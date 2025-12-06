@@ -39,7 +39,8 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-        player.ep0.dotknightLevelEffect = getLevelableAmount("pet", 401).pow(1.1).div(10).add(1)
+        let amt = getLevelableAmount("pet", 401).add(getLevelableTier("pet", 401).mul(5).min(40))
+        player.ep0.dotknightLevelEffect = amt.pow(1.1).div(10).mul(getLevelableTier("pet", 401).add(1)).add(1)
 
         player.ep0.timers[0].base = new Decimal(2)
         player.ep0.timers[1].base = new Decimal(5)
@@ -83,7 +84,7 @@
         12: {
             title() { return player.ep0.timers[1].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep0.timers[1].current) + "." : "<h3>+" + format(player.ep0.timers[1].base) + " Dotknight Points."},
             canClick() { return player.ep0.timers[1].current.lt(0) && this.unlocked() },
-            unlocked() { return getLevelableAmount("pet", 401).gte(3) },
+            unlocked() { return getLevelableAmount("pet", 401).gte(3) || getLevelableTier("pet", 401).gte(1)},
             tooltip() { return "Evo Shard Rarity: 2%"},
             onClick() {
                 player.ep0.dotknightPoints = player.ep0.dotknightPoints.add(player.ep0.timers[1].base)
@@ -104,7 +105,7 @@
         13: {
             title() { return player.ep0.timers[2].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep0.timers[2].current) + "." : "<h3>+" + format(player.ep0.timers[2].base) + " Dotknight Points."},
             canClick() { return player.ep0.timers[2].current.lt(0) && this.unlocked() },
-            unlocked() { return getLevelableAmount("pet", 401).gte(6) },
+            unlocked() { return getLevelableAmount("pet", 401).gte(6) || getLevelableTier("pet", 401).gte(1)},
             tooltip() { return "DOUBLE Evo Shard Rarity: 2%"},
             onClick() {
                 player.ep0.dotknightPoints = player.ep0.dotknightPoints.add(player.ep0.timers[2].base)
@@ -125,7 +126,7 @@
         99: {
             title() {return "Claim All"},
             canClick() {return tmp.ep0.clickables[11].canClick || tmp.ep0.clickables[12].canClick || tmp.ep0.clickables[13].canClick},
-            unlocked() {return getLevelableAmount("pet", 401).gte(3)},
+            unlocked() {return getLevelableAmount("pet", 401).gte(3) || getLevelableTier("pet", 401).gte(1)},
             onClick() {
                 clickClickable("ep0", 11)
                 clickClickable("ep0", 12)
@@ -224,15 +225,15 @@
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.ep0.dotknightPoints},
             pay(amt) { player.ep0.dotknightPoints = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.01).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Dotknight Offerings"
+                return "Dotknight Crates"
             },
             display() {
-                return 'which are boosting offering gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting crate roll chance by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Dotknight Points'
             },
             buy(mult) {
@@ -294,7 +295,7 @@
                 unlocked() { return true },
                 content: [
                     ["blank", "10px"],
-                    ["raw-html", () => {return getLevelableAmount("pet", 401).gte(6) ? "" : getLevelableAmount("pet", 401).gte(3) ? "You will unlock the next button at level 6!" : "You will unlock the next button at level 3!"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return (getLevelableAmount("pet", 401).gte(6) || getLevelableTier("pet", 401).gte(1)) ? "" : getLevelableAmount("pet", 401).gte(3) ? "You will unlock the next button at level 6!" : "You will unlock the next button at level 3!"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", () => {return "Dotknight Level: x<h3>" + format(player.ep0.dotknightLevelEffect) + "</h3>."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "10px"],
                     ["clickable", 11],
@@ -320,7 +321,7 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && getLevelableAmount("pet", 401).gte(1) }
+    layerShown() { return player.startedGame && (getLevelableAmount("pet", 401).gte(1) || getLevelableTier("pet", 401).gte(1)) }
 })
 addLayer("ep1", {
     name: "Dragon", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -359,7 +360,8 @@ addLayer("ep1", {
     update(delta) {
         let onepersec = new Decimal(1)
 
-        player.ep1.dragonLevelEffect = getLevelableAmount("pet", 402).pow(1.15).div(14).add(1)
+        let amt = getLevelableAmount("pet", 402).add(getLevelableTier("pet", 402).mul(5).min(40))
+        player.ep1.dragonLevelEffect = amt.pow(1.15).div(14).mul(getLevelableTier("pet", 402).add(1)).add(1)
 
         player.ep1.timers[0].base = new Decimal(0.2)
         player.ep1.timers[1].base = new Decimal(0.5)
@@ -404,7 +406,7 @@ addLayer("ep1", {
         12: {
             title() { return player.ep1.timers[1].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep1.timers[1].current) + "." : "<h3>+" + format(player.ep1.timers[1].base) + " Dragon Points."},
             canClick() { return player.ep1.timers[1].current.lt(0) && this.unlocked() },
-            unlocked() { return getLevelableAmount("pet", 402).gte(2) },
+            unlocked() { return getLevelableAmount("pet", 402).gte(2) || getLevelableTier("pet", 402).gte(1)},
             tooltip() { return "Paragon Shard Rarity: 0.1%"},
             onClick() {
                 player.ep1.dragonPoints = player.ep1.dragonPoints.add(player.ep1.timers[1].base)
@@ -425,7 +427,7 @@ addLayer("ep1", {
         13: {
             title() { return player.ep1.timers[2].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep1.timers[2].current) + "." : "<h3>+" + format(player.ep1.timers[2].base) + " Dragon Points."},
             canClick() { return player.ep1.timers[2].current.lt(0) && this.unlocked() },
-            unlocked() { return getLevelableAmount("pet", 402).gte(7) },
+            unlocked() { return getLevelableAmount("pet", 402).gte(7) || getLevelableTier("pet", 402).gte(1)},
             tooltip() { return "Paragon Shard Rarity: 0.2%"},
             onClick() {
                 player.ep1.dragonPoints = player.ep1.dragonPoints.add(player.ep1.timers[2].base)
@@ -446,7 +448,7 @@ addLayer("ep1", {
         99: {
             title() {return "Claim All"},
             canClick() {return tmp.ep1.clickables[11].canClick || tmp.ep1.clickables[12].canClick || tmp.ep1.clickables[13].canClick},
-            unlocked() {return getLevelableAmount("pet", 402).gte(2)},
+            unlocked() {return getLevelableAmount("pet", 402).gte(2) || getLevelableTier("pet", 402).gte(1)},
             onClick() {
                 clickClickable("ep1", 11)
                 clickClickable("ep1", 12)
@@ -615,7 +617,7 @@ addLayer("ep1", {
                 unlocked() { return true },
                 content: [
                     ["blank", "10px"],
-                    ["raw-html", () => {return getLevelableAmount("pet", 402).gte(7) ? "" : getLevelableAmount("pet", 402).gte(2) ? "You will unlock the next button at level 7!" : "You will unlock the next button at level 2!"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return (getLevelableAmount("pet", 402).gte(7) || getLevelableTier("pet", 402).gte(1)) ? "" : getLevelableAmount("pet", 402).gte(2) ? "You will unlock the next button at level 7!" : "You will unlock the next button at level 2!"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", () => {return "Dragon Level: x<h3>" + format(player.ep1.dragonLevelEffect) + "</h3>."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "10px"],
                     ["clickable", 11],
@@ -641,7 +643,7 @@ addLayer("ep1", {
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && getLevelableAmount("pet", 402).gte(1) }
+    layerShown() { return player.startedGame && (getLevelableAmount("pet", 402).gte(1) || getLevelableTier("pet", 402).gte(1)) }
 })
 addLayer("ep3", {
     name: "Kres", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -658,7 +660,6 @@ addLayer("ep3", {
 
         kresStats: [new Decimal(7), new Decimal(8), new Decimal(5)]
     }},
-    automate() {},
     nodeStyle: {
         backgroundColor: "#910a27",
     },
@@ -670,7 +671,8 @@ addLayer("ep3", {
         player.ep3.kresPointsMax = new Decimal(100)
         player.ep3.kresPointsMax = player.ep3.kresPointsMax.add(buyableEffect("ep3", 11))
 
-        player.ep3.kresPointsPerSecond = getLevelableAmount("pet", 404).pow(1.1).div(10)
+        let amt = getLevelableAmount("pet", 404).add(getLevelableTier("pet", 404).mul(5).min(40))
+        player.ep3.kresPointsPerSecond = amt.pow(1.1).div(10).mul(getLevelableTier("pet", 404).add(1))
         player.ep3.kresPoints = player.ep3.kresPoints.add(player.ep3.kresPointsPerSecond.mul(delta))
 
         if (player.ep3.kresPoints.gte(player.ep3.kresPointsMax)) {
@@ -921,11 +923,11 @@ addLayer("ep3", {
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.ep3.kresPoints) + "/" + format(player.ep3.kresPointsMax) + "</h3> kres points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You are gaining <h3>" + format(player.ep3.kresPointsPerSecond) + "</h3> kres points per second. (based on level)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You are gaining <h3>" + format(player.ep3.kresPointsPerSecond) + "</h3> kres points per second. (based on level/ascension)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && getLevelableAmount("pet", 404).gte(1) }
+    layerShown() { return player.startedGame && (getLevelableAmount("pet", 404).gte(1) || getLevelableTier("pet", 404).gte(1)) }
 })
 addLayer("ep4", {
     name: "Nav", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -943,7 +945,6 @@ addLayer("ep4", {
 
         navStats: [new Decimal(9), new Decimal(6), new Decimal(5)]
     }},
-    automate() {},
     nodeStyle: {
         backgroundColor: "#710a91",
     },
@@ -955,7 +956,8 @@ addLayer("ep4", {
         player.ep4.navPointsMax = new Decimal(100)
         player.ep4.navPointsMax = player.ep4.navPointsMax.add(buyableEffect("ep4", 11))
 
-        player.ep4.navPointsPerSecond = getLevelableAmount("pet", 405).pow(1.1).div(10)
+        let amt = getLevelableAmount("pet", 405).add(getLevelableTier("pet", 405).mul(5).min(40))
+        player.ep4.navPointsPerSecond = amt.pow(1.1).div(10).mul(getLevelableTier("pet", 405).add(1))
         player.ep4.navPoints = player.ep4.navPoints.add(player.ep4.navPointsPerSecond.mul(delta))
 
         if (player.ep4.navPoints.gte(player.ep4.navPointsMax)) {
@@ -1205,11 +1207,11 @@ addLayer("ep4", {
     },
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.ep4.navPoints) + "/" + format(player.ep4.navPointsMax) + "</h3> nav points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You are gaining <h3>" + format(player.ep4.navPointsPerSecond) + "</h3> nav points per second. (based on level)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You are gaining <h3>" + format(player.ep4.navPointsPerSecond) + "</h3> nav points per second. (based on level/ascension)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && getLevelableAmount("pet", 405).gte(1) }
+    layerShown() { return player.startedGame && (getLevelableAmount("pet", 405).gte(1) || getLevelableTier("pet", 405).gte(1)) }
 })
 addLayer("ep5", {
     name: "Sel", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -1227,7 +1229,6 @@ addLayer("ep5", {
 
         selStats: [new Decimal(6), new Decimal(6), new Decimal(8)]
     }},
-    automate() {},
     nodeStyle: {
         backgroundColor: "#065c19",
     },
@@ -1239,7 +1240,8 @@ addLayer("ep5", {
         player.ep5.selPointsMax = new Decimal(100)
         player.ep5.selPointsMax = player.ep5.selPointsMax.add(buyableEffect("ep5", 11))
 
-        player.ep5.selPointsPerSecond = getLevelableAmount("pet", 406).pow(1.1).div(10)
+        let amt = getLevelableAmount("pet", 406).add(getLevelableTier("pet", 406).mul(5).min(40))
+        player.ep5.selPointsPerSecond = amt.pow(1.1).div(10).mul(getLevelableTier("pet", 406).add(1))
         player.ep5.selPoints = player.ep5.selPoints.add(player.ep5.selPointsPerSecond.mul(delta))
 
         if (player.ep5.selPoints.gte(player.ep5.selPointsMax)) {
@@ -1488,9 +1490,9 @@ addLayer("ep5", {
     },
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.ep5.selPoints) + "/" + format(player.ep5.selPointsMax) + "</h3> sel points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You are gaining <h3>" + format(player.ep5.selPointsPerSecond) + "</h3> sel points per second. (based on level)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You are gaining <h3>" + format(player.ep5.selPointsPerSecond) + "</h3> sel points per second. (based on level/ascension)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && getLevelableAmount("pet", 406).gte(1) }
+    layerShown() { return player.startedGame && (getLevelableAmount("pet", 406).gte(1) || getLevelableTier("pet", 406).gte(1)) }
 })

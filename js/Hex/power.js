@@ -317,8 +317,8 @@ addLayer("hpw", {
             canAfford() { return hasUpgrade("hpw", 31)},
             onPurchase() {
                 player.hpw.upgScale[4] = player.hpw.upgScale[4] + 1
-                player.hpu.purifier[1] = player.hpu.purifier[1].add(1)
-                player.hpu.purifier[4] = player.hpu.purifier[4].add(1)
+                player.hpu.purifiers[1].amount = player.hpu.purifiers[1].amount.add(1)
+                player.hpu.purifiers[4].amount = player.hpu.purifiers[4].amount.add(1)
             },
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",

@@ -127,7 +127,6 @@
         player.gh.fertilizerPerSecond = player.gh.grasshoppers.pow(1.4).div(10)
         if (hasAchievement("achievements", 15)) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(1.5)
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(levelableEffect("pet", 201)[2])
-        player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(levelableEffect("pet", 301)[0])
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.d.boosterEffects[7])
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.rf.abilityEffects[3])
         if (hasUpgrade("ad", 16) && !inChallenge("ip", 14)) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(upgradeEffect("ad", 16))
@@ -143,6 +142,7 @@
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.i.preOTFMult)
 
         // POWER MODIFIERS
+        player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.pow(levelableEffect("pet", 301)[0])
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.div(player.po.halterEffects[7])
@@ -282,17 +282,18 @@
         player.r.factorPowerPerSecond = new Decimal(0)
         player.r.powerFactorUnlocks = [true, true, true, false, false, false, false, false]
 
-        for (let i = 11; i < 20; i++) {
-            player.f.buyables[i] = new Decimal(0)
-        }
-        for (let i = 21; i < 28; i++) {
-            player.f.buyables[i] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 20; i++) {
+                player.f.buyables[i] = new Decimal(0)
+            }
+            for (let i = 21; i < 28; i++) {
+                player.f.buyables[i] = new Decimal(0)
+            }
         }
 
         player.p.prestigePoints = new Decimal(0)
 
-        if (!hasMilestone("ip", 11))
-        {
+        if (!hasMilestone("ip", 11)) {
             for (let i = 0; i < player.p.upgrades.length; i++) {
                 if (+player.p.upgrades[i] < 24) {
                     player.p.upgrades.splice(i, 1);
@@ -301,8 +302,10 @@
             }
         }
 
-        for (let i = 11; i < 19; i++) {
-            player.t.buyables[i] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 19; i++) {
+                player.t.buyables[i] = new Decimal(0)
+            }
         }
 
         player.f.factorPower = new Decimal(0)
@@ -310,32 +313,38 @@
         player.t.leaves = new Decimal(0)
         player.t.trees = new Decimal(0)
 
-        for (let i = 11; i < 19; i++) {
-            player.g.buyables[i] = new Decimal(0)
-        }
-
-        if (!hasMilestone("ip", 11))
-        {
-        for (let i = 0; i < player.g.upgrades.length; i++) {
-            if (+player.g.upgrades[i] < 17) {
-                player.g.upgrades.splice(i, 1);
-                i--;
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 19; i++) {
+                player.g.buyables[i] = new Decimal(0)
             }
         }
-    }
+
+        if (!hasMilestone("ip", 11)) {
+            for (let i = 0; i < player.g.upgrades.length; i++) {
+                if (+player.g.upgrades[i] < 17) {
+                    player.g.upgrades.splice(i, 1);
+                    i--;
+                }
+            }
+        }
         player.g.grass = new Decimal(0)
-        player.g.savedGrass = new Decimal(0)
-        player.g.grassCount = new Decimal(0)
         player.g.grassTimer = new Decimal(0)
 
         player.g.goldGrass = new Decimal(0)
-        player.g.savedGoldGrass = new Decimal(0)
-        player.g.goldGrassCount = new Decimal(0)
         player.g.goldGrassTimer = new Decimal(0)
 
+        for (let i = 1; i < 509; ) {
+            setGridData("g", i, [0, new Decimal(1), new Decimal(1)])
+
+            // Increase i value
+            if (i % 10 == 8) {
+                i = i+93
+            } else {
+                i++
+            }
+        }
     },
-    steelieReset()
-    {
+    steelieReset() {
         player.pe.pests = new Decimal(0)
         player.points = new Decimal(10)
         player.r.rank = new Decimal(0)
@@ -354,23 +363,15 @@
         player.f.factorPowerEffect = new Decimal(1)
         player.f.factorPowerPerSecond = new Decimal(0)
         player.f.powerFactorUnlocks = [true, true, true, false, false, false, false, false]
-        for (let i = 1; i < 9; i++) {
-            player.f.buyables[i] = new Decimal(0)
-        }
-        for (let i = 11; i < 20; i++) {
-            player.f.buyables[i] = new Decimal(0)
-        }
-        for (let i = 21; i < 30; i++) {
-            player.f.buyables[i] = new Decimal(0)
-        }
-        for (let i = 31; i < 37; i++) {
-            player.f.buyables[i] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i in player.f.buyables) {
+                player.f.buyables[i] = new Decimal(0)
+            }
         }
 
         player.p.prestigePoints = new Decimal(0)
 
-        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14))
-        {
+        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14)) {
             for (let i = 0; i < player.p.upgrades.length; i++) {
                 if (+player.p.upgrades[i] < 24) {
                     player.p.upgrades.splice(i, 1);
@@ -379,8 +380,10 @@
             }
         }
 
-        for (let i = 11; i < 19; i++) {
-            player.t.buyables[i] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 19; i++) {
+                player.t.buyables[i] = new Decimal(0)
+            }
         }
 
         player.f.factorPower = new Decimal(0)
@@ -388,12 +391,13 @@
         player.t.leaves = new Decimal(0)
         player.t.trees = new Decimal(0)
 
-        for (let i = 11; i < 19; i++) {
-            player.g.buyables[i] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 19; i++) {
+                player.g.buyables[i] = new Decimal(0)
+            }
         }
 
-        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14))
-        {
+        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14)) {
         for (let i = 0; i < player.g.upgrades.length; i++) {
             if (+player.g.upgrades[i] < 22) {
                 player.g.upgrades.splice(i, 1);
@@ -402,8 +406,7 @@
         }
         }
 
-        if (!hasMilestone("ip", 15) && !inChallenge("ip", 14))
-        {
+        if (!hasMilestone("ip", 15) && !inChallenge("ip", 14)) {
             for (let i = 0; i < player.r.milestones.length; i++) {
                 if (+player.r.milestones[i] < 20) {
                     player.r.milestones.splice(i, 1);
@@ -413,20 +416,29 @@
         }
 
         player.g.grass = new Decimal(0)
-        player.g.savedGrass = new Decimal(0)
-        player.g.grassCount = new Decimal(0)
         player.g.grassTimer = new Decimal(0)
 
         player.g.goldGrass = new Decimal(0)
-        player.g.savedGoldGrass = new Decimal(0)
-        player.g.goldGrassCount = new Decimal(0)
         player.g.goldGrassTimer = new Decimal(0)
+
+        for (let i = 1; i < 509; ) {
+            setGridData("g", i, [0, new Decimal(1), new Decimal(1)])
+
+            // Increase i value
+            if (i % 10 == 8) {
+                i = i+93
+            } else {
+                i++
+            }
+        }
 
         player.gh.grasshoppers = new Decimal(0)
         player.gh.fertilizer = new Decimal(0)
 
-        for (let i = 11; i < 20; i++) {
-            player.gh.buyables[i] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 20; i++) {
+                player.gh.buyables[i] = new Decimal(0)
+            }
         }
         player.gh.buyables[21] = new Decimal(0)
         player.gh.buyables[22] = new Decimal(0)
@@ -435,8 +447,10 @@
         player.m.linesOfCode = new Decimal(0)
         player.m.mods = new Decimal(0)
 
-        for (let i = 11; i < 15; i++) {
-            player.m.buyables[i] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 15; i++) {
+                player.m.buyables[i] = new Decimal(0)
+            }
         }
 
         player.fa.foundryEffect = new Decimal(1)

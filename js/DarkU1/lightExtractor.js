@@ -71,7 +71,7 @@
         player.le.starmetalAlloyToGetToGet = player.le.resetAmount.add(1)
         player.le.starmetalAlloyToGetToGet = player.le.starmetalAlloyToGetToGet.mul(buyableEffect("sma", 12))
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGet
-        if (getLevelableBool("pu", 302)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(levelableEffect("pu", 302)[0])
+        if (getLevelableTier("pu", 302, true)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(levelableEffect("pu", 302)[0])
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(levelableEffect("pu", 302)[1])
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("dn", 11))
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("sma", 11))
@@ -89,7 +89,7 @@
 
         player.le.eclipseShardsToGetToGet = player.le.resetAmount.add(1)
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGet
-        if (getLevelableBool("pu", 304)) player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(levelableEffect("pu", 304)[0])
+        if (getLevelableTier("pu", 304, true)) player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(levelableEffect("pu", 304)[0])
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(levelableEffect("pu", 304)[1])
 
         player.le.eclipseShardsValue = new Decimal(5)
@@ -124,10 +124,10 @@
                 player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.le.starmetalAlloyToGetTrue.floor())
                 player.le.starmetalAlloyPauseAgain = new Decimal(10)
                 for (let prop in player.pu.levelables) {
-                    if (getLevelableBool("pu", prop)) {
+                    if (getLevelableTier("pu", prop, true)) {
                         addLevelableXP("pu", prop, player.le.starmetalAlloyToGetTrue.floor())
                     }
-                    setLevelableBool("pu", prop, new Decimal(0))
+                    setLevelableTier("pu", prop, new Decimal(0))
                 }
                 player.le.starmetalAlloyToGet = new Decimal(0)
                 player.le.resetAmount = new Decimal(0)
@@ -176,10 +176,10 @@
                 player.sma.eclipseShards = player.sma.eclipseShards.add(player.le.eclipseShardsToGetTrue.floor())
                 player.le.starmetalAlloyPauseAgain = new Decimal(10)
                 for (let prop in player.pu.levelables) {
-                    if (getLevelableBool("pu", prop)) {
+                    if (getLevelableTier("pu", prop, true)) {
                         addLevelableXP("pu", prop, player.le.eclipseShardsToGetTrue.mul(player.le.eclipseShardsValue).floor())
                     }
-                    setLevelableBool("pu", prop, new Decimal(0))
+                    setLevelableTier("pu", prop, new Decimal(0))
                 }
                 player.le.starmetalAlloyToGet = new Decimal(0)
                 player.le.eclipseShardsToGet = new Decimal(0)

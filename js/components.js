@@ -697,13 +697,14 @@ function loadVue() {
 			v-on:click="clickLevelable(layer, data)" :id='"levelable-" + layer + "-" + data'>
 				<div class="levelableTop">
 					<img v-bind:src="run(layers[layer].levelables[data].image, layers[layer].levelables[data])" class="levelableImg"></img>
-					<div v-bind:class="{levelableText: true, hide: player[layer].levelables[data][0].eq(0)&&player[layer].levelables[data][1].eq(0)}">
+					<div v-bind:class="{levelableText: true, hide: player[layer].levelables[data][0].eq(0)&&player[layer].levelables[data][1].eq(0)&&!(player[layer].levelables[data][2].gt(0) && tmp[layer].levelables[data].levelLimit.neq(Infinity))}">
 						<span v-html="tmp[layer].levelables[data].levelLimit.eq(Infinity) ? 'Lv ' + formatShortestWhole(player[layer].levelables[data][0]) : 'Lv ' + formatShortestWhole(player[layer].levelables[data][0])+'/'+formatShortestWhole(tmp[layer].levelables[data].levelLimit)"></span>
+						<span style='color:#a0b2c6' v-if="tmp[layer].levelables[data].levelLimit.gt(10) && tmp[layer].levelables[data].levelLimit.neq(Infinity) && player[layer].levelables[data][2].gt(0)" v-html="'<br>★ ' + formatShortestWhole(player[layer].levelables[data][2])"></span>
 					</div>
 				</div>
 				<div class="levelableBottom">
 					<div v-bind:class="{levelableBarText: true, hide: !tmp[layer].levelables[data].barShown}">
-						<span v-html="player[layer].levelables[data][0].eq(tmp[layer].levelables[data].levelLimit) ? formatShortestWhole(tmp[layer].levelables[data].currency) : formatShortestWhole(tmp[layer].levelables[data].currency)+'/'+formatShortestWhole(tmp[layer].levelables[data].xpReq)"></span>
+						<span v-html="player[layer].levelables[data][0].gte(tmp[layer].levelables[data].levelLimit) ? formatShortestWhole(tmp[layer].levelables[data].currency) : formatShortestWhole(tmp[layer].levelables[data].currency)+'/'+formatShortestWhole(tmp[layer].levelables[data].xpReq)"></span>
 					</div>
 					<div v-bind:class="{levelableBarProgress: true, hide: !tmp[layer].levelables[data].barShown}" v-bind:style="[{'width': toNumber(tmp[layer].levelables[data].currency.div(tmp[layer].levelables[data].xpReq).mul(100))+'%'}, tmp[layer].levelables[data].barStyle]"></div>
 				</div>
@@ -726,11 +727,12 @@ function loadVue() {
 						<img v-bind:src="run(layers[layer].levelables[layers[layer].levelables.index].image, layers[layer].levelables[layers[layer].levelables.index])" class="levelableImg"></img>
 						<div v-bind:class="{levelableText: true, hide: layers[layer].levelables.index==0}">
 							<span v-html="tmp[layer].levelables[layers[layer].levelables.index].levelLimit.eq(Infinity) ? 'Lv ' + formatShortestWhole(player[layer].levelables[layers[layer].levelables.index][0]) : 'Lv ' + formatShortestWhole(player[layer].levelables[layers[layer].levelables.index][0])+'/'+formatShortestWhole(tmp[layer].levelables[layers[layer].levelables.index].levelLimit)"></span>
+							<span style='color:#a0b2c6' v-if="tmp[layer].levelables[layers[layer].levelables.index].levelLimit.gt(10) && tmp[layer].levelables[layers[layer].levelables.index].levelLimit.neq(Infinity) && player[layer].levelables[layers[layer].levelables.index][2].gt(0)" v-html="'<br>★ ' + formatShortestWhole(player[layer].levelables[layers[layer].levelables.index][2])"></span>
 						</div>
 					</div>
 					<div class="levelableDisplayBarHolder">
 						<div v-bind:class="{levelableBarText: true, hide: layers[layer].levelables.index==0}">
-							<span v-html="player[layer].levelables[layers[layer].levelables.index][0].eq(tmp[layer].levelables[layers[layer].levelables.index].levelLimit) ? formatShortestWhole(tmp[layer].levelables[layers[layer].levelables.index].currency) : formatShortestWhole(tmp[layer].levelables[layers[layer].levelables.index].currency)+'/'+formatShortestWhole(tmp[layer].levelables[layers[layer].levelables.index].xpReq)"></span>
+							<span v-html="player[layer].levelables[layers[layer].levelables.index][0].gte(tmp[layer].levelables[layers[layer].levelables.index].levelLimit) ? formatShortestWhole(tmp[layer].levelables[layers[layer].levelables.index].currency) : formatShortestWhole(tmp[layer].levelables[layers[layer].levelables.index].currency)+'/'+formatShortestWhole(tmp[layer].levelables[layers[layer].levelables.index].xpReq)"></span>
 						</div>
 						<div v-bind:class="{levelableBarProgress: true, hide: layers[layer].levelables.index==0}" v-bind:style="[{'width': toNumber(tmp[layer].levelables[layers[layer].levelables.index].currency.div(tmp[layer].levelables[layers[layer].levelables.index].xpReq).mul(100))+'%'}, tmp[layer].levelables[layers[layer].levelables.index].barStyle]"></div>
 					</div>
@@ -946,7 +948,7 @@ function loadVue() {
 		v-if="tmp[layer].grid && player[layer].grid[data]!== undefined && run(layers[layer].grid.getUnlocked, layers[layer].grid, data)"
 		v-bind:class="{ tile: true, can: canClick, locked: !canClick, tooltipBox: true,}"
 		v-bind:style="[canClick ? {'background-color': tmp[layer].color} : {}, gridRun(layer, 'getStyle', player[this.layer].grid[this.data], this.data)]"
-		v-on:click="clickGrid(layer, data)"  @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
+		v-on:click="clickGrid(layer, data)" @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop" @touchmove="hover" @mouseenter="hover">
 			<span v-if="layers[layer].grid.getTitle" v-bind:style="{'transition-duration': '0s'}"><h2 v-html="gridRun(this.layer, 'getTitle', player[this.layer].grid[this.data], this.data)" v-bind:style="{'transition-duration': '0s'}"></h2><br></span>
 			<span v-bind:style="{'white-space': 'pre-line','transition-duration': '0s'}" v-html="gridRun(this.layer, 'getDisplay', player[this.layer].grid[this.data], this.data)"></span>
 			<tooltip v-if="layers[layer].grid.getTooltip" :text="gridRun(this.layer, 'getTooltip', player[this.layer].grid[this.data], this.data)"></tooltip>
@@ -965,12 +967,16 @@ function loadVue() {
 							gridRun(this.layer, 'onHold', player[this.layer].grid[this.data], this.data)						}
 						this.time = this.time+1
 					}).bind(this), 50)}
+				this.hover()
 			},
 			stop() {
 				clearInterval(this.interval)
 				this.interval = false
 			  	this.time = 0
-			}
+			},
+			hover() {
+				hoverGrid(this.layer, this.data)
+			},
 		},
 	})
 
@@ -1278,6 +1284,7 @@ function loadVue() {
 		props: ['layer', 'data'],
 		template: `
 		<div v-bind:class="{hoverable: true, selected: player[layer].glossaryRig == data}" v-if="run(layers[layer].glossary[data].display, layers[layer].glossary[data])" :disabled="player[layer].glossary[data].eq(0)" v-on:click="layers[layer].glossary[data].onClick ? run(layers[layer].glossary[data].onClick, layers[layer].glossary[data]) : ''" v-bind:style="player[layer].glossary[data].eq(0) ? {'filter': 'brightness(50%)'} : {}" @mouseenter="hover" @touchstart="hover" @touchmove="hover">
+			<span style="position:absolute;top:4px;font-size:12px;z-index:10;user-select:none" v-html="layers[layer].generateMult(layer,data)"></span>
 			<svg width='60pt' height='60pt' viewBox='0 0 60 60' v-bind:style="player[layer].glossary[data].eq(0) ? {'filter': 'brightness(50%) drop-shadow(0px 3px 2px rgba(0, 0, 0, 0.5))'} : {}" style="filter:drop-shadow(0px 3px 2px rgba(0, 0, 0, 0.5))" v-html="layers[layer].glossary[data].svg"></svg>
 		</div>
 		`,

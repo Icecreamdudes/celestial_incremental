@@ -600,14 +600,10 @@ addLayer("co", {
         //     <----     GRASS LAYER     ---->
         player.g.grass = new Decimal(0)
         player.g.grassVal = new Decimal(0)
-        player.g.savedGrass = new Decimal(0)
-        player.g.grassCount = new Decimal(0)
         player.g.grassTimer = new Decimal(0)
 
         player.g.goldGrass = new Decimal(0)
         player.g.goldGrassVal = new Decimal(0)
-        player.g.savedGoldGrass = new Decimal(0)
-        player.g.goldGrassCount = new Decimal(0)
         player.g.goldGrassTimer = new Decimal(0)
 
         for (let i = 11; i < 20; i++) {
@@ -629,6 +625,17 @@ addLayer("co", {
             }
         }
 
+        for (let i = 1; i < 509; ) {
+            setGridData("g", i, [0, new Decimal(1), new Decimal(1)])
+
+            // Increase i value
+            if (i % 10 == 8) {
+                i = i+93
+            } else {
+                i++
+            }
+        }
+        
         //     <----     GRASSHOPPER LAYER     ---->
         player.gh.grasshoppers = new Decimal(0)
         player.gh.grasshoppersToGet = new Decimal(0)
@@ -824,11 +831,23 @@ addLayer("co", {
         player.ta.upgrades.splice(0, player.ta.upgrades.length)
 
         //     <----     TAV'S DOMAIN LAYER     ---->
+        layers.tad.domainReset(10)
 
-        player.tad.upgrades.splice(0, player.tad.upgrades.length)
+        if (!hasMilestone("s", 15)) {
+            player.tad.upgrades.splice(0, player.tad.upgrades.length)
+        }
 
-        for (let i in player.tad.buyables) {
-            player.tad.buyables[i] = new Decimal(0)
+        if (!hasMilestone("s", 18)) {
+            player.tad.infinitum = new Decimal(0)
+            player.tad.infinitumGain = new Decimal(0)
+            player.tad.infinitumResets = new Decimal(0)
+            player.tad.altSelection = "none"
+            for (let i in player.tad.altInfinities) {
+                player.tad.altInfinities[i].amount = new Decimal(0)
+                player.tad.altInfinities[i].highest = new Decimal(0)
+                player.tad.altInfinities[i].gain = new Decimal(0)
+                player.tad.altInfinities[i].milestone = new Decimal(0)
+            }
         }
 
         //     <----     BREAK INFINITY LAYER     ---->
@@ -861,7 +880,6 @@ addLayer("co", {
         if (!hasMilestone("s", 18)) player.ca.canteEnergy = new Decimal(0)
         player.ca.replicantiGalaxies = new Decimal(0)
         if (!hasMilestone("s", 18)) player.ca.rememberanceCores = new Decimal(0)
-        player.ca.defeatedCante = false
         
         for (let i in player.ca.buyables) {
             player.ca.buyables[i] = new Decimal(0)
@@ -914,11 +932,20 @@ addLayer("co", {
         //     <----     REPLI-GRASS LAYER     ---->
         player.rg.repliGrass = new Decimal(1)
         player.rg.repliGrassMult = new Decimal(1)
-        player.rg.savedRepliGrass = 0
-        player.rg.repliGrassCount = 0
 
         for (let i in player.rg.buyables) {
             player.rg.buyables[i] = new Decimal(0)
+        }
+
+        for (let i = 1; i < 509; ) {
+            setGridData("rg", i, new Decimal(1))
+
+            // Increase i value
+            if (i % 10 == 8) {
+                i = i+93
+            } else {
+                i++
+            }
         }
 
         //     <----     GRASS-SKIP LAYER     ---->

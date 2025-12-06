@@ -1,4 +1,4 @@
-const COCOON_MILESTONE = [new Decimal(1), new Decimal(10), new Decimal(100), new Decimal(1000), new Decimal(10000)]
+const COCOON_MILESTONE = [new Decimal(1), new Decimal(10), new Decimal(100), new Decimal(1000), new Decimal(10000), new Decimal(100000), new Decimal(1e6), new Decimal(1e7), new Decimal(1e8), new Decimal(1e9)]
 addLayer("al", {
     name: "Aleph, the Celestial of Swarms", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "ℵ", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -96,6 +96,19 @@ addLayer("al", {
             }
         }
 
+        if (player.al.cocoonLevel >= 7) {
+            for (let i = 101; i < 116; ) {
+                player.fl.glossary[i] = new Decimal(1)
+
+                // Increase i value
+                if (i % 5 == 0) {
+                    i = i+6
+                } else {
+                    i++
+                }
+            }
+        }
+
         // POLLEN
         player.bpl.pollen = new Decimal(0)
         player.bpl.roles.drone.amount = new Decimal(0)
@@ -116,6 +129,9 @@ addLayer("al", {
         player.ne.delta.amount = new Decimal(0)
         player.ne.delta.gain = new Decimal(0)
         player.ne.delta.effect = new Decimal(1)
+        player.ne.epsilon.amount = new Decimal(0)
+        player.ne.epsilon.gain = new Decimal(0)
+        player.ne.epsilon.effect = new Decimal(1)
         player.ne.upgrades.splice(0, player.ne.upgrades.length)
 
         // BEE BREAD
@@ -307,6 +323,104 @@ addLayer("al", {
                 return look
             },
         },
+        110: {
+            title: "Honeycomb <small>(4, 1)</small>",
+            unlocked() {return player.tad.hiveExpand},
+            description: "Triple BPS and Flower Gain.",
+            cost: new Decimal(100000),
+            currencyLocation() { return player.al },
+            currencyDisplayName: "Honeycombs",
+            currencyInternalName: "honeycomb",
+            style() {
+                let look = {minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#e5bd3f"
+                return look
+            },
+        },
+        111: {
+            title: "Honeycomb <small>(4, 2)</small>",
+            unlocked() {return player.tad.hiveExpand},
+            description: "Unlock the forgotten pollen upgrade.",
+            cost: new Decimal(400000),
+            currencyLocation() { return player.al },
+            currencyDisplayName: "Honeycombs",
+            currencyInternalName: "honeycomb",
+            style() {
+                let look = {minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#e5bd3f"
+                return look
+            },
+        },
+        112: {
+            title: "Honeycomb <small>(4, 3)</small>",
+            unlocked() {return player.tad.hiveExpand},
+            description: "Replace pollen cooldown with constant pollen production.",
+            cost: new Decimal(1.2e6),
+            currencyLocation() { return player.al },
+            currencyDisplayName: "Honeycombs",
+            currencyInternalName: "honeycomb",
+            style() {
+                let look = {minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#e5bd3f"
+                return look
+            },
+        },
+        113: {
+            title: "Honeycomb <small>(5, 1)</small>",
+            unlocked() {return player.tad.hiveExpand},
+            description: "Remove BB GEB milestone cap.",
+            cost: new Decimal(4e6),
+            currencyLocation() { return player.al },
+            currencyDisplayName: "Honeycombs",
+            currencyInternalName: "honeycomb",
+            style() {
+                let look = {minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#e5bd3f"
+                return look
+            },
+        },
+        114: {
+            title: "Honeycomb <small>(5, 2)</small>",
+            unlocked() {return player.tad.hiveExpand},
+            description: "Unlock a new bee bread milestone.",
+            cost: new Decimal(2e7),
+            currencyLocation() { return player.al },
+            currencyDisplayName: "Honeycombs",
+            currencyInternalName: "honeycomb",
+            style() {
+                let look = {minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#e5bd3f"
+                return look
+            },
+        },
+        115: {
+            title: "Honeycomb <small>(5, 3)</small>",
+            unlocked() {return player.tad.hiveExpand},
+            description: "Auto-buy pollen upgrades when on pollen path.",
+            cost: new Decimal(8e7),
+            currencyLocation() { return player.al },
+            currencyDisplayName: "Honeycombs",
+            currencyInternalName: "honeycomb",
+            style() {
+                let look = {minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#e5bd3f"
+                return look
+            },
+        },
+        118: {
+            title: "Honeycomb <small>(6, 3)</small>",
+            unlocked() {return player.tad.hiveExpand},
+            description: "No longer reset when gaining BB tier.",
+            cost: new Decimal(1e11),
+            currencyLocation() { return player.al },
+            currencyDisplayName: "Honeycombs",
+            currencyInternalName: "honeycomb",
+            style() {
+                let look = {minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#e5bd3f"
+                return look
+            },
+        },
 
         201: {
             title: "Royal J. <small>(1, 1)</small>",
@@ -434,8 +548,90 @@ addLayer("al", {
                 return look
             },
         },
-
-        // Add an upgrade that makes flower cell also buff flower gain.
+        210: {
+            title: "Royal J. <small>(4, 1)</small>",
+            unlocked: true,
+            description: "x1.1 Glossary Effect Base.",
+            cost: new Decimal(100000),
+            currencyLocation() { return player.al },
+            currencyDisplayName: "Royal Jelly",
+            currencyInternalName: "royalJelly",
+            style() {
+                let look = {minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#e172b5"
+                return look
+            },
+        },
+        211: {
+            title: "Royal J. <small>(4, 2)</small>",
+            unlocked: true,
+            description: "Unlock a second effect for Nector δ-3.",
+            cost: new Decimal(400000),
+            currencyLocation() { return player.al },
+            currencyDisplayName: "Royal Jelly",
+            currencyInternalName: "royalJelly",
+            style() {
+                let look = {minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#e172b5"
+                return look
+            },
+        },
+        212: {
+            title: "Royal J. <small>(4, 3)</small>",
+            unlocked: true,
+            description: "Produce 10% of nectar δ per second.",
+            cost: new Decimal(1.2e6),
+            currencyLocation() { return player.al },
+            currencyDisplayName: "Royal Jelly",
+            currencyInternalName: "royalJelly",
+            style() {
+                let look = {minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#e172b5"
+                return look
+            },
+        },
+        213: {
+            title: "Royal J. <small>(5, 1)</small>",
+            unlocked: true,
+            description: "Unlock a second effect for flower cell.",
+            cost: new Decimal(4e6),
+            currencyLocation() { return player.al },
+            currencyDisplayName: "Royal Jelly",
+            currencyInternalName: "royalJelly",
+            style() {
+                let look = {minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#e172b5"
+                return look
+            },
+        },
+        214: {
+            title: "Royal J. <small>(5, 2)</small>",
+            unlocked: true,
+            description: "Unlock pollen cell.",
+            cost: new Decimal(2e7),
+            currencyLocation() { return player.al },
+            currencyDisplayName: "Royal Jelly",
+            currencyInternalName: "royalJelly",
+            style() {
+                let look = {minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#e172b5"
+                return look
+            },
+        },
+        215: {
+            title: "Royal J. <small>(5, 3)</small>",
+            unlocked: true,
+            description: "Auto-buy nectar upgrades when on nectar path.",
+            cost: new Decimal(8e7),
+            currencyLocation() { return player.al },
+            currencyDisplayName: "Royal Jelly",
+            currencyInternalName: "royalJelly",
+            style() {
+                let look = {minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#e172b5"
+                return look
+            },
+        },
     },
     buyables: {
         101: {
@@ -606,29 +802,33 @@ addLayer("al", {
                 if (player.al.highestHoneycomb.lt(100)) return player.al.highestHoneycomb.sub(10).div(90).mul(base).add(base*2)
                 if (player.al.highestHoneycomb.lt(1000)) return player.al.highestHoneycomb.sub(100).div(900).mul(base).add(base*3)
                 if (player.al.highestHoneycomb.lt(10000)) return player.al.highestHoneycomb.sub(1000).div(9000).mul(base).add(base*4)
-                if (player.al.highestHoneycomb.lt(1000000)) return player.al.highestHoneycomb.sub(10000).div(990000).mul(base).add(base*5)
-                return new Decimal(6/15)
+                if (player.al.highestHoneycomb.lt(100000)) return player.al.highestHoneycomb.sub(10000).div(90000).mul(base).add(base*5)
+                if (player.al.highestHoneycomb.lt(1e6)) return player.al.highestHoneycomb.sub(100000).div(900000).mul(base).add(base*6)
+                if (player.al.highestHoneycomb.lt(1e7)) return player.al.highestHoneycomb.sub(1e6).div(9e6).mul(base).add(base*7)
+                if (player.al.highestHoneycomb.lt(1e8)) return player.al.highestHoneycomb.sub(1e7).div(9e7).mul(base).add(base*8)
+                if (player.al.highestHoneycomb.lt(1e9)) return player.al.highestHoneycomb.sub(1e8).div(9e8).mul(base).add(base*9)
+                return new Decimal(10/15)
             },
-            baseStyle: {background: "linear-gradient(0deg, #140e00, #3c2a00)", marginRight: "-3px"},
-            fillStyle: {backgroundColor: "#3F3411cc"},
-            borderStyle: {border: "3px solid #625432", borderTopLeftRadius: "100px 200px", borderTopRightRadius: "0", borderBottomLeftRadius: "80px 360px", borderBottomRightRadius: "0"},
+            baseStyle: {background: "linear-gradient(0deg, #967d4a, #bd9d5b)", marginRight: "-3px"},
+            fillStyle: {backgroundColor: "#e5bd3f66"},
+            borderStyle: {border: "3px solid #726241", borderTopLeftRadius: "100px 200px", borderTopRightRadius: "0", borderBottomLeftRadius: "80px 360px", borderBottomRightRadius: "0"},
             textStyle: {userSelect: "none"},
             display() {
                 let str = "<div style='width:125px;height:600px;display:flex;flex-direction:column'>"
-                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
-                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
-                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
-                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
-                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
-                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
-                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
-                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
-                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
-                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
-                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
-                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
-                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
-                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #726241'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #726241'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #726241'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #726241'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:4px;border-bottom:4px dotted #726241'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #726241'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #726241'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #726241'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #726241'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:4px;border-bottom:4px dotted #726241'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #726241'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #726241'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #726241'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #726241'></div>")
                 str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid transparent'></div>")
                 return str
             },
@@ -646,29 +846,33 @@ addLayer("al", {
                 if (player.al.highestRoyalJelly.lt(100)) return player.al.highestRoyalJelly.sub(10).div(90).mul(base).add(base*2)
                 if (player.al.highestRoyalJelly.lt(1000)) return player.al.highestRoyalJelly.sub(100).div(900).mul(base).add(base*3)
                 if (player.al.highestRoyalJelly.lt(10000)) return player.al.highestRoyalJelly.sub(1000).div(9000).mul(base).add(base*4)
-                if (player.al.highestRoyalJelly.lt(1000000)) return player.al.highestRoyalJelly.sub(10000).div(990000).mul(base).add(base*5)
-                return new Decimal(6/15)
+                if (player.al.highestRoyalJelly.lt(100000)) return player.al.highestRoyalJelly.sub(10000).div(90000).mul(base).add(base*5)
+                if (player.al.highestRoyalJelly.lt(1e6)) return player.al.highestRoyalJelly.sub(100000).div(900000).mul(base).add(base*6)
+                if (player.al.highestRoyalJelly.lt(1e7)) return player.al.highestRoyalJelly.sub(1e6).div(9e6).mul(base).add(base*7)
+                if (player.al.highestRoyalJelly.lt(1e8)) return player.al.highestRoyalJelly.sub(1e7).div(9e7).mul(base).add(base*8)
+                if (player.al.highestRoyalJelly.lt(1e9)) return player.al.highestRoyalJelly.sub(1e8).div(9e8).mul(base).add(base*9)
+                return new Decimal(10/15)
             },
-            baseStyle: {background: "linear-gradient(0deg, #140e00, #3c2a00)"},
-            fillStyle: {backgroundColor: "#3F2033cc"},
-            borderStyle: {border: "3px solid #625432", borderTopLeftRadius: "0", borderTopRightRadius: "150px 178px", borderBottomLeftRadius: "0", borderBottomRightRadius: "150px 246px"},
+            baseStyle: {background: "linear-gradient(0deg, #967d4a, #bd9d5b)"},
+            fillStyle: {backgroundColor: "#e172b566"},
+            borderStyle: {border: "3px solid #726241", borderTopLeftRadius: "0", borderTopRightRadius: "150px 178px", borderBottomLeftRadius: "0", borderBottomRightRadius: "150px 246px"},
             textStyle: {userSelect: "none"},
             display() {
                 let str = "<div style='width:125px;height:600px;display:flex;flex-direction:column'>"
-                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
-                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
-                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
-                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
-                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
-                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
-                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
-                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
-                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
-                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
-                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
-                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
-                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
-                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #726241'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #726241'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #726241'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #726241'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:4px;border-bottom:4px dotted #726241'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #726241'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #726241'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #726241'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #726241'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:4px;border-bottom:4px dotted #726241'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #726241'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #726241'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #726241'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #726241'></div>")
                 str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid transparent'></div>")
                 return str
             },
@@ -692,10 +896,13 @@ addLayer("al", {
                                 ["clickable", 1],
                             ], {width: "400px", height: "147px", background: "#2d250c", borderBottom: "3px solid #a900a9", borderRadius: "17px 14px 0 0"}],
                             ["always-scroll-column", [
-                                ["blank", "10px"],
+                                ["blank", "5px"],
                                 ["row", [["upgrade", 101], ["upgrade", 102], ["upgrade", 103]]],
                                 ["row", [["upgrade", 104], ["upgrade", 105], ["upgrade", 106]]],
                                 ["row", [["upgrade", 107], ["upgrade", 108], ["upgrade", 109]]],
+                                ["row", [["upgrade", 110], ["upgrade", 111], ["upgrade", 112]]],
+                                ["row", [["upgrade", 113], ["upgrade", 114], ["upgrade", 115]]],
+                                ["blank", "5px"],
                             ], {width: "400px", height: "327px", borderBottom: "3px solid #a900a9"}],
                             ["style-row", [
                                 ["buyable", 101], ["buyable", 102], ["buyable", 103],
@@ -711,10 +918,13 @@ addLayer("al", {
                                 ["clickable", 2],
                             ], {width: "400px", height: "147px", background: "#2d1624", borderBottom: "3px solid #a900a9", borderRadius: "17px 14px 0 0"}],
                             ["always-scroll-column", [
-                                ["blank", "10px"],
+                                ["blank", "5px"],
                                 ["row", [["upgrade", 201], ["upgrade", 202], ["upgrade", 203]]],
                                 ["row", [["upgrade", 204], ["upgrade", 205], ["upgrade", 206]]],
                                 ["row", [["upgrade", 207], ["upgrade", 208], ["upgrade", 209]]],
+                                ["row", [["upgrade", 210], ["upgrade", 211], ["upgrade", 212]]],
+                                ["row", [["upgrade", 213], ["upgrade", 214], ["upgrade", 215]]],
+                                ["blank", "5px"],
                             ], {width: "400px", height: "327px", borderBottom: "3px solid #a900a9"}],
                             ["style-row", [
                                 ["buyable", 201], ["buyable", 202], ["buyable", 203],
@@ -750,7 +960,7 @@ addLayer("al", {
                         ["style-row", [
                             ["style-row", [
                                 ["column", [
-                                    ["style-row", [], {width: "3px", height: "23px", background: "#625432", marginRight: "-3px"}],
+                                    ["style-row", [], {width: "3px", height: "23px", background: "#726241", marginRight: "-3px"}],
                                     ["bar", "Cocoon1"],
                                     ["blank", "23px"],
                                 ]],
@@ -764,52 +974,86 @@ addLayer("al", {
                                     ], {width: "398px", height: "50px", background: "#250025", borderBottom: "3px solid #a900a9"}],
                                     ["style-row", [
                                         ["style-row", [
-                                            ["color-text", [() => {return "1"}, true, "white", () => {return player.al.highestHoneycomb.gte(1) && player.al.highestRoyalJelly.gte(1)}, "gray"]],
+                                            ["color-text", [() => {return "1"}, true, "white", () => {return player.al.cocoonLevel >= 1}, "gray"]],
                                         ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
                                         ["style-row", [
-                                            ["color-text", [() => {return "x1.5 Aleph Resources"}, true, "white", () => {return player.al.highestHoneycomb.gte(1) && player.al.highestRoyalJelly.gte(1)}, "gray"]],
+                                            ["color-text", [() => {return "x1.5 Aleph Resources"}, true, "white", () => {return player.al.cocoonLevel >= 1}, "gray"]],
                                         ], {width: "280px", height: "35px"}],
                                     ], {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"}],
                                     ["style-row", [
                                         ["style-row", [
-                                            ["color-text", [() => {return "10"}, true, "white", () => {return player.al.highestHoneycomb.gte(10) && player.al.highestRoyalJelly.gte(10)}, "gray"]],
+                                            ["color-text", [() => {return "10"}, true, "white", () => {return player.al.cocoonLevel >= 2}, "gray"]],
                                         ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
                                         ["style-row", [
-                                            ["color-text", [() => {return "Unlock a new bee research"}, true, "white", () => {return player.al.highestHoneycomb.gte(10) && player.al.highestRoyalJelly.gte(10)}, "gray"]],
+                                            ["color-text", [() => {return "Unlock a new bee research"}, true, "white", () => {return player.al.cocoonLevel >= 2}, "gray"]],
                                         ], {width: "280px", height: "35px"}],
-                                    ], () => {return player.al.highestHoneycomb.gte(1) && player.al.highestRoyalJelly.gte(1) ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
+                                    ], () => {return player.al.cocoonLevel >= 1 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
                                     ["style-row", [
                                         ["style-row", [
-                                            ["color-text", [() => {return "100"}, true, "white", () => {return player.al.highestHoneycomb.gte(100) && player.al.highestRoyalJelly.gte(100)}, "gray"]],
+                                            ["color-text", [() => {return "100"}, true, "white", () => {return player.al.cocoonLevel >= 3}, "gray"]],
                                         ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
                                         ["style-row", [
-                                            ["color-text", [() => {return "Unlock flower rigging"}, true, "white", () => {return player.al.highestHoneycomb.gte(100) && player.al.highestRoyalJelly.gte(100)}, "gray"]],
+                                            ["color-text", [() => {return "Unlock flower rigging"}, true, "white", () => {return player.al.cocoonLevel >= 3}, "gray"]],
                                         ], {width: "280px", height: "35px"}],
-                                    ], () => {return player.al.highestHoneycomb.gte(10) && player.al.highestRoyalJelly.gte(10) ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
+                                    ], () => {return player.al.cocoonLevel >= 2 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
                                     ["style-row", [
                                         ["style-row", [
-                                            ["color-text", [() => {return "1,000"}, true, "white", () => {return player.al.highestHoneycomb.gte(1000) && player.al.highestRoyalJelly.gte(1000)}, "gray"]],
+                                            ["color-text", [() => {return "1,000"}, true, "white", () => {return player.al.cocoonLevel >= 4}, "gray"]],
                                         ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
                                         ["style-row", [
-                                            ["color-text", [() => {return "Unlock a new bee research"}, true, "white", () => {return player.al.highestHoneycomb.gte(1000) && player.al.highestRoyalJelly.gte(1000)}, "gray"]],
+                                            ["color-text", [() => {return "Unlock a new bee research"}, true, "white", () => {return player.al.cocoonLevel >= 4}, "gray"]],
                                         ], {width: "280px", height: "35px"}],
-                                    ], () => {return player.al.highestHoneycomb.gte(100) && player.al.highestRoyalJelly.gte(100) ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
+                                    ], () => {return player.al.cocoonLevel >= 3 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
                                     ["style-row", [
                                         ["style-row", [
-                                            ["color-text", [() => {return "10,000"}, true, "white", () => {return player.al.highestHoneycomb.gte(10000) && player.al.highestRoyalJelly.gte(10000)}, "gray"]],
+                                            ["color-text", [() => {return "10,000"}, true, "white", () => {return player.al.cocoonLevel >= 5}, "gray"]],
                                         ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
                                         ["style-row", [
-                                            ["color-text", [() => {return "Release a part of Aleph"}, true, "white", () => {return player.al.highestHoneycomb.gte(10000) && player.al.highestRoyalJelly.gte(10000)}, "gray"]],
+                                            ["color-text", [() => {return "Release a part of Aleph"}, true, "white", () => {return player.al.cocoonLevel >= 5}, "gray"]],
                                         ], {width: "280px", height: "35px"}],
-                                    ], () => {return player.al.highestHoneycomb.gte(1000) && player.al.highestRoyalJelly.gte(1000) ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
+                                    ], () => {return player.al.cocoonLevel >= 4 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
                                     ["style-row", [
                                         ["style-row", [
-                                            ["color-text", [() => {return "1,000,000"}, true, "white", () => {return player.al.highestHoneycomb.gte(1000000) && player.al.highestRoyalJelly.gte(1000000)}, "gray"]],
+                                            ["color-text", [() => {return "100,000"}, true, "white", () => {return player.al.cocoonLevel >= 6}, "gray"]],
                                         ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
                                         ["style-row", [
-                                            ["color-text", [() => {return "TEMP"}, true, "white", () => {return player.al.highestHoneycomb.gte(1000000) && player.al.highestRoyalJelly.gte(1000000)}, "gray"]],
+                                            ["color-text", [() => {return "Skip picking flower stems"}, true, "white", () => {return player.al.cocoonLevel >= 6}, "gray"]],
                                         ], {width: "280px", height: "35px"}],
-                                    ], () => {return player.al.highestHoneycomb.gte(10000) && player.al.highestRoyalJelly.gte(10000) ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
+                                    ], () => {return player.al.cocoonLevel >= 5 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
+                                    ["style-row", [
+                                        ["style-row", [
+                                            ["color-text", [() => {return "1,000,000"}, true, "white", () => {return player.al.cocoonLevel >= 7}, "gray"]],
+                                        ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
+                                        ["style-row", [
+                                            ["color-text", [() => {return "<p style='font-size:12px;line-height:1'>Start with 1 of each<br>circular/pentagonal red flower</p>"}, true, "white", () => {return player.al.cocoonLevel >= 7}, "gray"]],
+                                        ], {width: "280px", height: "35px"}],
+                                    ], () => {return player.al.cocoonLevel >= 6 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
+                                    ["style-row", [
+                                        ["style-row", [
+                                            ["color-text", [() => {return "10,000,000"}, true, "white", () => {return player.al.cocoonLevel >= 8}, "gray"]],
+                                        ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
+                                        ["style-row", [
+                                            ["color-text", [() => {return "Halve all flower cooldowns"}, true, "white", () => {return player.al.cocoonLevel >= 8}, "gray"]],
+                                        ], {width: "280px", height: "35px"}],
+                                    ], () => {return player.al.cocoonLevel >= 7 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
+                                    ["style-row", [
+                                        ["style-row", [
+                                            ["color-text", [() => {return "100,000,000"}, true, "white", () => {return player.al.cocoonLevel >= 9}, "gray"]],
+                                        ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
+                                        ["style-row", [
+                                            ["color-text", [() => {return "Unlock a new bee research"}, true, "white", () => {return player.al.cocoonLevel >= 9}, "gray"]],
+                                        ], {width: "280px", height: "35px"}],
+                                    ], () => {return player.al.cocoonLevel >= 8 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
+                                    ["style-row", [
+                                        ["style-row", [
+                                            ["color-text", [() => {return "1e9"}, true, "white", () => {return player.al.cocoonLevel >= 10}, "gray"]],
+                                        ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
+                                        ["style-row", [
+                                            ["color-text", [() => {return "Release a part of Aleph"}, true, "white", () => {return player.al.cocoonLevel >= 10}, "gray"]],
+                                        ], {width: "280px", height: "35px"}],
+                                    ], () => {return player.al.cocoonLevel >= 9 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
+
+                                    // ADD A FLOWER COOLDOWN SPEED-UP
                                 ], {width: "398px", height: "410px"}],
                                 ["style-column", [
                                     

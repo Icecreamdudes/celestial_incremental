@@ -88,7 +88,7 @@
         boosterDiceAutomation: false,
     }},
     automate() {
-        if (hasUpgrade("d", 11) || player.tad.altInfinities.shattered.amount.gte(100))
+        if (hasUpgrade("d", 11) || player.tad.altInfinities.shattered.milestone.gte(3))
         {
             buyBuyable("d", 11)
             buyBuyable("d", 12)
@@ -406,18 +406,18 @@
                 }
                 player.d.boosterSpeedToggle ? player.d.boosterDiceCooldown = new Decimal(30) : player.d.boosterDiceCooldown = new Decimal(60)
 
-                let random = getRandomInt(100)
-                let prob = player.d.dicePoints.add(1).log10().pow(0.8).div(5).add(4).floor()
-
-                if (new Decimal(random).lte(prob)) {
+                let chance = player.d.dicePoints.add(1).log10().pow(0.8).div(5).add(4).floor()
+                let guarantee = chance.div(100).floor()
+                chance = chance.sub(guarantee.mul(100))
+                if (chance.gte(Math.random()*100)) guarantee = guarantee.add(1)
+                if (guarantee.gt(0)) {
                     if (!hasAchievement("achievements", 21)) completeAchievement("achievements", 21)
-                    addLevelableXP("pet", 302, 1);
-                    if (player.cb.highestLevel.lt(35)) doPopup("none", "+1 Dice!<br>(Rare pets unlock at CB level 35)", "Pet Obtained!", 5, "#4e7cff", "resources/Pets/diceRarePet.png")
-                    if (player.cb.highestLevel.gte(35)) doPopup("none", "+1 Dice!", "Pet Obtained!", 5, "#4e7cff", "resources/Pets/diceRarePet.png")
+                    addLevelableXP("pet", 302, guarantee);
+                    if (player.cb.highestLevel.lt(35)) doPopup("none", "+" + formatWhole(guarantee) + " Dice!<br>(Rare pets unlock at CB level 35)", "Pet Obtained!", 5, "#4e7cff", "resources/Pets/diceRarePet.png")
+                    if (player.cb.highestLevel.gte(35)) doPopup("none", "+" + formatWhole(guarantee) + " Dice!", "Pet Obtained!", 5, "#4e7cff", "resources/Pets/diceRarePet.png")
                 }
 
-                if (inChallenge("ip", 15))
-                {
+                if (inChallenge("ip", 15)) {
                     layers.in.bigCrunch();
                 }
 
@@ -702,6 +702,7 @@
         for (let i = 0; i < player.d.diceRolls.length; i++) {
             player.d.diceScore = player.d.diceScore.add(player.d.diceRolls[i])
         }
+        player.d.diceScore = player.d.diceScore.mul(levelableEffect("pet", 302)[1])
         if (hasUpgrade("ep2", 13)) player.d.diceScore = player.d.diceScore.mul(upgradeEffect("ep2", 13))
         if (hasUpgrade("cs", 801)) player.d.diceScore = player.d.diceScore.mul(10)
         if (hasUpgrade("cs", 803)) player.d.diceScore = player.d.diceScore.mul(player.d.challengeDicePointsEffect2)
@@ -741,7 +742,7 @@
         } else if (player.d.currentBoosterRoll == 8) {
                 player.d.addDiceEffect = player.d.diceScore.mul(0.0005).pow(0.7)
                 if (player.d.addDiceEffect.gte(1)) player.d.addDiceEffect = player.d.addDiceEffect.pow(player.cs.scraps.dice.effect)
-                if (player.d.addDiceEffect.gte(1000)) player.d.addDiceEffect = player.d.addDiceEffect.div(1000).pow(0.1).mul(1000)
+                if (player.d.addDiceEffect.gte(1e6)) player.d.addDiceEffect = player.d.addDiceEffect.div(1e6).pow(0.1).mul(1e6)
                 player.d.boosterEffects[8] = player.d.boosterEffects[8].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 9) {
                 player.d.addDiceEffect = player.d.diceScore.mul(0.0007).pow(0.7)
@@ -1058,6 +1059,7 @@
             pay(amt) { player.d.challengeDicePoints = this.currency().sub(amt) },
             effect(x) {
                 let eff = getBuyableAmount(this.layer, this.id).mul(0.05)
+                eff = eff.mul(levelableEffect("pet", 302)[1])
                 if (hasUpgrade("ep2", 13)) eff = eff.mul(upgradeEffect("ep2", 13))
                 if (hasUpgrade("cs", 801)) eff = eff.mul(10)
                 if (hasUpgrade("cs", 803)) eff = eff.mul(player.d.challengeDicePointsEffect2)

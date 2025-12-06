@@ -146,8 +146,10 @@
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)
 
-        for (let i = 11; i < 19; i++) {
-            player.f.buyables[i] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 19; i++) {
+                player.f.buyables[i] = new Decimal(0)
+            }
         }
 
         player.f.factorPower = new Decimal(0)
@@ -173,17 +175,11 @@
         player.f.factorPowerPerSecond = new Decimal(0)
         player.f.powerFactorUnlocks = [true, true, true, false, false, false, false, false]
 
-        for (let i = 1; i < 9; i++) {
-            player.f.buyables[i] = new Decimal(0)
-        }
-        for (let i = 11; i < 20; i++) {
-            player.f.buyables[i] = new Decimal(0)
-        }
-        for (let i = 21; i < 30; i++) {
-            player.f.buyables[i] = new Decimal(0)
-        }
-        for (let i = 31; i < 37; i++) {
-            player.f.buyables[i] = new Decimal(0)
+
+        if (!hasMilestone("ip", 26)) {
+            for (let i in player.f.buyables) {
+                player.f.buyables[i] = new Decimal(0)
+            }
         }
 
         player.p.prestigePoints = new Decimal(0)
@@ -198,8 +194,10 @@
             }
         }
 
-        for (let i = 11; i < 19; i++) {
-            player.t.buyables[i] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 19; i++) {
+                player.t.buyables[i] = new Decimal(0)
+            }
         }
 
         player.f.factorPower = new Decimal(0)
@@ -207,12 +205,13 @@
         player.t.leaves = new Decimal(0)
         player.t.trees = new Decimal(0)
 
-        for (let i = 11; i < 19; i++) {
-            player.g.buyables[i] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 19; i++) {
+                player.g.buyables[i] = new Decimal(0)
+            }
         }
 
-        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14))
-        {
+        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14)) {
         for (let i = 0; i < player.g.upgrades.length; i++) {
             if (+player.g.upgrades[i] < 22) {
                 player.g.upgrades.splice(i, 1);
@@ -221,8 +220,7 @@
         }
         }
 
-        if (!hasMilestone("ip", 15) && !inChallenge("ip", 14))
-        {
+        if (!hasMilestone("ip", 15) && !inChallenge("ip", 14)) {
             for (let i = 0; i < player.r.milestones.length; i++) {
                 if (+player.r.milestones[i] < 20) {
                     player.r.milestones.splice(i, 1);
@@ -232,28 +230,39 @@
         }
 
         player.g.grass = new Decimal(0)
-        player.g.savedGrass = new Decimal(0)
-        player.g.grassCount = new Decimal(0)
         player.g.grassTimer = new Decimal(0)
 
         player.g.goldGrass = new Decimal(0)
-        player.g.savedGoldGrass = new Decimal(0)
-        player.g.goldGrassCount = new Decimal(0)
         player.g.goldGrassTimer = new Decimal(0)
+
+        for (let i = 1; i < 509; ) {
+            setGridData("g", i, [0, new Decimal(1), new Decimal(1)])
+
+            // Increase i value
+            if (i % 10 == 8) {
+                i = i+93
+            } else {
+                i++
+            }
+        }
 
         player.gh.grasshoppers = new Decimal(0)
         player.gh.fertilizer = new Decimal(0)
 
-        for (let i = 11; i < 20; i++) {
-            player.gh.buyables[i] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 20; i++) {
+                player.gh.buyables[i] = new Decimal(0)
+            }
         }
 
         player.m.codeExperience = new Decimal(0)
         player.m.linesOfCode = new Decimal(0)
         player.m.mods = new Decimal(0)
 
-        for (let i = 11; i < 15; i++) {
-            player.m.buyables[i] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 15; i++) {
+                player.m.buyables[i] = new Decimal(0)
+            }
         }
     },
     clickables: {
@@ -610,11 +619,45 @@
         },
         16: {
             costBase() { return new Decimal(150) },
-            costGrowth() { return new Decimal(1.5) },
-            purchaseLimit() { return new Decimal(100) },
+            costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(500) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.04).add(1)},
+            effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.1).add(1)},
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Mastery Point Crystallizer"
+            },
+            display() {
+                return "which are multiplying all OTF mastery point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Crystals"
+            },
+            buy(mult) {
+                if (mult != true && !hasMilestone("s", 16)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16)) this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', backgroundColor: '#98245c', color: 'white'}
+        },
+        17: {
+            costBase() { return new Decimal(250) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.p.crystals},
+            pay(amt) { player.p.crystals = this.currency().sub(amt) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.04).add(1).min(3)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -642,47 +685,13 @@
             },
             style: { width: '275px', height: '150px', backgroundColor: '#98245c', color: 'white'}
         },
-        17: {
-            costBase() { return new Decimal(250) },
-            costGrowth() { return new Decimal(1.35) },
-            purchaseLimit() { return new Decimal(500) },
-            currency() { return player.p.crystals},
-            pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.1).add(1)},
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Mastery Point Crystallizer"
-            },
-            display() {
-                return "which are multiplying the first 3 OTF mastery point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Crystals"
-            },
-            buy(mult) {
-                if (mult != true && !hasMilestone("s", 16)) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasMilestone("s", 16)) this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', backgroundColor: '#98245c', color: 'white'}
-        },
         18: {
             costBase() { return new Decimal(400) },
             costGrowth() { return new Decimal(2) },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return new Decimal(50) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.04).add(1)},
+            effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.02).add(1).min(2)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -711,9 +720,6 @@
             style: { width: '275px', height: '150px', backgroundColor: '#98245c', color: 'white'}
         },
     },
-    milestones: {},
-    challenges: {},
-    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {

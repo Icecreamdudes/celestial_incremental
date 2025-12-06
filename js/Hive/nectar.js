@@ -27,8 +27,28 @@ addLayer("ne", {
             gain: new Decimal(0),
             effect: new Decimal(1),
         },
+        epsilon: {
+            amount: new Decimal(0),
+            gain: new Decimal(0),
+            effect: new Decimal(1),
+        }
     }},
-    automate() {},
+    automate() {
+        if (hasUpgrade("al", 215) && player.bee.path == 2) {
+            buyUpgrade("ne", 101)
+            buyUpgrade("ne", 102)
+            buyUpgrade("ne", 103)
+            buyUpgrade("ne", 201)
+            buyUpgrade("ne", 202)
+            buyUpgrade("ne", 203)
+            buyUpgrade("ne", 301)
+            buyUpgrade("ne", 302)
+            buyUpgrade("ne", 303)
+            buyUpgrade("ne", 401)
+            buyUpgrade("ne", 402)
+            buyUpgrade("ne", 403)
+        }
+    },
     nodeStyle() {
         return {borderColor: "#6d3701"}
     },
@@ -45,8 +65,10 @@ addLayer("ne", {
         allGain = allGain.mul(buyableEffect("al", 201))
         allGain = allGain.mul(player.ho.effects.nectar.effect)
         if (hasUpgrade("ho", 2)) allGain = allGain.mul(upgradeEffect("ho", 2))
+        if (player.bb.breadMilestone >= 9) allGain = allGain.mul(player.bb.breadEffects[8])
 
         player.ne.alpha.gain = player.bee.bees.div(1e5).pow(Decimal.add(0.5, buyableEffect("bee", 43)))
+        if (player.bee.path == 1) player.ne.alpha.gain = player.bee.bees.div(1e70).pow(Decimal.add(0.5, buyableEffect("bee", 43))).pow(0.7)
         player.ne.alpha.gain = player.ne.alpha.gain.mul(allGain)
         if (hasUpgrade("ne", 101)) player.ne.alpha.gain = player.ne.alpha.gain.mul(2)
         player.ne.alpha.gain = player.ne.alpha.gain.mul(buyableEffect("bee", 41))
@@ -54,20 +76,29 @@ addLayer("ne", {
         if (hasUpgrade("ne", 301)) player.ne.alpha.gain = player.ne.alpha.gain.mul(upgradeEffect("ne", 301))
         player.ne.alpha.gain = player.ne.alpha.gain.mul(player.ho.effects.alpha.effect)
 
-        if (hasUpgrade("al", 203) && player.bee.path == 2) player.ne.alpha.amount = player.ne.alpha.amount.add(player.ne.alpha.gain.mul(delta))
+        if (hasUpgrade("al", 203) && tmp.ne.layerShown && player.bee.path != 0) player.ne.alpha.amount = player.ne.alpha.amount.add(player.ne.alpha.gain.mul(delta))
 
         player.ne.beta.gain = player.ne.alpha.amount.div(100).pow(Decimal.add(0.65, buyableEffect("bee", 43)))
+        if (player.bee.path == 1) player.ne.beta.gain = player.ne.alpha.amount.div(1e7).pow(Decimal.add(0.65, buyableEffect("bee", 43))).pow(0.7)
         player.ne.beta.gain = player.ne.beta.gain.mul(allGain)
 
         if (hasUpgrade("al", 206) && hasUpgrade("ne", 103)) player.ne.beta.amount = player.ne.beta.amount.add(player.ne.beta.gain.div(2).mul(delta))
 
         player.ne.gamma.gain = player.ne.beta.amount.div(100).pow(Decimal.add(0.6, buyableEffect("bee", 43)))
+        if (player.bee.path == 1) player.ne.gamma.gain = player.ne.beta.amount.div(1e8).pow(Decimal.add(0.6, buyableEffect("bee", 43))).pow(0.7)
         player.ne.gamma.gain = player.ne.gamma.gain.mul(allGain)
 
         if (hasUpgrade("al", 209) && hasUpgrade("ne", 203)) player.ne.gamma.amount = player.ne.gamma.amount.add(player.ne.gamma.gain.div(4).mul(delta))
 
         player.ne.delta.gain = player.ne.gamma.amount.div(100).pow(Decimal.add(0.55, buyableEffect("bee", 43)))
+        if (player.bee.path == 1) player.ne.delta.gain = player.ne.gamma.amount.div(1e9).pow(Decimal.add(0.55, buyableEffect("bee", 43))).pow(0.7)
         player.ne.delta.gain = player.ne.delta.gain.mul(allGain)
+
+        if (hasUpgrade("al", 212) && hasUpgrade("ne", 303)) player.ne.delta.amount = player.ne.delta.amount.add(player.ne.delta.gain.div(10).mul(delta))
+
+        player.ne.epsilon.gain = player.ne.delta.amount.div(1e40).pow(Decimal.add(0.05, buyableEffect("bee", 43))).div(3e6)
+        if (player.bee.path == 1) player.ne.epsilon.gain = player.ne.delta.amount.div(1e125).pow(Decimal.add(0.05, buyableEffect("bee", 43))).div(3e18).pow(0.7)
+        player.ne.epsilon.gain = player.ne.epsilon.gain.mul(allGain.pow(0.5))
 
         if (!hasUpgrade("ne", 302)) {
             player.ne.alpha.effect = player.ne.alpha.amount.pow(0.7).add(1)
@@ -78,13 +109,25 @@ addLayer("ne", {
         player.ne.gamma.effect = player.ne.gamma.amount.add(1).log(10).pow(0.5).div(3)
         player.ne.delta.effect = player.ne.delta.amount.add(1).log(10).pow(0.5).div(3).add(1)
         if (hasUpgrade("al", 204) && player.ne.delta.amount.gte(1)) player.ne.delta.effect = player.ne.delta.effect.add(player.ne.delta.amount.pow(0.08).sub(1))
+        player.ne.epsilon.effect = player.ne.epsilon.amount.pow(0.3).add(1)
+
+        if (player.bee.path == 1) {
+            player.ne.alpha.effect = player.ne.alpha.effect.pow(0.7)
+            player.ne.beta.effect = player.ne.beta.effect.pow(0.7)
+            player.ne.gamma.effect = player.ne.gamma.effect.pow(0.7)
+            player.ne.delta.effect = player.ne.delta.effect.pow(0.7)
+            player.ne.epsilon.effect = player.ne.epsilon.effect.pow(0.7)
+        }
 
         if (player.tab == "ne" && player.bee.path == 0) player.bee.path = 2
     },
     clickables: {
         1: {
-            title() { return "Gain Nectar α, but reset previous content.<br><small>Req: 100,000 Bees</small>" },
-            canClick() { return player.bee.bees.gte(1e5) },
+            title() {
+                if (player.bee.path == 1) return "Gain Nectar α, but reset previous content.<br><small>Req: 1e60 Bees</small>"
+                return "Gain Nectar α, but reset previous content.<br><small>Req: 100,000 Bees</small>"
+            },
+            canClick() { return (player.bee.path == 2 && player.bee.bees.gte(1e5)) || (player.bee.path == 1 && player.bee.bees.gte(1e60)) },
             unlocked: true,
             onClick() {
                 player.ne.alpha.amount = player.ne.alpha.amount.add(player.ne.alpha.gain)
@@ -94,8 +137,11 @@ addLayer("ne", {
             style: {width: '300px', minHeight: '80px', fontSize: "12px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: '15px'},
         },
         2: {
-            title() { return "Gain Nectar β, but reset previous content.<br><small>Req: 100 Nectar α</small>" },
-            canClick() { return player.ne.alpha.amount.gte(100) },
+            title() {
+                if (player.bee.path == 1) return "Gain Nectar β, but reset previous content.<br><small>Req: 1e6 Nectar α</small>"
+                return "Gain Nectar β, but reset previous content.<br><small>Req: 100 Nectar α</small>"
+            },
+            canClick() { return (player.bee.path == 2 && player.ne.alpha.amount.gte(100)) || (player.bee.path == 1 && player.ne.alpha.amount.gte(1e6)) },
             unlocked: true,
             onClick() {
                 player.ne.beta.amount = player.ne.beta.amount.add(player.ne.beta.gain)
@@ -106,8 +152,11 @@ addLayer("ne", {
             style: {width: '300px', minHeight: '80px', fontSize: "12px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: '15px'},
         },
         3: {
-            title() { return "Gain Nectar γ, but reset previous content.<br><small>Req: 100 Nectar β</small>" },
-            canClick() { return player.ne.beta.amount.gte(100) },
+            title() {
+                if (player.bee.path == 1) return "Gain Nectar γ, but reset previous content.<br><small>Req: 1e6 Nectar β</small>"
+                return "Gain Nectar γ, but reset previous content.<br><small>Req: 100 Nectar β</small>"
+            },
+            canClick() { return (player.bee.path == 2 && player.ne.beta.amount.gte(100)) || (player.bee.path == 1 && player.ne.beta.amount.gte(1e6)) },
             unlocked: true,
             onClick() {
                 player.ne.gamma.amount = player.ne.gamma.amount.add(player.ne.gamma.gain)
@@ -119,8 +168,11 @@ addLayer("ne", {
             style: {width: '300px', minHeight: '80px', fontSize: "12px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: '15px'},
         },
         4: {
-            title() { return "Gain Nectar δ, but reset previous content.<br><small>Req: 100 Nectar γ</small>" },
-            canClick() { return player.ne.gamma.amount.gte(100) },
+            title() {
+                if (player.bee.path == 1) return "Gain Nectar δ, but reset previous content.<br><small>Req: 1e6 Nectar γ</small>"
+                return "Gain Nectar δ, but reset previous content.<br><small>Req: 100 Nectar γ</small>"
+            },
+            canClick() { return (player.bee.path == 2 && player.ne.gamma.amount.gte(100)) || (player.bee.path == 1 && player.ne.gamma.amount.gte(1e6)) },
             unlocked: true,
             onClick() {
                 player.ne.delta.amount = player.ne.delta.amount.add(player.ne.delta.gain)
@@ -132,13 +184,34 @@ addLayer("ne", {
             },
             style: {width: '300px', minHeight: '80px', fontSize: "12px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: '15px'},
         },
+        5: {
+            title() {
+                if (player.bee.path == 1) return "Gain Nectar ε, but reset previous content.<br><small>Req: 1e120 Nectar δ</small>"
+                return "Gain Nectar ε, but reset previous content.<br><small>Req: 1e40 Nectar δ</small>"
+            },
+            canClick() { return (player.bee.path == 2 && player.ne.delta.amount.gte(1e40)) || (player.bee.path == 1 && player.ne.delta.amount.gte(1e120)) },
+            unlocked() {return hasUpgrade("al", 211)},
+            onClick() {
+                player.ne.epsilon.amount = player.ne.epsilon.amount.add(player.ne.epsilon.gain)
+                
+                player.bee.bees = new Decimal(1)
+                player.ne.alpha.amount = new Decimal(0)
+                player.ne.beta.amount = new Decimal(0)
+                player.ne.gamma.amount = new Decimal(0)
+                player.ne.delta.amount = new Decimal(0)
+            },
+            style: {width: '300px', minHeight: '80px', fontSize: "12px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: '15px'},
+        },
     },
     upgrades: {
         101: {
             title: "Nector α-1",
             unlocked: true,
             description: "Double Nectar α Gain.",
-            cost: new Decimal(5),
+            cost() {
+                if (player.bee.path == 1) return new Decimal(125)
+                return new Decimal(5)
+            },
             currencyLocation() { return player.ne.alpha },
             currencyDisplayName: "Nectar α",
             currencyInternalName: "amount",
@@ -148,7 +221,10 @@ addLayer("ne", {
             title: "Nector α-2",
             unlocked: true,
             description: "Triple bees per second.",
-            cost: new Decimal(20),
+            cost() {
+                if (player.bee.path == 1) return new Decimal(8000)
+                return new Decimal(20)
+            },
             currencyLocation() { return player.ne.alpha },
             currencyDisplayName: "Nectar α",
             currencyInternalName: "amount",
@@ -158,7 +234,10 @@ addLayer("ne", {
             title: "Nector α-3",
             unlocked: true,
             description: "Unlock Nectar β.",
-            cost: new Decimal(100),
+            cost() {
+                if (player.bee.path == 1) return new Decimal(100000)
+                return new Decimal(100)
+            },
             currencyLocation() { return player.ne.alpha },
             currencyDisplayName: "Nectar α",
             currencyInternalName: "amount",
@@ -169,7 +248,10 @@ addLayer("ne", {
             title: "Nector β-1",
             unlocked: true,
             description: "Unlock green flowers.",
-            cost: new Decimal(5),
+            cost() {
+                if (player.bee.path == 1) return new Decimal(125)
+                return new Decimal(5)
+            },
             currencyLocation() { return player.ne.beta },
             currencyDisplayName: "Nectar β",
             currencyInternalName: "amount",
@@ -179,7 +261,10 @@ addLayer("ne", {
             title: "Nector β-2",
             unlocked: true,
             description: "Buff nectar α based on total nectar upgrades.",
-            cost: new Decimal(20),
+            cost() {
+                if (player.bee.path == 1) return new Decimal(8000)
+                return new Decimal(20)
+            },
             currencyLocation() { return player.ne.beta },
             currencyDisplayName: "Nectar β",
             currencyInternalName: "amount",
@@ -193,7 +278,10 @@ addLayer("ne", {
             title: "Nector β-3",
             unlocked: true,
             description: "Unlock Nectar γ.",
-            cost: new Decimal(100),
+            cost() {
+                if (player.bee.path == 1) return new Decimal(100000)
+                return new Decimal(100)
+            },
             currencyLocation() { return player.ne.beta },
             currencyDisplayName: "Nectar β",
             currencyInternalName: "amount",
@@ -204,7 +292,10 @@ addLayer("ne", {
             title: "Nector γ-1",
             unlocked: true,
             description: "Boost nectar α based on total research.",
-            cost: new Decimal(5),
+            cost() {
+                if (player.bee.path == 1) return new Decimal(125)
+                return new Decimal(5)
+            },
             currencyLocation() { return player.ne.gamma },
             currencyDisplayName: "Nectar γ",
             currencyInternalName: "amount",
@@ -218,7 +309,10 @@ addLayer("ne", {
             title: "Nector γ-2",
             unlocked: true,
             description: "Improve nector α effect.",
-            cost: new Decimal(20),
+            cost() {
+                if (player.bee.path == 1) return new Decimal(8000)
+                return new Decimal(20)
+            },
             currencyLocation() { return player.ne.gamma },
             currencyDisplayName: "Nectar γ",
             currencyInternalName: "amount",
@@ -228,7 +322,10 @@ addLayer("ne", {
             title: "Nector γ-3",
             unlocked: true,
             description: "Unlock Nectar δ.",
-            cost: new Decimal(100),
+            cost() {
+                if (player.bee.path == 1) return new Decimal(100000)
+                return new Decimal(100)
+            },
             currencyLocation() { return player.ne.gamma },
             currencyDisplayName: "Nectar γ",
             currencyInternalName: "amount",
@@ -239,7 +336,10 @@ addLayer("ne", {
             title: "Nector δ-1",
             unlocked: true,
             description: "Unlock a new nectar research.",
-            cost: new Decimal(5),
+            cost() {
+                if (player.bee.path == 1) return new Decimal(125)
+                return new Decimal(5)
+            },
             currencyLocation() { return player.ne.delta },
             currencyDisplayName: "Nectar δ",
             currencyInternalName: "amount",
@@ -249,7 +349,10 @@ addLayer("ne", {
             title: "Nector δ-2",
             unlocked: true,
             description: "Decrease time between green flower growth by /2.",
-            cost: new Decimal(20),
+            cost() {
+                if (player.bee.path == 1) return new Decimal(8000)
+                return new Decimal(20)
+            },
             currencyLocation() { return player.ne.delta },
             currencyDisplayName: "Nectar δ",
             currencyInternalName: "amount",
@@ -258,8 +361,14 @@ addLayer("ne", {
         403: {
             title: "Nector δ-3",
             unlocked: true,
-            description: "Double picking power.",
-            cost: new Decimal(100),
+            description() {
+                if (hasUpgrade("al", 211)) return "Double picking power and unlock nectar ε."
+                return "Double picking power."
+            },
+            cost() {
+                if (player.bee.path == 1) return new Decimal(100000)
+                return new Decimal(100)
+            },
             currencyLocation() { return player.ne.delta },
             currencyDisplayName: "Nectar δ",
             currencyInternalName: "amount",
@@ -315,7 +424,7 @@ addLayer("ne", {
                 ["style-row", [
                     ["upgrade", 301], ["upgrade", 302], ["upgrade", 303]
                 ], {width: "400px", height: "150px", background: "#ba8652", borderRadius: "0 0 17px 17px"}],
-            ], () => {return hasUpgrade("ne", 203) ? {width: "400px", height: "300px", background: "#e9a867", border: "3px solid #6d3701", margin: "3px 3px 0 0", borderRadius: "20px"} : {display: "none !important"}}],
+            ], () => {return hasUpgrade("ne", 203) ? {width: "400px", height: "300px", background: "#e9a867", border: "3px solid #6d3701", margin: "3px 3px 3px 0", borderRadius: "20px"} : {display: "none !important"}}],
             ["style-column", [
                 ["style-column", [
                     ["row", [
@@ -329,8 +438,32 @@ addLayer("ne", {
                 ["style-row", [
                     ["upgrade", 401], ["upgrade", 402], ["upgrade", 403]
                 ], {width: "400px", height: "150px", background: "#b46f29", borderRadius: "0 0 17px 17px"}],
-            ], () => {return hasUpgrade("ne", 303) ? {width: "400px", height: "300px", background: "#e28b34", border: "3px solid #6d3701", margin: "3px 0 0 3px", borderRadius: "20px"} : {display: "none !important"}}],
+            ], () => {return hasUpgrade("ne", 303) ? {width: "400px", height: "300px", background: "#e28b34", border: "3px solid #6d3701", margin: "3px 0 3px 3px", borderRadius: "20px"} : {display: "none !important"}}],
+            ["style-column", [
+                ["style-column", [
+                    ["row", [
+                        ["raw-html", () => {return "You have " + format(player.ne.epsilon.amount) + " Nectar ε"}, {color: "#161616", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "(+" + format(player.ne.epsilon.gain) + ")"}, {color: "#161616", fontSize: "16px", fontFamily: "monospace", marginLeft: "10px"}],
+                    ]],
+                    ["raw-html", () => {return "Boosts pollen gain by x" + formatSimple(player.ne.epsilon.effect, 2)}, {color: "#161616", fontSize: "14px", fontFamily: "monospace"}],
+                    ["blank", "10px"],
+                    ["clickable", 5],
+                ], {width: "400px", height: "147px"}],
+                ["style-row", [
+
+                ], () => {return false ? {width: "400px", height: "150px", background: "#b16415", borderTop: "3px solid #6d3701", borderRadius: "0 0 17px 17px"} : {display: "none !important"}}],
+            ], () => {
+                if (hasUpgrade("al", 211) && hasUpgrade("ne", 403)) {
+                    if (false) {
+                        return {width: "400px", height: "300px", background: "#de7d1b", border: "3px solid #6d3701", margin: "3px 3px 0 0", borderRadius: "20px"}
+                    } else {
+                        return {width: "400px", height: "147px", background: "#de7d1b", border: "3px solid #6d3701", margin: "3px 3px 0 0", borderRadius: "20px"}
+                    }
+                } else {
+                    return {display: "none !important"}
+                }
+            }],
         ], {width: "820px"}],
     ],
-    layerShown() { return player.startedGame && player.bee.totalResearch.gte(25) && player.bee.path != 1 }
+    layerShown() { return player.startedGame && (player.bee.totalResearch.gte(25) && player.bee.path != 1) || (player.tad.hiveExpand && player.bee.totalResearch.gte(120) && player.bee.path == 1)}
 })

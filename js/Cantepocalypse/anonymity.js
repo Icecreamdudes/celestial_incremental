@@ -46,12 +46,14 @@
         if (hasMilestone("fa", 18)) player.an.anonymityToGet = player.an.anonymityToGet.mul(player.fa.milestoneEffect[7])
         player.an.anonymityToGet = player.an.anonymityToGet.mul(buyableEffect("fu", 46))
         player.an.anonymityToGet = player.an.anonymityToGet.mul(levelableEffect("pu", 103)[2])
-        player.an.anonymityToGet = player.an.anonymityToGet.mul(levelableEffect("pet", 405)[0])
         player.an.anonymityToGet = player.an.anonymityToGet.mul(buyableEffect("st", 108))
 
         // ALWAYS AFTER
         if (inChallenge("fu", 11)) player.an.anonymityToGet = player.an.anonymityToGet.pow(0.2)
         if (inChallenge("fu", 11)) player.an.anonymityToGet = player.an.anonymityToGet.mul(player.fu.jocusEssenceEffect)
+
+        // POWER MODIFIERS
+        player.an.anonymityToGet = player.an.anonymityToGet.pow(levelableEffect("pet", 405)[0])
 
         if (hasMilestone("gs", 15)) player.an.anonymity = player.an.anonymity.add(player.an.anonymityToGet.mul(Decimal.mul(delta, 0.1)))
     },

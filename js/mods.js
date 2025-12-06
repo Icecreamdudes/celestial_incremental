@@ -129,7 +129,6 @@
         player.m.modsToGet = player.m.modsToGet.mul(levelableEffect("pet", 203)[1])
         if (hasMilestone("r", 19)) player.m.modsToGet = player.m.modsToGet.mul(player.r.pentMilestone9Effect[1])
         player.m.modsToGet = player.m.modsToGet.mul(player.d.boosterEffects[8])
-        player.m.modsToGet = player.m.modsToGet.mul(levelableEffect("pet", 302)[1])
         if (hasUpgrade("ip", 23) && !inChallenge("ip", 14)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ip", 23))
         if (hasUpgrade("ad", 18) && !inChallenge("ip", 14)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ad", 18))
         if (hasUpgrade("ip", 33) && !inChallenge("ip", 14)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ip", 33))
@@ -216,22 +215,14 @@
         player.r.factorPowerPerSecond = new Decimal(0)
         player.r.powerFactorUnlocks = [true, true, true, false, false, false, false, false]
 
-        player.f.buyables[11] = new Decimal(0)
-        player.f.buyables[12] = new Decimal(0)
-        player.f.buyables[13] = new Decimal(0)
-        player.f.buyables[14] = new Decimal(0)
-        player.f.buyables[15] = new Decimal(0)
-        player.f.buyables[16] = new Decimal(0)
-        player.f.buyables[17] = new Decimal(0)
-        player.f.buyables[18] = new Decimal(0)
-        player.f.buyables[19] = new Decimal(0)
-        player.f.buyables[21] = new Decimal(0)
-        player.f.buyables[22] = new Decimal(0)
-        player.f.buyables[23] = new Decimal(0)
-        player.f.buyables[24] = new Decimal(0)
-        player.f.buyables[25] = new Decimal(0)
-        player.f.buyables[26] = new Decimal(0)
-        player.f.buyables[27] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 19; i++) {
+                player.f.buyables[i] = new Decimal(0)
+            }
+            for (let i = 21; i < 28; i++) {
+                player.f.buyables[i] = new Decimal(0)
+            }
+        }
 
         player.p.prestigePoints = new Decimal(0)
 
@@ -243,28 +234,22 @@
                 }
             }
         }
-        player.t.buyables[11] = new Decimal(0)
-        player.t.buyables[12] = new Decimal(0)
-        player.t.buyables[13] = new Decimal(0)
-        player.t.buyables[14] = new Decimal(0)
-        player.t.buyables[15] = new Decimal(0)
-        player.t.buyables[16] = new Decimal(0)
-        player.t.buyables[17] = new Decimal(0)
-        player.t.buyables[18] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 19; i++) {
+                player.t.buyables[i] = new Decimal(0)
+            }
+        }
 
         player.f.factorPower = new Decimal(0)
 
         player.t.leaves = new Decimal(0)
         player.t.trees = new Decimal(0)
 
-        player.g.buyables[11] = new Decimal(0)
-        player.g.buyables[12] = new Decimal(0)
-        player.g.buyables[13] = new Decimal(0)
-        player.g.buyables[14] = new Decimal(0)
-        player.g.buyables[15] = new Decimal(0)
-        player.g.buyables[16] = new Decimal(0)
-        player.g.buyables[17] = new Decimal(0)
-        player.g.buyables[18] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 19; i++) {
+                player.g.buyables[i] = new Decimal(0)
+            }
+        }
 
         if (!hasMilestone("ip", 11)) {
             for (let i = 0; i < player.g.upgrades.length; i++) {
@@ -275,14 +260,21 @@
             }
         }
         player.g.grass = new Decimal(0)
-        player.g.savedGrass = new Decimal(0)
-        player.g.grassCount = new Decimal(0)
         player.g.grassTimer = new Decimal(0)
 
         player.g.goldGrass = new Decimal(0)
-        player.g.savedGoldGrass = new Decimal(0)
-        player.g.goldGrassCount = new Decimal(0)
         player.g.goldGrassTimer = new Decimal(0)
+
+        for (let i = 1; i < 509; ) {
+            setGridData("g", i, [0, new Decimal(1), new Decimal(1)])
+
+            // Increase i value
+            if (i % 10 == 8) {
+                i = i+93
+            } else {
+                i++
+            }
+        }
     },
     bars: {
         modbar: {

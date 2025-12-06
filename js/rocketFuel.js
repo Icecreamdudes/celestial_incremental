@@ -130,7 +130,7 @@
         }
 
         // ABILITY AUTOMATION
-        if (player.tad.altInfinities.broken.amount.gte(100)) {
+        if (player.tad.altInfinities.broken.milestone.gte(3)) {
             layers.rf.rocketFuelAbility(0, player.rf.rocketFuel)
             layers.rf.rocketFuelAbility(1, player.rf.rocketFuel)
             layers.rf.rocketFuelAbility(2, player.rf.rocketFuel)
@@ -362,16 +362,18 @@
                 player.rf.abilityTimers[3] = amount.pow(0.08).mul(45)
             break;
             case 4:
-                player.rf.abilityEffects[4] = player.cb.buttonBaseXP[0].mul(amount.log10().pow(0.7).div(10).add(1))
+                player.rf.abilityEffects[4] = player.cb.xpTimers[0].base.mul(amount.log10().pow(0.7).div(10).add(1))
                 player.cb.xp = player.cb.xp.add(player.rf.abilityEffects[4])
                 player.cb.totalxp = player.cb.totalxp.add(player.rf.abilityEffects[4])
-                player.rf.abilityTimers[4] = player.cb.buttonTimersMax[0].mul(amount.log10().pow(0.8).div(10).add(1.7))
-                let prob = amount.log10().pow(0.75).div(2).add(4).floor()
-                let random = getRandomInt(100)
+                player.rf.abilityTimers[4] = player.cb.xpTimers[0].max.mul(amount.log10().pow(0.8).div(10).add(1.7))
 
-                if (new Decimal(random).lte(prob)) {
-                    addLevelableXP("pet", 303, 1);
-                    doPopup("none", "+1 Drippy Ufo!", "Pet Obtained!", 5, "#4e7cff", "resources/Pets/ufoRarePet.png")
+                let chance = amount.log(10).pow(0.75).div(2).add(4).floor()
+                let guarantee = chance.div(100).floor()
+                chance = chance.sub(guarantee.mul(100))
+                if (chance.gte(Math.random()*100)) guarantee = guarantee.add(1)
+                if (guarantee.gt(0)) {
+                    addLevelableXP("pet", 303, guarantee);
+                    doPopup("none", "+" + formatWhole(guarantee) + " Drippy Ufo!", "Pet Obtained!", 5, "#4e7cff", "resources/Pets/ufoRarePet.png")
                 }
             break;
             case 5:
@@ -408,38 +410,11 @@
         player.f.factorPowerPerSecond = new Decimal(0)
         player.f.powerFactorUnlocks = [true, true, true, false, false, false, false, false]
 
-        player.f.buyables[1] = new Decimal(0)
-        player.f.buyables[2] = new Decimal(0)
-        player.f.buyables[3] = new Decimal(0)
-        player.f.buyables[4] = new Decimal(0)
-        player.f.buyables[5] = new Decimal(0)
-        player.f.buyables[6] = new Decimal(0)
-        player.f.buyables[7] = new Decimal(0)
-        player.f.buyables[8] = new Decimal(0)
-        player.f.buyables[11] = new Decimal(0)
-        player.f.buyables[12] = new Decimal(0)
-        player.f.buyables[13] = new Decimal(0)
-        player.f.buyables[14] = new Decimal(0)
-        player.f.buyables[15] = new Decimal(0)
-        player.f.buyables[16] = new Decimal(0)
-        player.f.buyables[17] = new Decimal(0)
-        player.f.buyables[18] = new Decimal(0)
-        player.f.buyables[19] = new Decimal(0)
-        player.f.buyables[21] = new Decimal(0)
-        player.f.buyables[22] = new Decimal(0)
-        player.f.buyables[23] = new Decimal(0)
-        player.f.buyables[24] = new Decimal(0)
-        player.f.buyables[25] = new Decimal(0)
-        player.f.buyables[26] = new Decimal(0)
-        player.f.buyables[27] = new Decimal(0)
-        player.f.buyables[28] = new Decimal(0)
-        player.f.buyables[29] = new Decimal(0)
-        player.f.buyables[31] = new Decimal(0)
-        player.f.buyables[32] = new Decimal(0)
-        player.f.buyables[33] = new Decimal(0)
-        player.f.buyables[34] = new Decimal(0)
-        player.f.buyables[35] = new Decimal(0)
-        player.f.buyables[36] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i in player.f.buyables) {
+                player.f.buyables[i] = new Decimal(0)
+            }
+        }
 
         player.p.prestigePoints = new Decimal(0)
 
@@ -452,28 +427,22 @@
             }
         }
 
-        player.t.buyables[11] = new Decimal(0)
-        player.t.buyables[12] = new Decimal(0)
-        player.t.buyables[13] = new Decimal(0)
-        player.t.buyables[14] = new Decimal(0)
-        player.t.buyables[15] = new Decimal(0)
-        player.t.buyables[16] = new Decimal(0)
-        player.t.buyables[17] = new Decimal(0)
-        player.t.buyables[18] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 19; i++) {
+                player.t.buyables[i] = new Decimal(0)
+            }
+        }
 
         player.f.factorPower = new Decimal(0)
 
         player.t.leaves = new Decimal(0)
         player.t.trees = new Decimal(0)
 
-        player.g.buyables[11] = new Decimal(0)
-        player.g.buyables[12] = new Decimal(0)
-        player.g.buyables[13] = new Decimal(0)
-        player.g.buyables[14] = new Decimal(0)
-        player.g.buyables[15] = new Decimal(0)
-        player.g.buyables[16] = new Decimal(0)
-        player.g.buyables[17] = new Decimal(0)
-        player.g.buyables[18] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 19; i++) {
+                player.g.buyables[i] = new Decimal(0)
+            }
+        }
 
         if (!hasMilestone("ip", 11)) {
             for (let i = 0; i < player.g.upgrades.length; i++) {
@@ -486,36 +455,40 @@
 
 
         player.g.grass = new Decimal(0)
-        player.g.savedGrass = new Decimal(0)
-        player.g.grassCount = new Decimal(0)
         player.g.grassTimer = new Decimal(0)
 
         player.g.goldGrass = new Decimal(0)
-        player.g.savedGoldGrass = new Decimal(0)
-        player.g.goldGrassCount = new Decimal(0)
         player.g.goldGrassTimer = new Decimal(0)
+
+        for (let i = 1; i < 509; ) {
+            setGridData("g", i, [0, new Decimal(1), new Decimal(1)])
+
+            // Increase i value
+            if (i % 10 == 8) {
+                i = i+93
+            } else {
+                i++
+            }
+        }
 
         player.gh.grasshoppers = new Decimal(0)
         player.gh.fertilizer = new Decimal(0)
 
-        player.gh.buyables[11] = new Decimal(0)
-        player.gh.buyables[12] = new Decimal(0)
-        player.gh.buyables[13] = new Decimal(0)
-        player.gh.buyables[14] = new Decimal(0)
-        player.gh.buyables[15] = new Decimal(0)
-        player.gh.buyables[16] = new Decimal(0)
-        player.gh.buyables[17] = new Decimal(0)
-        player.gh.buyables[18] = new Decimal(0)
-        player.gh.buyables[19] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 20; i++) {
+                player.gh.buyables[i] = new Decimal(0)
+            }
+        }
 
         player.m.codeExperience = new Decimal(0)
         player.m.linesOfCode = new Decimal(0)
         player.m.mods = new Decimal(0)
 
-        player.m.buyables[11] = new Decimal(0)
-        player.m.buyables[12] = new Decimal(0)
-        player.m.buyables[13] = new Decimal(0)
-        player.m.buyables[14] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 15; i++) {
+                player.m.buyables[i] = new Decimal(0)
+            }
+        }
     },
     bars: {},
     upgrades: {

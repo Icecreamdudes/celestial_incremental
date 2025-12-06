@@ -62,11 +62,13 @@
         player.oi.oilToGet = player.oi.oilToGet.mul(player.fu.funEffect)
         if (hasUpgrade("fu", 12)) player.oi.oilToGet = player.oi.oilToGet.mul(upgradeEffect("fu", 12))
         player.oi.oilToGet = player.oi.oilToGet.mul(levelableEffect("pu", 104)[2])
-        player.oi.oilToGet = player.oi.oilToGet.mul(levelableEffect("pet", 405)[1])
         player.oi.oilToGet = player.oi.oilToGet.mul(buyableEffect("st", 107))
 
         // KEEP AFTER
         if (inChallenge("fu", 11)) player.oi.oilToGet = player.oi.oilToGet.pow(0.2)
+
+        // POWER MODIFIERS
+        player.oi.oilToGet = player.oi.oilToGet.pow(levelableEffect("pet", 405)[1])
 
         if (!inChallenge("fu", 11)) player.oi.oil = player.oi.oil.add(player.oi.oilToGet.mul(Decimal.mul(buyableEffect("fa", 204), delta)))
 
@@ -161,6 +163,17 @@
         player.rg.buyables[16] = new Decimal(0)
         player.rg.buyables[17] = new Decimal(0)
         player.rg.buyables[18] = new Decimal(0)
+
+        for (let i = 1; i < 509; ) {
+            setGridData("rg", i, new Decimal(1))
+
+            // Increase i value
+            if (i % 10 == 8) {
+                i = i+93
+            } else {
+                i++
+            }
+        }
 
         if (!hasUpgrade("s", 15)) {
             for (let i = 0; i < player.an.upgrades.length; i++) {
@@ -768,14 +781,13 @@
                 content: [
                     ["layer-proxy", ["ca", [
                         ["blank", "25px"],
-                        ["raw-html", function () { return "You have <h3>" + formatWhole(player.ca.rememberanceCores) + "</h3> rememberance cores." }, { "color": "white", "font-size": "26px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "Your rememberance cores boost cante energy gain by x<h3>" + format(player.ca.rememberanceCoresEffect) + "</h3>." }, { "color": "white", "font-size": "26px", "font-family": "monospace" }],
+                        ["raw-html", () => {return "You have <h3>" + formatWhole(player.ca.rememberanceCores) + "</h3> rememberance cores."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "Boosts cante energy gain by x<h3>" + format(player.ca.rememberanceCoresEffect) + "</h3>."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ["blank", "25px"],
-                        ["raw-html", function () { return "You have <h3>" + formatWhole(player.ca.canteCores) + "</h3> cante cores." }, { "color": "white", "font-size": "22px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "You have <h3>" + format(player.oi.protoMemories) + "</h3> proto memories." }, { "color": "white", "font-size": "22px", "font-family": "monospace" }],
+                        ["raw-html", () => {return "You have <h3>" + formatWhole(player.ca.canteCores) + "</h3> Cante cores."}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "You have <h3>" + format(player.oi.protoMemories) + "</h3> proto memories."}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                         ["blank", "25px"],
-                        ["row", [["clickable", 15]]],
-                        ["raw-html", function () { return "Cost: <h3>" + format(player.ca.rememberanceCoreCost) + "</h3> proto memories." }, { "color": "white", "font-size": "22px", "font-family": "monospace" }],    
+                        ["clickable", 15],
                     ]]],
                 ]
             },

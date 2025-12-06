@@ -74,7 +74,7 @@ addUniverse("U1", {
 
 addUniverse("UA", {
     name: "Universe α<br>Hex",
-    symbol: "H",
+    symbol: "α",
     tree: [["hpr", "hsa"], ["hre", "hpu"], ["hbl", "hcu", "hve"], ["hpw", "hrm"]],
     nodeStyle() {
         let style = {
@@ -197,7 +197,7 @@ addUniverse("D1", {
 addUniverse("CB", {
     name: "Check Back",
     symbol: "CB",
-    tree: [["cb"], ["ev0", "ev1", "ev2", "ev4", "ev8", "ev10"], ["ep0", "ep1", "ep2", "ep3", "ep4", "ep5"]],
+    tree: [["cb"], ["ev0", "ev1", "ev2", "ev8"], ["ep0", "ep1", "ep2", "ep3", "ep4", "ep5"]],
     nodeStyle() {
         return {
             background: "#094599",
@@ -227,7 +227,11 @@ addUniverse("CH", {
 })
 
 addUniverse("UB", {
-    name: "Universe β<br>Hive",
+    name() {
+        if (player.bee.path == 1) return "Universe β<br>Hive [Pollen Path]"
+        if (player.bee.path == 2) return "Universe β<br>Hive [Nectar Path]"
+        return "Universe β<br>Hive"
+    },
     symbol: "β",
     tree: [["bee", "fl"], ["bpl", "ne"], ["bb", "wa", "ho"], ["al"]],
     nodeStyle() {

@@ -117,7 +117,7 @@ addLayer("in", {
         if (hasUpgrade("ip", 42)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(upgradeEffect("ip", 42))
         if (hasUpgrade("bi", 101)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(upgradeEffect("bi", 101))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.om.diceMasteryPointsEffect)
-        // player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("tad", 21))
+        if (player.tad.altInfinities.disfigured.milestone.gte(2)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.tad.altInfinities.disfigured.effect2)
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("gh", 38))
         if (hasUpgrade("bi", 23)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(upgradeEffect("bi", 23))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.ca.replicantiEffect)
@@ -132,7 +132,6 @@ addLayer("in", {
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.fu.sadnessEffect2)
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.co.cores.infinity.effect[0])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(levelableEffect("pu", 101)[2])
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(levelableEffect("pet", 404)[0])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ma", 21))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.ma.bestComboDepth1Effect)
         if (hasMilestone("r", 21)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.r.pentMilestone11Effect)
@@ -142,6 +141,7 @@ addLayer("in", {
 
         // POWER MODIFIERS
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(player.co.cores.infinity.effect[1])
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(levelableEffect("pet", 404)[0])
 
         // AUTOMATION
         if (hasUpgrade("s", 24)) player.in.infinityPoints = player.in.infinityPoints.add(player.in.infinityPointsToGet.mul(delta))
@@ -152,15 +152,22 @@ addLayer("in", {
         player.in.infinitiesToGet = new Decimal(1)
         // ADD A BUNCH OF INFINITY BUFF ACHIEVEMENTS (AT LEAST ENOUGH TO REACH x2 BEFORE ALT-INFINITIES)
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(2)
-        if (player.tad.altInfinities.shattered.amount.gte(10)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(player.tad.altInfinities.shattered.effect2)
+        if (player.tad.altInfinities.shattered.milestone.gte(2)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(player.tad.altInfinities.shattered.effect2)
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("om", 11))
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("p", 15))
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(levelableEffect("pet", 1101)[0])
+        if (hasMilestone("ip", 28)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(player.points.add(1).log("1.79e308").pow(0.7).max(1))
         if (hasUpgrade("ep2", 14)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(upgradeEffect("ep2", 14))
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(player.co.cores.infinity.effect[2])
         if (hasMilestone("fa", 13)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(player.fa.milestoneEffect[2])
+        if (hasUpgrade("tad", 152)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(player.tad.infinitumEffect2)
+        // THIS IS TEMP TO KEEP BALANCE
+        player.in.infinitiesToGet = player.in.infinitiesToGet.mul(8)
 
-        if (player.tad.altInfinities.fragmented.amount.gte(100)) player.in.infinities = player.in.infinities.add(player.in.infinitiesToGet.mul(0.1).mul(delta))
+        // POWER MODIFIERS
+        if (player.tad.altInfinities.infected.milestone.gte(2)) player.in.infinitiesToGet = player.in.infinitiesToGet.pow(player.tad.altInfinities.infected.effect2)
+
+        if (player.tad.altInfinities.fragmented.milestone.gte(3)) player.in.infinities = player.in.infinities.add(player.in.infinitiesToGet.div(4).mul(delta))
     },
     bigCrunch() {
         if (hasUpgrade("ta", 17)) {
@@ -213,8 +220,10 @@ addLayer("in", {
         player.f.factorPowerEffect = new Decimal(1)
         player.f.factorPowerPerSecond = new Decimal(0)
 
-        for (let i in player.f.buyables) {
-            player.f.buyables[i] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i in player.f.buyables) {
+                player.f.buyables[i] = new Decimal(0)
+            }
         }
 
         //     <----     PRESTIGE LAYER     ---->
@@ -229,28 +238,39 @@ addLayer("in", {
         player.t.leaves = new Decimal(0)
         player.t.leavesPerSecond = new Decimal(0)
 
-        for (let i in player.t.buyables) {
-            player.t.buyables[i] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i in player.t.buyables) {
+                player.t.buyables[i] = new Decimal(0)
+            }
         }
 
         //     <----     GRASS LAYER     ---->
         player.g.grass = new Decimal(0)
         player.g.grassVal = new Decimal(0)
-        player.g.savedGrass = new Decimal(0)
-        player.g.grassCount = new Decimal(0)
         player.g.grassTimer = new Decimal(0)
 
         player.g.goldGrass = new Decimal(0)
         player.g.goldGrassVal = new Decimal(0)
-        player.g.savedGoldGrass = new Decimal(0)
-        player.g.goldGrassCount = new Decimal(0)
         player.g.goldGrassTimer = new Decimal(0)
 
-        for (let i = 11; i < 19; i++) {
-            player.g.buyables[i] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 19; i++) {
+                player.g.buyables[i] = new Decimal(0)
+            }
         }
 
         if (!hasMilestone("ip", 11) && !inChallenge("ip", 14)) player.g.upgrades.splice(0, player.g.upgrades.length)
+
+        for (let i = 1; i < 509; ) {
+            setGridData("g", i, [0, new Decimal(1), new Decimal(1)])
+
+            // Increase i value
+            if (i % 10 == 8) {
+                i = i+93
+            } else {
+                i++
+            }
+        }
 
         //     <----     GRASSHOPPER LAYER     ---->
         player.gh.grasshoppers = new Decimal(0)
@@ -258,8 +278,10 @@ addLayer("in", {
         player.gh.fertilizer = new Decimal(0)
         player.gh.fertilizerPerSecond = new Decimal(0)
 
-        for (let i = 1; i < 20; i++) {
-            player.gh.buyables[i] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 1; i < 20; i++) {
+                player.gh.buyables[i] = new Decimal(0)
+            }
         }
 
         //     <----     MOD LAYER     ---->
@@ -270,8 +292,10 @@ addLayer("in", {
         player.m.mods = new Decimal(0)
         player.m.modsToGet = new Decimal(0)
 
-        for (let i = 11; i < 15; i++) {
-            player.m.buyables[i] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 15; i++) {
+                player.m.buyables[i] = new Decimal(0)
+            }
         }
 
         //     <----     DICE LAYER     ---->

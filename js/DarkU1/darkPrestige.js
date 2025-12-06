@@ -37,10 +37,10 @@
         if (player.du.points.div(1000).pow(0.25).lt(1e7)) player.dp.prestigePointsToGet = player.du.points.div(1000).pow(0.25)
         if (player.du.points.div(1000).pow(0.25).gte(1e7)) player.dp.prestigePointsToGet = player.du.points.div(10000).pow(0.01).mul(5e6)
         player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(buyableEffect("dg", 13))
-        if (getLevelableBool("pu", 102)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("pu", 102)[0])
-        if (getLevelableBool("pu", 102)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(buyableEffect("dp", 14))
-        if (getLevelableBool("pu", 204)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("pu", 204)[0])
-        if (getLevelableBool("pu", 301)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("pu", 301)[0])
+        if (getLevelableTier("pu", 102, true)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("pu", 102)[0])
+        if (getLevelableTier("pu", 102, true)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(buyableEffect("dp", 14))
+        if (getLevelableTier("pu", 204, true)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("pu", 204)[0])
+        if (getLevelableTier("pu", 301, true)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("pu", 301)[0])
         player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(buyableEffect("dgr", 16))
         player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("st", 105)[0])
         if (player.pet.legPetTimers[0].active) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.pow(0.8)
@@ -198,7 +198,7 @@
             currency() { return player.dp.prestigePoints},
             pay(amt) { player.dp.prestigePoints = this.currency().sub(amt) },
             effect(x) { return Decimal.pow(1.25, getBuyableAmount(this.layer, this.id)) },
-            unlocked() { return getLevelableBool("pu", 102) },
+            unlocked() { return getLevelableTier("pu", 102, true) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -232,7 +232,7 @@
             currency() { return player.dp.prestigePoints},
             pay(amt) { player.dp.prestigePoints = this.currency().sub(amt) },
             effect(x) { return Decimal.pow(1.2, getBuyableAmount(this.layer, this.id)) },
-            unlocked() { return getLevelableBool("pu", 206) },
+            unlocked() { return getLevelableTier("pu", 206, true) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -266,7 +266,7 @@
             currency() { return player.dp.prestigePoints},
             pay(amt) { player.dp.prestigePoints = this.currency().sub(amt) },
             effect(x) { return Decimal.pow(1.1, getBuyableAmount(this.layer, this.id)) },
-            unlocked() { return getLevelableBool("pu", 208) },
+            unlocked() { return getLevelableTier("pu", 208, true) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {

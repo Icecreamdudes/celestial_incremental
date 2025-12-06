@@ -20,10 +20,12 @@
         dimensionPower: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),],
         dimensionPowerPerSecond: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),],
         dimensionPowerEffects: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1),],
+        dimPowerMax: false,
 
         dimensionAutobuyToggles: [false, false, false, false, false, false, false, false, false, false, false,],
         dimensionAutobuyTimeReq: [new Decimal(3), new Decimal(3.5), new Decimal(4), new Decimal(4.5), new Decimal(5), new Decimal(5.5), new Decimal(6), new Decimal(6.5), new Decimal(4),new Decimal(8),new Decimal(8),],
         dimensionAutobuyTimer: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
+        dimAutoMax: false,
 
         dimboostToggle: false,
         dimboostLimit: new Decimal(1),
@@ -143,7 +145,7 @@
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("ta", 53))
         if (hasUpgrade('bi', 102)) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(upgradeEffect("bi", 102))
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(player.om.rocketFuelMasteryPointsEffect)
-        // player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("tad", 22))
+        if (player.tad.altInfinities.distorted.milestone.gte(2)) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(player.tad.altInfinities.distorted.effect2)
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("r", 13))
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("m", 18))
         if (hasUpgrade("hpw", 1052)) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(100)
@@ -284,21 +286,21 @@
     clickables: {
         2: {
             title() { return "Buy Max On" },
-            canClick() { return player.buyMax == false },
-            unlocked() { return true },
+            canClick() { return !player.ta.dimPowerMax },
+            unlocked: true,
             onClick() {
-                player.buyMax = true
+                player.ta.dimPowerMax = true
             },
-            style: { width: '80px', "min-height": '50px', borderRadius: '15px 0px 0px 15px' }
+            style: { width: "80px", minHeight: "50px", borderRadius: "15px 0px 0px 15px"}
         },
         3: {
             title() { return "Buy Max Off" },
-            canClick() { return player.buyMax == true  },
-            unlocked() { return true },
+            canClick() { return player.ta.dimPowerMax},
+            unlocked: true,
             onClick() {
-                player.buyMax = false
+                player.ta.dimPowerMax = false
             },
-            style: { width: '80px', "min-height": '50px', borderRadius: '0px 15px 15px 0px' }
+            style: { width: "80px", minHeight: "50px", borderRadius: "0px 15px 15px 0px"}
         },
         4: {
             title() { return "<h3>Lower Dimension" },
@@ -317,6 +319,24 @@
                 player.ta.dimensionPowerIndex = player.ta.dimensionPowerIndex.add(1)
             },
             style: { width: '100px', "min-height": '100px' },
+        },
+        6: {
+            title() { return "Buy Max On" },
+            canClick() { return !player.ta.dimAutoMax },
+            unlocked: true,
+            onClick() {
+                player.ta.dimAutoMax = true
+            },
+            style: { width: "80px", minHeight: "50px", borderRadius: "15px 0px 0px 15px"}
+        },
+        7: {
+            title() { return "Buy Max Off" },
+            canClick() { return player.ta.dimAutoMax},
+            unlocked: true,
+            onClick() {
+                player.ta.dimAutoMax = false
+            },
+            style: { width: "80px", minHeight: "50px", borderRadius: "0px 15px 15px 0px"}
         },
         14: {
             title() { return "<h2>ENTER" },
@@ -694,8 +714,8 @@
             title() {
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " NIP"
             },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+            buy() {
+                if (!player.ta.dimPowerMax && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -724,8 +744,8 @@
             title() {
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " NIP"
             },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+            buy() {
+                if (!player.ta.dimPowerMax && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -754,8 +774,8 @@
             title() {
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " NIP"
             },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+            buy() {
+                if (!player.ta.dimPowerMax && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -784,8 +804,8 @@
             title() {
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " NIP"
             },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+            buy() {
+                if (!player.ta.dimPowerMax && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -814,8 +834,8 @@
             title() {
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " NIP"
             },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+            buy() {
+                if (!player.ta.dimPowerMax && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -844,8 +864,8 @@
             title() {
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " NIP"
             },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+            buy() {
+                if (!player.ta.dimPowerMax && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -874,8 +894,8 @@
             title() {
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " NIP"
             },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+            buy() {
+                if (!player.ta.dimPowerMax && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -904,8 +924,8 @@
             title() {
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " NIP"
             },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+            buy() {
+                if (!player.ta.dimPowerMax && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -938,8 +958,8 @@
                 return "which are dividing cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+            buy() {
+                if (!player.ta.dimAutoMax && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -972,8 +992,8 @@
                 return "which are dividing cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+            buy() {
+                if (!player.ta.dimAutoMax && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1006,8 +1026,8 @@
                 return "which are dividing cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+            buy() {
+                if (!player.ta.dimAutoMax && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1040,8 +1060,8 @@
                 return "which are dividing cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+            buy() {
+                if (!player.ta.dimAutoMax && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1074,8 +1094,8 @@
                 return "which are dividing cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+            buy() {
+                if (!player.ta.dimAutoMax && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1108,8 +1128,8 @@
                 return "which are dividing cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+            buy() {
+                if (!player.ta.dimAutoMax && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1142,8 +1162,8 @@
                 return "which are dividing cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+            buy() {
+                if (!player.ta.dimAutoMax && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1176,8 +1196,8 @@
                 return "which are dividing cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+            buy() {
+                if (!player.ta.dimAutoMax && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1210,8 +1230,8 @@
                 return "which are dividing cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+            buy() {
+                if (!player.ta.dimAutoMax && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1244,8 +1264,8 @@
                 return "which are dividing cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+            buy() {
+                if (!player.ta.dimAutoMax && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1278,8 +1298,8 @@
                 return "which are dividing cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+            buy() {
+                if (!player.ta.dimAutoMax && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -2013,7 +2033,7 @@
             },
             "RESET": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return getLevelableAmount("pet", 1101).gte(1) },
+                unlocked() { return player.tad.breakNIP },
                 content: [
                     ["blank", "25px"],
                     ["row", [["clickable", 15]]],
@@ -2028,9 +2048,9 @@
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "<h4>You need at least 1 of the buyable to start autobuying." }, { color: "white", fontSize: "16px", fontFamily: "monospace" }],
+                    ["raw-html", "<h4>You need at least 1 of the buyable to start autobuying.", { color: "white", fontSize: "16px", fontFamily: "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 2], ["clickable", 3]]],
+                    ["row", [["clickable", 6], ["clickable", 7]]],
                     ["blank", "25px"],
                     ["row", [["buyable", 21], ["clickable", 101], ["clickable", 102], 
                         ["style-row", [

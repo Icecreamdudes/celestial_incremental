@@ -864,7 +864,7 @@
             },
             "Reverse Break": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return getLevelableAmount("pet", 1101).gte(1) },
+                unlocked() { return player.tad.breakNIP },
                 content: [
                     ["blank", "25px"],
                     ["row", [["clickable", 15]]],

@@ -222,7 +222,7 @@ h1, h2, h3, b, input {
 	color: rgb(0, 0, 0);
 	font-size: 10px;
 	position: relative;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 }
 
@@ -261,8 +261,9 @@ h1, h2, h3, b, input {
 
 .exBuyableInfo {
 	width: 100%;
-	height: calc(80% - 43px);
+	min-height: calc(80% - 46px);
 	display: flex;
+	flex: 1;
 	vertical-align: center;
 	border-top: 3px solid;
 	border-bottom: 3px solid;

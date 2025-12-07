@@ -162,7 +162,7 @@
             purchaseLimit() { return player.sb.maxBuildingSlots.sub(player.sb.buyables[101]).sub(player.sb.buyables[102]).sub(player.sb.buyables[104]).sub(player.sb.buyables[105]).sub(player.sb.buyables[106]) },
             currency() { return player.ir.spaceGem},
             pay(amt) { player.ir.spaceGem = this.currency().sub(amt) },
-            effect(x) { return player.sb.storedSpaceEnergy.plus(1).log10().div(25).add(1).pow(getBuyableAmount(this.layer, this.id).pow(0.12)) },
+            effect(x) { return player.sb.storedSpaceEnergy.plus(1).log10().pow(0.4).div(15).add(1).pow(getBuyableAmount(this.layer, this.id).pow(0.12)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },

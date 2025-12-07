@@ -72,9 +72,15 @@
         player.cof.fragmentScore[0] = player.cof.fragmentScore[0].mul(player.p.prestigePoints.plus(1).log10().pow(0.444).div(33))
 
         //natural
+        if (!inChallenge("ip", 12))
+        {
         player.cof.fragmentScore[1] = player.t.trees.plus(1).log10().pow(0.425).div(6).div(1.25)
         player.cof.fragmentScore[1] = player.cof.fragmentScore[1].mul(player.g.grass.plus(1).log10().pow(0.35).div(5))
         player.cof.fragmentScore[1] = player.cof.fragmentScore[1].mul(player.gh.grasshoppers.plus(1).log10().pow(0.35).div(5))
+        } else
+        {
+            player.cof.fragmentScore[1] = new Decimal(0)
+        }
 
         //technological
         player.cof.fragmentScore[2] = player.m.codeExperience.plus(1).log10().pow(0.45).div(4)

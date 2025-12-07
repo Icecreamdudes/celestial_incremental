@@ -46,7 +46,7 @@
         player.ds.spaceEnergyPause = player.ds.spaceEnergyPause.sub(1)
         if (player.ds.spaceEnergyPause.gte(1)) layers.ds.spaceEnergyReset();
 
-        player.ds.spaceEnergyEffect = player.ds.spaceEnergy.pow(0.3).div(20).add(1)
+        player.ds.spaceEnergyEffect = player.ds.spaceEnergy.add(1).log(10).pow(1.5).div(10).add(1)
 
         //space
         player.ds.space = player.ds.length.mul(player.ds.width.mul(player.ds.depth))

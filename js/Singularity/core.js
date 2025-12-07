@@ -1086,9 +1086,10 @@ addLayer("co", {
             player.hve.vexGain = new Decimal(0)
             player.hve.rowCurrent = [0, 0, 0, 0, 0, 0]
             player.hve.rowSpent = [0, 0, 0, 0, 0, 0]
+
+            player.hve.upgrades.splice(0, player.hve.upgrades.length)
         }
-        
-        player.hve.upgrades.splice(0, player.hve.upgrades.length)
+    
 
         //     <----     HEX OF BLESSINGS LAYER     ---->
         player.hbl.blessings = new Decimal(0)

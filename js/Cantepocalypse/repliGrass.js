@@ -14,6 +14,7 @@ addLayer("rg", {
         repliGrassMult: new Decimal(1.02),
         repliGrassReq: new Decimal(8),
         repliGrassTimer: new Decimal(0),
+        repliGrassTimer2: new Decimal(0),
 
         repliGrassSoftcapEffect: new Decimal(1),
         repliGrassSoftcapStart: new Decimal(1000),

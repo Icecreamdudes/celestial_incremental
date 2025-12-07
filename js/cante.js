@@ -79,6 +79,7 @@
         if (hasUpgrade("ep0", 11)) player.ca.replicantiMult = player.ca.replicantiMult.mul(upgradeEffect("ep0", 11))
         if (hasUpgrade("bi", 117)) player.ca.replicantiMult = player.ca.replicantiMult.mul(3)
         if (hasUpgrade("hpw", 1062)) player.ca.replicantiMult = player.ca.replicantiMult.mul(3)
+        player.ca.replicantiMult = player.ca.replicantiMult.mul(player.cof.coreFragmentEffects[5])
         
         player.ca.replicantiMult = player.ca.replicantiMult.div(player.ca.replicantiSoftcap)
 
@@ -124,10 +125,12 @@
         player.ca.galaxyDustToGet = player.ca.galaxyDustToGet.mul(levelableEffect("pet", 108)[1])
         if (hasMilestone("fa", 19)) player.ca.galaxyDustToGet = player.ca.galaxyDustToGet.mul(player.fa.milestoneEffect[8])
         player.ca.galaxyDustToGet = player.ca.galaxyDustToGet.mul(buyableEffect("fu", 44))
+        player.ca.galaxyDustToGet = player.ca.galaxyDustToGet.mul(buyableEffect("cof", 28))
 
         if (hasMilestone("s", 13)) player.ca.galaxyDust = player.ca.galaxyDust.add(Decimal.mul(player.ca.galaxyDustToGet.mul(0.01), delta))
 
         player.ca.galaxyDustEffect = player.ca.galaxyDust.plus(1).log10().mul(0.1).add(1)
+        player.ca.galaxyDustEffect = player.ca.galaxyDustEffect.pow(buyableEffect("cof", 27))
 
         //rep galax
         player.ca.replicantiGalaxiesCap = buyableEffect("ca", 23)

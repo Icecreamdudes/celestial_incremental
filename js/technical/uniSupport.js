@@ -129,13 +129,13 @@ addUniverse("A1", {
         }
         return style
     },
-    uniShown() { return player.startedGame && (((player.cap.cantepocalypseUnlock && !player.s.highestSingularityPoints.gt(0)) || (player.s.highestSingularityPoints.gt(0) && hasUpgrade("bi", 28))) || hasMilestone("s", 18)) && !player.sma.inStarmetalChallenge},
+    uniShown() { return player.startedGame && player.cap.cantepocalypseUnlock && (hasUpgrade("bi", 28) || hasMilestone("s", 18)) && !player.sma.inStarmetalChallenge},
 })
 
 addUniverse("A2", {
     name: "Alt-Universe 2<br>Cosmic Cosmos",
     symbol: "A2",
-    tree: [["st"], ["pl"]],
+    tree: [["st"], ["pl", "se"], ["ir"], ["sb"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(315deg, #5A4FCF 0%, #242124 74%)",
@@ -176,7 +176,7 @@ addUniverse("U3", {
 addUniverse("D1", {
     name: "Dark Universe 1<br>Shadow Overworld",
     symbol: "D1",
-    tree: [["le"], ["dr", "dp"], ["dg", "db", "dgr"], ["dn", "dv"]],
+    tree: [["le"], ["dr", "dp"], ["dg", "db", "dgr"], ["dn", "dv", "ds"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(145deg, #2e2e2e 0%, #0d0d0d 100%)",

@@ -201,7 +201,7 @@
         },
         4: {
             title: "Matos",
-            body() { return "The human civilization from the domain of singularity... A world polluted with industry, corruption in government, and ongoing conflict. This hatred all accumulating into one, mean, celestial. The human version of Matos had a dream. To experience the beauty and wonders of the natural world. But that dream was stripped away from him a long, long time ago. I've never met Matos, but I have heard many things about him. Matos is being used to ressurect Nova and the Novasent after they have been banished by ????????. Having taken part in Nova's religion, Matos believes that working for Nova in order to reach his goal will help him reach true freedom, which is one step closer to his goal. Despite having intent to harm, I completely understand the reasons Matos' hatred." },
+            body() { return "The human civilization from the domain of singularity... A world polluted with industry, corruption in government, and ongoing conflict. This hatred all accumulating into one, mean, celestial. The human version of Matos had a dream. To experience the beauty and wonders of the natural world. But that dream was stripped away from him a long, long time ago. I've never met Matos, but I have heard many things about him. Matos is being used to ressurect Nova and the Novasent after they have been banished by ????????. Having taken part in Nova's religion, Matos believes that working for Nova in order to reach his goal will help him reach true freedom, which is one step closer to his goal. Despite having intent to harm, I completely understand the reasons for Matos' hatred." },
             unlocked() { return player.ch.celestialIndex.eq(3) },      
         },
     },

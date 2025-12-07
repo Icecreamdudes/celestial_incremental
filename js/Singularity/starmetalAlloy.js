@@ -40,16 +40,61 @@
         if (player.sma.input.gt(0) && player.sma.type) player.sma.amount = player.sma.input
 
         if (player.s.singularityPointsToGet.gte(player.sma.amount) && player.sma.toggle && !player.sma.type) {
-            clickClickable("co", 1000)
+                player.cof.coreFragments[player.cof.highestScore] = player.cof.coreFragments[player.cof.highestScore].add(player.cof.coreFragmentsToGet[player.cof.highestScore])
+
+                let val = layers.co.coreXPCalc(player.co.resetIndex, player.s.singularityPointsToGet)
+                if (!player.ma.matosDefeated) {
+                    player.co.cores[player.co.resetIndex].totalxp = player.co.cores[player.co.resetIndex].totalxp.add(val)
+                    player.co.cores[player.co.resetIndex].xp = player.co.cores[player.co.resetIndex].xp.add(val)
+                }
+                player.s.singularities = player.s.singularities.add(player.s.singularitiesToGet)
+                player.s.singularityPoints = player.s.singularityPoints.add(player.s.singularityPointsToGet)
+                player.hrm.realmEssence = player.hrm.realmEssence.add(player.hrm.realmEssenceGain)
+                player.hrm.totalRealmEssence = player.hrm.totalRealmEssence.add(player.hrm.realmEssenceGain)
+                player.ra.storedRadiation = player.ra.storedRadiation.add(player.ra.radiation)
+
+                layers.co.singularityReset()
+                setTimeout(() => {layers.co.singularityReset()}, 100)
+
         }
 
         if (player.sma.toggle && player.sma.type) {
             player.sma.time = player.sma.time.add(onepersec.mul(delta));
             if (player.sma.time.gte(player.sma.amount)) {
                 player.sma.time = new Decimal(0)
-                clickClickable("co", 1000)
-            }
+                player.cof.coreFragments[player.cof.highestScore] = player.cof.coreFragments[player.cof.highestScore].add(player.cof.coreFragmentsToGet[player.cof.highestScore])
+
+                let val = layers.co.coreXPCalc(player.co.resetIndex, player.s.singularityPointsToGet)
+                if (!player.ma.matosDefeated) {
+                    player.co.cores[player.co.resetIndex].totalxp = player.co.cores[player.co.resetIndex].totalxp.add(val)
+                    player.co.cores[player.co.resetIndex].xp = player.co.cores[player.co.resetIndex].xp.add(val)
+                }
+                player.s.singularities = player.s.singularities.add(player.s.singularitiesToGet)
+                player.s.singularityPoints = player.s.singularityPoints.add(player.s.singularityPointsToGet)
+                player.hrm.realmEssence = player.hrm.realmEssence.add(player.hrm.realmEssenceGain)
+                player.hrm.totalRealmEssence = player.hrm.totalRealmEssence.add(player.hrm.realmEssenceGain)
+                player.ra.storedRadiation = player.ra.storedRadiation.add(player.ra.radiation)
+
+                layers.co.singularityReset()
+                setTimeout(() => {layers.co.singularityReset()}, 100)
+
         }
+        }
+
+        if (player.sme.autoEnterToggle)
+        {
+            player.sma.inStarmetalChallenge = true
+            player.universe = -0.1
+            player.tab = "le"
+            player.uniTab = 1
+
+            layers.pu.generateSelection();
+
+            player.subtabs["le"]["stuff"] = "Main"
+            player.subtabs.pu["stuff"] = "Selection"
+        }
+
+        player.sma.starmetalAlloy = player.sma.starmetalAlloy.floor()
     },
     clickables: {
         11: {
@@ -71,8 +116,8 @@
             style: {width: "600px", minHeight: "200px", color: "white", backgroundImage: "radial-gradient(circle, black 60%, #13292f 70%, #54265e 80%, #8d3947 90%, #e6eb57 110%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
         },
         12: {
-            title() { return "<h1>START WARPING LIGHT<br><h3>And enter an eclipse..." },
-            canClick: true,
+            title() { return player.pet.legendaryPetAbilityCooldowns[0].lte(0) ? "<h1>START WARPING LIGHT<br><h3>And enter an eclipse..." : "<h1>Check Back in " + formatTime(player.pet.legendaryPetAbilityCooldowns[0]) + "."},
+            unlocked() {return player.pet.legendaryPetAbilityCooldowns[0].lte(0)},
             unlocked() {return getLevelableAmount("pet", 501).gte(1)},
             onClick() {
                 player.pet.legPetTimers[0].current = player.pet.legPetTimers[0].max
@@ -382,13 +427,13 @@
         107: {
             title: "Light Starmetal Upgrade VII",
             unlocked() { return hasUpgrade("sma", 106)},
-            description: "Produce 1% core scrap per second.",
+            description: "Produce 1% core scrap per second and singularity doesn't reset anything check back related",
             cost: new Decimal("500"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
             style() {
-                let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                let look = {width: "175px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%, #60cfeb 100%)"
                 return look
             }
@@ -396,8 +441,8 @@
         108: {
             title: "Light Starmetal Upgrade VIII",
             unlocked() { return hasUpgrade("sma", 107) && player.ma.secondAreaUnlock},
-            description: "Number of dice sides is multiplied based on best depth 1 combo.",
-            cost: new Decimal("11111"),
+            description: "Number of dice sides is multiplied based on best depth 1 combo, and singularity preserves pent milestones and halter values.",
+            cost: new Decimal("1111"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
@@ -406,12 +451,26 @@
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style() {
+                let look = {width: "200px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%, #60cfeb 100%)"
+                return look
+            }
+        },
+        109:
+        {
+            title: "Secondary Starmetal Upgrade IX",
+            unlocked() { return hasUpgrade("sma", 108) && player.ma.matosDefeated},
+            description: "Unlocks auto starmetal (in starmetal essence).",
+            cost: new Decimal("8888"),
+            currencyLocation() { return player.sma },
+            currencyDisplayName: "Starmetal Alloy",
+            currencyInternalName: "starmetalAlloy",
+            style() {
                 let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%, #60cfeb 100%)"
                 return look
             }
         },
-
         //eclipse shards
         201: {
             title: "Eclipse Shard Upgrade I",
@@ -686,11 +745,12 @@
                     ["style-column", [
                         ["blank", "5px"],
                         ["style-row", [["upgrade", 101], ["upgrade", 102], ["upgrade", 103], ["upgrade", 104], ["upgrade", 105],
-                            ["upgrade", 106], ["upgrade", 107], ["upgrade", 108]], {maxWidth: "800px"}],
+                            ["upgrade", 106], ["upgrade", 107], ["upgrade", 108], ["upgrade", 109]], {maxWidth: "800px"}],
                         ["blank", "5px"],
                     ], {width: "800px", background: "linear-gradient(120deg, #b8bc45 0%, #987b28 25%, #bc4c5f 50%, #a94cbc, 75%, #4ca5bc 100%)", border: "3px solid #222", borderRadius: "15px"}],
                     ["blank", "25px"],
-                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]], {maxWidth: "1200px"}],
+                    ["blank", "25px"],
+                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
                 ]
             },
             "Punchcards": {

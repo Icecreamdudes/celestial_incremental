@@ -185,15 +185,16 @@ addLayer("ep2", {
         let onepersec = new Decimal(1)
         
         player.ep2.cookiesPerSecond = new Decimal(0)
-        for (let i = 1; i < 14; i++) {
+        for (let i = 1; i < 15; i++) {
             player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.add(buyableEffect("ep2", i))
         }
         player.ep2.cpsbm = player.ep2.cookiesPerSecond // Cookies Per Second Before Multipliers
-        for (let i = 101; i < 104; i++) {
+        for (let i = 101; i < 107; i++) {
             player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(buyableEffect("ep2", i))
         }
         player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(buyableEffect("ep0", 13))
         if (hasUpgrade("ep1", 13)) player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(upgradeEffect("ep1", 13))
+        if (hasUpgrade("fi", 22)) player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(upgradeEffect("fi", 22))
 
         player.ep2.cookies = player.ep2.cookies.add(player.ep2.cookiesPerSecond.mul(delta))
 
@@ -528,7 +529,7 @@ addLayer("ep2", {
             img: "resources/currencies/celestial_points.png",
             unlocked() {return getBuyableAmount("ep2", 1).gte(50)},
             title: "<span style='color:#E9D673cc'>Chocolatey Points</span>",
-            description: "Multiplies gain from Pointed Points by x5.",
+            description: "Multiplies gain from Flavored Points by x5.",
             cost: new Decimal(1e7),
             currencyLocation() { return player.ep2 },
             currencyDisplayName: "Cookies",
@@ -539,7 +540,7 @@ addLayer("ep2", {
             img: "resources/currencies/celestial_points.png",
             unlocked() {return getBuyableAmount("ep2", 1).gte(100)},
             title: "<span style='color:#A8BF91cc'>Sugary Points</span>",
-            description: "Multiplies gain from Pointed Points by x10.",
+            description: "Multiplies gain from Flavored Points by x10.",
             cost: new Decimal(1e8),
             currencyLocation() { return player.ep2 },
             currencyDisplayName: "Cookies",
@@ -550,7 +551,7 @@ addLayer("ep2", {
             img: "resources/currencies/celestial_points.png",
             unlocked() {return getBuyableAmount("ep2", 1).gte(150)},
             title: "<span style='color:#6E5755cc'>Buttery Points</span>",
-            description: "Multiplies gain from Pointed Points by x20.",
+            description: "Multiplies gain from Flavored Points by x20.",
             cost: new Decimal(1e10),
             currencyLocation() { return player.ep2 },
             currencyDisplayName: "Cookies",
@@ -1892,7 +1893,7 @@ addLayer("ep2", {
             unlocked() {return getLevelableAmount("pet", 403).gte(3) || getLevelableTier("pet", 403).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
-            img: "resources/currencies/Grass.png",
+            img: "resources/currencies/grass.png",
             title: "Grass",
             buy() {
                 this.pay(this.cost())

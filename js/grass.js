@@ -110,6 +110,7 @@ addLayer('g', {
         // POWER MODIFIERS
         if (hasUpgrade("hpw", 1031)) player.g.grassVal = player.g.grassVal.pow(1.18)
         player.g.grassVal = player.g.grassVal.pow(buyableEffect('st', 101))
+        player.g.grassVal = player.g.grassVal.pow(buyableEffect("cof", 14))
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         player.g.grassVal = player.g.grassVal.div(player.po.halterEffects[5])
@@ -172,6 +173,7 @@ addLayer('g', {
         player.g.goldGrassVal = player.g.goldGrassVal.mul(player.ro.activatedFuelEffect)
         player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect('st', 103))
         if (player.ma.matosDefeated) player.g.goldGrassVal = player.g.goldGrassVal.mul(1e20)
+        player.g.goldGrassVal = player.g.goldGrassVal.mul(player.cof.coreFragmentEffects[1])
 
         // POWER MODIFIERS
         if (hasUpgrade("hpw", 1032)) player.g.goldGrassVal = player.g.goldGrassVal.pow(1.06)

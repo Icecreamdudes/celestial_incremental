@@ -70,9 +70,11 @@
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(levelableEffect("pet", 306)[1])
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.co.cores.rocket.effect[0])
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(levelableEffect("pu", 106)[1])
+        player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.se.starsExploreEffect[0][3])
 
         // POWER MODIFIERS
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(player.co.cores.rocket.effect[1])
+        player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(buyableEffect("cof", 18))
 
         // ROCKET FUEL PER SECOND
         if ((hasUpgrade("rf", 17) || hasChallenge("ip", 16)) && (player.po.rocketFuel || inChallenge("ip", 16))) {

@@ -57,6 +57,14 @@
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(buyableEffect("st", 303))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.ma.bestComboDepth3Effect)
         if (player.ma.matosDefeated) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(1e40)
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.cof.coreFragmentEffects[4])
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.se.starsExploreEffect[1][0])
+        if (hasUpgrade("ir", 11)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(upgradeEffect("ir", 11))
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("ir", 1)[1])
+
+
+        //Power modifiers
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(buyableEffect("sb", 104))
 
         // SINGULARITY RAISERS
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(levelableEffect("pet", 308)[0])
@@ -177,7 +185,7 @@
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         21: {
-            title: "Singularity Upgrade X",
+            title: "Singularity Upgrade XI",
             unlocked() { return true},
             description: "Unlock starmetal alloy.",
             cost: new Decimal("1e30"),
@@ -187,7 +195,7 @@
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         22: {
-            title: "Singularity Upgrade XI",
+            title: "Singularity Upgrade XII",
             unlocked() { return true},
             description: "Autobuy fun and sfrgt buyables.",
             cost: new Decimal("1e38"),
@@ -197,7 +205,7 @@
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         23: {
-            title: "Singularity Upgrade XII",
+            title: "Singularity Upgrade XIII",
             unlocked() { return true},
             description: "Unlock more check back content.<br>(CB Level 25,000)",
             cost: new Decimal("1e44"),
@@ -207,7 +215,7 @@
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         24: {
-            title: "Singularity Upgrade XIII",
+            title: "Singularity Upgrade XIV",
             unlocked() { return true},
             description: "Gain 100% of IP per second.",  
             cost: new Decimal("1e100"),
@@ -217,7 +225,7 @@
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         25: {
-            title: "Singularity Upgrade XIV",
+            title: "Singularity Upgrade XV",
             unlocked() { return true},
             description: "Gain 100% of NIP per second.",  
             cost: new Decimal("1e120"),
@@ -227,7 +235,7 @@
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         26: {
-            title: "Singularity Upgrade XV",
+            title: "Singularity Upgrade XVI",
             unlocked() { return true},
             description: "Unlocks rockets (in universe 2).",  
             cost: new Decimal("1e160"),
@@ -237,7 +245,7 @@
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         27: {
-            title: "Singularity Upgrade XVI",
+            title: "Singularity Upgrade XVII",
             unlocked() { return true},
             description: "Autobuys all emotion buyables.",  
             cost: new Decimal("1e300"),

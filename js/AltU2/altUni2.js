@@ -11,6 +11,11 @@
 
         stars: new Decimal(0),
         starsToGet: new Decimal(0),
+        
+        //softcap
+        starSoftcapStart: new Decimal(1000000),
+        starSoftcapEffect: new Decimal(1),
+        starSoftcapActive: false,
     }},
     automate() {},
     nodeStyle() {
@@ -26,20 +31,64 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
+        if (player.subtabs["au2"]['stuff'] == 'Portal') {
+            player.po.lastUniverse = 'au2'
+            player.tab = "po"
+            player.subtabs["au2"]['stuff'] = 'Main'
+        }
+        if (player.subtabs["au2"]['stuff'] == 'Settings') {
+            player.po.lastUniverse = 'au2'
+            player.tab = "settings"
+            player.subtabs["au2"]['stuff'] = 'Main'
+        }
+
         player.au2.starsToGet = Decimal.mul(player.ro.rocketParts, player.ro.activatedFuel.pow(0.3)).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(levelableEffect("st", 209)[0]).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("st", 201)).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("ma", 31)).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(levelableEffect("pet", 501)[0]).floor()
+        // player.au2.starsToGet = player.au2.starsToGet.mul(player.le.punchcardsPassiveEffect[17]).floor()
+        player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("cof", 29)).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(levelableEffect("pu", 109)[2]).floor()
+
+        //Star Softcap
+        player.au2.starSoftcapStart = new Decimal(1000000)
+
+        if (player.au2.starsToGet.gte(player.au2.starSoftcapStart))
+        {
+            player.au2.starSoftcapEffect = player.au2.starsToGet.sub(1000000).pow(Decimal.add(0.1, player.au2.starsToGet.plus(1).log10().div(50)))
+            player.au2.starsToGet = player.au2.starsToGet.div(player.au2.starSoftcapEffect).add(700000)
+            player.au2.starSoftcapActive = true  
+        } else
+        {
+            player.au2.starSoftcapEffect = new Decimal(1)
+            player.au2.starSoftcapActive = false  
+        }
+
+        if (player.ro.rocketIndex.eq(1)) player.au2.starsToGet = player.au2.starsToGet.mul(5)
+        player.au2.starsToGet = player.au2.starsToGet.mul(player.se.starsExploreEffect[0][0]).floor()
+        if (hasUpgrade("fi", 23)) player.au2.starsToGet = player.au2.starsToGet.mul(upgradeEffect("fi", 23))
+        player.au2.starsToGet = player.au2.starsToGet.mul(levelableEffect("ir", 1)[0]).floor()
+        player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("sb", 101)).floor()
     },
-    clickables: {},
+    clickables: {
+        1: {
+            title() { return "<h2>Return" },
+            canClick() { return true },
+            unlocked() { return options.newMenu == false },
+            onClick() {
+                player.tab = "po"
+            },
+            style: { width: '100px', "min-height": '50px' },
+        },
+    },
     bars: {},
     upgrades: {},
     buyables: {},
     milestones: {},
     challenges: {},
-    infoboxes: {},
+    infoboxes: {
+    },
     microtabs: {
         stuff: {
             "Main": {
@@ -50,10 +99,20 @@
                     ["tree", universes.A2.tree],
                 ]
             },
+            "Portal": {
+                buttonStyle() { return { color: "black", borderRadius: "5px", borderColor: "purple", background: "linear-gradient(45deg, #8a00a9, #0061ff)"}},
+                unlocked() { return true },
+                content: [],
+            },
+            "Settings": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" }},
+                unlocked() { return true },
+                content: [],
+            },
         },
     },
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + formatWhole(player.au2.stars) + "</h3> stars." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                ["raw-html", function () { return "You have <h3>" + formatWhole(player.au2.stars) + "</h3> stars." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "You will gain " + formatWhole(player.au2.starsToGet) + " stars on reset." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],

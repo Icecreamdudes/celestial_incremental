@@ -72,6 +72,7 @@
 
         // SOFTCAP 2 STARTING VARIABLE
         player.du.secondSoftcapStart = new Decimal(1.79e308)
+        player.du.secondSoftcapStart = player.du.secondSoftcapStart.pow(player.ds.spaceEnergyEffect)
     },
     bars: {},
     upgrades: {},

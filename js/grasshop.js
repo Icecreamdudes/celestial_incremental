@@ -83,10 +83,12 @@
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.i.preOTFMult)
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.co.cores.grasshopper.effect[0])
         if (hasUpgrade("cs", 602)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.gs.grassSkipEffect2)
+        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.se.starsExploreEffect[0][4])
 
         // POWER MODIFIERS
         if (hasUpgrade("hpw", 1041)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(1.1)
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(buyableEffect("fu", 34))
+        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(buyableEffect("cof", 15))
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.div(player.po.halterEffects[6])
@@ -176,6 +178,8 @@
         player.gh.steelToGet = player.gh.steelToGet.mul(player.co.cores.grasshopper.effect[2])
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("st", 104))
         player.gh.steelToGet = player.gh.steelToGet.mul(player.i.postOTFMult)
+        player.gh.steelToGet = player.gh.steelToGet.mul(player.se.starsExploreEffect[0][5])
+        player.gh.steelToGet = player.gh.steelToGet.pow(player.cof.coreFragmentEffects[2])
 
         // STEEL PER SECOND
         if (hasUpgrade("sma", 103)) player.gh.steel = player.gh.steel.add(Decimal.mul(0.1, player.gh.steelToGet.mul(delta)))

@@ -73,7 +73,7 @@ const POLLINATOR_INFO = {
 addLayer("pol", {
     name: "Pollinators", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "PO", // This appears on the layer's node. Default is the id with the first letter capitalized
-    universe: "U1",
+    universe: "U1", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -180,9 +180,11 @@ addLayer("pol", {
             // POST-SOFTCAP MULTIPLIERS
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.co.cores.rocket.effect[2])
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(buyableEffect("gh", 25))
-
+            if (hasUpgrade("hpw", 1033)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(upgradeEffect("hpw", 1033))
             // EXPONENTS
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.pow(buyableEffect("gh", 26))
+
+            player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.pow(buyableEffect("cof", 16))
 
             // GAIN FUNCTIONS
             if (player.pol.pollinators.lt(player.pol.pollinatorsPerSecond.mul(buyableEffect("pol", 11)).add(1))) {

@@ -9,15 +9,18 @@
         currentCutscene: 0,
 
         //Cutscenes
-        cutscenes: [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,true, true, true,],
+        cutscene: [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,true, true, true,
+            true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,true, true, true,
+            true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,true, true, true,
+        ],
 
-        //OTF
-        cutsceneDice: true,
-        cutsceneRocketFuel: true,
-        cutsceneHex: true,
+//OTF
+cutsceneDice: true,
+cutsceneRocketFuel: true,
+cutsceneHex: true,
 
-        //celestial
-        tavCutscene: false,
+//celestial
+tavCutscene: false,
 
         //Cutscene Info
         cutsceneText: [
@@ -29,629 +32,985 @@
         ],
         cutsceneIndex: 0,
     }},
-    update(delta) {
-        //1
-        if (player.c.cutscenes[0] && player.startedGame) {
-            player.c.currentCutscene = 1
-        } else {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 1) {
-            player.tab = "c"
-            layers.c.startCutscene1();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 1) {
-            player.c.cutscenes[0] = false
-            player.tab = "i"
-            player.c.cutscenes[0] = false
-        }
-
-        //2
-        if (player.c.cutscenes[1] && hasUpgrade("i", 21)) {
-            player.c.currentCutscene = 2
-        } else if (player.tab != "c" && hasUpgrade("i", 21)) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 2) {
-            player.tab = "c"
-            layers.c.startCutscene2();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 2) {
-            player.c.cutscenes[1] = false
-            player.tab = "po"
-            player.c.cutscenes[1] = false
-        }
-
-        //3
-        if (player.c.cutscenes[2] && player.in.infinities.gt(0)) {
-            player.c.currentCutscene = 3
-        } else if (player.tab != "c" && player.in.infinities.gt(0)) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 3) {
-            player.tab = "c"
-            layers.c.startCutscene3();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 3) {
-            player.c.cutscenes[2] = false
-            player.tab = "ip"
-            player.c.cutscenes[2] = false
-        }
-
-        //4
-        if (player.c.cutscenes[3] && player.ta.negativeInfinityPoints.gt(0)) {
-            player.c.currentCutscene = 4
-        } else if (player.tab != "c" && player.ta.negativeInfinityPoints.gt(0)) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 4) {
-            player.tab = "c"
-            layers.c.startCutscene4();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 4) {
-            player.c.cutscenes[3] = false
-            player.tab = "i"
-            player.c.cutscenes[3] = false
-        }
-
-        //5
-        if (player.c.cutscenes[4] && player.ta.negativeInfinityPoints.gt(1000)) {
-            player.c.currentCutscene = 5
-        } else if (player.tab != "c" && player.ta.negativeInfinityPoints.gt(1000)) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 5) {
-            player.tab = "c"
-            layers.c.startCutscene5();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 5) {
-            player.c.cutscenes[4] = false
-            player.tab = "i"
-            player.c.cutscenes[4] = false
-        }
-
-        //6
-        if (player.c.cutscenes[5] && player.tab == "tad") {
-            player.c.currentCutscene = 6
-        } else if (player.tab == "tad" && player.tab != "c") {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 6) {
-            player.tab = "c"
-            layers.c.startCutscene6();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 6) {
-            player.c.cutscenes[5] = false
-            player.tab = "i"
-            player.c.cutscenes[5] = false
-        }
-
-
-        //7
-        if (player.c.cutscenes[6] && player.in.unlockedBreak) {
-            player.c.currentCutscene = 7
-        } else if (player.tab != "c" && player.in.unlockedBreak) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 7) {
-            player.tab = "c"
-            layers.c.startCutscene7();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 7) {
-            player.c.cutscenes[6] = false
-            player.tab = "po"
-            player.c.cutscenes[6] = false
-        }
-
-        //8
-        if (player.c.cutscenes[7] && hasUpgrade("bi", 24)) {
-            player.c.currentCutscene = 8
-        } else if (player.tab != "c" && hasUpgrade("bi", 24)) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 8) {
-            player.tab = "c"
-            layers.c.startCutscene8();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 8) {
-            player.c.cutscenes[7] = false
-            player.tab = "ip"
-            player.c.cutscenes[7] = false
-        }
-
-        //9
-        if (player.c.cutscenes[8] && player.ca.galaxyDust.gt(0)) {
-            player.c.currentCutscene = 9
-        } else if (player.tab != "c" && player.ca.galaxyDust.gt(0)) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 9) {
-            player.tab = "c"
-            layers.c.startCutscene9();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 9) {
-            player.c.cutscenes[8] = false
-            player.tab = "ip"
-            player.c.cutscenes[8] = false
-        }
-
-        //10
-        if (player.c.cutscenes[9] && hasUpgrade("bi", 28)) {
-            player.c.currentCutscene = 10
-        } else if (player.tab != "c" && hasUpgrade("bi", 28)) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 10) {
-            player.tab = "c"
-            layers.c.startCutscene10();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 10) {
-            player.c.cutscenes[9] = false
-            player.tab = "cap"
-            player.subtabs["cap"]['stuff'] = 'Main'
-            player.c.cutscenes[9] = false
-        }
-
-        //11
-        if (player.c.cutscenes[10] && (player.tab == "cp" || (player.tab == "c" && player.cap.cantepocalypseUnlock))) {
-            player.c.currentCutscene = 11
-        } else if (player.tab != "c" && player.tab == "cp" || (player.tab == "c" && player.cap.cantepocalypseUnlock)) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 11) {
-            player.tab = "c"
-            layers.c.startCutscene11();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 11) {
-            player.c.cutscenes[10] = false
-            player.tab = "cp"
-            player.c.cutscenes[10] = false
-        }
-
-        //12
-        if (player.c.cutscenes[11] && hasUpgrade("cp", 18)) {
-            player.c.currentCutscene = 12
-        } else if (player.tab != "c" && hasUpgrade("cp", 18)) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 12) {
-            player.tab = "c"
-            layers.c.startCutscene12();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 12) {
-            player.c.cutscenes[11] = false
-            player.tab = "cp"
-            player.c.cutscenes[11] = false
-        }
-
-        //13
-        if (player.c.cutscenes[12] && player.ca.defeatedCante) {
-            player.c.currentCutscene = 13
-        } else if (player.tab != "c" && player.ca.defeatedCante) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 13) {
-            player.tab = "c"
-            layers.c.startCutscene13();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 13) {
-            player.c.cutscenes[12] = false
-            player.tab = "po"
-            player.c.cutscenes[12] = false
-        }
-
-        //14
-        if (player.c.cutscenes[13] && player.s.highestSingularityPoints.gt(0)) {
-            player.c.currentCutscene = 14
-        } else if (player.tab != "c" && player.s.highestSingularityPoints.gt(0)) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 14) {
-            player.tab = "c"
-            layers.c.startCutscene14();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 14) {
-            player.c.cutscenes[13] = false
-            player.tab = "i"
-            player.c.cutscenes[13] = false
-        }
-        //15
-        if (player.c.cutscenes[14] && player.tab == "co" && player.subtabs["co"]['Cores'] == "Main") {
-            player.c.currentCutscene = 15
-        } else if (player.tab != "c" && player.s.highestSingularityPoints.gt(0)) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 15) {
-            player.tab = "c"
-            layers.c.startCutscene15();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 15) {
-            player.c.cutscenes[14] = false
-            player.tab = "i"
-            player.c.cutscenes[14] = false
-        } 
-
-        //16
-        if (player.c.cutscenes[15] && hasMilestone("s", 12)) {
-            player.c.currentCutscene = 16
-        } else if (player.tab != "c" && hasMilestone("s", 12)) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 16) {
-            player.tab = "c"
-            layers.c.startCutscene16();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 16) {
-            player.c.cutscenes[15] = false
-            player.tab = "i"
-            player.c.cutscenes[15] = false
-        } 
-
-        //17
-        if (player.c.cutscenes[16] && hasMilestone("s", 13)) {
-            player.c.currentCutscene = 17
-        } else if (player.tab != "c" && hasMilestone("s", 13)) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 17) {
-            player.tab = "c"
-            layers.c.startCutscene17();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 17) {
-            player.c.cutscenes[16] = false
-            player.tab = "ra"
-            player.c.cutscenes[16] = false
-        } 
-
-        //18
-        if (player.c.cutscenes[17] && hasMilestone("s", 14)) {
-            player.c.currentCutscene = 18
-        } else if (player.tab != "c" && hasMilestone("s", 14)) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 18) {
-            player.tab = "c"
-            layers.c.startCutscene18();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 18) {
-            player.c.cutscenes[17] = false
-            player.tab = "sd"
-            player.c.cutscenes[17] = false
-        } 
-
-        //19
-        if (player.c.cutscenes[18] && hasUpgrade("cp", 19)) {
-            player.c.currentCutscene = 19
-        } else if (player.tab != "c" && hasUpgrade("cp", 19)) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 19) {
-            player.tab = "c"
-            layers.c.startCutscene19();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 19) {
-            player.c.cutscenes[18] = false
-            player.tab = "fu"
-            player.c.cutscenes[18] = false
-        } 
-
-        //20
-        if (player.c.cutscenes[19] && player.fu.jocusCelestialActivate) {
-            player.c.currentCutscene = 20
-        } else if (player.tab != "c" && player.fu.jocusCelestialActivate) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 20) {
-            player.tab = "c"
-            layers.c.startCutscene20();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 20) {
-            player.c.cutscenes[19] = false
-            player.tab = "fu"
-            player.c.cutscenes[19] = false
-        } 
-
-        //21
-        if (player.c.cutscenes[20] && hasUpgrade("fu", 15)) {
-            player.c.currentCutscene = 21
-        } else if (player.tab != "c" && hasUpgrade("fu", 15)) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 21) {
-            player.tab = "c"
-            layers.c.startCutscene21();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 21) {
-            player.c.cutscenes[20] = false
-            player.tab = "fu"
-            player.c.cutscenes[20] = false
-        }
-
-        //22
-        if (player.c.cutscenes[21] && hasUpgrade("fu", 17)) {
-            player.c.currentCutscene = 22
-        } else if (player.tab != "c" && hasUpgrade("fu", 17)) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 22) {
-            player.tab = "c"
-            layers.c.startCutscene22();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 22) {
-            player.c.cutscenes[21] = false
-            player.tab = "fu"
-            player.c.cutscenes[21] = false
-        }
-
-        //23
-        if (player.c.cutscenes[22] && hasChallenge("fu", 11)) {
-            player.c.currentCutscene = 23
-        } else if (player.tab != "c" && hasChallenge("fu", 11)) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 23) {
-            player.tab = "c"
-            layers.c.startCutscene23();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 23) {
-            player.c.cutscenes[22] = false
-            player.tab = "ch" 
-            player.universe = -0.5
-            player.c.cutscenes[22] = false
-        }
-
-        //24
-        if (player.c.cutscenes[23] && hasUpgrade("s", 19)) {
-            player.c.currentCutscene = 24
-        } else if (player.tab != "c" && hasUpgrade("s", 19)) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 24) {
-            player.tab = "c"
-            layers.c.startCutscene24();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 24) {
-            player.c.cutscenes[23] = false
-            player.tab = "s" 
-            player.c.cutscenes[23] = false
-        }
-
-        //25
-        if (player.c.cutscenes[24] && hasUpgrade("s", 21)) {
-            player.c.currentCutscene = 25
-        } else if (player.tab != "c" && hasUpgrade("s", 21)) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 25) {
-            player.tab = "c"
-            layers.c.startCutscene25();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 25) {
-            player.c.cutscenes[24] = false
-            player.tab = "s" 
-            player.c.cutscenes[24] = false
-        }
-
-        //26
-        if (player.c.cutscenes[25] && player.sma.starmetalAlloy.gte(1)) {
-            player.c.currentCutscene = 26
-        } else if (player.tab != "c" && player.sma.starmetalAlloy.gte(1)) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 26) {
-            player.tab = "c"
-            layers.c.startCutscene26();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 26) {
-            player.c.cutscenes[25] = false
-            player.tab = "s" 
-            player.c.cutscenes[25] = false
-        }
-
-        //27
-        if (player.c.cutscenes[26] && tmp.pu.levelables[302].canClick) {
-            player.c.currentCutscene = 27
-        } else if (player.tab != "c" && tmp.pu.levelables[302].canClick) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 27) {
-            player.tab = "c"
-            layers.c.startCutscene27();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 27) {
-            player.c.cutscenes[26] = false
-            player.tab = "le" 
-            player.c.cutscenes[26] = false
-        }
-
-        //28
-        if (player.c.cutscenes[27] && player.ma.matosUnlock) {
-            player.c.currentCutscene = 28
-        } else if (player.tab != "c" && player.ma.matosUnlock) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 28) {
-            player.tab = "c"
-            layers.c.startCutscene28();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 28) {
-            player.c.cutscenes[27] = false
-            player.tab = "ma" 
-            player.subtabs["ma"]['stuff'] = 'Stats'
-            player.c.cutscenes[27] = false
-        }
-
-        //29
-        if (player.c.cutscenes[28] && player.ma.secondAreaUnlock) {
-            player.c.currentCutscene = 29
-        } else if (player.tab != "c" && player.ma.secondAreaUnlock) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 29) {
-            player.tab = "c"
-            layers.c.startCutscene29();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 29) {
-            player.c.cutscenes[28] = false
-            player.tab = "ma" 
-            player.subtabs["ma"]['stuff'] = 'Fight'
-            player.c.cutscenes[28] = false
-        }
-
-        //30
-        if (player.c.cutscenes[29] && player.au2.au2Unlocked) {
-            player.c.currentCutscene = 30
-        } else if (player.tab != "c" && player.au2.au2Unlocked) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 30) {
-            player.tab = "c"
-            layers.c.startCutscene30();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 30) {
-            player.c.cutscenes[29] = false
-            player.tab = "st"
-            player.subtabs["st"]['stuff'] = 'Pets'
-            player.c.cutscenes[29] = false
-        }
-
-        //31
-        if (player.c.cutscenes[30] && player.st.buyables[202].gte(1)) {
-            player.c.currentCutscene = 31
-        } else if (player.tab != "c" && player.st.buyables[202].gte(1)) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 31) {
-            player.tab = "c"
-            layers.c.startCutscene31();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 31) {
-            player.c.cutscenes[30] = false
-            player.tab = "pl"
-            player.subtabs["pl"]['stuff'] = 'Main'
-            player.c.cutscenes[30] = false
-        }
-
-        //32
-        if (player.c.cutscenes[31] && player.au2.stars.gte(10000)) {
-            player.c.currentCutscene = 32
-        } else if (player.tab != "c" && player.au2.stars.gte(10000)) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 32) {
-            player.tab = "c"
-            layers.c.startCutscene32();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 32) {
-            player.c.cutscenes[31] = false
-            player.tab = "pl"
-            player.subtabs["pl"]['stuff'] = 'Main'
-            player.c.cutscenes[31] = false
-        }
-
-        //33
-        if (player.c.cutscenes[32] && hasUpgrade("ma", 27)) {
-            player.c.currentCutscene = 33
-        } else if (player.tab != "c" && hasUpgrade("ma", 27)) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 33) {
-            player.tab = "c"
-            layers.c.startCutscene33();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 33) {
-            player.c.cutscenes[32] = false
-            player.tab = "ma"
-            player.subtabs["ma"]['stuff'] = 'Stats'
-            player.c.cutscenes[32] = false
-        }
-
-        //34
-        if (player.c.cutscenes[33] && player.ma.matosFightActive) {
-            player.c.currentCutscene = 34
-        } else if (player.tab != "c" && player.ma.matosFightActive) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 34) {
-            player.tab = "c"
-            layers.c.startCutscene34();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 34) {
-            player.c.cutscenes[33] = false
-            player.tab = "ma"
-            player.subtabs["ma"]['stuff'] = 'Fight'
-            player.c.cutscenes[33] = false
-        }
-
-        //35
-        if (player.c.cutscenes[34] && player.ma.matosDefeated) {
-            player.c.currentCutscene = 35
-        } else if (player.tab != "c" && player.ma.matosDefeated) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == 35) {
-            player.tab = "c"
-            layers.c.startCutscene35();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 35) {
-            player.c.cutscenes[34] = false
-            player.tab = "ma"
-            player.subtabs["ma"]['stuff'] = "Win"
-            player.ma.currentDepth = new Decimal(0)
-            player.c.cutscenes[34] = false
-        }
-
-        //d
-        if (player.c.cutsceneDice && player.po.dice) {
-            player.c.currentCutscene = -1
-        } else if (player.tab != "c" && player.po.dice) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == -1) {
-            player.tab = "c"
-            layers.c.startCutsceneDice();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == -1) {
-            player.c.cutsceneDice = false
-            player.tab = "i"
-        }
-
-
-        //rf
-        if (player.c.cutsceneRocketFuel && player.po.rocketFuel) {
-            player.c.currentCutscene = -2
-        } else if (player.tab != "c" && player.po.rocketFuel) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == -2) {
-            player.tab = "c"
-            layers.c.startCutsceneRocketFuel();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == -2) {
-            player.c.cutsceneRocketFuel = false
-            player.tab = "i"
-        }
-
-
-        //h
-        if (player.c.cutsceneHex && player.hpr.rank[0].gte(1)) {
-            player.c.currentCutscene = -3
-        } else if (player.tab != "c" && player.hpr.rank[0].gte(1) && hasChallenge("ip", 13)) {
-            player.c.currentCutscene = 0
-        }
-        if (player.c.currentCutscene == -3) {
-            player.tab = "c"
-            layers.c.startCutsceneHex();
-        }
-        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == -3) {
-            player.c.cutsceneHex = false
-            player.tab = "i"
-        }
-
-        if (player.tab != "c" && player.tab != "bigc" && player.c.cutsceneIndex == player.c.cutsceneText.length) {
-            player.c.cutsceneIndex = 0
-        }
-    },
+update(delta) {
+if (player.c.cutscene[0] && player.tab == "i")
+{
+    showCutscene(cutsceneDialogue1, {
+        background: "#000000", 
+        cutsceneID: 1,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[0] = false
+}
+if (player.c.cutscene[1] && player.r.rank.gte(1))
+{
+    showCutscene(cutsceneDialogue2, {
+        cutsceneID: 2,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[1] = false
+}
+if (player.c.cutscene[2] && hasUpgrade("i", 13))
+{
+    showCutscene(cutsceneDialogue3, {
+        cutsceneID: 3,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[2] = false
+}
+if (player.c.cutscene[3] && player.p.prestigePoints.gte(1))
+{
+    showCutscene(cutsceneDialogue4, {
+        cutsceneID: 4,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[3] = false
+}
+if (player.c.cutscene[4] && hasUpgrade("i", 15))
+{
+    showCutscene(cutsceneDialogue5, {
+        cutsceneID: 5,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[4] = false
+}
+if (player.c.cutscene[5] && player.t.trees.gte(1))
+{
+    showCutscene(cutsceneDialogue6, {
+        cutsceneID: 6,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[5] = false
+}
+if (player.c.cutscene[6] && player.g.grass.gte(1))
+{
+    showCutscene(cutsceneDialogue7, {
+        cutsceneID: 7,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[6] = false
+}
+if (player.c.cutscene[7] && player.gh.grasshoppers.gte(1))
+{
+    showCutscene(cutsceneDialogue8, {
+        cutsceneID: 8,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[7] = false
+}
+if (player.c.cutscene[8] && hasUpgrade("i", 19))
+{
+    showCutscene(cutsceneDialogue9, {
+        background: "#094599",
+        cutsceneID: 9,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[8] = false
+}
+if (player.c.cutscene[9] && hasUpgrade("i", 21))
+{
+    showCutscene(cutsceneDialogue10, {
+        cutsceneID: 10,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[9] = false
+}
+if (player.c.cutscene[10] && player.po.featureSlots.eq(0))
+{
+    showCutscene(cutsceneDialogue11, {
+        background: "#000000", 
+        cutsceneID: 11,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[10] = false
+}
+if (player.c.cutscene[11] && player.d.buyables[12].gte(1))
+{
+    showCutscene(cutsceneDialogue12, {
+        cutsceneID: 12,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[11] = false
+}
+if (player.c.cutscene[12] && player.rf.rocketFuel.gte(1))
+{
+    showCutscene(cutsceneDialogue13, {
+        cutsceneID: 13,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[12] = false
+}
+if (player.c.cutscene[13] && player.points.gte("1.79e308"))
+{
+    showCutscene(cutsceneDialogue14, {
+        background: "#b87c34",
+        cutsceneID: 14,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[13] = false
+}
+if (player.c.cutscene[14] && player.in.infinityPoints.gte("1"))
+{
+    showCutscene(cutsceneDialogue15, {
+        background: "#ffffff",
+        cutsceneID: 15,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[14] = false
+}
+if (player.c.cutscene[15] && hasUpgrade("ip", 11))
+{
+    showCutscene(cutsceneDialogue16, {
+        background: "#001f18",
+        cutsceneID: 16,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[15] = false
+}
+if (player.c.cutscene[16] && (hasUpgrade("ip", 11) && player.r.rank.gte(1)))
+{
+    showCutscene(cutsceneDialogue17, {
+        cutsceneID: 17,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[16] = false
+}
+if (player.c.cutscene[17] && (player.pet.levelables[101][0].gte(1) || player.pet.levelables[102][0].gte(1) || player.pet.levelables[103][0].gte(1) || player.pet.levelables[104][0].gte(1) || player.pet.levelables[105][0].gte(1)))
+{
+    showCutscene(cutsceneDialogue18, {
+        background: "#094599",
+        cutsceneID: 18,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[17] = false
+}
+if (player.c.cutscene[18] && hasMilestone("ip", 16))
+{
+    showCutscene(cutsceneDialogue19, {
+        cutsceneID: 19,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[18] = false
+}
+if (player.c.cutscene[19] && hasChallenge("ip", 11))
+{
+    showCutscene(cutsceneDialogue20, {
+        cutsceneID: 20,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[19] = false
+}
+if (player.c.cutscene[20] && ((inChallenge("ip", 12) || !player.c.cutscene[21]) && player.gh.grasshoppers.gte(1)))
+{
+    showCutscene(cutsceneDialogue21, {
+        cutsceneID: 21,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[20] = false
+}
+if (player.c.cutscene[21] && ((inChallenge("ip", 13) || !player.c.cutscene[22]))) //HEX, likely to change conditions
+{
+    showCutscene(cutsceneDialogue22, {
+        cutsceneID: 22,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[21] = false
+}
+if (player.c.cutscene[22] && ((inChallenge("ip", 15) || !player.c.cutscene[23]) && player.d.challengeDicePoints.gte(1))) 
+{
+    showCutscene(cutsceneDialogue23, {
+        cutsceneID: 23,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[22] = false
+}
+if (player.c.cutscene[23] && player.cb.evolutionShards.gte(1)) //marcel
+{
+    showCutscene(cutsceneDialogue24, {
+        background: "#094599",
+        cutsceneID: 24,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[23] = false
+}
+if (player.c.cutscene[24] && (inChallenge("ip", 16) || !player.c.cutscene[25]))
+{
+    showCutscene(cutsceneDialogue25, {
+        cutsceneID: 25,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[24] = false
+}
+if (player.c.cutscene[25] && (inChallenge("ip", 17) || !player.c.cutscene[26]))
+{
+    showCutscene(cutsceneDialogue26, {
+        background: "#ffffff",
+        cutsceneID: 26,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[25] = false
+}
+if (player.c.cutscene[26] && hasChallenge("ip", 17))
+{
+    showCutscene(cutsceneDialogue27, {
+        cutsceneID: 27,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[26] = false
+}
+if (player.c.cutscene[27] && hasChallenge("ip", 18))
+{
+    showCutscene(cutsceneDialogue28, {
+        background: "#008080",
+        cutsceneID: 28,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[27] = false
+}
+if (player.c.cutscene[28] && player.ta.negativeInfinityPoints.gte(1))
+{
+    showCutscene(cutsceneDialogue29, {
+        background: "#008080",
+        cutsceneID: 29,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[28] = false
+}
+if (player.c.cutscene[29] && player.ev.evolutionsUnlocked[0])
+{
+    showCutscene(cutsceneDialogue30, {
+        background: "#094599",
+        cutsceneID: 30,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[29] = false
+}
+if (player.c.cutscene[30] && hasUpgrade("ta", 15))
+{
+    showCutscene(cutsceneDialogue31, {
+        background: "#008080",
+        cutsceneID: 31,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[30] = false
+}
+if (player.c.cutscene[31] && hasUpgrade("ta", 17))
+{
+    showCutscene(cutsceneDialogue32, {
+        background: "#008080",
+        cutsceneID: 32,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[31] = false
+}
+if (player.c.cutscene[32] && hasUpgrade("ta", 21))
+{
+    showCutscene(cutsceneDialogue33, {
+        background: "#008080",
+        cutsceneID: 33,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[32] = false
+}
+if (player.c.cutscene[33] && (inChallenge("tad", 11) || !player.c.cutscene[34]))
+{
+    showCutscene(cutsceneDialogue34, {
+        cutsceneID: 34,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[33] = false
+}
+if (player.c.cutscene[34] && player.de.tavPoints.gte(1))
+{
+    showCutscene(cutsceneDialogue35, {
+        cutsceneID: 35,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[34] = false
+}
+if (player.c.cutscene[35] && player.bi.brokenInfinities.gte(1))
+{
+    showCutscene(cutsceneDialogue36, {
+        cutsceneID: 36,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[35] = false
+}
+if (player.c.cutscene[36] && hasUpgrade("de", 16))
+{
+    showCutscene(cutsceneDialogue37, {
+        background: "#ffffff",
+        cutsceneID: 37,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[36] = false
+}
+if (player.c.cutscene[37] && (player.tad.shatteredInfinities.gte(1) || player.tad.disfiguredInfinities.gte(1) || player.tad.corruptedInfinities.gte(1)))
+{
+    showCutscene(cutsceneDialogue38, {
+        cutsceneID: 38,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[37] = false
+}
+if (player.c.cutscene[38] && player.in.unlockedBreak)
+{
+    showCutscene(cutsceneDialogue39, {
+        background: "#008080",
+        cutsceneID: 39,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[38] = false
+}
+if (player.c.cutscene[39] && !player.c.cutscene[38])
+{
+    showCinematicCutscene(cutsceneDialogue40, {
+    background: "#000",
+    cutsceneID: 40
+    });
+    player.c.cutscene[39] = false
+}
+if (player.c.cutscene[40] && player.po.breakInfinity)
+{
+    showCutscene(cutsceneDialogue41, {
+        background: "#000000", 
+        cutsceneID: 41,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[40] = false
+}
+if (player.c.cutscene[41] && player.ev.evolutionsUnlocked[3])
+{
+    showCutscene(cutsceneDialogue42, {
+        background: "#094599", 
+        cutsceneID: 42,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[41] = false
+}
+if (player.c.cutscene[42] && hasUpgrade("bi", 14))
+{
+    showCutscene(cutsceneDialogue43, {
+    background: "#000",
+    cutsceneID: 43,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[42] = false
+}
+if (player.c.cutscene[43] && player.gh.steel.gte(1))
+{
+    showCutscene(cutsceneDialogue44, {
+    cutsceneID: 44,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[43] = false
+}
+if (player.c.cutscene[44] && player.p.crystals.gte(1))
+{
+    showCutscene(cutsceneDialogue45, {
+    cutsceneID: 45,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[44] = false
+}
+if (player.c.cutscene[45] && player.r.timeReversed)
+{
+    showCutscene(cutsceneDialogue46, {
+    background: "#000",
+    cutsceneID: 46,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[45] = false
+}
+if (player.c.cutscene[46] && player.ca.unlockedCante)
+{
+    showCutscene(cutsceneDialogue47, {
+    background: "linear-gradient(45deg, #0a82b9 0%, #7dd3f9 100%)",
+    cutsceneID: 47,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[46] = false
+}
+if (player.c.cutscene[47] && player.ca.replicanti.gte(1e308))
+{
+    showCutscene(cutsceneDialogue48, {
+    background: "linear-gradient(45deg, #0a82b9 0%, #7dd3f9 100%)",
+    cutsceneID: 48,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[47] = false
+}   
+if (player.c.cutscene[48] && player.ca.replicantiGalaxies.gte(1))
+{
+    showCutscene(cutsceneDialogue49, {
+    cutsceneID: 49,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[48] = false
+}   
+if (player.c.cutscene[49] && (player.tab == "cap" || !player.c.cutscene[50]))
+{
+    showCutscene(cutsceneDialogue50, {
+    cutsceneID: 50,
+    background: "linear-gradient(45deg, #0a82b9 0%, #7dd3f9 100%)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[49] = false
+} 
+if (player.c.cutscene[50] && player.ev.evolutionsUnlocked[8])
+{
+    showCutscene(cutsceneDialogue51, {
+    cutsceneID: 51,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[50] = false
+} 
+if (player.c.cutscene[51] && player.cap.reqsPassed[0])
+{
+    showCutscene(cutsceneDialogue52, {
+    cutsceneID: 52,
+    background: "#ffffff",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[51] = false
+} 
+if (player.c.cutscene[52] && player.cap.reqsPassed[1])
+{
+    showCutscene(cutsceneDialogue53, {
+    cutsceneID: 53,
+    background: "#ffffff",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[52] = false
+}
+if (player.c.cutscene[53] && player.cap.reqsPassed[2])
+{
+    showCutscene(cutsceneDialogue54, {
+    cutsceneID: 54,
+    background: "#ffffff",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[53] = false
+} 
+if (player.c.cutscene[54] && player.cap.reqsPassed[3])
+{
+    showCutscene(cutsceneDialogue55, {
+    cutsceneID: 55,
+    background: "#ffffff",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[54] = false
+} 
+if (player.c.cutscene[55] && ((player.tab == "cp"  || !player.c.cutscene[56]) || (player.tab == "a1u" || !player.c.cutscene[56])))
+{
+    showCutscene(cutsceneDialogue56, {
+    cutsceneID: 56,
+    background: "linear-gradient(45deg, #0a82b9 0%, #7dd3f9 100%)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[55] = false
+}
+if (player.c.cutscene[56] && hasUpgrade("cp", 15))
+{
+    showCutscene(cutsceneDialogue57, {
+    cutsceneID: 57,
+    background: "linear-gradient(45deg, #0a82b9 0%, #7dd3f9 100%)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[56] = false
+}
+if (player.c.cutscene[57] && hasUpgrade("cp", 18))
+{
+    showCutscene(cutsceneDialogue58, {
+    cutsceneID: 58,
+    background: "#ffffff",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[57] = false
+}
+if (player.c.cutscene[58] && player.oi.protoMemories.gt(1))
+{
+    showCutscene(cutsceneDialogue59, {
+    cutsceneID: 59,
+    background: "linear-gradient(45deg, #0a82b9 0%, #7dd3f9 100%)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[58] = false
+}
+if (player.c.cutscene[59] && player.ca.defeatedCante)
+{
+    showCutscene(cutsceneDialogue60, {
+    cutsceneID: 60,
+    background: "linear-gradient(45deg, #0a82b9 0%, #7dd3f9 100%)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[59] = false
+}
+if (player.c.cutscene[60] && !player.c.cutscene[59])
+{
+    showCutscene(cutsceneDialogue61, {
+    cutsceneID: 61,
+    background: "#000000",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[60] = false
+}
+if (player.c.cutscene[61] && hasMilestone("s", 11))
+{
+    showCutscene(cutsceneDialogue62, {
+    cutsceneID: 62,
+    background: "#260300",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[61] = false
+}
+if (player.c.cutscene[62] && (player.subtabs["co"]["stuff"] == "Cores" || !player.c.cutscene[63]))
+{
+    showCutscene(cutsceneDialogue63, {
+    cutsceneID: 63,
+    background: "#260300",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[62] = false
+}
+if (player.c.cutscene[63] && hasUpgrade("i", 101))
+{
+    showCutscene(cutsceneDialogue64, {
+    cutsceneID: 64,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[63] = false
+}
+if (player.c.cutscene[64] && hasMilestone("s", 12))
+{
+    showCutscene(cutsceneDialogue65, {
+    cutsceneID: 65,
+    background: "#260300",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[64] = false
+}
+if (player.c.cutscene[65] && hasMilestone("s", 13))
+{
+    showCutscene(cutsceneDialogue66, {
+    cutsceneID: 66,
+    background: "#260300",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[65] = false
+}
+if (player.c.cutscene[66] && hasMilestone("s", 14))
+{
+    showCutscene(cutsceneDialogue67, {
+    cutsceneID: 67,
+    background: "#260300",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[66] = false
+}
+if (player.c.cutscene[67] && hasUpgrade("cp", 19))
+{
+    showCutscene(cutsceneDialogue68, {
+    cutsceneID: 68,
+    background: "#5e8503",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[67] = false
+}
+if (player.c.cutscene[68] && hasUpgrade("fu", 11))
+{
+    showCutscene(cutsceneDialogue69, {
+    cutsceneID: 69,
+    background: "#5e8503",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[68] = false
+}
+if (player.c.cutscene[69] && hasUpgrade("fu", 16))
+{
+    showCutscene(cutsceneDialogue70, {
+    cutsceneID: 70,
+    background: "#ffffff",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[69] = false
+}
+if (player.c.cutscene[70] && (inChallenge("fu", 11) || !player.c.cutscene[71]))
+{
+    showCutscene(cutsceneDialogue71, {
+    cutsceneID: 71,
+    background: "#5e8503",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[70] = false
+}
+if (player.c.cutscene[71] && hasChallenge("fu", 11))
+{
+    showCutscene(cutsceneDialogue72, {
+    cutsceneID: 72,
+    background: "#5e8503",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[71] = false
+}
+if (player.c.cutscene[72] && hasMilestone("s", 17))
+{
+    showCutscene(cutsceneDialogue73, {
+    cutsceneID: 73,
+    background: "#260300",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[72] = false
+}
+if (player.c.cutscene[73] && (player.tab == "ch" || !player.c.cutscene[74]))
+{
+    showCutscene(cutsceneDialogue74, {
+    cutsceneID: 74,
+    background: "linear-gradient(90deg, #260b36, #0920b5)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[73] = false
+}
+if (player.c.cutscene[74] && hasMilestone("s", 19))
+{
+    showCutscene(cutsceneDialogue75, {
+    cutsceneID: 75,
+    background: "#260300",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[74] = false
+}
+if (player.c.cutscene[75] && hasUpgrade("s", 19))
+{
+    showCutscene(cutsceneDialogue76, {
+    cutsceneID: 76,
+    background: "#260300",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[75] = false
+}
+if (player.c.cutscene[76] && hasUpgrade("s", 21))
+{
+    showCutscene(cutsceneDialogue77, {
+    cutsceneID: 77,
+    background: "#260300",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[76] = false
+}
+if (player.c.cutscene[77] && (player.sma.inStarmetalChallenge || !player.c.cutscene[78]))
+{
+    showCutscene(cutsceneDialogue78, {
+    cutsceneID: 78,
+    background: "#000000ff",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[77] = false
+}
+if (player.c.cutscene[78] && player.sma.starmetalAlloy.gte(1))
+{
+    showCutscene(cutsceneDialogue79, {
+    cutsceneID: 79,
+    background: "#260300",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[78] = false
+}
+if (player.c.cutscene[79] && player.sma.starmetalAlloy.gte(1))
+{
+    showCutscene(cutsceneDialogue80, {
+    cutsceneID: 80,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[79] = false
+}
+if (player.c.cutscene[80] && player.ma.matosUnlockConditions[0])
+{
+    showCutscene(cutsceneDialogue81, {
+    cutsceneID: 81,
+    background: "#830b00ff",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[80] = false
+}
+if (player.c.cutscene[81] && player.ma.matosUnlockConditions[1])
+{
+    showCutscene(cutsceneDialogue82, {
+    cutsceneID: 82,
+    background: "#830b00ff",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[81] = false
+}
+if (player.c.cutscene[82] && player.ma.matosUnlockConditions[2])
+{
+    showCutscene(cutsceneDialogue83, {
+    cutsceneID: 83,
+    background: "#830b00ff",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[82] = false
+}
+if (player.c.cutscene[83] && player.ma.matosUnlockConditions[3])
+{
+    showCutscene(cutsceneDialogue84, {
+    cutsceneID: 84,
+    background: "#830b00ff",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[83] = false
+}
+if (player.c.cutscene[84] && player.ma.matosUnlock)
+{
+    showCutscene(cutsceneDialogue85, {
+    cutsceneID: 85,
+    background: "#260300",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[84] = false
+}
+if (player.c.cutscene[85] && player.au2.au2Unlocked)
+{
+    showCutscene(cutsceneDialogue86, {
+    cutsceneID: 86,
+    background: "radial-gradient(circle, #151230, #000000)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[85] = false
+}
+if (player.c.cutscene[86] && ((player.ma.inBlackHeart && player.ma.currentDepth.eq(1)) || !player.c.cutscene[87]))
+{
+    showCutscene(cutsceneDialogue87, {
+    cutsceneID: 87,
+    background: "linear-gradient(-180deg, #540818 0%, #3a0202 100%)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[86] = false
+}
+if (player.c.cutscene[87] && ((player.ma.inBlackHeart && player.ma.currentDepth.eq(2)) || !player.c.cutscene[88]))
+{
+    showCutscene(cutsceneDialogue88, {
+    cutsceneID: 88,
+    background: "linear-gradient(-180deg, #720455 0%, #250121 100%)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[87] = false
+}
+if (player.c.cutscene[88] && ((player.ma.inBlackHeart && player.ma.currentDepth.eq(3)) || !player.c.cutscene[89]))
+{
+    showCutscene(cutsceneDialogue89, {
+    cutsceneID: 89,
+    background: "linear-gradient(-180deg, #720804 0%, #720455 100%)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[88] = false
+}
+if (player.c.cutscene[89] && ((player.ma.inBlackHeart && player.ma.currentDepth.eq(3) && player.ma.matosFightActive) || !player.c.cutscene[90]))
+{
+    showCutscene(cutsceneDialogue90, {
+    cutsceneID: 90,
+    background: "linear-gradient(-180deg, #720804 0%, #720455 100%)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[89] = false
+}
+if (player.c.cutscene[90] && player.ma.matosDefeated)
+{
+    showCutscene(cutsceneDialogue91, {
+    cutsceneID: 91,
+    background: "linear-gradient(-180deg, #720804 0%, #720455 100%)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[90] = false
+}
+if (player.c.cutscene[91] && !player.c.cutscene[90] && !cutsceneActive)
+{
+    showCutscene(cutsceneDialogue92, {
+    cutsceneID: 92,
+    background: "linear-gradient(-180deg, #000000ff 0%, #20021dff 100%)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[91] = false
+}
+if (player.c.cutscene[92] && !player.c.cutscene[91] && !player.c.cutscene[90] && !cutsceneActive)
+{
+    showCutscene(cutsceneDialogue93, {
+    cutsceneID: 93,
+    background: "#260300",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[92] = false
+}
+if (player.c.cutscene[93] && player.sme.starmetalEssence.gte(1) && player.ma.matosDefeated)
+{
+    showCutscene(cutsceneDialogue94, {
+    cutsceneID: 94,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[93] = false
+}
+if (player.c.cutscene[94] && player.ro.rocket2Unlocked)
+{
+    showCutscene(cutsceneDialogue95, {
+    cutsceneID: 95,
+    background: "#1d1d1dff",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[94] = false
+}
+if (player.c.cutscene[95] && player.se.starsExploreCount[0][1].gte(1))
+{
+    showCutscene(cutsceneDialogue96, {
+    cutsceneID: 96,
+    background: "radial-gradient(circle, #151230, #000000)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[95] = false
+}
+if (player.c.cutscene[96] && player.se.starsExploreCount[0][2].gte(1))
+{
+    showCutscene(cutsceneDialogue97, {
+    cutsceneID: 97,
+    background: "radial-gradient(circle, #151230, #000000)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[96] = false
+}
+if (player.c.cutscene[97] && player.se.starsExploreCount[0][3].gte(1))
+{
+    showCutscene(cutsceneDialogue98, {
+    cutsceneID: 98,
+    background: "radial-gradient(circle, #151230, #000000)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[97] = false
+}
+if (player.c.cutscene[98] && player.se.starsExploreCount[0][4].gte(1))
+{
+    showCutscene(cutsceneDialogue99, {
+    cutsceneID: 99,
+    background: "radial-gradient(circle, #151230, #000000)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[98] = false
+}
+if (player.c.cutscene[99] && player.se.starsExploreCount[0][5].gte(1))
+{
+    showCutscene(cutsceneDialogue100, {
+    cutsceneID: 100,
+    background: "radial-gradient(circle, #151230, #000000)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[99] = false
+}
+if (player.c.cutscene[100] && player.ir.iriditeUnlocked)
+{
+    showCutscene(cutsceneDialogue101, {
+    cutsceneID: 101,
+    background: "radial-gradient(circle, #151230, #000000)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[100] = false
+}
+if (player.c.cutscene[101] && player.ir.inBattle)
+{
+    showCutscene(cutsceneDialogue102, {
+    cutsceneID: 102,
+    background: "radial-gradient(circle, #151230, #000000)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[101] = false
+}
+if (player.c.cutscene[102] && player.ir.battleLevel.gte(2))
+{
+    showCutscene(cutsceneDialogue103, {
+    cutsceneID: 103,
+    background: "radial-gradient(circle, #151230, #000000)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[102] = false
+}
+if (player.c.cutscene[103] && player.ir.battleLevel.gte(4))
+{
+    showCutscene(cutsceneDialogue104, {
+    cutsceneID: 104,
+    background: "radial-gradient(circle, #151230, #000000)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[103] = false
+}
+if (player.c.cutscene[104] && player.ds.spaceEnergy.gte(1))
+{
+    showCutscene(cutsceneDialogue105, {
+    cutsceneID: 105,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[104] = false
+}
+if (player.c.cutscene[105] && hasUpgrade("ir", 15))
+{
+    showCutscene(cutsceneDialogue106, {
+    cutsceneID: 106,
+    background: "#ffffff",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[105] = false
+}
+if (player.c.cutscene[106] && player.ir.battleLevel.gte(8) && hasUpgrade("ir", 16))
+{
+    showCutscene(cutsceneDialogue107, {
+    cutsceneID: 107,
+    background: "radial-gradient(circle, #151230, #000000)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[106] = false
+}
+if (player.c.cutscene[107] && hasUpgrade("ir", 19))
+{
+    showCutscene(cutsceneDialogue108, {
+    cutsceneID: 108,
+    background: "#5c4b4bff",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[107] = false
+}
+if (player.c.cutscene[108] && player.ir.iriditeFightActive)
+{
+    showCutscene(cutsceneDialogue109, {
+    cutsceneID: 109,
+    background: "radial-gradient(circle, #151230, #000000)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[108] = false
+}
+if (player.c.cutscene[109] && player.ir.iriditePhase > 2 && player.ir.iriditeFightActive)
+{
+    showCutscene(cutsceneDialogue110, {
+    cutsceneID: 110,
+    background: "radial-gradient(circle, #151230, #000000)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[109] = false
+}
+if (player.c.cutscene[110] && player.ir.iriditeDefeated)
+{
+    showCutscene(cutsceneDialogue111, {
+    cutsceneID: 111,
+    background: "radial-gradient(circle, #151230, #000000)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[110] = false
+}
+if (player.c.cutscene[111] && !player.c.cutscene[110] && !cutsceneActive)
+{
+    showCutscene(cutsceneDialogue112, {
+    cutsceneID: 112,
+    background: "linear-gradient(-180deg, #720804 0%, #720455 100%)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[111] = false
+}
+},
     startCutscene1() {
         player.c.cutsceneText = [
             "You find yourself in a vast desert of black sand.",
@@ -1311,15 +1670,15 @@
 })
 // Define the CSS animation within a template literal
 const cssStyles = `
-    @keyframes fall {
-        to {
-            transform: translateY(100vh);
-        }
-    }
+@keyframes fall {
+to {
+transform: translateY(100vh);
+}
+}
 
-    .raindrop {
-        position: absolute;
-    }
+.raindrop {
+position: absolute;
+}
 `;
 
 // Apply the CSS styles dynamically
@@ -1331,54 +1690,33 @@ document.head.appendChild(styleElement);
 let raining = false;
 let rainInterval;
 
-function startRain(rainColor) {
-    if (!raining) {
-        raining = true;
-        rainInterval = setInterval(() => createRaindrop(rainColor), 30);
-    }
-}
-
-function stopRain() {
-    if (raining) {
-        raining = false;
-        clearInterval(rainInterval);
-    }
-}
 
 function createRaindrop(rainColor) {
-    const raindrop = document.createElement('div');
-    raindrop.classList.add('raindrop');
-    raindrop.style.left = Math.random() * window.innerWidth + 'px';
-    raindrop.style.top = '0';
-    raindrop.style.backgroundColor = rainColor;
-    raindrop.style.width = '2px';
-    raindrop.style.height = '15px';
-    document.body.appendChild(raindrop);
+const raindrop = document.createElement('div');
+raindrop.classList.add('raindrop');
+raindrop.style.left = Math.random() * window.innerWidth + 'px';
+raindrop.style.top = '0';
+raindrop.style.backgroundColor = rainColor;
+raindrop.style.width = '2px';
+raindrop.style.height = '15px';
+document.body.appendChild(raindrop);
 
-    const animationDuration = Math.random() * 2 + 1;
-    raindrop.style.animation = `fall ${animationDuration}s linear`;
+const animationDuration = Math.random() * 2 + 1;
+raindrop.style.animation = `fall ${animationDuration}s linear`;
 
-    raindrop.addEventListener('animationend', () => {
-        raindrop.remove();
-    });
+raindrop.addEventListener('animationend', () => {
+raindrop.remove();
+});
 }
 
-// Handle tab visibility change
-document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible') {
-        startRain('#00f'); // Set default rain color
-    } else {
-        stopRain();
-    }
-});
 
 
 const embersCss = `
-    .ember-float {
-        pointer-events: none;
-        will-change: transform, opacity, filter;
-        transition: filter 0.2s, opacity 0.2s;
-    }
+.ember-float {
+    pointer-events: none;
+    will-change: transform, opacity, filter;
+    transition: filter 0.2s, opacity 0.2s;
+}
 `;
 if (!document.getElementById("embers-css")) {
     const style = document.createElement("style");
@@ -1387,3 +1725,1253 @@ if (!document.getElementById("embers-css")) {
     document.head.appendChild(style);
 }
 // i wrote basically all of the cutscenes. and if i didnt, ice wrote them and god is he awful at writing. i cleaned up and polished all of the things he wrote. im writing this at 1:27 am, 10/4/24. the game is set to release today, either in the morning or in the afternoon.
+
+
+//1
+
+/*
+if (player.c.cutscenes[0] && player.startedGame)
+{
+player.c.currentCutscene = 1
+} else
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 1)
+{
+player.tab = "c"
+layers.c.startCutscene1();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 1)
+{
+player.c.cutscenes[0] = false
+player.tab = "i"
+player.subtabs["i"]['stuff'] = 'Upgrades'
+player.c.cutscenes[0] = false
+}
+
+        //3
+        if (player.c.cutscenes[2] && player.in.infinities.gt(0)) {
+            player.c.currentCutscene = 3
+        } else if (player.tab != "c" && player.in.infinities.gt(0)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 3) {
+            player.tab = "c"
+            layers.c.startCutscene3();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 3) {
+            player.c.cutscenes[2] = false
+            player.tab = "in"
+            player.c.cutscenes[2] = false
+        }
+
+        //4
+        if (player.c.cutscenes[3] && player.ta.negativeInfinityPoints.gt(0)) {
+            player.c.currentCutscene = 4
+        } else if (player.tab != "c" && player.ta.negativeInfinityPoints.gt(0)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 4) {
+            player.tab = "c"
+            layers.c.startCutscene4();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 4) {
+            player.c.cutscenes[3] = false
+            player.tab = "i"
+            player.c.cutscenes[3] = false
+        }
+
+        //5
+        if (player.c.cutscenes[4] && player.ta.negativeInfinityPoints.gt(1000)) {
+            player.c.currentCutscene = 5
+        } else if (player.tab != "c" && player.ta.negativeInfinityPoints.gt(1000)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 5) {
+            player.tab = "c"
+            layers.c.startCutscene5();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 5) {
+            player.c.cutscenes[4] = false
+            player.tab = "i"
+            player.c.cutscenes[4] = false
+        }
+
+        //6
+        if (player.c.cutscenes[5] && inChallenge("tad", 11)) {
+            player.c.currentCutscene = 6
+        } else if (inChallenge("tad", 11) && player.tab != "c") {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 6) {
+            player.tab = "c"
+            layers.c.startCutscene6();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 6) {
+            player.c.cutscenes[5] = false
+            player.tab = "i"
+            player.c.cutscenes[5] = false
+        }
+
+
+        //7
+        if (player.c.cutscenes[6] && player.in.unlockedBreak) {
+            player.c.currentCutscene = 7
+        } else if (player.tab != "c" && player.in.unlockedBreak) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 7) {
+            player.tab = "c"
+            layers.c.startCutscene7();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 7) {
+            player.c.cutscenes[6] = false
+            player.tab = "po"
+            player.c.cutscenes[6] = false
+        }
+
+        //8
+        if (player.c.cutscenes[7] && hasUpgrade("bi", 24)) {
+            player.c.currentCutscene = 8
+        } else if (player.tab != "c" && hasUpgrade("bi", 24)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 8) {
+            player.tab = "c"
+            layers.c.startCutscene8();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 8) {
+            player.c.cutscenes[7] = false
+            player.tab = "in"
+            player.c.cutscenes[7] = false
+        }
+
+        //9
+        if (player.c.cutscenes[8] && player.ca.galaxyDust.gt(0)) {
+            player.c.currentCutscene = 9
+        } else if (player.tab != "c" && player.ca.galaxyDust.gt(0)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 9) {
+            player.tab = "c"
+            layers.c.startCutscene9();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 9) {
+            player.c.cutscenes[8] = false
+            player.tab = "in"
+            player.c.cutscenes[8] = false
+        }
+
+        //10
+        if (player.c.cutscenes[9] && hasUpgrade("bi", 28)) {
+            player.c.currentCutscene = 10
+        } else if (player.tab != "c" && hasUpgrade("bi", 28)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 10) {
+            player.tab = "c"
+            layers.c.startCutscene10();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 10) {
+            player.c.cutscenes[9] = false
+            player.tab = "cap"
+            player.subtabs["cap"]['stuff'] = 'Main'
+            player.c.cutscenes[9] = false
+        }
+
+        //11
+        if (player.c.cutscenes[10] && (player.tab == "cp" || (player.tab == "c" && player.cap.cantepocalypseUnlock))) {
+            player.c.currentCutscene = 11
+        } else if (player.tab != "c" && player.tab == "cp" || (player.tab == "c" && player.cap.cantepocalypseUnlock)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 11) {
+            player.tab = "c"
+            layers.c.startCutscene11();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 11) {
+            player.c.cutscenes[10] = false
+            player.tab = "cp"
+            player.c.cutscenes[10] = false
+        }
+
+        //12
+        if (player.c.cutscenes[11] && hasUpgrade("cp", 18)) {
+            player.c.currentCutscene = 12
+        } else if (player.tab != "c" && hasUpgrade("cp", 18)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 12) {
+            player.tab = "c"
+            layers.c.startCutscene12();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 12) {
+            player.c.cutscenes[11] = false
+            player.tab = "cp"
+            player.c.cutscenes[11] = false
+        }
+
+        //13
+        if (player.c.cutscenes[12] && player.ca.defeatedCante) {
+            player.c.currentCutscene = 13
+        } else if (player.tab != "c" && player.ca.defeatedCante) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 13) {
+            player.tab = "c"
+            layers.c.startCutscene13();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 13) {
+            player.c.cutscenes[12] = false
+            player.tab = "po"
+            player.c.cutscenes[12] = false
+        }
+
+        //14
+        if (player.c.cutscenes[13] && player.s.highestSingularityPoints.gt(0)) {
+            player.c.currentCutscene = 14
+        } else if (player.tab != "c" && player.s.highestSingularityPoints.gt(0)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 14) {
+            player.tab = "c"
+            layers.c.startCutscene14();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 14) {
+            player.c.cutscenes[13] = false
+            player.tab = "i"
+            player.c.cutscenes[13] = false
+        }
+        //15
+        if (player.c.cutscenes[14] && player.tab == "co" && player.subtabs["co"]['Cores'] == "Main") {
+            player.c.currentCutscene = 15
+        } else if (player.tab != "c" && player.s.highestSingularityPoints.gt(0)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 15) {
+            player.tab = "c"
+            layers.c.startCutscene15();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 15) {
+            player.c.cutscenes[14] = false
+            player.tab = "i"
+            player.c.cutscenes[14] = false
+        } 
+
+        //16
+        if (player.c.cutscenes[15] && hasMilestone("s", 12)) {
+            player.c.currentCutscene = 16
+        } else if (player.tab != "c" && hasMilestone("s", 12)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 16) {
+            player.tab = "c"
+            layers.c.startCutscene16();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 16) {
+            player.c.cutscenes[15] = false
+            player.tab = "i"
+            player.c.cutscenes[15] = false
+        } 
+
+        //17
+        if (player.c.cutscenes[16] && hasMilestone("s", 13)) {
+            player.c.currentCutscene = 17
+        } else if (player.tab != "c" && hasMilestone("s", 13)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 17) {
+            player.tab = "c"
+            layers.c.startCutscene17();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 17) {
+            player.c.cutscenes[16] = false
+            player.tab = "ra"
+            player.c.cutscenes[16] = false
+        } 
+
+        //18
+        if (player.c.cutscenes[17] && hasMilestone("s", 14)) {
+            player.c.currentCutscene = 18
+        } else if (player.tab != "c" && hasMilestone("s", 14)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 18) {
+            player.tab = "c"
+            layers.c.startCutscene18();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 18) {
+            player.c.cutscenes[17] = false
+            player.tab = "sd"
+            player.c.cutscenes[17] = false
+        } 
+
+        //19
+        if (player.c.cutscenes[18] && hasUpgrade("cp", 19)) {
+            player.c.currentCutscene = 19
+        } else if (player.tab != "c" && hasUpgrade("cp", 19)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 19) {
+            player.tab = "c"
+            layers.c.startCutscene19();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 19) {
+            player.c.cutscenes[18] = false
+            player.tab = "fu"
+            player.c.cutscenes[18] = false
+        } 
+
+        //20
+        if (player.c.cutscenes[19] && player.fu.jocusCelestialActivate) {
+            player.c.currentCutscene = 20
+        } else if (player.tab != "c" && player.fu.jocusCelestialActivate) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 20) {
+            player.tab = "c"
+            layers.c.startCutscene20();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 20) {
+            player.c.cutscenes[19] = false
+            player.tab = "fu"
+            player.c.cutscenes[19] = false
+        } 
+
+        //21
+        if (player.c.cutscenes[20] && hasUpgrade("fu", 15)) {
+            player.c.currentCutscene = 21
+        } else if (player.tab != "c" && hasUpgrade("fu", 15)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 21) {
+            player.tab = "c"
+            layers.c.startCutscene21();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 21) {
+            player.c.cutscenes[20] = false
+            player.tab = "fu"
+            player.c.cutscenes[20] = false
+        }
+
+        //22
+        if (player.c.cutscenes[21] && hasUpgrade("fu", 17)) {
+            player.c.currentCutscene = 22
+        } else if (player.tab != "c" && hasUpgrade("fu", 17)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 22) {
+            player.tab = "c"
+            layers.c.startCutscene22();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 22) {
+            player.c.cutscenes[21] = false
+            player.tab = "fu"
+            player.c.cutscenes[21] = false
+        }
+
+        //23
+        if (player.c.cutscenes[22] && hasChallenge("fu", 11)) {
+            player.c.currentCutscene = 23
+        } else if (player.tab != "c" && hasChallenge("fu", 11)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 23) {
+            player.tab = "c"
+            layers.c.startCutscene23();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 23) {
+            player.c.cutscenes[22] = false
+            player.tab = "ch" 
+            player.universe = -0.5
+            player.c.cutscenes[22] = false
+        }
+
+        //24
+        if (player.c.cutscenes[23] && hasUpgrade("s", 19)) {
+            player.c.currentCutscene = 24
+        } else if (player.tab != "c" && hasUpgrade("s", 19)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 24) {
+            player.tab = "c"
+            layers.c.startCutscene24();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 24) {
+            player.c.cutscenes[23] = false
+            player.tab = "s" 
+            player.c.cutscenes[23] = false
+        }
+
+        //25
+        if (player.c.cutscenes[24] && hasUpgrade("s", 21)) {
+            player.c.currentCutscene = 25
+        } else if (player.tab != "c" && hasUpgrade("s", 21)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 25) {
+            player.tab = "c"
+            layers.c.startCutscene25();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 25) {
+            player.c.cutscenes[24] = false
+            player.tab = "s" 
+            player.c.cutscenes[24] = false
+        }
+
+        //26
+        if (player.c.cutscenes[25] && player.sma.starmetalAlloy.gte(1)) {
+            player.c.currentCutscene = 26
+        } else if (player.tab != "c" && player.sma.starmetalAlloy.gte(1)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 26) {
+            player.tab = "c"
+            layers.c.startCutscene26();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 26) {
+            player.c.cutscenes[25] = false
+            player.tab = "s" 
+            player.c.cutscenes[25] = false
+        }
+
+        //27
+        if (player.c.cutscenes[26] && tmp.pu.levelables[302].canClick) {
+            player.c.currentCutscene = 27
+        } else if (player.tab != "c" && tmp.pu.levelables[302].canClick) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 27) {
+            player.tab = "c"
+            layers.c.startCutscene27();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 27) {
+            player.c.cutscenes[26] = false
+            player.tab = "le" 
+            player.c.cutscenes[26] = false
+        }
+
+        //28
+        if (player.c.cutscenes[27] && player.ma.matosUnlock) {
+            player.c.currentCutscene = 28
+        } else if (player.tab != "c" && player.ma.matosUnlock) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 28) {
+            player.tab = "c"
+            layers.c.startCutscene28();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 28) {
+            player.c.cutscenes[27] = false
+            player.tab = "ma" 
+            player.subtabs["ma"]['stuff'] = 'Stats'
+            player.c.cutscenes[27] = false
+        }
+
+        //29
+        if (player.c.cutscenes[28] && player.ma.secondAreaUnlock) {
+            player.c.currentCutscene = 29
+        } else if (player.tab != "c" && player.ma.secondAreaUnlock) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 29) {
+            player.tab = "c"
+            layers.c.startCutscene29();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 29) {
+            player.c.cutscenes[28] = false
+            player.tab = "ma" 
+            player.subtabs["ma"]['stuff'] = 'Fight'
+            player.c.cutscenes[28] = false
+        }
+
+        //30
+        if (player.c.cutscenes[29] && player.au2.au2Unlocked) {
+            player.c.currentCutscene = 30
+        } else if (player.tab != "c" && player.au2.au2Unlocked) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 30) {
+            player.tab = "c"
+            layers.c.startCutscene30();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 30) {
+            player.c.cutscenes[29] = false
+            player.tab = "st"
+            player.subtabs["st"]['stuff'] = 'Pets'
+            player.c.cutscenes[29] = false
+        }
+
+        //31
+        if (player.c.cutscenes[30] && player.st.buyables[202].gte(1)) {
+            player.c.currentCutscene = 31
+        } else if (player.tab != "c" && player.st.buyables[202].gte(1)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 31) {
+            player.tab = "c"
+            layers.c.startCutscene31();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 31) {
+            player.c.cutscenes[30] = false
+            player.tab = "pl"
+            player.subtabs["pl"]['stuff'] = 'Main'
+            player.c.cutscenes[30] = false
+        }
+
+        //32
+        if (player.c.cutscenes[31] && player.au2.stars.gte(10000)) {
+            player.c.currentCutscene = 32
+        } else if (player.tab != "c" && player.au2.stars.gte(10000)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 32) {
+            player.tab = "c"
+            layers.c.startCutscene32();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 32) {
+            player.c.cutscenes[31] = false
+            player.tab = "pl"
+            player.subtabs["pl"]['stuff'] = 'Main'
+            player.c.cutscenes[31] = false
+        }
+
+        //33
+        if (player.c.cutscenes[32] && hasUpgrade("ma", 27)) {
+            player.c.currentCutscene = 33
+        } else if (player.tab != "c" && hasUpgrade("ma", 27)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 33) {
+            player.tab = "c"
+            layers.c.startCutscene33();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 33) {
+            player.c.cutscenes[32] = false
+            player.tab = "ma"
+            player.subtabs["ma"]['stuff'] = 'Stats'
+            player.c.cutscenes[32] = false
+        }
+
+        //34
+        if (player.c.cutscenes[33] && player.ma.matosFightActive) {
+            player.c.currentCutscene = 34
+        } else if (player.tab != "c" && player.ma.matosFightActive) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 34) {
+            player.tab = "c"
+            layers.c.startCutscene34();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 34) {
+            player.c.cutscenes[33] = false
+            player.tab = "ma"
+            player.subtabs["ma"]['stuff'] = 'Fight'
+            player.c.cutscenes[33] = false
+        }
+
+        //35
+        if (player.c.cutscenes[34] && player.ma.matosDefeated) {
+            player.c.currentCutscene = 35
+        } else if (player.tab != "c" && player.ma.matosDefeated) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 35) {
+            player.tab = "c"
+            layers.c.startCutscene35();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 35) {
+            player.c.cutscenes[34] = false
+            player.tab = "ma"
+            player.subtabs["ma"]['stuff'] = "Win"
+            player.ma.currentDepth = new Decimal(0)
+            player.c.cutscenes[34] = false
+        }
+
+        //d
+        if (player.c.cutsceneDice && player.po.dice) {
+            player.c.currentCutscene = -1
+        } else if (player.tab != "c" && player.po.dice) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == -1) {
+            player.tab = "c"
+            layers.c.startCutsceneDice();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == -1) {
+            player.c.cutsceneDice = false
+            player.tab = "i"
+        }
+
+
+        //rf
+        if (player.c.cutsceneRocketFuel && player.po.rocketFuel) {
+            player.c.currentCutscene = -2
+        } else if (player.tab != "c" && player.po.rocketFuel) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == -2) {
+            player.tab = "c"
+            layers.c.startCutsceneRocketFuel();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == -2) {
+            player.c.cutsceneRocketFuel = false
+            player.tab = "i"
+        }
+
+
+        //h
+        if (player.c.cutsceneHex && player.hpr.rank[0].gte(1)) {
+            player.c.currentCutscene = -3
+        } else if (player.tab != "c" && player.hpr.rank[0].gte(1) && hasChallenge("ip", 13)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == -3) {
+            player.tab = "c"
+            layers.c.startCutsceneHex();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == -3) {
+            player.c.cutsceneHex = false
+            player.tab = "i"
+        }
+
+//8
+if (player.c.cutscenes[7] && hasUpgrade("bi", 24))
+{
+player.c.currentCutscene = 8
+} else if (player.tab != "c" && hasUpgrade("bi", 24))
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 8)
+{
+player.tab = "c"
+layers.c.startCutscene8();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 8)
+{
+player.c.cutscenes[7] = false
+player.tab = "in"
+player.subtabs["in"]['stuff'] = 'Features'
+player.c.cutscenes[7] = false
+}
+
+//9
+if (player.c.cutscenes[8] && player.ca.galaxyDust.gt(0))
+{
+player.c.currentCutscene = 9
+} else if (player.tab != "c" && player.ca.galaxyDust.gt(0))
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 9)
+{
+player.tab = "c"
+layers.c.startCutscene9();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 9)
+{
+player.c.cutscenes[8] = false
+player.tab = "in"
+player.subtabs["in"]['stuff'] = 'Features'
+player.c.cutscenes[8] = false
+}
+
+//10
+if (player.c.cutscenes[9] && hasUpgrade("bi", 28))
+{
+player.c.currentCutscene = 10
+} else if (player.tab != "c" && hasUpgrade("bi", 28))
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 10)
+{
+player.tab = "c"
+layers.c.startCutscene10();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 10)
+{
+player.c.cutscenes[9] = false
+player.tab = "cap"
+player.subtabs["cap"]['stuff'] = 'Main'
+player.c.cutscenes[9] = false
+}
+
+//11
+if (player.c.cutscenes[10] && (player.tab == "cp" || (player.tab == "c" && player.cap.cantepocalypseUnlock)))
+{
+player.c.currentCutscene = 11
+} else if (player.tab != "c" && player.tab == "cp" || (player.tab == "c" && player.cap.cantepocalypseUnlock))
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 11)
+{
+player.tab = "c"
+layers.c.startCutscene11();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 11)
+{
+player.c.cutscenes[10] = false
+player.tab = "cp"
+player.subtabs["cp"]['stuff'] = 'Features'
+player.c.cutscenes[10] = false
+}
+
+//12
+if (player.c.cutscenes[11] && hasUpgrade("cp", 18))
+{
+player.c.currentCutscene = 12
+} else if (player.tab != "c" && hasUpgrade("cp", 18))
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 12)
+{
+player.tab = "c"
+layers.c.startCutscene12();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 12)
+{
+player.c.cutscenes[11] = false
+player.tab = "cp"
+player.subtabs["cp"]['stuff'] = 'Features'
+player.c.cutscenes[11] = false
+}
+
+//13
+if (player.c.cutscenes[12] && player.ca.defeatedCante)
+{
+player.c.currentCutscene = 13
+} else if (player.tab != "c" && player.ca.defeatedCante)
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 13)
+{
+player.tab = "c"
+layers.c.startCutscene13();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 13)
+{
+player.c.cutscenes[12] = false
+player.tab = "po"
+player.subtabs["po"]['stuff'] = 'Portals'
+player.c.cutscenes[12] = false
+}
+
+//14
+if (player.c.cutscenes[13] && player.s.highestSingularityPoints.gt(0))
+{
+player.c.currentCutscene = 14
+} else if (player.tab != "c" && player.s.highestSingularityPoints.gt(0))
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 14)
+{
+player.tab = "c"
+layers.c.startCutscene14();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 14)
+{
+player.c.cutscenes[13] = false
+player.tab = "i"
+player.c.cutscenes[13] = false
+}
+
+//15
+if (player.c.cutscenes[14] && player.cop.processingCore)
+{
+player.c.currentCutscene = 15
+} else if (player.tab != "c" && player.cop.processingCore)
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 15)
+{
+player.tab = "c"
+layers.c.startCutscene15();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 15)
+{
+player.c.cutscenes[14] = false
+player.tab = "i"
+player.c.cutscenes[14] = false
+} 
+
+//16
+if (player.c.cutscenes[15] && hasMilestone("s", 12))
+{
+player.c.currentCutscene = 16
+} else if (player.tab != "c" && hasMilestone("s", 12))
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 16)
+{
+player.tab = "c"
+layers.c.startCutscene16();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 16)
+{
+player.c.cutscenes[15] = false
+player.tab = "i"
+player.c.cutscenes[15] = false
+} 
+
+//17
+if (player.c.cutscenes[16] && hasMilestone("s", 13))
+{
+player.c.currentCutscene = 17
+} else if (player.tab != "c" && hasMilestone("s", 13))
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 17)
+{
+player.tab = "c"
+layers.c.startCutscene17();
+layers.ra.generateRadiationValue();
+layers.ra.generateRadiationOutput();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 17)
+{
+player.c.cutscenes[16] = false
+player.tab = "ra"
+player.c.cutscenes[16] = false
+} 
+
+//18
+if (player.c.cutscenes[17] && hasMilestone("s", 14))
+{
+player.c.currentCutscene = 18
+} else if (player.tab != "c" && hasMilestone("s", 14))
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 18)
+{
+player.tab = "c"
+layers.c.startCutscene18();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 18)
+{
+player.c.cutscenes[17] = false
+player.tab = "sd"
+player.c.cutscenes[17] = false
+} 
+
+//19
+if (player.c.cutscenes[18] && hasUpgrade("cp", 19))
+{
+player.c.currentCutscene = 19
+} else if (player.tab != "c" && hasUpgrade("cp", 19))
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 19)
+{
+player.tab = "c"
+layers.c.startCutscene19();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 19)
+{
+player.c.cutscenes[18] = false
+player.tab = "fu"
+player.c.cutscenes[18] = false
+} 
+
+//20
+if (player.c.cutscenes[19] && player.fu.jocusCelestialActivate)
+{
+player.c.currentCutscene = 20
+} else if (player.tab != "c" && player.fu.jocusCelestialActivate)
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 20)
+{
+player.tab = "c"
+layers.c.startCutscene20();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 20)
+{
+player.c.cutscenes[19] = false
+player.tab = "fu"
+player.c.cutscenes[19] = false
+} 
+
+//21
+if (player.c.cutscenes[20] && hasUpgrade("fu", 15))
+{
+player.c.currentCutscene = 21
+} else if (player.tab != "c" && hasUpgrade("fu", 15))
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 21)
+{
+player.tab = "c"
+layers.c.startCutscene21();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 21)
+{
+player.c.cutscenes[20] = false
+player.tab = "fu"
+player.c.cutscenes[20] = false
+}
+
+//22
+if (player.c.cutscenes[21] && hasUpgrade("fu", 17))
+{
+player.c.currentCutscene = 22
+} else if (player.tab != "c" && hasUpgrade("fu", 17))
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 22)
+{
+player.tab = "c"
+layers.c.startCutscene22();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 22)
+{
+player.c.cutscenes[21] = false
+player.tab = "fu"
+player.c.cutscenes[21] = false
+}
+
+//23
+if (player.c.cutscenes[22] && hasChallenge("fu", 11))
+{
+player.c.currentCutscene = 23
+} else if (player.tab != "c" && hasChallenge("fu", 11))
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 23)
+{
+player.tab = "c"
+layers.c.startCutscene23();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 23)
+{
+player.c.cutscenes[22] = false
+if (!options.newMenu) player.tab = "ch" 
+if (options.newMenu) player.tab = "cmh" 
+player.universe = -0.5
+player.c.cutscenes[22] = false
+}
+
+//24
+if (player.c.cutscenes[23] && hasUpgrade("s", 18))
+{
+player.c.currentCutscene = 24
+} else if (player.tab != "c" && hasUpgrade("s", 18))
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 24)
+{
+player.tab = "c"
+layers.c.startCutscene24();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 24)
+{
+player.c.cutscenes[23] = false
+player.tab = "s" 
+player.c.cutscenes[23] = false
+}
+
+//25
+if (player.c.cutscenes[24] && hasUpgrade("s", 21))
+{
+player.c.currentCutscene = 25
+} else if (player.tab != "c" && hasUpgrade("s", 21))
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 25)
+{
+player.tab = "c"
+layers.c.startCutscene25();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 25)
+{
+player.c.cutscenes[24] = false
+player.tab = "s" 
+player.c.cutscenes[24] = false
+}
+
+//26
+if (player.c.cutscenes[25] && player.sma.starmetalAlloy.gte(1))
+{
+player.c.currentCutscene = 26
+} else if (player.tab != "c" && player.sma.starmetalAlloy.gte(1))
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 26)
+{
+player.tab = "c"
+layers.c.startCutscene26();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 26)
+{
+player.c.cutscenes[25] = false
+player.tab = "s" 
+player.c.cutscenes[25] = false
+}
+
+//27
+if (player.c.cutscenes[26] && player.le.punchcardsUnlocked[15])
+{
+player.c.currentCutscene = 27
+} else if (player.tab != "c" && player.le.punchcardsUnlocked[15])
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 27)
+{
+player.tab = "c"
+layers.c.startCutscene27();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 27)
+{
+player.c.cutscenes[26] = false
+player.tab = "du" 
+player.c.cutscenes[26] = false
+}
+
+//28
+if (player.c.cutscenes[27] && player.ma.matosUnlock)
+{
+player.c.currentCutscene = 28
+} else if (player.tab != "c" && player.ma.matosUnlock)
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 28)
+{
+player.tab = "c"
+layers.c.startCutscene28();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 28)
+{
+player.c.cutscenes[27] = false
+player.tab = "ma" 
+player.subtabs["ma"]['stuff'] = 'Stats'
+player.c.cutscenes[27] = false
+}
+
+//29
+if (player.c.cutscenes[28] && player.ma.secondAreaUnlock)
+{
+    player.c.currentCutscene = 29
+} else if (player.tab != "c" && player.ma.secondAreaUnlock)
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 29)
+{
+player.tab = "c"
+layers.c.startCutscene29();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 29)
+{
+player.c.cutscenes[28] = false
+player.tab = "ma" 
+player.subtabs["ma"]['stuff'] = 'Fight'
+player.c.cutscenes[28] = false
+}
+
+//30
+if (player.c.cutscenes[29] && player.au2.au2Unlocked)
+{
+    player.c.currentCutscene = 30
+} else if (player.tab != "c" && player.au2.au2Unlocked)
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 30)
+{
+player.tab = "c"
+layers.c.startCutscene30();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 30)
+{
+player.c.cutscenes[29] = false
+player.tab = "st"
+player.subtabs["st"]['stuff'] = 'Pets'
+player.c.cutscenes[29] = false
+}
+
+//31
+if (player.c.cutscenes[30] && player.st.buyables[202].gte(1))
+{
+    player.c.currentCutscene = 31
+} else if (player.tab != "c" && player.st.buyables[202].gte(1))
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 31)
+{
+player.tab = "c"
+layers.c.startCutscene31();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 31)
+{
+player.c.cutscenes[30] = false
+player.tab = "pl"
+player.subtabs["pl"]['stuff'] = 'Main'
+player.c.cutscenes[30] = false
+}
+
+//32
+if (player.c.cutscenes[31] && player.au2.stars.gte(10000))
+{
+    player.c.currentCutscene = 32
+} else if (player.tab != "c" && player.au2.stars.gte(10000))
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 32)
+{
+player.tab = "c"
+layers.c.startCutscene32();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 32)
+{
+player.c.cutscenes[31] = false
+player.tab = "pl"
+player.subtabs["pl"]['stuff'] = 'Main'
+player.c.cutscenes[31] = false
+}
+
+//33
+if (player.c.cutscenes[32] && hasUpgrade("ma", 27))
+{
+    player.c.currentCutscene = 33
+} else if (player.tab != "c" && hasUpgrade("ma", 27))
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 33)
+{
+player.tab = "c"
+layers.c.startCutscene33();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 33)
+{
+player.c.cutscenes[32] = false
+player.tab = "ma"
+player.subtabs["ma"]['stuff'] = 'Main'
+player.c.cutscenes[32] = false
+}
+
+//34
+if (player.c.cutscenes[33] && player.ma.matosFightActive)
+{
+    player.c.currentCutscene = 34
+} else if (player.tab != "c" && player.ma.matosFightActive)
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 34)
+{
+player.tab = "c"
+layers.c.startCutscene34();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 34)
+{
+player.c.cutscenes[33] = false
+player.tab = "ma"
+player.subtabs["ma"]['stuff'] = 'Fight'
+player.c.cutscenes[33] = false
+}
+
+//35
+if (player.c.cutscenes[34] && player.ma.matosDefeated)
+{
+    player.c.currentCutscene = 35
+} else if (player.tab != "c" && player.ma.matosDefeated)
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == 35)
+{
+player.tab = "c"
+layers.c.startCutscene35();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 35)
+{
+player.c.cutscenes[34] = false
+player.tab = "ma"
+player.subtabs["ma"]['stuff'] = 'Perks'
+player.c.cutscenes[34] = false
+}
+
+//d
+if (player.c.cutsceneDice && player.po.dice)
+{
+player.c.currentCutscene = -1
+} else if (player.tab != "c" && player.po.dice)
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == -1)
+{
+player.tab = "c"
+layers.c.startCutsceneDice();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == -1)
+{
+player.c.cutsceneDice = false
+player.tab = "i"
+player.subtabs["i"]['stuff'] = 'Features'
+}
+
+
+//rf
+if (player.c.cutsceneRocketFuel && player.po.rocketFuel)
+{
+player.c.currentCutscene = -2
+} else if (player.tab != "c" && player.po.rocketFuel)
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == -2)
+{
+player.tab = "c"
+layers.c.startCutsceneRocketFuel();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == -2)
+{
+player.c.cutsceneRocketFuel = false
+player.tab = "i"
+player.subtabs["i"]['stuff'] = 'Features'
+}
+
+
+//h
+if (player.c.cutsceneHex && player.h.hex.gte(1))
+{
+player.c.currentCutscene = -3
+} else if (player.tab != "c" && player.h.hex.gte(1) && hasChallenge("ip", 13))
+{
+player.c.currentCutscene = 0
+}
+if (player.c.currentCutscene == -3)
+{
+player.tab = "c"
+layers.c.startCutsceneHex();
+}
+if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == -3)
+{
+player.c.cutsceneHex = false
+player.tab = "i"
+player.subtabs["i"]['stuff'] = 'Upgrades'
+} */

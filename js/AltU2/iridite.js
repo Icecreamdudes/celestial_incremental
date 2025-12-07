@@ -507,7 +507,7 @@ addLayer("ir", {
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(2.5).pow(2).add(1), //mastery point effects
+                    getLevelableAmount(this.layer, this.id).mul(2.5).pow(1.5).add(1), //mastery point effects
                     getLevelableAmount(this.layer, this.id).pow(0.3).mul(0.1).add(1), //neginf
                     getLevelableAmount(this.layer, this.id).mul(0.06).add(1), //Damage
                     getLevelableAmount(this.layer, this.id).mul(0.03).add(1), //Health

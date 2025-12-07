@@ -12,6 +12,17 @@ addLayer("fi", {
         battleCapacityAvailable: new Decimal(4),
         battleCapacityCost: new Decimal(1),
 
+        /*
+        pet: {
+            401: {
+                health: new Decimal(150),
+                healthMax: new Decimal(150),
+                damage: new Decimal(25),
+                damageMax: new Decimal(25),
+            },
+        },
+        */
+
         petMaxHP: [[new Decimal(150),new Decimal(150),new Decimal(150),new Decimal(150),new Decimal(150),new Decimal(150),], [new Decimal(250), new Decimal(250)]],
         petMaxMaxHP: [[new Decimal(150),new Decimal(150),new Decimal(150),new Decimal(150),new Decimal(150),new Decimal(150),], [new Decimal(250), new Decimal(250)]],
         petDamage: [[new Decimal(25),new Decimal(25),new Decimal(25),new Decimal(25),new Decimal(25),new Decimal(25),], [new Decimal(25), new Decimal(25)]],
@@ -24,17 +35,59 @@ addLayer("fi", {
         selectedDamage: new Decimal(0),
         selectedMaxDamage: new Decimal(0),
 
-        damageButtonBaseGain: [new Decimal(1),new Decimal(2),new Decimal(5),new Decimal(12),], //damage gain is affected by starmetal binding level
-        healthButtonBaseGain: [new Decimal(1),new Decimal(2),new Decimal(5),new Decimal(12),], //health gain is affected by normal pet level
+        damageTimers: {
+            0: {
+                current: new Decimal(0),
+                max: new Decimal(600),
+                base: new Decimal(1), //damage gain is affected by starmetal binding level
+                gain: new Decimal(1),
+            },
+            1: {
+                current: new Decimal(0),
+                max: new Decimal(1800),
+                base: new Decimal(2),
+                gain: new Decimal(2),
+            },
+            2: {
+                current: new Decimal(0),
+                max: new Decimal(5400),
+                base: new Decimal(5),
+                gain: new Decimal(5),
+            },
+            3: {
+                current: new Decimal(0),
+                max: new Decimal(16200),
+                base: new Decimal(12),
+                gain: new Decimal(12),
+            },
+        },
 
-        damageButtonGain: [new Decimal(1),new Decimal(2),new Decimal(5),new Decimal(12),], 
-        healthButtonGain: [new Decimal(1),new Decimal(2),new Decimal(5),new Decimal(12),], 
-
-        damageButtonTimers: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),], 
-        healthButtonTimers: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),], 
-
-        damageButtonTimersMax: [new Decimal(600),new Decimal(1800),new Decimal(5400),new Decimal(16200),],
-        healthButtonTimersMax: [new Decimal(600),new Decimal(1800),new Decimal(5400),new Decimal(16200),], 
+        healthTimers: {
+            0: {
+                current: new Decimal(0),
+                max: new Decimal(600),
+                base: new Decimal(1), //health gain is affected by normal pet level
+                gain: new Decimal(1),
+            },
+            1: {
+                current: new Decimal(0),
+                max: new Decimal(1800),
+                base: new Decimal(2),
+                gain: new Decimal(2),
+            },
+            2: {
+                current: new Decimal(0),
+                max: new Decimal(5400),
+                base: new Decimal(5),
+                gain: new Decimal(5),
+            },
+            3: {
+                current: new Decimal(0),
+                max: new Decimal(16200),
+                base: new Decimal(12),
+                gain: new Decimal(12),
+            },
+        },
 
         petIndex: new Decimal(0),
         rarityIndex: new Decimal(0),
@@ -42,6 +95,16 @@ addLayer("fi", {
         selectedPets: [[false, false, false, false, false, false], [false]],
         selectedIDs: [],
 
+        battleTimers: {
+            0: {
+                current: new Decimal(0),
+                max: new Decimal(600),
+            },
+            1: {
+                current: new Decimal(0),
+                max: new Decimal(1200),
+            },
+        },
         battleButtonTimers: [new Decimal(0),new Decimal(0),], 
         battleButtonTimersMax: [new Decimal(600),new Decimal(1200),], 
 
@@ -68,11 +131,10 @@ addLayer("fi", {
         //player.fi.petMaxHP = [[new Decimal(100),new Decimal(150),new Decimal(100),new Decimal(200),new Decimal(150),new Decimal(100),], [new Decimal(250)]]
         //player.fi.petDamage = [[new Decimal(25),new Decimal(20),new Decimal(20),new Decimal(15),new Decimal(25),new Decimal(20),], [new Decimal(25)]]
 
-        player.fi.petTitle = tmp.sme.levelables[layers.sme.levelables.index].title.toString()
+        player.fi.petTitle = run(layers.sme.levelables[layers.sme.levelables.index].title, layers.sme.levelables[layers.sme.levelables.index]).toString()
 
 
-        if (layers.sme.levelables.index != 0)
-        {
+        if (layers.sme.levelables.index != 0) {
             player.fi.selectedMaxHP = tmp.sme.levelables[layers.sme.levelables.index].effect[0]
             player.fi.selectedMaxMaxHP = tmp.sme.levelables[layers.sme.levelables.index].effect[3]
             player.fi.selectedDamage = tmp.sme.levelables[layers.sme.levelables.index].effect[1]
@@ -87,73 +149,66 @@ addLayer("fi", {
         if (layers.sme.levelables.index < 200) healthFactor = player.sme.levelables[layers.sme.levelables.index][0].mul(2.5)
         if (layers.sme.levelables.index > 200) healthFactor = player.sme.levelables[layers.sme.levelables.index][0].mul(15)
 
-        for (let i = 0; i < player.fi.damageButtonTimers.length; i++)
-        {
-            player.fi.damageButtonTimers[i] = player.fi.damageButtonTimers[i].sub(delta)
-            player.fi.healthButtonTimers[i] = player.fi.healthButtonTimers[i].sub(delta)
-
-            player.fi.damageButtonGain[i] = player.fi.damageButtonBaseGain[i].mul(damageFactor)
-            player.fi.healthButtonGain[i] = player.fi.healthButtonBaseGain[i].mul(healthFactor)
+        for (let i in player.fi.damageTimers) {
+            player.fi.damageTimers[i].current = player.fi.damageTimers[i].current.sub(delta)
+            player.fi.damageTimers[i].gain = player.fi.damageTimers[i].base.mul(damageFactor)
         }
 
-        for (let i = 0; i < player.fi.battleButtonTimers.length; i++)
-        {
-            player.fi.battleButtonTimers[i] = player.fi.battleButtonTimers[i].sub(delta)
+        for (let i in player.fi.healthTimers) {
+            player.fi.healthTimers[i].current = player.fi.healthTimers[i].current.sub(delta)
+            player.fi.healthTimers[i].gain = player.fi.healthTimers[i].base.mul(healthFactor)
         }
 
-        if (player.fi.rarityIndex == 0)
-        {
+        if (player.fi.rarityIndex == 0) {
             player.fi.battleCapacityCost = new Decimal(1)
         }
-        if (player.fi.rarityIndex == 1)
-        {
+        if (player.fi.rarityIndex == 1) {
             player.fi.battleCapacityCost = new Decimal(2)
         }
 
-        player.fi.battleButtonTimersMax = [new Decimal(600), new Decimal(1200)]
+        player.fi.battleTimers[0].max = new Decimal(600)
+        player.fi.battleTimers[1].max = new Decimal(1200)
 
-        for (let i = 0; i < player.fi.battleButtonTimers.length; i++)
-        {
-            player.fi.battleButtonTimers[i] = player.fi.battleButtonTimers[i].sub(delta)
+        for (let i in player.fi.battleTimers) {
+            player.fi.battleTimers[i].current = player.fi.battleTimers[i].current.sub(delta)
         }
 
         player.fi.selectedIDs = [];
         for (let rarity = 0; rarity < player.fi.selectedPets.length; rarity++) {
-        for (let i = 0; i < player.fi.selectedPets[rarity].length; i++) {
-        if (player.fi.selectedPets[rarity][i]) {
-            let id = rarity === 0 ? 101 + i : 201 + i;
-            player.fi.selectedIDs.push(id);
-        }
+            for (let i = 0; i < player.fi.selectedPets[rarity].length; i++) {
+                if (player.fi.selectedPets[rarity][i]) {
+                    let id = rarity === 0 ? 101 + i : 201 + i;
+                    player.fi.selectedIDs.push(id);
+                }
 
-        for (let rarity = 0; rarity < player.fi.petMaxMaxHP.length; rarity++) {
-            for (let i = 0; i < player.fi.petMaxMaxHP[rarity].length; i++) {
-             // Get starmetal binding level for this pet
-            let petID = rarity === 0 ? 101 + i : 201 + i;
-            let starmetalLevel = player.sme.levelables[petID][0];
-            let baseHP = rarity === 0 ? new Decimal(150) : new Decimal(250);
-            let baseDMG = new Decimal(25);
-            if (rarity == 0) player.fi.petMaxMaxHP[rarity][i] = baseHP.add(starmetalLevel.mul(25));
-            if (rarity == 1) player.fi.petMaxMaxHP[rarity][i] = baseHP.add(starmetalLevel.mul(125));
-            if (rarity == 0) player.fi.petMaxDamage[rarity][i] = baseDMG.add(starmetalLevel.mul(5));
-            if (rarity == 1) player.fi.petMaxDamage[rarity][i] = baseDMG.add(starmetalLevel.mul(25));
+                for (let rarity = 0; rarity < player.fi.petMaxMaxHP.length; rarity++) {
+                    for (let i = 0; i < player.fi.petMaxMaxHP[rarity].length; i++) {
+                     // Get starmetal binding level for this pet
+                    let petID = rarity === 0 ? 101 + i : 201 + i;
+                    let starmetalLevel = player.sme.levelables[petID][0];
+                    let baseHP = rarity === 0 ? new Decimal(150) : new Decimal(250);
+                    let baseDMG = new Decimal(25);
+                    if (rarity == 0) player.fi.petMaxMaxHP[rarity][i] = baseHP.add(starmetalLevel.mul(25));
+                    if (rarity == 1) player.fi.petMaxMaxHP[rarity][i] = baseHP.add(starmetalLevel.mul(125));
+                    if (rarity == 0) player.fi.petMaxDamage[rarity][i] = baseDMG.add(starmetalLevel.mul(5));
+                    if (rarity == 1) player.fi.petMaxDamage[rarity][i] = baseDMG.add(starmetalLevel.mul(25));
+                    }
+                }
+
+                for (let rarity = 0; rarity < player.fi.petMaxHP.length; rarity++) {
+                    for (let i = 0; i < player.fi.petMaxHP[rarity].length; i++) {
+                        // Cap petMaxHP to petMaxMaxHP
+                        if (player.fi.petMaxHP[rarity][i].gt(player.fi.petMaxMaxHP[rarity][i])) {
+                            player.fi.petMaxHP[rarity][i] = player.fi.petMaxMaxHP[rarity][i];
+                        }   
+                        // Cap petDamage to petMaxDamage
+                        if (player.fi.petDamage[rarity][i].gt(player.fi.petMaxDamage[rarity][i])) {
+                            player.fi.petDamage[rarity][i] = player.fi.petMaxDamage[rarity][i];
+                        }   
+                    }
+                }
             }
         }
-
-        for (let rarity = 0; rarity < player.fi.petMaxHP.length; rarity++) {
-            for (let i = 0; i < player.fi.petMaxHP[rarity].length; i++) {
-                // Cap petMaxHP to petMaxMaxHP
-                if (player.fi.petMaxHP[rarity][i].gt(player.fi.petMaxMaxHP[rarity][i])) {
-                    player.fi.petMaxHP[rarity][i] = player.fi.petMaxMaxHP[rarity][i];
-                }   
-                // Cap petDamage to petMaxDamage
-                if (player.fi.petDamage[rarity][i].gt(player.fi.petMaxDamage[rarity][i])) {
-                    player.fi.petDamage[rarity][i] = player.fi.petMaxDamage[rarity][i];
-                }   
-            }
-        }
-
-    }
-}
 
     player.fi.milestone101Effect = player.fi.tier1BestWave.pow(0.6).div(25).add(1)
     },
@@ -169,10 +224,10 @@ addLayer("fi", {
         },
         2: {
             title() { return "<h3>Select this pet" },
-            canClick() { return player.fi.battleCapacityAvailable.gte(player.fi.battleCapacityCost) && player.sme.levelables[layers.sme.levelables.index][2] == false },
+            canClick() { return player.fi.battleCapacityAvailable.gte(player.fi.battleCapacityCost) && !getLevelableTier("sme", layers.sme.levelables.index, true) },
             unlocked() { return true },
             onClick() {
-                player.sme.levelables[layers.sme.levelables.index][2] = true
+                setLevelableTier("sme", layers.sme.levelables.index, true)
                 player.fi.selectedPets[player.fi.rarityIndex][player.fi.petIndex] = true
                 player.fi.battleCapacityAvailable = player.fi.battleCapacityAvailable.sub(player.fi.battleCapacityCost)
             },
@@ -180,10 +235,10 @@ addLayer("fi", {
         },
         3: {
             title() { return "<h3>Unselect this pet" },
-            canClick() { return player.sme.levelables[layers.sme.levelables.index][2] == true  },
+            canClick() { return getLevelableTier("sme", layers.sme.levelables.index, true)  },
             unlocked() { return true },
             onClick() {
-                player.sme.levelables[layers.sme.levelables.index][2] = false
+                setLevelableTier("sme", layers.sme.levelables.index, false)
                 player.fi.selectedPets[player.fi.rarityIndex][player.fi.petIndex] = false
                 player.fi.battleCapacityAvailable = player.fi.battleCapacityAvailable.add(player.fi.battleCapacityCost)
             },
@@ -255,22 +310,22 @@ addLayer("fi", {
 
         //stat buttons
         101: {
-            title() { return player.fi.damageButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.fi.damageButtonTimers[0]) + "." : "<h3>+" + format(player.fi.damageButtonGain[0]) + " DMG."},
-            canClick() { return player.fi.damageButtonTimers[0].lte(0) && layers.sme.levelables.index != 0 },
+            title() { return player.fi.damageTimers[0].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.fi.damageTimers[0].current) + "." : "<h3>+" + format(player.fi.damageTimers[0].gain) + " DMG."},
+            canClick() { return player.fi.damageTimers[0].current.lte(0) && layers.sme.levelables.index != 0 },
             unlocked() { return true },
             onClick() {
-                player.fi.petDamage[player.fi.rarityIndex][player.fi.petIndex] = player.fi.petDamage[player.fi.rarityIndex][player.fi.petIndex].add(player.fi.damageButtonGain[0])
-                player.fi.damageButtonTimers[0] = player.fi.damageButtonTimersMax[0]
+                player.fi.petDamage[player.fi.rarityIndex][player.fi.petIndex] = player.fi.petDamage[player.fi.rarityIndex][player.fi.petIndex].add(player.fi.damageTimers[0].gain)
+                player.fi.damageTimers[0].current = player.fi.damageTimers[0].max
             },
             style: { width: '150px', minHeight: '43.75px', borderRadius: "0px", border: "2px solid white", borderTop: "0px", borderLeft: "0px", backgroundColor: "#052a55ff",},
         },
         102: {
-            title() { return player.fi.healthButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.fi.healthButtonTimers[0]) + "." : "<h3>+" + format(player.fi.healthButtonGain[0]) + " HP."},
-            canClick() { return player.fi.healthButtonTimers[0].lte(0) && layers.sme.levelables.index != 0 },
+            title() { return player.fi.healthTimers[0].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.fi.healthTimers[0].current) + "." : "<h3>+" + format(player.fi.healthTimers[0].gain) + " HP."},
+            canClick() { return player.fi.healthTimers[0].current.lte(0) && layers.sme.levelables.index != 0 },
             unlocked() { return true },
             onClick() {
-                player.fi.petMaxHP[player.fi.rarityIndex][player.fi.petIndex] = player.fi.petMaxHP[player.fi.rarityIndex][player.fi.petIndex].add(player.fi.healthButtonGain[0])
-                player.fi.healthButtonTimers[0] = player.fi.healthButtonTimersMax[0]
+                player.fi.petMaxHP[player.fi.rarityIndex][player.fi.petIndex] = player.fi.petMaxHP[player.fi.rarityIndex][player.fi.petIndex].add(player.fi.healthTimers[0].gain)
+                player.fi.healthTimers[0].current = player.fi.healthTimers[0].max
             },
             style: { width: '150px', minHeight: '43.75px', borderRadius: "0px", border: "2px solid white", borderTop: "0px",  borderLeft: "0px", backgroundColor: "#6e0606ff",},
         },
@@ -325,8 +380,8 @@ addLayer("fi", {
 
         //battle
         201: {
-            title() { return player.fi.battleButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.fi.battleButtonTimers[0]) + "." : "<h3>Fight Tier I Enemies"},
-            canClick() { return player.fi.battleButtonTimers[0].lte(0) && player.fi.battleCapacityAvailable.lt(player.fi.battleCapacity) },
+            title() { return player.fi.battleTimers[0].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.fi.battleTimers[0].current) + "." : "<h3>Fight Tier I Enemies"},
+            canClick() { return player.fi.battleTimers[0].current.lte(0) && player.fi.battleCapacityAvailable.lt(player.fi.battleCapacity) },
             unlocked() { return true },
             onClick() {
                 layers.ba.selectCelestialites()
@@ -350,7 +405,7 @@ addLayer("fi", {
             }
                 player.ba.currentAttackSequence = []
                 player.fi.battleTier = new Decimal(1)
-                player.fi.battleButtonTimers[0] = player.fi.battleButtonTimersMax[0]
+                player.fi.battleTimers[0].current = player.fi.battleTimers[0].max
 
                 player.ba.petIDs = player.fi.selectedIDs
 
@@ -407,8 +462,8 @@ addLayer("fi", {
             },
         },
         202: {
-            title() { return player.fi.battleButtonTimers[1].gt(0) ? "<h3>Check back in <br>" + formatTime(player.fi.battleButtonTimers[1]) + "." : "<h3>Fight Tier II Enemies"},
-            canClick() { return player.fi.battleButtonTimers[1].lte(0) && player.fi.battleCapacityAvailable.lt(player.fi.battleCapacity) },
+            title() { return player.fi.battleTimers[1].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.fi.battleTimers[1].current) + "." : "<h3>Fight Tier II Enemies"},
+            canClick() { return player.fi.battleTimers[1].current.lte(0) && player.fi.battleCapacityAvailable.lt(player.fi.battleCapacity) },
             unlocked() { return hasMilestone("fi", 102) },
             onClick() {
                 layers.ba.selectCelestialites()
@@ -432,7 +487,7 @@ addLayer("fi", {
             }
                 player.ba.currentAttackSequence = []
                 player.fi.battleTier = new Decimal(2)
-                player.fi.battleButtonTimers[1] = player.fi.battleButtonTimersMax[1]
+                player.fi.battleTimers[1].current = player.fi.battleTimers[1].max
 
                 player.ba.petIDs = player.fi.selectedIDs
 

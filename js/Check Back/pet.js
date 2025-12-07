@@ -1117,7 +1117,7 @@ addLayer("pet", {
 
         // legendary pet selection
         301: {
-            title() { return "<img src='resources/pets/eclipseLegendaryPet.png'style='width:80px;height:80px;margin:0px'></img>" },
+            title() { return "<img src='resources/Pets/eclipseLegendaryPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" },
             canClick() { return true },
             unlocked() { return true },
             onClick() {
@@ -1125,13 +1125,13 @@ addLayer("pet", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "100px", minHeight: "100px", borderRadius: "15px"}
+                let look = {width: "100px", minHeight: "100px"}
                 player.pet.summonIndex.eq(0) ? look.backgroundColor = "#fe2600ff" : look.backgroundColor = "#fe9400"
                 return look
             },
         },
         302: {
-            title() { return "<img src='resources/pets/geroaLegendaryPet.png'style='width:80px;height:80px;margin:0px'></img>" },
+            title() { return "<img src='resources/Pets/geroaLegendaryPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" },
             canClick() { return true },
             unlocked() { return hasUpgrade("ir", 16) },
             onClick() {
@@ -1139,7 +1139,7 @@ addLayer("pet", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "100px", minHeight: "100px", borderRadius: "15px"}
+                let look = {width: "100px", minHeight: "100px"}
                 player.pet.summonIndex.eq(1) ? look.backgroundColor = "#fe2600ff" : look.backgroundColor = "#fe9400"
                 return look
             },
@@ -4419,7 +4419,7 @@ addLayer("pet", {
                         ["style-column", [
                             ["raw-html", "Summoning Altar", {color: "black", fontSize: "24px", fontFamily: "monospace"}],
                             ["raw-html", "(Gems requirements are dependent on the current time of day)", {color: "black", fontSize: "14px", fontFamily: "monospace"}],
-                            ["blank", "25px"],
+                            ["blank", "10px"],
                             ["raw-html", "Current Requirements:", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
                             ["blank", "10px"],
                             ["left-row", [
@@ -4446,14 +4446,14 @@ addLayer("pet", {
                                     ["raw-html", () => { return formatShortWhole(player.pet.summonReqs[4]) }, {width: "95px", height: "50px", color: "#4c64ff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                                 ], {width: "150px", height: "50px"}],
                             ], {width: "300px", height: "50px", backgroundColor: "black", borderLeft: "2px solid white", borderRight: "2px solid white", borderBottom: "2px solid white", borderRadius: "0 0 10px 10px", userSelect: "none"}],
-                            ["blank", "25px"],
+                            ["blank", "15px"],
                             ["row", [["bt-clickable", 202]]],
                             ["blank", "10px"],
                             ["bar", "summonPity"],
-                        ], () => {return player.cb.highestLevel.gte(100000) ? {width: "500px", border: "3px solid rgb(27, 0, 36)", backgroundColor: "#f5b942", paddingTop: "5px", paddingBottom: "20px", borderRadius: "15px"} : {display: "none !important"}}],
-                        ["blank", "25px"],
-                        ["raw-html", "Select Pet to Summon", {color: "black", fontSize: "24px", fontFamily: "monospace"}],
-                        ["row", [["clickable", 301], ["clickable", 302]]],
+                            ["blank", "10px"],
+                            ["raw-html", "Select Pet to Summon", {color: "black", fontSize: "24px", fontFamily: "monospace"}],
+                            ["row", [["clickable", 301], ["clickable", 302]]],
+                        ], () => {return player.cb.highestLevel.gte(100000) ? {width: "500px", border: "3px solid rgb(27, 0, 36)", backgroundColor: "#f5b942", paddingTop: "5px", paddingBottom: "10px", borderRadius: "15px"} : {display: "none !important"}}],
                     ], {width: "550px", height: "700px", backgroundColor: "#eed200"}],
                 ],
             },

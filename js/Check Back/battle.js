@@ -846,7 +846,7 @@ celestialiteDeath(index){
 
         let random = Math.random()
 
-        if (random < 0.01)
+        if (random < 0.04)
         {
             player.fi.temporalShards = player.fi.temporalShards.add(1)
             logPrintBattle("<span style='color: #625fffff;'>You found a temporal shard! (You have " + formatWhole(player.fi.temporalShards) + ".)" ) 
@@ -861,7 +861,7 @@ celestialiteDeath(index){
 
         let random = Math.random()
 
-        if (random < 0.015)
+        if (random < 0.05)
         {
             player.fi.temporalShards = player.fi.temporalShards.add(1)
             logPrintBattle("<span style='color: #625fffff;'>You found a temporal shard! (You have " + formatWhole(player.fi.temporalShards) + ".)" ) 
@@ -876,7 +876,7 @@ celestialiteDeath(index){
 
         let random = Math.random()
 
-        if (random < 0.02)
+        if (random < 0.06)
         {
             player.fi.temporalShards = player.fi.temporalShards.add(1)
             logPrintBattle("<span style='color: #625fffff;'>You found a temporal shard! (You have " + formatWhole(player.fi.temporalShards) + ".)" ) 
@@ -891,7 +891,7 @@ celestialiteDeath(index){
 
         let random = Math.random()
 
-        if (random < 0.02)
+        if (random < 0.07)
         {
             player.fi.temporalShards = player.fi.temporalShards.add(1)
             logPrintBattle("<span style='color: #625fffff;'>You found a temporal shard! (You have " + formatWhole(player.fi.temporalShards) + ".)" ) 
@@ -908,7 +908,7 @@ celestialiteDeath(index){
 
         let random = Math.random()
 
-        if (random < 0.025)
+        if (random < 0.08)
         {
             player.fi.temporalShards = player.fi.temporalShards.add(1)
             logPrintBattle("<span style='color: #625fffff;'>You found a temporal shard! (You have " + formatWhole(player.fi.temporalShards) + ".)" ) 
@@ -923,7 +923,7 @@ celestialiteDeath(index){
 
         let random = Math.random()
 
-        if (random < 0.025)
+        if (random < 0.09)
         {
             player.fi.temporalShards = player.fi.temporalShards.add(1)
             logPrintBattle("<span style='color: #625fffff;'>You found a temporal shard! (You have " + formatWhole(player.fi.temporalShards) + ".)" ) 
@@ -938,7 +938,7 @@ celestialiteDeath(index){
 
         let random = Math.random()
 
-        if (random < 0.025)
+        if (random < 0.1)
         {
             player.fi.temporalShards = player.fi.temporalShards.add(1)
             logPrintBattle("<span style='color: #625fffff;'>You found a temporal shard! (You have " + formatWhole(player.fi.temporalShards) + ".)" ) 
@@ -953,7 +953,7 @@ celestialiteDeath(index){
 
         let random = Math.random()
 
-        if (random < 0.025)
+        if (random < 0.11)
         {
             player.fi.temporalShards = player.fi.temporalShards.add(1)
             logPrintBattle("<span style='color: #625fffff;'>You found a temporal shard! (You have " + formatWhole(player.fi.temporalShards) + ".)" ) 
@@ -1055,6 +1055,7 @@ celestialiteDeath(index){
             unlocked() { return true },
             onClick() {
                 player.ba.attackPower = player.ba.attackPower.add(player.ba.spentAttackPower)
+                player.ba.spentAttackPower = new Decimal(0)
 
                 player.ba.currentAttackSequence = []
 
@@ -1105,7 +1106,7 @@ celestialiteDeath(index){
                 player.ba.currentAttackSequence.push([player.ba.petIDs[player.ba.petIndex], 1, player.ba.celestialiteIndex, player.ba.petIndex, player.ba.abilityID[0], player.ba.abilityID[1]])
 
                 player.ba.attackPower = player.ba.attackPower.sub(player.ba.petAbilityAPCosts[player.ba.abilityID[0]][player.ba.abilityID[1]][1])
-                player.ba.spentAttackPower = player.ba.spentAttackPower.add(player.ba.petAbilityAPCosts[player.ba.abilityID[0]][player.ba.abilityID[1]][0])
+                player.ba.spentAttackPower = player.ba.spentAttackPower.add(player.ba.petAbilityAPCosts[player.ba.abilityID[0]][player.ba.abilityID[1]][1])
                 player.ba.petAbilitiesAvailable[player.ba.abilityID[0]][player.ba.abilityID[1]][1] = false
             },
             style: { width: '100px', "min-height": '100px', 'color': "black",},

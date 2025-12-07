@@ -23,6 +23,12 @@
 
         replicantiSoftcap2Effect: new Decimal(1),
         replicantiSoftcap2Start: new Decimal(1e10),
+
+        replicantiSoftcap3Effect: new Decimal(1),
+        replicantiSoftcap3Start: new Decimal(1e308),
+
+        replicantiSoftcap4Effect: new Decimal(1),
+        replicantiSoftcap4Start: new Decimal(1e308),
     }},
     automate() {
         if (hasMilestone("s", 17) && !inChallenge("fu", 11)) {
@@ -83,6 +89,8 @@
         player.cp.replicantiSoftcapStart = player.cp.replicantiSoftcapStart.mul(buyableEffect("fu", 22))
         player.cp.replicantiSoftcapStart = player.cp.replicantiSoftcapStart.mul(buyableEffect("fu", 65))
 
+        player.cp.replicantiSoftcapStart = player.cp.replicantiSoftcapStart.pow(buyableEffect("cof", 13))
+
         player.cp.replicantiSoftcapEffect = player.cp.replicantiPoints.sub(player.cp.replicantiSoftcapStart).pow(0.375)
         player.cp.replicantiSoftcapEffect = player.cp.replicantiSoftcapEffect.div(buyableEffect("pr", 16))
         player.cp.replicantiSoftcapEffect = player.cp.replicantiSoftcapEffect.div(buyableEffect("fu", 22))
@@ -110,6 +118,18 @@
             multAdd = multAdd.div(player.cp.replicantiSoftcap2Effect)
         }
 
+        player.cp.replicantiSoftcap3Start = new Decimal(1e308)
+        player.cp.replicantiSoftcap3Effect = player.cp.replicantiPoints.plus(1).log10().div(30).add(1)
+        if (player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap3Start)) {
+            player.cp.replicantiPointsTimerReq = player.cp.replicantiPointsTimerReq.mul(player.cp.replicantiSoftcap3Effect)
+        }
+
+        player.cp.replicantiSoftcap4Start = new Decimal(1e308)
+        player.cp.replicantiSoftcap4Effect = Decimal.div(1, player.cp.replicantiPoints.plus(1).log10().pow(0.7))
+        if (player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap4Start)) {
+            multAdd = multAdd.pow(player.cp.replicantiSoftcap4Effect)
+        }
+
         multAdd = multAdd.mul(buyableEffect("fu", 36))
         multAdd = multAdd.mul(player.fu.fearEffect2)
 
@@ -120,6 +140,10 @@
         if (player.cp.replicantiPointsTimer.gte(player.cp.replicantiPointsTimerReq)) {
             layers.cp.replicantiPointMultiply();
         }
+
+        //cap
+        player.cp.replicantiPointCap = new Decimal(1.79e308)
+        player.cp.replicantiPointCap = player.cp.replicantiPointCap.pow(buyableEffect("cof", 11))
     },
     replicantiPointMultiply() {
         if (player.cp.replicantiPoints.gte(player.cp.replicantiPointCap)) {
@@ -274,11 +298,19 @@
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Softcap starts at <h3>" + format(player.cp.replicantiSoftcapStart) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Softcap divides replicanti mult by <h3>/" + format(player.cp.replicantiSoftcapEffect) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap2Start) ? "Second softcap starts at <h3>" + format(player.cp.replicantiSoftcap2Start) + "</h3>." : ""}, { "color": "#ff4545", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap2Start) ? "Second softcap divides replicanti mult by <h3>/" + format(player.cp.replicantiSoftcap2Effect) + "</h3>." : ""}, { "color": "#ff4545", "font-size": "20px", "font-family": "monospace" }],
+            ["raw-html", function () { return "Softcap starts at <h3>" + format(player.cp.replicantiSoftcapStart) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+            ["raw-html", function () { return "Softcap divides replicanti mult by <h3>/" + format(player.cp.replicantiSoftcapEffect) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+            ["blank", "25px"],
+            ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap2Start) ? "Second softcap starts at <h3>" + format(player.cp.replicantiSoftcap2Start) + "</h3>." : ""}, { "color": "#ff4545", "font-size": "20px", "font-family": "monospace" }],
+            ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap2Start) ? "Second softcap divides replicanti mult by <h3>/" + format(player.cp.replicantiSoftcap2Effect) + "</h3>." : ""}, { "color": "#ff4545", "font-size": "20px", "font-family": "monospace" }],
+            ["blank", "25px"],
+            ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap3Start) ? "Third softcap starts at <h3>" + format(player.cp.replicantiSoftcap3Start) + "</h3>." : ""}, { "color": "#cc2121", "font-size": "20px", "font-family": "monospace" }],
+            ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap3Start) ? "Third softcap multiplies replicanti time requirement by <h3>x" + format(player.cp.replicantiSoftcap3Effect) + "</h3>." : ""}, { "color": "#cc2121", "font-size": "20px", "font-family": "monospace" }],
+            ["blank", "25px"],
+            ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap4Start) ? "Fourth softcap starts at <h3>" + format(player.cp.replicantiSoftcap4Start) + "</h3>." : ""}, { "color": "#9c1c1c", "font-size": "20px", "font-family": "monospace" }],
+            ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap4Start) ? "Fourth softcap raises replicanti mult by <h3>^" + format(player.cp.replicantiSoftcap4Effect) + "</h3>." : ""}, { "color": "#9c1c1c", "font-size": "20px", "font-family": "monospace" }],
+            ["blank", "25px"],
+            ["raw-html", function () { return player.cp.replicantiPoints.gte(1e308) ? "Hardcap: <h3>" + format(player.cp.replicantiPointCap) + "</h3>." : ""}, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
                 ]
             },
         },

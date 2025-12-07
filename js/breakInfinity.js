@@ -39,6 +39,7 @@
             buyUpgrade("bi", 26)
             buyUpgrade("bi", 27)
             buyUpgrade("bi", 28)
+            buyUpgrade("bi", 29)
 
             buyUpgrade("bi", 101)
             buyUpgrade("bi", 102)
@@ -55,6 +56,7 @@
             buyUpgrade("bi", 114)
             buyUpgrade("bi", 115)
             buyUpgrade("bi", 116)
+            buyUpgrade("bi", 117)
             buyUpgrade("bi", 117)
         }
     },
@@ -410,6 +412,21 @@
             currencyInternalName: "infinityPoints",
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
+        29:
+        {
+            title: "BI IP Upgrade XVIII",
+            unlocked() { return player.ma.matosDefeated },
+            description() { return "Boost infinity dimensions based on galaxy dust." },
+            cost: new Decimal("1e4000"),
+            currencyLocation() { return player.in },
+            currencyDisplayName: "Infinity Points",
+            currencyInternalName: "infinityPoints",
+            effect() {
+                return player.ca.galaxyDust.pow(4).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: { width: '150px', height: '100px', }
+        },
         //Negative Infinity Points
         101: {
             title: "BI NIP Upgrade I",
@@ -582,6 +599,20 @@
             currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
+        117 :{
+            title: "BI NIP Upgrade XVI",
+            unlocked() { return player.ma.matosDefeated },
+            description: "Tickspeed effect boosts antimatter gain.",
+            cost: new Decimal("1e1000"),
+            currencyLocation() { return player.ta },
+            currencyDisplayName: "Negative Infinity Points",
+            currencyInternalName: "negativeInfinityPoints",
+            effect() {
+                return buyableEffect("ad", 1).pow(0.2).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px", width: '150px', height: '100px', }
         },
     },
     microtabs: {

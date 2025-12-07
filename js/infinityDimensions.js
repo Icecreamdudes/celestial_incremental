@@ -65,12 +65,15 @@
         player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(levelableEffect("pet", 208)[0])
         player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(player.sd.singularityPowerEffect2)
         if (hasMilestone("fa", 16)) player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(player.fa.milestoneEffect[5])
+        if (hasUpgrade("bi", 29)) player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(upgradeEffect("bi", 29))
 
         // SOFTCAP MODIFIER
         let base = new Decimal(300)
         if (hasUpgrade("cs", 1102)) base = base.mul(2)
         let max = Decimal.div(1, Decimal.pow(1.05, player.id.infinityPowerPerSecond.add(1).log(Decimal.pow(10, base)))).max(0.01)
         if (player.id.infinityPowerPerSecond.gt(1e300)) player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.div(1e300).pow(Decimal.div(base, player.id.infinityPowerPerSecond.plus(1).log(10)).min(max)).mul(1e300)
+
+        player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(player.se.starsExploreEffect[0][2])
 
         // POWER MODIFIERS
         player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.pow(buyableEffect("fu", 42))
@@ -88,10 +91,13 @@
             player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(levelableEffect("pet", 208)[0])
             player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(player.sd.singularityPowerEffect2)
             if (hasMilestone("fa", 16)) player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(player.fa.milestoneEffect[5])
+        if (hasUpgrade("bi", 29)) player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(upgradeEffect("bi", 29))
 
             // SOFTCAP MODIFIER
             if (player.id.dimensionsPerSecond[i].gt(1e300)) player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].div(1e300).pow(0.95).mul(1e300)
 
+            player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(buyableEffect("id", i+12).div(10))
+            player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(player.se.starsExploreEffect[0][2])
             // POWER MODIFIERS
             player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].pow(buyableEffect("fu", 42))
 

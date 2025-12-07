@@ -83,16 +83,13 @@
         if (player.tab == 'cap' && player.subtabs["cap"]['stuff'] == 'CANTEPOCALYPSE' && player.s.highestSingularityPoints.eq(0)) {
             player.cap.cantepocalypsePrep = true
         }
-        if (player.universe == 1.5) {
-            player.cap.cantepocalypsePrep = false
-        }
 
         player.cap.quizAnswers = [
             new Decimal(4).abs(),
             new Decimal(200).abs(),
             new Decimal(0.04).abs(),
             new Decimal(11).abs(),
-            new Decimal(777).abs(),
+            new Decimal(250).abs(),
             new Decimal(0.45).abs(),
             new Decimal(18).abs(),
             new Decimal(14).abs(),

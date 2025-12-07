@@ -1025,6 +1025,9 @@ addLayer("co", {
             player.po.halterEffects[i] = new Decimal(1)
         }
 
+        // KEEP HEX STUFF AFTER IRIDITE
+        if (!player.ir.iriditeDefeated) {
+
         //     <----     HEX OF SACRIFICE LAYER     ---->
         player.hsa.sacredEnergy = new Decimal(0)
         player.hsa.sacredEnergyGain = new Decimal(0)
@@ -1042,7 +1045,6 @@ addLayer("co", {
         player.hrm.blessLimit = new Decimal(0)
         player.hrm.dreamTimer = new Decimal(60)
         player.hrm.activeChallenge = null
-        
         if (getBuyableAmount("hpw", 1).lt(1)) player.hrm.challenges[11] = 0
         if (getBuyableAmount("hpw", 2).lt(1)) player.hrm.challenges[12] = 0
         if (getBuyableAmount("hpw", 3).lt(1)) player.hrm.challenges[13] = 0
@@ -1090,8 +1092,9 @@ addLayer("co", {
         player.hve.vexGain = new Decimal(0)
         player.hve.rowCurrent = [0, 0, 0, 0, 0, 0]
         player.hve.rowSpent = [0, 0, 0, 0, 0, 0]
-        
+
         player.hve.upgrades.splice(0, player.hve.upgrades.length)
+    
 
         //     <----     HEX OF BLESSINGS LAYER     ---->
         player.hbl.blessings = new Decimal(0)
@@ -1135,6 +1138,7 @@ addLayer("co", {
         //     <----     HEX STUFF     ---->
         player.h.hexPointGain = new Decimal(0)
         player.h.hexPoint = new Decimal(0)
+    }
     },
     clickables: {
         100: {
@@ -1533,6 +1537,8 @@ addLayer("co", {
             canClick() { return player.in.infinityPoints.gte(1e40) },
             unlocked: true,
             onClick() {
+                player.cof.coreFragments[player.cof.highestScore] = player.cof.coreFragments[player.cof.highestScore].add(player.cof.coreFragmentsToGet[player.cof.highestScore])
+
                 let val = layers.co.coreXPCalc(player.co.resetIndex, player.s.singularityPointsToGet)
                 if (!player.ma.matosDefeated) {
                     player.co.cores[player.co.resetIndex].totalxp = player.co.cores[player.co.resetIndex].totalxp.add(val)

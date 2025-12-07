@@ -1,7 +1,7 @@
 ﻿const CANTE_BASES = [
     [new Decimal(0.2), new Decimal(0.3), new Decimal(0.5), new Decimal(0.02), new Decimal(1.4), new Decimal(2.5), new Decimal(5), new Decimal(12)],
     [new Decimal(1.6), new Decimal(3), new Decimal(5.5), new Decimal(9), new Decimal(7), new Decimal(14), new Decimal(30)],
-    [new Decimal(10), new Decimal(30)]
+    [new Decimal(10), new Decimal(30), new Decimal(80)]
 ]
 addLayer("cb", {
     name: "Check Back", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -147,8 +147,14 @@ addLayer("cb", {
             },
             1: {
                 current: new Decimal(0),
-                max: new Decimal(129600),
+                max: new Decimal(43200),
                 base: new Decimal(0.5),
+                average: new Decimal(0),
+            },
+            2: {
+                current: new Decimal(0),
+                max: new Decimal(129600),
+                base: new Decimal(1.5),
                 average: new Decimal(0),
             },
         },
@@ -193,6 +199,7 @@ addLayer("cb", {
         player.cb.reqDiv = player.cb.reqDiv.mul(levelableEffect("pet", 203)[2])
         player.cb.reqDiv = player.cb.reqDiv.mul(levelableEffect("pet", 304)[1])
         player.cb.reqDiv = player.cb.reqDiv.mul(buyableEffect("ev2", 11))
+        player.cb.reqDiv = player.cb.reqDiv.mul(player.se.starsExploreEffect[2][1])
 
         player.cb.req = layers.cb.levelToXP(player.cb.level.add(1)).sub(layers.cb.levelToXP(player.cb.level))
 
@@ -237,6 +244,10 @@ addLayer("cb", {
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("pl", 12))
             if (hasMilestone("db", 101)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(1.25)
             if (player.ma.matosDefeated) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(2)
+            if (hasUpgrade("fi", 11)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(upgradeEffect("fi", 11))
+            player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(player.se.starsExploreEffect[2][0])
+            if (hasUpgrade("ir", 13)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(upgradeEffect("ir", 13))
+            player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(player.cof.coreFragmentEffects[6])
         }
 
         player.cb.xpTimers[0].max = new Decimal(60).div(buyableEffect("ev1", 102))
@@ -257,6 +268,7 @@ addLayer("cb", {
             player.cb.xpTimers[i].max = player.cb.xpTimers[i].max.div(levelableEffect("pu", 201)[2])
             if (player.rf.abilityTimers[6].gt(0)) player.cb.xpTimers[i].max = player.cb.xpTimers[i].max.div(1.2)
             if (hasUpgrade("ev8", 15)) player.cb.xpTimers[i].max = player.cb.xpTimers[i].max.div(1.15)
+            player.cb.xpTimers[i].max = player.cb.xpTimers[i].max.div(buyableEffect("cof", 31))
 
             // AVERAGE GAIN
             if (layers.cb.clickables[Number(i)+11].unlocked()) {
@@ -320,18 +332,21 @@ addLayer("cb", {
         }
 
         //xpboost
-
         player.cb.boostTimers[0].base = new Decimal(0.2)
         player.cb.boostTimers[1].base = new Decimal(0.5)
+        player.cb.boostTimers[2].base = new Decimal(1.5)
         if (player.cb.level.lt(10000)) {
             player.cb.boostTimers[0].base = player.cb.boostTimers[0].base.mul(player.cb.level.div(100).pow(1.2))
             player.cb.boostTimers[1].base = player.cb.boostTimers[1].base.mul(player.cb.level.div(80).pow(1.1))
+            player.cb.boostTimers[2].base = player.cb.boostTimers[2].base.mul(player.cb.level.div(60))
         } else if (player.cb.level.lt(100000)) {
             player.cb.boostTimers[0].base = player.cb.boostTimers[0].base.mul(player.cb.level.div(40))
             player.cb.boostTimers[1].base = player.cb.boostTimers[1].base.mul(player.cb.level.div(50))
+            player.cb.boostTimers[2].base = player.cb.boostTimers[2].base.mul(player.cb.level.div(60))
         } else {
             player.cb.boostTimers[0].base = player.cb.boostTimers[0].base.mul(player.cb.level.div(16.8).pow(0.9))
             player.cb.boostTimers[1].base = player.cb.boostTimers[1].base.mul(player.cb.level.div(21.5).pow(0.9))
+            player.cb.boostTimers[1].base = player.cb.boostTimers[1].base.mul(player.cb.level.div(25.5).pow(0.9))
         }
         for (let i in player.cb.boostTimers) {
             player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(levelableEffect("pet", 1203)[1])
@@ -344,14 +359,17 @@ addLayer("cb", {
             player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(buyableEffect("ep5", 12))
             player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(buyableEffect("pl", 13))
             if (player.ma.matosDefeated) player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(1.5)
+            player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(levelableEffect("ir", 5)[1])
         }
 
         player.cb.boostTimers[0].max = new Decimal(10800)
-        player.cb.boostTimers[1].max = new Decimal(129600)
+        player.cb.boostTimers[1].max = new Decimal(43200)
+        player.cb.boostTimers[2].max = new Decimal(129600)
         for (let i in player.cb.boostTimers) {
             player.cb.boostTimers[i].max = player.cb.boostTimers[i].max.div(levelableEffect("pet", 401)[2])
             player.cb.boostTimers[i].max = player.cb.boostTimers[i].max.div(buyableEffect("ep5", 13))
             player.cb.boostTimers[i].max = player.cb.boostTimers[i].max.div(buyableEffect("ev2", 12))
+            if (hasUpgrade("fi", 14)) player.cb.boostTimers[i].max = player.cb.boostTimers[i].max.div(2)
 
             player.cb.boostTimers[i].current = player.cb.boostTimers[i].current.sub(onepersec.mul(delta))
 
@@ -1163,9 +1181,10 @@ addLayer("cb", {
             },
         },
         // XPBOOST BUTTONS
+        //XPBoostReq: [new Decimal(100),new Decimal(500),new Decimal(1e6),],
         301: {
-            title() { return player.cb.boostTimers[0].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.boostTimers[0].current) + "." : "<h3>+" + format(player.cb.boostTimers[0].base) + " XP Boost."},
-            canClick() { return player.cb.boostTimers[0].current.lt(0) },
+            title() { return player.cb.level.lt(100) ? "Requires level 100" : player.cb.boostTimers[0].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.boostTimers[0].current) + "." : "<h3>+" + format(player.cb.boostTimers[0].base) + " XP Boost."},
+            canClick() { return player.cb.boostTimers[0].current.lt(0) && player.cb.level.gte(100) },
             unlocked() { return true },
             tooltip() { return player.cb.highestLevel.gte(250) ? "Paragon Shard Rarity: 10%" : ""},
             onClick() {
@@ -1192,8 +1211,8 @@ addLayer("cb", {
             },
         },
         302: {
-            title() { return player.cb.boostTimers[1].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.boostTimers[1].current) + "." : "<h3>+" + format(player.cb.boostTimers[1].base) + " XP Boost."},
-            canClick() { return player.cb.boostTimers[1].current.lt(0) || player.cb.highestLevel.lt(500)},
+            title() { return player.cb.level.lt(500) ? "Requires level 500" : player.cb.boostTimers[1].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.boostTimers[1].current) + "." : "<h3>+" + format(player.cb.boostTimers[1].base) + " XP Boost."},
+            canClick() { return player.cb.boostTimers[1].current.lt(0) && player.cb.level.gte(500)},
             unlocked() { return player.cb.highestLevel.gte(666) },
             tooltip() { return player.cb.highestLevel.gte(250) ? "Paragon Shard Rarity: 25%" : ""},
             onClick() {
@@ -1212,6 +1231,34 @@ addLayer("cb", {
                 player.cb.xp = new Decimal(0)
                 player.cb.totalxp = new Decimal(4.5)
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[2][1].mul(player.ca.canteEnergyMult))
+            },
+            style() {
+                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
+                this.canClick() ? look.backgroundColor = "#00B229" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
+        },
+        303: {
+            title() { return player.cb.level.lt(1e6) ? "Requires level 1e6" : player.cb.boostTimers[2].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.boostTimers[2].current) + "." : "<h3>+" + format(player.cb.boostTimers[2].base) + " XP Boost."},
+            canClick() { return player.cb.boostTimers[2].current.lt(0) && player.cb.level.gte(1e6)},
+            unlocked() { return hasUpgrade("fi", 13)},
+            tooltip() { return player.cb.highestLevel.gte(250) ? "Paragon Shard Rarity: 50%" : ""},
+            onClick() {
+                player.cb.XPBoost = player.cb.XPBoost.add(player.cb.boostTimers[2].base)
+                player.cb.boostTimers[2].current = player.cb.boostTimers[2].max
+
+                let random = getRandomInt(2)
+                if (random == 1) {
+                    player.cb.paragonShards = player.cb.paragonShards.add(1);
+                    player.cb.pityParaCurrent = new Decimal(0);
+                    doPopup("none", "+1 Paragon Shard! (50%)", "Shard Obtained!", 5, "#4c64ff", "resources/paragonShard.png")
+                } else {
+                    player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(50);
+                }
+                player.cb.level = new Decimal(1)
+                player.cb.xp = new Decimal(0)
+                player.cb.totalxp = new Decimal(4.5)
+                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[2][2].mul(player.ca.canteEnergyMult))
             },
             style() {
                 let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
@@ -2070,11 +2117,6 @@ addLayer("cb", {
                 unlocked() { return player.cb.highestLevel.gte(10) },
                 embedLayer: 'pet',
             },
-            "Evolution": {
-                buttonStyle() { return {color: "#1500bf", borderColor: "#1500bf", backgroundImage: "linear-gradient(90deg, #d487fd, #4b79ff)", borderRadius: "5px" }},
-                unlocked() { return player.cb.highestLevel.gte(35)  },
-                embedLayer: 'ev'
-            },
             "Buyables": {
                 buttonStyle() { return {color: "#094599", borderColor: "#094599", borderRadius: "5px"}},
                 unlocked() { return (hasChallenge("ip", 17) || hasMilestone("s", 14)) },
@@ -2085,6 +2127,16 @@ addLayer("cb", {
                     ["blank", "25px"],
                     ["style-row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23]], {maxWidth: "900px"}],
                 ]
+            },
+            "Evolution": {
+                buttonStyle() { return {color: "#1500bf", borderColor: "#1500bf", backgroundImage: "linear-gradient(90deg, #d487fd, #4b79ff)", borderRadius: "5px" }},
+                unlocked() { return player.cb.highestLevel.gte(35)  },
+                embedLayer: 'ev'
+            },
+            "Fighting": {
+                buttonStyle() { return {color: "#2e0000ff", borderColor: "#2e0000ff", backgroundImage: "linear-gradient(90deg, #ad0000ff, #920044ff)", borderRadius: "5px" }},
+                unlocked() { return player.ma.matosDefeated },
+                embedLayer: 'fi'
             },
         },
         buttons: {
@@ -2126,7 +2178,7 @@ addLayer("cb", {
                     ], {width: "400px", padding: "10px", border: "3px solid white", borderRadius: "15px", backgroundColor: "#001903"}],
                     ["blank", "10px"],
                     ["column", [
-                        ["clickable", 301], ["clickable", 302],
+                        ["clickable", 301], ["clickable", 302], ["clickable", 303],
                     ]],
                 ]
             },

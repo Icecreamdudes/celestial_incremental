@@ -8,7 +8,11 @@
 
         preOTFMult: new Decimal(1),
         postOTFMult: new Decimal(1),
-    }},
+
+        cutsceneInput: new Decimal(0),
+        cutsceneInputAmount: new Decimal(0),
+    }
+    },
     automate() {
         if (player.i.auto == true && hasMilestone("ip", 19)) {
             buyUpgrade("i", 11)
@@ -65,7 +69,7 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-        stopRain()
+       // stopRain()
 
         // START OF PRE-OTF-MULT MODIFIERS
         player.i.preOTFMult = new Decimal(1)
@@ -78,6 +82,9 @@
 
         //----------------------------------------
 
+        //cutscene
+        player.i.cutsceneInputAmount = player.i.cutsceneInput.floor()
+        if (player.i.cutsceneInput.lt(0)) player.i.cutsceneInputAmount = new Decimal(0)
         // START OF POST-OTF-MULT MODIFIERS
         player.i.postOTFMult = new Decimal(1)
         player.i.postOTFMult = player.i.postOTFMult.mul(buyableEffect("ma", 22))
@@ -146,6 +153,10 @@
         player.gain = player.gain.pow(player.co.cores.point.effect[1])
         player.gain = player.gain.pow(player.sd.singularityPowerEffect3)
         player.gain = player.gain.pow(player.st.starPowerEffect)
+        player.gain = player.gain.pow(player.se.starsExploreEffect[0][1])
+        player.gain = player.gain.pow(levelableEffect("ir", 2)[0])
+        player.gain = player.gain.pow(player.cof.coreFragmentEffects[0])
+        player.gain = player.gain.pow(buyableEffect("cof", 12))
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (inChallenge("ip", 18) && player.points.gt(player.points.mul(0.9 * delta))) player.points = player.points.sub(player.points.mul(0.9 * delta))
@@ -441,6 +452,17 @@
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
     },
+    clickables: {
+        11: {
+            title() { return "<h2>Replay Cutscene" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.c.cutscene[player.i.cutsceneInput] = true
+            },
+            style: { width: '300px', "min-height": '60px' },
+        },
+    },
     infoboxes: {
         1: {
             title: "Superphysical Values",
@@ -488,6 +510,32 @@
                     ["infobox", "2"],
                     ["infobox", "3"],
                     ["infobox", "4"],
+                ],
+            },
+            "Cutscene Rewatch": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                unlocked() { return true},
+                content: [
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "Note: THIS FEATURE IS HEAVILY BUGGED AND UNOPTIMIZED" }, { "color": "red", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "(Note: Cutscene requirements must be met in order to rewatch a cutscene.)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "(Cutscene IDs start at 0.)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Current Cutscene ID: " + formatWhole(player.i.cutsceneInput) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [
+                    ["text-input", "cutsceneInput", {
+                        color: "var(--color)",
+                        width: "400px",
+                        height: "48px",
+                        "font-family": "Calibri",
+                        "text-align": "left",
+                        "font-size": "32px",
+                        border: "2px solid #ffffff17",
+                        background: "var(--background)",
+                    }],
+                    ["clickable", 11],
+                    ]],
                 ],
             },
         },
@@ -571,3 +619,16 @@ function callAlert(message, imageUrl, imagePosition = 'top') {
         }
     });
 }
+    document.addEventListener('keydown', function(event) {
+        if (event.altKey && options.toggleHotkey) {
+            if (!options.musicToggle) 
+            {
+                options.musicToggle = true
+                doPopup("milestone", "Music is toggled on.", "Milestone Gotten!", 3, "#ffffff")
+            } else
+            {
+                options.musicToggle = false
+                doPopup("milestone", "Music is toggled off.", "Milestone Gotten!", 3, "#ffffff")
+            }
+        }
+    });

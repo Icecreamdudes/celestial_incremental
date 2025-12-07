@@ -89,6 +89,7 @@
         if (hasUpgrade("bi", 21)) base = base.mul(1.1)
         base = base.mul(buyableEffect("m", 15))
         base = base.mul(player.cs.scraps.antimatter.effect)
+        if (player.ir.iriditeDefeated) base = base.mul(2)
         let max = Decimal.div(1, Decimal.pow(1.05, player.ad.antimatterPerSecond.add(1).log(Decimal.pow(10, base)))).max(0.01)
         if (player.ad.antimatterPerSecond.gt(1e300) && hasChallenge("ip", 18)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.div(1e300).pow(Decimal.div(base, player.ad.antimatterPerSecond.plus(1).log(10)).min(max)).mul(1e300)
 
@@ -100,6 +101,9 @@
 
         // POWER MODIFIERS
         if (hasUpgrade("hpw", 1051)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(1.05)
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(levelableEffect("ir", 3)[0])
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(buyableEffect("sb", 105))
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(buyableEffect("cof", 21))
 
         // ANTIMATTER PER SECOND
         player.ad.antimatter = player.ad.antimatter.add(player.ad.antimatterPerSecond.mul(delta))
@@ -137,7 +141,7 @@
             // SOFTCAP MODIFIER
             if (player.ad.dimensionsPerSecond[i].gt(1e300) && !hasChallenge("ip", 18)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(0.1)
             if (player.ad.dimensionsPerSecond[i].gt(1e300) && hasChallenge("ip", 18) && !hasUpgrade("bi", 21)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].div(1e300).pow(0.96).mul(1e300)
-            if (player.ad.dimensionsPerSecond[i].gt(1e300) && hasChallenge("ip", 18) && hasUpgrade("bi", 21)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].div(1e300).pow(0.975).mul(1e300)
+            if (player.ad.dimensionsPerSecond[i].gt(1e300) && hasChallenge("ip", 18) && hasUpgrade("bi", 21) && !player.ir.defeatedIridite) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].div(1e300).pow(0.975).mul(1e300)
 
             // CONTINUED REGULAR MODIFIERS
             if (hasUpgrade("ip", 43)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(upgradeEffect("ip", 43))
@@ -146,6 +150,8 @@
             // POWER MODIFIERS
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(player.co.cores.antimatter.effect[1])
             if (hasUpgrade("hpw", 1051)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(1.05)
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(levelableEffect("ir", 3)[0])
+
         }
         
         // SPECIALIZED MODIFIERS

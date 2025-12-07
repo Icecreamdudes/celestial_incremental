@@ -48,6 +48,9 @@
         // GENERATOR SOFTCAP
         if (player.dg.generatorsToGet.gte(1e100)) player.dg.generatorsToGet = player.dg.generatorsToGet.div(1e100).pow(0.2).mul(1e100)
 
+        //post softcap multipliers
+        player.dg.generatorsToGet = player.dg.generatorsToGet.mul(buyableEffect("ds", 102))
+
         player.dg.generatorEffect = player.dg.generators.pow(1.5)
 
         player.dg.generatorPower = player.dg.generatorPower.add(player.dg.generatorPowerPerSecond.mul(delta))

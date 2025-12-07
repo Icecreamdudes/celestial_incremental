@@ -48,6 +48,9 @@
         // PRESTIGE SOFTCAP
         if (player.dp.prestigePointsToGet.gte(1e250)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.div(1e250).pow(0.2).mul(1e250)
 
+        //post softcap multipliers
+        player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(buyableEffect("ds", 101))
+
         if (player.dp.prestigePause.gte(0)) {
             layers.dp.prestigeReset();
         }

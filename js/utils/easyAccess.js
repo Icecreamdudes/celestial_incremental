@@ -75,6 +75,10 @@ function getLevelableTier(layer, id, bool = false) {
 		}
 	}
 	if (bool == true) {
+		if (typeof player[layer].levelables[id][2] == "number") {
+			if (player[layer].levelables[id][2] == 0) return false
+			return true
+		}
 		if (player[layer].levelables[id][2].eq(0)) return false
 		return true
 	}

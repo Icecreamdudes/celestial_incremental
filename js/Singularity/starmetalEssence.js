@@ -291,7 +291,7 @@
             barStyle() { return {background: "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)",}},
             style() {
                 let look = {width: "100px", minHeight: "125px"}
-                player.sme.levelables[101][2] ? look.backgroundColor = "#a60000ff" : this.canClick() ? look.backgroundColor = "#6600A6" : look.backgroundColor = "#222222"
+                getLevelableTier("sme", 101, true) ? look.backgroundColor = "#a60000ff" : this.canClick() ? look.backgroundColor = "#6600A6" : look.backgroundColor = "#222222"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
                 return look
             }  
@@ -334,7 +334,7 @@
             barStyle() { return {background: "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)",}},
             style() {
                 let look = {width: "100px", minHeight: "125px"}
-                player.sme.levelables[102][2] ? look.backgroundColor = "#a60000ff" : this.canClick() ? look.backgroundColor = "#6600A6" : look.backgroundColor = "#222222"
+                getLevelableTier("sme", 102, true) ? look.backgroundColor = "#a60000ff" : this.canClick() ? look.backgroundColor = "#6600A6" : look.backgroundColor = "#222222"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
                 return look
             }  
@@ -377,7 +377,7 @@
             barStyle() { return {background: "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)",}},
             style() {
                 let look = {width: "100px", minHeight: "125px"}
-                player.sme.levelables[103][2] ? look.backgroundColor = "#a60000ff" : this.canClick() ? look.backgroundColor = "#6600A6" : look.backgroundColor = "#222222"
+                getLevelableTier("sme", 103, true) ? look.backgroundColor = "#a60000ff" : this.canClick() ? look.backgroundColor = "#6600A6" : look.backgroundColor = "#222222"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
                 return look
             }  
@@ -420,7 +420,7 @@
             barStyle() { return {background: "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)",}},
             style() {
                 let look = {width: "100px", minHeight: "125px"}
-                player.sme.levelables[104][2] ? look.backgroundColor = "#a60000ff" : this.canClick() ? look.backgroundColor = "#6600A6" : look.backgroundColor = "#222222"
+                getLevelableTier("sme", 104, true) ? look.backgroundColor = "#a60000ff" : this.canClick() ? look.backgroundColor = "#6600A6" : look.backgroundColor = "#222222"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
                 return look
             }  
@@ -463,7 +463,7 @@
             barStyle() { return {background: "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)",}},
             style() {
                 let look = {width: "100px", minHeight: "125px"}
-                player.sme.levelables[105][2] ? look.backgroundColor = "#a60000ff" : this.canClick() ? look.backgroundColor = "#6600A6" : look.backgroundColor = "#222222"
+                getLevelableTier("sme", 105, true) ? look.backgroundColor = "#a60000ff" : this.canClick() ? look.backgroundColor = "#6600A6" : look.backgroundColor = "#222222"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
                 return look
             }  
@@ -506,7 +506,7 @@
             barStyle() { return {background: "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)",}},
             style() {
                 let look = {width: "100px", minHeight: "125px"}
-                player.sme.levelables[106][2] ? look.backgroundColor = "#a60000ff" : this.canClick() ? look.backgroundColor = "#6600A6" : look.backgroundColor = "#222222"
+                getLevelableTier("sme", 106, true) ? look.backgroundColor = "#a60000ff" : this.canClick() ? look.backgroundColor = "#6600A6" : look.backgroundColor = "#222222"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
                 return look
             }  
@@ -551,7 +551,7 @@
             barStyle() { return {background: "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)",}},
             style() {
                 let look = {width: "100px", minHeight: "125px"}
-                player.sme.levelables[201][2] ? look.backgroundColor = "#a60000ff" : this.canClick() ? look.backgroundColor = "#eed200" : look.backgroundColor = "#222222"
+                getLevelableTier("sme", 201, true) ? look.backgroundColor = "#a60000ff" : this.canClick() ? look.backgroundColor = "#eed200" : look.backgroundColor = "#222222"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
                 return look
             }  
@@ -594,7 +594,7 @@
             barStyle() { return {background: "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)",}},
             style() {
                 let look = {width: "100px", minHeight: "125px"}
-                player.sme.levelables[202][2] ? look.backgroundColor = "#a60000ff" : this.canClick() ? look.backgroundColor = "#eed200" : look.backgroundColor = "#222222"
+                getLevelableTier("sme", 202, true) ? look.backgroundColor = "#a60000ff" : this.canClick() ? look.backgroundColor = "#eed200" : look.backgroundColor = "#222222"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
                 return look
             }  

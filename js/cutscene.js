@@ -312,6 +312,7 @@ if (player.c.cutscene[32] && hasUpgrade("ta", 21))
     });
     player.c.cutscene[32] = false
 }
+/*
 if (player.c.cutscene[33] && (inChallenge("tad", 11) || !player.c.cutscene[34]))
 {
     showCutscene(cutsceneDialogue34, {
@@ -353,6 +354,7 @@ if (player.c.cutscene[37] && (player.tad.shatteredInfinities.gte(1) || player.ta
     });
     player.c.cutscene[37] = false
 }
+*/
 if (player.c.cutscene[38] && player.in.unlockedBreak)
 {
     showCutscene(cutsceneDialogue39, {

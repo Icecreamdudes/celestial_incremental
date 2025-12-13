@@ -146,6 +146,10 @@ addLayer("in", {
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(levelableEffect("ir", 4)[1]).floor()
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(player.cof.coreFragmentEffects[3])
 
+        // ABNORMAL MODIFIERS
+        if (player.po.halter.ip.enabled == 1) player.in.infinityPointsToGet = player.in.infinityPointsToGet.div(player.po.halter.ip.halt)
+        if (player.po.halter.ip.enabled == 2 && player.in.infinityPointsToGet.gt(player.po.halter.ip.halt)) player.in.infinityPointsToGet = player.po.halter.ip.halt
+
         // AUTOMATION
         if (hasUpgrade("s", 24)) player.in.infinityPoints = player.in.infinityPoints.add(player.in.infinityPointsToGet.mul(delta))
 
@@ -170,6 +174,11 @@ addLayer("in", {
         // POWER MODIFIERS
         if (player.tad.altInfinities.infected.milestone.gte(2)) player.in.infinitiesToGet = player.in.infinitiesToGet.pow(player.tad.altInfinities.infected.effect2)
 
+        // ABNORMAL MODIFIERS
+        if (player.po.halter.infinities.enabled == 1) player.in.infinitiesToGet = player.in.infinitiesToGet.div(player.po.halter.infinities.halt)
+        if (player.po.halter.infinities.enabled == 2 && player.in.infinitiesToGet.gt(player.po.halter.infinities.halt)) player.in.infinitiesToGet = player.po.halter.infinities.halt
+
+        // PASSIVE GAIN
         if (player.tad.altInfinities.fragmented.milestone.gte(3)) player.in.infinities = player.in.infinities.add(player.in.infinitiesToGet.div(4).mul(delta))
     },
     bigCrunch() {

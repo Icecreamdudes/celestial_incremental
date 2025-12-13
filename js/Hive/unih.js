@@ -13,6 +13,7 @@ addLayer("bee", {
         totalResearch: new Decimal(0),
 
         path: 0,
+        extremePath: false,
 
         beeMax: false,
     }},
@@ -365,11 +366,11 @@ addLayer("bee", {
 
         31: {
             costBase() {
-                if (player.bee.path == 2) return new Decimal(1e60)
+                if (player.bee.path != 1) return new Decimal(1e60)
                 return new Decimal(1e6)
             },
             costGrowth() {
-                if (player.bee.path == 2) return new Decimal(512)
+                if (player.bee.path != 1) return new Decimal(512)
                 return new Decimal(8)
             },
             purchaseLimit() { return new Decimal(18) },
@@ -409,11 +410,11 @@ addLayer("bee", {
         },
         32: {
             costBase() {
-                if (player.bee.path == 2) return new Decimal(1e70)
+                if (player.bee.path != 1) return new Decimal(1e70)
                 return new Decimal(1e7)
             },
             costGrowth() {
-                if (player.bee.path == 2) return new Decimal(125000)
+                if (player.bee.path != 1) return new Decimal(125000)
                 return new Decimal(50)
             },
             purchaseLimit() { return new Decimal(5) },
@@ -453,11 +454,11 @@ addLayer("bee", {
         },
         33: {
             costBase() {
-                if (player.bee.path == 2) return new Decimal(1e80)
+                if (player.bee.path != 1) return new Decimal(1e80)
                 return new Decimal(1e8)
             },
             costGrowth() {
-                if (player.bee.path == 2) return new Decimal(216)
+                if (player.bee.path != 1) return new Decimal(216)
                 return new Decimal(6)
             },
             purchaseLimit() { return new Decimal(15) },
@@ -497,11 +498,11 @@ addLayer("bee", {
         },
         34: {
             costBase() {
-                if (player.bee.path == 2) return new Decimal(1e120)
+                if (player.bee.path != 1) return new Decimal(1e120)
                 return new Decimal(1e12)
             },
             costGrowth() {
-                if (player.bee.path == 2) return new Decimal(1000)
+                if (player.bee.path != 1) return new Decimal(1000)
                 return new Decimal(10)
             },
             purchaseLimit() { return new Decimal(5) },
@@ -541,11 +542,11 @@ addLayer("bee", {
         },
         35: {
             costBase() {
-                if (player.bee.path == 2) return new Decimal(1e250)
+                if (player.bee.path != 1) return new Decimal(1e250)
                 return new Decimal(1e25)
             },
             costGrowth() {
-                if (player.bee.path == 2) return new Decimal(1e15)
+                if (player.bee.path != 1) return new Decimal(1e15)
                 return new Decimal(1e5)
             },
             purchaseLimit() { return new Decimal(10) },
@@ -586,11 +587,11 @@ addLayer("bee", {
 
         41: {
             costBase() {
-                if (player.bee.path == 1) return new Decimal(1e60)
+                if (player.bee.path != 2) return new Decimal(1e60)
                 return new Decimal(1e6)
             },
             costGrowth() {
-                if (player.bee.path == 1) return new Decimal(512)
+                if (player.bee.path != 2) return new Decimal(512)
                 return new Decimal(8)
             },
             purchaseLimit() { return new Decimal(18) },
@@ -630,11 +631,11 @@ addLayer("bee", {
         },
         42: {
             costBase() {
-                if (player.bee.path == 1) return new Decimal(1e70)
+                if (player.bee.path != 2) return new Decimal(1e70)
                 return new Decimal(1e7)
             },
             costGrowth() {
-                if (player.bee.path == 1) return new Decimal(125)
+                if (player.bee.path != 2) return new Decimal(125)
                 return new Decimal(5)
             },
             purchaseLimit() { return new Decimal(10) },
@@ -674,17 +675,17 @@ addLayer("bee", {
         },
         43: {
             costBase() {
-                if (player.bee.path == 1) return new Decimal(1e80)
+                if (player.bee.path != 2) return new Decimal(1e80)
                 return new Decimal(1e8)
             },
             costGrowth() {
-                if (player.bee.path == 1) return new Decimal(1000)
+                if (player.bee.path != 2) return new Decimal(1000)
                 return new Decimal(10)
             },
             purchaseLimit() { return new Decimal(5) },
             currency() { return player.bee.bees},
             pay(amt) { player.bee.bees = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).div(100) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(100).min(0.05) },
             unlocked() { return tmp.ne.layerShown},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() {
@@ -718,11 +719,11 @@ addLayer("bee", {
         },
         44: {
             costBase() {
-                if (player.bee.path == 1) return new Decimal(1e120)
+                if (player.bee.path != 2) return new Decimal(1e120)
                 return new Decimal(1e12)
             },
             costGrowth() {
-                if (player.bee.path == 1) return new Decimal(1000)
+                if (player.bee.path != 2) return new Decimal(1000)
                 return new Decimal(10)
             },
             purchaseLimit() { return new Decimal(5) },
@@ -762,11 +763,11 @@ addLayer("bee", {
         },
         45: {
             costBase() {
-                if (player.bee.path == 1) return new Decimal(1e250)
+                if (player.bee.path != 2) return new Decimal(1e250)
                 return new Decimal(1e25)
             },
             costGrowth() {
-                if (player.bee.path == 1) return new Decimal(1e15)
+                if (player.bee.path != 2) return new Decimal(1e15)
                 return new Decimal(1e5)
             },
             purchaseLimit() { return new Decimal(10) },
@@ -807,8 +808,14 @@ addLayer("bee", {
 
 
         51: {
-            costBase() { return new Decimal(1e16) },
-            costGrowth() { return new Decimal(8) },
+            costBase() {
+                if (player.bee.path != 1) return new Decimal(1e160)
+                return new Decimal(1e16)
+            },
+            costGrowth() {
+                if (player.bee.path != 1) return new Decimal(512)
+                return new Decimal(8)
+            },
             purchaseLimit() { return new Decimal(15) },
             currency() { return player.bee.bees},
             pay(amt) { player.bee.bees = this.currency().sub(amt) },
@@ -845,8 +852,14 @@ addLayer("bee", {
             style: { width: '175px', height: '60px', border: "3px solid rgba(0,0,0,0.3)", borderRadius: '0px'}
         },
         52: {
-            costBase() { return new Decimal(1e18) },
-            costGrowth() { return new Decimal(100) },
+            costBase() {
+                if (player.bee.path != 1) return new Decimal(1e180)
+                return new Decimal(1e18)
+            },
+            costGrowth() {
+                if (player.bee.path != 1) return new Decimal(1e6)
+                return new Decimal(100)
+            },
             purchaseLimit() { return new Decimal(10) },
             currency() { return player.bee.bees},
             pay(amt) { player.bee.bees = this.currency().sub(amt) },
@@ -883,8 +896,14 @@ addLayer("bee", {
             style: { width: '175px', height: '60px', border: "3px solid rgba(0,0,0,0.3)", borderRadius: '0px'}
         },
         53: {
-            costBase() { return new Decimal(1e20) },
-            costGrowth() { return new Decimal(10) },
+            costBase() {
+                if (player.bee.path != 1) return new Decimal(1e200)
+                return new Decimal(1e20)
+            },
+            costGrowth() {
+                if (player.bee.path != 1) return new Decimal(1000)
+                return new Decimal(10)
+            },
             purchaseLimit() { return new Decimal(5) },
             currency() { return player.bee.bees},
             pay(amt) { player.bee.bees = this.currency().sub(amt) },
@@ -922,8 +941,14 @@ addLayer("bee", {
         },
 
         61: {
-            costBase() { return new Decimal(1e16) },
-            costGrowth() { return new Decimal(10) },
+            costBase() {
+                if (player.bee.path != 2) return new Decimal(1e160)
+                return new Decimal(1e16)
+            },
+            costGrowth() {
+                if (player.bee.path != 2) return new Decimal(1000)
+                return new Decimal(10)
+            },
             purchaseLimit() { return new Decimal(15) },
             currency() { return player.bee.bees},
             pay(amt) { player.bee.bees = this.currency().sub(amt) },
@@ -960,8 +985,14 @@ addLayer("bee", {
             style: { width: '175px', height: '60px', border: "3px solid rgba(0,0,0,0.3)", borderRadius: '0px'}
         },
         62: {
-            costBase() { return new Decimal(1e17) },
-            costGrowth() { return new Decimal(50) },
+            costBase() {
+                if (player.bee.path != 2) return new Decimal(1e170)
+                return new Decimal(1e17)
+            },
+            costGrowth() {
+                if (player.bee.path != 2) return new Decimal(125000)
+                return new Decimal(50)
+            },
             purchaseLimit() { return new Decimal(10) },
             currency() { return player.bee.bees},
             pay(amt) { player.bee.bees = this.currency().sub(amt) },
@@ -998,8 +1029,14 @@ addLayer("bee", {
             style: { width: '175px', height: '60px', border: "3px solid rgba(0,0,0,0.3)", borderRadius: '0px'}
         },
         63: {
-            costBase() { return new Decimal(1e18) },
-            costGrowth() { return new Decimal(250) },
+            costBase() {
+                if (player.bee.path != 2) return new Decimal(1e180)
+                return new Decimal(1e18)
+            },
+            costGrowth() {
+                if (player.bee.path != 2) return new Decimal(15625000)
+                return new Decimal(250)
+            },
             purchaseLimit() { return new Decimal(5) },
             currency() { return player.bee.bees},
             pay(amt) { player.bee.bees = this.currency().sub(amt) },
@@ -1036,13 +1073,19 @@ addLayer("bee", {
             style: { width: '175px', height: '60px', border: "3px solid rgba(0,0,0,0.3)", borderRadius: '0px'}
         },
         64: {
-            costBase() { return new Decimal(1e24) },
-            costGrowth() { return new Decimal(10) },
+            costBase() {
+                if (player.bee.path != 2) return new Decimal(1e240)
+                return new Decimal(1e24)
+            },
+            costGrowth() {
+                if (player.bee.path != 2) return new Decimal(1000)
+                return new Decimal(10)
+            },
             purchaseLimit() { return new Decimal(5) },
             currency() { return player.bee.bees},
             pay(amt) { player.bee.bees = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id) },
-            unlocked() { return player.ho.cell.gte(1000) && tmp.ho.layerShown },
+            unlocked() { return player.ho.cell.gte(CELL_MILESTONES[player.bee.path][6]) && tmp.ho.layerShown },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() {
                 return this.currency().gte(this.cost())
@@ -1206,7 +1249,7 @@ addLayer("bee", {
                     ["style-row", [], {width: "4px", height: "60px", background: "#8e4200"}],
                     ["buyable", 35],
                 ], () => {return hasUpgrade("al", 105) ? {borderBottom: "4px solid #8e4200", backgroundColor: "#ffb825"} : {display: "none !important"}}],
-            ], () => {return tmp.bpl.layerShown ? {} : {display: "none !important"}}],
+            ], () => {return tmp.bpl.layerShown && (player.bee.path != 0 || player.bee.extremePath) ? {} : {display: "none !important"}}],
 
             // NECTAR RESEARCH
             ["style-column", [
@@ -1253,7 +1296,7 @@ addLayer("bee", {
                     ["style-row", [], {width: "4px", height: "60px", background: "#8e4200"}],
                     ["buyable", 45],
                 ], () => {return hasUpgrade("al", 205) ? {borderBottom: "4px solid #8e4200", backgroundColor: "#ffb825"} : {display: "none !important"}}],
-            ], () => {return tmp.ne.layerShown ? {} : {display: "none !important"}}],
+            ], () => {return tmp.ne.layerShown && (player.bee.path != 0 || player.bee.extremePath) ? {} : {display: "none !important"}}],
 
             // BEE BREAD RESEARCH
 
@@ -1323,7 +1366,7 @@ addLayer("bee", {
                     ], {width: "396px"}],
                     ["style-row", [], {width: "4px", height: "60px", background: "#8e4200"}],
                     ["buyable", 64],
-                ], () => {return player.ho.cell.gte(1000) ? {borderBottom: "4px solid #8e4200", backgroundColor: "#ffb825"} : {display: "none !important"}}],
+                ], () => {return player.ho.cell.gte(CELL_MILESTONES[player.bee.path][6]) ? {borderBottom: "4px solid #8e4200", backgroundColor: "#ffb825"} : {display: "none !important"}}],
             ], () => {return tmp.ho.layerShown ? {} : {display: "none !important"}}],
         ], {userSelect: "none", borderLeft: "4px solid #8e4200", borderRight: "4px solid #8e4200", borderTop: "4px solid #8e4200"}],
         ["style-column", [
@@ -1331,9 +1374,12 @@ addLayer("bee", {
             ["raw-html", () => {return player.bee.totalResearch.lt(25) && player.bee.totalResearch.gte(1) ? formatWhole(Decimal.sub(25, player.bee.totalResearch)) + " research until next layer." : ""}, {color: "#312f17", fontSize: "20px", fontFamily: "monospace"}],
             ["raw-html", () => {return player.bee.totalResearch.lt(60) && player.bee.totalResearch.gte(25) ? formatWhole(Decimal.sub(60, player.bee.totalResearch)) + " research until next layer." : ""}, {color: "#312f17", fontSize: "20px", fontFamily: "monospace"}],
             ["raw-html", () => {return player.bee.totalResearch.lt(120) && player.bee.totalResearch.gte(60) && player.tad.hiveExpand ? formatWhole(Decimal.sub(120, player.bee.totalResearch)) + " research until next layer." : ""}, {color: "#312f17", fontSize: "20px", fontFamily: "monospace"}],
+            ["raw-html", () => {return player.bee.path == 1 && player.bee.totalResearch.lt(165) && player.bee.totalResearch.gte(120) && hasChallenge("fu", 12) ? formatWhole(Decimal.sub(165, player.bee.totalResearch)) + " research until next layer." : ""}, {color: "#312f17", fontSize: "20px", fontFamily: "monospace"}],
+            ["raw-html", () => {return player.bee.path == 2 && player.bee.totalResearch.lt(170) && player.bee.totalResearch.gte(120) && hasChallenge("fu", 12) ? formatWhole(Decimal.sub(170, player.bee.totalResearch)) + " research until next layer." : ""}, {color: "#312f17", fontSize: "20px", fontFamily: "monospace"}],
         ], () => {
             if (player.bee.totalResearch.gte(60) && !player.tad.hiveExpand) return {display: "none !important"}
-            if (player.bee.totalResearch.gte(120)) return {display: "none !important"}
+            if (player.bee.totalResearch.gte(120) && !hasChallenge("fu", 12)) return {display: "none !important"}
+            if (player.bee.totalResearch.gte(165) && player.bee.path == 1 || player.bee.totalResearch.gte(170) && player.bee.path == 2) return {display: "none !important"}
             return {height: "40px", backgroundColor: "#db6f02", borderLeft: "4px solid #8e4200", borderRight: "4px solid #8e4200", borderBottom: "4px solid #8e4200", userSelect: "none"}
         }],
         ["blank", "25px"],

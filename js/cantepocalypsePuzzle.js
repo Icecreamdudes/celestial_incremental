@@ -44,7 +44,7 @@
         if (player.cap.reqDisplayIndex.eq(0)) {
             player.cap.reqDisplay = "Recall the challenges and reach further like you never have before."
         } else if (player.cap.reqDisplayIndex.eq(1)) {
-            player.cap.reqDisplay = "Gain a shard that automates a timely feature."
+            player.cap.reqDisplay = "Perfect an evolved being."
         } else if (player.cap.reqDisplayIndex.eq(2)) {
             player.cap.reqDisplay = "Revisit the previous celestial and go beyond."
         } else if (player.cap.reqDisplayIndex.eq(3)) {
@@ -179,19 +179,6 @@
             style: { width: '200px', "min-height": '75px', borderRadius: "10px" },
         },
     },
-    bars: {
-
-    },
-    upgrades: {
-    },
-    buyables: {
-    },
-    milestones: {
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
     microtabs: {
         stuff: {
             "Main": {
@@ -245,13 +232,11 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return "THERE IS NO RETURN..." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["tree", ["cp"]],
+                    ["tree", [["cp"]]],
                 ]
             },
         },
-
     },
-
     tabFormat: [
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],

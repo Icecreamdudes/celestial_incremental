@@ -76,7 +76,8 @@
         if (hasUpgrade("cs", 401)) player.t.treesToGet = player.t.treesToGet.pow(1.1)
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
-        player.t.treesToGet = player.t.treesToGet.div(player.po.halterEffects[4])
+        if (player.po.halter.trees.enabled == 1) player.t.treesToGet = player.t.treesToGet.div(player.po.halter.trees.halt)
+        if (player.po.halter.trees.enabled == 2 && player.t.treesToGet.gt(player.po.halter.trees.halt)) player.t.treesToGet = player.po.halter.trees.halt
         if (inChallenge("ip", 18) && player.t.trees.gt(player.t.trees.mul(0.3 * delta))) {
             player.t.trees = player.t.trees.sub(player.t.trees.mul(0.3 * delta))
         }
@@ -121,7 +122,6 @@
         player.t.leavesPerSecond = player.t.leavesPerSecond.pow(player.co.cores.tree.effect[2])
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
-        player.t.leavesPerSecond = player.t.leavesPerSecond.div(player.po.halterEffects[3])
         if (player.r.timeReversed) player.t.leavesPerSecond = player.t.leavesPerSecond.mul(0)
         
         // LEAVES PER SECOND

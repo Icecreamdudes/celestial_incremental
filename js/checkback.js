@@ -248,6 +248,10 @@ addLayer("cb", {
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(player.se.starsExploreEffect[2][0])
             if (hasUpgrade("ir", 13)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(upgradeEffect("ir", 13))
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(player.cof.coreFragmentEffects[6])
+
+            // ABNORMAL MODIFIERS
+            if (player.po.halter.xp.enabled == 1) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.div(player.po.halter.xp.halt)
+            if (player.po.halter.xp.enabled == 2 && player.cb.xpTimers[i].base.gt(player.po.halter.xp.halt)) player.cb.xpTimers[i].base = player.po.halter.xp.halt
         }
 
         player.cb.xpTimers[0].max = new Decimal(60).div(buyableEffect("ev1", 102))
@@ -290,6 +294,7 @@ addLayer("cb", {
         for (let i in player.cb.xpTimers) {
             player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(levelableEffect("pet", 1107)[1])
             player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(buyableEffect("ev2", 31))
+            player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(buyableEffect("ma", 33))
         }
 
         player.cb.crateTimers[0].base = buyableEffect("ev1", 201)
@@ -305,6 +310,8 @@ addLayer("cb", {
             player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(buyableEffect("ep0", 12))
             player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(buyableEffect("ev2", 21))
             if (hasUpgrade("cs", 1202)) player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(1.5)
+            player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(buyableEffect("ma", 34))
+            player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(buyableEffect("cof", 32))
         }
 
         player.cb.crateTimers[0].max = new Decimal(900).div(buyableEffect("ev1", 202))
@@ -346,7 +353,7 @@ addLayer("cb", {
         } else {
             player.cb.boostTimers[0].base = player.cb.boostTimers[0].base.mul(player.cb.level.div(16.8).pow(0.9))
             player.cb.boostTimers[1].base = player.cb.boostTimers[1].base.mul(player.cb.level.div(21.5).pow(0.9))
-            player.cb.boostTimers[1].base = player.cb.boostTimers[1].base.mul(player.cb.level.div(25.5).pow(0.9))
+            player.cb.boostTimers[2].base = player.cb.boostTimers[2].base.mul(player.cb.level.div(25.5).pow(0.9))
         }
         for (let i in player.cb.boostTimers) {
             player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(levelableEffect("pet", 1203)[1])
@@ -459,6 +466,7 @@ addLayer("cb", {
         layers.ev1.update(time)
         layers.ev2.update(time)
         layers.ev8.update(time)
+        layers.fi.update(time)
     },
     branches: ["m"],
     clickables: {

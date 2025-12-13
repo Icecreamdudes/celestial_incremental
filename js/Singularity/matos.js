@@ -3388,10 +3388,10 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "CB Button Automation Boost"
+                return "CB XP Button ESC"
             },
             display() {
-                return "which are dividing check back XP button automation times by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are multiplying check back XP button evolution shard chance by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Epic Matos Fragments"
             },
             buy(mult) {
@@ -3422,10 +3422,10 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "CB Pet Button Automation Boost"
+                return "CB Crate Roll Chance"
             },
             display() {
-                return "which are dividing check back pet button automation times by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are multiplying check back crate roll chance by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Epic Matos Fragments"
             },
             buy(mult) {

@@ -739,7 +739,6 @@
     ],
     layerShown() { return false }
 })
-//player.ev4.offeringReq = player.ev4.offeringReq.div(buyableEffect("cof", 32))
 addLayer("ev8", {
     name: "Marcel", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "Mc", // This appears on the layer's node. Default is the id with the first letter capitalized

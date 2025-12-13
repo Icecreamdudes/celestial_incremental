@@ -82,6 +82,7 @@
         if (hasMilestone("db", 102)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(1.2)
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(player.ds.spaceEffect)
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("cof", 26))
+        player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("al", 105))
 
         // Eclipse Shards
         player.le.eclipseShardsReq = Decimal.pow(1e1, player.le.resetAmount.add(1).pow(1.7).floor()).mul(1e3)
@@ -97,8 +98,7 @@
         player.le.eclipseShardsValue = new Decimal(5)
         player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(buyableEffect("le", 11)).floor()
 
-        if (player.sme.starmetalResetToggle && player.du.points.gte(player.le.starmetalAlloyReq) && !player.pet.activeAbilities[0])
-        {
+        if (player.sme.starmetalResetToggle && player.du.points.gte(player.le.starmetalAlloyReq) && !player.pet.activeAbilities[0]) {
             player.le.resetAmount = player.le.resetAmount.add(1)
             if (player.le.highestReset.lt(player.le.resetAmount)) player.le.highestReset = player.le.resetAmount
             player.le.starmetalAlloyPause = new Decimal(10)
@@ -107,15 +107,16 @@
 
             player.le.starmetalAlloyToGet = player.le.starmetalAlloyToGet.add(player.le.starmetalAlloyToGetToGet)
         }
-        if (player.sme.autoLeaveToggle && player.le.starmetalAlloyToGetTrue.gte(player.sme.leaveAmount) && !player.pet.activeAbilities[0])
-        {
+        if (player.sme.autoLeaveToggle && player.le.starmetalAlloyToGetTrue.gte(player.sme.leaveAmount) && !player.pet.activeAbilities[0]) {
+            player.sb.storedSpaceEnergy = player.sb.storedSpaceEnergy.add(player.ds.storedSpaceEnergyToGet)
+
             player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.le.starmetalAlloyToGetTrue.floor())
             player.le.starmetalAlloyPauseAgain = new Decimal(10)
             for (let prop in player.pu.levelables) {
-                if (getLevelableBool("pu", prop)) {
+                if (getLevelableTier("pu", prop, true)) {
                     addLevelableXP("pu", prop, player.le.starmetalAlloyToGetTrue.floor())
                 }
-                setLevelableBool("pu", prop, false)
+                setLevelableTier("pu", prop, new Decimal(0))
             }
             player.le.starmetalAlloyToGet = new Decimal(0)
             player.le.resetAmount = new Decimal(0)
@@ -124,7 +125,7 @@
             if (hasUpgrade("sma", 15)) player.pu.storedSelections = new Decimal(1)
 
             player.sma.inStarmetalChallenge = false
-            player.universe = 3
+            player.universe = "U3"
             player.tab = "sma"
             player.subtabs.pu["stuff"] = "Collection"
 

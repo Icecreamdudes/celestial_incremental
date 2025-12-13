@@ -92,7 +92,8 @@
         if (inChallenge("ip", 18) && player.p.prestigePoints.gt(player.p.prestigePoints.mul(0.6 * delta))) {
             player.p.prestigePoints = player.p.prestigePoints.sub(player.p.prestigePoints.mul(0.6 * delta))
         }
-        player.p.prestigePointsToGet = player.p.prestigePointsToGet.div(player.po.halterEffects[2])
+        if (player.po.halter.prestige.enabled == 1) player.p.prestigePointsToGet = player.p.prestigePointsToGet.div(player.po.halter.prestige.halt)
+        if (player.po.halter.prestige.enabled == 2 && player.p.prestigePointsToGet.gt(player.po.halter.prestige.halt)) player.p.prestigePointsToGet = player.po.halter.prestige.halt
         if (player.r.timeReversed) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(0)
 
         // PRESTIGE POINTS PER SECOND

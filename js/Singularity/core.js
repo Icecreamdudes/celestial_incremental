@@ -552,10 +552,12 @@ addLayer("co", {
         player.r.tetrsToGet = new Decimal(0)
         player.r.pentToGet = new Decimal(0)
 
-        for (let i = 0; i < player.r.milestones.length; i++) {
-            if ((!hasMilestone("s", 12) && +player.r.milestones[i] < 20) || +player.r.milestones[i] >= 20) {
-                player.r.milestones.splice(i, 1);
-                i--;
+        if (!hasMilestone("s", 25)) {
+            for (let i = 0; i < player.r.milestones.length; i++) {
+                if ((!hasMilestone("s", 12) && +player.r.milestones[i] < 20) || +player.r.milestones[i] >= 20) {
+                    player.r.milestones.splice(i, 1);
+                    i--;
+                }
             }
         }
 
@@ -1021,8 +1023,10 @@ addLayer("co", {
             player.po.featureSlots = player.po.featureSlotsMax
         }
 
-        for (let i = 0; i < player.po.halterEffects.length; i++) {
-            player.po.halterEffects[i] = new Decimal(1)
+        if (!hasMilestone("s", 24)) {
+            for (let i in player.po.halter) {
+                player.po.halter[i].enabled = 0
+            }
         }
 
         // KEEP HEX STUFF AFTER IRIDITE

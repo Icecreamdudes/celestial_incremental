@@ -54,8 +54,7 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-        player.cof.coreFragmentNames = 
-        [
+        player.cof.coreFragmentNames = [
             "Ancient Core Fragments",
             "Natural Core Fragments",
             "Technological Core Fragments",
@@ -89,7 +88,7 @@
 
         //paradox
         player.cof.fragmentScore[3] = player.in.infinityPoints.plus(1).log10().pow(0.52).div(4).mul(1.25)
-        player.cof.fragmentScore[3] = player.cof.fragmentScore[3].mul(player.in.infinities.plus(1).log(10).pow(0.5))
+        player.cof.fragmentScore[3] = player.cof.fragmentScore[3].mul(player.in.infinities.plus(1).log(10).pow(0.6))
         player.cof.fragmentScore[3] = player.cof.fragmentScore[3].mul(player.ta.negativeInfinityPoints.plus(1).log10().pow(0.45).div(2.25))
 
         //radioactive
@@ -118,6 +117,7 @@
         for (let i = 0; i < player.cof.coreFragments.length; i++) {
             player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(buyableEffect("st", 110))
             player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(buyableEffect("sb", 102))
+            player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(buyableEffect("fu", 91))
 
             player.cof.coreFragmentsToGet[i] = player.cof.fragmentScore[i].div(100).floor()
             player.cof.coreFragments[i] = player.cof.coreFragments[i].floor()
@@ -228,7 +228,7 @@
             purchaseLimit() { return new Decimal(500) },
             currency() { return player.cof.coreFragments[0] },
             pay(amt) { player.cof.coreFragments[0] = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).div(1.5).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.8).div(1.5).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -236,7 +236,7 @@
                 return "Ancient Core Fragment Buyable I"
             },
             display() {
-                return 'which are extending replicanti point limit by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are extending replicanti point limit by ^' + format(tmp[this.layer].buyables[this.id].effect, 3) + '.\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
             },
             buy(mult) {
@@ -270,7 +270,7 @@
                 return "Ancient Core Fragment Buyable II"
             },
             display() {
-                return 'which are boosting points by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting points by ^' + format(tmp[this.layer].buyables[this.id].effect, 3) + '.\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
             },
             buy(mult) {
@@ -304,7 +304,7 @@
                 return "Ancient Core Fragment Buyable III"
             },
             display() {
-                return 'which are extending both replicanti point softcaps by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are extending both replicanti point softcaps by ^' + format(tmp[this.layer].buyables[this.id].effect, 3) + '.\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
             },
             buy(mult) {
@@ -338,7 +338,7 @@
                 return "Natural Core Fragment Buyable I"
             },
             display() {
-                return 'which are boosting grass value by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting grass value by ^' + format(tmp[this.layer].buyables[this.id].effect, 3) + '.\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
             },
             buy(mult) {
@@ -372,7 +372,7 @@
                 return "Natural Core Fragment Buyable II"
             },
             display() {
-                return 'which are boosting grasshopper gain by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting grasshopper gain by ^' + format(tmp[this.layer].buyables[this.id].effect, 3) + '.\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
             },
             buy(mult) {
@@ -406,7 +406,7 @@
                 return "Natural Core Fragment Buyable III"
             },
             display() {
-                return 'which are boosting pollinator gain by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting pollinator gain by ^' + format(tmp[this.layer].buyables[this.id].effect, 3) + '.\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
             },
             buy(mult) {
@@ -440,7 +440,7 @@
                 return "Technological Core Fragment Buyable I"
             },
             display() {
-                return 'which are boosting mod gain by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting mod gain by ^' + format(tmp[this.layer].buyables[this.id].effect, 3) + '.\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
             },
             buy(mult) {
@@ -474,7 +474,7 @@
                 return "Technological Core Fragment Buyable II"
             },
             display() {
-                return 'which are boosting rocket fuel gain by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting rocket fuel gain by ^' + format(tmp[this.layer].buyables[this.id].effect, 3) + '.\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
             },
             buy(mult) {
@@ -542,7 +542,7 @@
                 return "Paradox Core Fragment Buyable I"
             },
             display() {
-                return 'which are boosting antimatter gain by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting antimatter gain by ^' + format(tmp[this.layer].buyables[this.id].effect, 3) + '.\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
             },
             buy(mult) {
@@ -576,7 +576,7 @@
                 return "Paradox Core Fragment Buyable II"
             },
             display() {
-                return 'which are boosting negative infinity point gain by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting negative infinity point gain by ^' + format(tmp[this.layer].buyables[this.id].effect, 3) + '.\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
             },
             buy(mult) {
@@ -678,7 +678,7 @@
                 return "Radioactive Core Fragment Buyable II"
             },
             display() {
-                return 'which are boosting singularity power gain by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting singularity power gain by ^' + format(tmp[this.layer].buyables[this.id].effect, 3) + '.\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
             },
             buy(mult) {
@@ -746,7 +746,7 @@
                 return "Cosmic Core Fragment Buyable I"
             },
             display() {
-                return 'which are raising galaxy dust effect by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are raising galaxy dust effect by ^' + format(tmp[this.layer].buyables[this.id].effect, 3) + '.\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
             },
             buy(mult) {
@@ -882,7 +882,7 @@
                 return "Temporal Core Fragment Buyable II"
             },
             display() {
-                return 'which are dividing offering requirement by /' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are multiplying crate roll chance by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
             },
             buy(mult) {
@@ -951,10 +951,10 @@
                 content: [
                     ["blank", "25px"],
         ["raw-html", function () { return "You will <h3>" + formatWhole(player.cof.coreFragments[player.cof.fragmentIndex]) + "</h3> " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cof.fragmentIndex == 0 ? "Your " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + " boosts points by ^" + format(player.cof.coreFragmentEffects[player.cof.fragmentIndex]) + "." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return player.cof.fragmentIndex == 0 ? "Your " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + " boosts points by ^" + format(player.cof.coreFragmentEffects[player.cof.fragmentIndex], 3) + "." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return player.cof.fragmentIndex == 1 ? "Your " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + " boosts golden grass by x" + format(player.cof.coreFragmentEffects[player.cof.fragmentIndex]) + "." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cof.fragmentIndex == 2 ? "Your " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + " boosts steel by ^" + format(player.cof.coreFragmentEffects[player.cof.fragmentIndex]) + "." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cof.fragmentIndex == 3 ? "Your " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + " boosts infinity points by ^" + format(player.cof.coreFragmentEffects[player.cof.fragmentIndex]) + "." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return player.cof.fragmentIndex == 2 ? "Your " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + " boosts steel by ^" + format(player.cof.coreFragmentEffects[player.cof.fragmentIndex], 3) + "." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return player.cof.fragmentIndex == 3 ? "Your " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + " boosts infinity points by ^" + format(player.cof.coreFragmentEffects[player.cof.fragmentIndex], 3) + "." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return player.cof.fragmentIndex == 4 ? "Your " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + " boosts singularity points x" + format(player.cof.coreFragmentEffects[player.cof.fragmentIndex]) + "." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return player.cof.fragmentIndex == 5 ? "Your " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + " boosts replicanti mult by x" + format(player.cof.coreFragmentEffects[player.cof.fragmentIndex]) + "." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return player.cof.fragmentIndex == 6 ? "Your " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + " boosts check back XP by x" + format(player.cof.coreFragmentEffects[player.cof.fragmentIndex]) + "." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],

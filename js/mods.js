@@ -66,7 +66,8 @@
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.pow(player.co.cores.code.effect[1])
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
-        player.m.codeExperienceToGet = player.m.codeExperienceToGet.div(player.po.halterEffects[8])
+        if (player.po.halter.code.enabled == 1) player.m.codeExperienceToGet = player.m.codeExperienceToGet.div(player.po.halter.code.halt)
+        if (player.po.halter.code.enabled == 2 && player.m.codeExperienceToGet.gt(player.po.halter.code.halt)) player.m.codeExperienceToGet = player.po.halter.code.halt
         if (inChallenge("ip", 18) && player.m.codeExperience.gt(player.m.codeExperience.mul(0.2 * delta))) {
             player.m.codeExperience = player.m.codeExperience.sub(player.m.codeExperience.mul(0.2 * delta))
         }
@@ -115,7 +116,6 @@
         }
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
-        player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.div(player.po.halterEffects[9])
         if (player.r.timeReversed) player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(0)
 
         // LINES OF CODE PER SECOND
@@ -148,7 +148,8 @@
         player.gh.steelToGet = player.gh.steelToGet.pow(buyableEffect("cof", 17))
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
-        player.m.modsToGet = player.m.modsToGet.div(player.po.halterEffects[10])
+        if (player.po.halter.mods.enabled == 1) player.m.modsToGet = player.m.modsToGet.div(player.po.halter.mods.halt)
+        if (player.po.halter.mods.enabled == 2 && player.m.modsToGet.gt(player.po.halter.mods.halt)) player.m.modsToGet = player.po.halter.mods.halt
         if (inChallenge("ip", 18) && player.m.mods.gt(player.m.mods.mul(0.3 * delta))) {
             player.m.mods = player.m.mods.sub(player.m.mods.mul(0.3 * delta))
         }

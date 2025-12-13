@@ -54,11 +54,11 @@ addLayer("bpl", {
     update(delta) {
         let onepersec = new Decimal(1)
 
-        if (player.tab == "bpl" && player.bee.path == 0) player.bee.path = 1
+        if (player.tab == "bpl" && player.bee.path == 0 && !player.bee.extremePath) player.bee.path = 1
 
         // Pollen per Flower Calculations
         player.bpl.pollenGain = new Decimal(1)
-        if (player.bee.path == 2) player.bpl.pollenGain = new Decimal(0.001)
+        if (player.bee.path != 1) player.bpl.pollenGain = new Decimal(0.001)
         player.bpl.pollenGain = player.bpl.pollenGain.mul(player.fl.glossaryEffects.pollen)
         player.bpl.pollenGain = player.bpl.pollenGain.mul(buyableEffect("bee", 31))
         player.bpl.pollenGain = player.bpl.pollenGain.mul(player.bpl.roles.worker.effect)
@@ -78,14 +78,14 @@ addLayer("bpl", {
         player.bpl.pollenTimerMax = player.bpl.pollenTimerMax.div(buyableEffect("bee", 32))
         if (player.bb.breadMilestone >= 3) player.bpl.pollenTimerMax = player.bpl.pollenTimerMax.div(player.bb.breadEffects[2])
 
-        if (tmp.bpl.layerShown && !hasUpgrade("al", 112) && player.bee.path != 0) player.bpl.pollenTimer = player.bpl.pollenTimer.add(onepersec.mul(delta))
+        if (tmp.bpl.layerShown && !hasUpgrade("al", 112) && (player.bee.path != 0 || player.bee.extremePath)) player.bpl.pollenTimer = player.bpl.pollenTimer.add(onepersec.mul(delta))
         if (player.bpl.pollenTimer.gte(player.bpl.pollenTimerMax)) {
             player.bpl.pollenTimer = new Decimal(0)
             player.bpl.pollen = player.bpl.pollen.add(player.bpl.pollenGain)
         }
 
         // Pollen Per Second
-        if (tmp.bpl.layerShown && hasUpgrade("al", 112) && player.bee.path != 0) {
+        if (tmp.bpl.layerShown && hasUpgrade("al", 112) && (player.bee.path != 0 || player.bee.extremePath)) {
             let percent = new Decimal(0.2)
             if (hasUpgrade("bpl", 12)) percent = percent.add(0.05)
             if (hasUpgrade("bpl", 17)) percent = percent.add(0.05)
@@ -106,16 +106,18 @@ addLayer("bpl", {
             player.bpl.roles.worker.gain = player.bpl.pollen.div(100).mul(eff)
             player.bpl.roles.queen.gain = player.bpl.pollen.div(5000).mul(eff)
         } else {
-            player.bpl.roles.drone.gain = player.bpl.pollen.pow(0.7).div(125).mul(eff)
-            player.bpl.roles.worker.gain = player.bpl.pollen.pow(0.7).div(1e6).mul(eff)
-            player.bpl.roles.queen.gain = player.bpl.pollen.pow(0.7).div(1.25e10).mul(eff)
+            player.bpl.roles.drone.gain = player.bpl.pollen.pow(0.5).div(125).mul(eff)
+            player.bpl.roles.worker.gain = player.bpl.pollen.pow(0.5).div(1e6).mul(eff)
+            player.bpl.roles.queen.gain = player.bpl.pollen.pow(0.5).div(1.25e10).mul(eff)
         }
 
         // Bee Role Effect Calculations
-        if (player.bpl.roles.worker.amount.lt(1e60)) {
-            player.bpl.roles.drone.effect = player.bpl.roles.drone.amount.pow(0.85).add(1)
-        } else {
+        if (player.bpl.roles.drone.amount.gte(1e100)) {
+            player.bpl.roles.drone.effect = player.bpl.roles.drone.amount.pow(0.4).mul(1e37).add(1)
+        } else if (player.bpl.roles.drone.amount.gte(1e60)) {
             player.bpl.roles.drone.effect = player.bpl.roles.drone.amount.pow(0.65).mul(1e12).add(1)
+        } else {
+            player.bpl.roles.drone.effect = player.bpl.roles.drone.amount.pow(0.85).add(1)
         }
 
         if (player.bpl.roles.worker.amount.lt(1e30)) {
@@ -193,7 +195,7 @@ addLayer("bpl", {
             unlocked: true,
             description: "Doubles pollen gain.",
             cost() {
-                if (player.bee.path == 2) return new Decimal(125)
+                if (player.bee.path != 1) return new Decimal(125)
                 return new Decimal(5)
             },
             currencyLocation() { return player.bpl },
@@ -209,7 +211,7 @@ addLayer("bpl", {
                 return "Reduce base pollen cooldown by 0.5s."
             },
             cost() {
-                if (player.bee.path == 2) return new Decimal(3375)
+                if (player.bee.path != 1) return new Decimal(3375)
                 return new Decimal(15)
             },
             currencyLocation() { return player.bpl },
@@ -222,7 +224,7 @@ addLayer("bpl", {
             unlocked: true,
             description: "Unlock Worker Bees.",
             cost() {
-                if (player.bee.path == 2) return new Decimal(125000)
+                if (player.bee.path != 1) return new Decimal(125000)
                 return new Decimal(50)
             },
             currencyLocation() { return player.bpl },
@@ -235,7 +237,7 @@ addLayer("bpl", {
             unlocked: true,
             description: "Unlock blue flowers.",
             cost() {
-                if (player.bee.path == 2) return new Decimal(3375000)
+                if (player.bee.path != 1) return new Decimal(3375000)
                 return new Decimal(150)
             },
             currencyLocation() { return player.bpl },
@@ -248,7 +250,7 @@ addLayer("bpl", {
             unlocked: true,
             description: "Boost Pollen based on total Research.",
             cost() {
-                if (player.bee.path == 2) return new Decimal(1e9)
+                if (player.bee.path != 1) return new Decimal(1e9)
                 return new Decimal(1000)
             },
             currencyLocation() { return player.bpl },
@@ -265,7 +267,7 @@ addLayer("bpl", {
             unlocked: true,
             description: "Unlock Queen Bees.",
             cost() {
-                if (player.bee.path == 2) return new Decimal(1.5625e13)
+                if (player.bee.path != 1) return new Decimal(1.5625e13)
                 return new Decimal(25000)
             },
             currencyLocation() { return player.bpl },
@@ -281,7 +283,7 @@ addLayer("bpl", {
                 return "Reduce base pollen cooldown by 0.5s, again."
             },
             cost() {
-                if (player.bee.path == 2) return new Decimal(1.25e17)
+                if (player.bee.path != 1) return new Decimal(1.25e17)
                 return new Decimal(500000)
             },
             currencyLocation() { return player.bpl },
@@ -294,7 +296,7 @@ addLayer("bpl", {
             unlocked: true,
             description: "Decrease time between blue flower growth by /2.",
             cost() {
-                if (player.bee.path == 2) return new Decimal(1.5625e19)
+                if (player.bee.path != 1) return new Decimal(1.5625e19)
                 return new Decimal(2500000)
             },
             currencyLocation() { return player.bpl },
@@ -307,7 +309,7 @@ addLayer("bpl", {
             unlocked: true,
             description: "Unlock a new pollen research.",
             cost() {
-                if (player.bee.path == 2) return new Decimal(1.25e23)
+                if (player.bee.path != 1) return new Decimal(1.25e23)
                 return new Decimal(50000000)
             },
             currencyLocation() { return player.bpl },
@@ -320,7 +322,7 @@ addLayer("bpl", {
             unlocked() {return hasUpgrade("al", 111)},
             description: "Boost pollen based on nectar α.",
             cost() {
-                if (player.bee.path == 2) return new Decimal(1e240)
+                if (player.bee.path != 1) return new Decimal(1e240)
                 return new Decimal(1e60)
             },
             currencyLocation() { return player.bpl },
@@ -358,7 +360,7 @@ addLayer("bpl", {
                     ["raw-html", () => { return "You have " + format(player.bpl.roles.drone.amount) + " Drone Bees."}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
                     ["row", [
                         ["raw-html", () => { return "Which boosts bees per second by x" + format(player.bpl.roles.drone.effect)}, { color: "white", fontSize: "16px", fontFamily: "monospace" }],
-                        ["raw-html", () => {return player.bpl.roles.drone.amount.gte(1e60) ? "[SOFTCAPPED]" : ""}, {color: "#c00", fontSize: "14px", fontFamily: "monospace", marginLeft: "8px"}],
+                        ["raw-html", () => {return player.bpl.roles.drone.amount.gte(1e100) ? "[SOFTCAPPED<sup>2</sup>]" : player.bpl.roles.drone.amount.gte(1e60) ? "[SOFTCAPPED]" : ""}, {color: "#c00", fontSize: "14px", fontFamily: "monospace", marginLeft: "8px"}],
                     ]],
                 ], {width: "525px"}],
                 ["style-row", [], {width: "4px", height: "60px", background: "white"}],

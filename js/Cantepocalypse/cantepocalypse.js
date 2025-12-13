@@ -31,7 +31,7 @@
         replicantiSoftcap4Start: new Decimal(1e308),
     }},
     automate() {
-        if (hasMilestone("s", 17) && !inChallenge("fu", 11)) {
+        if (hasMilestone("s", 17) && !inChallenge("fu", 11) && !inChallenge("fu", 12)) {
             buyUpgrade("cp", 11)
             buyUpgrade("cp", 12)
             buyUpgrade("cp", 13)
@@ -74,12 +74,19 @@
         if (hasUpgrade("an", 23)) multAdd = multAdd.mul(upgradeEffect("an", 23))
         if (hasMilestone("gs", 12)) multAdd = multAdd.mul(player.gs.milestone2Effect)
         multAdd = multAdd.mul(player.oi.linkingPowerEffect[0])
-        multAdd = multAdd.mul(levelableEffect("pet", 402)[0])
-        multAdd = multAdd.mul(player.co.cores.point.effect[2])
-        if (inChallenge("fu", 11)) multAdd = multAdd.pow(0.2)
+        if (hasUpgrade("fu", 101)) multAdd = multAdd.mul(3)
+        if (!inChallenge("fu", 12)) {
+            multAdd = multAdd.mul(levelableEffect("pet", 402)[0])
+            multAdd = multAdd.mul(player.co.cores.point.effect[2])
+        }
+
+        // POWERS
+        if (inChallenge("fu", 11)) multAdd = multAdd.pow(Decimal.mul(0.2, buyableEffect("fu", 88)))
 
         player.cp.replicantiPointsTimerReq = new Decimal(3)
         player.cp.replicantiPointsTimerReq = player.cp.replicantiPointsTimerReq.div(buyableEffect("pr", 12))
+        if (hasUpgrade("fu", 103)) player.cp.replicantiPointsTimerReq = player.cp.replicantiPointsTimerReq.div(upgradeEffect("fu", 103))
+        if (hasUpgrade("fu", 111)) player.cp.replicantiPointsTimerReq = player.cp.replicantiPointsTimerReq.div(2)
 
         player.cp.replicantiSoftcapStart = new Decimal(1000)
         player.cp.replicantiSoftcapStart = player.cp.replicantiSoftcapStart.mul(buyableEffect("pr", 15))
@@ -89,13 +96,21 @@
         player.cp.replicantiSoftcapStart = player.cp.replicantiSoftcapStart.mul(buyableEffect("fu", 22))
         player.cp.replicantiSoftcapStart = player.cp.replicantiSoftcapStart.mul(buyableEffect("fu", 65))
 
-        player.cp.replicantiSoftcapStart = player.cp.replicantiSoftcapStart.pow(buyableEffect("cof", 13))
+        if (!inChallenge("fu", 12)) player.cp.replicantiSoftcapStart = player.cp.replicantiSoftcapStart.pow(buyableEffect("cof", 13))
 
-        player.cp.replicantiSoftcapEffect = player.cp.replicantiPoints.sub(player.cp.replicantiSoftcapStart).pow(0.375)
-        player.cp.replicantiSoftcapEffect = player.cp.replicantiSoftcapEffect.div(buyableEffect("pr", 16))
-        player.cp.replicantiSoftcapEffect = player.cp.replicantiSoftcapEffect.div(buyableEffect("fu", 22))
-        player.cp.replicantiSoftcapEffect = player.cp.replicantiSoftcapEffect.div(buyableEffect("fu", 66))
-        if (inChallenge("fu", 11)) player.cp.replicantiSoftcapEffect = player.cp.replicantiSoftcapEffect.pow(2)
+        // CHALLENGE
+        if (inChallenge("fu", 12)) player.cp.replicantiSoftcapStart = new Decimal(1)
+
+        player.cp.replicantiSoftcapEffect = player.cp.replicantiPoints.sub(player.cp.replicantiSoftcapStart).pow(0.375).max(1)
+        if (inChallenge("fu", 12) && hasUpgrade("fu", 106)) player.cp.replicantiSoftcapEffect = player.cp.replicantiSoftcapEffect.pow(upgradeEffect("fu", 106))
+        if (!inChallenge("fu", 12)) {
+            player.cp.replicantiSoftcapEffect = player.cp.replicantiSoftcapEffect.div(buyableEffect("pr", 16))
+            player.cp.replicantiSoftcapEffect = player.cp.replicantiSoftcapEffect.div(buyableEffect("fu", 22))
+            player.cp.replicantiSoftcapEffect = player.cp.replicantiSoftcapEffect.div(buyableEffect("fu", 66))
+            if (inChallenge("fu", 11)) player.cp.replicantiSoftcapEffect = player.cp.replicantiSoftcapEffect.pow(2)
+        } else {
+            player.cp.replicantiSoftcapEffect = player.cp.replicantiSoftcapEffect.max(1)
+        }
         if (player.cp.replicantiPoints.gte(player.cp.replicantiSoftcapStart)) {
             multAdd = multAdd.div(player.cp.replicantiSoftcapEffect)
         }
@@ -108,30 +123,46 @@
         player.cp.replicantiSoftcap2Start = player.cp.replicantiSoftcap2Start.mul(buyableEffect("fu", 22))
         player.cp.replicantiSoftcap2Start = player.cp.replicantiSoftcap2Start.mul(buyableEffect("fu", 67))
 
-        player.cp.replicantiSoftcap2Effect = player.cp.replicantiPoints.sub(player.cp.replicantiSoftcap2Start).pow(0.25).div(4)
-        player.cp.replicantiSoftcap2Effect = player.cp.replicantiSoftcap2Effect.div(buyableEffect("pr", 16))
-        if (hasUpgrade("an", 22)) player.cp.replicantiSoftcap2Effect = player.cp.replicantiSoftcap2Effect.div(upgradeEffect("an", 22))
-        player.cp.replicantiSoftcap2Effect = player.cp.replicantiSoftcap2Effect.div(buyableEffect("fu", 22))
-        player.cp.replicantiSoftcap2Effect = player.cp.replicantiSoftcap2Effect.div(buyableEffect("fu", 68))
-        if (inChallenge("fu", 11)) player.cp.replicantiSoftcap2Effect = player.cp.replicantiSoftcap2Effect.pow(2)
+        // CHALLENGE
+        if (inChallenge("fu", 12)) player.cp.replicantiSoftcap2Start = new Decimal(1)
+
+        player.cp.replicantiSoftcap2Effect = player.cp.replicantiPoints.sub(player.cp.replicantiSoftcap2Start).pow(0.25).div(4).max(1)
+        if (inChallenge("fu", 12) && hasUpgrade("fu", 106)) player.cp.replicantiSoftcap2Effect = player.cp.replicantiSoftcap2Effect.pow(upgradeEffect("fu", 106))
+        if (!inChallenge("fu", 12)) {
+            player.cp.replicantiSoftcap2Effect = player.cp.replicantiSoftcap2Effect.div(buyableEffect("pr", 16))
+            if (hasUpgrade("an", 22)) player.cp.replicantiSoftcap2Effect = player.cp.replicantiSoftcap2Effect.div(upgradeEffect("an", 22))
+            player.cp.replicantiSoftcap2Effect = player.cp.replicantiSoftcap2Effect.div(buyableEffect("fu", 22))
+            player.cp.replicantiSoftcap2Effect = player.cp.replicantiSoftcap2Effect.div(buyableEffect("fu", 68))
+            if (inChallenge("fu", 11)) player.cp.replicantiSoftcap2Effect = player.cp.replicantiSoftcap2Effect.pow(2)
+        } else {
+            player.cp.replicantiSoftcap2Effect = player.cp.replicantiSoftcap2Effect.max(1)
+        }
         if (player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap2Start)) {
             multAdd = multAdd.div(player.cp.replicantiSoftcap2Effect)
         }
 
         player.cp.replicantiSoftcap3Start = new Decimal(1e308)
-        player.cp.replicantiSoftcap3Effect = player.cp.replicantiPoints.plus(1).log10().div(30).add(1)
+        if (inChallenge("fu", 12)) player.cp.replicantiSoftcap3Start = new Decimal(1)
+        if (!player.ir.iriditeDefeated) {
+            player.cp.replicantiSoftcap3Effect = player.cp.replicantiPoints.plus(1).log(10).div(30).add(1)
+        } else {
+            player.cp.replicantiSoftcap3Effect = player.cp.replicantiPoints.plus(1).log(10).div(100).add(1)
+        }
+        if (inChallenge("fu", 12) && hasUpgrade("fu", 106)) player.cp.replicantiSoftcap3Effect = player.cp.replicantiSoftcap3Effect.pow(upgradeEffect("fu", 106))
         if (player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap3Start)) {
             player.cp.replicantiPointsTimerReq = player.cp.replicantiPointsTimerReq.mul(player.cp.replicantiSoftcap3Effect)
         }
 
         player.cp.replicantiSoftcap4Start = new Decimal(1e308)
-        player.cp.replicantiSoftcap4Effect = Decimal.div(1, player.cp.replicantiPoints.plus(1).log10().pow(0.7))
-        if (player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap4Start)) {
+        player.cp.replicantiSoftcap4Effect = Decimal.div(1, player.cp.replicantiPoints.plus(1).log(10).pow(0.7)).min(1)
+        if (player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap4Start) && multAdd.gte(1)) {
             multAdd = multAdd.pow(player.cp.replicantiSoftcap4Effect)
         }
 
         multAdd = multAdd.mul(buyableEffect("fu", 36))
         multAdd = multAdd.mul(player.fu.fearEffect2)
+
+        if (inChallenge("fu", 12) && multAdd.gte(1)) multAdd = multAdd.pow(Decimal.mul(0.2, buyableEffect("fu", 88)))
 
         player.cp.replicantiPointsMult = multAdd.add(1)
 
@@ -143,7 +174,7 @@
 
         //cap
         player.cp.replicantiPointCap = new Decimal(1.79e308)
-        player.cp.replicantiPointCap = player.cp.replicantiPointCap.pow(buyableEffect("cof", 11))
+        if (!inChallenge("fu", 12)) player.cp.replicantiPointCap = player.cp.replicantiPointCap.pow(buyableEffect("cof", 11))
     },
     replicantiPointMultiply() {
         if (player.cp.replicantiPoints.gte(player.cp.replicantiPointCap)) {

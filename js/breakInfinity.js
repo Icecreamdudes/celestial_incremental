@@ -357,9 +357,14 @@
             currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
             effect() {
-                return player.in.infinityPoints.pow(0.2).mul(0.002).add(1)
+                let eff = player.in.infinityPoints.pow(0.2).mul(0.002).add(1)
+                if (eff.gte("1e1000")) eff = Decimal.pow(1e100, player.in.infinityPoints.add(1).log(10).log(10).add(1)).mul("1e530")
+                return eff
             },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            effectDisplay() {
+                if (upgradeEffect(this.layer, this.id).gte("1e1000")) return format(upgradeEffect(this.layer, this.id))+"x <small style='color:red'>[SOFTCAPPED]"
+                return format(upgradeEffect(this.layer, this.id))+"x"
+            }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         24: {
@@ -600,7 +605,7 @@
             currencyInternalName: "negativeInfinityPoints",
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        117 :{
+        118 :{
             title: "BI NIP Upgrade XVI",
             unlocked() { return player.ma.matosDefeated },
             description: "Tickspeed effect boosts antimatter gain.",
@@ -612,7 +617,7 @@
                 return buyableEffect("ad", 1).pow(0.2).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px", width: '150px', height: '100px', }
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px", width: '140px', height: '100px', }
         },
     },
     microtabs: {
@@ -630,6 +635,7 @@
                     ["style-row", [
                         ["upgrade", 101], ["upgrade", 102], ["upgrade", 103], ["upgrade", 104], ["upgrade", 105], ["upgrade", 106], ["upgrade", 107], ["upgrade", 108],
                         ["upgrade", 109], ["upgrade", 111], ["upgrade", 112], ["upgrade", 113], ["upgrade", 114], ["upgrade", 115], ["upgrade", 116], ["upgrade", 117],
+                        ["upgrade", 118]
                     ], {maxWidth: "1000px", padding: "5px 0", backgroundColor: "#232b2b", border: "3px solid #596c6c", borderRadius: "20px"}],
                     ["blank", "25px"],
                     ["raw-html", () => { return !player.ta.unlockedReverseBreak ? "Wanna break infinity for antimatter? Check pet evolutions." : ""}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],

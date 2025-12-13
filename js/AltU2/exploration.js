@@ -95,21 +95,21 @@ addLayer("se", {
 
         player.se.starsExploreEffect = [
             [
-                player.se.starsExploreCount[0][0].pow(0.8).mul(0.2).add(1),
-                player.se.starsExploreCount[0][1].pow(0.04).mul(0.1).add(1),
-                player.id.infinityPower.pow(0.125).add(1).pow(player.se.starsExploreCount[0][2].pow(0.5)),
-                player.rf.rocketFuel.pow(0.125).add(1).pow(player.se.starsExploreCount[0][3].pow(0.4)),
-                player.gh.grasshoppers.pow(0.075).add(1).pow(player.se.starsExploreCount[0][4].pow(0.65)),
-                player.gh.steel.pow(0.07).add(1).pow(player.se.starsExploreCount[0][5].pow(0.6)),
+                player.se.starsExploreCount[0][0].min(100).pow(0.8).mul(0.2).add(1), // MULTIPLY STAR GAIN
+                player.se.starsExploreCount[0][1].min(100).pow(0.3).mul(0.05).add(1), // RAISE POINT GAIN
+                player.se.starsExploreCount[0][2].min(100).pow(0.3).mul(0.04).add(1), // RAISE INFINITY DIMENSIONS
+                player.se.starsExploreCount[0][3].min(100).pow(0.3).mul(0.08).add(1), // RAISE ROCKET FUEL
+                player.se.starsExploreCount[0][4].min(100).pow(0.3).mul(0.07).add(1), // RAISE GRASSHOPPERS
+                player.se.starsExploreCount[0][5].min(100).pow(0.3).mul(0.06).add(1), // RAISE STEEL
             ],
             [
-                player.s.singularityPoints.pow(0.08).add(1).pow(player.se.starsExploreCount[1][0].pow(0.3)),
-                player.ra.radiation.pow(0.2).add(1).pow(player.se.starsExploreCount[1][1].pow(0.35)),
-                player.s.singularityPoints.plus(1).log10().pow(0.5).add(1).pow(player.se.starsExploreCount[1][2].pow(0.3)),
+                player.se.starsExploreCount[1][0].min(100).pow(0.3).mul(0.04).add(1), // RAISE SINGULARITY POINTS
+                player.se.starsExploreCount[1][1].min(100).pow(0.3).mul(0.07).add(1), // RAISE RADIATION
+                player.s.singularityPoints.add(1).log(10).pow(0.5).add(1).pow(player.se.starsExploreCount[1][2].min(100).pow(0.3)), // CORE SCRAPS BASED ON SINGULARITY POINTS
             ],
             [
-                player.se.starsExploreCount[2][0].pow(0.6).mul(0.4).add(1),
-                player.se.starsExploreCount[2][1].pow(0.65).mul(0.6).add(1),
+                player.se.starsExploreCount[2][0].min(100).pow(0.6).mul(0.4).add(1), // MULTIPLY CHECK BACK XP
+                player.se.starsExploreCount[2][1].min(100).pow(0.65).mul(0.6).add(1), // DIVIDE CHECKBACK REQUIREMENT
             ]
         ]
     },
@@ -148,7 +148,7 @@ addLayer("se", {
         },
         11: {
             title() { return "A0" },
-            tooltip() { return "Visited " + formatWhole(player.se.starsExploreCount[0][0]) + " times.<br>Boosts star gain by x" + format(player.se.starsExploreEffect[0][0]) + "." },
+            tooltip() { return "Visited " + formatWhole(player.se.starsExploreCount[0][0].min(100)) + "/100 times.<br>Boosts star gain by x" + format(player.se.starsExploreEffect[0][0]) + "." },
             canClick() { 
                 return (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(1)) && !player.se.currentlyTravelling || (player.se.currentPosition[0].eq(1) && player.se.currentPosition[1].eq(0)) && !player.se.currentlyTravelling
             },
@@ -168,7 +168,7 @@ addLayer("se", {
         },
         12: {
             title() { return "A1" },
-            tooltip() { return "Visited " + formatWhole(player.se.starsExploreCount[0][1]) + " times.<br>Boosts point gain by ^" + format(player.se.starsExploreEffect[0][1]) + "." },
+            tooltip() { return "Visited " + formatWhole(player.se.starsExploreCount[0][1].min(100)) + "/100 times.<br>Boosts point gain by ^" + formatSimple(player.se.starsExploreEffect[0][1], 3) + "." },
             canClick() { 
                 return (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(0)) && !player.se.currentlyTravelling|| (player.se.currentStar[0].eq(0) && player.se.currentStar[1].eq(2)) && !player.se.currentlyTravelling || (player.se.currentPosition[0].eq(2) && player.se.currentPosition[1].eq(0)) && !player.se.currentlyTravelling
             },
@@ -189,7 +189,7 @@ addLayer("se", {
         },
         13: {
             title() { return "A2" },
-            tooltip() { return "Visited " + formatWhole(player.se.starsExploreCount[0][2]) + " times.<br>Boosts all infinity dimensions by x" + format(player.se.starsExploreEffect[0][2]) + ". (Affected by infinity power)" },
+            tooltip() { return "Visited " + formatWhole(player.se.starsExploreCount[0][2].min(100)) + "/100 times.<br>Boosts all infinity dimensions by ^" + format(player.se.starsExploreEffect[0][2], 3) + "." },
             canClick() { 
                 return (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(1)) && !player.se.currentlyTravelling || (player.se.currentPosition[0].eq(1) && player.se.currentPosition[1].eq(0)) && !player.se.currentlyTravelling|| (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(3)) && !player.se.currentlyTravelling|| (player.se.currentPosition[0].eq(2) && player.se.currentPosition[1].eq(0)) && !player.se.currentlyTravelling
             },
@@ -210,7 +210,7 @@ addLayer("se", {
         }, 
         14: {
             title() { return "A3" },
-            tooltip() { return "Visited " + formatWhole(player.se.starsExploreCount[0][3]) + " times.<br>Boosts rocket fuel by x" + format(player.se.starsExploreEffect[0][3]) + " (affected by rocket fuel)." },
+            tooltip() { return "Visited " + formatWhole(player.se.starsExploreCount[0][3].min(100)) + "/100 times.<br>Boosts rocket fuel by ^" + format(player.se.starsExploreEffect[0][3], 3) + "." },
             canClick() { 
                 return (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(2)) && !player.se.currentlyTravelling || (player.se.currentPosition[0].eq(1) && player.se.currentPosition[1].eq(1))  && !player.se.currentlyTravelling || (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(4)) && !player.se.currentlyTravelling
             },
@@ -231,9 +231,9 @@ addLayer("se", {
         }, 
         15: {
             title() { return "A4" },
-            tooltip() { return "Visited " + formatWhole(player.se.starsExploreCount[0][4]) + " times.<br>Boosts grasshoppers by x" + format(player.se.starsExploreEffect[0][4]) + " (affected by grasshopppers)." },
+            tooltip() { return "Visited " + formatWhole(player.se.starsExploreCount[0][4].min(100)) + "/100 times.<br>Boosts grasshoppers by ^" + format(player.se.starsExploreEffect[0][4], 3) + "." },
             canClick() { 
-                return (player.se.currentPosition[0].eq(2) && player.se.currentPosition[1].eq(0)) || (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(5)) && !player.se.currentlyTravelling || (player.se.currentPosition[0].eq(1) && player.se.currentPosition[1].eq(1)) || (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(3)) && !player.se.currentlyTravelling
+                return (player.se.currentPosition[0].eq(2) && player.se.currentPosition[1].eq(0)) && !player.se.currentlyTravelling || (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(5)) && !player.se.currentlyTravelling || (player.se.currentPosition[0].eq(1) && player.se.currentPosition[1].eq(1)) && !player.se.currentlyTravelling || (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(3)) && !player.se.currentlyTravelling
             },
             branches: ["31", "14", "22"],
             unlocked() { return ((player.se.currentPosition[0].eq(2) && player.se.currentPosition[1].eq(0)) || (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(5)) || (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(3)) && player.se.starsExploreCount[2][0].gte(1)) || player.se.starsExploreCount[0][4].gte(1) },
@@ -252,7 +252,7 @@ addLayer("se", {
         }, 
         16: {
             title() { return "A5" },
-            tooltip() { return "UNLOCKS IRIDITE.<br>Visited " + formatWhole(player.se.starsExploreCount[0][5]) + " times.<br>Boosts steel by x" + format(player.se.starsExploreEffect[0][5]) + " (affected by steel)." },
+            tooltip() { return "UNLOCKS IRIDITE.<br>Visited " + formatWhole(player.se.starsExploreCount[0][5].min(100)) + "/100 times.<br>Boosts steel by ^" + format(player.se.starsExploreEffect[0][5], 3) + "." },
             canClick() { 
                 return (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(4)) && !player.se.currentlyTravelling || (player.se.currentPosition[0].eq(1) && player.se.currentPosition[1].eq(2)) && !player.se.currentlyTravelling || (player.se.currentPosition[0].eq(2) && player.se.currentPosition[1].eq(1)) && !player.se.currentlyTravelling
             },
@@ -275,7 +275,7 @@ addLayer("se", {
         //B1 boosts singularity points
         21: {
             title() { return "B0" },
-            tooltip() { return "Visited " + formatWhole(player.se.starsExploreCount[1][0]) + " times.<br>Boosts all singularity by x" + format(player.se.starsExploreEffect[1][0]) + ". (Affected by singularity points)" },
+            tooltip() { return "Visited " + formatWhole(player.se.starsExploreCount[1][0].min(100)) + "/100 times.<br>Boosts singularity points by ^" + format(player.se.starsExploreEffect[1][0], 3) + "." },
             canClick() { 
                 return (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(2)) && !player.se.currentlyTravelling|| (player.se.currentStar[0].eq(1) && player.se.currentStar[1].eq(1)) && !player.se.currentlyTravelling|| (player.se.currentStar[0].eq(0) && player.se.currentStar[1].eq(0)) && !player.se.currentlyTravelling || (player.se.currentPosition[0].eq(1) && player.se.currentPosition[1].eq(1)) && !player.se.currentlyTravelling
             },
@@ -296,9 +296,9 @@ addLayer("se", {
         }, 
         22: {
             title() { return "B1" },
-            tooltip() { return "Visited " + formatWhole(player.se.starsExploreCount[1][1]) + " times.<br>Boosts all radiation by x" + format(player.se.starsExploreEffect[1][1]) + ". (Affected by radiation)" },
+            tooltip() { return "Visited " + formatWhole(player.se.starsExploreCount[1][1].min(100)) + "/100 times.<br>Boosts radiation by ^" + format(player.se.starsExploreEffect[1][1], 3) + "." },
             canClick() { 
-                return (player.se.currentPosition[0].eq(1) && player.se.currentPosition[1].eq(0)) && !player.se.currentlyTravelling|| (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(4))&& !player.se.currentlyTravelling || (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(3)) && !player.se.currentlyTravelling|| (player.se.currentPosition[0].eq(1) && player.se.currentPosition[1].eq(1)) && !player.se.currentlyTravelling || (player.se.currentPosition[0].eq(1) && player.se.currentPosition[1].eq(2)) && !player.se.currentlyTravelling
+                return (player.se.currentPosition[0].eq(1) && player.se.currentPosition[1].eq(0)) && !player.se.currentlyTravelling|| (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(4))&& !player.se.currentlyTravelling || (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(3)) && !player.se.currentlyTravelling || (player.se.currentPosition[0].eq(1) && player.se.currentPosition[1].eq(2)) && !player.se.currentlyTravelling
             },
             branches: ["21"],
             unlocked() { return (player.se.currentPosition[0].eq(1) && player.se.currentPosition[1].eq(0)) || player.se.starsExploreCount[1][1].gte(1) },
@@ -317,7 +317,7 @@ addLayer("se", {
         }, 
         23: {
             title() { return "B2" },
-            tooltip() { return "Visited " + formatWhole(player.se.starsExploreCount[1][2]) + " times.<br>Boosts all core scraps by x" + format(player.se.starsExploreEffect[1][2]) + ". (Affected by singularity points)" },
+            tooltip() { return "Visited " + formatWhole(player.se.starsExploreCount[1][2].min(100)) + "/100 times.<br>Boosts all core scraps by x" + format(player.se.starsExploreEffect[1][2]) + ". (Affected by singularity points)" },
             canClick() { 
                 return (player.se.currentPosition[0].eq(1) && player.se.currentPosition[1].eq(1)) && !player.se.currentlyTravelling || (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(5))&& !player.se.currentlyTravelling 
             },
@@ -340,12 +340,12 @@ addLayer("se", {
         //c
         31: {
             title() { return "C0" },
-            tooltip() { return "Visited " + formatWhole(player.se.starsExploreCount[2][0]) + " times.<br>Boosts check back xp by x" + format(player.se.starsExploreEffect[2][0]) + "." },
+            tooltip() { return "Visited " + formatWhole(player.se.starsExploreCount[2][0].min(100)) + "/100 times.<br>Boosts check back xp by x" + format(player.se.starsExploreEffect[2][0]) + "." },
             canClick() { 
                 return (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(2)) && !player.se.currentlyTravelling|| (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(4)) && !player.se.currentlyTravelling || (player.se.currentPosition[0].eq(2) && player.se.currentPosition[1].eq(1)) && !player.se.currentlyTravelling
             },
             branches: ["13", "12"],
-            unlocked() { return (player.se.currentPosition[0].eq(1) && player.se.currentPosition[1].eq(0)) || player.se.starsExploreCount[2][0].gte(1) },
+            unlocked() { return (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(2)) || player.se.starsExploreCount[2][0].gte(1) },
             onClick() {
                 player.se.currentStar = [new Decimal(2), new Decimal(0)]
 
@@ -361,7 +361,7 @@ addLayer("se", {
         }, 
         32: {
             title() { return "C1" },
-            tooltip() { return "Visited " + formatWhole(player.se.starsExploreCount[2][1]) + " times.<br>Divides check back level requirements by /" + format(player.se.starsExploreEffect[2][1]) + "." },
+            tooltip() { return "Visited " + formatWhole(player.se.starsExploreCount[2][1].min(100)) + "/100 times.<br>Divides check back level requirements by /" + format(player.se.starsExploreEffect[2][1]) + "." },
             canClick() { 
                 return (player.se.currentPosition[0].eq(2) && player.se.currentPosition[1].eq(0)) && !player.se.currentlyTravelling || (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(5))&& !player.se.currentlyTravelling 
             },

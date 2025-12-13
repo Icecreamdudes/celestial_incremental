@@ -85,8 +85,8 @@
         if (hasUpgrade("le", 12)) ranksGainPostS =  pointExponent.mul(player.dr.rankDiv).mul(2).pow(0.25).floor()
         let ranksGainPostS2 = pointExponent.mul(player.dr.rankDiv).div(10).pow(Decimal.div(1, 10)).floor()
         if (hasUpgrade("le", 12)) ranksGainPostS2 = pointExponent.mul(player.dr.rankDiv).mul(2).pow(Decimal.div(1, 10)).floor()
-        let ranksGainPostS3 = pointExponent.mul(player.dr.rankDiv).div(10).pow(Decimal.div(1, 100)).floor()
-        if (hasUpgrade("le", 12)) ranksGainPostS3 = pointExponent.mul(player.dr.rankDiv).mul(2).pow(Decimal.div(1, 100)).floor()
+        let ranksGainPostS3 = pointExponent.mul(player.dr.rankDiv).div(10).pow(Decimal.div(1, 50)).mul(1e25).floor()
+        if (hasUpgrade("le", 12)) ranksGainPostS3 = pointExponent.mul(player.dr.rankDiv).mul(2).pow(Decimal.div(1, 50)).mul(1e25).floor()
 
         if (!hasUpgrade("sma", 11)) player.dr.rankEffect = player.dr.rank.mul(0.3).add(1).pow(1.055)
         if (hasUpgrade("sma", 11)) player.dr.rankEffect = player.dr.rank.mul(0.5).add(1).pow(1.08)
@@ -106,7 +106,7 @@
         if (player.du.points.gte(player.dr.rankReq) && player.dr.rank.add(player.dr.ranksToGet).gt(100) && hasUpgrade("le", 14)) {
             player.dr.ranksToGet = ranksGainPostS2.sub(player.dr.rank).add(95)
         }
-        if (player.du.points.gte(player.dr.rankReq) && player.dr.rank.add(player.dr.ranksToGet).gt(1e50) && hasUpgrade("le", 14)) {
+        if (player.du.points.gte(player.dr.rankReq) && player.dr.rank.add(player.dr.ranksToGet).gt(1e30) && hasUpgrade("le", 14)) {
             player.dr.ranksToGet = ranksGainPostS3.sub(player.dr.rank)
         }
         if (player.du.points.lt(player.dr.rankReq) || player.dr.ranksToGet.lt(0)) {
@@ -236,7 +236,7 @@
                     return "<h2>Reset dark celestial points, but rank up.</h2><br><h3>Req: " + format(player.dr.rankReq) + " Points</h3>"
                 } else if (player.dr.rank.lte(100)) {
                     return "<h2>Reset dark celestial points, but rank up.</h2><br><h3>Req: " + format(player.dr.rankReq) + " Points<br><small style='color:red'>[SOFTCAPPED]</small></h3>"
-                } else if (player.dr.rank.lte(1e50)) {
+                } else if (player.dr.rank.lte(1e30)) {
                     return "<h2>Reset dark celestial points, but rank up.</h2><br><h3>Req: " + format(player.dr.rankReq) + " Points<br><small style='color:red'>[SOFTCAPPED<sup>2</sup>]</small></h3>"
                 } else {
                     return "<h2>Reset dark celestial points, but rank up.</h2><br><h3>Req: " + format(player.dr.rankReq) + " Points<br><small style='color:red'>[SOFTCAPPED<sup>3</sup>]</small></h3>"
@@ -309,12 +309,12 @@
         } else if (player.dr.rank.gt(20) && player.dr.rank.lte(100)) {
             if (!hasUpgrade("le", 12)) return (player.dr.rank.sub(17)).pow(4).mul(10).div(player.dr.rankDiv)
             if (hasUpgrade("le", 12)) return (player.dr.rank.sub(17)).pow(4).div(2).div(player.dr.rankDiv)
-        } else if (player.dr.rank.gt(100) && player.dr.rank.lt(1e50)) {
+        } else if (player.dr.rank.gt(100) && player.dr.rank.lt(1e30)) {
             if (!hasUpgrade("le", 12)) return (player.dr.rank.sub(94)).pow(10).mul(10).div(player.dr.rankDiv)
             if (hasUpgrade("le", 12)) return (player.dr.rank.sub(94)).pow(10).div(2).div(player.dr.rankDiv)
-        } else if (player.dr.rank.gte(1e50)) {
-            if (!hasUpgrade("le", 12)) return (player.dr.rank).pow(100).mul(10).div(player.dr.rankDiv)
-            if (hasUpgrade("le", 12)) return (player.dr.rank).pow(100).div(2).div(player.dr.rankDiv)
+        } else if (player.dr.rank.gte(1e30)) {
+            if (!hasUpgrade("le", 12)) return (player.dr.rank.div(1e25)).pow(50).mul(10).div(player.dr.rankDiv)
+            if (hasUpgrade("le", 12)) return (player.dr.rank.div(1e25)).pow(50).div(2).div(player.dr.rankDiv)
         }
     },
     getTierReq() {

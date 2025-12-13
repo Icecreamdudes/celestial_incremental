@@ -33,7 +33,7 @@ addNode("tma", {
 })
 addLayer("tad", {
     name: "Tav's Domain", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "<h2>→", // This appears on the layer's node. Default is the id with the first letter capitalized
+    symbol: "TD", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "U2",
     innerNodes: [["tac", "tco"], ["tma"]],
     row: 1,
@@ -51,7 +51,7 @@ addLayer("tad", {
         // ACCUMULATION - ACCUMULATORS
         accumulationCost: new Decimal(1),
         accumulationScale: new Decimal(1.1),
-        accumulationMult: new Decimal(1),
+        accumulationMult: new Decimal(0.04),
         accumulationMax: false,
 
         // COMPRESSION - COMPRESSORS
@@ -168,34 +168,23 @@ addLayer("tad", {
     },
     tooltip: "Tav's Domain",
     color: "#5b629a",
-    branches: ["ta"],
+    branches: ["ta", "ip", "om"],
     update(delta) {
         let onepersec = new Decimal(1)
 
         // MATTER MODIFIERS
-        player.tad.matterBase = buyableEffect("tad", 11)[0]
-        player.tad.matterBase = player.tad.matterBase.add(buyableEffect("tad", 12)[0])
-        player.tad.matterBase = player.tad.matterBase.add(buyableEffect("tad", 21))
-        player.tad.matterBase = player.tad.matterBase.add(buyableEffect("tad", 22))
-        player.tad.matterBase = player.tad.matterBase.add(buyableEffect("tad", 13)[0])
-        player.tad.matterBase = player.tad.matterBase.add(buyableEffect("tad", 23))
-        player.tad.matterBase = player.tad.matterBase.add(buyableEffect("tad", 31))
-        player.tad.matterBase = player.tad.matterBase.add(buyableEffect("tad", 32))
-        player.tad.matterBase = player.tad.matterBase.add(buyableEffect("tad", 33))
-        player.tad.matterBase = player.tad.matterBase.add(buyableEffect("tad", 14)[0])
-        player.tad.matterBase = player.tad.matterBase.add(buyableEffect("tad", 24))
-        player.tad.matterBase = player.tad.matterBase.add(buyableEffect("tad", 34))
-        player.tad.matterBase = player.tad.matterBase.add(buyableEffect("tad", 41))
-        player.tad.matterBase = player.tad.matterBase.add(buyableEffect("tad", 42))
-        player.tad.matterBase = player.tad.matterBase.add(buyableEffect("tad", 43))
-        player.tad.matterBase = player.tad.matterBase.add(buyableEffect("tad", 44))
+        player.tad.matterBase = new Decimal(0)
+        for (let i = 11; i < 45; ) {
+            player.tad.matterBase = player.tad.matterBase.add(buyableEffect("tad", i))
+            if (i % 10 == 4) {i = i+7} else {i++}
+        }
 
         player.tad.matterGain = player.tad.matterBase
         if (hasUpgrade("tad", 111)) player.tad.matterGain = player.tad.matterGain.mul(2)
-        if (hasUpgrade("tad", 113)) player.tad.matterGain = player.tad.matterGain.mul(buyableEffect("tad", 11)[1])
-        if (hasUpgrade("tad", 123)) player.tad.matterGain = player.tad.matterGain.mul(buyableEffect("tad", 12)[1])
-        if (hasUpgrade("tad", 133)) player.tad.matterGain = player.tad.matterGain.mul(buyableEffect("tad", 13)[1])
-        if (hasUpgrade("tad", 143)) player.tad.matterGain = player.tad.matterGain.mul(buyableEffect("tad", 14)[1])
+        if (hasUpgrade("tad", 113)) player.tad.matterGain = player.tad.matterGain.mul(getBuyableAmount("tad", 11).mul(player.tad.accumulationMult).add(1))
+        if (hasUpgrade("tad", 123)) player.tad.matterGain = player.tad.matterGain.mul(getBuyableAmount("tad", 12).mul(player.tad.accumulationMult).add(1))
+        if (hasUpgrade("tad", 133)) player.tad.matterGain = player.tad.matterGain.mul(getBuyableAmount("tad", 13).mul(player.tad.accumulationMult).add(1))
+        if (hasUpgrade("tad", 143)) player.tad.matterGain = player.tad.matterGain.mul(getBuyableAmount("tad", 14).mul(player.tad.accumulationMult).add(1))
         if (hasUpgrade("tad", 121)) player.tad.matterGain = player.tad.matterGain.mul(player.tad.infinitumEffect)
         player.tad.matterGain = player.tad.matterGain.mul(buyableEffect("tad", 101))
         if (hasUpgrade("tad", 133)) player.tad.matterGain = player.tad.matterGain.mul(1.5) // TEMP UNTIL ACHIEVEMENTS
@@ -226,7 +215,7 @@ addLayer("tad", {
         player.tad.accumulationScale = player.tad.accumulationScale.add(1)
 
         // ACCUMULATION 2ND EFFECT MULT
-        player.tad.accumulationMult = new Decimal(1)
+        player.tad.accumulationMult = new Decimal(0.04)
         if (player.tad.altInfinities.corrupted.milestone.gte(1)) player.tad.accumulationMult = player.tad.accumulationMult.mul(player.tad.altInfinities.corrupted.effect1)
         if (hasMilestone("tad", 3)) player.tad.accumulationMult = player.tad.accumulationMult.mul(player.tad.magnification.max(3).sub(3).div(10).add(1).pow(2))
 
@@ -1304,10 +1293,7 @@ addLayer("tad", {
             currency() { return player.tad.matter},
             pay(amt) { player.tad.matter = this.currency().sub(amt) },
             effect(x) {
-                return [
-                    getBuyableAmount(this.layer, this.id).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id).min(50))),
-                    getBuyableAmount(this.layer, this.id).div(25).mul(player.tad.accumulationMult).add(1)
-                ]
+                return getBuyableAmount(this.layer, this.id).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id).min(50)))
             },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -1316,13 +1302,13 @@ addLayer("tad", {
                 if (hasUpgrade("tad", 113)) {
                     return "<h3>Accumulator [1:1]\n\
                         (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(tmp[this.layer].buyables[this.id].purchaseLimit) + ")</h3>\n\
-                        Increases base matter gain by +" + formatSimple(tmp[this.layer].buyables[this.id].effect[0], 1) + ".\n\
-                        Multiplies matter gain by x" + formatSimple(tmp[this.layer].buyables[this.id].effect[1], 2) + ".\n\
+                        Increases base matter gain by +" + formatSimple(tmp[this.layer].buyables[this.id].effect, 1) + ".\n\
+                        Multiplies matter gain by x" + formatSimple(getBuyableAmount(this.layer, this.id).mul(player.tad.accumulationMult).add(1), 2) + ".\n\
                         Cost: " + formatSimple(tmp[this.layer].buyables[this.id].cost, 1) + " Matter"
                 }
                 return "<h3>Accumulator [1:1]\n\
                     (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(tmp[this.layer].buyables[this.id].purchaseLimit) + ")</h3>\n\
-                    Increases base matter gain by +" + formatSimple(tmp[this.layer].buyables[this.id].effect[0], 1) + ".\n\
+                    Increases base matter gain by +" + formatSimple(tmp[this.layer].buyables[this.id].effect, 1) + ".\n\
                     Cost: " + formatSimple(tmp[this.layer].buyables[this.id].cost, 1) + " Matter"
             },
             buy() {
@@ -1353,10 +1339,7 @@ addLayer("tad", {
             currency() { return player.tad.matter},
             pay(amt) { player.tad.matter = this.currency().sub(amt) },
             effect(x) {
-                return [
-                    getBuyableAmount(this.layer, this.id).mul(4).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id).min(50))),
-                    getBuyableAmount(this.layer, this.id).div(25).mul(player.tad.accumulationMult).add(1)
-                ]
+                return getBuyableAmount(this.layer, this.id).mul(4).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id).min(50)))
             },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -1365,13 +1348,13 @@ addLayer("tad", {
                 if (hasUpgrade("tad", 123)) {
                     return "<h3>Accumulator [1:2]\n\
                         (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(tmp[this.layer].buyables[this.id].purchaseLimit) + ")</h3>\n\
-                        Increases base matter gain by +" + formatSimple(tmp[this.layer].buyables[this.id].effect[0], 1) + ".\n\
-                        Multiplies matter gain by x" + formatSimple(tmp[this.layer].buyables[this.id].effect[1], 2) + ".\n\
+                        Increases base matter gain by +" + formatSimple(tmp[this.layer].buyables[this.id].effect, 1) + ".\n\
+                        Multiplies matter gain by x" + formatSimple(getBuyableAmount(this.layer, this.id).mul(player.tad.accumulationMult).add(1), 2) + ".\n\
                         Cost: " + formatSimple(tmp[this.layer].buyables[this.id].cost, 1) + " Matter"
                 }
                 return "<h3>Accumulator [1:2]\n\
                     (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(tmp[this.layer].buyables[this.id].purchaseLimit) + ")</h3>\n\
-                    Increases base matter gain by +" + formatSimple(tmp[this.layer].buyables[this.id].effect[0], 1) + ".\n\
+                    Increases base matter gain by +" + formatSimple(tmp[this.layer].buyables[this.id].effect, 1) + ".\n\
                     Cost: " + formatSimple(tmp[this.layer].buyables[this.id].cost, 1) + " Matter"
             },
             buy() {
@@ -1402,10 +1385,7 @@ addLayer("tad", {
             currency() { return player.tad.matter},
             pay(amt) { player.tad.matter = this.currency().sub(amt) },
             effect(x) {
-                return [
-                    getBuyableAmount(this.layer, this.id).mul(400).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id).min(50))),
-                    getBuyableAmount(this.layer, this.id).div(25).mul(player.tad.accumulationMult).add(1)
-                ]
+                return getBuyableAmount(this.layer, this.id).mul(400).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id).min(50)))
             },
             unlocked() {return hasUpgrade("tad", 122)},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -1414,13 +1394,13 @@ addLayer("tad", {
                 if (hasUpgrade("tad", 133)) {
                     return "<h3>Accumulator [1:3]\n\
                         (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(tmp[this.layer].buyables[this.id].purchaseLimit) + ")</h3>\n\
-                        Increases base matter gain by +" + formatSimple(tmp[this.layer].buyables[this.id].effect[0], 1) + ".\n\
-                        Multiplies matter gain by x" + formatSimple(tmp[this.layer].buyables[this.id].effect[1], 2) + ".\n\
+                        Increases base matter gain by +" + formatSimple(tmp[this.layer].buyables[this.id].effect, 1) + ".\n\
+                        Multiplies matter gain by x" + formatSimple(getBuyableAmount(this.layer, this.id).mul(player.tad.accumulationMult).add(1), 2) + ".\n\
                         Cost: " + formatSimple(tmp[this.layer].buyables[this.id].cost, 1) + " Matter"
                 }
                 return "<h3>Accumulator [1:3]\n\
                     (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(tmp[this.layer].buyables[this.id].purchaseLimit) + ")</h3>\n\
-                    Increases base matter gain by +" + formatSimple(tmp[this.layer].buyables[this.id].effect[0], 1) + ".\n\
+                    Increases base matter gain by +" + formatSimple(tmp[this.layer].buyables[this.id].effect, 1) + ".\n\
                     Cost: " + formatSimple(tmp[this.layer].buyables[this.id].cost, 1) + " Matter"
             },
             buy() {
@@ -1451,10 +1431,7 @@ addLayer("tad", {
             currency() { return player.tad.matter},
             pay(amt) { player.tad.matter = this.currency().sub(amt) },
             effect(x) {
-                return [
-                    getBuyableAmount(this.layer, this.id).mul(1.6e6).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id).min(50))),
-                    getBuyableAmount(this.layer, this.id).div(25).mul(player.tad.accumulationMult).add(1)
-                ]
+                return getBuyableAmount(this.layer, this.id).mul(1.6e6).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id).min(50)))
             },
             unlocked() {return hasUpgrade("tad", 141)},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -1463,13 +1440,13 @@ addLayer("tad", {
                 if (hasUpgrade("tad", 143)) {
                     return "<h3>Accumulator [1:4]\n\
                         (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(tmp[this.layer].buyables[this.id].purchaseLimit) + ")</h3>\n\
-                        Increases base matter gain by +" + formatSimple(tmp[this.layer].buyables[this.id].effect[0], 1) + ".\n\
-                        Multiplies matter gain by x" + formatSimple(tmp[this.layer].buyables[this.id].effect[1], 2) + ".\n\
+                        Increases base matter gain by +" + formatSimple(tmp[this.layer].buyables[this.id].effect, 1) + ".\n\
+                        Multiplies matter gain by x" + formatSimple(getBuyableAmount(this.layer, this.id).mul(player.tad.accumulationMult).add(1), 2) + ".\n\
                         Cost: " + formatSimple(tmp[this.layer].buyables[this.id].cost, 1) + " Matter"
                 }
                 return "<h3>Accumulator [1:4]\n\
                     (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(tmp[this.layer].buyables[this.id].purchaseLimit) + ")</h3>\n\
-                    Increases base matter gain by +" + formatSimple(tmp[this.layer].buyables[this.id].effect[0], 1) + ".\n\
+                    Increases base matter gain by +" + formatSimple(tmp[this.layer].buyables[this.id].effect, 1) + ".\n\
                     Cost: " + formatSimple(tmp[this.layer].buyables[this.id].cost, 1) + " Matter"
             },
             buy() {

@@ -41,7 +41,12 @@
         player.pr.perkPointsToGet = player.pr.perkPointsToGet.mul(player.oi.linkingPowerEffect[1])
         if (hasUpgrade("fu", 11)) player.pr.perkPointsToGet = player.pr.perkPointsToGet.mul(upgradeEffect("fu", 11))
         player.pr.perkPointsToGet = player.pr.perkPointsToGet.mul(buyableEffect("fu", 37))
-        if (inChallenge("fu", 11)) player.pr.perkPointsToGet = player.pr.perkPointsToGet.pow(0.2)
+
+        // POWER MODIFIERS
+        player.pr.perkPointsToGet = player.pr.perkPointsToGet.pow(buyableEffect("fu", 82))
+
+        // KEEP AT LAST
+        if (inChallenge("fu", 11) || inChallenge("fu", 12)) player.pr.perkPointsToGet = player.pr.perkPointsToGet.pow(Decimal.mul(0.2, buyableEffect("fu", 88)))
 
         player.pr.perkPointsChance = new Decimal(0.03)
         player.pr.perkPointsChance = player.pr.perkPointsChance.add(buyableEffect("pr", 18))

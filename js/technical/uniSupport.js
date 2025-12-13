@@ -228,6 +228,7 @@ addUniverse("CH", {
 
 addUniverse("UB", {
     name() {
+        if (player.bee.path == 0 && player.bee.extremePath) return "Universe β<br>Hive [Extreme Path]"
         if (player.bee.path == 1) return "Universe β<br>Hive [Pollen Path]"
         if (player.bee.path == 2) return "Universe β<br>Hive [Nectar Path]"
         return "Universe β<br>Hive"

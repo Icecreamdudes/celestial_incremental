@@ -104,6 +104,11 @@
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(levelableEffect("ir", 3)[0])
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(buyableEffect("sb", 105))
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(buyableEffect("cof", 21))
+        if (hasUpgrade("bi", 118)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(upgradeEffect("bi", 118))
+
+        // ABNORMAL MODIFIERS
+        if (player.po.halter.antimatter.enabled == 1) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.div(player.po.halter.antimatter.halt)
+        if (player.po.halter.antimatter.enabled == 2 && player.ad.antimatterPerSecond.gt(player.po.halter.antimatter.halt)) player.ad.antimatterPerSecond = player.po.halter.antimatter.halt
 
         // ANTIMATTER PER SECOND
         player.ad.antimatter = player.ad.antimatter.add(player.ad.antimatterPerSecond.mul(delta))

@@ -25,6 +25,7 @@ addLayer("hpw", {
         player.hpw.powerGain = player.hpw.powerGain.mul(levelableEffect("pu", 203)[2])
         player.hpw.powerGain = player.hpw.powerGain.mul(levelableEffect("pet", 1106)[1])
         if (hasUpgrade("fi", 24)) player.hpw.powerGain = player.hpw.powerGain.mul(upgradeEffect("fi", 24))
+        player.hpw.powerGain = player.hpw.powerGain.mul(buyableEffect("al", 206))
 
         player.hpw.powerGain = player.hpw.powerGain.floor() // To keep power to whole numbers
 
@@ -880,9 +881,15 @@ addLayer("hpw", {
             currencyDisplayName: "Power",
             currencyInternalName: "power",
             effect() {
-                return Decimal.pow(1.06, player.hpw.power.add(1).log(6)).pow(buyableEffect("hrm", 5))
+                let eff = Decimal.pow(1.06, player.hpw.power.add(1).log(6))
+                if (eff.gte(5)) eff = player.hpw.power.add(1).log(6).div(5.5)
+                eff = eff.pow(buyableEffect("hrm", 5))
+                return eff
             },
-            effectDisplay() { return "^" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            effectDisplay() {
+                if (Decimal.pow(1.06, player.hpw.power.add(1).log(6)).gte(5)) return "^" + format(upgradeEffect(this.layer, this.id)) + "<small style='color:darkred'>[SOFTCAPPED]</small>"
+                return "^" + format(upgradeEffect(this.layer, this.id))
+            }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #00f"},
         },
         1061: {

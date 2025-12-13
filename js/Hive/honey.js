@@ -1,3 +1,8 @@
+const CELL_MILESTONES = [
+    [new Decimal(1), new Decimal(125), new Decimal(3375), new Decimal(125000), new Decimal(1e6), new Decimal(8e6), new Decimal(1e9), new Decimal(1.5625e10), new Decimal(1e90), new Decimal(1e225)],
+    [new Decimal(1), new Decimal(125), new Decimal(3375), new Decimal(125000), new Decimal(1e6), new Decimal(8e6), new Decimal(1e9), new Decimal(1.5625e10), new Decimal(1e90), new Decimal(1e225)],
+    [new Decimal(1), new Decimal(5), new Decimal(15), new Decimal(50), new Decimal(100), new Decimal(200), new Decimal(1000), new Decimal(2500), new Decimal(1e30), new Decimal(1e75)],
+]
 addLayer("ho", {
     name: "Honey", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "HO", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -58,6 +63,7 @@ addLayer("ho", {
         let onepersec = new Decimal(1)
 
         player.ho.cellGain = player.ne.delta.amount.div(100).pow(0.5)
+        if (player.bee.path != 2) player.ho.cellGain = player.ne.delta.amount.div(1e16).pow(0.3)
         player.ho.cellGain = player.ho.cellGain.mul(buyableEffect("bee", 61))
         player.ho.cellGain = player.ho.cellGain.mul(player.fl.glossaryEffects.honey)
         if (hasUpgrade("ho", 4)) player.ho.cellGain = player.ho.cellGain.mul(upgradeEffect("ho", 4))
@@ -76,25 +82,30 @@ addLayer("ho", {
         base = base.mul(buyableEffect("bee", 63))
         if (hasUpgrade("al", 207)) base = base.mul(1.1)
 
-        if (player.ho.cell.gte(1)) player.ho.effects.bee.xp = player.ho.effects.bee.xp.add(player.ho.honey.mul(delta))
+        if (player.ho.cell.gte(CELL_MILESTONES[player.bee.path][0])) player.ho.effects.bee.xp = player.ho.effects.bee.xp.add(player.ho.honey.mul(delta))
         player.ho.effects.bee.req = Decimal.pow(3, player.ho.effects.bee.level).mul(10)
+        if (player.bee.path != 2) player.ho.effects.bee.req = Decimal.pow(5, player.ho.effects.bee.level).mul(100)
         player.ho.effects.bee.effect = Decimal.pow(Decimal.mul(0.3, base).add(1), player.ho.effects.bee.level)
 
-        if (player.ho.cell.gte(5)) player.ho.effects.flower.xp = player.ho.effects.flower.xp.add(player.ho.honey.mul(delta))
+        if (player.ho.cell.gte(CELL_MILESTONES[player.bee.path][1])) player.ho.effects.flower.xp = player.ho.effects.flower.xp.add(player.ho.honey.mul(delta))
         player.ho.effects.flower.req = Decimal.pow(4, player.ho.effects.flower.level).mul(1000)
+        if (player.bee.path != 2) player.ho.effects.flower.req = Decimal.pow(8, player.ho.effects.flower.level).mul(10000)
         player.ho.effects.flower.effect = player.ho.effects.flower.level.mul(Decimal.mul(0.1, base)).div(2)
-        player.ho.effects.flower.effect2 = player.ho.effects.flower.level.mul(Decimal.mul(0.1, base)).add(1)
+        player.ho.effects.flower.effect2 = player.ho.effects.flower.level.mul(Decimal.mul(0.1, base)).div(2).add(1)
 
-        if (player.ho.cell.gte(50)) player.ho.effects.alpha.xp = player.ho.effects.alpha.xp.add(player.ho.honey.mul(delta))
+        if (player.ho.cell.gte(CELL_MILESTONES[player.bee.path][3])) player.ho.effects.alpha.xp = player.ho.effects.alpha.xp.add(player.ho.honey.mul(delta))
         player.ho.effects.alpha.req = Decimal.pow(5, player.ho.effects.alpha.level).mul(10000)
+        if (player.bee.path != 2) player.ho.effects.alpha.req = Decimal.pow(12, player.ho.effects.alpha.level).mul(1e7)
         player.ho.effects.alpha.effect = Decimal.pow(Decimal.mul(0.25, base).add(1), player.ho.effects.alpha.level)
 
-        if (player.ho.cell.gte(200)) player.ho.effects.nectar.xp = player.ho.effects.nectar.xp.add(player.ho.honey.mul(delta))
+        if (player.ho.cell.gte(CELL_MILESTONES[player.bee.path][5])) player.ho.effects.nectar.xp = player.ho.effects.nectar.xp.add(player.ho.honey.mul(delta))
         player.ho.effects.nectar.req = Decimal.pow(6, player.ho.effects.nectar.level).mul(100000)
+        if (player.bee.path != 2) player.ho.effects.nectar.req = Decimal.pow(15, player.ho.effects.nectar.level).mul(1e9)
         player.ho.effects.nectar.effect = Decimal.pow(Decimal.mul(0.1, base).add(1), player.ho.effects.nectar.level)
 
-        if (player.ho.cell.gte(1e30) && hasUpgrade("al", 214)) player.ho.effects.pollen.xp = player.ho.effects.pollen.xp.add(player.ho.honey.mul(delta))
+        if (hasUpgrade("al", 214) && player.ho.cell.gte(CELL_MILESTONES[player.bee.path][8])) player.ho.effects.pollen.xp = player.ho.effects.pollen.xp.add(player.ho.honey.mul(delta))
         player.ho.effects.pollen.req = Decimal.pow(10, player.ho.effects.pollen.level).mul(1e35)
+        if (player.bee.path != 2) player.ho.effects.pollen.req = Decimal.pow(32, player.ho.effects.pollen.level).mul(1e100)
         player.ho.effects.pollen.effect = Decimal.pow(Decimal.mul(0.1, base).add(1), player.ho.effects.pollen.level)
         
         for (let i in player.ho.effects) {
@@ -107,8 +118,11 @@ addLayer("ho", {
     },
     clickables: {
         1: {
-            title() { return "Gain honey-cells, but reset previous content<br><small>Req: 100 Nectar δ</small>"},
-            canClick() { return player.ne.delta.amount.gte(100)},
+            title() {
+                if (player.bee.path != 2) return "Gain honey-cells, but reset previous content<br><small>Req: 1e16 Nectar δ</small>"
+                return "Gain honey-cells, but reset previous content<br><small>Req: 100 Nectar δ</small>"
+            },
+            canClick() { return (player.bee.path == 2 && player.ne.delta.amount.gte(100)) || (player.bee.path != 2 && player.ne.delta.amount.gte(1e16))},
             unlocked: true,
             onClick() {
                 player.ho.cell = player.ho.cell.add(player.ho.cellGain)
@@ -133,7 +147,7 @@ addLayer("ho", {
     },
     bars: {
         effect1: {
-            unlocked() {return player.ho.cell.gte(1)},
+            unlocked() {return player.ho.cell.gte(CELL_MILESTONES[player.bee.path][0])},
             direction: RIGHT,
             width: 500,
             height: 50,
@@ -149,7 +163,7 @@ addLayer("ho", {
             },
         },
         effect2: {
-            unlocked() {return player.ho.cell.gte(5)},
+            unlocked() {return player.ho.cell.gte(CELL_MILESTONES[player.bee.path][1])},
             direction: RIGHT,
             width: 500,
             height: 50,
@@ -173,7 +187,7 @@ addLayer("ho", {
             },
         },
         effect3: {
-            unlocked() {return player.ho.cell.gte(50)},
+            unlocked() {return player.ho.cell.gte(CELL_MILESTONES[player.bee.path][3])},
             direction: RIGHT,
             width: 500,
             height: 50,
@@ -189,7 +203,7 @@ addLayer("ho", {
             },
         },
         effect4: {
-            unlocked() {return player.ho.cell.gte(200)},
+            unlocked() {return player.ho.cell.gte(CELL_MILESTONES[player.bee.path][5])},
             direction: RIGHT,
             width: 500,
             height: 50,
@@ -205,7 +219,7 @@ addLayer("ho", {
             },
         },
         effect5: {
-            unlocked() {return player.ho.cell.gte(1e30) && hasUpgrade("al", 214)},
+            unlocked() {return player.ho.cell.gte(CELL_MILESTONES[player.bee.path][8]) && hasUpgrade("al", 214)},
             direction: RIGHT,
             width: 500,
             height: 50,
@@ -229,15 +243,9 @@ addLayer("ho", {
                 let base = 0.125
                 if (hasUpgrade("al", 214)) base = 1/9
                 if (player.ho.cell.lte(0)) return new Decimal(0)
-                if (player.ho.cell.lt(1)) return player.ho.cell.mul(base)
-                if (player.ho.cell.lt(5)) return player.ho.cell.sub(1).div(4).mul(base).add(base)
-                if (player.ho.cell.lt(15)) return player.ho.cell.sub(5).div(10).mul(base).add(base*2)
-                if (player.ho.cell.lt(50)) return player.ho.cell.sub(15).div(35).mul(base).add(base*3)
-                if (player.ho.cell.lt(100)) return player.ho.cell.sub(50).div(50).mul(base).add(base*4)
-                if (player.ho.cell.lt(200)) return player.ho.cell.sub(100).div(100).mul(base).add(base*5)
-                if (player.ho.cell.lt(1000)) return player.ho.cell.sub(200).div(800).mul(base).add(base*6)
-                if (player.ho.cell.lt(2500)) return player.ho.cell.sub(1000).div(1500).mul(base).add(base*7)
-                if (player.ho.cell.lt(1e30)) return player.ho.cell.sub(2500).div(1e30-2500).mul(base).add(base*8)
+                for (let i = 1; i < 10; i++) {
+                    if (player.ho.cell.lt(CELL_MILESTONES[player.bee.path][i])) return player.ho.cell.sub(CELL_MILESTONES[player.bee.path][i-1]).div(CELL_MILESTONES[player.bee.path][i].sub(CELL_MILESTONES[player.bee.path][i-1])).mul(base).add(base*i)
+                }
                 return new Decimal(1)
             },
             baseStyle: {background: "linear-gradient(0deg, #281c00, #3c2a00)"},
@@ -246,16 +254,16 @@ addLayer("ho", {
             textStyle: {fontSize: "11px", userSelect: "none"},
             display() {
                 let str = "<div style='width:250px;height:465px;display:flex;flex-direction:column'>"
-                if (false) str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>?? Cells<hr style='width:200px;margin-bottom:3px'>Unlock Bee Bread Cell</div>")
-                if (hasUpgrade("al", 214)) str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>1e30 Cells<hr style='width:200px;margin-bottom:3px'>Unlock Pollen Cell</div>")
-                str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>2,500 Cells<hr style='width:200px;margin-bottom:3px'>Unlock Honey Upgrades</div>")
-                str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>1,000 Cells<hr style='width:200px;margin-bottom:3px'>Unlock a new honey research</div>")
-                str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>200 Cells<hr style='width:200px;margin-bottom:3px'>Unlock Nectar Cell</div>")
-                str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>100 Cells<hr style='width:200px;margin-bottom:3px'>Half time between Yellow Flower Growth</div>")
-                str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>50 Cells<hr style='width:200px;margin-bottom:3px'>Unlock Alpha Cell</div>")
-                str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>15 Cells<hr style='width:200px;margin-bottom:3px'>Unlock Yellow Flowers</div>")
-                str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>5 Cells<hr style='width:200px;margin-bottom:3px'>Unlock Flower Cell</div>")
-                str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid transparent'>1 Cell<hr style='width:200px;margin-bottom:3px'>Unlock Bee Cell</div>")
+                if (false) str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>" + formatWhole(CELL_MILESTONES[player.bee.path][9]) + " Cells<hr style='width:200px;margin-bottom:3px'>Unlock Bee Bread Cell</div>")
+                if (hasUpgrade("al", 214)) str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>" + formatWhole(CELL_MILESTONES[player.bee.path][8]) + " Cells<hr style='width:200px;margin-bottom:3px'>Unlock Pollen Cell</div>")
+                str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>" + formatWhole(CELL_MILESTONES[player.bee.path][7]) + " Cells<hr style='width:200px;margin-bottom:3px'>Unlock Honey Upgrades</div>")
+                str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>" + formatWhole(CELL_MILESTONES[player.bee.path][6]) + " Cells<hr style='width:200px;margin-bottom:3px'>Unlock a new honey research</div>")
+                str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>" + formatWhole(CELL_MILESTONES[player.bee.path][5]) + " Cells<hr style='width:200px;margin-bottom:3px'>Unlock Nectar Cell</div>")
+                str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>" + formatWhole(CELL_MILESTONES[player.bee.path][4]) + " Cells<hr style='width:200px;margin-bottom:3px'>Half time between Yellow Flower Growth</div>")
+                str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>" + formatWhole(CELL_MILESTONES[player.bee.path][3]) + " Cells<hr style='width:200px;margin-bottom:3px'>Unlock Alpha Cell</div>")
+                str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>" + formatWhole(CELL_MILESTONES[player.bee.path][2]) + " Cells<hr style='width:200px;margin-bottom:3px'>Unlock Yellow Flowers</div>")
+                str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>" + formatWhole(CELL_MILESTONES[player.bee.path][1]) + " Cells<hr style='width:200px;margin-bottom:3px'>Unlock Flower Cell</div>")
+                str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid transparent'>" + formatWhole(CELL_MILESTONES[player.bee.path][0]) + " Cell<hr style='width:200px;margin-bottom:3px'>Unlock Bee Cell</div>")
                 return str
             },
         },
@@ -265,7 +273,10 @@ addLayer("ho", {
             title: "Honey 1",
             unlocked() {return player.ho.cell.gte(2500)},
             description: "Double honey gain per honey upgrade.",
-            cost: new Decimal(1e6),
+            cost() {
+                if (player.bee.path != 2) return new Decimal(1e18)
+                return new Decimal(1e6)
+            },
             currencyLocation() { return player.ho },
             currencyDisplayName: "Honey",
             currencyInternalName: "honey",
@@ -279,7 +290,10 @@ addLayer("ho", {
             title: "Honey 2",
             unlocked() {return player.ho.cell.gte(2500)},
             description: "Total cell level boosts nectar.",
-            cost: new Decimal(3e6),
+            cost() {
+                if (player.bee.path != 2) return new Decimal(2.7e19)
+                return new Decimal(3e6)
+            },
             currencyLocation() { return player.ho },
             currencyDisplayName: "Honey",
             currencyInternalName: "honey",
@@ -297,7 +311,10 @@ addLayer("ho", {
             title: "Honey 3",
             unlocked() {return player.ho.cell.gte(2500)},
             description: "Nectar β boosts picking power.",
-            cost: new Decimal(1e7),
+            cost() {
+                if (player.bee.path != 2) return new Decimal(1e21)
+                return new Decimal(1e7)
+            },
             currencyLocation() { return player.ho },
             currencyDisplayName: "Honey",
             currencyInternalName: "honey",
@@ -311,7 +328,10 @@ addLayer("ho", {
             title: "Honey 4",
             unlocked() {return player.ho.cell.gte(2500)},
             description: "Nectar γ boosts honey-cells.",
-            cost: new Decimal(4e7),
+            cost() {
+                if (player.bee.path != 2) return new Decimal(6.4e22)
+                return new Decimal(4e7)
+            },
             currencyLocation() { return player.ho },
             currencyDisplayName: "Honey",
             currencyInternalName: "honey",
@@ -325,7 +345,10 @@ addLayer("ho", {
             title: "Honey 5",
             unlocked() {return player.ho.cell.gte(2500)},
             description: "Honey-cells boost flower gain.",
-            cost: new Decimal(2e8),
+            cost() {
+                if (player.bee.path != 2) return new Decimal(8e24)
+                return new Decimal(2e8)
+            },
             currencyLocation() { return player.ho },
             currencyDisplayName: "Honey",
             currencyInternalName: "honey",
@@ -339,7 +362,10 @@ addLayer("ho", {
             title: "Honey 6",
             unlocked() {return player.ho.cell.gte(2500)},
             description: "Glossary effect base boosts honey.",
-            cost: new Decimal(1e9),
+            cost() {
+                if (player.bee.path != 2) return new Decimal(1e27)
+                return new Decimal(1e9)
+            },
             currencyLocation() { return player.ho },
             currencyDisplayName: "Honey",
             currencyInternalName: "honey",
@@ -397,5 +423,5 @@ addLayer("ho", {
             ], {width: "250px", height: "625px", borderRight: "3px solid white", borderTop: "3px solid white", borderBottom: "3px solid white", borderRadius: "0px 20px 20px 0px"}],
         ]],
     ],
-    layerShown() { return player.startedGame && player.bee.totalResearch.gte(60) && player.bee.path != 1 }
+    layerShown() { return player.startedGame && ((player.bee.totalResearch.gte(60) && player.bee.path == 2) || (player.bee.totalResearch.gte(165) && player.bee.path == 1)) }
 })

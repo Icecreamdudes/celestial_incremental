@@ -37,8 +37,7 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-        player.sme.generatorTimersMax = 
-        [
+        player.sme.generatorTimersMax = [
             new Decimal(10),new Decimal(40),new Decimal(90),new Decimal(160),new Decimal(250),
         ]
         player.sme.generatorTimersMax[0] = player.sme.generatorTimersMax[0].div(buyableEffect("sme", 10))
@@ -49,8 +48,7 @@
 
         player.sme.starmetalEssenceSoftcap = player.sme.starmetalEssence.pow(0.5).div(15).add(1)
         
-        player.sme.generatorProduction = 
-        [
+        player.sme.generatorProduction = [
             new Decimal(1),new Decimal(7),new Decimal(16),new Decimal(30),new Decimal(60),
         ]
 
@@ -62,12 +60,11 @@
             if (hasMilestone("db", 103)) player.sme.generatorTimersMax[i] = player.sme.generatorTimersMax[i].div(1.4)
             player.sme.generatorProduction[i] = player.sme.generatorProduction[i].mul(buyableEffect("sme", i))
             player.sme.generatorProduction[i] = player.sme.generatorProduction[i].mul(levelableEffect("pet", 502)[1])
-            if (player.sme.generatorTimers[i].gte(player.sme.generatorTimersMax[i]))
-            {
+            player.sme.generatorProduction[i] = player.sme.generatorProduction[i].mul(buyableEffect("al", 205))
+            if (player.sme.generatorTimers[i].gte(player.sme.generatorTimersMax[i])) {
                 player.sme.starmetalEssence = player.sme.starmetalEssence.add(player.sme.generatorProduction[i])
                 player.sme.generatorTimers[i] = new Decimal(0)
             }
-
         }
         
         if (player.sme.leaveInput.gte(1)) player.sme.leaveAmount = player.sme.leaveInput
@@ -105,146 +102,140 @@
             },
         },
         11: {
-            title() { return "Auto Starmetal Resets On" },
-            canClick() { return player.sme.starmetalResetToggle == false },
-            unlocked() { return true },
+            title() {return player.sme.starmetalResetToggle ? "Auto Starmetal Resets On" : "Auto Starmetal Resets Off"},
+            canClick: true,
+            unlocked: true,
             onClick() {
-                player.sme.starmetalResetToggle = true
+                if (player.sme.starmetalResetToggle) {
+                    player.sme.starmetalResetToggle = false
+                } else {
+                    player.sme.starmetalResetToggle = true
+                }
             },
-            style: { width: '150px', "min-height": '100px', }
+            style() {
+                let look = {width: "133px", minHeight: "100px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0px"}
+                if (player.sme.starmetalResetToggle) {look.backgroundColor = "#d460eb"} else {look.backgroundColor = "#a94cbc"}
+                return look
+            },
         },
         12: {
-            title() { return "Auto Starmetal Resets Off" },
-            canClick() { return player.sme.starmetalResetToggle == true  },
-            unlocked() { return true },
+            title() {return player.sme.autoLeaveToggle ? "Auto Leave DU1 On" : "Auto Leave DU1 Off"},
+            canClick: true,
+            unlocked: true,
             onClick() {
-                player.sme.starmetalResetToggle = false
+                if (player.sme.autoLeaveToggle) {
+                    player.sme.autoLeaveToggle = false
+                } else {
+                    player.sme.autoLeaveToggle = true
+                }
             },
-            style: { width: '150px', "min-height": '100px', }
+            style() {
+                let look = {width: "133px", minHeight: "100px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0px"}
+                if (player.sme.autoLeaveToggle) {look.backgroundColor = "#d460eb"} else {look.backgroundColor = "#a94cbc"}
+                return look
+            },
         },
         13: {
-            title() { return "Auto Leave DU1 On" },
-            canClick() { return player.sme.autoLeaveToggle == false },
-            unlocked() { return true },
+            title() {return player.sme.autoEnterToggle ? "Auto Enter DU1 On" : "Auto Enter DU1 Off"},
+            canClick: true,
+            unlocked: true,
             onClick() {
-                player.sme.autoLeaveToggle = true
+                if (player.sme.autoEnterToggle) {
+                    player.sme.autoEnterToggle = false
+                } else {
+                    player.sme.autoEnterToggle = true
+                }
             },
-            style: { width: '150px', "min-height": '100px', }
-        },
-        14: {
-            title() { return "Auto Leave DU1 Off" },
-            canClick() { return player.sme.autoLeaveToggle == true  },
-            unlocked() { return true },
-            onClick() {
-                player.sme.autoLeaveToggle = false
+            style() {
+                let look = {width: "133px", minHeight: "100px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0px"}
+                if (player.sme.autoEnterToggle) {look.backgroundColor = "#d460eb"} else {look.backgroundColor = "#a94cbc"}
+                return look
             },
-            style: { width: '150px', "min-height": '100px', }
         },
-        15: {
-            title() { return "Auto Enter DU1 On" },
-            canClick() { return player.sme.autoEnterToggle == false },
-            unlocked() { return true },
-            onClick() {
-                player.sme.autoEnterToggle = true
-            },
-            style: { width: '150px', "min-height": '100px', }
-        },
-        16: {
-            title() { return "Auto Enter DU1 Off" },
-            canClick() { return player.sme.autoEnterToggle == true  },
-            unlocked() { return true },
-            onClick() {
-                player.sme.autoEnterToggle = false
-            },
-            style: { width: '150px', "min-height": '100px', }
-        },
-
     },
     bars: {
         0: {
             unlocked() { return player.sme.buyables[0].gte(1) },
             direction: RIGHT,
             width: 350,
-            height: 125,
+            height: 128,
             progress() {
                 return player.sme.generatorTimers[0].div(player.sme.generatorTimersMax[0])
             },
-            fillStyle: {
-                "background-color": "#d460eb",
-            },
+            borderStyle: {borderLeft: "3px solid white", borderRight: "3px solid white", borderTop: "0px solid white", borderBottom: "0px solid white", borderRadius: "0"},
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
+            fillStyle: {backgroundColor: "#d460eb"},
             display() {
                 return "<h5>" + format(player.sme.generatorTimers[0]) + "/" + format(player.sme.generatorTimersMax[0]) + "<h5> seconds to produce " + format(player.sme.generatorProduction[0]) + " starmetal essence.</h5>";
             },
-
         },
-                1: {
+        1: {
             unlocked() { return player.sme.buyables[1].gte(1) },
             direction: RIGHT,
             width: 350,
-            height: 125,
+            height: 128,
             progress() {
                 return player.sme.generatorTimers[1].div(player.sme.generatorTimersMax[1])
             },
-            fillStyle: {
-                "background-color": "#d460eb",
-            },
+            borderStyle: {borderLeft: "3px solid white", borderRight: "3px solid white", borderTop: "0px solid white", borderBottom: "0px solid white", borderRadius: "0"},
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
+            fillStyle: {backgroundColor: "#d460eb"},
             display() {
                 return "<h5>" + format(player.sme.generatorTimers[1]) + "/" + format(player.sme.generatorTimersMax[1]) + "<h5> seconds to produce " + format(player.sme.generatorProduction[1]) + " starmetal essence.</h5>";
             },
         },
-                2: {
+        2: {
             unlocked() { return player.sme.buyables[2].gte(1) },
             direction: RIGHT,
             width: 350,
-            height: 125,
+            height: 128,
             progress() {
                 return player.sme.generatorTimers[2].div(player.sme.generatorTimersMax[2])
             },
-            fillStyle: {
-                "background-color": "#d460eb",
-            },
+            borderStyle: {borderLeft: "3px solid white", borderRight: "3px solid white", borderTop: "0px solid white", borderBottom: "0px solid white", borderRadius: "0"},
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
+            fillStyle: {backgroundColor: "#d460eb"},
             display() {
                 return "<h5>" + format(player.sme.generatorTimers[2]) + "/" + format(player.sme.generatorTimersMax[2]) + "<h5> seconds to produce " + format(player.sme.generatorProduction[2]) + " starmetal essence.</h5>";
             },
 
         },
-                3: {
+        3: {
             unlocked() { return player.sme.buyables[3].gte(1) },
             direction: RIGHT,
             width: 350,
-            height: 125,
+            height: 128,
             progress() {
                 return player.sme.generatorTimers[3].div(player.sme.generatorTimersMax[3])
             },
-            fillStyle: {
-                "background-color": "#d460eb",
-            },
+            borderStyle: {borderLeft: "3px solid white", borderRight: "3px solid white", borderTop: "0px solid white", borderBottom: "0px solid white", borderRadius: "0"},
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
+            fillStyle: {backgroundColor: "#d460eb"},
             display() {
                 return "<h5>" + format(player.sme.generatorTimers[3]) + "/" + format(player.sme.generatorTimersMax[3]) + "<h5> seconds to produce " + format(player.sme.generatorProduction[3]) + " starmetal essence.</h5>";
             },
 
         },
-                4: {
+        4: {
             unlocked() { return player.sme.buyables[4].gte(1) },
             direction: RIGHT,
             width: 350,
-            height: 125,
+            height: 128,
             progress() {
                 return player.sme.generatorTimers[4].div(player.sme.generatorTimersMax[4])
             },
-            fillStyle: {
-                "background-color": "#d460eb",
-            },
+            borderStyle: {borderLeft: "3px solid white", borderRight: "3px solid white", borderTop: "0px solid white", borderBottom: "0px solid white", borderRadius: "0"},
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
+            fillStyle: {backgroundColor: "#d460eb"},
             display() {
                 return "<h5>" + format(player.sme.generatorTimers[4]) + "/" + format(player.sme.generatorTimersMax[4]) + "<h5> seconds to produce " + format(player.sme.generatorProduction[4]) + " starmetal essence.</h5>";
             },
 
         },
     },
-    upgrades: { 
-    },
+    upgrades: {},
     levelables: {
-                0: {
+        0: {
             image() { return "resources/secret.png"},
             title() { return "No pet selected." },
             lore() { return "" },
@@ -253,9 +244,9 @@
             barStyle() { return {background: "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)",}},
             style() { return { width: '100px', height: '125px', backgroundColor: '#222222'} } 
         },
-            101: {
-            image() { return this.canClick() ? "resources/Pets/dotknightEpicPet.png" : "resources/secret.png"},
-            title() { return "Dotknight" },
+        101: {
+            image() {return this.canClick() ? "resources/Pets/dotknightEpicPet.png" : "resources/secret.png"},
+            title() {return "Dotknight"},
             description() {
                 return "Max HP: " + format(this.effect()[0]) + "<br>Damage: " + format(this.effect()[1])
             },
@@ -272,7 +263,7 @@
             sacValue() { return new Decimal(0)},
             // CLICK CODE
             unlocked() { return true },
-            canClick() { return player.pet.levelables[401][0].gte(1) },
+            canClick() {return player.pet.levelables[401][0].gte(1) || player.pet.levelables[401][2].gte(1)},
             onClick() { 
                 player.fi.rarityIndex = 0
                 player.fi.petIndex = 0
@@ -296,7 +287,7 @@
                 return look
             }  
         },
-                    102: {
+        102: {
             image() { return this.canClick() ? "resources/Pets/dragonEpicPet.png" : "resources/secret.png"},
             title() { return "Dragon" },
             description() {
@@ -315,7 +306,7 @@
             sacValue() { return new Decimal(0)},
             // CLICK CODE
             unlocked() { return true },
-            canClick() { return player.pet.levelables[402][0].gte(1) },
+            canClick() { return player.pet.levelables[402][0].gte(1) || player.pet.levelables[402][2].gte(1)},
             onClick() { 
                 player.fi.rarityIndex = 0
                 player.fi.petIndex = 1
@@ -339,7 +330,7 @@
                 return look
             }  
         },
-                            103: {
+        103: {
             image() { return this.canClick() ? "resources/Pets/cookieEpicPet.png" : "resources/secret.png"},
             title() { return "Cookie" },
             description() {
@@ -358,7 +349,7 @@
             sacValue() { return new Decimal(0)},
             // CLICK CODE
             unlocked() { return true },
-            canClick() { return player.pet.levelables[403][0].gte(1) },
+            canClick() { return player.pet.levelables[403][0].gte(1) || player.pet.levelables[403][2].gte(1)},
             onClick() { 
                 player.fi.rarityIndex = 0
                 player.fi.petIndex = 2
@@ -382,7 +373,7 @@
                 return look
             }  
         },
-                                    104: {
+        104: {
             image() { return this.canClick() ? "resources/Pets/kresEpicPet.png" : "resources/secret.png"},
             title() { return "Kres" },
             description() {
@@ -401,7 +392,7 @@
             sacValue() { return new Decimal(0)},
             // CLICK CODE
             unlocked() { return true },
-            canClick() { return player.pet.levelables[404][0].gte(1) },
+            canClick() { return player.pet.levelables[404][0].gte(1) || player.pet.levelables[404][2].gte(1)},
             onClick() { 
                 player.fi.rarityIndex = 0
                 player.fi.petIndex = 3
@@ -425,7 +416,7 @@
                 return look
             }  
         },
-                                            105: {
+        105: {
             image() { return this.canClick() ? "resources/Pets/navEpicPet.png" : "resources/secret.png"},
             title() { return "Nav" },
             description() {
@@ -444,7 +435,7 @@
             sacValue() { return new Decimal(0)},
             // CLICK CODE
             unlocked() { return true },
-            canClick() { return player.pet.levelables[405][0].gte(1) },
+            canClick() { return player.pet.levelables[405][0].gte(1) || player.pet.levelables[405][2].gte(1)},
             onClick() { 
                 player.fi.rarityIndex = 0
                 player.fi.petIndex = 4
@@ -468,7 +459,7 @@
                 return look
             }  
         },
-                                                    106: {
+        106: {
             image() { return this.canClick() ? "resources/Pets/selEpicPet.png" : "resources/secret.png"},
             title() { return "Sel" },
             description() {
@@ -487,7 +478,7 @@
             sacValue() { return new Decimal(0)},
             // CLICK CODE
             unlocked() { return true },
-            canClick() { return player.pet.levelables[406][0].gte(1) },
+            canClick() { return player.pet.levelables[406][0].gte(1) || player.pet.levelables[406][2].gte(1)},
             onClick() { 
                 player.fi.rarityIndex = 0
                 player.fi.petIndex = 5
@@ -532,7 +523,7 @@
             sacValue() { return new Decimal(0)},
             // CLICK CODE
             unlocked() { return true },
-            canClick() { return player.pet.levelables[501][0].gte(1) },
+            canClick() { return player.pet.levelables[501][0].gte(1) || player.pet.levelables[501][2].gte(1)},
             onClick() { 
                 player.fi.rarityIndex = 1
                 player.fi.petIndex = 0
@@ -575,7 +566,7 @@
             sacValue() { return new Decimal(0)},
             // CLICK CODE
             unlocked() { return hasUpgrade("ir", 16) },
-            canClick() { return player.pet.levelables[502][0].gte(1) },
+            canClick() { return player.pet.levelables[502][0].gte(1) || player.pet.levelables[502][2].gte(1)},
             onClick() { 
                 player.fi.rarityIndex = 1
                 player.fi.petIndex = 1
@@ -957,37 +948,32 @@
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.sma.starmetalAlloy) + "</h3> starmetal alloy." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.ra.radiation) + "</h3> radiation." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["bar", 0], ["ex-buyable", 0], ["ex-buyable", 10]]],
-                    ["row", [["bar", 1], ["ex-buyable", 1], ["ex-buyable", 11]]],
-                    ["row", [["bar", 2], ["ex-buyable", 2], ["ex-buyable", 12]]],
-                    ["row", [["bar", 3], ["ex-buyable", 3], ["ex-buyable", 13]]],
-                    ["row", [["bar", 4], ["ex-buyable", 4], ["ex-buyable", 14]]],
+                    ["style-row", [["ex-buyable", 0], ["bar", 0], ["ex-buyable", 10]], {border: "3px solid white"}],
+                    ["style-row", [["ex-buyable", 1], ["bar", 1], ["ex-buyable", 11]], {border: "3px solid white", marginTop: "-3px"}],
+                    ["style-row", [["ex-buyable", 2], ["bar", 2], ["ex-buyable", 12]], {border: "3px solid white", marginTop: "-3px"}],
+                    ["style-row", [["ex-buyable", 3], ["bar", 3], ["ex-buyable", 13]], {border: "3px solid white", marginTop: "-3px"}],
+                    ["style-row", [["ex-buyable", 4], ["bar", 4], ["ex-buyable", 14]], {border: "3px solid white", marginTop: "-3px"}],
                     ["blank", "25px"],  
                 ]
             },
             "Starmetal Automation": {
                 buttonStyle() { return { 'color': 'white' } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],  
-                            ["style-column", [
+                    ["style-column", [
+                        ["style-row", [
+                            ["raw-html", () => {return format(player.sma.starmetalAlloy) + " SMA"}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ], {width: "400px", height: "30px", backgroundColor: "#6a3075"}],
                         ["style-column", [
-                            ["row", [
-                                ["raw-html", () => {return format(player.sma.starmetalAlloy) + " SMA"}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                            ]],
-                        ], {width: "400px", height: "30px", backgroundColor: "#8e3f9eff"}],
-                        ["style-column", [
-                    ["raw-html", function () { return "Autoleave amount: " + formatWhole(player.sme.leaveAmount) + " SMA."}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-
+                            ["raw-html", () => {return "Autoleave amount"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return formatWhole(player.sme.leaveAmount) + " SMA."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ], {width: "400px", height: "70px"}],
-                        ["text-input", "leaveInput", {width: "350px", height: "50px", backgroundColor: "#30003aff", color: "white", fontSize: "32px", textAlign: "left", border: "0px", padding: "0px 25px"}],
-                        ["style-column", [
-        ["row", [["clickable", 11], ["clickable", 12]]],
-                            ["row", [["clickable", 13], ["clickable", 14]]],
-                            ["row", [["clickable", 15], ["clickable", 16]]],
-                        ], {width: "400px", height: "400px"}],
-                    ], {width: "400px", height: "600px", backgroundColor: "#d460eb", border: "3px solid #ccc"}],
+                        ["text-input", "leaveInput", {width: "350px", height: "50px", backgroundColor: "#3f1c46", color: "white", fontSize: "32px", textAlign: "left", border: "0px", padding: "0px 25px"}],
+                        ["style-row", [
+                            ["clickable", 11], ["clickable", 12], ["clickable", 13],
+                        ], {width: "400px", height: "100px"}],
+                    ], {width: "400px", height: "250px", backgroundColor: "#54265e", border: "3px solid #ccc"}],
                 ]
             },
             "Starmetal Binding": {

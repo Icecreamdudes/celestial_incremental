@@ -125,7 +125,7 @@ addLayer("ev2", {
             },
             onClick() {
                 player.cb.evolutionShards = player.cb.evolutionShards.sub(player.ev2.evoInput)
-                player.cb.paragonShards = player.cb.paragonShards.sub(player.ev2.evoInput)
+                player.cb.paragonShards = player.cb.paragonShards.sub(player.ev2.paraInput)
                 player.ev2.shardBoost = player.ev2.potentialBoost
             },
             style: {width: '180px', minHeight: '50px', borderRadius: "30px"},
@@ -139,6 +139,7 @@ addLayer("ev2", {
                 player.ev2.timers[0].current = player.ev2.timers[0].max
                 player.ev2.shardBoost = new Decimal(1)
                 player.ev2.day = player.ev2.day.add(1)
+                doPopup("none", "+" + formatSimple(player.ev2.timers[0].base) + " orbs!", "Resource Obtained!", 5, "#96DED1", "resources/orbs.png")
             },
             style: {width: '200px', minHeight: '50px', borderRadius: "30px / 15px"},
         },
@@ -150,6 +151,7 @@ addLayer("ev2", {
                 player.ev2.orbs = player.ev2.orbs.add(player.ev2.timers[1].base)
                 player.ev2.timers[1].current = player.ev2.timers[1].max
                 player.ev2.shardBoost = new Decimal(1)
+                doPopup("none", "+" + formatSimple(player.ev2.timers[1].base) + " orbs!", "Resource Obtained!", 5, "#96DED1", "resources/orbs.png")
             },
             style: {width: '200px', minHeight: '50px', borderRadius: "30px / 15px"},
         },
@@ -161,6 +163,7 @@ addLayer("ev2", {
                 player.ev2.orbs = player.ev2.orbs.add(player.ev2.timers[2].base)
                 player.ev2.timers[2].current = player.ev2.timers[2].max
                 player.ev2.shardBoost = new Decimal(1)
+                doPopup("none", "+" + formatSimple(player.ev2.timers[2].base) + " orbs!", "Resource Obtained!", 5, "#96DED1", "resources/orbs.png")
             },
             style: {width: '200px', minHeight: '50px', borderRadius: "30px / 15px"},
         },
@@ -172,6 +175,7 @@ addLayer("ev2", {
                 player.ev2.orbs = player.ev2.orbs.add(player.ev2.timers[3].base)
                 player.ev2.timers[3].current = player.ev2.timers[3].max
                 player.ev2.shardBoost = new Decimal(1)
+                doPopup("none", "+" + formatSimple(player.ev2.timers[3].base) + " orbs!", "Resource Obtained!", 5, "#96DED1", "resources/orbs.png")
             },
             style: {width: '200px', minHeight: '50px', borderRadius: "30px / 15px"},
         },

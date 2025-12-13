@@ -88,6 +88,7 @@
         // START OF POST-OTF-MULT MODIFIERS
         player.i.postOTFMult = new Decimal(1)
         player.i.postOTFMult = player.i.postOTFMult.mul(buyableEffect("ma", 22))
+        if (player.ir.iriditeDefeated) player.i.postOTFMult = player.i.postOTFMult.mul(1e12)
 
         //----------------------------------------
 
@@ -164,7 +165,8 @@
             player.gain = player.gain.mul(0)
             player.points = player.points.div(player.points.add(1).log10().mul(0.1).add(1).mul(delta))
         }
-        player.gain = player.gain.div(player.po.halterEffects[0])
+        if (player.po.halter.points.enabled == 1) player.gain = player.gain.div(player.po.halter.points.halt)
+        if (player.po.halter.points.enabled == 2 && player.gain.gt(player.po.halter.points.halt)) player.gain = player.po.halter.points.halt
         if (!player.in.breakInfinity && player.gain.gte("9.99e309")) player.gain = new Decimal("9.99e309")
 
         // CELESTIAL POINT PER SECOND

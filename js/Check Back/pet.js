@@ -574,6 +574,8 @@ addLayer("pet", {
         if (getLevelableTier("pu", 303, true)) abilityTimeDecrease = abilityTimeDecrease.div(levelableEffect("pu", 303)[0])
         player.pet.legPetTimers[0].current = player.pet.legPetTimers[0].current.sub(abilityTimeDecrease.mul(delta))
 
+        player.pet.legPetTimers[1].current = player.pet.legPetTimers[1].current.sub(delta)
+
         if (player.pet.legPetTimers[0].current.lte(0) && player.pet.legPetTimers[0].active) {
             player.pet.legPetTimers[0].active = false
             player.sma.eclipseShards = player.sma.eclipseShards.add(player.le.eclipseShardsToGetTrue.floor())
@@ -878,7 +880,11 @@ addLayer("pet", {
                 player.subtabs.le["stuff"] = "Shards"
                 player.subtabs.pu["stuff"] = "Selection"                
             },
-            style: {width: '125px', minHeight: '40px', backgroundColor: "#eed200", color: "black", borderRadius: '0px', fontSize: '8px'},
+            style() {
+                let look = {width: '125px', minHeight: '40px', borderRadius: '0px', fontSize: '8px'}
+                this.canClick() ? look.backgroundColor = "#eed200" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         32: {
             title() { return player.pet.legPetTimers[1].cooldown.lte(0) ? "<h3>Activate Skill</h3>" : player.pet.legPetTimers[1].current.gte(0) ? "Active: " + formatTime(player.pet.legPetTimers[1].current) + "." : "Check Back in " + formatTime(player.pet.legPetTimers[1].cooldown) + "."},
@@ -891,7 +897,11 @@ addLayer("pet", {
                 player.pet.legPetTimers[1].active = true
                 //write code
             },
-            style: {width: '125px', minHeight: '40px', backgroundColor: "#eed200", color: "black", borderRadius: '0px', fontSize: '8px'},
+            style() {
+                let look = {width: '125px', minHeight: '40px', borderRadius: '0px', fontSize: '8px'}
+                this.canClick() ? look.backgroundColor = "#eed200" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
 
         // START OF FRAGMENTATION CLICKABLES
@@ -1704,7 +1714,7 @@ addLayer("pet", {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
                     amt.pow(3).pow(Decimal.pow(4, getLevelableTier(this.layer, this.id))).add(1), // Points Gain
-                    amt.mul(0.02).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Check Back XP Gain
+                    amt.mul(0.02).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Check Back XP Gain
                 ]
             },
             sellValue() { return new Decimal(5)},
@@ -1871,8 +1881,8 @@ addLayer("pet", {
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    amt.mul(0.01).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Crate button Cooldown
-                    amt.mul(0.02).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // XP Button Cooldown
+                    amt.mul(0.01).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Crate button Cooldown
+                    amt.mul(0.02).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // XP Button Cooldown
                 ]
             },
             sellValue() { return new Decimal(5)},
@@ -1954,7 +1964,7 @@ addLayer("pet", {
             effect() { 
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40)).add(levelableEffect("pet", 1107)[0])
                 return [
-                    amt.mul(0.01).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // XPBoost
+                    amt.mul(0.01).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // XPBoost
                 ]
             },
             sellValue() { return new Decimal(10)},
@@ -1995,7 +2005,7 @@ addLayer("pet", {
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    amt.mul(0.1).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Replicanti Multiplier
+                    amt.mul(0.1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Replicanti Multiplier
                     amt.pow(1.05).pow(Decimal.pow(3, getLevelableTier(this.layer, this.id))).mul(0.2).add(1), // Galaxy Dust
                 ]
             },
@@ -2038,7 +2048,7 @@ addLayer("pet", {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
                     amt.pow(1.2).pow(Decimal.pow(3.5, getLevelableTier(this.layer, this.id))).mul(0.7).add(1), // All Mastery Points
-                    amt.pow(0.9).mul(0.03).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Jinx Score
+                    amt.pow(0.9).mul(0.03).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Jinx Score
                 ]
             },
             sellValue() { return new Decimal(15)},
@@ -2127,7 +2137,7 @@ addLayer("pet", {
                 return [
                     amt.pow(1.3).pow(Decimal.pow(4, getLevelableTier(this.layer, this.id))).div(1.6).add(1), // Lines of Code
                     amt.pow(1.6).pow(Decimal.pow(4, getLevelableTier(this.layer, this.id))).div(1.3).add(1), // Leaves
-                    amt.mul(0.01).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Check Back XP and Crate Button Cooldowns
+                    amt.mul(0.01).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Check Back XP and Crate Button Cooldowns
                 ]
             },
             sellValue() { return new Decimal(12.5)},
@@ -2171,7 +2181,7 @@ addLayer("pet", {
                 return [
                     amt.pow(1.7).pow(Decimal.pow(4, getLevelableTier(this.layer, this.id))).add(1), // Tree Requirement
                     amt.pow(1.4).pow(Decimal.pow(4, getLevelableTier(this.layer, this.id))).add(1), // Mod Requirement
-                    amt.mul(0.02).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Check Back Level Requirement
+                    amt.mul(0.02).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Check Back Level Requirement
                 ]
             },
             sellValue() { return new Decimal(12.5)},
@@ -2255,7 +2265,7 @@ addLayer("pet", {
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    amt.mul(0.05).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Check Back XP
+                    amt.mul(0.05).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Check Back XP
                 ]
             },
             sellValue() { return new Decimal(12.5)},
@@ -2387,7 +2397,7 @@ addLayer("pet", {
                 return [
                     amt.pow(1.25).pow(Decimal.pow(4, getLevelableTier(this.layer, this.id))).mul(0.7).add(1), // Infinity Dimensions
                     amt.pow(1.8).pow(Decimal.pow(3, getLevelableTier(this.layer, this.id))).mul(3).add(1), // Negative Infinity Points
-                    amt.div(10).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // T1 Alternate Infinities
+                    amt.div(10).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // T1 Alternate Infinities
                 ]
             },
             sellValue() { return new Decimal(37.5)},
@@ -2430,7 +2440,7 @@ addLayer("pet", {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
                     amt.pow(1.3).pow(Decimal.pow(4, getLevelableTier(this.layer, this.id))).mul(0.4).add(1), // Dimension Power
-                    amt.div(5).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Matter
+                    amt.div(5).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Matter
                     amt.pow(1.2).pow(Decimal.pow(3, getLevelableTier(this.layer, this.id))).add(1), // Time Cubes
                 ]
             },
@@ -2473,17 +2483,17 @@ addLayer("pet", {
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    amt.pow(0.5).mul(0.0035).mul(player.g.grass.add(10).log(10).log(10).add(1)).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Fertilizer (Based on Grass Magnitude^2)
-                    amt.div(8).mul(player.cb.level.add(2).log(2).log(2).add(1)).mul(getLevelableTier(this.layer, this.id).add(1)).add(1) // Check Back XP (Based on Level Magnitude)
+                    amt.pow(0.5).mul(0.0035).mul(player.g.grass.add(10).log(10).log(10).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Fertilizer (Based on Grass Magnitude^2)
+                    amt.div(8).mul(player.cb.level.add(2).log(2).log(2).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1) // Check Back XP (Based on Level Magnitude)
                 ]
             },
             sellValue() { return new Decimal(100)},
             // PET POINT CODE
             pointValue() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
-                return new Decimal(0.5).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(getLevelableTier(this.layer, this.id).add(1))
+                return new Decimal(0.5).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2.5, getLevelableTier(this.layer, this.id)))
             },
-            pointCooldown() { return new Decimal(40).div(player.pet.petCooldownDiv)},
+            pointCooldown() { return new Decimal(40).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
             canteBase() { return new Decimal(0.12)},
             pointTooltip() { return "" },
             pointClick() {
@@ -2527,16 +2537,16 @@ addLayer("pet", {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40)).add(levelableEffect("pet", 1302)[0])
                 return [
                     amt.add(1).pow(player.pet.highestDicePetCombo.add(1)).pow(Decimal.pow(4, getLevelableTier(this.layer, this.id))), // Dice Points (Based on Highest Combo)
-                    amt.mul(player.d.dicePoints.add(10).log(10).log(10).div(10)).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Dice Score (Based on Dice Points)
+                    amt.mul(player.d.dicePoints.add(10).log(10).log(10).div(10)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Dice Score (Based on Dice Points)
                 ]
             },
             sellValue() { return new Decimal(100)},
             // PET POINT CODE
             pointValue() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40)).add(levelableEffect("pet", 1302)[0])
-                return new Decimal(0.1).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(getLevelableTier(this.layer, this.id).add(1))
+                return new Decimal(0.1).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2.5, getLevelableTier(this.layer, this.id)))
             },
-            pointCooldown() { return new Decimal(20).div(player.pet.petCooldownDiv)},
+            pointCooldown() { return new Decimal(20).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
             canteBase() { return new Decimal(0.05)},
             pointTooltip() { return "<h5>Last roll: " + format(player.pet.dicePetPointsGain) + " PP<br>Last roll: " + player.pet.lastDicePetRoll + "<br>Current roll combo: " + player.pet.dicePetCombo + "<br>Highest roll combo: " + player.pet.highestDicePetCombo },
             pointClick() {
@@ -2591,16 +2601,16 @@ addLayer("pet", {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
                     amt.mul(player.cb.petPoints.add(2).log(2).log(2).add(1)).pow(2.2).pow(Decimal.pow(4, getLevelableTier(this.layer, this.id))).add(1), // Rocket Fuel (Based on Pet Points)
-                    amt.mul(0.05).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Golden Grass Spawn Time
+                    amt.mul(0.05).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Golden Grass Spawn Time
                 ]
             },
             sellValue() { return new Decimal(100)},
             // PET POINT CODE
             pointValue() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
-                return new Decimal(10).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(getLevelableTier(this.layer, this.id).add(1))
+                return new Decimal(10).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2.5, getLevelableTier(this.layer, this.id)))
             },
-            pointCooldown() { return new Decimal(900).div(player.pet.petCooldownDiv)},
+            pointCooldown() { return new Decimal(900).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
             canteBase() { return new Decimal(0.8)},
             pointTooltip() { return "" },
             pointClick() {
@@ -2645,16 +2655,16 @@ addLayer("pet", {
                 let shard = player.cb.evolutionShards.add(1).log(2).log(2).add(1)
                 return [
                     amt.mul(shard.mul(2)).pow(shard.div(2)).pow(Decimal.pow(4, getLevelableTier(this.layer, this.id))).add(1), // Grasshoppers (Based on Evo Shards)
-                    amt.mul(0.03).mul(getLevelableTier(this.layer, this.id).add(1)).add(1) // Level Requirement
+                    amt.mul(0.03).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1) // Level Requirement
                 ]
             },
             sellValue() { return new Decimal(100)},
             // PET POINT CODE
             pointValue() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
-                return new Decimal(90).mul(player.pet.petPointMult).mul(amt.add(1)).mul(getLevelableTier(this.layer, this.id).add(1))
+                return new Decimal(90).mul(player.pet.petPointMult).mul(amt.add(1)).mul(Decimal.pow(2.5, getLevelableTier(this.layer, this.id)))
             },
-            pointCooldown() { return new Decimal(18000).div(player.pet.petCooldownDiv)},
+            pointCooldown() { return new Decimal(18000).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
             canteBase() { return new Decimal(7)},
             pointTooltip() { return "25% chance for an evo shard." },
             pointClick() {
@@ -2714,9 +2724,9 @@ addLayer("pet", {
             // PET POINT CODE
             pointValue() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
-                return new Decimal(2).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(getLevelableTier(this.layer, this.id).add(1))
+                return new Decimal(2).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2.5, getLevelableTier(this.layer, this.id)))
             },
-            pointCooldown() { return new Decimal(120).div(player.pet.petCooldownDiv)},
+            pointCooldown() { return new Decimal(120).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
             canteBase() { return new Decimal(0.3)},
             pointTooltip() { return "" },
             pointClick() {
@@ -2767,9 +2777,9 @@ addLayer("pet", {
             // PET POINT CODE
             pointValue() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
-                return new Decimal(18).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(getLevelableTier(this.layer, this.id).add(1))
+                return new Decimal(18).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2.5, getLevelableTier(this.layer, this.id)))
             },
-            pointCooldown() { return new Decimal(1500).div(player.pet.petCooldownDiv)},
+            pointCooldown() { return new Decimal(1500).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
             canteBase() { return new Decimal(1)},
             pointTooltip() { return "2% chance for an paragon shard." },
             pointClick() {
@@ -2830,9 +2840,9 @@ addLayer("pet", {
             // PET POINT CODE
             pointValue() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
-                return new Decimal(0.2).mul(player.pet.petPointMult).mul(amt.div(5).add(1)).mul(getLevelableTier(this.layer, this.id).add(1))
+                return new Decimal(0.2).mul(player.pet.petPointMult).mul(amt.div(5).add(1)).mul(Decimal.pow(2.5, getLevelableTier(this.layer, this.id)))
             },
-            pointCooldown() { return new Decimal(5).div(player.pet.petCooldownDiv)},
+            pointCooldown() { return new Decimal(5).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
             canteBase() { return new Decimal(0.002)},
             pointTooltip() { return "+" + formatWhole(getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40)).mul(100)) + "% of golden grass value on claim.<br>(You have " + format(player.g.goldGrass) + " golden grass)" },
             pointClick() {
@@ -2876,7 +2886,7 @@ addLayer("pet", {
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    amt.pow(0.5).mul(0.0065).mul(player.ra.radiation.add(10).log(10).log(10).add(1)).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Singularity Points (Based on Radiation)
+                    amt.pow(0.5).mul(0.0065).mul(player.ra.radiation.add(10).log(10).log(10).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Singularity Points (Based on Radiation)
                     amt.mul(player.s.singularityPoints.add(2).log(2).log(2).add(1)).pow(2.5).pow(Decimal.pow(3, getLevelableTier(this.layer, this.id))).add(1) // Singularity Dimenstions (Based on Singularity Points)
                 ]
             },
@@ -2884,9 +2894,9 @@ addLayer("pet", {
             // PET POINT CODE
             pointValue() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
-                return new Decimal(50).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(getLevelableTier(this.layer, this.id).add(1))
+                return new Decimal(50).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2.5, getLevelableTier(this.layer, this.id)))
             },
-            pointCooldown() { return new Decimal(4500).div(player.pet.petCooldownDiv)},
+            pointCooldown() { return new Decimal(4500).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
             canteBase() { return new Decimal(0.3)},
             pointTooltip() { return "" },
             pointClick() {
@@ -2937,9 +2947,9 @@ addLayer("pet", {
             // PET POINT CODE
             pointValue() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
-                return new Decimal(100).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(getLevelableTier(this.layer, this.id).add(1))
+                return new Decimal(100).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2.5, getLevelableTier(this.layer, this.id)))
             },
-            pointCooldown() { return new Decimal(8000).div(player.pet.petCooldownDiv)},
+            pointCooldown() { return new Decimal(8000).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
             canteBase() { return new Decimal(0.5)},
             pointTooltip() { return "" },
             pointClick() {
@@ -2984,9 +2994,9 @@ addLayer("pet", {
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    amt.mul(player.cb.XPBoost.add(2).log(2).log(2).add(1).div(150)).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Pet Points (Based on XPBoost)
-                    amt.mul(player.cb.evolutionShards.add(2).log(2).log(2).add(1).div(35)).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Pet Point Button Cooldown (Based on Evolution Shards)
-                    amt.mul(player.cb.paragonShards.add(2).log(2).log(2).add(1).div(30)).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // XPBoost Button Cooldown (Based on Paragon Shards)
+                    amt.mul(player.cb.XPBoost.add(2).log(2).log(2).add(1).div(150)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Pet Points (Based on XPBoost)
+                    amt.mul(player.cb.evolutionShards.add(2).log(2).log(2).add(1).div(35)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Pet Point Button Cooldown (Based on Evolution Shards)
+                    amt.mul(player.cb.paragonShards.add(2).log(2).log(2).add(1).div(30)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // XPBoost Button Cooldown (Based on Paragon Shards)
                 ]
             },
             sellValue() { return new Decimal(250)},
@@ -3082,7 +3092,7 @@ addLayer("pet", {
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    amt.mul(player.ca.canteCores.add(2).log(2).log(2).add(1)).div(5).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Cante Energy (Based on Cante Cores)
+                    amt.mul(player.ca.canteCores.add(2).log(2).log(2).add(1)).div(5).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Cante Energy (Based on Cante Cores)
                     amt.pow(2.5).mul(player.ca.canteCores.add(2).log(2).log(2).add(1)).pow(3.5).pow(Decimal.pow(3, getLevelableTier(this.layer, this.id))).add(1), // Infinity Points (Based on Cante Cores)
                     amt.mul(player.cb.XPBoost.add(2).log(2).log(2).add(1).pow(2.25)).pow(2.5).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Proto Memories (Based on XPBoost)
                 ]
@@ -3131,9 +3141,9 @@ addLayer("pet", {
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    amt.mul(player.cb.level.add(2).log(2).log(2).add(1)).div(3000).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Infinity Points (Based on Check Back Level)
+                    amt.mul(player.cb.level.add(2).log(2).log(2).add(1)).div(3000).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Infinity Points (Based on Check Back Level)
                     amt.pow(2).mul(player.cb.level.add(2).log(2).log(2).add(1)).pow(2.4).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Singularity Points (Based on Check Back Level)
-                    amt.mul(player.cb.level.add(2).log(2).log(2).add(1)).div(20).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Starmetal Alloy (Based on Check Back Level)
+                    amt.mul(player.cb.level.add(2).log(2).log(2).add(1)).div(20).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Starmetal Alloy (Based on Check Back Level)
                 ]
             },
             sellValue() { return new Decimal(500)},
@@ -3180,9 +3190,9 @@ addLayer("pet", {
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    amt.mul(player.ra.radiation.add(2).log(2).log(2).add(1)).div(300).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Anonymity (Based on Radiation)
-                    amt.mul(player.ra.radiation.add(2).log(2).log(2).add(1)).div(300).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Oil (Based on Radiation)
-                    amt.mul(player.ra.radiation.add(2).log(2).log(2).add(1)).div(220).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Fun (Based on Radiation)
+                    amt.mul(player.ra.radiation.add(2).log(2).log(2).add(1)).div(300).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Anonymity (Based on Radiation)
+                    amt.mul(player.ra.radiation.add(2).log(2).log(2).add(1)).div(300).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Oil (Based on Radiation)
+                    amt.mul(player.ra.radiation.add(2).log(2).log(2).add(1)).div(220).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Fun (Based on Radiation)
                 ]
             },
             sellValue() { return new Decimal(500)},
@@ -3229,9 +3239,9 @@ addLayer("pet", {
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    amt.mul(player.sma.starmetalAlloy.add(2).log(2).log(2).add(1)).div(10).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Check Back XP (Based on Starmetal Alloy)
-                    amt.mul(player.sma.starmetalAlloy.add(2).log(2).log(2).add(1)).div(20).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // XPBoost (Based on Starmetal Alloy)
-                    amt.mul(player.sma.starmetalAlloy.add(2).log(2).log(2).add(1)).div(30).mul(getLevelableTier(this.layer, this.id).add(1)).add(1) // Pet Points (Based on Starmetal Alloy)
+                    amt.mul(player.sma.starmetalAlloy.add(2).log(2).log(2).add(1)).div(10).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Check Back XP (Based on Starmetal Alloy)
+                    amt.mul(player.sma.starmetalAlloy.add(2).log(2).log(2).add(1)).div(20).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // XPBoost (Based on Starmetal Alloy)
+                    amt.mul(player.sma.starmetalAlloy.add(2).log(2).log(2).add(1)).div(30).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1) // Pet Points (Based on Starmetal Alloy)
                 ]
             },
             sellValue() { return new Decimal(500)},
@@ -3323,9 +3333,9 @@ addLayer("pet", {
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    amt.pow(0.75).mul(0.1).add(1).mul(getLevelableTier(this.layer, this.id).add(1)), // star exploration time
-                    player.sma.starmetalAlloy.pow(0.125).div(5).add(1).pow(amt.pow(0.1)).mul(getLevelableTier(this.layer, this.id).add(1)), // starmetal essence (Based on starmetal alloy)
-                    amt.pow(0.75).mul(0.5).add(1).mul(getLevelableTier(this.layer, this.id).add(1)), // space rocks
+                    amt.pow(0.75).mul(0.1).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // star exploration time
+                    player.sma.starmetalAlloy.pow(0.125).div(5).add(1).pow(amt.pow(0.1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // starmetal essence (Based on starmetal alloy)
+                    amt.pow(0.75).mul(0.5).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // space rocks
                 ]
             },
             sellValue() { return new Decimal(10000)},

@@ -58,13 +58,12 @@
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.ma.bestComboDepth3Effect)
         if (player.ma.matosDefeated) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(1e40)
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.cof.coreFragmentEffects[4])
-        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.se.starsExploreEffect[1][0])
         if (hasUpgrade("ir", 11)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(upgradeEffect("ir", 11))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("ir", 1)[1])
 
-
         //Power modifiers
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(buyableEffect("sb", 104))
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(player.se.starsExploreEffect[1][0])
 
         // SINGULARITY RAISERS
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(levelableEffect("pet", 308)[0])
@@ -433,9 +432,23 @@
             style: {width: "800px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         23: {
-            requirementDescription: "<h3>1000 Singularities",
+            requirementDescription: "<h3>1,000 Singularities",
             effectDescription: "Keep pollinator selection, upgrades, and buyables on singularity resets.",
             done() { return player.s.singularities.gte(1000) },
+            style: {width: "800px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
+        },
+        24: {
+            requirementDescription: "<h3>5,000 Singularities",
+            effectDescription: "Keep halters enabled on singularity resets.",
+            unlocked() {return hasUpgrade("sma", 108)},
+            done() { return player.s.singularities.gte(5000) && hasUpgrade("sma", 108)},
+            style: {width: "800px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
+        },
+        25: {
+            requirementDescription: "<h3>10,000 Singularities",
+            effectDescription: "Keep pent milestones on singularity resets.",
+            unlocked() {return hasUpgrade("sma", 108)},
+            done() { return player.s.singularities.gte(10000) && hasUpgrade("sma", 108)},
             style: {width: "800px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         //REMINDER: MAKE THE TIME MACHINE at some point
@@ -496,6 +509,8 @@
                     ["milestone", 21],
                     ["milestone", 22],
                     ["milestone", 23],
+                    ["milestone", 24],
+                    ["milestone", 25],
                 ]
             },
             "Buyables": {

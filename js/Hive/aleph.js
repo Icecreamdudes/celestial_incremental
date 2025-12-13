@@ -411,7 +411,7 @@ addLayer("al", {
             title: "Honeycomb <small>(6, 3)</small>",
             unlocked() {return player.tad.hiveExpand},
             description: "No longer reset when gaining BB tier.",
-            cost: new Decimal(1e11),
+            cost: new Decimal(1e15),
             currencyLocation() { return player.al },
             currencyDisplayName: "Honeycombs",
             currencyInternalName: "honeycomb",
@@ -632,6 +632,20 @@ addLayer("al", {
                 return look
             },
         },
+        218: {
+            title: "Royal J. <small>(6, 3)</small>",
+            unlocked: true,
+            description: "Auto-buy honey upgrades when on nectar path.",
+            cost: new Decimal(1e15),
+            currencyLocation() { return player.al },
+            currencyDisplayName: "Royal Jelly",
+            currencyInternalName: "royalJelly",
+            style() {
+                let look = {minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#e172b5"
+                return look
+            },
+        },
     },
     buyables: {
         101: {
@@ -710,6 +724,84 @@ addLayer("al", {
                 return look
             },
         },
+        104: {
+            costBase() { return new Decimal(5) },
+            costGrowth() { return new Decimal(5) },
+            purchaseLimit() { return new Decimal(30) },
+            currency() { return player.al.honeycomb},
+            pay(amt) { player.al.honeycomb = this.currency().sub(amt) },
+            effect(x) {return Decimal.pow(10, getBuyableAmount(this.layer, this.id))},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>HC-4</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/30)\n\
+                    Decuple pollinator gain\n\
+                    Currently: x" + formatWhole(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Honeycombs"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "#e5bd3f"
+                return look
+            },
+        },
+        105: {
+            costBase() { return new Decimal(1000) },
+            costGrowth() { return new Decimal(30) },
+            purchaseLimit() { return new Decimal(15) },
+            currency() { return player.al.honeycomb},
+            pay(amt) { player.al.honeycomb = this.currency().sub(amt) },
+            effect(x) {return Decimal.pow(1.1, getBuyableAmount(this.layer, this.id))},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>HC-5</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/15)\n\
+                    x1.1 starmetal alloy gain\n\
+                    Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Honeycombs"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "#e5bd3f"
+                return look
+            },
+        },
+        106: {
+            costBase() { return new Decimal(1e8) },
+            costGrowth() { return new Decimal(1000) },
+            purchaseLimit() { return new Decimal(10) },
+            currency() { return player.al.honeycomb},
+            pay(amt) { player.al.honeycomb = this.currency().sub(amt) },
+            effect(x) {return Decimal.pow(2, getBuyableAmount(this.layer, this.id))},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>HC-6</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
+                    Double pre-power hex resource gain\n\
+                    Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Honeycombs"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "#e5bd3f"
+                return look
+            },
+        },
 
         201: {
             costBase() { return new Decimal(3) },
@@ -775,6 +867,84 @@ addLayer("al", {
             display() {
                 return "<h3>RJ-3</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/5)\n\
                     Unlock +" + formatWhole(tmp[this.layer].buyables[this.id].effect) + " cubic yellow flowers\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Royal Jelly"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "#e172b5"
+                return look
+            },
+        },
+        204: {
+            costBase() { return new Decimal(5) },
+            costGrowth() { return new Decimal(5) },
+            purchaseLimit() { return new Decimal(30) },
+            currency() { return player.al.royalJelly},
+            pay(amt) { player.al.royalJelly = this.currency().sub(amt) },
+            effect(x) {return Decimal.pow(2, getBuyableAmount(this.layer, this.id))},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>RJ-4</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/30)\n\
+                    Double moonstone gain\n\
+                    Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 1) + "\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Royal Jelly"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "#e172b5"
+                return look
+            },
+        },
+        205: {
+            costBase() { return new Decimal(1000) },
+            costGrowth() { return new Decimal(30) },
+            purchaseLimit() { return new Decimal(15) },
+            currency() { return player.al.royalJelly},
+            pay(amt) { player.al.royalJelly = this.currency().sub(amt) },
+            effect(x) {return Decimal.pow(1.05, getBuyableAmount(this.layer, this.id))},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>RJ-5</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/15)\n\
+                    x1.05 starmetal essence gain\n\
+                    Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Royal Jelly"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "#e172b5"
+                return look
+            },
+        },
+        206: {
+            costBase() { return new Decimal(1e8) },
+            costGrowth() { return new Decimal(1000) },
+            purchaseLimit() { return new Decimal(10) },
+            currency() { return player.al.royalJelly},
+            pay(amt) { player.al.royalJelly = this.currency().sub(amt) },
+            effect(x) {return Decimal.pow(1.2, getBuyableAmount(this.layer, this.id))},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>RJ-6</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
+                    x1.2 hex power gain\n\
+                    Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\ \n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Royal Jelly"
             },
             buy() {
@@ -906,8 +1076,9 @@ addLayer("al", {
                             ], {width: "400px", height: "327px", borderBottom: "3px solid #a900a9"}],
                             ["style-row", [
                                 ["buyable", 101], ["buyable", 102], ["buyable", 103],
-                            ], {width: "400px", height: "120px", background: "#2d250c", borderRadius: "0 0 14px 17px"}],
-                        ], {width: "400px", height: "600px", background: "#161206", borderRight: "3px solid #a900a9", borderRadius: "17px", marginRight: "-1.5px"}],
+                                ["buyable", 104], ["buyable", 105], ["buyable", 106],
+                            ], {width: "400px", height: "220px", background: "#2d250c", borderRadius: "0 0 14px 17px"}],
+                        ], {width: "400px", height: "700px", background: "#161206", borderRight: "3px solid #a900a9", borderRadius: "17px", marginRight: "-1.5px"}],
                         ["style-column", [
                             ["style-column", [
                                 ["row", [
@@ -928,9 +1099,10 @@ addLayer("al", {
                             ], {width: "400px", height: "327px", borderBottom: "3px solid #a900a9"}],
                             ["style-row", [
                                 ["buyable", 201], ["buyable", 202], ["buyable", 203],
-                            ], {width: "400px", height: "120px", background: "#2d1624", borderRadius: "0 0 17px 14px"}],
-                        ], {width: "400px", height: "600px", background: "#160b12", borderLeft: "3px solid #a900a9", borderRadius: "17px", marginLeft: "-1.5px"}],
-                    ], {width: "803px", height: "600px", background: "#a900a9", border: "3px solid #a900a9", borderRadius: "20px"}],
+                                ["buyable", 204], ["buyable", 205], ["buyable", 206],
+                            ], {width: "400px", height: "220px", background: "#2d1624", borderRadius: "0 0 17px 14px"}],
+                        ], {width: "400px", height: "700px", background: "#160b12", borderLeft: "3px solid #a900a9", borderRadius: "17px", marginLeft: "-1.5px"}],
+                    ], {width: "803px", height: "700px", background: "#a900a9", border: "3px solid #a900a9", borderRadius: "20px"}],
                 ],
             },
             "Cocoon": {
@@ -1078,5 +1250,5 @@ addLayer("al", {
         ["microtabs", "Tabs", {borderWidth: "0"}],
         ["blank", "20px"],
     ],
-    layerShown() { return player.startedGame && ((player.bee.totalResearch.gte(160) && player.bee.path == 1)) || player.al.show }
+    layerShown() { return player.startedGame && (player.bee.totalResearch.gte(160) || player.al.show) }
 })

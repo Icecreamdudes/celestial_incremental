@@ -113,7 +113,8 @@ addLayer('g', {
         player.g.grassVal = player.g.grassVal.pow(buyableEffect("cof", 14))
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
-        player.g.grassVal = player.g.grassVal.div(player.po.halterEffects[5])
+        if (player.po.halter.grass.enabled == 1) player.g.grassVal = player.g.grassVal.div(player.po.halter.grass.halt)
+        if (player.po.halter.grass.enabled == 2 && player.g.grassVal.gt(player.po.halter.grass.halt)) player.g.grassVal = player.po.halter.grass.halt
         if (inChallenge("ip", 18) && player.g.grass.gt(player.g.grass.mul(0.4 * delta))) {
             player.g.grass = player.g.grass.sub(player.g.grass.mul(0.4 * delta))
         }
@@ -178,6 +179,10 @@ addLayer('g', {
         // POWER MODIFIERS
         if (hasUpgrade("hpw", 1032)) player.g.goldGrassVal = player.g.goldGrassVal.pow(1.06)
 
+        // ABNORMAL MODIFIERS
+        if (player.po.halter.goldenGrass.enabled == 1) player.g.goldGrassVal = player.g.goldGrassVal.div(player.po.halter.goldenGrass.halt)
+        if (player.po.halter.goldenGrass.enabled == 2 && player.g.goldGrassVal.gt(player.po.halter.goldenGrass.halt)) player.g.goldGrassVal = player.po.halter.goldenGrass.halt
+
         // GOLDEN GRASS PER SECOND
         player.g.goldGrass = player.g.goldGrass.add(player.g.goldGrassVal.mul(buyableEffect('gh', 18).mul(delta)))
 
@@ -225,6 +230,10 @@ addLayer('g', {
         if (hasMilestone("r", 28)) player.g.moonstoneVal = player.g.moonstoneVal.mul(player.r.pentMilestone18Effect)
         player.g.moonstoneVal = player.g.moonstoneVal.mul(player.ro.rocketPartsEffect)
         if (player.ma.matosDefeated) player.g.moonstoneVal = player.g.moonstoneVal.mul(5)
+        player.g.moonstoneVal = player.g.moonstoneVal.mul(buyableEffect("al", 204))
+
+        // MOONSTONE AUTOMATION
+        if (hasMilestone("r", 29)) player.g.moonstone = player.g.moonstone.add(player.g.moonstoneVal.mul(Decimal.mul(delta, 0.01)))
 
         // MOONSTONE REQUIREMENT
         player.g.moonstoneReq = new Decimal(30)

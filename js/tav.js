@@ -157,8 +157,14 @@
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(player.r.pentMilestone13Effect)
         if (player.pol.pollinatorEffects.water.enabled) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(player.pol.pollinatorEffects.water.effects[1])
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("st", 301))
+
+        // POWER MODIFIERS
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.pow(buyableEffect("cof", 22))
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.pow(levelableEffect("ir", 6)[1])
+
+        // ABNORMAL MODIFIERS
+        if (player.po.halter.nip.enabled == 1) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.div(player.po.halter.nip.halt)
+        if (player.po.halter.nip.enabled == 2 && player.ta.negativeInfinityPointsToGet.gt(player.po.halter.nip.halt)) player.ta.negativeInfinityPointsToGet = player.po.halter.nip.halt
 
         // AUTOMATION
         if (hasUpgrade("s", 25)) player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet.mul(delta))

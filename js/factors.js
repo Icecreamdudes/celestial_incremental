@@ -100,7 +100,8 @@
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.pow(player.co.cores.factor.effect[1])
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
-        player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.div(player.po.halterEffects[1])
+        if (player.po.halter.factor.enabled == 1) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.div(player.po.halter.factor.halt)
+        if (player.po.halter.factor.enabled == 2 && player.f.factorPowerPerSecond.gt(player.po.halter.factor.halt)) player.f.factorPowerPerSecond = player.po.halter.factor.halt
         if (player.r.timeReversed) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(0)
         
         // FACTOR POWER PER SECOND

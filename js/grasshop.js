@@ -83,15 +83,16 @@
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.i.preOTFMult)
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.co.cores.grasshopper.effect[0])
         if (hasUpgrade("cs", 602)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.gs.grassSkipEffect2)
-        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.se.starsExploreEffect[0][4])
 
         // POWER MODIFIERS
         if (hasUpgrade("hpw", 1041)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(1.1)
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(buyableEffect("fu", 34))
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(buyableEffect("cof", 15))
+        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(player.se.starsExploreEffect[0][4])
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
-        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.div(player.po.halterEffects[6])
+        if (player.po.halter.grasshoppers.enabled == 1) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.div(player.po.halter.grasshoppers.halt)
+        if (player.po.halter.grasshoppers.enabled == 2 && player.gh.grasshoppersToGet.gt(player.po.halter.grasshoppers.halt)) player.gh.grasshoppersToGet = player.po.halter.grasshoppers.halt
         if (inChallenge("ip", 12) && player.gh.grasshoppers.gt(1)) {
             player.gh.grasshoppers = player.gh.grasshoppers.sub(player.gh.grasshoppers.mul(player.pe.pestEffect[7] * delta))
         }
@@ -147,7 +148,6 @@
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.pow(levelableEffect("pet", 301)[0])
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
-        player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.div(player.po.halterEffects[7])
         if (player.r.timeReversed) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(0)
 
         // FERTILIZER PER SECOND
@@ -178,7 +178,9 @@
         player.gh.steelToGet = player.gh.steelToGet.mul(player.co.cores.grasshopper.effect[2])
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("st", 104))
         player.gh.steelToGet = player.gh.steelToGet.mul(player.i.postOTFMult)
-        player.gh.steelToGet = player.gh.steelToGet.mul(player.se.starsExploreEffect[0][5])
+
+        // POWER MODIFIERS
+        player.gh.steelToGet = player.gh.steelToGet.pow(player.se.starsExploreEffect[0][5])
         player.gh.steelToGet = player.gh.steelToGet.pow(player.cof.coreFragmentEffects[2])
 
         // STEEL PER SECOND

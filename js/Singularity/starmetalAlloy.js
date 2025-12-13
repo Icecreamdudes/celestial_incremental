@@ -117,7 +117,7 @@
         },
         12: {
             title() { return player.pet.legendaryPetAbilityCooldowns[0].lte(0) ? "<h1>START WARPING LIGHT<br><h3>And enter an eclipse..." : "<h1>Check Back in " + formatTime(player.pet.legendaryPetAbilityCooldowns[0]) + "."},
-            unlocked() {return player.pet.legendaryPetAbilityCooldowns[0].lte(0)},
+            canClick() {return player.pet.legendaryPetAbilityCooldowns[0].lte(0)},
             unlocked() {return getLevelableAmount("pet", 501).gte(1)},
             onClick() {
                 player.pet.legendaryPetAbilityTimers[0] = player.pet.legendaryPetAbilityTimersMax[0]

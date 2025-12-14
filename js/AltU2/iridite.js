@@ -149,6 +149,11 @@ addLayer("ir", {
 
         shipCooldownMax: [new Decimal(0), new Decimal(600), new Decimal(900)],
         shipCooldownTimers: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),],
+        
+        sendCooldownMax: [new Decimal(0), new Decimal(900), new Decimal(1200), new Decimal(10), new Decimal(4800), new Decimal(12000), new Decimal(24000)],
+        sendCooldownTimer: new Decimal(0),
+        sendResource: ["ir", "spaceRock"],
+        sendGain: new Decimal(50),
 
         battleLevel: new Decimal(0),
         battleXP: new Decimal(0),
@@ -181,13 +186,49 @@ addLayer("ir", {
             player.subtabs["ir"]['stuff'] = "Refresh Page :(";
         }
 
-        // Ship max health by type
-        if (player.ir.shipType == 1) player.ir.shipHealthMax = new Decimal(100)
-        if (player.ir.shipType == 2) player.ir.shipHealthMax = new Decimal(150)
-        if (player.ir.shipType == 3) player.ir.shipHealthMax = new Decimal(75)
-        if (player.ir.shipType == 4) player.ir.shipHealthMax = new Decimal(100)
-        if (player.ir.shipType == 5) player.ir.shipHealthMax = new Decimal(50)
-        if (player.ir.shipType == 6) player.ir.shipHealthMax = new Decimal(75)
+        if (player.ir.shipType == 0) {
+            player.ir.sendResource = ["ir", "spaceRock"]
+            player.ir.sendGain = new Decimal(0)
+        }
+        if (player.ir.shipType == 1) {
+            player.ir.shipHealthMax = new Decimal(100)
+
+            player.ir.sendResource = ["ir", "spaceRock"]
+            player.ir.sendGain = new Decimal(100)
+            .mul(levelableEffect("pet", 502)[1])
+        }
+        if (player.ir.shipType == 2) {
+            player.ir.shipHealthMax = new Decimal(150)
+
+            player.ir.sendResource = ["ir", "spaceGem"]
+            player.ir.sendGain = new Decimal(1)
+        }
+        if (player.ir.shipType == 3) {
+            player.ir.shipHealthMax = new Decimal(75)
+
+            player.ir.sendResource = ["ir", "spaceRock"]
+            player.ir.sendGain = new Decimal(2)
+            .mul(levelableEffect("pet", 502)[1])
+        }
+        if (player.ir.shipType == 4) {
+            player.ir.shipHealthMax = new Decimal(100)
+
+            player.ir.sendResource = ["ir", "spaceGem"]
+            player.ir.sendGain = new Decimal(2)
+        }
+        if (player.ir.shipType == 5) {
+            player.ir.shipHealthMax = new Decimal(50)
+
+            player.ir.sendResource = ["ir", "spaceRock"]
+            player.ir.sendGain = new Decimal(1000)
+            .mul(levelableEffect("pet", 502)[1])
+        }
+        if (player.ir.shipType == 6) {
+            player.ir.shipHealthMax = new Decimal(75)
+
+            player.ir.sendResource = ["ir", "spaceGem"]
+            player.ir.sendGain = new Decimal(5)
+        }
 
         if (hasUpgrade("ir", 102)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.25)
         if (player.ir.shipType != 0) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(levelableEffect("ir", player.ir.shipType)[3])
@@ -199,6 +240,8 @@ addLayer("ir", {
 
             if (hasUpgrade("ir", 18)) player.ir.shipCooldownMax[i] = player.ir.shipCooldownMax[i].div(upgradeEffect("ir", 18))
         }
+        
+        player.ir.sendCooldownTimer = player.ir.sendCooldownTimer.sub(delta);
 
         player.ir.battleXPReq = player.ir.battleLevel.pow(1.6).mul(5).add(40)
         if (hasUpgrade("ir", 103)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.25)
@@ -574,7 +617,7 @@ addLayer("ir", {
             },
         },
         11: {
-            title() { return player.ir.shipCooldownTimers[player.ir.shipType].lte(0) ? "<h2>Enter Space Battle" : "<h2>Cooldown: " + formatTime(player.ir.shipCooldownTimers[player.ir.shipType])},
+            title() { return player.ir.shipCooldownTimers[player.ir.shipType].lte(0) ? "<h2>Enter Space Battle" : "<h2>Enter Space Battle<br>Cooldown: " + formatTime(player.ir.shipCooldownTimers[player.ir.shipType])},
             canClick() { return player.ir.shipCooldownTimers[player.ir.shipType].lte(0) },
             unlocked() { return true },
             tooltip() { return "Universes are paused to save performance." },
@@ -602,7 +645,17 @@ addLayer("ir", {
                 player.ir.ufoFought = false
                 player.ir.iriditeFought = false
             },
-            style: { width: '300px', "min-height": '100px', color: "white" },
+            style() {
+                let look = {width: "300px", minHeight: "100px"}
+                if (this.canClick()) {
+                    look.backgroundColor = "#480e8a"
+                    look.color = "white"
+                } else {
+                    look.backgroundColor = "#bf8f8f"
+                    look.color = "black"
+                }
+                return look
+            },
         },
         12: {
             title() { return "<h2>Leave Battle" },
@@ -632,9 +685,69 @@ addLayer("ir", {
                 player.ir.battleLevel = new Decimal(0)
                 player.ir.iriditeFightActive = false
             },
-            style: { width: '300px', "min-height": '100px', color: "white" },
+            style() {
+                let look = {width: "300px", minHeight: "100px"}
+                if (this.canClick()) {
+                    look.backgroundColor = "#480e8a"
+                    look.color = "white"
+                } else {
+                    look.backgroundColor = "#bf8f8f"
+                    look.color = "black"
+                }
+                return look
+            },
         },
-                1001: {
+        13: {
+            title() { return "<h2>Battle<br><span style='font-size:16px'>+"
+                + format(player.ir.sendGain.mul(new Decimal(1).add(new Decimal(0.1).mul(getLevelableAmount(this.layer, player.ir.shipType).sub(1)))))
+                + " " + (player.ir.sendResource[1] == "spaceRock" ? "Space Rock" : "Space Gem") + "<br>" + formatTime(player.ir.sendCooldownMax[player.ir.shipType]) + " Cooldown</span>"
+            },
+            canClick() { return player.ir.sendCooldownTimer.lte(0) },
+            unlocked() { return player.ev.evolutionsUnlocked[11] },
+            tooltip() { return "Based on ship level." },
+            onClick() {
+                player[player.ir.sendResource[0]][player.ir.sendResource[1]] = player[player.ir.sendResource[0]][player.ir.sendResource[1]].add(player.ir.sendGain.mul(new Decimal(1).add(new Decimal(0.1).mul(getLevelableAmount(this.layer, player.ir.shipType).sub(1)))))
+
+                player.ir.sendCooldownTimer = player.ir.sendCooldownMax[player.ir.shipType]
+            },
+            style() {
+                let look = {width: "300px", minHeight: "100px"}
+                if (this.canClick()) {
+                    look.backgroundColor = "#480e8a"
+                    look.color = "white"
+                } else {
+                    look.backgroundColor = "#bf8f8f"
+                    look.color = "black"
+                }
+                return look
+            },
+        },
+        14: {
+            title() { return "<h2>Repair<br><span style='font-size:16px'>+"
+                + format(new Decimal(100).mul(new Decimal(1).add(new Decimal(0.15).mul(getLevelableAmount('pet', 1209).sub(1)))))
+                + " XP<br>" + formatTime(new Decimal(600).add(player.ir.sendCooldownMax[player.ir.shipType].mul(0.5))) + " Cooldown</span>"
+            },
+            canClick() { return player.ir.sendCooldownTimer.lte(0) },
+            unlocked() { return player.ev.evolutionsUnlocked[11] },
+            tooltip() { return "Based on Captain evo pet level." },
+            onClick() {
+                setLevelableXP("ir", player.ir.shipType, getLevelableXP("ir", player.ir.shipType).add(new Decimal(100).mul(new Decimal(1).add(new Decimal(0.15).mul(getLevelableAmount('pet', 1209).sub(1))))))
+
+                player.ir.sendCooldownTimer = new Decimal(600).add(player.ir.sendCooldownMax[player.ir.shipType].mul(0.5))
+            },
+            style() {
+                let look = {width: "300px", minHeight: "100px"}
+                if (this.canClick()) {
+                    look.backgroundColor = "#480e8a"
+                    look.color = "white"
+                } else {
+                    look.backgroundColor = "#bf8f8f"
+                    look.color = "black"
+                }
+                return look
+            },
+        },
+        1001: {
             title() {return "W"},
             canClick: true,
             unlocked: true,
@@ -882,6 +995,9 @@ addLayer("ir", {
                     ["style-column", [
                     ["blank", "25px"],
                     ["clickable", 11],
+                    ["blank", "25px"],
+                    ["raw-html", function () { if (getLevelableAmount('pet', 1209).lte(0)) return ""; else return player.ir.sendCooldownTimer.lte(0) ? "Captain (Ready)" : "Captain (Cooldown: "+formatTime(player.ir.sendCooldownTimer)+")" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["row", [["clickable", 13],["clickable", 14]]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "You have " + formatWhole(player.ir.spaceRock) + " space rocks." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You have " + formatWhole(player.ir.spaceGem) + " space gems." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],

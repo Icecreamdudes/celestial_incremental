@@ -3159,6 +3159,50 @@ addLayer("pet", {
                 return look
             } 
         },
+        1209: {
+            image() { return this.canClick() ? "resources/Pets/johnUncommonPet.png" : "resources/secret.png"},
+            title() { return "Captain" },
+            lore() { return "he pilot spaecship." }, 
+            description() {
+                return "x" + format(this.effect()[0]) + " to ship damage.<br>" +
+                    "x" + format(this.effect()[1]) + " to rocket parts.<br>"
+            },
+            // levelLimit() { return new Decimal(99) },
+            effect() { 
+                return [
+                    getLevelableAmount(this.layer, this.id).pow(0.75).div(20).add(1), // All ship damage
+                    getLevelableAmount(this.layer, this.id).mul(1.5).pow(1.5).add(1), // Rocket parts
+                ]
+            },
+            levelTooltip() { return "Costs Paragon Shards." },
+            evoCan() { return true },
+            evoTooltip() { return ""},
+            evoClick() {
+                player.tab = "ev10"
+            },
+            // CLICK CODE
+            unlocked() { return player.ir.unlocked},
+            canClick() { return getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { player.cb.paragonShards = player.cb.paragonShards.sub(amt) },
+            canAfford() { return player.cb.paragonShards.gte(this.xpReq()) },
+            xpReq() { return getLevelableAmount(this.layer, this.id).pow(0.6).add(3).floor() },
+            currency() { return player.cb.paragonShards },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barShown() { return this.canClick() },
+            barStyle() { return {backgroundColor: "#4C64FF"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#bF7Fff" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            } 
+        },
         1302: {
             image() { return this.canClick() ? "resources/Pets/d20EvoPet.png" : "resources/secret.png"},
             title() { return "d20" },
@@ -3702,6 +3746,7 @@ addLayer("pet", {
                             ], () => { return player.cb.highestLevel.gte(250) ? {width: "535px", height: "40px", backgroundColor: "#0f1433", borderTop: "3px solid #4c64ff", borderBottom: "3px solid #4c64ff", userSelect: "none"} : {display: "none !important"}}],
                             ["style-column", [
                                 ["row", [["levelable", 1202], ["levelable", 1302], ["levelable", 1303], ["levelable", 1205], ["levelable", 1106]]],
+                                ["row", [["levelable", 1209]]],
                             ], () => { return player.cb.highestLevel.gte(250) ? {width: "525px", backgroundColor: "#070a19", padding: "5px"} : {display: "none !important"}}],
 
                             ["style-column", [

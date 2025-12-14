@@ -21,6 +21,7 @@
         8 - Clock
         9 - Gd Checkpoint
         10 - Eye
+        11 - John
         */
     }},
     automate() {},
@@ -156,6 +157,16 @@
                 player.ev.evolutionDisplayIndex = new Decimal(10)
             },
             style: { width: "100px", minHeight: "100px", border: "5px solid #3F3F3F", borderRadius: "0px", padding: "0px" },
+        },
+        111: {
+            title() { return "<img src='resources/evoShard.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
+            canClick() { return true},
+            unlocked() { return tmp.pet.levelables[209].canClick && !player.ev.evolutionsUnlocked[11] && player.ir.unlocked},
+            tooltip() { return "██████ buttons ███ █████ battle █████████" },
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(11)
+            },
+            style: { width: "100px", minHeight: "100px", border: "5px solid #3F007F", borderRadius: "0px", padding: "0px" },
         },
 
         201: {
@@ -481,6 +492,32 @@
                 setLevelableAmount("pet", 1205, new Decimal(1))
             }
         },
+        11: {
+            title() { return "Captain" },
+            description() {
+                return formatWhole(player.cb.evolutionShards) + "/60 Evolution Shards" +
+                "<br>"  + formatWhole(player.cb.paragonShards) + "/12 Paragon Shards" +
+                "<br>"  + formatWhole(player.fi.temporalShards) + "/12 Temporal Shards" +
+                "<br>"  + formatWhole(player.au2.stars) + "/2.5e10 Stars" +
+                "<br>"  + formatWhole(player.oi.oil) + "/1e400 Oil"
+            },
+            canClick() {
+                return (player.cb.evolutionShards.gte(60) && player.cb.paragonShards.gte(12) && player.fi.temporalShards.gte(12)
+                && player.au2.stars.gte("2.5e10") && player.oi.oil.gte("1e400"))
+            },
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(-1)
+
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(60)
+                player.cb.paragonShards = player.cb.paragonShards.sub(12)
+                player.fi.temporalShards = player.fi.temporalShards.sub(12)
+                player.au2.stars = player.au2.stars.sub("2.5e10")
+                player.oi.oil = player.oi.oil.sub("1e400")
+
+                player.ev.evolutionsUnlocked[11] = true
+                setLevelableAmount("pet", 1209, new Decimal(1))
+            }
+        },
 
         101: {
             title() { return "Simple Cookie" },
@@ -625,7 +662,7 @@
                 ["row", [
                     ["bt-clickable", 100], ["bt-clickable", 101], ["bt-clickable", 102], ["bt-clickable", 103], ["bt-clickable", 104],
                     ["bt-clickable", 105], ["bt-clickable", 107], ["bt-clickable", 108], ["bt-clickable", 109], ["bt-clickable", 110],
-                    ["bt-clickable", 106],
+                    ["bt-clickable", 106], ["bt-clickable", 111],
 
                     ["bt-clickable", 201], ["bt-clickable", 202], ["bt-clickable", 203]
                 ]],

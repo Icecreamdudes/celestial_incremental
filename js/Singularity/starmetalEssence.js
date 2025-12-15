@@ -81,7 +81,7 @@
             style: { width: '125px', "min-height": '50px', borderRadius: "5px" },
         },
         2: {
-            title() { return "<h3>Level up binding" },
+            title() { return "Level up binding" },
             canClick() { return tmp.sme.levelables[layers.sme.levelables.index].canBuy },
             unlocked() { return layers.sme.levelables.index != 0 },
             tooltip() {
@@ -96,7 +96,7 @@
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "100px", minHeight: "40px", borderRadius: "0px", fontSize: '8px'}
+                let look = {width: "425px", minHeight: "40px", borderRadius: "0px", fontSize: '12px'}
                 !this.canClick() ? look.backgroundColor = "#bf8f8f" : layers.sme.levelables.index >= 1000 ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#4e7cff"
                 return look
             },
@@ -979,44 +979,42 @@
             "Starmetal Binding": {
                 buttonStyle() { return { 'color': 'white' } },
                 unlocked() { return true },
-                content:
-                [
-        ["microtabs", "binding", { 'border-width': '0px' }],
+                content: [
+                    ["microtabs", "binding", { 'border-width': '0px' }],
                 ]
             },
         },
-                        binding: {
+        binding: {
             "Pets": {
                 buttonStyle() { return { 'color': 'white' } },
                 unlocked() { return true },
-                content:
-                [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "Starmetal Binding is used in Check Back's fighting system. (Which is unlocked after Matos)"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                content: [
+                    ["blank", "10px"],
+                    ["raw-html", "Starmetal Binding is used in Check Back's fighting system.<br>(Which is unlocked after Matos)", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["blank", "10px"],
                     ["style-column", [
                         ["style-column", [
                             ["levelable-display", [
                                 ["style-row", [["clickable", 2]], {width: '100px', height: '40px' }],
                             ]],
-                        ], {width: "550px", height: "175px", backgroundColor: "#29132eff", borderBottom: "3px solid #cb79ed"}],
+                        ], {width: "550px", height: "175px", backgroundColor: "#29132eff", borderBottom: "3px solid rgb(218, 218, 218)"}],
                         ["always-scroll-column", [
                             ["style-column", [
                                 ["raw-html", "Epic", {color: "#cb79ed", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "535px", height: "40px", backgroundColor: "#28182f", borderBottom: "3px solid #cb79ed", userSelect: "none"}],
-                            ["style-column", [
+                            ["top-column", [
                                 ["row", [["levelable", 101],["levelable", 102],["levelable", 103],["levelable", 104],["levelable", 105],]],
                                 ["row", [["levelable", 106],]],
-                            ], {width: "525px", backgroundColor: "#28182f", padding: "5px"}],
+                            ], {width: "525px", height: "260px", backgroundColor: "#28182f", padding: "5px"}],
             
                             ["style-column", [
                                 ["raw-html", "Legendary", {color: "#eed200", fontSize: "20px", fontFamily: "monospace"}],
                              ], {width: "535px", height: "40px", backgroundColor: "#2f2a00", borderTop: "3px solid #eed200", borderBottom: "3px solid #eed200", userSelect: "none"}],
-                            ["style-column", [
+                            ["top-column", [
                                 ["row", [["levelable", 201],["levelable", 202],]],
-                            ], {width: "525px", backgroundColor: "#2f2a00", padding: "5px"}],
-
+                            ], {width: "525px", minHeight: "153px", backgroundColor: "#2f2a00", padding: "5px"}],
                         ], {width: "550px", height: "522px"}],
-                    ], {width: "550px", height: "700px", backgroundColor: "#161616", border: "3px solid rgb(218, 218, 218)", paddingTop: "5px", paddingBottom: "5px", borderRadius: "5px 5px 5px 5px"}],
+                    ], {width: "550px", height: "700px", backgroundColor: "#161616", border: "3px solid rgb(218, 218, 218)"}],
                 ]
             },
             "Punchcards": {

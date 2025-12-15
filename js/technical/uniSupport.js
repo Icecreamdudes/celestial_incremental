@@ -234,7 +234,7 @@ addUniverse("UB", {
         return "Universe β<br>Hive"
     },
     symbol: "β",
-    tree: [["bee", "fl"], ["bpl", "ne"], ["bb", "wa", "ho"], ["al"]],
+    tree: [["bee", "fl"], ["bpl", "ne"], ["bb", "ho"], ["al", "wa"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(45deg, #f6e000 0%, #f9c901 100%)",

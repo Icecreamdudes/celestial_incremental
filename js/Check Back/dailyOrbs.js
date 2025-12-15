@@ -226,7 +226,7 @@ addLayer("ev2", {
                 player.ev2.orbs = player.ev2.orbs.sub(1)
 
                 player.cb.XPBoost = player.cb.XPBoost.add(player.ev2.boostGain)
-                doPopup("none", "+" + formatWhole(player.ev2.boostGain) + " pet points!", "Resource Obtained!", 5, "#00B229", "resources/XPBoost.png")
+                doPopup("none", "+" + formatWhole(player.ev2.boostGain) + " XPBoost!", "Resource Obtained!", 5, "#00B229", "resources/XPBoost.png")
             },
             style: {width: "250px", minHeight: "60px", fontSize: "9px", borderRadius: "30px", margin: "5px"},
         },

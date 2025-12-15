@@ -354,9 +354,9 @@ addLayer("co", {
 
         for (let prop in player.co.cores) {
             player.co.cores[prop].req = Decimal.pow(10, player.co.cores[prop].level)
-            if (player.co.cores[prop].xp.gte(player.co.cores[prop].req)) {
+            if (player.co.cores[prop].xp.gte(player.co.cores[prop].req) && player.co.cores[prop].level.lt(99)) {
                 let gain = player.co.cores[prop].totalxp.ln().div(Decimal.ln(10)).add(1).sub(player.co.cores[prop].level).floor()
-                player.co.cores[prop].level = player.co.cores[prop].level.add(gain)
+                player.co.cores[prop].level = player.co.cores[prop].level.add(gain).min(99)
                 player.co.cores[prop].xp = player.co.cores[prop].totalxp.sub(Decimal.pow(10, player.co.cores[prop].level.sub(1)))
             }
         }
@@ -1365,7 +1365,7 @@ addLayer("co", {
             },
         },
         201: {
-            title() {return "Point<br>Core<br><small>Lv." + player.co.cores.point.level},
+            title() {return "Point<br>Core<br><small>Lv." + player.co.cores.point.level + "/99"},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1378,7 +1378,7 @@ addLayer("co", {
             },
         },
         202: {
-            title() {return "Factor<br>Core<br><small>Lv." + player.co.cores.factor.level},
+            title() {return "Factor<br>Core<br><small>Lv." + player.co.cores.factor.level + "/99"},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1391,7 +1391,7 @@ addLayer("co", {
             },
         },
         203: {
-            title() {return "Prestige<br>Core<br><small>Lv." + player.co.cores.prestige.level},
+            title() {return "Prestige<br>Core<br><small>Lv." + player.co.cores.prestige.level + "/99"},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1404,7 +1404,7 @@ addLayer("co", {
             },
         },
         204: {
-            title() {return "Tree<br>Core<br><small>Lv." + player.co.cores.tree.level},
+            title() {return "Tree<br>Core<br><small>Lv." + player.co.cores.tree.level + "/99"},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1417,7 +1417,7 @@ addLayer("co", {
             },
         },
         205: {
-            title() {return "Grass<br>Core<br><small>Lv." + player.co.cores.grass.level},
+            title() {return "Grass<br>Core<br><small>Lv." + player.co.cores.grass.level + "/99"},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1430,7 +1430,7 @@ addLayer("co", {
             },
         },
         206: {
-            title() {return "<h2 style='font-size:14px'>Grasshopper</h2><br>Core<br><small>Lv." + player.co.cores.grasshopper.level},
+            title() {return "<h2 style='font-size:14px'>Grasshopper</h2><br>Core<br><small>Lv." + player.co.cores.grasshopper.level + "/99"},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1443,7 +1443,7 @@ addLayer("co", {
             },
         },
         207: {
-            title() {return "Code<br>Core<br><small>Lv." + player.co.cores.code.level},
+            title() {return "Code<br>Core<br><small>Lv." + player.co.cores.code.level + "/99"},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1456,7 +1456,7 @@ addLayer("co", {
             },
         },
         208: {
-            title() {return "Dice<br>Core<br><small>Lv." + player.co.cores.dice.level},
+            title() {return "Dice<br>Core<br><small>Lv." + player.co.cores.dice.level + "/99"},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1469,7 +1469,7 @@ addLayer("co", {
             },
         },
         209: {
-            title() {return "Rocket<br>Core<br><small>Lv." + player.co.cores.rocket.level},
+            title() {return "Rocket<br>Core<br><small>Lv." + player.co.cores.rocket.level + "/99"},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1482,7 +1482,7 @@ addLayer("co", {
             },
         },
         210: {
-            title() {return "<h2 style='font-size:14px'>Antimatter</h2><br>Core<br><small>Lv." + player.co.cores.antimatter.level},
+            title() {return "<h2 style='font-size:14px'>Antimatter</h2><br>Core<br><small>Lv." + player.co.cores.antimatter.level + "/99"},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1495,7 +1495,7 @@ addLayer("co", {
             },
         },
         211: {
-            title() {return "Infinity<br>Core<br><small>Lv." + player.co.cores.infinity.level},
+            title() {return "Infinity<br>Core<br><small>Lv." + player.co.cores.infinity.level + "/99"},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1508,7 +1508,7 @@ addLayer("co", {
             },
         },
         212: {
-            title() {return "<h2 style='font-size:14px'>Check Back</h2><br>Core<br><small>Lv." + player.co.cores.checkback.level},
+            title() {return "<h2 style='font-size:14px'>Check Back</h2><br>Core<br><small>Lv." + player.co.cores.checkback.level + "/99"},
             canClick: true,
             unlocked() {return hasUpgrade("s", 20)},
             onClick() {
@@ -1521,7 +1521,7 @@ addLayer("co", {
             },
         },
         213: {
-            title() {return "<h2 style='font-size:14px'>Radioactive</h2><br>Core<br><small>Lv." + player.co.cores.radioactive.level},
+            title() {return "<h2 style='font-size:14px'>Radioactive</h2><br>Core<br><small>Lv." + player.co.cores.radioactive.level + "/99"},
             canClick: true,
             unlocked() {return hasUpgrade("sma", 106)},
             onClick() {
@@ -1568,12 +1568,14 @@ addLayer("co", {
             width: 519,
             height: 37,
             progress() {
+                if (player.co.cores[player.co.coreIndex].level.gte(99)) return new Decimal(1)
                 return player.co.cores[player.co.coreIndex].xp.div(player.co.cores[player.co.coreIndex].req)
             },
             baseStyle: {backgroundColor: "black"},
             fillStyle: {backgroundColor: "#933"},
             borderStyle: {border: "0px", borderLeft: "3px solid white", borderRadius: "0px"},
             display() {
+                if (player.co.cores[player.co.coreIndex].level.gte(99)) return "<h3>Level Maxed</h3>"
                 return "<h3>" + format(player.co.cores[player.co.coreIndex].xp) + "/" + format(player.co.cores[player.co.coreIndex].req) + "</h3>";
             },
         },
@@ -1590,7 +1592,7 @@ addLayer("co", {
                             ["raw-html", "Core Fueling", {color: "white", fontSize: "30px", fontFamily: "monospace"}],
                         ], {width: "700px", height: "50px", borderBottom: "3px solid white"}],
                         ["style-column", [
-                            ["raw-html", () => {return "Currently Fueling: " + CORE_INFO[player.co.resetIndex].name + " (Lv." + formatWhole(player.co.cores[player.co.resetIndex].level) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return "Currently Fueling: " + CORE_INFO[player.co.resetIndex].name + " (Lv." + formatWhole(player.co.cores[player.co.resetIndex].level) + "/99)"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ["blank", "5px"],
                             ["raw-html", () => {return "Which will give +" + format(layers.co.coreXPCalc(player.co.resetIndex, player.s.singularityPointsToGet)) + " XP"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ], () => {return player.s.highestSingularityPoints.gt(0) ? {width: "700px", height: "80px", backgroundColor: "#411", borderBottom: "3px solid white"} : {width: "700px", height: "80px", backgroundColor: "#411", borderRadius: "0 0 12px 12px"}}],
@@ -1620,7 +1622,7 @@ addLayer("co", {
                         }],
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", () => {return "Lv." + formatWhole(player.co.cores[player.co.coreIndex].level) + " " + CORE_STRENGTH[player.co.cores[player.co.coreIndex].strength].name + " " + CORE_INFO[player.co.coreIndex].name}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "Lv." + formatWhole(player.co.cores[player.co.coreIndex].level) + "/99 " + CORE_STRENGTH[player.co.cores[player.co.coreIndex].strength].name + " " + CORE_INFO[player.co.coreIndex].name}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ], {width: "500px", height: "40px", borderBottom: "3px solid white"}],
                             ["style-column", [
                                 ["raw-html", () => {return CORE_INFO[player.co.coreIndex].effect[0] + format(player.co.cores[player.co.coreIndex].effect[0])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],

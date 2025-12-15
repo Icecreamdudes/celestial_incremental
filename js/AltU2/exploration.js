@@ -33,18 +33,15 @@ addLayer("se", {
     branches: ["st"],
     color: "#00a2ffff",
     update(delta) {
-        if (player.se.currentlyTravelling)
-        {
+        if (player.se.currentlyTravelling) {
             player.se.explorationTime = player.se.explorationTime.sub(delta)
 
-            if (player.se.explorationTime.lte(player.se.starExploreTimes[player.se.currentStar[0][player.se.currentStar[1]]]))
-            {
+            if (player.se.explorationTime.lte(player.se.starExploreTimes[player.se.currentStar[0][player.se.currentStar[1]]])) {
                 layers.se.arriveAtStar(player.se.currentStar[0], player.se.currentStar[1])
             }
         }
 
-        player.se.starNames = 
-        [
+        player.se.starNames = [
             [
                 "A0",
                 "A1",
@@ -64,24 +61,23 @@ addLayer("se", {
             ]
         ]
 
-        player.se.starExploreTimes = 
-        [
+        player.se.starExploreTimes = [
             [
-                new Decimal(180),
+                new Decimal(150),
                 new Decimal(300),
-                new Decimal(540),
+                new Decimal(450),
+                new Decimal(600),
                 new Decimal(1200),
                 new Decimal(2400),
-                new Decimal(7200),
             ],
             [
-                new Decimal(3600),
-                new Decimal(5400),
-                new Decimal(6000),
-            ],
-            [
+                new Decimal(1500),
                 new Decimal(1800),
-                new Decimal(2800),
+                new Decimal(2100),
+            ],
+            [
+                new Decimal(750),
+                new Decimal(900),
             ]
         ]
 

@@ -1847,7 +1847,7 @@ addLayer("ev1", {
                             ["style-column", [
                                 ["raw-html", () => {return "Crate Roll Chance: " + formatSimple(player.cb.crateTimers[0].base.mul(100), 1) + "%"}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
                                 ["raw-html", () => {return "Cooldown: " + formatTime(player.cb.crateTimers[0].max)}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
-                                ["raw-html", () => {return "Average: " + formatSimple(player.cb.crateTimers[0].average, 2) + " Rolls/s"}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "Average: " + formatSimple(player.cb.crateTimers[0].average.mul(3600), 2) + " Rolls/h"}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
                             ], {width: "250px", height: "87px", background: "#1f3166", borderBottom: "3px solid #17254c"}],
                             ["style-column", [
                                 ["row", [["buyable", 201], ["buyable", 202]]],
@@ -1860,7 +1860,7 @@ addLayer("ev1", {
                             ["style-column", [
                                 ["raw-html", () => {return "Crate Roll Chance: " + formatSimple(player.cb.crateTimers[1].base.mul(100), 1) + "%"}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
                                 ["raw-html", () => {return "Cooldown: " + formatTime(player.cb.crateTimers[1].max)}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
-                                ["raw-html", () => {return "Average: " + formatSimple(player.cb.crateTimers[1].average, 2) + " Rolls/s"}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "Average: " + formatSimple(player.cb.crateTimers[1].average.mul(3600), 2) + " Rolls/h"}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
                             ], {width: "250px", height: "87px", background: "#1f3166", borderBottom: "3px solid #17254c"}],
                             ["style-column", [
                                 ["row", [["buyable", 211], ["buyable", 212]]],
@@ -1873,7 +1873,7 @@ addLayer("ev1", {
                             ["style-column", [
                                 ["raw-html", () => {return "Crate Roll Chance: " + formatSimple(player.cb.crateTimers[2].base.mul(100), 1) + "%"}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
                                 ["raw-html", () => {return "Cooldown: " + formatTime(player.cb.crateTimers[2].max)}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
-                                ["raw-html", () => {return "Average: " + formatSimple(player.cb.crateTimers[2].average, 2) + " Rolls/s"}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "Average: " + formatSimple(player.cb.crateTimers[2].average.mul(3600), 2) + " Rolls/h"}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
                             ], {width: "250px", height: "87px", background: "#1f3166", borderBottom: "3px solid #17254c"}],
                             ["style-column", [
                                 ["row", [["buyable", 221], ["buyable", 222]]],
@@ -1886,7 +1886,7 @@ addLayer("ev1", {
                             ["style-column", [
                                 ["raw-html", () => {return "Crate Roll Chance: " + formatSimple(player.cb.crateTimers[3].base.mul(100), 1) + "%"}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
                                 ["raw-html", () => {return "Cooldown: " + formatTime(player.cb.crateTimers[3].max)}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
-                                ["raw-html", () => {return "Average: " + formatSimple(player.cb.crateTimers[3].average, 2) + " Rolls/s"}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "Average: " + formatSimple(player.cb.crateTimers[3].average.mul(3600), 2) + " Rolls/h"}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
                             ], {width: "250px", height: "87px", background: "#1f3166", borderBottom: "3px solid #17254c"}],
                             ["style-column", [
                                 ["row", [["buyable", 231], ["buyable", 232]]],
@@ -1899,7 +1899,7 @@ addLayer("ev1", {
                             ["style-column", [
                                 ["raw-html", () => {return "Crate Roll Chance: " + formatSimple(player.cb.crateTimers[4].base.mul(100), 1) + "%"}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
                                 ["raw-html", () => {return "Cooldown: " + formatTime(player.cb.crateTimers[4].max)}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
-                                ["raw-html", () => {return "Average: " + formatSimple(player.cb.crateTimers[4].average, 2) + " Rolls/s"}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "Average: " + formatSimple(player.cb.crateTimers[4].average.mul(3600), 2) + " Rolls/h"}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
                             ], {width: "250px", height: "87px", background: "#1f3166", borderBottom: "3px solid #17254c"}],
                             ["style-column", [
                                 ["row", [["buyable", 241], ["buyable", 242]]],
@@ -1912,7 +1912,7 @@ addLayer("ev1", {
                             ["style-column", [
                                 ["raw-html", () => {return "Crate Roll Chance: " + formatSimple(player.cb.crateTimers[5].base.mul(100), 1) + "%"}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
                                 ["raw-html", () => {return "Cooldown: " + formatTime(player.cb.crateTimers[5].max)}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
-                                ["raw-html", () => {return "Average: " + formatSimple(player.cb.crateTimers[5].average, 2) + " Rolls/s"}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "Average: " + formatSimple(player.cb.crateTimers[5].average.mul(3600), 2) + " Rolls/h"}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
                             ], {width: "250px", height: "87px", background: "#1f3166", borderBottom: "3px solid #17254c"}],
                             ["style-column", [
                                 ["row", [["buyable", 251], ["buyable", 252]]],
@@ -1925,7 +1925,7 @@ addLayer("ev1", {
                             ["style-column", [
                                 ["raw-html", () => {return "Crate Roll Chance: " + formatSimple(player.cb.crateTimers[6].base.mul(100), 1) + "%"}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
                                 ["raw-html", () => {return "Cooldown: " + formatTime(player.cb.crateTimers[6].max)}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
-                                ["raw-html", () => {return "Average: " + formatSimple(player.cb.crateTimers[6].average, 2) + " Rolls/s"}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "Average: " + formatSimple(player.cb.crateTimers[6].average.mul(3600), 2) + " Rolls/h"}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
                             ], {width: "250px", height: "87px", background: "#1f3166", borderBottom: "3px solid #17254c"}],
                             ["style-column", [
                                 ["row", [["buyable", 261], ["buyable", 262]]],

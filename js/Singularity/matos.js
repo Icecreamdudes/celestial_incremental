@@ -18,6 +18,10 @@
 
         eclipseStats: [new Decimal(0), new Decimal(0), new Decimal(0)], // Eclipse stats, 0 - damage, 1 - health, 2 - cooldown
 
+        // IDEA: SKILLS TAKE SKILL POINTS THAT CAN BE INCREASED INDIVIDUALLY FOR A CHARACTER VIA XP DROPPED BY ENEMIES. MAKES POWERFUL SKILLS MORE RISKY TO ADD.
+        // SKILLS CAN ALSO BE INCREASED IN TIER (INCREASING MAX TIER COSTS MATOS FRAGMENTS), WHICH INCREASES SKILL POINT COST, BUT ALSO INCREASES THE SKILLS POWER.
+        // MAKE CURSE DAMAGE CALCULATED IN A SEPERATE FUNCTION
+
         //character stats
         // 0 - Kres, 1 - Nav, 2 - Sel, 3 - Eclipse
         health: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
@@ -413,6 +417,29 @@
                             logPrint("<span style='color: #ee8700;'>Shield blocked explosive damage towards " + player.ma.characterNames[i] + ".</span>")
                         }
                     }
+                }
+            }
+
+            if (hasUpgrade("ma", 16) && Decimal.lt(Math.random(), upgradeEffect("ma", 16))) {
+                // Filter out dead characters
+                let aliveCharacters = player.ma.deadCharacters
+                    .map((isDead, index) => (!isDead ? index : null))
+                    .filter(index => index !== null);
+
+                if (aliveCharacters.length > 0) {
+                    let character = aliveCharacters[getRandomInt(aliveCharacters.length)];
+        
+                    // Heal for 10% of max health
+                    let healAmount = player.ma.healthMax[character].mul(0.1)
+                    player.ma.health[character] = player.ma.health[character].add(healAmount);
+        
+                    // Ensure health does not exceed max HP
+                    if (player.ma.health[character].gt(player.ma.healthMax[character])) {
+                        player.ma.health[character] = player.ma.healthMax[character];
+                    }
+        
+                    // Log the healing event
+                    logPrint("<span style='color: #ffc5d3;'>" + player.ma.characterNames[character] + " has been healed for " + format(healAmount) +  "HP! (Tonic Toss-Up)")
                 }
             }
         }
@@ -1284,8 +1311,12 @@
         
                 // Apply self-damage to Kres
                 if (player.ma.shieldDuration.lte(0)) {
-                    player.ma.health[0] = player.ma.health[0].sub(selfDamage)
-                    logPrint("<span style='color: #910a27;'>Kres takes " + format(selfDamage) + " self-damage from the Big Attack.</span>")
+                    if (!hasUpgrade("ma", 15) || Decimal.gte(Math.random(), upgradeEffect("ma", 15))) {
+                        player.ma.health[0] = player.ma.health[0].sub(selfDamage)
+                        logPrint("<span style='color: #910a27;'>Kres takes " + format(selfDamage) + " self-damage from the Big Attack.</span>")
+                    } else {
+                        logPrint("<span style='color: #ffc5d3;'>Kres avoided taking self-damage from the Big Attack! (Improved Coordination)")
+                    }
                 } else {
                     logPrint("<span style='color: #910a27;'>Shield blocks Kres's self-damage.</span>")
                 }
@@ -1828,6 +1859,12 @@
         }
     },
     lootCelestialite() {
+        if (hasUpgrade("ma", 17) && Decimal.lt(Math.random(), upgradeEffect("ma", 17))) {
+            for (let i = 0; i < player.ma.matosFragmentMult.length; i++) {
+                player.ma.matosFragmentMult[i] = player.ma.matosFragmentMult[i].mul(2)
+            }
+            logPrint("<span style='color: #ffc5d3;'>Celestialite rewards have been doubled! (Random Returns)")
+        }
         let random = Math.random()
         if (player.ma.currentCelestialiteType == 0) {
             if (random < 0.7) {
@@ -2683,56 +2720,60 @@
                 return look
             },
         },
+        // MAYBE REPLACE THESE WITH LOW SKILL POINT PASSIVE SKILLS AND MAKE THESE BUFF SKILL POINT RELATED THINGS
         15: {
-            title: "Kres Upgrade II",
+            title: "Improved Coordination",
             unlocked: true,
-            description: "Kres' pet level boosts his strength and defense.",
+            description: "Kres' pet level/ascension increases chance to not take self-damage.",
             cost: new Decimal("500"),
             currencyLocation() { return player.ma },
             currencyDisplayName: "Common Matos Fragments",
             currencyInternalName: "commonMatosFragments",
             effect() {
-                return getLevelableAmount("pet", 404)
+                let amt = getLevelableAmount("pet", 404).add(getLevelableTier("pet", 404).mul(5).min(40))
+                return amt.mul(Decimal.pow(2, getLevelableTier("pet", 404))).add(1).log(2).div(25)
             },
-            effectDisplay() { return "+" + formatWhole(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            effectDisplay() { return "+" + formatSimple(upgradeEffect(this.layer, this.id).mul(100)) + "%" }, // Add formatting to the effect
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid #4d767f", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid #4d767f", lineHeight: "1", borderRadius: "15px", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#9bedff"
                 return look
             },
         },
         16: {
-            title: "Nav Upgrade II",
+            title: "Tonic Toss-up",
             unlocked: true,
-            description: "Nav's pet level boosts her strength and agility.",
+            description: "Nav's pet level/ascension increases chance to heal between celestialites.",
             cost: new Decimal("300"),
             currencyLocation() { return player.ma },
             currencyDisplayName: "Rare Matos Fragments",
             currencyInternalName: "rareMatosFragments",
             effect() {
-                return getLevelableAmount("pet", 405)
+                let amt = getLevelableAmount("pet", 405).add(getLevelableTier("pet", 405).mul(5).min(40))
+                return amt.mul(Decimal.pow(2, getLevelableTier("pet", 405))).add(1).log(2).div(50)
             },
-            effectDisplay() { return "+" + formatWhole(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            effectDisplay() { return "+" + formatSimple(upgradeEffect(this.layer, this.id).mul(100)) + "%" }, // Add formatting to the effect
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid #273e7f", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid #273e7f", lineHeight: "1", borderRadius: "15px", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#4e7cff"
                 return look
             },
         },
         17: {
-            title: "Sel Upgrade II",
+            title: "Random Returns",
             unlocked: true,
-            description: "Sel's pet level boosts his agility and defense.",
+            description: "Sel's pet level/ascension increases chance to double celestialite rewards.",
             cost: new Decimal("16"),
             currencyLocation() { return player.ma },
             currencyDisplayName: "Epic Matos Fragments",
             currencyInternalName: "epicMatosFragments",
             effect() {
-                return getLevelableAmount("pet", 406)
+                let amt = getLevelableAmount("pet", 406).add(getLevelableTier("pet", 406).mul(5).min(40))
+                return amt.mul(Decimal.pow(2, getLevelableTier("pet", 406))).add(1).log(2).div(75)
             },
-            effectDisplay() { return "+" + formatWhole(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            effectDisplay() { return "+" + formatSimple(upgradeEffect(this.layer, this.id).mul(100)) + "%" }, // Add formatting to the effect
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid #653c76", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid #653c76", lineHeight: "1", borderRadius: "15px", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#cb79ed"
                 return look
             },
@@ -2798,7 +2839,7 @@
             },
         },
         23: {
-            title: "Kres Upgrade III",
+            title: "Kres Upgrade II",
             unlocked: true,
             description: "Unlock Kres' third skill.",
             cost: new Decimal("1"),
@@ -2812,7 +2853,7 @@
             },
         },
         24: {
-            title: "Nav Upgrade III",
+            title: "Nav Upgrade II",
             unlocked: true,
             description: "Unlock Nav's third skill.",
             cost: new Decimal("1"),
@@ -2826,7 +2867,7 @@
             },
         },
         25: {
-            title: "Sel Upgrade III",
+            title: "Sel Upgrade II",
             unlocked: true,
             description: "Unlock Sel's third skill.",
             cost: new Decimal("1"),

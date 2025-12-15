@@ -2568,6 +2568,66 @@ const cutsceneDialogue112 = [ //dead sel
     { text: "How sad...", },
 ];   //REMINDER: CROSS OUT SEL'S NAME AFTER DEFEATING IRIDITE.
 
+// Happens when entering the hive
+const cutsceneDialogue113 = [
+    { text: "You appear in a giant plains, and an indiscernible being floats towards you." },
+    { text: "Oh~, a visitor!", portrait: "resources/alephDark.png"},
+    { text: "Who are you?", portrait: "resources/player.png"},
+    { text: "You don't need to worry about that, you will figure out with time.", portrait: "resources/alephDark.png"},
+    { text: "All that matters is whether or not you can be beneficial to the swarm.", portrait: "resources/alephDark.png"},
+    { text: "You look forward and see a lone bee."},
+    { text: "Unfortunately it has dwindled down to only one bee, but it is quite the special one!", portrait: "resources/alephDark.png"},
+    { text: "Why should I help you with building up this swarm?", portrait: "resources/player.png"},
+    { text: "Judging by your aura, you seem to be quite focused on hunting celestials.", portrait: "resources/alephDark.png"},
+    { text: "To do that, you need quite a lot of power.", portrait: "resources/alephDark.png"},
+    { text: "My swarm has the potential to help you grow stronger.", portrait: "resources/alephDark.png"},
+    { text: "Alright.", portrait: "resources/player.png"},
+    { text: "If you are worthy, I am sure you can figure it out from here.", portrait: "resources/alephDark.png"},
+];
+
+// Happens at the layer branch
+const cutsceneDialogue114 = [
+    { text: "You seem to understand the basics now.", portrait: "resources/alephDark.png"},
+    { text: "This is where building a swarm gets tru~ly interesting.", portrait: "resources/alephDark.png"},
+    { text: "Next is choosing what path you will take to improve your swarm.", portrait: "resources/alephDark.png"},
+    { text: "I currently know of two potential paths.", portrait: "resources/alephDark.png"},
+    { text: "Are there other paths?", portrait: "resources/player.png"},
+    { text: "Perhaps, but I haven't been able to reach them.", portrait: "resources/alephDark.png"},
+    { text: "Hopefully you'll do well enough that you can discover one.", portrait: "resources/alephDark.png"},
+];
+
+// Happens half way through the path
+const cutsceneDialogue115 = [
+    { text: "Excellent, you seem to have potential.", portrait: "resources/alephDark.png"},
+    { text: "At the current rate you'll be able to reach where I was sealed.", portrait: "resources/alephDark.png"},
+    { text: "So this isn't your actual body.", portrait: "resources/player.png"},
+    { text: "Of course not! My body is multiple times bigger then this spirit.", portrait: "resources/alephDark.png"},
+    { text: "Most importantly, the swarm wouldn't have dwindled in power if I hadn't been sealed.", portrait: "resources/alephDark.png"},
+    { text: "So what is next?", portrait: "resources/player.png"},
+    { text: "Just a little more and you can get to my location.", portrait: "resources/alephDark.png"},
+    { text: "From there you can build up the fundamental power of the swarm.", portrait: "resources/alephDark.png"},
+    { text: "I'll be waiting!", portrait: "resources/alephDark.png"},
+];
+
+// Happens when you unlock Aleph
+const cutsceneDialogue116 = [
+    { text: "Fantastic, finally a capable soul who can truly continue the swarm.", portrait: "resources/alephDark.png"},
+    { text: "Can I finally know who you are?", portrait: "resources/player.png"},
+    { text: "I am Aleph, the Celestial of Swarms.", portrait: "resources/aleph.png"},
+    { text: "You raise up your guard."},
+    { text: "Fufufu~, you don't need to stress darling.", portrait: "resources/aleph.png"},
+    { text: "The only thing I care about is whatever will make my swarm prosper.", portrait: "resources/aleph.png"},
+    { text: "And you seem to be ve~ry useful.", portrait: "resources/aleph.png"},
+    { text: "Besides, the important part is that you can now condense your swarms power into its fundamental resource.", portrait: "resources/aleph.png"},
+    { text: "And if you use those resources to help unseal me, I'll be able to lend you some of my powers.", portrait: "resources/aleph.png"},
+    { text: "I'll even be able to modify some powers you already have to greatly improve them.", portrait: "resources/aleph.png"},
+    { text: "... Whatever will make me stronger.", portrait: "resources/player.png"},
+    { text: "That's the spirit!", portrait: "resources/aleph.png"},
+    { text: "Just keep working on improving the swarm, and I will be able to help you.", portrait: "resources/aleph.png"},
+];
+
+
+
 // Example with custom background:
 // showCutscene(cutsceneDialogue1, {
 //     background: \"url('img/bg.png') center/cover\", // or any valid CSS background

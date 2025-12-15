@@ -174,7 +174,7 @@ addLayer("fl", {
         player.fl.timers.yellow.max = new Decimal(60)
         if (player.ho.cell.gte(CELL_MILESTONES[player.bee.path][4])) player.fl.timers.yellow.max = player.fl.timers.yellow.max.div(2)
         if (player.al.cocoonLevel >= 8) player.fl.timers.yellow.max = player.fl.timers.yellow.max.div(2)
-        if (player.ho.cell.gte(CELL_MILESTONES[player.bee.path][2]) && !player.fl.timers.yellow.paused) player.fl.timers.yellow.current = player.fl.timers.yellow.current.sub(delta)
+        if (player.ho.cell.gte(CELL_MILESTONES[player.bee.path][2]) && !player.fl.timers.yellow.pause) player.fl.timers.yellow.current = player.fl.timers.yellow.current.sub(delta)
 
         for (let thing in player.fl.timers) {
             if (player.fl.timers[thing].current.lte(0)) {
@@ -255,10 +255,25 @@ addLayer("fl", {
         let column = getRandomInt(5) + 1
         let val = column + "0" + row
         let tier = Math.random()
+        if (player.al.cocoonLevel >= 11 && player.fl.glossaryRig != 0) {
+            tier = player.fl.glossaryRig.toString()[1]
+            switch (tier) {
+                case '0':
+                    tier = 0.9
+                    break;
+                case '1':
+                    tier = 0.1
+                    break;
+                default:
+                    tier = 0.35
+                    break;
+            }
+        }
         let rigBase = ((player.fl.glossaryRig-1)%5)+2
         switch(type) {
             case "red":
                 // PENTAGONAL RED
+                console.log(tier)
                 if (tier < 0.3 && buyableEffect("bee", 22).gt(0)) {
                     if (getGridData("fl", val)[0] <= player.fl.glossaryRig && player.fl.glossaryRig > 110 && player.fl.glossaryRig < 120) {
                         setGridData("fl", val, [player.fl.glossaryRig, new Decimal(rigBase*5)])
@@ -1905,7 +1920,7 @@ addLayer("fl", {
                             ["raw-html", "<button class='shopButton' style='width:65px;height:65px;background:#251d0d;font-size:12px' onclick='player.fl.glossaryRig=0'>Disable<br>Rigging</button>"],
                             ["style-column", [
                                 ["raw-html", () => {return "Currently rigging: " + layers.fl.glossary[player.fl.glossaryRig].name}, {color: "#ccc", fontSize: "14px", fontFamily: "monospace"}],
-                                ["raw-html", "(Rigged flowers are guaranteed to be rolled if its tier is picked)", {color: "#ccc", fontSize: "12px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return player.al.cocoonLevel >= 11 ? "(Rigged flowers are guaranteed to be rolled)" : "(Rigged flowers are guaranteed to be rolled if its tier is picked)"}, {color: "#ccc", fontSize: "12px", fontFamily: "monospace"}],
                             ], {width: "465px", height: "65px", borderLeft: "5px solid #3e3117"}],
                         ], () => {return player.al.cocoonLevel >= 3 ? {width: "535px", height: "65px", background: "#251d0d", borderTop: "5px solid #3e3117"} : {width: "535px", height: "70px"}}],
                     ], {width: "535px", height: "480px", backgroundColor: "#312712", border: "5px solid #3e3117"}],

@@ -963,6 +963,10 @@
 
                     ["blank", "25px"], 
         ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15], ["clickable", 16], ["clickable", 17],]],
+                    ["blank", "50px"],
+                    ["layer-proxy", ["co", [
+                        ["clickable", 1000]
+                    ]]],
                     ["blank", "25px"],
                 ]
             },

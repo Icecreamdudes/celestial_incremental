@@ -60,6 +60,7 @@ addLayer("pet", {
     symbol: "Pet", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    levelableAscend: true,
     startData() { return {
         unlocked: true,
         paused: false,
@@ -554,7 +555,11 @@ addLayer("pet", {
         for (let i in player.pet.shop) {
             for (let j in player.pet.shop[i]) {
                 player.pet.shop[i][j].cost = petShopBase[i][j]
-                player.pet.shop[i][j].cost = player.pet.shop[i][j].cost.mul(player.pet.shopBulk.mul(0.02).add(0.98)).mul(player.pet.shopBulk)
+                if (i != "shard") {
+                    player.pet.shop[i][j].cost = player.pet.shop[i][j].cost.mul(player.pet.shopBulk.mul(0.02).add(0.98)).mul(player.pet.shopBulk)
+                } else {
+                    player.pet.shop[i][j].cost = player.pet.shop[i][j].cost.mul(player.pet.shopBulk.mul(0.05).add(0.95)).mul(player.pet.shopBulk)
+                }
 
                 player.pet.shop[i][j].current = player.pet.shop[i][j].current.sub(onepersec.mul(delta))
             }
@@ -634,7 +639,7 @@ addLayer("pet", {
             onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "100px", minHeight: "40px", borderRadius: "0px", fontSize: '8px'}
-                !this.canClick() ? look.backgroundColor = "#bf8f8f" : layers.pet.levelables.index >= 1000 ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#4e7cff"
+                if (!this.canClick()) {look.backgroundColor = "#bf8f8f"} else {look.backgroundColor = "#4e7cff"}
                 return look
             },
         },
@@ -841,7 +846,7 @@ addLayer("pet", {
             },
             style() {
                 let look = {width: '125px', minHeight: '40px', color: "black", borderRadius: '0px', fontSize: '8px'}
-                this.canClick() ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.backgroundColor = "#4e7cff" : look.backgroundColor = "#bf8f8f"
                 return look
             },
         },
@@ -2491,7 +2496,7 @@ addLayer("pet", {
             // PET POINT CODE
             pointValue() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
-                return new Decimal(0.5).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2.5, getLevelableTier(this.layer, this.id)))
+                return new Decimal(0.5).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id)))
             },
             pointCooldown() { return new Decimal(40).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
             canteBase() { return new Decimal(0.12)},
@@ -2544,7 +2549,7 @@ addLayer("pet", {
             // PET POINT CODE
             pointValue() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40)).add(levelableEffect("pet", 1302)[0])
-                return new Decimal(0.1).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2.5, getLevelableTier(this.layer, this.id)))
+                return new Decimal(0.1).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id)))
             },
             pointCooldown() { return new Decimal(20).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
             canteBase() { return new Decimal(0.05)},
@@ -2608,7 +2613,7 @@ addLayer("pet", {
             // PET POINT CODE
             pointValue() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
-                return new Decimal(10).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2.5, getLevelableTier(this.layer, this.id)))
+                return new Decimal(10).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id)))
             },
             pointCooldown() { return new Decimal(900).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
             canteBase() { return new Decimal(0.8)},
@@ -2662,7 +2667,7 @@ addLayer("pet", {
             // PET POINT CODE
             pointValue() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
-                return new Decimal(90).mul(player.pet.petPointMult).mul(amt.add(1)).mul(Decimal.pow(2.5, getLevelableTier(this.layer, this.id)))
+                return new Decimal(90).mul(player.pet.petPointMult).mul(amt.add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id)))
             },
             pointCooldown() { return new Decimal(18000).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
             canteBase() { return new Decimal(7)},
@@ -2724,7 +2729,7 @@ addLayer("pet", {
             // PET POINT CODE
             pointValue() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
-                return new Decimal(2).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2.5, getLevelableTier(this.layer, this.id)))
+                return new Decimal(2).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id)))
             },
             pointCooldown() { return new Decimal(120).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
             canteBase() { return new Decimal(0.3)},
@@ -2777,7 +2782,7 @@ addLayer("pet", {
             // PET POINT CODE
             pointValue() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
-                return new Decimal(18).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2.5, getLevelableTier(this.layer, this.id)))
+                return new Decimal(18).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id)))
             },
             pointCooldown() { return new Decimal(1500).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
             canteBase() { return new Decimal(1)},
@@ -2840,7 +2845,7 @@ addLayer("pet", {
             // PET POINT CODE
             pointValue() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
-                return new Decimal(0.2).mul(player.pet.petPointMult).mul(amt.div(5).add(1)).mul(Decimal.pow(2.5, getLevelableTier(this.layer, this.id)))
+                return new Decimal(0.2).mul(player.pet.petPointMult).mul(amt.div(5).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id)))
             },
             pointCooldown() { return new Decimal(5).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
             canteBase() { return new Decimal(0.002)},
@@ -2894,7 +2899,7 @@ addLayer("pet", {
             // PET POINT CODE
             pointValue() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
-                return new Decimal(50).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2.5, getLevelableTier(this.layer, this.id)))
+                return new Decimal(50).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id)))
             },
             pointCooldown() { return new Decimal(4500).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
             canteBase() { return new Decimal(0.3)},
@@ -2947,7 +2952,7 @@ addLayer("pet", {
             // PET POINT CODE
             pointValue() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
-                return new Decimal(100).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2.5, getLevelableTier(this.layer, this.id)))
+                return new Decimal(100).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id)))
             },
             pointCooldown() { return new Decimal(8000).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
             canteBase() { return new Decimal(0.5)},
@@ -3912,6 +3917,7 @@ addLayer("pet", {
                 return [getLevelableAmount(this.layer, this.id).div(100), new Decimal(1)]
             },
             levelTooltip() { return "Costs Chocolate Shards." },
+            evoCan() { return true },
             // CLICK CODE
             unlocked() { return player.ep2.obtainedShards },
             canClick() { return getLevelableAmount(this.layer, this.id).gt(0)},
@@ -3949,6 +3955,7 @@ addLayer("pet", {
                 return [Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).sub(1)).max(1), new Decimal(1)]
             },
             levelTooltip() { return "Costs Chocolate Shards." },
+            evoCan() { return true },
             // CLICK CODE
             unlocked() { return player.ep2.obtainedShards && hasUpgrade("s", 21)},
             canClick() { return getLevelableAmount(this.layer, this.id).gt(0)},
@@ -3985,6 +3992,7 @@ addLayer("pet", {
                 return [getLevelableAmount(this.layer, this.id).mul(0.02), new Decimal(1)]
             },
             levelTooltip() { return "Costs Chocolate Shards." },
+            evoCan() { return true },
             // CLICK CODE
             unlocked() { return player.ep2.obtainedShards && player.ma.matosUnlock},
             canClick() { return getLevelableAmount(this.layer, this.id).gt(0)},

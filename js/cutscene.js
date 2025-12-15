@@ -12,6 +12,7 @@
         cutscene: [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,true, true, true,
             true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,true, true, true,
             true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,true, true, true,
+            true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,true, true, true,
         ],
 
 //OTF
@@ -1011,6 +1012,38 @@ if (player.c.cutscene[111] && !player.c.cutscene[110] && !cutsceneActive)
         portrait: "resources/secret.png"
     });
     player.c.cutscene[111] = false
+}
+if (player.c.cutscene[112] && player.tab == "bee") {
+    showCutscene(cutsceneDialogue113, {
+        cutsceneID: 113,
+        background: "radial-gradient(circle, #2a1c00, #150e00)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[112] = false
+}
+if (player.c.cutscene[113] && player.bee.totalResearch.gte(25)) {
+    showCutscene(cutsceneDialogue114, {
+        cutsceneID: 114,
+        background: "radial-gradient(circle, #2a1c00, #150e00)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[113] = false
+}
+if (player.c.cutscene[114] && player.bee.totalResearch.gte(60)) {
+    showCutscene(cutsceneDialogue115, {
+        cutsceneID: 115,
+        background: "radial-gradient(circle, #2a1c00, #150e00)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[114] = false
+}
+if (player.c.cutscene[115] && player.tab == "al") {
+    showCutscene(cutsceneDialogue116, {
+        cutsceneID: 116,
+        background: "radial-gradient(circle, #2a1c00, #150e00)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[115] = false
 }
 },
     startCutscene1() {

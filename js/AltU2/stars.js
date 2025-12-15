@@ -5,6 +5,7 @@ addLayer("st", {
     universe: "A2",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    levelableAscend: true,
     startData() { return {
         unlocked: true,
 
@@ -203,6 +204,31 @@ addLayer("st", {
         },
     },
     clickables: {
+        1: {
+            title() { return "Ascend Pet" },
+            canClick() {
+                if (player.ir.spaceRock.lt(Decimal.pow(10, getLevelableTier("st", layers.st.levelables.index).add(2)))) return false
+                if (tmp.st.levelables[layers.st.levelables.index].levelLimit == undefined) {
+                    return false
+                } else {
+                    return getLevelableAmount("st", layers.st.levelables.index).gte(tmp.st.levelables[layers.st.levelables.index].levelLimit)
+                }
+            },
+            unlocked() { return player.ev.evolutionsUnlocked[3] && layers.st.levelables.index != 0 },
+            tooltip() {return "Costs: " + formatSimple(Decimal.pow(10, getLevelableTier("st", layers.st.levelables.index).add(2))) + " Space Rocks"},
+            onClick() {
+                player.ir.spaceRock = player.ir.spaceRock.sub(Decimal.pow(10, getLevelableTier("st", layers.st.levelables.index).add(2)))
+                if (getLevelableAmount("st", layers.st.levelables.index).gte(tmp.st.levelables[layers.st.levelables.index].levelLimit)) {
+                    setLevelableTier("st", layers.st.levelables.index, getLevelableTier("st", layers.st.levelables.index).add(1))
+                    setLevelableAmount("st", layers.st.levelables.index, new Decimal(0))
+                }
+            },
+            style() {
+                let look = {width: "211px", minHeight: "40px", borderRadius: "0px", fontSize: '12px'}
+                !this.canClick() ? look.backgroundColor = "#bf8f8f" : look.backgroundColor = "#4e7cff"
+                return look
+            },
+        },
         2: {
             title() { return "Level Up" },
             canClick() { return tmp.st.levelables[layers.st.levelables.index].canBuy },
@@ -219,8 +245,9 @@ addLayer("st", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "425px", minHeight: "40px", borderRadius: "0px", fontSize: '12px'}
-                !this.canClick() ? look.backgroundColor = "#bf8f8f" : layers.st.levelables.index >= 1000 ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#4e7cff"
+                let look = {width: "211px", minHeight: "40px", borderRadius: "0px", fontSize: '12px'}
+                if (!player.ev.evolutionsUnlocked[3]) look.width = "425px"
+                !this.canClick() ? look.backgroundColor = "#bf8f8f" : look.backgroundColor = "#4e7cff"
                 return look
             },
         },
@@ -267,10 +294,11 @@ addLayer("st", {
             description() {
                 return "x" + format(this.effect()[0]) + " to dark celestial points.<br>"
             },
-            levelLimit() { return new Decimal(50)},
-            effect() { 
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(4).add(1).pow(3), // Dark Points Gain
+                    amt.mul(4).add(1).pow(3).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Dark Points Gain
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -281,7 +309,10 @@ addLayer("st", {
             // BUY CODE
             pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).mul(3).add(10).floor() },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(3).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+            },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
                 this.pay(this.xpReq())
@@ -302,10 +333,11 @@ addLayer("st", {
             description() {
                 return "x" + format(this.effect()[0]) + " to dark rank points.<br>"
             },
-            levelLimit() { return new Decimal(50)},
-            effect() { 
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(3).add(1).pow(3), // Rank Point Gain
+                    amt.mul(3).add(1).pow(3).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Rank Point Gain
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -316,7 +348,10 @@ addLayer("st", {
             // BUY CODE
             pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).mul(3).add(10).floor() },  
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(3).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+            },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
                 this.pay(this.xpReq())
@@ -337,10 +372,11 @@ addLayer("st", {
             description() {
                 return "x" + format(this.effect()[0]) + " to dark tier points.<br>"
             },
-            levelLimit() { return new Decimal(50)},
-            effect() { 
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(3).add(1).pow(6), // Tier Point Gain
+                    amt.mul(3).add(1).pow(6).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Tier Point Gain
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -351,7 +387,10 @@ addLayer("st", {
             // BUY CODE
             pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).mul(3).add(10).floor() },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(3).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+            },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
                 this.pay(this.xpReq())
@@ -372,10 +411,11 @@ addLayer("st", {
             description() {
                 return "x" + format(this.effect()[0]) + " to dark tetr points.<br>"
             },
-            levelLimit() { return new Decimal(50)},
-            effect() { 
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(3).add(1).pow(9), // Tetr Point Gain
+                    amt.mul(3).add(1).pow(9).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Tetr Point Gain
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -386,7 +426,10 @@ addLayer("st", {
             // BUY CODE
             pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).mul(3).add(10).floor() },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(3).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+            },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
                 this.pay(this.xpReq())
@@ -407,10 +450,11 @@ addLayer("st", {
             description() {
                 return "x" + format(this.effect()[0]) + " to dark prestige points.<br>"
             },
-            levelLimit() { return new Decimal(50)},
-            effect() { 
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(2).add(1).pow(3), // Dark Prestige Points
+                    amt.mul(2).add(1).pow(3).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Dark Prestige Points
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -421,7 +465,10 @@ addLayer("st", {
             // BUY CODE
             pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).mul(3).add(10).floor() },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(3).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+            },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
                 this.pay(this.xpReq())
@@ -442,10 +489,11 @@ addLayer("st", {
             description() {
                 return "x" + format(this.effect()[0]) + " to generators.<br>"
             },
-            levelLimit() { return new Decimal(50)},
-            effect() { 
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(1.8).add(1).pow(1.8), //  Generators
+                    amt.mul(1.8).add(1).pow(1.8).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), //  Generators
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -456,7 +504,10 @@ addLayer("st", {
             // BUY CODE
             pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).mul(3).add(10).floor() },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(3).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+            },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
                 this.pay(this.xpReq())
@@ -477,10 +528,11 @@ addLayer("st", {
             description() {
                 return "x" + format(this.effect()[0]) + " to generator power.<br>"
             },
-            levelLimit() { return new Decimal(50)},
-            effect() { 
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(2).add(1).pow(2.5), // Generator Power
+                    amt.mul(2).add(1).pow(2.5).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Generator Power
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -491,7 +543,10 @@ addLayer("st", {
             // BUY CODE
             pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).mul(3).add(10).floor() },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(3).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+            },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
                 this.pay(this.xpReq())
@@ -512,10 +567,11 @@ addLayer("st", {
             description() {
                 return "x" + format(this.effect()[0]) + " to dark grass value.<br>"
             },
-            levelLimit() { return new Decimal(50)},
-            effect() { 
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(1.2).add(1).pow(2), // Grass value
+                    amt.mul(1.2).add(1).pow(2).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Grass value
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -526,7 +582,10 @@ addLayer("st", {
             // BUY CODE
             pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).mul(3).add(10).floor() },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(3).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+            },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
                 this.pay(this.xpReq())
@@ -547,10 +606,11 @@ addLayer("st", {
             description() {
                 return "x" + format(this.effect()[0]) + " to dark grass capacity.<br>"
             },
-            levelLimit() { return new Decimal(50)},
-            effect() { 
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(1.2).add(1).pow(2), // Grass capacity
+                    amt.mul(1.2).add(1).pow(2).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Grass capacity
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -561,7 +621,10 @@ addLayer("st", {
             // BUY CODE
             pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).mul(3).add(10).floor() },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(3).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+            },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
                 this.pay(this.xpReq())
@@ -584,10 +647,11 @@ addLayer("st", {
             description() {
                 return "^" + format(this.effect()[0]) + " to dark celestial point softcap.<br>"
             },
-            levelLimit() { return new Decimal(50)},
-            effect() { 
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    getLevelableAmount(this.layer, this.id).eq(0) ? new Decimal(1) : Decimal.pow(0.98, getLevelableAmount(this.layer, this.id)), // Softcap 
+                    amt.eq(0) ? new Decimal(1) : Decimal.pow(0.98, amt.mul(Decimal.pow(2, getLevelableTier(this.layer, this.id)))), // Softcap 
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -598,7 +662,10 @@ addLayer("st", {
             // BUY CODE
             pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).mul(5).add(10).floor() },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(5).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+            },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
                 this.pay(this.xpReq())
@@ -619,10 +686,11 @@ addLayer("st", {
             description() {
                 return "/" + format(this.effect()[0]) + " to dark rank req.<br>"
             },
-            levelLimit() { return new Decimal(50)},
-            effect() { 
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(3).add(1).pow(4), // Rank Req
+                    amt.mul(3).add(1).pow(4).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Rank Req
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -633,7 +701,10 @@ addLayer("st", {
             // BUY CODE
             pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).mul(5).add(10).floor() },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(5).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+            },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
                 this.pay(this.xpReq())
@@ -654,10 +725,11 @@ addLayer("st", {
             description() {
                 return "/" + format(this.effect()[0]) + " to dark tier req.<br>"
             },
-            levelLimit() { return new Decimal(50)},
-            effect() { 
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(2.8).add(1).pow(4), // Tier Req
+                    amt.mul(2.8).add(1).pow(4).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Tier Req
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -668,7 +740,10 @@ addLayer("st", {
             // BUY CODE
             pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).mul(5).add(10).floor() },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(5).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+            },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
                 this.pay(this.xpReq())
@@ -689,10 +764,11 @@ addLayer("st", {
             description() {
                 return "/" + format(this.effect()[0]) + " to dark tetr req.<br>"
             },
-            levelLimit() { return new Decimal(50)},
-            effect() { 
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(2.6).add(1).pow(4), // Tetr Req
+                    amt.mul(2.6).add(1).pow(4).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Tetr Req
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -703,7 +779,10 @@ addLayer("st", {
             // BUY CODE
             pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).mul(5).add(10).floor() },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(5).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+            },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
                 this.pay(this.xpReq())
@@ -724,10 +803,11 @@ addLayer("st", {
             description() {
                 return "x" + format(this.effect()[0]) + " to dark pent points.<br>"
             },
-            levelLimit() { return new Decimal(50)},
-            effect() { 
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(3).add(1).pow(12), // Pent Points gain
+                    amt.mul(3).add(1).pow(12).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Pent Points gain
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -738,7 +818,10 @@ addLayer("st", {
             // BUY CODE
             pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).mul(5).add(10).floor() },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(5).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+            },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
                 this.pay(this.xpReq())
@@ -759,10 +842,11 @@ addLayer("st", {
             description() {
                 return "/" + format(this.effect()[0]) + " to dark grass timer.<br>"
             },
-            levelLimit() { return new Decimal(50)},
-            effect() { 
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    getLevelableAmount(this.layer, this.id).pow(0.8).mul(0.1).add(1)
+                    amt.pow(0.8).mul(0.1).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id)))
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -773,7 +857,10 @@ addLayer("st", {
             // BUY CODE
             pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).mul(5).add(10).floor() },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(5).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+            },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
                 this.pay(this.xpReq())
@@ -794,10 +881,11 @@ addLayer("st", {
             description() {
                 return "x" + format(this.effect()[0]) + " to normality.<br>"
             },
-            levelLimit() { return new Decimal(50)},
-            effect() { 
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    getLevelableAmount(this.layer, this.id).add(1).pow(1.5), // Normality Gain
+                    amt.add(1).pow(1.5).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Normality Gain
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -808,7 +896,10 @@ addLayer("st", {
             // BUY CODE
             pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).mul(5).add(10).floor() },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(5).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+            },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
                 this.pay(this.xpReq())
@@ -829,10 +920,11 @@ addLayer("st", {
             description() {
                 return "/" + format(this.effect()[0]) + " to starmetal req.<br>"
             },
-            levelLimit() { return new Decimal(50)},
-            effect() { 
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(7).add(1).pow(4), // Starmetal Req
+                    amt.mul(7).add(1).pow(4).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Starmetal Req
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -843,7 +935,10 @@ addLayer("st", {
             // BUY CODE
             pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).mul(5).add(10).floor() },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(5).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+            },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
                 this.pay(this.xpReq())
@@ -864,10 +959,11 @@ addLayer("st", {
             description() {
                 return "x" + format(this.effect()[0]) + " to stars.<br>"
             },
-            levelLimit() { return new Decimal(50)},
-            effect() { 
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    getLevelableAmount(this.layer, this.id).pow(0.6).mul(0.3).add(1), // Points Gain
+                    amt.pow(0.6).mul(0.3).add(1).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Stars Gain
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -878,7 +974,10 @@ addLayer("st", {
             // BUY CODE
             pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).mul(5).add(10).floor() },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(5).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+            },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
                 this.pay(this.xpReq())
@@ -1934,7 +2033,7 @@ addLayer("st", {
                     ["style-column", [
                         ["style-column", [
                             ["levelable-display", [
-                                ["style-row", [["clickable", 2]], {width: '100px', height: '40px' }],
+                                ["style-row", [["clickable", 2], ["style-row", [], {width: "3px", height: "40px", background: "white"}], ["clickable", 1]], {width: '425px', height: '40px' }],
                             ]],
                         ], {width: "550px", height: "175px", backgroundColor: "#070024", borderBottom: "3px solid #9badff", borderRadius: "2px 2px 0 0"}],
                         ["always-scroll-column", [

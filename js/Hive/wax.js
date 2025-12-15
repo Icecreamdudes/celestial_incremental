@@ -1,4 +1,3 @@
-const baseWax = [new Decimal(1.112e99), new Decimal(1e109), new Decimal(1e119), new Decimal(1e129), new Decimal(1e139)]
 
 addLayer("wa", {
     name: "Wax", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -9,15 +8,8 @@ addLayer("wa", {
     startData() { return {
         unlocked: true,
 
-        cwi: 0, // Current Wax Index
-        wps: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)], // Wax Per Second
-
-        cbw: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)], // Current Boost Wax
-        tbw: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)], // Total Boost Wax
-        wtl: [new Decimal(1e100), new Decimal(1e110), new Decimal(1e120), new Decimal(1e130), new Decimal(1e140)], // Wax Till Next Level
-        cwl: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)], // Current Wax Level
-
-        wbe: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)], // Wax Boost Effect
+        wax: new Decimal(0),
+        waxGain: new Decimal(0),
     }},
     automate() {},
     nodeStyle() {
@@ -32,168 +24,56 @@ addLayer("wa", {
     update(delta) {
         let onepersec = new Decimal(1)
 
-        // Wax Calculations
-        for (let i = 0; i < 5; i++) {
-            player.wa.cbw[i] = player.wa.cbw[i].add(player.wa.wps[i].mul(delta))
-            player.wa.tbw[i] = player.wa.tbw[i].add(player.wa.wps[i].mul(delta))
-            player.wa.wbe[i] = new Decimal(2).pow(player.wa.cwl[i])
-            player.wa.wtl[i] = layers.wa.levelToXP(player.wa.cwl[i].add(1), i).sub(layers.wa.levelToXP(player.wa.cwl[i], i))
-            if (player.wa.cbw[i].gte(player.wa.wtl[i])) {
-                layers.wa.levelup(i)
-            }
-        }
-    },
-    levelToXP(quantity, index) {
-        quantity = new Decimal(10+(index*5)).pow(quantity.add(baseWax[index].log(10+(index*5))))
-        return quantity
-    },
-    xpToLevel(quantity, index) {
-        quantity = quantity.div(baseWax[index]).log(10+(index*5)).floor()
-        return quantity
-    },
-    levelup(index) {
-        let leftover = new Decimal(0)
-        player.wa.cwl[index] = layers.wa.xpToLevel(player.wa.tbw[index], index)
-        leftover = player.wa.tbw[index] - layers.wa.levelToXP(player.wa.cwl[index], index)
-        player.wa.cbw[index] = new Decimal(0)
-        player.wa.cbw[index] = player.wa.cbw[index].add(leftover)
+        player.wa.waxGain = Decimal.mul(player.bb.beeBread.div(1e10).pow(0.25), player.ho.honey.div(1e10).pow(0.25)).pow(0.5)
     },
     clickables: {
-        2: {
-            title() { return "Lv." + formatWhole(player.wa.cwl[0]) + "<br>BPS<br>x" + format(player.wa.wbe[0]) },
-            canClick() { return player.wa.cwi != 0 },
-            unlocked() { return true },
+        1: {
+            title() { return "Gain Wax, but reset previous content.<br><small>Req: 1e10 Bee Bread and Honey</small>" },
+            canClick() { return player.bb.beeBread.gte(1e10) && player.ho.honey.gte(1e10)},
+            unlocked: true,
             onClick() {
-                player.wa.cwi = 0
+                player.wa.wax = player.wa.wax.add(player.wa.waxGain)
+                layers.al.prestigeReset()
             },
-            style: { width: '125px', minHeight: '75px', fontSize: '10px', borderRadius: '0px' },
-        },
-        3: {
-            title() { return "Lv." + formatWhole(player.wa.cwl[1]) + "<br>Pollen<br>x" + format(player.wa.wbe[1]) },
-            canClick() { return player.wa.cwi != 1 },
-            unlocked() { return true },
-            onClick() {
-                player.wa.cwi = 1
-            },
-            style: { width: '125px', minHeight: '75px', fontSize: '10px', borderRadius: '0px' },
-        },
-        4: {
-            title() { return "Lv." + formatWhole(player.wa.cwl[2]) + "<br>Nectar<br>x" + format(player.wa.wbe[2]) },
-            canClick() { return player.wa.cwi != 2 },
-            unlocked() { return true },
-            onClick() {
-                player.wa.cwi = 2
-            },
-            style: { width: '125px', minHeight: '75px', fontSize: '10px', borderRadius: '0px' },
-        },
-        5: {
-            title() { return "Lv." + formatWhole(player.wa.cwl[3]) + "<br>Bee Bread<br>x" + format(player.wa.wbe[3]) },
-            canClick() { return player.wa.cwi != 3 },
-            unlocked() { return true },
-            onClick() {
-                player.wa.cwi = 3
-            },
-            style: { width: '125px', minHeight: '75px', fontSize: '10px', borderRadius: '0px' },
-        },
-        6: {
-            title() { return "Lv." + formatWhole(player.wa.cwl[4]) + "<br>Honey<br>x" + format(player.wa.wbe[4]) },
-            canClick() { return player.wa.cwi != 4 },
-            unlocked() { return true },
-            onClick() {
-                player.wa.cwi = 4
-            },
-            style: { width: '125px', minHeight: '75px', fontSize: '10px', borderRadius: '0px' },
-        },
-        7: {
-            title() { return "1%" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.wa.wps[player.wa.cwi] = player.wa.wps[player.wa.cwi].add(player.bee.bees.div(100))
-                player.bee.bees = player.bee.bees.sub(player.bee.bees.div(100))
-            },
-            style: { width: '75px', minHeight: '50px', fontSize: '12px' },
-        },
-        8: {
-            title() { return "10%" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.wa.wps[player.wa.cwi] = player.wa.wps[player.wa.cwi].add(player.bee.bees.div(10))
-                player.bee.bees = player.bee.bees.sub(player.bee.bees.div(10))
-            },
-            style: { width: '75px', minHeight: '50px', fontSize: '12px', },
-        },
-        9: {
-            title() { return "100%" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.wa.wps[player.wa.cwi] = player.wa.wps[player.wa.cwi].add(player.bee.bees)
-                player.bee.bees = new Decimal(0)
-            },
-            style: { width: '75px', minHeight: '50px', fontSize: '12px' },
-        },
-    },
-    bars: {
-        waxBar: {
-            unlocked() { return true },
-            direction: RIGHT,
-            width: 575,
-            height: 50,
-            progress() {
-                return player.wa.cbw[player.wa.cwi].div(player.wa.wtl[player.wa.cwi])
-            },
-            baseStyle: {
-                backgroundColor: "#665533"
-            },
-            fillStyle: {
-                backgroundColor: "white"
-            },
-            textStyle: {
-                fontSize: "24px"
-            },
-            display() {
-                return format(player.wa.cbw[player.wa.cwi]) + "/" + format(player.wa.wtl[player.wa.cwi]);
+            style() {
+                let look = { width: '300px', minHeight: '80px', fontSize: "12px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: '15px'}
+                if (this.canClick()) {look.background = "#f3e3c2"} else {look.background = "#bf8f8f"}
+                return look
             },
         },
     },
+    bars: {},
     upgrades: {},
     buyables: {},
     milestones: {},
     challenges: {},
     infoboxes: {},
-    microtabs: {},
+    microtabs: {
+        Tabs: {
+            "Main": {
+                buttonStyle: {borderColor: "#f3e3c2", borderRadius: "15px"},
+                unlocked: true,
+                content: [
+                    ["blank", "10px"],
+                    ["clickable", 1],
+                ],
+            },
+        },
+    },
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.bee.bees) + "</h3> bees (" + format(player.bee.bps) + "/s)." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["style-row", [
+            ["raw-html", () => {return "You have " + format(player.bb.beeBread) + " Bee Bread"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(" + format(player.bb.beeBreadPerSecond) + "/s)"}, {color: "white", fontSize: "16px", fontFamily: "monospace", marginLeft: "10px"}],
+        ]],
+        ["style-row", [
+            ["raw-html", () => {return "You have " + format(player.ho.honey) + " Honey"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(" + format(player.ho.honeyPerSecond) + "/s)"}, {color: "white", fontSize: "16px", fontFamily: "monospace", marginLeft: "10px"}],
+        ]],
         ["blank", "10px"],
-        ["clickable", 1],
-        ["blank", "25px"],
-        ["style-column", [
-            ["style-row", [
-                ["clickable", 2], ["clickable", 3], ["clickable", 4], ["clickable", 5], ["clickable", 6],
-            ], { borderBottom: "2px solid white" }],
-            ["style-column", [
-                ["blank", "25px"],
-                ["raw-html", function () { return player.wa.cwi == 0 ? "Bees Per Second: x" + format(player.wa.wbe[0]) : ""}, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                ["raw-html", function () { return player.wa.cwi == 1 ? "Pollen: x" + format(player.wa.wbe[1]) : ""}, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                ["raw-html", function () { return player.wa.cwi == 2 ? "Nectar: x" + format(player.wa.wbe[2]) : ""}, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                ["raw-html", function () { return player.wa.cwi == 3 ? "Bee Bread: x" + format(player.wa.wbe[3]) : ""}, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                ["raw-html", function () { return player.wa.cwi == 4 ? "Honey: x" + format(player.wa.wbe[4]) : ""}, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                ["blank", "10px"],
-                ["bar", "waxBar"],
-                ["raw-html", function () { return "+" + format(player.wa.wps[player.wa.cwi]) + "/s"}, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                ["blank", "25px"],
-                ["style-column", [
-                    ["blank", "10px"],
-                    ["raw-html", function () { return "Allocate Bees"}, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "10px"],
-                    ["row", [["clickable", 7], ["clickable", 8], ["clickable", 9]]],
-                    ["blank", "10px"],
-                ], {backgroundColor: "#665533", width: "615px", borderRadius: "15px"}],
-                ["blank", "5px"]
-            ], {backgroundColor: "#997F4C"}],
-        ], { border: "2px solid white" }],
+        ["microtabs", "Tabs", {borderWidth: "0"}],
+        ["blank", "20px"],
     ],
-    layerShown() { return player.startedGame && false }
+    layerShown() { return player.startedGame && player.bee.path == 0 && player.bee.extremePath}
 })
+// #997F4C
+// #665533

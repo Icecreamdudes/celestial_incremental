@@ -56,10 +56,10 @@ addLayer("bb", {
                 player.bb.beeBreadGain = player.bpl.pollen.div(1e12).pow(0.5)
             }
         } else {
-            if (player.bpl.pollen.lt(1e50)) {
-                player.bb.beeBreadGain = player.bpl.pollen.div(1e50)
+            if (player.bpl.pollen.lt(1e42)) {
+                player.bb.beeBreadGain = player.bpl.pollen.div(1e42)
             } else {
-                player.bb.beeBreadGain = player.bpl.pollen.div(1e50).pow(0.3)
+                player.bb.beeBreadGain = player.bpl.pollen.div(1e42).pow(0.3)
             }
         }
         player.bb.beeBreadGain = player.bb.beeBreadGain.mul(buyableEffect("bee", 51))
@@ -87,7 +87,7 @@ addLayer("bb", {
         if (!hasUpgrade("al", 113) || player.bb.breadEffects[3].lt(1.5)) {
             player.bb.breadEffects[3] = amt.div(bbMilestone[player.bee.path][3]).mul(player.bb.breadTierMult).pow(0.1).add(1).log(10).mul(2).sub(0.5).min(1.5) // Glossary Effect Base
         } else {
-            player.bb.breadEffects[3] = amt.div(bbMilestone[player.bee.path][3]).mul(player.bb.breadTierMult).pow(0.1).add(1).log(10).div(1.4).add(0.6) // Glossary Effect Base Without Cap
+            player.bb.breadEffects[3] = amt.div(bbMilestone[player.bee.path][3]).mul(player.bb.breadTierMult).pow(0.1).add(1).log(10).div(1.25).add(0.6) // Glossary Effect Base Without Cap
         }
         player.bb.breadEffects[4] = amt.div(bbMilestone[player.bee.path][4]).mul(player.bb.breadTierMult).pow(0.1).add(1).log(10).add(0.8) // Pollen Conversion Rate
         player.bb.breadEffects[5] = amt.div(bbMilestone[player.bee.path][5]).mul(player.bb.breadTierMult).pow(0.2).add(1).log(10).add(0.8) // Picking Power
@@ -125,7 +125,7 @@ addLayer("bb", {
     clickables: {
         11: {
             title() { return "Increase Bee Bread/s<br>but reset previous content.<br>Gain: " + format(player.bb.beeBreadGain) + " BB/s"},
-            canClick() { return player.bpl.pollen.gte(1e10)},
+            canClick() { return (player.bee.path == 1 && player.bpl.pollen.gte(1e10)) || player.bpl.pollen.gte(1e40)},
             unlocked() { return true},
             onClick() {
                 layers.bb.prestigeReset()
@@ -139,10 +139,20 @@ addLayer("bb", {
         },
         12: {
             title() {
+                if (player.bee.path != 1) {
+                    if (hasUpgrade("al", 118)) return "Increase your Bee Bread tier.<br>Req: " + format(new Decimal(10).pow(player.bb.breadTier.add(1).pow(2)).pow(3)) + " BB"
+                    return "Increase your Bee Bread tier<br>but reset previous content.<br>Req: " + format(new Decimal(10).pow(player.bb.breadTier.add(1).pow(2)).pow(3)) + " BB"
+                }
                 if (hasUpgrade("al", 118)) return "Increase your Bee Bread tier.<br>Req: " + format(new Decimal(10).pow(player.bb.breadTier.add(1).pow(2))) + " BB"
                 return "Increase your Bee Bread tier<br>but reset previous content.<br>Req: " + format(new Decimal(10).pow(player.bb.breadTier.add(1).pow(2))) + " BB"
             },
-            canClick() { return player.bb.beeBread.gte(new Decimal(10).pow(player.bb.breadTier.add(1).pow(2))) },
+            canClick() {
+                if (player.bee.path == 1) {
+                    return player.bb.beeBread.gte(new Decimal(10).pow(player.bb.breadTier.add(1).pow(2)))
+                } else {
+                    return player.bb.beeBread.gte(new Decimal(10).pow(player.bb.breadTier.add(1).pow(2)).pow(3))
+                }
+            },
             unlocked() { return true },
             onClick() {
                 if (!hasUpgrade("al", 118)) {
@@ -167,7 +177,7 @@ addLayer("bb", {
             width: 450,
             height: 35,
             progress() {
-                if (player.bb.breadMilestone == 8) return new Decimal(0)
+                if ((hasUpgrade("al", 114) && player.bb.breadMilestone >= 9) || (!hasUpgrade("al", 114) && player.bb.breadMilestone >= 8)) return new Decimal(0)
                 return player.bb.beeBread.div(bbMilestone[player.bee.path][player.bb.breadMilestone])
             },
             borderStyle: {
@@ -185,7 +195,7 @@ addLayer("bb", {
                 fontSize: "18px",
             },
             display() {
-                if ((player.bee.path == 1 && player.bb.breadMilestone < 8) || (hasUpgrade("al", 114) && player.bb.breadMilestone < 9)) {
+                if ((player.bb.breadMilestone < 8) || (hasUpgrade("al", 114) && player.bb.breadMilestone < 9)) {
                     return format(player.bb.beeBread) + "/" + format(bbMilestone[player.bee.path][player.bb.breadMilestone]) + " Bee Bread (" + format(player.bb.beeBreadPerSecond) + "/s)"
                 } else {
                     return format(player.bb.beeBread) + " Bee Bread (" + format(player.bb.beeBreadPerSecond) + "/s)"

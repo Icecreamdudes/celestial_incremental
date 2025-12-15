@@ -120,7 +120,7 @@ addLayer("ne", {
         player.ne.epsilon.effect = player.ne.epsilon.amount.pow(0.3).add(1)
 
         if (player.bee.path != 2) {
-            player.ne.alpha.effect = player.ne.alpha.effect.pow(0.7)
+            player.ne.alpha.effect = player.ne.alpha.effect.pow(0.6)
             player.ne.beta.effect = player.ne.beta.effect.pow(0.7)
             player.ne.gamma.effect = player.ne.gamma.effect.pow(0.7)
             player.ne.delta.effect = player.ne.delta.effect.pow(0.7)

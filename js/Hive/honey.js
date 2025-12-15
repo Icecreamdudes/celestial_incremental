@@ -52,7 +52,16 @@ addLayer("ho", {
             },
         },
     }},
-    automate() {},
+    automate() {
+        if (hasUpgrade("al", 218) && player.bee.path == 2) {
+            buyUpgrade("ho", 1)
+            buyUpgrade("ho", 2)
+            buyUpgrade("ho", 3)
+            buyUpgrade("ho", 4)
+            buyUpgrade("ho", 5)
+            buyUpgrade("ho", 6)
+        }
+    },
     nodeStyle() {
         return {borderColor: "#654700"}
     },

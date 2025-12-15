@@ -119,7 +119,7 @@
             player.ro.petAscension = player.pet.levelables[Decimal.add(200, player.ro.uncommonPassengerIndex.add(1))][2]
         }
 
-        player.ro.spacePetXPToGet = player.ro.petLevel.mul(player.ro.petAscension.add(1)).pow(player.ro.petAscension.div(10).add(1.2)).floor()
+        player.ro.spacePetXPToGet = player.ro.petLevel.mul(Decimal.pow(2, player.ro.petAscension)).pow(Decimal.mul(1.2, Decimal.pow(1.1, player.ro.petAscension))).floor()
         if (hasUpgrade("sma", 203)) player.ro.spacePetXPToGet = player.ro.spacePetXPToGet.mul(1.2).floor()
 
         player.ro.evoCost = Decimal.mul(player.ro.selectedPassengersCommon.length, Decimal.add(7, player.ro.selectedPassengersCommon.length)).add(player.ro.evoShardsReq)
@@ -128,12 +128,12 @@
         for (let i = 0; i < player.ro.selectedPassengersCommon.length; i++) {
             let lvl = player.pet.levelables[Decimal.add(101, player.ro.selectedPassengersCommon[i])][0]
             let tier = player.pet.levelables[Decimal.add(101, player.ro.selectedPassengersCommon[i])][2]
-            player.ro.commonXPToGet[i] = lvl.mul(tier.add(1)).pow(tier.div(10).add(1.2)).floor()
+            player.ro.commonXPToGet[i] = lvl.mul(Decimal.pow(2, tier)).pow(Decimal.mul(1.2, Decimal.pow(1.1, tier))).floor()
         }
         for (let i = 0; i < player.ro.selectedPassengersUncommon.length; i++) {
             let lvl = player.pet.levelables[Decimal.add(201, player.ro.selectedPassengersUncommon[i])][0]
             let tier = player.pet.levelables[Decimal.add(201, player.ro.selectedPassengersUncommon[i])][2]
-            player.ro.uncommonXPToGet[i] = lvl.mul(tier.add(1)).pow(tier.div(10).add(1.2)).floor()
+            player.ro.uncommonXPToGet[i] = lvl.mul(Decimal.pow(2, tier)).pow(Decimal.mul(1.2, Decimal.pow(1.1, tier))).floor()
         }
 
         player.ro.rocketImages = [

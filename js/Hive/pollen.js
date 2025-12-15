@@ -113,7 +113,7 @@ addLayer("bpl", {
 
         // Bee Role Effect Calculations
         if (player.bpl.roles.drone.amount.gte(1e100)) {
-            player.bpl.roles.drone.effect = player.bpl.roles.drone.amount.pow(0.4).mul(1e37).add(1)
+            player.bpl.roles.drone.effect = player.bpl.roles.drone.amount.pow(0.3).mul(1e47).add(1)
         } else if (player.bpl.roles.drone.amount.gte(1e60)) {
             player.bpl.roles.drone.effect = player.bpl.roles.drone.amount.pow(0.65).mul(1e12).add(1)
         } else {

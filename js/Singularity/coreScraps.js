@@ -1293,7 +1293,7 @@
                     ["style-row", [
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", () => {return "Lv." + formatWhole(player.co.cores[player.cs.scrapIndex].level) + "<br>" + CORE_INFO[player.cs.scrapIndex].name}, {color: "white", fontSize: "22px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "Lv." + formatWhole(player.co.cores[player.cs.scrapIndex].level) + "/99<br>" + CORE_INFO[player.cs.scrapIndex].name}, {color: "white", fontSize: "22px", fontFamily: "monospace"}],
                             ], {width: "247px", height: "50px", borderBottom: "3px solid #ababab"}],
                             ["style-row", [], () => {
                                 let look = {boxSizing: "border-box", width: "150px", height: "150px", border: "22px solid", borderRadius: "50%", margin: "25px auto"}

@@ -1,4 +1,4 @@
-const COCOON_MILESTONE = [new Decimal(1), new Decimal(10), new Decimal(100), new Decimal(1000), new Decimal(10000), new Decimal(100000), new Decimal(1e6), new Decimal(1e7), new Decimal(1e8), new Decimal(1e9)]
+const COCOON_MILESTONE = [new Decimal(1), new Decimal(10), new Decimal(100), new Decimal(1000), new Decimal(10000), new Decimal(100000), new Decimal(1e6), new Decimal(1e7), new Decimal(1e8), new Decimal(1e9), new Decimal(1e14), new Decimal(1e16)]
 addLayer("al", {
     name: "Aleph, the Celestial of Swarms", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "ℵ", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -411,7 +411,7 @@ addLayer("al", {
             title: "Honeycomb <small>(6, 3)</small>",
             unlocked() {return player.tad.hiveExpand},
             description: "No longer reset when gaining BB tier.",
-            cost: new Decimal(1e15),
+            cost: new Decimal(1e17),
             currencyLocation() { return player.al },
             currencyDisplayName: "Honeycombs",
             currencyInternalName: "honeycomb",
@@ -421,6 +421,12 @@ addLayer("al", {
                 return look
             },
         },
+        // Bee Bread is buffed based on Honey-Cells in pollen path
+        // Empress Bee that buffs BB Tiers
+        // Bee Bread Research that buffs pink flowers
+        // New BB Milestone that buffs Honey-Cells
+        // Buff BPS based on picking power
+        // Very small exponential buff to pollen
 
         201: {
             title: "Royal J. <small>(1, 1)</small>",
@@ -636,7 +642,7 @@ addLayer("al", {
             title: "Royal J. <small>(6, 3)</small>",
             unlocked: true,
             description: "Auto-buy honey upgrades when on nectar path.",
-            cost: new Decimal(1e15),
+            cost: new Decimal(1e17),
             currencyLocation() { return player.al },
             currencyDisplayName: "Royal Jelly",
             currencyInternalName: "royalJelly",
@@ -646,6 +652,12 @@ addLayer("al", {
                 return look
             },
         },
+        // Honey research that improves yellow flowers
+        // Nectar epsilon upgrades
+        // Bee Bread Cell
+        // Honey-Cells are buffed based on Bee Bread in nectar path
+        // Buff BPS based on flower gain
+        // Very small exponential buff to nectar alpha
     },
     buyables: {
         101: {
@@ -966,18 +978,10 @@ addLayer("al", {
             height: 600,
             progress() {
                 let base = 1/15
-                if (player.al.highestHoneycomb.lte(0)) return new Decimal(0)
-                if (player.al.highestHoneycomb.lt(1)) return player.al.highestHoneycomb.mul(base)
-                if (player.al.highestHoneycomb.lt(10)) return player.al.highestHoneycomb.sub(1).div(9).mul(base).add(base)
-                if (player.al.highestHoneycomb.lt(100)) return player.al.highestHoneycomb.sub(10).div(90).mul(base).add(base*2)
-                if (player.al.highestHoneycomb.lt(1000)) return player.al.highestHoneycomb.sub(100).div(900).mul(base).add(base*3)
-                if (player.al.highestHoneycomb.lt(10000)) return player.al.highestHoneycomb.sub(1000).div(9000).mul(base).add(base*4)
-                if (player.al.highestHoneycomb.lt(100000)) return player.al.highestHoneycomb.sub(10000).div(90000).mul(base).add(base*5)
-                if (player.al.highestHoneycomb.lt(1e6)) return player.al.highestHoneycomb.sub(100000).div(900000).mul(base).add(base*6)
-                if (player.al.highestHoneycomb.lt(1e7)) return player.al.highestHoneycomb.sub(1e6).div(9e6).mul(base).add(base*7)
-                if (player.al.highestHoneycomb.lt(1e8)) return player.al.highestHoneycomb.sub(1e7).div(9e7).mul(base).add(base*8)
-                if (player.al.highestHoneycomb.lt(1e9)) return player.al.highestHoneycomb.sub(1e8).div(9e8).mul(base).add(base*9)
-                return new Decimal(10/15)
+                for (let i = 1; i < COCOON_MILESTONE.length; i++) {
+                    if (player.al.highestHoneycomb.lt(COCOON_MILESTONE[i])) return player.al.highestHoneycomb.sub(COCOON_MILESTONE[i-1]).div(COCOON_MILESTONE[i].sub(COCOON_MILESTONE[i-1])).mul(base).add(base*i)
+                }
+                return new Decimal(11/15)
             },
             baseStyle: {background: "linear-gradient(0deg, #967d4a, #bd9d5b)", marginRight: "-3px"},
             fillStyle: {backgroundColor: "#e5bd3f66"},
@@ -1010,18 +1014,10 @@ addLayer("al", {
             height: 600,
             progress() {
                 let base = 1/15
-                if (player.al.highestRoyalJelly.lte(0)) return new Decimal(0)
-                if (player.al.highestRoyalJelly.lt(1)) return player.al.highestRoyalJelly.mul(base)
-                if (player.al.highestRoyalJelly.lt(10)) return player.al.highestRoyalJelly.sub(1).div(9).mul(base).add(base)
-                if (player.al.highestRoyalJelly.lt(100)) return player.al.highestRoyalJelly.sub(10).div(90).mul(base).add(base*2)
-                if (player.al.highestRoyalJelly.lt(1000)) return player.al.highestRoyalJelly.sub(100).div(900).mul(base).add(base*3)
-                if (player.al.highestRoyalJelly.lt(10000)) return player.al.highestRoyalJelly.sub(1000).div(9000).mul(base).add(base*4)
-                if (player.al.highestRoyalJelly.lt(100000)) return player.al.highestRoyalJelly.sub(10000).div(90000).mul(base).add(base*5)
-                if (player.al.highestRoyalJelly.lt(1e6)) return player.al.highestRoyalJelly.sub(100000).div(900000).mul(base).add(base*6)
-                if (player.al.highestRoyalJelly.lt(1e7)) return player.al.highestRoyalJelly.sub(1e6).div(9e6).mul(base).add(base*7)
-                if (player.al.highestRoyalJelly.lt(1e8)) return player.al.highestRoyalJelly.sub(1e7).div(9e7).mul(base).add(base*8)
-                if (player.al.highestRoyalJelly.lt(1e9)) return player.al.highestRoyalJelly.sub(1e8).div(9e8).mul(base).add(base*9)
-                return new Decimal(10/15)
+                for (let i = 1; i < COCOON_MILESTONE.length; i++) {
+                    if (player.al.highestRoyalJelly.lt(COCOON_MILESTONE[i])) return player.al.highestRoyalJelly.sub(COCOON_MILESTONE[i-1]).div(COCOON_MILESTONE[i].sub(COCOON_MILESTONE[i-1])).mul(base).add(base*i)
+                }
+                return new Decimal(11/15)
             },
             baseStyle: {background: "linear-gradient(0deg, #967d4a, #bd9d5b)"},
             fillStyle: {backgroundColor: "#e172b566"},
@@ -1072,6 +1068,7 @@ addLayer("al", {
                                 ["row", [["upgrade", 107], ["upgrade", 108], ["upgrade", 109]]],
                                 ["row", [["upgrade", 110], ["upgrade", 111], ["upgrade", 112]]],
                                 ["row", [["upgrade", 113], ["upgrade", 114], ["upgrade", 115]]],
+                                ["row", [["upgrade", 116], ["upgrade", 117], ["upgrade", 118]]],
                                 ["blank", "5px"],
                             ], {width: "400px", height: "327px", borderBottom: "3px solid #a900a9"}],
                             ["style-row", [
@@ -1095,6 +1092,7 @@ addLayer("al", {
                                 ["row", [["upgrade", 207], ["upgrade", 208], ["upgrade", 209]]],
                                 ["row", [["upgrade", 210], ["upgrade", 211], ["upgrade", 212]]],
                                 ["row", [["upgrade", 213], ["upgrade", 214], ["upgrade", 215]]],
+                                ["row", [["upgrade", 216], ["upgrade", 217], ["upgrade", 218]]],
                                 ["blank", "5px"],
                             ], {width: "400px", height: "327px", borderBottom: "3px solid #a900a9"}],
                             ["style-row", [
@@ -1139,97 +1137,107 @@ addLayer("al", {
                                 ["bar", "Cocoon2"],
                             ], {width: "399px", height: "652px", borderRight: "3px solid #a900a9"}],
                             ["top-column", [
-                                ["top-column", [
-                                    ["style-column", [
-                                        ["raw-html", "Current Effects", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                                        ["raw-html", "Requires both resources to obtain effect", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
-                                    ], {width: "398px", height: "50px", background: "#250025", borderBottom: "3px solid #a900a9"}],
-                                    ["style-row", [
-                                        ["style-row", [
-                                            ["color-text", [() => {return "1"}, true, "white", () => {return player.al.cocoonLevel >= 1}, "gray"]],
-                                        ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
-                                        ["style-row", [
-                                            ["color-text", [() => {return "x1.5 Aleph Resources"}, true, "white", () => {return player.al.cocoonLevel >= 1}, "gray"]],
-                                        ], {width: "280px", height: "35px"}],
-                                    ], {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"}],
-                                    ["style-row", [
-                                        ["style-row", [
-                                            ["color-text", [() => {return "10"}, true, "white", () => {return player.al.cocoonLevel >= 2}, "gray"]],
-                                        ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
-                                        ["style-row", [
-                                            ["color-text", [() => {return "Unlock a new bee research"}, true, "white", () => {return player.al.cocoonLevel >= 2}, "gray"]],
-                                        ], {width: "280px", height: "35px"}],
-                                    ], () => {return player.al.cocoonLevel >= 1 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
-                                    ["style-row", [
-                                        ["style-row", [
-                                            ["color-text", [() => {return "100"}, true, "white", () => {return player.al.cocoonLevel >= 3}, "gray"]],
-                                        ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
-                                        ["style-row", [
-                                            ["color-text", [() => {return "Unlock flower rigging"}, true, "white", () => {return player.al.cocoonLevel >= 3}, "gray"]],
-                                        ], {width: "280px", height: "35px"}],
-                                    ], () => {return player.al.cocoonLevel >= 2 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
-                                    ["style-row", [
-                                        ["style-row", [
-                                            ["color-text", [() => {return "1,000"}, true, "white", () => {return player.al.cocoonLevel >= 4}, "gray"]],
-                                        ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
-                                        ["style-row", [
-                                            ["color-text", [() => {return "Unlock a new bee research"}, true, "white", () => {return player.al.cocoonLevel >= 4}, "gray"]],
-                                        ], {width: "280px", height: "35px"}],
-                                    ], () => {return player.al.cocoonLevel >= 3 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
-                                    ["style-row", [
-                                        ["style-row", [
-                                            ["color-text", [() => {return "10,000"}, true, "white", () => {return player.al.cocoonLevel >= 5}, "gray"]],
-                                        ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
-                                        ["style-row", [
-                                            ["color-text", [() => {return "Release a part of Aleph"}, true, "white", () => {return player.al.cocoonLevel >= 5}, "gray"]],
-                                        ], {width: "280px", height: "35px"}],
-                                    ], () => {return player.al.cocoonLevel >= 4 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
-                                    ["style-row", [
-                                        ["style-row", [
-                                            ["color-text", [() => {return "100,000"}, true, "white", () => {return player.al.cocoonLevel >= 6}, "gray"]],
-                                        ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
-                                        ["style-row", [
-                                            ["color-text", [() => {return "Skip picking flower stems"}, true, "white", () => {return player.al.cocoonLevel >= 6}, "gray"]],
-                                        ], {width: "280px", height: "35px"}],
-                                    ], () => {return player.al.cocoonLevel >= 5 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
-                                    ["style-row", [
-                                        ["style-row", [
-                                            ["color-text", [() => {return "1,000,000"}, true, "white", () => {return player.al.cocoonLevel >= 7}, "gray"]],
-                                        ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
-                                        ["style-row", [
-                                            ["color-text", [() => {return "<p style='font-size:12px;line-height:1'>Start with 1 of each<br>circular/pentagonal red flower</p>"}, true, "white", () => {return player.al.cocoonLevel >= 7}, "gray"]],
-                                        ], {width: "280px", height: "35px"}],
-                                    ], () => {return player.al.cocoonLevel >= 6 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
-                                    ["style-row", [
-                                        ["style-row", [
-                                            ["color-text", [() => {return "10,000,000"}, true, "white", () => {return player.al.cocoonLevel >= 8}, "gray"]],
-                                        ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
-                                        ["style-row", [
-                                            ["color-text", [() => {return "Halve all flower cooldowns"}, true, "white", () => {return player.al.cocoonLevel >= 8}, "gray"]],
-                                        ], {width: "280px", height: "35px"}],
-                                    ], () => {return player.al.cocoonLevel >= 7 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
-                                    ["style-row", [
-                                        ["style-row", [
-                                            ["color-text", [() => {return "100,000,000"}, true, "white", () => {return player.al.cocoonLevel >= 9}, "gray"]],
-                                        ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
-                                        ["style-row", [
-                                            ["color-text", [() => {return "Unlock a new bee research"}, true, "white", () => {return player.al.cocoonLevel >= 9}, "gray"]],
-                                        ], {width: "280px", height: "35px"}],
-                                    ], () => {return player.al.cocoonLevel >= 8 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
-                                    ["style-row", [
-                                        ["style-row", [
-                                            ["color-text", [() => {return "1e9"}, true, "white", () => {return player.al.cocoonLevel >= 10}, "gray"]],
-                                        ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
-                                        ["style-row", [
-                                            ["color-text", [() => {return "Release a part of Aleph"}, true, "white", () => {return player.al.cocoonLevel >= 10}, "gray"]],
-                                        ], {width: "280px", height: "35px"}],
-                                    ], () => {return player.al.cocoonLevel >= 9 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
-
-                                    // ADD A FLOWER COOLDOWN SPEED-UP
-                                ], {width: "398px", height: "410px"}],
                                 ["style-column", [
-                                    
-                                ], () => {return false ? {width: "398px", height: "237px", borderTop: "3px solid #a900a9"} : {width: "398px", height: "240px"}}],
+                                    ["raw-html", "Current Effects", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                    ["raw-html", "Requires both resources to obtain effect", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                                ], {width: "398px", height: "50px", background: "#250025", borderBottom: "3px solid #a900a9"}],
+                                ["style-row", [
+                                    ["style-row", [
+                                        ["color-text", [() => {return "1"}, true, "white", () => {return player.al.cocoonLevel >= 1}, "gray"]],
+                                    ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
+                                    ["style-row", [
+                                        ["color-text", [() => {return "x1.5 Aleph Resources"}, true, "white", () => {return player.al.cocoonLevel >= 1}, "gray"]],
+                                    ], {width: "280px", height: "35px"}],
+                                ], {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"}],
+                                ["style-row", [
+                                    ["style-row", [
+                                        ["color-text", [() => {return "10"}, true, "white", () => {return player.al.cocoonLevel >= 2}, "gray"]],
+                                    ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
+                                    ["style-row", [
+                                        ["color-text", [() => {return "Unlock a new bee research"}, true, "white", () => {return player.al.cocoonLevel >= 2}, "gray"]],
+                                    ], {width: "280px", height: "35px"}],
+                                ], () => {return player.al.cocoonLevel >= 1 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
+                                ["style-row", [
+                                    ["style-row", [
+                                        ["color-text", [() => {return "100"}, true, "white", () => {return player.al.cocoonLevel >= 3}, "gray"]],
+                                    ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
+                                    ["style-row", [
+                                        ["color-text", [() => {return "Unlock flower rigging"}, true, "white", () => {return player.al.cocoonLevel >= 3}, "gray"]],
+                                    ], {width: "280px", height: "35px"}],
+                                ], () => {return player.al.cocoonLevel >= 2 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
+                                ["style-row", [
+                                    ["style-row", [
+                                        ["color-text", [() => {return "1,000"}, true, "white", () => {return player.al.cocoonLevel >= 4}, "gray"]],
+                                    ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
+                                    ["style-row", [
+                                        ["color-text", [() => {return "Unlock a new bee research"}, true, "white", () => {return player.al.cocoonLevel >= 4}, "gray"]],
+                                    ], {width: "280px", height: "35px"}],
+                                ], () => {return player.al.cocoonLevel >= 3 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
+                                ["style-row", [
+                                    ["style-row", [
+                                        ["color-text", [() => {return "10,000"}, true, "white", () => {return player.al.cocoonLevel >= 5}, "gray"]],
+                                    ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
+                                    ["style-row", [
+                                        ["color-text", [() => {return "Release a part of Aleph"}, true, "white", () => {return player.al.cocoonLevel >= 5}, "gray"]],
+                                    ], {width: "280px", height: "35px"}],
+                                ], () => {return player.al.cocoonLevel >= 4 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
+                                ["style-row", [
+                                    ["style-row", [
+                                        ["color-text", [() => {return "100,000"}, true, "white", () => {return player.al.cocoonLevel >= 6}, "gray"]],
+                                    ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
+                                    ["style-row", [
+                                        ["color-text", [() => {return "Skip picking flower stems"}, true, "white", () => {return player.al.cocoonLevel >= 6}, "gray"]],
+                                    ], {width: "280px", height: "35px"}],
+                                ], () => {return player.al.cocoonLevel >= 5 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
+                                ["style-row", [
+                                    ["style-row", [
+                                        ["color-text", [() => {return "1,000,000"}, true, "white", () => {return player.al.cocoonLevel >= 7}, "gray"]],
+                                    ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
+                                    ["style-row", [
+                                        ["color-text", [() => {return "<p style='font-size:12px;line-height:1'>Start with 1 of each<br>circular/pentagonal red flower</p>"}, true, "white", () => {return player.al.cocoonLevel >= 7}, "gray"]],
+                                    ], {width: "280px", height: "35px"}],
+                                ], () => {return player.al.cocoonLevel >= 6 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
+                                ["style-row", [
+                                    ["style-row", [
+                                        ["color-text", [() => {return "10,000,000"}, true, "white", () => {return player.al.cocoonLevel >= 8}, "gray"]],
+                                    ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
+                                    ["style-row", [
+                                        ["color-text", [() => {return "Halve all flower cooldowns"}, true, "white", () => {return player.al.cocoonLevel >= 8}, "gray"]],
+                                    ], {width: "280px", height: "35px"}],
+                                ], () => {return player.al.cocoonLevel >= 7 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
+                                ["style-row", [
+                                    ["style-row", [
+                                        ["color-text", [() => {return "100,000,000"}, true, "white", () => {return player.al.cocoonLevel >= 9}, "gray"]],
+                                    ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
+                                    ["style-row", [
+                                        ["color-text", [() => {return "Unlock a new bee research"}, true, "white", () => {return player.al.cocoonLevel >= 9}, "gray"]],
+                                    ], {width: "280px", height: "35px"}],
+                                ], () => {return player.al.cocoonLevel >= 8 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
+                                ["style-row", [
+                                    ["style-row", [
+                                        ["color-text", [() => {return "1e9"}, true, "white", () => {return player.al.cocoonLevel >= 10}, "gray"]],
+                                    ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
+                                    ["style-row", [
+                                        ["color-text", [() => {return "Release a part of Aleph"}, true, "white", () => {return player.al.cocoonLevel >= 10}, "gray"]],
+                                    ], {width: "280px", height: "35px"}],
+                                ], () => {return player.al.cocoonLevel >= 9 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
+                                ["style-row", [
+                                    ["style-row", [
+                                        ["color-text", [() => {return "1e14"}, true, "white", () => {return player.al.cocoonLevel >= 11}, "gray"]],
+                                    ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
+                                    ["style-row", [
+                                        ["color-text", [() => {return "Improve flower rigging"}, true, "white", () => {return player.al.cocoonLevel >= 11}, "gray"]],
+                                    ], {width: "280px", height: "35px"}],
+                                ], () => {return player.al.cocoonLevel >= 10 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
+                                ["style-row", [
+                                    ["style-row", [
+                                        ["color-text", [() => {return "1e16"}, true, "white", () => {return player.al.cocoonLevel >= 12}, "gray"]],
+                                    ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
+                                    ["style-row", [
+                                        ["color-text", [() => {return "TEMP"}, true, "white", () => {return player.al.cocoonLevel >= 12}, "gray"]],
+                                    ], {width: "280px", height: "35px"}],
+                                ], () => {return player.al.cocoonLevel >= 11 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
+
                             ], {width: "398px", height: "652px"}],
                         ], {width: "800px", height: "652px"}],
                     ], {width: "800px", height: "725px", background: "#0c000c", border: "3px solid #a900a9", borderRadius: "20px"}],

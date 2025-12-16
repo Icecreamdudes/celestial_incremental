@@ -1546,8 +1546,9 @@ function fixOldSave(oldVersion){
 			player.d.boosterEffects[i] = new Decimal(player.d.diceEffects[i])
 		}
 		// REFUNDS
-		player.cb.petPoints = player.cb.petPoints.add(player.cb.totalAutomationShards.pow(0.5).mul(20000))
-        doPopup("none", "+" + formatWhole(player.cb.totalAutomationShards.pow(0.5).mul(20000)) + " pet points!", "REFUND", 5, "#A2D800", "resources/petPoint.png")
-
+		if (typeof player.cb.totalAutomationShards != "undefined") {
+			player.cb.petPoints = player.cb.petPoints.add(new Decimal(player.cb.totalAutomationShards).pow(0.5).mul(20000))
+        	doPopup("none", "+" + formatWhole(new Decimal(player.cb.totalAutomationShards).pow(0.5).mul(20000)) + " pet points!", "REFUND", 5, "#A2D800", "resources/petPoint.png")
+		}
 	}
 }

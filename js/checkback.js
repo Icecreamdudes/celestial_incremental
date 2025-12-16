@@ -291,10 +291,12 @@ addLayer("cb", {
         player.cb.xpTimers[6].esc = new Decimal(50).mul(buyableEffect("ev1", 164))
         player.cb.xpTimers[7].esc = new Decimal(98).mul(buyableEffect("ev1", 174))
 
+        let mult = new Decimal(1)
+        mult = mult.add(levelableEffect("pet", 1107)[1])
+        mult = mult.add(buyableEffect("ev2", 31))
+        mult = mult.add(buyableEffect("ma", 33))
         for (let i in player.cb.xpTimers) {
-            player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(levelableEffect("pet", 1107)[1])
-            player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(buyableEffect("ev2", 31))
-            player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(buyableEffect("ma", 33))
+            player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(mult)
         }
 
         player.cb.crateTimers[0].base = buyableEffect("ev1", 201)
@@ -494,9 +496,8 @@ addLayer("cb", {
                         player.cb.pityEvoCurrent = new Decimal(0);
                         if (inChallenge("ip", 17)) player.cb.IC7shardCount++
                         doPopup("none", "+" + formatWhole(guarantee) + " Evolution Shard!", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
-                    } else {
-                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(chance);
                     }
+                    player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(chance);
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[0][0].mul(player.ca.canteEnergyMult))
             },
@@ -531,9 +532,8 @@ addLayer("cb", {
                         player.cb.pityEvoCurrent = new Decimal(0);
                         if (inChallenge("ip", 17)) player.cb.IC7shardCount++
                         doPopup("none", "+" + formatWhole(guarantee) + " Evolution Shard!", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
-                    } else {
-                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(chance);
                     }
+                    player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(chance);
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[0][1].mul(player.ca.canteEnergyMult))
             },
@@ -568,9 +568,8 @@ addLayer("cb", {
                         player.cb.pityEvoCurrent = new Decimal(0);
                         if (inChallenge("ip", 17)) player.cb.IC7shardCount++
                         doPopup("none", "+" + formatWhole(guarantee) + " Evolution Shard!", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
-                    } else {
-                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(chance);
                     }
+                    player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(chance);
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[0][2].mul(player.ca.canteEnergyMult))
             },
@@ -605,9 +604,8 @@ addLayer("cb", {
                         player.cb.pityEvoCurrent = new Decimal(0);
                         if (inChallenge("ip", 17)) player.cb.IC7shardCount++
                         doPopup("none", "+" + formatWhole(guarantee) + " Evolution Shard!", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
-                    } else {
-                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(chance);
                     }
+                    player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(chance);
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[0][3].mul(player.ca.canteEnergyMult))
             },
@@ -642,9 +640,8 @@ addLayer("cb", {
                         player.cb.pityEvoCurrent = new Decimal(0);
                         if (inChallenge("ip", 17)) player.cb.IC7shardCount++
                         doPopup("none", "+" + formatWhole(guarantee) + " Evolution Shard!", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
-                    } else {
-                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(chance);
                     }
+                    player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(chance);
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[0][4].mul(player.ca.canteEnergyMult))
             },
@@ -679,9 +676,8 @@ addLayer("cb", {
                     player.cb.pityEvoCurrent = new Decimal(0);
                     if (inChallenge("ip", 17)) player.cb.IC7shardCount++
                     doPopup("none", "+" + formatWhole(guarantee) + " Evolution Shard!", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
-                } else {
-                    player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(chance);
                 }
+                player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(chance);
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[0][5].mul(player.ca.canteEnergyMult))
             },
             onHold() { clickClickable(this.layer, this.id) },
@@ -714,9 +710,8 @@ addLayer("cb", {
                     player.cb.pityEvoCurrent = new Decimal(0);
                     if (inChallenge("ip", 17)) player.cb.IC7shardCount++
                     doPopup("none", "+" + formatWhole(guarantee) + " Evolution Shard!", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
-                } else {
-                    player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(chance);
                 }
+                player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(chance);
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[0][6].mul(player.ca.canteEnergyMult))
             },
             onHold() { clickClickable(this.layer, this.id) },
@@ -750,9 +745,9 @@ addLayer("cb", {
                     if (inChallenge("ip", 17)) player.cb.IC7shardCount++
                     doPopup("none", "+" + formatWhole(guarantee) + " Evolution Shard!", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
                 } else {
-                    player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(chance);
                     doPopup("none", "", "Damn bro you didn't gain an evo shard. Take a screenshot, send to the discord, and ping the dev. I think ur still cool.", 60, "#d487fd", "resources/evoShardDenied.png")
                 }
+                player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(chance);
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[0][7].mul(player.ca.canteEnergyMult))
             },
             onHold() { clickClickable(this.layer, this.id) },

@@ -540,7 +540,7 @@ addLayer("ev2", {
             purchaseLimit() { return new Decimal(10) },
             currency() { return player.ev2.orbs},
             pay(amt) { player.ev2.orbs = this.currency().sub(amt) },
-            effect(x) {return getBuyableAmount(this.layer, this.id).div(10).add(1)},
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(10)},
             unlocked: true,
             cost(x) { return (x || getBuyableAmount(this.layer, this.id)).mul(this.costGrowth()).add(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -548,7 +548,7 @@ addLayer("ev2", {
                 return "Orb ES Chance"
             },
             display() {
-                return "which are multiplying XP button ESC by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are adding +" + formatSimple(tmp[this.layer].buyables[this.id].effect) + " to the XP button ESC multiplier.\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Orbs"
             },
             buy(mult) {

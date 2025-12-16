@@ -556,9 +556,9 @@ addLayer("pet", {
             for (let j in player.pet.shop[i]) {
                 player.pet.shop[i][j].cost = petShopBase[i][j]
                 if (i != "shard") {
-                    player.pet.shop[i][j].cost = player.pet.shop[i][j].cost.mul(player.pet.shopBulk.mul(0.02).add(0.98)).mul(player.pet.shopBulk)
-                } else {
                     player.pet.shop[i][j].cost = player.pet.shop[i][j].cost.mul(player.pet.shopBulk.mul(0.05).add(0.95)).mul(player.pet.shopBulk)
+                } else {
+                    player.pet.shop[i][j].cost = player.pet.shop[i][j].cost.mul(player.pet.shopBulk.mul(0.1).add(0.9)).mul(player.pet.shopBulk)
                 }
 
                 player.pet.shop[i][j].current = player.pet.shop[i][j].current.sub(onepersec.mul(delta))
@@ -3554,13 +3554,13 @@ addLayer("pet", {
             lore() { return "Blob!" }, 
             description() {
                 return "+" + formatWhole(this.effect()[0]) + " to effective blob levels.<br>" +
-                    "x" + format(this.effect()[1], 1) + " to XP button shard chance."
+                    "+" + formatSimple(this.effect()[1], 1) + " to XP button ESC multiplier."
             },
             levelLimit() { return new Decimal(10) },
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id), // Effective Blob Levels
-                    getLevelableAmount(this.layer, this.id).div(10).add(1), // XP Button Shard Chance
+                    getLevelableAmount(this.layer, this.id).div(20), // XP Button Shard Chance
                 ]
             },
             levelTooltip() { return "Costs Evolution Shards." },

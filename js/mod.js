@@ -1535,12 +1535,6 @@ function fixOldSave(oldVersion){
 	}
 
 	if (oldVersion < 190) {
-		for (let i = 0; i < player.cb.buttonAutomationAllocation.length; i++) {
-			player.cb.automationShards = player.cb.automationShards.add(player.cb.buttonAutomationAllocation[i])
-		}
-		for (let i = 0; i < player.cb.petAutomationAllocation.length; i++) {
-			player.cb.automationShards = player.cb.automationShards.add(player.cb.petAutomationAllocation[i])
-		}
 		for (let i = 0; i < player.hbl.boosterLevels.length; i++) {
 			player.hbl.boosters[i].level = player.hbl.boosterLevels[i]
 			player.hbl.boosters[i].xp = player.hbl.boosterXP[i]
@@ -1551,5 +1545,9 @@ function fixOldSave(oldVersion){
 		for (let i in player.d.boosterEffects) {
 			player.d.boosterEffects[i] = new Decimal(player.d.diceEffects[i])
 		}
+		// REFUNDS
+		player.cb.petPoints = player.cb.petPoints.add(player.cb.totalAutomationShards.pow(0.5).mul(20000))
+        doPopup("none", "+" + formatWhole(player.cb.totalAutomationShards.pow(0.5).mul(20000)) + " pet points!", "REFUND", 5, "#A2D800", "resources/petPoint.png")
+
 	}
 }

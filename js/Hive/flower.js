@@ -273,7 +273,6 @@ addLayer("fl", {
         switch(type) {
             case "red":
                 // PENTAGONAL RED
-                console.log(tier)
                 if (tier < 0.3 && buyableEffect("bee", 22).gt(0)) {
                     if (getGridData("fl", val)[0] <= player.fl.glossaryRig && player.fl.glossaryRig > 110 && player.fl.glossaryRig < 120) {
                         setGridData("fl", val, [player.fl.glossaryRig, new Decimal(rigBase*5)])

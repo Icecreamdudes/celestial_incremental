@@ -40,6 +40,8 @@ addLayer("bee", {
         if (hasUpgrade("al", 101)) player.bee.bps = player.bee.bps.mul(2)
         player.bee.bps = player.bee.bps.mul(buyableEffect("bee", 12))
         if (hasUpgrade("al", 110)) player.bee.bps = player.bee.bps.mul(3)
+        if (hasUpgrade("al", 116)) player.bee.bps = player.bee.bps.mul(upgradeEffect("al", 116))
+        if (hasUpgrade("al", 216)) player.bee.bps = player.bee.bps.mul(upgradeEffect("al", 216))
 
         player.bee.bees = player.bee.bees.add(player.bee.bps.mul(delta))
     },
@@ -939,6 +941,50 @@ addLayer("bee", {
             },
             style: { width: '175px', height: '60px', border: "3px solid rgba(0,0,0,0.3)", borderRadius: '0px'}
         },
+        54: {
+            costBase() {
+                if (player.bee.path != 1) return new Decimal("1e480")
+                return new Decimal(1e160)
+            },
+            costGrowth() {
+                if (player.bee.path != 1) return new Decimal(1e30)
+                return new Decimal(1e10)
+            },
+            purchaseLimit() { return new Decimal(10) },
+            currency() { return player.bee.bees},
+            pay(amt) { player.bee.bees = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(20) },
+            unlocked() { return hasUpgrade("al", 117) && tmp.bb.layerShown},
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() {
+                return this.currency().gte(this.cost())
+            },
+            title() {
+                if (!getBuyableAmount(this.layer, this.id).eq(this.purchaseLimit())) {
+                    return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Bees"
+                } else {
+                    return "<h2>MAX"
+                }
+            },
+            buy() {
+                if (player.bee.beeMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    player.bee.totalResearch = player.bee.totalResearch.add(1)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    player.bee.totalResearch = player.bee.totalResearch.add(max)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '175px', height: '60px', border: "3px solid rgba(0,0,0,0.3)", borderRadius: '0px'}
+        },
 
         61: {
             costBase() {
@@ -1116,7 +1162,50 @@ addLayer("bee", {
             },
             style: { width: '175px', height: '60px', border: "3px solid rgba(0,0,0,0.3)", borderRadius: '0px'}
         },
+        65: {
+            costBase() {
+                if (player.bee.path != 2) return new Decimal("1e480")
+                return new Decimal(1e160)
+            },
+            costGrowth() {
+                if (player.bee.path != 2) return new Decimal(1e30)
+                return new Decimal(1e10)
+            },
+            purchaseLimit() { return new Decimal(10) },
+            currency() { return player.bee.bees},
+            pay(amt) { player.bee.bees = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(20) },
+            unlocked() { return hasUpgrade("al", 217) && tmp.ho.layerShown},
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() {
+                return this.currency().gte(this.cost())
+            },
+            title() {
+                if (!getBuyableAmount(this.layer, this.id).eq(this.purchaseLimit())) {
+                    return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Bees"
+                } else {
+                    return "<h2>MAX"
+                }
+            },
+            buy() {
+                if (player.bee.beeMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
 
+                    player.bee.totalResearch = player.bee.totalResearch.add(1)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    player.bee.totalResearch = player.bee.totalResearch.add(max)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '175px', height: '60px', border: "3px solid rgba(0,0,0,0.3)", borderRadius: '0px'}
+        },
     },
     tabFormat: [
         ["row", [

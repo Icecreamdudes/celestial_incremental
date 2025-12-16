@@ -407,11 +407,44 @@ addLayer("al", {
                 return look
             },
         },
+        116: {
+            title: "Honeycomb <small>(6, 1)</small>",
+            unlocked() {return hasChallenge("fu", 12)},
+            description: "Boost BPS based on picking power.",
+            cost: new Decimal(1e14),
+            currencyLocation() { return player.al },
+            currencyDisplayName: "Honeycombs",
+            currencyInternalName: "honeycomb",
+            effect() {
+                return player.fl.pickingPower.add(1).log(2).add(1)
+            },
+            effectDisplay() { return "x" + formatSimple(upgradeEffect(this.layer, this.id), 2) }, // Add formatting to the effect
+            style() {
+                let look = {minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#e5bd3f"
+                return look
+            },
+        },
+        117: {
+            title: "Honeycomb <small>(6, 2)</small>",
+            unlocked() {return hasChallenge("fu", 12)},
+            description: "Unlock a new bee bread research.",
+            cost: new Decimal(1e15),
+            currencyLocation() { return player.al },
+            currencyDisplayName: "Honeycombs",
+            currencyInternalName: "honeycomb",
+            style() {
+                let look = {minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#e5bd3f"
+                return look
+            },
+
+        },
         118: {
             title: "Honeycomb <small>(6, 3)</small>",
-            unlocked() {return player.tad.hiveExpand},
+            unlocked() {return hasChallenge("fu", 12)},
             description: "No longer reset when gaining BB tier.",
-            cost: new Decimal(1e17),
+            cost: new Decimal(1e16),
             currencyLocation() { return player.al },
             currencyDisplayName: "Honeycombs",
             currencyInternalName: "honeycomb",
@@ -423,9 +456,7 @@ addLayer("al", {
         },
         // Bee Bread is buffed based on Honey-Cells in pollen path
         // Empress Bee that buffs BB Tiers
-        // Bee Bread Research that buffs pink flowers
         // New BB Milestone that buffs Honey-Cells
-        // Buff BPS based on picking power
         // Very small exponential buff to pollen
 
         201: {
@@ -638,11 +669,29 @@ addLayer("al", {
                 return look
             },
         },
-        218: {
-            title: "Royal J. <small>(6, 3)</small>",
+        216: {
+            title: "Royal J. <small>(6, 1)</small>",
             unlocked: true,
-            description: "Auto-buy honey upgrades when on nectar path.",
-            cost: new Decimal(1e17),
+            description: "Boost BPS based on flower gain.",
+            cost: new Decimal(1e14),
+            currencyLocation() { return player.al },
+            currencyDisplayName: "Royal Jelly",
+            currencyInternalName: "royalJelly",
+            effect() {
+                return player.fl.flowerGain.add(1).log(3).add(1)
+            },
+            effectDisplay() { return "x" + formatSimple(upgradeEffect(this.layer, this.id), 2) }, // Add formatting to the effect
+            style() {
+                let look = {minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#e172b5"
+                return look
+            },
+        },
+        217: {
+            title: "Royal J. <small>(6, 2)</small>",
+            unlocked: true,
+            description: "Unlock a new honey-cell research.",
+            cost: new Decimal(1e15),
             currencyLocation() { return player.al },
             currencyDisplayName: "Royal Jelly",
             currencyInternalName: "royalJelly",
@@ -652,11 +701,23 @@ addLayer("al", {
                 return look
             },
         },
-        // Honey research that improves yellow flowers
+        218: {
+            title: "Royal J. <small>(6, 3)</small>",
+            unlocked: true,
+            description: "Auto-buy honey upgrades when on nectar path.",
+            cost: new Decimal(1e16),
+            currencyLocation() { return player.al },
+            currencyDisplayName: "Royal Jelly",
+            currencyInternalName: "royalJelly",
+            style() {
+                let look = {minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#e172b5"
+                return look
+            },
+        },
         // Nectar epsilon upgrades
         // Bee Bread Cell
         // Honey-Cells are buffed based on Bee Bread in nectar path
-        // Buff BPS based on flower gain
         // Very small exponential buff to nectar alpha
     },
     buyables: {
@@ -1237,7 +1298,32 @@ addLayer("al", {
                                         ["color-text", [() => {return "TEMP"}, true, "white", () => {return player.al.cocoonLevel >= 12}, "gray"]],
                                     ], {width: "280px", height: "35px"}],
                                 ], () => {return player.al.cocoonLevel >= 11 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
+                                ["style-row", [
+                                    ["style-row", [
+                                        ["color-text", [() => {return "1e18"}, true, "white", () => {return player.al.cocoonLevel >= 13}, "gray"]],
+                                    ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
+                                    ["style-row", [
+                                        ["color-text", [() => {return "TEMP"}, true, "white", () => {return player.al.cocoonLevel >= 13}, "gray"]],
+                                    ], {width: "280px", height: "35px"}],
+                                ], () => {return player.al.cocoonLevel >= 12 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
+                                ["style-row", [
+                                    ["style-row", [
+                                        ["color-text", [() => {return "1e20"}, true, "white", () => {return player.al.cocoonLevel >= 14}, "gray"]],
+                                    ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
+                                    ["style-row", [
+                                        ["color-text", [() => {return "TEMP"}, true, "white", () => {return player.al.cocoonLevel >= 14}, "gray"]],
+                                    ], {width: "280px", height: "35px"}],
+                                ], () => {return player.al.cocoonLevel >= 13 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
+                                ["style-row", [
+                                    ["style-row", [
+                                        ["color-text", [() => {return "1e25"}, true, "white", () => {return player.al.cocoonLevel >= 15}, "gray"]],
+                                    ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
+                                    ["style-row", [
+                                        ["color-text", [() => {return "Release a part of Aleph"}, true, "white", () => {return player.al.cocoonLevel >= 15}, "gray"]],
+                                    ], {width: "280px", height: "35px"}],
+                                ], () => {return player.al.cocoonLevel >= 14 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
 
+                                // LAST BEE RESEARCH THAT RAISES BEES BY A VERY VERY SMALL AMOUNT
                             ], {width: "398px", height: "652px"}],
                         ], {width: "800px", height: "652px"}],
                     ], {width: "800px", height: "725px", background: "#0c000c", border: "3px solid #a900a9", borderRadius: "20px"}],

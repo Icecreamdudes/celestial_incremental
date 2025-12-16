@@ -3424,7 +3424,7 @@
             purchaseLimit() { return new Decimal(10) },
             currency() { return player.ma.epicMatosFragments},
             pay(amt) { player.ma.epicMatosFragments = this.currency().sub(amt).floor() },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.04).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05)},
             unlocked() { return hasUpgrade("ma", 26) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -3432,7 +3432,7 @@
                 return "CB XP Button ESC"
             },
             display() {
-                return "which are multiplying check back XP button evolution shard chance by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are adding +" + formatSimple(tmp[this.layer].buyables[this.id].effect) + " to the check back XP button ESC multiplier.\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Epic Matos Fragments"
             },
             buy(mult) {

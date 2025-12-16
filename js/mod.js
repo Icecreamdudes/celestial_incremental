@@ -1536,11 +1536,11 @@ function fixOldSave(oldVersion){
 
 	if (oldVersion < 190) {
 		for (let i = 0; i < player.hbl.boosterLevels.length; i++) {
-			player.hbl.boosters[i].level = player.hbl.boosterLevels[i]
-			player.hbl.boosters[i].xp = player.hbl.boosterXP[i]
+			player.hbl.boosters[i].level = new Decimal(player.hbl.boosterLevels[i])
+			player.hbl.boosters[i].xp = new Decimal(player.hbl.boosterXP[i])
 		}
 		for (let i = 0; i < player.hpu.purifier.length; i++) {
-			player.hpu.purifiers[i].amount = player.hpu.purifier[i]
+			player.hpu.purifiers[i].amount = new Decimal(player.hpu.purifier[i])
 		}
 		for (let i in player.d.boosterEffects) {
 			player.d.boosterEffects[i] = new Decimal(player.d.diceEffects[i])

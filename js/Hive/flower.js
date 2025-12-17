@@ -197,6 +197,7 @@ addLayer("fl", {
         if (hasUpgrade("al", 101)) player.fl.flowerGain = player.fl.flowerGain.mul(2)
         if (hasUpgrade("al", 110)) player.fl.flowerGain = player.fl.flowerGain.mul(3)
         if (hasUpgrade("al", 213)) player.fl.flowerGain = player.fl.flowerGain.mul(player.ho.effects.flower.effect2)
+        player.fl.flowerGain = player.fl.flowerGain.mul(player.bee.preAlephMult)
 
         // GLOSSARY ADDITIVE BASE
         player.fl.glossaryBase = new Decimal(1)
@@ -237,7 +238,7 @@ addLayer("fl", {
         player.fl.glossaryEffects.beeBread = new Decimal(1)
         for (let i = 401; i < 426; ) {
             if (player.fl.glossary[i].gt(0)) {
-                player.fl.glossaryEffects.beeBread = player.fl.glossaryEffects.beeBread.mul(player.fl.glossary[i].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1))
+                player.fl.glossaryEffects.beeBread = player.fl.glossaryEffects.beeBread.mul(player.fl.glossary[i].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 54).add(1)).add(1))
             }
             if (i % 10 == 5) {i = i+6} else {i++}
         }
@@ -245,7 +246,7 @@ addLayer("fl", {
         player.fl.glossaryEffects.honey = new Decimal(1)
         for (let i = 501; i < 526; ) {
             if (player.fl.glossary[i].gt(0)) {
-                player.fl.glossaryEffects.honey = player.fl.glossaryEffects.honey.mul(player.fl.glossary[i].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1))
+                player.fl.glossaryEffects.honey = player.fl.glossaryEffects.honey.mul(player.fl.glossary[i].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 65).add(1)).add(1))
             }
             if (i % 10 == 5) {i = i+6} else {i++}
         }
@@ -721,7 +722,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return buyableEffect("bee", 13).gte(1)},
+            display() {return buyableEffect("bee", 13).gte(1) && buyableEffect("bee", 22).gte(1)},
             onHover() {player.fl.glossaryIndex=121},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=121},
         },
@@ -754,7 +755,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return buyableEffect("bee", 13).gte(3)},
+            display() {return buyableEffect("bee", 13).gte(3) && buyableEffect("bee", 22).gte(1)},
             onHover() {player.fl.glossaryIndex=123},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=123},
         },
@@ -772,7 +773,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return buyableEffect("bee", 13).gte(4)},
+            display() {return buyableEffect("bee", 13).gte(4) && buyableEffect("bee", 22).gte(1)},
             onHover() {player.fl.glossaryIndex=124},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=124},
         },
@@ -791,7 +792,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return buyableEffect("bee", 13).gte(5)},
+            display() {return buyableEffect("bee", 13).gte(5) && buyableEffect("bee", 22).gte(1)},
             onHover() {player.fl.glossaryIndex=125},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=125},
         },
@@ -949,7 +950,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return buyableEffect("al", 102).gte(1)},
+            display() {return buyableEffect("al", 102).gte(1) && buyableEffect("bee", 34).gte(1)},
             onHover() {player.fl.glossaryIndex=221},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=221},
         },
@@ -965,7 +966,7 @@ addLayer("fl", {
                 <line transform="translate(20, 23)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 23)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return buyableEffect("al", 102).gte(2)},
+            display() {return buyableEffect("al", 102).gte(2) && buyableEffect("bee", 34).gte(1)},
             onHover() {player.fl.glossaryIndex=222},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=222},
         },
@@ -982,7 +983,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return buyableEffect("al", 102).gte(3)},
+            display() {return buyableEffect("al", 102).gte(3) && buyableEffect("bee", 34).gte(1)},
             onHover() {player.fl.glossaryIndex=223},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=223},
         },
@@ -1000,7 +1001,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return buyableEffect("al", 102).gte(4)},
+            display() {return buyableEffect("al", 102).gte(4) && buyableEffect("bee", 34).gte(1)},
             onHover() {player.fl.glossaryIndex=224},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=224},
         },
@@ -1019,7 +1020,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return buyableEffect("al", 102).gte(5)},
+            display() {return buyableEffect("al", 102).gte(5) && buyableEffect("bee", 34).gte(1)},
             onHover() {player.fl.glossaryIndex=225},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=225},
         },
@@ -1178,7 +1179,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return buyableEffect("al", 202).gte(1)},
+            display() {return buyableEffect("al", 202).gte(1) && buyableEffect("bee", 44).gte(1)},
             onHover() {player.fl.glossaryIndex=321},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=321},
         },
@@ -1194,7 +1195,7 @@ addLayer("fl", {
                 <line transform="translate(20, 23)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 23)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return buyableEffect("al", 202).gte(2)},
+            display() {return buyableEffect("al", 202).gte(2) && buyableEffect("bee", 44).gte(1)},
             onHover() {player.fl.glossaryIndex=322},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=322},
         },
@@ -1211,7 +1212,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return buyableEffect("al", 202).gte(3)},
+            display() {return buyableEffect("al", 202).gte(3) && buyableEffect("bee", 44).gte(1)},
             onHover() {player.fl.glossaryIndex=323},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=323},
         },
@@ -1229,7 +1230,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return buyableEffect("al", 202).gte(4)},
+            display() {return buyableEffect("al", 202).gte(4) && buyableEffect("bee", 44).gte(1)},
             onHover() {player.fl.glossaryIndex=324},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=324},
         },
@@ -1248,7 +1249,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return buyableEffect("al", 202).gte(5)},
+            display() {return buyableEffect("al", 202).gte(5) && buyableEffect("bee", 44).gte(1)},
             onHover() {player.fl.glossaryIndex=325},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=325},
         },
@@ -1256,7 +1257,7 @@ addLayer("fl", {
 
         401: {
             name: "Circular 2-Petalled Pink Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[401].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Bee Bread"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[401].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 54).add(1)).add(1)) + " Bee Bread"},
             svg: `
                 <ellipse id="petal2" transform="translate(24, 16)" rx="16" ry="14" cx="16" cy="14" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal1" transform="translate(4, 16)" rx="16" ry="14" cx="16" cy="14" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1268,7 +1269,7 @@ addLayer("fl", {
         },
         402: {
             name: "Circular 3-Petalled Pink Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[402].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Bee Bread"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[402].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 54).add(1)).add(1)) + " Bee Bread"},
             svg: `
                 <ellipse id="petal3" transform="translate(17.5, 6.5)" rx="12.5" cx="12.5" ry="12.5" cy="12.5" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal2" transform="translate(29.5, 28.5)" rx="12.5" cx="12.5" ry="12.5" cy="12.5" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1281,7 +1282,7 @@ addLayer("fl", {
         },
         403: {
             name: "Circular 4-Petalled Pink Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[403].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Bee Bread"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[403].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 54).add(1)).add(1)) + " Bee Bread"},
             svg: `
                 <ellipse id="petal4" transform="translate(20, 6)" rx="10" cx="10" ry="10" cy="10" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal3" transform="translate(34, 20)" rx="10" cx="10" ry="10" cy="10" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1295,7 +1296,7 @@ addLayer("fl", {
         },
         404: {
             name: "Circular 5-Petalled Pink Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[404].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Bee Bread"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[404].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 54).add(1)).add(1)) + " Bee Bread"},
             svg: `
                 <ellipse id="petal5" transform="translate(22.5, 9.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal4" transform="translate(34.5, 18.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1310,7 +1311,7 @@ addLayer("fl", {
         },
         405: {
             name: "Circular 6-Petalled Pink Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[405].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Bee Bread"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[405].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 54).add(1)).add(1)) + " Bee Bread"},
             svg: `
                 <ellipse id="petal6" transform="translate(24, 12)" rx="6" cx="6" ry="6" cy="6" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal5" transform="translate(34, 18)" rx="6" cx="6" ry="6" cy="6" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1327,7 +1328,7 @@ addLayer("fl", {
 
         411: {
             name: "Pentagonal 2-Petalled Pink Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[411].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Bee Bread"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[411].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 54).add(1)).add(1)) + " Bee Bread"},
             svg: `
                 <ellipse id="petal2" transform="translate(24, 16)" rx="16" ry="14" cx="16" cy="14" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal1" transform="translate(4, 16)" rx="16" ry="14" cx="16" cy="14" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1339,7 +1340,7 @@ addLayer("fl", {
         },
         412: {
             name: "Pentagonal 3-Petalled Pink Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[412].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Bee Bread"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[412].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 54).add(1)).add(1)) + " Bee Bread"},
             svg: `
                 <ellipse id="petal3" transform="translate(17.5, 6.5)" rx="12.5" cx="12.5" ry="12.5" cy="12.5" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal2" transform="translate(29.5, 28.5)" rx="12.5" cx="12.5" ry="12.5" cy="12.5" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1352,7 +1353,7 @@ addLayer("fl", {
         },
         413: {
             name: "Pentagonal 4-Petalled Pink Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[413].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Bee Bread"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[413].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 54).add(1)).add(1)) + " Bee Bread"},
             svg: `
                 <ellipse id="petal4" transform="translate(20, 6)" rx="10" cx="10" ry="10" cy="10" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal3" transform="translate(34, 20)" rx="10" cx="10" ry="10" cy="10" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1366,7 +1367,7 @@ addLayer("fl", {
         },
         414: {
             name: "Pentagonal 5-Petalled Pink Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[414].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Bee Bread"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[414].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 54).add(1)).add(1)) + " Bee Bread"},
             svg: `
                 <ellipse id="petal5" transform="translate(22.5, 9.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal4" transform="translate(34.5, 18.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1381,7 +1382,7 @@ addLayer("fl", {
         },
         415: {
             name: "Pentagonal 6-Petalled Pink Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[415].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Bee Bread"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[415].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 54).add(1)).add(1)) + " Bee Bread"},
             svg: `
                 <ellipse id="petal6" transform="translate(24, 12)" rx="6" cx="6" ry="6" cy="6" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal5" transform="translate(34, 18)" rx="6" cx="6" ry="6" cy="6" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1398,7 +1399,7 @@ addLayer("fl", {
 
         421: {
             name: "Cubic 2-Petalled Pink Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[421].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Bee Bread"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[421].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 54).add(1)).add(1)) + " Bee Bread"},
             svg: `
                 <ellipse id="petal2" transform="translate(24, 16)" rx="16" ry="14" cx="16" cy="14" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal1" transform="translate(4, 16)" rx="16" ry="14" cx="16" cy="14" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1407,13 +1408,13 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return buyableEffect("al", 103).gte(1)},
+            display() {return buyableEffect("al", 103).gte(1) && player.bb.breadMilestone >= 7 && player.bb.breadEffects[6].gte(1)},
             onHover() {player.fl.glossaryIndex=421},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=421},
         },
         422: {
             name: "Cubic 3-Petalled Pink Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[422].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Bee Bread"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[422].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 54).add(1)).add(1)) + " Bee Bread"},
             svg: `
                 <ellipse id="petal3" transform="translate(17.5, 6.5)" rx="12.5" cx="12.5" ry="12.5" cy="12.5" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal2" transform="translate(29.5, 28.5)" rx="12.5" cx="12.5" ry="12.5" cy="12.5" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1423,13 +1424,13 @@ addLayer("fl", {
                 <line transform="translate(20, 23)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 23)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return buyableEffect("al", 103).gte(2)},
+            display() {return buyableEffect("al", 103).gte(2) && player.bb.breadMilestone >= 7 && player.bb.breadEffects[6].gte(1)},
             onHover() {player.fl.glossaryIndex=422},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=422},
         },
         423: {
             name: "Cubic 4-Petalled Pink Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[423].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Bee Bread"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[423].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 54).add(1)).add(1)) + " Bee Bread"},
             svg: `
                 <ellipse id="petal4" transform="translate(20, 6)" rx="10" cx="10" ry="10" cy="10" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal3" transform="translate(34, 20)" rx="10" cx="10" ry="10" cy="10" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1440,13 +1441,13 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return buyableEffect("al", 103).gte(3)},
+            display() {return buyableEffect("al", 103).gte(3) && player.bb.breadMilestone >= 7 && player.bb.breadEffects[6].gte(1)},
             onHover() {player.fl.glossaryIndex=423},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=423},
         },
         424: {
             name: "Cubic 5-Petalled Pink Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[424].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Bee Bread"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[424].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 54).add(1)).add(1)) + " Bee Bread"},
             svg: `
                 <ellipse id="petal5" transform="translate(22.5, 9.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal4" transform="translate(34.5, 18.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1458,13 +1459,13 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return buyableEffect("al", 103).gte(4)},
+            display() {return buyableEffect("al", 103).gte(4) && player.bb.breadMilestone >= 7 && player.bb.breadEffects[6].gte(1)},
             onHover() {player.fl.glossaryIndex=424},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=424},
         },
         425: {
             name: "Cubic 6-Petalled Pink Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[425].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Bee Bread"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[425].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 54).add(1)).add(1)) + " Bee Bread"},
             svg: `
                 <ellipse id="petal6" transform="translate(24, 12)" rx="6" cx="6" ry="6" cy="6" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal5" transform="translate(34, 18)" rx="6" cx="6" ry="6" cy="6" fill="#FDE3E6" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1477,7 +1478,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return buyableEffect("al", 103).gte(5)},
+            display() {return buyableEffect("al", 103).gte(5) && player.bb.breadMilestone >= 7 && player.bb.breadEffects[6].gte(1)},
             onHover() {player.fl.glossaryIndex=425},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=425},
         },
@@ -1485,7 +1486,7 @@ addLayer("fl", {
 
         501: {
             name: "Circular 2-Petalled Yellow Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[501].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Honey-Cells"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[501].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 65).add(1)).add(1)) + " Honey-Cells"},
             svg: `
                 <ellipse id="petal2" transform="translate(24, 16)" rx="16" ry="14" cx="16" cy="14" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal1" transform="translate(4, 16)" rx="16" ry="14" cx="16" cy="14" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1497,7 +1498,7 @@ addLayer("fl", {
         },
         502: {
             name: "Circular 3-Petalled Yellow Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[502].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Honey-Cells"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[502].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 65).add(1)).add(1)) + " Honey-Cells"},
             svg: `
                 <ellipse id="petal3" transform="translate(17.5, 6.5)" rx="12.5" cx="12.5" ry="12.5" cy="12.5" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal2" transform="translate(29.5, 28.5)" rx="12.5" cx="12.5" ry="12.5" cy="12.5" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1510,7 +1511,7 @@ addLayer("fl", {
         },
         503: {
             name: "Circular 4-Petalled Yellow Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[503].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Honey-Cells"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[503].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 65).add(1)).add(1)) + " Honey-Cells"},
             svg: `
                 <ellipse id="petal4" transform="translate(20, 6)" rx="10" cx="10" ry="10" cy="10" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal3" transform="translate(34, 20)" rx="10" cx="10" ry="10" cy="10" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1524,7 +1525,7 @@ addLayer("fl", {
         },
         504: {
             name: "Circular 5-Petalled Yellow Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[504].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Honey-Cells"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[504].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 65).add(1)).add(1)) + " Honey-Cells"},
             svg: `
                 <ellipse id="petal5" transform="translate(22.5, 9.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal4" transform="translate(34.5, 18.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1539,7 +1540,7 @@ addLayer("fl", {
         },
         505: {
             name: "Circular 6-Petalled Yellow Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[505].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Honey-Cells"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[505].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 65).add(1)).add(1)) + " Honey-Cells"},
             svg: `
                 <ellipse id="petal6" transform="translate(24, 12)" rx="6" cx="6" ry="6" cy="6" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal5" transform="translate(34, 18)" rx="6" cx="6" ry="6" cy="6" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1556,7 +1557,7 @@ addLayer("fl", {
 
         511: {
             name: "Pentagonal 2-Petalled Yellow Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[511].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Honey-Cells"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[511].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 65).add(1)).add(1)) + " Honey-Cells"},
             svg: `
                 <ellipse id="petal2" transform="translate(24, 16)" rx="16" ry="14" cx="16" cy="14" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal1" transform="translate(4, 16)" rx="16" ry="14" cx="16" cy="14" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1568,7 +1569,7 @@ addLayer("fl", {
         },
         512: {
             name: "Pentagonal 3-Petalled Yellow Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[512].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Honey-Cells"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[512].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 65).add(1)).add(1)) + " Honey-Cells"},
             svg: `
                 <ellipse id="petal3" transform="translate(17.5, 6.5)" rx="12.5" cx="12.5" ry="12.5" cy="12.5" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal2" transform="translate(29.5, 28.5)" rx="12.5" cx="12.5" ry="12.5" cy="12.5" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1581,7 +1582,7 @@ addLayer("fl", {
         },
         513: {
             name: "Pentagonal 4-Petalled Yellow Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[513].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Honey-Cells"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[513].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 65).add(1)).add(1)) + " Honey-Cells"},
             svg: `
                 <ellipse id="petal4" transform="translate(20, 6)" rx="10" cx="10" ry="10" cy="10" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal3" transform="translate(34, 20)" rx="10" cx="10" ry="10" cy="10" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1595,7 +1596,7 @@ addLayer("fl", {
         },
         514: {
             name: "Pentagonal 5-Petalled Yellow Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[514].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Honey-Cells"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[514].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 65).add(1)).add(1)) + " Honey-Cells"},
             svg: `
                 <ellipse id="petal5" transform="translate(22.5, 9.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal4" transform="translate(34.5, 18.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1610,7 +1611,7 @@ addLayer("fl", {
         },
         515: {
             name: "Pentagonal 6-Petalled Yellow Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[515].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Honey-Cells"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[515].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 65).add(1)).add(1)) + " Honey-Cells"},
             svg: `
                 <ellipse id="petal6" transform="translate(24, 12)" rx="6" cx="6" ry="6" cy="6" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal5" transform="translate(34, 18)" rx="6" cx="6" ry="6" cy="6" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1627,7 +1628,7 @@ addLayer("fl", {
 
         521: {
             name: "Cubic 2-Petalled Yellow Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[521].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Honey-Cells"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[521].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 65).add(1)).add(1)) + " Honey-Cells"},
             svg: `
                 <ellipse id="petal2" transform="translate(24, 16)" rx="16" ry="14" cx="16" cy="14" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal1" transform="translate(4, 16)" rx="16" ry="14" cx="16" cy="14" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1636,13 +1637,13 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return buyableEffect("al", 203).gte(1)},
+            display() {return buyableEffect("al", 203).gte(1) && buyableEffect("bee", 64).gte(1)},
             onHover() {player.fl.glossaryIndex=521},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=521},
         },
         522: {
             name: "Cubic 3-Petalled Yellow Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[522].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Honey-Cells"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[522].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 65).add(1)).add(1)) + " Honey-Cells"},
             svg: `
                 <ellipse id="petal3" transform="translate(17.5, 6.5)" rx="12.5" cx="12.5" ry="12.5" cy="12.5" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal2" transform="translate(29.5, 28.5)" rx="12.5" cx="12.5" ry="12.5" cy="12.5" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1652,13 +1653,13 @@ addLayer("fl", {
                 <line transform="translate(20, 23)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 23)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return buyableEffect("al", 203).gte(2)},
+            display() {return buyableEffect("al", 203).gte(2) && buyableEffect("bee", 64).gte(1)},
             onHover() {player.fl.glossaryIndex=522},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=522},
         },
         523: {
             name: "Cubic 4-Petalled Yellow Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[523].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Honey-Cells"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[523].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 65).add(1)).add(1)) + " Honey-Cells"},
             svg: `
                 <ellipse id="petal4" transform="translate(20, 6)" rx="10" cx="10" ry="10" cy="10" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal3" transform="translate(34, 20)" rx="10" cx="10" ry="10" cy="10" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1669,13 +1670,13 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return buyableEffect("al", 203).gte(3)},
+            display() {return buyableEffect("al", 203).gte(3) && buyableEffect("bee", 64).gte(1)},
             onHover() {player.fl.glossaryIndex=523},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=523},
         },
         524: {
             name: "Cubic 5-Petalled Yellow Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[524].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Honey-Cells"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[524].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 65).add(1)).add(1)) + " Honey-Cells"},
             svg: `
                 <ellipse id="petal5" transform="translate(22.5, 9.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal4" transform="translate(34.5, 18.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1687,13 +1688,13 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return buyableEffect("al", 203).gte(4)},
+            display() {return buyableEffect("al", 203).gte(4) && buyableEffect("bee", 64).gte(1)},
             onHover() {player.fl.glossaryIndex=524},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=524},
         },
         525: {
             name: "Cubic 6-Petalled Yellow Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[525].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).add(1)) + " Honey-Cells"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[525].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 65).add(1)).add(1)) + " Honey-Cells"},
             svg: `
                 <ellipse id="petal6" transform="translate(24, 12)" rx="6" cx="6" ry="6" cy="6" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal5" transform="translate(34, 18)" rx="6" cx="6" ry="6" cy="6" fill="#fae033" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1706,7 +1707,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return buyableEffect("al", 203).gte(5)},
+            display() {return buyableEffect("al", 203).gte(5) && buyableEffect("bee", 64).gte(1)},
             onHover() {player.fl.glossaryIndex=525},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=525},
         },

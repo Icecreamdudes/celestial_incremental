@@ -70,6 +70,7 @@ addLayer("bpl", {
         if (hasUpgrade("bpl", 20)) player.bpl.pollenGain = player.bpl.pollenGain.mul(upgradeEffect("bpl", 20))
         player.bpl.pollenGain = player.bpl.pollenGain.mul(player.ne.epsilon.effect)
         player.bpl.pollenGain = player.bpl.pollenGain.mul(player.ho.effects.pollen.effect)
+        player.bpl.pollenGain = player.bpl.pollenGain.mul(player.bee.preAlephMult)
 
         // Pollen Timer Calculations
         player.bpl.pollenTimerMax = new Decimal(5)

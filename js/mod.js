@@ -612,103 +612,74 @@ function updateStyles() {
 		}
 	}
         //cutscene music logic
-        if ((cutsceneActive || window.cinematicCutsceneActive) && options.musicToggle)
-        {
+        if ((cutsceneActive || window.cinematicCutsceneActive) && options.musicToggle) {
             //if (cutsceneID == 12345 && cutsceneIndex == 2) playAndLoopAudio("music/space.mp3", options.musicVolume/10); examples
             //if (cutsceneID == 12345 && cutsceneIndex == 3) playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
 
-            if (cutsceneID == 1) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 9) playAndLoopAudio("music/marcel.mp3", options.musicVolume/10);
-            if (cutsceneID == 11) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 14) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 15) playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 16) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 18) playAndLoopAudio("music/marcel.mp3", options.musicVolume/10);
-            if (cutsceneID == 19) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 24) playAndLoopAudio("music/marcel.mp3", options.musicVolume/10);
-            if (cutsceneID == 26) playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 28) playAndLoopAudio("music/tavCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 29) playAndLoopAudio("music/tavCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 30) playAndLoopAudio("music/marcel.mp3", options.musicVolume/10);
-            if (cutsceneID == 31) playAndLoopAudio("music/tavCutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 32) playAndLoopAudio("music/tavCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 33) playAndLoopAudio("music/tavCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 37) playAndLoopAudio("music/tavCutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 39) playAndLoopAudio("music/tavDeath.mp3", options.musicVolume/10);
-            if (cutsceneID == 41) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 43) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 46) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 47) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 48) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 50) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 52) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 53) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 54) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 55) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 56) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 57) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 58) playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 59) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 60) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 61) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 62) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 63) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 65) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 66) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
+			switch (cutsceneID) {
+				case 1: case 11: case 14: case 16: case 19:
+				case 41: case 43: case 46: case 61: case 95:
+				case 108:
+					playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
+					break;
+				case 9: case 18: case 24: case 30: case 94:
+					playAndLoopAudio("music/marcel.mp3", options.musicVolume/10);
+					break;
+				case 15: case 26: case 58: case 70: case 106:
+					playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
+					break;
+				case 28: case 29: case 32: case 33:
+					playAndLoopAudio("music/tavCutscene.mp3", options.musicVolume/10);
+					break;
+				case 31: case 37:
+					playAndLoopAudio("music/tavCutsceneBox.mp3", options.musicVolume/10);
+					break;
+				case 39:
+					playAndLoopAudio("music/tavDeath.mp3", options.musicVolume/10);
+					break;
+				case 47: case 48: case 50: case 52: case 53:
+				case 54: case 55: case 56: case 57: case 59:
+				case 60:
+					playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
+					break;
+				case 62: case 63: case 65: case 66: case 73:
+				case 75: case 76: case 77: case 78: case 79:
+				case 93: case 112:
+					playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
+					break;
+				case 69: case 71: case 72:
+					playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
+					break;
+				case 74:
+					playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10);
+					break;
+				case 81: case 82: case 83: case 84: case 91:
+					playAndLoopAudio("music/matosCutsceneBox.mp3", options.musicVolume/10);
+					break;
+				case 85: case 87: case 88: case 89: case 90:
+					playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
+					break;
+				case 92:
+					playAndLoopAudio("music/novaCutscene.mp3", options.musicVolume/10);
+					break;
+				case 96: case 97: case 98: case 99: case 100:
+				case 101: case 102: case 103: case 104: case 107:
+				case 109: case 110:
+					playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
+					break;
+				case 113: case 114: case 115: case 116:
+					playAndLoopAudio("music/alephCutscene.mp3", options.musicVolume/10);
+					break;
+			}
             if (cutsceneID == 68 && cutsceneIndex < 7) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
             if (cutsceneID == 68 && cutsceneIndex >= 7) playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
-            if (cutsceneID == 69) playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
-            if (cutsceneID == 70) playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 71) playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
-            if (cutsceneID == 72) playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
-            if (cutsceneID == 73) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 74) playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10);
-            if (cutsceneID == 75) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 76) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 77) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 78) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 79) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-			//no music for cutsceneID == 80
-            if (cutsceneID == 81) playAndLoopAudio("music/matosCutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 82) playAndLoopAudio("music/matosCutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 83) playAndLoopAudio("music/matosCutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 84) playAndLoopAudio("music/matosCutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 85) playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
-			//no music for cutsceneID == 86
-            if (cutsceneID == 87) playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 88) playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 89) playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 90) playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 91) playAndLoopAudio("music/matosCutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 92) playAndLoopAudio("music/novaCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 93) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 94) playAndLoopAudio("music/marcel.mp3", options.musicVolume/10);
-            if (cutsceneID == 95) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 96) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 97) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 98) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 99) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 100) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 101) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 102) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 103) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 104) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
-			//no music for cutsceneID == 105
-            if (cutsceneID == 106) playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 107) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 108) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 109) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 110) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
             if (cutsceneID == 111 && cutsceneIndex < 23) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
             if (cutsceneID == 111 && cutsceneIndex > 23) playAndLoopAudio("music/novaCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 112) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
         }
-        if (window.cinematicCutsceneActive && options.musicToggle)
-        {
+        if (window.cinematicCutsceneActive && options.musicToggle) {
             if (cinematicCutsceneID == 40) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
         }
-	if (options.musicToggle == false)
-	{
+	if (options.musicToggle == false) {
 		stopAudio();
 	}
 	

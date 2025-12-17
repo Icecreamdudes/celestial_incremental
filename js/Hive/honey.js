@@ -77,6 +77,7 @@ addLayer("ho", {
         player.ho.cellGain = player.ho.cellGain.mul(player.fl.glossaryEffects.honey)
         if (hasUpgrade("ho", 4)) player.ho.cellGain = player.ho.cellGain.mul(upgradeEffect("ho", 4))
         if (hasUpgrade("al", 202)) player.ho.cellGain = player.ho.cellGain.mul(2)
+        player.ho.cellGain = player.ho.cellGain.mul(player.bee.preAlephMult)
 
         //FLOOR VALUE
         player.ho.cellGain = player.ho.cellGain.floor()
@@ -85,6 +86,7 @@ addLayer("ho", {
         player.ho.honeyPerSecond = player.ho.honeyPerSecond.mul(buyableEffect("bee", 62))
         if (hasUpgrade("ho", 1)) player.ho.honeyPerSecond = player.ho.honeyPerSecond.mul(upgradeEffect("ho", 1))
         if (hasUpgrade("ho", 6)) player.ho.honeyPerSecond = player.ho.honeyPerSecond.mul(upgradeEffect("ho", 6))
+
         player.ho.honey = player.ho.honey.add(player.ho.honeyPerSecond.mul(delta))
 
         let base = new Decimal(1)
@@ -280,7 +282,7 @@ addLayer("ho", {
     upgrades: {
         1: {
             title: "Honey 1",
-            unlocked() {return player.ho.cell.gte(2500)},
+            unlocked() {return player.ho.cell.gte(CELL_MILESTONES[player.bee.path][7])},
             description: "Double honey gain per honey upgrade.",
             cost() {
                 if (player.bee.path != 2) return new Decimal(1e18)
@@ -297,7 +299,7 @@ addLayer("ho", {
         },
         2: {
             title: "Honey 2",
-            unlocked() {return player.ho.cell.gte(2500)},
+            unlocked() {return player.ho.cell.gte(CELL_MILESTONES[player.bee.path][7])},
             description: "Total cell level boosts nectar.",
             cost() {
                 if (player.bee.path != 2) return new Decimal(2.7e19)
@@ -318,7 +320,7 @@ addLayer("ho", {
         },
         3: {
             title: "Honey 3",
-            unlocked() {return player.ho.cell.gte(2500)},
+            unlocked() {return player.ho.cell.gte(CELL_MILESTONES[player.bee.path][7])},
             description: "Nectar β boosts picking power.",
             cost() {
                 if (player.bee.path != 2) return new Decimal(1e21)
@@ -335,7 +337,7 @@ addLayer("ho", {
         },
         4: {
             title: "Honey 4",
-            unlocked() {return player.ho.cell.gte(2500)},
+            unlocked() {return player.ho.cell.gte(CELL_MILESTONES[player.bee.path][7])},
             description: "Nectar γ boosts honey-cells.",
             cost() {
                 if (player.bee.path != 2) return new Decimal(6.4e22)
@@ -352,7 +354,7 @@ addLayer("ho", {
         },
         5: {
             title: "Honey 5",
-            unlocked() {return player.ho.cell.gte(2500)},
+            unlocked() {return player.ho.cell.gte(CELL_MILESTONES[player.bee.path][7])},
             description: "Honey-cells boost flower gain.",
             cost() {
                 if (player.bee.path != 2) return new Decimal(8e24)
@@ -369,7 +371,7 @@ addLayer("ho", {
         },
         6: {
             title: "Honey 6",
-            unlocked() {return player.ho.cell.gte(2500)},
+            unlocked() {return player.ho.cell.gte(CELL_MILESTONES[player.bee.path][7])},
             description: "Glossary effect base boosts honey.",
             cost() {
                 if (player.bee.path != 2) return new Decimal(1e27)
@@ -416,7 +418,7 @@ addLayer("ho", {
                 ], {width: "550px", height: "450px"}],
                 ["style-row", [
                     ["upgrade", 1], ["upgrade", 2], ["upgrade", 3], ["upgrade", 4], ["upgrade", 5], ["upgrade", 6]
-                ], () => {return player.ho.cell.gte(2500) ? {width: "550px", height: "172px", background: "#0f0a00", borderTop: "3px solid white", borderRadius: "0 0 0 17px"} : {width: "550px", height: "150px"}}],
+                ], () => {return player.ho.cell.gte(CELL_MILESTONES[player.bee.path][7]) ? {width: "550px", height: "172px", background: "#0f0a00", borderTop: "3px solid white", borderRadius: "0 0 0 17px"} : {width: "550px", height: "150px"}}],
             ], {width: "550px", height: "625px", backgroundColor: "#1e1500", border: "3px solid white", borderRadius: "20px 0 0 20px"}],
             ["style-column", [
                 ["style-column", [

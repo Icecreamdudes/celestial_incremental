@@ -718,7 +718,7 @@ addLayer("ev2", {
         ], {width: "265px", height: "80px", backgroundColor: "rgba(0,0,0,0.4)", borderRadius: "10px"}],
         ["blank", "25px"],
         ["row", [
-            ["style-column", [
+            ["top-column", [
                 ["clickable", 11],
                 ["clickable", 12],
                 ["clickable", 13],

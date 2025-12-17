@@ -438,7 +438,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Space Energy Space Boost"
+                return "Space Energy Space Boost"
             },
             display() {
                 return "which are multiplying space energy gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -480,7 +480,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Space Space Boost"
+                return "Space Space Boost"
             },
             display() {
                 return "which are multiplying length, width, and depth gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\

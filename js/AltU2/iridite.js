@@ -2060,6 +2060,10 @@ class SpaceArena {
         let vertexCount = big ? 8 + Math.floor(Math.random() * 4) : 8 + Math.floor(Math.random() * 3);
         let shape = this.generateConvexPolygon(size, vertexCount);
 
+        if (player.ir.battleLevel.gte(20)) {
+            health = health * Decimal.pow(1.04, player.ir.battleLevel.sub(19)).toNumber()
+        }
+
         this.asteroids.push({
             x: x !== null ? x : Math.random() * this.width,
             y: y !== null ? y : Math.random() * this.height,
@@ -2114,6 +2118,10 @@ class SpaceArena {
         }
         if (typeName === "etaShip") {
             enemy.shootCooldown = type.bulletCooldown || 120;
+        }
+
+        if (player.ir.battleLevel.gte(20)) {
+            enemy.health = enemy.health * Decimal.pow(1.04, player.ir.battleLevel.sub(19)).toNumber()
         }
 
         this.enemies.push(enemy);
@@ -3975,10 +3983,18 @@ class SpaceArena {
                     this.ship.vy = Math.sin(angle) * bounceSpeed;
                     this.ship.x += Math.cos(angle) * bounceSpeed;
                 } else if (player.ir.shipType == 7) {
-                    if (this.ship.velocity < 0) {
-                        this.ship.velocity = 2;
+                    if (enemy.type === "ufoBoss") {
+                        if (this.ship.velocity < 0) {
+                            this.ship.velocity = 1;
+                        } else {
+                            this.ship.velocity = -1;
+                        }
                     } else {
-                        this.ship.velocity = -2;
+                        if (this.ship.velocity < 0) {
+                            this.ship.velocity = 2;
+                        } else {
+                            this.ship.velocity = -2;
+                        }
                     }
                 } else {
                     this.ship.velocity = -2;
@@ -4186,6 +4202,11 @@ class SpaceArena {
         let speed = 2 + Math.random() * 2;
         let phaseTime = 99999999999999;
         let shape = this.generateConvexPolygon(size, 5 + Math.floor(Math.random() * 3));
+
+        if (player.ir.battleLevel.gte(20)) {
+            health = health * Decimal.pow(1.04, player.ir.battleLevel.sub(19)).toNumber()
+        }
+
         return {
             x: x,
             y: y,

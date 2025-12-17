@@ -12,6 +12,8 @@ addLayer("bee", {
         bps: new Decimal(0),
         totalResearch: new Decimal(0),
 
+        preAlephMult: new Decimal(1),
+
         path: 0,
         extremePath: false,
 
@@ -29,6 +31,10 @@ addLayer("bee", {
     update(delta) {
         let onepersec = new Decimal(1)
 
+        // Pre-Aleph Multiplier
+        player.bee.preAlephMult = new Decimal(1)
+        if (player.al.cocoonLevel >= 12) player.bee.preAlephMult = player.bee.preAlephMult.mul(3)
+
         // Bee Calculations
         player.bee.bps = buyableEffect("bee", 11)
         player.bee.bps = player.bee.bps.mul(player.fl.glossaryEffects.bee)
@@ -42,6 +48,10 @@ addLayer("bee", {
         if (hasUpgrade("al", 110)) player.bee.bps = player.bee.bps.mul(3)
         if (hasUpgrade("al", 116)) player.bee.bps = player.bee.bps.mul(upgradeEffect("al", 116))
         if (hasUpgrade("al", 216)) player.bee.bps = player.bee.bps.mul(upgradeEffect("al", 216))
+        player.bee.bps = player.bee.bps.mul(player.bee.preAlephMult)
+
+        // POWER MODIFIERS
+        player.bee.bps = player.bee.bps.pow(buyableEffect("bee", 15))
 
         player.bee.bees = player.bee.bees.add(player.bee.bps.mul(delta))
     },
@@ -88,7 +98,7 @@ addLayer("bee", {
             buy() {
                 if (player.bee.beeMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
+                    if (player.al.cocoonLevel < 13) this.pay(buyonecost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(1)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -96,7 +106,7 @@ addLayer("bee", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (player.al.cocoonLevel < 13) this.pay(cost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(max)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -124,7 +134,7 @@ addLayer("bee", {
             buy() {
                 if (player.bee.beeMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
+                    if (player.al.cocoonLevel < 13) this.pay(buyonecost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(1)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -132,7 +142,7 @@ addLayer("bee", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (player.al.cocoonLevel < 13) this.pay(cost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(max)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -160,7 +170,7 @@ addLayer("bee", {
             buy() {
                 if (player.bee.beeMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
+                    if (player.al.cocoonLevel < 13) this.pay(buyonecost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(1)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -168,7 +178,7 @@ addLayer("bee", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (player.al.cocoonLevel < 13) this.pay(cost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(max)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -196,7 +206,7 @@ addLayer("bee", {
             buy() {
                 if (player.bee.beeMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
+                    if (player.al.cocoonLevel < 13) this.pay(buyonecost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(1)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -204,7 +214,43 @@ addLayer("bee", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (player.al.cocoonLevel < 13) this.pay(cost)
+
+                    player.bee.totalResearch = player.bee.totalResearch.add(max)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '175px', height: '60px', border: "3px solid rgba(0,0,0,0.3)", borderRadius: '0px'}
+        },
+        15: {
+            costBase() { return new Decimal(1e225) },
+            costGrowth() { return new Decimal(1e25) },
+            purchaseLimit() { return new Decimal(5) },
+            currency() { return player.bee.bees},
+            pay(amt) { player.bee.bees = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.002).add(1) },
+            unlocked() { return player.al.cocoonLevel >= 14 },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                if (!getBuyableAmount(this.layer, this.id).eq(this.purchaseLimit())) {
+                    return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Bees"
+                } else {
+                    return "<h2>MAX"
+                }
+            },
+            buy() {
+                if (player.bee.beeMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    if (player.al.cocoonLevel < 13) this.pay(buyonecost)
+
+                    player.bee.totalResearch = player.bee.totalResearch.add(1)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (player.al.cocoonLevel < 13) this.pay(cost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(max)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -235,7 +281,7 @@ addLayer("bee", {
             buy() {
                 if (player.bee.beeMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
+                    if (player.al.cocoonLevel < 13) this.pay(buyonecost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(1)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -243,7 +289,7 @@ addLayer("bee", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (player.al.cocoonLevel < 13) this.pay(cost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(max)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -273,7 +319,7 @@ addLayer("bee", {
             buy() {
                 if (player.bee.beeMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
+                    if (player.al.cocoonLevel < 13) this.pay(buyonecost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(1)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -281,7 +327,7 @@ addLayer("bee", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (player.al.cocoonLevel < 13) this.pay(cost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(max)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -311,7 +357,7 @@ addLayer("bee", {
             buy() {
                 if (player.bee.beeMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
+                    if (player.al.cocoonLevel < 13) this.pay(buyonecost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(1)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -319,7 +365,7 @@ addLayer("bee", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (player.al.cocoonLevel < 13) this.pay(cost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(max)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -349,7 +395,7 @@ addLayer("bee", {
             buy() {
                 if (player.bee.beeMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
+                    if (player.al.cocoonLevel < 13) this.pay(buyonecost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(1)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -357,7 +403,7 @@ addLayer("bee", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (player.al.cocoonLevel < 13) this.pay(cost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(max)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -394,7 +440,7 @@ addLayer("bee", {
             buy() {
                 if (player.bee.beeMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
+                    if (player.al.cocoonLevel < 13) this.pay(buyonecost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(1)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -402,7 +448,7 @@ addLayer("bee", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (player.al.cocoonLevel < 13) this.pay(cost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(max)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -438,7 +484,7 @@ addLayer("bee", {
             buy() {
                 if (player.bee.beeMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
+                    if (player.al.cocoonLevel < 13) this.pay(buyonecost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(1)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -446,7 +492,7 @@ addLayer("bee", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (player.al.cocoonLevel < 13) this.pay(cost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(max)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -482,7 +528,7 @@ addLayer("bee", {
             buy() {
                 if (player.bee.beeMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
+                    if (player.al.cocoonLevel < 13) this.pay(buyonecost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(1)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -490,7 +536,7 @@ addLayer("bee", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (player.al.cocoonLevel < 13) this.pay(cost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(max)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -526,7 +572,7 @@ addLayer("bee", {
             buy() {
                 if (player.bee.beeMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
+                    if (player.al.cocoonLevel < 13) this.pay(buyonecost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(1)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -534,7 +580,7 @@ addLayer("bee", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (player.al.cocoonLevel < 13) this.pay(cost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(max)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -570,7 +616,7 @@ addLayer("bee", {
             buy() {
                 if (player.bee.beeMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
+                    if (player.al.cocoonLevel < 13) this.pay(buyonecost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(1)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -578,7 +624,7 @@ addLayer("bee", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (player.al.cocoonLevel < 13) this.pay(cost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(max)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -615,7 +661,7 @@ addLayer("bee", {
             buy() {
                 if (player.bee.beeMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
+                    if (player.al.cocoonLevel < 13) this.pay(buyonecost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(1)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -623,7 +669,7 @@ addLayer("bee", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (player.al.cocoonLevel < 13) this.pay(cost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(max)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -659,7 +705,7 @@ addLayer("bee", {
             buy() {
                 if (player.bee.beeMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
+                    if (player.al.cocoonLevel < 13) this.pay(buyonecost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(1)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -667,7 +713,7 @@ addLayer("bee", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (player.al.cocoonLevel < 13) this.pay(cost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(max)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -703,7 +749,7 @@ addLayer("bee", {
             buy() {
                 if (player.bee.beeMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
+                    if (player.al.cocoonLevel < 13) this.pay(buyonecost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(1)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -711,7 +757,7 @@ addLayer("bee", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (player.al.cocoonLevel < 13) this.pay(cost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(max)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -747,7 +793,7 @@ addLayer("bee", {
             buy() {
                 if (player.bee.beeMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
+                    if (player.al.cocoonLevel < 13) this.pay(buyonecost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(1)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -755,7 +801,7 @@ addLayer("bee", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (player.al.cocoonLevel < 13) this.pay(cost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(max)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -791,7 +837,7 @@ addLayer("bee", {
             buy() {
                 if (player.bee.beeMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
+                    if (player.al.cocoonLevel < 13) this.pay(buyonecost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(1)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -799,7 +845,7 @@ addLayer("bee", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (player.al.cocoonLevel < 13) this.pay(cost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(max)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -837,7 +883,7 @@ addLayer("bee", {
             buy() {
                 if (player.bee.beeMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
+                    if (player.al.cocoonLevel < 13) this.pay(buyonecost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(1)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -845,7 +891,7 @@ addLayer("bee", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (player.al.cocoonLevel < 13) this.pay(cost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(max)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -881,7 +927,7 @@ addLayer("bee", {
             buy() {
                 if (player.bee.beeMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
+                    if (player.al.cocoonLevel < 13) this.pay(buyonecost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(1)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -889,7 +935,7 @@ addLayer("bee", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (player.al.cocoonLevel < 13) this.pay(cost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(max)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -925,7 +971,7 @@ addLayer("bee", {
             buy() {
                 if (player.bee.beeMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
+                    if (player.al.cocoonLevel < 13) this.pay(buyonecost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(1)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -933,7 +979,7 @@ addLayer("bee", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (player.al.cocoonLevel < 13) this.pay(cost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(max)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -950,10 +996,10 @@ addLayer("bee", {
                 if (player.bee.path != 1) return new Decimal(1e30)
                 return new Decimal(1e10)
             },
-            purchaseLimit() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(5) },
             currency() { return player.bee.bees},
             pay(amt) { player.bee.bees = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).div(20) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(10) },
             unlocked() { return hasUpgrade("al", 117) && tmp.bb.layerShown},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() {
@@ -969,7 +1015,7 @@ addLayer("bee", {
             buy() {
                 if (player.bee.beeMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
+                    if (player.al.cocoonLevel < 13) this.pay(buyonecost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(1)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -977,7 +1023,7 @@ addLayer("bee", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (player.al.cocoonLevel < 13) this.pay(cost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(max)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -1014,7 +1060,7 @@ addLayer("bee", {
             buy() {
                 if (player.bee.beeMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
+                    if (player.al.cocoonLevel < 13) this.pay(buyonecost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(1)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -1022,7 +1068,7 @@ addLayer("bee", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (player.al.cocoonLevel < 13) this.pay(cost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(max)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -1058,7 +1104,7 @@ addLayer("bee", {
             buy() {
                 if (player.bee.beeMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
+                    if (player.al.cocoonLevel < 13) this.pay(buyonecost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(1)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -1066,7 +1112,7 @@ addLayer("bee", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (player.al.cocoonLevel < 13) this.pay(cost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(max)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -1102,7 +1148,7 @@ addLayer("bee", {
             buy() {
                 if (player.bee.beeMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
+                    if (player.al.cocoonLevel < 13) this.pay(buyonecost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(1)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -1110,7 +1156,7 @@ addLayer("bee", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (player.al.cocoonLevel < 13) this.pay(cost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(max)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -1146,7 +1192,7 @@ addLayer("bee", {
             buy() {
                 if (player.bee.beeMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
+                    if (player.al.cocoonLevel < 13) this.pay(buyonecost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(1)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -1154,7 +1200,7 @@ addLayer("bee", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (player.al.cocoonLevel < 13) this.pay(cost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(max)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -1171,10 +1217,10 @@ addLayer("bee", {
                 if (player.bee.path != 2) return new Decimal(1e30)
                 return new Decimal(1e10)
             },
-            purchaseLimit() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(5) },
             currency() { return player.bee.bees},
             pay(amt) { player.bee.bees = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).div(20) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(10) },
             unlocked() { return hasUpgrade("al", 217) && tmp.ho.layerShown},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() {
@@ -1190,7 +1236,7 @@ addLayer("bee", {
             buy() {
                 if (player.bee.beeMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
+                    if (player.al.cocoonLevel < 13) this.pay(buyonecost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(1)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -1198,7 +1244,7 @@ addLayer("bee", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (player.al.cocoonLevel < 13) this.pay(cost)
 
                     player.bee.totalResearch = player.bee.totalResearch.add(max)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -1251,6 +1297,14 @@ addLayer("bee", {
                 ["style-row", [], {width: "4px", height: "60px", background: "#8e4200"}],
                 ["buyable", 14],
             ], () => {return player.al.cocoonLevel >= 9 ? {borderBottom: "4px solid #8e4200", backgroundColor: "#ffb825"} : {display: "none !important"}}],
+            ["style-row", [
+                ["style-column", [
+                    ["raw-html", () => { return "Magnified Bees - " + formatWhole(getBuyableAmount("bee", 14)) + "/5"}, { color: "#312f17", fontSize: "24px", fontFamily: "monospace" }],
+                    ["raw-html", () => { return "Boosts BPS by ^" + formatSimple(buyableEffect("bee", 14), 3)}, { color: "#312f17", fontSize: "16px", fontFamily: "monospace" }]
+                ], {width: "396px"}],
+                ["style-row", [], {width: "4px", height: "60px", background: "#8e4200"}],
+                ["buyable", 15],
+            ], () => {return player.al.cocoonLevel >= 14 ? {borderBottom: "4px solid #8e4200", backgroundColor: "#ffb825"} : {display: "none !important"}}],
 
             // FLOWER RESEARCH
 
@@ -1417,6 +1471,14 @@ addLayer("bee", {
                     ["style-row", [], {width: "4px", height: "60px", background: "#8e4200"}],
                     ["buyable", 53],
                 ], {borderBottom: "4px solid #8e4200", backgroundColor: "#ffb825"}],
+                ["style-row", [
+                    ["style-column", [
+                        ["raw-html", () => { return "Enhanced Anthers - " + formatWhole(getBuyableAmount("bee", 54)) + "/5"}, { color: "#312f17", fontSize: "24px", fontFamily: "monospace" }],
+                        ["raw-html", () => { return "Pink flowers are " + formatWhole(buyableEffect("bee", 54).mul(100)) + "% stronger"}, { color: "#312f17", fontSize: "16px", fontFamily: "monospace" }]
+                    ], {width: "396px"}],
+                    ["style-row", [], {width: "4px", height: "60px", background: "#8e4200"}],
+                    ["buyable", 54],
+                ], () => {return hasUpgrade("al", 117) ? {borderBottom: "4px solid #8e4200", backgroundColor: "#ffb825"} : {display: "none !important"}}],
             ], () => {return tmp.bb.layerShown ? {} : {display: "none !important"}}],
 
             // HONEY RESEARCH
@@ -1456,6 +1518,14 @@ addLayer("bee", {
                     ["style-row", [], {width: "4px", height: "60px", background: "#8e4200"}],
                     ["buyable", 64],
                 ], () => {return player.ho.cell.gte(CELL_MILESTONES[player.bee.path][6]) ? {borderBottom: "4px solid #8e4200", backgroundColor: "#ffb825"} : {display: "none !important"}}],
+                ["style-row", [
+                    ["style-column", [
+                        ["raw-html", () => { return "Enhanced Nectaries - " + formatWhole(getBuyableAmount("bee", 65)) + "/5"}, { color: "#312f17", fontSize: "24px", fontFamily: "monospace" }],
+                        ["raw-html", () => { return "Yellow flowers are " + formatWhole(buyableEffect("bee", 65).mul(100)) + "% stronger"}, { color: "#312f17", fontSize: "16px", fontFamily: "monospace" }]
+                    ], {width: "396px"}],
+                    ["style-row", [], {width: "4px", height: "60px", background: "#8e4200"}],
+                    ["buyable", 65],
+                ], () => {return hasUpgrade("al", 217) ? {borderBottom: "4px solid #8e4200", backgroundColor: "#ffb825"} : {display: "none !important"}}],
             ], () => {return tmp.ho.layerShown ? {} : {display: "none !important"}}],
         ], {userSelect: "none", borderLeft: "4px solid #8e4200", borderRight: "4px solid #8e4200", borderTop: "4px solid #8e4200"}],
         ["style-column", [

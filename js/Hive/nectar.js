@@ -66,6 +66,7 @@ addLayer("ne", {
         allGain = allGain.mul(player.ho.effects.nectar.effect)
         if (hasUpgrade("ho", 2)) allGain = allGain.mul(upgradeEffect("ho", 2))
         if (player.bb.breadMilestone >= 9) allGain = allGain.mul(player.bb.breadEffects[8])
+        allGain = allGain.mul(player.bee.preAlephMult.pow(0.5))
 
         player.ne.alpha.gain = player.bee.bees.div(1e5).pow(Decimal.add(0.5, buyableEffect("bee", 43)))
         if (player.bee.path != 2) player.ne.alpha.gain = player.bee.bees.div(1e70).pow(Decimal.add(0.5, buyableEffect("bee", 43))).pow(0.7)

@@ -554,7 +554,7 @@ function createRepliGrass(quantity) {
 
 function isCollision(x, y) {
     for (const repliCircle of repliCircles) {
-        if (repliCircleDistanceSquared(repliCircle, x, y) <= repliCircleSize) {
+        if (repliCircleDistanceSquared(repliCircle, x, y) <= repliCircleSize * repliCircleSize) {
             return true; // Collision detected
         }
     }

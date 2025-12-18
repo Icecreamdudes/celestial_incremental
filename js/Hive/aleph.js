@@ -109,6 +109,19 @@ addLayer("al", {
             }
         }
 
+        player.fl.gatherer[1].id = 101
+        player.fl.gatherer[1].current = new Decimal(0)
+        player.fl.gatherer[1].max = new Decimal(5)
+        player.fl.gatherer[1].power = new Decimal(0)
+        player.fl.gatherer[1].mult = new Decimal(1)
+        
+        player.fl.gatherer[2].id = 505
+        player.fl.gatherer[2].current = new Decimal(0)
+
+        player.fl.buyables[1] = new Decimal(0)
+        player.fl.buyables[2] = new Decimal(0)
+        player.fl.buyables[3] = new Decimal(0)
+
         // POLLEN
         player.bpl.pollen = new Decimal(0)
         player.bpl.roles.drone.amount = new Decimal(0)

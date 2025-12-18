@@ -1216,7 +1216,7 @@ var doNotCallTheseFunctionsEveryTick = [
 	"generateCelestialite", "lootCelestialite", "startCutscene30", "startCutscene31", "startCutscene32",
 	"startCutscene33", "startCutscene34", "resetFightCooldown", "starReset", "legendarySummon",
 	"generatePhase1Attack", "generatePhase2Attack", "startCutscene35", "startCutscene36", "startCutscene37",
-	"startCutscene38", "startCutscene39", "cookieClick", "generateFlower", "generateMult",
+	"startCutscene38", "startCutscene39", "cookieClick", "generateFlower", "generateMult", "flowerClick",
 	"selectCelestialites", "petDeath", "celestialiteDeath", "petAbility", "celestialiteAbility",
 	"arriveAtStar", "spaceEnergyReset",
 ]

@@ -2184,6 +2184,9 @@ class SpaceArena {
             this.enterIriditeFullscreen();
         }
 
+        let amt = 1
+        if (player.ir.shipType == 7) amt = 2
+        for (let i = 0; i < amt; i++) {
         // Decide a spawn position that is NOT on top of the player.
         // Compute safe minimum separation based on both radii and a buffer.
         const enemyRadius = (this.enemyTypes.iriditeBoss && this.enemyTypes.iriditeBoss.radius) ? this.enemyTypes.iriditeBoss.radius : 64;
@@ -2244,6 +2247,7 @@ class SpaceArena {
             _recentlyHit: 0,
         };
         this.enemies.push(enemy);
+        }
     }
 
     generateConvexPolygon(radius, vertexCount) {
@@ -3282,7 +3286,8 @@ class SpaceArena {
                     let dx = this.ship.x - enemy.x;
                     let dy = this.ship.y - enemy.y;
                     let dist = Math.hypot(dx, dy) || 1;
-                    const desiredDist = 220;
+                    let desiredDist = 220;
+                    if (player.ir.shipType == 7) desiredDist = 50
                     // Move toward or away to keep distance
                     let moveSpeed = 2.5;
                     if (dist > desiredDist + 10) {
@@ -3968,7 +3973,7 @@ class SpaceArena {
                 if (Number.isNaN(enemyDmg) || !isFinite(enemyDmg) || enemyDmg < 0) enemyDmg = 0;
                 if (player.ir.shipType != 3 && player.ir.shipType != 7) enemy.health -= enemyDmg * 0.05;
                 if (player.ir.shipType == 3) enemy.health -= enemyDmg * 2.5;
-                if (player.ir.shipType == 7) enemy.health -= enemyDmg * 2;
+                if (player.ir.shipType == 7) enemy.health -= enemyDmg;
 
                 let shipDmg = enemy.damage * this.upgradeEffects.damageReduction * 6;
                 if (Number.isNaN(shipDmg) || !isFinite(shipDmg) || shipDmg < 0) shipDmg = 3 * this.upgradeEffects.damageReduction;
@@ -3983,18 +3988,10 @@ class SpaceArena {
                     this.ship.vy = Math.sin(angle) * bounceSpeed;
                     this.ship.x += Math.cos(angle) * bounceSpeed;
                 } else if (player.ir.shipType == 7) {
-                    if (enemy.type === "ufoBoss") {
-                        if (this.ship.velocity < 0) {
-                            this.ship.velocity = 1;
-                        } else {
-                            this.ship.velocity = -1;
-                        }
+                    if (this.ship.velocity < 0) {
+                        this.ship.velocity = 2 * this.upgradeEffects.attackSpeed;
                     } else {
-                        if (this.ship.velocity < 0) {
-                            this.ship.velocity = 2;
-                        } else {
-                            this.ship.velocity = -2;
-                        }
+                        this.ship.velocity = -2 * this.upgradeEffects.attackSpeed;
                     }
                 } else {
                     this.ship.velocity = -2;
@@ -4028,6 +4025,7 @@ class SpaceArena {
 
                     // guaranteed gem drop for UFO miniboss
                     if (enemy.type === "ufoBoss") {
+                        this.bossActive = false;
                         player.ir.ufoDefeated = true;
                         player.ir.spaceGem = player.ir.spaceGem.add(2);
                         lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 2, type: "gem" });
@@ -4071,9 +4069,9 @@ class SpaceArena {
                     this.ship.x += Math.cos(angle) * bounceSpeed;
                 } else if (player.ir.shipType == 7) {
                     if (this.ship.velocity < 0) {
-                        this.ship.velocity = 2;
+                        this.ship.velocity = 2 * this.upgradeEffects.attackSpeed;
                     } else {
-                        this.ship.velocity = -2;
+                        this.ship.velocity = -2 * this.upgradeEffects.attackSpeed;
                     }
                 } else {
                     this.ship.velocity = -2;

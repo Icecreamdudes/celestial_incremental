@@ -141,6 +141,23 @@ addLayer("fl", {
         },
         glossaryIndex: 0,
         glossaryRig: 0,
+
+        gatherer: {
+            1: {
+                id: 101,
+                current: new Decimal(0),
+                max: new Decimal(5),
+                power: new Decimal(0),
+                mult: new Decimal(1),
+            },
+            2: {
+                id: 505,
+                current: new Decimal(0),
+                max: new Decimal(5),
+                power: new Decimal(0),
+                mult: new Decimal(1),
+            },
+        },
     }},
     nodeStyle() {
         return {borderColor: "#7e3075"}
@@ -250,6 +267,51 @@ addLayer("fl", {
             }
             if (i % 10 == 5) {i = i+6} else {i++}
         }
+
+        // GATHERER STUFF
+        player.fl.gatherer[1].max = new Decimal(5).div(buyableEffect("fl", 1))
+        player.fl.gatherer[1].power = buyableEffect("fl", 2)
+        player.fl.gatherer[1].mult = buyableEffect("fl", 3).add(1)
+        player.fl.gatherer[1].current = player.fl.gatherer[1].current.add(delta)
+
+        player.fl.gatherer[2].max = new Decimal(5).div(buyableEffect("fl", 4))
+        player.fl.gatherer[2].power = buyableEffect("fl", 5)
+        player.fl.gatherer[2].mult = buyableEffect("fl", 6).add(1)
+        player.fl.gatherer[2].current = player.fl.gatherer[2].current.add(delta)
+
+        if (player.fl.gatherer[1].current.gte(player.fl.gatherer[1].max) && player.fl.gatherer[1].power.gt(0)) {
+            // RESET TIMER
+            player.fl.gatherer[1].current = new Decimal(0)
+
+            // SIMULATE CLICK
+            layers.fl.flowerClick(player.fl.gatherer[1].id, player.fl.gatherer[1].power.mul(player.fl.gatherer[1].mult))
+
+            // CYCLE ID FORWARD
+            if (player.fl.gatherer[1].id == 505) {
+                player.fl.gatherer[1].id = 101
+            } else if (player.fl.gatherer[1].id%100 == 5) {
+                player.fl.gatherer[1].id += 96
+            } else {
+                player.fl.gatherer[1].id += 1
+            }
+        }
+        
+        if (player.fl.gatherer[2].current.gte(player.fl.gatherer[2].max) && player.fl.gatherer[2].power.gt(0)) {
+            // RESET TIMER
+            player.fl.gatherer[2].current = new Decimal(0)
+
+            // SIMULATE CLICK
+            layers.fl.flowerClick(player.fl.gatherer[2].id, player.fl.gatherer[2].power.mul(player.fl.gatherer[2].mult))
+
+            // CYCLE ID FORWARD
+            if (player.fl.gatherer[2].id == 101) {
+                player.fl.gatherer[2].id = 505
+            } else if (player.fl.gatherer[2].id%100 == 1) {
+                player.fl.gatherer[2].id -= 96
+            } else {
+                player.fl.gatherer[2].id -= 1
+            }
+        }
     },
     generateFlower(type) {
         let row = getRandomInt(5) + 1
@@ -257,17 +319,20 @@ addLayer("fl", {
         let val = column + "0" + row
         let tier = Math.random()
         if (player.al.cocoonLevel >= 11 && player.fl.glossaryRig != 0) {
-            tier = player.fl.glossaryRig.toString()[1]
-            switch (tier) {
-                case '0':
-                    tier = 0.9
-                    break;
-                case '1':
-                    tier = 0.1
-                    break;
-                default:
-                    tier = 0.35
-                    break;
+            let numType = player.fl.glossaryRig.toString()[0]
+            if (numType == '1' && type == "red" || numType == '2' && type == "blue" || numType == '3' && type == "green" || numType == '4' && type == "pink" || numType == '5' && type == "yellow") {
+                tier = player.fl.glossaryRig.toString()[1]
+                switch (tier) {
+                    case '0':
+                        tier = 0.9
+                        break;
+                    case '1':
+                        tier = 0.1
+                        break;
+                    default:
+                        tier = 0.35
+                        break;
+                }
             }
         }
         let rigBase = ((player.fl.glossaryRig-1)%5)+2
@@ -563,6 +628,17 @@ addLayer("fl", {
         let str = run(layers[layer].glossary[data].getTitle, layers[layer].glossary[data])
         str = str.substring(0, str.indexOf(' '))
         return str
+    },
+    flowerClick(id, power) {
+        if (getGridData("fl", id)[0] != 0) {
+            if (getGridData("fl", id)[1].gt(0)) {
+                setGridData("fl", id, [getGridData("fl", id)[0], getGridData("fl", id)[1].sub(power)])
+                if (getGridData("fl", id)[1].lte(0)) {
+                    player.fl.glossary[getGridData("fl", id)[0]] = player.fl.glossary[getGridData("fl", id)[0]].add(player.fl.flowerGain)
+                    setGridData("fl", id, [0, new Decimal(1)])
+                }
+            }
+        }
     },
     glossary: {
         0: {
@@ -1776,7 +1852,16 @@ addLayer("fl", {
             }
         },
         getStyle(data, id) {
-            let look = {width: "100px", height: "100px", backgroundColor: "#136d15", border: "5px solid rgba(0,0,0,0.3)", borderRadius: "0", padding: "0", margin: "-2.5px"}
+            let look = {width: "100px", height: "100px", background: "#136d15", border: "5px solid #0d4c0e", borderRadius: "0", padding: "0", margin: "-2.5px"}
+            let gather1 = (player.fl.gatherer[1].id == id && player.fl.gatherer[1].power.gte(1))
+            let gather2 = (player.fl.gatherer[2].id == id && player.fl.gatherer[2].power.gte(1))
+            if (gather1 && gather2) {
+                look.background = "radial-gradient(circle, #136d15ff 0%, #136d15ff 85%, #89770Bff 85%)"
+            } else if (gather1) {
+                look.background = "radial-gradient(circle, #136d15ff 0%, #136d15ff 85%, #89370Bff 85%)"
+            } else if (gather2) {
+                look.background = "radial-gradient(circle, #136d15ff 0%, #136d15ff 85%, #89B60Bff 85%)"
+            }
             return look
         }
     },
@@ -1882,6 +1967,194 @@ addLayer("fl", {
             }
         },
     },
+    buyables: {
+        1: {
+            costBase() { return new Decimal(1e20) },
+            costGrowth() { return new Decimal(100) },
+            purchaseLimit() { return new Decimal(150) },
+            currency() { return player.bee.bees},
+            pay(amt) { player.bee.bees = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.85).mul(0.1).add(1) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            display() {
+                return "Decreases sweep time by /" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Bees"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '175px', height: '150px', color: "white", background: "#441b05", border: "5px solid #220d02", borderColor: "#220d02", boxSizing: "border-box"}
+        },
+        2: {
+            costBase() { return new Decimal(1e10) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(300) },
+            currency() { return player.bee.bees},
+            pay(amt) { player.bee.bees = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.7) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            display() {
+                return "Increases picking power by +" + formatSimple(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Bees"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '175px', height: '150px', color: "white", background: "#441b05", border: "5px solid #220d02", borderColor: "#220d02", boxSizing: "border-box"}
+        },
+        3: {
+            costBase() { return new Decimal(1e50) },
+            costGrowth() { return new Decimal(1e5) },
+            purchaseLimit() { return new Decimal(60) },
+            currency() { return player.bee.bees},
+            pay(amt) { player.bee.bees = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(5) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            display() {
+                return "Increases multiplier by +" + formatSimple(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Bees"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '175px', height: '150px', color: "white", background: "#441b05", border: "5px solid #220d02", borderColor: "#220d02", boxSizing: "border-box"}
+        },
+        4: {
+            costBase() { return new Decimal(10) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.al.honeycomb},
+            pay(amt) { player.al.honeycomb = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.85).mul(0.25).add(1) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) && tmp.al.layerShown },
+            display() {
+                return "Decreases sweep time by /" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Honeycombs"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '175px', height: '140px', color: "white", background: "#445b05", border: "5px solid #222d02", borderColor: "#222d02", boxSizing: "border-box"}
+        },
+        5: {
+            costBase() { return new Decimal(10) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.al.royalJelly},
+            pay(amt) { player.al.royalJelly = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) && tmp.al.layerShown },
+            display() {
+                return "Increases picking power by +" + formatSimple(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Royal Jelly"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '175px', height: '140px', color: "white", background: "#445b05", border: "5px solid #222d02", borderColor: "#222d02", boxSizing: "border-box"}
+        },
+        6: {
+            costBase() { return new Decimal(1e300) },
+            costGrowth() { return new Decimal(1e10) },
+            purchaseLimit() { return new Decimal(60) },
+            currency() { return player.pol.pollinators},
+            pay(amt) { player.pol.pollinators = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(5) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) && tmp.al.layerShown },
+            display() {
+                return "Increases multiplier by +" + formatSimple(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Pollinators"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '175px', height: '140px', color: "white", background: "#445b05", border: "5px solid #222d02", borderColor: "#222d02", boxSizing: "border-box"}
+        },
+    },
     microtabs: {
         Tabs: {
             "Garden": {
@@ -1889,7 +2162,7 @@ addLayer("fl", {
                     ["style-row", [
                         ["style-column", [
                             "grid",
-                        ], {width: "480px", height: "480px"}],
+                        ], {width: "480px", height: "480px", background: "#0d4c0e"}],
                         ["left-row", [
                             ["clickable", 1],
                             ["clickable", 2],
@@ -1925,6 +2198,75 @@ addLayer("fl", {
                         ], () => {return player.al.cocoonLevel >= 3 ? {width: "535px", height: "65px", background: "#251d0d", borderTop: "5px solid #3e3117"} : {width: "535px", height: "70px"}}],
                     ], {width: "535px", height: "480px", backgroundColor: "#312712", border: "5px solid #3e3117"}],
                 ]
+            },
+            "Gatherer": {
+                content: [
+                    ["top-column", [
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", "Gatherer Mk.1", {color: "#ccc", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "535px", height: "32px", background: "#291003", borderBottom: "5px solid #3e3117"}],
+                            ["row", [
+                                ["style-column", [
+                                    ["style-column", [
+                                        ["raw-html", "Sweep Time", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
+                                        ["style-row", [], {width: "150px", height: "1px", background: "#ccc", margin: "2px"}],
+                                        ["raw-html", () => {return formatTime(player.fl.gatherer[1].max)}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
+                                    ], {width: "175px", height: "45px", borderBottom: "5px solid #3e3117"}],
+                                    ["ex-buyable", 1],
+                                ], {width: "175px", height: "200px", borderRight: "5px solid #3e3117"}],
+                                ["style-column", [
+                                    ["style-column", [
+                                        ["raw-html", "Picking Power", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
+                                        ["style-row", [], {width: "150px", height: "1px", background: "#ccc", margin: "2px"}],
+                                        ["raw-html", () => {return formatSimple(player.fl.gatherer[1].power)}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
+                                    ], {width: "175px", height: "45px", borderBottom: "5px solid #3e3117"}],
+                                    ["ex-buyable", 2],
+                                ], {width: "175px", height: "200px", borderRight: "5px solid #3e3117"}],
+                                ["style-column", [
+                                    ["style-column", [
+                                        ["raw-html", "Multiplier", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
+                                        ["style-row", [], {width: "150px", height: "1px", background: "#ccc", margin: "2px"}],
+                                        ["raw-html", () => {return "x" + formatSimple(player.fl.gatherer[1].mult)}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
+                                    ], {width: "175px", height: "45px", borderBottom: "5px solid #3e3117"}],
+                                    ["ex-buyable", 3],
+                                ], {width: "175px", height: "200px"}],
+                            ]],
+                        ], {width: "535px", height: "237px", background: "#1b0b02", borderBottom: "5px solid #3e3117"}],
+                        ["style-row", [
+                            ["style-column", [
+                                ["raw-html", "Gatherer Mk.2", {color: "#ccc", fontSize: "20px", fontFamily: "monospace"}],
+                                ["raw-html", "(Kept on Aleph resets)", {color: "#ccc", fontSize: "14px", fontFamily: "monospace"}],
+                            ], {width: "535px", height: "43px", background: "#1b2402", borderBottom: "5px solid #3e3117"}],
+                            ["row", [
+                                ["style-column", [
+                                    ["style-column", [
+                                        ["raw-html", "Sweep Time", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
+                                        ["style-row", [], {width: "150px", height: "1px", background: "#ccc", margin: "2px"}],
+                                        ["raw-html", () => {return formatTime(player.fl.gatherer[2].max)}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
+                                    ], {width: "175px", height: "45px", borderBottom: "5px solid #3e3117"}],
+                                    ["ex-buyable", 4],
+                                ], {width: "175px", height: "190px", borderRight: "5px solid #3e3117"}],
+                                ["style-column", [
+                                    ["style-column", [
+                                        ["raw-html", "Picking Power", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
+                                        ["style-row", [], {width: "150px", height: "1px", background: "#ccc", margin: "2px"}],
+                                        ["raw-html", () => {return formatSimple(player.fl.gatherer[2].power)}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
+                                    ], {width: "175px", height: "45px", borderBottom: "5px solid #3e3117"}],
+                                    ["ex-buyable", 5],
+                                ], {width: "175px", height: "190px", borderRight: "5px solid #3e3117"}],
+                                ["style-column", [
+                                    ["style-column", [
+                                        ["raw-html", "Multiplier", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
+                                        ["style-row", [], {width: "150px", height: "1px", background: "#ccc", margin: "2px"}],
+                                        ["raw-html", () => {return "x" + formatSimple(player.fl.gatherer[2].mult)}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
+                                    ], {width: "175px", height: "45px", borderBottom: "5px solid #3e3117"}],
+                                    ["ex-buyable", 6],
+                                ], {width: "175px", height: "190px"}],
+                            ]],
+                        ], () => {return tmp.al.layerShown ? {width: "535px", height: "238px", background: "#0d1201"} : {display: "none !important"}}],
+                    ], {width: "535px", height: "480px", backgroundColor: "#161616", border: "5px solid #3e3117"}],
+                ],
             },
         },
         Glossary: {
@@ -1983,13 +2325,18 @@ addLayer("fl", {
         ["blank", "10px"],
         ["style-row", [
             ["raw-html", () => {
-                if (player.subtabs.fl.Tabs == "Garden") return "<button class='shopButton selected' style='width:265px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Garden`'>Garden</button>"
-                return "<button class='shopButton' style='width:265px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Garden`'>Garden</button>"
+                if (player.subtabs.fl.Tabs == "Garden") return "<button class='shopButton selected' style='width:175px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Garden`'>Garden</button>"
+                return "<button class='shopButton' style='width:175px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Garden`'>Garden</button>"
             }],
             ["style-row", [], {width: "5px", height: "40px", backgroundColor: "#3e3117"}],
             ["raw-html", () => {
-                if (player.subtabs.fl.Tabs == "Glossary") return "<button class='shopButton selected' style='width:265px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Glossary`'>Glossary</button>"
-                return "<button class='shopButton' style='width:265px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Glossary`'>Glossary</button>"
+                if (player.subtabs.fl.Tabs == "Glossary") return "<button class='shopButton selected' style='width:175px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Glossary`'>Glossary</button>"
+                return "<button class='shopButton' style='width:175px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Glossary`'>Glossary</button>"
+            }],
+            ["style-row", [], {width: "5px", height: "40px", backgroundColor: "#3e3117"}],
+            ["raw-html", () => {
+                if (player.subtabs.fl.Tabs == "Gatherer") return "<button class='shopButton selected' style='width:175px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Gatherer`'>Gatherer</button>"
+                return "<button class='shopButton' style='width:175px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Gatherer`'>Gatherer</button>"
             }],
         ], {width: "535px", height: "40px", border: "5px solid #3e3117", marginBottom: "-5px"}],
         ["buttonless-microtabs", "Tabs", {borderWidth: "0"}],

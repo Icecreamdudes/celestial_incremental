@@ -65,6 +65,7 @@ addLayer("bb", {
         player.bb.beeBreadGain = player.bb.beeBreadGain.mul(buyableEffect("bee", 51))
         player.bb.beeBreadGain = player.bb.beeBreadGain.mul(player.fl.glossaryEffects.beeBread)
         if (hasUpgrade("al", 102)) player.bb.beeBreadGain = player.bb.beeBreadGain.mul(2)
+        if (hasUpgrade("al", 119)) player.bb.beeBreadGain = player.bb.beeBreadGain.mul(upgradeEffect("al", 119))
         player.bb.beeBreadGain = player.bb.beeBreadGain.mul(player.bee.preAlephMult)
 
         // Per Second
@@ -84,17 +85,17 @@ addLayer("bb", {
         if (player.bee.path != 1) amt = amt.pow(2/3)
         player.bb.breadEffects[0] = amt.mul(player.bb.breadTierMult).pow(0.3).add(1) // BPS
         player.bb.breadEffects[1] = amt.div(bbMilestone[player.bee.path][1]).mul(player.bb.breadTierMult).pow(0.2).add(1) // Pollen
-        player.bb.breadEffects[2] = amt.div(bbMilestone[player.bee.path][2]).mul(player.bb.breadTierMult).pow(0.2).add(1).log(10).add(0.8).min(5) // Pollen Cooldown
+        player.bb.breadEffects[2] = amt.div(bbMilestone[player.bee.path][2]).mul(player.bb.breadTierMult).pow(0.2).add(1).log(10).add(0.8).max(1).min(5) // Pollen Cooldown
         if (!hasUpgrade("al", 113) || player.bb.breadEffects[3].lt(1.5)) {
             player.bb.breadEffects[3] = amt.div(bbMilestone[player.bee.path][3]).mul(player.bb.breadTierMult).pow(0.1).add(1).log(10).mul(2).sub(0.5).min(1.5) // Glossary Effect Base
         } else {
             player.bb.breadEffects[3] = amt.div(bbMilestone[player.bee.path][3]).mul(player.bb.breadTierMult).pow(0.1).add(1).log(10).div(1.25).add(0.6) // Glossary Effect Base Without Cap
         }
-        player.bb.breadEffects[4] = amt.div(bbMilestone[player.bee.path][4]).mul(player.bb.breadTierMult).pow(0.1).add(1).log(10).add(0.8) // Pollen Conversion Rate
-        player.bb.breadEffects[5] = amt.div(bbMilestone[player.bee.path][5]).mul(player.bb.breadTierMult).pow(0.2).add(1).log(10).add(0.8) // Picking Power
+        player.bb.breadEffects[4] = amt.div(bbMilestone[player.bee.path][4]).mul(player.bb.breadTierMult).pow(0.1).add(1).log(10).add(0.8).max(1) // Pollen Conversion Rate
+        player.bb.breadEffects[5] = amt.div(bbMilestone[player.bee.path][5]).mul(player.bb.breadTierMult).pow(0.2).add(1).log(10).add(0.8).max(1) // Picking Power
         player.bb.breadEffects[6] = amt.div(bbMilestone[player.bee.path][6]).mul(player.bb.breadTierMult).pow(0.5).add(1).log(100).add(1).floor().min(5) // Pentagonal Pink Flowers
-        player.bb.breadEffects[7] = amt.div(bbMilestone[player.bee.path][7]).mul(player.bb.breadTierMult).pow(0.1).add(1).log(10).add(0.7).min(2) // Pink Flower Growth
-        player.bb.breadEffects[8] = amt.div(bbMilestone[player.bee.path][8]).mul(player.bb.breadTierMult).pow(0.3).add(1).log(10).add(0.7) // Nectar
+        player.bb.breadEffects[7] = amt.div(bbMilestone[player.bee.path][7]).mul(player.bb.breadTierMult).pow(0.1).add(1).log(10).add(0.7).max(1).min(2) // Pink Flower Growth
+        player.bb.breadEffects[8] = amt.div(bbMilestone[player.bee.path][8]).mul(player.bb.breadTierMult).pow(0.3).add(1).log(10).add(0.7).max(1) // Nectar
         player.bb.breadEffects[9] = amt.div(bbMilestone[player.bee.path][8]).mul(player.bb.breadTierMult).pow(0.1).add(1) // Honey
 
         // Check for milestones

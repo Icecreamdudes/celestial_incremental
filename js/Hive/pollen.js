@@ -29,6 +29,11 @@ addLayer("bpl", {
                 gain: new Decimal(0),
                 effect: new Decimal(0),
             },
+            empress: {
+                amount: new Decimal(0),
+                gain: new Decimal(0),
+                effect: new Decimal(1),
+            }
         },
     }},
     automate() {
@@ -106,10 +111,12 @@ addLayer("bpl", {
             player.bpl.roles.drone.gain = player.bpl.pollen.div(5).mul(eff)
             player.bpl.roles.worker.gain = player.bpl.pollen.div(100).mul(eff)
             player.bpl.roles.queen.gain = player.bpl.pollen.div(5000).mul(eff)
+            player.bpl.roles.empress.gain = player.bpl.pollen.div(1e175).mul(eff).pow(0.2)
         } else {
             player.bpl.roles.drone.gain = player.bpl.pollen.pow(0.5).div(125).mul(eff)
             player.bpl.roles.worker.gain = player.bpl.pollen.pow(0.5).div(1e6).mul(eff)
             player.bpl.roles.queen.gain = player.bpl.pollen.pow(0.5).div(1.25e10).mul(eff)
+            player.bpl.roles.empress.gain = player.bpl.pollen.div("1e525").mul(eff).pow(0.1)
         }
 
         // Bee Role Effect Calculations
@@ -129,17 +136,19 @@ addLayer("bpl", {
 
         player.bpl.roles.queen.effect = player.bpl.roles.queen.amount.add(1).log(10).add(1)
         if (hasUpgrade("al", 104)) player.bpl.roles.queen.effect = player.bpl.roles.queen.effect.add(player.bpl.roles.queen.amount.pow(0.15))
+        player.bpl.roles.empress.effect = player.bpl.roles.empress.amount.add(1).log(10).div(4).add(1)
 
         // Bee Role Automation
         if (hasUpgrade("al", 103)) player.bpl.roles.drone.amount = player.bpl.roles.drone.amount.add(player.bpl.roles.drone.gain.mul(delta))
         if (hasUpgrade("al", 106) && hasUpgrade("bpl", 13)) player.bpl.roles.worker.amount = player.bpl.roles.worker.amount.add(player.bpl.roles.worker.gain.div(2).mul(delta))
         if (hasUpgrade("al", 109) && hasUpgrade("bpl", 16)) player.bpl.roles.queen.amount = player.bpl.roles.queen.amount.add(player.bpl.roles.queen.gain.div(4).mul(delta))
+        if (hasUpgrade("al", 124)) player.bpl.roles.empress.amount = player.bpl.roles.empress.amount.add(player.bpl.roles.empress.gain.div(10).mul(delta))
     },
     clickables: {
         11: {
             title: "Convert your Pollen into Drone Bees",
             tooltip() {return "+" + formatSimple(player.bpl.roles.drone.gain, 1) + "<br>On Conversion"},
-            canClick: true,
+            canClick() {return player.bpl.roles.drone.gain.gte(0.01)},
             unlocked: true,
             onClick() {
                 player.bpl.roles.drone.amount = player.bpl.roles.drone.amount.add(player.bpl.roles.drone.gain)
@@ -150,7 +159,7 @@ addLayer("bpl", {
         12: {
             title: "Convert your Pollen into Worker Bees",
             tooltip() {return "+" + formatSimple(player.bpl.roles.worker.gain, 1) + "<br>On Conversion"},
-            canClick() { return hasUpgrade("bpl", 13) },
+            canClick() { return hasUpgrade("bpl", 13) && player.bpl.roles.worker.gain.gte(0.01)},
             unlocked: true,
             onClick() {
                 player.bpl.roles.worker.amount = player.bpl.roles.worker.amount.add(player.bpl.roles.worker.gain)
@@ -161,10 +170,21 @@ addLayer("bpl", {
         13: {
             title: "Convert your Pollen into Queen Bees",
             tooltip() {return "+" + formatSimple(player.bpl.roles.queen.gain, 1) + "<br>On Conversion"},
-            canClick() { return hasUpgrade("bpl", 16) },
+            canClick() { return hasUpgrade("bpl", 16) && player.bpl.roles.queen.gain.gte(0.01)},
             unlocked: true,
             onClick() {
                 player.bpl.roles.queen.amount = player.bpl.roles.queen.amount.add(player.bpl.roles.queen.gain)
+                player.bpl.pollen = new Decimal(0)
+            },
+            style: { width: '175px', minHeight: '60px', border: "3px solid rgba(0,0,0,0.3)", borderRadius: '0px' },
+        },
+        14: {
+            title: "Convert your Pollen into Empress Bees",
+            tooltip() {return "+" + formatSimple(player.bpl.roles.empress.gain, 1) + "<br>On Conversion"},
+            canClick() { return hasUpgrade("al", 120) && player.bpl.roles.empress.gain.gte(0.01)},
+            unlocked: true,
+            onClick() {
+                player.bpl.roles.empress.amount = player.bpl.roles.empress.amount.add(player.bpl.roles.empress.gain)
                 player.bpl.pollen = new Decimal(0)
             },
             style: { width: '175px', minHeight: '60px', border: "3px solid rgba(0,0,0,0.3)", borderRadius: '0px' },
@@ -386,6 +406,14 @@ addLayer("bpl", {
                 ["style-row", [], {width: "4px", height: "60px", background: "white"}],
                 ["clickable", 13],
             ], () => { return hasUpgrade("bpl", 16) ? {borderBottom: "4px solid white"} : {display: "none !important"} }],
+            ["style-row", [
+                ["style-column", [
+                    ["raw-html", () => { return "You have " + format(player.bpl.roles.empress.amount) + " Empress Bees."}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["raw-html", () => { return "Which boosts flower gain by x" + format(player.bpl.roles.empress.effect)}, { color: "white", fontSize: "16px", fontFamily: "monospace" }],
+                ], {width: "525px"}],
+                ["style-row", [], {width: "4px", height: "60px", background: "white"}],
+                ["clickable", 14],
+            ], () => { return hasUpgrade("al", 120) ? {borderBottom: "4px solid white"} : {display: "none !important"} }],
         ], {userSelect: "none", backgroundColor: "#332a1f", borderLeft: "4px solid white", borderRight: "4px solid white", borderTop: "4px solid white"}],
     ],
     layerShown() { return player.startedGame && (player.bee.totalResearch.gte(25) && player.bee.path != 2) || (player.tad.hiveExpand && player.bee.totalResearch.gte(120) && player.bee.path == 2)}

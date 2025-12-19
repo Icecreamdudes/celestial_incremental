@@ -2122,6 +2122,7 @@ class SpaceArena {
 
         if (player.ir.battleLevel.gte(20)) {
             enemy.health = enemy.health * Decimal.pow(1.04, player.ir.battleLevel.sub(19)).toNumber()
+            enemy.maxHealth = enemy.health
         }
 
         this.enemies.push(enemy);
@@ -2185,7 +2186,7 @@ class SpaceArena {
         }
 
         let amt = 1
-        if (player.ir.shipType == 7) amt = 2
+        if (player.ir.shipType == 7) amt = 3
         for (let i = 0; i < amt; i++) {
         // Decide a spawn position that is NOT on top of the player.
         // Compute safe minimum separation based on both radii and a buffer.
@@ -3287,7 +3288,7 @@ class SpaceArena {
                     let dy = this.ship.y - enemy.y;
                     let dist = Math.hypot(dx, dy) || 1;
                     let desiredDist = 220;
-                    if (player.ir.shipType == 7) desiredDist = 50
+                    if (player.ir.shipType == 7) desiredDist = 110
                     // Move toward or away to keep distance
                     let moveSpeed = 2.5;
                     if (dist > desiredDist + 10) {

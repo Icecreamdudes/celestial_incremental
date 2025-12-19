@@ -445,15 +445,15 @@ addLayer("tad", {
 
         player.tad.altInfinities.corrupted.effect1 = amt4.max(0.1).mul(10).log(10).div(5).add(1)
         player.tad.altInfinities.corrupted.effect2 = amt4.pow(0.5).add(1)
-        if (player.tad.altInfinities.infected.milestone.gte(3)) player.tad.altInfinities.corrupted.effect2 = player.tad.altInfinities.corrupted.effect2.pow(10)
+        if (player.tad.altInfinities.infected.milestone.gte(3)) player.tad.altInfinities.corrupted.effect2 = player.tad.altInfinities.corrupted.effect2.pow(5)
 
         player.tad.altInfinities.disfigured.effect1 = amt5.max(0.1).mul(10).log(10).div(10).add(1)
         player.tad.altInfinities.disfigured.effect2 = amt5.add(1).log(10).div(2).add(1)
-        if (player.tad.altInfinities.infected.milestone.gte(3)) player.tad.altInfinities.disfigured.effect2 = new Decimal(1e30).pow(player.tad.altInfinities.disfigured.effect2)
+        if (player.tad.altInfinities.infected.milestone.gte(3)) player.tad.altInfinities.disfigured.effect2 = new Decimal(1e20).pow(player.tad.altInfinities.disfigured.effect2)
 
         player.tad.altInfinities.distorted.effect1 = amt6.add(1).log(10).div(5).add(1)
         player.tad.altInfinities.distorted.effect2 = amt6.add(1).log(10).div(2).add(1)
-        if (player.tad.altInfinities.infected.milestone.gte(3)) player.tad.altInfinities.distorted.effect2 = new Decimal(1e15).pow(player.tad.altInfinities.distorted.effect2)
+        if (player.tad.altInfinities.infected.milestone.gte(3)) player.tad.altInfinities.distorted.effect2 = new Decimal(1e10).pow(player.tad.altInfinities.distorted.effect2)
 
         player.tad.altInfinities.infected.effect1 = amt7.pow(0.7).add(1)
         player.tad.altInfinities.infected.effect2 = amt7.add(1).log(10).div(20).add(1)

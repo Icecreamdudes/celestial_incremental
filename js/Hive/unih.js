@@ -1537,7 +1537,8 @@ addLayer("bee", {
             ["raw-html", () => {return player.bee.path == 1 && player.bee.totalResearch.lt(165) && player.bee.totalResearch.gte(120) && hasChallenge("fu", 12) ? formatWhole(Decimal.sub(165, player.bee.totalResearch)) + " research until next layer." : ""}, {color: "#312f17", fontSize: "20px", fontFamily: "monospace"}],
             ["raw-html", () => {return player.bee.path == 2 && player.bee.totalResearch.lt(170) && player.bee.totalResearch.gte(120) && hasChallenge("fu", 12) ? formatWhole(Decimal.sub(170, player.bee.totalResearch)) + " research until next layer." : ""}, {color: "#312f17", fontSize: "20px", fontFamily: "monospace"}],
         ], () => {
-            if (player.bee.totalResearch.gte(60) && !player.tad.hiveExpand) return {display: "none !important"}
+            if (player.bee.totalResearch.gte(95) && !tmp.al.layerShown && !player.tad.hiveExpand) return {display: "none !important"}
+            if (player.bee.totalResearch.gte(60) && tmp.al.layerShown && !player.tad.hiveExpand) return {display: "none !important"}
             if (player.bee.totalResearch.gte(120) && !hasChallenge("fu", 12)) return {display: "none !important"}
             if (player.bee.totalResearch.gte(165) && player.bee.path == 1 || player.bee.totalResearch.gte(170) && player.bee.path == 2) return {display: "none !important"}
             return {height: "40px", backgroundColor: "#db6f02", borderLeft: "4px solid #8e4200", borderRight: "4px solid #8e4200", borderBottom: "4px solid #8e4200", userSelect: "none"}

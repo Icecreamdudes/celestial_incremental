@@ -1284,7 +1284,7 @@ function loadVue() {
 		props: ['layer', 'data'],
 		template: `
 		<div v-bind:class="{hoverable: true, selected: player[layer].glossaryRig == data}" v-if="run(layers[layer].glossary[data].display, layers[layer].glossary[data])" :disabled="player[layer].glossary[data].eq(0)" v-on:click="layers[layer].glossary[data].onClick ? run(layers[layer].glossary[data].onClick, layers[layer].glossary[data]) : ''" v-bind:style="player[layer].glossary[data].eq(0) ? {'filter': 'brightness(50%)'} : {}" @mouseenter="hover" @touchstart="hover" @touchmove="hover">
-			<span style="position:absolute;top:4px;font-size:12px;z-index:10;user-select:none" v-html="layers[layer].generateMult(layer,data)"></span>
+			<span style="position:absolute;top:4px;font-size:12px;z-index:10;user-select:none" v-html="'Lv.' + formatWhole(player.fl.glossary[data].add(1).log(2).ceil())"></span>
 			<svg width='60pt' height='60pt' viewBox='0 0 60 60' v-bind:style="player[layer].glossary[data].eq(0) ? {'filter': 'brightness(50%) drop-shadow(0px 3px 2px rgba(0, 0, 0, 0.5))'} : {}" style="filter:drop-shadow(0px 3px 2px rgba(0, 0, 0, 0.5))" v-html="layers[layer].glossary[data].svg"></svg>
 		</div>
 		`,
@@ -1300,9 +1300,10 @@ function loadVue() {
 		template: `
 			<div class="glossaryUpgDisplay">
 				<span style="position:absolute;top:4px;left:15px;font-size:20px;text-shadow:#000 0px 1px 4px;letter-spacing:-1px" v-html="player.fl.glossaryIndex != 0 ? layers.fl.glossary[player.fl.glossaryIndex].name : ''"></span>
-				<span style="position:absolute;top:7px;right:15px;font-size:14px;text-shadow:#000 0 0 4px,#000 0 1px 0" v-html="player.fl.glossaryIndex != 0 ? 'You have: ' + formatSimple(player.fl.glossary[player.fl.glossaryIndex], 1) : ''"></span>
+				<span style="position:absolute;top:4px;right:15px;font-size:20px;text-shadow:#000 0px 1px 4px;letter-spacing:-1px" v-html="player.fl.glossaryIndex != 0 ? 'Lv.' + formatWhole(player.fl.glossary[player.fl.glossaryIndex].add(1).log(2).ceil()) : ''"></span>
+				<span style="position:absolute;top:34px;right:15px;font-size:14px" v-html="player.fl.glossaryIndex != 0 ? 'You have: ' + formatSimple(player.fl.glossary[player.fl.glossaryIndex], 1) : ''"></span>
 				<div style="position:absolute;top:30px;left:15px;width:505px;height:2px;border:0;background:#888"></div>
-				<span style="position:absolute;top:34px;left:15px;font-size:14px;letter-spacing:-1px;text-align:left;padding-right:15px" v-html="player.fl.glossaryIndex != 0 ? run(layers.fl.glossary[player.fl.glossaryIndex].getTitle, layers.fl.glossary[player.fl.glossaryIndex]) : ''"></span>
+				<span style="position:absolute;top:34px;left:15px;font-size:14px" v-html="player.fl.glossaryIndex != 0 ? run(layers.fl.glossary[player.fl.glossaryIndex].getTitle, layers.fl.glossary[player.fl.glossaryIndex]) : ''"></span>
 			</div>
 		`
 	})

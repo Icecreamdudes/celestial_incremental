@@ -117,6 +117,7 @@ addLayer("bb", {
         player.bpl.roles.drone.amount = new Decimal(0)
         player.bpl.roles.worker.amount = new Decimal(0)
         player.bpl.roles.queen.amount = new Decimal(0)
+        player.bpl.roles.empress.amount = new Decimal(0)
         player.bpl.upgrades.splice(0, player.bpl.upgrades.length)
         
         setTimeout(() => {

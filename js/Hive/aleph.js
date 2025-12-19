@@ -127,6 +127,7 @@ addLayer("al", {
         player.bpl.roles.drone.amount = new Decimal(0)
         player.bpl.roles.worker.amount = new Decimal(0)
         player.bpl.roles.queen.amount = new Decimal(0)
+        player.bpl.roles.empress.amount = new Decimal(0)
         player.bpl.upgrades.splice(0, player.bpl.upgrades.length)
 
         // NECTAR
@@ -1530,5 +1531,5 @@ addLayer("al", {
         ["microtabs", "Tabs", {borderWidth: "0"}],
         ["blank", "20px"],
     ],
-    layerShown() { return player.startedGame && (player.bee.totalResearch.gte(160) || player.al.show) }
+    layerShown() { return player.startedGame && (player.bee.totalResearch.gte(95) || player.al.show) }
 })

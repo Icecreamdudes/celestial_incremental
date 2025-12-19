@@ -112,7 +112,11 @@ addLayer("ho", {
         if (player.ho.cell.gte(CELL_MILESTONES[player.bee.path][5])) player.ho.effects.nectar.xp = player.ho.effects.nectar.xp.add(player.ho.honey.mul(delta))
         player.ho.effects.nectar.req = Decimal.pow(6, player.ho.effects.nectar.level).mul(100000)
         if (player.bee.path != 2) player.ho.effects.nectar.req = Decimal.pow(15, player.ho.effects.nectar.level).mul(1e9)
-        player.ho.effects.nectar.effect = Decimal.pow(Decimal.mul(0.1, base).add(1), player.ho.effects.nectar.level)
+        if (!hasUpgrade("ne", 502)) {
+            player.ho.effects.nectar.effect = Decimal.pow(Decimal.mul(0.1, base).add(1), player.ho.effects.nectar.level)
+        } else {
+            player.ho.effects.nectar.effect = Decimal.pow(Decimal.mul(0.12, base).add(1), player.ho.effects.nectar.level)
+        }
 
         if (hasUpgrade("al", 214) && player.ho.cell.gte(CELL_MILESTONES[player.bee.path][8])) player.ho.effects.pollen.xp = player.ho.effects.pollen.xp.add(player.ho.honey.mul(delta))
         player.ho.effects.pollen.req = Decimal.pow(10, player.ho.effects.pollen.level).mul(1e35)
@@ -151,6 +155,9 @@ addLayer("ho", {
                 player.ne.delta.amount = new Decimal(0)
                 player.ne.delta.gain = new Decimal(0)
                 player.ne.delta.effect = new Decimal(1)
+                player.ne.epsilon.amount = new Decimal(0)
+                player.ne.epsilon.gain = new Decimal(0)
+                player.ne.epsilon.effect = new Decimal(1)
                 player.ne.upgrades.splice(0, player.ne.upgrades.length)
             },
             style: {width: "250px", minHeight: "97px", fontSize: "12px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px 0px 17px 0px"},

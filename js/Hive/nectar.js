@@ -48,6 +48,11 @@ addLayer("ne", {
             buyUpgrade("ne", 402)
             buyUpgrade("ne", 403)
         }
+        if (hasUpgrade("al", 224) && player.bee.path == 2) {
+            buyUpgrade("ne", 501)
+            buyUpgrade("ne", 502)
+            buyUpgrade("ne", 503)
+        }
     },
     nodeStyle() {
         return {borderColor: "#6d3701"}
@@ -101,6 +106,8 @@ addLayer("ne", {
         if (player.bee.path != 2) player.ne.epsilon.gain = player.ne.delta.amount.div(1e125).pow(Decimal.add(0.05, buyableEffect("bee", 43))).div(3e18).pow(0.7)
         player.ne.epsilon.gain = player.ne.epsilon.gain.mul(allGain.pow(0.5))
 
+        if (hasUpgrade("al", 221) && hasUpgrade("ne", 403)) player.ne.epsilon.amount = player.ne.epsilon.amount.add(player.ne.epsilon.gain.div(20).mul(delta))
+
         if (player.ne.alpha.amount.lt(1e80)) {
             if (!hasUpgrade("ne", 302)) {
                 player.ne.alpha.effect = player.ne.alpha.amount.pow(0.7).add(1)
@@ -115,7 +122,11 @@ addLayer("ne", {
             }
         }
         player.ne.beta.effect = player.ne.beta.amount.add(1).log(10).pow(0.5).add(1)
-        player.ne.gamma.effect = player.ne.gamma.amount.add(1).log(10).pow(0.5).div(3)
+        if (!hasUpgrade("ne", 501)) {
+            player.ne.gamma.effect = player.ne.gamma.amount.add(1).log(10).pow(0.5).div(3)
+        } else {
+            player.ne.gamma.effect = player.ne.gamma.amount.add(1).log(10).pow(0.6).div(3)
+        }
         player.ne.delta.effect = player.ne.delta.amount.add(1).log(10).pow(0.5).div(3).add(1)
         if (hasUpgrade("al", 204) && player.ne.delta.amount.gte(1)) player.ne.delta.effect = player.ne.delta.effect.add(player.ne.delta.amount.pow(0.08).sub(1))
         player.ne.epsilon.effect = player.ne.epsilon.amount.pow(0.3).add(1)
@@ -383,7 +394,49 @@ addLayer("ne", {
             currencyInternalName: "amount",
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-
+        501: {
+            title: "Nector δ-1",
+            unlocked: true,
+            description: "Improve nectar γ's effect",
+            cost() {
+                if (player.bee.path != 2) return new Decimal(1e60)
+                return new Decimal(1e20)
+            },
+            currencyLocation() { return player.ne.epsilon },
+            currencyDisplayName: "Nectar ε",
+            currencyInternalName: "amount",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
+        502: {
+            title: "Nector δ-2",
+            unlocked: true,
+            description: "Multiply nectar cell base by x1.2",
+            cost() {
+                if (player.bee.path != 2) return new Decimal(1e75)
+                return new Decimal(1e25)
+            },
+            currencyLocation() { return player.ne.epsilon },
+            currencyDisplayName: "Nectar ε",
+            currencyInternalName: "amount",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
+        503: {
+            title: "Nector δ-3",
+            unlocked: true,
+            description: "Divide all flower cooldowns based on nectar ε",
+            cost() {
+                if (player.bee.path != 2) return new Decimal(1e90)
+                return new Decimal(1e30)
+            },
+            currencyLocation() { return player.ne.epsilon },
+            currencyDisplayName: "Nectar ε",
+            currencyInternalName: "amount",
+            effect() {
+                return player.ne.epsilon.amount.add(1).log(1e15).div(10).add(1)
+            },
+            effectDisplay() { return "/" + formatSimple(upgradeEffect(this.layer, this.id), 2) }, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
     },
     tabFormat: [
         ["row", [
@@ -462,11 +515,11 @@ addLayer("ne", {
                     ["clickable", 5],
                 ], {width: "400px", height: "147px"}],
                 ["style-row", [
-
-                ], () => {return false ? {width: "400px", height: "150px", background: "#b16415", borderTop: "3px solid #6d3701", borderRadius: "0 0 17px 17px"} : {display: "none !important"}}],
+                    ["upgrade", 501], ["upgrade", 502], ["upgrade", 503]
+                ], () => {return hasUpgrade("al", 220) ? {width: "400px", height: "150px", background: "#b16415", borderTop: "3px solid #6d3701", borderRadius: "0 0 17px 17px"} : {display: "none !important"}}],
             ], () => {
                 if (hasUpgrade("al", 211) && hasUpgrade("ne", 403)) {
-                    if (false) {
+                    if (hasUpgrade("al", 220)) {
                         return {width: "400px", height: "300px", background: "#de7d1b", border: "3px solid #6d3701", margin: "3px 3px 0 0", borderRadius: "20px"}
                     } else {
                         return {width: "400px", height: "147px", background: "#de7d1b", border: "3px solid #6d3701", margin: "3px 3px 0 0", borderRadius: "20px"}

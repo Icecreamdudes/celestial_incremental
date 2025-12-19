@@ -167,30 +167,33 @@ addLayer("fl", {
     branches: ["bee"],
     update(delta) {
         let onepersec = new Decimal(1)
+        let allCooldownDiv = new Decimal(1)
+        if (player.al.cocoonLevel >= 8) allCooldownDiv = allCooldownDiv.mul(2)
+        if (hasUpgrade("al", 503)) allCooldownDiv = allCooldownDiv.mul(upgradeEffect("ne", 503))
 
         player.fl.timers.red.max = new Decimal(20)
         player.fl.timers.red.max = player.fl.timers.red.max.div(buyableEffect("bee", 21))
-        if (player.al.cocoonLevel >= 8) player.fl.timers.red.max = player.fl.timers.red.max.div(2)
+        player.fl.timers.red.max = player.fl.timers.red.max.div(allCooldownDiv)
         if (player.bee.totalResearch.gte(1) && !player.fl.timers.red.pause) player.fl.timers.red.current = player.fl.timers.red.current.sub(delta)
 
         player.fl.timers.blue.max = new Decimal(40)
         if (hasUpgrade("bpl", 18)) player.fl.timers.blue.max = player.fl.timers.blue.max.div(2)
-        if (player.al.cocoonLevel >= 8) player.fl.timers.blue.max = player.fl.timers.blue.max.div(2)
+        player.fl.timers.blue.max = player.fl.timers.blue.max.div(allCooldownDiv)
         if (hasUpgrade("bpl", 14) && !player.fl.timers.blue.pause) player.fl.timers.blue.current = player.fl.timers.blue.current.sub(delta)
 
         player.fl.timers.green.max = new Decimal(40)
         if (hasUpgrade("ne", 402)) player.fl.timers.green.max = player.fl.timers.green.max.div(2)
-        if (player.al.cocoonLevel >= 8) player.fl.timers.green.max = player.fl.timers.green.max.div(2)
+        player.fl.timers.green.max = player.fl.timers.green.max.div(allCooldownDiv)
         if (hasUpgrade("ne", 201) && !player.fl.timers.green.pause) player.fl.timers.green.current = player.fl.timers.green.current.sub(delta)
 
         player.fl.timers.pink.max = new Decimal(60)
         if (player.bb.breadMilestone >= 8) player.fl.timers.pink.max = player.fl.timers.pink.max.div(player.bb.breadEffects[7])
-        if (player.al.cocoonLevel >= 8) player.fl.timers.pink.max = player.fl.timers.pink.max.div(2)
+        player.fl.timers.pink.max = player.fl.timers.pink.max.div(allCooldownDiv)
         if (buyableEffect("bee", 53).gte(1) && !player.fl.timers.pink.pause) player.fl.timers.pink.current = player.fl.timers.pink.current.sub(delta)
 
         player.fl.timers.yellow.max = new Decimal(60)
         if (player.ho.cell.gte(CELL_MILESTONES[player.bee.path][4])) player.fl.timers.yellow.max = player.fl.timers.yellow.max.div(2)
-        if (player.al.cocoonLevel >= 8) player.fl.timers.yellow.max = player.fl.timers.yellow.max.div(2)
+        player.fl.timers.yellow.max = player.fl.timers.yellow.max.div(allCooldownDiv)
         if (player.ho.cell.gte(CELL_MILESTONES[player.bee.path][2]) && !player.fl.timers.yellow.pause) player.fl.timers.yellow.current = player.fl.timers.yellow.current.sub(delta)
 
         for (let thing in player.fl.timers) {
@@ -214,6 +217,7 @@ addLayer("fl", {
         if (hasUpgrade("al", 101)) player.fl.flowerGain = player.fl.flowerGain.mul(2)
         if (hasUpgrade("al", 110)) player.fl.flowerGain = player.fl.flowerGain.mul(3)
         if (hasUpgrade("al", 213)) player.fl.flowerGain = player.fl.flowerGain.mul(player.ho.effects.flower.effect2)
+        player.fl.flowerGain = player.fl.flowerGain.mul(player.bpl.roles.empress.effect)
         player.fl.flowerGain = player.fl.flowerGain.mul(player.bee.preAlephMult)
 
         // GLOSSARY ADDITIVE BASE

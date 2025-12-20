@@ -1045,6 +1045,30 @@ if (player.c.cutscene[115] && player.tab == "al") {
     });
     player.c.cutscene[115] = false
 }
+if (player.c.cutscene[116] && player.al.cocoonLevel >= 1) {
+    showCutscene(cutsceneDialogue117, {
+        cutsceneID: 117,
+        background: "radial-gradient(circle, #2a1c00, #150e00)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[116] = false
+}
+if (player.c.cutscene[117] && player.al.cocoonLevel >= 5) {
+    showCutscene(cutsceneDialogue118, {
+        cutsceneID: 118,
+        background: "radial-gradient(circle, #2a1c00, #150e00)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[117] = false
+}
+if (player.c.cutscene[118] && player.al.cocoonLevel >= 5 && player.tab == "tad") {
+    showCutscene(cutsceneDialogue119, {
+        cutsceneID: 119,
+        background: "#596c6c",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[118] = false
+}
 },
     startCutscene1() {
         player.c.cutsceneText = [

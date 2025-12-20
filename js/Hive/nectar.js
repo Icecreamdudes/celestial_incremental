@@ -34,7 +34,7 @@ addLayer("ne", {
         }
     }},
     automate() {
-        if (hasUpgrade("al", 215) && player.bee.path == 2) {
+        if ((hasUpgrade("al", 215) && player.bee.path == 2) || (hasUpgrade("al", 127) && player.bee.path == 1)) {
             buyUpgrade("ne", 101)
             buyUpgrade("ne", 102)
             buyUpgrade("ne", 103)
@@ -48,7 +48,7 @@ addLayer("ne", {
             buyUpgrade("ne", 402)
             buyUpgrade("ne", 403)
         }
-        if (hasUpgrade("al", 224) && player.bee.path == 2) {
+        if ((hasUpgrade("al", 224) && player.bee.path == 2) || (hasUpgrade("al", 127) && player.bee.path == 1)) {
             buyUpgrade("ne", 501)
             buyUpgrade("ne", 502)
             buyUpgrade("ne", 503)
@@ -82,11 +82,17 @@ addLayer("ne", {
         if (hasUpgrade("ne", 301)) player.ne.alpha.gain = player.ne.alpha.gain.mul(upgradeEffect("ne", 301))
         player.ne.alpha.gain = player.ne.alpha.gain.mul(player.ho.effects.alpha.effect)
 
+        // POWER MODIFIERS
+        if (hasUpgrade("al", 226)) player.ne.alpha.gain = player.ne.alpha.gain.pow(1.01)
+
         if (hasUpgrade("al", 203) && tmp.ne.layerShown && player.bee.path != 0) player.ne.alpha.amount = player.ne.alpha.amount.add(player.ne.alpha.gain.mul(delta))
 
         player.ne.beta.gain = player.ne.alpha.amount.div(100).pow(Decimal.add(0.65, buyableEffect("bee", 43)))
         if (player.bee.path != 2) player.ne.beta.gain = player.ne.alpha.amount.div(1e7).pow(Decimal.add(0.65, buyableEffect("bee", 43))).pow(0.7)
         player.ne.beta.gain = player.ne.beta.gain.mul(allGain)
+
+        // POWER MODIFIERS
+        if (hasUpgrade("al", 226)) player.ne.beta.gain = player.ne.beta.gain.pow(1.01)
 
         if (hasUpgrade("al", 206) && hasUpgrade("ne", 103)) player.ne.beta.amount = player.ne.beta.amount.add(player.ne.beta.gain.div(2).mul(delta))
 
@@ -94,17 +100,26 @@ addLayer("ne", {
         if (player.bee.path != 2) player.ne.gamma.gain = player.ne.beta.amount.div(1e8).pow(Decimal.add(0.6, buyableEffect("bee", 43))).pow(0.7)
         player.ne.gamma.gain = player.ne.gamma.gain.mul(allGain)
 
+        // POWER MODIFIERS
+        if (hasUpgrade("al", 226)) player.ne.gamma.gain = player.ne.gamma.gain.pow(1.01)
+
         if (hasUpgrade("al", 209) && hasUpgrade("ne", 203)) player.ne.gamma.amount = player.ne.gamma.amount.add(player.ne.gamma.gain.div(4).mul(delta))
 
         player.ne.delta.gain = player.ne.gamma.amount.div(100).pow(Decimal.add(0.55, buyableEffect("bee", 43)))
         if (player.bee.path != 2) player.ne.delta.gain = player.ne.gamma.amount.div(1e9).pow(Decimal.add(0.55, buyableEffect("bee", 43))).pow(0.7)
         player.ne.delta.gain = player.ne.delta.gain.mul(allGain)
 
+        // POWER MODIFIERS
+        if (hasUpgrade("al", 226)) player.ne.delta.gain = player.ne.delta.gain.pow(1.01)
+
         if (hasUpgrade("al", 212) && hasUpgrade("ne", 303)) player.ne.delta.amount = player.ne.delta.amount.add(player.ne.delta.gain.div(10).mul(delta))
 
         player.ne.epsilon.gain = player.ne.delta.amount.div(1e40).pow(Decimal.add(0.05, buyableEffect("bee", 43))).div(3e6)
         if (player.bee.path != 2) player.ne.epsilon.gain = player.ne.delta.amount.div(1e125).pow(Decimal.add(0.05, buyableEffect("bee", 43))).div(3e18).pow(0.7)
         player.ne.epsilon.gain = player.ne.epsilon.gain.mul(allGain.pow(0.5))
+
+        // POWER MODIFIERS
+        if (hasUpgrade("al", 226)) player.ne.epsilon.gain = player.ne.epsilon.gain.pow(1.01)
 
         if (hasUpgrade("al", 221) && hasUpgrade("ne", 403)) player.ne.epsilon.amount = player.ne.epsilon.amount.add(player.ne.epsilon.gain.div(20).mul(delta))
 
@@ -410,7 +425,7 @@ addLayer("ne", {
         502: {
             title: "Nector δ-2",
             unlocked: true,
-            description: "Multiply nectar cell base by x1.2",
+            description: "Multiply nectar cell base by x1.1",
             cost() {
                 if (player.bee.path != 2) return new Decimal(1e75)
                 return new Decimal(1e25)

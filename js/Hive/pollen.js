@@ -37,7 +37,7 @@ addLayer("bpl", {
         },
     }},
     automate() {
-        if (hasUpgrade("al", 115) && player.bee.path == 1) {
+        if ((hasUpgrade("al", 115) && player.bee.path == 1) || (hasUpgrade("al", 227) && player.bee.path == 2)) {
             buyUpgrade("bpl", 11)
             buyUpgrade("bpl", 12)
             buyUpgrade("bpl", 13)
@@ -76,6 +76,9 @@ addLayer("bpl", {
         player.bpl.pollenGain = player.bpl.pollenGain.mul(player.ne.epsilon.effect)
         player.bpl.pollenGain = player.bpl.pollenGain.mul(player.ho.effects.pollen.effect)
         player.bpl.pollenGain = player.bpl.pollenGain.mul(player.bee.preAlephMult)
+
+        // POWER MODIFIERS
+        if (hasUpgrade("al", 126)) player.bpl.pollenGain = player.bpl.pollenGain.pow(1.01)
 
         // Pollen Timer Calculations
         player.bpl.pollenTimerMax = new Decimal(5)

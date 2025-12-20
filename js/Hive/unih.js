@@ -34,6 +34,8 @@ addLayer("bee", {
         // Pre-Aleph Multiplier
         player.bee.preAlephMult = new Decimal(1)
         if (player.al.cocoonLevel >= 12) player.bee.preAlephMult = player.bee.preAlephMult.mul(3)
+        if (hasUpgrade("al", 125)) player.bee.preAlephMult = player.bee.preAlephMult.mul(2)
+        if (hasUpgrade("al", 225)) player.bee.preAlephMult = player.bee.preAlephMult.mul(2)
 
         // Bee Calculations
         player.bee.bps = buyableEffect("bee", 11)
@@ -223,8 +225,8 @@ addLayer("bee", {
             style: { width: '175px', height: '60px', border: "3px solid rgba(0,0,0,0.3)", borderRadius: '0px'}
         },
         15: {
-            costBase() { return new Decimal(1e225) },
-            costGrowth() { return new Decimal(1e25) },
+            costBase() { return new Decimal(1e220) },
+            costGrowth() { return new Decimal(1e20) },
             purchaseLimit() { return new Decimal(5) },
             currency() { return player.bee.bees},
             pay(amt) { player.bee.bees = this.currency().sub(amt) },
@@ -1299,8 +1301,8 @@ addLayer("bee", {
             ], () => {return player.al.cocoonLevel >= 9 ? {borderBottom: "4px solid #8e4200", backgroundColor: "#ffb825"} : {display: "none !important"}}],
             ["style-row", [
                 ["style-column", [
-                    ["raw-html", () => { return "Magnified Bees - " + formatWhole(getBuyableAmount("bee", 14)) + "/5"}, { color: "#312f17", fontSize: "24px", fontFamily: "monospace" }],
-                    ["raw-html", () => { return "Boosts BPS by ^" + formatSimple(buyableEffect("bee", 14), 3)}, { color: "#312f17", fontSize: "16px", fontFamily: "monospace" }]
+                    ["raw-html", () => { return "Magnified Bees - " + formatWhole(getBuyableAmount("bee", 15)) + "/5"}, { color: "#312f17", fontSize: "24px", fontFamily: "monospace" }],
+                    ["raw-html", () => { return "Boosts BPS by ^" + formatSimple(buyableEffect("bee", 15), 3)}, { color: "#312f17", fontSize: "16px", fontFamily: "monospace" }]
                 ], {width: "396px"}],
                 ["style-row", [], {width: "4px", height: "60px", background: "#8e4200"}],
                 ["buyable", 15],

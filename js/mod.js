@@ -628,7 +628,7 @@ function updateStyles() {
 				case 15: case 26: case 58: case 70: case 106:
 					playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
 					break;
-				case 28: case 29: case 32: case 33:
+				case 28: case 29: case 32: case 33: case 119:
 					playAndLoopAudio("music/tavCutscene.mp3", options.musicVolume/10);
 					break;
 				case 31: case 37:
@@ -667,7 +667,8 @@ function updateStyles() {
 				case 109: case 110:
 					playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
 					break;
-				case 113: case 114: case 115: case 116:
+				case 113: case 114: case 115: case 116: case 117:
+				case 118:
 					playAndLoopAudio("music/alephCutscene.mp3", options.musicVolume/10);
 					break;
 			}

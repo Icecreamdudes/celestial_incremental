@@ -1,7 +1,7 @@
 const CELL_MILESTONES = [
-    [new Decimal(1), new Decimal(125), new Decimal(3375), new Decimal(125000), new Decimal(1e6), new Decimal(8e6), new Decimal(1e9), new Decimal(1.5625e10), new Decimal(1e90), new Decimal(1e225)],
-    [new Decimal(1), new Decimal(125), new Decimal(3375), new Decimal(125000), new Decimal(1e6), new Decimal(8e6), new Decimal(1e9), new Decimal(1.5625e10), new Decimal(1e90), new Decimal(1e225)],
-    [new Decimal(1), new Decimal(5), new Decimal(15), new Decimal(50), new Decimal(100), new Decimal(200), new Decimal(1000), new Decimal(2500), new Decimal(1e30), new Decimal(1e75)],
+    [new Decimal(1), new Decimal(125), new Decimal(3375), new Decimal(125000), new Decimal(1e6), new Decimal(8e6), new Decimal(1e9), new Decimal(1.5625e10), new Decimal(1e90), new Decimal(1e255)],
+    [new Decimal(1), new Decimal(125), new Decimal(3375), new Decimal(125000), new Decimal(1e6), new Decimal(8e6), new Decimal(1e9), new Decimal(1.5625e10), new Decimal(1e90), new Decimal(1e255)],
+    [new Decimal(1), new Decimal(5), new Decimal(15), new Decimal(50), new Decimal(100), new Decimal(200), new Decimal(1000), new Decimal(2500), new Decimal(1e30), new Decimal(1e85)],
 ]
 addLayer("ho", {
     name: "Honey", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -50,6 +50,12 @@ addLayer("ho", {
                 req: new Decimal(1),
                 effect: new Decimal(1),
             },
+            bread: {
+                level: new Decimal(0),
+                xp: new Decimal(0),
+                req: new Decimal(1),
+                effect: new Decimal(1),
+            },
         },
     }},
     automate() {
@@ -92,6 +98,7 @@ addLayer("ho", {
         let base = new Decimal(1)
         base = base.mul(buyableEffect("bee", 63))
         if (hasUpgrade("al", 207)) base = base.mul(1.1)
+        if (player.bb.breadMilestone >= 10) base = base.mul(player.bb.breadEffects[9])
 
         if (player.ho.cell.gte(CELL_MILESTONES[player.bee.path][0])) player.ho.effects.bee.xp = player.ho.effects.bee.xp.add(player.ho.honey.mul(delta))
         player.ho.effects.bee.req = Decimal.pow(3, player.ho.effects.bee.level).mul(10)
@@ -115,17 +122,23 @@ addLayer("ho", {
         if (!hasUpgrade("ne", 502)) {
             player.ho.effects.nectar.effect = Decimal.pow(Decimal.mul(0.1, base).add(1), player.ho.effects.nectar.level)
         } else {
-            player.ho.effects.nectar.effect = Decimal.pow(Decimal.mul(0.12, base).add(1), player.ho.effects.nectar.level)
+            player.ho.effects.nectar.effect = Decimal.pow(Decimal.mul(0.11, base).add(1), player.ho.effects.nectar.level)
         }
 
         if (hasUpgrade("al", 214) && player.ho.cell.gte(CELL_MILESTONES[player.bee.path][8])) player.ho.effects.pollen.xp = player.ho.effects.pollen.xp.add(player.ho.honey.mul(delta))
         player.ho.effects.pollen.req = Decimal.pow(10, player.ho.effects.pollen.level).mul(1e35)
         if (player.bee.path != 2) player.ho.effects.pollen.req = Decimal.pow(32, player.ho.effects.pollen.level).mul(1e100)
         player.ho.effects.pollen.effect = Decimal.pow(Decimal.mul(0.1, base).add(1), player.ho.effects.pollen.level)
+
+        if (hasUpgrade("al", 222) && player.ho.cell.gte(CELL_MILESTONES[player.bee.path][9])) player.ho.effects.bread.xp = player.ho.effects.bread.xp.add(player.ho.honey.mul(delta))
+        player.ho.effects.bread.req = Decimal.pow(100, player.ho.effects.bread.level).mul(1e92)
+        if (player.bee.path != 2) player.ho.effects.bread.req = Decimal.pow(1000, player.ho.effects.bread.level).mul(1e270)
+        player.ho.effects.bread.effect = player.ho.effects.bread.level.mul(Decimal.mul(0.005, base)).add(1)
         
         for (let i in player.ho.effects) {
             if (player.ho.effects[i].xp.gte(player.ho.effects[i].req)) {
                 if (i == "flower" && !hasUpgrade("al", 208) && player.ho.effects[i].level.eq(25)) continue
+                if (i == "bread" && player.ho.effects[i].level.gte(20)) continue
                 player.ho.effects[i].level = player.ho.effects[i].level.add(1)
                 player.ho.effects[i].xp = new Decimal(0)
             }
@@ -198,7 +211,7 @@ addLayer("ho", {
                     return "Flower Cell Lv." + formatWhole(player.ho.effects.flower.level) + " | [" + format(player.ho.effects.flower.xp) + "/" + format(player.ho.effects.flower.req) + "] | +" + commaFormat(player.ho.effects.flower.effect, 2) + " GEB | x" + format(player.ho.effects.flower.effect2) + " Flowers"
                 }
                 if (!hasUpgrade("al", 208)) {
-                    if (player.ho.effects.flower.level.gte(25)) return "Flower Cell Lv." + formatWhole(player.ho.effects.flower.level) + "/25 | [MAX] | x" + format(player.ho.effects.flower.effect) + " GEB"
+                    if (player.ho.effects.flower.level.gte(25)) return "Flower Cell Lv." + formatWhole(player.ho.effects.flower.level) + "/25 | [MAX] | +" + format(player.ho.effects.flower.effect) + " GEB"
                     return "Flower Cell Lv." + formatWhole(player.ho.effects.flower.level) + "/25 | [" + format(player.ho.effects.flower.xp) + "/" + format(player.ho.effects.flower.req) + "] | +" + commaFormat(player.ho.effects.flower.effect, 2) + " GEB"
                 }
                 return "Flower Cell Lv." + formatWhole(player.ho.effects.flower.level) + " | [" + format(player.ho.effects.flower.xp) + "/" + format(player.ho.effects.flower.req) + "] | +" + commaFormat(player.ho.effects.flower.effect, 2) + " GEB"
@@ -252,6 +265,24 @@ addLayer("ho", {
                 return "Pollen Cell Lv." + formatWhole(player.ho.effects.pollen.level) + " | [" + format(player.ho.effects.pollen.xp) + "/" + format(player.ho.effects.pollen.req) + "] | x" + format(player.ho.effects.pollen.effect) + " Pollen"
             },
         },
+        effect6: {
+            unlocked() {return player.ho.cell.gte(CELL_MILESTONES[player.bee.path][9]) && hasUpgrade("al", 222)},
+            direction: RIGHT,
+            width: 500,
+            height: 50,
+            progress() {
+                if (player.ho.effects.bread.level.gte(20)) return new Decimal(1)
+                return player.ho.effects.bread.xp.div(player.ho.effects.bread.req)
+            },
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle: {backgroundColor: "#a27100"},
+            borderStyle: {border: "3px solid white", borderRadius: "25px"},
+            textStyle: {userSelect: "none"},
+            display() {
+                if (player.ho.effects.bread.level.gte(20)) return "Bee Bread Cell Lv." + formatWhole(player.ho.effects.bread.level) + "/20 | [MAX] | ^" + format(player.ho.effects.bread.effect) + " Effective BB"
+                return "Bee Bread Cell Lv." + formatWhole(player.ho.effects.bread.level) + "/20 | [" + format(player.ho.effects.bread.xp) + "/" + format(player.ho.effects.bread.req) + "] | ^" + commaFormat(player.ho.effects.bread.effect, 2) + " Effective BB"
+            },
+        },
         cellBar: {
             unlocked: true,
             direction: UP,
@@ -260,6 +291,7 @@ addLayer("ho", {
             progress() {
                 let base = 0.125
                 if (hasUpgrade("al", 214)) base = 1/9
+                if (hasUpgrade("al", 222)) base = 0.1
                 if (player.ho.cell.lte(0)) return new Decimal(0)
                 for (let i = 1; i < 10; i++) {
                     if (player.ho.cell.lt(CELL_MILESTONES[player.bee.path][i])) return player.ho.cell.sub(CELL_MILESTONES[player.bee.path][i-1]).div(CELL_MILESTONES[player.bee.path][i].sub(CELL_MILESTONES[player.bee.path][i-1])).mul(base).add(base*i)
@@ -272,7 +304,7 @@ addLayer("ho", {
             textStyle: {fontSize: "11px", userSelect: "none"},
             display() {
                 let str = "<div style='width:250px;height:465px;display:flex;flex-direction:column'>"
-                if (false) str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>" + formatWhole(CELL_MILESTONES[player.bee.path][9]) + " Cells<hr style='width:200px;margin-bottom:3px'>Unlock Bee Bread Cell</div>")
+                if (hasUpgrade("al", 222)) str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>" + formatWhole(CELL_MILESTONES[player.bee.path][9]) + " Cells<hr style='width:200px;margin-bottom:3px'>Unlock Bee Bread Cell</div>")
                 if (hasUpgrade("al", 214)) str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>" + formatWhole(CELL_MILESTONES[player.bee.path][8]) + " Cells<hr style='width:200px;margin-bottom:3px'>Unlock Pollen Cell</div>")
                 str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>" + formatWhole(CELL_MILESTONES[player.bee.path][7]) + " Cells<hr style='width:200px;margin-bottom:3px'>Unlock Honey Upgrades</div>")
                 str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>" + formatWhole(CELL_MILESTONES[player.bee.path][6]) + " Cells<hr style='width:200px;margin-bottom:3px'>Unlock a new honey research</div>")
@@ -290,7 +322,10 @@ addLayer("ho", {
         1: {
             title: "Honey 1",
             unlocked() {return player.ho.cell.gte(CELL_MILESTONES[player.bee.path][7])},
-            description: "Double honey gain per honey upgrade.",
+            description() {
+                if (hasUpgrade("al", 223)) return "Triple honey gain per honey upgrade."
+                return "Double honey gain per honey upgrade."
+            },
             cost() {
                 if (player.bee.path != 2) return new Decimal(1e18)
                 return new Decimal(1e6)
@@ -299,6 +334,7 @@ addLayer("ho", {
             currencyDisplayName: "Honey",
             currencyInternalName: "honey",
             effect() {
+                if (hasUpgrade("al", 223)) return Decimal.pow(3, player.ho.upgrades.length)
                 return Decimal.pow(2, player.ho.upgrades.length)
             },
             effectDisplay() { return "x" + formatWhole(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
@@ -320,6 +356,7 @@ addLayer("ho", {
                 for (let i in player.ho.effects) {
                     lvl = lvl.add(player.ho.effects[i].level)
                 }
+                if (hasUpgrade("al", 223)) return lvl.div(75).add(1)
                 return lvl.div(100).add(1)
             },
             effectDisplay() { return "x" + formatSimple(upgradeEffect(this.layer, this.id), 2) }, // Add formatting to the effect
@@ -337,6 +374,7 @@ addLayer("ho", {
             currencyDisplayName: "Honey",
             currencyInternalName: "honey",
             effect() {
+                if (hasUpgrade("al", 223)) return player.ne.beta.amount.add(1).log(5).div(10).add(1)
                 return player.ne.beta.amount.add(1).log(10).div(10).add(1)
             },
             effectDisplay() { return "x" + formatSimple(upgradeEffect(this.layer, this.id), 2) }, // Add formatting to the effect
@@ -354,6 +392,7 @@ addLayer("ho", {
             currencyDisplayName: "Honey",
             currencyInternalName: "honey",
             effect() {
+                if (hasUpgrade("al", 223)) return player.ne.gamma.amount.add(1).pow(0.04)
                 return player.ne.gamma.amount.add(1).pow(0.03)
             },
             effectDisplay() { return "x" + formatSimple(upgradeEffect(this.layer, this.id), 2) }, // Add formatting to the effect
@@ -371,6 +410,7 @@ addLayer("ho", {
             currencyDisplayName: "Honey",
             currencyInternalName: "honey",
             effect() {
+                if (hasUpgrade("al", 223)) return player.ho.cell.add(1).log(5).div(4).add(1)
                 return player.ho.cell.add(1).log(10).div(4).add(1)
             },
             effectDisplay() { return "x" + formatSimple(upgradeEffect(this.layer, this.id), 2) }, // Add formatting to the effect
@@ -388,6 +428,7 @@ addLayer("ho", {
             currencyDisplayName: "Honey",
             currencyInternalName: "honey",
             effect() {
+                if (hasUpgrade("al", 223)) return player.fl.glossaryBase
                 return player.fl.glossaryBase.sub(1).div(2).add(1)
             },
             effectDisplay() { return "x" + formatSimple(upgradeEffect(this.layer, this.id), 2) }, // Add formatting to the effect
@@ -422,6 +463,8 @@ addLayer("ho", {
                     ["bar", "effect4"],
                     ["blank", "10px"],
                     ["bar", "effect5"],
+                    ["blank", "10px"],
+                    ["bar", "effect6"],
                 ], {width: "550px", height: "450px"}],
                 ["style-row", [
                     ["upgrade", 1], ["upgrade", 2], ["upgrade", 3], ["upgrade", 4], ["upgrade", 5], ["upgrade", 6]

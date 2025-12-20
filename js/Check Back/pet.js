@@ -4016,6 +4016,43 @@ addLayer("pet", {
                 return look
             }
         },
+        2004: {
+            image() { return this.canClick() ? "resources/Pets/cookie/crumbCookieEvo.png" : "resources/secret.png"},
+            title() { return "Cookie Crumbs" },
+            lore() { return "Why waste parts of the cookie?" }, 
+            description() {
+                return "Unlock more buildings.<br>" +
+                    "Passively fill the golden click bar with +" + formatWhole(this.effect()[0], 1) + " clicks/s <br>"
+            },
+            levelLimit() { return new Decimal(10) },
+            effect() {
+                return [getLevelableAmount(this.layer, this.id), new Decimal(1)]
+            },
+            levelTooltip() { return "Costs Chocolate Shards." },
+            evoCan() { return true },
+            // CLICK CODE
+            unlocked() { return player.ep2.obtainedShards && player.ir.iriditeUnlocked},
+            canClick() { return getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { player.ep2.chocoShards = player.ep2.chocoShards.sub(amt) },
+            canAfford() { return player.ep2.chocoShards.gte(this.xpReq()) },
+            xpReq() { return getLevelableAmount(this.layer, this.id).pow(1.8).floor() },
+            currency() { return player.ep2.chocoShards },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barShown() { return this.canClick() },
+            barStyle() { return {backgroundColor: "#86562E"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#16364a" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }
+        },
     },
     refreshBanner() {
         player.pet.banners[0].id = 101 + getRandomInt(8)
@@ -4357,7 +4394,7 @@ addLayer("pet", {
                                 ["raw-html", "Chocolate Shards", {color: "#86562E", fontSize: "20px", fontFamily: "monospace"}],
                             ], () => { return player.ep2.obtainedShards ? {width: "535px", height: "40px", backgroundColor: "#1a1109", borderTop: "3px solid #86562E", borderBottom: "3px solid #86562E", userSelect: "none"} : {display: "none !important"}}],
                             ["style-column", [
-                                ["row", [["levelable", 2001], ["levelable", 2002], ["levelable", 2003]]],
+                                ["row", [["levelable", 2001], ["levelable", 2002], ["levelable", 2003], ["levelable", 2004]]],
                             ], () => { return player.ep2.obtainedShards ? {width: "525px", backgroundColor: "#0d0804", padding: "5px"} : {display: "none !important"}}],
                         ], {width: "550px", height: "522px"}],
                     ], {width: "550px", height: "700px", backgroundColor: "#161616"}],

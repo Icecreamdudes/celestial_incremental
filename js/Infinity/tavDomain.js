@@ -720,7 +720,7 @@ addLayer("tad", {
                 }
             },
             style() {
-                let look = {width: "240px", minHeight: "70px", fontSize: "9px", lineHeight: "0.9", border: "3px solid rgba(0,0,0,0.3", borderRadius: "15px"}
+                let look = {width: "240px", minHeight: "70px", fontSize: "9px", lineHeight: "0.9", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px"}
                 if (player.tad.altSelection == "broken") {look.background = "#444808";look.color = "#ccc"} else {look.background = "#7a820e";look.color = "black"}
                 return look
             },
@@ -740,7 +740,7 @@ addLayer("tad", {
                 }
             },
             style() {
-                let look = {width: "240px", minHeight: "70px", fontSize: "9px", lineHeight: "0.9", border: "3px solid rgba(0,0,0,0.3", borderRadius: "15px"}
+                let look = {width: "240px", minHeight: "70px", fontSize: "9px", lineHeight: "0.9", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px"}
                 if (player.tad.altSelection == "shattered") {look.background = "#395009";look.color = "#ccc"} else {look.background = "#679010";look.color = "black"}
                 return look
             },
@@ -760,7 +760,7 @@ addLayer("tad", {
                 }
             },
             style() {
-                let look = {width: "240px", minHeight: "70px", fontSize: "9px", lineHeight: "0.9", border: "3px solid rgba(0,0,0,0.3", borderRadius: "15px"}
+                let look = {width: "240px", minHeight: "70px", fontSize: "9px", lineHeight: "0.9", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px"}
                 if (player.tad.altSelection == "fragmented") {look.background = "#204511";look.color = "#ccc"} else {look.background = "#397d1e";look.color = "black"}
                 return look
             },
@@ -780,7 +780,7 @@ addLayer("tad", {
                 }
             },
             style() {
-                let look = {width: "240px", minHeight: "70px", fontSize: "9px", lineHeight: "0.9", border: "3px solid rgba(0,0,0,0.3", borderRadius: "15px"}
+                let look = {width: "240px", minHeight: "70px", fontSize: "9px", lineHeight: "0.9", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px"}
                 if (player.tad.altSelection == "corrupted") {look.background = "#480844";look.color = "#ccc"} else {look.background = "#820e7a";look.color = "black"}
                 return look
             },
@@ -800,7 +800,7 @@ addLayer("tad", {
                 }
             },
             style() {
-                let look = {width: "240px", minHeight: "70px", fontSize: "9px", lineHeight: "0.9", border: "3px solid rgba(0,0,0,0.3", borderRadius: "15px"}
+                let look = {width: "240px", minHeight: "70px", fontSize: "9px", lineHeight: "0.9", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px"}
                 if (player.tad.altSelection == "disfigured") {look.background = "#500939";look.color = "#ccc"} else {look.background = "#901067";look.color = "black"}
                 return look
             },
@@ -820,7 +820,7 @@ addLayer("tad", {
                 }
             },
             style() {
-                let look = {width: "240px", minHeight: "70px", fontSize: "9px", lineHeight: "0.9", border: "3px solid rgba(0,0,0,0.3", borderRadius: "15px"}
+                let look = {width: "240px", minHeight: "70px", fontSize: "9px", lineHeight: "0.9", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px"}
                 if (player.tad.altSelection == "distorted") {look.background = "#451120";look.color = "#ccc"} else {look.background = "#7d1e39";look.color = "black"}
                 return look
             },
@@ -840,7 +840,7 @@ addLayer("tad", {
                 }
             },
             style() {
-                let look = {width: "240px", minHeight: "70px", fontSize: "9px", lineHeight: "0.9", border: "3px solid rgba(0,0,0,0.3", borderRadius: "15px"}
+                let look = {width: "240px", minHeight: "70px", fontSize: "9px", lineHeight: "0.9", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px"}
                 if (player.tad.altSelection == "infected") {look.background = "#084448";look.color = "#ccc"} else {look.background = "#0e7a82";look.color = "black"}
                 return look
             },
@@ -860,7 +860,7 @@ addLayer("tad", {
                 }
             },
             style() {
-                let look = {width: "240px", minHeight: "70px", fontSize: "9px", lineHeight: "0.9", border: "3px solid rgba(0,0,0,0.3", borderRadius: "15px"}
+                let look = {width: "240px", minHeight: "70px", fontSize: "9px", lineHeight: "0.9", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px"}
                 if (player.tad.altSelection == "infested") {look.background = "#1c294b";look.color = "#ccc"} else {look.background = "#324a87";look.color = "black"}
                 return look
             },
@@ -877,7 +877,7 @@ addLayer("tad", {
                 player.subtabs["po"]["stuff"] = "Otherworldly Features"
             },
             style() {
-                let look = {width: "300px", minHeight: "50px", border: "3px solid rgba(0,0,0,0.3", borderRadius: "15px"}
+                let look = {width: "300px", minHeight: "50px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px"}
                 if (player.in.unlockedBreak) {look.background = "#77bf5f";look.cursor = "default"}
                 return look
             },
@@ -894,7 +894,7 @@ addLayer("tad", {
                 player.subtabs["ta"]["stuff"] = "RESET"
             },
             style() {
-                let look = {width: "375px", minHeight: "50px", border: "3px solid rgba(0,0,0,0.3", borderRadius: "15px"}
+                let look = {width: "375px", minHeight: "50px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px"}
                 if (player.tad.breakNIP) {look.background = "#77bf5f";look.cursor = "default"}
                 return look
             },
@@ -909,7 +909,7 @@ addLayer("tad", {
                 player.tad.hiveExpand = true
             },
             style() {
-                let look = {width: "300px", minHeight: "50px", border: "3px solid rgba(0,0,0,0.3", borderRadius: "15px"}
+                let look = {width: "300px", minHeight: "50px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px"}
                 if (player.tad.hiveExpand) {look.background = "#77bf5f";look.cursor = "default"}
                 return look
             },

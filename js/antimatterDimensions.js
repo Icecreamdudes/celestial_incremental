@@ -11,6 +11,8 @@
         antimatterEffect: new Decimal(1),
         antimatterPerSecond: new Decimal(0),
 
+        secondSoftcap: new Decimal("1e100000"),
+
         // Dimension Stuff
         dimensionAmounts: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
         dimensionsPerSecond: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
@@ -105,6 +107,10 @@
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(buyableEffect("sb", 105))
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(buyableEffect("cof", 21))
         if (hasUpgrade("bi", 118)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(upgradeEffect("bi", 118))
+
+        // SECOND SOFTCAP
+        player.ad.secondSoftcap = new Decimal("1e100000")
+        if (player.ad.antimatterPerSecond.gte(player.ad.secondSoftcap)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.div(player.ad.secondSoftcap).pow(0.1).mul(player.ad.secondSoftcap)
 
         // ABNORMAL MODIFIERS
         if (player.po.halter.antimatter.enabled == 1) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.div(player.po.halter.antimatter.halt)
@@ -898,6 +904,7 @@
             }],
         ]],
         ["raw-html", () => {return "Boosts points by x" + format(player.ad.antimatterEffect) + " (based on points and antimatter)"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.ad.antimatterPerSecond.gte(player.ad.secondSoftcap) ? "UNAVOIDABLE SOFTCAP: Gain past " + format(player.ad.secondSoftcap) + " is raised by ^0.1." : "" }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],

@@ -146,8 +146,7 @@ addLayer("hsa", {
             currencyDisplayName: "Sacred Energy",
             currencyInternalName: "sacredEnergy",
             effect() {
-                if (player.hpw.totalPower.gte(25)) return Decimal.sub(player.hpw.upgTotal, 25).mul(0.2).add(1)
-                return new Decimal(1)
+                return Decimal.sub(player.hpw.upgTotal.max(25), 25).mul(0.2).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id)) + "x" },
             style: {color: "rgba(0,0,0,0.6)", borderColor: "rgba(0,0,0,0.6)", borderRadius: "15px", margin: "2px"},

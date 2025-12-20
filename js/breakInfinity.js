@@ -614,9 +614,14 @@
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
             effect() {
-                return buyableEffect("ad", 1).pow(0.2).add(1)
+                let eff = buyableEffect("ad", 1).pow(0.2).add(1)
+                if (eff.gte("1e50000")) eff = eff.div("1e50000").pow(0.1).mul("1e50000")
+                return eff
             },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            effectDisplay() {
+                if (upgradeEffect(this.layer, this.id).gte("1e50000")) return format(upgradeEffect(this.layer, this.id))+"x <small style='color:red'>[SOFTCAPPED]</small>"
+                return format(upgradeEffect(this.layer, this.id))+"x"
+            }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px", width: '140px', height: '100px', }
         },
     },

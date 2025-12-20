@@ -200,6 +200,16 @@
             },
             style: { width: "100px", minHeight: "100px", border: "5px solid #16364a", borderRadius: "0px", padding: "0px" },
         },
+        203: {
+            title() { return "<img src='resources/Pets/cookie/crumbCookieEvo.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
+            canClick() { return true},
+            unlocked() { return tmp.pet.levelables[403].canClick && player.ep2.obtainedShards && player.ir.iriditeUnlocked && getLevelableAmount("pet", 2001).gte(1) && getLevelableAmount("pet", 2004).lt(1)},
+            tooltip() { return "██████ more ███ █████████,<br>███ ████ passive ██████" },
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(104)
+            },
+            style: { width: "100px", minHeight: "100px", border: "5px solid #16364a", borderRadius: "0px", padding: "0px" },
+        },
     },
     evos: {
         0: {
@@ -643,6 +653,36 @@
                 setLevelableAmount("pet", 2003, new Decimal(1))
             }
         },
+        104: {
+            title() { return "Cookie Crumbs" },
+            description() {
+                return "<div class='evoContainer'><h3>Costs:</h3>" +
+                "<br>" + formatWhole(player.ep2.chocoShards) + "/15 Chocolate Shard" +
+                "<br>" + formatWhole(player.cb.petPoints) + "/100,000 Pet Points" +
+                "<br>" + formatWhole(player.ca.rememberanceCores) + "/50 Rememberance Cores" +
+                "</div>" +
+                "<div class='evoContainer'><h3>Requires:</h3>" +
+                "<br>"  + formatWhole(getLevelableTier("pet", 403)) + "/1 Cookie Ascension" +
+                "<br>" + formatWhole(player.sb.storedSpaceEnergy) + "/100,000 Stored Space Energy" +
+                "<br>" + formatWhole(player.ir.spaceRock) + "/1,000 Space Rocks" +
+                "<br>" + formatWhole(player.ir.spaceGem) + "/10 Space Gems" +
+                "</div>"
+            },
+            canClick() {
+                return (player.ep2.chocoShards.gte(15) && player.cb.petPoints.gte(100000) && player.ca.rememberanceCores.gte(50)
+                && player.sb.storedSpaceEnergy.gte(100000) && player.ir.spaceRock.gte(1000) && player.ir.spaceGem.gte(10)
+                && getLevelableTier("pet", 403).gte(1))
+            },
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(-1)
+
+                player.ep2.chocoShards = player.ep2.chocoShards.sub(15)
+                player.cb.petPoints = player.cb.petPoints.sub(100000)
+                player.ca.rememberanceCores = player.ca.rememberanceCores.sub(50)
+
+                setLevelableAmount("pet", 2004, new Decimal(1))
+            }
+        },
     },
     bars: {
         pityEvoBar: {
@@ -713,7 +753,7 @@
                         ["bt-clickable", 105], ["bt-clickable", 107], ["bt-clickable", 108], ["bt-clickable", 109], ["bt-clickable", 110],
                         ["bt-clickable", 106], ["bt-clickable", 111],
 
-                        ["bt-clickable", 201], ["bt-clickable", 202], ["bt-clickable", 203]
+                        ["bt-clickable", 201], ["bt-clickable", 202], ["bt-clickable", 203], ["bt-clickable", 204]
                     ]],
                 ], {width: "620px", background: "rgba(0,0,0,0.4)", paddingBottom: "10px", borderRadius: "15px"}],
                 ["blank", "5px"],

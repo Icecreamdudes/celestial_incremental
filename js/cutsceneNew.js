@@ -2626,6 +2626,37 @@ const cutsceneDialogue116 = [
     { text: "Just keep working on improving the swarm, and I will be able to help you.", portrait: "resources/aleph.png"},
 ];
 
+// Happens after the first cocoon milestone
+const cutsceneDialogue117 = [
+    { text: "Oh~, so freeing!", portrait: "resources/aleph.png"},
+    { text: "Even such a small relief feels amazing after ages of constraints.", portrait: "resources/aleph.png"},
+    { text: "You look at her impatiently."},
+    { text: "Oh yes, I should be able to improve your production now.", portrait: "resources/aleph.png"},
+    { text: "Though with just this much it won't be anything impressive.", portrait: "resources/aleph.png"},
+    { text: "Given enough fundamental power, I should be able to connect this hive to one of your celestial powers.", portrait: "resources/aleph.png"},
+    { text: "Doing so should both improve the effects of that celestial power and expand the hives potential.", portrait: "resources/aleph.png"},
+    { text: "I'll notify you when it is time.", portrait: "resources/aleph.png"},
+];
+
+// Happens after the fifth cocoon milestone
+const cutsceneDialogue118 = [
+    { text: "It appears to be time.", portrait: "resources/aleph.png"},
+    { text: "This should be enough fundamental power to connect with your weakest celestial power.", portrait: "resources/aleph.png"},
+    { text: "Apparently it is called \"Tav's Domain\"?", portrait: "resources/aleph.png"},
+    { text: "I'll send my spirit, and I'll see what all I can do to improve it.", portrait: "resources/aleph.png"},
+];
+
+// Happens when entering Tav's Domain after obtaining fifth cocoon milestone
+const cutsceneDialogue119 = [
+    { text: "How fascinating of a concept!", portrait: "resources/alephDark.png"},
+    { text: "To think of modifying the concept of infinity to imbue it with new effects.", portrait: "resources/alephDark.png"},
+    { text: "I certainly can do some interesting things with this.", portrait: "resources/alephDark.png"},
+    { text: "You feel the bounds of the domain expand."},
+    { text: "There! You should now be able to use some new types of infinities.", portrait: "resources/alephDark.png"},
+    { text: "Gain enough of them, and they should be able to improve the gain and effects of the rest of your infinities.", portrait: "resources/alephDark.png"},
+    { text: "And given enough of them, they should be able to also expand the capabilities of the hive!", portrait: "resources/alephDark.png"},
+    { text: "Hopefully you'll be able to fully utilize their power.", portrait: "resources/alephDark.png"},
+];
 
 
 // Example with custom background:

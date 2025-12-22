@@ -408,7 +408,7 @@
         },
         19: {
             title: "Prestige Upgrade X",
-            unlocked() { return hasUpgrade("p", 18) && tmp.f.buyables[26].unlocked },
+            unlocked() { return hasUpgrade("p", 18) && (tmp.f.buyables[26].unlocked || hasUpgrade("p", 19)) },
             description: "Unlocks Power Factor VIII, and more tree buyables.",
             cost: new Decimal(4782969),
             currencyLocation() { return player.p },

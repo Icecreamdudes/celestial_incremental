@@ -2657,7 +2657,7 @@ addLayer("pet", {
             levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
-                let shard = player.cb.evolutionShards.add(1).log(2).log(2).add(1)
+                let shard = player.cb.evolutionShards.add(2).log(2).log(2).add(1)
                 return [
                     amt.mul(shard.mul(2)).pow(shard.div(2)).pow(Decimal.pow(4, getLevelableTier(this.layer, this.id))).add(1), // Grasshoppers (Based on Evo Shards)
                     amt.mul(0.03).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1) // Level Requirement

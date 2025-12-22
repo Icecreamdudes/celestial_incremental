@@ -212,6 +212,21 @@ addLayer("achievements", {
             color: "#ffbf00",
             unlocked: true,
         },
+        102: {
+            name: "New Dimensions",
+            image: "resources/achievements/2_00.png",
+            tooltip: "<h3>New Dimensions</h3><hr style='margin-bottom:4px'>Do your first dimension<br>boost.",
+            color: "#ffbf00",
+            unlocked: true,
+        },
+        103: {
+            name: "Slow Fueling",
+            image: "resources/achievements/2_00.png",
+            tooltip: "<h3>Slow Fueling</h3><hr style='margin-bottom:4px'>Do your first rocket<br>fuel reset.<br><br>Reward: Double rocket<br>fuel gain.",
+            color: "#ffbf00",
+            unlocked: true,
+            marked: true,
+        },
     },
     tooltip: "Achievements",
     color: "white",
@@ -235,7 +250,7 @@ addLayer("achievements", {
                 content: [
                     ["top-column", [
                         ["row", [
-                            ["achievement", 101],
+                            ["achievement", 101], ["achievement", 102], ["achievement", 103], ["achievement", 104], ["achievement", 105], ["achievement", 106],
                         ]],
                     ], {width: "621px", height: "409px", background: "#191300", borderLeft: "3px solid white", padding: "3px", borderRadius: "0 0 22px 0"}],
                 ],

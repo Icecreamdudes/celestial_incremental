@@ -1203,7 +1203,7 @@ addLayer('g', {
                             ["raw-html", () => {return "Gold Grass Mult Cap: " + formatWhole(player.g.goldGrassCap)}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                         ], () => {
                             if (!hasUpgrade("g", 13)) return {display: "none !important"}
-                            let look = {width: "210px", height: "40px", background: "#33290c", borderLeft: "5px solid #3e3117"}
+                            let look = {width: "210px", height: "40px", background: "#2e250c", borderLeft: "5px solid #3e3117"}
                             if (!player.ev.evolutionsUnlocked[7]) look.width = "320px"
                             return look
                         }],

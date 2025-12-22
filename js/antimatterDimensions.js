@@ -522,9 +522,10 @@
                     Req: " + format(tmp[this.layer].buyables[this.id].cost) + dimtext
             },
             buy() {
-                    if (!hasUpgrade("bi", 112)) layers.ad.dimBoostReset()
+                if (!hasAchievement("achievements", 102)) completeAchievement("achievements", 102)
+                if (!hasUpgrade("bi", 112)) layers.ad.dimBoostReset()
 
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
             },
             style: { width: '300px', height: '75px', borderRadius: '10px'}
         },
@@ -554,9 +555,9 @@
                     Req: " + format(tmp[this.layer].buyables[this.id].cost) + " 8th dimensions."
             },
             buy() {
-                    if (!hasUpgrade("bi", 112)) layers.ad.galaxyReset()
+                if (!hasUpgrade("bi", 112)) layers.ad.galaxyReset()
 
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
             },
             style: { width: '300px', height: '75px', borderRadius: '10px'}
         },

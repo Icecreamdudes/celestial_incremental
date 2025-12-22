@@ -8,17 +8,17 @@ addLayer("achievements", {
     }},
     achievements: {
         1: {
-            name: "Small Beginnings",
+            name: "First Reset<br><small>(of many)</small>",
             image: "resources/achievements/1_01.png",
-            tooltip: "<h3>Small Beginnings</h3><hr style='margin-bottom:4px'>Obtain your first rank.",
+            tooltip: "<h3>First Reset <small>(of many)</small></h3><hr style='margin-bottom:4px'>Obtain your first rank.",
             color: "white",
             complete() {return hasUpgrade("p", 17)},
             unlocked: true,
         },
         2: {
-            name: "First Reset<br><small>(of many)</small>",
+            name: "Small Beginnings",
             image: "resources/achievements/1_02.png",
-            tooltip: "<h3>First Reset <small>(of many)</small></h3><hr style='margin-bottom:4px'>Obtain your first tier.<br><br>Reward: Ranks are 20% cheaper.",
+            tooltip: "<h3>Small Beginnings</h3><hr style='margin-bottom:4px'>Obtain your first tier.<br><br>Reward: Ranks are 20% cheaper.",
             color: "white",
             complete() {return hasUpgrade("p", 18)},
             unlocked: true,

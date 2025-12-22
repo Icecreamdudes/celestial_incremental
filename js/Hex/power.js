@@ -64,8 +64,8 @@ addLayer("hpw", {
         let extra = new Decimal(0)
         if (hasUpgrade("hpw", 41)) extra = extra.add(1)
         if (type == 2 && hasUpgrade("hve", 33)) extra = extra.add(1)
-        player.hpu.purifier[1] = extra
-        player.hpu.purifier[4] = extra
+        player.hpu.purifiers[1].amount = extra
+        player.hpu.purifiers[4].amount = extra
 
         // CURSES
         player.hcu.curses = new Decimal(0)

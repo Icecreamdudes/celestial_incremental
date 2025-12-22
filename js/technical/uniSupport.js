@@ -129,7 +129,7 @@ addUniverse("A1", {
         }
         return style
     },
-    uniShown() { return player.startedGame && player.cap.cantepocalypseUnlock && (hasUpgrade("bi", 28) || hasMilestone("s", 18)) && !player.sma.inStarmetalChallenge},
+    uniShown() { return player.startedGame && (((player.ca.cantepocalypseUnlock && !player.s.highestSingularityPoints.gt(0)) || (player.s.highestSingularityPoints.gt(0) && hasUpgrade("bi", 28))) || hasMilestone("s", 18)) && !player.sma.inStarmetalChallenge},
 })
 
 addUniverse("A2", {

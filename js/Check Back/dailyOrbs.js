@@ -723,7 +723,9 @@ addLayer("ev2", {
                 ["clickable", 12],
                 ["clickable", 13],
                 ["clickable", 14],
-                ["raw-html", () => {return getLevelableAmount("pet", 1203).gte(10) ? "" : getLevelableAmount("pet", 1203).gte(6) ? "Next button unlocked at Insane Face Lv10" : getLevelableAmount("pet", 1203).gte(3) ? "Next button unlocked at Insane Face Lv6" : "Next button unlocked at Insane Face Lv3"}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                ["style-row", [
+                    ["raw-html", () => {return getLevelableAmount("pet", 1203).gte(6) ? "Next button unlocked at Insane Face Lv10" : getLevelableAmount("pet", 1203).gte(3) ? "Next button unlocked at Insane Face Lv6" : "Next button unlocked at Insane Face Lv3"}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                ], () => {return getLevelableAmount("pet", 1203).lt(10) ? {width: "180px", height: "40px", background: "rgba(0,0,0,0.4)", borderRadius: "5px", marginTop: "10px"} : {display: "none !important"}}],
             ], {width: "200px", height: "200px", padding: "10px", backgroundColor: "rgba(0,0,0,0.4)", borderRadius: "10px"}],
             ["top-column", [
                 ["raw-html", "Evo-Shards", {color: "white", fontSize: "20px", fontFamily: "monospace"}],

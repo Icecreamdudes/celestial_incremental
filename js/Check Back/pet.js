@@ -431,7 +431,7 @@ addLayer("pet", {
 
         // PET BUTTON COOLDOWN CALC
         for (let i in player.pet.petTimers) {
-            player.pet.petTimers[i] = player.pet.petTimers[i].sub(onepersec.mul(player.ev10.checkbackBoost).mul(delta))
+            player.pet.petTimers[i] = player.pet.petTimers[i].sub(onepersec.mul(delta))
         }
 
         // PET BUTTON AVERAGES

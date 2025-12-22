@@ -633,10 +633,24 @@
     },
     challenges: {
         11: {
-            name: "Challenge I",
+            name() {
+                if (hasUpgrade("bi", 28)) return "Challenge I (" + challengeCompletions(this.layer, this.id) + "/" + this.completionLimit() + ")"
+                return "Challenge I"
+            },
+            completionLimit() {
+                if (hasUpgrade("bi", 28)) return new Decimal(2)
+                return new Decimal(1)
+            },
+            marked: false,
             challengeDescription() { return "<h4>You can't pick an otherworldy feature." },
-            goal() { return new Decimal("1.79e308") },
-            canComplete: function () { return player.points.gte(1.79e308) },
+            goal() {
+                if (hasUpgrade("bi", 28) && challengeCompletions(this.layer, this.id) >= 1) return new Decimal("1e7500")
+                return new Decimal("1.79e308")
+            },
+            canComplete() {
+                if (hasUpgrade("bi", 28) && challengeCompletions(this.layer, this.id) >= 1) return player.points.gte("1e7500")
+                return player.points.gte(1.79e308)
+            },
             rewardDescription: "Unlock new grasshopper studies.",
             onEnter() {
                 //OTF is reset here and not in crunch to prevent a bug
@@ -659,10 +673,24 @@
 
         },
         12: {
-            name: "Challenge II",
+            name() {
+                if (hasUpgrade("bi", 28)) return "Challenge II (" + challengeCompletions(this.layer, this.id) + "/" + this.completionLimit() + ")"
+                return "Challenge II"
+            },
+            completionLimit() {
+                if (hasUpgrade("bi", 28)) return new Decimal(2)
+                return new Decimal(1)
+            },
+            marked: false,
             challengeDescription() { return "<h4>Introduces pests, which do bad things to your grass :(" },
-            goal() { return new Decimal("1.79e308") },
-            canComplete: function () { return player.points.gte(1.79e308) },
+            goal() {
+                if (hasUpgrade("bi", 28) && challengeCompletions(this.layer, this.id) >= 1) return new Decimal("1e10000")
+                return new Decimal("1.79e308")
+            },
+            canComplete() {
+                if (hasUpgrade("bi", 28) && challengeCompletions(this.layer, this.id) >= 1) return player.points.gte("1e10000")
+                return player.points.gte(1.79e308)
+            },
             rewardDescription: "Unlocks a new check back button at level 125.",
             unlocked() { return hasChallenge("ip", 11) },
             onEnter() {
@@ -673,14 +701,30 @@
             },
             buttonStyle: {backgroundColor: "white"},
             style: { width: '350px', height: '275px'},
-
         },
         13: {
-            name: "Challenge III",
+            name() {
+                if (hasUpgrade("bi", 28)) return "Challenge III (" + challengeCompletions(this.layer, this.id) + "/" + this.completionLimit() + ")"
+                return "Challenge III"
+            },
+            completionLimit() {
+                if (hasUpgrade("bi", 28)) return new Decimal(2)
+                return new Decimal(1)
+            },
+            marked: false,
             challengeDescription() { return "<h4>Hex... A feature seemingly coming from thin air. No check back effects either..." },
-            goalDescription() { return "2 Refinements" },
-            goal() { return new Decimal("2") },
-            canComplete: function () { return player.hre.refinement.gte(2) },
+            goalDescription() {
+                if (hasUpgrade("bi", 28) && challengeCompletions(this.layer, this.id) >= 1) return "1e2400 celestial points"
+                return "2 Refinements"
+            },
+            goal() {
+                if (hasUpgrade("bi", 28) && challengeCompletions(this.layer, this.id) >= 1) return new Decimal("1e2000")
+                return new Decimal("2")
+            },
+            canComplete() {
+                if (hasUpgrade("bi", 28) && challengeCompletions(this.layer, this.id) >= 1) return player.points.gte("1e2000")
+                return player.hre.refinement.gte(2)
+            },
             rewardDescription: "Permanently unlock hex as an otherworldly feature, and improve base hex point gain.",
             unlocked() { return hasChallenge("ip", 12) },
             onEnter() {
@@ -704,11 +748,28 @@
 
         },
         14: {
-            name: "Challenge IV",
+            name() {
+                if (hasUpgrade("bi", 28)) return "Challenge IV (" + challengeCompletions(this.layer, this.id) + "/" + this.completionLimit() + ")"
+                return "Challenge IV"
+            },
+            completionLimit() {
+                if (hasUpgrade("bi", 28)) return new Decimal(2)
+                return new Decimal(1)
+            },
+            marked: false,
             challengeDescription() { return "<h4>IP and AD upgrades are disabled, some IP milestones are disabled, and pent divides point gain, but is necessary to unlock OTFs." },
-            goalDescription() { return "Pent 30" },
-            goal() { return new Decimal("30") },
-            canComplete: function () { return player.r.pent.gte(30) },
+            goalDescription() {
+                if (hasUpgrade("bi", 28) && challengeCompletions(this.layer, this.id) >= 1) return "1e6000 celestial points"
+                return "Pent 30"
+            },
+            goal() {
+                if (hasUpgrade("bi", 28) && challengeCompletions(this.layer, this.id) >= 1) return new Decimal("1e6000")
+                return new Decimal("30")
+            },
+            canComplete() {
+                if (hasUpgrade("bi", 28) && challengeCompletions(this.layer, this.id) >= 1) return player.points.gte("1e6000")
+                return player.r.pent.gte(30)
+            },
             rewardDescription: "Unlocks infinity point buyables and new milestones.",
             unlocked() { return hasChallenge("ip", 13) },
             onEnter() {

@@ -313,33 +313,31 @@ if (player.c.cutscene[32] && hasUpgrade("ta", 21))
     });
     player.c.cutscene[32] = false
 }
-/*
-if (player.c.cutscene[33] && (inChallenge("tad", 11) || !player.c.cutscene[34]))
-{
+if (player.c.cutscene[33] && player.tab == "tad") {
     showCutscene(cutsceneDialogue34, {
+        background: "#596c6c",
         cutsceneID: 34,
         portrait: "resources/secret.png"
     });
     player.c.cutscene[33] = false
 }
-if (player.c.cutscene[34] && player.de.tavPoints.gte(1))
-{
+if (player.c.cutscene[34] && player.tad.matter.gte(player.tad.domainCap)) {
     showCutscene(cutsceneDialogue35, {
+        background: "#596c6c",
         cutsceneID: 35,
         portrait: "resources/secret.png"
     });
     player.c.cutscene[34] = false
 }
-if (player.c.cutscene[35] && player.bi.brokenInfinities.gte(1))
-{
+if (player.c.cutscene[35] && hasUpgrade("tad", 115)) {
     showCutscene(cutsceneDialogue36, {
+        background: "#596c6c",
         cutsceneID: 36,
         portrait: "resources/secret.png"
     });
     player.c.cutscene[35] = false
 }
-if (player.c.cutscene[36] && hasUpgrade("de", 16))
-{
+if (player.c.cutscene[36] && hasUpgrade("tad", 125)) {
     showCutscene(cutsceneDialogue37, {
         background: "#ffffff",
         cutsceneID: 37,
@@ -347,15 +345,15 @@ if (player.c.cutscene[36] && hasUpgrade("de", 16))
     });
     player.c.cutscene[36] = false
 }
-if (player.c.cutscene[37] && (player.tad.shatteredInfinities.gte(1) || player.tad.disfiguredInfinities.gte(1) || player.tad.corruptedInfinities.gte(1)))
-{
+if (player.c.cutscene[37] && (player.tad.altInfinities.broken.amount.gte(1) || player.tad.altInfinities.shattered.amount.gte(1) || player.tad.altInfinities.fragmented.amount.gte(1))) {
+    player.tad.altSelection = "none"
     showCutscene(cutsceneDialogue38, {
+        background: "#596c6c",
         cutsceneID: 38,
         portrait: "resources/secret.png"
     });
     player.c.cutscene[37] = false
 }
-*/
 if (player.c.cutscene[38] && player.in.unlockedBreak)
 {
     showCutscene(cutsceneDialogue39, {
@@ -451,7 +449,7 @@ if (player.c.cutscene[48] && player.ca.replicantiGalaxies.gte(1))
     });
     player.c.cutscene[48] = false
 }   
-if (player.c.cutscene[49] && (player.tab == "cap" || !player.c.cutscene[50]))
+if (player.c.cutscene[49] && ((player.tab == "ca" && player.subtabs["ca"]["stuff"] == "Trials") || !player.c.cutscene[50]))
 {
     showCutscene(cutsceneDialogue50, {
     cutsceneID: 50,
@@ -468,7 +466,7 @@ if (player.c.cutscene[50] && player.ev.evolutionsUnlocked[8])
     });
     player.c.cutscene[50] = false
 } 
-if (player.c.cutscene[51] && player.cap.reqsPassed[0])
+if (player.c.cutscene[51] && player.ca.canteTrialCount >= 1)
 {
     showCutscene(cutsceneDialogue52, {
     cutsceneID: 52,
@@ -477,7 +475,7 @@ if (player.c.cutscene[51] && player.cap.reqsPassed[0])
     });
     player.c.cutscene[51] = false
 } 
-if (player.c.cutscene[52] && player.cap.reqsPassed[1])
+if (player.c.cutscene[52] && player.ca.canteTrialCount >= 2)
 {
     showCutscene(cutsceneDialogue53, {
     cutsceneID: 53,
@@ -486,7 +484,7 @@ if (player.c.cutscene[52] && player.cap.reqsPassed[1])
     });
     player.c.cutscene[52] = false
 }
-if (player.c.cutscene[53] && player.cap.reqsPassed[2])
+if (player.c.cutscene[53] && player.ca.canteTrialCount >= 3)
 {
     showCutscene(cutsceneDialogue54, {
     cutsceneID: 54,
@@ -495,7 +493,7 @@ if (player.c.cutscene[53] && player.cap.reqsPassed[2])
     });
     player.c.cutscene[53] = false
 } 
-if (player.c.cutscene[54] && player.cap.reqsPassed[3])
+if (player.c.cutscene[54] && player.ca.canteTrialCount >= 4)
 {
     showCutscene(cutsceneDialogue55, {
     cutsceneID: 55,
@@ -504,7 +502,7 @@ if (player.c.cutscene[54] && player.cap.reqsPassed[3])
     });
     player.c.cutscene[54] = false
 } 
-if (player.c.cutscene[55] && ((player.tab == "cp"  || !player.c.cutscene[56]) || (player.tab == "a1u" || !player.c.cutscene[56])))
+if (player.c.cutscene[55] && (player.tab == "cp" || !player.c.cutscene[56]))
 {
     showCutscene(cutsceneDialogue56, {
     cutsceneID: 56,

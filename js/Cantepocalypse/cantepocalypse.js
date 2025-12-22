@@ -1,7 +1,7 @@
 ﻿addLayer("cp", {
     name: "Alternate Origin", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol() {
-        if (player.cap.cantepocalypsePrep) return "CP"
+        if (player.ca.cantepocalypsePrep) return "CP"
         return "AO"
     }, // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "A1",
@@ -45,7 +45,7 @@
     },
     nodeStyle: {background: "linear-gradient(45deg, #064461 0%, #4a7d94 100%)", backgroundOrigin: "border-box", borderColor: "#013851"},
     tooltip() {
-        if (player.cap.cantepocalypsePrep) return "Cantepocalypse"
+        if (player.ca.cantepocalypsePrep) return "Cantepocalypse"
         return "Alternate Origin"
     },
     color: "#398",
@@ -53,10 +53,9 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-        if (player.tab == "cp" && player.cap.cantepocalypsePrep == true) {
+        if (player.tab == "cp" && player.ca.cantepocalypsePrep == true) {
             player.universe = "A1"
-            player.cap.cantepocalypsePrep = false
-            player.subtabs["cap"]['stuff'] = 'Main'
+            player.ca.cantepocalypsePrep = false
             player.cp.cantepocalypseActive = true
         }
 
@@ -166,7 +165,7 @@
 
         player.cp.replicantiPointsMult = multAdd.add(1)
 
-        if (player.cap.cantepocalypseUnlock) player.cp.replicantiPointsTimer = player.cp.replicantiPointsTimer.add(onepersec.mul(delta))
+        if (player.ca.cantepocalypseUnlock) player.cp.replicantiPointsTimer = player.cp.replicantiPointsTimer.add(onepersec.mul(delta))
 
         if (player.cp.replicantiPointsTimer.gte(player.cp.replicantiPointsTimerReq)) {
             layers.cp.replicantiPointMultiply();
@@ -353,5 +352,5 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && (((player.cap.cantepocalypseUnlock && !player.s.highestSingularityPoints.gt(0)) || (player.s.highestSingularityPoints.gt(0) && hasUpgrade("bi", 28))) || hasMilestone("s", 18)) && !player.sma.inStarmetalChallenge}
+    layerShown() { return player.startedGame == true && (((player.ca.cantepocalypseUnlock && !player.s.highestSingularityPoints.gt(0)) || (player.s.highestSingularityPoints.gt(0) && hasUpgrade("bi", 28))) || hasMilestone("s", 18)) && !player.sma.inStarmetalChallenge}
 })

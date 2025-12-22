@@ -1,6 +1,6 @@
 const COCOON_MILESTONE = [new Decimal(1), new Decimal(10), new Decimal(100), new Decimal(1000), new Decimal(10000), new Decimal(100000), new Decimal(1e6), new Decimal(1e7), new Decimal(1e8), new Decimal(1e9), new Decimal(1e14), new Decimal(1e16), new Decimal(1e18), new Decimal(1e20), new Decimal(1e22), new Decimal(1e25)]
 addLayer("al", {
-    name: "Aleph, the Celestial of Swarms", // This is optional, only used in a few places, If absent it just uses the layer id.
+    name: "Aleph, Celestial of Swarms", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "ℵ", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "UB",
     row: 1,

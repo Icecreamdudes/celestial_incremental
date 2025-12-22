@@ -969,8 +969,9 @@ const cutsceneDialogue33 = [ //tavs domain unlock
     { text: "Sure.", portrait: "resources/player.png"  },
     { text: "Tav pulls out a small, glowing blue circle.", },
     { text: "This is my core.", portrait: "resources/tav.png"  },
-    { text: "All it takes to destroy it is the power of the alternate broken infinities.", portrait: "resources/tav.png"  },
-    { text: "Breaking infinities turns it into broken infinities. Going through my domain will create the alternate versions.", portrait: "resources/tav.png"  },
+    { text: "All it takes to destroy it is the power of the alternate infinities.", portrait: "resources/tav.png"  },
+    { text: "Within my domain you can produce matter. Reaching the point of collapsing matter will produce infinitums.", portrait: "resources/tav.png"  },
+    { text: "From there, you can combine the infinitums and your infinities to create alternate infinities.", portrait: "resources/tav.png"  },
     { text: "I gotcha bud. Don't worry. You'll find your freedom.", portrait: "resources/player.png"  },
     { text: "You and Tav dap each other up.", },
     { text: "Despite the cloaked being's words, you still decide to be friendly to this celestial.", },
@@ -978,25 +979,23 @@ const cutsceneDialogue33 = [ //tavs domain unlock
     { text: "You found a friend within a celestial.", },
 
 ];
-const cutsceneDialogue34 = [ //tavs domain
-    { text: "Tav's core splits off into pure energy and surrounds you.", },
-    { text: "You notice your superphysical value gain drop significantly.", },
-    { text: "It feels very similar to the eighth infinity challenge.", },
+const cutsceneDialogue34 = [ // Tav's Domain
+    { text: "You enter the domain and see a new superphysical value.", },
+    { text: "It seems similar to your antimatter, but notably different.", },
+    { text: "It seems more fragile, and less capable of multiplying.", },
 ];
-const cutsceneDialogue35 = [ //tavs points
-    { text: "Tav notices you struggle gaining any superphysical values.", },
-    { text: "Dang, you really are a celestial after all!", portrait: "resources/player.png"  },
-    { text: "Don't worry. I can help you.", portrait: "resources/tav.png"  },
-    { text: "I've saved this one superphysical value: Tav points. It will certainly help you get infinities.", portrait: "resources/tav.png"  },
-    { text: "Thanks Tav!", portrait: "resources/player.png"  },
+const cutsceneDialogue35 = [ // First Infinitum Collapse
+    { text: "You reach the physical limit of your matter, and it collapses into a new superphysical energy.", },
+    { text: "I am assuming this is infinitum?", portrait: "resources/player.png"  },
+    { text: "Indeed. From here you need to strengthen the domain with that infinitum in order to be able to get enough to create alternate infinities.", portrait: "resources/tav.png"  },
+    { text: "Seems simple enough.", portrait: "resources/player.png"  },
 ];
-const cutsceneDialogue36 = [ //broken infinities
-    { text: "You channel your superphysical energy through your fingers, and point it at the infinities.", },
-    { text: "You stomp your foot, and all the infinities form a massive crack in the center of them.", },
-    { text: "The infinities also stop glowing.", },
-    { text: "You feel the superphysical energy from the infinities get converted into a new one.", },
+const cutsceneDialogue36 = [ // Unlock Domain Expander
+    { text: "After continuously channeling infinitum into the domain, you sense something change in the domain.", },
+    { text: "It seems you can now strengthen your matter to increase the amount of infinitum per collapse.", },
+    { text: "Though it also seems strengthening your matter will make it harder to reach a collapse.", },
 ];
-const cutsceneDialogue37 = [ //reunlock antidebuff (Tav flashback)
+const cutsceneDialogue37 = [ // Unlock Compression (Tav flashback)
     { text: "A white flash hits your vision.", },
     { text: "You are brought to another flashback.", },
     { text: "You appear to be in a more vibrant version of the antimatter world.", },
@@ -1034,16 +1033,16 @@ const cutsceneDialogue37 = [ //reunlock antidebuff (Tav flashback)
     { text: "Tav was built by the original seven.", },
 
 ];
-const cutsceneDialogue38 = [ //alt broken infinities
-    { text: "You take the broken infinities, and step infront of the otherworldly feature altar.", },
+const cutsceneDialogue38 = [ //alt infinities
+    { text: "You take the infinitums, and step infront of the otherworldly feature altar.", },
     { text: '"Just like what Tav said...", You thought to yourself.', },
     { text: "The superphysical energy from Tav's core mixes with the energy from the altar.", },
-    { text: "The energy forms a ball, which merges with the broken infinity.", },
+    { text: "The energy forms a ball, which allows the infinitum to merge with your infinities.", },
     { text: "The infinity glows with a light you haven't seen before.", },
-    { text: "You have created an alternate broken infinity.", },
+    { text: "You have created an alternate infinity.", },
 ];
 const cutsceneDialogue39 = [ //tav's death
-    { text: "You did it. You have gained 1,000 of each alternate broken infinity type.", },
+    { text: "You did it. You have gained 250 of each alternate infinity type.", },
     { text: "You are filled with dread. You will defeat your first celestial, but you will have to kill your friend.", },
     { text: "You did it... I'm so proud of you.", portrait: "resources/tav.png"  },
     { text: "Now I'll finally be put to rest. Thank you.", portrait: "resources/tav.png"  },
@@ -1082,7 +1081,7 @@ const cutsceneDialogue39 = [ //tav's death
     { text: "You will find your freedom. I know you will.", portrait: "resources/player.png"  },
     { text: "Goodbye...", portrait: "resources/tav.png"  },
     { text: "Goodbye...", portrait: "resources/player.png"  },
-    { text: "The energy from the alternate broken infinities are converted into one powerful beam of energy.", },
+    { text: "The energy from the alternate infinities are converted into one powerful beam of energy.", },
     { text: "The beam strikes through Tav's core, immediately disintegrating it.", },
     { text: "Tav's physical form fades away into dust.", },
     { text: "You have defeated your first celestial.", },
@@ -1219,7 +1218,7 @@ const cutsceneDialogue49 = [ //replicanti galaxy
     { text: "It doesn't make any sense. How could such an evil celestial be responsible for such beautiful sights?",  },
 
 ];
-const cutsceneDialogue50 = [ //cantepocalypse puzzles (on tab switch)
+const cutsceneDialogue50 = [ //cantepocalypse trials (on tab switch)
     { text: "All of a sudden, a temple rises in front of you.",  },
     { text: "As you walk inside, you are greeted with Cante's voice.",  },
     { text: "They're all gone. THEY'RE ALL GONE.", portrait: "resources/cante.png"  },
@@ -1229,7 +1228,7 @@ const cutsceneDialogue50 = [ //cantepocalypse puzzles (on tab switch)
     { text: "EVEN IF THEY ALL HATED ME, THEY DIDN'T DESERVE DEATH.", portrait: "resources/cante.png"  },
     { text: "And I know you want to kill me as well.", portrait: "resources/cante.png"  },
     { text: "I have built this temple for this very moment.", portrait: "resources/cante.png"  },
-    { text: "Solve 4 puzzles, and I will let you kill me.", portrait: "resources/cante.png"  },
+    { text: "Conquer these 4 trials, and I will let you kill me.", portrait: "resources/cante.png"  },
     { text: "What's the point in even living if they are all gone.", portrait: "resources/cante.png"  },
     { text: "There's nothing for me to do.", portrait: "resources/cante.png"  },
     { text: "Absolutely nothing.", portrait: "resources/cante.png"  },
@@ -1250,9 +1249,9 @@ const cutsceneDialogue51 = [ //marcel evolution
     { text: "Thanks bud.", portrait: "resources/player.png"  },
 ];
 
-//first puzzle complete 
+//first trial complete 
 const cutsceneDialogue52 = [ 
-    { text: "You complete the puzzle, and the floor underneath you breaks, revealing another room.",  },
+    { text: "You complete the trial, and a lock opens.",  },
     { text: "A white flash hits your eyes.",  },
     { text: "You are presented with a flashback.",  },
     { text: "You find yourself in the vibrant antimatter world again.",  },
@@ -1281,9 +1280,9 @@ const cutsceneDialogue52 = [
     { text: "You need to figure out more.",  },
     { text: "You need to understand what truly happened to the original seven.",  },
 ];
-//second puzzle complete 
+//second trial complete 
 const cutsceneDialogue53 = [ 
-    { text: "You complete the puzzle, and the floor underneath you breaks, revealing another room.",  },
+    { text: "You complete the trial, and a lock opens.",  },
     { text: "A white flash hits your eyes.",  },
     { text: "You are presented with a flashback.",  },
     { text: "You find yourself in a vibrant city. Bright lights, noise, and cars.",  },
@@ -1303,9 +1302,9 @@ const cutsceneDialogue53 = [
     { text: "A secret organization is destroying universes and converting people into celestials?",  },
     { text: "You'll have to figure it all out...",  },
 ];
-//third puzzle complete 
+//third trial complete 
 const cutsceneDialogue54 = [ 
-    { text: "You complete the puzzle, and the floor underneath you breaks, revealing another room.",  },
+    { text: "You complete the trial, and a lock opens.",  },
     { text: "A white flash hits your eyes.",  },
     { text: "You are presented with a flashback.",  },
     { text: "You are in what appears to be an office room.",  },
@@ -1326,9 +1325,9 @@ const cutsceneDialogue54 = [
     { text: "This must have caused Cante's removal from the original seven.",  },
     { text: "Very interesting...",  },
 ];
-//fourth puzzle complete 
+//fourth trial complete 
 const cutsceneDialogue55 = [ 
-    { text: "You complete the puzzle, and the floor underneath you breaks, revealing another room.",  },
+    { text: "You complete the trial, and a lock opens.",  },
     { text: "A white flash hits your eyes.",  },
     { text: "You are presented with a flashback.",  }, //laitela created cante's prison
     { text: "You find yourself in a black and white void, surrounded by dark energy.",  },
@@ -1348,7 +1347,7 @@ const cutsceneDialogue55 = [
 ];
 //cantepocalypse 
 const cutsceneDialogue56 = [ 
-    { text: "As all 4 puzzles are completed, you find yourself in one final room.",  },
+    { text: "As all 4 trials are completed, you enter through the now open door, and find yourself in a vast room.",  },
     { text: "There is a hole in the center of the room, and the hole is pulling everything in towards it.",  },
     { text: "My core is in here. You can kill me now.", portrait: "resources/cante.png"  },
     { text: "You get an uneasy feeling about jumping in the hole, but notice the walls around you start to shrink.",  },
@@ -2657,6 +2656,8 @@ const cutsceneDialogue119 = [
     { text: "And given enough of them, they should be able to also expand the capabilities of the hive!", portrait: "resources/alephDark.png"},
     { text: "Hopefully you'll be able to fully utilize their power.", portrait: "resources/alephDark.png"},
 ];
+
+// Happens after finishing T3 Alt Infinity
 
 
 // Example with custom background:

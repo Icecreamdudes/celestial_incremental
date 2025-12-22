@@ -38,6 +38,14 @@
         rememberanceCoresEffect: new Decimal(0),
         rememberanceCoreCost: new Decimal(1000),
 
+        canteTrial1: false,
+        canteTrial2: false,
+        canteTrial3: false,
+        canteTrial4: false,
+        canteTrialCount: 0,
+
+        cantepocalypseUnlock: false,
+        cantepocalypsePrep: false,
         defeatedCante: false,
     }},
     automate() {
@@ -145,6 +153,14 @@
         } else {
             player.ca.replicantiSoftcap = new Decimal(1)
         }
+
+        // Cantepocalypse Stuff
+        if (player.ca.canteTrialCount >= 4) {
+            player.ca.cantepocalypseUnlock = true
+            if (player.tab == "ca" && player.subtabs["ca"]['stuff'] == 'Trials' && !hasUpgrade("cp", 18) && player.s.highestSingularityPoints.eq(0)) {
+                player.ca.cantepocalypsePrep = true
+            }
+        }
     },
     gainCanteCore() {
         let leftover = new Decimal(0)
@@ -229,15 +245,6 @@
                 return look
             },
         },
-        14: {
-            title() { return "<h2>CONTEMPLATE INFINITY" },
-            canClick() { return true },
-            unlocked() { return hasUpgrade("bi", 28) },
-            onClick() {
-                player.tab = "cap"
-            },
-            style: { width: '400px', "min-height": '100px', borderRadius: '15px' },
-        },
         15: {
             title() { return "<h3>Convert a cante core into a rememberance core</h3><br>Cost: " + format(player.ca.rememberanceCoreCost) + " Proto Memories" },
             canClick() { return player.ca.canteCores.gte(1) && player.oi.protoMemories.gte(player.ca.rememberanceCoreCost) },
@@ -248,7 +255,7 @@
             style: {width: "300px", minHeight: "100px", borderRadius: "15px"},
         },
         16: {
-            title() { return "<h3>REMEMBER THE PROTO OVERWORLD. DESTROY CANTE. END THE SUFFERING. (REQ: 10 Rememberance Cores)" },
+            title() { return "<h2>REMEMBER THE PROTO OVERWORLD.<br>DESTROY CANTE.<br>END THE SUFFERING.</h2><br><br><h3>[REQ: 10 Rememberance Cores]</h3>" },
             canClick() { return player.ca.rememberanceCores.gte(10) },
             unlocked() { return true },
             onClick() {
@@ -256,7 +263,83 @@
                 player.tab = 'ca'
                 player.subtabs["ca"]['stuff'] = 'Main'
             },
-            style: { width: '500px', "min-height": '200px', borderRadius: '20px' },
+            style() {
+                let look = {width: "450px", minHeight: "150px", color: "white", border: "8px solid #626170", borderRadius: "40px"}
+                this.canClick() ? look.backgroundColor = "#4b4a5b" : look.backgroundColor = "#361e1e"
+                return look
+            },
+        },
+        101: {
+            title() {
+                if (player.ca.canteTrial1) return "<img src='resources/lock_unlocked.png' width='90px' height='90px' style='margin-bottom:-5px'></img>"
+                return "<img src='resources/lock_locked.png' width='90px' height='90px' style='margin-bottom:-5px'></img>"
+            },
+            canClick() {return !player.ca.canteTrial1 && challengeCompletions("ip", 11) >= 2 && challengeCompletions("ip", 12) >= 2 && challengeCompletions("ip", 13) >= 2 && challengeCompletions("ip", 14) >= 2},
+            unlocked: true,
+            tooltip: "Conquer the second clears of the infinity challenges.",
+            onClick() {
+                player.ca.canteTrial1 = true
+                player.ca.canteTrialCount += 1
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", background: "transparent", border: "none", borderRadius: "50%", padding: "0", boxShadow: "0 0 !important"}
+                if (player.ca.canteTrial1) look.cursor = "default"
+                return look
+            },
+        },
+        102: {
+            title() {
+                if (player.ca.canteTrial2) return "<img src='resources/lock_unlocked.png' width='90px' height='90px' style='margin-bottom:-5px'></img>"
+                return "<img src='resources/lock_locked.png' width='90px' height='90px' style='margin-bottom:-5px'></img>"
+            },
+            canClick() {return !player.ca.canteTrial2 && getLevelableTier("pet", 101).gte(1)},
+            unlocked: true,
+            tooltip: "Ascend a cat-like companion.",
+            onClick() {
+                player.ca.canteTrial2 = true
+                player.ca.canteTrialCount += 1
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", background: "transparent", border: "none", borderRadius: "50%", padding: "0", boxShadow: "0 0 !important"}
+                if (player.ca.canteTrial2) look.cursor = "default"
+                return look
+            },
+        },
+        103: {
+            title() {
+                if (player.ca.canteTrial3) return "<img src='resources/lock_unlocked.png' width='90px' height='90px' style='margin-bottom:-5px'></img>"
+                return "<img src='resources/lock_locked.png' width='90px' height='90px' style='margin-bottom:-5px'></img>"
+            },
+            canClick() {return !player.ca.canteTrial3 && (challengeCompletions("hrm", 13) > 0)},
+            unlocked: true,
+            tooltip: "Survive a remnant of the realm of death.",
+            onClick() {
+                player.ca.canteTrial3 = true
+                player.ca.canteTrialCount += 1
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", background: "transparent", border: "none", borderRadius: "50%", padding: "0", boxShadow: "0 0 !important"}
+                if (player.ca.canteTrial3) look.cursor = "default"
+                return look
+            },
+        },
+        104: {
+            title() {
+                if (player.ca.canteTrial4) return "<img src='resources/lock_unlocked.png' width='90px' height='90px' style='margin-bottom:-5px'></img>"
+                return "<img src='resources/lock_locked.png' width='90px' height='90px' style='margin-bottom:-5px'></img>"
+            },
+            canClick() {return !player.ca.canteTrial4 && player.ca.replicanti.gte(1.79e308)},
+            unlocked: true,
+            tooltip: "Cap out your replicanti.",
+            onClick() {
+                player.ca.canteTrial4 = true
+                player.ca.canteTrialCount += 1
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", background: "transparent", border: "none", borderRadius: "50%", padding: "0", boxShadow: "0 0 !important"}
+                if (player.ca.canteTrial4) look.cursor = "default"
+                return look
+            },
         },
     },
     bars: {
@@ -810,7 +893,7 @@
                 ]
             },
             "Cante Energy": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                buttonStyle() { return { color: "white", background: "#05415c", borderColor: "#086894", borderRadius: "5px" } },
                 unlocked() { return player.ca.unlockedCante },
                 content: [
                     ["blank", "25px"],
@@ -836,12 +919,46 @@
                     ["row", [["clickable", 14]]],
                 ]
             },
-            "THE BARRIER": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return hasUpgrade("cp", 18) && !player.ca.defeatedCante },
+            "Trials": {
+                buttonStyle() { return { color: "white", background: "#1F1E33", borderColor: "#626170", borderRadius: "5px" } },
+                unlocked() { return player.ca.unlockedCante && hasUpgrade("bi", 28) },
                 content: [
                     ["blank", "25px"],
-                    ["row", [["clickable", 16]]],
+                    ["top-column", [
+                        ["blank", "25px"],
+                        ["style-row", [
+                            ["raw-html", () => {return player.ca.canteTrialCount >= 4 ? "THERE IS NO RETURN ..." : "You must pass 4 trials in order to start the ???."}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ], {width: "500px", height: "100px", background: "rgba(0,0,0,0.3)", border: "3px solid #626170", borderRadius: "20px"}],
+                        ["blank", "25px"],
+                        ["style-row", [
+                            ["style-column", [
+                                ["clickable", 101],
+                                ["blank", "75px"],
+                                ["clickable", 102],
+                            ], {width: "146px", height: "500px"}],
+                            ["style-row", [], {width: "8px", height: "500px", background: "#353447"}],
+                            ["style-column", [
+                                ["clickable", 103],
+                                ["blank", "75px"],
+                                ["clickable", 104],
+                            ], {width: "146px", height: "500px"}],
+                        ], () => {return player.ca.canteTrialCount < 4 ? {width: "300px", height: "500px", background: "#4b4a5b", border: "8px solid #353447", borderRadius: "150px 150px 0 0"} : {display: "none !important"}}],
+                        ["style-row", [
+                            ["style-row", [], {width: "146px", height: "500px", background: "#4b4a5b", border: "8px solid #353447", borderRadius: "0 150px 0 0", marginRight: "-8px"}],
+                            ["style-row", [
+                                ["tree", [["cp"]]],
+                            ], {width: "300px", height: "500px", background: "radial-gradient(#000000, #181828)", border: "8px solid #353447", borderRadius: "150px 150px 0 0"}],
+                            ["style-row", [], {width: "146px", height: "500px", background: "#4b4a5b", border: "8px solid #353447", borderRadius: "150px 0 0 0", marginLeft: "-8px"}],
+                        ], () => {return player.ca.canteTrialCount >= 4 ? {} : {display: "none !important"}}],
+                    ], {width: "700px", height: "700px", background: "#181828", border: "3px solid #626170", borderRadius: "20px"}],
+                ]
+            },
+            "THE BARRIER": {
+                buttonStyle() { return { color: "white", background: "#1F1E33", borderColor: "#626170", borderRadius: "5px" } },
+                unlocked() { return hasUpgrade("cp", 18) && !player.ca.defeatedCante },
+                content: [
+                    ["blank", "100px"],
+                    ["clickable", 16],
                 ]
             },
         },

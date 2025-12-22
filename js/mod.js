@@ -14,7 +14,7 @@
 		"checkback.js", "portal.js", "dice.js", "evolution.js", "rocketFuel.js",
 		"infinity.js", "antimatterDimensions.js", "infinityPoints.js", "pests.js", "debuff.js",
 		"tav.js", "Infinity/tavDomain.js", "breakInfinity.js", "lore.js", "otfMastery.js",
-		"infinityDimensions.js", "cante.js", "cantepocalypsePuzzle.js", "Cantepocalypse/cantepocalypse.js", "Cantepocalypse/altRanks.js",
+		"infinityDimensions.js", "cante.js", "Cantepocalypse/cantepocalypse.js", "Cantepocalypse/altRanks.js",
 		"Cantepocalypse/perks.js", "Cantepocalypse/anonymity.js", "Cantepocalypse/repliTrees.js", "Cantepocalypse/repliGrass.js", "Cantepocalypse/grassSkip.js",
 		"Cantepocalypse/oil.js", "Singularity/singularity.js", "epicPets.js", "pollinator.js", "factory.js",
 		"Singularity/radiation.js", "Singularity/singularityDimensions.js", "Cantepocalypse/funify.js", "Singularity/coreScraps.js", "Hall of Celestials/celestialHall.js",
@@ -170,9 +170,7 @@ function updateStyles() {
 		case "ca":
 			layerBG = "#2a3e66"
 			if (player.subtabs["ca"]['stuff'] == "Galaxy Dust") layerBG = "#0f1226"
-			break;
-		case "cap":
-			layerBG = "#1f1e33"
+			if (player.subtabs["ca"]["stuff"] == "Trials" || player.subtabs["ca"]["stuff"] == "THE BARRIER") layerBG = "#1f1e33"
 			break;
 		case "cp": case "ar": case "pr": case "an": case "rt":
 		case "rg": case "gs": case "oi": case "fu":
@@ -1422,9 +1420,6 @@ function fixOldSave(oldVersion){
 		for (let prop in player.om.buyables) {
 			if (getBuyableAmount("om", prop).gt(layers.om.buyables[prop].purchaseLimit())) setBuyableAmount("om", prop, layers.om.buyables[prop].purchaseLimit())
 		}
-		for (let prop in player.bi.buyables) {
-			if (getBuyableAmount("bi", prop).gt(layers.bi.buyables[prop].purchaseLimit())) setBuyableAmount("bi", prop, layers.bi.buyables[prop].purchaseLimit())
-		}
 		for (let prop in player.ca.buyables) {
 			if (getBuyableAmount("ca", prop).gt(layers.ca.buyables[prop].purchaseLimit())) setBuyableAmount("ca", prop, layers.ca.buyables[prop].purchaseLimit())
 		}
@@ -1517,6 +1512,25 @@ function fixOldSave(oldVersion){
 		for (let i in player.d.boosterEffects) {
 			player.d.boosterEffects[i] = new Decimal(player.d.diceEffects[i])
 		}
+		for (let i in player.tad.buyables) {
+            player.tad.buyables[i] = new Decimal(0)
+        }
+		player.ev2.buyables[101] = new Decimal(player.ev2.buyables[13])
+		player.ev2.buyables[102] = new Decimal(player.ev2.buyables[14])
+		player.ev2.buyables[111] = new Decimal(player.ev2.buyables[15])
+		player.ev2.buyables[112] = new Decimal(player.ev2.buyables[16])
+		player.ev2.buyables[121] = new Decimal(player.ev2.buyables[17])
+		player.ev2.buyables[122] = new Decimal(player.ev2.buyables[18])
+		player.ev2.buyables[131] = new Decimal(player.ev2.buyables[11])
+		player.ev2.buyables[132] = new Decimal(player.ev2.buyables[12])
+		player.ev2.buyables[141] = new Decimal(player.ev2.buyables[21])
+		player.ev2.buyables[142] = new Decimal(player.ev2.buyables[22])
+		player.ev2.buyables[151] = new Decimal(player.ev2.buyables[23])
+		player.ev2.buyables[152] = new Decimal(player.ev2.buyables[24])
+		player.ev2.buyables[161] = new Decimal(player.ev2.buyables[25])
+		player.ev2.buyables[162] = new Decimal(player.ev2.buyables[26])
+		player.ev2.buyables[171] = new Decimal(player.ev2.buyables[27])
+		player.ev2.buyables[172] = new Decimal(player.ev2.buyables[28])
 		// REFUNDS
 		if (typeof player.cb.totalAutomationShards != "undefined") {
 			player.cb.petPoints = player.cb.petPoints.add(new Decimal(player.cb.totalAutomationShards).pow(0.5).mul(20000))

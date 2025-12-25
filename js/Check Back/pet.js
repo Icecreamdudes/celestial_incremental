@@ -1194,6 +1194,7 @@ addLayer("pet", {
             },
             unlocked() { return player.pet.shopIndex > 100},
             onClick() {
+                if (!hasAchievement("achievements", 104)) completeAchievement("achievements", 104)
                 if (player.pet.shopIndex >= 100 && player.pet.shopIndex < 200) {
                     player.cb.petPoints = player.cb.petPoints.sub(player.pet.shop.common[player.pet.shopIndex-101].cost)
                     player.pet.shop.common[player.pet.shopIndex-101].current = player.pet.shop.common[player.pet.shopIndex-101].max
@@ -1801,6 +1802,7 @@ addLayer("pet", {
             levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40)).add(levelableEffect("pet", 1103)[0])
+                if ((player.points.lt(1e100) && !hasMilestone("ip", 24)) || inChallenge("ip", 13)) amt = amt.sub(1)
                 return [
                     amt.pow(2.7).pow(Decimal.pow(4, getLevelableTier(this.layer, this.id))).add(1), // Factor Power Gain
                     amt.pow(1.8).pow(Decimal.pow(3, getLevelableTier(this.layer, this.id))).add(1), // Mod Gain
@@ -1968,6 +1970,7 @@ addLayer("pet", {
             levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
             effect() { 
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40)).add(levelableEffect("pet", 1107)[0])
+                if ((player.points.lt(1e100) && !hasMilestone("ip", 24)) || inChallenge("ip", 13)) amt = amt.sub(1)
                 return [
                     amt.mul(0.01).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // XPBoost
                 ]
@@ -2139,6 +2142,7 @@ addLayer("pet", {
             levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40)).add(levelableEffect("pet", 1202)[0])
+                if ((player.points.lt(1e100) && !hasMilestone("ip", 24)) || inChallenge("ip", 13)) amt = amt.sub(1)
                 return [
                     amt.pow(1.3).pow(Decimal.pow(4, getLevelableTier(this.layer, this.id))).div(1.6).add(1), // Lines of Code
                     amt.pow(1.6).pow(Decimal.pow(4, getLevelableTier(this.layer, this.id))).div(1.3).add(1), // Leaves
@@ -2227,6 +2231,7 @@ addLayer("pet", {
             levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40)).add(levelableEffect("pet", 1204)[0])
+                if ((player.points.lt(1e100) && !hasMilestone("ip", 24)) || inChallenge("ip", 13)) amt = amt.sub(1)
                 return [
                     amt.pow(2).pow(Decimal.pow(4, getLevelableTier(this.layer, this.id))).mul(5).add(1), // Rank Requirement
                     amt.pow(1.87).pow(Decimal.pow(4, getLevelableTier(this.layer, this.id))).mul(3).add(1), // Tier Requirement
@@ -2540,6 +2545,7 @@ addLayer("pet", {
             levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40)).add(levelableEffect("pet", 1302)[0])
+                if ((player.points.lt(1e100) && !hasMilestone("ip", 24)) || inChallenge("ip", 13)) amt = amt.sub(1)
                 return [
                     amt.add(1).pow(player.pet.highestDicePetCombo.add(1)).pow(Decimal.pow(4, getLevelableTier(this.layer, this.id))), // Dice Points (Based on Highest Combo)
                     amt.mul(player.d.dicePoints.add(10).log(10).log(10).div(10)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Dice Score (Based on Dice Points)
@@ -2549,6 +2555,7 @@ addLayer("pet", {
             // PET POINT CODE
             pointValue() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40)).add(levelableEffect("pet", 1302)[0])
+                if ((player.points.lt(1e100) && !hasMilestone("ip", 24)) || inChallenge("ip", 13)) amt = amt.sub(1)
                 return new Decimal(0.1).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id)))
             },
             pointCooldown() { return new Decimal(20).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
@@ -2605,7 +2612,7 @@ addLayer("pet", {
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    amt.mul(player.cb.petPoints.add(2).log(2).log(2).add(1)).pow(2.2).pow(Decimal.pow(4, getLevelableTier(this.layer, this.id))).add(1), // Rocket Fuel (Based on Pet Points)
+                    amt.mul(player.cb.petPoints.add(2).log(2).log(2).div(6).add(1)).pow(2.2).pow(Decimal.pow(4, getLevelableTier(this.layer, this.id))), // Rocket Fuel (Based on Pet Points)
                     amt.mul(0.05).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Golden Grass Spawn Time
                 ]
             },
@@ -4381,7 +4388,11 @@ addLayer("pet", {
                             ["style-column", [
                                 ["row", [["levelable", 1103], ["levelable", 1204], ["levelable", 1203], ["levelable", 1101], ["levelable", 1206]]],
                                 ["row", [["levelable", 1104], ["levelable", 1107]]],
-                            ], {width: "525px", backgroundColor: "#150d19", padding: "5px"}],
+                            ], () => {
+                                let look = {width: "525px", backgroundColor: "#150d19", padding: "5px"}
+                                if (player.cb.highestLevel.lt(250)) look.borderBottom = "3px solid #d487fd"
+                                return look
+                            }],
 
                             ["style-column", [
                                 ["raw-html", "Paragon Shards", {color: "#4c64ff", fontSize: "20px", fontFamily: "monospace"}],
@@ -4648,7 +4659,7 @@ addLayer("pet", {
     tabFormat: [
         ["blank", "10px"],
         ["raw-html", () => {
-            if ((player.points.gte(1e100) || hasMilestone("ip", 24) || (hasUpgrade("de", 13) && inChallenge("tad", 11))) && !inChallenge("ip", 13)) {
+            if ((player.points.gte(1e100) || hasMilestone("ip", 24)) && !inChallenge("ip", 13)) {
                 return ""
             } else if (inChallenge("ip", 13)) {
                 return "[Pet effects disabled due to IC3]"

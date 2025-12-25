@@ -66,7 +66,7 @@
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(levelableEffect("pet", 201)[1])
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.d.boosterEffects[6])
         if (hasAchievement("achievements", 23)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(2)
-        if (player.po.rocketFuel) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.rf.rocketFuelEffect)
+        if (player.po.rocketFuel || inChallenge("ip", 16)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.rf.rocketFuelEffect)
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(levelableEffect("pet", 304)[0])
         if (hasUpgrade("ad", 16) && !inChallenge("ip", 14)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("ad", 16))
         if (hasUpgrade("ip", 32) && !inChallenge("ip", 14)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("ip", 32))
@@ -75,7 +75,6 @@
         // CHALLENGE MODIFIERS
         if (inChallenge("ip", 15)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(0.85)
         if (hasUpgrade("d", 14)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("d", 14))
-        if (inChallenge("ip", 18)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(0.6)
 
         // CONTINUED REGULAR MODIFIERS
         if (player.pol.pollinatorEffects.bee.enabled) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.pol.pollinatorEffects.bee.effects[0])
@@ -99,7 +98,8 @@
         if (player.r.timeReversed) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(0)
 
         // GRASSHOPPERS PER SECOND
-        if (hasMilestone("ip", 22)) player.gh.grasshoppers = player.gh.grasshoppers.add(player.gh.grasshoppersToGet.mul(Decimal.mul(delta, 0.1)))
+        if (hasUpgrade("rf", 14)) player.gh.grasshoppers = player.gh.grasshoppers.add(player.gh.grasshoppersToGet.div(100).mul(delta))
+        if (hasMilestone("ip", 22)) player.gh.grasshoppers = player.gh.grasshoppers.add(player.gh.grasshoppersToGet.div(10).mul(delta))
 
         // GRASSHOPPER RESET CODE
         if (player.gh.grasshopPause.gt(0)) {
@@ -250,7 +250,11 @@
                 player.gh.grasshopPause = new Decimal(3)
                 player.gh.grasshoppers = player.gh.grasshoppers.add(player.gh.grasshoppersToGet)
 
-                player.pe.pests = player.pe.pests.mul(0.9)
+                if (!hasAchievement("achievements", 108)) {
+                    player.pe.pests = player.pe.pests.mul(0.9)
+                } else {
+                    player.pe.pests = player.pe.pests.mul(0.8)
+                }
             },
             style: { width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
@@ -647,7 +651,7 @@
             display() {
                 return "<h3>Factor Study I</h3>\n\
                     (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/20)\n\
-                    Add +" + format(tmp[this.layer].buyables[this.id].effect) + " to the factor effect base.\n\ \n\
+                    Add +" + commaFormat(tmp[this.layer].buyables[this.id].effect, 2) + " to the factor effect base.\n\ \n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
             branches: [14, 15],

@@ -12,7 +12,7 @@
 		"layers.js", "cutscene.js", "tree.js", "ranks.js", "factors.js",
 		"prestige.js", "trees.js", "grass.js", "grasshop.js", "mods.js",
 		"checkback.js", "portal.js", "dice.js", "evolution.js", "rocketFuel.js",
-		"infinity.js", "antimatterDimensions.js", "infinityPoints.js", "pests.js", "debuff.js",
+		"infinity.js", "antimatterDimensions.js", "infinityPoints.js", "pests.js",
 		"tav.js", "Infinity/tavDomain.js", "breakInfinity.js", "lore.js", "otfMastery.js",
 		"infinityDimensions.js", "cante.js", "Cantepocalypse/cantepocalypse.js", "Cantepocalypse/altRanks.js",
 		"Cantepocalypse/perks.js", "Cantepocalypse/anonymity.js", "Cantepocalypse/repliTrees.js", "Cantepocalypse/repliGrass.js", "Cantepocalypse/grassSkip.js",
@@ -155,9 +155,6 @@ function updateStyles() {
 		case "in": case "ad": case "ip": case "ta": case "bi":
 		case "om": case "id":
 			layerBG = "#001f18"
-			break;
-		case "de":
-			layerBG = "#1c1624"
 			break;
 		case "revc":
 			layerBG = "#31aeb0"
@@ -499,7 +496,7 @@ function updateStyles() {
 			break;
 		case "i": case "r": case "f": case "p": case "t":
 		case "g": case "pe": case "pol": case "gh": case "rf":
-		case "de": case "m": case "d": case "re": case "fa":
+		case "m": case "d": case "re": case "fa":
 			player.musuniverse = "U1"
 			break;
 		case "in": case "ad": case "ip": case "id": case "tad":
@@ -627,6 +624,7 @@ function updateStyles() {
 					playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
 					break;
 				case 28: case 29: case 32: case 33: case 119:
+				case 120:
 					playAndLoopAudio("music/tavCutscene.mp3", options.musicVolume/10);
 					break;
 				case 31: case 37:
@@ -645,7 +643,7 @@ function updateStyles() {
 				case 93: case 112:
 					playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
 					break;
-				case 69: case 71: case 72:
+				case 69: case 71: case 72: case 123: case 124:
 					playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
 					break;
 				case 74:
@@ -666,7 +664,7 @@ function updateStyles() {
 					playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
 					break;
 				case 113: case 114: case 115: case 116: case 117:
-				case 118:
+				case 118: case 121: case 122: case 125:
 					playAndLoopAudio("music/alephCutscene.mp3", options.musicVolume/10);
 					break;
 			}
@@ -1198,7 +1196,7 @@ var doNotCallTheseFunctionsEveryTick = [
 	"dimBoostReset", "startCutscene6", "galaxyReset", "startCutscene7", "startCutscene8",
 	"petButton4", "hexReq", "hexGain",
 	"startCutscene9", "startCutscene10", "startCutscene11","crunch", "startCutscene12",
-	"startCutscene13", "antidebuffReset", "startCutscene14", "negativeInfinityReset", "reverseCrunch",
+	"startCutscene13", "startCutscene14", "negativeInfinityReset", "reverseCrunch",
 	"startCutscene15", "startCutscene16", "startCutscene17", "startCutscene18", "breakInfinities",
 	"domainReset", "gainAutomationShard", "sacrificeCommonPet", "sacrificeAllCommonPet", "sacrificeUncommonPet",
 	"sacrificeAllUncommonPet", "sacrificeRarePet", "sacrificeAllRarePet", "steelieReset", "crystalReset",

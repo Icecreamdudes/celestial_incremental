@@ -163,6 +163,7 @@
 
         let pentDiv = new Decimal(1)
         if (hasAchievement("achievements", 17)) pentDiv = pentDiv.mul(8)
+        if (hasAchievement("achievements", 112)) pentDiv = pentDiv.mul(10)
         pentDiv = pentDiv.mul(buyableEffect("g", 19))
         if (hasUpgrade("ep2", 8)) pentDiv = pentDiv.mul(upgradeEffect("ep2", 8))
         

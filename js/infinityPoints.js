@@ -388,6 +388,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 114)) completeAchievement("achievements", 114)
                 if (mult != true && !hasUpgrade("bi", 109)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -534,7 +535,7 @@
         },
         14: {
             requirementDescription: "<h3>5 Infinities",
-            effectDescription: "Keep antimatter progress on regular infinity resets.",
+            effectDescription: "Keep antimatter dimension resources on regular infinity resets.",
             done() { return player.in.infinities.gte(5) },
             style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
@@ -668,6 +669,7 @@
             onExit() {
                 layers.in.bigCrunch()
             },
+            onComplete() {if (!hasAchievement("achievements", 107)) completeAchievement("achievements", 107)},
             buttonStyle: {backgroundColor: "white"},
             style: { width: '350px', height: '275px'},
 
@@ -699,6 +701,7 @@
             onExit() {
                 layers.in.bigCrunch()
             },
+            onComplete() {if (!hasAchievement("achievements", 109)) completeAchievement("achievements", 109)},
             buttonStyle: {backgroundColor: "white"},
             style: { width: '350px', height: '275px'},
         },
@@ -725,7 +728,7 @@
                 if (hasUpgrade("bi", 28) && challengeCompletions(this.layer, this.id) >= 1) return player.points.gte("1e2000")
                 return player.hre.refinement.gte(2)
             },
-            rewardDescription: "Permanently unlock hex as an otherworldly feature, and improve base hex point gain.",
+            rewardDescription: "Permanently unlock hex as an otherworldly feature, and change base hex point formula to:<br><small>(log<sub>60</sub>(Celestial Points+1))<sup>0.6</sup></small>",
             unlocked() { return hasChallenge("ip", 12) },
             onEnter() {
                 //OTF is reset here and not in crunch to prevent a bug
@@ -743,6 +746,7 @@
             onExit() {
                 layers.in.bigCrunch()
             },
+            onComplete() {if (!hasAchievement("achievements", 111)) completeAchievement("achievements", 111)},
             buttonStyle: {backgroundColor: "white"},
             style: { width: '350px', height: '275px'},
 
@@ -780,6 +784,7 @@
             onExit() {
                 layers.in.bigCrunch()
             },
+            onComplete() {if (!hasAchievement("achievements", 113)) completeAchievement("achievements", 113)},
             buttonStyle: {backgroundColor: "white"},
             style: { width: '350px', height: '275px'},
 
@@ -821,6 +826,7 @@
             onExit() {
                 layers.in.bigCrunch()
             },
+            onComplete() {if (!hasAchievement("achievements", 116)) completeAchievement("achievements", 116)},
             buttonStyle: {backgroundColor: "white"},
             style: { width: '350px', height: '275px'},
         },
@@ -848,6 +854,7 @@
             onExit() {
                 layers.in.bigCrunch()
             },
+            onComplete() {if (!hasAchievement("achievements", 120)) completeAchievement("achievements", 120)},
             buttonStyle: {backgroundColor: "white"},
             style: { width: '350px', height: '275px'},
         },
@@ -867,23 +874,45 @@
             onExit() {
                 layers.in.bigCrunch()
             },
+            onComplete() {if (!hasAchievement("achievements", 122)) completeAchievement("achievements", 122)},
             buttonStyle: {backgroundColor: "white"},
             style: { width: '350px', height: '275px'},
         },
         18: {
             name: "Challenge VIII",
-            challengeDescription() { return "<h4>Debuffs so strong they distort the universe. You'd hate it, but there will still be worse things to come." },
-            goalDescription() { return "1.79e308 celestial points" },
-            goal() { return new Decimal("1.79e308") },
-            canComplete: function () { return player.points.gte(1.79e308) },
-            rewardDescription: "....???",
-            unlocked() { return hasChallenge("ip", 16) && hasChallenge("ip", 17) && !hasChallenge('ip', 18) },
+            challengeDescription() { return "<h4>The 8th antimatter dimension is removed. Antimatter Galaxies now cost 7th dimensions." },
+            goalDescription() { return "10 7th Dimensions" },
+            goal() {return new Decimal("10") },
+            canComplete() {return getBuyableAmount("ad", 17).gte(10) },
+            rewardDescription() {return hasChallenge("ip", 18) ? "Unlock Tav, antimatter hardcap is now a softcap, and raise the caps for dim-boosts and galaxies" : "....???"},
+            unlocked() { return hasChallenge("ip", 17) },
             onEnter() {
-                layers.in.bigCrunch()
+                player.ad.antimatter = new Decimal(10)
+                player.ad.antimatterPerSecond = new Decimal(0)
+
+                for (let i = 0; i < player.ad.dimensionAmounts.length; i++) {
+                    player.ad.dimensionAmounts[i] = new Decimal(0)
+                    player.ad.dimensionsPerSecond[i] = new Decimal(0)
+                }
+
+                for (let i in player.ad.buyables) {
+                    player.ad.buyables[i] = new Decimal(0)
+                }
             },
             onExit() {
-                layers.in.bigCrunch()
+                player.ad.antimatter = new Decimal(10)
+                player.ad.antimatterPerSecond = new Decimal(0)
+
+                for (let i = 0; i < player.ad.dimensionAmounts.length; i++) {
+                    player.ad.dimensionAmounts[i] = new Decimal(0)
+                    player.ad.dimensionsPerSecond[i] = new Decimal(0)
+                }
+
+                for (let i in player.ad.buyables) {
+                    player.ad.buyables[i] = new Decimal(0)
+                }
             },
+            onComplete() {if (!hasAchievement("achievements", 124)) completeAchievement("achievements", 124)},
             buttonStyle: {backgroundColor: "white"},
             style: { width: '350px', height: '275px'},
         },
@@ -940,7 +969,6 @@
                     ["blank", "10px"],
                     ["raw-html", () => { return player.in.unlockedBreak ? "Break Infinity works in all challenges." : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
                     ["raw-html", () => { return hasChallenge("ip", 16) && !hasChallenge("ip", 17) && player.cb.highestLevel.lt(35) ? "Unlock Challenge VII by reaching Check Back Level 35" : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                    ["raw-html", () => { return hasChallenge("ip", 18) ? "CHALLENGE VIII HAS BEEN TERMINATED." : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
                 ]
             },
             "Buyables": {
@@ -972,8 +1000,8 @@
             }],
         ]],
         ["row", [
-            ["raw-html", () => { return "You have <h3>" + formatWhole(player.in.infinities) + "</h3> infinities." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-            ["raw-html", () => { return player.in.infinitiesToGet.gt(1) ? "(+" + format(player.in.infinitiesToGet) + ")" : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace", marginLeft: "8px"}],
+            ["raw-html", () => { return "You have <h3>" + formatSimple(player.in.infinities, 1) + "</h3> infinities." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+            ["raw-html", () => { return player.in.infinitiesToGet.gt(1) ? "(+" + formatSimple(player.in.infinitiesToGet, 1) + ")" : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace", marginLeft: "8px"}],
         ]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],

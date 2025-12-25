@@ -26,12 +26,6 @@ addLayer("in", {
             "border-color": "#333",
         }
     },
-    shouldNotify() {
-        if (player["ip"].activeChallenge && canCompleteChallenge("ip", player["ip"].activeChallenge)) {
-		    return true
-	    }
-        return false
-    },
     tooltip: "Roots",
     color: "#1b4",
     branches: ["ad", "ip"],
@@ -63,32 +57,27 @@ addLayer("in", {
         if (player.in.reachedInfinity) {
             if (!player.in.breakInfinity) {
                 if (inChallenge("ip", 11) && !hasChallenge("ip", 11)) {
+                    if (!hasAchievement("achievements", 107)) completeAchievement("achievements", 107)
                     player.ip.challenges[11] = 1
                     completeChallenge("ip", 11)
                 }
                 if (inChallenge("ip", 12) && !hasChallenge("ip", 12)) {
+                    if (!hasAchievement("achievements", 109)) completeAchievement("achievements", 109)
                     player.ip.challenges[12] = 1
                     completeChallenge("ip", 12)
                 }
-                if (inChallenge("ip", 13) && !hasChallenge("ip", 13)) {
-                    player.ip.challenges[13] = 1
-                    completeChallenge("ip", 13)
-                }
-                if (inChallenge("ip", 14) && !hasChallenge("ip", 14)) {
-                    player.ip.challenges[14] = 1
-                    completeChallenge("ip", 14)
+                if (inChallenge("ip", 14)) {
+                    if (!hasAchievement("achievements", 112)) completeAchievement("achievements", 112)
                 }
                 if (inChallenge("ip", 15) && !hasChallenge("ip", 15)) {
+                    if (!hasAchievement("achievements", 116)) completeAchievement("achievements", 116)
                     player.ip.challenges[15] = 1
                     completeChallenge("ip", 15)
                 }
                 if (inChallenge("ip", 16) && !hasChallenge("ip", 16)) {
+                    if (!hasAchievement("achievements", 120)) completeAchievement("achievements", 120)
                     player.ip.challenges[16] = 1
                     completeChallenge("ip", 16)
-                }
-                if (inChallenge("ip", 18) && !hasChallenge("ip", 18)) {
-                    player.ip.challenges[18] = 1
-                    completeChallenge("ip", 18)
                 }
                 if (!hasMilestone("ip", 21) && ((!player.s.highestSingularityPoints.gt(0)))) {
                     player.tab = "bigc"
@@ -158,7 +147,15 @@ addLayer("in", {
         // START OF INFINITIES MODIFIERS
         player.in.infinitiesToGet = new Decimal(1)
         // ADD A BUNCH OF INFINITY BUFF ACHIEVEMENTS (AT LEAST ENOUGH TO REACH x2 BEFORE ALT-INFINITIES)
-        player.in.infinitiesToGet = player.in.infinitiesToGet.mul(2)
+        if (hasAchievement("achievements", 107)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(1.1)
+        if (hasAchievement("achievements", 109)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(1.1)
+        if (hasAchievement("achievements", 111)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(1.1)
+        if (hasAchievement("achievements", 113)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(1.1)
+        if (hasAchievement("achievements", 116)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(1.1)
+        if (hasAchievement("achievements", 120)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(1.1)
+        if (hasAchievement("achievements", 122)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(1.1)
+        if (hasAchievement("achievements", 124)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(1.1)
+
         if (player.tad.altInfinities.shattered.milestone.gte(2)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(player.tad.altInfinities.shattered.effect2)
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("om", 11))
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("p", 15))
@@ -355,11 +352,6 @@ addLayer("in", {
         player.pe.pestsPerSecond = new Decimal(0)
         player.pe.pestEffect = [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(0)]
 
-        player.de.antidebuffPoints = new Decimal(0)
-        player.de.antidebuffPointsToGet = new Decimal(0)
-        player.de.antidebuffEffect = new Decimal(1)
-        player.de.antidebuffPointsEffect = new Decimal(1)
-
         //     <----     POLLINATOR LAYER     ---->
         player.pol.pollinators = new Decimal(0)
         player.pol.pollinatorsPerSecond = new Decimal(0)
@@ -371,16 +363,12 @@ addLayer("in", {
 
         //     <----     ANTIMATTER LAYER     ---->
         if (!hasMilestone("ip", 14)) {
-            if (player.in.infinities.eq(0)) player.ad.antimatter = new Decimal(10)
+            player.ad.antimatter = new Decimal(10)
             player.ad.antimatterPerSecond = new Decimal(0)
 
             for (let i = 0; i < player.ad.dimensionAmounts.length; i++) {
-                player.ad.dimensionAmounts[i] = new Decimal(0)
+                player.ad.dimensionAmounts[i] = getBuyableAmount("ad", 11+i)
                 player.ad.dimensionsPerSecond[i] = new Decimal(0)
-            }
-
-            for (let i in player.ad.buyables) {
-                player.ad.buyables[i] = new Decimal(0)
             }
         }
 
@@ -484,7 +472,6 @@ addLayer("bigc", {
             canClick() { return true },
             unlocked() { return true },
             onClick() {
-                if (!hasAchievement("achievements", 101)) completeAchievement("achievements", 101)
                 player.tab = "ip"
 
                 layers.bigc.crunch()
@@ -509,6 +496,9 @@ addLayer("bigc", {
                 if (player.po.hex || hasUpgrade("s", 18)) player.ta.highestHexPoints = player.h.hexPoint
             }
         }
+        if (!hasAchievement("achievements", 101)) completeAchievement("achievements", 101)
+        if (!hasAchievement("achievements", 105) && player.in.infinities.gte(3)) completeAchievement("achievements", 105)
+        if (!hasAchievement("achievements", 118) && player.in.infinities.gte(100)) completeAchievement("achievements", 118)
         layers.in.bigCrunch()
         player.in.reachedInfinity = false
     },

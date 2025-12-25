@@ -239,6 +239,7 @@
 
                 player.ev.evolutionsUnlocked[0] = true
                 setLevelableAmount("pet", 1103, new Decimal(1))
+                if (!hasAchievement("achievements", 117)) completeAchievement("achievements", 117)
             }
         },
         1: {

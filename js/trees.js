@@ -61,7 +61,6 @@
 
         // CHALLENGE MODIFIERS
         if (inChallenge("ip", 13)) player.t.treesToGet = player.t.treesToGet.pow(0.75)
-        if (player.de.antidebuffIndex.eq(3)) player.t.treesToGet = player.t.treesToGet.mul(player.de.antidebuffEffect)
 
         // CONTINUED REGULAR MODIFIERS
         if (player.pol.pollinatorEffects.bat.enabled) player.t.treesToGet = player.t.treesToGet.mul(player.pol.pollinatorEffects.bat.effects[1])
@@ -78,9 +77,6 @@
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.po.halter.trees.enabled == 1) player.t.treesToGet = player.t.treesToGet.div(player.po.halter.trees.halt)
         if (player.po.halter.trees.enabled == 2 && player.t.treesToGet.gt(player.po.halter.trees.halt)) player.t.treesToGet = player.po.halter.trees.halt
-        if (inChallenge("ip", 18) && player.t.trees.gt(player.t.trees.mul(0.3 * delta))) {
-            player.t.trees = player.t.trees.sub(player.t.trees.mul(0.3 * delta))
-        }
 
         // TREE EFFECT
         player.t.treeEffect = player.t.trees.div(6).pow(1.1).add(1)

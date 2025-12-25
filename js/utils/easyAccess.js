@@ -121,7 +121,7 @@ function levelableEffect(layer, id) {
 	if (tmp[layer].levelables[id].effect != decimalOne) {
 		if (layer != "pet") {
 			return (tmp[layer].levelables[id].effect)
-		} else if (((player.points.gte(1e100) || hasMilestone("ip", 24))) && !inChallenge("ip", 13)) {
+		} else if ((player.points.gte(1e100) || hasMilestone("ip", 24)) && !inChallenge("ip", 13)) {
 			return (tmp[layer].levelables[id].effect)
 		}
 	}

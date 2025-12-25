@@ -927,5 +927,5 @@ addLayer("pol", {
         ["microtabs", "stuff", { borderWidth: '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && hasUpgrade("i", 22) && !(inChallenge("ip", 12) || inChallenge("ip", 18)) }
+    layerShown() { return player.startedGame == true && hasUpgrade("i", 22) && !inChallenge("ip", 12) }
 })

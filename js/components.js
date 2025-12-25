@@ -706,7 +706,7 @@ function loadVue() {
 					<div v-bind:class="{levelableBarText: true, hide: !tmp[layer].levelables[data].barShown}">
 						<span v-html="player[layer].levelables[data][0].gte(tmp[layer].levelables[data].levelLimit) ? formatShortestWhole(tmp[layer].levelables[data].currency) : formatShortestWhole(tmp[layer].levelables[data].currency)+'/'+formatShortestWhole(tmp[layer].levelables[data].xpReq)"></span>
 					</div>
-					<div v-bind:class="{levelableBarProgress: true, hide: !tmp[layer].levelables[data].barShown}" v-bind:style="[{'width': toNumber(tmp[layer].levelables[data].currency.div(tmp[layer].levelables[data].xpReq).mul(100))+'%'}, tmp[layer].levelables[data].barStyle]"></div>
+					<div v-bind:class="{levelableBarProgress: true, hide: !tmp[layer].levelables[data].barShown}" v-bind:style="[{'width': player[layer].levelables[data][0].gte(tmp[layer].levelables[data].levelLimit) ? '0%' : toNumber(tmp[layer].levelables[data].currency.div(tmp[layer].levelables[data].xpReq).mul(100))+'%'}, tmp[layer].levelables[data].barStyle]"></div>
 				</div>
 				<tooltip v-if="layers[layer].levelables[data].tooltip" :text="run(layers[layer].levelables[data].tooltip, layers[layer].levelables[data])"></tooltip>
 			</button>
@@ -734,7 +734,7 @@ function loadVue() {
 						<div v-bind:class="{levelableBarText: true, hide: layers[layer].levelables.index==0}">
 							<span v-html="player[layer].levelables[layers[layer].levelables.index][0].gte(tmp[layer].levelables[layers[layer].levelables.index].levelLimit) ? formatShortestWhole(tmp[layer].levelables[layers[layer].levelables.index].currency) : formatShortestWhole(tmp[layer].levelables[layers[layer].levelables.index].currency)+'/'+formatShortestWhole(tmp[layer].levelables[layers[layer].levelables.index].xpReq)"></span>
 						</div>
-						<div v-bind:class="{levelableBarProgress: true, hide: layers[layer].levelables.index==0}" v-bind:style="[{'width': toNumber(tmp[layer].levelables[layers[layer].levelables.index].currency.div(tmp[layer].levelables[layers[layer].levelables.index].xpReq).mul(100))+'%'}, tmp[layer].levelables[layers[layer].levelables.index].barStyle]"></div>
+						<div v-bind:class="{levelableBarProgress: true, hide: layers[layer].levelables.index==0}" v-bind:style="[{'width': player[layer].levelables[layers[layer].levelables.index][0].gte(tmp[layer].levelables[layers[layer].levelables.index].levelLimit) ? '0%' : toNumber(tmp[layer].levelables[layers[layer].levelables.index].currency.div(tmp[layer].levelables[layers[layer].levelables.index].xpReq).mul(100))+'%'}, tmp[layer].levelables[layers[layer].levelables.index].barStyle]"></div>
 					</div>
 				</div>
 			</div>

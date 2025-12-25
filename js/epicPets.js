@@ -188,7 +188,7 @@
         11: {
             costBase() { return new Decimal(20) },
             costGrowth() { return new Decimal(1.25) },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return new Decimal(50) },
             currency() { return player.ep0.dotknightPoints},
             pay(amt) { player.ep0.dotknightPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
@@ -222,7 +222,7 @@
         12: {
             costBase() { return new Decimal(35) },
             costGrowth() { return new Decimal(1.3) },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return new Decimal(50) },
             currency() { return player.ep0.dotknightPoints},
             pay(amt) { player.ep0.dotknightPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.01).add(1) },
@@ -256,7 +256,7 @@
         13: {
             costBase() { return new Decimal(50) },
             costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return new Decimal(50) },
             currency() { return player.ep0.dotknightPoints},
             pay(amt) { player.ep0.dotknightPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
@@ -510,7 +510,7 @@ addLayer("ep1", {
         11: {
             costBase() { return new Decimal(25) },
             costGrowth() { return new Decimal(1.3) },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return new Decimal(50) },
             currency() { return player.ep1.dragonPoints},
             pay(amt) { player.ep1.dragonPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1) },
@@ -544,7 +544,7 @@ addLayer("ep1", {
         12: {
             costBase() { return new Decimal(35) },
             costGrowth() { return new Decimal(1.25) },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return new Decimal(50) },
             currency() { return player.ep1.dragonPoints},
             pay(amt) { player.ep1.dragonPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.5).add(1).pow(1.1) },
@@ -578,7 +578,7 @@ addLayer("ep1", {
         13: {
             costBase() { return new Decimal(50) },
             costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return new Decimal(50) },
             currency() { return player.ep1.dragonPoints},
             pay(amt) { player.ep1.dragonPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },

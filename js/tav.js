@@ -478,7 +478,7 @@
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
-            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         15: {
             title: "Negative Upgrade V",
@@ -534,7 +534,7 @@
         21: {
             title: "Negative Upgrade X",
             unlocked() { return hasUpgrade("ta", 19) },
-            description: "Unlock TAV'S DOMAIN and broken infinities.",
+            description: "Unlock TAV'S DOMAIN.",
             cost: new Decimal(1000000),
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",

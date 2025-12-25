@@ -1067,6 +1067,56 @@ if (player.c.cutscene[118] && player.al.cocoonLevel >= 5 && player.tab == "tad")
     });
     player.c.cutscene[118] = false
 }
+if (player.c.cutscene[119] && player.tad.hiveExpand) {
+    showCutscene(cutsceneDialogue120, {
+        cutsceneID: 120,
+        background: "#596c6c",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[119] = false
+}
+if (player.c.cutscene[120] && player.tad.hiveExpand && player.universe == "UB" && player.bee.totalResearch.gte(120)) {
+    showCutscene(cutsceneDialogue121, {
+        cutsceneID: 121,
+        background: "radial-gradient(circle, #2a1c00, #150e00)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[120] = false
+}
+if (player.c.cutscene[121] && player.al.cocoonLevel >= 10) {
+    showCutscene(cutsceneDialogue122, {
+        cutsceneID: 122,
+        background: "radial-gradient(circle, #2a1c00, #150e00)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[121] = false
+}
+if (player.c.cutscene[122] && player.al.cocoonLevel >= 10 && player.tab == "fu") {
+    showCutscene(cutsceneDialogue123, {
+        cutsceneID: 123,
+        background: "#5e8503",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[122] = false
+}
+if (player.c.cutscene[123] && hasChallenge("fu", 12)) {
+    showCutscene(cutsceneDialogue124, {
+        cutsceneID: 124,
+        background: "#5e8503",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[123] = false
+}
+if (player.c.cutscene[124] && hasChallenge("fu", 12) && player.universe == "UB" && ((player.bee.path == 1 && player.bee.totalResearch.gte(165)) || (player.bee.path == 2 && player.bee.totalResearch.gte(170)))) {
+    showCutscene(cutsceneDialogue125, {
+        cutsceneID: 125,
+        background: "radial-gradient(circle, #2a1c00, #150e00)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[124] = false
+}
+
+
 },
     startCutscene1() {
         player.c.cutsceneText = [

@@ -55,8 +55,6 @@
 
         // CHALLENGE MODIFIERS
         if (inChallenge('ip', 15)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.pow(0.65)
-        if (inChallenge("ip", 18)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.pow(0.6)
-        if (player.de.antidebuffIndex.eq(5)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(player.de.antidebuffEffect)
 
         // CONTINUED REGULAR MODIFIERS
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(player.i.preOTFMult)
@@ -68,9 +66,6 @@
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.po.halter.code.enabled == 1) player.m.codeExperienceToGet = player.m.codeExperienceToGet.div(player.po.halter.code.halt)
         if (player.po.halter.code.enabled == 2 && player.m.codeExperienceToGet.gt(player.po.halter.code.halt)) player.m.codeExperienceToGet = player.po.halter.code.halt
-        if (inChallenge("ip", 18) && player.m.codeExperience.gt(player.m.codeExperience.mul(0.2 * delta))) {
-            player.m.codeExperience = player.m.codeExperience.sub(player.m.codeExperience.mul(0.2 * delta))
-        }
         if (player.r.timeReversed) player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(0)
 
         // CODE EXPERIENCE PER SECOND
@@ -132,7 +127,6 @@
         if (hasUpgrade("ip", 23) && !inChallenge("ip", 14)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ip", 23))
         if (hasUpgrade("ad", 18) && !inChallenge("ip", 14)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ad", 18))
         if (hasUpgrade("ip", 33) && !inChallenge("ip", 14)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ip", 33))
-        if (player.de.antidebuffIndex.eq(4)) player.m.modsToGet = player.m.modsToGet.mul(player.de.antidebuffEffect)
         if (player.pol.pollinatorsIndex == 6) player.m.modsToGet = player.m.modsToGet.mul(player.pol.pollinatorsEffect[11])
         if (player.pol.pollinatorEffects.butterfly.enabled) player.m.modsToGet = player.m.modsToGet.mul(player.pol.pollinatorEffects.butterfly.effects[1])
         player.m.modsToGet = player.m.modsToGet.mul(buyableEffect("p", 12))
@@ -150,9 +144,6 @@
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.po.halter.mods.enabled == 1) player.m.modsToGet = player.m.modsToGet.div(player.po.halter.mods.halt)
         if (player.po.halter.mods.enabled == 2 && player.m.modsToGet.gt(player.po.halter.mods.halt)) player.m.modsToGet = player.po.halter.mods.halt
-        if (inChallenge("ip", 18) && player.m.mods.gt(player.m.mods.mul(0.3 * delta))) {
-            player.m.mods = player.m.mods.sub(player.m.mods.mul(0.3 * delta))
-        }
 
         // MOD EFFECT
         player.m.modEffect = player.m.mods.div(6).pow(1.2).add(1)

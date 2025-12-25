@@ -73,8 +73,6 @@
         if (hasUpgrade("d", 17)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(upgradeEffect("d", 17))
         if (inChallenge("ip", 13)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(0.7)
         if (inChallenge("ip", 15)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(0.65)
-        if (inChallenge("ip", 18)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(0.5)
-        if (player.de.antidebuffIndex.eq(1)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.de.antidebuffEffect)
 
         // CONTINUED REGULAR MODIFIERS
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(buyableEffect("p", 11))
@@ -89,9 +87,6 @@
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(player.co.cores.prestige.effect[1])
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
-        if (inChallenge("ip", 18) && player.p.prestigePoints.gt(player.p.prestigePoints.mul(0.6 * delta))) {
-            player.p.prestigePoints = player.p.prestigePoints.sub(player.p.prestigePoints.mul(0.6 * delta))
-        }
         if (player.po.halter.prestige.enabled == 1) player.p.prestigePointsToGet = player.p.prestigePointsToGet.div(player.po.halter.prestige.halt)
         if (player.po.halter.prestige.enabled == 2 && player.p.prestigePointsToGet.gt(player.po.halter.prestige.halt)) player.p.prestigePointsToGet = player.po.halter.prestige.halt
         if (player.r.timeReversed) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(0)

@@ -26,7 +26,13 @@
         // START OF HEX POINT GAIN
         player.h.hexPointGain = new Decimal(0)
         if (!hasChallenge("ip", 13) && layerShown("h")) player.h.hexPointGain = new Decimal(12)
-        if (hasChallenge("ip", 13)) player.h.hexPointGain = player.points.add(1).log(60).pow(0.6)
+        if (hasChallenge("ip", 13)) {
+            if (!hasMilestone("hre", 0)) {
+                player.h.hexPointGain = player.points.add(1).log(60).pow(0.6)
+            } else {
+                player.h.hexPointGain = player.i.bestPoints.add(1).log(60).pow(0.6)
+            }
+        }
         player.h.hexPointGain = player.h.hexPointGain.mul(player.hpr.rankEffect[0][1])
         player.h.hexPointGain = player.h.hexPointGain.mul(player.hpr.rankEffect[1][1])
         player.h.hexPointGain = player.h.hexPointGain.mul(player.hpr.rankEffect[2][1])

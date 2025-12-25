@@ -55,7 +55,7 @@ function addUniverse(uniName, uniData){ // Call this to add universes from a dif
 addUniverse("U1", {
     name: "Universe 1<br>Overworld",
     symbol: "1",
-    tree: [["i"], ["r", "f"], ["p", "t", "g"], ["gh", "pe", "pol", "m"], ["de", "rf", "d"], ["cb", "oi", "fa"]],
+    tree: [["i"], ["r", "f"], ["p", "t", "g"], ["gh", "pol", "m"], ["pe", "rf", "d"], ["cb", "oi", "fa"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(315deg, #bababa 0%, #efefef 100%)",
@@ -106,6 +106,12 @@ addUniverse("U2", {
             style.outline = "2px solid white"
             style.outlineOffset = "-2px"
             style.borderWidth = "5px"
+        }
+        if (player["ip"].activeChallenge && canCompleteChallenge("ip", player["ip"].activeChallenge)) {
+            style.outline = "2px solid red"
+            style.outlineOffset = "-2px"
+            style.borderWidth = "5px"
+            style.boxShadow = "var(--hqProperty2a), 0 0 20px #ff0000"
         }
         return style
     },
@@ -203,7 +209,7 @@ addUniverse("CB", {
             background: "#094599",
         }
     },
-    uniShown() { return player.startedGame && hasUpgrade("i", 19) || hasMilestone("ip", 12) || (hasUpgrade("de", 13) && inChallenge("tad", 11)) || hasMilestone("s", 14)},
+    uniShown() { return player.startedGame && hasUpgrade("i", 19) || hasMilestone("ip", 12) || hasMilestone("s", 14)},
 })
 
 addUniverse("CH", {

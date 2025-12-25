@@ -66,6 +66,8 @@
         if (hasUpgrade("ad", 12)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(upgradeEffect("ad", 12))
         if (hasUpgrade("ip", 12)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(upgradeEffect("ip", 12))
         if (hasUpgrade("ad", 17)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(upgradeEffect("ad", 17))
+        if (hasAchievement("achievements", 123)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(2)
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(levelableEffect("pet", 305)[0])
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("gh", 23))
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("gh", 24))
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(levelableEffect("pet", 106)[0])
@@ -139,8 +141,9 @@
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("ad", 1))
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("ad", 2))
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("gh", 23))
-            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(levelableEffect("pet", 305)[0]) // Doesn't Effect Regular Antimatter?
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(levelableEffect("pet", 305)[0])
             if (hasUpgrade("ad", 17)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(upgradeEffect("ad", 17))
+            if (hasAchievement("achievements", 123)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(2)
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.ta.dimensionPowerEffects[i+1])
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("ip", 14))
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("ta", 36))
@@ -150,7 +153,7 @@
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("m", 17))
 
             // SOFTCAP MODIFIER
-            if (player.ad.dimensionsPerSecond[i].gt(1e300) && !hasChallenge("ip", 18)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(0.1)
+            if (player.ad.dimensionsPerSecond[i].gt(1e300) && !hasChallenge("ip", 18)) player.ad.dimensionsPerSecond[i] = new Decimal(1e300)
             if (player.ad.dimensionsPerSecond[i].gt(1e300) && hasChallenge("ip", 18) && !hasUpgrade("bi", 21)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].div(1e300).pow(0.96).mul(1e300)
             if (player.ad.dimensionsPerSecond[i].gt(1e300) && hasChallenge("ip", 18) && hasUpgrade("bi", 21) && !player.ir.defeatedIridite) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].div(1e300).pow(0.975).mul(1e300)
 
@@ -484,7 +487,7 @@
                     return player.ad.dimensionAmounts[4]
                 } else if (getBuyableAmount(this.layer, this.id).eq(2)) {
                     return player.ad.dimensionAmounts[5]
-                } else if (getBuyableAmount(this.layer, this.id).eq(3)) {
+                } else if (getBuyableAmount(this.layer, this.id).eq(3) || inChallenge("ip", 18)) {
                     return player.ad.dimensionAmounts[6]
                 } else {
                     return player.ad.dimensionAmounts[7]
@@ -497,10 +500,18 @@
             },
             unlocked() { return true },
             cost(x) {
-                if (getBuyableAmount(this.layer, this.id).lt(4)) {
-                    return new Decimal(2)
+                if (!inChallenge("ip", 18)) {
+                    if (getBuyableAmount(this.layer, this.id).lt(4)) {
+                        return new Decimal(2)
+                    } else {
+                        return getBuyableAmount(this.layer, this.id).sub(4).mul(2).add(2)
+                    }
                 } else {
-                    return getBuyableAmount(this.layer, this.id).sub(4).mul(2).add(2)
+                    if (getBuyableAmount(this.layer, this.id).lt(3)) {
+                        return new Decimal(2)
+                    } else {
+                        return getBuyableAmount(this.layer, this.id).sub(3).mul(2).add(2)
+                    }
                 }
             },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -513,7 +524,7 @@
                     dimtext = " 5th dimensions."
                 } else if (getBuyableAmount(this.layer, this.id).eq(2)) {
                     dimtext = " 6th dimensions."
-                } else if (getBuyableAmount(this.layer, this.id).eq(3)) {
+                } else if (getBuyableAmount(this.layer, this.id).eq(3) || inChallenge("ip", 18)) {
                     dimtext = " 7th dimensions."
                 } else {
                     dimtext = " 8th dimensions."
@@ -531,13 +542,19 @@
         },
         3: {
             costBase() { return new Decimal(1) },
-            costMult() { return new Decimal(4) },
+            costMult() {
+                if (inChallenge("ip", 18)) return new Decimal(8)
+                return new Decimal(4)
+            },
             purchaseLimit() {
                 if (!hasChallenge("ip", 18)) return new Decimal(1)
                 if (!hasUpgrade("cs", 1002)) return new Decimal(16)
                 return new Decimal(80)
             },
-            currency() { return player.ad.dimensionAmounts[7]},
+            currency() {
+                if (inChallenge("ip", 18)) return player.ad.dimensionAmounts[6]
+                return player.ad.dimensionAmounts[7]
+            },
             effect(x) {
                 let eff = new Decimal(0.01)
                 eff = eff.mul(player.ca.galaxyDustEffect)
@@ -551,10 +568,15 @@
                 return "<h3>" + getBuyableAmount(this.layer, this.id) + "/" + this.purchaseLimit() + " Antimatter Galaxies"
             },
             display() {
+                if (inChallenge("ip", 18)) {
+                    return "<h3>Which gives +" + format(tmp[this.layer].buyables[this.id].effect) + " to tickspeed base.\n\
+                        Req: " + format(tmp[this.layer].buyables[this.id].cost) + " 7th dimensions."
+                }
                 return "<h3>Which gives +" + format(tmp[this.layer].buyables[this.id].effect) + " to tickspeed base.\n\
                     Req: " + format(tmp[this.layer].buyables[this.id].cost) + " 8th dimensions."
             },
             buy() {
+                if (!hasAchievement("achievements", 106)) completeAchievement("achievements", 106)
                 if (!hasUpgrade("bi", 112)) layers.ad.galaxyReset()
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -678,6 +700,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                     player.ad.dimensionAmounts[3] = player.ad.dimensionAmounts[3].add(max)
                 }
+                if (!hasAchievement("achievements", 123) && inChallenge("ip", 18) && getBuyableAmount(this.layer, this.id).gte(4)) completeAchievement("achievements", 123)
             },
             style: { width: '175px', height: '50px', borderRadius: '10px'}
         },
@@ -777,7 +800,7 @@
             currency() { return player.ad.antimatter},
             pay(amt) { player.ad.antimatter = this.currency().sub(amt) },
             effect(x) { return new Decimal(2).pow(getBuyableAmount(this.layer, this.id)) },
-            unlocked() { return getBuyableAmount("ad", 2).gte(4) },
+            unlocked() { return getBuyableAmount("ad", 2).gte(4) && !inChallenge("ip", 18) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -867,12 +890,12 @@
                         ], {width: "650px"}], 
                         ["buyable", 17],
                     ]],
-                    ["row", [
+                    ["style-row", [
                         ["style-row", [
                             ["raw-html", function () { return getBuyableAmount("ad", 2).gte(4) ? "8th dimension (" + format(buyableEffect("ad", "18")) + "x): " + format(player.ad.dimensionAmounts[7]) : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }]
                         ], {width: "650px"}], 
                         ["buyable", 18],
-                    ]],
+                    ], () => {return inChallenge("ip", 18) ? {display: "none !important"} : {}}],
                     ["blank", "25px"],
                     ["row", [["buyable", 2], ["buyable", 3]]],
                     ["blank", "25px"],

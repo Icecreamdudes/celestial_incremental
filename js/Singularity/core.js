@@ -538,6 +538,7 @@ addLayer("co", {
         //     <----     U1 STUFF     ---->
         player.points = new Decimal(10)
         player.gain = new Decimal(0)
+        player.i.bestPoints = new Decimal(10)
 
         player.i.upgrades.splice(0, player.i.upgrades.length)
 
@@ -711,19 +712,6 @@ addLayer("co", {
         player.pe.pests = new Decimal(0)
         player.pe.pestsPerSecond = new Decimal(0)
         player.pe.pestEffect = [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(0)]
-
-        player.de.antidebuffPoints = new Decimal(0)
-        player.de.antidebuffPointsToGet = new Decimal(0)
-        player.de.tavEssence = new Decimal(0)
-        player.de.tavEssencePerSecond = new Decimal(0)
-        player.de.tavPoints = new Decimal(0)
-        player.de.tavPointsToGet = new Decimal(0)
-
-        for (let i in player.de.buyables) {
-            player.de.buyables[i] = new Decimal(0)
-        }
-
-        player.de.upgrades.splice(0, player.de.upgrades.length)
 
         //     <----     POLLINATOR LAYER     ---->
         player.pol.pollinators = new Decimal(0)
@@ -1006,7 +994,6 @@ addLayer("co", {
         player.subtabs["p"]['stuff'] = 'Main'
         player.subtabs["g"]['stuff'] = 'Grass'
         player.subtabs["gh"]['stuff'] = 'Main'
-        player.subtabs["de"]['stuff'] = 'Antidebuff'
         player.subtabs["oi"]['stuff'] = 'Main'
         player.subtabs["id"]['stuff'] = 'Dimensions'
 

@@ -97,7 +97,6 @@ addLayer('g', {
         // CHALLENGE MODIFIERS
         player.g.grassVal = player.g.grassVal.div(player.pe.pestEffect[4])
         if (inChallenge('ip', 13)) player.g.grassVal = player.g.grassVal.pow(0.75)
-        if (player.de.antidebuffIndex.eq(2)) player.g.grassVal = player.g.grassVal.mul(player.de.antidebuffEffect)
 
         // CONTINUED REGULAR MODIFIERS
         if (player.pol.pollinatorEffects.wind.enabled) player.g.grassVal = player.g.grassVal.mul(player.pol.pollinatorEffects.wind.effects[0])
@@ -115,9 +114,6 @@ addLayer('g', {
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.po.halter.grass.enabled == 1) player.g.grassVal = player.g.grassVal.div(player.po.halter.grass.halt)
         if (player.po.halter.grass.enabled == 2 && player.g.grassVal.gt(player.po.halter.grass.halt)) player.g.grassVal = player.po.halter.grass.halt
-        if (inChallenge("ip", 18) && player.g.grass.gt(player.g.grass.mul(0.4 * delta))) {
-            player.g.grass = player.g.grass.sub(player.g.grass.mul(0.4 * delta))
-        }
         if (player.r.timeReversed) player.g.grassVal = player.g.grassVal.mul(0)
 
         // GRASS GAIN

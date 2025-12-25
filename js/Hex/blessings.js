@@ -174,6 +174,7 @@ addLayer("hbl", {
             },
             unlocked: true,
             onClick() {
+                if (!hasAchievement("achievements", 121)) completeAchievement("achievements", 121)
                 player.hbl.blessings = player.hbl.blessings.add(player.hbl.blessingsGain)
                 if (inChallenge("hrm", 11)) player.hrm.blessLimit = player.hrm.blessLimit.add(1)
 

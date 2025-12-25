@@ -2658,7 +2658,59 @@ const cutsceneDialogue119 = [
 ];
 
 // Happens after finishing T3 Alt Infinity
+const cutsceneDialogue120 = [
+    { text: "I feel changes in the hive!", portrait: "resources/alephDark.png"},
+    { text: "It seems like the new infinities worked properly.", portrait: "resources/alephDark.png"},
+    { text: "You weren't sure they would?", portrait: "resources/player.png"},
+    { text: "I was mostly sure, and that is good enough to give it a try.", portrait: "resources/alephDark.png"},
+    { text: "Anyways, it seems that the hive has expanded.", portrait: "resources/alephDark.png"},
+    { text: "This should allow you to gain more of the hives fundamental powers.", portrait: "resources/alephDark.png"},
+];
 
+// Happens when reaching Pollen/Nectar in hard mode
+const cutsceneDialogue121 = [
+    { text: "It seems when the hive expanded, the paths somewhat converged.", portrait: "resources/aleph.png"},
+    { text: "You should now be able to gain the other paths first resource.", portrait: "resources/aleph.png"},
+    { text: "However, since it isn't your hives current specialty, it will be notably harder.", portrait: "resources/aleph.png"},
+    { text: "Shouldn't be too much of a problem for you though.", portrait: "resources/aleph.png"},
+];
+
+// Happens when reaching tenth cocoon milestone
+const cutsceneDialogue122 = [
+    { text: "It's time again.", portrait: "resources/aleph.png"},
+    { text: "Next seems to be a fusion between two celestial powers.", portrait: "resources/aleph.png"},
+    { text: "Apparently it is called \"Funify\"?", portrait: "resources/aleph.png"},
+    { text: "I'll send my spirit, and I'll see what all I can do to improve it.", portrait: "resources/aleph.png"},
+];
+
+// Happens when entering Funify after obtaining tenth cocoon milestone
+const cutsceneDialogue123 = [
+    { text: "Let's see what we have here.", portrait: "resources/alephDark.png"},
+    { text: "... Emotions?", portrait: "resources/alephDark.png"},
+    { text: "You don't need those to run the hive.", portrait: "resources/alephDark.png"},
+    { text: "Though I can't deny the power they exude ...", portrait: "resources/alephDark.png"},
+    { text: "She pauses for a while."},
+    { text: "I'll make an emotion that can help you control the rest of the emotions.", portrait: "resources/alephDark.png"},
+    { text: "They certainly can be useful, but at this level of intensity they will only cause problems.", portrait: "resources/alephDark.png"},
+    { text: "Please tell me when you are done, I don't want to be here for long.", portrait: "resources/alephDark.png"},
+];
+
+// Happens after finishing Numbness
+const cutsceneDialogue124 = [
+    { text: "You're done?", portrait: "resources/alephDark.png"},
+    { text: "Good. This place brings back memories I'd prefer to forget.", portrait: "resources/alephDark.png"},
+    { text: "The hive seems to have expanded from this, so let's go back to the hive.", portrait: "resources/alephDark.png"},
+];
+
+// Happens when reaching BB/Honey in hard mode
+const cutsceneDialogue125 = [
+    { text: "It seems the paths have mostly converged.", portrait: "resources/aleph.png"},
+    { text: "This should allow you to build up enough power to unseal me.", portrait: "resources/aleph.png"},
+    { text: "I'll go dormant until you do to preserve power.", portrait: "resources/aleph.png"},
+    { text: "No reason to potentially make the process harder for you.", portrait: "resources/aleph.png"},
+    { text: "You feel Aleph's presence weaken."},
+    { text: "Not much left to go, hopefully she keeps her promise.", portrait: "resources/player.png"},
+];
 
 // Example with custom background:
 // showCutscene(cutsceneDialogue1, {
@@ -2672,11 +2724,6 @@ showCutscene(cutsceneDialogue1, {
     portrait: "resources/matos.png"
 });
 
-const test4 = [ //reunlock antidebuff (Tav flashback)
-    { text: "<h1>A white flash hits your vision.", portrait: "resources/teresa.png",  },
-    { text: "<img src=resources/teresa.png width=500 height=500>", },
-
-];
 
 showCutscene(cutsceneDialogue1, {
     background: "#000000", // blue gradient

@@ -138,6 +138,7 @@
         if (hasUpgrade("d", 12)) player.d.dicePointsMult = player.d.dicePointsMult.mul(upgradeEffect("d", 12))
         if (hasUpgrade("d", 15)) player.d.dicePointsMult = player.d.dicePointsMult.mul(upgradeEffect("d", 15))
         if (hasUpgrade("d", 16)) player.d.dicePointsMult = player.d.dicePointsMult.mul(upgradeEffect("d", 16))
+        if (hasAchievement("achievements", 115)) player.d.dicePointsMult = player.d.dicePointsMult.mul(2)
         player.d.dicePointsMult = player.d.dicePointsMult.mul(buyableEffect("cb", 11))
         player.d.dicePointsMult = player.d.dicePointsMult.mul(buyableEffect("ta", 41))
         player.d.dicePointsMult = player.d.dicePointsMult.mul(buyableEffect("ta", 42))
@@ -316,6 +317,7 @@
                 return "Double booster roll speed.<br>(Currently off)"
             },
             canClick: true,
+            tooltip() { return "<h3>Reduces pet chance by *0.75." },
             unlocked() {return hasAchievement("achievements", 22)},
             onClick() {
                 if (player.d.boosterSpeedToggle) {
@@ -374,7 +376,10 @@
         12: {
             title() { return player.d.boosterDiceCooldown.gt(0) ? formatTime(player.d.boosterDiceCooldown) : "<h2>Roll to change currency boost!"},
             canClick() { return player.d.boosterDiceCooldown.lt(0) },
-            tooltip() { return "<h3>" + player.d.dicePoints.add(1).log10().pow(0.8).div(5).add(5).floor() + "% chance for a pet???</h3>" },
+            tooltip() {
+                if (player.d.boosterSpeedToggle) return "<h3>" + player.d.dicePoints.add(1).log(10).pow(0.8).div(5).add(5).floor().mul(0.75).floor() + "% chance for a pet???</h3>"
+                return "<h3>" + player.d.dicePoints.add(1).log(10).pow(0.8).div(5).add(5).floor() + "% chance for a pet???</h3>"
+            },
             unlocked() { return true },
             onClick() {
                 let riggy = false
@@ -408,6 +413,7 @@
                 player.d.boosterSpeedToggle ? player.d.boosterDiceCooldown = new Decimal(30) : player.d.boosterDiceCooldown = new Decimal(60)
 
                 let chance = player.d.dicePoints.add(1).log10().pow(0.8).div(5).add(4).floor()
+                if (player.d.boosterSpeedToggle) chance = chance.mul(0.75).floor()
                 let guarantee = chance.div(100).floor()
                 chance = chance.sub(guarantee.mul(100))
                 if (chance.gte(Math.random()*100)) guarantee = guarantee.add(1)
@@ -900,8 +906,11 @@
                 return "You have " + format(player.d.dice, 0) + "/24 dice."
             },
             display() {
-                return "Buys another die.\n\
+                let str = "Buys another die.\n\
                     Req: " + format(tmp[this.layer].buyables[this.id].cost) + " Dice Points"
+                if (player.d.dice.gte(7) && player.d.dice.lt(13)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
+                if (player.d.dice.gte(13)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED<sup>2</sup>]</small>")
+                return str
             },
             buy() {
                 if (!hasAchievement("achievements", 20)) completeAchievement("achievements", 20)
@@ -1180,6 +1189,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Challenge Dice Points"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 115)) completeAchievement("achievements", 115)
                 if (mult != true && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -1210,7 +1220,10 @@
                     ["row", [["buyable", 11], ["clickable", 11]]],
                     ["blank", "25px"],
                     ["style-column", [
-                        ["raw-html", () => { return "You are rolling " + formatShortWhole(player.d.dice) + " " + formatShortWhole(player.d.diceSides) + ' sided dice.'}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => {
+                            if (player.d.lowestRoll.gte(player.d.diceSides)) return "You are rolling " + formatShortWhole(player.d.dice) + " dice that can only roll " + formatShortWhole(player.d.diceSides) + "."
+                            return "You are rolling " + formatShortWhole(player.d.dice) + " dice that can roll " + formatShortWhole(player.d.lowestRoll) + "-" + formatShortWhole(player.d.diceSides) + '.'
+                        }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ["raw-html", () => { return "Current rolls:<br>" + player.d.rollText + '.'}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ["raw-html", () => { return "+" + formatWhole(player.d.gainedDicePointsDisplay) + ' DP.'}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],    
                     ], {width: "60%", backgroundColor: "#333333", border: "3px solid white", padding: "5px", borderRadius: "15px"}],
@@ -1236,8 +1249,11 @@
                         ["style-row", [
                             ["clickable", 12],
                             ["style-column", [
-                                ["raw-html", function () { return player.d.currentBoosterText[player.d.currentBoosterRoll] + "<br>(Currently x" + format(player.d.boosterEffects[player.d.currentBoosterRoll]) + ")" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                                ["raw-html", function () { return player.d.currentBoosterRoll == 18 ? "(MAX IS x100)" : player.d.currentBoosterRoll == 12 ? "(MAX IS x10)" : "" }, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                                ["raw-html", () => {
+                                    if (player.d.currentBoosterRoll == 12) return player.d.currentBoosterText[player.d.currentBoosterRoll] + "<br>(Currently x" + format(player.d.boosterEffects[player.d.currentBoosterRoll], 3) + ")"
+                                    return player.d.currentBoosterText[player.d.currentBoosterRoll] + "<br>(Currently x" + format(player.d.boosterEffects[player.d.currentBoosterRoll]) + ")"
+                                }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                                ["raw-html", () => { return player.d.currentBoosterRoll == 18 ? "(MAX IS x100)" : player.d.currentBoosterRoll == 12 ? "(MAX IS x10)" : "" }, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
                             ], {width: "490px"}]
                         ]],
                         ["blank", "10px"],
@@ -1302,6 +1318,9 @@
                     ["raw-html", "^0.65 Prestige Point Gain.", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", "^0.85 Grasshopper Gain.", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", "^0.65 Code Experience Gain.", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["blank", "10px"],
+                    ["raw-html", "Tip:", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", "Pets only work after getting<br>1e100 celestial points", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                 ]
             },
         },
@@ -1311,6 +1330,7 @@
         ["raw-html", () => { return "You have <h3>" + format(player.points) + "</h3> celestial points (+" + format(player.gain) + "/s)." }, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
         ["raw-html", () => { return "You have <h3>" + formatWhole(player.d.dicePoints) + "</h3> dice points" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["raw-html", () => { return "Boosts check back level effect by ^" + format(player.d.dicePointsEffect) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+        ["raw-html", () => {return inChallenge("ip", 15) ? "IC5: Booster Collapse in " + formatTime(player.d.boosterDiceCooldown) : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
         ],

@@ -307,6 +307,7 @@ addLayer("cb", {
         player.cb.crateTimers[5].base = buyableEffect("ev1", 251)
         player.cb.crateTimers[6].base = buyableEffect("ev1", 261)
         for (let i in player.cb.crateTimers) {
+            if (hasAchievement("achievements", 104)) player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(1.05)
             if (hasUpgrade("ev8", 14)) player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(1.2)
             player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(levelableEffect("pet", 1205)[2])
             player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(buyableEffect("ep0", 12))
@@ -490,7 +491,10 @@ addLayer("cb", {
                 if (player.cb.highestLevel.gt(35)) {
                     let guarantee = player.cb.xpTimers[0].esc.div(100).floor()
                     let chance = player.cb.xpTimers[0].esc.sub(guarantee.mul(100))
-                    if (chance.gte(Math.random()*100)) guarantee = guarantee.add(1)
+                    if (chance.gte(Math.random()*100)) {
+                        guarantee = guarantee.add(1)
+                        chance = new Decimal(0)
+                    }
                     if (guarantee.gt(0)) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(guarantee);
                         player.cb.pityEvoCurrent = new Decimal(0);
@@ -526,7 +530,10 @@ addLayer("cb", {
                 if (player.cb.highestLevel.gt(35)) {
                     let guarantee = player.cb.xpTimers[1].esc.div(100).floor()
                     let chance = player.cb.xpTimers[1].esc.sub(guarantee.mul(100))
-                    if (chance.gte(Math.random()*100)) guarantee = guarantee.add(1)
+                    if (chance.gte(Math.random()*100)) {
+                        guarantee = guarantee.add(1)
+                        chance = new Decimal(0)
+                    }
                     if (guarantee.gt(0)) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(guarantee);
                         player.cb.pityEvoCurrent = new Decimal(0);
@@ -562,7 +569,10 @@ addLayer("cb", {
                 if (player.cb.highestLevel.gt(35)) {
                     let guarantee = player.cb.xpTimers[2].esc.div(100).floor()
                     let chance = player.cb.xpTimers[2].esc.sub(guarantee.mul(100))
-                    if (chance.gte(Math.random()*100)) guarantee = guarantee.add(1)
+                    if (chance.gte(Math.random()*100)) {
+                        guarantee = guarantee.add(1)
+                        chance = new Decimal(0)
+                    }
                     if (guarantee.gt(0)) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(guarantee);
                         player.cb.pityEvoCurrent = new Decimal(0);
@@ -598,7 +608,10 @@ addLayer("cb", {
                 if (player.cb.highestLevel.gt(35)) {
                     let guarantee = player.cb.xpTimers[3].esc.div(100).floor()
                     let chance = player.cb.xpTimers[3].esc.sub(guarantee.mul(100))
-                    if (chance.gte(Math.random()*100)) guarantee = guarantee.add(1)
+                    if (chance.gte(Math.random()*100)) {
+                        guarantee = guarantee.add(1)
+                        chance = new Decimal(0)
+                    }
                     if (guarantee.gt(0)) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(guarantee);
                         player.cb.pityEvoCurrent = new Decimal(0);
@@ -634,7 +647,10 @@ addLayer("cb", {
                 if (player.cb.highestLevel.gt(35)) {
                     let guarantee = player.cb.xpTimers[4].esc.div(100).floor()
                     let chance = player.cb.xpTimers[4].esc.sub(guarantee.mul(100))
-                    if (chance.gte(Math.random()*100)) guarantee = guarantee.add(1)
+                    if (chance.gte(Math.random()*100)) {
+                        guarantee = guarantee.add(1)
+                        chance = new Decimal(0)
+                    }
                     if (guarantee.gt(0)) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(guarantee);
                         player.cb.pityEvoCurrent = new Decimal(0);
@@ -670,7 +686,10 @@ addLayer("cb", {
                 
                 let guarantee = player.cb.xpTimers[5].esc.div(100).floor()
                 let chance = player.cb.xpTimers[5].esc.sub(guarantee.mul(100))
-                if (chance.gte(Math.random()*100)) guarantee = guarantee.add(1)
+                if (chance.gte(Math.random()*100)) {
+                    guarantee = guarantee.add(1)
+                    chance = new Decimal(0)
+                }
                 if (guarantee.gt(0)) {
                     player.cb.evolutionShards = player.cb.evolutionShards.add(guarantee);
                     player.cb.pityEvoCurrent = new Decimal(0);
@@ -704,7 +723,10 @@ addLayer("cb", {
 
                 let guarantee = player.cb.xpTimers[6].esc.div(100).floor()
                 let chance = player.cb.xpTimers[6].esc.sub(guarantee.mul(100))
-                if (chance.gte(Math.random()*100)) guarantee = guarantee.add(1)
+                if (chance.gte(Math.random()*100)) {
+                    guarantee = guarantee.add(1)
+                    chance = new Decimal(0)
+                }
                 if (guarantee.gt(0)) {
                     player.cb.evolutionShards = player.cb.evolutionShards.add(guarantee);
                     player.cb.pityEvoCurrent = new Decimal(0);
@@ -738,7 +760,10 @@ addLayer("cb", {
 
                 let guarantee = player.cb.xpTimers[7].esc.div(100).floor()
                 let chance = player.cb.xpTimers[7].esc.sub(guarantee.mul(100))
-                if (chance.gte(Math.random()*100)) guarantee = guarantee.add(1)
+                if (chance.gte(Math.random()*100)) {
+                    guarantee = guarantee.add(1)
+                    chance = new Decimal(0)
+                }
                 if (guarantee.gt(0)) {
                     player.cb.evolutionShards = player.cb.evolutionShards.add(guarantee);
                     player.cb.pityEvoCurrent = new Decimal(0);

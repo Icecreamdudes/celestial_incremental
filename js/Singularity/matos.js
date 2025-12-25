@@ -3458,7 +3458,7 @@
             purchaseLimit() { return new Decimal(10) },
             currency() { return player.ma.epicMatosFragments},
             pay(amt) { player.ma.epicMatosFragments = this.currency().sub(amt).floor() },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.04).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.03).add(1)},
             unlocked() { return hasUpgrade("ma", 26) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },

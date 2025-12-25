@@ -224,6 +224,10 @@ addLayer("pol", {
 
         player.pol.pollinatorEffects.water.effects[0] = player.pol.pollinators.add(1).log(10).pow(3).add(1).pow(buyableEffect("pol", 14)) // IP
         player.pol.pollinatorEffects.water.effects[1] = player.pol.pollinators.add(1).log(10).pow(2).add(1).pow(buyableEffect("pol", 14)) // NIP
+        if (hasUpgrade("ep2", 16)) {
+            player.pol.pollinatorEffects.water.effects[0] = player.pol.pollinatorEffects.water.effects[0].pow(upgradeEffect("ep2", 16))
+            player.pol.pollinatorEffects.water.effects[1] = player.pol.pollinatorEffects.water.effects[1].pow(upgradeEffect("ep2", 16))
+        }
 
         player.pol.pollinatorEffects.plant.effects[0] = player.pol.pollinators.pow(0.03).add(1).pow(buyableEffect("pol", 14)) // Pollinators
 

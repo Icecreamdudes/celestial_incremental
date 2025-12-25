@@ -44,7 +44,7 @@
 // Set your version in num and name
 let VERSION = {
 	num: 190, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
-	name: "Novasent Update II: Aleph",
+	name: "Aleph Update I: The Hive",
 }
 
 function miscCode() {
@@ -222,13 +222,10 @@ function updateStyles() {
 			layerBG = "linear-gradient(-45deg, #655421, #fad25a)"
 			break;
 		case "ev1":
-			layerBG = "radial-gradient(#753c00, #750000)"
+			layerBG = "linear-gradient(0deg, #3f1500, #722600, #3f1500)"
 			break;
 		case "ev2":
 			layerBG = "url(resources/gdbg.jpg)"
-			break;
-		case "ev4":
-			layerBG = "linear-gradient(-90deg, #f38004, #fc3404)"
 			break;
 		case "ev8":
 			layerBG = "#252525"
@@ -1533,6 +1530,19 @@ function fixOldSave(oldVersion){
 		if (typeof player.cb.totalAutomationShards != "undefined") {
 			player.cb.petPoints = player.cb.petPoints.add(new Decimal(player.cb.totalAutomationShards).pow(0.5).mul(20000))
         	doPopup("none", "+" + formatWhole(new Decimal(player.cb.totalAutomationShards).pow(0.5).mul(20000)) + " pet points!", "REFUND", 5, "#A2D800", "resources/petPoint.png")
+		}
+		let evoRefund = new Decimal(0)
+		if (getBuyableAmount("cb", 21)) evoRefund = evoRefund.add(Decimal.sumGeometricSeries(getBuyableAmount("cb", 21), 6, 1.5, 0).floor())
+		if (getBuyableAmount("ev4", 11)) evoRefund = evoRefund.add(Decimal.sumGeometricSeries(getBuyableAmount("ev4", 11), 1, 1.2, 0).floor())
+		if (evoRefund.gt(0)) {
+			player.cb.evolutionShards = player.cb.evolutionShards.add(evoRefund)
+    		doPopup("none", "+" + formatWhole(evoRefund) + " Evolution Shard!", "REFUND", 5, "#d487fd", "resources/evoShard.png")
+		}
+		let paraRefund = new Decimal(0)
+		if (getBuyableAmount("ev4", 12)) paraRefund = paraRefund.add(Decimal.sumGeometricSeries(getBuyableAmount("ev4", 12), 1, 1.1, 0).floor())
+		if (paraRefund.gt(0)) {
+			player.cb.paragonShards = player.cb.paragonShards.add(paraRefund)
+            doPopup("none", "+" + formatWhole(paraRefund) + " Paragon Shard!", "REFUND", 5, "#4c64ff", "resources/paragonShard.png")
 		}
 	}
 }

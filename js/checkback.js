@@ -248,6 +248,7 @@ addLayer("cb", {
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(player.se.starsExploreEffect[2][0])
             if (hasUpgrade("ir", 13)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(upgradeEffect("ir", 13))
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(player.cof.coreFragmentEffects[6])
+            player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(levelableEffect("pet", 1102)[0])
 
             // ABNORMAL MODIFIERS
             if (player.po.halter.xp.enabled == 1) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.div(player.po.halter.xp.halt)
@@ -273,6 +274,7 @@ addLayer("cb", {
             if (player.rf.abilityTimers[6].gt(0)) player.cb.xpTimers[i].max = player.cb.xpTimers[i].max.div(1.2)
             if (hasUpgrade("ev8", 15)) player.cb.xpTimers[i].max = player.cb.xpTimers[i].max.div(1.15)
             player.cb.xpTimers[i].max = player.cb.xpTimers[i].max.div(buyableEffect("cof", 31))
+            player.cb.xpTimers[i].max = player.cb.xpTimers[i].max.mul(levelableEffect("pet", 1102)[2]) // Yes, it multiplies it
 
             // AVERAGE GAIN
             if (layers.cb.clickables[Number(i)+11].unlocked()) {
@@ -297,33 +299,34 @@ addLayer("cb", {
         mult = mult.add(buyableEffect("ma", 33))
         for (let i in player.cb.xpTimers) {
             player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(mult)
+            player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(levelableEffect("pet", 1102)[1])
         }
 
-        player.cb.crateTimers[0].base = buyableEffect("ev1", 201)
-        player.cb.crateTimers[1].base = buyableEffect("ev1", 211)
-        player.cb.crateTimers[2].base = buyableEffect("ev1", 221)
-        player.cb.crateTimers[3].base = buyableEffect("ev1", 231)
-        player.cb.crateTimers[4].base = buyableEffect("ev1", 241)
-        player.cb.crateTimers[5].base = buyableEffect("ev1", 251)
-        player.cb.crateTimers[6].base = buyableEffect("ev1", 261)
+        player.cb.crateTimers[0].base = buyableEffect("ev1", 201).mul(buyableEffect("ev1", 204))
+        player.cb.crateTimers[1].base = buyableEffect("ev1", 211).mul(buyableEffect("ev1", 214))
+        player.cb.crateTimers[2].base = buyableEffect("ev1", 221).mul(buyableEffect("ev1", 224))
+        player.cb.crateTimers[3].base = buyableEffect("ev1", 231).mul(buyableEffect("ev1", 234))
+        player.cb.crateTimers[4].base = buyableEffect("ev1", 241).mul(buyableEffect("ev1", 244))
+        player.cb.crateTimers[5].base = buyableEffect("ev1", 251).mul(buyableEffect("ev1", 254))
+        player.cb.crateTimers[6].base = buyableEffect("ev1", 261).mul(buyableEffect("ev1", 264))
         for (let i in player.cb.crateTimers) {
             if (hasAchievement("achievements", 104)) player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(1.05)
             if (hasUpgrade("ev8", 14)) player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(1.2)
             player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(levelableEffect("pet", 1205)[2])
             player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(buyableEffect("ep0", 12))
             player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(buyableEffect("ev2", 21))
-            if (hasUpgrade("cs", 1202)) player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(1.5)
+            if (hasUpgrade("cs", 1202)) player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(1.2)
             player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(buyableEffect("ma", 34))
             player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(buyableEffect("cof", 32))
         }
 
-        player.cb.crateTimers[0].max = new Decimal(900).div(buyableEffect("ev1", 202))
-        player.cb.crateTimers[1].max = new Decimal(2700).div(buyableEffect("ev1", 212))
-        player.cb.crateTimers[2].max = new Decimal(5400).div(buyableEffect("ev1", 222))
-        player.cb.crateTimers[3].max = new Decimal(28800).div(buyableEffect("ev1", 232))
-        player.cb.crateTimers[4].max = new Decimal(7200).div(buyableEffect("ev1", 242))
-        player.cb.crateTimers[5].max = new Decimal(42000).div(buyableEffect("ev1", 252))
-        player.cb.crateTimers[6].max = new Decimal(86400).div(buyableEffect("ev1", 262))
+        player.cb.crateTimers[0].max = new Decimal(900).div(buyableEffect("ev1", 202)).mul(buyableEffect("ev1", 204))
+        player.cb.crateTimers[1].max = new Decimal(2700).div(buyableEffect("ev1", 212)).mul(buyableEffect("ev1", 214))
+        player.cb.crateTimers[2].max = new Decimal(5400).div(buyableEffect("ev1", 222)).mul(buyableEffect("ev1", 224))
+        player.cb.crateTimers[3].max = new Decimal(28800).div(buyableEffect("ev1", 232)).mul(buyableEffect("ev1", 234))
+        player.cb.crateTimers[4].max = new Decimal(7200).div(buyableEffect("ev1", 242)).mul(buyableEffect("ev1", 244))
+        player.cb.crateTimers[5].max = new Decimal(42000).div(buyableEffect("ev1", 252)).mul(buyableEffect("ev1", 254))
+        player.cb.crateTimers[6].max = new Decimal(86400).div(buyableEffect("ev1", 262)).mul(buyableEffect("ev1", 264))
         for (let i in player.cb.crateTimers) {
             player.cb.crateTimers[i].max = player.cb.crateTimers[i].max.div(levelableEffect("pet", 105)[0])
             player.cb.crateTimers[i].max = player.cb.crateTimers[i].max.div(levelableEffect("pet", 202)[2])

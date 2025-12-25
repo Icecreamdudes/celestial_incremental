@@ -85,6 +85,7 @@ addLayer("se", {
             for (let j = 0; j < player.se.starExploreTimes[i].length; j++) {
                 {
                     player.se.starExploreTimes[i][j] = player.se.starExploreTimes[i][j].div(levelableEffect("pet", 502)[0])
+                    if (hasUpgrade("ep2", 18)) player.se.starExploreTimes[i][j] = player.se.starExploreTimes[i][j].div(upgradeEffect("ep2", 18))
                 }
             }
         }

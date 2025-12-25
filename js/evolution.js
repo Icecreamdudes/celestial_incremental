@@ -10,7 +10,7 @@
         evolutionDisplayIndex: new Decimal(-1),
         evolutionsUnlocked: [false, false, false, false, false,
             false, false, false, false, false,
-            false, false],
+            false, false, false],
         /*
         0 - Unsmith
         1 - Shark
@@ -24,6 +24,7 @@
         9 - Gd Checkpoint
         10 - Eye
         11 - Blob
+        12 - Egg Man
         */
     }},
     nodeStyle() {},
@@ -166,6 +167,16 @@
             tooltip() { return "███████ crates ███████ ███<br>██████ enhancements" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(11)
+            },
+            style: { width: "100px", minHeight: "100px", border: "5px solid #2F2F2F", borderRadius: "0px", padding: "0px" },
+        },
+        112: {
+            title() { return "<img src='resources/Pets/eggEvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
+            canClick() { return true},
+            unlocked() { return tmp.pet.levelables[102].canClick && !player.ev.evolutionsUnlocked[12] && (player.cb.highestLevel.gte(100000) && player.ma.matosDefeated)},
+            tooltip() { return "██████ █████ automation<br>███ █████████████" },
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(12)
             },
             style: { width: "100px", minHeight: "100px", border: "5px solid #2F2F2F", borderRadius: "0px", padding: "0px" },
         },
@@ -569,6 +580,37 @@
                 setLevelableAmount("pet", 1107, new Decimal(1))
             }
         },
+        12: {
+            title() { return "Cracked Man" },
+            description() {
+                return "<div class='evoContainer'><h3>Costs:</h3>" +
+                "<br>"  + formatWhole(player.cb.evolutionShards) + "/250 Evolution Shards" +
+                "<br>"  + formatWhole(player.cb.paragonShards) + "/25 Paragon Shards" +
+                "<br>"  + formatWhole(player.cb.petPoints) + "/1,000,000 Pet Points" +
+                "</div>" +
+                "<div class='evoContainer'><h3>Requires:</h3>" +
+                "<br>"  + formatWhole(getLevelableTier("pet", 102)) + "/2 Egg Man Ascensions" +
+                "<br>"  + formatSimple(player.cof.coreFragments[6], 1) + "/1,000 Temporal Core Fragments" +
+                "<br>"  + formatSimple(player.fi.temporalDust, 1) + "/100 Temporal Dust" +
+                "<br>"  + formatSimple(player.fi.temporalShards, 1) + "/5 Temporal Shards" +
+                "</div>"
+            },
+            canClick() {
+                return (player.cb.evolutionShards.gte(250) && player.cb.paragonShards.gte(25) && player.cb.petPoints.gte(1000000)
+                && getLevelableTier("pet", 102).gte(2) && player.cof.coreFragments[6].gte(1000) && player.fi.temporalDust.gte(100)
+                && player.fi.temporalShards.gte(5))
+            },
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(-1)
+
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(250)
+                player.cb.paragonShards = player.cb.paragonShards.sub(25)
+                player.cb.petPoints = player.cb.petPoints.sub(1000000)
+
+                player.ev.evolutionsUnlocked[12] = true
+                setLevelableAmount("pet", 1102, new Decimal(1))
+            }
+        },
 
         101: {
             title() { return "Simple Cookie" },
@@ -752,7 +794,7 @@
                     ["row", [
                         ["bt-clickable", 100], ["bt-clickable", 101], ["bt-clickable", 102], ["bt-clickable", 103], ["bt-clickable", 104],
                         ["bt-clickable", 105], ["bt-clickable", 107], ["bt-clickable", 108], ["bt-clickable", 109], ["bt-clickable", 110],
-                        ["bt-clickable", 106], ["bt-clickable", 111],
+                        ["bt-clickable", 106], ["bt-clickable", 111], ["bt-clickable", 112],
 
                         ["bt-clickable", 201], ["bt-clickable", 202], ["bt-clickable", 203], ["bt-clickable", 204]
                     ]],

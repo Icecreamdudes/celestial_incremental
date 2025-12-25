@@ -926,7 +926,7 @@
         1202: {
             title: "Altered Altar",
             unlocked: true,
-            description: "Multiply crate roll chance by x1.5.",
+            description: "Multiply crate roll chance by x1.2.",
             cost: new Decimal(1e6),
             currencyLocation() { return player.cs.scraps.checkback },
             currencyDisplayName: "Check Back Core Scraps",

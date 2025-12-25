@@ -403,7 +403,7 @@ addLayer("ev2", {
             purchaseLimit() { return new Decimal(10) },
             currency() { return player.cb.paragonShards},
             pay(amt) { player.cb.paragonShards = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).div(10).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(20).add(1) },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },

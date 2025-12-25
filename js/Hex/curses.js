@@ -32,6 +32,7 @@ addLayer("hcu", {
         if (hasUpgrade("hbl", 4)) player.hcu.cursesGain = player.hcu.cursesGain.mul(upgradeEffect("hbl", 4))
         if (hasUpgrade("hpw", 22)) player.hcu.cursesGain = player.hcu.cursesGain.mul(upgradeEffect("hpw", 22))
         player.hcu.cursesGain = player.hcu.cursesGain.mul(buyableEffect("g", 27))
+        if (hasUpgrade("ep2", 17)) player.hcu.cursesGain = player.hcu.cursesGain.mul(upgradeEffect("ep2", 17))
         player.hcu.cursesGain = player.hcu.cursesGain.mul(player.h.prePowerMult)
 
         // CURSE EXPONENT

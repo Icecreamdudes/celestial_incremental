@@ -2554,7 +2554,7 @@ addLayer("pet", {
             sellValue() { return new Decimal(100)},
             // PET POINT CODE
             pointValue() {
-                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40)).add(levelableEffect("pet", 1302)[0])
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 if ((player.points.lt(1e100) && !hasMilestone("ip", 24)) || inChallenge("ip", 13)) amt = amt.sub(1)
                 return new Decimal(0.1).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id)))
             },
@@ -2952,7 +2952,7 @@ addLayer("pet", {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
                     amt.mul(player.s.singularities.add(2).log(2).log(2).add(1)).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Radiation (Based on Singularities)
-                    amt.mul(player.sma.starmetalAlloy.add(2).log(2).log(2).add(1)).div(2).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1) // Core Scraps (Based on Starmetal Alloys)
+                    amt.mul(player.sma.starmetalAlloy.add(2).log(2).log(2).add(1)).div(2).pow(Decimal.pow(1.5, getLevelableTier(this.layer, this.id))).add(1) // Core Scraps (Based on Starmetal Alloys)
                 ]
             },
             sellValue() { return new Decimal(300)},
@@ -3414,6 +3414,52 @@ addLayer("pet", {
             style() {
                 let look = {width: "100px", minHeight: "125px"}
                 this.canClick() ? look.backgroundColor = "#000000" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            } 
+        },
+        1102: {
+            image() { return this.canClick() ? "resources/Pets/eggEvoPet.png" : "resources/secret.png"},
+            title() { return "Cracked Man" },
+            lore() { return "He has managed to prevent the chicken from hatching ... for now." }, 
+            description() {
+                return "x" + format(this.effect()[0]) + " to XP button gain.<br>" +
+                    "x" + format(this.effect()[1]) + " to XP button ESC.<br>" +
+                    "x" + format(this.effect()[2]) + " to XP button cooldown." // Yes, it multiplies it
+            },
+            levelLimit() { return new Decimal(10) },
+            effect() {
+                return [
+                    Decimal.pow(1.4, getLevelableAmount(this.layer, this.id)), // XP Button Gain
+                    Decimal.pow(1.35, getLevelableAmount(this.layer, this.id)), // XP Button ESC
+                    Decimal.pow(1.4, getLevelableAmount(this.layer, this.id)), // XP Button Cooldown
+                ]
+            },
+            levelTooltip() { return "Costs Evo Shards." },
+            evoCan() { return true },
+            evoTooltip() { return ""},
+            evoClick() {
+                player.tab = "ev1"
+            },
+            // CLICK CODE
+            unlocked() { return player.cb.highestLevel.gte(100000) && player.ma.matosDefeated },
+            canClick() { return getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { player.cb.evolutionShards = player.cb.evolutionShards.sub(amt) },
+            canAfford() { return player.cb.evolutionShards.gte(this.xpReq()) },
+            xpReq() { return Decimal.pow(2, getLevelableAmount(this.layer, this.id).add(4)).floor() },
+            currency() { return player.cb.evolutionShards },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barShown() { return this.canClick() },
+            barStyle() { return {backgroundColor: "#d487fd"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.background = "#136D15" : look.background = "#222222"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
                 return look
             } 
@@ -4387,7 +4433,7 @@ addLayer("pet", {
                             ], {width: "535px", height: "40px", backgroundColor: "#2a1b32", borderBottom: "3px solid #d487fd", userSelect: "none"}],
                             ["style-column", [
                                 ["row", [["levelable", 1103], ["levelable", 1204], ["levelable", 1203], ["levelable", 1101], ["levelable", 1206]]],
-                                ["row", [["levelable", 1104], ["levelable", 1107]]],
+                                ["row", [["levelable", 1104], ["levelable", 1107], ["levelable", 1102]]],
                             ], () => {
                                 let look = {width: "525px", backgroundColor: "#150d19", padding: "5px"}
                                 if (player.cb.highestLevel.lt(250)) look.borderBottom = "3px solid #d487fd"

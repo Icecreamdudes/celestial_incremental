@@ -547,9 +547,11 @@
                 return new Decimal(4)
             },
             purchaseLimit() {
-                if (!hasChallenge("ip", 18)) return new Decimal(1)
-                if (!hasUpgrade("cs", 1002)) return new Decimal(16)
-                return new Decimal(80)
+                let amt = new Decimal(1)
+                if (hasChallenge("ip", 18)) amt = amt.add(15)
+                if (hasUpgrade("cs", 1002)) amt = amt.add(64)
+                if (hasUpgrade("ep2", 15)) amt = amt.add(upgradeEffect("ep2", 15))
+                return amt
             },
             currency() {
                 if (inChallenge("ip", 18)) return player.ad.dimensionAmounts[6]

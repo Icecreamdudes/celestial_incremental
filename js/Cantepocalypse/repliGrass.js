@@ -123,6 +123,7 @@
     {
         player.rg.grassTimer = new Decimal(0)
         player.rg.grassCount = new Decimal(0)
+        removeAllRepliGrass();
     },
     loadRepliGrass()
     {
@@ -463,15 +464,50 @@
     ],
     layerShown() { return player.startedGame == true && hasUpgrade("cp", 16) }
 })
+/** @type Array<{el: HTMLDivElement, targetLeft: number, targetTop: number, left: number, top: number}> */
+const repliCircles = [];
+const repliCircleSize = 22.5;
+
+/**
+ * @param {(typeof repliCircles)[number]} repliCircle 
+ * @param {number} x
+ * @param {number} y
+ */
+function repliCircleDistanceSquared(repliCircle, x, y) {
+    const circleCenterX = repliCircle.left + repliCircleSize / 2;
+    const circleCenterY = repliCircle.top + repliCircleSize / 2;
+    const dX = circleCenterX - x;
+    const dY = circleCenterY - y;
+    return dX * dX + dY * dY;
+}
+
+/** @param {MouseEvent} event */
+function checkCursorDistance(event) {
+    const cursorX = event.offsetX;
+    const cursorY = event.offsetY;
+
+    for (let i = repliCircles.length-1; i >= 0; i--) {
+        const repliCircle = repliCircles[i];
+        // If the cursor is within 100 pixels, remove the repliCircle
+        if (repliCircleDistanceSquared(repliCircle, cursorX, cursorY) < 100 * 100) {
+            repliCircle.el.parentNode.removeChild(repliCircle.el);
+            repliCircles.splice(i, 1);
+            player.rg.repliGrassCount--; // Decrease grass count
+            player.rg.savedRepliGrass--; // Decrease saved repli grass count
+            player.rg.repliGrass = player.rg.repliGrass.mul(player.rg.repliGrassMult);
+        }
+    }
+}
+
 function createRepliGrass(quantity) {
     const spawnArea = document.getElementById('repli-spawn-area');
     const spawnAreaRect = spawnArea?.getBoundingClientRect();
 
     if (!spawnAreaRect) return; // Exit if spawnAreaRect is null or undefined
 
-    // Function to calculate the distance between two points
-    function getDistance(x1, y1, x2, y2) {
-        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    if (moveRepliCirclesRafId !== undefined) {
+        cancelAnimationFrame(moveRepliCirclesRafId);
+        moveRepliCirclesRafId = undefined;
     }
 
     // Create repli circles based on quantity
@@ -491,105 +527,89 @@ function createRepliGrass(quantity) {
         repliCircle.style.left = `${randomX}px`;
         repliCircle.style.top = `${randomY}px`;
         repliCircle.style.border = '2px solid black'; // Add a black border
+        repliCircle.style.transitionDuration = '0s';
         repliCircle.classList.add('repli-circle');
 
         spawnArea.appendChild(repliCircle); // Append to spawnArea instead of document.body
 
-        // Function to check if cursor is within 100px radius of the repliCircle
-        function checkCursorDistance(event) {
-            const cursorX = event.clientX;
-            const cursorY = event.clientY;
+        const targetLeft = Math.random() * (spawnAreaRect.width - 22.5); // Random x in the entire area
+        const targetTop = Math.random() * (spawnAreaRect.height - 22.5); // Random y in the entire area
 
-            const repliCircleRect = repliCircle.getBoundingClientRect();
-            const circleCenterX = repliCircleRect.left + repliCircleRect.width / 2;
-            const circleCenterY = repliCircleRect.top + repliCircleRect.height / 2;
-
-            const distance = getDistance(cursorX, cursorY, circleCenterX, circleCenterY);
-
-            // If the cursor is within 100 pixels, remove the repliCircle
-            if (distance <= 100) {
-                removeRepliGrass(repliCircle);
-                player.rg.repliGrassCount--; // Decrease grass count
-                player.rg.savedRepliGrass--; // Decrease saved repli grass count
-                player.rg.repliGrass = player.rg.repliGrass.mul(player.rg.repliGrassMult);
-
-                // Remove the mousemove listener once the repliCircle is collected
-                document.removeEventListener('mousemove', checkCursorDistance);
-            }
-        }
-
-        // Add the mousemove event listener to check the distance from the cursor
-        document.addEventListener('mousemove', checkCursorDistance);
+        repliCircles.push({
+            el: repliCircle,
+            targetLeft: targetLeft,
+            targetTop: targetTop,
+            left: randomX,
+            top: randomY,
+        });
 
         player.rg.repliGrassCount++; // Increase repli grass count
-
-        // Start moving the repliCircle
-        moveRepliCircle(repliCircle, spawnAreaRect);
     }
+
+    moveRepliCircles(spawnArea);
+    // Add the mousemove event listener to check the distance from the cursor
+    // Note that this is idempotent.
+    spawnArea.addEventListener('mousemove', checkCursorDistance);
 }
 
 function isCollision(x, y) {
-    const existingRepliCircles = document.querySelectorAll('.repli-circle');
-    for (let i = 0; i < existingRepliCircles.length; i++) {
-        const squareRect = existingRepliCircles[i].getBoundingClientRect();
-        if (x >= squareRect.left && x <= squareRect.right && y >= squareRect.top && y <= squareRect.bottom) {
+    for (const repliCircle of repliCircles) {
+        if (repliCircleDistanceSquared(repliCircle, x, y) <= repliCircleSize * repliCircleSize) {
             return true; // Collision detected
         }
     }
-    return false; // No collision detected
+    return false;
 }
 
-function moveRepliCircle(circle, spawnAreaRect) {
-    const moveInterval = 16; // Interval in milliseconds (approx. 60 FPS)
+/** @type {number|undefined} */
+let moveRepliCirclesRafId = undefined;
+
+/** @param {HTMLDivElement} spawnArea  */
+function moveRepliCircles(spawnArea) {
     const moveSpeed = 5; // Movement speed in pixels per frame
-    const gridSize = 250; // Size of each grid cell
-
-    function getRandomPositionInGrid() {
-        const x = Math.random() * (spawnAreaRect.width - 22.5); // Random x in the entire area
-        const y = Math.random() * (spawnAreaRect.height - 22.5); // Random y in the entire area
-        return { x, y };
-    }
-
-    let { x: targetX, y: targetY } = getRandomPositionInGrid();
 
     function move() {
-        let currentX = parseFloat(circle.style.left);
-        let currentY = parseFloat(circle.style.top);
+        const spawnAreaRect = spawnArea.getBoundingClientRect();
+        for (const repliCircle of repliCircles) {
+            let dx = repliCircle.targetLeft - repliCircle.left;
+            let dy = repliCircle.targetTop - repliCircle.top;
 
-        let dx = targetX - currentX;
-        let dy = targetY - currentY;
+            let distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance > moveSpeed) {
+                dx = (dx / distance) * moveSpeed;
+                dy = (dy / distance) * moveSpeed;
+            }
 
-        let distance = Math.sqrt(dx * dx + dy * dy);
-        if (distance > moveSpeed) {
-            dx = (dx / distance) * moveSpeed;
-            dy = (dy / distance) * moveSpeed;
+            repliCircle.left += dx;
+            repliCircle.top += dy;
+
+            // Ensure the circle stays within bounds
+            repliCircle.left = Math.max(0, Math.min(spawnAreaRect.width - 22.5, repliCircle.left));
+            repliCircle.top = Math.max(0, Math.min(spawnAreaRect.height - 22.5, repliCircle.top));
+            repliCircle.el.style.left = `${repliCircle.left}px`;
+            repliCircle.el.style.top = `${repliCircle.top}px`;
+
+            // Set a new target position after reaching the current target
+            if (Math.abs(repliCircle.targetLeft - repliCircle.left) < moveSpeed && Math.abs(repliCircle.targetTop - repliCircle.top) < moveSpeed) {
+                repliCircle.targetLeft = Math.random() * (spawnAreaRect.width - 22.5); // Random x in the entire area
+                repliCircle.targetTop = Math.random() * (spawnAreaRect.height - 22.5); // Random y in the entire area
+            }
         }
 
-        currentX += dx;
-        currentY += dy;
 
-        // Ensure the circle stays within bounds
-        circle.style.left = `${Math.max(0, Math.min(spawnAreaRect.width - 22.5, currentX))}px`;
-        circle.style.top = `${Math.max(0, Math.min(spawnAreaRect.height - 22.5, currentY))}px`;
-
-        // Set a new target position after reaching the current target
-        if (Math.abs(targetX - currentX) < moveSpeed && Math.abs(targetY - currentY) < moveSpeed) {
-            ({ x: targetX, y: targetY } = getRandomPositionInGrid());
-        }
-
-        requestAnimationFrame(move);
+        moveRepliCirclesRafId = requestAnimationFrame(move);
     }
 
-    requestAnimationFrame(move);
-}
-
-function removeRepliGrass(circle) {
-    circle.parentNode.removeChild(circle);
+    moveRepliCirclesRafId = requestAnimationFrame(move);
 }
 
 function removeAllRepliGrass() {
-    const circles = document.querySelectorAll('.repli-circle');
-    circles.forEach(circle => circle.parentNode.removeChild(circle));
+    repliCircles.forEach(circle => circle.el.parentNode.removeChild(circle.el));
+    repliCircles.length = 0;
+    if (moveRepliCirclesRafId !== undefined) {
+        cancelAnimationFrame(moveRepliCirclesRafId);
+        moveRepliCirclesRafId = undefined;
+    }
 }
 
 window.addEventListener('load', function() {

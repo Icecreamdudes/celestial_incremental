@@ -412,7 +412,7 @@ addLayer("achievements", {
                             ["achievement", 13], ["achievement", 14], ["achievement", 15], ["achievement", 16], ["achievement", 17], ["achievement", 18],
                             ["achievement", 19], ["achievement", 20], ["achievement", 21], ["achievement", 22], ["achievement", 23], ["achievement", 24],
                         ]],
-                    ], {width: "621px", height: "409px", background: "#111", borderLeft: "3px solid white", padding: "3px", borderRadius: "0 0 22px 0"}],
+                    ], {width: "621px", height: "409px", background: "#111", borderLeft: "3px solid white", padding: "3px"}],
                 ],
             },
             2: {
@@ -425,7 +425,7 @@ addLayer("achievements", {
                             ["achievement", 113], ["achievement", 114], ["achievement", 115], ["achievement", 116], ["achievement", 117], ["achievement", 118],
                             ["achievement", 119], ["achievement", 120], ["achievement", 121], ["achievement", 122], ["achievement", 123], ["achievement", 124],
                         ]],
-                    ], {width: "621px", height: "409px", background: "#191300", borderLeft: "3px solid white", padding: "3px", borderRadius: "0 0 22px 0"}],
+                    ], {width: "621px", height: "409px", background: "#191300", borderLeft: "3px solid white", padding: "3px"}],
                 ],
             },
         },
@@ -433,7 +433,7 @@ addLayer("achievements", {
     tabFormat: [
         ["style-column", [
             ["raw-html", "Achievements", {color: "white", fontSize: "30px", fontFamily: "monospace"}],
-        ], {width: "800px", height: "50px", backgroundColor: "rgba(0,0,0,0.3)", borderTop: "3px solid white", borderLeft: "3px solid white", borderRight: "3px solid white", borderRadius: "25px 25px 0 0"}],
+        ], {width: "800px", height: "50px", backgroundColor: "rgba(0,0,0,0.5)", borderTop: "3px solid white", borderLeft: "3px solid white", borderRight: "3px solid white", borderRadius: "25px 25px 0 0"}],
         ["style-row", [
             ["always-scroll-column", [
                 ["style-row", [
@@ -446,7 +446,11 @@ addLayer("achievements", {
             ["style-column", [
                 ["buttonless-microtabs", "stars", {borderWidth: "0"}],
             ], {width: "630px", height: "415px"}],
-        ], {width: "800px", height: "415px", backgroundColor: "black", border: "3px solid white", borderRadius: "0 0 25px 25px"}],
+        ], {width: "800px", height: "415px", backgroundColor: "black", border: "3px solid white"}],
+        ["style-column", [
+            ["raw-html", "<span style='color:red'>WARNING:</span> Achievements are currently <span style='color:red'>WIP</span> and are missing pages and icons.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+            ["raw-html", "(They do give rewards though, so maybe look at them a little)", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+        ], {width: "800px", height: "50px", backgroundColor: "rgba(0,0,0,0.5)", borderLeft: "3px solid white", borderRight: "3px solid white", borderBottom: "3px solid white", borderRadius: "0 0 25px 25px"}],
         ["blank", "25px"],
     ],
     layerShown() { return false }

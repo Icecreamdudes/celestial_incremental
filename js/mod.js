@@ -693,6 +693,83 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.10 - Aleph Update Part I: The Hive</h3><br>
+		Content:<br>
+			- Added a new universe, The Hive.<br>
+			- Revamped Tav's Domain into a mini universe all contained in one layer.<br>
+			- Revamped Grass layer.<br>
+			- Revamped Repli-Grass layer.<br>
+			- Replaced IC8 challenge with an antimatter themed challenge.<br>
+			- Replaced Cante puzzles with Cante trials.<br>
+			- Revamped MrRedShark layer into Button Enhancement layer.<br>
+			- Revamped Insane Face layer into Daily Orbs layer.<br>
+			- Added 3 new pet evolutions.<br>
+			- Revamped pet shop to properly support bulk pet buying.<br>
+			- Added a new ship.<br>
+			- Added pet ascensions.<br>
+			- Added space pet ascensions.<br>
+			- Added 2 singularity milestones.<br>
+			- Added achievements. (Still WIP, only 2 pages currently)<br><br>
+		QoL:<br>
+			- Reduced star exploration time requirements.<br>
+			- Made certain effect texts show more decimal digits.<br>
+			- Removed sacrificing, you now purchase automation through button enhancement layer.<br>
+			- Changed the name of pet buttons to crate buttons to prevent confusion.<br>
+			- CB alerts now show up as popups.<br>
+			- You can now individually disable milestone, achievement, and misc popups.<br>
+			- Improved Starmetal Essence visuals.<br>
+			- Improved Cante core visuals.<br>
+			- Improved Halter with more options.<br>
+			- Added a faster booster dice toggle, unlocked through an achievement.<br>
+			- Added softcap warnings to the 'Buys another die' buyable.<br>
+			- Changed dice roll text to make the roll range more clear.<br>
+			- Added a rocket fuel upgrade that gives +1% grasshoppers per second.<br>
+			- Added 2 rocket fuel upgrades while in IC6 to make it less painful to beat.<br>
+			- Revamped AD automation to be visually better, more performant, and cheaper to upgrade.<br>
+			- Added infinity challenge completion warnings to the U2 icon.<br><br>
+		Balancing:<br>
+			- Reworked Star Exploration effects, and added a 100 visit effect cap.<br>
+			- Added a 50 level cap to ships.<br>
+			- Nerfed most space buildings.<br>
+			- Changed Fun Upgrade 2 to be based on perk points.<br>
+			- Gave Fear challenge a x10 singularity point reward.<br>
+			- Improved pet point gain from buttons with longer cooldowns.<br>
+			- Buffed legendary summon rewards.<br>
+			- Added CB XP button evolution shard chance improvement buffs throughout the game.<br>
+			- Added crate roll chance buffs throughout the game.<br>
+			- Most pet formulas modified to support pet ascensions.<br>
+			- Some pet effects are changed to be exponent buffs.<br>
+			- Pet evolutions are now capped at 10 levels.<br>
+			- Added a softcap to Might E:3.<br>
+			- Buffed 2nd refinement effects slightly.<br>
+			- Moved Refinement 12 milestone to Refinement 6.<br>
+			- New Refinement 12 milestone makes hex point gain based on highest celestial points.<br>
+			- Made Refinement 84 milestones effect a native feature of blessing automation.<br>
+			- New Refinement 84 milestone gives +1% Blessings per second (excluding RC1).<br>
+			- Added a level cap of 99 to cores.<br>
+			- Made infinity resets before infinity 5 reset AD resources instead of purchases.<br>
+			- Replaced Kres/Nav/Sel Upgrade II (as they didn't even do anything).<br>
+			- Added an emergency softcap to antimatter at 1e100,000.<br>
+			- Removed broken infinities, replaced by a new resource in Tav's Domain.<br>
+			- Break negative infinity is now unlocked through Tav's Domain instead of Voidgwa.<br>
+			- Added softcaps to some inflation prone BI upgrades.<br>
+			- 'Chances' above 100% count for a chance to get multiple of that reward.<br>
+			- Changed 10,000 charge milestone to instead buff infinities.<br>
+			- Replaced Infinity 10,000 milestone with one that keeps Pre-OTF buyables on infinity reset.<br>
+			- Changed some crystal and OTF mastery buyables to match the Tav's Domain changes.<br>
+			- Changed rocket fuel timer formulas to be more friendly to early game.<br><br>
+		Bugfixes:<br>
+			- Fixed Star Exploration node C1 not being accessible.<br>
+			- Fixed skipping time in CB Fighting not giving eclipse drain damage.<br>
+			- Fixed being able to auto-click cookie while not hovering over it.<br>
+			(I did add a way to gain similar functionality through gameplay)<br>
+			- Fixed Dark Rank's 3rd Softcap not functioning correctly.<br>
+			- Fixed certain buttons that switch universes setting your universe to nonexistant values.<br>
+			- Fixed header text in the Celestial Hall.<br>
+			- Fixed the Z-Jinx inflation bug. (yippee)<br>
+			- Fixed Sacrifice layer's Alert upgrade being able to nerf sacred energy gain.<br>
+			- Fixed grass studies container not properly changing height depending on unlocked studies.<br><br>
+
 	<h3>v1.9 - The Novasent Update Part I: Iridite</h3><br>
 		Content:<br>
 			- Fully rewrote the cutscenes.<br>
@@ -706,11 +783,11 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added Iridite's bossfight.<br>
 			- Added Space Energy.<br>
 			- Added Space Buildings.<br>
-			- Added a new legendary pet.<br>
+			- Added a new legendary pet.<br><br>
 	    QoL:<br>
-			- Fully revamped the cutscene system.<br>
+			- Fully revamped the cutscene system.<br><br>
 		Balancing:<br>
-			- A lot of things I don't remember.<br>
+			- A lot of things I don't remember.<br><br>
 		Bugfixes:<br>
 			- A lot of things I don't remember<br><br>
 	<h3>v1.8.5 - Epic Pet Revamp Part 1</h3><br>
@@ -1401,11 +1478,6 @@ function fixOldSave(oldVersion){
 			player.hrm.realmEssence = new Decimal(player.re.halterEssence)
 			player.hrm.totalRealmEssence = new Decimal(player.re.halterEssence)
 		}
-		for (let prop in player.ta.buyables) {
-			if (prop != 19 && prop != 39) {
-				if (getBuyableAmount("ta", prop).gt(layers.ta.buyables[prop].purchaseLimit())) setBuyableAmount("ta", prop, layers.ta.buyables[prop].purchaseLimit())
-			}
-		}
 		for (let prop in player.ip.buyables) {
 			if (getBuyableAmount("ip", prop).gt(layers.ip.buyables[prop].purchaseLimit())) setBuyableAmount("ip", prop, layers.ip.buyables[prop].purchaseLimit())
 		}
@@ -1497,12 +1569,16 @@ function fixOldSave(oldVersion){
 	}
 
 	if (oldVersion < 190) {
-		for (let i = 0; i < player.hbl.boosterLevels.length; i++) {
-			player.hbl.boosters[i].level = new Decimal(player.hbl.boosterLevels[i])
-			player.hbl.boosters[i].xp = new Decimal(player.hbl.boosterXP[i])
+		if (player.hbl.boosterLevels) {
+			for (let i = 0; i < player.hbl.boosterLevels.length; i++) {
+				player.hbl.boosters[i].level = new Decimal(player.hbl.boosterLevels[i])
+				player.hbl.boosters[i].xp = new Decimal(player.hbl.boosterXP[i])
+			}
 		}
-		for (let i = 0; i < player.hpu.purifier.length; i++) {
-			player.hpu.purifiers[i].amount = new Decimal(player.hpu.purifier[i])
+		if (player.hpu.purifier) {
+			for (let i = 0; i < player.hpu.purifier.length; i++) {
+				player.hpu.purifiers[i].amount = new Decimal(player.hpu.purifier[i])
+			}
 		}
 		for (let i in player.d.boosterEffects) {
 			player.d.boosterEffects[i] = new Decimal(player.d.diceEffects[i])
@@ -1510,6 +1586,11 @@ function fixOldSave(oldVersion){
 		for (let i in player.tad.buyables) {
             player.tad.buyables[i] = new Decimal(0)
         }
+		for (let i in player.pet.levelables) {
+			if (tmp.pet.levelables[i].levelLimit) {
+				if (player.pet.levelables[i][0].gt(tmp.pet.levelables[i].levelLimit)) player.pet.levelables[i][0] = tmp.pet.levelables[i].levelLimit
+			}
+		}
 		player.ev2.buyables[101] = new Decimal(player.ev2.buyables[13])
 		player.ev2.buyables[102] = new Decimal(player.ev2.buyables[14])
 		player.ev2.buyables[111] = new Decimal(player.ev2.buyables[15])

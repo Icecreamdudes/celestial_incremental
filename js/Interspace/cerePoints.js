@@ -27,7 +27,7 @@
     update(delta) {
         player.cep.cerePointsEffect = player.cep.cerePoints.add(1).log(10).pow(2/3).div(100).add(1);
 
-        player.cep.cerePointsFactorGain = player.points.log(10).div(300000).pow(10)
+        player.cep.cerePointsFactorGain = player.points.add(1).log(10).div(300000).pow(10)
         player.cep.cerePointsFactorGain = player.cep.cerePointsFactorGain.div(player.rif.tearDivisor)
         if (hasUpgrade("rif", 14)) player.cep.cerePointsFactorGain = player.cep.cerePointsFactorGain.mul(upgradeEffect("rif", 14));
         player.cep.cerePointsFactorGain = player.cep.cerePointsFactorGain.add(1).pow(buyableEffect("cep", 11)).sub(1)

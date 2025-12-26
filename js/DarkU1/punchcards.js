@@ -56,7 +56,7 @@ addLayer("pu", {
     },
     clickables: {
         1: {
-            title() {return layers.pu.levelables.index != 0 ? "Level Up" : ""},
+            title() {return "Level Up"},
             canClick() {return getLevelableXP("pu", layers.pu.levelables.index).gte(tmp.pu.levelables[layers.pu.levelables.index].xpReq) && layers.pu.levelables.index != 0},
             unlocked() {return true},
             onClick() {
@@ -66,8 +66,7 @@ addLayer("pu", {
             onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "425px", minHeight: "40px", color: "white", fontSize: "12px", borderRadius: "0px"}
-                layers.pu.levelables.index == 0 ? look.backgroundColor =  "#0e1019" : !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#384166"
-                if (layers.pu.levelables.index == 0) look.cursor = "default"
+                !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#384166"
                 return look
             }
         },

@@ -162,6 +162,7 @@ addLayer("i", {
         player.gain = player.gain.pow(levelableEffect("ir", 2)[0])
         player.gain = player.gain.pow(player.cof.coreFragmentEffects[0])
         player.gain = player.gain.pow(buyableEffect("cof", 12))
+        player.gain = player.gain.pow(player.cep.cerePointsEffect)
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (inChallenge("ip", 18) && player.points.gt(player.points.mul(0.9 * delta))) player.points = player.points.sub(player.points.mul(0.9 * delta))

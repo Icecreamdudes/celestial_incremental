@@ -27,6 +27,7 @@
 		"Hex/purity.js", "Hex/power.js", "Hex/realms.js", "Hex/vex.js", "Hex/sacrifice.js",
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js",
 		"Check Back/cookie.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
+		"Interspace/rift.js", "Interspace/cerePoints.js", "Interspace/exoticMatter.js", "Interspace/cere.js",
 
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
@@ -199,6 +200,28 @@ function updateStyles() {
 			break;
 		case "au2":
 			layerBG = "#151230"
+			break;
+		case "rif":
+			layerBG = "#301830"
+			break;
+		case "cer": case "ats":
+			layerBG = "#402030"
+			break;
+		case "cep":
+			if (player.cer.transfiguratorLayersEnabled[0]) layerBG = "#301830";
+			else layerBG = "#000000";
+			break;
+		case "exm":
+			if (player.cer.transfiguratorLayersEnabled[1]) layerBG = "#301830";
+			else layerBG = "#000000";
+			break;
+		case "der":
+			if (player.cer.transfiguratorLayersEnabled[2]) layerBG = "#301830";
+			else layerBG = "#000000";
+			break;
+		case "uns":
+			if (player.cer.transfiguratorLayersEnabled[3]) layerBG = "#301830";
+			else layerBG = "#000000";
 			break;
 		case "cb":
 			layerBG = "#021124"
@@ -445,6 +468,9 @@ function updateStyles() {
 				break;
 			case "A2":
 				sideBG = "radial-gradient(circle, #151230, #000000)"
+				break;
+			case "UD":
+				sideBG = "linear-gradient(135deg, #402030 0%, #0f001f 100%)"
 				break;
 			case "CB":
 				sideBG = "#010812"
@@ -1216,7 +1242,8 @@ var doNotCallTheseFunctionsEveryTick = [
 	"startCutscene33", "startCutscene34", "resetFightCooldown", "starReset", "legendarySummon",
 	"generatePhase1Attack", "generatePhase2Attack", "startCutscene35", "startCutscene36", "startCutscene37",
 	"startCutscene38", "startCutscene39", "selectCelestialites", "petDeath", "celestialiteDeath",
-	"petAbility", "celestialiteAbility", "arriveAtStar", "cookieClick", "spaceEnergyReset"
+	"petAbility", "celestialiteAbility", "arriveAtStar", "cookieClick", "spaceEnergyReset",
+	"rebootReset"
 
 ]
 

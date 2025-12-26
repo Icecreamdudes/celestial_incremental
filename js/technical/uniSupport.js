@@ -225,3 +225,23 @@ addUniverse("CH", {
     },
     uniShown() { return player.startedGame && player.fu.defeatedJocus && !player.sma.inStarmetalChallenge},
 })
+
+addUniverse("UD", {
+    name: "Universe δ<br>Interspace",
+    symbol: "δ",
+    tree: [["rif"], ["cep", "blank", "exm"], ["cer"]],
+    nodeStyle() {
+        let style = {
+            background: "linear-gradient(135deg, #ff7fbf 0%, #bf7fff 100%)",
+            backgroundOrigin: "border-box",
+        	borderColor: "#7f007f",
+        }
+        if (player.universe=="UD") {
+            style.outline = "2px solid white"
+            style.outlineOffset = "-2px"
+            style.borderWidth = "5px"
+        }
+        return style
+    },
+    uniShown() { return player.startedGame && player.au2.au2Unlocked && !player.sma.inStarmetalChallenge},
+})

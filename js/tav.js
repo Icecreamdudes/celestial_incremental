@@ -157,7 +157,8 @@
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("st", 301))
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.pow(buyableEffect("cof", 22))
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.pow(levelableEffect("ir", 6)[1])
-
+        if (player.cer.cereUnlocked) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.pow(player.cer.abstractEffect)
+        
         // AUTOMATION
         if (hasUpgrade("s", 25)) player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet.mul(delta))
 

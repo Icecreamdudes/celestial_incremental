@@ -2568,6 +2568,71 @@ const cutsceneDialogue112 = [ //dead sel
     { text: "How sad...", },
 ];   //REMINDER: CROSS OUT SEL'S NAME AFTER DEFEATING IRIDITE.
 
+const cutsceneDialogue113 = [ // enter u2 after matos
+    { text: "You arrive back to the antimatter world, still shaken from your victory against Matos.", },
+    { text: "It feels pretty lonely here compared to the domain of singularity.", },
+    { text: "At least you have-", },
+    { text: "...", },
+    { text: "A subtle whisper makes you flinch.", },
+    { text: "A bright pink light casts its shadow infront of you.", },
+    { text: "You turn around, ready for the worst, but are met by a rift.", },
+    { text: "On the other side is many towers connected by wires.", },
+    { text: "There's another whisper.", },
+    { text: "How creepy.", },
+]
+
+const cutsceneDialogue114 = [ //enter interspace rift
+    { text: "You cautiously tread into the rift and immediately pick up on the presence of a celestial.", },
+    { text: "The towers look even more enormous on the inside.", },
+    { text: "Yet another whisper comes from the tower right infront of you.", },
+    { text: "You can't help but go investigate.", },
+    { text: "Free... me...", portrait: "resources/pollinators/fly.png" },
+    { text: "Who's there?", portrait: "resources/player.png" },
+    { text: "That raspy voice reminds you of Cante.", },
+    { text: "My... core... infinities...", portrait: "resources/pollinators/fly.png" },
+    { text: "The voice gets quieter, muttering more words unintelligible.", },
+    { text: "High above you, what appears to be a celestial's core is suspended by more wires.", },
+    { text: "I... am... Cere...", portrait: "resources/pollinators/fly.png" },
+    { text: "It sounds incredibly weak.", },
+    { text: "You may as well put this being out of its misery.", },
+]
+
+const cutsceneDialogue115 = [ //unlock cere
+    { text: "Using an enormous amount of infinities, you channel a beam of superphysical energy upward.", },
+    { text: "It warps and bends through the air...", },
+    { text: "...then gets sucked into the core.", },
+    { text: "Uh oh.", portrait: "resources/player.png" },
+    { text: "Ah, much better.", portrait: "resources/pollinators/fly.png" },
+    { text: "Wait, what did you do?", portrait: "resources/player.png" },
+    { text: "I absorbed your infinities! What do you think I did, ate them?", portrait: "resources/pollinators/fly.png" },
+    { text: "actually, grasshoppers taste pretty damn good. don't tell anyone I said that.", portrait: "resources/pollinators/fly.png" },
+    { text: "Whatever. I have to kill you now.", portrait: "resources/player.png" },
+]
+
+const cutsceneDialogue116 = [ //transfigurator power 2
+    { text: "You gather your infinities and core fragments again, as well as some cere points.", },
+    { text: "It does the same thing as last time, but Cere's core glows a bit brighter.", },
+    { text: "How do I know you can't use the transfigurator yourself?", portrait: "resources/player.png" },
+    { text: "Well, I-", portrait: "resources/pollinators/fly.png" },
+    { text: "I would have-", portrait: "resources/pollinators/fly.png" },
+    { text: "I can't use it, alright?", portrait: "resources/pollinators/fly.png" },
+    { text: "Uh-huh.", portrait: "resources/player.png" },
+    { text: "I can't do much of anything in this state.", portrait: "resources/pollinators/fly.png" },
+    { text: "If I could, I would have broken myself out of here a long time ago.", portrait: "resources/pollinators/fly.png" },
+    { text: "There is no way you're trusting this guy.", },
+    { text: "Anyway, you should be able to power up that green tower over there, now.", portrait: "resources/pollinators/fly.png" },
+    { text: "Have fun!", portrait: "resources/pollinators/fly.png" },
+]
+
+const cutsceneDialogue117 = [ //transfigurator power 3
+    { text: "Cere grows stronger.", },
+    { text: "This is stressing you out.", },
+    { text: "So when do I get to kill you again?", portrait: "resources/player.png" },
+    { text: "Just a few more.", portrait: "resources/pollinators/fly.png" },
+    { text: "He still looks somewhat weak.", },
+    { text: "Just a few more.", portrait: "resources/pollinators/fly.png" },
+]
+
 // Example with custom background:
 // showCutscene(cutsceneDialogue1, {
 //     background: \"url('img/bg.png') center/cover\", // or any valid CSS background

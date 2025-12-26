@@ -339,7 +339,7 @@ addLayer("se", {
             title() { return "C0" },
             tooltip() { return "Visited " + formatWhole(player.se.starsExploreCount[2][0].min(100)) + "/100 times.<br>Boosts check back xp by x" + format(player.se.starsExploreEffect[2][0]) + "." },
             canClick() { 
-                return (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(2)) && !player.se.currentlyTravelling|| (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(4)) && !player.se.currentlyTravelling || (player.se.currentPosition[0].eq(2) && player.se.currentPosition[1].eq(1)) && !player.se.currentlyTravelling
+                return (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(1)) && !player.se.currentlyTravelling || (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(2)) && !player.se.currentlyTravelling || (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(4)) && !player.se.currentlyTravelling || (player.se.currentPosition[0].eq(2) && player.se.currentPosition[1].eq(1)) && !player.se.currentlyTravelling
             },
             branches: ["13", "12"],
             unlocked() { return (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(2)) || player.se.starsExploreCount[2][0].gte(1) },

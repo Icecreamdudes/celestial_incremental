@@ -238,7 +238,7 @@ addLayer("ep2", {
         if (levelableEffect("pet", 2004)[0].gt(0)) {
             player.ep2.goldClickTimer = player.ep2.goldClickTimer.add(delta)
             if (player.ep2.goldClickTimer.gte(Decimal.div(1, levelableEffect("pet", 2004)[0]))) {
-                player.ep2.goldenClicks = player.ep2.goldenClicks.add(1)
+                player.ep2.barClicks += 1
                 player.ep2.goldClickTimer = new Decimal(0)
             }
         }

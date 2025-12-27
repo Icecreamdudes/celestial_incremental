@@ -478,7 +478,7 @@ addLayer("ho", {
                         ["raw-html", () => {return "(+" + formatWhole(player.ho.cellGain) + ")"}, {color: "white", fontSize: "14px", fontFamily: "monospace", marginLeft: "7px"}],
                     ]],
 
-                ], {width: "250px", height: "57px"}],
+                ], {width: "250px", height: "57px", backgroundColor: "#2b1e00", borderRadius: "0 20px 0 0"}],
                 ["bar", "cellBar"],
                 ["clickable", 1],
             ], {width: "250px", height: "625px", borderRight: "3px solid white", borderTop: "3px solid white", borderBottom: "3px solid white", borderRadius: "0px 20px 20px 0px"}],

@@ -420,7 +420,7 @@ function updateStyles() {
 	        gridBackground.style.height = "100%";
         	gridBackground.style.overflow = "hidden";
     	    gridBackground.style.zIndex = "-2006"; // Ensure it stays in the background
-	        gridBackground.style.background = "#061900"; // Galaxy gradient
+	        gridBackground.style.background = "#061900"; // Background Color
 			gridBackground.style.backgroundImage = "linear-gradient(#092600 2px, transparent 2px), linear-gradient(to right, #092600 2px, #061900 2px)";
 			gridBackground.style.backgroundSize = "40px 40px";
         	document.body.appendChild(gridBackground);

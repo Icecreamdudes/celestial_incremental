@@ -1594,6 +1594,12 @@ function fixOldSave(oldVersion){
 		for (let i in player.tad.buyables) {
             player.tad.buyables[i] = new Decimal(0)
         }
+		for (let i in player.pet.levelables) {
+			if (player.pet.levelables[i][0].gt(10)) player.pet.levelables[i][0] = new Decimal(10)
+		}
+		for (let i in player.ir.levelables) {
+			if (player.ir.levelables[i][0].gt(50)) player.ir.levelables[i][0] = new Decimal(50)
+		}
 		player.ev2.buyables[101] = new Decimal(player.ev2.buyables[13])
 		player.ev2.buyables[102] = new Decimal(player.ev2.buyables[14])
 		player.ev2.buyables[111] = new Decimal(player.ev2.buyables[15])

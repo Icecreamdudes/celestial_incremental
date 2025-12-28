@@ -1276,13 +1276,13 @@ addLayer("al", {
             purchaseLimit() { return new Decimal(10) },
             currency() { return player.al.royalJelly},
             pay(amt) { player.al.royalJelly = this.currency().sub(amt) },
-            effect(x) {return Decimal.pow(1.2, getBuyableAmount(this.layer, this.id))},
+            effect(x) {return Decimal.pow(1.5, getBuyableAmount(this.layer, this.id))},
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() {return this.currency().gte(this.cost())},
             display() {
                 return "<h3>RJ-6</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
-                    x1.2 hex power gain\n\
+                    x1.5 hex power gain\n\
                     Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\ \n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Royal Jelly"
             },

@@ -1600,7 +1600,7 @@ function fixOldSave(oldVersion){
 		}
 		for (let i in player.ir.levelables) {
 			let limit = layers.pet.levelables[i].levelLimit()
-			if (player.ir.levelables[i][0].gt(tmp.ir.levelables[i].limit)) player.ir.levelables[i][0] = tmp.ir.levelables[i].limit
+			if (player.ir.levelables[i][0].gt(limit)) player.ir.levelables[i][0] = limit
 		}
 		player.ev2.buyables[101] = new Decimal(player.ev2.buyables[13])
 		player.ev2.buyables[102] = new Decimal(player.ev2.buyables[14])

@@ -241,8 +241,8 @@ addLayer("ir", {
         for (let i in player.ir.timers) {
             if (hasUpgrade("ir", 18)) player.ir.timers[i].max = player.ir.timers[i].max.div(upgradeEffect("ir", 18))
 
-            if (hasUpgrade("ir", 18)) player.ir.shipCooldownMax[i] = player.ir.shipCooldownMax[i].div(upgradeEffect("ir", 18))
-            player.ir.shipCooldownMax[i] = player.ir.shipCooldownMax[i].div(levelableEffect("pu", 401)[1])
+            if (hasUpgrade("ir", 18)) player.ir.timers[i].max = player.ir.timers[i].max.div(upgradeEffect("ir", 18))
+            player.ir.timers[i].max = player.ir.timers[i].max.div(levelableEffect("pu", 401)[1])
             player.ir.timers[i].current = player.ir.timers[i].current.sub(delta)
         }
 
@@ -2027,6 +2027,55 @@ class SpaceArena {
 
         // Optionally save the spawn timer so it continues where it left off on resume
         this._savedAsteroidSpawnTimer = this.asteroidSpawnTimer;
+
+        // If the Iridite boss exists, save and freeze its state so it cannot move/attack
+        for (let e of this.enemies) {
+            if (!e.alive) continue;
+            if (e.type === "iriditeBoss") {
+                // Save key runtime fields so we can restore them later
+                e._savedBossState = {
+                    vx: e.vx,
+                    vy: e.vy,
+                    phase: e.phase,
+                    state: e.state,
+                    attackTimer: e.attackTimer,
+                    _actionCooldown: e._actionCooldown,
+                    dashing: e.dashing,
+                    dashSeqRemaining: e.dashSeqRemaining,
+                    dashDistance: e.dashDistance,
+                    dashSpeed: e.dashSpeed,
+                    _dashState: e._dashState,
+                    _dashDir: e._dashDir,
+                    _dashTargets: e._dashTargets,
+                    homingShotsRemaining: e.homingShotsRemaining,
+                    radialShotsRemaining: e.radialShotsRemaining,
+                    attackIndex: e.attackIndex,
+                    _lungeTimer: e._lungeTimer,
+                    _rainingTimer: e._rainingTimer,
+                    _rainingInterval: e._rainingInterval,
+                    _daggerPrep: e._daggerPrep,
+                    _daggerCount: e._daggerCount,
+                    _daggerWarnings: Array.isArray(e._daggerWarnings) ? e._daggerWarnings.slice() : null,
+                    _burstShots: e._burstShots,
+                    wingPhase: e.wingPhase,
+                    _laserTimer: e._laserTimer,
+                    _giantPrep: e._giantPrep,
+                    _giantLines: Array.isArray(e._giantLines) ? e._giantLines.slice() : null,
+                    _giantFired: e._giantFired,
+                    _recentlyHit: e._recentlyHit,
+                };
+
+                // Mark as paused so other systems can skip interactions
+                e._pausedBoss = true;
+
+                // Freeze movement and action-related fields
+                e.vx = 0;
+                e.vy = 0;
+                e.dashing = false;
+                e._actionCooldown = 999999;
+                e.attackTimer = 999999;
+            }
+        }
     }
 
     // Resume asteroid minigame: restore velocities and allow spawns again
@@ -2051,6 +2100,47 @@ class SpaceArena {
         if (typeof this._savedAsteroidSpawnTimer !== 'undefined') {
             this.asteroidSpawnTimer = this._savedAsteroidSpawnTimer;
             delete this._savedAsteroidSpawnTimer;
+        }
+
+        // Restore Iridite boss state if we saved it earlier
+        for (let e of this.enemies) {
+            if (!e.alive) continue;
+            if (e.type === "iriditeBoss" && e._savedBossState) {
+                const s = e._savedBossState;
+                e.vx = (typeof s.vx !== 'undefined') ? s.vx : 0;
+                e.vy = (typeof s.vy !== 'undefined') ? s.vy : 0;
+                e.phase = (typeof s.phase !== 'undefined') ? s.phase : e.phase;
+                e.state = (typeof s.state !== 'undefined') ? s.state : e.state;
+                e.attackTimer = (typeof s.attackTimer !== 'undefined') ? s.attackTimer : e.attackTimer;
+                e._actionCooldown = (typeof s._actionCooldown !== 'undefined') ? s._actionCooldown : e._actionCooldown;
+                e.dashing = (typeof s.dashing !== 'undefined') ? s.dashing : e.dashing;
+                e.dashSeqRemaining = (typeof s.dashSeqRemaining !== 'undefined') ? s.dashSeqRemaining : e.dashSeqRemaining;
+                e.dashDistance = (typeof s.dashDistance !== 'undefined') ? s.dashDistance : e.dashDistance;
+                e.dashSpeed = (typeof s.dashSpeed !== 'undefined') ? s.dashSpeed : e.dashSpeed;
+                e._dashState = (typeof s._dashState !== 'undefined') ? s._dashState : e._dashState;
+                e._dashDir = (typeof s._dashDir !== 'undefined') ? s._dashDir : e._dashDir;
+                e._dashTargets = (typeof s._dashTargets !== 'undefined') ? s._dashTargets : e._dashTargets;
+                e.homingShotsRemaining = (typeof s.homingShotsRemaining !== 'undefined') ? s.homingShotsRemaining : e.homingShotsRemaining;
+                e.radialShotsRemaining = (typeof s.radialShotsRemaining !== 'undefined') ? s.radialShotsRemaining : e.radialShotsRemaining;
+                e.attackIndex = (typeof s.attackIndex !== 'undefined') ? s.attackIndex : e.attackIndex;
+                e._lungeTimer = (typeof s._lungeTimer !== 'undefined') ? s._lungeTimer : e._lungeTimer;
+                e._rainingTimer = (typeof s._rainingTimer !== 'undefined') ? s._rainingTimer : e._rainingTimer;
+                e._rainingInterval = (typeof s._rainingInterval !== 'undefined') ? s._rainingInterval : e._rainingInterval;
+                e._daggerPrep = (typeof s._daggerPrep !== 'undefined') ? s._daggerPrep : e._daggerPrep;
+                e._daggerCount = (typeof s._daggerCount !== 'undefined') ? s._daggerCount : e._daggerCount;
+                e._daggerWarnings = (s._daggerWarnings !== null) ? s._daggerWarnings.slice() : e._daggerWarnings;
+                e._burstShots = (typeof s._burstShots !== 'undefined') ? s._burstShots : e._burstShots;
+                e.wingPhase = (typeof s.wingPhase !== 'undefined') ? s.wingPhase : e.wingPhase;
+                e._laserTimer = (typeof s._laserTimer !== 'undefined') ? s._laserTimer : e._laserTimer;
+                e._giantPrep = (typeof s._giantPrep !== 'undefined') ? s._giantPrep : e._giantPrep;
+                e._giantLines = (s._giantLines !== null) ? s._giantLines.slice() : e._giantLines;
+                e._giantFired = (typeof s._giantFired !== 'undefined') ? s._giantFired : e._giantFired;
+                e._recentlyHit = (typeof s._recentlyHit !== 'undefined') ? s._recentlyHit : e._recentlyHit;
+
+                // Remove paused marker and saved state
+                delete e._savedBossState;
+                delete e._pausedBoss;
+            }
         }
     }
 
@@ -2584,6 +2674,11 @@ class SpaceArena {
             const type = this.enemyTypes[enemy.type];
 
             if (enemy.type === "iriditeBoss") {
+                // If the asteroid minigame is paused, also pause Iridite boss actions
+                if (this._asteroidMinigamePaused) {
+                    // Skip AI updates for the boss while paused (keeps current position/state)
+                    continue;
+                }
                 player.ir.iriditePhase = enemy.phase
 
                 // ensure wingPhase exists and animate it (controls flap)
@@ -3798,12 +3893,12 @@ class SpaceArena {
                 let shipRadius = player.ir.shipType == 3 ? this.ship.radius : 12;
                 let dist = Math.sqrt(dx * dx + dy * dy);
                 if (dist < trail.radius + shipRadius && trail.timer > 0) {
-                    let dmg = trail.damage * this.upgradeEffects.damageReduction;
-                    if (player.ir.shipType == 3) dmg /= 4;
-                    if (player.ir.shipType == 7) dmg /= 2;
-                    player.ir.shipHealth = player.ir.shipHealth.sub(dmg);
-                    if (player.ir.shipHealth.lte(0)) {
-                        this.onShipDeath();
+                    // Skip ship damage if asteroid minigame is paused
+                    if (!this._asteroidMinigamePaused) {
+                        let dmg = trail.damage * this.upgradeEffects.damageReduction;
+                        if (player.ir.shipType == 3) dmg /= 4;
+                        if (player.ir.shipType == 7) dmg /= 2;
+                        this.applyShipDamage(dmg);
                     }
                 }
             }
@@ -3864,6 +3959,8 @@ class SpaceArena {
             if (bullet.fromEnemy && !bullet.vampireSpear) continue;
             for (let enemy of this.enemies) {
                 if (!enemy.alive) continue;
+                // Skip interactions with paused Iridite boss
+                if (enemy._pausedBoss) continue;
                 // avoid hitting same enemy multiple times per bullet
                 if (bullet.piercedEnemies && bullet.piercedEnemies.includes(enemy)) continue;
                 let dx = bullet.x - enemy.x;
@@ -3987,6 +4084,8 @@ class SpaceArena {
         // Ship-enemy collision
         for (let enemy of this.enemies) {
             if (!enemy.alive) continue;
+            // Skip collisions for a paused Iridite boss
+            if (enemy._pausedBoss) continue;
             let dx = this.ship.x - enemy.x;
             let dy = this.ship.y - enemy.y;
             let shipRadius = player.ir.shipType == 3 ? this.ship.radius : 12;
@@ -4002,7 +4101,7 @@ class SpaceArena {
                 if (Number.isNaN(shipDmg) || !isFinite(shipDmg) || shipDmg < 0) shipDmg = 3 * this.upgradeEffects.damageReduction;
                 if (player.ir.iriditeFightActive) shipDmg /= 12;
                 if (player.ir.shipType == 3 || player.ir.shipType == 7) shipDmg /= 20;
-                player.ir.shipHealth = player.ir.shipHealth.sub(shipDmg);
+                if (!this._asteroidMinigamePaused) this.applyShipDamage(shipDmg);
 
                 if (player.ir.shipType == 3) {
                     let angle = Math.atan2(dy, dx);
@@ -4085,7 +4184,7 @@ class SpaceArena {
                 asteroid.health -= this.ship.collisionDamage * this.upgradeEffects.attackDamage;
                 let dmg = (asteroid.big ? 3 : 2) * this.upgradeEffects.damageReduction;
                 if (player.ir.shipType == 3 || player.ir.shipType == 7) dmg /= 6;
-                player.ir.shipHealth = player.ir.shipHealth.sub(dmg);
+                if (!this._asteroidMinigamePaused) this.applyShipDamage(dmg);
                 if (player.ir.shipType == 3) {
                     let angle = Math.atan2(dy, dx);
                     let bounceSpeed = Math.max(8, Math.abs(this.ship.vy) * this.ship.bounce);
@@ -4221,6 +4320,8 @@ class SpaceArena {
     // Apply damage to player's ship respecting invulnerability frames
     // Returns true if damage was applied, false if blocked by invuln
     applyShipDamage(dmg) {
+        // When asteroid minigame is paused, ship should not take damage
+        if (this._asteroidMinigamePaused) return false;
         // invulnerability duration: ~333ms (max 3 hits per second)
         const INVULN_MS = 1000 / 3;
         if (this.shipHitInvuln && this.shipHitInvuln > 0) return false;

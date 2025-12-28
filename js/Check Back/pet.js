@@ -890,7 +890,6 @@ addLayer("pet", {
                 pauseUniverse("UA")
                 pauseUniverse("U2")
                 pauseUniverse("A1")
-                pauseUniverse("A2")
                 pauseUniverse("U3")
                 pauseUniverse("CB")
             },

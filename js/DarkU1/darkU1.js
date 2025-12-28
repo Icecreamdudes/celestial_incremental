@@ -72,12 +72,12 @@
         // PLACE ANY BASE MODIFIERS TO SOFTCAP2 BEFORE SCALING
         player.du.pointSoftcap2 = player.du.pointSoftcap2.div(player.du.pointGain.div(player.du.secondSoftcapStart).add(1).log(player.du.secondSoftcapStart).add(1))
 
-        if (getLevelableBool("pu", 306)) player.du.pointSoftcap2 = player.du.pointSoftcap2.pow(levelableEffect("pu", 306)[0])
+        if (getLevelableTier("pu", 306, true)) player.du.pointSoftcap2 = player.du.pointSoftcap2.pow(levelableEffect("pu", 306)[0])
 
         // SOFTCAP 2 STARTING VARIABLE
         player.du.secondSoftcapStart = new Decimal(1.79e308)
         player.du.secondSoftcapStart = player.du.secondSoftcapStart.pow(player.ds.spaceEnergyEffect)
-        if (getLevelableBool("pu", 306)) player.du.secondSoftcapStart = player.du.secondSoftcapStart.mul(levelableEffect("pu", 306)[1])
+        if (getLevelableTier("pu", 306, true)) player.du.secondSoftcapStart = player.du.secondSoftcapStart.mul(levelableEffect("pu", 306)[1])
     },
     bars: {},
     upgrades: {},

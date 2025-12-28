@@ -45,9 +45,9 @@
         player.ds.spaceEnergyToGet = player.dn.normality.div(1e30).pow(0.06).div(4)
         player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(buyableEffect("ds", 105))
         player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(levelableEffect("ir", 4)[0])
-        if (getLevelableBool("pu", 111)) player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(levelableEffect("pu", 111)[0])
+        if (getLevelableTier("pu", 111, true)) player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(levelableEffect("pu", 111)[0])
         player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.div(player.ds.spaceEnergySoftcap)
-        if (getLevelableBool("pu", 209)) player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(levelableEffect("pu", 209)[0])
+        if (getLevelableTier("pu", 209, true)) player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(levelableEffect("pu", 209)[0])
 
         player.ds.spaceEnergyPause = player.ds.spaceEnergyPause.sub(1)
         if (player.ds.spaceEnergyPause.gte(1)) layers.ds.spaceEnergyReset();
@@ -69,19 +69,19 @@
         player.ds.lengthPerSecond = buyableEffect("ds", 11)
         player.ds.lengthPerSecond = player.ds.lengthPerSecond.mul(buyableEffect("ds", 106))
         player.ds.lengthPerSecond = player.ds.lengthPerSecond.mul(buyableEffect("dn", 14))
-        if (getLevelableBool("pu", 212)) player.ds.lengthPerSecond = player.ds.lengthPerSecond.mul(levelableEffect("pu", 212)[0])
+        if (getLevelableTier("pu", 212, true)) player.ds.lengthPerSecond = player.ds.lengthPerSecond.mul(levelableEffect("pu", 212)[0])
 
         player.ds.width = player.ds.width.add(player.ds.widthPerSecond.mul(delta))
         player.ds.widthPerSecond = buyableEffect("ds", 12)
         player.ds.widthPerSecond = player.ds.widthPerSecond.mul(buyableEffect("ds", 106))
         player.ds.widthPerSecond = player.ds.widthPerSecond.mul(buyableEffect("dn", 14))
-        if (getLevelableBool("pu", 212)) player.ds.widthPerSecond = player.ds.widthPerSecond.mul(levelableEffect("pu", 212)[0])
+        if (getLevelableTier("pu", 212, true)) player.ds.widthPerSecond = player.ds.widthPerSecond.mul(levelableEffect("pu", 212)[0])
 
         player.ds.depth = player.ds.depth.add(player.ds.depthPerSecond.mul(delta))
         player.ds.depthPerSecond = buyableEffect("ds", 13)
         player.ds.depthPerSecond = player.ds.depthPerSecond.mul(buyableEffect("ds", 106))
         player.ds.depthPerSecond = player.ds.depthPerSecond.mul(buyableEffect("dn", 14))
-        if (getLevelableBool("pu", 212)) player.ds.depthPerSecond = player.ds.depthPerSecond.mul(levelableEffect("pu", 212)[0])
+        if (getLevelableTier("pu", 212, true)) player.ds.depthPerSecond = player.ds.depthPerSecond.mul(levelableEffect("pu", 212)[0])
 
         player.ds.spissitude = player.ds.spissitude.add(player.ds.spissitudePerSecond.mul(delta))
         player.ds.spissitudePerSecond = buyableEffect("ds", 14)
@@ -284,7 +284,7 @@
             currency() { return player.ds.spaceEnergy},
             pay(amt) { player.ds.spaceEnergy = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.2).mul(0.01) },
-            unlocked() { return getLevelableBool("pu", 212) },
+            unlocked() { return getLevelableTier("pu", 212, true) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -601,7 +601,7 @@
                     ["raw-html", () => { return "Length: " + format(player.ds.length) + ". (+" + format(player.ds.lengthPerSecond) + "/s)"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Width: " + format(player.ds.width) + ". (+" + format(player.ds.widthPerSecond) + "/s)"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Depth: " + format(player.ds.depth) + ". (+" + format(player.ds.depthPerSecond) + "/s)"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                    ["raw-html", () => { return getLevelableBool("pu", 212) ? "Spissitude: " + format(player.ds.spissitude) + ". (+" + format(player.ds.spissitudePerSecond) + "/s)" : ""}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return getLevelableTier("pu", 212, true) ? "Spissitude: " + format(player.ds.spissitude) + ". (+" + format(player.ds.spissitudePerSecond) + "/s)" : ""}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13], ["dark-buyable", 14]]],
                 ]

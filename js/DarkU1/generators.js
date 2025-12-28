@@ -44,7 +44,7 @@
         if (getLevelableTier("pu", 106, true)) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(buyableEffect("dg", 14))
         if (getLevelableTier("pu", 301, true)) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(levelableEffect("pu", 301)[0])
         player.dg.generatorsToGet = player.dg.generatorsToGet.mul(levelableEffect("st", 106)[0])
-        if (getLevelableBool("pu", 210)) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(levelableEffect("pu", 210)[0])
+        if (getLevelableTier("pu", 210, true)) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(levelableEffect("pu", 210)[0])
         
         // GENERATOR SOFTCAP
         if (player.dg.generatorsToGet.gte(1e100)) player.dg.generatorsToGet = player.dg.generatorsToGet.div(1e100).pow(0.2).mul(1e100)

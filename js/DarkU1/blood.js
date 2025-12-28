@@ -38,7 +38,7 @@
             player.subtabs["bl"]['stuff'] = "Refresh Page :(";
         }
         player.bl.bloodToGet = player.du.points.plus(1).log10().div(100).div(player.bl.blood.add(1).add(player.bl.bloodToGet))
-        if (getLevelableBool("pu", 401)) player.bl.bloodToGet = player.bl.bloodToGet.mul(levelableEffect("pu", 401)[0])
+        if (getLevelableTier("pu", 401, true)) player.bl.bloodToGet = player.bl.bloodToGet.mul(levelableEffect("pu", 401)[0])
         player.bl.bloodToGet = player.bl.bloodToGet.mul(buyableEffect("bl", 23))
 
         player.bl.bloodEffect = player.bl.blood.pow(0.25).div(10).add(1)
@@ -66,14 +66,14 @@
         if (!player.pet.activeAbilities[0])
         {
             for (let prop in player.pu.levelables) {
-                if (getLevelableBool("pu", prop)) {
+                if (getLevelableTier("pu", prop, true)) {
                     if (player.bl.bloodDrain) addLevelableXP("pu", prop, player.le.starmetalAlloyToGetTrue.mul(player.bl.xpGainPercentage.mul(delta)).floor())
                 }
             }
         } else
         {
             for (let prop in player.pu.levelables) {
-                if (getLevelableBool("pu", prop)) {
+                if (getLevelableTier("pu", prop, true)) {
                     if (player.bl.bloodDrain) addLevelableXP("pu", prop, player.le.eclipseShardsToGetTrue.mul(player.bl.xpGainPercentage.mul(delta)).floor())
                 }
             }
@@ -84,8 +84,8 @@
     bars: {},
     clickables: {
         11: {
-            title() { return player.ir.shipCooldownTimers[player.ir.shipType].lte(0) ? "<h2>Enter Blood Battle" : "<h2>Cooldown: " + formatTime(player.ir.shipCooldownTimers[player.ir.shipType])},
-            canClick() { return player.ir.shipCooldownTimers[player.ir.shipType].lte(0) },
+            title() { return player.ir.timers[player.ir.shipType].current.lte(0) ? "<h2>Enter Blood Battle" : "<h2>Cooldown: " + formatTime(player.ir.shipCooldownTimers[player.ir.shipType])},
+            canClick() { return player.ir.timers[player.ir.shipType].current.lte(0) },
             unlocked() { return true },
             tooltip() { return "Blood... The elixir of humanity." },
             onClick() {
@@ -516,7 +516,7 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return getLevelableBool("pu", 401) },
+    layerShown() { return getLevelableTier("pu", 401, true) },
     deactivated() { return !player.sma.inStarmetalChallenge},
 })
 

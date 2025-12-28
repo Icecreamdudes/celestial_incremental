@@ -294,9 +294,9 @@ addLayer("cb", {
         player.cb.xpTimers[7].esc = new Decimal(98).mul(buyableEffect("ev1", 174))
 
         let mult = new Decimal(1)
-        mult = mult.add(levelableEffect("pet", 1107)[1])
-        mult = mult.add(buyableEffect("ev2", 31))
-        mult = mult.add(buyableEffect("ma", 33))
+        mult = mult.add(levelableEffect("pet", 1107)[1].sub(1))
+        mult = mult.add(buyableEffect("ev2", 31).sub(1))
+        mult = mult.add(buyableEffect("ma", 33).sub(1))
         for (let i in player.cb.xpTimers) {
             player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(mult)
             player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(levelableEffect("pet", 1102)[1])

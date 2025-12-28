@@ -44,6 +44,7 @@
         if (getLevelableBool("pu", 106)) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(buyableEffect("dg", 14))
         if (getLevelableBool("pu", 301)) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(levelableEffect("pu", 301)[0])
         player.dg.generatorsToGet = player.dg.generatorsToGet.mul(levelableEffect("st", 106)[0])
+        if (getLevelableBool("pu", 210)) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(levelableEffect("pu", 210)[0])
         
         // GENERATOR SOFTCAP
         if (player.dg.generatorsToGet.gte(1e100)) player.dg.generatorsToGet = player.dg.generatorsToGet.div(1e100).pow(0.2).mul(1e100)
@@ -75,6 +76,7 @@
         } else {
             player.dg.generatorPowerEffect = player.dg.generatorPower.add(1).pow(0.1).mul(1.78e17).pow(player.dgr.grassEffect)
         }
+        player.dg.generatorPowerEffect = player.dg.generatorPowerEffect.pow(buyableEffect("dn", 15))
 
         player.dg.generators = player.dg.generators.add(player.dg.generatorsToGet.mul(buyableEffect("dn", 13)).mul(delta))
         if (hasUpgrade("sma", 205) && !player.pet.activeAbilities[0]) player.dg.generators = player.dg.generators.add(player.dg.generatorsToGet.mul(0.01).mul(delta))

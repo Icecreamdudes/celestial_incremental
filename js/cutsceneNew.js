@@ -2518,7 +2518,7 @@ const cutsceneDialogue111 = [ //end of battle
     { text: "Zar. Tera. I'm sorry for everything. I wish we stayed celestial hunters. I wish our adventure lasted a little longer.", portrait: "resources/iridite.png"  },
     { text: "My celestial tendencies have ruined everything.", portrait: "resources/iridite.png"  },
     { text: "My life has been wasted away.", portrait: "resources/iridite.png"  },
-    { text: "As iridite's body fades into nothingness, you realize something.", },
+    { text: "As Iridite's body fades into nothingness, you realize something.", },
     { text: "Do celestials regain their humanity on the brink of death?", },
     { text: "That dark energy arm... What's so important about it?", },
     { text: "We won. We did it... Do I get to go home now?", portrait: "resources/sel.png"  },
@@ -2566,8 +2566,93 @@ const cutsceneDialogue112 = [ //dead sel
     { text: "Is Sel really dead?", },
     { text: "He never got to retire and live a peaceful life.", },
     { text: "How sad...", },
-];   //REMINDER: CROSS OUT SEL'S NAME AFTER DEFEATING IRIDITE.
+];  
 
+
+
+//arbitrary IDs
+const cutsceneDialogueA1 = [ //unlocking legendary punchcards
+    { text: "Your arsenal of superphysical values in the dark universe grows.", },
+    { text: "The collection of punchcards somewhat amuses you.", },
+    { text: "It's almost as if you have a strange personal connection with them.", },
+    { text: "Eclipse appears in front of you.", },
+    { text: "Finally, I'm able to speak.", portrait: "resources/eclipse.png"  },
+    { text: "No way... You can talk? How???", portrait: "resources/player.png"  },
+    { text: "The superphysical powers of this world have allowed me to speak to you telepathically.", portrait: "resources/eclipse.png"  },
+    { text: "I have a lot of things to ask you. Who really are you? Why have you decided to help us with defeating celestials.", portrait: "resources/player.png"  },
+    { text: "I must repay the sins that I have committed.", portrait: "resources/eclipse.png"  },
+    { text: "All the tortured souls of the domain of singularity...", portrait: "resources/eclipse.png"  },
+    { text: "They are currently in Nova's possesion.", portrait: "resources/eclipse.png"  },
+    { text: "I don't know what he plans on doing with those souls, but it's definitely not good.", portrait: "resources/eclipse.png"  },
+    { text: "Matos was only used to harvest those souls.", portrait: "resources/eclipse.png"  },
+    { text: "You seem to know a lot that of things we don't know. Why was Nova stuck in captive?", portrait: "resources/player.png"  },
+    { text: "There is another celestial out there. This celestial is responsible for capturing Nova.", portrait: "resources/eclipse.png"  },
+    { text: "This celestial is also responsible for my continued existence.", portrait: "resources/eclipse.png"  },
+    { text: "My time is up. We will continue our conversation later.", portrait: "resources/eclipse.png"  },
+];  
+const cutsceneDialogueA2 = [ //humanity punchcard
+    { text: "You see a strange reddish-pink punchcard appear in front of you.", },
+    { text: "The punchcard of humanity.", },
+    { text: "You have a sudden sense of realization.", },
+    { text: "After all of this, you are still human after all.", },
+    { text: "Have you ever truly lived a human life?", },
+    { text: "You still don't remember your life before waking up in the overworld.", },
+    { text: "Eclipse appears in front of you.", },
+    { text: "You know, I am also human as well.", portrait: "resources/eclipse.png"  },
+    { text: "How did he know what I was thinking about?", },
+    { text: "I've actually ruled the domain of singularity before in my past.", portrait: "resources/eclipse.png"  },
+    { text: "If it wasn't for me...", portrait: "resources/eclipse.png"  },
+    { text: "None of this would have happened.", portrait: "resources/eclipse.png"  },
+    { text: "I was the reason why our civilization fell into ruin.", portrait: "resources/eclipse.png"  },
+    { text: "I must save these souls. I must stop Nova.", portrait: "resources/eclipse.png"  },
+    { text: "I must stop Nova.", portrait: "resources/eclipse.png"  },
+    { text: "I must...", portrait: "resources/eclipse.png"  },
+    { text: "All of a sudden, Eclipse's smoke starts to glitch, phasing in and out of the universe.", },
+    { text: "Interesting.", },
+    { text: "Eclipse's story interests you. You must learn more.", },
+];  
+const cutsceneDialogueA3 = [ //blood
+    { text: "You soon realize that you have superphysical powers imbued into your own blood.", },
+    { text: "Are these powers constructed into your very own physical being?", },
+    { text: "This raises a lot of questions.", },
+    { text: "You shoot out a small quantity of blood from your fingertips.", },
+    { text: "This blood is your very own. The pain is very minimal.", },
+    { text: "You remember seeing the infinity keeper use her own blood for certain situations.", },
+    { text: "But what could you possibly do with this blood?", },
+];  
+const cutsceneDialogueA4 = [ //blood battle
+    { text: "You notice a swarm of leeches, bats, and other creatures come in your way.", },
+    { text: "They must be attracted to the blood.", },
+    { text: "All of a sudden, you find yourself creating a spaceship using superphysical values.", },
+    { text: "The same ship as the ones you used against Iridite...", },
+    { text: "You kill a leech, and a singular red stone appears.", },
+    { text: "How interesting.", },
+];  
+const cutsceneDialogueA5 = [ //pylon
+    { text: "Your ancient core fragments construct into a large tower.", },
+    { text: "A straight beam of beige light gets shot out of the tower.", },
+    { text: "You notice time to shift differently in this universe.", },
+    { text: "These pylons... They speed up time in a universe?", },
+    { text: "Time is a superphysical value after all.", },
+    { text: "You start to worry for Nav and Kres.", },
+    { text: "Celestials are going after them after all.", },
+    { text: "But what if...", },
+    { text: "Instead of waiting for the celestial, you go after the celestial yourself?", },
+];  
+const cutsceneDialogueA6 = [ //nox
+    { text: "You become tired of fighting these blood creatures.", },
+    { text: "All of a sudden, you see a spear fly towards one of the creatures.", },
+    { text: "The smell of blood... It intruiges me.", portrait: "resources/nox.png"  },
+    { text: "Who are you?", portrait: "resources/player.png"  },
+    { text: "I'm glad you asked. I am Nox, the Vampire Knight!", portrait: "resources/nox.png"  },
+    { text: "I hunt celestials for a living, and I must make as much money as I can by doing so.", portrait: "resources/nox.png"  },
+    { text: "That's interesting. I also hunt celestials.", portrait: "resources/player.png"  },
+    { text: "Are you associated with the celestial hunting corporation?", portrait: "resources/player.png"  },
+    { text: "Never joined them. I don't see the point.", portrait: "resources/nox.png"  },
+    { text: "Why let a company take all the treasures when you can take them for yourself?", portrait: "resources/nox.png"  },
+    { text: "Oh well. I don't mind you helping me here.", portrait: "resources/player.png"  },
+    { text: "As long as you let me take all these blood stones I'm fine!", portrait: "resources/nox.png"  },
+];  
 // Example with custom background:
 // showCutscene(cutsceneDialogue1, {
 //     background: \"url('img/bg.png') center/cover\", // or any valid CSS background

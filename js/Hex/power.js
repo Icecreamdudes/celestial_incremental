@@ -25,6 +25,7 @@ addLayer("hpw", {
         player.hpw.powerGain = player.hpw.powerGain.mul(levelableEffect("pu", 203)[2])
         player.hpw.powerGain = player.hpw.powerGain.mul(levelableEffect("pet", 1106)[1])
         if (hasUpgrade("fi", 24)) player.hpw.powerGain = player.hpw.powerGain.mul(upgradeEffect("fi", 24))
+        player.hpw.powerGain = player.hpw.powerGain.mul(levelableEffect("pu", 210)[1])
 
         player.hpw.powerGain = player.hpw.powerGain.floor() // To keep power to whole numbers
 

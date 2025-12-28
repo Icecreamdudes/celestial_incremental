@@ -58,6 +58,8 @@
         if (getLevelableBool("pu", 206)) player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("pu", 206)[0])
         if (getLevelableBool("pu", 206)) player.dgr.maxGrass = player.dgr.maxGrass.mul(buyableEffect("dp", 15))
         if (getLevelableBool("pu", 301)) player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("pu", 301)[0])
+        if (hasMilestone("db", 14)) player.dgr.maxGrass = player.dgr.maxGrass.mul(player.db.milestone4Effect)
+        if (getLevelableBool("pu", 211)) player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("pu", 211)[0])
         player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("st", 109)[0])
         
         // MAX GRASS SOFTCAP
@@ -75,6 +77,8 @@
         if (getLevelableBool("pu", 206)) player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("pu", 206)[0])
         if (getLevelableBool("pu", 206)) player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("dp", 15))
         if (getLevelableBool("pu", 301)) player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("pu", 301)[0])
+        if (hasMilestone("db", 14)) player.dgr.grassValue = player.dgr.grassValue.mul(player.db.milestone4Effect)
+        if (getLevelableBool("pu", 211)) player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("pu", 211)[0])
         player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("st", 108)[0])
 
         // GRASS VALUE SOFTCAP
@@ -82,6 +86,9 @@
 
         //post softcap
         player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("ds", 103))
+
+        if (hasUpgrade("le", 24)) player.dgr.grass = player.dgr.grass.add(player.dgr.grassValue.mul(delta))
+        if (hasMilestone("db", 14)) player.dgr.grass = player.dgr.grass.add(player.dgr.grassValue.mul(Decimal.mul(delta, 0.1)))
 
         if (hasUpgrade("le", 22)) player.dgr.grassTimer = player.dgr.grassTimer.add(onepersec.mul(delta))
         player.dgr.grassTimerReq = new Decimal(5)

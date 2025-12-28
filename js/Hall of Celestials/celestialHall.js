@@ -205,6 +205,11 @@ addLayer("ch", {
             body() { return "The human civilization from the domain of singularity... A world polluted with industry, corruption in government, and ongoing conflict. This hatred all accumulating into one, mean, celestial. The human version of Matos had a dream. To experience the beauty and wonders of the natural world. But that dream was stripped away from him a long, long time ago. I've never met Matos, but I have heard many things about him. Matos is being used to ressurect Nova and the Novasent after they have been banished by ????????. Having taken part in Nova's religion, Matos believes that working for Nova in order to reach his goal will help him reach true freedom, which is one step closer to his goal. Despite having intent to harm, I completely understand the reasons for Matos' hatred." },
             unlocked() { return player.ch.celestialIndex.eq(3) },      
         },
+        5: {
+            title: "Iridite",
+            body() { return "The first of the novasent, Iridite was born as a member of the celestial hunting corporation. Living her entire life under these conditions, she never got to live her life like a normal human being. One day, she went on a mission that somehow got her turned into a celestial. When she was a celestial, she became obsessed with how celestials are made, and conducted many experiments on countless universes. Nova took sight of this, and asked her to join him as a novasent. She agreed, and was tasked with finding a universe suitable enough for Nova to take over as his own. That's how Nova discovered the domain of singularity." },
+            unlocked() { return player.ch.celestialIndex.eq(4) },      
+        },
     },
     microtabs: {
         stuff: {

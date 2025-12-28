@@ -112,6 +112,13 @@
 
                 player.subtabs["le"]["stuff"] = "Main"
                 player.subtabs.pu["stuff"] = "Selection"
+
+                pauseUniverse("U1")
+                pauseUniverse("UA")
+                pauseUniverse("U2")
+                pauseUniverse("A1")
+                pauseUniverse("U3")
+                pauseUniverse("CB")
             },
             style: {width: "600px", minHeight: "200px", color: "white", backgroundImage: "radial-gradient(circle, black 60%, #13292f 70%, #54265e 80%, #8d3947 90%, #e6eb57 110%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
         },
@@ -121,6 +128,7 @@
             unlocked() {return getLevelableAmount("pet", 501).gte(1)},
             onClick() {
                 player.pet.legendaryPetAbilityTimers[0] = player.pet.legendaryPetAbilityTimersMax[0]
+                player.pet.legendaryPetAbilityCooldowns[0] = player.pet.legendaryPetAbilityCooldownsMax[0]
                 player.pet.activeAbilities[0] = true
 
                 player.sma.inStarmetalChallenge = true
@@ -131,7 +139,14 @@
                 layers.pu.generateSelection();
 
                 player.subtabs.le["stuff"] = "Shards"
-                player.subtabs.pu["stuff"] = "Selection"                
+                player.subtabs.pu["stuff"] = "Selection"   
+                
+                pauseUniverse("U1")
+                pauseUniverse("UA")
+                pauseUniverse("U2")
+                pauseUniverse("A1")
+                pauseUniverse("U3")
+                pauseUniverse("CB")
             },
             style: {width: "600px", minHeight: "200px", color: "#ffe066", backgroundImage: "radial-gradient(circle, #222 80%, #664900 95%, #b29c47 110%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
         },

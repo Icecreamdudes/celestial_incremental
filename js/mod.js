@@ -26,7 +26,7 @@
 		"Hex/hex.js", "Hex/provenance.js", "Hex/refinement.js", "Hex/blessings.js", "Hex/curses.js",
 		"Hex/purity.js", "Hex/power.js", "Hex/realms.js", "Hex/vex.js", "Hex/sacrifice.js",
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js",
-		"Check Back/cookie.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
+		"Check Back/cookie.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js", "DarkU1/blood.js",
 
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
@@ -108,6 +108,15 @@ function updateStyles() {
 			break;
 		case "po":
 			layerBG = "linear-gradient(45deg, #450054, #00307f)"
+			break;
+		case "i":
+			if (player.i.pylonBuilt && player.subtabs["i"]["stuff"] == "Pylon")
+			{
+				layerBG = "linear-gradient(90deg, #927550ff, #725442ff)"
+			} else
+			{
+				layerBG = "#161616"
+			}
 			break;
 		case "t":
 			layerBG = "#02172f"
@@ -202,6 +211,9 @@ function updateStyles() {
 			break;
 		case "cb":
 			layerBG = "#021124"
+			break;
+	    case "bl":
+			layerBG = "#130000ff"
 			break;
 		case "ba":
 			if (player.fi.battleTier.eq(1)) layerBG = "linear-gradient(-90deg, #5c2109ff, #5c0e04ff)"
@@ -556,8 +568,9 @@ function updateStyles() {
             	}
 				break;
 			case "D1":
-				if (!player.pet.activeAbilities[0]) playAndLoopAudio("music/darkUni1.mp3", options.musicVolume/10)
-				if (player.pet.activeAbilities[0]) playAndLoopAudio("music/eclipse.mp3", options.musicVolume/10)
+				if (!player.pet.activeAbilities[0] && !player.ir.inBattle) playAndLoopAudio("music/darkUni1.mp3", options.musicVolume/10)
+				if (player.pet.activeAbilities[0] && !player.ir.inBattle) playAndLoopAudio("music/eclipse.mp3", options.musicVolume/10)
+			    if (player.ir.inBattle) playAndLoopAudio("music/bloodBattle.mp3", options.musicVolume/10);
 				break;
 			case "CH":
 				if (player.tab == "ch") playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10)
@@ -672,6 +685,13 @@ function updateStyles() {
             if (cutsceneID == 111 && cutsceneIndex < 23) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
             if (cutsceneID == 111 && cutsceneIndex > 23) playAndLoopAudio("music/novaCutscene.mp3", options.musicVolume/10);
             if (cutsceneID == 112) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
+
+			//arbitrary IDs
+			if (cutsceneID == -1) playAndLoopAudio("music/aniciffoCutscene.mp3", options.musicVolume/10);	
+			if (cutsceneID == -2) playAndLoopAudio("music/aniciffoCutscene.mp3", options.musicVolume/10);	
+			// no music for cutsceneID == -3
+			// no music for cutsceneID == -4
+			// no music for cutsceneID == -5
         }
         if (window.cinematicCutsceneActive && options.musicToggle)
         {

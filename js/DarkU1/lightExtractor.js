@@ -37,6 +37,7 @@
             buyUpgrade("le", 21, false)
             buyUpgrade("le", 22, false)
             buyUpgrade("le", 23, false)
+            buyUpgrade("le", 24, false)
             buyUpgrade("le", 101, false)
             buyUpgrade("le", 102, false)
         }
@@ -61,6 +62,8 @@
         if (player.le.resetAmount.gte(8)) player.le.starmetalAlloyReq = Decimal.pow(1e1, player.le.resetAmount.add(1).pow(2.6).floor()).mul(1e2)
         player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(player.dn.normalityEffect) 
         player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(levelableEffect("st", 208)[0])
+        player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.pow(buyableEffect("bl", 21))
+
 
         if (player.le.starmetalAlloyPause.gte(0)) layers.le.starmetalReset();
         player.le.starmetalAlloyPause = player.le.starmetalAlloyPause.sub(1)
@@ -82,6 +85,8 @@
         if (hasMilestone("db", 102)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(1.2)
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(player.ds.spaceEffect)
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("cof", 26))
+        if (getLevelableBool("pu", 305)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(levelableEffect("pu", 305)[0])
+        player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("bl", 22))
 
         // Eclipse Shards
         player.le.eclipseShardsReq = Decimal.pow(1e1, player.le.resetAmount.add(1).pow(1.7).floor()).mul(1e3)
@@ -93,9 +98,11 @@
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGet
         if (getLevelableBool("pu", 304)) player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(levelableEffect("pu", 304)[0])
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(levelableEffect("pu", 304)[1])
+        player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(buyableEffect("dv", 15))
 
         player.le.eclipseShardsValue = new Decimal(5)
         player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(buyableEffect("le", 11)).floor()
+        player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(levelableEffect("pu", 211)[1])
 
         if (player.sme.starmetalResetToggle && player.du.points.gte(player.le.starmetalAlloyReq) && !player.pet.activeAbilities[0])
         {
@@ -179,6 +186,13 @@
                 player.subtabs.pu["stuff"] = "Collection"
 
                 layers.pu.generateSelection();
+
+                pauseUniverse("U1")
+                pauseUniverse("UA")
+                pauseUniverse("U2")
+                pauseUniverse("A1")
+                pauseUniverse("U3")
+                pauseUniverse("CB")
             },
             style() {
                 let look = {width: "400px", minHeight: "100px", fontSize: "9px", borderRadius: "15px", color: "white", border: "2px solid #384166"}
@@ -235,6 +249,15 @@
                 player.pet.activeAbilities[0] = false
                 player.pet.legendaryPetAbilityTimers[0] = new Decimal(0)
                 layers.pu.generateSelection();
+
+                pauseUniverse("U1")
+                pauseUniverse("UA")
+                pauseUniverse("U2")
+                pauseUniverse("A1")
+                pauseUniverse("U3")
+                pauseUniverse("CB")
+
+                player.pet.legendaryPetAbilityCooldowns[0] = player.pet.legendaryPetAbilityCooldownsMax[0]
             },
             style() {
                 let look = {width: "400px", minHeight: "100px", fontSize: "9px", borderRadius: "15px", color: "white", border: "2px solid #384166"}
@@ -459,7 +482,7 @@
         player.dg.generatorPowerPerSecond = new Decimal(0)
 
         for (let i = 0; i < player.le.upgrades.length; i++) {
-            if (+player.le.upgrades[i] < 201) {
+            if (+player.le.upgrades[i] < 102) {
                 player.le.upgrades.splice(i, 1);
                 i--;
             }
@@ -573,6 +596,8 @@
         player.dn.buyables[11] = new Decimal(0)
         player.dn.buyables[12] = new Decimal(0)
         player.dn.buyables[13] = new Decimal(0)
+        player.dn.buyables[14] = new Decimal(0)
+        player.dn.buyables[15] = new Decimal(0)
         player.db.boosters = new Decimal(0)
         for (let i = 0; i < player.db.milestones.length; i++) {
             if (+player.db.milestones[i] < 101) {
@@ -585,9 +610,11 @@
         player.ds.length = new Decimal(1)
         player.ds.width = new Decimal(1)
         player.ds.depth = new Decimal(1)
+        player.ds.spissitude = new Decimal(1)
         player.ds.buyables[11] = new Decimal(0)
         player.ds.buyables[12] = new Decimal(0)
         player.ds.buyables[13] = new Decimal(0)
+        player.ds.buyables[14] = new Decimal(0)
 
         player.ds.buyables[101] = new Decimal(0)
         player.ds.buyables[102] = new Decimal(0)
@@ -595,6 +622,26 @@
         player.ds.buyables[104] = new Decimal(0)
         player.ds.buyables[105] = new Decimal(0)
         player.ds.buyables[106] = new Decimal(0)
+
+        player.dv.clouds = new Decimal(0)
+        player.dv.producingClouds = false
+
+        player.dv.buyables[11] = new Decimal(0)
+        player.dv.buyables[12] = new Decimal(0)
+        player.dv.buyables[13] = new Decimal(0)
+        player.dv.buyables[14] = new Decimal(0)
+        player.dv.buyables[15] = new Decimal(0)
+        player.dv.buyables[16] = new Decimal(0)
+
+        player.bl.blood = new Decimal(0)
+        player.bl.bloodStones = new Decimal(0)
+
+        player.bl.buyables[11] = new Decimal(0)
+        player.bl.buyables[12] = new Decimal(0)
+        player.bl.buyables[13] = new Decimal(0)
+        player.bl.buyables[21] = new Decimal(0)
+        player.bl.buyables[22] = new Decimal(0)
+        player.bl.buyables[23] = new Decimal(0)
     },
     upgrades: {
         11: {
@@ -765,6 +812,20 @@
                 return look
             }
         },
+        24: {
+            title: "Automatic Lawnmower",
+            unlocked() { return player.ir.iriditeDefeated && !player.pet.activeAbilities[0] },
+            description: "Generate 100% of grass value per second.",
+            cost: new Decimal("1e308"),
+            currencyLocation() { return player.du },
+            currencyDisplayName: "Dark Celestial Points",
+            currencyInternalName: "points",
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "2px solid #384166", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
+            }
+        },
 
         //eclipse exclusive
         101: {
@@ -793,8 +854,25 @@
                 let look = {borderRadius: "15px", color: "white", border: "2px solid #384166", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.backgroundColor = "rgb(51, 54, 0)" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
                 return look
+            },
+        },
+
+        //permanent
+        201: {
+            title: "Legendary Punchcards [PERMANENT]",
+            unlocked() { return player.ir.iriditeDefeated },
+            description: "Unlock Legendary Punchcards.",
+            cost: new Decimal("1e750"),
+            currencyLocation() { return player.du },
+            currencyDisplayName: "Dark Celestial Points",
+            currencyInternalName: "points",
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "2px solid #384166", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
             }
         },
+
     },
     buyables: {
         11: {
@@ -999,7 +1077,8 @@
                     ["style-column", [
                         ["blank", "5px"],
                         ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],
-                            ["upgrade", 17], ["upgrade", 101], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 102]], {maxWidth: "755px"}],
+                            ["upgrade", 17], ["upgrade", 101], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 102], 
+                            ["upgrade", 24],  ["upgrade", 201], ], {maxWidth: "755px"}],
                         ["blank", "5px"],
                     ], {width: "755px", backgroundColor: "#0e1019", border: "2px solid #384166", borderRadius: "15px"}],
                     ["blank", "25px"],

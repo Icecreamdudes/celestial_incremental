@@ -44,6 +44,7 @@
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(levelableEffect("pet", 309)[0])
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(player.se.starsExploreEffect[1][1])
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(buyableEffect("cof", 24))
+        player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(levelableEffect("pu", 110)[1])
         
         if (hasMilestone("s", 13)) player.ra.radiation = player.ra.radiation.add(player.ra.radiationPerSecond.mul(delta))
 

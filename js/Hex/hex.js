@@ -48,6 +48,7 @@ addLayer("h", {
         if (hasUpgrade("hve", 12)) player.h.hexPointGain = player.h.hexPointGain.mul(upgradeEffect("hve", 12))
         if (hasUpgrade("hve", 13)) player.h.hexPointGain = player.h.hexPointGain.mul(upgradeEffect("hve", 13))
         player.h.hexPointGain = player.h.hexPointGain.mul(player.h.prePowerMult)
+        player.h.hexPointGain = player.h.hexPointGain.mul(levelableEffect("pu", 209)[1])
 
         // POWER
         if (hasUpgrade("hve", 61)) player.h.hexPointGain = player.h.hexPointGain.pow(1.03)

@@ -532,6 +532,7 @@
         if (hasMilestone("ma", 306)) player.ma.comboSoftcapMult = player.ma.comboSoftcapMult.sub(0.001)
         if (hasUpgrade("ep2", 9107)) player.ma.comboSoftcapMult = player.ma.comboSoftcapMult.sub(0.001)
         if (hasUpgrade("fi", 21)) player.ma.comboSoftcapMult = player.ma.comboSoftcapMult.sub(0.001)
+        if (hasMilestone("db", 105)) player.ma.comboSoftcapMult = player.ma.comboSoftcapMult.sub(0.001)
 
         //Kept code
         player.ma.keptCombo[0] = new Decimal(0.1)

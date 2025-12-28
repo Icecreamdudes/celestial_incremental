@@ -16,6 +16,7 @@
         //space
         space: new Decimal(0),
         spaceEffect: new Decimal(1),
+
         
         length: new Decimal(1),
         lengthPerSecond: new Decimal(0),
@@ -23,6 +24,9 @@
         widthPerSecond: new Decimal(0),
         depth: new Decimal(1),
         depthPerSecond: new Decimal(0),
+
+        spissitude: new Decimal(1),
+        spissitudePerSecond: new Decimal(0),
     }},
     automate() {},
     nodeStyle() {
@@ -38,15 +42,20 @@
     color: "#221473ff",
     update(delta) {
         let onepersec = new Decimal(1)
-
-        player.ds.spaceEnergyToGet = player.dn.normality.div(1e30).pow(0.15).div(4)
+        player.ds.spaceEnergyToGet = player.dn.normality.div(1e30).pow(0.06).div(4)
         player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(buyableEffect("ds", 105))
         player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(levelableEffect("ir", 4)[0])
+        if (getLevelableBool("pu", 111)) player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(levelableEffect("pu", 111)[0])
+        player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.div(player.ds.spaceEnergySoftcap)
+        if (getLevelableBool("pu", 209)) player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(levelableEffect("pu", 209)[0])
 
         player.ds.spaceEnergyPause = player.ds.spaceEnergyPause.sub(1)
         if (player.ds.spaceEnergyPause.gte(1)) layers.ds.spaceEnergyReset();
 
-        player.ds.spaceEnergyEffect = player.ds.spaceEnergy.add(1).log(10).pow(1.5).div(10).add(1)
+        player.ds.spaceEnergyEffect = player.ds.spaceEnergy.add(1).log(10).pow(1.4).div(25).add(1)
+
+        // SPACE ENERGY SOFTCAP
+        if (player.ds.spaceEnergyToGet.gte(1000)) player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.div(1000).pow(0.3).mul(1000)
 
         //space
         player.ds.space = player.ds.length.mul(player.ds.width.mul(player.ds.depth))
@@ -59,14 +68,23 @@
         player.ds.length = player.ds.length.add(player.ds.lengthPerSecond.mul(delta))
         player.ds.lengthPerSecond = buyableEffect("ds", 11)
         player.ds.lengthPerSecond = player.ds.lengthPerSecond.mul(buyableEffect("ds", 106))
+        player.ds.lengthPerSecond = player.ds.lengthPerSecond.mul(buyableEffect("dn", 14))
+        if (getLevelableBool("pu", 212)) player.ds.lengthPerSecond = player.ds.lengthPerSecond.mul(levelableEffect("pu", 212)[0])
 
         player.ds.width = player.ds.width.add(player.ds.widthPerSecond.mul(delta))
         player.ds.widthPerSecond = buyableEffect("ds", 12)
         player.ds.widthPerSecond = player.ds.widthPerSecond.mul(buyableEffect("ds", 106))
+        player.ds.widthPerSecond = player.ds.widthPerSecond.mul(buyableEffect("dn", 14))
+        if (getLevelableBool("pu", 212)) player.ds.widthPerSecond = player.ds.widthPerSecond.mul(levelableEffect("pu", 212)[0])
 
         player.ds.depth = player.ds.depth.add(player.ds.depthPerSecond.mul(delta))
         player.ds.depthPerSecond = buyableEffect("ds", 13)
         player.ds.depthPerSecond = player.ds.depthPerSecond.mul(buyableEffect("ds", 106))
+        player.ds.depthPerSecond = player.ds.depthPerSecond.mul(buyableEffect("dn", 14))
+        if (getLevelableBool("pu", 212)) player.ds.depthPerSecond = player.ds.depthPerSecond.mul(levelableEffect("pu", 212)[0])
+
+        player.ds.spissitude = player.ds.spissitude.add(player.ds.spissitudePerSecond.mul(delta))
+        player.ds.spissitudePerSecond = buyableEffect("ds", 14)
 
         //stored
         player.ds.storedSpaceEnergyToGet = player.ds.spaceEnergy.mul(0.05).pow(0.6)
@@ -122,6 +140,8 @@
         player.dn.buyables[11] = new Decimal(0)
         player.dn.buyables[12] = new Decimal(0)
         player.dn.buyables[13] = new Decimal(0)
+        player.dn.buyables[14] = new Decimal(0)
+        player.dn.buyables[15] = new Decimal(0)
         for (let i = 0; i < player.dn.upgrades.length; i++) {
             if (+player.dn.upgrades[i] < 14) {
                 player.dn.upgrades.splice(i, 1);
@@ -132,6 +152,7 @@
         player.ds.length = new Decimal(1)
         player.ds.width = new Decimal(1)
         player.ds.depth = new Decimal(1)
+        player.ds.spissitude = new Decimal(1)
 
         player.dgr.grass = new Decimal(0)
         for (let i = 1; i < (tmp.dgr.grid.cols + "0" + (tmp.dgr.grid.rows + 1)); ) {
@@ -190,7 +211,7 @@
         },
         12: {
             costBase() { return new Decimal(100) },
-            costGrowth() { return new Decimal(1.4) },
+            costGrowth() { return new Decimal(1.3) },
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.ds.spaceEnergy},
             pay(amt) { player.ds.spaceEnergy = this.currency().sub(amt) },
@@ -224,7 +245,7 @@
         },
         13: {
             costBase() { return new Decimal(1000) },
-            costGrowth() { return new Decimal(1.6) },
+            costGrowth() { return new Decimal(1.4) },
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.ds.spaceEnergy},
             pay(amt) { player.ds.spaceEnergy = this.currency().sub(amt) },
@@ -256,7 +277,40 @@
             },
             style: { width: '275px', height: '150px', color: "white" }
         },
+        14: {
+            costBase() { return new Decimal(10000) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.ds.spaceEnergy},
+            pay(amt) { player.ds.spaceEnergy = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.2).mul(0.01) },
+            unlocked() { return getLevelableBool("pu", 212) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Spissitudiner"
+            },
+            display() {
+                return "which are producing " + format(tmp[this.layer].buyables[this.id].effect) + " spissitude per second.\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space Energy"
+            },
+            buy(mult) {
+                if (!mult) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
 
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', color: "white" }
+        },
 
         //space upgrades
         101: {
@@ -274,7 +328,7 @@
             },
             display() {
                 return "which are multiplying prestige point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space Energy"
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space"
             },
             buy(mult) {
                 if (!mult) {
@@ -316,7 +370,7 @@
             },
             display() {
                 return "which are multiplying generator gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space Energy"
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space"
             },
             buy(mult) {
                 if (!mult) {
@@ -358,7 +412,7 @@
             },
             display() {
                 return "which are multiplying dark grass value and capacity by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space Energy"
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space"
             },
             buy(mult) {
                 if (!mult) {
@@ -400,7 +454,7 @@
             },
             display() {
                 return "which are multiplying normality gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space Energy"
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space"
             },
             buy(mult) {
                 if (!mult) {
@@ -442,7 +496,7 @@
             },
             display() {
                 return "which are multiplying space energy gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space Energy"
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space"
             },
             buy(mult) {
                 if (!mult) {
@@ -484,7 +538,7 @@
             },
             display() {
                 return "which are multiplying length, width, and depth gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space Energy"
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space"
             },
             buy(mult) {
                 if (!mult) {
@@ -534,6 +588,7 @@
                             return look
                         }],
                     ]],
+                    ["raw-html", () => { return player.ds.spaceEnergyToGet.gte(1000) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Extends unavoidable point softcap<sup>2</sup> by ^" + format(player.ds.spaceEnergyEffect)}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "You will store " + format(player.ds.storedSpaceEnergyToGet) + " space energy when you leave D1."}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                     ["blank", "25px"],
@@ -546,8 +601,9 @@
                     ["raw-html", () => { return "Length: " + format(player.ds.length) + ". (+" + format(player.ds.lengthPerSecond) + "/s)"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Width: " + format(player.ds.width) + ". (+" + format(player.ds.widthPerSecond) + "/s)"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Depth: " + format(player.ds.depth) + ". (+" + format(player.ds.depthPerSecond) + "/s)"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return getLevelableBool("pu", 212) ? "Spissitude: " + format(player.ds.spissitude) + ". (+" + format(player.ds.spissitudePerSecond) + "/s)" : ""}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ["blank", "25px"],
-                    ["row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13]]],
+                    ["row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13], ["dark-buyable", 14]]],
                 ]
             },
             "Space Buyables": {

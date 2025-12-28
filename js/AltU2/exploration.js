@@ -89,6 +89,8 @@ addLayer("se", {
             for (let j = 0; j < player.se.starExploreTimes[i].length; j++) {
                 {
                     player.se.starExploreTimes[i][j] = player.se.starExploreTimes[i][j].div(levelableEffect("pet", 502)[0])
+                    if (hasMilestone("db", 104)) player.se.starExploreTimes[i][j] = player.se.starExploreTimes[i][j].div(player.db.permaMilestone4Effect)
+                    player.se.starExploreTimes[i][j] = player.se.starExploreTimes[i][j].div(levelableEffect("pu", 111)[1])
                 }
             }
         }

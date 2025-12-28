@@ -199,7 +199,7 @@ addLayer("hsa", {
     buyables: {
         1: {
             costBase() { return new Decimal(1e8) },
-            costGrowth() { return new Decimal(10) },
+            costGrowth() { return new Decimal(6) },
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.hsa.sacredEnergy},
             pay(amt) { player.hsa.sacredEnergy = this.currency().sub(amt) },
@@ -233,7 +233,7 @@ addLayer("hsa", {
         },
         2: {
             costBase() { return new Decimal(1e10) },
-            costGrowth() { return new Decimal(100) },
+            costGrowth() { return new Decimal(36) },
             purchaseLimit() { return new Decimal(50) },
             currency() { return player.hsa.sacredEnergy},
             pay(amt) { player.hsa.sacredEnergy = this.currency().sub(amt) },

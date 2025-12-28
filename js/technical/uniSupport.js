@@ -5,7 +5,7 @@ function uniShown(uni){
 }
 
 function uniPaused(uni){
-    return tmp.uni[uni].paused;
+    return player.uni[uni].paused || tmp.uni[uni].disabled;
 }
 
 function pauseUniverse(universe) {
@@ -44,6 +44,7 @@ function setupUniverses(uni) {
     if (universes[uni].name === undefined) universes[uni].name = uni
     if (universes[uni].symbol === undefined) universes[uni].symbol = uni.charAt(0).toUpperCase() + uni.slice(1)
     if (universes[uni].uniShown === undefined) universes[uni].uniShown = true
+    if (universes[uni].disabled === undefined) universes[uni].disabled = false
     if (universes[uni].layers === undefined) universes[uni].layers = []
 }
 
@@ -55,7 +56,7 @@ function addUniverse(uniName, uniData){ // Call this to add universes from a dif
 addUniverse("U1", {
     name: "Universe 1<br>Overworld",
     symbol: "1",
-    tree: [["i"], ["r", "f"], ["p", "t", "g"], ["gh", "pe", "pol", "m"], ["de", "rf", "d"], ["cb", "oi", "fa"]],
+    tree: [["i"], ["r", "f"], ["p", "t", "g"], ["gh", "pol", "m"], ["pe", "rf", "d"], ["cb", "oi", "fa"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(315deg, #bababa 0%, #efefef 100%)",
@@ -74,7 +75,7 @@ addUniverse("U1", {
 
 addUniverse("UA", {
     name: "Universe α<br>Hex",
-    symbol: "H",
+    symbol: "α",
     tree: [["hpr", "hsa"], ["hre", "hpu"], ["hbl", "hcu", "hve"], ["hpw", "hrm"]],
     nodeStyle() {
         let style = {
@@ -90,6 +91,7 @@ addUniverse("UA", {
         return style
     },
     uniShown() { return player.startedGame && (inChallenge("ip", 13) || player.po.hex || hasUpgrade("s", 18)) && !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge},
+    disabled() {return !player.startedGame || (!inChallenge("ip", 13) && !hasChallenge("ip", 13) && player.s.highestSingularityPoints.lte(0)) || player.cp.cantepocalypseActive},
 })
 
 addUniverse("U2", {
@@ -107,9 +109,16 @@ addUniverse("U2", {
             style.outlineOffset = "-2px"
             style.borderWidth = "5px"
         }
+        if (player["ip"].activeChallenge && canCompleteChallenge("ip", player["ip"].activeChallenge)) {
+            style.outline = "2px solid red"
+            style.outlineOffset = "-2px"
+            style.borderWidth = "5px"
+            style.boxShadow = "var(--hqProperty2a), 0 0 20px #ff0000"
+        }
         return style
     },
     uniShown() { return player.startedGame && player.in.unlockedInfinity && !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge},
+    disabled() {return !player.startedGame || (!player.in.unlockedInfinity && player.s.highestSingularityPoints.lte(0)) || player.cp.cantepocalypseActive},
 })
 
 addUniverse("A1", {
@@ -129,7 +138,8 @@ addUniverse("A1", {
         }
         return style
     },
-    uniShown() { return player.startedGame && player.cap.cantepocalypseUnlock && (hasUpgrade("bi", 28) || hasMilestone("s", 18)) && !player.sma.inStarmetalChallenge},
+    uniShown() { return player.startedGame && (((player.ca.cantepocalypseUnlock && !player.s.highestSingularityPoints.gt(0)) || (player.s.highestSingularityPoints.gt(0) && hasUpgrade("bi", 28))) || hasMilestone("s", 18)) && !player.sma.inStarmetalChallenge},
+    disabled() {return (!player.startedGame || (!player.ca.cantepocalypseUnlock && player.s.highestSingularityPoints.lte(0))) && !player.ca.cantepocalypsePrep},
 })
 
 addUniverse("A2", {
@@ -151,6 +161,7 @@ addUniverse("A2", {
         return style
     },
     uniShown() { return player.startedGame && player.au2.au2Unlocked && !player.sma.inStarmetalChallenge},
+    disabled() {return !player.startedGame || !player.au2.au2Unlocked},
 })
 
 addUniverse("U3", {
@@ -171,6 +182,7 @@ addUniverse("U3", {
         return style
     },
     uniShown() { return player.startedGame && (player.ca.defeatedCante || player.s.highestSingularityPoints.gt(0)) && !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge},
+    disabled() {return !player.startedGame || (!player.ca.defeatedCante && player.s.highestSingularityPoints.lte(0))}
 })
 
 addUniverse("D1", {
@@ -197,13 +209,14 @@ addUniverse("D1", {
 addUniverse("CB", {
     name: "Check Back",
     symbol: "CB",
-    tree: [["cb"], ["ev0", "ev1", "ev2"], ["ev4", "ev8", "ev10"], ["ep0", "ep1", "ep2"], ["ep3", "ep4", "ep5"]],
+    tree: [["cb"], ["ev0", "ev1", "ev2", "ev8"], ["ep0", "ep1", "ep2", "ep3", "ep4", "ep5"]],
     nodeStyle() {
         return {
             background: "#094599",
         }
     },
-    uniShown() { return player.startedGame && hasUpgrade("i", 19) || hasMilestone("ip", 12) || (hasUpgrade("de", 13) && inChallenge("tad", 11)) || hasMilestone("s", 14)},
+    uniShown() { return player.startedGame && hasUpgrade("i", 19) || hasMilestone("ip", 12) || hasMilestone("s", 14)},
+    disabled() {return !player.startedGame || (!hasUpgrade("i", 19) && !player.in.unlockedInfinity && player.s.highestSingularityPoints.lte(0)) || player.cp.cantepocalypseActive},
 })
 
 addUniverse("CH", {
@@ -224,4 +237,30 @@ addUniverse("CH", {
         return style
     },
     uniShown() { return player.startedGame && player.fu.defeatedJocus && !player.sma.inStarmetalChallenge},
+})
+
+addUniverse("UB", {
+    name() {
+        if (player.bee.path == 0 && player.bee.extremePath) return "Universe β<br>Hive [Extreme Path]"
+        if (player.bee.path == 1) return "Universe β<br>Hive [Pollen Path]"
+        if (player.bee.path == 2) return "Universe β<br>Hive [Nectar Path]"
+        return "Universe β<br>Hive"
+    },
+    symbol: "β",
+    tree: [["bee", "fl"], ["bpl", "ne"], ["bb", "ho"], ["al", "wa"]],
+    nodeStyle() {
+        let style = {
+            background: "linear-gradient(45deg, #f6e000 0%, #f9c901 100%)",
+            backgroundOrigin: "border-box",
+            borderColor: "#6b4701",
+        }
+        if (player.universe=="UB") {
+            style.outline = "2px solid white"
+            style.outlineOffset = "-2px"
+            style.borderWidth = "5px"
+        }
+        return style
+    },
+    uniShown() { return player.startedGame && player.pol.unlockHive >= 2 && !player.sma.inStarmetalChallenge},
+    disabled() {return !player.startedGame && player.pol.unlockHive < 2}
 })

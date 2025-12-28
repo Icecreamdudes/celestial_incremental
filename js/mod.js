@@ -12,9 +12,9 @@
 		"layers.js", "cutscene.js", "tree.js", "ranks.js", "factors.js",
 		"prestige.js", "trees.js", "grass.js", "grasshop.js", "mods.js",
 		"checkback.js", "portal.js", "dice.js", "evolution.js", "rocketFuel.js",
-		"infinity.js", "antimatterDimensions.js", "infinityPoints.js", "pests.js", "debuff.js",
-		"tav.js", "tavDomain.js", "breakInfinity.js", "lore.js", "otfMastery.js",
-		"infinityDimensions.js", "cante.js", "cantepocalypsePuzzle.js", "Cantepocalypse/cantepocalypse.js", "Cantepocalypse/altRanks.js",
+		"infinity.js", "antimatterDimensions.js", "infinityPoints.js", "pests.js",
+		"tav.js", "Infinity/tavDomain.js", "breakInfinity.js", "lore.js", "otfMastery.js",
+		"infinityDimensions.js", "cante.js", "Cantepocalypse/cantepocalypse.js", "Cantepocalypse/altRanks.js",
 		"Cantepocalypse/perks.js", "Cantepocalypse/anonymity.js", "Cantepocalypse/repliTrees.js", "Cantepocalypse/repliGrass.js", "Cantepocalypse/grassSkip.js",
 		"Cantepocalypse/oil.js", "Singularity/singularity.js", "epicPets.js", "pollinator.js", "factory.js",
 		"Singularity/radiation.js", "Singularity/singularityDimensions.js", "Cantepocalypse/funify.js", "Singularity/coreScraps.js", "Hall of Celestials/celestialHall.js",
@@ -25,8 +25,12 @@
 		"Singularity/starmetalEssence.js", "rockets.js", "AltU2/altUni2.js", "AltU2/stars.js", "AltU2/planets.js", "AltU2/exploration.js", "AltU2/iridite.js",
 		"Hex/hex.js", "Hex/provenance.js", "Hex/refinement.js", "Hex/blessings.js", "Hex/curses.js",
 		"Hex/purity.js", "Hex/power.js", "Hex/realms.js", "Hex/vex.js", "Hex/sacrifice.js",
+		"Check Back/cookie.js", "Check Back/coinDust.js", "Check Back/buttonEnhancement.js", "Check Back/dailyOrbs.js", "Misc/achievements.js",
+		"Hive/unih.js", "Hive/flower.js", "Hive/pollen.js", "Hive/nectar.js", "Hive/beebread.js",
+		"Hive/honey.js", "Hive/wax.js", "Hive/aleph.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
+		
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js",
-		"Check Back/cookie.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js", "DarkU1/blood.js",
+		"Check Back/cookie.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
 
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
@@ -40,8 +44,8 @@
 
 // Set your version in num and name
 let VERSION = {
-	num: 189, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
-	name: "Novasent Update I: Iridite",
+	num: 190, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
+	name: "Aleph Update I: The Hive",
 }
 
 function miscCode() {
@@ -106,6 +110,10 @@ function updateStyles() {
 			if (!player.sma.inStarmetalChallenge) layerBG = "linear-gradient(90deg, #57636d, #2e3d49)"
 			if (player.sma.inStarmetalChallenge) layerBG = "linear-gradient(90deg, #1b242b, #12181d)"
 			break;
+		case "achievements":
+			if (!player.sma.inStarmetalChallenge) layerBG = "linear-gradient(45deg, #450054, #00307f)"
+			if (player.sma.inStarmetalChallenge) layerBG = "linear-gradient(90deg, #0d0010, #000919)"
+			break;
 		case "po":
 			layerBG = "linear-gradient(45deg, #450054, #00307f)"
 			break;
@@ -158,21 +166,18 @@ function updateStyles() {
 		case "om": case "id":
 			layerBG = "#001f18"
 			break;
-		case "de":
-			layerBG = "#1c1624"
-			break;
 		case "revc":
 			layerBG = "#31aeb0"
 			break;
 		case "tad":
-			layerBG = "#b2d8d8"
+			if (player.subtabs["tad"]["Tabs"] == "Domain") layerBG = "#b2d8d8"
+			if (player.subtabs["tad"]["Tabs"] == "Infinitum") layerBG = "#c8c9fc"
+			if (player.subtabs["tad"]["Tabs"] == "Alternative Infinities") layerBG = "#9dc7fe"
 			break;
 		case "ca":
 			layerBG = "#2a3e66"
 			if (player.subtabs["ca"]['stuff'] == "Galaxy Dust") layerBG = "#0f1226"
-			break;
-		case "cap":
-			layerBG = "#1f1e33"
+			if (player.subtabs["ca"]["stuff"] == "Trials" || player.subtabs["ca"]["stuff"] == "THE BARRIER") layerBG = "#1f1e33"
 			break;
 		case "cp": case "ar": case "pr": case "an": case "rt":
 		case "rg": case "gs": case "oi": case "fu":
@@ -209,6 +214,13 @@ function updateStyles() {
 		case "au2":
 			layerBG = "#151230"
 			break;
+		case "bee": case "fl": case "bpl": case "ne": case "bb":
+		case "ho": case "wa":
+			layerBG = "#2a1c00"
+			break;
+		case "al":
+			layerBG = "#1f001f"
+			break;
 		case "cb":
 			layerBG = "#021124"
 			break;
@@ -223,13 +235,10 @@ function updateStyles() {
 			layerBG = "linear-gradient(-45deg, #655421, #fad25a)"
 			break;
 		case "ev1":
-			layerBG = "linear-gradient(140deg, rgba(117,0,0,1) 0%, rgba(126,110,0,1) 20%, rgba(117,0,0,1) 40%, rgba(126,110,0,1) 60%, rgba(117,0,0,1) 80%, rgba(126,110,0,1) 100%)"
+			layerBG = "linear-gradient(0deg, #3f1500, #722600, #3f1500)"
 			break;
 		case "ev2":
 			layerBG = "url(resources/gdbg.jpg)"
-			break;
-		case "ev4":
-			layerBG = "linear-gradient(-90deg, #f38004, #fc3404)"
 			break;
 		case "ev8":
 			layerBG = "#252525"
@@ -424,7 +433,7 @@ function updateStyles() {
 	        gridBackground.style.height = "100%";
         	gridBackground.style.overflow = "hidden";
     	    gridBackground.style.zIndex = "-2006"; // Ensure it stays in the background
-	        gridBackground.style.background = "#061900"; // Galaxy gradient
+	        gridBackground.style.background = "#061900"; // Background Color
 			gridBackground.style.backgroundImage = "linear-gradient(#092600 2px, transparent 2px), linear-gradient(to right, #092600 2px, #061900 2px)";
 			gridBackground.style.backgroundSize = "40px 40px";
         	document.body.appendChild(gridBackground);
@@ -457,6 +466,9 @@ function updateStyles() {
 				break;
 			case "A2":
 				sideBG = "radial-gradient(circle, #151230, #000000)"
+				break;
+			case "UB":
+				sideBG = "#150e00"
 				break;
 			case "CB":
 				sideBG = "#010812"
@@ -494,7 +506,7 @@ function updateStyles() {
 			break;
 		case "i": case "r": case "f": case "p": case "t":
 		case "g": case "pe": case "pol": case "gh": case "rf":
-		case "de": case "m": case "d": case "re": case "fa":
+		case "m": case "d": case "re": case "fa":
 			player.musuniverse = "U1"
 			break;
 		case "in": case "ad": case "ip": case "id": case "tad":
@@ -523,6 +535,10 @@ function updateStyles() {
 		case "mi":
 			player.musuniverse = "MI"
 			break;
+		case "bee": case "fl": case "bpl": case "ne": case "bb":
+		case "ho": case "wa": case "al":
+			player.musuniverse = "UB"
+			break;
 		case "cb": case "ev0": case "ev1": case "ev2": case "ev4":
 		case "ev8": case "ev10": case "ep0": case "ep1":
 		case "ep2": case "ep3": case "ep4": case "ep5":
@@ -543,11 +559,15 @@ function updateStyles() {
 				playAndLoopAudio("music/hex.mp3", options.musicVolume/10)
 				break;
 			case "U1":
-				if (player.startedGame && player.ip.activeChallenge == null && !inChallenge("tad", 11)) playAndLoopAudio("music/universe1.mp3", options.musicVolume/10)
-				if (player.ip.activeChallenge != null || inChallenge("tad", 11)) playAndLoopAudio("music/tav.mp3", options.musicVolume/10)
+				if (player.startedGame && player.ip.activeChallenge == null) playAndLoopAudio("music/universe1.mp3", options.musicVolume/10)
+				if (player.ip.activeChallenge != null) playAndLoopAudio("music/tav.mp3", options.musicVolume/10)
 				break;
 			case "U2":
-				playAndLoopAudio("music/universe2.mp3", options.musicVolume/10)
+				if (player.tab != "tad") {
+					playAndLoopAudio("music/universe2.mp3", options.musicVolume/10)
+				} else {
+					playAndLoopAudio("music/tavDomain.mp3", options.musicVolume/10)
+				}
 				break;
 			case "A1":
 				playAndLoopAudio("music/alt-uni1.mp3", options.musicVolume/10)
@@ -584,6 +604,9 @@ function updateStyles() {
 			case "MI":
 				playAndLoopAudio("music/mining.mp3", options.musicVolume/10)
 				break;
+			case "UB":
+				playAndLoopAudio("music/hive.mp3", options.musicVolume/10)
+				break;
 			case "CB":
 				if (player.fi.battleTier.eq(0)) playAndLoopAudio("music/checkback.mp3", options.musicVolume/10)
 				if (player.fi.battleTier.eq(1)) playAndLoopAudio("music/fighting.mp3", options.musicVolume/10)
@@ -595,110 +618,77 @@ function updateStyles() {
 		}
 	}
         //cutscene music logic
-        if ((cutsceneActive || window.cinematicCutsceneActive) && options.musicToggle)
-        {
+        if ((cutsceneActive || window.cinematicCutsceneActive) && options.musicToggle) {
             //if (cutsceneID == 12345 && cutsceneIndex == 2) playAndLoopAudio("music/space.mp3", options.musicVolume/10); examples
             //if (cutsceneID == 12345 && cutsceneIndex == 3) playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
 
-            if (cutsceneID == 1) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 9) playAndLoopAudio("music/marcel.mp3", options.musicVolume/10);
-            if (cutsceneID == 11) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 14) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 15) playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 16) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 18) playAndLoopAudio("music/marcel.mp3", options.musicVolume/10);
-            if (cutsceneID == 19) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 24) playAndLoopAudio("music/marcel.mp3", options.musicVolume/10);
-            if (cutsceneID == 26) playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 28) playAndLoopAudio("music/tavCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 29) playAndLoopAudio("music/tavCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 30) playAndLoopAudio("music/marcel.mp3", options.musicVolume/10);
-            if (cutsceneID == 31) playAndLoopAudio("music/tavCutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 32) playAndLoopAudio("music/tavCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 33) playAndLoopAudio("music/tavCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 37) playAndLoopAudio("music/tavCutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 39) playAndLoopAudio("music/tavDeath.mp3", options.musicVolume/10);
-            if (cutsceneID == 41) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 43) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 46) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 47) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 48) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 50) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 52) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 53) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 54) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 55) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 56) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 57) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 58) playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 59) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 60) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 61) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 62) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 63) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 65) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 66) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
+			switch (cutsceneID) {
+				case 1: case 11: case 14: case 16: case 19:
+				case 41: case 43: case 46: case 61: case 95:
+				case 108:
+					playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
+					break;
+				case 9: case 18: case 24: case 30: case 94:
+					playAndLoopAudio("music/marcel.mp3", options.musicVolume/10);
+					break;
+				case 15: case 26: case 58: case 70: case 106:
+					playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
+					break;
+				case 28: case 29: case 32: case 33: case 119:
+				case 120:
+					playAndLoopAudio("music/tavCutscene.mp3", options.musicVolume/10);
+					break;
+				case 31: case 37:
+					playAndLoopAudio("music/tavCutsceneBox.mp3", options.musicVolume/10);
+					break;
+				case 39:
+					playAndLoopAudio("music/tavDeath.mp3", options.musicVolume/10);
+					break;
+				case 47: case 48: case 50: case 52: case 53:
+				case 54: case 55: case 56: case 57: case 59:
+				case 60:
+					playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
+					break;
+				case 62: case 63: case 65: case 66: case 73:
+				case 75: case 76: case 77: case 78: case 79:
+				case 93: case 112:
+					playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
+					break;
+				case 69: case 71: case 72: case 123: case 124:
+					playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
+					break;
+				case 74:
+					playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10);
+					break;
+				case 81: case 82: case 83: case 84: case 91:
+					playAndLoopAudio("music/matosCutsceneBox.mp3", options.musicVolume/10);
+					break;
+				case 85: case 87: case 88: case 89: case 90:
+					playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
+					break;
+				case 92:
+					playAndLoopAudio("music/novaCutscene.mp3", options.musicVolume/10);
+					break;
+				case 96: case 97: case 98: case 99: case 100:
+				case 101: case 102: case 103: case 104: case 107:
+				case 109: case 110:
+					playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
+					break;
+				case 113: case 114: case 115: case 116: case 117:
+				case 118: case 121: case 122: case 125:
+					playAndLoopAudio("music/alephCutscene.mp3", options.musicVolume/10);
+					break;
+			}
             if (cutsceneID == 68 && cutsceneIndex < 7) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
             if (cutsceneID == 68 && cutsceneIndex >= 7) playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
-            if (cutsceneID == 69) playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
-            if (cutsceneID == 70) playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 71) playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
-            if (cutsceneID == 72) playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
-            if (cutsceneID == 73) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 74) playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10);
-            if (cutsceneID == 75) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 76) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 77) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 78) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 79) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-			//no music for cutsceneID == 80
-            if (cutsceneID == 81) playAndLoopAudio("music/matosCutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 82) playAndLoopAudio("music/matosCutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 83) playAndLoopAudio("music/matosCutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 84) playAndLoopAudio("music/matosCutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 85) playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
-			//no music for cutsceneID == 86
-            if (cutsceneID == 87) playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 88) playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 89) playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 90) playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 91) playAndLoopAudio("music/matosCutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 92) playAndLoopAudio("music/novaCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 93) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 94) playAndLoopAudio("music/marcel.mp3", options.musicVolume/10);
-            if (cutsceneID == 95) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 96) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 97) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 98) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 99) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 100) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 101) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 102) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 103) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 104) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
-			//no music for cutsceneID == 105
-            if (cutsceneID == 106) playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 107) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 108) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 109) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 110) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
             if (cutsceneID == 111 && cutsceneIndex < 23) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
             if (cutsceneID == 111 && cutsceneIndex > 23) playAndLoopAudio("music/novaCutscene.mp3", options.musicVolume/10);
             if (cutsceneID == 112) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-
-			//arbitrary IDs
-			if (cutsceneID == -1) playAndLoopAudio("music/aniciffoCutscene.mp3", options.musicVolume/10);	
-			if (cutsceneID == -2) playAndLoopAudio("music/aniciffoCutscene.mp3", options.musicVolume/10);	
-			// no music for cutsceneID == -3
-			// no music for cutsceneID == -4
-			// no music for cutsceneID == -5
         }
-        if (window.cinematicCutsceneActive && options.musicToggle)
-        {
+        if (window.cinematicCutsceneActive && options.musicToggle) {
             if (cinematicCutsceneID == 40) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
         }
-	if (options.musicToggle == false)
-	{
+	if (options.musicToggle == false) {
 		stopAudio();
 	}
 	
@@ -718,6 +708,90 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.10 - Aleph Update Part I: The Hive</h3><br>
+		Content:<br>
+			- Added a new universe, The Hive.<br>
+			- Revamped Tav's Domain into a mini universe all contained in one layer.<br>
+			- Revamped Grass layer.<br>
+			- Revamped Repli-Grass layer.<br>
+			- Replaced IC8 challenge with an antimatter themed challenge.<br>
+			- Replaced Cante puzzles with Cante trials.<br>
+			- Revamped MrRedShark layer into Button Enhancement layer.<br>
+			- Revamped Insane Face layer into Daily Orbs layer.<br>
+			- Added 3 new pet evolutions.<br>
+			- Revamped pet shop to properly support bulk pet buying.<br>
+			- Added a new ship.<br>
+			- Added pet ascensions.<br>
+			- Added space pet ascensions.<br>
+			- Added 2 singularity milestones.<br>
+			- Added achievements. (Still WIP, only 2 pages currently)<br><br>
+		QoL:<br>
+			- Reduced star exploration time requirements.<br>
+			- Made certain effect texts show more decimal digits.<br>
+			- Removed sacrificing, you now purchase automation through button enhancement layer.<br>
+			- Changed the name of pet buttons to crate buttons to prevent confusion.<br>
+			- CB alerts now show up as popups.<br>
+			- You can now individually disable milestone, achievement, and misc popups.<br>
+			- Improved Starmetal Essence visuals.<br>
+			- Improved Cante core visuals.<br>
+			- Improved Halter with more options.<br>
+			- Added a faster booster dice toggle, unlocked through an achievement.<br>
+			- Added softcap warnings to the 'Buys another die' buyable.<br>
+			- Changed dice roll text to make the roll range more clear.<br>
+			- Added a rocket fuel upgrade that gives +1% grasshoppers per second.<br>
+			- Added 2 rocket fuel upgrades while in IC6 to make it less painful to beat.<br>
+			- Revamped AD automation to be visually better, more performant, and cheaper to upgrade.<br>
+			- Added infinity challenge completion warnings to the U2 icon.<br><br>
+		Balancing:<br>
+			- Reworked Star Exploration effects, and added a 100 visit effect cap.<br>
+			- Added a 50 level cap to ships.<br>
+			- Nerfed most space buildings.<br>
+			- Changed Fun Upgrade 2 to be based on perk points.<br>
+			- Gave Fear challenge a x10 singularity point reward.<br>
+			- Improved pet point gain from buttons with longer cooldowns.<br>
+			- Buffed legendary summon rewards.<br>
+			- Added CB XP button evolution shard chance improvement buffs throughout the game.<br>
+			- Added crate roll chance buffs throughout the game.<br>
+			- Most pet formulas modified to support pet ascensions.<br>
+			- Some pet effects are changed to be exponent buffs.<br>
+			- Pet evolutions are now capped at 10 levels.<br>
+			- Added a softcap to Might E:3.<br>
+			- Buffed 2nd refinement effects slightly.<br>
+			- Moved Refinement 12 milestone to Refinement 6.<br>
+			- New Refinement 12 milestone makes hex point gain based on highest celestial points.<br>
+			- Made Refinement 84 milestones effect a native feature of blessing automation.<br>
+			- New Refinement 84 milestone gives +1% Blessings per second (excluding RC1).<br>
+			- Added a level cap of 99 to cores.<br>
+			- Made infinity resets before infinity 5 reset AD resources instead of purchases.<br>
+			- Replaced Kres/Nav/Sel Upgrade II (as they didn't even do anything).<br>
+			- Added an emergency softcap to antimatter at 1e100,000.<br>
+			- Removed broken infinities, replaced by a new resource in Tav's Domain.<br>
+			- Break negative infinity is now unlocked through Tav's Domain instead of Voidgwa.<br>
+			- Added softcaps to some inflation prone BI upgrades.<br>
+			- 'Chances' above 100% count for a chance to get multiple of that reward.<br>
+			- Changed 10,000 charge milestone to instead buff infinities.<br>
+			- Replaced Infinity 10,000 milestone with one that keeps Pre-OTF buyables on infinity reset.<br>
+			- Changed some crystal and OTF mastery buyables to match the Tav's Domain changes.<br>
+			- Changed rocket fuel timer formulas to be more friendly to early game.<br><br>
+		Bugfixes:<br>
+			- Fixed Star Exploration node C1 not being accessible.<br>
+			- Fixed skipping time in CB Fighting not giving eclipse drain damage.<br>
+			- Fixed being able to auto-click cookie while not hovering over it.<br>
+			(I did add a way to gain similar functionality through gameplay)<br>
+			- Fixed Dark Rank's 3rd Softcap not functioning correctly.<br>
+			- Fixed certain buttons that switch universes setting your universe to nonexistant values.<br>
+			- Fixed header text in the Celestial Hall.<br>
+			- Fixed the Z-Jinx inflation bug. (yippee)<br>
+			- Fixed Sacrifice layer's Alert upgrade being able to nerf sacred energy gain.<br>
+			- Fixed grass studies container not properly changing height depending on unlocked studies.<br><br>
+		Performance:<br>
+			- Remade Grass and Repli-Grass as they were very lag prone.<br>
+			- Apparently the moving grass from repli-grass never properly deleted itself, so that is fixed.<br>
+			- Made titles, descriptions, images, css styles, etc. not load via tmp, and instead load when layer is active.<br>
+			This is a notable improvement to performance :)<br>
+			- Made universes be disabled if you haven't reached their first unlock spot.<br>
+			- These changes could cause some uncaught bugs, so please report any bugs.<br><br>
+
 	<h3>v1.9 - The Novasent Update Part I: Iridite</h3><br>
 		Content:<br>
 			- Fully rewrote the cutscenes.<br>
@@ -731,11 +805,11 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added Iridite's bossfight.<br>
 			- Added Space Energy.<br>
 			- Added Space Buildings.<br>
-			- Added a new legendary pet.<br>
+			- Added a new legendary pet.<br><br>
 	    QoL:<br>
-			- Fully revamped the cutscene system.<br>
+			- Fully revamped the cutscene system.<br><br>
 		Balancing:<br>
-			- A lot of things I don't remember.<br>
+			- A lot of things I don't remember.<br><br>
 		Bugfixes:<br>
 			- A lot of things I don't remember<br><br>
 	<h3>v1.8.5 - Epic Pet Revamp Part 1</h3><br>
@@ -1210,21 +1284,21 @@ let winText = `Congratulations! You have completed the entirety of Celestial Inc
 // (The ones here are examples, all official functions are already taken care of)z
 var doNotCallTheseFunctionsEveryTick = [
 	"blowUpEverything", "startCutscene1","startCutscene2", "startCutscene3", "rankReset",
-	"tierReset", "tetrReset", "prestigeReset", "loadGrass", "unloadGrass",
-	"pentReset", "loadGoldGrass", "unloadGoldGrass", "grasshopReset", "codeExperienceReset",
+	"tierReset", "tetrReset", "prestigeReset",
+	"pentReset", "grasshopReset", "codeExperienceReset",
 	"levelToXP", "xpToLevel", "levelup", "petButton1", "petButton2",
 	"resetPrices", "addDiceEffect", "diceRoll", "evoCutscenes", "rocketFuelReset",
 	"rocketFuelAbility", "petButton3","bigCrunch", "startCutscene4", "startCutscene5",
 	"dimBoostReset", "startCutscene6", "galaxyReset", "startCutscene7", "startCutscene8",
-	"dailyReward", "dailyRewardPet", "petButton4", "hexReq", "hexGain",
+	"petButton4", "hexReq", "hexGain",
 	"startCutscene9", "startCutscene10", "startCutscene11","crunch", "startCutscene12",
-	"startCutscene13", "antidebuffReset", "startCutscene14", "negativeInfinityReset", "reverseCrunch",
+	"startCutscene13", "startCutscene14", "negativeInfinityReset", "reverseCrunch",
 	"startCutscene15", "startCutscene16", "startCutscene17", "startCutscene18", "breakInfinities",
 	"domainReset", "gainAutomationShard", "sacrificeCommonPet", "sacrificeAllCommonPet", "sacrificeUncommonPet",
 	"sacrificeAllUncommonPet", "sacrificeRarePet", "sacrificeAllRarePet", "steelieReset", "crystalReset",
-	"replicantiMultiply", "gainCanteCore", "replicantiPointMultiply", "repliLeavesMultiply", "loadRepliGrass",
-	"unloadRepliGrass", "grassSkipReset", "oilReset", "convertRememberanceCore", "startCutsceneDice",
-	"startCutsceneRocketFuel", "startCutsceneHex", "startRealmModCutscene", "loadMoonstone", "unloadMoonstone",
+	"replicantiMultiply", "gainCanteCore", "replicantiPointMultiply", "repliLeavesMultiply", "updateSoftcap",
+	"grassSkipReset", "oilReset", "convertRememberanceCore", "startCutsceneDice",
+	"startCutsceneRocketFuel", "startCutsceneHex", "startRealmModCutscene",
 	"petButton5", "petButton6", "refreshBanner", "commonPetBanner", "uncommonPetBanner",
 	"rarePetBanner", "singularityReset", "instantProduction", "startCutscene19", "startCutscene20",
 	"startCutscene21", "startCutscene22", "startCutscene23", "startCutscene24", "funifyReset",
@@ -1235,9 +1309,9 @@ var doNotCallTheseFunctionsEveryTick = [
 	"generateCelestialite", "lootCelestialite", "startCutscene30", "startCutscene31", "startCutscene32",
 	"startCutscene33", "startCutscene34", "resetFightCooldown", "starReset", "legendarySummon",
 	"generatePhase1Attack", "generatePhase2Attack", "startCutscene35", "startCutscene36", "startCutscene37",
-	"startCutscene38", "startCutscene39", "selectCelestialites", "petDeath", "celestialiteDeath",
-	"petAbility", "celestialiteAbility", "arriveAtStar", "cookieClick", "spaceEnergyReset"
-
+	"startCutscene38", "startCutscene39", "cookieClick", "generateFlower", "generateMult", "flowerClick",
+	"selectCelestialites", "petDeath", "celestialiteDeath", "petAbility", "celestialiteAbility",
+	"arriveAtStar", "spaceEnergyReset",
 ]
 
 function getStartPoints(){
@@ -1337,7 +1411,7 @@ function fixOldSave(oldVersion){
 		// Prevent old save grass buyables from being over cap
 		if (getBuyableAmount("g", 11).gt(1000)) setBuyableAmount("g", 11, 1000)
 		if (getBuyableAmount("g", 12).gt(200)) setBuyableAmount("g", 12, 200)
-		if (getBuyableAmount("g", 13).gt(500)) setBuyableAmount("g", 13, 500)
+		if (getBuyableAmount("g", 13).gt(5)) setBuyableAmount("g", 13, 5)
 		if (getBuyableAmount("g", 14).gt(1000)) setBuyableAmount("g", 14, 1000)
 		if (getBuyableAmount("g", 15).gt(1000)) setBuyableAmount("g", 15, 1000)
 		if (getBuyableAmount("g", 16).gt(1000)) setBuyableAmount("g", 16, 1000)
@@ -1362,12 +1436,12 @@ function fixOldSave(oldVersion){
 		setLevelableAmount("pet", 404, player.cb.epicPetLevels[3])
 		setLevelableAmount("pet", 405, player.cb.epicPetLevels[4])
 		setLevelableAmount("pet", 406, player.cb.epicPetLevels[5])
-		player.pet.singularityFragments = player.cb.epicPetFragments[3]
+		player.pet.singularityFragments = new Decimal(player.cb.epicPetFragments[3])
 		
-		player.pet.lastDicePetRoll = player.cb.lastDicePetRoll
-		player.pet.highestDicePetCombo = player.cb.highestDicePetCombo
-		player.pet.dicePetCombo = player.cb.dicePetCombo
-		player.pet.dicePetPointsGain = player.cb.dicePetPointsGain
+		player.pet.lastDicePetRoll = new Decimal(player.cb.lastDicePetRoll)
+		player.pet.highestDicePetCombo = new Decimal(player.cb.highestDicePetCombo)
+		player.pet.dicePetCombo = new Decimal(player.cb.dicePetCombo)
+		player.pet.dicePetPointsGain = new Decimal(player.cb.dicePetPointsGain)
 
 		setLevelableAmount("pet", 1103, player.cb.evolvedLevels[0])
 		setLevelableAmount("pet", 1204, player.cb.evolvedLevels[1])
@@ -1381,8 +1455,14 @@ function fixOldSave(oldVersion){
 		setLevelableAmount("pet", 1104, player.cb.evolvedLevels[9])
 		setLevelableAmount("pet", 1205, player.cb.evolvedLevels[10])
 
-		if (player.d.diceEffects[14].gt(100)) player.d.diceEffects[14] = new Decimal(100)
-		if (player.rf.abilityEffects[7].gt(1000)) player.rf.abilityEffects[7] = new Decimal(1000)
+		if (typeof player.d.diceEffects[14] == "object") {
+			if (player.d.diceEffects[14].gt(100)) player.d.diceEffects[14] = new Decimal(100)
+		}
+		if (typeof player.rf.abilityEffects[7] == "object") {
+			if (player.rf.abilityEffects[7].gt(1000)) player.rf.abilityEffects[7] = new Decimal(1000)
+		}
+
+		return
 	}
 	if (oldVersion < 161) {
 		if (player.points.gt("1e100000")) {
@@ -1393,8 +1473,12 @@ function fixOldSave(oldVersion){
 		}
 	}
 	if (oldVersion < 180) {
-		if (player.d.diceEffects[13].gt(10000)) player.d.diceEffects[13] = new Decimal(10000)
-		if (player.d.diceEffects[14].gt(100)) player.d.diceEffects[14] = new Decimal(100)
+		if (typeof player.d.diceEffects[13] == "object") {
+			if (player.d.diceEffects[13].gt(10000)) player.d.diceEffects[13] = new Decimal(10000)
+		}
+		if (typeof player.d.diceEffects[14] == "object") {
+			if (player.d.diceEffects[14].gt(100)) player.d.diceEffects[14] = new Decimal(100)
+		}
 		if (player.rf.abilityEffects[7].gt(1000)) player.rf.abilityEffects[7] = new Decimal(1000)
 		if (player.id.infinityPower.gte(1e300)) player.id.infinityPower = new Decimal(1e300)
 		if (player.sd.singularityPower.gte(1e300)) player.sd.singularityPower = new Decimal(1e300)
@@ -1416,11 +1500,6 @@ function fixOldSave(oldVersion){
 			player.hrm.realmEssence = new Decimal(player.re.halterEssence)
 			player.hrm.totalRealmEssence = new Decimal(player.re.halterEssence)
 		}
-		for (let prop in player.ta.buyables) {
-			if (prop != 19 && prop != 39) {
-				if (getBuyableAmount("ta", prop).gt(layers.ta.buyables[prop].purchaseLimit())) setBuyableAmount("ta", prop, layers.ta.buyables[prop].purchaseLimit())
-			}
-		}
 		for (let prop in player.ip.buyables) {
 			if (getBuyableAmount("ip", prop).gt(layers.ip.buyables[prop].purchaseLimit())) setBuyableAmount("ip", prop, layers.ip.buyables[prop].purchaseLimit())
 		}
@@ -1429,9 +1508,6 @@ function fixOldSave(oldVersion){
 		}
 		for (let prop in player.om.buyables) {
 			if (getBuyableAmount("om", prop).gt(layers.om.buyables[prop].purchaseLimit())) setBuyableAmount("om", prop, layers.om.buyables[prop].purchaseLimit())
-		}
-		for (let prop in player.bi.buyables) {
-			if (getBuyableAmount("bi", prop).gt(layers.bi.buyables[prop].purchaseLimit())) setBuyableAmount("bi", prop, layers.bi.buyables[prop].purchaseLimit())
 		}
 		for (let prop in player.ca.buyables) {
 			if (getBuyableAmount("ca", prop).gt(layers.ca.buyables[prop].purchaseLimit())) setBuyableAmount("ca", prop, layers.ca.buyables[prop].purchaseLimit())
@@ -1512,5 +1588,70 @@ function fixOldSave(oldVersion){
 		setBuyableAmount("ep2", 11, new Decimal(0))
 		setBuyableAmount("ep2", 12, new Decimal(0))
 		setBuyableAmount("ep2", 13, new Decimal(0))
+	}
+
+	if (oldVersion < 190) {
+		if (player.hbl.boosterLevels) {
+			for (let i = 0; i < player.hbl.boosterLevels.length; i++) {
+				player.hbl.boosters[i].level = new Decimal(player.hbl.boosterLevels[i])
+				player.hbl.boosters[i].xp = new Decimal(player.hbl.boosterXP[i])
+			}
+		}
+		if (player.cap.cantepocalypseUnlock) player.ca.cantepocalypseUnlock = player.cap.cantepocalypseUnlock
+		if (player.hpu.purifier) {
+			for (let i = 0; i < player.hpu.purifier.length; i++) {
+				player.hpu.purifiers[i].amount = new Decimal(player.hpu.purifier[i])
+			}
+		}
+		for (let i in player.d.boosterEffects) {
+			player.d.boosterEffects[i] = new Decimal(player.d.diceEffects[i])
+		}
+		for (let i in player.tad.buyables) {
+            player.tad.buyables[i] = new Decimal(0)
+        }
+		for (let i in player.pet.levelables) {
+			if (tmp.pet.levelables && tmp.pet.levelables[i].levelLimit) {
+				if (player.pet.levelables[i][0].gt(tmp.pet.levelables[i].levelLimit)) player.pet.levelables[i][0] = tmp.pet.levelables[i].levelLimit
+			}
+		}
+		for (let i in player.ir.levelables) {
+			if (tmp.ir.levelables && tmp.ir.levelables[i].levelLimit) {
+				if (player.ir.levelables[i][0].gt(tmp.ir.levelables[i].levelLimit)) player.ir.levelables[i][0] = tmp.ir.levelables[i].levelLimit
+			}
+		}
+		player.ev2.buyables[101] = new Decimal(player.ev2.buyables[13])
+		player.ev2.buyables[102] = new Decimal(player.ev2.buyables[14])
+		player.ev2.buyables[111] = new Decimal(player.ev2.buyables[15])
+		player.ev2.buyables[112] = new Decimal(player.ev2.buyables[16])
+		player.ev2.buyables[121] = new Decimal(player.ev2.buyables[17])
+		player.ev2.buyables[122] = new Decimal(player.ev2.buyables[18])
+		player.ev2.buyables[131] = new Decimal(player.ev2.buyables[11])
+		player.ev2.buyables[132] = new Decimal(player.ev2.buyables[12])
+		player.ev2.buyables[141] = new Decimal(player.ev2.buyables[21])
+		player.ev2.buyables[142] = new Decimal(player.ev2.buyables[22])
+		player.ev2.buyables[151] = new Decimal(player.ev2.buyables[23])
+		player.ev2.buyables[152] = new Decimal(player.ev2.buyables[24])
+		player.ev2.buyables[161] = new Decimal(player.ev2.buyables[25])
+		player.ev2.buyables[162] = new Decimal(player.ev2.buyables[26])
+		player.ev2.buyables[171] = new Decimal(player.ev2.buyables[27])
+		player.ev2.buyables[172] = new Decimal(player.ev2.buyables[28])
+		// REFUNDS
+		if (typeof player.cb.totalAutomationShards != "undefined") {
+			player.cb.petPoints = player.cb.petPoints.add(new Decimal(player.cb.totalAutomationShards).pow(0.5).mul(20000))
+        	doPopup("none", "+" + formatWhole(new Decimal(player.cb.totalAutomationShards).pow(0.5).mul(20000)) + " pet points!", "REFUND", 5, "#A2D800", "resources/petPoint.png")
+		}
+		let evoRefund = new Decimal(0)
+		if (getBuyableAmount("cb", 21)) evoRefund = evoRefund.add(Decimal.sumGeometricSeries(getBuyableAmount("cb", 21), 6, 1.5, 0).floor())
+		if (getBuyableAmount("ev4", 11)) evoRefund = evoRefund.add(Decimal.sumGeometricSeries(getBuyableAmount("ev4", 11), 1, 1.2, 0).floor())
+		if (evoRefund.gt(0)) {
+			player.cb.evolutionShards = player.cb.evolutionShards.add(evoRefund)
+    		doPopup("none", "+" + formatWhole(evoRefund) + " Evolution Shard!", "REFUND", 5, "#d487fd", "resources/evoShard.png")
+		}
+		let paraRefund = new Decimal(0)
+		if (getBuyableAmount("ev4", 12)) paraRefund = paraRefund.add(Decimal.sumGeometricSeries(getBuyableAmount("ev4", 12), 1, 1.1, 0).floor())
+		if (paraRefund.gt(0)) {
+			player.cb.paragonShards = player.cb.paragonShards.add(paraRefund)
+            doPopup("none", "+" + formatWhole(paraRefund) + " Paragon Shard!", "REFUND", 5, "#4c64ff", "resources/paragonShard.png")
+		}
 	}
 }

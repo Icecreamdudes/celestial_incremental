@@ -41,6 +41,12 @@
     color: "#8a00a9",
     update(delta) {
         let onepersec = new Decimal(1)
+        let mult = new Decimal(1)
+        mult = mult.mul(buyableEffect("om", 16))
+        if (player.tad.altInfinities.corrupted.milestone.gte(2)) mult = mult.mul(player.tad.altInfinities.corrupted.effect2)
+        mult = mult.mul(buyableEffect("p", 16))
+        mult = mult.mul(levelableEffect("pet", 109)[0])
+        mult = mult.mul(buyableEffect("fu", 43))
 
         if (player.po.dice && player.d.dicePoints.gte(1)) {
             if (!hasUpgrade("s", 12)) player.om.diceMasteryPointsToGet = player.d.dicePoints.plus(1).log10().pow(2.4).mul(10)
@@ -49,12 +55,7 @@
         }
         if (hasUpgrade("s", 12)) player.om.diceMasteryPointsToGet = player.ta.highestDicePoints.plus(1).log10().pow(2.4).mul(10)
         
-        player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(buyableEffect("om", 16))
-        player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(buyableEffect("tad", 19))
-        player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(buyableEffect("tad", 23))
-        player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(buyableEffect("p", 17))
-        player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(levelableEffect("pet", 109)[0])
-        player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(buyableEffect("fu", 43))
+        player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(mult)
 
         if (player.po.rocketFuel && player.rf.rocketFuel.gte(1)) {
             if (!hasUpgrade("s", 12)) player.om.rocketFuelMasteryPointsToGet = player.rf.rocketFuel.plus(1).log10().pow(2.7)
@@ -63,12 +64,7 @@
         }
         if (hasUpgrade("s", 12)) player.om.rocketFuelMasteryPointsToGet = player.ta.highestRocketFuel.plus(1).log10().pow(2.7)
 
-        player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(buyableEffect("om", 16))
-        player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(buyableEffect("tad", 18))
-        player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(buyableEffect("tad", 23))
-        player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(buyableEffect("p", 17))
-        player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(levelableEffect("pet", 109)[0])
-        player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(buyableEffect("fu", 43))
+        player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(mult)
 
         if ((player.po.hex || hasUpgrade("s", 18)) && player.h.hexPoint.gte(1)) {
             if (!hasUpgrade("s", 12)) player.om.hexMasteryPointsToGet = player.h.hexPoint.plus(1).log10().pow(1.65)
@@ -77,12 +73,7 @@
         }
         if (hasUpgrade("s", 12)) player.om.hexMasteryPointsToGet = player.ta.highestHexPoints.plus(1).log10().pow(1.65)
 
-        player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(buyableEffect("om", 16))
-        player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(buyableEffect("tad", 17))
-        player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(buyableEffect("tad", 23))
-        player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(buyableEffect("p", 17))
-        player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(levelableEffect("pet", 109)[0])
-        player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(buyableEffect("fu", 43))
+        player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(mult)
 
         player.om.diceMasteryPointsEffect = player.om.diceMasteryPoints.pow(0.1).div(8).add(1).pow(levelableEffect("ir", 6)[0])
         player.om.rocketFuelMasteryPointsEffect = player.om.rocketFuelMasteryPoints.pow(0.08).div(10).add(1).pow(levelableEffect("ir", 6)[0])
@@ -103,12 +94,12 @@
     upgrades: {},
     buyables: {
         11: {
-            costBase() { return new Decimal(10000) },
+            costBase() { return new Decimal(1000) },
             costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(250) },
+            purchaseLimit() { return new Decimal(100) },
             currency() { return player.om.diceMasteryPoints},
             pay(amt) { player.om.diceMasteryPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1).min(6) },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -137,20 +128,20 @@
             style: { width: '275px', height: '150px', backgroundColor: "#4531D4", backgroundImage: "linear-gradient(0deg, #8a00a9, #0061ff)", backgroundOrigin: "border-box", color: "white"},
         },
         12: {
-            costBase() { return new Decimal(10000) },
+            costBase() { return new Decimal(1000) },
             costGrowth() { return new Decimal(1.25) },
-            purchaseLimit() { return new Decimal(250) },
+            purchaseLimit() { return new Decimal(100) },
             currency() { return player.om.rocketFuelMasteryPoints},
             pay(amt) { player.om.rocketFuelMasteryPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.02).add(1).min(3) },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Broken Infinity Mastery Multiplier"
+                return "Infinitum Mastery Multiplier"
             },
             display() {
-                return "which are multiplying broken infinities by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are multiplying infinitum by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Rocket Fuel Mastery Points"
             },
             buy(mult) {
@@ -171,12 +162,12 @@
             style: { width: '275px', height: '150px', backgroundColor: "#4531D4", backgroundImage: "linear-gradient(0deg, #8a00a9, #0061ff)", backgroundOrigin: "border-box", color: "white"},
         },
         13: {
-            costBase() { return new Decimal(10000) },
-            costGrowth() { return new Decimal(1.4) },
-            purchaseLimit() { return new Decimal(250) },
+            costBase() { return new Decimal(1000) },
+            costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(100) },
             currency() { return player.om.hexMasteryPoints},
             pay(amt) { player.om.hexMasteryPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01).add(1).min(2) },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -184,7 +175,7 @@
                 return "Alternate Infinity Mastery Multiplier"
             },
             display() {
-                return "which are multiplying alternate infinity types by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are multiplying T1 alternate infinities by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex Mastery Points"
             },
             buy(mult) {

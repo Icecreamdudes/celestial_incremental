@@ -217,7 +217,7 @@ addLayer("hve", {
             style: {width: "110px", minHeight: "110px", margin: "5px", borderRadius: "50%"},
         },
         32: {
-            fullDisplay() { return "Blessing boosters base is increased by +0.1"},
+            fullDisplay() { return "Blessing boosters base is increased by 20%"},
             unlocked: true,
             cost() {return new Decimal(1)},
             canAfford() { return player.hve.rowCurrent[2] > 0},

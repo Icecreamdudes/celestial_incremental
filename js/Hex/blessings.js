@@ -16,10 +16,44 @@ addLayer("hbl", {
         minRefineInput: new Decimal(0),
         minRefine: new Decimal(1),
 
-        boosterLevels: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
-        boosterXP: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
-        boosterReq: [new Decimal(6), new Decimal(12), new Decimal(36), new Decimal(600), new Decimal(3600), new Decimal(21600)],
-        boosterEffects: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(0)],
+        boosters: {
+            0: {
+                level: new Decimal(0),
+                xp: new Decimal(0),
+                req: new Decimal(6),
+                effect: new Decimal(1),
+            },
+            1: {
+                level: new Decimal(0),
+                xp: new Decimal(0),
+                req: new Decimal(12),
+                effect: new Decimal(1),
+            },
+            2: {
+                level: new Decimal(0),
+                xp: new Decimal(0),
+                req: new Decimal(36),
+                effect: new Decimal(1),
+            },
+            3: {
+                level: new Decimal(0),
+                xp: new Decimal(0),
+                req: new Decimal(600),
+                effect: new Decimal(1),
+            },
+            4: {
+                level: new Decimal(0),
+                xp: new Decimal(0),
+                req: new Decimal(3600),
+                effect: new Decimal(1),
+            },
+            5: {
+                level: new Decimal(0),
+                xp: new Decimal(0),
+                req: new Decimal(21600),
+                effect: new Decimal(0),
+            },
+        },
         boosterDeposit: 0.05,
     }},
     automate() {
@@ -30,9 +64,9 @@ addLayer("hbl", {
     update(delta) {
         player.hbl.blessingsGain = new Decimal(0)
         if (player.hre.refinement.gte(18)) player.hbl.blessingsGain = player.hre.refinement.sub(17).pow(1.6)
-        player.hbl.blessingsGain = player.hbl.blessingsGain.mul(player.hbl.boosterEffects[4])
+        player.hbl.blessingsGain = player.hbl.blessingsGain.mul(player.hbl.boosters[4].effect)
         if (hasMilestone("hbl", 1)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(2)
-        if (hasMilestone("hbl", 1) || inChallenge("hrm", 12)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(player.hpu.purifierEffects[1])
+        if (hasMilestone("hbl", 1) || inChallenge("hrm", 12)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(player.hpu.purifiers[1].effect)
         if (hasUpgrade("hpw", 1)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(upgradeEffect("hpw", 1))
         player.hbl.blessingsGain = player.hbl.blessingsGain.mul(player.hre.refinementEffect[4][0])
         if (hasMilestone("hpw", 3) && player.hbl.blessings.lt(6e5) && !inChallenge("hrm", 13)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(2)
@@ -45,19 +79,20 @@ addLayer("hbl", {
         if (hasUpgrade("hve", 62)) player.hbl.blessingsGain = player.hbl.blessingsGain.pow(1.03)
 
         let bps = new Decimal(0)
-        if (!inChallenge("hrm", 11)) bps = player.hpu.purifierEffects[4]
-        if (hasMilestone("s", 13) && !inChallenge("hrm", 11)) bps = bps.add(0.06)
+        if (!inChallenge("hrm", 11)) bps = player.hpu.purifiers[4].effect
+        if (hasMilestone("hre", 12) && !inChallenge("hrm", 11)) bps = bps.add(0.01)
+        if (hasMilestone("s", 13) && !inChallenge("hrm", 11)) bps = bps.add(0.05)
         player.hbl.blessingPerSec = player.hbl.blessingsGain.mul(bps)
         if (inChallenge("hrm", 13)) player.hbl.blessingPerSec = player.hbl.blessingPerSec.sub(player.hbl.blessings.mul(0.06))
         if (player.hbl.blessings.add(player.hbl.blessingPerSec.mul(delta)).gt(0)) player.hbl.blessings = player.hbl.blessings.add(player.hbl.blessingPerSec.mul(delta))
         
         // BOON START
         player.hbl.boonsGain = player.hbl.blessings.pow(1.6).div(6)
-        player.hbl.boonsGain = player.hbl.boonsGain.mul(player.hbl.boosterEffects[1])
+        player.hbl.boonsGain = player.hbl.boonsGain.mul(player.hbl.boosters[1].effect)
         player.hbl.boonsGain = player.hbl.boonsGain.mul(player.hre.refinementEffect[3][0])
         player.hbl.boonsGain = player.hbl.boonsGain.mul(buyableEffect("hcu", 108))
         if (hasMilestone("hbl", 4)) player.hbl.boonsGain = player.hbl.boonsGain.mul(2)
-        if (hasMilestone("hbl", 4) || inChallenge("hrm", 12)) player.hbl.boonsGain = player.hbl.boonsGain.mul(player.hpu.purifierEffects[1])
+        if (hasMilestone("hbl", 4) || inChallenge("hrm", 12)) player.hbl.boonsGain = player.hbl.boonsGain.mul(player.hpu.purifiers[1].effect)
         player.hbl.boonsGain = player.hbl.boonsGain.mul(player.h.prePowerMult)
 
         // POWER AND AUTOMATION
@@ -69,59 +104,59 @@ addLayer("hbl", {
             let val = 0.1
             if (hasUpgrade("hpw", 51)) val = val * 10
             if (hasUpgrade("hpw", 53)) val = val * 10
-            for (let i = 0; i < 6; i++) {
-                player.hbl.boosterXP[i] = player.hbl.boosterXP[i].add(player.hbl.boons.mul(val).mul(delta))
+            for (let i in player.hbl.boosters) {
+                player.hbl.boosters[i].xp = player.hbl.boosters[i].xp.add(player.hbl.boons.mul(val).mul(delta))
             }
         }
 
-        player.hbl.boosterReq[0] = Decimal.pow(6, player.hbl.boosterLevels[0])
-        player.hbl.boosterReq[1] = Decimal.pow(12, player.hbl.boosterLevels[1].add(1))
-        player.hbl.boosterReq[2] = Decimal.pow(30, player.hbl.boosterLevels[2].add(1))
-        player.hbl.boosterReq[3] = Decimal.pow(60, player.hbl.boosterLevels[3].add(2))
-        player.hbl.boosterReq[4] = Decimal.pow(120, player.hbl.boosterLevels[4].add(2))
-        player.hbl.boosterReq[5] = Decimal.pow(180, player.hbl.boosterLevels[5].add(2))
+        player.hbl.boosters[0].req = Decimal.pow(6, player.hbl.boosters[0].level)
+        player.hbl.boosters[1].req = Decimal.pow(12, player.hbl.boosters[1].level.add(1))
+        player.hbl.boosters[2].req = Decimal.pow(30, player.hbl.boosters[2].level.add(1))
+        player.hbl.boosters[3].req = Decimal.pow(60, player.hbl.boosters[3].level.add(2))
+        player.hbl.boosters[4].req = Decimal.pow(120, player.hbl.boosters[4].level.add(2))
+        player.hbl.boosters[5].req = Decimal.pow(180, player.hbl.boosters[5].level.add(2))
 
-        for (let i = 0; i < 6; i++) {
-            if (player.hbl.boosterXP[i].gte(player.hbl.boosterReq[i].mul(0.99))) {
-                player.hbl.boosterXP[i] = new Decimal(0)
-                player.hbl.boosterLevels[i] = player.hbl.boosterLevels[i].add(1)
+        for (let i in player.hbl.boosters) {
+            if (player.hbl.boosters[i].xp.gte(player.hbl.boosters[i].req.mul(0.99))) {
+                player.hbl.boosters[i].xp = new Decimal(0)
+                player.hbl.boosters[i].level = player.hbl.boosters[i].level.add(1)
             }
         }
 
-        player.hbl.boosterEffects[0] = Decimal.pow(1.3, player.hbl.boosterLevels[0])
-        if (hasMilestone("hre", 2)) player.hbl.boosterEffects[0] = player.hbl.boosterEffects[0].mul(player.hbl.boosterXP[0].div(player.hbl.boosterReq[0]).mul(0.15).add(1))
-        if (player.hbl.boosterEffects[0].gte(1e9)) player.hbl.boosterEffects[0] = player.hbl.boosterEffects[0].div(1e9).pow(0.3).mul(1e9)
-        if (!inChallenge("hrm", 12)) player.hbl.boosterEffects[0] = player.hbl.boosterEffects[0].pow(player.hpu.purifierEffects[3])
+        player.hbl.boosters[0].effect = Decimal.pow(1.3, player.hbl.boosters[0].level)
+        if (hasMilestone("hre", 2)) player.hbl.boosters[0].effect = player.hbl.boosters[0].effect.mul(player.hbl.boosters[0].xp.div(player.hbl.boosters[0].req).mul(0.15).add(1))
+        if (player.hbl.boosters[0].effect.gte(1e9)) player.hbl.boosters[0].effect = player.hbl.boosters[0].effect.div(1e9).pow(0.3).mul(1e9)
+        if (!inChallenge("hrm", 12)) player.hbl.boosters[0].effect = player.hbl.boosters[0].effect.pow(player.hpu.purifiers[3].effect)
         
-        player.hbl.boosterEffects[1] = Decimal.pow(1.6, player.hbl.boosterLevels[1])
-        if (hasMilestone("hre", 2)) player.hbl.boosterEffects[1] = player.hbl.boosterEffects[1].mul(player.hbl.boosterXP[1].div(player.hbl.boosterReq[1]).mul(0.3).add(1))
+        player.hbl.boosters[1].effect = Decimal.pow(1.6, player.hbl.boosters[1].level)
+        if (hasMilestone("hre", 2)) player.hbl.boosters[1].effect = player.hbl.boosters[1].effect.mul(player.hbl.boosters[1].xp.div(player.hbl.boosters[1].req).mul(0.3).add(1))
 
-        player.hbl.boosterEffects[2] = Decimal.pow(Decimal.mul(0.06, player.hbl.boosterEffects[5]).add(1), player.hbl.boosterLevels[2])
-        if (hasMilestone("hre", 2)) player.hbl.boosterEffects[2] = player.hbl.boosterEffects[2].mul(player.hbl.boosterXP[2].div(player.hbl.boosterReq[2]).mul(Decimal.mul(0.03, player.hbl.boosterEffects[5])).add(1))
-        if (player.hbl.boosterEffects[2].gte(1e9)) player.hbl.boosterEffects[2] = player.hbl.boosterEffects[2].div(1e9).pow(Decimal.add(0.3, buyableEffect("hrm", 3))).mul(1e9)
+        player.hbl.boosters[2].effect = Decimal.pow(Decimal.mul(0.06, player.hbl.boosters[5].effect).add(1), player.hbl.boosters[2].level)
+        if (hasMilestone("hre", 2)) player.hbl.boosters[2].effect = player.hbl.boosters[2].effect.mul(player.hbl.boosters[2].xp.div(player.hbl.boosters[2].req).mul(Decimal.mul(0.03, player.hbl.boosters[5].effect)).add(1))
+        if (player.hbl.boosters[2].effect.gte(1e9)) player.hbl.boosters[2].effect = player.hbl.boosters[2].effect.div(1e9).pow(Decimal.add(0.3, buyableEffect("hrm", 3))).mul(1e9)
 
-        if (!hasUpgrade("hpw", 12)) player.hbl.boosterEffects[3] = Decimal.pow(2, player.hbl.boosterLevels[3])
-        if (hasUpgrade("hpw", 12)) player.hbl.boosterEffects[3] = Decimal.pow(3, player.hbl.boosterLevels[3])
+        if (!hasUpgrade("hpw", 12)) player.hbl.boosters[3].effect = Decimal.pow(2, player.hbl.boosters[3].level)
+        if (hasUpgrade("hpw", 12)) player.hbl.boosters[3].effect = Decimal.pow(3, player.hbl.boosters[3].level)
         if (hasMilestone("hre", 2)) {
-            if (!hasUpgrade("hpw", 12)) player.hbl.boosterEffects[3] = player.hbl.boosterEffects[3].mul(player.hbl.boosterXP[3].div(player.hbl.boosterReq[3]).mul(0.5).add(1))
-            if (hasUpgrade("hpw", 12)) player.hbl.boosterEffects[3] = player.hbl.boosterEffects[3].mul(player.hbl.boosterXP[3].div(player.hbl.boosterReq[3]).add(1))
+            if (!hasUpgrade("hpw", 12)) player.hbl.boosters[3].effect = player.hbl.boosters[3].effect.mul(player.hbl.boosters[3].xp.div(player.hbl.boosters[3].req).mul(0.5).add(1))
+            if (hasUpgrade("hpw", 12)) player.hbl.boosters[3].effect = player.hbl.boosters[3].effect.mul(player.hbl.boosters[3].xp.div(player.hbl.boosters[3].req).add(1))
         }
-        if (player.hbl.boosterEffects[3].gte(1e12)) player.hbl.boosterEffects[3] = player.hbl.boosterEffects[3].div(1e12).pow(0.3).mul(1e12)
+        if (player.hbl.boosters[3].effect.gte(1e12)) player.hbl.boosters[3].effect = player.hbl.boosters[3].effect.div(1e12).pow(0.3).mul(1e12)
 
-        if (!hasUpgrade("hve", 32)) player.hbl.boosterEffects[4] = Decimal.pow(1.5, player.hbl.boosterLevels[4])
-        if (hasUpgrade("hve", 32)) player.hbl.boosterEffects[4] = Decimal.pow(1.6, player.hbl.boosterLevels[4])
+        if (!hasUpgrade("hve", 32)) player.hbl.boosters[4].effect = Decimal.pow(1.5, player.hbl.boosters[4].level)
+        if (hasUpgrade("hve", 32)) player.hbl.boosters[4].effect = Decimal.pow(1.6, player.hbl.boosters[4].level)
         if (hasMilestone("hre", 2)) {
-            if (!hasUpgrade("hve", 32)) player.hbl.boosterEffects[4] = player.hbl.boosterEffects[4].mul(player.hbl.boosterXP[4].div(player.hbl.boosterReq[4]).mul(0.25).add(1))
-            if (hasUpgrade("hve", 32)) player.hbl.boosterEffects[4] = player.hbl.boosterEffects[4].mul(player.hbl.boosterXP[4].div(player.hbl.boosterReq[4]).mul(0.3).add(1))
+            if (!hasUpgrade("hve", 32)) player.hbl.boosters[4].effect = player.hbl.boosters[4].effect.mul(player.hbl.boosters[4].xp.div(player.hbl.boosters[4].req).mul(0.25).add(1))
+            if (hasUpgrade("hve", 32)) player.hbl.boosters[4].effect = player.hbl.boosters[4].effect.mul(player.hbl.boosters[4].xp.div(player.hbl.boosters[4].req).mul(0.3).add(1))
         }
 
-        if (!hasMilestone("hbl", 2)) player.hbl.boosterEffects[5] = Decimal.pow(2, player.hbl.boosterLevels[5])
-        if (hasMilestone("hbl", 2)) player.hbl.boosterEffects[5] = Decimal.pow(2.3, player.hbl.boosterLevels[5])
+        if (!hasMilestone("hbl", 2)) player.hbl.boosters[5].effect = Decimal.pow(2, player.hbl.boosters[5].level)
+        if (hasMilestone("hbl", 2)) player.hbl.boosters[5].effect = Decimal.pow(2.3, player.hbl.boosters[5].level)
         if (hasMilestone("hre", 2)) {
-            if (!hasMilestone("hbl", 2)) player.hbl.boosterEffects[5] = player.hbl.boosterEffects[5].mul(player.hbl.boosterXP[5].div(player.hbl.boosterReq[5]).mul(0.5).add(1))
-            if (hasMilestone("hbl", 2)) player.hbl.boosterEffects[5] = player.hbl.boosterEffects[5].mul(player.hbl.boosterXP[5].div(player.hbl.boosterReq[5]).mul(0.65).add(1))
+            if (!hasMilestone("hbl", 2)) player.hbl.boosters[5].effect = player.hbl.boosters[5].effect.mul(player.hbl.boosters[5].xp.div(player.hbl.boosters[5].req).mul(0.5).add(1))
+            if (hasMilestone("hbl", 2)) player.hbl.boosters[5].effect = player.hbl.boosters[5].effect.mul(player.hbl.boosters[5].xp.div(player.hbl.boosters[5].req).mul(0.65).add(1))
         }
-        if (player.hbl.boosterEffects[5].gte(16)) player.hbl.boosterEffects[5] = player.hbl.boosterEffects[5].log(2.4).mul(5)
+        if (player.hbl.boosters[5].effect.gte(16)) player.hbl.boosters[5].effect = player.hbl.boosters[5].effect.log(2.4).mul(5)
 
         // AUTOMATION LIMIT
         if (player.hbl.minRefineInput.gte(1)) player.hbl.minRefine = player.hbl.minRefineInput.floor()
@@ -139,6 +174,7 @@ addLayer("hbl", {
             },
             unlocked: true,
             onClick() {
+                if (!hasAchievement("achievements", 121)) completeAchievement("achievements", 121)
                 player.hbl.blessings = player.hbl.blessings.add(player.hbl.blessingsGain)
                 if (inChallenge("hrm", 11)) player.hrm.blessLimit = player.hrm.blessLimit.add(1)
 
@@ -158,54 +194,54 @@ addLayer("hbl", {
         },
         2: {
             title() {
-                let str = "<h3>Hex Point Booster <small>Lv." + formatWhole(player.hbl.boosterLevels[0]) + "</small></h3><br>(" + formatWhole(player.hbl.boosterXP[0]) + "/" + formatWhole(player.hbl.boosterReq[0]) + ")<br>x" + format(player.hbl.boosterEffects[0]) + " Hex Points<br><small>(Hold to deposit boons)</small>"
-                if (player.hbl.boosterEffects[0].pow(Decimal.div(1, player.hpu.purifierEffects[3])).gte(1e9)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
+                let str = "<h3>Hex Point Booster <small>Lv." + formatWhole(player.hbl.boosters[0].level) + "</small></h3><br>(" + formatWhole(player.hbl.boosters[0].xp) + "/" + formatWhole(player.hbl.boosters[0].req) + ")<br>x" + format(player.hbl.boosters[0].effect) + " Hex Points<br><small>(Hold to deposit boons)</small>"
+                if (player.hbl.boosters[0].effect.pow(Decimal.div(1, player.hpu.purifiers[3].effect)).gte(1e9)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
             },
             canClick: true,
             unlocked: true,
             onClick() {this.onHold()},
             onHold() {
-                let amt = player.hbl.boosterReq[0].mul(player.hbl.boosterDeposit).min(player.hbl.boosterReq[0].sub(player.hbl.boosterXP[0]))
+                let amt = player.hbl.boosters[0].req.mul(player.hbl.boosterDeposit).min(player.hbl.boosters[0].req.sub(player.hbl.boosters[0].xp))
                 if (player.hbl.boons.gte(amt)) {
-                    player.hbl.boosterXP[0] = player.hbl.boosterXP[0].add(amt)
+                    player.hbl.boosters[0].xp = player.hbl.boosters[0].xp.add(amt)
                     player.hbl.boons = player.hbl.boons.sub(amt)
-                    if (player.hbl.boosterXP[0].gte(player.hbl.boosterReq[0].mul(0.99))) {
-                        player.hbl.boosterXP[0] = new Decimal(0)
-                        player.hbl.boosterLevels[0] = player.hbl.boosterLevels[0].add(1)
-                        player.hbl.boosterReq[0] = Decimal.pow(6, player.hbl.boosterLevels[0])
+                    if (player.hbl.boosters[0].xp.gte(player.hbl.boosters[0].req.mul(0.99))) {
+                        player.hbl.boosters[0].xp = new Decimal(0)
+                        player.hbl.boosters[0].level = player.hbl.boosters[0].level.add(1)
+                        player.hbl.boosters[0].req = Decimal.pow(6, player.hbl.boosters[0].level)
                     }
                 }
             },
             style() {
-                return {background: `linear-gradient(to right, #ffbf00 ${format(player.hbl.boosterXP[0].div(player.hbl.boosterReq[0]).mul(100).min(100))}%, #cc9800 ${format(player.hbl.boosterXP[0].div(player.hbl.boosterReq[0]).mul(100).add(0.25).min(100))}%)`, width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "10px", margin: "3px"}
+                return {background: `linear-gradient(to right, #ffbf00 ${format(player.hbl.boosters[0].xp.div(player.hbl.boosters[0].req).mul(100).min(100))}%, #cc9800 ${format(player.hbl.boosters[0].xp.div(player.hbl.boosters[0].req).mul(100).add(0.25).min(100))}%)`, width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "10px", margin: "3px"}
             },
         },
         3: {
-            title() { return "<h3>Boon Booster <small>Lv." + formatWhole(player.hbl.boosterLevels[1]) + "</small></h3><br>(" + formatWhole(player.hbl.boosterXP[1]) + "/" + formatWhole(player.hbl.boosterReq[1]) + ")<br>x" + format(player.hbl.boosterEffects[1]) + " Boons<br><small>(Hold to deposit boons)</small>" },
+            title() { return "<h3>Boon Booster <small>Lv." + formatWhole(player.hbl.boosters[1].level) + "</small></h3><br>(" + formatWhole(player.hbl.boosters[1].xp) + "/" + formatWhole(player.hbl.boosters[1].req) + ")<br>x" + format(player.hbl.boosters[1].effect) + " Boons<br><small>(Hold to deposit boons)</small>" },
             canClick: true,
             unlocked: true,
             onClick() {this.onHold()},
             onHold() {
-                let amt = player.hbl.boosterReq[1].mul(player.hbl.boosterDeposit).min(player.hbl.boosterReq[1].sub(player.hbl.boosterXP[1]))
+                let amt = player.hbl.boosters[1].req.mul(player.hbl.boosterDeposit).min(player.hbl.boosters[1].req.sub(player.hbl.boosters[1].xp))
                 if (player.hbl.boons.gte(amt)) {
-                    player.hbl.boosterXP[1] = player.hbl.boosterXP[1].add(amt)
+                    player.hbl.boosters[1].xp = player.hbl.boosters[1].xp.add(amt)
                     player.hbl.boons = player.hbl.boons.sub(amt)
-                    if (player.hbl.boosterXP[1].gte(player.hbl.boosterReq[1].mul(0.99))) {
-                        player.hbl.boosterXP[1] = new Decimal(0)
-                        player.hbl.boosterLevels[1] = player.hbl.boosterLevels[1].add(1)
-                        player.hbl.boosterReq[1] = Decimal.pow(12, player.hbl.boosterLevels[1].add(1))
+                    if (player.hbl.boosters[1].xp.gte(player.hbl.boosters[1].req.mul(0.99))) {
+                        player.hbl.boosters[1].xp = new Decimal(0)
+                        player.hbl.boosters[1].level = player.hbl.boosters[1].level.add(1)
+                        player.hbl.boosters[1].req = Decimal.pow(12, player.hbl.boosters[1].level.add(1))
                     }
                 }
             },
             style() {
-                return {background: `linear-gradient(to right, #ffbf00 ${format(player.hbl.boosterXP[1].div(player.hbl.boosterReq[1]).mul(100).min(100))}%, #cc9800 ${format(player.hbl.boosterXP[1].div(player.hbl.boosterReq[1]).mul(100).add(0.25).min(100))}%)`, width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "10px", margin: "3px"}
+                return {background: `linear-gradient(to right, #ffbf00 ${format(player.hbl.boosters[1].xp.div(player.hbl.boosters[1].req).mul(100).min(100))}%, #cc9800 ${format(player.hbl.boosters[1].xp.div(player.hbl.boosters[1].req).mul(100).add(0.25).min(100))}%)`, width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "10px", margin: "3px"}
             },
         },
         4: {
             title() {
-                let str = "<h3>IP Booster <small>Lv." + formatWhole(player.hbl.boosterLevels[2]) + "</small></h3><br>(" + formatWhole(player.hbl.boosterXP[2]) + "/" + formatWhole(player.hbl.boosterReq[2]) + ")<br>x" + format(player.hbl.boosterEffects[2]) + " Infinity Points<br><small>(Hold to deposit boons)</small>"
-                if (player.hbl.boosterEffects[2].gte(1e9)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
+                let str = "<h3>IP Booster <small>Lv." + formatWhole(player.hbl.boosters[2].level) + "</small></h3><br>(" + formatWhole(player.hbl.boosters[2].xp) + "/" + formatWhole(player.hbl.boosters[2].req) + ")<br>x" + format(player.hbl.boosters[2].effect) + " Infinity Points<br><small>(Hold to deposit boons)</small>"
+                if (player.hbl.boosters[2].effect.gte(1e9)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
             },
             canClick: true,
@@ -213,90 +249,90 @@ addLayer("hbl", {
             tooltip: "Works outside of hex.",
             onClick() {this.onHold()},
             onHold() {
-                let amt = player.hbl.boosterReq[2].mul(player.hbl.boosterDeposit).min(player.hbl.boosterReq[2].sub(player.hbl.boosterXP[2]))
+                let amt = player.hbl.boosters[2].req.mul(player.hbl.boosterDeposit).min(player.hbl.boosters[2].req.sub(player.hbl.boosters[2].xp))
                 if (player.hbl.boons.gte(amt)) {
-                    player.hbl.boosterXP[2] = player.hbl.boosterXP[2].add(amt)
+                    player.hbl.boosters[2].xp = player.hbl.boosters[2].xp.add(amt)
                     player.hbl.boons = player.hbl.boons.sub(amt)
-                    if (player.hbl.boosterXP[2].gte(player.hbl.boosterReq[2].mul(0.99))) {
-                        player.hbl.boosterXP[2] = new Decimal(0)
-                        player.hbl.boosterLevels[2] = player.hbl.boosterLevels[2].add(1)
-                        player.hbl.boosterReq[2] = Decimal.pow(30, player.hbl.boosterLevels[2].add(1))
+                    if (player.hbl.boosters[2].xp.gte(player.hbl.boosters[2].req.mul(0.99))) {
+                        player.hbl.boosters[2].xp = new Decimal(0)
+                        player.hbl.boosters[2].level = player.hbl.boosters[2].level.add(1)
+                        player.hbl.boosters[2].req = Decimal.pow(30, player.hbl.boosters[2].level.add(1))
                     }
                 }
             },
             style() {
-                return {background: `linear-gradient(to right, #ffbf00 ${format(player.hbl.boosterXP[2].div(player.hbl.boosterReq[2]).mul(100).min(100))}%, #cc9800 ${format(player.hbl.boosterXP[2].div(player.hbl.boosterReq[2]).mul(100).add(0.25).min(100))}%)`, width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "10px", margin: "3px"}
+                return {background: `linear-gradient(to right, #ffbf00 ${format(player.hbl.boosters[2].xp.div(player.hbl.boosters[2].req).mul(100).min(100))}%, #cc9800 ${format(player.hbl.boosters[2].xp.div(player.hbl.boosters[2].req).mul(100).add(0.25).min(100))}%)`, width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "10px", margin: "3px"}
             },
         },
         5: {
             title() {
-                let str = "<h3>Refiner Req Booster <small>Lv." + formatWhole(player.hbl.boosterLevels[3]) + "</small></h3><br>(" + formatWhole(player.hbl.boosterXP[3]) + "/" + formatWhole(player.hbl.boosterReq[3]) + ")<br>/" + format(player.hbl.boosterEffects[3]) + " Refinement Req<br><small>(Hold to deposit boons)</small>"
-                if (player.hbl.boosterEffects[3].gte(1e12)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
+                let str = "<h3>Refiner Req Booster <small>Lv." + formatWhole(player.hbl.boosters[3].level) + "</small></h3><br>(" + formatWhole(player.hbl.boosters[3].xp) + "/" + formatWhole(player.hbl.boosters[3].req) + ")<br>/" + format(player.hbl.boosters[3].effect) + " Refinement Req<br><small>(Hold to deposit boons)</small>"
+                if (player.hbl.boosters[3].effect.gte(1e12)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
             },
             canClick: true,
             unlocked() {return hasUpgrade("ta", 15)},
             onClick() {this.onHold()},
             onHold() {
-                let amt = player.hbl.boosterReq[3].mul(player.hbl.boosterDeposit).min(player.hbl.boosterReq[3].sub(player.hbl.boosterXP[3]))
+                let amt = player.hbl.boosters[3].req.mul(player.hbl.boosterDeposit).min(player.hbl.boosters[3].req.sub(player.hbl.boosters[3].xp))
                 if (player.hbl.boons.gte(amt)) {
-                    player.hbl.boosterXP[3] = player.hbl.boosterXP[3].add(amt)
+                    player.hbl.boosters[3].xp = player.hbl.boosters[3].xp.add(amt)
                     player.hbl.boons = player.hbl.boons.sub(amt)
-                    if (player.hbl.boosterXP[3].gte(player.hbl.boosterReq[3].mul(0.99))) {
-                        player.hbl.boosterXP[3] = new Decimal(0)
-                        player.hbl.boosterLevels[3] = player.hbl.boosterLevels[3].add(1)
-                        player.hbl.boosterReq[3] = Decimal.pow(60, player.hbl.boosterLevels[3].add(2))
+                    if (player.hbl.boosters[3].xp.gte(player.hbl.boosters[3].req.mul(0.99))) {
+                        player.hbl.boosters[3].xp = new Decimal(0)
+                        player.hbl.boosters[3].level = player.hbl.boosters[3].level.add(1)
+                        player.hbl.boosters[3].req = Decimal.pow(60, player.hbl.boosters[3].level.add(2))
                     }
                 }
             },
             style() {
-                return {background: `linear-gradient(to right, #ffbf00 ${format(player.hbl.boosterXP[3].div(player.hbl.boosterReq[3]).mul(100).min(100))}%, #cc9800 ${format(player.hbl.boosterXP[3].div(player.hbl.boosterReq[3]).mul(100).add(0.25).min(100))}%)`, width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "10px", margin: "3px"}
+                return {background: `linear-gradient(to right, #ffbf00 ${format(player.hbl.boosters[3].xp.div(player.hbl.boosters[3].req).mul(100).min(100))}%, #cc9800 ${format(player.hbl.boosters[3].xp.div(player.hbl.boosters[3].req).mul(100).add(0.25).min(100))}%)`, width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "10px", margin: "3px"}
             },
         },
         6: {
-            title() { return "<h3>Blessing Booster <small>Lv." + formatWhole(player.hbl.boosterLevels[4]) + "</small></h3><br>(" + formatWhole(player.hbl.boosterXP[4]) + "/" + formatWhole(player.hbl.boosterReq[4]) + ")<br>x" + format(player.hbl.boosterEffects[4]) + " Blessings<br><small>(Hold to deposit boons)</small>" },
+            title() { return "<h3>Blessing Booster <small>Lv." + formatWhole(player.hbl.boosters[4].level) + "</small></h3><br>(" + formatWhole(player.hbl.boosters[4].xp) + "/" + formatWhole(player.hbl.boosters[4].req) + ")<br>x" + format(player.hbl.boosters[4].effect) + " Blessings<br><small>(Hold to deposit boons)</small>" },
             canClick: true,
             unlocked() {return hasUpgrade("ta", 15)},
             onClick() {this.onHold()},
             onHold() {
-                let amt = player.hbl.boosterReq[4].mul(player.hbl.boosterDeposit).min(player.hbl.boosterReq[4].sub(player.hbl.boosterXP[4]))
+                let amt = player.hbl.boosters[4].req.mul(player.hbl.boosterDeposit).min(player.hbl.boosters[4].req.sub(player.hbl.boosters[4].xp))
                 if (player.hbl.boons.gte(amt)) {
-                    player.hbl.boosterXP[4] = player.hbl.boosterXP[4].add(amt)
+                    player.hbl.boosters[4].xp = player.hbl.boosters[4].xp.add(amt)
                     player.hbl.boons = player.hbl.boons.sub(amt)
-                    if (player.hbl.boosterXP[4].gte(player.hbl.boosterReq[4].mul(0.99))) {
-                        player.hbl.boosterXP[4] = new Decimal(0)
-                        player.hbl.boosterLevels[4] = player.hbl.boosterLevels[4].add(1)
-                        player.hbl.boosterReq[4] = Decimal.pow(120, player.hbl.boosterLevels[4].add(2))
+                    if (player.hbl.boosters[4].xp.gte(player.hbl.boosters[4].req.mul(0.99))) {
+                        player.hbl.boosters[4].xp = new Decimal(0)
+                        player.hbl.boosters[4].level = player.hbl.boosters[4].level.add(1)
+                        player.hbl.boosters[4].req = Decimal.pow(120, player.hbl.boosters[4].level.add(2))
                     }
                 }
             },
             style() {
-                return {background: `linear-gradient(to right, #ffbf00 ${format(player.hbl.boosterXP[4].div(player.hbl.boosterReq[4]).mul(100).min(100))}%, #cc9800 ${format(player.hbl.boosterXP[4].div(player.hbl.boosterReq[4]).mul(100).add(0.25).min(100))}%)`, width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "10px", margin: "3px"}
+                return {background: `linear-gradient(to right, #ffbf00 ${format(player.hbl.boosters[4].xp.div(player.hbl.boosters[4].req).mul(100).min(100))}%, #cc9800 ${format(player.hbl.boosters[4].xp.div(player.hbl.boosters[4].req).mul(100).add(0.25).min(100))}%)`, width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "10px", margin: "3px"}
             },
         },
         7: {
             title() {
-                let str = "<h3>IP Booster Booster <small>Lv." + formatWhole(player.hbl.boosterLevels[5]) + "</small></h3><br>(" + formatWhole(player.hbl.boosterXP[5]) + "/" + formatWhole(player.hbl.boosterReq[5]) + ")<br>x" + format(player.hbl.boosterEffects[5]) + " IP Booster Base<br><small>(Hold to deposit boons)</small>"
-                if (player.hbl.boosterEffects[5].gte(16)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
+                let str = "<h3>IP Booster Booster <small>Lv." + formatWhole(player.hbl.boosters[5].level) + "</small></h3><br>(" + formatWhole(player.hbl.boosters[5].xp) + "/" + formatWhole(player.hbl.boosters[5].req) + ")<br>x" + format(player.hbl.boosters[5].effect) + " IP Booster Base<br><small>(Hold to deposit boons)</small>"
+                if (player.hbl.boosters[5].effect.gte(16)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
             },
             canClick: true,
             unlocked() {return hasUpgrade("ta", 15)},
             onClick() {this.onHold()},
             onHold() {
-                let amt = player.hbl.boosterReq[5].mul(player.hbl.boosterDeposit).min(player.hbl.boosterReq[5].sub(player.hbl.boosterXP[5]))
+                let amt = player.hbl.boosters[5].req.mul(player.hbl.boosterDeposit).min(player.hbl.boosters[5].req.sub(player.hbl.boosters[5].xp))
                 if (player.hbl.boons.gte(amt)) {
-                    player.hbl.boosterXP[5] = player.hbl.boosterXP[5].add(amt)
+                    player.hbl.boosters[5].xp = player.hbl.boosters[5].xp.add(amt)
                     player.hbl.boons = player.hbl.boons.sub(amt)
-                    if (player.hbl.boosterXP[5].gte(player.hbl.boosterReq[5].mul(0.99))) {
-                        player.hbl.boosterXP[5] = new Decimal(0)
-                        player.hbl.boosterLevels[5] = player.hbl.boosterLevels[5].add(1)
-                        player.hbl.boosterReq[5] = Decimal.pow(180, player.hbl.boosterLevels[5].add(2))
+                    if (player.hbl.boosters[5].xp.gte(player.hbl.boosters[5].req.mul(0.99))) {
+                        player.hbl.boosters[5].xp = new Decimal(0)
+                        player.hbl.boosters[5].level = player.hbl.boosters[5].level.add(1)
+                        player.hbl.boosters[5].req = Decimal.pow(180, player.hbl.boosters[5].level.add(2))
                     }
                 }
             },
             style() {
-                return {background: `linear-gradient(to right, #ffbf00 ${format(player.hbl.boosterXP[5].div(player.hbl.boosterReq[5]).mul(100).min(100))}%, #cc9800 ${format(player.hbl.boosterXP[5].div(player.hbl.boosterReq[5]).mul(100).add(0.25).min(100))}%)`, width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "10px", margin: "3px"}
+                return {background: `linear-gradient(to right, #ffbf00 ${format(player.hbl.boosters[5].xp.div(player.hbl.boosters[5].req).mul(100).min(100))}%, #cc9800 ${format(player.hbl.boosters[5].xp.div(player.hbl.boosters[5].req).mul(100).add(0.25).min(100))}%)`, width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "10px", margin: "3px"}
             },
         },
         101: {
@@ -314,8 +350,7 @@ addLayer("hbl", {
                 }
             },
             style() {
-                let look = {width: "300px", minHeight: "100px", border: "0px", padding: "10px"}
-                hasMilestone("hre", 12) ? look.borderRadius = "0 0 0 13px" : look.borderRadius = "0 0 13px 13px"
+                let look = {width: "300px", minHeight: "100px", border: "0px", padding: "10px", borderRadius: "0 0 0 13px"}
                 if (player.hbl.blessAutomation) look.backgroundColor = "#ffbf00"
                 if (!player.hbl.blessAutomation) look.backgroundColor = "#cc9800"
                 return look
@@ -406,13 +441,13 @@ addLayer("hbl", {
         4: {
             title: "Grace IV",
             unlocked() { return hasUpgrade("bi", 12) },
-            description: "Alternative infinities boost curse gain.",
+            description: "Infinitums boost curse gain.",
             cost: new Decimal(720),
             currencyLocation() { return player.hbl },
             currencyDisplayName: "Blessings",
             currencyInternalName: "blessings",
             effect() {
-                let eff = player.tad.shatteredInfinities.mul(player.tad.disfiguredInfinities).mul(player.tad.corruptedInfinities).add(1).log(6).pow(2).add(1).pow(player.hpu.purifierEffects[5])
+                let eff = player.tad.infinitum.add(1).log(6).pow(4).add(1).pow(player.hpu.purifiers[5].effect)
                 if (inChallenge("hrm", 12)) eff = eff.pow(0.3)
                 return eff
             },
@@ -464,7 +499,7 @@ addLayer("hbl", {
     milestones: {
         1: {
             requirementDescription: "<h3>3,600 Blessings",
-            effectDescription() { return "x" + format(new Decimal(2).mul(player.hpu.purifierEffects[1])) + " Blessings."},
+            effectDescription() { return "x" + format(new Decimal(2).mul(player.hpu.purifiers[1].effect)) + " Blessings."},
             done() { return player.hbl.blessings.gte(3600) && tmp.hbl.microtabs.blessing.Miracles.unlocked},
             style: {width: "500px", height: "50px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
@@ -482,7 +517,7 @@ addLayer("hbl", {
         },
         4: {
             requirementDescription: "<h3>36,000 Blessings",
-            effectDescription() { return "x" + format(new Decimal(2).mul(player.hpu.purifierEffects[1])) + " Boons."},
+            effectDescription() { return "x" + format(new Decimal(2).mul(player.hpu.purifiers[1].effect)) + " Boons."},
             done() { return player.hbl.blessings.gte(36000) && tmp.hbl.microtabs.blessing.Miracles.unlocked},
             style: {width: "500px", height: "50px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
@@ -562,10 +597,7 @@ addLayer("hbl", {
                                 ["raw-html", "Autoclicker", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ], {width: "300px", height: "48px", borderBottom: "2px solid white"}],
                             ["clickable", 101],
-                        ], () => {
-                            if (hasMilestone("hre", 12)) return {width: "300px", height: "150px", backgroundColor: "#332600", border: "2px solid white", borderRadius: "15px 0 0 15px"}
-                            return {width: "300px", height: "150px", backgroundColor: "#332600", border: "2px solid white", borderRadius: "15px"}
-                        }],
+                        ], {width: "300px", height: "150px", backgroundColor: "#332600", border: "2px solid white", borderRadius: "15px 0 0 15px"}],
                         ["style-column", [
                             ["style-row", [
                                 ["raw-html", "Min. Refinement", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
@@ -575,10 +607,7 @@ addLayer("hbl", {
                                 ["blank", "10px"],
                                 ["text-input", "minRefineInput", {backgroundColor: "#191300", color: "white", width: "180px", padding: "0 10px", textAlign: "left", fontSize: "28px", border: "2px solid black"}],
                             ], {width: "300px", height: "100px"}],
-                        ], () => {
-                            if (hasMilestone("hre", 12)) return {width: "300px", height: "150px", backgroundColor: "#332600", border: "2px solid white", borderLeft: "0px", borderRadius: "0 15px 15px 0"}
-                            return {display: "none !important"}
-                        }],
+                        ], {width: "300px", height: "150px", backgroundColor: "#332600", border: "2px solid white", borderLeft: "0px", borderRadius: "0 15px 15px 0"}],
                     ]],
                 ]
             },

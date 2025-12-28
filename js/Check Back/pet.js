@@ -3346,7 +3346,7 @@ addLayer("pet", {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
                     amt.pow(0.75).mul(0.1).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // star exploration time
-                    amt.mul(player.sma.starmetalAlloy.add(2).log(2).log(2).div(4).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // starmetal essence (Based on starmetal alloy)
+                    amt.mul(player.sma.starmetalAlloy.add(2).log(2).log(2).div(4).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // starmetal essence (Based on starmetal alloy)
                     amt.pow(0.75).mul(0.5).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // space rocks
                 ]
             },

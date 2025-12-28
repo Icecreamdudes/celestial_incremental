@@ -1582,6 +1582,7 @@ function fixOldSave(oldVersion){
 				player.hbl.boosters[i].xp = new Decimal(player.hbl.boosterXP[i])
 			}
 		}
+		if (player.tad.activeChallenge) player.tad.activeChallenge = null
 		if (player.cap.cantepocalypseUnlock) player.ca.cantepocalypseUnlock = player.cap.cantepocalypseUnlock
 		if (player.hpu.purifier) {
 			for (let i = 0; i < player.hpu.purifier.length; i++) {

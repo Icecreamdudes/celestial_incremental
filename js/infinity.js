@@ -49,8 +49,9 @@ addLayer("in", {
         }
 
         // UNI 2 UNLOCK VARIABLE
-        if (player.in.infinityPoints.gt(0)) {
+        if (player.in.infinityPoints.gt(0) && !player.in.unlockedInfinity) {
             player.in.unlockedInfinity = true
+            player.universe == "U2"
         }
 
         // REACH INFINITY CODE (1e308 POINTS ROUGHLY)

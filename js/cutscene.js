@@ -2191,7 +2191,7 @@ player.c.cutscenes[0] = false
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 23) {
             player.c.cutscenes[22] = false
             player.tab = "ch" 
-            player.universe = -0.5
+            player.universe = "A1"
             player.c.cutscenes[22] = false
         }
 
@@ -2769,7 +2769,7 @@ if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCu
 player.c.cutscenes[22] = false
 if (!options.newMenu) player.tab = "ch" 
 if (options.newMenu) player.tab = "cmh" 
-player.universe = -0.5
+player.universe = "A1"
 player.c.cutscenes[22] = false
 }
 

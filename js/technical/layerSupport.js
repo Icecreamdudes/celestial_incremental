@@ -13,7 +13,7 @@ function layerShown(layer) {
 
 function layerDeactivated(layer) {
     if (typeof layers[layer].universe !== "undefined") {
-        if (player.uni[layers[layer].universe].paused) {
+        if (uniPaused(layers[layer].universe)) {
             if (layers[layer].avoidPause) return false
             return true
         }

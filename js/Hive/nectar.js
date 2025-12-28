@@ -85,7 +85,7 @@ addLayer("ne", {
         // POWER MODIFIERS
         if (hasUpgrade("al", 226)) player.ne.alpha.gain = player.ne.alpha.gain.pow(1.01)
 
-        if (hasUpgrade("al", 203) && tmp.ne.layerShown && player.bee.path != 0) player.ne.alpha.amount = player.ne.alpha.amount.add(player.ne.alpha.gain.mul(delta))
+        if (hasUpgrade("al", 203) && tmp.ne.layerShown && (player.bee.path != 0 || player.bee.extremePath)) player.ne.alpha.amount = player.ne.alpha.amount.add(player.ne.alpha.gain.mul(delta))
 
         player.ne.beta.gain = player.ne.alpha.amount.div(100).pow(Decimal.add(0.65, buyableEffect("bee", 43)))
         if (player.bee.path != 2) player.ne.beta.gain = player.ne.alpha.amount.div(1e7).pow(Decimal.add(0.65, buyableEffect("bee", 43))).pow(0.7)
@@ -154,7 +154,7 @@ addLayer("ne", {
             player.ne.epsilon.effect = player.ne.epsilon.effect.pow(0.7)
         }
 
-        if (player.tab == "ne" && player.bee.path == 0) player.bee.path = 2
+        if (player.tab == "ne" && player.bee.path == 0 && !player.bee.extremePath) player.bee.path = 2
     },
     clickables: {
         1: {

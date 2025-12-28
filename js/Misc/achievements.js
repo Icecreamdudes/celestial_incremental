@@ -221,14 +221,14 @@ addLayer("achievements", {
         },
         103: {
             name: "Fueled Gains",
-            image: "resources/achievements/2_00.png",
+            image: "resources/achievements/2_03.png",
             tooltip: "<h3>Fueled Gains</h3><hr style='margin-bottom:4px'>Do your first rocket<br>fuel reset.",
             color: "#ffbf00",
             unlocked: true,
         },
         104: {
             name: "Paid Friends",
-            image: "resources/achievements/2_00.png",
+            image: "resources/achievements/2_04.png",
             tooltip: "<h3>Paid Friends</h3><hr style='margin-bottom:4px'>Buy a pet from the<br>pet shop.<br><br>Reward: +5% crate roll<br>chance.<br><small>(Chance to roll more times)</small>",
             color: "#ffbf00",
             unlocked: true,
@@ -250,7 +250,7 @@ addLayer("achievements", {
         },
         107: {
             name: "Unnecessary Feature",
-            image: "resources/achievements/2_00.png",
+            image: "resources/achievements/2_07.png",
             tooltip: "<h3>Unnecessary Feature</h3><hr style='margin-bottom:4px'>Beat infinity challenge 1.<br><br>Reward: x1.1 Infinities.",
             color: "#ffbf00",
             complete() {return hasChallenge("ip", 11)},
@@ -259,7 +259,7 @@ addLayer("achievements", {
         },
         108: {
             name: "Pest Lover",
-            image: "resources/achievements/2_00.png",
+            image: "resources/achievements/2_08.png",
             tooltip: "<h3>Pest Lover</h3><hr style='margin-bottom:4px'>Obtain 250,000 pests.<br><br>Reward: Grasshops remove<br>twice as many pests.",
             color: "#ffbf00",
             unlocked: true,
@@ -267,7 +267,7 @@ addLayer("achievements", {
         },
         109: {
             name: "Pest Exterminator",
-            image: "resources/achievements/2_00.png",
+            image: "resources/achievements/2_09.png",
             tooltip: "<h3>Pest Exterminator</h3><hr style='margin-bottom:4px'>Beat infinity challenge 2.<br><br>Reward: x1.1 Infinities.",
             color: "#ffbf00",
             complete() {return hasChallenge("ip", 12)},
@@ -294,7 +294,7 @@ addLayer("achievements", {
         },
         112: {
             name: "Wrong Goal!",
-            image: "resources/achievements/2_00.png",
+            image: "resources/achievements/2_12.png",
             tooltip: "<h3>Wrong Goal!</h3><hr style='margin-bottom:4px'>Reach infinity in<br>infinity challenge 4.<br><br>Reward: Decrease pent<br>requirement by /10",
             color: "#ffbf00",
             unlocked: true,
@@ -302,7 +302,7 @@ addLayer("achievements", {
         },
         113: {
             name: "Pent Down",
-            image: "resources/achievements/2_00.png",
+            image: "resources/achievements/2_13.png",
             tooltip: "<h3>Pent Down</h3><hr style='margin-bottom:4px'>Beat infinity challenge 4.<br><br>Reward: x1.1 Infinities.",
             color: "#ffbf00",
             complete() {return hasChallenge("ip", 14)},
@@ -311,14 +311,14 @@ addLayer("achievements", {
         },
         114: {
             name: "Doublin'",
-            image: "resources/achievements/2_00.png",
+            image: "resources/achievements/2_14.png",
             tooltip: "<h3>Doublin'</h3><hr style='margin-bottom:4px'>Buy an IP Doubler.",
             color: "#ffbf00",
             unlocked: true,
         },
         115: {
             name: "Not Very Boosty",
-            image: "resources/achievements/2_00.png",
+            image: "resources/achievements/2_15.png",
             tooltip: "<h3>Not Very Boosty</h3><hr style='margin-bottom:4px'>Buy a \"Challenge Dice<br>Boosty!!! :D\".<br><br>Reward: Double Dice Points.",
             color: "#ffbf00",
             unlocked: true,
@@ -326,7 +326,7 @@ addLayer("achievements", {
         },
         116: {
             name: "Dicey Challenge",
-            image: "resources/achievements/2_00.png",
+            image: "resources/achievements/2_16.png",
             tooltip: "<h3>Dicey Challenge</h3><hr style='margin-bottom:4px'>Beat infinity challenge 5.<br><br>Reward: x1.1 Infinities.",
             color: "#ffbf00",
             complete() {return hasChallenge("ip", 15)},
@@ -335,7 +335,7 @@ addLayer("achievements", {
         },
         117: {
             name: "Golden Time",
-            image: "resources/achievements/2_00.png",
+            image: "resources/achievements/2_17.png",
             tooltip: "<h3>Golden Time</h3><hr style='margin-bottom:4px'>Evolve Unsmith.",
             color: "#ffbf00",
             complete() {return getLevelableAmount("pet", 1103).gt(0)},
@@ -350,14 +350,14 @@ addLayer("achievements", {
         },
         119: {
             name: "Requirement Met?",
-            image: "resources/achievements/2_00.png",
+            image: "resources/achievements/2_19.png",
             tooltip: "<h3>Requirement Met?</h3><hr style='margin-bottom:4px'>Reset for over<br>1e15 rocket fuel.",
             color: "#ffbf00",
             unlocked: true,
         },
         120: {
             name: "Nightmare Fuel",
-            image: "resources/achievements/2_00.png",
+            image: "resources/achievements/2_20.png",
             tooltip: "<h3>Nightmare Fuel</h3><hr style='margin-bottom:4px'>Beat infinity challenge 6.<br><br>Reward: x1.1 Infinities.",
             color: "#ffbf00",
             complete() {return hasChallenge("ip", 16)},
@@ -373,7 +373,7 @@ addLayer("achievements", {
         },
         122: {
             name: "ShardNG",
-            image: "resources/achievements/2_00.png",
+            image: "resources/achievements/2_22.png",
             tooltip: "<h3>ShardNG</h3><hr style='margin-bottom:4px'>Beat infinity challenge 7.<br><br>Reward: x1.1 Infinities.",
             color: "#ffbf00",
             complete() {return hasChallenge("ip", 17)},

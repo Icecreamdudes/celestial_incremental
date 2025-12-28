@@ -2606,14 +2606,14 @@ addLayer("pet", {
             lore() { return "An unknown flying object, but with style. Iridite's messenger. Be careful what you tell it." }, 
             description() {
                 return "x" + format(this.effect()[0]) + " to rocket fuel <small>(based on pet points)</small>.<br>" +
-                    "/" + format(this.effect()[1]) + " to golden grass spawn time."
+                    "/" + format(this.effect()[1]) + " to grass layer spawn times."
             },
             levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
                     amt.mul(player.cb.petPoints.add(2).log(2).log(2).div(6).add(1)).pow(2.2).pow(Decimal.pow(4, getLevelableTier(this.layer, this.id))), // Rocket Fuel (Based on Pet Points)
-                    amt.mul(0.05).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Golden Grass Spawn Time
+                    amt.mul(0.04).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Grass Layer Spawn Times
                 ]
             },
             sellValue() { return new Decimal(100)},

@@ -131,6 +131,8 @@ addLayer('g', {
         // GRASS REQUIREMENT
         player.g.grassReq = new Decimal(4).div(buyableEffect('g', 12))
         if (hasAchievement("achievements", 9)) player.g.grassReq = player.g.grassReq.div(1.1)
+        player.g.grassReq = player.g.grassReq.div(levelableEffect("pet", 303)[1])
+        player.g.grassReq = player.g.grassReq.max(0.25)
 
         // GRASS CAP
         player.g.grassCap = new Decimal(5).add(buyableEffect('g', 13))
@@ -193,6 +195,7 @@ addLayer('g', {
         if (hasUpgrade('g', 16)) player.g.goldGrassReq = player.g.goldGrassReq.div(1.3)
         player.g.goldGrassReq = player.g.goldGrassReq.div(buyableEffect('gh', 12))
         player.g.goldGrassReq = player.g.goldGrassReq.div(levelableEffect("pet", 303)[1])
+        player.g.goldGrassReq = player.g.goldGrassReq.max(0.25)
 
         // GOLDEN GRASS CAP
         player.g.goldGrassCap = new Decimal(3).add(buyableEffect('g', 18))
@@ -232,9 +235,11 @@ addLayer('g', {
         if (hasMilestone("r", 29)) player.g.moonstone = player.g.moonstone.add(player.g.moonstoneVal.mul(Decimal.mul(delta, 0.01)))
 
         // MOONSTONE REQUIREMENT
-        player.g.moonstoneReq = new Decimal(30)
+        player.g.moonstoneReq = new Decimal(40)
         player.g.moonstoneReq = player.g.moonstoneReq.div(buyableEffect('g', 24))
         player.g.moonstoneReq = player.g.moonstoneReq.mul(player.g.moonstoneLevelEffects[1])
+        player.g.moonstoneReq = player.g.moonstoneReq.div(levelableEffect("pet", 303)[1])
+        player.g.moonstoneReq = player.g.moonstoneReq.max(0.25)
 
         // MOONSTONE CAP
         player.g.moonstoneCap = levelableEffect("pet", 1303)[0]
@@ -371,6 +376,7 @@ addLayer('g', {
             width: 640,
             height: 20,
             progress() {
+                if (player.g.grassReq.lte(0.25)) return new Decimal(1)
                 return player.g.grassTimer.div(player.g.grassReq)
             },
             baseStyle: {backgroundColor: "black"},
@@ -380,6 +386,7 @@ addLayer('g', {
                 borderRadius: "0",
             },
             display() {
+                if (player.g.grassReq.lte(0.25)) return "<small style='color:red'>TIMER HARDCAPPED</small>"
                 return formatTime(player.g.grassTimer) + "/" + formatTime(player.g.grassReq)
             },
         },
@@ -389,6 +396,7 @@ addLayer('g', {
             width: 640,
             height: 20,
             progress() {
+                if (player.g.goldGrassReq.lte(0.25)) return new Decimal(1)
                 return player.g.goldGrassTimer.div(player.g.goldGrassReq)
             },
             baseStyle: {backgroundColor: "black"},
@@ -398,6 +406,7 @@ addLayer('g', {
                 borderRadius: "0",
             },
             display() {
+                if (player.g.goldGrassReq.lte(0.25)) return "<small style='color:red'>TIMER HARDCAPPED</small>"
                 return formatTime(player.g.goldGrassTimer) + "/" + formatTime(player.g.goldGrassReq)
             },
         },
@@ -407,6 +416,7 @@ addLayer('g', {
             width: 640,
             height: 20,
             progress() {
+                if (player.g.moonstoneReq.lte(0.25)) return new Decimal(1)
                 return player.g.moonstoneTimer.div(player.g.moonstoneReq)
             },
             baseStyle: {backgroundColor: "black"},
@@ -416,6 +426,7 @@ addLayer('g', {
                 borderRadius: "0",
             },
             display() {
+                if (player.g.moonstoneReq.lte(0.25)) return "<small style='color:red'>TIMER HARDCAPPED</small>"
                 return formatTime(player.g.moonstoneTimer) + "/" + formatTime(player.g.moonstoneReq)
             },
         },

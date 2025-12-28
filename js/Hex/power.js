@@ -721,9 +721,13 @@ addLayer("hpw", {
             currencyDisplayName: "Power",
             currencyInternalName: "power",
             effect() {
+                if (player.hpw.power.gte(1e80)) return new Decimal(5).pow(buyableEffect("hrm", 5))
                 return player.hpw.power.add(1).log(10).mul(0.05).add(1).pow(buyableEffect("hrm", 5))
             },
-            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            effectDisplay() {
+                if (player.hpw.power.gte(1e80)) return "x" + format(upgradeEffect(this.layer, this.id)) + " <small style='color:red'>[HARDCAPPED]</small>"
+                return "x" + format(upgradeEffect(this.layer, this.id))
+            }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #f00"},
         },
         1021: {
@@ -882,12 +886,13 @@ addLayer("hpw", {
             currencyInternalName: "power",
             effect() {
                 let eff = Decimal.pow(1.06, player.hpw.power.add(1).log(6))
-                if (eff.gte(5)) eff = player.hpw.power.add(1).log(6).div(5.5)
+                if (eff.gte(5)) eff = player.hpw.power.add(1).log(6).div(5.5).min(10)
                 eff = eff.pow(buyableEffect("hrm", 5))
                 return eff
             },
             effectDisplay() {
-                if (Decimal.pow(1.06, player.hpw.power.add(1).log(6)).gte(5)) return "^" + format(upgradeEffect(this.layer, this.id)) + "<small style='color:darkred'>[SOFTCAPPED]</small>"
+                if (Decimal.pow(1.06, player.hpw.power.add(1).log(6)).gte(10)) return "^" + format(upgradeEffect(this.layer, this.id)) + " <small style='color:darkred'>[HARDCAPPED]</small>"
+                if (Decimal.pow(1.06, player.hpw.power.add(1).log(6)).gte(5)) return "^" + format(upgradeEffect(this.layer, this.id)) + " <small style='color:darkred'>[SOFTCAPPED]</small>"
                 return "^" + format(upgradeEffect(this.layer, this.id))
             }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #00f"},

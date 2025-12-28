@@ -5,7 +5,7 @@ addLayer("hre", {
     tooltip: "Refinement", // Decides the nodes tooltip
     color: "#444", // Decides the nodes color.
     nodeStyle: {backgroundColor: "black", borderColor: "#ccc", color: "#ccc"}, // Decides the nodes style, in CSS format.
-    branches: ["hpr"], // Decides the nodes branches.
+    branches: ["hpr", "hbl"], // Decides the nodes branches.
     startData() { return {
         refinement: new Decimal(0),
         refinementReq: new Decimal(0),

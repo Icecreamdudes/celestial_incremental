@@ -1027,7 +1027,7 @@ if (player.c.cutscene2[0] && hasUpgrade("le", 201)) //MAKE SURE A DIFFERENT CUTS
     });
     player.c.cutscene2[0] = false
 }
-if (player.c.cutscene2[1] && getLevelableBool("pu", 401))
+if (player.c.cutscene2[1] && getLevelableTier("pu", 401, true))
 {
     showCutscene(cutsceneDialogueA2, {
     cutsceneID: -2,

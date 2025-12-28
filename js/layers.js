@@ -104,6 +104,9 @@
         // START OF POST-OTF-MULT MODIFIERS
         player.i.postOTFMult = new Decimal(1)
         player.i.postOTFMult = player.i.postOTFMult.mul(buyableEffect("ma", 22))
+        if (player.ir.iriditeDefeated) player.i.postOTFMult = player.i.postOTFMult.mul(1e12)
+
+        player.i.postOTFMult = player.i.postOTFMult.pow(player.i.pylonEnergyEffect3)
 
         //----------------------------------------
 
@@ -183,6 +186,43 @@
 
         // CELESTIAL POINT PER SECOND
         player.points = player.points.add(player.gain.mul(delta))
+
+        //pylon
+        player.i.pylonEnergyMax = Decimal.pow(1e6, player.i.pylonTier)
+
+        if (player.i.pylonBuilt)
+        {
+            player.i.pylonEnergyPerSecond = new Decimal(1)
+            player.i.pylonEnergyPerSecond = player.i.pylonEnergyPerSecond.mul(buyableEffect("i", 11))
+            player.i.pylonEnergyPerSecond = player.i.pylonEnergyPerSecond.mul(buyableEffect("i", 12))
+            player.i.pylonEnergyPerSecond = player.i.pylonEnergyPerSecond.mul(buyableEffect("i", 13))
+
+            player.i.pylonPassiveEffect = player.points.pow(0.002).add(1).pow(player.i.pylonTierEffect)
+        } else
+        {
+            player.i.pylonEnergyPerSecond = new Decimal(0)
+
+            player.i.pylonPassiveEffect = new Decimal(1)
+        }
+
+        if (player.i.pylonEnergy.gte(player.i.pylonEnergyMax))
+        {
+            player.i.pylonEnergy = player.i.pylonEnergyMax
+            player.i.pylonEnergyPerSecond = new Decimal(0)
+        }
+        player.i.pylonEnergy = player.i.pylonEnergy.add(player.i.pylonEnergyPerSecond.mul(delta))
+
+        player.i.pylonEnergyEffect = player.i.pylonEnergy.pow(4).add(1).pow(player.i.pylonTierEffect)
+        player.i.pylonEnergyEffect2 = player.i.pylonEnergy.pow(0.3).add(1).pow(player.i.pylonTierEffect)
+        player.i.pylonEnergyEffect3 = player.i.pylonEnergy.pow(0.1).add(1).pow(player.i.pylonTierEffect)
+
+        player.i.pylonTierEffect = player.i.pylonTier.sub(1).div(10).add(1)
+
+        //tickspeed
+        player.uni["U1"].tickspeed = new Decimal(1)
+        player.uni["U1"].tickspeed = player.uni["U1"].tickspeed.mul(player.i.pylonEnergyEffect)
+        // BEST CELESTIAL POINTS
+        if (player.i.bestPoints.lt(player.points)) player.i.bestPoints = player.points
     },
     bars: {
         infbar: {
@@ -436,10 +476,133 @@
             },
             style: { width: '300px', "min-height": '60px' },
         },
+        12: {
+            title() { return "<h2>Build the Universe 1 Pylon<br>Cost: 1,000 Ancient Core Fragments" },
+            canClick() { return player.cof.coreFragments[0].gte(1000) },
+            unlocked() { return !player.i.pylonBuilt },
+            onClick() {
+                player.cof.coreFragments[0] = player.cof.coreFragments[0].sub(1000)
+
+                player.i.pylonBuilt = true
+            },
+            style: {width: "600px", minHeight: "200px", color: "#1b110eff", backgroundImage: "radial-gradient(circle, #674134 80%, #A87B5A 95%, #C49574 110%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
+        },
+        13: {
+            title() { return "<h2>Tier up the Ancient Pylon" },
+            canClick() { return player.i.pylonEnergy.gte(player.i.pylonEnergyMax) },
+            unlocked() { return player.i.pylonEnergy.gte(player.i.pylonEnergyMax) },
+            onClick() {
+                player.i.pylonEnergy = new Decimal(0)
+
+                player.i.pylonTier = player.i.pylonTier.add(1)
+            },
+            style: {width: "600px", minHeight: "200px", color: "#1b110eff", backgroundImage: "radial-gradient(circle, #674134 80%, #A87B5A 95%, #C49574 110%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
+        },
     },
-    buyables: {},
-    milestones: {},
-    challenges: {},
+    buyables: {
+        11: {
+            costBase() { return new Decimal(50) },
+            costGrowth() { return new Decimal(1.2) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.cof.coreFragments[0] },
+            pay(amt) { player.cof.coreFragments[0] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).add(1)},
+            unlocked() { return player.i.pylonBuilt },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Ancient Pylon Factor I"
+            },
+            display() {
+                return 'which are boosting ancient pylon energy by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #B8916A 0%, #BE8267 100%)" }
+        },
+        12: {
+            costBase() { return new Decimal(250) },
+            costGrowth() { return new Decimal(1.25) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.cof.coreFragments[0] },
+            pay(amt) { player.cof.coreFragments[0] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).add(1)},
+            unlocked() { return player.i.pylonBuilt },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Ancient Pylon Factor II"
+            },
+            display() {
+                return 'which are boosting ancient pylon energy by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #B8916A 0%, #BE8267 100%)" }
+        },
+        13: {
+            costBase() { return new Decimal(1500) },
+            costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.cof.coreFragments[0] },
+            pay(amt) { player.cof.coreFragments[0] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).add(1)},
+            unlocked() { return player.i.pylonBuilt },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Ancient Pylon Factor III"
+            },
+            display() {
+                return 'which are boosting ancient pylon energy by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #B8916A 0%, #BE8267 100%)" }
+        },
+    },
     infoboxes: {
         1: {
             title: "Superphysical Values",

@@ -760,15 +760,15 @@ addLayer("pu", {
             image() {return this.canClick() ? "resources/Punchcards/commonPunchcard10.png" : "resources/Punchcards/lockedPunchcard.png"},
             title() {
                 let str = "Normality based on Normality"
-                if (getLevelableBool(this.layer, this.id)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
+                if (getLevelableTier(this.layer, this.id, true)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
                 return str
             },
             description() {
                 let str = [
-                    !getLevelableBool(this.layer, this.id) ? "<span style='color:gray'>" : "",
+                    !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
                     "x" + format(this.effect()[0]) + " to normality <small>(Based on normality)</small><br>",
-                    !getLevelableBool(this.layer, this.id) ? "</span>" : "",
+                    !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to radiation",
                     getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
@@ -789,9 +789,9 @@ addLayer("pu", {
                 return eff
             },
             // CLICK CODE
-            unlocked() {return (player.le.highestReset.gte(5) && player.ir.iriditeDefeated && !player.pet.activeAbilities[0]) || this.canClick()},
-            canSelect() {return player.le.resetAmount.gte(5) && player.ir.iriditeDefeated && !player.pet.activeAbilities[0]},
-            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableBool(this.layer, this.id)},
+            unlocked() {return (player.le.highestReset.gte(5) && player.ir.iriditeDefeated && !player.pet.legPetTimers[0].active) || this.canClick()},
+            canSelect() {return player.le.resetAmount.gte(5) && player.ir.iriditeDefeated && !player.pet.legPetTimers[0].active},
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
@@ -803,7 +803,7 @@ addLayer("pu", {
             barStyle() { return {backgroundColor: "#1a3b0f"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
-                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableBool(this.layer, this.id) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
                 return look
             }
@@ -812,15 +812,15 @@ addLayer("pu", {
             image() {return this.canClick() ? "resources/Punchcards/commonPunchcard11.png" : "resources/Punchcards/lockedPunchcard.png"},
             title() {
                 let str = "Space Energy based on Space Energy"
-                if (getLevelableBool(this.layer, this.id)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
+                if (getLevelableTier(this.layer, this.id, true)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
                 return str
             },
             description() {
                 let str = [
-                    !getLevelableBool(this.layer, this.id) ? "<span style='color:gray'>" : "",
+                    !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
                     "x" + format(this.effect()[0]) + " to space energy <small>(Based on space energy)</small><br>",
-                    !getLevelableBool(this.layer, this.id) ? "</span>" : "",
+                    !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "/" + format(this.effect()[1]) + " to star exploration times",
                     getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
@@ -841,9 +841,9 @@ addLayer("pu", {
                 return eff
             },
             // CLICK CODE
-            unlocked() {return (player.le.highestReset.gte(7) && player.ir.iriditeDefeated && !player.pet.activeAbilities[0] ) || this.canClick()},
-            canSelect() {return player.le.resetAmount.gte(7) && player.ir.iriditeDefeated && !player.pet.activeAbilities[0]},
-            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableBool(this.layer, this.id)},
+            unlocked() {return (player.le.highestReset.gte(7) && player.ir.iriditeDefeated && !player.pet.legPetTimers[0].active ) || this.canClick()},
+            canSelect() {return player.le.resetAmount.gte(7) && player.ir.iriditeDefeated && !player.pet.legPetTimers[0].active},
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
@@ -855,7 +855,7 @@ addLayer("pu", {
             barStyle() { return {backgroundColor: "#1a3b0f"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
-                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableBool(this.layer, this.id) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
                 return look
             }
@@ -864,15 +864,15 @@ addLayer("pu", {
             image() {return this.canClick() ? "resources/Punchcards/commonPunchcard12.png" : "resources/Punchcards/lockedPunchcard.png"},
             title() {
                 let str = "Clouds based on Clouds"
-                if (getLevelableBool(this.layer, this.id)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
+                if (getLevelableTier(this.layer, this.id, true)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
                 return str
             },
             description() {
                 let str = [
-                    !getLevelableBool(this.layer, this.id) ? "<span style='color:gray'>" : "",
+                    !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
                     "x" + format(this.effect()[0]) + " to clouds <small>(Based on clouds)</small><br>",
-                    !getLevelableBool(this.layer, this.id) ? "</span>" : "",
+                    !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "/" + format(this.effect()[1]) + " to star reset cooldowns",
                     getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
@@ -893,9 +893,9 @@ addLayer("pu", {
                 return eff
             },
             // CLICK CODE
-            unlocked() {return (player.pet.activeAbilities[0] && player.le.highestReset.gte(4) && player.ir.iriditeDefeated) || this.canClick()},
-            canSelect() {return player.pet.activeAbilities[0] && player.le.resetAmount.gte(4) && player.ir.iriditeDefeated},
-            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableBool(this.layer, this.id)},
+            unlocked() {return (player.pet.legPetTimers[0].active && player.le.highestReset.gte(4) && player.ir.iriditeDefeated) || this.canClick()},
+            canSelect() {return player.pet.legPetTimers[0].active && player.le.resetAmount.gte(4) && player.ir.iriditeDefeated},
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
@@ -907,7 +907,7 @@ addLayer("pu", {
             barStyle() { return {backgroundColor: "#1a3b0f"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
-                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableBool(this.layer, this.id) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
                 return look
             }
@@ -1352,16 +1352,16 @@ addLayer("pu", {
             image() {return this.canClick() ? "resources/Punchcards/rarePunchcard9.png" : "resources/Punchcards/lockedPunchcard.png"},
             title() {
                 let str = "Space Energy based on Normality"
-                if (getLevelableBool(this.layer, this.id)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
+                if (getLevelableTier(this.layer, this.id, true)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
                 return str
             },
             description() {
                 let str = [
-                    !getLevelableBool(this.layer, this.id) ? "<span style='color:gray'>" : "",
+                    !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
                     "x" + format(this.effect()[0]) + " to space energy <small>(Based on normality)</small><br>",
                     "Unlock a new normality buyable<br>",
-                    !getLevelableBool(this.layer, this.id) ? "</span>" : "",
+                    !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to hex points",
                     getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
@@ -1383,9 +1383,9 @@ addLayer("pu", {
                 return eff
             },
             // CLICK CODE
-            unlocked() {return (player.ir.iriditeDefeated && player.le.highestReset.gte(7) && !player.pet.activeAbilities[0]) || this.canClick()},
-            canSelect() {return player.ir.iriditeDefeated && player.le.resetAmount.gte(7) && !player.pet.activeAbilities[0]},
-            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableBool(this.layer, this.id)},
+            unlocked() {return (player.ir.iriditeDefeated && player.le.highestReset.gte(7) && !player.pet.legPetTimers[0].active) || this.canClick()},
+            canSelect() {return player.ir.iriditeDefeated && player.le.resetAmount.gte(7) && !player.pet.legPetTimers[0].active},
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
@@ -1397,7 +1397,7 @@ addLayer("pu", {
             barStyle() { return {backgroundColor: "#1a3b0f"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
-                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableBool(this.layer, this.id) ? look.backgroundColor = "#7f5f00" : look.backgroundColor = "#3f2f00"
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f5f00" : look.backgroundColor = "#3f2f00"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
                 return look
             }
@@ -1406,16 +1406,16 @@ addLayer("pu", {
             image() {return this.canClick() ? "resources/Punchcards/rarePunchcard10.png" : "resources/Punchcards/lockedPunchcard.png"},
             title() {
                 let str = "Generators based on Normality"
-                if (getLevelableBool(this.layer, this.id)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
+                if (getLevelableTier(this.layer, this.id, true)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
                 return str
             },
             description() {
                 let str = [
-                    !getLevelableBool(this.layer, this.id) ? "<span style='color:gray'>" : "",
+                    !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
                     "x" + format(this.effect()[0]) + " to generators <small>(Based on normality)</small><br>",
                     "Unlock a new normality buyable<br>",
-                    !getLevelableBool(this.layer, this.id) ? "</span>" : "",
+                    !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to hex power",
                     getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
@@ -1437,9 +1437,9 @@ addLayer("pu", {
                 return eff
             },
             // CLICK CODE
-            unlocked() {return (player.ir.iriditeDefeated && player.le.highestReset.gte(5) && !player.pet.activeAbilities[0]) || this.canClick()},
-            canSelect() {return player.ir.iriditeDefeated && player.le.resetAmount.gte(5) && !player.pet.activeAbilities[0]},
-            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableBool(this.layer, this.id)},
+            unlocked() {return (player.ir.iriditeDefeated && player.le.highestReset.gte(5) && !player.pet.legPetTimers[0].active) || this.canClick()},
+            canSelect() {return player.ir.iriditeDefeated && player.le.resetAmount.gte(5) && !player.pet.legPetTimers[0].active},
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
@@ -1451,7 +1451,7 @@ addLayer("pu", {
             barStyle() { return {backgroundColor: "#1a3b0f"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
-                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableBool(this.layer, this.id) ? look.backgroundColor = "#7f5f00" : look.backgroundColor = "#3f2f00"
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f5f00" : look.backgroundColor = "#3f2f00"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
                 return look
             }
@@ -1460,16 +1460,16 @@ addLayer("pu", {
             image() {return this.canClick() ? "resources/Punchcards/rarePunchcard11.png" : "resources/Punchcards/lockedPunchcard.png"},
             title() {
                 let str = "Rainy Day"
-                if (getLevelableBool(this.layer, this.id)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
+                if (getLevelableTier(this.layer, this.id, true)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
                 return str
             },
             description() {
                 let str = [
-                    !getLevelableBool(this.layer, this.id) ? "<span style='color:gray'>" : "",
+                    !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
                     "x" + format(this.effect()[0]) + " to grass value and capacity <small>(Based on clouds)</small><br>",
                     "Unlock a new vaporizer buyable<br>",
-                    !getLevelableBool(this.layer, this.id) ? "</span>" : "",
+                    !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to eclipse shard xp value",
                     getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
@@ -1491,9 +1491,9 @@ addLayer("pu", {
                 return eff
             },
             // CLICK CODE
-            unlocked() {return (player.pet.activeAbilities[0] && player.ir.iriditeDefeated && player.le.highestReset.gte(4)) || this.canClick()},
-            canSelect() {return player.pet.activeAbilities[0] && player.ir.iriditeDefeated && player.le.resetAmount.gte(4)},
-            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableBool(this.layer, this.id)},
+            unlocked() {return (player.pet.legPetTimers[0].active && player.ir.iriditeDefeated && player.le.highestReset.gte(4)) || this.canClick()},
+            canSelect() {return player.pet.legPetTimers[0].active && player.ir.iriditeDefeated && player.le.resetAmount.gte(4)},
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
@@ -1505,7 +1505,7 @@ addLayer("pu", {
             barStyle() { return {backgroundColor: "#1a3b0f"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
-                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableBool(this.layer, this.id) ? look.backgroundColor = "#7f5f00" : look.backgroundColor = "#3f2f00"
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f5f00" : look.backgroundColor = "#3f2f00"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
                 return look
             }
@@ -1514,16 +1514,16 @@ addLayer("pu", {
             image() {return this.canClick() ? "resources/Punchcards/rarePunchcard12.png" : "resources/Punchcards/lockedPunchcard.png"},
             title() {
                 let str = "Iridite"
-                if (getLevelableBool(this.layer, this.id)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
+                if (getLevelableTier(this.layer, this.id, true)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
                 return str
             },
             description() {
                 let str = [
-                    !getLevelableBool(this.layer, this.id) ? "<span style='color:gray'>" : "",
+                    !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
                     "x" + format(this.effect()[0]) + " to length, width, and depth <small>(Based on space)</small><br>",
                     "Unlocks Spissitude<br>",
-                    !getLevelableBool(this.layer, this.id) ? "</span>" : "",
+                    !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to space rocks",
                     getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
@@ -1546,7 +1546,7 @@ addLayer("pu", {
             // CLICK CODE
             unlocked() {return (player.ir.iriditeDefeated && player.le.highestReset.gte(7)) || this.canClick()},
             canSelect() {return player.ir.iriditeDefeated && player.le.resetAmount.gte(7)},
-            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableBool(this.layer, this.id)},
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
@@ -1558,7 +1558,7 @@ addLayer("pu", {
             barStyle() { return {backgroundColor: "#1a3b0f"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
-                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableBool(this.layer, this.id) ? look.backgroundColor = "#7f5f00" : look.backgroundColor = "#3f2f00"
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f5f00" : look.backgroundColor = "#3f2f00"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
                 return look
             }
@@ -1781,16 +1781,16 @@ addLayer("pu", {
             image() {return this.canClick() ? "resources/Punchcards/epicPunchcard5.png" : "resources/Punchcards/lockedPunchcard.png"},
             title() {
                 let str = "Challenge"
-                if (getLevelableBool(this.layer, this.id)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
+                if (getLevelableTier(this.layer, this.id, true)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
                 return str
             },
             description() {
                 let str = [
-                    !getLevelableBool(this.layer, this.id) ? "<span style='color:gray'>" : "",
+                    !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
                     "x" + format(this.effect()[0]) + " to starmetal alloy<small> (Based on universe resets)</small><br>",
                     "^" + format(this.effect()[1]) + " to points<small> (Based on universe resets)</small><br>",
-                    !getLevelableBool(this.layer, this.id) ? "</span>" : "",
+                    !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[2]) + " to starmetal essence",
                     getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
@@ -1815,7 +1815,7 @@ addLayer("pu", {
             // CLICK CODE
             unlocked() {return (player.ir.iriditeDefeated && player.le.resetAmount.lte(0)) || this.canClick()},
             canSelect() {return player.ir.iriditeDefeated && player.le.resetAmount.lte(0)},
-            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableBool(this.layer, this.id)},
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
@@ -1827,7 +1827,7 @@ addLayer("pu", {
             barStyle() { return {backgroundColor: "#1a3b0f"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
-                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableBool(this.layer, this.id) ? look.backgroundColor = "#003f7f" : look.backgroundColor = "#00254c"
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#003f7f" : look.backgroundColor = "#00254c"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
                 return look
             }
@@ -1836,16 +1836,16 @@ addLayer("pu", {
             image() {return this.canClick() ? "resources/Punchcards/epicPunchcard6.png" : "resources/Punchcards/lockedPunchcard.png"},
             title() {
                 let str = "Point Softcap Weakener^2"
-                if (getLevelableBool(this.layer, this.id)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
+                if (getLevelableTier(this.layer, this.id, true)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
                 return str
             },
             description() {
                 let str = [
-                    !getLevelableBool(this.layer, this.id) ? "<span style='color:gray'>" : "",
+                    !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
                     "<small>^" + format(this.effect()[0]) + " to the second point softcap's effect<br>",
                     "<small>x" + format(this.effect()[1]) + " to second point softcap start (Based on normality)</small><br>",
-                    !getLevelableBool(this.layer, this.id) ? "</span>" : "",
+                    !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[2]) + " to space pet XP gain",
                     getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
@@ -1869,7 +1869,7 @@ addLayer("pu", {
             // CLICK CODE
             unlocked() {return (player.ir.iriditeDefeated && player.le.resetAmount.gte(6)) || this.canClick()},
             canSelect() {return player.ir.iriditeDefeated && player.le.resetAmount.gte(6)},
-            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableBool(this.layer, this.id)},
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
@@ -1881,7 +1881,7 @@ addLayer("pu", {
             barStyle() { return {backgroundColor: "#1a3b0f"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
-                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableBool(this.layer, this.id) ? look.backgroundColor = "#003f7f" : look.backgroundColor = "#00254c"
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#003f7f" : look.backgroundColor = "#00254c"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
                 return look
             }
@@ -1892,16 +1892,16 @@ addLayer("pu", {
             image() {return this.canClick() ? "resources/Punchcards/legendaryPunchcard1.png" : "resources/Punchcards/lockedPunchcard.png"},
             title() {
                 let str = "Humanity"
-                if (getLevelableBool(this.layer, this.id)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
+                if (getLevelableTier(this.layer, this.id, true)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
                 return str
             },
             description() {
                 let str = [
-                    !getLevelableBool(this.layer, this.id) ? "<span style='color:gray'>" : "",
+                    !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
                     "Unlock Blood<br>",
                     "x" + format(this.effect()[0]) + " to blood gain (based on universe resets)<br>",
-                    !getLevelableBool(this.layer, this.id) ? "</span>" : "",
+                    !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "/" + format(this.effect()[1]) + " to ship cooldowns",
                     getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
@@ -1924,7 +1924,7 @@ addLayer("pu", {
             // CLICK CODE
             unlocked() {return (player.ir.iriditeDefeated && hasUpgrade("le", 201)) || this.canClick()},
             canSelect() {return player.ir.iriditeDefeated && hasUpgrade("le", 201)},
-            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableBool(this.layer, this.id)},
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
@@ -1936,7 +1936,7 @@ addLayer("pu", {
             barStyle() { return {backgroundColor: "#1a3b0f"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
-                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableBool(this.layer, this.id) ? look.backgroundColor = "#003f7f" : look.backgroundColor = "#00254c"
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#003f7f" : look.backgroundColor = "#00254c"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
                 return look
             }

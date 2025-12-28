@@ -30,7 +30,7 @@
 		"Hive/honey.js", "Hive/wax.js", "Hive/aleph.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
 		
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js",
-		"Check Back/cookie.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
+		"Check Back/cookie.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js", "DarkU1/blood.js",
 
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",

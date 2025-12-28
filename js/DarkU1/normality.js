@@ -34,7 +34,7 @@
         player.dn.normalityToGet = player.dn.normalityToGet.mul(levelableEffect("st", 207)[0])
         player.dn.normalityToGet = player.dn.normalityToGet.mul(buyableEffect("st", 106))
         player.dn.normalityToGet = player.dn.normalityToGet.mul(buyableEffect("ds", 104))
-        if (getLevelableBool("pu", 110)) player.dn.normalityToGet = player.dn.normalityToGet.mul(levelableEffect("pu", 110)[0])
+        if (getLevelableTier("pu", 110, true)) player.dn.normalityToGet = player.dn.normalityToGet.mul(levelableEffect("pu", 110)[0])
 
         //normality softcap
         if (player.dn.normalityToGet.gte(1e120)) player.dn.normalityToGet = player.dn.normalityToGet.div(1e120).pow(0.5).mul(1e120)
@@ -257,7 +257,7 @@
             currency() { return player.dn.normality},
             pay(amt) { player.dn.normality = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).pow(0.8).add(1) },
-            unlocked() { return getLevelableBool("pu", 209) },
+            unlocked() { return getLevelableTier("pu", 209, true) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -291,7 +291,7 @@
             currency() { return player.dn.normality},
             pay(amt) { player.dn.normality = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
-            unlocked() { return getLevelableBool("pu", 209) },
+            unlocked() { return getLevelableTier("pu", 209, true) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {

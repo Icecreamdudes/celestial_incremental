@@ -311,7 +311,7 @@ addLayer("st", {
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
             xpReq() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
-                return amt.mul(3).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+                return amt.mul(3).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
@@ -350,7 +350,7 @@ addLayer("st", {
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
             xpReq() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
-                return amt.mul(3).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+                return amt.mul(3).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
@@ -389,7 +389,7 @@ addLayer("st", {
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
             xpReq() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
-                return amt.mul(3).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+                return amt.mul(3).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
@@ -428,7 +428,7 @@ addLayer("st", {
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
             xpReq() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
-                return amt.mul(3).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+                return amt.mul(3).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
@@ -467,7 +467,7 @@ addLayer("st", {
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
             xpReq() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
-                return amt.mul(3).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+                return amt.mul(3).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
@@ -506,7 +506,7 @@ addLayer("st", {
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
             xpReq() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
-                return amt.mul(3).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+                return amt.mul(3).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
@@ -545,7 +545,7 @@ addLayer("st", {
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
             xpReq() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
-                return amt.mul(3).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+                return amt.mul(3).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
@@ -584,7 +584,7 @@ addLayer("st", {
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
             xpReq() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
-                return amt.mul(3).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+                return amt.mul(3).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
@@ -623,7 +623,7 @@ addLayer("st", {
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
             xpReq() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
-                return amt.mul(3).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+                return amt.mul(3).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
@@ -664,7 +664,7 @@ addLayer("st", {
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
             xpReq() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
-                return amt.mul(5).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+                return amt.mul(5).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
@@ -703,7 +703,7 @@ addLayer("st", {
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
             xpReq() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
-                return amt.mul(5).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+                return amt.mul(5).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
@@ -742,7 +742,7 @@ addLayer("st", {
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
             xpReq() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
-                return amt.mul(5).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+                return amt.mul(5).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
@@ -781,7 +781,7 @@ addLayer("st", {
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
             xpReq() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
-                return amt.mul(5).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+                return amt.mul(5).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
@@ -820,7 +820,7 @@ addLayer("st", {
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
             xpReq() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
-                return amt.mul(5).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+                return amt.mul(5).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
@@ -859,7 +859,7 @@ addLayer("st", {
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
             xpReq() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
-                return amt.mul(5).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+                return amt.mul(5).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
@@ -898,7 +898,7 @@ addLayer("st", {
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
             xpReq() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
-                return amt.mul(5).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+                return amt.mul(5).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
@@ -937,7 +937,7 @@ addLayer("st", {
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
             xpReq() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
-                return amt.mul(5).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+                return amt.mul(5).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
@@ -976,7 +976,7 @@ addLayer("st", {
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
             xpReq() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
-                return amt.mul(5).add(10).pow(Decimal.pow(1.2, getLevelableTier(this.layer, this.id))).floor()
+                return amt.mul(5).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {

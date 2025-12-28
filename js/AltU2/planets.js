@@ -1,5 +1,4 @@
-﻿
-addLayer("pl", {
+﻿addLayer("pl", {
     name: "Planets", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "♄", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "A2",
@@ -60,58 +59,37 @@ addLayer("pl", {
             title() { return "<h2>Sacrifice your stars" },
             canClick() { return true },
             unlocked() { return true },
-onClick() {
-    let starsToSacrifice = player.pl.starInputAmount;
-    player.au2.stars = player.au2.stars.sub(starsToSacrifice);
+            onClick() {
+                let starsToSacrifice = player.pl.starInputAmount;
+                player.au2.stars = player.au2.stars.sub(starsToSacrifice);
 
-    let planets = player.pl.planets;
-    let stars = new Decimal(starsToSacrifice);
+                let planets = player.pl.planets;
+                let stars = new Decimal(starsToSacrifice);
 
-if (starsToSacrifice.gt(500)) {
-    // Split into 50 intervals for better approximation
-    let intervals = 50;
-    let intervalSize = stars.div(intervals).floor();
-    // Calculate leftover manually (stars - intervalSize * intervals)
-    let leftover = stars.sub(intervalSize.mul(intervals));
-    let gain = new Decimal(0);
-    let currentPlanets = planets;
+                if (starsToSacrifice.gt(100)) {
+                    let preExp = starsToSacrifice.div(5).add(player.pl.planets.add(1).pow(2))
+                    let gain = new Decimal(1)
+                    if (preExp.gt(2e7)) {
+                        gain = starsToSacrifice.mul(1e7).add(player.pl.planets.add(1).pow(4)).pow(0.25).sub(1).sub(player.pl.planets).max(0)
+                    } else {
+                        gain = preExp.pow(0.5).sub(player.pl.planets.add(1)).max(0)
+                    }
+                    player.pl.planets = player.pl.planets.add(gain.floor());
 
-    for (let i = 0; i < intervals; i++) {
-        // Add 1 to some intervals to account for leftovers
-        let thisInterval = intervalSize.add(i < leftover.toNumber() ? 1 : 0);
-        if (thisInterval.lte(0)) continue;
-
-        // Calculate start and end planet chance for this interval
-        let startChance = currentPlanets.gte(500)
-            ? Decimal.div(0.1, currentPlanets.pow(1.5).add(1))
-            : Decimal.div(0.1, currentPlanets.add(1));
-        let endPlanets = currentPlanets.add(thisInterval);
-        let endChance = endPlanets.gte(500)
-            ? Decimal.div(0.1, endPlanets.pow(1.5).add(1))
-            : Decimal.div(0.1, endPlanets.add(1));
-        let avgChance = startChance.add(endChance).div(2);
-
-        gain = gain.add(thisInterval.mul(avgChance));
-        currentPlanets = endPlanets;
-    }
-
-    player.pl.planets = player.pl.planets.add(gain.floor());
-} else {
-    // Simulate each star individually (random, slow)
-    let gained = new Decimal(0);
-    let currentPlanets = planets;
-    for (let i = 0; i < starsToSacrifice.toNumber(); i++) {
-        let chance = currentPlanets.gte(500)
-            ? Decimal.div(0.1, currentPlanets.pow(1.5).add(1)).toNumber()
-            : Decimal.div(0.1, currentPlanets.add(1)).toNumber();
-        if (Math.random() < chance) {
-            gained = gained.add(1);
-            currentPlanets = currentPlanets.add(1);
-        }
-    }
-    player.pl.planets = player.pl.planets.add(gained.floor());
-}
-},
+                } else {
+                    // Simulate each star individually (random, slow)
+                    let gained = new Decimal(0);
+                    let currentPlanets = planets;
+                    for (let i = 0; i < starsToSacrifice.toNumber(); i++) {
+                        let chance = Decimal.div(0.1, currentPlanets.add(1)).toNumber();
+                        if (Math.random() < chance) {
+                            gained = gained.add(1);
+                            currentPlanets = currentPlanets.add(1);
+                        }
+                    }
+                    player.pl.planets = player.pl.planets.add(gained.floor());
+                }
+            },
             style: {width: "300px", minHeight: "50px", borderRadius: "0 15px 15px 0"},
         },
     },
@@ -265,10 +243,13 @@ if (starsToSacrifice.gt(500)) {
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.au2.stars) + "</h3> stars." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", () => { return "You have <h3>" + formatWhole(player.au2.stars) + "</h3> stars." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You will sacrifice <h3>" + formatWhole(player.pl.starInputAmount) + "</h3> stars to find planets." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Planet find chance: " + formatWhole(player.pl.planetChance.mul(100)) + "%. (Increases with planets)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", () => { return "You will sacrifice <h3>" + formatWhole(player.pl.starInputAmount) + "</h3> stars to find planets." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["row", [
+                        ["raw-html", () => { return "Planet find chance: " + formatWhole(player.pl.planetChance.mul(100)) + "%. (Decreases with planets)" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return player.pl.planets.gt(4471) ? "<small style='margin-left:10px'>[SOFTCAPPED]</small>" : "" }, {color: "red", fontSize: "24px", fontFamily: "monospace"}],
+                    ]],
                     ["blank", "25px"],
                     ["style-row", [
                         ["text-input", "starInput", {width: "300px", height: "50px", color: "white", textAlign: "left", fontSize: "32px", background: "rgba(0,0,0,0.5)", border: "0", borderRight: "2px solid white", borderRadius: "15px 0 0 15px", padding: "0 25px 0 25px"}],

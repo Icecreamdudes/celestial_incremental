@@ -5,7 +5,7 @@ addLayer("hre", {
     tooltip: "Refinement", // Decides the nodes tooltip
     color: "#444", // Decides the nodes color.
     nodeStyle: {backgroundColor: "black", borderColor: "#ccc", color: "#ccc"}, // Decides the nodes style, in CSS format.
-    branches: ["hpr"], // Decides the nodes branches.
+    branches: ["hpr", "hbl"], // Decides the nodes branches.
     startData() { return {
         refinement: new Decimal(0),
         refinementReq: new Decimal(0),
@@ -16,7 +16,7 @@ addLayer("hre", {
     update (delta) {
         player.hre.refinementDiv = new Decimal(1)
         player.hre.refinementDiv = player.hre.refinementDiv.mul(player.rf.abilityEffects[7])
-        player.hre.refinementDiv = player.hre.refinementDiv.mul(player.hbl.boosterEffects[3])
+        player.hre.refinementDiv = player.hre.refinementDiv.mul(player.hbl.boosters[3].effect)
         player.hre.refinementDiv = player.hre.refinementDiv.mul(buyableEffect("ta", 47))
         if (hasUpgrade("hbl", 3)) player.hre.refinementDiv = player.hre.refinementDiv.mul(upgradeEffect("hbl", 3))
         if (inChallenge("hrm", 16)) player.hre.refinementDiv = player.hre.refinementDiv.mul(player.hre.refinementEffect[1][0])
@@ -36,11 +36,11 @@ addLayer("hre", {
         if (player.hre.refinement.gte(1) || hasMilestone("hre", 1)) {
             if (!hasUpgrade("hpw", 81)) player.hre.refinementEffect[0][0] = Decimal.pow(1.3, player.hre.refinement.pow(0.8)).mul(2)
             if (hasUpgrade("hpw", 81)) player.hre.refinementEffect[0][0] = Decimal.pow(1.4, player.hre.refinement.pow(0.8)).mul(3)
-            player.hre.refinementEffect[0][1] = Decimal.pow(2, player.hre.refinement).mul(2)
+            player.hre.refinementEffect[0][1] = Decimal.pow(3, player.hre.refinement).mul(3)
         }
         if (inChallenge("hrm", 12)) {
-            player.hre.refinementEffect[0][0] = player.hre.refinementEffect[0][0].pow(player.hpu.purifierEffects[3])
-            player.hre.refinementEffect[0][1] = player.hre.refinementEffect[0][1].pow(player.hpu.purifierEffects[3])
+            player.hre.refinementEffect[0][0] = player.hre.refinementEffect[0][0].pow(player.hpu.purifiers[3].effect)
+            player.hre.refinementEffect[0][1] = player.hre.refinementEffect[0][1].pow(player.hpu.purifiers[3].effect)
         }
         if (inChallenge("hrm", 16)) {
             let effPow = player.hre.refinementEffect[2][0]
@@ -52,26 +52,26 @@ addLayer("hre", {
             player.hre.refinementEffect[0][1] = player.hre.refinementEffect[0][1].pow(effPow)
         }
 
-        if (player.hre.refinement.gte(3) && player.hre.refinement.lt(60)) player.hre.refinementEffect[1][0] = Decimal.pow(1.15, player.hre.refinement.sub(2).pow(0.6)).pow(player.hpu.purifierEffects[0])
-        if (player.hre.refinement.gte(60)) player.hre.refinementEffect[1][0] = Decimal.pow(1.1, player.hre.refinement.pow(0.3)).add(3.56).pow(player.hpu.purifierEffects[0])
-        if (inChallenge("hrm", 16)) player.hre.refinementEffect[1][0] = Decimal.pow(1.36, player.hre.refinement.sub(2).pow(0.8)).pow(player.hpu.purifierEffects[0])
-        if (player.hre.refinement.gte(3)) player.hre.refinementEffect[1][1] = Decimal.pow(1.9, player.hre.refinement.sub(2)).pow(player.hpu.purifierEffects[0])
+        if (player.hre.refinement.gte(3) && player.hre.refinement.lt(60)) player.hre.refinementEffect[1][0] = Decimal.pow(1.15, player.hre.refinement.sub(2).pow(0.6)).pow(player.hpu.purifiers[0].effect)
+        if (player.hre.refinement.gte(60)) player.hre.refinementEffect[1][0] = Decimal.pow(1.1, player.hre.refinement.pow(0.3)).add(3.56).pow(player.hpu.purifiers[0].effect)
+        if (inChallenge("hrm", 16)) player.hre.refinementEffect[1][0] = Decimal.pow(1.36, player.hre.refinement.sub(2).pow(0.8)).pow(player.hpu.purifiers[0].effect)
+        if (player.hre.refinement.gte(3)) player.hre.refinementEffect[1][1] = Decimal.pow(2.75, player.hre.refinement.sub(2)).pow(player.hpu.purifiers[0].effect)
 
         if (player.hre.refinement.gte(9)) player.hre.refinementEffect[2][0] = Decimal.pow(1.06, player.hre.refinement.sub(4).pow(0.6))
-        if (player.hre.refinement.gte(9)) player.hre.refinementEffect[2][1] = Decimal.pow(1.8, player.hre.refinement.sub(4))
+        if (player.hre.refinement.gte(9)) player.hre.refinementEffect[2][1] = Decimal.pow(2.5, player.hre.refinement.sub(4))
 
         if (player.hre.refinement.gte(24)) player.hre.refinementEffect[3][0] = Decimal.pow(1.6, player.hre.refinement.sub(23).pow(0.6))
-        if (player.hre.refinement.gte(24)) player.hre.refinementEffect[3][1] = Decimal.pow(1.7, player.hre.refinement.sub(12))
+        if (player.hre.refinement.gte(24)) player.hre.refinementEffect[3][1] = Decimal.pow(2.25, player.hre.refinement.sub(12))
 
         if (player.hre.refinement.gte(54) && !hasUpgrade("hpw", 91)) player.hre.refinementEffect[4][0] = Decimal.pow(1.3, player.hre.refinement.sub(53).pow(0.6))
         if (player.hre.refinement.gte(54) && hasUpgrade("hpw", 91)) player.hre.refinementEffect[4][0] = Decimal.pow(1.6, player.hre.refinement.sub(53).pow(0.6))
-        if (player.hre.refinement.gte(54)) player.hre.refinementEffect[4][1] = Decimal.pow(1.6, player.hre.refinement.sub(27))
+        if (player.hre.refinement.gte(54)) player.hre.refinementEffect[4][1] = Decimal.pow(2, player.hre.refinement.sub(27))
 
         if (player.hre.refinement.gte(90)) player.hre.refinementEffect[5][0] = player.hre.refinement.sub(89).mul(0.1).add(1)
-        if (player.hre.refinement.gte(90)) player.hre.refinementEffect[5][1] = Decimal.pow(1.1, player.hre.refinement.sub(45).pow(0.8))
+        if (player.hre.refinement.gte(90)) player.hre.refinementEffect[5][1] = Decimal.pow(1.5, player.hre.refinement.sub(45).pow(0.8))
 
         for (let i = 0; i < 6; i++) {
-            player.hre.refinementEffect[i][1] = player.hre.refinementEffect[i][1].pow(player.hpu.purifierEffects[2])
+            player.hre.refinementEffect[i][1] = player.hre.refinementEffect[i][1].pow(player.hpu.purifiers[2].effect)
         }
     },
     clickables: {
@@ -83,8 +83,8 @@ addLayer("hre", {
             canClick() { return player.hre.refinementGain.gte(1) && (!hasMilestone("hre", 4) || inChallenge("hrm", 15))},
             unlocked: true,
             onClick() {
-                if (!hasMilestone("hre", 0)) player.hre.refinement = player.hre.refinement.add(1)
-                if (hasMilestone("hre", 0)) player.hre.refinement = player.hre.refinement.add(player.hre.refinementGain)
+                if (!hasMilestone("hre", 100)) player.hre.refinement = player.hre.refinement.add(1)
+                if (hasMilestone("hre", 100)) player.hre.refinement = player.hre.refinement.add(player.hre.refinementGain)
 
                 // RESET CODE
                 for (let i = 0; i < 6; i++) {
@@ -104,10 +104,17 @@ addLayer("hre", {
         },
     },
     milestones: {
+        100: {
+            requirementDescription: "<h3>6 Refinements",
+            effectDescription: "Unlocks buy max refinements.",
+            done() { return player.hre.refinement.gte(6)},
+            style: {width: "500px", height: "50px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
+        },
         0: {
             requirementDescription: "<h3>12 Refinements",
-            effectDescription: "Unlocks buy max refinements.",
+            effectDescription: "Hex point formula now uses best celestial points.",
             done() { return player.hre.refinement.gte(12)},
+            unlocked() { return hasMilestone("hre", 100) },
             style: {width: "500px", height: "50px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         1: {
@@ -201,7 +208,7 @@ addLayer("hre", {
         },
         12: {
             requirementDescription: "<h3>84 Refinements",
-            effectDescription: "Unlock minimum refinement for booster autoclicker.",
+            effectDescription: "Produce 1% of blessings per second (excluding RC1).",
             done() { return player.hre.refinement.gte(84)},
             unlocked() { return hasMilestone("hre", 11) },
             style: {width: "500px", height: "50px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
@@ -348,6 +355,7 @@ addLayer("hre", {
                 content: [
                     ["raw-html", "Milestones kept on later resets.", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "5px"],
+                    ["milestone", 100],
                     ["milestone", 0],
                     ["milestone", 1],
                     ["milestone", 2],
@@ -385,7 +393,7 @@ addLayer("hre", {
         ["blank", "10px"],
         ["row", [
             ["raw-html", () => {return player.hre.refinement.neq(1) ? "You are at <h3>" + formatWhole(player.hre.refinement) + "</h3> refinements." : "You are at <h3>" + formatWhole(player.hre.refinement) + "</h3> refinement." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-            ["raw-html", () => {return hasMilestone("hre", 0) ? "(+" + formatWhole(player.hre.refinementGain) + ")" : "" }, () => {
+            ["raw-html", () => {return hasMilestone("hre", 100) ? "(+" + formatWhole(player.hre.refinementGain) + ")" : "" }, () => {
                 let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
                 player.hre.refinementGain.gt(0) ? look.color = "white" : look.color = "gray"
                 return look

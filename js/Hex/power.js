@@ -25,6 +25,7 @@ addLayer("hpw", {
         player.hpw.powerGain = player.hpw.powerGain.mul(levelableEffect("pu", 203)[2])
         player.hpw.powerGain = player.hpw.powerGain.mul(levelableEffect("pet", 1106)[1])
         if (hasUpgrade("fi", 24)) player.hpw.powerGain = player.hpw.powerGain.mul(upgradeEffect("fi", 24))
+        player.hpw.powerGain = player.hpw.powerGain.mul(buyableEffect("al", 206))
 
         player.hpw.powerGain = player.hpw.powerGain.floor() // To keep power to whole numbers
 
@@ -52,21 +53,19 @@ addLayer("hpw", {
         player.hrm.dreamTimer = new Decimal(60)
 
         // PURITY
-        if (!player.ir.iriditeDefeated)
-        {
         player.hpu.purity = player.hpu.keptPurity
         player.hpu.totalPurity = player.hpu.keptPurity
         player.hpu.purityGain = new Decimal(0)
-        player.hpu.purifier = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)]
+        for (let i in player.hpu.purifiers) {
+            player.hpu.purifiers[i].amount = new Decimal(0)
+            if (i != "2" || i != "5") player.hpu.purifiers[i].effect = new Decimal(1)
+        }
         
         let extra = new Decimal(0)
         if (hasUpgrade("hpw", 41)) extra = extra.add(1)
         if (type == 2 && hasUpgrade("hve", 33)) extra = extra.add(1)
-        player.hpu.purifier[1] = extra
-        player.hpu.purifier[4] = extra
-
-        player.hpu.purifierEffects = [new Decimal(1), new Decimal(1), new Decimal(0), new Decimal(1), new Decimal(0), new Decimal(1)]
-        }
+        player.hpu.purifiers[1].amount = extra
+        player.hpu.purifiers[4].amount = extra
 
         // CURSES
         player.hcu.curses = new Decimal(0)
@@ -80,18 +79,15 @@ addLayer("hpw", {
         if (!hasMilestone("hpw", 4)) player.hcu.buyables[112] = new Decimal(0)
 
         // VEXES
-        if (!player.ir.iriditeDefeated)
-        {
-            if (type != 2) {
-                player.hve.vex = new Decimal(0)
-                player.hve.vexTotal = new Decimal(0)
-                player.hve.vexGain = new Decimal(0)
-                player.hve.rowCurrent = [0, 0, 0, 0, 0, 0]
-                player.hve.rowSpent = [0, 0, 0, 0, 0, 0]
-                for (let i = 0; i < player.hve.upgrades.length; i++) {
-                    player.hve.upgrades.splice(i, 1);
-                    i--;
-                }
+        if (type != 2) {
+            player.hve.vex = new Decimal(0)
+            player.hve.vexTotal = new Decimal(0)
+            player.hve.vexGain = new Decimal(0)
+            player.hve.rowCurrent = [0, 0, 0, 0, 0, 0]
+            player.hve.rowSpent = [0, 0, 0, 0, 0, 0]
+            for (let i = 0; i < player.hve.upgrades.length; i++) {
+                player.hve.upgrades.splice(i, 1);
+                i--;
             }
         }
 
@@ -102,14 +98,12 @@ addLayer("hpw", {
         player.hbl.boons = new Decimal(0)
         player.hbl.boonsGain = new Decimal(0)
         player.hbl.blessAutomation = false
-        player.hbl.boosterLevels[0] = new Decimal(0)
-        player.hbl.boosterLevels[1] = new Decimal(0)
-        if (!hasMilestone("hpw", 2)) player.hbl.boosterLevels[2] = new Decimal(0)
-        player.hbl.boosterLevels[3] = new Decimal(0)
-        player.hbl.boosterLevels[4] = new Decimal(0)
-        if (!hasMilestone("hpw", 2)) player.hbl.boosterLevels[5] = new Decimal(0)
-        player.hbl.boosterXP = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)]
-        player.hbl.boosterEffects = [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(0)]
+        for (let i in player.hbl.boosters) {
+            if (hasMilestone("hpw", 2) && (i == "2" || i == "5")) continue;
+            player.hbl.boosters[i].level = new Decimal(0)
+            player.hbl.boosters[i].xp = new Decimal(0)
+            if (i != "5") player.hbl.boosters[i].effect = new Decimal(1)
+        }
         for (let i = 0; i < player.hbl.upgrades.length; i++) {
             if ((type != 1 || hasMilestone("s", 20)) && +player.hbl.upgrades[i] > player.hpw.vigor) {
                 player.hbl.upgrades.splice(i, 1);
@@ -180,6 +174,7 @@ addLayer("hpw", {
             title: "Might 1:1",
             unlocked: true,
             description: "Boost blessings based on power.",
+            tooltip: "(log6(Power+1)+1)*2",
             cost() {return new Decimal(1).pow(player.hpw.upgScale[0])},
             onPurchase() {player.hpw.upgScale[0] = player.hpw.upgScale[0] + 1},
             currencyLocation() { return player.hpw },
@@ -195,6 +190,10 @@ addLayer("hpw", {
             title: "Might 1:2",
             unlocked: true,
             description: "Boost hex points based on power.",
+            tooltip() {
+                if (hasUpgrade("hpw", 32)) return "(log1.6((Power+1)^3)+1)*6"
+                return "(log2(Power+1)+1)*3"
+            },
             cost() {return new Decimal(1).pow(player.hpw.upgScale[0])},
             onPurchase() {player.hpw.upgScale[0] = player.hpw.upgScale[0] + 1},
             currencyLocation() { return player.hpw },
@@ -284,6 +283,7 @@ addLayer("hpw", {
             title: "Might 4:2",
             unlocked: true,
             description: "Improve Might 1:2's effect.",
+            tooltip: "(log2(Power+1)+1)*3<br>↓<br>(log1.6((Power+1)^3)+1)*6",
             branches: [31, 33],
             cost() {return new Decimal(6).pow(player.hpw.upgScale[3])},
             canAfford() { return hasUpgrade("hpw", 31) && hasUpgrade("hpw", 33)},
@@ -319,8 +319,8 @@ addLayer("hpw", {
             canAfford() { return hasUpgrade("hpw", 31)},
             onPurchase() {
                 player.hpw.upgScale[4] = player.hpw.upgScale[4] + 1
-                player.hpu.purifier[1] = player.hpu.purifier[1].add(1)
-                player.hpu.purifier[4] = player.hpu.purifier[4].add(1)
+                player.hpu.purifiers[1].amount = player.hpu.purifiers[1].amount.add(1)
+                player.hpu.purifiers[4].amount = player.hpu.purifiers[4].amount.add(1)
             },
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
@@ -721,9 +721,12 @@ addLayer("hpw", {
             currencyDisplayName: "Power",
             currencyInternalName: "power",
             effect() {
-                return player.hpw.power.add(1).log(10).mul(0.05).add(1).pow(buyableEffect("hrm", 5))
+                return player.hpw.power.add(1).log(10).mul(0.05).add(1).min(5).pow(buyableEffect("hrm", 5))
             },
-            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            effectDisplay() {
+                if (player.hpw.power.gte(1e80)) return "x" + format(upgradeEffect(this.layer, this.id)) + " <small style='color:red'>[HARDCAPPED]</small>"
+                return "x" + format(upgradeEffect(this.layer, this.id))
+            }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #f00"},
         },
         1021: {
@@ -881,15 +884,22 @@ addLayer("hpw", {
             currencyDisplayName: "Power",
             currencyInternalName: "power",
             effect() {
-                return Decimal.pow(1.06, player.hpw.power.add(1).log(6)).pow(buyableEffect("hrm", 5))
+                let eff = Decimal.pow(1.06, player.hpw.power.add(1).log(6))
+                if (eff.gte(5)) eff = player.hpw.power.add(1).log(6).div(5.5).min(10)
+                eff = eff.pow(buyableEffect("hrm", 5))
+                return eff
             },
-            effectDisplay() { return "^" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            effectDisplay() {
+                if (Decimal.pow(1.06, player.hpw.power.add(1).log(6)).gte(10)) return "^" + format(upgradeEffect(this.layer, this.id)) + " <small style='color:darkred'>[HARDCAPPED]</small>"
+                if (Decimal.pow(1.06, player.hpw.power.add(1).log(6)).gte(5)) return "^" + format(upgradeEffect(this.layer, this.id)) + " <small style='color:darkred'>[SOFTCAPPED]</small>"
+                return "^" + format(upgradeEffect(this.layer, this.id))
+            }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #00f"},
         },
         1061: {
             title: "Might F:1",
             unlocked() {return challengeCompletions("hrm", 16) >= 1 && hasUpgrade("bi", 27)},
-            description: "Gain 10% infinities per second.",
+            description: "+25% crate roll multiplier.",
             branches: [1006],
             cost() {return new Decimal(362797056)},
             canAfford() { return hasUpgrade("hpw", 1006)},
@@ -1192,8 +1202,8 @@ addLayer("hpw", {
                     ["clickable", 2],
                     ["row", [
                         ["blank", ["140px", "140px"]],
-                        ["upgrade", 1],
-                        ["upgrade", 2],
+                        ["bt-upgrade", 1],
+                        ["bt-upgrade", 2],
                         ["style-row", [["upgrade", 1011]], {width: "140px", height: "140px"}],
                     ]],
                     ["row", [
@@ -1212,7 +1222,7 @@ addLayer("hpw", {
                     ["row", [
                         ["style-row", [["upgrade", 1021]], {width: "140px", height: "140px"}],
                         ["upgrade", 31],
-                        ["upgrade", 32],
+                        ["bt-upgrade", 32],
                         ["upgrade", 33],
                         ["style-row", [["upgrade", 1031]], {width: "140px", height: "140px"}],
                     ]],

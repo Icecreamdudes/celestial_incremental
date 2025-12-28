@@ -59,8 +59,8 @@
         if (player.rf.rocketFuelToGet.gt(1e20)) player.rf.rocketFuelToGet = player.gh.grasshoppers.pow(0.01).div(50000).add(1e20)
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(levelableEffect("pet", 303)[0])
         if (hasUpgrade("ip", 34) && !inChallenge("ip", 14)) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(upgradeEffect("ip", 34))
-        player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.d.diceEffects[13])
-        if (hasUpgrade("rf", 15)) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(upgradeEffect("rf", 15))
+        player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.d.boosterEffects[13])
+        if (hasUpgrade("rf", 16)) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(upgradeEffect("rf", 16))
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(buyableEffect("cb", 11))
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(buyableEffect("ta", 44))
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(buyableEffect("ta", 45))
@@ -70,19 +70,26 @@
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(levelableEffect("pet", 306)[1])
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.co.cores.rocket.effect[0])
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(levelableEffect("pu", 106)[1])
-        player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.se.starsExploreEffect[0][3])
 
         // POWER MODIFIERS
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(player.co.cores.rocket.effect[1])
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(buyableEffect("cof", 18))
+        player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(player.se.starsExploreEffect[0][3])
 
         // ROCKET FUEL PER SECOND
-        if ((hasUpgrade("rf", 17) || hasChallenge("ip", 16)) && (player.po.rocketFuel || inChallenge("ip", 16))) {
-            player.rf.rocketFuel = player.rf.rocketFuel.add(Decimal.mul(player.rf.rocketFuelToGet.mul(0.2), delta))
+        if (player.po.rocketFuel || inChallenge("ip", 16)) {
+            if (hasUpgrade("rf", 18) || hasChallenge("ip", 16)) {
+                player.rf.rocketFuel = player.rf.rocketFuel.add(Decimal.mul(player.rf.rocketFuelToGet.div(5), delta))
+            }
         }
 
         // ROCKET FUEL EFFECT
-        player.rf.rocketFuelEffect = player.rf.rocketFuel.mul(30).pow(0.85).add(1)
+        if (!inChallenge("ip", 16)) {
+            player.rf.rocketFuelEffect = player.rf.rocketFuel.mul(30).pow(0.85).add(1)
+        } else {
+            player.rf.rocketFuelEffect = new Decimal(1)
+            if (hasUpgrade("rf", 19)) player.rf.rocketFuelEffect = player.rf.rocketFuel.pow(0.2).add(1)
+        }
 
         // ROCKET FUEL RESET CODE
         if (player.rf.rocketFuelPause.gt(0)) {
@@ -109,7 +116,7 @@
         if (hasUpgrade("rf", 13) && player.rf.abilitiesUnlocked[2]) {
             player.rf.abilitiesUnlocked[3] = true
         }
-        if (hasUpgrade("rf", 14) && player.rf.abilitiesUnlocked[3]) {
+        if (hasUpgrade("rf", 15) && player.rf.abilitiesUnlocked[3]) {
             player.rf.abilitiesUnlocked[4] = true
         }
         if (hasChallenge("ip", 16)) {
@@ -132,7 +139,7 @@
         }
 
         // ABILITY AUTOMATION
-        if (hasUpgrade("tad", 12)) {
+        if (player.tad.altInfinities.broken.milestone.gte(3)) {
             layers.rf.rocketFuelAbility(0, player.rf.rocketFuel)
             layers.rf.rocketFuelAbility(1, player.rf.rocketFuel)
             layers.rf.rocketFuelAbility(2, player.rf.rocketFuel)
@@ -152,6 +159,8 @@
             onClick() {
                 player.rf.rocketFuelPause = new Decimal(3)
                 player.rf.rocketFuel = player.rf.rocketFuel.add(player.rf.rocketFuelToGet)
+                if (!hasAchievement("achievements", 103)) completeAchievement("achievements", 103)
+                if (!hasAchievement("achievements", 119) && player.rf.rocketFuel.gte(1e15)) completeAchievement("achievements", 119)
             },
             style() {
                 let look = {width: "225px", minHeight: "150px", borderRadius: "12px 0px 0px 0px"}
@@ -349,44 +358,46 @@
         switch (type) {
             case 0:
                 player.rf.abilityEffects[0] = amount.pow(1.15).mul(100).add(1).pow(player.cs.scraps.rocket.effect)
-                player.rf.abilityTimers[0] = amount.pow(0.14).mul(100)
+                player.rf.abilityTimers[0] = amount.add(1).log(10).add(1).mul(180)
                 break;
             case 1:
                 player.rf.abilityEffects[1] = amount.pow(1.1).mul(10).add(1).pow(player.cs.scraps.rocket.effect)
-                player.rf.abilityTimers[1] = amount.pow(0.12).mul(80)
+                player.rf.abilityTimers[1] = amount.add(1).log(10).add(1).mul(150)
             break;
             case 2:
                 player.rf.abilityEffects[2] = amount.pow(0.9).mul(6).add(1).pow(player.cs.scraps.rocket.effect)
-                player.rf.abilityTimers[2] = amount.pow(0.1).mul(60)
+                player.rf.abilityTimers[2] = amount.add(1).log(10).add(1).mul(120)
             break;
             case 3:
                 player.rf.abilityEffects[3] = amount.pow(0.7).mul(3).add(1).pow(player.cs.scraps.rocket.effect)
-                player.rf.abilityTimers[3] = amount.pow(0.08).mul(45)
+                player.rf.abilityTimers[3] = amount.add(1).log(10).add(1).mul(90)
             break;
             case 4:
-                player.rf.abilityEffects[4] = player.cb.buttonBaseXP[0].mul(amount.log10().pow(0.7).div(10).add(1))
+                player.rf.abilityEffects[4] = player.cb.xpTimers[0].base.mul(amount.add(1).log10().pow(0.7).div(10).add(1))
                 player.cb.xp = player.cb.xp.add(player.rf.abilityEffects[4])
                 player.cb.totalxp = player.cb.totalxp.add(player.rf.abilityEffects[4])
-                player.rf.abilityTimers[4] = player.cb.buttonTimersMax[0].mul(amount.log10().pow(0.8).div(10).add(1.7))
-                let prob = amount.log10().pow(0.75).div(2).add(4).floor()
-                let random = getRandomInt(100)
+                player.rf.abilityTimers[4] = player.cb.xpTimers[0].max.mul(amount.add(1).log10().pow(0.8).div(10).add(1.7))
 
-                if (new Decimal(random).lte(prob)) {
-                    addLevelableXP("pet", 303, 1);
-                    callAlert("You gained a Drippy Ufo!", "resources/Pets/ufoRarePet.png");
+                let chance = amount.log(10).pow(0.75).div(2).add(4).floor()
+                let guarantee = chance.div(100).floor()
+                chance = chance.sub(guarantee.mul(100))
+                if (chance.gte(Math.random()*100)) guarantee = guarantee.add(1)
+                if (guarantee.gt(0)) {
+                    addLevelableXP("pet", 303, guarantee);
+                    doPopup("none", "+" + formatWhole(guarantee) + " Drippy Ufo!", "Pet Obtained!", 5, "#4e7cff", "resources/Pets/ufoRarePet.png")
                 }
             break;
             case 5:
                 if (!hasUpgrade("cs", 901)) player.rf.abilityEffects[5] = amount.add(1).log(10).add(1).div(66).add(1).pow(player.cs.scraps.rocket.effect)
                 if (hasUpgrade("cs", 901)) player.rf.abilityEffects[5] = amount.add(1).log(10).add(1).pow(2).pow(player.cs.scraps.rocket.effect)
-                player.rf.abilityTimers[5] = amount.add(1).log10().add(1).mul(20)
+                player.rf.abilityTimers[5] = amount.add(1).log(10).add(1).mul(60)
             break;
             case 6:
-                player.rf.abilityTimers[6] = amount.add(1).log10().add(1).mul(20)
+                player.rf.abilityTimers[6] = amount.add(1).log(10).add(1).mul(60)
             break;
             case 7:
                 player.rf.abilityEffects[7] = amount.add(1).log(6).add(1).div(36).add(1).pow(player.cs.scraps.rocket.effect)
-                player.rf.abilityTimers[7] = amount.add(1).log(6).add(1).mul(60)
+                player.rf.abilityTimers[7] = amount.add(1).log(6).add(1).mul(120)
             break;
         }
     },
@@ -410,38 +421,11 @@
         player.f.factorPowerPerSecond = new Decimal(0)
         player.f.powerFactorUnlocks = [true, true, true, false, false, false, false, false]
 
-        player.f.buyables[1] = new Decimal(0)
-        player.f.buyables[2] = new Decimal(0)
-        player.f.buyables[3] = new Decimal(0)
-        player.f.buyables[4] = new Decimal(0)
-        player.f.buyables[5] = new Decimal(0)
-        player.f.buyables[6] = new Decimal(0)
-        player.f.buyables[7] = new Decimal(0)
-        player.f.buyables[8] = new Decimal(0)
-        player.f.buyables[11] = new Decimal(0)
-        player.f.buyables[12] = new Decimal(0)
-        player.f.buyables[13] = new Decimal(0)
-        player.f.buyables[14] = new Decimal(0)
-        player.f.buyables[15] = new Decimal(0)
-        player.f.buyables[16] = new Decimal(0)
-        player.f.buyables[17] = new Decimal(0)
-        player.f.buyables[18] = new Decimal(0)
-        player.f.buyables[19] = new Decimal(0)
-        player.f.buyables[21] = new Decimal(0)
-        player.f.buyables[22] = new Decimal(0)
-        player.f.buyables[23] = new Decimal(0)
-        player.f.buyables[24] = new Decimal(0)
-        player.f.buyables[25] = new Decimal(0)
-        player.f.buyables[26] = new Decimal(0)
-        player.f.buyables[27] = new Decimal(0)
-        player.f.buyables[28] = new Decimal(0)
-        player.f.buyables[29] = new Decimal(0)
-        player.f.buyables[31] = new Decimal(0)
-        player.f.buyables[32] = new Decimal(0)
-        player.f.buyables[33] = new Decimal(0)
-        player.f.buyables[34] = new Decimal(0)
-        player.f.buyables[35] = new Decimal(0)
-        player.f.buyables[36] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i in player.f.buyables) {
+                player.f.buyables[i] = new Decimal(0)
+            }
+        }
 
         player.p.prestigePoints = new Decimal(0)
 
@@ -454,28 +438,22 @@
             }
         }
 
-        player.t.buyables[11] = new Decimal(0)
-        player.t.buyables[12] = new Decimal(0)
-        player.t.buyables[13] = new Decimal(0)
-        player.t.buyables[14] = new Decimal(0)
-        player.t.buyables[15] = new Decimal(0)
-        player.t.buyables[16] = new Decimal(0)
-        player.t.buyables[17] = new Decimal(0)
-        player.t.buyables[18] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 19; i++) {
+                player.t.buyables[i] = new Decimal(0)
+            }
+        }
 
         player.f.factorPower = new Decimal(0)
 
         player.t.leaves = new Decimal(0)
         player.t.trees = new Decimal(0)
 
-        player.g.buyables[11] = new Decimal(0)
-        player.g.buyables[12] = new Decimal(0)
-        player.g.buyables[13] = new Decimal(0)
-        player.g.buyables[14] = new Decimal(0)
-        player.g.buyables[15] = new Decimal(0)
-        player.g.buyables[16] = new Decimal(0)
-        player.g.buyables[17] = new Decimal(0)
-        player.g.buyables[18] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 19; i++) {
+                player.g.buyables[i] = new Decimal(0)
+            }
+        }
 
         if (!hasMilestone("ip", 11)) {
             for (let i = 0; i < player.g.upgrades.length; i++) {
@@ -488,36 +466,40 @@
 
 
         player.g.grass = new Decimal(0)
-        player.g.savedGrass = new Decimal(0)
-        player.g.grassCount = new Decimal(0)
         player.g.grassTimer = new Decimal(0)
 
         player.g.goldGrass = new Decimal(0)
-        player.g.savedGoldGrass = new Decimal(0)
-        player.g.goldGrassCount = new Decimal(0)
         player.g.goldGrassTimer = new Decimal(0)
+
+        for (let i = 1; i < 509; ) {
+            setGridData("g", i, [0, new Decimal(1), new Decimal(1)])
+
+            // Increase i value
+            if (i % 10 == 8) {
+                i = i+93
+            } else {
+                i++
+            }
+        }
 
         player.gh.grasshoppers = new Decimal(0)
         player.gh.fertilizer = new Decimal(0)
 
-        player.gh.buyables[11] = new Decimal(0)
-        player.gh.buyables[12] = new Decimal(0)
-        player.gh.buyables[13] = new Decimal(0)
-        player.gh.buyables[14] = new Decimal(0)
-        player.gh.buyables[15] = new Decimal(0)
-        player.gh.buyables[16] = new Decimal(0)
-        player.gh.buyables[17] = new Decimal(0)
-        player.gh.buyables[18] = new Decimal(0)
-        player.gh.buyables[19] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 20; i++) {
+                player.gh.buyables[i] = new Decimal(0)
+            }
+        }
 
         player.m.codeExperience = new Decimal(0)
         player.m.linesOfCode = new Decimal(0)
         player.m.mods = new Decimal(0)
 
-        player.m.buyables[11] = new Decimal(0)
-        player.m.buyables[12] = new Decimal(0)
-        player.m.buyables[13] = new Decimal(0)
-        player.m.buyables[14] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 15; i++) {
+                player.m.buyables[i] = new Decimal(0)
+            }
+        }
     },
     bars: {},
     upgrades: {
@@ -554,8 +536,8 @@
         14: {
             title: "Rocket Fuel Upgrade IV",
             unlocked() { return hasUpgrade("rf", 13) },
-            description() { return "Unlocks yet another ability." },
-            cost: new Decimal(540),
+            description() { return "Gain 1% of grasshoppers per second." },
+            cost: new Decimal(120),
             currencyLocation() { return player.rf },
             currencyDisplayName: "Rocket Fuel",
             currencyInternalName: "rocketFuel",
@@ -563,21 +545,41 @@
         },
         15: {
             title: "Rocket Fuel Upgrade V",
-            unlocked() { return hasUpgrade("rf", 14) && inChallenge("ip", 16)},
+            unlocked() { return hasUpgrade("rf", 14) },
+            description() { return "Unlocks yet another ability." },
+            cost: new Decimal(540),
+            currencyLocation() { return player.rf },
+            currencyDisplayName: "Rocket Fuel",
+            currencyInternalName: "rocketFuel",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
+        16: {
+            title: "Rocket Fuel Upgrade VI",
+            unlocked() { return hasUpgrade("rf", 15) && inChallenge("ip", 16)},
             description: "Rocket Fuel boosts itself.",
             cost: new Decimal(2222),
             currencyLocation() { return player.rf },
             currencyDisplayName: "Rocket Fuel",
             currencyInternalName: "rocketFuel",
             effect() {
-                return player.rf.rocketFuel.pow(0.3).mul(3).add(1)
+                let eff = new Decimal(1)
+                if (hasUpgrade("rf", 20)) {
+                    eff = player.rf.rocketFuel.pow(0.35).add(1)
+                } else {
+                    eff = player.rf.rocketFuel.pow(0.3).mul(3).add(1)
+                }
+                if (eff.gte(1e50)) eff = eff.div(1e50).pow(0.3).mul(1e50)
+                return eff
             },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            effectDisplay() {
+                if (upgradeEffect(this.layer, this.id).gte(1e50)) return format(upgradeEffect(this.layer, this.id))+"x <small style='color:red'>[SOFTCAPPED]</small>"
+                return format(upgradeEffect(this.layer, this.id))+"x"
+            }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        16: {
-            title: "Rocket Fuel Upgrade VI",
-            unlocked() { return hasUpgrade("rf", 15) && inChallenge("ip", 16)},
+        17: {
+            title: "Rocket Fuel Upgrade VII",
+            unlocked() { return hasUpgrade("rf", 16) && inChallenge("ip", 16)},
             description: "Rocket Fuel boosts points, ignoring IC6 nerf.",
             cost: new Decimal(1e10),
             currencyLocation() { return player.rf },
@@ -589,11 +591,31 @@
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        17: {
-            title: "Rocket Fuel Upgrade VII",
-            unlocked() { return hasUpgrade("rf", 16) && inChallenge("ip", 16)},
+        18: {
+            title: "Rocket Fuel Upgrade VIII",
+            unlocked() { return hasUpgrade("rf", 17) && inChallenge("ip", 16)},
             description: "Gain 20% of rocket fuel per second.",
             cost: new Decimal(1e12),
+            currencyLocation() { return player.rf },
+            currencyDisplayName: "Rocket Fuel",
+            currencyInternalName: "rocketFuel",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
+        19: {
+            title: "Rocket Fuel Upgrade IX",
+            unlocked() { return hasUpgrade("rf", 18) && inChallenge("ip", 16)},
+            description: "Re-activate rocket fuel effect, though at a weaker strength.",
+            cost: new Decimal(1e16),
+            currencyLocation() { return player.rf },
+            currencyDisplayName: "Rocket Fuel",
+            currencyInternalName: "rocketFuel",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
+        20: {
+            title: "Rocket Fuel Upgrade X",
+            unlocked() { return hasUpgrade("rf", 19) && inChallenge("ip", 16)},
+            description: "Improve \"Rocket Fuel Upgrade VI\".",
+            cost: new Decimal(1e20),
             currencyLocation() { return player.rf },
             currencyDisplayName: "Rocket Fuel",
             currencyInternalName: "rocketFuel",
@@ -616,7 +638,7 @@
             }],
             ["raw-html", () => {return player.rf.rocketFuel.gt(1e20) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
-        ["raw-html", () => { return "Boosts grassshoppers by x" + format(player.rf.rocketFuelEffect) + "." }, {color: "#949494", fontSize: "20px", fontFamily: "monospace"}],
+        ["raw-html", () => {return !inChallenge("ip", 16) || hasUpgrade("rf", 19) ? "Boosts grassshoppers by x" + format(player.rf.rocketFuelEffect) + "." : "<s>Boosts grassshoppers by x" + format(player.rf.rocketFuelEffect) + ".</s>" }, {color: "#949494", fontSize: "20px", fontFamily: "monospace"}],
         ["blank", "25px"],
         ["style-column", [
             ["style-row", [
@@ -647,7 +669,8 @@
             ], {width: "600px", height: "50px", backgroundColor: "#282828", userSelect: "none", borderRadius: "0px 0px 12px 12px"}],
         ], {backgroundColor: "#161616", border: "3px solid white", borderRadius: "15px", width: "600px"}],
         ["blank", "25px"],
-        ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17]]],
+        ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15],
+            ["upgrade", 16], ["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 20]], {maxWidth: "650px"}],
         ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && (player.po.rocketFuel || inChallenge("ip", 16)) }

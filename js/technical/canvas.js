@@ -29,6 +29,7 @@ function drawTree() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	if (player) {
 		let tree = universes[player.universe]?.tree
+		if (layers[player.tab].innerNodes) tree = tree.concat(layers[player.tab].innerNodes)
 		if (typeof tree !== "undefined") {
 			for (row in tree) {
 				for (thing in tree[row]) {

@@ -13,7 +13,10 @@ function layerShown(layer) {
 
 function layerDeactivated(layer) {
     if (typeof layers[layer].universe !== "undefined") {
-        if (player.uni[layers[layer].universe].paused) return true
+        if (uniPaused(layers[layer].universe)) {
+            if (layers[layer].avoidPause) return false
+            return true
+        }
     }
     if (typeof layers[layer].deactivated === "function") {
         return layers[layer].deactivated()
@@ -106,6 +109,8 @@ function setupLayer(layer){
             if (isPlainObject(layers[layer].achievements[thing])){
                 layers[layer].achievements[thing].id = thing
                 layers[layer].achievements[thing].layer = layer
+                if (layers[layer].achievements[thing].complete === undefined)
+                    layers[layer].achievements[thing].complete = false
                 if (layers[layer].achievements[thing].unlocked === undefined)
                     layers[layer].achievements[thing].unlocked = true
             }

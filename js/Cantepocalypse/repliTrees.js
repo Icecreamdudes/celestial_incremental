@@ -45,8 +45,11 @@
         // START OF REPLI-LEAVES MODIFIERS
         let preLeavesMult = buyableEffect("rt", 11)
         preLeavesMult = preLeavesMult.mul(player.rg.repliGrassEffect2)
-        preLeavesMult = preLeavesMult.mul(levelableEffect("pet", 402)[2])
-        if (hasUpgrade("cs", 402)) preLeavesMult = preLeavesMult.mul(100)
+        if (!inChallenge("fu", 12)) {
+            preLeavesMult = preLeavesMult.mul(levelableEffect("pet", 402)[2])
+            if (hasUpgrade("cs", 402)) preLeavesMult = preLeavesMult.mul(100)
+        }
+        preLeavesMult = preLeavesMult.add(1).pow(buyableEffect("fu", 84)).sub(1)
 
         // REPLI-TREE SOFTCAP START (NEEDED FOR NERFS)
         player.rt.repliTreeSoftcapStart = new Decimal(10)
@@ -55,8 +58,10 @@
         player.rt.repliTreeSoftcapStart = player.rt.repliTreeSoftcapStart.mul(player.oi.oilEffect)
         player.rt.repliTreeSoftcapStart = player.rt.repliTreeSoftcapStart.mul(buyableEffect("fu", 47))
 
+        if (inChallenge("fu", 12)) player.rt.repliTreeSoftcapStart = new Decimal(1)
+
         // REPLI-LEAVES NERFS
-        if (inChallenge("fu", 11)) preLeavesMult = preLeavesMult.pow(0.2)
+        if (inChallenge("fu", 11)) preLeavesMult = preLeavesMult.pow(Decimal.pow(0.2, buyableEffect("fu", 88)))
         player.rt.repliTreeSoftcapEffect = player.rt.repliTrees.sub(player.rt.repliTreeSoftcapStart).pow(1.25).div(10).add(1)
         if (player.rt.repliTrees.gte(player.rt.repliTreeSoftcapStart)) {
             preLeavesMult = preLeavesMult.div(player.rt.repliTreeSoftcapEffect)
@@ -64,6 +69,7 @@
 
         // CONVERT TO PROPER MULTIPLIER
         player.rt.repliLeavesMult = preLeavesMult.add(1)
+        if (inChallenge("fu", 12)) player.rt.repliLeavesMult = player.rt.repliLeavesMult.pow(Decimal.mul(0.2, buyableEffect("fu", 88)))
 
         // REPLI-LEAVES PER SECOND
         player.rt.repliLeavesTimer = player.rt.repliLeavesTimer.add(onepersec.mul(delta))
@@ -75,6 +81,7 @@
         player.rt.repliLeavesTimerReq = new Decimal(6)
         if (hasUpgrade("an", 21)) player.rt.repliLeavesTimerReq = player.rt.repliLeavesTimerReq.sub(1.5)
         player.rt.repliLeavesTimerReq = player.rt.repliLeavesTimerReq.div(buyableEffect("rt", 12))
+        if (hasUpgrade("fu", 111)) player.rt.repliLeavesTimerReq = player.rt.repliLeavesTimerReq.div(2)
 
         // REPLI-LEAVES TIMER CODE
         if (player.rt.repliLeavesTimer.gte(player.rt.repliLeavesTimerReq)) {
@@ -90,10 +97,13 @@
         player.rt.repliTreesToGet = player.rt.repliTreesToGet.mul(buyableEffect("gs", 17))
         player.rt.repliTreesToGet = player.rt.repliTreesToGet.mul(player.oi.oilEffect)
         player.rt.repliTreesToGet = player.rt.repliTreesToGet.mul(player.oi.linkingPowerEffect[3])
-        if (hasUpgrade("ep2", 6)) player.rt.repliTreesToGet = player.rt.repliTreesToGet.mul(upgradeEffect("ep2", 6))
+        if (hasUpgrade("ep2", 6) && !inChallenge("fu", 12)) player.rt.repliTreesToGet = player.rt.repliTreesToGet.mul(upgradeEffect("ep2", 6))
+
+        // REPLI-TREE POWER
+        player.rt.repliTreesToGet = player.rt.repliTreesToGet.pow(buyableEffect("fu", 85))
 
         // REPLI-TREE NERFS
-        if (inChallenge("fu", 11)) player.rt.repliTreesToGet = player.rt.repliTreesToGet.pow(0.2)
+        if (inChallenge("fu", 11) || inChallenge("fu", 12)) player.rt.repliTreesToGet = player.rt.repliTreesToGet.pow(Decimal.mul(0.2, buyableEffect("fu", 88)))
 
         // REPLI-TREE REQUIREMENT
         player.rt.repliTreeReq = player.rt.repliTrees.mul(0.5).add(1).pow(1.2).mul(10)

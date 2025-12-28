@@ -9,17 +9,27 @@
 
         dotknightPoints: new Decimal(0),
         dotknightLevelEffect: new Decimal(1),
-        dotknightPointsToGet: [new Decimal(1), new Decimal(3), new Decimal(8),],
-        dotknightPointButtonUnlocks: [false, false, false,],
-        dotknightPointButtonTimers: [new Decimal(0), new Decimal(0), new Decimal(0),],
-        dotknightPointButtonTimersMax: [new Decimal(60), new Decimal(240), new Decimal(600),],
+        timers: {
+            0: {
+                current: new Decimal(0),
+                max: new Decimal(60),
+                base: new Decimal(2),
+            },
+            1: {
+                current: new Decimal(0),
+                max: new Decimal(240),
+                base: new Decimal(5),
+            },
+            2: {
+                current: new Decimal(0),
+                max: new Decimal(600),
+                base: new Decimal(12),
+            },
+        },
 
-        dotknightUnlockText: '',
         //Cursword
         //Pointurret
     }
-    },
-    automate() {
     },
     nodeStyle: {
         backgroundColor: "#9176af",
@@ -29,54 +39,41 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-        player.ep0.dotknightLevelEffect = getLevelableAmount("pet", 401).pow(1.1).div(10).add(1)
+        let amt = getLevelableAmount("pet", 401).add(getLevelableTier("pet", 401).mul(5).min(40))
+        player.ep0.dotknightLevelEffect = amt.pow(1.1).div(10).mul(getLevelableTier("pet", 401).add(1)).add(1)
 
-        player.ep0.dotknightPointsToGet = [new Decimal(1), new Decimal(3), new Decimal(8),]
-        for (let i = 0; i < player.ep0.dotknightPointsToGet.length; i++)
-        {
-            player.ep0.dotknightPointsToGet[i] = player.ep0.dotknightPointsToGet[i].mul(player.ep0.dotknightLevelEffect)
-            if (hasUpgrade("ev8", 21)) player.ep0.dotknightPointsToGet[i] = player.ep0.dotknightPointsToGet[i].mul(1.4)
-            player.ep0.dotknightPointsToGet[i] = player.ep0.dotknightPointsToGet[i].mul(buyableEffect("ep1", 13))
-            if (hasUpgrade("ep2", 11)) player.ep0.dotknightPointsToGet[i] = player.ep0.dotknightPointsToGet[i].mul(upgradeEffect("ep2", 11))
+        player.ep0.timers[0].base = new Decimal(2)
+        player.ep0.timers[1].base = new Decimal(5)
+        player.ep0.timers[2].base = new Decimal(12)
+        for (let thing in player.ep0.timers) {
+            player.ep0.timers[thing].base = player.ep0.timers[thing].base.mul(player.ep0.dotknightLevelEffect)
+            if (hasUpgrade("ev8", 21)) player.ep0.timers[thing].base = player.ep0.timers[thing].base.mul(1.4)
+            player.ep0.timers[thing].base = player.ep0.timers[thing].base.mul(buyableEffect("ep1", 13))
+            if (hasUpgrade("ep2", 11)) player.ep0.timers[thing].base = player.ep0.timers[thing].base.mul(upgradeEffect("ep2", 11))
         }
 
-        for (let i = 0; i < player.ep0.dotknightPointButtonTimers.length; i++)
-        {
-            player.ep0.dotknightPointButtonTimers[i] = player.ep0.dotknightPointButtonTimers[i].sub(onepersec.mul(delta))
-        }
-        player.ep0.dotknightPointButtonTimersMax = [new Decimal(60), new Decimal(240), new Decimal(600),]
-
-        if (getLevelableAmount("pet", 401).gte(1))
-        {
-            player.ep0.dotknightPointButtonUnlocks[0] = true
-            player.ep0.dotknightUnlockText = "You will unlock the next button at level 3!"
-        }
-        if (getLevelableAmount("pet", 401).gte(3))
-        {
-            player.ep0.dotknightPointButtonUnlocks[1] = true
-            player.ep0.dotknightUnlockText = "You will unlock the next button at level 6!"
-        }
-        if (getLevelableAmount("pet", 401).gte(6))
-        {
-            player.ep0.dotknightPointButtonUnlocks[2] = true
-            player.ep0.dotknightUnlockText = "You will unlock the next button at level ???"
+        player.ep0.timers[0].max = new Decimal(60)
+        player.ep0.timers[1].max = new Decimal(240)
+        player.ep0.timers[2].max = new Decimal(600)
+        for (let thing in player.ep0.timers) {
+            player.ep0.timers[thing].current = player.ep0.timers[thing].current.sub(onepersec.mul(delta))
         }
     },
     clickables: {
         11: {
-            title() { return player.ep0.dotknightPointButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep0.dotknightPointButtonTimers[0]) + "." : "<h3>+" + format(player.ep0.dotknightPointsToGet[0]) + " Dotknight Points."},
-            canClick() { return player.ep0.dotknightPointButtonTimers[0].lt(0) && this.unlocked() },
-            unlocked() { return player.ep0.dotknightPointButtonUnlocks[0] },
+            title() { return player.ep0.timers[0].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep0.timers[0].current) + "." : "<h3>+" + format(player.ep0.timers[0].base) + " Dotknight Points."},
+            canClick() { return player.ep0.timers[0].current.lt(0) },
+            unlocked: true,
             tooltip() { return "Evo Shard Rarity: 1%"},
             onClick() {
-                player.ep0.dotknightPoints = player.ep0.dotknightPoints.add(player.ep0.dotknightPointsToGet[0])
-                player.ep0.dotknightPointButtonTimers[0] = player.ep0.dotknightPointButtonTimersMax[0]
+                player.ep0.dotknightPoints = player.ep0.dotknightPoints.add(player.ep0.timers[0].base)
+                player.ep0.timers[0].current = player.ep0.timers[0].max
 
                     let random = getRandomInt(100)
                     if (random == 1) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(1);
                         player.cb.pityEvoCurrent = new Decimal(0);
-                        callAlert("You gained an Evolution Shard! (1%)", "resources/evoShard.png");
+                        doPopup("none", "+1 Evolution Shard! (1%)", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
                     } else {
                         player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(1);
                     }
@@ -85,19 +82,19 @@
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
         12: {
-            title() { return player.ep0.dotknightPointButtonTimers[1].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep0.dotknightPointButtonTimers[1]) + "." : "<h3>+" + format(player.ep0.dotknightPointsToGet[1]) + " Dotknight Points."},
-            canClick() { return player.ep0.dotknightPointButtonTimers[1].lt(0) && this.unlocked() },
-            unlocked() { return player.ep0.dotknightPointButtonUnlocks[1] },
+            title() { return player.ep0.timers[1].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep0.timers[1].current) + "." : "<h3>+" + format(player.ep0.timers[1].base) + " Dotknight Points."},
+            canClick() { return player.ep0.timers[1].current.lt(0) && this.unlocked() },
+            unlocked() { return getLevelableAmount("pet", 401).gte(3) || getLevelableTier("pet", 401).gte(1)},
             tooltip() { return "Evo Shard Rarity: 2%"},
             onClick() {
-                player.ep0.dotknightPoints = player.ep0.dotknightPoints.add(player.ep0.dotknightPointsToGet[1])
-                player.ep0.dotknightPointButtonTimers[1] = player.ep0.dotknightPointButtonTimersMax[1]
+                player.ep0.dotknightPoints = player.ep0.dotknightPoints.add(player.ep0.timers[1].base)
+                player.ep0.timers[1].current = player.ep0.timers[1].max
 
                     let random = getRandomInt(50)
                     if (random == 1) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(1);
                         player.cb.pityEvoCurrent = new Decimal(0);
-                        callAlert("You gained an Evolution Shard! (2%)", "resources/evoShard.png");
+                        doPopup("none", "+1 Evolution Shard! (2%)", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
                     } else {
                         player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(2);
                     }
@@ -106,19 +103,19 @@
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
         13: {
-            title() { return player.ep0.dotknightPointButtonTimers[2].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep0.dotknightPointButtonTimers[2]) + "." : "<h3>+" + format(player.ep0.dotknightPointsToGet[2]) + " Dotknight Points."},
-            canClick() { return player.ep0.dotknightPointButtonTimers[2].lt(0) && this.unlocked() },
-            unlocked() { return player.ep0.dotknightPointButtonUnlocks[2] },
+            title() { return player.ep0.timers[2].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep0.timers[2].current) + "." : "<h3>+" + format(player.ep0.timers[2].base) + " Dotknight Points."},
+            canClick() { return player.ep0.timers[2].current.lt(0) && this.unlocked() },
+            unlocked() { return getLevelableAmount("pet", 401).gte(6) || getLevelableTier("pet", 401).gte(1)},
             tooltip() { return "DOUBLE Evo Shard Rarity: 2%"},
             onClick() {
-                player.ep0.dotknightPoints = player.ep0.dotknightPoints.add(player.ep0.dotknightPointsToGet[2])
-                player.ep0.dotknightPointButtonTimers[2] = player.ep0.dotknightPointButtonTimersMax[2]
+                player.ep0.dotknightPoints = player.ep0.dotknightPoints.add(player.ep0.timers[2].base)
+                player.ep0.timers[2].current = player.ep0.timers[2].max
 
                     let random = getRandomInt(50)
                     if (random == 1) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(1);
                         player.cb.pityEvoCurrent = new Decimal(0);
-                        callAlert("You gained 2 Evolution Shards! (2%)", "resources/evoShard.png");
+                        doPopup("none", "+2 Evolution Shard! (2%)", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
                     } else {
                         player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(4)
                     }
@@ -126,11 +123,10 @@
             onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
-
         99: {
             title() {return "Claim All"},
             canClick() {return tmp.ep0.clickables[11].canClick || tmp.ep0.clickables[12].canClick || tmp.ep0.clickables[13].canClick},
-            unlocked() {return player.ep0.dotknightPointButtonUnlocks[1]},
+            unlocked() {return getLevelableAmount("pet", 401).gte(3) || getLevelableTier("pet", 401).gte(1)},
             onClick() {
                 clickClickable("ep0", 11)
                 clickClickable("ep0", 12)
@@ -143,8 +139,6 @@
                 return look
             },
         },
-    },
-    bars: {
     },
     upgrades: {
         11: {
@@ -194,7 +188,7 @@
         11: {
             costBase() { return new Decimal(20) },
             costGrowth() { return new Decimal(1.25) },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return new Decimal(50) },
             currency() { return player.ep0.dotknightPoints},
             pay(amt) { player.ep0.dotknightPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
@@ -228,18 +222,18 @@
         12: {
             costBase() { return new Decimal(35) },
             costGrowth() { return new Decimal(1.3) },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return new Decimal(50) },
             currency() { return player.ep0.dotknightPoints},
             pay(amt) { player.ep0.dotknightPoints = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.01).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Dotknight Offerings"
+                return "Dotknight Crates"
             },
             display() {
-                return 'which are boosting offering gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting crate roll chance by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Dotknight Points'
             },
             buy(mult) {
@@ -262,7 +256,7 @@
         13: {
             costBase() { return new Decimal(50) },
             costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return new Decimal(50) },
             currency() { return player.ep0.dotknightPoints},
             pay(amt) { player.ep0.dotknightPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
@@ -294,19 +288,15 @@
             style: { width: '275px', height: '150px', }
         },
     },
-    milestones: {},
-    challenges: {},
-    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
                 buttonStyle() { return { color: "black", borderColor: "black", backgroundColor: "#cb79ed", borderRadius: "5px"} },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "10px"],
-                    ["raw-html", function () { return player.ep0.dotknightUnlockText }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Dotknight Level: x<h3>" + format(player.ep0.dotknightLevelEffect) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", () => {return (getLevelableAmount("pet", 401).gte(6) || getLevelableTier("pet", 401).gte(1)) ? "" : getLevelableAmount("pet", 401).gte(3) ? "You will unlock the next button at level 6!" : "You will unlock the next button at level 3!"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "Dotknight Level: x<h3>" + format(player.ep0.dotknightLevelEffect) + "</h3>."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "10px"],
                     ["clickable", 11],
                     ["clickable", 12],
@@ -317,8 +307,7 @@
             "Buyables and Upgrades": {
                 buttonStyle() { return { color: "black", borderColor: "black", backgroundColor: "#cb79ed", borderRadius: "5px"} },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13]]],
                     ["blank", "25px"],
@@ -327,13 +316,12 @@
             },
         },
     },
-
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.ep0.dotknightPoints) + "</h3> dotknight points." }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
+        ["raw-html", () => { return "You have <h3>" + format(player.ep0.dotknightPoints) + "</h3> dotknight points." }, {color: "white", fontSize: "32px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && getLevelableAmount("pet", 401).gte(1) }
+    layerShown() { return player.startedGame && (getLevelableAmount("pet", 401).gte(1) || getLevelableTier("pet", 401).gte(1)) }
 })
 addLayer("ep1", {
     name: "Dragon", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -346,16 +334,24 @@ addLayer("ep1", {
 
         dragonPoints: new Decimal(0),
         dragonLevelEffect: new Decimal(1),
-        dragonPointsToGet: [new Decimal(0.04), new Decimal(0.1), new Decimal(0.2),],
-        dragonPointButtonUnlocks: [false, false, false,],
-        dragonPointButtonTimers: [new Decimal(0), new Decimal(0), new Decimal(0),],
-        dragonPointButtonTimersMax: [new Decimal(1), new Decimal(3), new Decimal(8),],
-
-        dragonUnlockText: '',
-    }
-    },
-    automate() {
-    },
+        timers: {
+            0: {
+                current: new Decimal(0),
+                max: new Decimal(1),
+                base: new Decimal(0.2),
+            },
+            1: {
+                current: new Decimal(0),
+                max: new Decimal(3),
+                base: new Decimal(0.5),
+            },
+            2: {
+                current: new Decimal(0),
+                max: new Decimal(8),
+                base: new Decimal(1),
+            },
+        },
+    }},
     nodeStyle: {
         backgroundColor: "#689b3a",
     },
@@ -364,55 +360,42 @@ addLayer("ep1", {
     update(delta) {
         let onepersec = new Decimal(1)
 
-        player.ep1.dragonLevelEffect = getLevelableAmount("pet", 402).pow(1.15).div(14).add(1)
+        let amt = getLevelableAmount("pet", 402).add(getLevelableTier("pet", 402).mul(5).min(40))
+        player.ep1.dragonLevelEffect = amt.pow(1.15).div(14).mul(getLevelableTier("pet", 402).add(1)).add(1)
 
-        player.ep1.dragonPointsToGet = [new Decimal(0.2), new Decimal(0.45), new Decimal(0.9),]
-        for (let i = 0; i < player.ep1.dragonPointsToGet.length; i++)
-        {
-            player.ep1.dragonPointsToGet[i] = player.ep1.dragonPointsToGet[i].mul(player.ep1.dragonLevelEffect)
-            if (hasUpgrade("ep0", 13)) player.ep1.dragonPointsToGet[i] = player.ep1.dragonPointsToGet[i].mul(upgradeEffect("ep0", 13))
-            if (hasUpgrade("ep2", 10)) player.ep1.dragonPointsToGet[i] = player.ep1.dragonPointsToGet[i].mul(upgradeEffect("ep2", 10))
-            if (hasUpgrade("ev8", 21)) player.ep1.dragonPointsToGet[i] = player.ep1.dragonPointsToGet[i].mul(1.4)
+        player.ep1.timers[0].base = new Decimal(0.2)
+        player.ep1.timers[1].base = new Decimal(0.5)
+        player.ep1.timers[2].base = new Decimal(1)
+        for (let thing in player.ep1.timers) {
+            player.ep1.timers[thing].base = player.ep1.timers[thing].base.mul(player.ep1.dragonLevelEffect)
+            if (hasUpgrade("ep0", 13)) player.ep1.timers[thing].base = player.ep1.timers[thing].base.mul(upgradeEffect("ep0", 13))
+            if (hasUpgrade("ep2", 10)) player.ep1.timers[thing].base = player.ep1.timers[thing].base.mul(upgradeEffect("ep2", 10))
+            if (hasUpgrade("ev8", 21)) player.ep1.timers[thing].base = player.ep1.timers[thing].base.mul(1.4)
         }
 
-        for (let i = 0; i < player.ep1.dragonPointButtonTimers.length; i++)
-        {
-            player.ep1.dragonPointButtonTimers[i] = player.ep1.dragonPointButtonTimers[i].sub(onepersec.mul(delta))
-        }
-        player.ep1.dragonPointButtonTimersMax = [new Decimal(1), new Decimal(3), new Decimal(8),]
-
-        if (getLevelableAmount("pet", 402).gte(1))
-        {
-            player.ep1.dragonPointButtonUnlocks[0] = true
-            player.ep1.dragonUnlockText = "You will unlock the next button at level 2!"
-        }
-        if (getLevelableAmount("pet", 402).gte(2))
-        {
-            player.ep1.dragonPointButtonUnlocks[1] = true
-            player.ep1.dragonUnlockText = "You will unlock the next button at level 7!"
-        }
-        if (getLevelableAmount("pet", 402).gte(7))
-        {
-            player.ep1.dragonPointButtonUnlocks[2] = true
-            player.ep1.dragonUnlockText = "You will unlock the next button at level ???"
+        player.ep1.timers[0].max = new Decimal(1)
+        player.ep1.timers[1].max = new Decimal(3)
+        player.ep1.timers[2].max = new Decimal(8)
+        for (let thing in player.ep1.timers) {
+            player.ep1.timers[thing].current = player.ep1.timers[thing].current.sub(onepersec.mul(delta))
         }
     },
     clickables: {
         11: {
-            title() { return player.ep1.dragonPointButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep1.dragonPointButtonTimers[0]) + "." : "<h3>+" + format(player.ep1.dragonPointsToGet[0]) + " Dragon Points."},
-            canClick() { return player.ep1.dragonPointButtonTimers[0].lt(0) && this.unlocked() },
-            unlocked() { return player.ep1.dragonPointButtonUnlocks[0] },
+            title() { return player.ep1.timers[0].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep1.timers[0].current) + "." : "<h3>+" + format(player.ep1.timers[0].base) + " Dragon Points."},
+            canClick() { return player.ep1.timers[0].current.lt(0) },
+            unlocked: true,
             tooltip() { return "Paragon Shard Rarity: 0.04%"},
             onClick() {
-                player.ep1.dragonPoints = player.ep1.dragonPoints.add(player.ep1.dragonPointsToGet[0])
-                player.ep1.dragonPointButtonTimers[0] = player.ep1.dragonPointButtonTimersMax[0]
+                player.ep1.dragonPoints = player.ep1.dragonPoints.add(player.ep1.timers[0].base)
+                player.ep1.timers[0].current = player.ep1.timers[0].max
 
                     let random = getRandomInt(2500)
                     if (random == 1)
                     {
                         player.cb.paragonShards = player.cb.paragonShards.add(1);
                         player.cb.pityParaCurrent = new Decimal(0);
-                        callAlert("You gained an Paragon Shard! (0.04%)", "resources/paragonShard.png");
+                        doPopup("none", "+1 Paragon Shard! (0.04%)", "Shard Obtained!", 5, "#4c64ff", "resources/paragonShard.png")
                     } else {
                         player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(0.04);
                     }
@@ -421,19 +404,19 @@ addLayer("ep1", {
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
         12: {
-            title() { return player.ep1.dragonPointButtonTimers[1].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep1.dragonPointButtonTimers[1]) + "." : "<h3>+" + format(player.ep1.dragonPointsToGet[1]) + " Dragon Points."},
-            canClick() { return player.ep1.dragonPointButtonTimers[1].lt(0) && this.unlocked() },
-            unlocked() { return player.ep1.dragonPointButtonUnlocks[1] },
+            title() { return player.ep1.timers[1].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep1.timers[1].current) + "." : "<h3>+" + format(player.ep1.timers[1].base) + " Dragon Points."},
+            canClick() { return player.ep1.timers[1].current.lt(0) && this.unlocked() },
+            unlocked() { return getLevelableAmount("pet", 402).gte(2) || getLevelableTier("pet", 402).gte(1)},
             tooltip() { return "Paragon Shard Rarity: 0.1%"},
             onClick() {
-                player.ep1.dragonPoints = player.ep1.dragonPoints.add(player.ep1.dragonPointsToGet[1])
-                player.ep1.dragonPointButtonTimers[1] = player.ep1.dragonPointButtonTimersMax[1]
+                player.ep1.dragonPoints = player.ep1.dragonPoints.add(player.ep1.timers[1].base)
+                player.ep1.timers[1].current = player.ep1.timers[1].max
 
                     let random = getRandomInt(1000)
                     if (random == 1) {
                         player.cb.paragonShards = player.cb.paragonShards.add(1);
                         player.cb.pityParaCurrent = new Decimal(0);
-                        callAlert("You gained an Paragon Shard! (0.1%)", "resources/paragonShard.png");
+                        doPopup("none", "+1 Paragon Shard! (0.1%)", "Shard Obtained!", 5, "#4c64ff", "resources/paragonShard.png")
                     } else {
                         player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(0.1);
                     }
@@ -442,19 +425,19 @@ addLayer("ep1", {
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
         13: {
-            title() { return player.ep1.dragonPointButtonTimers[2].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep1.dragonPointButtonTimers[2]) + "." : "<h3>+" + format(player.ep1.dragonPointsToGet[2]) + " Dragon Points."},
-            canClick() { return player.ep1.dragonPointButtonTimers[2].lt(0) && this.unlocked() },
-            unlocked() { return player.ep1.dragonPointButtonUnlocks[2] },
+            title() { return player.ep1.timers[2].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep1.timers[2].current) + "." : "<h3>+" + format(player.ep1.timers[2].base) + " Dragon Points."},
+            canClick() { return player.ep1.timers[2].current.lt(0) && this.unlocked() },
+            unlocked() { return getLevelableAmount("pet", 402).gte(7) || getLevelableTier("pet", 402).gte(1)},
             tooltip() { return "Paragon Shard Rarity: 0.2%"},
             onClick() {
-                player.ep1.dragonPoints = player.ep1.dragonPoints.add(player.ep1.dragonPointsToGet[2])
-                player.ep1.dragonPointButtonTimers[2] = player.ep1.dragonPointButtonTimersMax[2]
+                player.ep1.dragonPoints = player.ep1.dragonPoints.add(player.ep1.timers[2].base)
+                player.ep1.timers[2].current = player.ep1.timers[2].max
 
                     let random = getRandomInt(500)
                     if (random == 1) {
                         player.cb.paragonShards = player.cb.paragonShards.add(1);
                         player.cb.pityParaCurrent = new Decimal(0);
-                        callAlert("You gained a Paragon Shard! (0.2%)", "resources/paragonShard.png");
+                        doPopup("none", "+1 Paragon Shard! (0.2%)", "Shard Obtained!", 5, "#4c64ff", "resources/paragonShard.png")
                     } else {
                         player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(0.2);
                     }
@@ -462,11 +445,10 @@ addLayer("ep1", {
             onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
-
         99: {
             title() {return "Claim All"},
             canClick() {return tmp.ep1.clickables[11].canClick || tmp.ep1.clickables[12].canClick || tmp.ep1.clickables[13].canClick},
-            unlocked() {return player.ep1.dragonPointButtonUnlocks[1]},
+            unlocked() {return getLevelableAmount("pet", 402).gte(2) || getLevelableTier("pet", 402).gte(1)},
             onClick() {
                 clickClickable("ep1", 11)
                 clickClickable("ep1", 12)
@@ -479,8 +461,6 @@ addLayer("ep1", {
                 return look
             },
         },
-    },
-    bars: {
     },
     upgrades: {
         11: {
@@ -530,7 +510,7 @@ addLayer("ep1", {
         11: {
             costBase() { return new Decimal(25) },
             costGrowth() { return new Decimal(1.3) },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return new Decimal(50) },
             currency() { return player.ep1.dragonPoints},
             pay(amt) { player.ep1.dragonPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1) },
@@ -564,7 +544,7 @@ addLayer("ep1", {
         12: {
             costBase() { return new Decimal(35) },
             costGrowth() { return new Decimal(1.25) },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return new Decimal(50) },
             currency() { return player.ep1.dragonPoints},
             pay(amt) { player.ep1.dragonPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.5).add(1).pow(1.1) },
@@ -598,7 +578,7 @@ addLayer("ep1", {
         13: {
             costBase() { return new Decimal(50) },
             costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return new Decimal(50) },
             currency() { return player.ep1.dragonPoints},
             pay(amt) { player.ep1.dragonPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
@@ -630,19 +610,15 @@ addLayer("ep1", {
             style: { width: '275px', height: '150px', }
         },
     },
-    milestones: {},
-    challenges: {},
-    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
                 buttonStyle() { return { color: "black", borderColor: "black", backgroundColor: "#cb79ed", borderRadius: "5px"} },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "10px"],
-                    ["raw-html", function () { return player.ep1.dragonUnlockText }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Dragon Level: x<h3>" + format(player.ep1.dragonLevelEffect) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", () => {return (getLevelableAmount("pet", 402).gte(7) || getLevelableTier("pet", 402).gte(1)) ? "" : getLevelableAmount("pet", 402).gte(2) ? "You will unlock the next button at level 7!" : "You will unlock the next button at level 2!"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "Dragon Level: x<h3>" + format(player.ep1.dragonLevelEffect) + "</h3>."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "10px"],
                     ["clickable", 11],
                     ["clickable", 12],
@@ -653,8 +629,7 @@ addLayer("ep1", {
             "Buyables and Upgrades": {
                 buttonStyle() { return { color: "black", borderColor: "black", backgroundColor: "#cb79ed", borderRadius: "5px"} },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13]]],
                     ["blank", "25px"],
@@ -663,13 +638,12 @@ addLayer("ep1", {
             },
         },
     },
-
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.ep1.dragonPoints) + "</h3> dragon points." }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
+        ["raw-html", () => {return "You have <h3>" + format(player.ep1.dragonPoints) + "</h3> dragon points."}, {color: "white", fontSize: "32px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && getLevelableAmount("pet", 402).gte(1) }
+    layerShown() { return player.startedGame && (getLevelableAmount("pet", 402).gte(1) || getLevelableTier("pet", 402).gte(1)) }
 })
 addLayer("ep3", {
     name: "Kres", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -686,7 +660,6 @@ addLayer("ep3", {
 
         kresStats: [new Decimal(7), new Decimal(8), new Decimal(5)]
     }},
-    automate() {},
     nodeStyle: {
         backgroundColor: "#910a27",
     },
@@ -698,7 +671,8 @@ addLayer("ep3", {
         player.ep3.kresPointsMax = new Decimal(100)
         player.ep3.kresPointsMax = player.ep3.kresPointsMax.add(buyableEffect("ep3", 11))
 
-        player.ep3.kresPointsPerSecond = getLevelableAmount("pet", 404).pow(1.1).div(10)
+        let amt = getLevelableAmount("pet", 404).add(getLevelableTier("pet", 404).mul(5).min(40))
+        player.ep3.kresPointsPerSecond = amt.pow(1.1).div(10).mul(getLevelableTier("pet", 404).add(1))
         player.ep3.kresPoints = player.ep3.kresPoints.add(player.ep3.kresPointsPerSecond.mul(delta))
 
         if (player.ep3.kresPoints.gte(player.ep3.kresPointsMax)) {
@@ -949,11 +923,11 @@ addLayer("ep3", {
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.ep3.kresPoints) + "/" + format(player.ep3.kresPointsMax) + "</h3> kres points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You are gaining <h3>" + format(player.ep3.kresPointsPerSecond) + "</h3> kres points per second. (based on level)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You are gaining <h3>" + format(player.ep3.kresPointsPerSecond) + "</h3> kres points per second. (based on level/ascension)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && getLevelableAmount("pet", 404).gte(1) }
+    layerShown() { return player.startedGame && (getLevelableAmount("pet", 404).gte(1) || getLevelableTier("pet", 404).gte(1)) }
 })
 addLayer("ep4", {
     name: "Nav", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -971,7 +945,6 @@ addLayer("ep4", {
 
         navStats: [new Decimal(9), new Decimal(6), new Decimal(5)]
     }},
-    automate() {},
     nodeStyle: {
         backgroundColor: "#710a91",
     },
@@ -983,7 +956,8 @@ addLayer("ep4", {
         player.ep4.navPointsMax = new Decimal(100)
         player.ep4.navPointsMax = player.ep4.navPointsMax.add(buyableEffect("ep4", 11))
 
-        player.ep4.navPointsPerSecond = getLevelableAmount("pet", 405).pow(1.1).div(10)
+        let amt = getLevelableAmount("pet", 405).add(getLevelableTier("pet", 405).mul(5).min(40))
+        player.ep4.navPointsPerSecond = amt.pow(1.1).div(10).mul(getLevelableTier("pet", 405).add(1))
         player.ep4.navPoints = player.ep4.navPoints.add(player.ep4.navPointsPerSecond.mul(delta))
 
         if (player.ep4.navPoints.gte(player.ep4.navPointsMax)) {
@@ -1233,11 +1207,11 @@ addLayer("ep4", {
     },
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.ep4.navPoints) + "/" + format(player.ep4.navPointsMax) + "</h3> nav points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You are gaining <h3>" + format(player.ep4.navPointsPerSecond) + "</h3> nav points per second. (based on level)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You are gaining <h3>" + format(player.ep4.navPointsPerSecond) + "</h3> nav points per second. (based on level/ascension)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && getLevelableAmount("pet", 405).gte(1) }
+    layerShown() { return player.startedGame && (getLevelableAmount("pet", 405).gte(1) || getLevelableTier("pet", 405).gte(1)) }
 })
 addLayer("ep5", {
     name: "Sel", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -1255,7 +1229,6 @@ addLayer("ep5", {
 
         selStats: [new Decimal(6), new Decimal(6), new Decimal(8)]
     }},
-    automate() {},
     nodeStyle: {
         backgroundColor: "#065c19",
     },
@@ -1267,7 +1240,8 @@ addLayer("ep5", {
         player.ep5.selPointsMax = new Decimal(100)
         player.ep5.selPointsMax = player.ep5.selPointsMax.add(buyableEffect("ep5", 11))
 
-        player.ep5.selPointsPerSecond = getLevelableAmount("pet", 406).pow(1.1).div(10)
+        let amt = getLevelableAmount("pet", 406).add(getLevelableTier("pet", 406).mul(5).min(40))
+        player.ep5.selPointsPerSecond = amt.pow(1.1).div(10).mul(getLevelableTier("pet", 406).add(1))
         player.ep5.selPoints = player.ep5.selPoints.add(player.ep5.selPointsPerSecond.mul(delta))
 
         if (player.ep5.selPoints.gte(player.ep5.selPointsMax)) {
@@ -1516,9 +1490,9 @@ addLayer("ep5", {
     },
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.ep5.selPoints) + "/" + format(player.ep5.selPointsMax) + "</h3> sel points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You are gaining <h3>" + format(player.ep5.selPointsPerSecond) + "</h3> sel points per second. (based on level)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You are gaining <h3>" + format(player.ep5.selPointsPerSecond) + "</h3> sel points per second. (based on level/ascension)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && getLevelableAmount("pet", 406).gte(1) }
+    layerShown() { return player.startedGame && (getLevelableAmount("pet", 406).gte(1) || getLevelableTier("pet", 406).gte(1)) }
 })

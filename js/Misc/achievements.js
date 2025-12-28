@@ -138,7 +138,7 @@ addLayer("achievements", {
             image: "resources/achievements/1_16.png",
             tooltip: "<h3>Shockingly Powerful</h3><hr style='margin-bottom:4px'>Buy a Factor Study I.",
             color: "white",
-            complete() {return hasMilestone("ip", 17)},
+            complete() {return hasMilestone("ip", 17) || getBuyableAmount("gh", 16).gte(20)},
             unlocked: true,
         },
         17: {

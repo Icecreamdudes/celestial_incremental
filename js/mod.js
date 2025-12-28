@@ -1594,14 +1594,6 @@ function fixOldSave(oldVersion){
 		for (let i in player.tad.buyables) {
             player.tad.buyables[i] = new Decimal(0)
         }
-		for (let i in player.pet.levelables) {
-			let limit = layers.pet.levelables[i].levelLimit()
-			if (player.pet.levelables[i][0].gt(limit)) player.pet.levelables[i][0] = limit
-		}
-		for (let i in player.ir.levelables) {
-			let limit = layers.pet.levelables[i].levelLimit()
-			if (player.ir.levelables[i][0].gt(limit)) player.ir.levelables[i][0] = limit
-		}
 		player.ev2.buyables[101] = new Decimal(player.ev2.buyables[13])
 		player.ev2.buyables[102] = new Decimal(player.ev2.buyables[14])
 		player.ev2.buyables[111] = new Decimal(player.ev2.buyables[15])

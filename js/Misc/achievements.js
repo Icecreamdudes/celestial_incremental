@@ -448,6 +448,9 @@ addLayer("achievements", {
             ], {width: "630px", height: "415px"}],
         ], {width: "800px", height: "415px", backgroundColor: "black", border: "3px solid white"}],
         ["style-column", [
+            ["raw-html", "Achievements with a green border can be clicked to obtain.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+        ], {width: "800px", height: "30px", backgroundColor: "rgba(0,0,0,0.5)", borderLeft: "3px solid white", borderRight: "3px solid white", borderBottom: "1px solid white"}],
+        ["style-column", [
             ["raw-html", "<span style='color:red'>WARNING:</span> Achievements are currently <span style='color:red'>WIP</span> and are missing pages and icons.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
             ["raw-html", "(They do give rewards though, so maybe look at them a little)", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ], {width: "800px", height: "50px", backgroundColor: "rgba(0,0,0,0.5)", borderLeft: "3px solid white", borderRight: "3px solid white", borderBottom: "3px solid white", borderRadius: "0 0 25px 25px"}],

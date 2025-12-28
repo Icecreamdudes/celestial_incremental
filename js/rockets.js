@@ -115,6 +115,7 @@
 
         player.ro.spacePetXPToGet = Decimal.pow(player.ro.petLevel, 1.2).floor()
         if (hasUpgrade("sma", 203)) player.ro.spacePetXPToGet = player.ro.spacePetXPToGet.mul(1.2).floor()
+        player.ro.spacePetXPToGet = player.ro.spacePetXPToGet.mul(levelableEffect("pu", 306)[2]).floor()
 
         player.ro.evoCost = Decimal.mul(player.ro.selectedPassengersCommon.length, Decimal.add(7, player.ro.selectedPassengersCommon.length)).add(player.ro.evoShardsReq)
         player.ro.paragonCost = Decimal.mul(player.ro.selectedPassengersUncommon.length, Decimal.add(2, player.ro.selectedPassengersUncommon.length)).add(player.ro.paragonShardsReq)
@@ -154,9 +155,13 @@
             layers.ro.starReset();
         }
 
-        player.ro.rocketCooldown = player.ro.rocketCooldown.sub(onepersec.mul(delta))
 
         player.ro.rocketCooldownMax = [new Decimal(300), new Decimal(1200)]
+
+        player.ro.rocketCooldown = player.ro.rocketCooldown.sub(onepersec.mul(delta))
+        for (let i = 0; i < player.ro.rocketCooldownMax.length; i++) {
+            player.ro.rocketCooldownMax[i] = player.ro.rocketCooldownMax[i].div(levelableEffect("pu", 112)[1])
+        }
     },
     starReset() {
         clickClickable("co", 1000)

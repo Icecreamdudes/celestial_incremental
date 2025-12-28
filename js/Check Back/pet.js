@@ -254,6 +254,7 @@ addLayer("pet", {
         
         let abilityTimeDecrease = new Decimal(1)
         if (getLevelableBool("pu", 303)) abilityTimeDecrease = abilityTimeDecrease.div(levelableEffect("pu", 303)[0])
+        abilityTimeDecrease = abilityTimeDecrease.mul(player.dv.timeDrainRate)
         player.pet.legendaryPetAbilityTimers[0] = player.pet.legendaryPetAbilityTimers[0].sub(abilityTimeDecrease.mul(delta))
 
         if (player.pet.legendaryPetAbilityTimers[0].lte(0) && player.pet.activeAbilities[0]) {
@@ -548,7 +549,15 @@ addLayer("pet", {
                 layers.pu.generateSelection();
 
                 player.subtabs.le["stuff"] = "Shards"
-                player.subtabs.pu["stuff"] = "Selection"                
+                player.subtabs.pu["stuff"] = "Selection"   
+                
+                pauseUniverse("U1")
+                pauseUniverse("UA")
+                pauseUniverse("U2")
+                pauseUniverse("A1")
+                pauseUniverse("A2")
+                pauseUniverse("U3")
+                pauseUniverse("CB")
             },
             style: {width: '125px', minHeight: '40px', backgroundColor: "#eed200", color: "black", borderRadius: '0px', fontSize: '8px'},
         },
@@ -3967,3 +3976,4 @@ function randomInt(min, max) {
     max = Math.floor(max.toNumber());
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+

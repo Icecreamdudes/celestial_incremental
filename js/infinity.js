@@ -18,6 +18,8 @@ addLayer("in", {
         infinitiesToGet: new Decimal(1),
 
         delay: new Decimal(0),
+
+        pylonBuilt: false,
     }},
     automate() {},
     nodeStyle() {
@@ -154,6 +156,7 @@ addLayer("in", {
         if (player.pol.pollinatorEffects.water.enabled) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.pol.pollinatorEffects.water.effects[0])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("st", 301))
         if (player.ma.matosDefeated) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul("1e600")
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.i.pylonPassiveEffect)
 
         // POWER MODIFIERS
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(player.co.cores.infinity.effect[1])
@@ -383,7 +386,19 @@ addLayer("in", {
             if (player.po.hex || hasUpgrade("s", 18)) player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
         }
     },
-    clickables: {},
+    clickables: {
+        11: {
+            title() { return "<h2>Build the Universe 2 Pylon<br>Cost: 4,000 Paradox Core Fragments" },
+            canClick() { return player.cof.coreFragments[3].gte(4000) },
+            unlocked() { return !player.in.pylonBuilt },
+            onClick() {
+                player.cof.coreFragments[3] = player.cof.coreFragments[3].sub(4000)
+
+                player.in.pylonBuilt = true
+            },
+            style: {width: "600px", minHeight: "200px", color: "#1b110eff", backgroundImage: "radial-gradient(circle, #1FF4B0 80%, #20ABC1 95%, #2161D2 110%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
+        },
+    },
     bars: {},
     upgrades: {},
     buyables: {},
@@ -416,6 +431,22 @@ addLayer("in", {
                         ["infobox", "1"],
                         ["infobox", "2"],
                         ["infobox", "3"],
+                ]
+            },
+            "Pylon": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                unlocked() { return player.i.pylonTier.gte(2) },
+                content: [
+                        ["blank", "25px"],
+                            ["left-row", [
+            ["tooltip-row", [
+                ["raw-html", "<img src='resources/fragments/paradoxFragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                ["raw-html", () => { return formatWhole(player.cof.coreFragments[3])}, {width: "93px", height: "50px", color: "#1FD3B7", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                ["raw-html", "<div class='bottomTooltip'>Paradox Core Fragments</div>"],
+            ], {width: "148px", height: "50px",}],
+        ], {width: "148px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
+                    ["blank", "25px"],
+                    ["clickable", 11],
                 ]
             },
         },

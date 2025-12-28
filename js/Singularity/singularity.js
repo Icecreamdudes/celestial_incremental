@@ -252,6 +252,16 @@ addLayer("s", {
             currencyInternalName: "singularityPoints",
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
+        28: {
+            title: "Singularity Upgrade XVIII",
+            unlocked() { return player.ir.iriditeDefeated},
+            description: "Unlock universe 1's pylon (in the universe's main layer).",  
+            cost: new Decimal("1e450"),
+            currencyLocation() { return player.s },
+            currencyDisplayName: "Singularity Points",
+            currencyInternalName: "singularityPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
     },
     buyables: {
         11: {
@@ -466,7 +476,7 @@ addLayer("s", {
                     ["style-row", [
                         ["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14],["upgrade", 15],["upgrade", 16],["upgrade", 17],
                         ["upgrade", 18],["upgrade", 19],["upgrade", 20],["upgrade", 21],["upgrade", 22],["upgrade", 23],
-                        ["upgrade", 24],["upgrade", 25],["upgrade", 26],["upgrade", 27]
+                        ["upgrade", 24],["upgrade", 25],["upgrade", 26],["upgrade", 27],["upgrade", 28]
                     ], {maxWidth: "800px"}],
                 ]
             },

@@ -103,6 +103,8 @@ function getStartUniData(uni) {
 		unidata.paused = false;
 	if (unidata.pauseTime === undefined)
 		unidata.pauseTime = Date.now();
+	if (unidata.tickspeed == undefined)
+		unidata.tickspeed = new Decimal(1)
 
 	return unidata;
 }

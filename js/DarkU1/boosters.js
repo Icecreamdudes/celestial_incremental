@@ -14,6 +14,9 @@
         //milestones
         milestone1Effect: new Decimal(1),
         milestone2Effect: new Decimal(1),
+        milestone4Effect: new Decimal(1),
+
+        permaMilestone4Effect: new Decimal(1),
     }},
     automate() {},
     nodeStyle() {
@@ -39,6 +42,8 @@
         if (getLevelableBool("pu", 208)) player.db.boosterReq = player.db.boosterReq.div(levelableEffect("pu", 208)[0])
         if (getLevelableBool("pu", 208)) player.db.boosterReq = player.db.boosterReq.div(buyableEffect("dp", 16))
 
+        player.db.boosterReq = player.db.boosterReq.pow(buyableEffect("dv", 13))
+
         player.db.boosterEffect = Decimal.pow(5, player.db.boosters)
 
         if (player.db.boosters.gt(player.db.bestBoosters)) { 
@@ -47,6 +52,9 @@
 
         player.db.milestone1Effect = Decimal.pow(100, player.db.boosters.pow(0.75))
         player.db.milestone2Effect = player.du.points.add(1).pow(0.15).div(30).add(1)
+        player.db.milestone4Effect = player.db.boosters.add(1).pow(1.2).div(3).add(1)
+
+        player.db.permaMilestone4Effect = player.db.bestBoosters.add(1).pow(0.35).div(10).add(1)
     },
     bars: {},
     clickables: {
@@ -101,6 +109,27 @@
                 return look
             },
         },
+        14: {
+            requirementDescription: "<h3>12 Boosters",
+            effectDescription() { return "Gain 10% of grass value per second, and boost grass value and capacity based on boosters<br>Currently: x" + format(player.db.milestone4Effect) + "." },
+            done() { return player.db.boosters.gte(12) && player.ir.iriditeDefeated },
+            style() {
+                let look = {width: "500px", minHeight: "90px", color: "white", border: "3px solid #6e64c4", borderRadius: "10px", margin: "-1.5px"}
+                if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
+                return look
+            },
+        },
+        15: {
+            requirementDescription: "<h3>16 Boosters",
+            effectDescription() { return "Gain 100% of prestige points per second and autobuy all prestige point buyables." },
+            done() { return player.db.boosters.gte(16) && player.ir.iriditeDefeated },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #6e64c4", borderRadius: "10px", margin: "-1.5px"}
+                if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
+                return look
+            },
+        },
+
         101: {
             requirementDescription: "<h3>1 Best Booster",
             effectDescription: "x1.25 to check back XP gain.",
@@ -124,7 +153,30 @@
         103: {
             requirementDescription: "<h3>10 Best Boosters",
             effectDescription: "/1.4 to starmetal essence generator time.",
+            unlocked() { return player.ma.matosDefeated },
             done() { return player.db.bestBoosters.gte(10) && player.ma.matosDefeated },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #6e64c4", borderRadius: "10px", margin: "-1.5px"}
+                if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
+                return look
+            },
+        },
+        104: {
+            requirementDescription: "<h3>15 Best Boosters",
+            effectDescription() { return "Best boosters divides star exploration times.<br>Currently: /" + format(player.db.permaMilestone4Effect) + "." },
+            unlocked() { return player.ma.matosDefeated },
+            done() { return player.db.bestBoosters.gte(15) && player.ma.matosDefeated },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #6e64c4", borderRadius: "10px", margin: "-1.5px"}
+                if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
+                return look
+            },
+        },
+        105: {
+            requirementDescription: "<h3>20 Best Boosters",
+            effectDescription() { return "Reduce matos combo softcap scaling by -0.1%.<br>"},
+            unlocked() { return player.ir.iriditeDefeated },
+            done() { return player.db.bestBoosters.gte(20) && player.ir.iriditeDefeated },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #6e64c4", borderRadius: "10px", margin: "-1.5px"}
                 if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
@@ -160,6 +212,8 @@
                     ["row", [["milestone", 11]]],
                     ["row", [["milestone", 12]]],
                     ["row", [["milestone", 13]]],
+                    ["row", [["milestone", 14]]],
+                    ["row", [["milestone", 15]]],
                     ]],
                     ['blank', '25px'],
                     ["column", [
@@ -167,6 +221,8 @@
                     ["row", [["milestone", 101]]],
                     ["row", [["milestone", 102]]],
                     ["row", [["milestone", 103]]],
+                    ["row", [["milestone", 104]]],
+                    ["row", [["milestone", 105]]],
                     ]],
                     ]],
                 ]

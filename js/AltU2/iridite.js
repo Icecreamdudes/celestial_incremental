@@ -198,6 +198,7 @@ addLayer("ir", {
             player.ir.shipCooldownTimers[i] = player.ir.shipCooldownTimers[i].sub(delta);
 
             if (hasUpgrade("ir", 18)) player.ir.shipCooldownMax[i] = player.ir.shipCooldownMax[i].div(upgradeEffect("ir", 18))
+            player.ir.shipCooldownMax[i] = player.ir.shipCooldownMax[i].div(levelableEffect("pu", 401)[1])
         }
 
         player.ir.battleXPReq = player.ir.battleLevel.pow(1.6).mul(5).add(40)
@@ -938,6 +939,7 @@ addLayer("ir", {
                         ["raw-html", () => { return "Keep hex of realms challenge completions on singularity reset." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", () => { return "Keep hex of vexes on singularity resets and subsequent reset tiers." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", () => { return "Keep hex of purity on singularity resets and subsequent reset tiers." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return "Unlock a lot of new punchcards." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                     ], {width: "1000px", border: "3px solid rgb(27, 0, 36)", backgroundImage: "linear-gradient(120deg, #480e8aff 0%, rgba(20, 7, 24, 1) 100%)", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px"}]
                 ]
             },
@@ -1122,6 +1124,8 @@ class SpaceArena {
                 collisionDamage: 5,
             };
         }
+        // hit invulnerability timer in milliseconds (prevents >3 hits/sec)
+        this.shipHitInvuln = 0;
         if (player.ir.shipType == 2) {
             this.ship = {
                 x: width / 2,
@@ -1200,7 +1204,7 @@ class SpaceArena {
                 cooldown: 250,
                 lastShot: 0,
                 damage: 3,
-                collisionDamage: 5,
+                collisionDamage: 0.1,
             };
         }
         if (player.ir.shipType == 6) {
@@ -1322,6 +1326,7 @@ class SpaceArena {
                     ctx.restore();
                 }
             },
+            
             gammaShip: {
                 name: "Gamma Ship",
                 radius: 28,
@@ -2112,6 +2117,10 @@ class SpaceArena {
             return;
         }
 
+        // decrement ship invulnerability timer each tick (approx 60FPS)
+        const _TICK_MS = 1000 / 60;
+        if (this.shipHitInvuln > 0) this.shipHitInvuln = Math.max(0, this.shipHitInvuln - _TICK_MS);
+
         // Hard mode check
         const hardMode = player.ir.battleLevel.gte(8);
         
@@ -2647,8 +2656,7 @@ class SpaceArena {
                             if (!enemy._lungeHit) {
                                 enemy._lungeHit = 18; // few frames cooldown
                                 let impactDmg = (6 + enemy.phase * 3) * this.upgradeEffects.damageReduction;
-                                player.ir.shipHealth = player.ir.shipHealth.sub(impactDmg);
-                                if (player.ir.shipHealth.lte(0)) this.onShipDeath();
+                                this.applyShipDamage(impactDmg);
                             }
                         }
                         if (enemy._lungeHit && enemy._lungeHit > 0) enemy._lungeHit--;
@@ -2932,9 +2940,8 @@ class SpaceArena {
                             if (proj > -enemy.radius && proj < beamLen && perp < thickness + (player.ir.shipType == 3 ? this.ship.radius : 12)) {
                                 // apply damage once per short cooldown
                                 let dmg = (6 + enemy.phase * 1) * this.upgradeEffects.damageReduction;
-                                player.ir.shipHealth = player.ir.shipHealth.sub(dmg);
+                                this.applyShipDamage(dmg);
                                 enemy._laserHitCooldown = 8; // frames between hits
-                                if (player.ir.shipHealth.lte(0)) this.onShipDeath();
                             }
                         }
                         enemy._laserTimer--;
@@ -3040,7 +3047,7 @@ class SpaceArena {
                                 enemy._recentlyHit = 6; // frames of invuln for player from this contact
                                 // reduced dash damage to make attack less violent
                                 let impactDmg = (5) * this.upgradeEffects.damageReduction;
-                                player.ir.shipHealth = player.ir.shipHealth.sub(impactDmg);
+                                this.applyShipDamage(impactDmg);
                                 // reduced knockback
                                 let kn = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
                                 if (player.ir.shipType == 3) {
@@ -3229,6 +3236,7 @@ class SpaceArena {
                     continue;
             }
             // --- Alpha Ship behavior ---
+            
             if (enemy.type === "alphaShip") {
                 if (!enemy.wanderTimer || enemy.wanderTimer <= 0) {
                     enemy.wanderTimer = getRandomInt(60) + 60;
@@ -3625,10 +3633,7 @@ class SpaceArena {
                 if (dist < trail.radius + shipRadius && trail.timer > 0) {
                     let dmg = trail.damage * this.upgradeEffects.damageReduction;
                     if (player.ir.shipType == 3) dmg /= 4;
-                    player.ir.shipHealth = player.ir.shipHealth.sub(dmg);
-                    if (player.ir.shipHealth.lte(0)) {
-                        this.onShipDeath();
-                    }
+                    this.applyShipDamage(dmg);
                 }
             }
             this.gammaTrails = this.gammaTrails.filter(trail => trail.timer > 0);
@@ -3684,7 +3689,8 @@ class SpaceArena {
 
         // Bullet-enemy collision (player bullets only)
         for (let bullet of this.bullets) {
-            if (bullet.fromEnemy) continue;
+            // allow normal player bullets OR special vampire spear bullets to hit enemies
+            if (bullet.fromEnemy && !bullet.vampireSpear) continue;
             for (let enemy of this.enemies) {
                 if (!enemy.alive) continue;
                 // avoid hitting same enemy multiple times per bullet
@@ -3694,6 +3700,22 @@ class SpaceArena {
                 let dist = Math.sqrt(dx * dx + dy * dy);
                 if (dist < enemy.radius) {
                     enemy.health -= bullet.damage;
+
+                    // Vampire spear knockback: push enemies away along bullet velocity
+                    if (bullet.vampireSpear) {
+                        try {
+                            let nx = (typeof bullet.vx === 'number') ? bullet.vx : 0;
+                            let ny = (typeof bullet.vy === 'number') ? bullet.vy : 0;
+                            let nlen = Math.sqrt(nx * nx + ny * ny) || 1;
+                            nx /= nlen; ny /= nlen;
+                            // stronger knockback: apply to knockback velocity so physics feels smoother
+                            let kb = (typeof bullet.knockback === 'number') ? bullet.knockback : 18;
+                            enemy._knockbackVx = (enemy._knockbackVx || 0) + nx * kb;
+                            enemy._knockbackVy = (enemy._knockbackVy || 0) + ny * kb;
+                            // longer knockback duration
+                            enemy._knockbackTimer = Math.max(enemy._knockbackTimer || 0, 18);
+                        } catch (err) { /* ignore knockback errors */ }
+                    }
 
                     // Handle piercing bullets: decrement pierce and mark enemy as pierced
                     if (typeof bullet.pierce === "number" && bullet.pierce > 0) {
@@ -3716,6 +3738,7 @@ class SpaceArena {
                             let amt = getRandomInt(maxR - minR + 1) + minR;
                             amt = Math.max(0, Math.floor(amt * this.upgradeEffects.lootGain));
                             amt = Math.max(0, Math.floor(amt * levelableEffect("pet", 502)[1]));
+                            amt = Math.max(0, Math.floor(amt * levelableEffect("pu", 212)[1]));
                             player.ir.spaceRock = player.ir.spaceRock.add(amt);
                             lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "rock" });
                         }
@@ -3762,9 +3785,9 @@ class SpaceArena {
         }
         
 
-        // Enemy bullets hit player
+        // Enemy bullets hit player (also include vampire spear projectiles)
         for (let bullet of this.bullets) {
-            if (!bullet.fromEnemy) continue;
+            if (!bullet.fromEnemy && !bullet.vampireSpear) continue;
             let dx = bullet.x - this.ship.x;
             let dy = bullet.y - this.ship.y;
             let shipRadius = player.ir.shipType == 3 ? this.ship.radius : 12;
@@ -3778,14 +3801,10 @@ class SpaceArena {
                     bullet._hitPlayer = true;
                     let dmg = bullet.damage * this.upgradeEffects.damageReduction;
                     if (player.ir.shipType == 3) dmg /= 1.5;
-                    player.ir.shipHealth = player.ir.shipHealth.sub(dmg);
- 
+                    this.applyShipDamage(dmg);
+
                     // remove the projectile immediately so it can't deal damage again
                     bullet.life = 0;
- 
-                    if (player.ir.shipHealth.lte(0)) {
-                        this.onShipDeath();
-                    }                    
                 }
             }
         }
@@ -3811,7 +3830,7 @@ class SpaceArena {
                 if (Number.isNaN(shipDmg) || !isFinite(shipDmg) || shipDmg < 0) shipDmg = 3 * this.upgradeEffects.damageReduction;
                 if (player.ir.iriditeFightActive) shipDmg /= 12;
                 if (player.ir.shipType == 3) shipDmg /= 20;
-                player.ir.shipHealth = player.ir.shipHealth.sub(shipDmg);
+                this.applyShipDamage(shipDmg);
 
                 if (player.ir.shipType == 3) {
                     let angle = Math.atan2(dy, dx);
@@ -3838,6 +3857,7 @@ class SpaceArena {
                         let amt = getRandomInt(maxR - minR + 1) + minR;
                         amt = Math.max(0, Math.floor(amt * this.upgradeEffects.lootGain));
                         amt = Math.max(0, Math.floor(amt * levelableEffect("pet", 502)[1]));
+                        amt = Math.max(0, Math.floor(amt * levelableEffect("pu", 212)[1]));
                         player.ir.spaceRock = player.ir.spaceRock.add(amt);
                         lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "rock" });
                     }
@@ -3884,9 +3904,9 @@ class SpaceArena {
             let shipRadius = player.ir.shipType == 3 ? this.ship.radius : 12;
             if (dist < asteroid.size + shipRadius) {
                 asteroid.health -= this.ship.collisionDamage * this.upgradeEffects.attackDamage;
-                let dmg = (asteroid.big ? 3 : 2) * this.upgradeEffects.damageReduction;
+                let dmg = (asteroid.big ? 8 : 5) * this.upgradeEffects.damageReduction;
                 if (player.ir.shipType == 3) dmg /= 6;
-                player.ir.shipHealth = player.ir.shipHealth.sub(dmg);
+                this.applyShipDamage(dmg);
                 if (player.ir.shipType == 3) {
                     let angle = Math.atan2(dy, dx);
                     let bounceSpeed = Math.max(8, Math.abs(this.ship.vy) * this.ship.bounce);
@@ -3907,6 +3927,7 @@ class SpaceArena {
                 let loot = Math.floor(Math.random() * (asteroid.big ? 4 : 3)) + (asteroid.big ? 3 : 1);
                 loot = Math.floor(loot * this.upgradeEffects.lootGain);
                 loot = Math.max(0, Math.floor(loot * levelableEffect("pet", 502)[1]));
+                loot = Math.max(0, Math.floor(loot * levelableEffect("pu", 212)[1]));
                 player.ir.spaceRock = player.ir.spaceRock.add(loot);
                 player.ir.levelables[player.ir.shipType][1] = player.ir.levelables[player.ir.shipType][1].add(loot)
                 lootFlashPositions.push({ x: asteroid.x, y: asteroid.y, amount: loot, type: "rock" });
@@ -4010,6 +4031,45 @@ class SpaceArena {
         this.xpOrbs = this.xpOrbs.filter(orb => !orb.picked && orb.timer > 0);
 
         this.draw();
+    }
+
+    // Apply damage to player's ship respecting invulnerability frames
+    // Returns true if damage was applied, false if blocked by invuln
+    applyShipDamage(dmg) {
+        // invulnerability duration: ~333ms (max 3 hits per second)
+        const INVULN_MS = 1000 / 3;
+        if (this.shipHitInvuln && this.shipHitInvuln > 0) return false;
+        // grant invulnerability
+        this.shipHitInvuln = INVULN_MS;
+        try {
+            if (player.ir.shipHealth && typeof player.ir.shipHealth.sub === 'function') {
+                // Decimal-friendly subtraction
+                player.ir.shipHealth = player.ir.shipHealth.sub(dmg);
+            } else if (typeof player.ir.shipHealth === 'number') {
+                const raw = (typeof dmg === 'number') ? dmg : (dmg && dmg.toNumber ? dmg.toNumber() : Number(dmg));
+                player.ir.shipHealth = Math.max(0, player.ir.shipHealth - raw);
+            }
+        } catch (e) {
+            // fallback numeric
+            try {
+                const raw = (typeof dmg === 'number') ? dmg : (dmg && dmg.toNumber ? dmg.toNumber() : Number(dmg));
+                if (typeof player.ir.shipHealth === 'number') player.ir.shipHealth = Math.max(0, player.ir.shipHealth - raw);
+            } catch (e2) {}
+        }
+
+        // clamp/validate health value
+        try {
+            if ((player.ir.shipHealth.isNaN && player.ir.shipHealth.isNaN()) || !player.ir.shipHealth.isFinite || player.ir.shipHealth < 0) player.ir.shipHealth = new Decimal(0);
+        } catch (e) {
+            if (typeof player.ir.shipHealth === 'number' && player.ir.shipHealth < 0) player.ir.shipHealth = 0;
+        }
+
+        // death check
+        try {
+            if (player.ir.shipHealth && player.ir.shipHealth.lte && player.ir.shipHealth.lte(0)) this.onShipDeath();
+            else if (typeof player.ir.shipHealth === 'number' && player.ir.shipHealth <= 0) this.onShipDeath();
+        } catch (e) {}
+        return true;
     }
 
     createSmallAsteroid(x, y) {
@@ -4681,7 +4741,8 @@ class SpaceArena {
         player.ir.battleLevel = new Decimal(0);
         player.ir.battleXP = new Decimal(0);
         if (arena) arena.upgradeEffects = arena.getDefaultUpgradeEffects();
-        player.subtabs["ir"]['stuff'] = "Lose";
+        if (player.tab == "ir") player.subtabs["ir"]['stuff'] = "Lose";
+        if (player.tab == "bl") player.subtabs["bl"]['stuff'] = "Lose";
         localStorage.setItem('arenaActive', 'false');
     }
 }
@@ -4753,3 +4814,4 @@ function resumeAsteroidMinigame() {
     if (typeof arena.resumeAsteroidMinigame === 'function') arena.resumeAsteroidMinigame();
 }
 window.resumeAsteroidMinigame = resumeAsteroidMinigame;
+

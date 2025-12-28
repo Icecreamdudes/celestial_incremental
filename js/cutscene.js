@@ -14,6 +14,11 @@
             true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,true, true, true,
         ],
 
+        cutscene2: [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,true, true, true,
+            true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,true, true, true,
+            true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,true, true, true,
+        ],
+
 //OTF
 cutsceneDice: true,
 cutsceneRocketFuel: true,
@@ -1009,6 +1014,58 @@ if (player.c.cutscene[111] && !player.c.cutscene[110] && !cutsceneActive)
         portrait: "resources/secret.png"
     });
     player.c.cutscene[111] = false
+}
+
+//arbitrary IDs
+if (player.c.cutscene2[0] && hasUpgrade("le", 201)) //MAKE SURE A DIFFERENT CUTSCENE PLAYS IF YOU HAVE ALREADY BEATEN NOVA
+{
+    showCutscene(cutsceneDialogueA1, {
+    cutsceneID: -1,
+    background: "linear-gradient(-180deg, #000000 100%)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene2[0] = false
+}
+if (player.c.cutscene2[1] && getLevelableBool("pu", 401))
+{
+    showCutscene(cutsceneDialogueA2, {
+    cutsceneID: -2,
+    background: "linear-gradient(-180deg, #000000 100%)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene2[1] = false
+}
+if (player.c.cutscene2[2] && player.bl.blood.gte(1)) 
+{
+    showCutscene(cutsceneDialogueA3, {
+    cutsceneID: -3,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene2[2] = false
+}
+if (player.c.cutscene2[3] && player.subtabs["bl"]['stuff'] == 'Battle')
+{
+    showCutscene(cutsceneDialogueA4, {
+    cutsceneID: -4,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene2[3] = false
+}
+if (player.c.cutscene2[4] && player.i.pylonBuilt)
+{
+    showCutscene(cutsceneDialogueA5, {
+    cutsceneID: -5,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene2[4] = false
+}
+if (player.c.cutscene2[5] && player.ir.battleLevel.gte(12) && player.subtabs["bl"]['stuff'] == 'Battle')
+{
+    showCutscene(cutsceneDialogueA6, {
+    cutsceneID: -6,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene2[5] = false
 }
 },
     startCutscene1() {

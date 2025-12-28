@@ -188,7 +188,7 @@
         ]
 
         // BOOSTER DICE COOLDOWN DECREMENTOR
-        player.d.boosterDiceCooldown = player.d.boosterDiceCooldown.sub(onepersec.mul(delta))
+        player.d.boosterDiceCooldown = player.d.boosterDiceCooldown.sub(onepersec.mul(delta.div(player.uni["U1"].tickspeed)))
 
         // DICE COST CODE
         player.d.diceCost = Decimal.pow(player.d.dice.add(1), 8)

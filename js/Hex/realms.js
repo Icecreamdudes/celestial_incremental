@@ -35,11 +35,11 @@ addLayer("hrm", {
         if (hasUpgrade("ma", 30)) player.hrm.realmEssenceGain = player.hrm.realmEssenceGain.mul(upgradeEffect("ma", 30))
 
         player.hrm.realmEssenceEffects = [new Decimal(1), new Decimal(1)]
-        player.hrm.realmEssenceEffects[0] = Decimal.pow(2.5, player.hrm.realmEssence.add(1).log(6))
-        player.hrm.realmEssenceEffects[1] = player.hrm.realmEssence.add(1).log(6).mul(0.05).add(1)
+        player.hrm.realmEssenceEffects[0] = Decimal.pow(2.5, player.hrm.realmEssence.add(1).log(6)).min(1e10)
+        player.hrm.realmEssenceEffects[1] = player.hrm.realmEssence.add(1).log(6).mul(0.05).add(1).min(3)
 
-        if (player.hrm.realmEssence.gte(7776)) player.hrm.realmEssenceEffects[0] = Decimal.pow(1.5, player.hrm.realmEssence.div(7776).log(6)).mul(98)
-        if (player.hrm.realmEssence.gte(60466176)) player.hrm.realmEssenceEffects[1] = player.hrm.realmEssence.div(60466176).log(6).mul(0.01).add(1.5)
+        if (player.hrm.realmEssence.gte(7776)) player.hrm.realmEssenceEffects[0] = Decimal.pow(1.5, player.hrm.realmEssence.div(7776).log(6)).mul(98).min(1e10)
+        if (player.hrm.realmEssence.gte(60466176)) player.hrm.realmEssenceEffects[1] = player.hrm.realmEssence.div(60466176).log(6).mul(0.01).add(1.5).min(3)
 
         if (inChallenge("hrm", 15)) {
             player.hrm.dreamTimer = player.hrm.dreamTimer.sub(delta)
@@ -485,11 +485,11 @@ addLayer("hrm", {
                         ]],
                         ["row", [
                             ["raw-html", () => {return "Boosts Pre-Power resources by x" + format(player.hrm.realmEssenceEffects[0])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                            ["raw-html", () => {return player.hrm.realmEssence.gte(7776) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace", marginLeft: "8px"}],
+                            ["raw-html", () => {return player.hrm.realmEssenceEffects[0].gte(1e10) ? "[HARDCAPPED]" : player.hrm.realmEssence.gte(7776) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace", marginLeft: "8px"}],
                         ]],
                         ["row", [
                             ["raw-html", () => {return "Boosts Checkback Tickspeed by x" + format(player.hrm.realmEssenceEffects[1])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                            ["raw-html", () => {return player.hrm.realmEssence.gte(60466176) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace", marginLeft: "8px"}],
+                            ["raw-html", () => {return player.hrm.realmEssenceEffects[1].gte(3) ? "[HARDCAPPED]" : player.hrm.realmEssence.gte(60466176) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace", marginLeft: "8px"}],
                         ]],
                     ], {width: "600px", height: "75px", background: "linear-gradient(90deg, #530000, #533a00, #515300, #0e5300, #00531d, #005349, #004677, #003153, #230053, #4f0053)", borderTop: "3px solid white", borderLeft: "3px solid white", borderRight: "3px solid white", borderRadius: "20px 20px 0px 0px"}],
                     ["style-column", [

@@ -55,6 +55,9 @@ addLayer("wa", {
                 unlocked: true,
                 content: [
                     ["blank", "10px"],
+                    ["raw-html", () => {return "You have " + formatWhole(player.wa.wax) + " Wax"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "(+" + formatWhole(player.wa.waxGain) + ")"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["blank", "10px"],
                     ["clickable", 1],
                 ],
             },

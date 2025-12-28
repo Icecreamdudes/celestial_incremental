@@ -1595,7 +1595,7 @@ function fixOldSave(oldVersion){
             player.tad.buyables[i] = new Decimal(0)
         }
 		for (let i in player.pet.levelables) {
-			if (tmp.pet.levelables[i].levelLimit) {
+			if (tmp.pet.levelables && tmp.pet.levelables[i].levelLimit) {
 				if (player.pet.levelables[i][0].gt(tmp.pet.levelables[i].levelLimit)) player.pet.levelables[i][0] = tmp.pet.levelables[i].levelLimit
 			}
 		}

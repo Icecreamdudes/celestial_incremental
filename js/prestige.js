@@ -131,6 +131,7 @@
         // CRYSTAL EFFECT
         player.p.crystalEffect = player.p.crystals.plus(1).log(10).pow(0.265).mul(0.045).add(1)
         if (hasUpgrade("cs", 303)) player.p.crystalEffect = player.p.crystals.plus(1).log(10).pow(0.3).mul(0.05).add(1)
+        player.p.crystalEffect = player.p.crystalEffect.min(10)
     },
     prestigeReset()
     {

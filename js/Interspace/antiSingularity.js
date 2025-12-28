@@ -1,31 +1,27 @@
-﻿addLayer("rif", {
-    name: "Rift",
-    symbol: "RI",
-    row: 0,
+﻿addLayer("ans", {
+    name: "Anti-Singularity",
+    symbol: "AS",
+    row: 3,
     position: 0,
     startData() { return {
         unlocked: true,
-
-        tears: new Decimal(0),
-        tearDivisorBase: new Decimal(4),
-        tearDivisor: new Decimal(1),
     }},
     automate() {},
     nodeStyle() {
         return {
-            color: "#7f007f",
-            background: "linear-gradient(135deg, #ff7fbf 0%, #bf7fff 100%)",
+            color: "#005f5f",
+            background: "#dfffdf",
             "background-origin": "border-box",
-            "border-color": "#7f007f",
+            "border-color": "#005f5f",
         };
     },
-    tooltip: "Rift",
-    color: "#ff7fbf",
+    tooltip: "Anti-Singularity",
+    color: "#dfffdf",
     update(delta) {
         
 
     },
-    branches: ["tas", "wel", ["bum", "#fff", 40], ["bum", "#402030", 8]],
+    branches: ["ans"],
     clickables: {
         
     },
@@ -59,7 +55,7 @@
         },
     },
     tabFormat: [
-        ["raw-html", () => { return "You have <h3>" + format(player.wel.light) + "</h3> light." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cer.cereUnlocked ? "The product of your abstract values is <h3>" + format(player.cer.abstractProduct) + "</h3>." : ""}, {color: "#ff7fbf", fontSize: "18px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true}

@@ -1,38 +1,26 @@
-﻿addLayer("cer", {
+﻿addLayer("bum", {
     name: "Cere",
-    symbol: "⇕",
+    symbol: "BU",
     universe: "UD",
-    row: 4,
+    row: 2,
     position: 0,
     startData() { return {
         unlocked: true,
-
-        cereUnlocked: false,
-        transfiguratorPower: new Decimal(0),
-        transfiguratorPowerBest: new Decimal(0),
-        transfiguratorPowerSpendable: new Decimal(0),
-        transfiguratorLayersEnabled: [false, false, false, false],
-
-        rebootCooldown: new Decimal(0),
-        rebootCooldownSpeed: new Decimal(1),
-
-        abstractProduct: new Decimal(0),
-        abstractEffect: new Decimal(1),
     }},
     automate() {},
     nodeStyle() {
         return {
-            color: "#ff7fbf",
-            background: "#ffdfef",
+            color: "#bf00bf",
+            background: "#dfffdf",
             "background-origin": "border-box",
-            "border-color": "#ff7fbf",
+            "border-color": "#bf00bf",
         };
     },
-    tooltip: "Cere, the Celestial of Cycles",
-    color: "#ffdfef",
+    tooltip: "Bumpy",
+    color: "#dfffdf",
     update(delta) {
     },
-    branches: ["dxp", "ans"],
+    branches: [["cer", "#fff", 40], ["cer", "#402030", 8]],
     clickables: {
         1: {
             title() { return "<h2>" + (player.cer.cereUnlocked ? (this.canClick() ? "Tier-up the transfigurator to tier " + formatWhole(player.cer.transfiguratorPower.add(1)): "Insufficient resources to tier-up") : "DESTROY CERE'S CORE") + "</h2>" },
@@ -64,17 +52,33 @@
     infoboxes: {},
     microtabs: {
         stuff: {
-            "Cycle": {
+            "Projects": {
                 buttonStyle() { return { color: "white", borderRadius: "8px"} },
                 unlocked() { return true },
                 content: [
+                    ["blank", "25px"],
+                    ["style-column", [
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", () => { return formatWhole(new Decimal(10)) + "%" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ], {background: "#994d86", border: "3px solid #663366", borderRadius: "100px", width: "75px", height:"75px"}]
+                        ], () => {
+                            let look = {borderRadius: "50%", width: "150px", height:"150px"}
+                            look.background = "conic-gradient(#dfffdf " + "36" + "deg, #180b18 0deg)"
+                            return look
+                        }],
+                        ["blank", "25px"],
+                        ["style-column", [
+
+                            ], {background: "#994d86", borderRadius: "0px 0px 5px 5px", height:"150px"}]
+                    ], {background: "#663366",border: "3px solid #663366", borderRadius: "103px 103px 8px 8px", width: "150px"}],
+                    ["blank", "25px"],
                 ]
             },
         }
     },
     tabFormat: [
-        ["raw-html", () => { return player.cer.cereUnlocked ? "The product of your abstract values is <h3>" + format(player.cer.abstractProduct) + ".</h3>" : ""}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", () => { return player.cer.cereUnlocked ? "Boosts negative infinity points by ^" + format(player.cer.abstractEffect) + "" : "" }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+        ["raw-html", () => { return "You have <h3>" + format(player.wel.light) + "</h3> light." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true}

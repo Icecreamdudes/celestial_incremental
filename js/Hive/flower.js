@@ -2179,7 +2179,7 @@ addLayer("fl", {
             },
             "Glossary": {
                 content: [
-                    ["style-column", [
+                    ["top-column", [
                         "glossary-display",
                         ["left-row", [
                             ["category-button", [() => {return "Red<br><small>x" + formatShort(player.fl.glossaryEffects.bee) + "</small>"}, "Glossary", "Red"], {width: "103px", height: "40px", background: "#1a0402"}],
@@ -2199,7 +2199,7 @@ addLayer("fl", {
                                 ["raw-html", () => {return "Currently rigging: " + layers.fl.glossary[player.fl.glossaryRig].name}, {color: "#ccc", fontSize: "14px", fontFamily: "monospace"}],
                                 ["raw-html", () => {return player.al.cocoonLevel >= 11 ? "(Rigged flowers are guaranteed to be rolled)" : "(Rigged flowers are guaranteed to be rolled if its tier is picked)"}, {color: "#ccc", fontSize: "12px", fontFamily: "monospace"}],
                             ], {width: "465px", height: "65px", borderLeft: "5px solid #3e3117"}],
-                        ], () => {return player.al.cocoonLevel >= 3 ? {width: "535px", height: "65px", background: "#251d0d", borderTop: "5px solid #3e3117"} : {width: "535px", height: "70px"}}],
+                        ], () => {return player.al.cocoonLevel >= 3 ? {width: "535px", height: "65px", background: "#251d0d", borderTop: "5px solid #3e3117"} : {display: "none !important"}}],
                     ], {width: "535px", height: "480px", backgroundColor: "#312712", border: "5px solid #3e3117"}],
                 ]
             },

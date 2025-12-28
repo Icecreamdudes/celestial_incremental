@@ -9,6 +9,8 @@ addLayer("ev1", {
 
         xpGain: new Decimal(0),
         crateTimer: new Decimal(0),
+
+        buyMax: false,
     }},
     nodeStyle: {
         background: "linear-gradient(140deg, #b00000 0%, #bda500 50%, #b00000 100%)",
@@ -44,19 +46,19 @@ addLayer("ev1", {
     clickables: {
         2: {
             title: "Buy Max On",
-            canClick() {return !player.buyMax},
+            canClick() {return !player.ev1.buyMax},
             unlocked: true,
             onClick() {
-                player.buyMax = true
+                player.ev1.buyMax = true
             },
             style: {width: '80px', minHeight: "50px", borderRadius: "10px 0px 0px 10px"}
         },
         3: {
             title: "Buy Max Off",
-            canClick() {return player.buyMax},
+            canClick() {return player.ev1.buyMax},
             unlocked: true,
             onClick() {
-                player.buyMax = false
+                player.ev1.buyMax = false
             },
             style: {width: "80px", minHeight: "50px", borderRadius: "0px 10px 10px 0px"}
         },
@@ -77,8 +79,8 @@ addLayer("ev1", {
                     "<br>XP: x" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -114,8 +116,8 @@ addLayer("ev1", {
                     "<br>Cooldown: /" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -152,8 +154,8 @@ addLayer("ev1", {
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
             tooltip() {return "+" + formatSimple(player.cb.xpTimers[0].average.mul(tmp[this.layer].buyables[this.id].effect)) + " XP/s"},
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -185,8 +187,8 @@ addLayer("ev1", {
                     "<br>ESC: x" + format(tmp[this.layer].buyables[this.id].effect, 1) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -219,8 +221,8 @@ addLayer("ev1", {
                     "<br>XP: x" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -256,8 +258,8 @@ addLayer("ev1", {
                     "<br>Cooldown: /" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -294,8 +296,8 @@ addLayer("ev1", {
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
             tooltip() {return "+" + formatSimple(player.cb.xpTimers[1].average.mul(tmp[this.layer].buyables[this.id].effect)) + " XP/s"},
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -327,8 +329,8 @@ addLayer("ev1", {
                     "<br>ESC: x" + format(tmp[this.layer].buyables[this.id].effect, 1) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -361,8 +363,8 @@ addLayer("ev1", {
                     "<br>XP: x" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -398,8 +400,8 @@ addLayer("ev1", {
                     "<br>Cooldown: /" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -436,8 +438,8 @@ addLayer("ev1", {
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
             tooltip() {return "+" + formatSimple(player.cb.xpTimers[2].average.mul(tmp[this.layer].buyables[this.id].effect)) + " XP/s"},
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -469,8 +471,8 @@ addLayer("ev1", {
                     "<br>ESC: x" + format(tmp[this.layer].buyables[this.id].effect, 1) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -503,8 +505,8 @@ addLayer("ev1", {
                     "<br>XP: x" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -540,8 +542,8 @@ addLayer("ev1", {
                     "<br>Cooldown: /" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -578,8 +580,8 @@ addLayer("ev1", {
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
             tooltip() {return "+" + formatSimple(player.cb.xpTimers[3].average.mul(tmp[this.layer].buyables[this.id].effect)) + " XP/s"},
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -611,8 +613,8 @@ addLayer("ev1", {
                     "<br>ESC: x" + format(tmp[this.layer].buyables[this.id].effect, 1) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -645,8 +647,8 @@ addLayer("ev1", {
                     "<br>XP: x" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -682,8 +684,8 @@ addLayer("ev1", {
                     "<br>Cooldown: /" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -720,8 +722,8 @@ addLayer("ev1", {
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
             tooltip() {return "+" + formatSimple(player.cb.xpTimers[4].average.mul(tmp[this.layer].buyables[this.id].effect)) + " XP/s"},
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -753,8 +755,8 @@ addLayer("ev1", {
                     "<br>ESC: x" + format(tmp[this.layer].buyables[this.id].effect, 1) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -787,8 +789,8 @@ addLayer("ev1", {
                     "<br>XP: x" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -824,8 +826,8 @@ addLayer("ev1", {
                     "<br>Cooldown: /" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -862,8 +864,8 @@ addLayer("ev1", {
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
             tooltip() {return "+" + formatSimple(player.cb.xpTimers[5].average.mul(tmp[this.layer].buyables[this.id].effect)) + " XP/s"},
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -895,8 +897,8 @@ addLayer("ev1", {
                     "<br>ESC: x" + format(tmp[this.layer].buyables[this.id].effect, 1) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -929,8 +931,8 @@ addLayer("ev1", {
                     "<br>XP: x" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -966,8 +968,8 @@ addLayer("ev1", {
                     "<br>Cooldown: /" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1004,8 +1006,8 @@ addLayer("ev1", {
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
             tooltip() {return "+" + formatSimple(player.cb.xpTimers[6].average.mul(tmp[this.layer].buyables[this.id].effect)) + " XP/s"},
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1037,8 +1039,8 @@ addLayer("ev1", {
                     "<br>ESC: x" + format(tmp[this.layer].buyables[this.id].effect, 1) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1071,8 +1073,8 @@ addLayer("ev1", {
                     "<br>XP: x" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1108,8 +1110,8 @@ addLayer("ev1", {
                     "<br>Cooldown: /" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1146,8 +1148,8 @@ addLayer("ev1", {
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
             tooltip() {return "+" + formatSimple(player.cb.xpTimers[7].average.mul(tmp[this.layer].buyables[this.id].effect)) + " XP/s"},
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1179,8 +1181,8 @@ addLayer("ev1", {
                     "<br>ESC: x" + format(tmp[this.layer].buyables[this.id].effect, 1) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1213,8 +1215,8 @@ addLayer("ev1", {
                     "<br>CRC: x" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1250,8 +1252,8 @@ addLayer("ev1", {
                     "<br>Cooldown: /" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1288,8 +1290,8 @@ addLayer("ev1", {
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
             tooltip() {return "+" + formatSimple(player.cb.crateTimers[0].average.mul(tmp[this.layer].buyables[this.id].effect).mul(3600)) + " CR/h"},
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1322,8 +1324,8 @@ addLayer("ev1", {
                     "<br>Cooldown: x" + format(tmp[this.layer].buyables[this.id].effect, 1) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1356,8 +1358,8 @@ addLayer("ev1", {
                     "<br>CRC: x" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1393,8 +1395,8 @@ addLayer("ev1", {
                     "<br>Cooldown: /" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1431,8 +1433,8 @@ addLayer("ev1", {
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
             tooltip() {return "+" + formatSimple(player.cb.crateTimers[1].average.mul(tmp[this.layer].buyables[this.id].effect).mul(3600)) + " CR/h"},
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1465,8 +1467,8 @@ addLayer("ev1", {
                     "<br>Cooldown: x" + format(tmp[this.layer].buyables[this.id].effect, 1) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1499,8 +1501,8 @@ addLayer("ev1", {
                     "<br>CRC: x" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1536,8 +1538,8 @@ addLayer("ev1", {
                     "<br>Cooldown: /" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1574,8 +1576,8 @@ addLayer("ev1", {
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
             tooltip() {return "+" + formatSimple(player.cb.crateTimers[2].average.mul(tmp[this.layer].buyables[this.id].effect).mul(3600)) + " CR/h"},
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1608,8 +1610,8 @@ addLayer("ev1", {
                     "<br>Cooldown: x" + format(tmp[this.layer].buyables[this.id].effect, 1) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1642,8 +1644,8 @@ addLayer("ev1", {
                     "<br>CRC: x" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1679,8 +1681,8 @@ addLayer("ev1", {
                     "<br>Cooldown: /" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1717,8 +1719,8 @@ addLayer("ev1", {
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
             tooltip() {return "+" + formatSimple(player.cb.crateTimers[3].average.mul(tmp[this.layer].buyables[this.id].effect).mul(3600)) + " CR/h"},
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1751,8 +1753,8 @@ addLayer("ev1", {
                     "<br>Cooldown: x" + format(tmp[this.layer].buyables[this.id].effect, 1) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1785,8 +1787,8 @@ addLayer("ev1", {
                     "<br>CRC: x" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1822,8 +1824,8 @@ addLayer("ev1", {
                     "<br>Cooldown: /" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1860,8 +1862,8 @@ addLayer("ev1", {
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
             tooltip() {return "+" + formatSimple(player.cb.crateTimers[4].average.mul(tmp[this.layer].buyables[this.id].effect).mul(3600)) + " CR/h"},
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1894,8 +1896,8 @@ addLayer("ev1", {
                     "<br>Cooldown: x" + format(tmp[this.layer].buyables[this.id].effect, 1) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1928,8 +1930,8 @@ addLayer("ev1", {
                     "<br>CRC: x" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1965,8 +1967,8 @@ addLayer("ev1", {
                     "<br>Cooldown: /" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -2003,8 +2005,8 @@ addLayer("ev1", {
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
             tooltip() {return "+" + formatSimple(player.cb.crateTimers[5].average.mul(tmp[this.layer].buyables[this.id].effect).mul(3600)) + " CR/h"},
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -2037,8 +2039,8 @@ addLayer("ev1", {
                     "<br>Cooldown: x" + format(tmp[this.layer].buyables[this.id].effect, 1) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -2071,8 +2073,8 @@ addLayer("ev1", {
                     "<br>CRC: x" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -2108,8 +2110,8 @@ addLayer("ev1", {
                     "<br>Cooldown: /" + format(tmp[this.layer].buyables[this.id].effect) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -2146,8 +2148,8 @@ addLayer("ev1", {
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
             tooltip() {return "+" + formatSimple(player.cb.crateTimers[6].average.mul(tmp[this.layer].buyables[this.id].effect).mul(3600)) + " CR/h"},
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -2180,8 +2182,8 @@ addLayer("ev1", {
                     "<br>Cooldown: x" + format(tmp[this.layer].buyables[this.id].effect, 1) +
                     "<br>Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " PP"
             },
-            buy(mult) {
-                if (mult != true) {
+            buy() {
+                if (!player.ev1.buyMax) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 

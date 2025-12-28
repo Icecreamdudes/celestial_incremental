@@ -1599,6 +1599,11 @@ function fixOldSave(oldVersion){
 				if (player.pet.levelables[i][0].gt(tmp.pet.levelables[i].levelLimit)) player.pet.levelables[i][0] = tmp.pet.levelables[i].levelLimit
 			}
 		}
+		for (let i in player.ir.levelables) {
+			if (tmp.ir.levelables && tmp.ir.levelables[i].levelLimit) {
+				if (player.ir.levelables[i][0].gt(tmp.ir.levelables[i].levelLimit)) player.ir.levelables[i][0] = tmp.ir.levelables[i].levelLimit
+			}
+		}
 		player.ev2.buyables[101] = new Decimal(player.ev2.buyables[13])
 		player.ev2.buyables[102] = new Decimal(player.ev2.buyables[14])
 		player.ev2.buyables[111] = new Decimal(player.ev2.buyables[15])

@@ -2620,7 +2620,7 @@ addLayer("pet", {
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    amt.mul(player.cb.petPoints.add(2).log(2).log(2).div(6).add(1)).pow(2.2).pow(Decimal.pow(4, getLevelableTier(this.layer, this.id))), // Rocket Fuel (Based on Pet Points)
+                    amt.mul(player.cb.petPoints.add(2).log(2).log(2).div(6).add(1)).pow(2.2).pow(Decimal.pow(4, getLevelableTier(this.layer, this.id))).add(1), // Rocket Fuel (Based on Pet Points)
                     amt.mul(0.04).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Grass Layer Spawn Times
                 ]
             },
@@ -3615,13 +3615,13 @@ addLayer("pet", {
             lore() { return "Blob!" }, 
             description() {
                 return "+" + formatWhole(this.effect()[0]) + " to effective blob levels.<br>" +
-                    "+" + formatSimple(this.effect()[1], 1) + " to XP button ESC multiplier."
+                    "+" + formatSimple(this.effect()[1].sub(1), 1) + " to XP button ESC multiplier."
             },
             levelLimit() { return new Decimal(10) },
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id), // Effective Blob Levels
-                    getLevelableAmount(this.layer, this.id).div(20), // XP Button Shard Chance
+                    getLevelableAmount(this.layer, this.id).div(20).add(1), // XP Button Shard Chance
                 ]
             },
             levelTooltip() { return "Costs Evolution Shards." },

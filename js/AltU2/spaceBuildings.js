@@ -128,7 +128,7 @@
             purchaseLimit() { return player.sb.maxBuildingSlots.sub(player.sb.buyables[101]).sub(player.sb.buyables[103]).sub(player.sb.buyables[104]).sub(player.sb.buyables[105]).sub(player.sb.buyables[106]) },
             currency() { return player.ir.spaceRock},
             pay(amt) { player.ir.spaceRock = this.currency().sub(amt) },
-            effect(x) { return player.sb.storedSpaceEnergy.plus(1).log10().div(3).add(1).pow(getBuyableAmount(this.layer, this.id).pow(0.125)) },
+            effect(x) { return player.sb.storedSpaceEnergy.plus(1).log(10).div(8).add(1).pow(getBuyableAmount(this.layer, this.id).pow(0.125)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -136,7 +136,7 @@
                 return "Secondary Space Building"
             },
             display() {
-                return "Stored space energy boosts core framgent scores by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "Stored space energy boosts core fragment scores by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Space Rocks"
             },
             buy(mult) {
@@ -162,7 +162,7 @@
             purchaseLimit() { return player.sb.maxBuildingSlots.sub(player.sb.buyables[101]).sub(player.sb.buyables[102]).sub(player.sb.buyables[104]).sub(player.sb.buyables[105]).sub(player.sb.buyables[106]) },
             currency() { return player.ir.spaceGem},
             pay(amt) { player.ir.spaceGem = this.currency().sub(amt) },
-            effect(x) { return player.sb.storedSpaceEnergy.plus(1).log10().pow(0.4).div(15).add(1).pow(getBuyableAmount(this.layer, this.id).pow(0.12)) },
+            effect(x) { return player.sb.storedSpaceEnergy.plus(1).log(10).pow(0.4).div(30).add(1).pow(getBuyableAmount(this.layer, this.id).pow(0.12)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -196,7 +196,7 @@
             purchaseLimit() { return player.sb.maxBuildingSlots.sub(player.sb.buyables[101]).sub(player.sb.buyables[102]).sub(player.sb.buyables[103]).sub(player.sb.buyables[105]).sub(player.sb.buyables[106])  },
             currency() { return player.ir.spaceGem},
             pay(amt) { player.ir.spaceGem = this.currency().sub(amt) },
-            effect(x) { return player.sb.storedSpaceEnergy.plus(1).log10().div(55).add(1).pow(getBuyableAmount(this.layer, this.id).pow(0.115)) },
+            effect(x) { return player.sb.storedSpaceEnergy.plus(1).log(10).div(100).add(1).pow(getBuyableAmount(this.layer, this.id).pow(0.115)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -230,7 +230,7 @@
             purchaseLimit() { return player.sb.maxBuildingSlots.sub(player.sb.buyables[101]).sub(player.sb.buyables[102]).sub(player.sb.buyables[103]).sub(player.sb.buyables[104]).sub(player.sb.buyables[106])},
             currency() { return player.ir.spaceRock},
             pay(amt) { player.ir.spaceRock = this.currency().sub(amt) },
-            effect(x) { return player.sb.storedSpaceEnergy.plus(1).log10().div(15).add(1).pow(getBuyableAmount(this.layer, this.id).pow(0.11)) },
+            effect(x) { return player.sb.storedSpaceEnergy.plus(1).log(10).div(50).add(1).pow(getBuyableAmount(this.layer, this.id).pow(0.11)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -264,7 +264,7 @@
             purchaseLimit() { return player.sb.maxBuildingSlots.sub(player.sb.buyables[101]).sub(player.sb.buyables[102]).sub(player.sb.buyables[103]).sub(player.sb.buyables[104]).sub(player.sb.buyables[105])   },
             currency() { return player.ir.spaceRock},
             pay(amt) { player.ir.spaceRock = this.currency().sub(amt) },
-            effect(x) { return player.sb.storedSpaceEnergy.plus(1).log10().div(20).add(1).pow(getBuyableAmount(this.layer, this.id).pow(0.105)) },
+            effect(x) { return player.sb.storedSpaceEnergy.plus(1).log(10).div(25).add(1).pow(getBuyableAmount(this.layer, this.id).pow(0.105)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -303,7 +303,7 @@
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.sb.storedSpaceEnergy) + "</h3> space energy. (From D1)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have <h3>" + format(player.sb.storedSpaceEnergy) + "</h3> space energy. (From Dark Universe)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["ex-buyable", 11],]],
                     ["blank", "25px"],

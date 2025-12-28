@@ -969,8 +969,9 @@ const cutsceneDialogue33 = [ //tavs domain unlock
     { text: "Sure.", portrait: "resources/player.png"  },
     { text: "Tav pulls out a small, glowing blue circle.", },
     { text: "This is my core.", portrait: "resources/tav.png"  },
-    { text: "All it takes to destroy it is the power of the alternate broken infinities.", portrait: "resources/tav.png"  },
-    { text: "Breaking infinities turns it into broken infinities. Going through my domain will create the alternate versions.", portrait: "resources/tav.png"  },
+    { text: "All it takes to destroy it is the power of the alternate infinities.", portrait: "resources/tav.png"  },
+    { text: "Within my domain you can produce matter. Reaching the point of collapsing matter will produce infinitums.", portrait: "resources/tav.png"  },
+    { text: "From there, you can combine the infinitums and your infinities to create alternate infinities.", portrait: "resources/tav.png"  },
     { text: "I gotcha bud. Don't worry. You'll find your freedom.", portrait: "resources/player.png"  },
     { text: "You and Tav dap each other up.", },
     { text: "Despite the cloaked being's words, you still decide to be friendly to this celestial.", },
@@ -978,25 +979,23 @@ const cutsceneDialogue33 = [ //tavs domain unlock
     { text: "You found a friend within a celestial.", },
 
 ];
-const cutsceneDialogue34 = [ //tavs domain
-    { text: "Tav's core splits off into pure energy and surrounds you.", },
-    { text: "You notice your superphysical value gain drop significantly.", },
-    { text: "It feels very similar to the eighth infinity challenge.", },
+const cutsceneDialogue34 = [ // Tav's Domain
+    { text: "You enter the domain and see a new superphysical value.", },
+    { text: "It seems similar to your antimatter, but notably different.", },
+    { text: "It seems more fragile, and less capable of multiplying.", },
 ];
-const cutsceneDialogue35 = [ //tavs points
-    { text: "Tav notices you struggle gaining any superphysical values.", },
-    { text: "Dang, you really are a celestial after all!", portrait: "resources/player.png"  },
-    { text: "Don't worry. I can help you.", portrait: "resources/tav.png"  },
-    { text: "I've saved this one superphysical value: Tav points. It will certainly help you get infinities.", portrait: "resources/tav.png"  },
-    { text: "Thanks Tav!", portrait: "resources/player.png"  },
+const cutsceneDialogue35 = [ // First Infinitum Collapse
+    { text: "You reach the physical limit of your matter, and it collapses into a new superphysical energy.", },
+    { text: "I am assuming this is infinitum?", portrait: "resources/player.png"  },
+    { text: "Indeed. From here you need to strengthen the domain with that infinitum in order to be able to get enough to create alternate infinities.", portrait: "resources/tav.png"  },
+    { text: "Seems simple enough.", portrait: "resources/player.png"  },
 ];
-const cutsceneDialogue36 = [ //broken infinities
-    { text: "You channel your superphysical energy through your fingers, and point it at the infinities.", },
-    { text: "You stomp your foot, and all the infinities form a massive crack in the center of them.", },
-    { text: "The infinities also stop glowing.", },
-    { text: "You feel the superphysical energy from the infinities get converted into a new one.", },
+const cutsceneDialogue36 = [ // Unlock Domain Expander
+    { text: "After continuously channeling infinitum into the domain, you sense something change in the domain.", },
+    { text: "It seems you can now strengthen your matter to increase the amount of infinitum per collapse.", },
+    { text: "Though it also seems strengthening your matter will make it harder to reach a collapse.", },
 ];
-const cutsceneDialogue37 = [ //reunlock antidebuff (Tav flashback)
+const cutsceneDialogue37 = [ // Unlock Compression (Tav flashback)
     { text: "A white flash hits your vision.", },
     { text: "You are brought to another flashback.", },
     { text: "You appear to be in a more vibrant version of the antimatter world.", },
@@ -1034,16 +1033,16 @@ const cutsceneDialogue37 = [ //reunlock antidebuff (Tav flashback)
     { text: "Tav was built by the original seven.", },
 
 ];
-const cutsceneDialogue38 = [ //alt broken infinities
-    { text: "You take the broken infinities, and step infront of the otherworldly feature altar.", },
+const cutsceneDialogue38 = [ //alt infinities
+    { text: "You take the infinitums, and step infront of the otherworldly feature altar.", },
     { text: '"Just like what Tav said...", You thought to yourself.', },
     { text: "The superphysical energy from Tav's core mixes with the energy from the altar.", },
-    { text: "The energy forms a ball, which merges with the broken infinity.", },
+    { text: "The energy forms a ball, which allows the infinitum to merge with your infinities.", },
     { text: "The infinity glows with a light you haven't seen before.", },
-    { text: "You have created an alternate broken infinity.", },
+    { text: "You have created an alternate infinity.", },
 ];
 const cutsceneDialogue39 = [ //tav's death
-    { text: "You did it. You have gained 1,000 of each alternate broken infinity type.", },
+    { text: "You did it. You have gained 250 of each alternate infinity type.", },
     { text: "You are filled with dread. You will defeat your first celestial, but you will have to kill your friend.", },
     { text: "You did it... I'm so proud of you.", portrait: "resources/tav.png"  },
     { text: "Now I'll finally be put to rest. Thank you.", portrait: "resources/tav.png"  },
@@ -1082,7 +1081,7 @@ const cutsceneDialogue39 = [ //tav's death
     { text: "You will find your freedom. I know you will.", portrait: "resources/player.png"  },
     { text: "Goodbye...", portrait: "resources/tav.png"  },
     { text: "Goodbye...", portrait: "resources/player.png"  },
-    { text: "The energy from the alternate broken infinities are converted into one powerful beam of energy.", },
+    { text: "The energy from the alternate infinities are converted into one powerful beam of energy.", },
     { text: "The beam strikes through Tav's core, immediately disintegrating it.", },
     { text: "Tav's physical form fades away into dust.", },
     { text: "You have defeated your first celestial.", },
@@ -1219,7 +1218,7 @@ const cutsceneDialogue49 = [ //replicanti galaxy
     { text: "It doesn't make any sense. How could such an evil celestial be responsible for such beautiful sights?",  },
 
 ];
-const cutsceneDialogue50 = [ //cantepocalypse puzzles (on tab switch)
+const cutsceneDialogue50 = [ //cantepocalypse trials (on tab switch)
     { text: "All of a sudden, a temple rises in front of you.",  },
     { text: "As you walk inside, you are greeted with Cante's voice.",  },
     { text: "They're all gone. THEY'RE ALL GONE.", portrait: "resources/cante.png"  },
@@ -1229,7 +1228,7 @@ const cutsceneDialogue50 = [ //cantepocalypse puzzles (on tab switch)
     { text: "EVEN IF THEY ALL HATED ME, THEY DIDN'T DESERVE DEATH.", portrait: "resources/cante.png"  },
     { text: "And I know you want to kill me as well.", portrait: "resources/cante.png"  },
     { text: "I have built this temple for this very moment.", portrait: "resources/cante.png"  },
-    { text: "Solve 4 puzzles, and I will let you kill me.", portrait: "resources/cante.png"  },
+    { text: "Conquer these 4 trials, and I will let you kill me.", portrait: "resources/cante.png"  },
     { text: "What's the point in even living if they are all gone.", portrait: "resources/cante.png"  },
     { text: "There's nothing for me to do.", portrait: "resources/cante.png"  },
     { text: "Absolutely nothing.", portrait: "resources/cante.png"  },
@@ -1250,9 +1249,9 @@ const cutsceneDialogue51 = [ //marcel evolution
     { text: "Thanks bud.", portrait: "resources/player.png"  },
 ];
 
-//first puzzle complete 
+//first trial complete 
 const cutsceneDialogue52 = [ 
-    { text: "You complete the puzzle, and the floor underneath you breaks, revealing another room.",  },
+    { text: "You complete the trial, and a lock opens.",  },
     { text: "A white flash hits your eyes.",  },
     { text: "You are presented with a flashback.",  },
     { text: "You find yourself in the vibrant antimatter world again.",  },
@@ -1281,9 +1280,9 @@ const cutsceneDialogue52 = [
     { text: "You need to figure out more.",  },
     { text: "You need to understand what truly happened to the original seven.",  },
 ];
-//second puzzle complete 
+//second trial complete 
 const cutsceneDialogue53 = [ 
-    { text: "You complete the puzzle, and the floor underneath you breaks, revealing another room.",  },
+    { text: "You complete the trial, and a lock opens.",  },
     { text: "A white flash hits your eyes.",  },
     { text: "You are presented with a flashback.",  },
     { text: "You find yourself in a vibrant city. Bright lights, noise, and cars.",  },
@@ -1303,9 +1302,9 @@ const cutsceneDialogue53 = [
     { text: "A secret organization is destroying universes and converting people into celestials?",  },
     { text: "You'll have to figure it all out...",  },
 ];
-//third puzzle complete 
+//third trial complete 
 const cutsceneDialogue54 = [ 
-    { text: "You complete the puzzle, and the floor underneath you breaks, revealing another room.",  },
+    { text: "You complete the trial, and a lock opens.",  },
     { text: "A white flash hits your eyes.",  },
     { text: "You are presented with a flashback.",  },
     { text: "You are in what appears to be an office room.",  },
@@ -1326,9 +1325,9 @@ const cutsceneDialogue54 = [
     { text: "This must have caused Cante's removal from the original seven.",  },
     { text: "Very interesting...",  },
 ];
-//fourth puzzle complete 
+//fourth trial complete 
 const cutsceneDialogue55 = [ 
-    { text: "You complete the puzzle, and the floor underneath you breaks, revealing another room.",  },
+    { text: "You complete the trial, and a lock opens.",  },
     { text: "A white flash hits your eyes.",  },
     { text: "You are presented with a flashback.",  }, //laitela created cante's prison
     { text: "You find yourself in a black and white void, surrounded by dark energy.",  },
@@ -1348,7 +1347,7 @@ const cutsceneDialogue55 = [
 ];
 //cantepocalypse 
 const cutsceneDialogue56 = [ 
-    { text: "As all 4 puzzles are completed, you find yourself in one final room.",  },
+    { text: "As all 4 trials are completed, you enter through the now open door, and find yourself in a vast room.",  },
     { text: "There is a hole in the center of the room, and the hole is pulling everything in towards it.",  },
     { text: "My core is in here. You can kill me now.", portrait: "resources/cante.png"  },
     { text: "You get an uneasy feeling about jumping in the hole, but notice the walls around you start to shrink.",  },
@@ -2568,6 +2567,151 @@ const cutsceneDialogue112 = [ //dead sel
     { text: "How sad...", },
 ];   //REMINDER: CROSS OUT SEL'S NAME AFTER DEFEATING IRIDITE.
 
+// Happens when entering the hive
+const cutsceneDialogue113 = [
+    { text: "You appear in a giant plains, and an indiscernible being floats towards you." },
+    { text: "Oh~, a visitor!", portrait: "resources/alephDark.png"},
+    { text: "Who are you?", portrait: "resources/player.png"},
+    { text: "You don't need to worry about that, you will figure out with time.", portrait: "resources/alephDark.png"},
+    { text: "All that matters is whether or not you can be beneficial to the swarm.", portrait: "resources/alephDark.png"},
+    { text: "You look forward and see a lone bee."},
+    { text: "Unfortunately it has dwindled down to only one bee, but it is quite the special one!", portrait: "resources/alephDark.png"},
+    { text: "Why should I help you with building up this swarm?", portrait: "resources/player.png"},
+    { text: "Judging by your aura, you seem to be quite focused on hunting celestials.", portrait: "resources/alephDark.png"},
+    { text: "To do that, you need quite a lot of power.", portrait: "resources/alephDark.png"},
+    { text: "My swarm has the potential to help you grow stronger.", portrait: "resources/alephDark.png"},
+    { text: "Alright.", portrait: "resources/player.png"},
+    { text: "If you are worthy, I am sure you can figure it out from here.", portrait: "resources/alephDark.png"},
+];
+
+// Happens at the layer branch
+const cutsceneDialogue114 = [
+    { text: "You seem to understand the basics now.", portrait: "resources/alephDark.png"},
+    { text: "This is where building a swarm gets tru~ly interesting.", portrait: "resources/alephDark.png"},
+    { text: "Next is choosing what path you will take to improve your swarm.", portrait: "resources/alephDark.png"},
+    { text: "I currently know of two potential paths.", portrait: "resources/alephDark.png"},
+    { text: "Are there other paths?", portrait: "resources/player.png"},
+    { text: "Perhaps, but I haven't been able to reach them.", portrait: "resources/alephDark.png"},
+    { text: "Hopefully you'll do well enough that you can discover one.", portrait: "resources/alephDark.png"},
+];
+
+// Happens half way through the path
+const cutsceneDialogue115 = [
+    { text: "Excellent, you seem to have potential.", portrait: "resources/alephDark.png"},
+    { text: "At the current rate you'll be able to reach where I was sealed.", portrait: "resources/alephDark.png"},
+    { text: "So this isn't your actual body.", portrait: "resources/player.png"},
+    { text: "Of course not! My body is multiple times bigger then this spirit.", portrait: "resources/alephDark.png"},
+    { text: "Most importantly, the swarm wouldn't have dwindled in power if I hadn't been sealed.", portrait: "resources/alephDark.png"},
+    { text: "So what is next?", portrait: "resources/player.png"},
+    { text: "Just a little more and you can get to my location.", portrait: "resources/alephDark.png"},
+    { text: "From there you can build up the fundamental power of the swarm.", portrait: "resources/alephDark.png"},
+    { text: "I'll be waiting!", portrait: "resources/alephDark.png"},
+];
+
+// Happens when you unlock Aleph
+const cutsceneDialogue116 = [
+    { text: "Fantastic, finally a capable soul who can truly continue the swarm.", portrait: "resources/alephDark.png"},
+    { text: "Can I finally know who you are?", portrait: "resources/player.png"},
+    { text: "I am Aleph, the Celestial of Swarms.", portrait: "resources/aleph.png"},
+    { text: "You raise up your guard."},
+    { text: "Fufufu~, you don't need to stress darling.", portrait: "resources/aleph.png"},
+    { text: "The only thing I care about is whatever will make my swarm prosper.", portrait: "resources/aleph.png"},
+    { text: "And you seem to be ve~ry useful.", portrait: "resources/aleph.png"},
+    { text: "Besides, the important part is that you can now condense your swarms power into its fundamental resource.", portrait: "resources/aleph.png"},
+    { text: "And if you use those resources to help unseal me, I'll be able to lend you some of my powers.", portrait: "resources/aleph.png"},
+    { text: "I'll even be able to modify some powers you already have to greatly improve them.", portrait: "resources/aleph.png"},
+    { text: "... Whatever will make me stronger.", portrait: "resources/player.png"},
+    { text: "That's the spirit!", portrait: "resources/aleph.png"},
+    { text: "Just keep working on improving the swarm, and I will be able to help you.", portrait: "resources/aleph.png"},
+];
+
+// Happens after the first cocoon milestone
+const cutsceneDialogue117 = [
+    { text: "Oh~, so freeing!", portrait: "resources/aleph.png"},
+    { text: "Even such a small relief feels amazing after ages of constraints.", portrait: "resources/aleph.png"},
+    { text: "You look at her impatiently."},
+    { text: "Oh yes, I should be able to improve your production now.", portrait: "resources/aleph.png"},
+    { text: "Though with just this much it won't be anything impressive.", portrait: "resources/aleph.png"},
+    { text: "Given enough fundamental power, I should be able to connect this hive to one of your celestial powers.", portrait: "resources/aleph.png"},
+    { text: "Doing so should both improve the effects of that celestial power and expand the hives potential.", portrait: "resources/aleph.png"},
+    { text: "I'll notify you when it is time.", portrait: "resources/aleph.png"},
+];
+
+// Happens after the fifth cocoon milestone
+const cutsceneDialogue118 = [
+    { text: "It appears to be time.", portrait: "resources/aleph.png"},
+    { text: "This should be enough fundamental power to connect with your weakest celestial power.", portrait: "resources/aleph.png"},
+    { text: "Apparently it is called \"Tav's Domain\"?", portrait: "resources/aleph.png"},
+    { text: "I'll send my spirit, and I'll see what all I can do to improve it.", portrait: "resources/aleph.png"},
+];
+
+// Happens when entering Tav's Domain after obtaining fifth cocoon milestone
+const cutsceneDialogue119 = [
+    { text: "How fascinating of a concept!", portrait: "resources/alephDark.png"},
+    { text: "To think of modifying the concept of infinity to imbue it with new effects.", portrait: "resources/alephDark.png"},
+    { text: "I certainly can do some interesting things with this.", portrait: "resources/alephDark.png"},
+    { text: "You feel the bounds of the domain expand."},
+    { text: "There! You should now be able to use some new types of infinities.", portrait: "resources/alephDark.png"},
+    { text: "Gain enough of them, and they should be able to improve the gain and effects of the rest of your infinities.", portrait: "resources/alephDark.png"},
+    { text: "And given enough of them, they should be able to also expand the capabilities of the hive!", portrait: "resources/alephDark.png"},
+    { text: "Hopefully you'll be able to fully utilize their power.", portrait: "resources/alephDark.png"},
+];
+
+// Happens after finishing T3 Alt Infinity
+const cutsceneDialogue120 = [
+    { text: "I feel changes in the hive!", portrait: "resources/alephDark.png"},
+    { text: "It seems like the new infinities worked properly.", portrait: "resources/alephDark.png"},
+    { text: "You weren't sure they would?", portrait: "resources/player.png"},
+    { text: "I was mostly sure, and that is good enough to give it a try.", portrait: "resources/alephDark.png"},
+    { text: "Anyways, it seems that the hive has expanded.", portrait: "resources/alephDark.png"},
+    { text: "This should allow you to gain more of the hives fundamental powers.", portrait: "resources/alephDark.png"},
+];
+
+// Happens when reaching Pollen/Nectar in hard mode
+const cutsceneDialogue121 = [
+    { text: "It seems when the hive expanded, the paths somewhat converged.", portrait: "resources/aleph.png"},
+    { text: "You should now be able to gain the other paths first resource.", portrait: "resources/aleph.png"},
+    { text: "However, since it isn't your hives current specialty, it will be notably harder.", portrait: "resources/aleph.png"},
+    { text: "Shouldn't be too much of a problem for you though.", portrait: "resources/aleph.png"},
+];
+
+// Happens when reaching tenth cocoon milestone
+const cutsceneDialogue122 = [
+    { text: "It's time again.", portrait: "resources/aleph.png"},
+    { text: "Next seems to be a fusion between two celestial powers.", portrait: "resources/aleph.png"},
+    { text: "Apparently it is called \"Funify\"?", portrait: "resources/aleph.png"},
+    { text: "I'll send my spirit, and I'll see what all I can do to improve it.", portrait: "resources/aleph.png"},
+];
+
+// Happens when entering Funify after obtaining tenth cocoon milestone
+const cutsceneDialogue123 = [
+    { text: "Let's see what we have here.", portrait: "resources/alephDark.png"},
+    { text: "... Emotions?", portrait: "resources/alephDark.png"},
+    { text: "You don't need those to run the hive.", portrait: "resources/alephDark.png"},
+    { text: "Though I can't deny the power they exude ...", portrait: "resources/alephDark.png"},
+    { text: "She pauses for a while."},
+    { text: "I'll make an emotion that can help you control the rest of the emotions.", portrait: "resources/alephDark.png"},
+    { text: "They certainly can be useful, but at this level of intensity they will only cause problems.", portrait: "resources/alephDark.png"},
+    { text: "Please tell me when you are done, I don't want to be here for long.", portrait: "resources/alephDark.png"},
+];
+
+// Happens after finishing Numbness
+const cutsceneDialogue124 = [
+    { text: "You're done?", portrait: "resources/alephDark.png"},
+    { text: "Good. This place brings back memories I'd prefer to forget.", portrait: "resources/alephDark.png"},
+    { text: "The hive seems to have expanded from this, so let's go back to the hive.", portrait: "resources/alephDark.png"},
+];
+
+// Happens when reaching BB/Honey in hard mode
+const cutsceneDialogue125 = [
+    { text: "It seems the paths have mostly converged.", portrait: "resources/aleph.png"},
+    { text: "This should allow you to build up enough power to unseal me.", portrait: "resources/aleph.png"},
+    { text: "I'll go dormant until you do to preserve power.", portrait: "resources/aleph.png"},
+    { text: "No reason to potentially make the process harder for you.", portrait: "resources/aleph.png"},
+    { text: "You feel Aleph's presence weaken."},
+    { text: "Not much left to go, hopefully she keeps her promise.", portrait: "resources/player.png"},
+];
+
 // Example with custom background:
 // showCutscene(cutsceneDialogue1, {
 //     background: \"url('img/bg.png') center/cover\", // or any valid CSS background
@@ -2580,11 +2724,6 @@ showCutscene(cutsceneDialogue1, {
     portrait: "resources/matos.png"
 });
 
-const test4 = [ //reunlock antidebuff (Tav flashback)
-    { text: "<h1>A white flash hits your vision.", portrait: "resources/teresa.png",  },
-    { text: "<img src=resources/teresa.png width=500 height=500>", },
-
-];
 
 showCutscene(cutsceneDialogue1, {
     background: "#000000", // blue gradient

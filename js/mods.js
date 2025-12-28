@@ -50,15 +50,11 @@
         player.m.codeExperienceToGet = player.t.trees.div(1e7).pow(0.3)
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(buyableEffect("m", 11))
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(levelableEffect("pet", 201)[0])
-        player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(player.d.diceEffects[10])
+        player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(player.d.boosterEffects[10])
         if (hasUpgrade("ad", 21) && !inChallenge("ip", 14)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(upgradeEffect("ad", 21))
 
         // CHALLENGE MODIFIERS
         if (inChallenge('ip', 15)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.pow(0.65)
-        if (inChallenge("ip", 18)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.pow(0.6)
-        if (player.de.antidebuffIndex.eq(5)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(player.de.antidebuffEffect)
-        if (inChallenge("tad", 11)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.pow(0.4)
-        if (inChallenge("tad", 11)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.pow(buyableEffect("de", 17))
 
         // CONTINUED REGULAR MODIFIERS
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(player.i.preOTFMult)
@@ -68,10 +64,8 @@
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.pow(player.co.cores.code.effect[1])
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
-        player.m.codeExperienceToGet = player.m.codeExperienceToGet.div(player.po.halterEffects[8])
-        if (inChallenge("ip", 18) && player.m.codeExperience.gt(player.m.codeExperience.mul(0.2 * delta))) {
-            player.m.codeExperience = player.m.codeExperience.sub(player.m.codeExperience.mul(0.2 * delta))
-        }
+        if (player.po.halter.code.enabled == 1) player.m.codeExperienceToGet = player.m.codeExperienceToGet.div(player.po.halter.code.halt)
+        if (player.po.halter.code.enabled == 2 && player.m.codeExperienceToGet.gt(player.po.halter.code.halt)) player.m.codeExperienceToGet = player.po.halter.code.halt
         if (player.r.timeReversed) player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(0)
 
         // CODE EXPERIENCE PER SECOND
@@ -96,7 +90,7 @@
         player.m.linesOfCodePerSecond = player.m.codeExperience.pow(1.5)
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(buyableEffect("m", 12))
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(levelableEffect("pet", 202)[0])
-        player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(player.d.diceEffects[9])
+        player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(player.d.boosterEffects[9])
         if (hasUpgrade("ip", 23) && !inChallenge("ip", 14)) player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(upgradeEffect("ip", 23))
 
         // CHALLENGE MODIFIERS
@@ -117,7 +111,6 @@
         }
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
-        player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.div(player.po.halterEffects[9])
         if (player.r.timeReversed) player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(0)
 
         // LINES OF CODE PER SECOND
@@ -130,12 +123,10 @@
         if (hasUpgrade("g", 21)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("g", 21))
         player.m.modsToGet = player.m.modsToGet.mul(levelableEffect("pet", 203)[1])
         if (hasMilestone("r", 19)) player.m.modsToGet = player.m.modsToGet.mul(player.r.pentMilestone9Effect[1])
-        player.m.modsToGet = player.m.modsToGet.mul(player.d.diceEffects[8])
-        player.m.modsToGet = player.m.modsToGet.mul(levelableEffect("pet", 302)[1])
+        player.m.modsToGet = player.m.modsToGet.mul(player.d.boosterEffects[8])
         if (hasUpgrade("ip", 23) && !inChallenge("ip", 14)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ip", 23))
         if (hasUpgrade("ad", 18) && !inChallenge("ip", 14)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ad", 18))
         if (hasUpgrade("ip", 33) && !inChallenge("ip", 14)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ip", 33))
-        if (player.de.antidebuffIndex.eq(4)) player.m.modsToGet = player.m.modsToGet.mul(player.de.antidebuffEffect)
         if (player.pol.pollinatorsIndex == 6) player.m.modsToGet = player.m.modsToGet.mul(player.pol.pollinatorsEffect[11])
         if (player.pol.pollinatorEffects.butterfly.enabled) player.m.modsToGet = player.m.modsToGet.mul(player.pol.pollinatorEffects.butterfly.effects[1])
         player.m.modsToGet = player.m.modsToGet.mul(buyableEffect("p", 12))
@@ -151,10 +142,8 @@
         player.gh.steelToGet = player.gh.steelToGet.pow(buyableEffect("cof", 17))
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
-        player.m.modsToGet = player.m.modsToGet.div(player.po.halterEffects[10])
-        if (inChallenge("ip", 18) && player.m.mods.gt(player.m.mods.mul(0.3 * delta))) {
-            player.m.mods = player.m.mods.sub(player.m.mods.mul(0.3 * delta))
-        }
+        if (player.po.halter.mods.enabled == 1) player.m.modsToGet = player.m.modsToGet.div(player.po.halter.mods.halt)
+        if (player.po.halter.mods.enabled == 2 && player.m.modsToGet.gt(player.po.halter.mods.halt)) player.m.modsToGet = player.po.halter.mods.halt
 
         // MOD EFFECT
         player.m.modEffect = player.m.mods.div(6).pow(1.2).add(1)
@@ -194,6 +183,7 @@
             canClick() { return player.m.codeExperienceToGet.gte(1) && player.points.gte(1e65) && player.t.trees.gte(10000000) },
             unlocked() { return true },
             onClick() {
+                if (!hasAchievement("achievements", 17)) completeAchievement("achievements", 17)
                 player.m.codeExperiencePause = new Decimal(3)
                 player.m.codeExperience = player.m.codeExperience.add(player.m.codeExperienceToGet)
             },
@@ -218,22 +208,14 @@
         player.r.factorPowerPerSecond = new Decimal(0)
         player.r.powerFactorUnlocks = [true, true, true, false, false, false, false, false]
 
-        player.f.buyables[11] = new Decimal(0)
-        player.f.buyables[12] = new Decimal(0)
-        player.f.buyables[13] = new Decimal(0)
-        player.f.buyables[14] = new Decimal(0)
-        player.f.buyables[15] = new Decimal(0)
-        player.f.buyables[16] = new Decimal(0)
-        player.f.buyables[17] = new Decimal(0)
-        player.f.buyables[18] = new Decimal(0)
-        player.f.buyables[19] = new Decimal(0)
-        player.f.buyables[21] = new Decimal(0)
-        player.f.buyables[22] = new Decimal(0)
-        player.f.buyables[23] = new Decimal(0)
-        player.f.buyables[24] = new Decimal(0)
-        player.f.buyables[25] = new Decimal(0)
-        player.f.buyables[26] = new Decimal(0)
-        player.f.buyables[27] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 19; i++) {
+                player.f.buyables[i] = new Decimal(0)
+            }
+            for (let i = 21; i < 28; i++) {
+                player.f.buyables[i] = new Decimal(0)
+            }
+        }
 
         player.p.prestigePoints = new Decimal(0)
 
@@ -245,28 +227,22 @@
                 }
             }
         }
-        player.t.buyables[11] = new Decimal(0)
-        player.t.buyables[12] = new Decimal(0)
-        player.t.buyables[13] = new Decimal(0)
-        player.t.buyables[14] = new Decimal(0)
-        player.t.buyables[15] = new Decimal(0)
-        player.t.buyables[16] = new Decimal(0)
-        player.t.buyables[17] = new Decimal(0)
-        player.t.buyables[18] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 19; i++) {
+                player.t.buyables[i] = new Decimal(0)
+            }
+        }
 
         player.f.factorPower = new Decimal(0)
 
         player.t.leaves = new Decimal(0)
         player.t.trees = new Decimal(0)
 
-        player.g.buyables[11] = new Decimal(0)
-        player.g.buyables[12] = new Decimal(0)
-        player.g.buyables[13] = new Decimal(0)
-        player.g.buyables[14] = new Decimal(0)
-        player.g.buyables[15] = new Decimal(0)
-        player.g.buyables[16] = new Decimal(0)
-        player.g.buyables[17] = new Decimal(0)
-        player.g.buyables[18] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 19; i++) {
+                player.g.buyables[i] = new Decimal(0)
+            }
+        }
 
         if (!hasMilestone("ip", 11)) {
             for (let i = 0; i < player.g.upgrades.length; i++) {
@@ -277,14 +253,21 @@
             }
         }
         player.g.grass = new Decimal(0)
-        player.g.savedGrass = new Decimal(0)
-        player.g.grassCount = new Decimal(0)
         player.g.grassTimer = new Decimal(0)
 
         player.g.goldGrass = new Decimal(0)
-        player.g.savedGoldGrass = new Decimal(0)
-        player.g.goldGrassCount = new Decimal(0)
         player.g.goldGrassTimer = new Decimal(0)
+
+        for (let i = 1; i < 509; ) {
+            setGridData("g", i, [0, new Decimal(1), new Decimal(1)])
+
+            // Increase i value
+            if (i % 10 == 8) {
+                i = i+93
+            } else {
+                i++
+            }
+        }
     },
     bars: {
         modbar: {
@@ -417,7 +400,7 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.m.mods},
             pay(amt) { player.m.mods = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(2).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).add(1).pow(2) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },

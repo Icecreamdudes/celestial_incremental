@@ -1,5 +1,4 @@
-﻿var tree3 = [["s"], ["co", "cof"], ["ra", "cs", "sd"], ["sma", "sme"], ["ma"]]
-addLayer("s", {
+﻿addLayer("s", {
     name: "Genesis", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "GE", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "U3",
@@ -50,22 +49,24 @@ addLayer("s", {
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("pet", 1104)[1])
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.co.cores.radioactive.effect[0])
         if (hasUpgrade("sma", 101)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(upgradeEffect("sma", 101))
-        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("pet", 308)[0])
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("pet", 404)[1])
-        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.d.diceEffects[18])
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.d.boosterEffects[18])
         if (hasMilestone("r", 25)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.r.pentMilestone15Effect)
+        if (hasChallenge("fu", 11)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(10)
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(buyableEffect("ma", 17))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(buyableEffect("st", 303))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.ma.bestComboDepth3Effect)
         if (player.ma.matosDefeated) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(1e40)
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.cof.coreFragmentEffects[4])
-        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.se.starsExploreEffect[1][0])
         if (hasUpgrade("ir", 11)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(upgradeEffect("ir", 11))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("ir", 1)[1])
 
-
         //Power modifiers
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(buyableEffect("sb", 104))
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(player.se.starsExploreEffect[1][0])
+
+        // SINGULARITY RAISERS
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(levelableEffect("pet", 308)[0])
 
         if (player.s.singularityPoints.gte(player.s.highestSingularityPoints)) {
             player.s.highestSingularityPoints = player.s.singularityPoints
@@ -360,7 +361,7 @@ addLayer("s", {
     milestones: {
         11: {
             requirementDescription: "<h3>1 Singularity",
-            effectDescription: "Start every singularity reset with 8 infinities. No longer have to rebeat Tav (Break infinity always unlocked). Unlock realm essence and the factory.",
+            effectDescription: "Start every singularity reset with 8 infinities. Keep alt-infinity limit breaks. Unlock realm essence and the factory.",
             done() { return player.s.singularities.gte(1) },
             style: {width: "800px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
@@ -372,7 +373,7 @@ addLayer("s", {
         },
         13: {
             requirementDescription: "<h3>3 Singularities",
-            effectDescription: "Produce 6% of blessings per second (excluding RC1), produce 10% of alternate infinities per second, produce 1% of galaxy dust per second, autobuy infinity power and alt inf buyables, and unlock radiation.",
+            effectDescription: "Produce 5% of blessings per second (excluding RC1), produce 1% of galaxy dust per second, autobuy infinity power, and unlock radiation.",
             done() { return player.s.singularities.gte(3) },
             style: {width: "800px", height: "85px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
@@ -384,7 +385,7 @@ addLayer("s", {
         },
         15: {
             requirementDescription: "<h3>5 Singularities",
-            effectDescription: "Keep check back buyables and infinity challenges on singularity resets, and unlock singularity point buyables.",
+            effectDescription: "Keep check back buyables, infinitum upgrades, and infinity challenges on singularity resets, and unlock singularity point buyables.",
             done() { return player.s.singularities.gte(5) },
             style: {width: "800px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
@@ -402,9 +403,9 @@ addLayer("s", {
         },
         18: {
             requirementDescription: "<h3>12 Singularities",
-            effectDescription: "Start singularity with alt-uni 1 unlocked, keep cante and rememberance cores, singularity resets don't change the screen, and autocruncher toggles don't get reset.",
+            effectDescription: "Start singularity with alt-uni 1 unlocked, keep cante cores, rememberance cores, infinitum, and alt-infinities, singularity resets don't change the screen, and autocruncher toggles don't get reset.",
             done() { return player.s.singularities.gte(12) },
-            style: {width: "800px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
+            style: {width: "800px", height: "85px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         19: {
             requirementDescription: "<h3>25 Singularities",
@@ -431,9 +432,23 @@ addLayer("s", {
             style: {width: "800px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         23: {
-            requirementDescription: "<h3>1000 Singularities",
+            requirementDescription: "<h3>1,000 Singularities",
             effectDescription: "Keep pollinator selection, upgrades, and buyables on singularity resets.",
             done() { return player.s.singularities.gte(1000) },
+            style: {width: "800px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
+        },
+        24: {
+            requirementDescription: "<h3>5,000 Singularities",
+            effectDescription: "Keep halters enabled on singularity resets.",
+            unlocked() {return hasUpgrade("sma", 108)},
+            done() { return player.s.singularities.gte(5000) && hasUpgrade("sma", 108)},
+            style: {width: "800px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
+        },
+        25: {
+            requirementDescription: "<h3>10,000 Singularities",
+            effectDescription: "Keep pent milestones on singularity resets.",
+            unlocked() {return hasUpgrade("sma", 108)},
+            done() { return player.s.singularities.gte(10000) && hasUpgrade("sma", 108)},
             style: {width: "800px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         //REMINDER: MAKE THE TIME MACHINE at some point
@@ -494,6 +509,8 @@ addLayer("s", {
                     ["milestone", 21],
                     ["milestone", 22],
                     ["milestone", 23],
+                    ["milestone", 24],
+                    ["milestone", 25],
                 ]
             },
             "Buyables": {

@@ -103,6 +103,8 @@ function getStartUniData(uni) {
 		unidata.paused = false;
 	if (unidata.pauseTime === undefined)
 		unidata.pauseTime = Date.now();
+	if (unidata.tickspeed === undefined)
+		unidata.tickspeed = new Decimal(1);
 
 	return unidata;
 }
@@ -120,7 +122,7 @@ function getStartLevelables(layer) {
 	if (layers[layer].levelables) {
 		for (id in layers[layer].levelables)
 			if (isPlainObject(layers[layer].levelables[id]))
-				data[id] = [decimalZero, decimalZero, false];
+				data[id] = [decimalZero, decimalZero, decimalZero];
 	}
 	return data;
 }

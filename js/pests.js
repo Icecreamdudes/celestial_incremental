@@ -25,11 +25,11 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-        if (inChallenge("ip", 12) || inChallenge("ip", 18)) {
-            if (inChallenge("ip", 12)) player.pe.pestsPerSecond = player.points.plus(1).log10().pow(1.4)
-            if (inChallenge("ip", 18)) player.pe.pestsPerSecond = player.points.plus(1).log10().pow(2.6)
-            player.pe.pestsPerSecond = player.pe.pestsPerSecond.div(player.de.antidebuffPointsEffect)
+        if (inChallenge("ip", 12)) {
+            if (inChallenge("ip", 12)) player.pe.pestsPerSecond = player.points.plus(1).log(10).pow(1.4)
             player.pe.pests = player.pe.pests.add(player.pe.pestsPerSecond.mul(delta))
+
+            if (!hasAchievement("achievements", 108) && player.pe.pests.gte(250000)) completeAchievement("achievements", 108)
         }
 
         player.pe.pestEffect = [
@@ -69,7 +69,7 @@
                     ["style-column", [
                         ["raw-html", () => { return "<h2>Your pests are killing the grasshoppers,<br>so -" + formatShort(player.pe.pestEffect[7]*100) + "% grasshoppers per second." }, {color: "white", fontSize: "16px", fontFamily: "monospace" }],
                         ["blank", "10px"],
-                        ["raw-html", () => { return "<h2>Grasshops remove 10% of your pests." }, {color: "white", fontSize: "16px", fontFamily: "monospace" }],
+                        ["raw-html", () => {return hasAchievement("achievements", 108) ? "<h2>Grasshops remove 20% of your pests." : "<h2>Grasshops remove 10% of your pests." }, {color: "white", fontSize: "16px", fontFamily: "monospace" }],
                     ], {width: "600px", padding: "10px", backgroundColor: "#1a0b15", border: "3px solid #411c35", borderRadius: "20px"}],
                 ]
             },
@@ -83,6 +83,6 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && (inChallenge("ip", 12) || inChallenge("ip", 18)) },
-    deactivated() { return !(inChallenge("ip", 12) || inChallenge("ip", 18))},
+    layerShown() { return player.startedGame && inChallenge("ip", 12) },
+    deactivated() { return !inChallenge("ip", 12)},
 })

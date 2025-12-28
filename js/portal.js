@@ -1,5 +1,4 @@
-﻿var tree = [["i", "in", "s"], ["cp", "au2"], ["ch", "od"]]
-addLayer("po", {
+﻿addLayer("po", {
     name: "Portal", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "P", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
@@ -19,22 +18,65 @@ addLayer("po", {
         keepOTFS: false,
 
         halterInput: new Decimal(1),
-        halterEffects: [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),],
-        /*
-            0 - Points
-            1 - Factor Power
-            2 - Prestige Points
-            3 - Leaves
-            4 - Trees
-            5 - Grass
-            6 - Grasshoppers
-            7 - Fertilizer
-            8 - Code Experience
-            9 - Lines of Code
-            10 - Mods
-        */
-       halterIndex: new Decimal(0),
-       halterText: ["", "", "", "", "", "", "", "", "", "", ""],
+        halter: {
+            points: {
+                enabled: 0,
+                halt: new Decimal(1),
+            },
+            factor: {
+                enabled: 0,
+                halt: new Decimal(1),
+            },
+            prestige: {
+                enabled: 0,
+                halt: new Decimal(1),
+            },
+            trees: {
+                enabled: 0,
+                halt: new Decimal(1),
+            },
+            grass: {
+                enabled: 0,
+                halt: new Decimal(1),
+            },
+            goldenGrass: {
+                enabled: 0,
+                halt: new Decimal(1),
+            },
+            grasshoppers: {
+                enabled: 0,
+                halt: new Decimal(1),
+            },
+            code: {
+                enabled: 0,
+                halt: new Decimal(1),
+            },
+            mods: {
+                enabled: 0,
+                halt: new Decimal(1),
+            },
+            xp: {
+                enabled: 0,
+                halt: new Decimal(1),
+            },
+            antimatter: {
+                enabled: 0,
+                halt: new Decimal(1),
+            },
+            infinities: {
+                enabled: 0,
+                halt: new Decimal(1),
+            },
+            ip: {
+                enabled: 0,
+                halt: new Decimal(1),
+            },
+            nip: {
+                enabled: 0,
+                halt: new Decimal(1),
+            },
+        },
+        halterID: "points",
     }},
     automate() {},
     nodeStyle() {},
@@ -43,13 +85,12 @@ addLayer("po", {
     update(delta) {
         let onepersec = new Decimal(1)
 
-        if (player.points.gte(Number.MAX_VALUE))
-        {
+        if (player.points.gte(Number.MAX_VALUE)) {
             player.in.reachedInfinity = true
         }
 
         player.po.featureSlotsMax = new Decimal(1)
-        if ((inChallenge("tad", 11) && hasUpgrade("de", 14)) || hasUpgrade("i", 28)) player.po.featureSlotsMax = player.po.featureSlotsMax.add(1)
+        if (hasUpgrade("i", 28)) player.po.featureSlotsMax = player.po.featureSlotsMax.add(1)
 
         player.po.featureSlots = player.po.featureSlotsMax
         if (player.po.dice) {
@@ -75,45 +116,7 @@ addLayer("po", {
             player.subtabs["po"]['stuff'] = 'Portals'
         }
 
-        if (inChallenge("tad", 11) && player.po.breakInfinity) {
-            player.po.breakInfinity = false
-            player.po.featureSlots = player.po.featureSlots.sub(1)
-        }
-
-        player.po.halterText =
-        [
-            "<h2>You have " + format(player.points) + " Celestial Points.<br><h3>You are gaining " + format(player.gain) + " Celestial Points per second.<br><br><h3>Celestial Point gain: /" + format(player.po.halterEffects[0]),
-            "<h2>You have " + format(player.f.factorPower) + " Factor Power.<br><h3>You are gaining " + format(player.f.factorPowerPerSecond) + " Factor Power per second.<br><br><h3>Factor Power gain: /" + format(player.po.halterEffects[1]),
-            "<h2>You have " + format(player.p.prestigePoints) + " Prestige Points.<br><h3>You will gain " + format(player.p.prestigePointsToGet) + " Prestige Points on reset.<br><br><h3>Prestige Points gain: /" + format(player.po.halterEffects[2]),
-            "<h2>You have " + format(player.t.leaves) + " Leaves.<br><h3>You are making " + format(player.t.leavesPerSecond) + " Leaves per second.<br><br><h3>Leaf gain: /" + format(player.po.halterEffects[3]),
-            "<h2>You have " + format(player.t.trees) + " Trees.<br><h3>You will gain " + format(player.t.treesToGet) + " Trees.<br><br><h3>Tree gain: /" + format(player.po.halterEffects[4]),
-            "<h2>You have " + format(player.g.grass) + " Grass.<br><h3>Current Grass Value: " + format(player.g.grassVal) + ".<br><br><h3>Grass gain: /" + format(player.po.halterEffects[5]),
-            "<h2>You have " + format(player.gh.grasshoppers) + " Grasshoppers.<br><h3>You will gain " + format(player.gh.grasshoppersToGet) + " Grasshoppers on reset.<br><br><h3>Grasshopper gain: /" + format(player.po.halterEffects[6]),
-            "<h2>You have " + format(player.gh.fertilizer) + " Fertilizer.<br><h3>You are gaining " + format(player.gh.fertilizerPerSecond) + " Fertilizer per second.<br><br><h3>Fertilizer gain: /" + format(player.po.halterEffects[7]),
-            "<h2>You have " + format(player.m.codeExperience) + " Code Experience.<br><h3>You will gain " + format(player.m.codeExperienceToGet) + " Code Experience on reset.<br><br><h3>Code Experience gain: /" + format(player.po.halterEffects[8]),
-            "<h2>You have " + format(player.m.linesOfCode) + " Lines of Code.<br><h3>You are making " + format(player.m.linesOfCodePerSecond) + " Lines of Code per second.<br><br><h3>Lines of Code gain: /" + format(player.po.halterEffects[9]),
-            "<h2>You have " + format(player.m.mods) + " Mods.<br><h3>You will gain " + format(player.m.modsToGet) + " Mods.<br><br><h3>Mod gain: /" + format(player.po.halterEffects[10]),
-        ]
-        /*
-            0 - Points
-            1 - Factor Power
-            2 - Prestige Points
-            3 - Leaves
-            4 - Trees
-            5 - Grass
-            6 - Grasshoppers
-            7 - Fertilizer
-            8 - Code Experience
-            9 - Lines of Code
-            10 - Mods
-        */
-
-        if (player.po.halterInput.gte(1)) {
-            if (player.po.halterInput.neq(player.po.halterEffects[player.po.halterIndex])) {
-               // player.rm.halterBoostCheck = false
-            }
-        }
-        if (player.po.halterInput.lt(1)) player.po.halterEffects[player.po.halterIndex] = new Decimal(1)
+        if (player.po.halterInput.lt(1)) player.po.halter[player.po.halterID].halt = new Decimal(1)
 
     },
     clickables: {
@@ -123,7 +126,7 @@ addLayer("po", {
                 return "You only gain them back once you reach the req.";
             },
             canClick() { return true },
-            unlocked() { return ((hasMilestone("ip", 18)|| player.s.highestSingularityPoints.gt(0)) && !player.po.keepOTFS)},
+            unlocked() { return ((hasMilestone("ip", 18) || player.s.highestSingularityPoints.gt(0) || player.po.breakInfinity) && !player.po.keepOTFS)},
             onClick() {
                 player.po.keepOTFS = true
             },
@@ -136,7 +139,7 @@ addLayer("po", {
         3: {
             title() { return "Don't keep OTFs on reset. (Currently on)" },
             canClick() { return true },
-            unlocked() { return ((hasMilestone("ip", 18)|| player.s.highestSingularityPoints.gt(0)) && player.po.keepOTFS)},
+            unlocked() { return ((hasMilestone("ip", 18) || player.s.highestSingularityPoints.gt(0) || player.po.breakInfinity) && player.po.keepOTFS)},
             onClick() {
                 player.po.keepOTFS = false
             },
@@ -147,83 +150,71 @@ addLayer("po", {
             },
         },
         4: {
-            title() { return "<h3>Lower" },
-            canClick() { return player.po.halterIndex.gt(0) },
-            unlocked() { return player.ev.evolutionsUnlocked[6] },
+            title() { return "<h3>Disable Halter" },
+            canClick() {return player.po.halter[player.po.halterID].enabled != 0},
+            unlocked: true,
             onClick() {
-                player.po.halterIndex = player.po.halterIndex.sub(1)
+                player.po.halter[player.po.halterID].enabled = 0
             },
-            style: { width: '100px', "min-height": '100px', borderRadius: "10px 0px 0px 10px" },
+            style: {width: "100px", minHeight: "100px", borderRadius: "0 0 0 12px"},
         },
         5: {
-            title() { return "<h3>Increase" },
-            canClick() { return player.po.halterIndex.lt(10) },
-            unlocked() { return player.ev.evolutionsUnlocked[6] },
+            title() { return "<h3>Enable Halter<br>[DIVIDE]" },
+            canClick() {return player.po.halter[player.po.halterID].enabled != 1},
+            unlocked: true,
             onClick() {
-                player.po.halterIndex = player.po.halterIndex.add(1)
+                player.po.halter[player.po.halterID].enabled = 1
             },
-            style: { width: '100px', "min-height": '100px', borderRadius: "0px" },
+            style: {width: "100px", minHeight: "100px", borderRadius: "0"},
         },
         6: {
+            title() { return "<h3>Enable Halter<br>[HARDCAP]" },
+            canClick() {return player.po.halter[player.po.halterID].enabled != 2},
+            unlocked: true,
+            onClick() {
+                player.po.halter[player.po.halterID].enabled = 2
+            },
+            style: {width: "100px", minHeight: "100px", borderRadius: "0"},
+        },
+        7: {
             title() { return "<h3>Apply Halt" },
-            canClick() { return true },
-            unlocked() { return true },
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (player.po.halterInput.gte(1)) {
-                    player.po.halterEffects[player.po.halterIndex] = player.po.halterInput
+                    player.po.halter[player.po.halterID].halt = player.po.halterInput
                 } else {
-                    player.po.halterEffects[player.po.halterIndex] = new Decimal(1)
+                    player.po.halter[player.po.halterID].halt = new Decimal(1)
                 }
             },
             style() {
                 if (player.ev.evolutionsUnlocked[6]) {
-                    return { width: '100px', "min-height": '100px', borderRadius: "0px" }
+                    return {width: "100px", minHeight: "100px", borderRadius: "0"}
                 } else {
-                    return { width: '100px', "min-height": '100px', borderRadius: "10px" }
+                    return {width: "100px", minHeight: "100px", borderRadius: "0 0 12px 0"}
                 }
             }
         },
-        7: {
-            title() { return "<h3>Reset Halts" },
-            canClick() { return true },
+        8: {
+            title() { return "<h3>Disable All Halts" },
+            canClick: true,
             unlocked() { return player.ev.evolutionsUnlocked[6] },
             onClick() {
-                for (let i = 0; i < player.po.halterEffects.length; i++)
-                {
-                    player.po.halterEffects[i] = new Decimal(1)
+                for (let i in player.po.halter) {
+                    player.po.halter[i].enabled = 0
                 }
             },
-            style: { width: '100px', "min-height": '100px', borderRadius: "0px" },
-        },
-        8: {
-            title() { return "<h3>View Halts" },
-            canClick() { return true },
-            unlocked() { return player.ev.evolutionsUnlocked[6] },
-            onClick() {
-                callAlert(
-                    "Celestial Point gain: /" + format(player.po.halterEffects[0]) + "\n" +
-                    "Factor Power gain: /" + format(player.po.halterEffects[1]) + "\n" +
-                    "Prestige Point gain: /" + format(player.po.halterEffects[2]) + "\n" +
-                    "Leaf gain: /" + format(player.po.halterEffects[3]) + "\n" +
-                    "Tree gain: /" + format(player.po.halterEffects[4]) + "\n" +
-                    "Grass gain: /" + format(player.po.halterEffects[5]) + "\n" +
-                    "Grasshopper gain: /" + format(player.po.halterEffects[6]) + "\n" +
-                    "Fertilizer gain: /" + format(player.po.halterEffects[7]) + "\n" +
-                    "Code Experience gain: /" + format(player.po.halterEffects[8]) + "\n" +
-                    "Lines of Code gain: /" + format(player.po.halterEffects[9]) + "\n" +
-                    "Mod gain: /" + format(player.po.halterEffects[10]) + "\n"
-                )
-            },
-            style: { width: '100px', "min-height": '100px', borderRadius: "0px 10px 10px 0px" },
+            style: {width: "100px", minHeight: "100px", borderRadius: "0 0 12px 0"},
         },
         11: {
             title() { return "<h1>Dice" },
             display() {
                 return player.po.dice ? "<h1>The die will decide your fate.<br>On" : "<h1>The die will decide your fate.<br>Off<br><h2>Req: 1e150 points";
             },
-            canClick() { return player.po.featureSlots.gte(1) && (player.points.gte(1e150) || inChallenge("tad", 11)) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15)) },
+            canClick() { return player.po.featureSlots.gte(1) && player.points.gte(1e150) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15)) },
             unlocked() { return !inChallenge("ip", 11) && !inChallenge("ip", 13) && !inChallenge("ip", 15) && !inChallenge("ip", 16) },
             onClick() {
+                if (!hasAchievement("achievements", 19)) completeAchievement("achievements", 19)
                 player.po.dice = true
             },
             style: {
@@ -240,7 +231,7 @@ addLayer("po", {
             display() {
                 return player.po.rocketFuel ? "<h1>Fly me to the moon.<br>On" : "<h1>Fly me to the moon.<br>Off<br><h2>Req: 1e170 points";
             },
-            canClick() { return player.po.featureSlots.gte(1) && (player.points.gte(1e170) || inChallenge("tad", 11)) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15)) },
+            canClick() { return player.po.featureSlots.gte(1) && player.points.gte(1e170) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15)) },
             unlocked() { return hasMilestone("ip", 1) && !inChallenge("ip", 11) && !inChallenge("ip", 13) && !inChallenge("ip", 15) && !inChallenge("ip", 16)  },
             onClick() {
                 player.po.rocketFuel = true
@@ -280,7 +271,7 @@ addLayer("po", {
         13: {
             title() { return "<h1>Hex" },
             display() {
-                return player.po.hex ? "<h1>The number 6.<br>On" : "<h1>The number 6.<br>Off";
+                return player.po.hex ? "<h1>The number 6.<br>On<br><h2>(Progress is kept between infinities)</h2>" : "<h1>The number 6.<br>Off<br><h2>(Progress is kept between infinities)</h2>";
             },
             canClick() { return player.po.featureSlots.gte(1) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15))},
             unlocked() { return hasChallenge("ip", 13) && !inChallenge("ip", 11) && !inChallenge("ip", 13) && !inChallenge("ip", 15) && !inChallenge("ip", 16) && !hasUpgrade("s", 18)},
@@ -299,10 +290,10 @@ addLayer("po", {
         14: {
             title() { return "<h1>BREAK INFINITY" },
             display() {
-                return player.po.breakInfinity ? "<h1>Get past limits.<br>On" : "<h1>Get past limits.<br>Off<br><h2>Req: Tav Defeated<br>Can't activate in Tav's domain";
+                return player.po.breakInfinity ? "<h1>Get past limits.<br>On" : "<h1>Get past limits.<br>Off<br><h2>Req: Tav Defeated";
             },
-            canClick() { return player.po.featureSlots.gte(1) && (player.in.unlockedBreak || hasMilestone("s", 11)) && !inChallenge("tad", 11)},
-            unlocked() { return player.in.unlockedBreak },
+            canClick() { return player.po.featureSlots.gte(1)},
+            unlocked() { return player.in.unlockedBreak || hasMilestone("s", 11) },
             onClick() {
                 player.po.breakInfinity = true
             },
@@ -314,6 +305,287 @@ addLayer("po", {
                 "background-origin": "border-box",
                 "color": "white",
                 borderRadius: "20px",
+            },
+        },
+
+        30: {
+            title: "<small>Celestial Points",
+            display() {
+                let str = "<hr style='border:1px solid black'>" + formatSimple(player.points) + "<br>(+" + formatSimple(player.gain) + "/s)<hr style='border:1px solid black'>"
+                if (player.po.halter.points.enabled == 0) {str = str.concat("{" + formatSimple(player.po.halter.points.halt) + "}<br><span style='color:red'>[DISABLED]")}
+                if (player.po.halter.points.enabled == 1) {str = str.concat("/" + formatSimple(player.po.halter.points.halt) + "<br><span style='color:green'>[ENABLED]")}
+                if (player.po.halter.points.enabled == 2) {str = str.concat("Cap: " + formatSimple(player.po.halter.points.halt) + "<br><span style='color:green'>[ENABLED]")}
+                return str
+            },
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.po.halterID = "points"
+            },
+            style() {
+                let look = {width: "150px", minHeight: "100px", fontSize: "12px", background: "#ccc", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px", margin: "3px"}
+                if (player.po.halterID == "points") look.border = "3px solid red"
+                return look
+            },
+        },
+        31: {
+            title: "<small>Factor Power",
+            display() {
+                let str = "<hr style='border:1px solid black'>" + formatSimple(player.f.factorPower) + "<br>(+" + formatSimple(player.f.factorPowerPerSecond) + "/s)<hr style='border:1px solid black'>"
+                if (player.po.halter.factor.enabled == 0) {str = str.concat("{" + formatSimple(player.po.halter.factor.halt) + "}<br><span style='color:red'>[DISABLED]")}
+                if (player.po.halter.factor.enabled == 1) {str = str.concat("/" + formatSimple(player.po.halter.factor.halt) + "<br><span style='color:green'>[ENABLED]")}
+                if (player.po.halter.factor.enabled == 2) {str = str.concat("Cap: " + formatSimple(player.po.halter.factor.halt) + "<br><span style='color:green'>[ENABLED]")}
+                return str
+            },
+            canClick: true,
+            unlocked() {return player.ev.evolutionsUnlocked[6]},
+            onClick() {
+                player.po.halterID = "factor"
+            },
+            style() {
+                let look = {width: "150px", minHeight: "100px", fontSize: "12px", background: "#83cecf", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px", margin: "3px"}
+                if (player.po.halterID == "factor") look.border = "3px solid red"
+                return look
+            },
+        },
+        32: {
+            title: "<small>Prestige Points",
+            display() {
+                let str = "<hr style='border:1px solid black'>" + formatSimple(player.p.prestigePoints) + "<br>(+" + formatSimple(player.p.prestigePointsToGet) + ")<hr style='border:1px solid black'>"
+                if (player.po.halter.prestige.enabled == 0) {str = str.concat("{" + formatSimple(player.po.halter.prestige.halt) + "}<br><span style='color:red'>[DISABLED]")}
+                if (player.po.halter.prestige.enabled == 1) {str = str.concat("/" + formatSimple(player.po.halter.prestige.halt) + "<br><span style='color:green'>[ENABLED]")}
+                if (player.po.halter.prestige.enabled == 2) {str = str.concat("Cap: " + formatSimple(player.po.halter.prestige.halt) + "<br><span style='color:green'>[ENABLED]")}
+                return str
+            },
+            canClick: true,
+            unlocked() {return player.ev.evolutionsUnlocked[6]},
+            onClick() {
+                player.po.halterID = "prestige"
+            },
+            style() {
+                let look = {width: "150px", minHeight: "100px", fontSize: "12px", background: "#31aeb0", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px", margin: "3px"}
+                if (player.po.halterID == "prestige") look.border = "3px solid red"
+                return look
+            },
+        },
+        33: {
+            title: "<small>Trees",
+            display() {
+                let str = "<hr style='border:1px solid black'>" + formatSimple(player.t.trees) + "<br>(+" + formatSimple(player.t.treesToGet) + ")<hr style='border:1px solid black'>"
+                if (player.po.halter.trees.enabled == 0) {str = str.concat("{" + formatSimple(player.po.halter.trees.halt) + "}<br><span style='color:red'>[DISABLED]")}
+                if (player.po.halter.trees.enabled == 1) {str = str.concat("/" + formatSimple(player.po.halter.trees.halt) + "<br><span style='color:green'>[ENABLED]")}
+                if (player.po.halter.trees.enabled == 2) {str = str.concat("Cap: " + formatSimple(player.po.halter.trees.halt) + "<br><span style='color:green'>[ENABLED]")}
+                return str
+            },
+            canClick: true,
+            unlocked() {return player.ev.evolutionsUnlocked[6]},
+            onClick() {
+                player.po.halterID = "trees"
+            },
+            style() {
+                let look = {width: "150px", minHeight: "100px", fontSize: "12px", background: "#237538", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px", margin: "3px"}
+                if (player.po.halterID == "trees") look.border = "3px solid red"
+                return look
+            },
+        },
+        34: {
+            title: "<small>Grass",
+            display() {
+                let str = "<hr style='border:1px solid black'>" + formatSimple(player.g.grass) + "<br>(+" + formatSimple(player.g.grassVal) + ")<hr style='border:1px solid black'>"
+                if (player.po.halter.grass.enabled == 0) {str = str.concat("{" + formatSimple(player.po.halter.grass.halt) + "}<br><span style='color:red'>[DISABLED]")}
+                if (player.po.halter.grass.enabled == 1) {str = str.concat("/" + formatSimple(player.po.halter.grass.halt) + "<br><span style='color:green'>[ENABLED]")}
+                if (player.po.halter.grass.enabled == 2) {str = str.concat("Cap: " + formatSimple(player.po.halter.grass.halt) + "<br><span style='color:green'>[ENABLED]")}
+                return str
+            },
+            canClick: true,
+            unlocked() {return player.ev.evolutionsUnlocked[6]},
+            onClick() {
+                player.po.halterID = "grass"
+            },
+            style() {
+                let look = {width: "150px", minHeight: "100px", fontSize: "12px", background: "#119B35", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px", margin: "3px"}
+                if (player.po.halterID == "grass") look.border = "3px solid red"
+                return look
+            },
+        },
+        35: {
+            title: "<small>Golden Grass",
+            display() {
+                let str = "<hr style='border:1px solid black'>" + formatSimple(player.g.goldGrass) + "<br>(+" + formatSimple(player.g.goldGrassVal) + ")<hr style='border:1px solid black'>"
+                if (player.po.halter.goldenGrass.enabled == 0) {str = str.concat("{" + formatSimple(player.po.halter.goldenGrass.halt) + "}<br><span style='color:red'>[DISABLED]")}
+                if (player.po.halter.goldenGrass.enabled == 1) {str = str.concat("/" + formatSimple(player.po.halter.goldenGrass.halt) + "<br><span style='color:green'>[ENABLED]")}
+                if (player.po.halter.goldenGrass.enabled == 2) {str = str.concat("Cap: " + formatSimple(player.po.halter.goldenGrass.halt) + "<br><span style='color:green'>[ENABLED]")}
+                return str
+            },
+            canClick: true,
+            unlocked() {return player.ev.evolutionsUnlocked[6]},
+            onClick() {
+                player.po.halterID = "goldenGrass"
+            },
+            style() {
+                let look = {width: "150px", minHeight: "100px", fontSize: "12px", background: "#ffcf40", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px", margin: "3px"}
+                if (player.po.halterID == "goldenGrass") look.border = "3px solid red"
+                return look
+            },
+        },
+        36: {
+            title: "<small>Grasshoppers",
+            display() {
+                let str = "<hr style='border:1px solid black'>" + formatSimple(player.gh.grasshoppers) + "<br>(+" + formatSimple(player.gh.grasshoppersToGet) + ")<hr style='border:1px solid black'>"
+                if (player.po.halter.grasshoppers.enabled == 0) {str = str.concat("{" + formatSimple(player.po.halter.grasshoppers.halt) + "}<br><span style='color:red'>[DISABLED]")}
+                if (player.po.halter.grasshoppers.enabled == 1) {str = str.concat("/" + formatSimple(player.po.halter.grasshoppers.halt) + "<br><span style='color:green'>[ENABLED]")}
+                if (player.po.halter.grasshoppers.enabled == 2) {str = str.concat("Cap: " + formatSimple(player.po.halter.grasshoppers.halt) + "<br><span style='color:green'>[ENABLED]")}
+                return str
+            },
+            canClick: true,
+            unlocked() {return player.ev.evolutionsUnlocked[6]},
+            onClick() {
+                player.po.halterID = "grasshoppers"
+            },
+            style() {
+                let look = {width: "150px", minHeight: "100px", fontSize: "12px", background: "#19e04d", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px", margin: "3px"}
+                if (player.po.halterID == "grasshoppers") look.border = "3px solid red"
+                return look
+            },
+        },
+        37: {
+            title: "<small>Code Experience",
+            display() {
+                let str = "<hr style='border:1px solid black'>" + formatSimple(player.m.codeExperience) + "<br>(+" + formatSimple(player.m.codeExperienceToGet) + ")<hr style='border:1px solid black'>"
+                if (player.po.halter.code.enabled == 0) {str = str.concat("{" + formatSimple(player.po.halter.code.halt) + "}<br><span style='color:red'>[DISABLED]")}
+                if (player.po.halter.code.enabled == 1) {str = str.concat("/" + formatSimple(player.po.halter.code.halt) + "<br><span style='color:green'>[ENABLED]")}
+                if (player.po.halter.code.enabled == 2) {str = str.concat("Cap: " + formatSimple(player.po.halter.code.halt) + "<br><span style='color:green'>[ENABLED]")}
+                return str
+            },
+            canClick: true,
+            unlocked() {return player.ev.evolutionsUnlocked[6]},
+            onClick() {
+                player.po.halterID = "code"
+            },
+            style() {
+                let look = {width: "150px", minHeight: "100px", fontSize: "12px", background: "#2a84c5", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px", margin: "3px"}
+                if (player.po.halterID == "code") look.border = "3px solid red"
+                return look
+            },
+        },
+        38: {
+            title: "<small>Mods",
+            display() {
+                let str = "<hr style='border:1px solid black'>" + formatSimple(player.m.mods) + "<br>(+" + formatSimple(player.m.modsToGet) + ")<hr style='border:1px solid black'>"
+                if (player.po.halter.mods.enabled == 0) {str = str.concat("{" + formatSimple(player.po.halter.mods.halt) + "}<br><span style='color:red'>[DISABLED]")}
+                if (player.po.halter.mods.enabled == 1) {str = str.concat("/" + formatSimple(player.po.halter.mods.halt) + "<br><span style='color:green'>[ENABLED]")}
+                if (player.po.halter.mods.enabled == 2) {str = str.concat("Cap: " + formatSimple(player.po.halter.mods.halt) + "<br><span style='color:green'>[ENABLED]")}
+                return str
+            },
+            canClick: true,
+            unlocked() {return player.ev.evolutionsUnlocked[6]},
+            onClick() {
+                player.po.halterID = "mods"
+            },
+            style() {
+                let look = {width: "150px", minHeight: "100px", fontSize: "12px", background: "#116bab", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px", margin: "3px"}
+                if (player.po.halterID == "mods") look.border = "3px solid red"
+                return look
+            },
+        },
+        39: {
+            title: "<small>Checkback XP",
+            display() {
+                let str = "<hr style='border:1px solid black'>" + formatSimple(player.cb.xp) + "<br>(+" + formatSimple(player.cb.xpTimers[0].base) + ")<hr style='border:1px solid black'>"
+                if (player.po.halter.xp.enabled == 0) {str = str.concat("{" + formatSimple(player.po.halter.xp.halt) + "}<br><span style='color:red'>[DISABLED]")}
+                if (player.po.halter.xp.enabled == 1) {str = str.concat("/" + formatSimple(player.po.halter.xp.halt) + "<br><span style='color:green'>[ENABLED]")}
+                if (player.po.halter.xp.enabled == 2) {str = str.concat("Cap: " + formatSimple(player.po.halter.xp.halt) + "<br><span style='color:green'>[ENABLED]")}
+                return str
+            },
+            canClick: true,
+            unlocked() {return player.ev.evolutionsUnlocked[6]},
+            onClick() {
+                player.po.halterID = "xp"
+            },
+            style() {
+                let look = {width: "150px", minHeight: "100px", fontSize: "12px", background: "#094599", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px", margin: "3px"}
+                if (player.po.halterID == "xp") look.border = "3px solid red"
+                return look
+            },
+        },
+        40: {
+            title: "<small>Antimatter",
+            display() {
+                let str = "<hr style='border:1px solid black'>" + formatSimple(player.ad.antimatter) + "<br>(+" + formatSimple(player.ad.antimatterPerSecond) + "/s)<hr style='border:1px solid black'>"
+                if (player.po.halter.antimatter.enabled == 0) {str = str.concat("{" + formatSimple(player.po.halter.antimatter.halt) + "}<br><span style='color:red'>[DISABLED]")}
+                if (player.po.halter.antimatter.enabled == 1) {str = str.concat("/" + formatSimple(player.po.halter.antimatter.halt) + "<br><span style='color:green'>[ENABLED]")}
+                if (player.po.halter.antimatter.enabled == 2) {str = str.concat("Cap: " + formatSimple(player.po.halter.antimatter.halt) + "<br><span style='color:green'>[ENABLED]")}
+                return str
+            },
+            canClick: true,
+            unlocked() {return player.ev.evolutionsUnlocked[6]},
+            onClick() {
+                player.po.halterID = "antimatter"
+            },
+            style() {
+                let look = {width: "150px", minHeight: "100px", fontSize: "12px", background: "#1eb516", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px", margin: "3px"}
+                if (player.po.halterID == "antimatter") look.border = "3px solid red"
+                return look
+            },
+        },
+        41: {
+            title: "<small>Infinities",
+            display() {
+                let str = "<hr style='border:1px solid black'>" + formatSimple(player.in.infinities) + "<br>(+" + formatSimple(player.in.infinitiesToGet) + ")<hr style='border:1px solid black'>"
+                if (player.po.halter.infinities.enabled == 0) {str = str.concat("{" + formatSimple(player.po.halter.infinities.halt) + "}<br><span style='color:red'>[DISABLED]")}
+                if (player.po.halter.infinities.enabled == 1) {str = str.concat("/" + formatSimple(player.po.halter.infinities.halt) + "<br><span style='color:green'>[ENABLED]")}
+                if (player.po.halter.infinities.enabled == 2) {str = str.concat("Cap: " + formatSimple(player.po.halter.infinities.halt) + "<br><span style='color:green'>[ENABLED]")}
+                return str
+            },
+            canClick: true,
+            unlocked() {return player.ev.evolutionsUnlocked[6]},
+            onClick() {
+                player.po.halterID = "infinities"
+            },
+            style() {
+                let look = {width: "150px", minHeight: "100px", fontSize: "12px", background: "#d3a165", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px", margin: "3px"}
+                if (player.po.halterID == "infinities") look.border = "3px solid red"
+                return look
+            },
+        },
+        42: {
+            title: "<small>Infinity Points",
+            display() {
+                let str = "<hr style='border:1px solid black'>" + formatSimple(player.in.infinityPoints) + "<br>(+" + formatSimple(player.in.infinityPointsToGet) + ")<hr style='border:1px solid black'>"
+                if (player.po.halter.ip.enabled == 0) {str = str.concat("{" + formatSimple(player.po.halter.ip.halt) + "}<br><span style='color:red'>[DISABLED]")}
+                if (player.po.halter.ip.enabled == 1) {str = str.concat("/" + formatSimple(player.po.halter.ip.halt) + "<br><span style='color:green'>[ENABLED]")}
+                if (player.po.halter.ip.enabled == 2) {str = str.concat("Cap: " + formatSimple(player.po.halter.ip.halt) + "<br><span style='color:green'>[ENABLED]")}
+                return str
+            },
+            canClick: true,
+            unlocked() {return player.ev.evolutionsUnlocked[6]},
+            onClick() {
+                player.po.halterID = "ip"
+            },
+            style() {
+                let look = {width: "150px", minHeight: "100px", fontSize: "12px", background: "#ffbf00", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px", margin: "3px"}
+                if (player.po.halterID == "ip") look.border = "3px solid red"
+                return look
+            },
+        },
+        43: {
+            title: "<small>NIP",
+            display() {
+                let str = "<hr style='border:1px solid black'>" + formatSimple(player.ta.negativeInfinityPoints) + "<br>(+" + formatSimple(player.ta.negativeInfinityPointsToGet) + ")<hr style='border:1px solid black'>"
+                if (player.po.halter.nip.enabled == 0) {str = str.concat("{" + formatSimple(player.po.halter.nip.halt) + "}<br><span style='color:red'>[DISABLED]")}
+                if (player.po.halter.nip.enabled == 1) {str = str.concat("/" + formatSimple(player.po.halter.nip.halt) + "<br><span style='color:green'>[ENABLED]")}
+                if (player.po.halter.nip.enabled == 2) {str = str.concat("Cap: " + formatSimple(player.po.halter.nip.halt) + "<br><span style='color:green'>[ENABLED]")}
+                return str
+            },
+            canClick: true,
+            unlocked() {return player.ev.evolutionsUnlocked[6]},
+            onClick() {
+                player.po.halterID = "nip"
+            },
+            style() {
+                let look = {width: "150px", minHeight: "100px", fontSize: "12px", background: "#b2d8d8", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px", margin: "3px"}
+                if (player.po.halterID == "nip") look.border = "3px solid red"
+                return look
             },
         },
 
@@ -380,6 +652,19 @@ addLayer("po", {
             style() {
                 let look = {width: "200px", minHeight: "50px", color: "white", background: "black", border: "5px solid", borderRadius: "0 0 12px 12px"}
                 if (player.uni.UA.paused) {look.borderColor = "#0043b2"} else {look.borderColor = "#0061ff"}
+                return look
+            }
+        },
+        203: {
+            title() {return player.uni.UB.paused ? "PAUSED<br>▶" : "UNPAUSED<br>⏸"},
+            canClick: true,
+            unlocked() {return uniShown("UB")},
+            onClick() {
+                pauseUniverse("UB")
+            },
+            style() {
+                let look = {width: "200px", minHeight: "50px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0 0 12px 12px"}
+                if (player.uni.UB.paused) {look.backgroundColor = "#938600"} else {look.backgroundColor = "#f6e000"}
                 return look
             }
         },
@@ -453,14 +738,30 @@ addLayer("po", {
                 unlocked: true,
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", () => {return "<h3>" + player.po.halterText[player.po.halterIndex]}],
-                    ["blank", "10px"],
-                    ["text-input", "halterInput", {width: "300px", height: "50px", color: "white", textAlign: "left", fontSize: "32px", background: "rgba(0,0,0,0.5)", border: "2px solid white", borderRadius: "15px", padding: "0 25px 0 25px"}],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 4], ["clickable", 5], ["clickable", 6], ["clickable", 7], ["clickable", 8]]],
-                    ["blank", "25px"],
-                    ["raw-html", "<h3>Enter a number greater than 1. You thought you could get away with dividing by 0?"],
-                    ["raw-html", "<h4>This can help by letting you progress in OTFS while infinity is fixed. (and a whole bunch of other stuff eventually)"],
+                        ["style-column", [
+                            ["style-row", [
+                            ["clickable", 30], ["clickable", 31], ["clickable", 32], ["clickable", 33],
+                            ["clickable", 34], ["clickable", 35], ["clickable", 36], ["clickable", 37],
+                            ["clickable", 38], ["clickable", 39], ["clickable", 40], ["clickable", 41],
+                            ["clickable", 42], ["clickable", 43],
+                        ], {maxWidth: "650px"}],
+                        ["blank", "25px"],
+                        ["style-column", [
+                            ["text-input", "halterInput", () => {
+                                let look = {width: "350px", height: "50px", color: "white", textAlign: "left", fontSize: "32px", background: "rgba(0,0,0,0.5)", borderWidth: "0", borderBottom: "3px solid white", borderRadius: "12px 12px 0 0", padding: "0 25px 0 25px"}
+                                if (player.ev.evolutionsUnlocked[6]) look.width = "450px"
+                                return look
+                            }],
+                            ["row", [["clickable", 4], ["clickable", 5], ["clickable", 6], ["clickable", 7], ["clickable", 8]]],
+                        ], () => {
+                            let look = {width: "400px", border: "3px solid white", borderRadius: "15px"}
+                            if (player.ev.evolutionsUnlocked[6]) look.width = "500px"
+                            return look
+                        }],
+                        ["blank", "25px"],
+                        ["raw-html", "<h3>Enter a number greater than 1. You thought you could get away with dividing by 0?"],
+                        ["raw-html", "<h4>This can help by letting you progress in OTFS while infinity is fixed.<br>(and a whole bunch of other stuff eventually)"],
+                    ], {width: "650px", background: "rgba(0,0,0,0.3)", border: "3px solid white", borderRadius: "30px", padding: "10px"}],
                 ],
             },
             "Pauser": {
@@ -532,6 +833,14 @@ addLayer("po", {
                             ["clickable", 302],
                         ], () => {return uniShown("A2") ? {width: "200px", height: "100px", background: "#484096", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
                     ]],
+                    ["row", [
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", "Universe β", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "200px", height: "47px", borderBottom: "3px solid white"}],
+                            ["clickable", 203],
+                        ], () => {return uniShown("UB") ? {width: "200px", height: "100px", background: "#c4b300", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
+                    ]],
                 ],
             },
         },
@@ -553,8 +862,8 @@ addLayer("po", {
                 buttonStyle() {return { color: "white", borderRadius: "5px" } },
                 unlocked() {
                     let halt = false
-                    for (i = 0; i < player.po.halterEffects.length; i++) {
-                        if (player.po.halterEffects[0].gt(1)) halt = true
+                    for (i in player.po.halter) {
+                        if (player.po.halter[i].enabled > 0) halt = true
                     }
                     for (thing in universes) {
                         if (player.uni[thing].paused) halt = true

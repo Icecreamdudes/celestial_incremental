@@ -170,9 +170,10 @@ addLayer("pol", {
             if (hasMilestone("gs", 18)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.gs.milestone8Effect)
             if (hasUpgrade("hpw", 1033)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(upgradeEffect("hpw", 1033))
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(levelableEffect("pu", 206)[1])
-            player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.d.diceEffects[16])
+            player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.d.boosterEffects[16])
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.i.postOTFMult)
             if (player.pol.pollinatorEffects.plant.enabled) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.pol.pollinatorEffects.plant.effects[0])
+            player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(buyableEffect("al", 104))
 
             // SOFTCAP
             if (player.pol.pollinators.gt(1e15)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.div(1e15).pow(Decimal.add(0.5, buyableEffect("pol", 16))).mul(1e15)
@@ -183,18 +184,14 @@ addLayer("pol", {
             if (hasUpgrade("hpw", 1033)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(upgradeEffect("hpw", 1033))
             // EXPONENTS
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.pow(buyableEffect("gh", 26))
-
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.pow(buyableEffect("cof", 16))
+            player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.pow(levelableEffect("ir", 7)[0])
 
             // GAIN FUNCTIONS
             if (player.pol.pollinators.lt(player.pol.pollinatorsPerSecond.mul(buyableEffect("pol", 11)).add(1))) {
                 player.pol.pollinators = player.pol.pollinatorsPerSecond.mul(buyableEffect("pol", 11)).add(1)
             }
             player.pol.pollinators = player.pol.pollinators.add(player.pol.pollinatorsPerSecond.mul(delta))
-        }  
-
-        if (player.pol.pollinators.gte(1e500) && player.pol.unlockHive < 1) {
-            player.pol.unlockHive = 1
         }
 
         // POLLINATOR EFFECTS
@@ -227,8 +224,12 @@ addLayer("pol", {
 
         player.pol.pollinatorEffects.water.effects[0] = player.pol.pollinators.add(1).log(10).pow(3).add(1).pow(buyableEffect("pol", 14)) // IP
         player.pol.pollinatorEffects.water.effects[1] = player.pol.pollinators.add(1).log(10).pow(2).add(1).pow(buyableEffect("pol", 14)) // NIP
+        if (hasUpgrade("ep2", 16)) {
+            player.pol.pollinatorEffects.water.effects[0] = player.pol.pollinatorEffects.water.effects[0].pow(upgradeEffect("ep2", 16))
+            player.pol.pollinatorEffects.water.effects[1] = player.pol.pollinatorEffects.water.effects[1].pow(upgradeEffect("ep2", 16))
+        }
 
-        player.pol.pollinatorEffects.plant.effects[0] = player.pol.pollinators.add(1).log(10).add(1).pow(buyableEffect("pol", 14)) // Pollinators
+        player.pol.pollinatorEffects.plant.effects[0] = player.pol.pollinators.pow(0.03).add(1).pow(buyableEffect("pol", 14)) // Pollinators
 
         player.pol.currCount = new Decimal(0)
         for (let prop in player.pol.pollinatorEffects) {
@@ -437,7 +438,7 @@ addLayer("pol", {
         20: {
             title() { return "<img src='resources/pollinators/plant.png' style='width:80px;height:80px;transform:translateY(3px)'></img>"},
             canClick() { return player.pol.currCount.lt(player.pol.maxCount) || player.pol.pollinatorEffects.plant.enabled },
-            unlocked() { return false },
+            unlocked() { return hasUpgrade("fu", 108) },
             onClick() {
                 if (player.pol.pollinatorEffects.plant.enabled) {
                     player.pol.pollinatorEffects.plant.enabled = false
@@ -455,23 +456,18 @@ addLayer("pol", {
             },
         },
         100: {
-            title() { return "<h1>UNLOCK" },
+            title() { return "<h2>UNLOCK ???" },
             canClick() {
-                return player.pol.pollinators.gte(1e100) && getLevelableAmount("pet", 102).gte(20) && getLevelableAmount("pet", 104).gte(20)
-                && getLevelableAmount("pet", 202).gte(15) && getLevelableAmount("pet", 203).gte(15) && getLevelableAmount("pet", 303).gte(8)
-                && getLevelableAmount("pet", 305).gte(8) && getLevelableAmount("pet", 402).gte(4)
+                return player.pol.pollinators.gte(1e250) && getLevelableAmount("pu", 108).gte(25) && player.cof.coreFragments[1].gte(10000) && player.gs.grassSkip.gte(400)
             },
-            unlocked() { return true},
+            unlocked: true,
             onClick() {
                 player.pol.unlockHive = 2
+                player.tab = "bee"
+                player.universe = "UB"
                 player.subtabs["pol"]['stuff'] = 'Main'
-                //if (options.newMenu) {
-                //    player.tab = 'uh'
-                //} else {
-                //    player.tab = 'uh'
-                //}
             },
-            style: { width: '400px', "min-height": '160px' },
+            style: {width: "200px", minHeight: "120px", border: "3px solid #513800", borderRadius: "30px"},
         }
     },
     bars: {},
@@ -713,6 +709,7 @@ addLayer("pol", {
                 if (hasUpgrade("pol", 18)) amt = amt.add(1)
                 if (hasUpgrade("bi", 116)) amt = amt.add(1)
                 if (hasUpgrade("cs", 1101)) amt = amt.add(1)
+                if (hasUpgrade("fu", 108)) amt = amt.add(1)
                 return amt
             },
             currency() { return player.pol.pollinators},
@@ -891,24 +888,32 @@ addLayer("pol", {
                     ], {maxWidth: "900px"}],
                 ]
             },
-            "???": {
+            "Larva": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return false /*player.pol.unlockHive == 1*/ },
+                unlocked() { return player.ir.iriditeDefeated && player.pol.unlockHive != 2 },
                 content: [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "Unlock ???:" }, { color: "white", fontSize: "36px", fontFamily: "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return format(player.pol.pollinators) + "/1e100 Pollinators" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 101)) + "/20 Egg Guy Level" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 104)) + "/20 Gd Checkpoint Level" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 202)) + "/15 Star Level" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 203)) + "/15 Normal Face Level" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 303)) + "/8 Drippy Ufo Level" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 305)) + "/8 Antimatter Level" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 402)) + "/4 Dragon Level" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", "COMING SOON", { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                    //["row", [["clickable", 100]]],
+                    ["blank", "50px"],
+                    ["style-column", [
+                        ["style-column", [
+                            ["raw-html", () => {return formatSimple(player.pol.pollinators, 1) + "/1e250<br>Pollinators" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ], {width: "250px", height: "100px", backgroundColor: "#281c00", border: "3px solid #513800", borderRadius: "20px"}],
+                        ["style-column", [], {width: "6px", height: "25px", background: "#513800"}],
+                        ["row", [
+                            ["style-column", [
+                                ["raw-html", () => {return formatSimple(player.cof.coreFragments[1], 1) + "/10,000<br>Natural Core Fragments" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ], {width: "250px", height: "100px", backgroundColor: "#281c00", border: "3px solid #513800", borderRadius: "20px"}],
+                            ["style-column", [], {width: "25px", height: "6px", background: "#513800"}],
+                            ["clickable", 100],
+                            ["style-column", [], {width: "25px", height: "6px", background: "#513800"}],
+                            ["style-column", [
+                                ["raw-html", () => {return formatWhole(player.gs.grassSkip) + "/400<br>Grass-Skips" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ], {width: "250px", height: "100px", backgroundColor: "#281c00", border: "3px solid #513800", borderRadius: "20px"}],
+                        ]],
+                        ["style-column", [], {width: "6px", height: "25px", background: "#513800"}],
+                        ["style-column", [
+                            ["raw-html", () => {return formatWhole(getLevelableAmount("pu", 108)) + "/25<br><small>Grass based on Grass Punchcard Levels" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ], {width: "250px", height: "100px", backgroundColor: "#281c00", border: "3px solid #513800", borderRadius: "20px"}],
+                    ], {width: "800px", height: "420px", backgroundColor: "#100b00", border: "3px solid #513800", borderRadius: "20px"}],
                 ]
             }
         },
@@ -926,5 +931,5 @@ addLayer("pol", {
         ["microtabs", "stuff", { borderWidth: '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && hasUpgrade("i", 22) && !(inChallenge("ip", 12) || inChallenge("ip", 18)) }
+    layerShown() { return player.startedGame == true && hasUpgrade("i", 22) && !inChallenge("ip", 12) }
 })

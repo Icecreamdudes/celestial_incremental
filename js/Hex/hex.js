@@ -1,5 +1,4 @@
-﻿var treeh = [["hpr", "hsa"], ["hre", "hpu"], ["hbl", "hcu", "hve"], ["hpw", "hrm"]]
-addLayer("h", {
+﻿addLayer("h", {
     name: "Hex", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "H", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "UA",
@@ -27,7 +26,13 @@ addLayer("h", {
         // START OF HEX POINT GAIN
         player.h.hexPointGain = new Decimal(0)
         if (!hasChallenge("ip", 13) && layerShown("h")) player.h.hexPointGain = new Decimal(12)
-        if (hasChallenge("ip", 13)) player.h.hexPointGain = player.points.add(1).log(60).pow(0.6)
+        if (hasChallenge("ip", 13)) {
+            if (!hasMilestone("hre", 0)) {
+                player.h.hexPointGain = player.points.add(1).log(60).pow(0.6)
+            } else {
+                player.h.hexPointGain = player.i.bestPoints.add(1).log(60).pow(0.6)
+            }
+        }
         player.h.hexPointGain = player.h.hexPointGain.mul(player.hpr.rankEffect[0][1])
         player.h.hexPointGain = player.h.hexPointGain.mul(player.hpr.rankEffect[1][1])
         player.h.hexPointGain = player.h.hexPointGain.mul(player.hpr.rankEffect[2][1])
@@ -35,9 +40,9 @@ addLayer("h", {
         player.h.hexPointGain = player.h.hexPointGain.mul(player.hpr.rankEffect[4][1])
         player.h.hexPointGain = player.h.hexPointGain.mul(player.hpr.rankEffect[5][1])
         player.h.hexPointGain = player.h.hexPointGain.mul(player.hre.refinementEffect[0][0])
-        player.h.hexPointGain = player.h.hexPointGain.mul(player.d.diceEffects[14])
+        player.h.hexPointGain = player.h.hexPointGain.mul(player.d.boosterEffects[14])
         player.h.hexPointGain = player.h.hexPointGain.mul(buyableEffect("cb", 11))
-        player.h.hexPointGain = player.h.hexPointGain.mul(player.hbl.boosterEffects[0])
+        player.h.hexPointGain = player.h.hexPointGain.mul(player.hbl.boosters[0].effect)
         player.h.hexPointGain = player.h.hexPointGain.mul(buyableEffect("hcu", 107))
         player.h.hexPointGain = player.h.hexPointGain.mul(buyableEffect("ta", 48))
         if (player.pol.pollinatorEffects.ant.enabled) player.h.hexPointGain = player.h.hexPointGain.mul(player.pol.pollinatorEffects.ant.effects[2])
@@ -74,6 +79,7 @@ addLayer("h", {
         if (hasUpgrade("hpw", 141)) player.h.prePowerMult = player.h.prePowerMult.mul(upgradeEffect("hpw", 141))
         player.h.prePowerMult = player.h.prePowerMult.mul(levelableEffect("pu", 107)[1])
         player.h.prePowerMult = player.h.prePowerMult.mul(levelableEffect("pet", 1106)[0])
+        player.h.prePowerMult = player.h.prePowerMult.mul(buyableEffect("al", 106))
         player.h.prePowerMult = player.h.prePowerMult.div(player.hrm.challengeSoftcap)
     },
     hexReq(value, base, scale, div = new Decimal(1), add = new Decimal(1)) {

@@ -721,8 +721,7 @@ addLayer("hpw", {
             currencyDisplayName: "Power",
             currencyInternalName: "power",
             effect() {
-                if (player.hpw.power.gte(1e80)) return new Decimal(5).pow(buyableEffect("hrm", 5))
-                return player.hpw.power.add(1).log(10).mul(0.05).add(1).pow(buyableEffect("hrm", 5))
+                return player.hpw.power.add(1).log(10).mul(0.05).add(1).min(5).pow(buyableEffect("hrm", 5))
             },
             effectDisplay() {
                 if (player.hpw.power.gte(1e80)) return "x" + format(upgradeEffect(this.layer, this.id)) + " <small style='color:red'>[HARDCAPPED]</small>"

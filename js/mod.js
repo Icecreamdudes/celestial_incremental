@@ -769,6 +769,13 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Fixed the Z-Jinx inflation bug. (yippee)<br>
 			- Fixed Sacrifice layer's Alert upgrade being able to nerf sacred energy gain.<br>
 			- Fixed grass studies container not properly changing height depending on unlocked studies.<br><br>
+		Performance:<br>
+			- Remade Grass and Repli-Grass as they were very lag prone.<br>
+			- Apparently the moving grass from repli-grass never properly deleted itself, so that is fixed.<br>
+			- Made titles, descriptions, images, css styles, etc. not load via tmp, and instead load when layer is active.<br>
+			This is a notable improvement to performance :)<br>
+			- Made universes be disabled if you haven't reached their first unlock spot.<br>
+			- These changes could cause some uncaught bugs, so please report any bugs.<br><br>
 
 	<h3>v1.9 - The Novasent Update Part I: Iridite</h3><br>
 		Content:<br>

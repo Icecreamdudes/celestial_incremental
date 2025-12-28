@@ -27,7 +27,7 @@
 		"Hex/purity.js", "Hex/power.js", "Hex/realms.js", "Hex/vex.js", "Hex/sacrifice.js",
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js",
 		"Check Back/cookie.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
-		"Interspace/rift.js", "Interspace/cerePoints.js", "Interspace/exoticMatter.js", "Interspace/cere.js",
+		"Interspace/rift.js", "Interspace/tasks.js", "Interspace/well.js", "Interspace/bumpy.js", "Interspace/developmentXp.js", "Interspace/antiSingularity.js", "Interspace/cere.js",
 
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
@@ -204,24 +204,23 @@ function updateStyles() {
 		case "rif":
 			layerBG = "#301830"
 			break;
-		case "cer": case "ats":
+		case "tas":
+			layerBG = "#241830"
+			break;
+		case "wel":
+			layerBG = "#183030"
+			break;
+		case "bum":
+			layerBG = "#180b18"
+			break;
+		case "dxp":
+			layerBG = "#181830"
+			break;
+		case "ans":
+			layerBG = "#183024"
+			break;
+		case "cer":
 			layerBG = "#402030"
-			break;
-		case "cep":
-			if (player.cer.transfiguratorLayersEnabled[0]) layerBG = "#301830";
-			else layerBG = "#000000";
-			break;
-		case "exm":
-			if (player.cer.transfiguratorLayersEnabled[1]) layerBG = "#301830";
-			else layerBG = "#000000";
-			break;
-		case "der":
-			if (player.cer.transfiguratorLayersEnabled[2]) layerBG = "#301830";
-			else layerBG = "#000000";
-			break;
-		case "uns":
-			if (player.cer.transfiguratorLayersEnabled[3]) layerBG = "#301830";
-			else layerBG = "#000000";
 			break;
 		case "cb":
 			layerBG = "#021124"

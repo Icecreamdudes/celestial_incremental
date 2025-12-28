@@ -20,10 +20,35 @@
         dimensionPower: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),],
         dimensionPowerPerSecond: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),],
         dimensionPowerEffects: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1),],
+        dimPowerMax: false,
 
-        dimensionAutobuyToggles: [false, false, false, false, false, false, false, false, false, false, false,],
-        dimensionAutobuyTimeReq: [new Decimal(3), new Decimal(3.5), new Decimal(4), new Decimal(4.5), new Decimal(5), new Decimal(5.5), new Decimal(6), new Decimal(6.5), new Decimal(4),new Decimal(8),new Decimal(8),],
-        dimensionAutobuyTimer: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
+        autoBuy: {
+            tickspeed: {
+                current: new Decimal(0),
+                max: new Decimal(3),
+                toggle: false,
+            },
+            dim1: {
+                current: new Decimal(0),
+                max: new Decimal(4),
+                toggle: false,
+            },
+            dim2: {
+                current: new Decimal(0),
+                max: new Decimal(6),
+                toggle: false,
+            },
+            dimboost: {
+                current: new Decimal(0),
+                max: new Decimal(8),
+                toggle: false,
+            },
+            galaxy: {
+                current: new Decimal(0),
+                max: new Decimal(10),
+                toggle: false,
+            },
+        },
 
         dimboostToggle: false,
         dimboostLimit: new Decimal(1),
@@ -49,17 +74,11 @@
             buyBuyable("ta", 18)
 
             buyBuyable("ta", 21)
-            buyBuyable("ta", 22)
-            buyBuyable("ta", 23)
-            buyBuyable("ta", 24)
             buyBuyable("ta", 25)
-            buyBuyable("ta", 26)
-            buyBuyable("ta", 27)
-            buyBuyable("ta", 28)
             buyBuyable("ta", 29)
-
             buyBuyable("ta", 31)
             buyBuyable("ta", 32)
+            
             buyBuyable("ta", 33)
             buyBuyable("ta", 34)
             buyBuyable("ta", 35)
@@ -108,18 +127,15 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-        if (player.ad.antimatter.gte(Number.MAX_VALUE))
-        {
+        if (player.ad.antimatter.gte(Number.MAX_VALUE)) {
             player.ta.reachedNegativeInfinity = true
         }
 
         if (player.ta.reachedNegativeInfinity && !player.ta.unlockedReverseBreak) {
-            if ((!hasUpgrade("ta", 12) && player.ta.negativeInfinityPoints.lt(1000)) && player.ta.reachedNegativeInfinity && (!player.s.highestSingularityPoints.gt(0) || player.ad.antimatter.gte(1e308))) 
-            {
+            if ((!hasUpgrade("ta", 12) && player.ta.negativeInfinityPoints.lt(1000)) && player.ta.reachedNegativeInfinity && (!player.s.highestSingularityPoints.gt(0) || player.ad.antimatter.gte(1e308))) {
                 player.tab = "revc"
             }
-            else if (hasUpgrade("ta", 12) || player.ta.negativeInfinityPoints.gte(1000))
-            {
+            else if (hasUpgrade("ta", 12) || player.ta.negativeInfinityPoints.gte(1000)) {
                 layers.revc.reverseCrunch()
                 player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
 
@@ -143,7 +159,7 @@
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("ta", 53))
         if (hasUpgrade('bi', 102)) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(upgradeEffect("bi", 102))
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(player.om.rocketFuelMasteryPointsEffect)
-        player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("tad", 22))
+        if (player.tad.altInfinities.distorted.milestone.gte(2)) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(player.tad.altInfinities.distorted.effect2)
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("r", 13))
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("m", 18))
         if (hasUpgrade("hpw", 1052)) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(100)
@@ -155,8 +171,14 @@
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(player.r.pentMilestone13Effect)
         if (player.pol.pollinatorEffects.water.enabled) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(player.pol.pollinatorEffects.water.effects[1])
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("st", 301))
+
+        // POWER MODIFIERS
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.pow(buyableEffect("cof", 22))
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.pow(levelableEffect("ir", 6)[1])
+
+        // ABNORMAL MODIFIERS
+        if (player.po.halter.nip.enabled == 1) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.div(player.po.halter.nip.halt)
+        if (player.po.halter.nip.enabled == 2 && player.ta.negativeInfinityPointsToGet.gt(player.po.halter.nip.halt)) player.ta.negativeInfinityPointsToGet = player.po.halter.nip.halt
 
         // AUTOMATION
         if (hasUpgrade("s", 25)) player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet.mul(delta))
@@ -186,76 +208,47 @@
             player.ta.dimensionPower[i] = player.ta.dimensionPower[i].add(player.ta.dimensionPowerPerSecond[i].mul(delta))
         }
 
-        for (let i = 0; i < 11; i++) {
-            if (player.ta.dimensionAutobuyToggles[i]) player.ta.dimensionAutobuyTimer[i] = player.ta.dimensionAutobuyTimer[i].add(onepersec.mul(delta))
-            if (player.ta.dimensionAutobuyTimer[i].gte(player.ta.dimensionAutobuyTimeReq[i])) {
-                if (i == 0 && player.ta.buyables[21].gte(1)) {
-                    buyBuyable("ad", 11)
-                    player.ta.dimensionAutobuyTimer[i] = new Decimal(0)
-                }
-                if (i == 1 && player.ta.buyables[22].gte(1)) {
-                    buyBuyable("ad", 12)
-                    player.ta.dimensionAutobuyTimer[i] = new Decimal(0)
-                }
-                if (i == 2 && player.ta.buyables[23].gte(1)) {
-                    buyBuyable("ad", 13)
-                    player.ta.dimensionAutobuyTimer[i] = new Decimal(0)
-                }
-                if (i == 3 && player.ta.buyables[24].gte(1)) {
-                    buyBuyable("ad", 14)
-                    player.ta.dimensionAutobuyTimer[i] = new Decimal(0)
-                }
-                if (i == 4 && player.ta.buyables[25].gte(1)) {
-                    buyBuyable("ad", 15)
-                    player.ta.dimensionAutobuyTimer[i] = new Decimal(0)
-                }
-                if (i == 5 && player.ta.buyables[26].gte(1)) {
-                    buyBuyable("ad", 16)
-                    player.ta.dimensionAutobuyTimer[i] = new Decimal(0)
-                }
-                if (i == 6 && player.ta.buyables[27].gte(1)) {
-                    buyBuyable("ad", 17)
-                    player.ta.dimensionAutobuyTimer[i] = new Decimal(0)
-                }
-                if (i == 7 && player.ta.buyables[28].gte(1)) {
-                    buyBuyable("ad", 18)
-                    player.ta.dimensionAutobuyTimer[i] = new Decimal(0)
-                }
-                if (i == 8 && player.ta.buyables[29].gte(1)) {
-                    buyBuyable("ad", 1)
-                    player.ta.dimensionAutobuyTimer[i] = new Decimal(0)
-                }
-                if (i == 9 && player.ta.buyables[31].gte(1) && (!hasUpgrade("ta", 14) || hasUpgrade("ta", 14) && getBuyableAmount("ad", 2).lt(player.ta.dimboostLimit))) {
-                    if (!player.ta.dimboostToggle || player.ta.dimboostToggle && getBuyableAmount("ad", 3).gte(player.ta.galaxyLimit)) {
-                        buyBuyable("ad", 2)
-                        player.ta.dimensionAutobuyTimer[i] = new Decimal(0)
-                    } else {
-                        if (getBuyableAmount("ad", 2).lt(4)) {
-                            buyBuyable("ad", 2)
-                            player.ta.dimensionAutobuyTimer[i] = new Decimal(0)
+        for (let i in player.ta.autoBuy) {
+            if (player.ta.autoBuy[i].toggle) player.ta.autoBuy[i].current = player.ta.autoBuy[i].current.add(delta)
+            if (player.ta.autoBuy[i].current.gte(player.ta.autoBuy[i].max)) {
+                switch (i) {
+                    case 'tickspeed':
+                        buyBuyable("ad", 1)
+                        break;
+                    case 'dim1':
+                        buyBuyable("ad", 14)
+                        buyBuyable("ad", 13)
+                        buyBuyable("ad", 12)
+                        buyBuyable("ad", 11)
+                        break
+                    case 'dim2':
+                        buyBuyable("ad", 18)
+                        buyBuyable("ad", 17)
+                        buyBuyable("ad", 16)
+                        buyBuyable("ad", 15)
+                        break;
+                    case 'dimboost':
+                        if (getBuyableAmount("ad", 2).lt(player.ta.dimboostLimit)) {
+                            if (!player.ta.dimboostToggle || getBuyableAmount("ad", 3).gte(player.ta.galaxyLimit) || getBuyableAmount("ad", 2).lt(4)) {
+                                buyBuyable("ad", 2)
+                            }
                         }
-                    }
+                        break;
+                    case 'galaxy':
+                        if (getBuyableAmount("ad", 3).lt(player.ta.galaxyLimit)) {
+                            buyBuyable("ad", 3)
+                        }
+                        break;
                 }
-                if (i == 10 && player.ta.buyables[32].gte(1)) {
-                    if (!hasUpgrade("ta", 14) || hasUpgrade("ta", 14) && getBuyableAmount("ad", 3).lt(player.ta.galaxyLimit)) {
-                        buyBuyable("ad", 3)
-                        player.ta.dimensionAutobuyTimer[i] = new Decimal(0)
-                    }
-                }
+                player.ta.autoBuy[i].current = new Decimal(0)
             }
         }
-        player.ta.dimensionAutobuyTimeReq = [new Decimal(3), new Decimal(3.5), new Decimal(4), new Decimal(4.5), new Decimal(5), new Decimal(5.5), new Decimal(6), new Decimal(6.5), new Decimal(4),new Decimal(8),new Decimal(8)]
-        player.ta.dimensionAutobuyTimeReq[0] = player.ta.dimensionAutobuyTimeReq[0].div(buyableEffect("ta", 21))
-        player.ta.dimensionAutobuyTimeReq[1] = player.ta.dimensionAutobuyTimeReq[1].div(buyableEffect("ta", 22))
-        player.ta.dimensionAutobuyTimeReq[2] = player.ta.dimensionAutobuyTimeReq[2].div(buyableEffect("ta", 23))
-        player.ta.dimensionAutobuyTimeReq[3] = player.ta.dimensionAutobuyTimeReq[3].div(buyableEffect("ta", 24))
-        player.ta.dimensionAutobuyTimeReq[4] = player.ta.dimensionAutobuyTimeReq[4].div(buyableEffect("ta", 25))
-        player.ta.dimensionAutobuyTimeReq[5] = player.ta.dimensionAutobuyTimeReq[5].div(buyableEffect("ta", 26))
-        player.ta.dimensionAutobuyTimeReq[6] = player.ta.dimensionAutobuyTimeReq[6].div(buyableEffect("ta", 27))
-        player.ta.dimensionAutobuyTimeReq[7] = player.ta.dimensionAutobuyTimeReq[7].div(buyableEffect("ta", 28))
-        player.ta.dimensionAutobuyTimeReq[8] = player.ta.dimensionAutobuyTimeReq[8].div(buyableEffect("ta", 29))
-        player.ta.dimensionAutobuyTimeReq[9] = player.ta.dimensionAutobuyTimeReq[9].div(buyableEffect("ta", 31))
-        player.ta.dimensionAutobuyTimeReq[10] = player.ta.dimensionAutobuyTimeReq[10].div(buyableEffect("ta", 32))
+
+        player.ta.autoBuy.tickspeed.max = new Decimal(3).div(buyableEffect("ta", 29))
+        player.ta.autoBuy.dim1.max = new Decimal(4).div(buyableEffect("ta", 21))
+        player.ta.autoBuy.dim2.max = new Decimal(6).div(buyableEffect("ta", 25))
+        player.ta.autoBuy.dimboost.max = new Decimal(8).div(buyableEffect("ta", 31))
+        player.ta.autoBuy.galaxy.max = new Decimal(10).div(buyableEffect("ta", 32))
 
         if (player.ta.dimboostLimitInput.gte(0)) player.ta.dimboostLimit = player.ta.dimboostLimitInput.floor()
         if (player.ta.dimboostLimitInput.lt(0)) player.ta.dimboostLimit = new Decimal(0)
@@ -286,39 +279,21 @@
     clickables: {
         2: {
             title() { return "Buy Max On" },
-            canClick() { return player.buyMax == false },
-            unlocked() { return true },
+            canClick() { return !player.ta.dimPowerMax },
+            unlocked: true,
             onClick() {
-                player.buyMax = true
+                player.ta.dimPowerMax = true
             },
-            style: { width: '80px', "min-height": '50px', borderRadius: '15px 0px 0px 15px' }
+            style: { width: "80px", minHeight: "50px", borderRadius: "15px 0px 0px 15px"}
         },
         3: {
             title() { return "Buy Max Off" },
-            canClick() { return player.buyMax == true  },
-            unlocked() { return true },
+            canClick() { return player.ta.dimPowerMax},
+            unlocked: true,
             onClick() {
-                player.buyMax = false
+                player.ta.dimPowerMax = false
             },
-            style: { width: '80px', "min-height": '50px', borderRadius: '0px 15px 15px 0px' }
-        },
-        4: {
-            title() { return "<h3>Lower Dimension" },
-            canClick() { return player.ta.dimensionPowerIndex.gt(0) },
-            unlocked() { return true },
-            onClick() {
-                player.ta.dimensionPowerIndex = player.ta.dimensionPowerIndex.sub(1)
-            },
-            style: { width: '100px', "min-height": '100px' },
-        },
-        5: {
-            title() { return "<h3>Increase Dimension" },
-            canClick() { return player.ta.dimensionPowerIndex.lt(7) },
-            unlocked() { return true },
-            onClick() {
-                player.ta.dimensionPowerIndex = player.ta.dimensionPowerIndex.add(1)
-            },
-            style: { width: '100px', "min-height": '100px' },
+            style: { width: "80px", minHeight: "50px", borderRadius: "0px 15px 15px 0px"}
         },
         14: {
             title() { return "<h2>ENTER" },
@@ -357,224 +332,109 @@
             },
             style: { width: '200px', "min-height": '80px', borderRadius: '15px' },
         },
-        18: {
-            title() { return "<h3>Toggle<br>On" },
-            canClick() { return !player.ta.dimboostToggle },
-            unlocked() { return true },
-            onClick() {
-                player.ta.dimboostToggle = true
-            },
-            style: { width: '100px', "min-height": '100px', borderRadius: '15px 0px 0px 15px' },
-        },
-        19: {
-            title() { return "<h3>Toggle<br>Off" },
-            canClick() { return player.ta.dimboostToggle },
-            unlocked() { return true },
-            onClick() {
-                player.ta.dimboostToggle = false
-            },
-            style: { width: '100px', "min-height": '100px', borderRadius: '0px 15px 15px 0px' },
-        },
         101: {
-            title() { return "<h3>On" },
-            canClick() { return !player.ta.dimensionAutobuyToggles[0] },
-            unlocked() { return true },
+            title() {return player.ta.autoBuy.tickspeed.toggle ? "[ON]" : "[OFF]"},
+            canClick() {return getBuyableAmount("ta", 29).gte(1)},
+            unlocked: true,
             onClick() {
-                player.ta.dimensionAutobuyToggles[0] = true
+                if (player.ta.autoBuy.tickspeed.toggle) {
+                    player.ta.autoBuy.tickspeed.toggle = false
+                } else {
+                    player.ta.autoBuy.tickspeed.toggle = true
+                }
             },
-            style: { width: '50px', "min-height": '50px', borderRadius: '0px' },
+            style() {
+                let look = {width: "250px", minHeight: "36px", color: "rgba(0,0,0,0.8)", fontSize: "14px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0px"}
+                if (!this.canClick()) {look.backgroundColor = "#bf8f8f"} else if (player.ta.autoBuy.tickspeed.toggle) {look.backgroundColor = "#b2d8d8"} else {look.backgroundColor = "#7c9797"}
+                return look
+            },
         },
         102: {
-            title() { return "<h3>Off" },
-            canClick() { return player.ta.dimensionAutobuyToggles[0] },
-            unlocked() { return true },
+            title() {return player.ta.autoBuy.dim1.toggle ? "[ON]" : "[OFF]"},
+            canClick() {return getBuyableAmount("ta", 21).gte(1)},
+            unlocked: true,
             onClick() {
-                player.ta.dimensionAutobuyToggles[0] = false
+                if (player.ta.autoBuy.dim1.toggle) {
+                    player.ta.autoBuy.dim1.toggle = false
+                } else {
+                    player.ta.autoBuy.dim1.toggle = true
+                }
             },
-            style: { width: '50px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' },
+            style() {
+                let look = {width: "250px", minHeight: "36px", color: "rgba(0,0,0,0.8)", fontSize: "14px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0px"}
+                if (!this.canClick()) {look.backgroundColor = "#bf8f8f"} else if (player.ta.autoBuy.dim1.toggle) {look.backgroundColor = "#b2d8d8"} else {look.backgroundColor = "#7c9797"}
+                return look
+            },
         },
         103: {
-            title() { return "<h3>On" },
-            canClick() { return !player.ta.dimensionAutobuyToggles[1] },
-            unlocked() { return true },
+            title() {return player.ta.autoBuy.dim2.toggle ? "[ON]" : "[OFF]"},
+            canClick() {return getBuyableAmount("ta", 25).gte(1)},
+            unlocked: true,
             onClick() {
-                player.ta.dimensionAutobuyToggles[1] = true
+                if (player.ta.autoBuy.dim2.toggle) {
+                    player.ta.autoBuy.dim2.toggle = false
+                } else {
+                    player.ta.autoBuy.dim2.toggle = true
+                }
             },
-            style: { width: '50px', "min-height": '50px', borderRadius: '0px' },
+            style() {
+                let look = {width: "250px", minHeight: "36px", color: "rgba(0,0,0,0.8)", fontSize: "14px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0px"}
+                if (!this.canClick()) {look.backgroundColor = "#bf8f8f"} else if (player.ta.autoBuy.dim2.toggle) {look.backgroundColor = "#b2d8d8"} else {look.backgroundColor = "#7c9797"}
+                return look
+            },
         },
         104: {
-            title() { return "<h3>Off" },
-            canClick() { return player.ta.dimensionAutobuyToggles[1] },
-            unlocked() { return true },
+            title() {return player.ta.autoBuy.dimboost.toggle ? "[ON]" : "[OFF]"},
+            canClick() {return getBuyableAmount("ta", 31).gte(1)},
+            unlocked: true,
             onClick() {
-                player.ta.dimensionAutobuyToggles[1] = false
+                if (player.ta.autoBuy.dimboost.toggle) {
+                    player.ta.autoBuy.dimboost.toggle = false
+                } else {
+                    player.ta.autoBuy.dimboost.toggle = true
+                }
             },
-            style: { width: '50px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' },
+            style() {
+                let look = {width: "250px", minHeight: "36px", color: "rgba(0,0,0,0.8)", fontSize: "14px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0px"}
+                if (!this.canClick()) {look.backgroundColor = "#bf8f8f"} else if (player.ta.autoBuy.dimboost.toggle) {look.backgroundColor = "#b2d8d8"} else {look.backgroundColor = "#7c9797"}
+                return look
+            },
         },
         105: {
-            title() { return "<h3>On" },
-            canClick() { return !player.ta.dimensionAutobuyToggles[2] },
-            unlocked() { return true },
+            title() {return player.ta.autoBuy.galaxy.toggle ? "[ON]" : "[OFF]"},
+            canClick() {return getBuyableAmount("ta", 32).gte(1)},
+            unlocked: true,
             onClick() {
-                player.ta.dimensionAutobuyToggles[2] = true
+                if (player.ta.autoBuy.galaxy.toggle) {
+                    player.ta.autoBuy.galaxy.toggle = false
+                } else {
+                    player.ta.autoBuy.galaxy.toggle = true
+                }
             },
-            style: { width: '50px', "min-height": '50px', borderRadius: '0px' },
+            style() {
+                let look = {width: "250px", minHeight: "36px", color: "rgba(0,0,0,0.8)", fontSize: "14px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0px"}
+                if (!this.canClick()) {look.backgroundColor = "#bf8f8f"} else if (player.ta.autoBuy.galaxy.toggle) {look.backgroundColor = "#b2d8d8"} else {look.backgroundColor = "#7c9797"}
+                return look
+            },
         },
         106: {
-            title() { return "<h3>Off" },
-            canClick() { return player.ta.dimensionAutobuyToggles[2] },
-            unlocked() { return true },
+            title() {return player.ta.dimboostToggle ? "Only dimboost to unlock new dimensions until galaxy limit<br><h3>[ON]" : "Only dimboost to unlock new dimensions until galaxy limit<br><h3>[OFF]"},
+            canClick: true,
+            unlocked: true,
             onClick() {
-                player.ta.dimensionAutobuyToggles[2] = false
+                if (player.ta.dimboostToggle) {
+                    player.ta.dimboostToggle = false
+                } else {
+                    player.ta.dimboostToggle = true
+                }
             },
-            style: { width: '50px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' },
-        },
-        107: {
-            title() { return "<h3>On" },
-            canClick() { return !player.ta.dimensionAutobuyToggles[3] },
-            unlocked() { return true },
-            onClick() {
-                player.ta.dimensionAutobuyToggles[3] = true
+            style() {
+                let look = {width: "250px", minHeight: "60px", color: "rgba(0,0,0,0.8)", fontSize: "8px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0px"}
+                if (player.ta.dimboostToggle) {look.backgroundColor = "#b2d8d8"} else {look.backgroundColor = "#7c9797"}
+                return look
             },
-            style: { width: '50px', "min-height": '50px', borderRadius: '0px' },
-        },
-        108: {
-            title() { return "<h3>Off" },
-            canClick() { return player.ta.dimensionAutobuyToggles[3] },
-            unlocked() { return true },
-            onClick() {
-                player.ta.dimensionAutobuyToggles[3] = false
-            },
-            style: { width: '50px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' },
-        },
-        109: {
-            title() { return "<h3>On" },
-            canClick() { return !player.ta.dimensionAutobuyToggles[4] },
-            unlocked() { return true },
-            onClick() {
-                player.ta.dimensionAutobuyToggles[4] = true
-            },
-            style: { width: '50px', "min-height": '50px', borderRadius: '0px' },
-        },
-        110: {
-            title() { return "<h3>Off" },
-            canClick() { return player.ta.dimensionAutobuyToggles[4] },
-            unlocked() { return true },
-            onClick() {
-                player.ta.dimensionAutobuyToggles[4] = false
-            },
-            style: { width: '50px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' },
-        },
-        111: {
-            title() { return "<h3>On" },
-            canClick() { return !player.ta.dimensionAutobuyToggles[5] },
-            unlocked() { return true },
-            onClick() {
-                player.ta.dimensionAutobuyToggles[5] = true
-            },
-            style: { width: '50px', "min-height": '50px', borderRadius: '0px' },
-        },
-        112: {
-            title() { return "<h3>Off" },
-            canClick() { return player.ta.dimensionAutobuyToggles[5] },
-            unlocked() { return true },
-            onClick() {
-                player.ta.dimensionAutobuyToggles[5] = false
-            },
-            style: { width: '50px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' },
-        },
-        113: {
-            title() { return "<h3>On" },
-            canClick() { return !player.ta.dimensionAutobuyToggles[6] },
-            unlocked() { return true },
-            onClick() {
-                player.ta.dimensionAutobuyToggles[6] = true
-            },
-            style: { width: '50px', "min-height": '50px', borderRadius: '0px' },
-        },
-        114: {
-            title() { return "<h3>Off" },
-            canClick() { return player.ta.dimensionAutobuyToggles[6] },
-            unlocked() { return true },
-            onClick() {
-                player.ta.dimensionAutobuyToggles[6] = false
-            },
-            style: { width: '50px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' },
-        },
-        115: {
-            title() { return "<h3>On" },
-            canClick() { return !player.ta.dimensionAutobuyToggles[7] },
-            unlocked() { return true },
-            onClick() {
-                player.ta.dimensionAutobuyToggles[7] = true
-            },
-            style: { width: '50px', "min-height": '50px', borderRadius: '0px' },
-        },
-        116: {
-            title() { return "<h3>Off" },
-            canClick() { return player.ta.dimensionAutobuyToggles[7] },
-            unlocked() { return true },
-            onClick() {
-                player.ta.dimensionAutobuyToggles[7] = false
-            },
-            style: { width: '50px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' },
-        },
-        117: {
-            title() { return "<h3>On" },
-            canClick() { return !player.ta.dimensionAutobuyToggles[8] },
-            unlocked() { return true },
-            onClick() {
-                player.ta.dimensionAutobuyToggles[8] = true
-            },
-            style: { width: '50px', "min-height": '50px', borderRadius: '0px' },
-        },
-        118: {
-            title() { return "<h3>Off" },
-            canClick() { return player.ta.dimensionAutobuyToggles[8] },
-            unlocked() { return true },
-            onClick() {
-                player.ta.dimensionAutobuyToggles[8] = false
-            },
-            style: { width: '50px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' },
-        },
-        119: {
-            title() { return "<h3>On" },
-            canClick() { return !player.ta.dimensionAutobuyToggles[9] },
-            unlocked() { return true },
-            onClick() {
-                player.ta.dimensionAutobuyToggles[9] = true
-            },
-            style: { width: '50px', "min-height": '50px', borderRadius: '0px' },
-        },
-        120: {
-            title() { return "<h3>Off" },
-            canClick() { return player.ta.dimensionAutobuyToggles[9] },
-            unlocked() { return true },
-            onClick() {
-                player.ta.dimensionAutobuyToggles[9] = false
-            },
-            style: { width: '50px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' },
-        },
-        121: {
-            title() { return "<h3>On" },
-            canClick() { return !player.ta.dimensionAutobuyToggles[10] },
-            unlocked() { return true },
-            onClick() {
-                player.ta.dimensionAutobuyToggles[10] = true
-            },
-            style: { width: '50px', "min-height": '50px', borderRadius: '0px' },
-        },
-        122: {
-            title() { return "<h3>Off" },
-            canClick() { return player.ta.dimensionAutobuyToggles[10] },
-            unlocked() { return true },
-            onClick() {
-                player.ta.dimensionAutobuyToggles[10] = false
-            },
-            style: { width: '50px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' },
         },
     },
-    bars: {},
     upgrades: {
         11: {
             title: "Negative Upgrade I",
@@ -613,12 +473,12 @@
         14: {
             title: "Negative Upgrade IV",
             unlocked() { return hasUpgrade("ta", 13) },
-            description: "Unlock limiters for Dimboost and Galaxy autobuyers. Unlock new IP upgrades.",
+            description: "Unlock new IP upgrades.",
             cost: new Decimal(20),
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
-            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         15: {
             title: "Negative Upgrade V",
@@ -674,7 +534,7 @@
         21: {
             title: "Negative Upgrade X",
             unlocked() { return hasUpgrade("ta", 19) },
-            description: "Unlock TAV'S DOMAIN and broken infinities.",
+            description: "Unlock TAV'S DOMAIN.",
             cost: new Decimal(1000000),
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
@@ -696,8 +556,8 @@
             title() {
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " NIP"
             },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+            buy() {
+                if (!player.ta.dimPowerMax && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -726,8 +586,8 @@
             title() {
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " NIP"
             },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+            buy() {
+                if (!player.ta.dimPowerMax && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -756,8 +616,8 @@
             title() {
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " NIP"
             },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+            buy() {
+                if (!player.ta.dimPowerMax && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -786,8 +646,8 @@
             title() {
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " NIP"
             },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+            buy() {
+                if (!player.ta.dimPowerMax && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -816,8 +676,8 @@
             title() {
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " NIP"
             },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+            buy() {
+                if (!player.ta.dimPowerMax && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -846,8 +706,8 @@
             title() {
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " NIP"
             },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+            buy() {
+                if (!player.ta.dimPowerMax && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -876,8 +736,8 @@
             title() {
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " NIP"
             },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+            buy() {
+                if (!player.ta.dimPowerMax && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -906,8 +766,8 @@
             title() {
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " NIP"
             },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+            buy() {
+                if (!player.ta.dimPowerMax && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -925,159 +785,20 @@
         },
         21: {
             costBase() { return new Decimal(1) },
-            costGrowth() { return new Decimal(1.15) },
-            purchaseLimit() { return new Decimal(300) },
-            currency() { return player.ta.negativeInfinityPoints},
-            pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).add(1) },
-            unlocked: true,
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "1st Dimension Autobuy"
-            },
-            display() {
-                return "which are dividing cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
-            },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("bi", 104)) this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '50px', borderRadius: '10px 0px 0px 10px'}
-        },
-        22: {
-            costBase() { return new Decimal(1.5) },
-            costGrowth() { return new Decimal(1.16) },
-            purchaseLimit() { return new Decimal(350) },
-            currency() { return player.ta.negativeInfinityPoints},
-            pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).add(1) },
-            unlocked: true,
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "2nd Dimension Autobuy"
-            },
-            display() {
-                return "which are dividing cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
-            },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("bi", 104)) this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '50px', borderRadius: '10px 0px 0px 10px'}
-        },
-        23: {
-            costBase() { return new Decimal(2) },
-            costGrowth() { return new Decimal(1.17) },
-            purchaseLimit() { return new Decimal(400) },
-            currency() { return player.ta.negativeInfinityPoints},
-            pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).add(1) },
-            unlocked: true,
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "3rd Dimension Autobuy"
-            },
-            display() {
-                return "which are dividing cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
-            },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("bi", 104)) this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '50px', borderRadius: '10px 0px 0px 10px'}
-        },
-        24: {
-            costBase() { return new Decimal(2.5) },
-            costGrowth() { return new Decimal(1.18) },
-            purchaseLimit() { return new Decimal(450) },
-            currency() { return player.ta.negativeInfinityPoints},
-            pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).add(1) },
-            unlocked: true,
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "4th Dimension Autobuy"
-            },
-            display() {
-                return "which are dividing cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
-            },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("bi", 104)) this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '50px', borderRadius: '10px 0px 0px 10px'}
-        },
-        25: {
-            costBase() { return new Decimal(3) },
-            costGrowth() { return new Decimal(1.19) },
+            costGrowth() { return new Decimal(1.1) },
             purchaseLimit() { return new Decimal(500) },
             currency() { return player.ta.negativeInfinityPoints},
             pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).min(500).mul(0.2).add(1) },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "5th Dimension Autobuy"
-            },
             display() {
-                return "which are dividing cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "Divide cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
             buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+                if (!mult && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1091,27 +812,24 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '50px', borderRadius: '10px 0px 0px 10px'}
+            style: { width: '250px', height: '120px', backgroundColor: "#a0c2c2", fontSize: "11px", boxSizing: "border-box"},
         },
-        26: {
-            costBase() { return new Decimal(3.5) },
-            costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(550) },
+        25: {
+            costBase() { return new Decimal(1) },
+            costGrowth() { return new Decimal(1.15) },
+            purchaseLimit() { return new Decimal(500) },
             currency() { return player.ta.negativeInfinityPoints},
             pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).min(500).mul(0.3).add(1) },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "6th Dimension Autobuy"
-            },
             display() {
-                return "which are dividing cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "Divide cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
             buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+                if (!mult && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1125,95 +843,24 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '50px', borderRadius: '10px 0px 0px 10px'}
-        },
-        27: {
-            costBase() { return new Decimal(4) },
-            costGrowth() { return new Decimal(1.21) },
-            purchaseLimit() { return new Decimal(600) },
-            currency() { return player.ta.negativeInfinityPoints},
-            pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).add(1) },
-            unlocked: true,
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "7th Dimension Autobuy"
-            },
-            display() {
-                return "which are dividing cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
-            },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("bi", 104)) this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '50px', borderRadius: '10px 0px 0px 10px'}
-        },
-        28: {
-            costBase() { return new Decimal(4.5) },
-            costGrowth() { return new Decimal(1.22) },
-            purchaseLimit() { return new Decimal(650) },
-            currency() { return player.ta.negativeInfinityPoints},
-            pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).add(1) },
-            unlocked: true,
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "8th Dimension Autobuy"
-            },
-            display() {
-                return "which are dividing cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
-            },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("bi", 104)) this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '50px', borderRadius: '10px 0px 0px 10px'}
+            style: { width: '250px', height: '120px', backgroundColor: "#a0c2c2", fontSize: "11px", boxSizing: "border-box"},
         },
         29: {
-            costBase() { return new Decimal(3) },
-            costGrowth() { return new Decimal(1.175) },
-            purchaseLimit() { return new Decimal(400) },
+            costBase() { return new Decimal(1) },
+            costGrowth() { return new Decimal(1.2) },
+            purchaseLimit() { return new Decimal(500) },
             currency() { return player.ta.negativeInfinityPoints},
             pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).min(500).mul(0.15).add(1) },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Tickspeed Autobuy"
-            },
             display() {
-                return "which are dividing cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "Divide cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
             buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+                if (!mult && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1227,27 +874,24 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '50px', borderRadius: '10px 0px 0px 10px'}
+            style: { width: '250px', height: '120px', backgroundColor: "#a0c2c2", fontSize: "11px", boxSizing: "border-box"},
         },
         31: {
-            costBase() { return new Decimal(8) },
+            costBase() { return new Decimal(5) },
             costGrowth() { return new Decimal(1.3) },
-            purchaseLimit() { return new Decimal(800) },
+            purchaseLimit() { return new Decimal(500) },
             currency() { return player.ta.negativeInfinityPoints},
             pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).min(500).mul(0.4).add(1) },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Dimboost Autobuy"
-            },
             display() {
-                return "which are dividing cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "Divide cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
             buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+                if (!mult && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1261,27 +905,24 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '50px', borderRadius: '10px 0px 0px 10px'}
+            style: { width: '250px', height: '120px', backgroundColor: "#a0c2c2", fontSize: "11px", boxSizing: "border-box"},
         },
         32: {
-            costBase() { return new Decimal(12) },
+            costBase() { return new Decimal(10) },
             costGrowth() { return new Decimal(1.4) },
-            purchaseLimit() { return new Decimal(800) },
+            purchaseLimit() { return new Decimal(500) },
             currency() { return player.ta.negativeInfinityPoints},
             pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).min(500).mul(0.5).add(1) },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Galaxy Autobuy"
-            },
             display() {
-                return "which are dividing cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "Divide cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
             buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 104) ) {
+                if (!mult && !hasUpgrade("bi", 104) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1295,7 +936,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '50px', borderRadius: '10px 0px 0px 10px'}
+            style: { width: '250px', height: '120px', backgroundColor: "#a0c2c2", fontSize: "11px", boxSizing: "border-box"},
         },
         // TAV BUYABLES
         33: {
@@ -1915,6 +1556,88 @@
     milestones: {},
     challenges: {},
     infoboxes: {},
+    bars: {
+        tickspeed: {
+            unlocked: true,
+            direction: RIGHT,
+            width: 250,
+            height: 41,
+            progress() {
+                return player.ta.autoBuy.tickspeed.current.div(player.ta.autoBuy.tickspeed.max)
+            },
+            baseStyle: {backgroundColor: "#354040"},
+            fillStyle: {backgroundColor: "#475656"},
+            borderStyle: {border: "0px solid #ccc", borderBottom: "4px solid #ccc", borderRadius: "0"},
+            textStyle: {color: "rgba(255,255,255,0.8)", fontSize: "16px", fontFamily: "monospace"},
+            display() {
+                return formatTime(player.ta.autoBuy.tickspeed.current) + "/" + formatTime(player.ta.autoBuy.tickspeed.max)
+            },
+        },
+        dim1: {
+            unlocked: true,
+            direction: RIGHT,
+            width: 250,
+            height: 41,
+            progress() {
+                return player.ta.autoBuy.dim1.current.div(player.ta.autoBuy.dim1.max)
+            },
+            baseStyle: {backgroundColor: "#354040"},
+            fillStyle: {backgroundColor: "#475656"},
+            borderStyle: {border: "0px solid #ccc", borderBottom: "4px solid #ccc", borderRadius: "0"},
+            textStyle: {color: "rgba(255,255,255,0.8)", fontSize: "16px", fontFamily: "monospace"},
+            display() {
+                return formatTime(player.ta.autoBuy.dim1.current) + "/" + formatTime(player.ta.autoBuy.dim1.max)
+            },
+        },
+        dim2: {
+            unlocked: true,
+            direction: RIGHT,
+            width: 250,
+            height: 41,
+            progress() {
+                return player.ta.autoBuy.dim2.current.div(player.ta.autoBuy.dim2.max)
+            },
+            baseStyle: {backgroundColor: "#354040"},
+            fillStyle: {backgroundColor: "#475656"},
+            borderStyle: {border: "0px solid #ccc", borderBottom: "4px solid #ccc", borderRadius: "0"},
+            textStyle: {color: "rgba(255,255,255,0.8)", fontSize: "16px", fontFamily: "monospace"},
+            display() {
+                return formatTime(player.ta.autoBuy.dim2.current) + "/" + formatTime(player.ta.autoBuy.dim2.max)
+            },
+        },
+        dimboost: {
+            unlocked: true,
+            direction: RIGHT,
+            width: 250,
+            height: 41,
+            progress() {
+                return player.ta.autoBuy.dimboost.current.div(player.ta.autoBuy.dimboost.max)
+            },
+            baseStyle: {backgroundColor: "#354040"},
+            fillStyle: {backgroundColor: "#475656"},
+            borderStyle: {border: "0px solid #ccc", borderBottom: "4px solid #ccc", borderRadius: "0"},
+            textStyle: {color: "rgba(255,255,255,0.8)", fontSize: "16px", fontFamily: "monospace"},
+            display() {
+                return formatTime(player.ta.autoBuy.dimboost.current) + "/" + formatTime(player.ta.autoBuy.dimboost.max)
+            },
+        },
+        galaxy: {
+            unlocked: true,
+            direction: RIGHT,
+            width: 250,
+            height: 41,
+            progress() {
+                return player.ta.autoBuy.galaxy.current.div(player.ta.autoBuy.galaxy.max)
+            },
+            baseStyle: {backgroundColor: "#354040"},
+            fillStyle: {backgroundColor: "#475656"},
+            borderStyle: {border: "0px solid #ccc", borderBottom: "4px solid #ccc", borderRadius: "0"},
+            textStyle: {color: "rgba(255,255,255,0.8)", fontSize: "16px", fontFamily: "monospace"},
+            display() {
+                return formatTime(player.ta.autoBuy.galaxy.current) + "/" + formatTime(player.ta.autoBuy.galaxy.max)
+            },
+        },
+    },
     microtabs: {
         stuff: {
             "Dimension Power": {
@@ -1978,7 +1701,70 @@
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
-                    ["microtabs", "auto", { 'border-width': '0px' }],
+                    ["blank", "20px"],
+                    ["style-row", [
+                        ["raw-html", "You need at least 1 divider to start autobuying.", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ], {width: "758px", height: "30px", background: "#232b2b", border: "4px solid #ccc", marginBottom: "-4px"}],
+                    ["style-row", [
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", "Tickspeed Autobuyer", {color: "rgba(255,255,255,0.8)", fontSize: "18px", fontFamily: "monospace"}],
+                            ], {width: "250px", height: "41px", borderBottom: "4px solid #ccc"}],
+                            ["bar", "tickspeed"],
+                            ["clickable", 101],
+                            ["style-row", [], {width: "250px", height: "4px", background: "#ccc"}],
+                            ["ex-buyable", 29],
+                        ], {width: "250px", height: "250px", borderRight: "4px solid #ccc"}],
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", "Dimension Autobuyer Mk.1<br><p style='font-size:12px'>(Dimensions 1,2,3,4)", {color: "rgba(255,255,255,0.8)", fontSize: "14px", fontFamily: "monospace"}],
+                            ], {width: "250px", height: "41px", borderBottom: "4px solid #ccc"}],
+                            ["bar", "dim1"],
+                            ["clickable", 102],
+                            ["style-row", [], {width: "250px", height: "4px", background: "#ccc"}],
+                            ["ex-buyable", 21],
+                        ], {width: "250px", height: "250px", borderRight: "4px solid #ccc"}],
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", "Dimension Autobuyer Mk.2<br><p style='font-size:12px'>(Dimensions 5,6,7,8)", {color: "rgba(255,255,255,0.8)", fontSize: "14px", fontFamily: "monospace"}],
+                            ], {width: "250px", height: "41px", borderBottom: "4px solid #ccc"}],
+                            ["bar", "dim2"],
+                            ["clickable", 103],
+                            ["style-row", [], {width: "250px", height: "4px", background: "#ccc"}],
+                            ["ex-buyable", 25],
+                        ], {width: "250px", height: "250px"}],
+                    ], {width: "758px", height: "250px", background: "#596c6c", border: "4px solid #ccc"}],
+                    ["style-row", [
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", "Dimboost Autobuyer", {color: "rgba(255,255,255,0.8)", fontSize: "18px", fontFamily: "monospace"}],
+                            ], {width: "250px", height: "41px", borderBottom: "4px solid #ccc"}],
+                            ["bar", "dimboost"],
+                            ["clickable", 104],
+                            ["style-row", [], {width: "250px", height: "4px", background: "#ccc"}],
+                            ["ex-buyable", 31],
+                        ], {width: "250px", height: "250px", borderRight: "4px solid #ccc"}],
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", "Galaxy Autobuyer", {color: "rgba(255,255,255,0.8)", fontSize: "18px", fontFamily: "monospace"}],
+                            ], {width: "250px", height: "41px", borderBottom: "4px solid #ccc"}],
+                            ["bar", "galaxy"],
+                            ["clickable", 105],
+                            ["style-row", [], {width: "250px", height: "4px", background: "#ccc"}],
+                            ["ex-buyable", 32],
+                        ], {width: "250px", height: "250px", borderRight: "4px solid #ccc"}],
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", "Dimboost Limit", {color: "rgba(255,255,255,0.8)", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "250px", height: "41px", borderBottom: "4px solid #ccc"}],
+                            ["text-input", "dimboostLimitInput", {width: "220px", height: "46px", backgroundColor: "#232b2b", color: "white", fontSize: "24px", textAlign: "left", border: "0px", padding: "0px 15px", borderBottom: "4px solid #ccc"}],
+                            ["clickable", 106],
+                            ["style-column", [
+                                ["raw-html", "Galaxy Limit", {color: "rgba(255,255,255,0.8)", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "250px", height: "41px", borderTop: "4px solid #ccc", borderBottom: "4px solid #ccc"}],
+                            ["text-input", "galaxyLimitInput", {width: "220px", height: "46px", backgroundColor: "#232b2b", color: "white", fontSize: "24px", textAlign: "left", border: "0px", padding: "0px 15px"}],
+                        ], {width: "250px", height: "250px"}],
+                    ], {width: "758px", height: "250px", background: "#596c6c", border: "4px solid #ccc", marginTop: "-4px"}],
                 ]
             },
             "Buyables and Upgrades": {
@@ -2015,122 +1801,12 @@
             },
             "RESET": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return getLevelableAmount("pet", 1101).gte(1) },
+                unlocked() { return player.tad.breakNIP },
                 content: [
                     ["blank", "25px"],
                     ["row", [["clickable", 15]]],
                     ["blank", "25px"],
                     ["row", [["clickable", 16], ["clickable", 17]]],
-                ]
-            },
-        },
-        auto: {
-            "Main": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return true },
-                content: [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "<h4>You need at least 1 of the buyable to start autobuying." }, { color: "white", fontSize: "16px", fontFamily: "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 21], ["clickable", 101], ["clickable", 102], 
-                        ["style-row", [
-                            ["raw-html", function () { return player.ta.dimensionAutobuyTimer[0].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[0].toStringWithDecimalPlaces(2) + "s" },
-                            () => { return getBuyableAmount("ta", 21).lte(0) ? {color: "#444", fontSize: "24px", fontFamily: "monospace"} : !player.ta.dimensionAutobuyToggles[0] ? {color: "gray", fontSize: "24px", fontFamily: "monospace"} : {color: "white", fontSize: "24px", fontFamily: "monospace"}}],
-                        ], {width: "200px"}],
-                    ]],
-                    ["row", [["buyable", 22], ["clickable", 103], ["clickable", 104], 
-                        ["style-row", [
-                            ["raw-html", function () { return player.ta.dimensionAutobuyTimer[1].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[1].toStringWithDecimalPlaces(2) + "s" },
-                            () => { return getBuyableAmount("ta", 22).lte(0) ? {color: "#444", fontSize: "24px", fontFamily: "monospace"} : !player.ta.dimensionAutobuyToggles[1] ? {color: "gray", fontSize: "24px", fontFamily: "monospace"} : {color: "white", fontSize: "24px", fontFamily: "monospace"}}],
-                        ], {width: "200px"}],
-                    ]],
-                    ["row", [["buyable", 23], ["clickable", 105], ["clickable", 106], 
-                        ["style-row", [
-                            ["raw-html", function () { return player.ta.dimensionAutobuyTimer[2].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[2].toStringWithDecimalPlaces(2) + "s" },
-                            () => { return getBuyableAmount("ta", 23).lte(0) ? {color: "#444", fontSize: "24px", fontFamily: "monospace"} : !player.ta.dimensionAutobuyToggles[2] ? {color: "gray", fontSize: "24px", fontFamily: "monospace"} : {color: "white", fontSize: "24px", fontFamily: "monospace"}}],
-                        ], {width: "200px"}],
-                    ]],
-                    ["row", [["buyable", 24], ["clickable", 107], ["clickable", 108], 
-                        ["style-row", [
-                            ["raw-html", function () { return player.ta.dimensionAutobuyTimer[3].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[3].toStringWithDecimalPlaces(2) + "s" },
-                            () => { return getBuyableAmount("ta", 24).lte(0) ? {color: "#444", fontSize: "24px", fontFamily: "monospace"} : !player.ta.dimensionAutobuyToggles[3] ? {color: "gray", fontSize: "24px", fontFamily: "monospace"} : {color: "white", fontSize: "24px", fontFamily: "monospace"}}],
-                        ], {width: "200px"}],
-                    ]],
-                    ["row", [["buyable", 25], ["clickable", 109], ["clickable", 110], 
-                        ["style-row", [
-                            ["raw-html", function () { return player.ta.dimensionAutobuyTimer[4].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[4].toStringWithDecimalPlaces(2) + "s" },
-                            () => { return getBuyableAmount("ta", 25).lte(0) ? {color: "#444", fontSize: "24px", fontFamily: "monospace"} : !player.ta.dimensionAutobuyToggles[4] ? {color: "gray", fontSize: "24px", fontFamily: "monospace"} : {color: "white", fontSize: "24px", fontFamily: "monospace"}}],
-                        ], {width: "200px"}],
-                    ]],
-                    ["row", [["buyable", 26], ["clickable", 111], ["clickable", 112], 
-                        ["style-row", [
-                            ["raw-html", function () { return player.ta.dimensionAutobuyTimer[5].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[5].toStringWithDecimalPlaces(2) + "s" },
-                            () => { return getBuyableAmount("ta", 26).lte(0) ? {color: "#444", fontSize: "24px", fontFamily: "monospace"} : !player.ta.dimensionAutobuyToggles[5] ? {color: "gray", fontSize: "24px", fontFamily: "monospace"} : {color: "white", fontSize: "24px", fontFamily: "monospace"}}],
-                        ], {width: "200px"}],
-                    ]],
-                    ["row", [["buyable", 27], ["clickable", 113], ["clickable", 114], 
-                        ["style-row", [
-                            ["raw-html", function () { return player.ta.dimensionAutobuyTimer[6].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[6].toStringWithDecimalPlaces(2) + "s" },
-                            () => { return getBuyableAmount("ta", 27).lte(0) ? {color: "#444", fontSize: "24px", fontFamily: "monospace"} : !player.ta.dimensionAutobuyToggles[6] ? {color: "gray", fontSize: "24px", fontFamily: "monospace"} : {color: "white", fontSize: "24px", fontFamily: "monospace"}}],
-                        ], {width: "200px"}],
-                    ]],
-                    ["row", [["buyable", 28], ["clickable", 115], ["clickable", 116], 
-                        ["style-row", [
-                            ["raw-html", function () { return player.ta.dimensionAutobuyTimer[7].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[7].toStringWithDecimalPlaces(2) + "s" },
-                            () => { return getBuyableAmount("ta", 28).lte(0) ? {color: "#444", fontSize: "24px", fontFamily: "monospace"} : !player.ta.dimensionAutobuyToggles[7] ? {color: "gray", fontSize: "24px", fontFamily: "monospace"} : {color: "white", fontSize: "24px", fontFamily: "monospace"}}],
-                        ], {width: "200px"}],
-                    ]],
-                    ["row", [["buyable", 29], ["clickable", 117], ["clickable", 118], 
-                        ["style-row", [
-                            ["raw-html", function () { return player.ta.dimensionAutobuyTimer[8].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[8].toStringWithDecimalPlaces(2) + "s" },
-                            () => { return getBuyableAmount("ta", 29).lte(0) ? {color: "#444", fontSize: "24px", fontFamily: "monospace"} : !player.ta.dimensionAutobuyToggles[8] ? {color: "gray", fontSize: "24px", fontFamily: "monospace"} : {color: "white", fontSize: "24px", fontFamily: "monospace"}}],
-                        ], {width: "200px"}],
-                    ]],
-                    ["row", [["buyable", 31], ["clickable", 119], ["clickable", 120], 
-                        ["style-row", [
-                            ["raw-html", function () { return player.ta.dimensionAutobuyTimer[9].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[9].toStringWithDecimalPlaces(2) + "s" },
-                            () => { return getBuyableAmount("ta", 31).lte(0) ? {color: "#444", fontSize: "24px", fontFamily: "monospace"} : !player.ta.dimensionAutobuyToggles[9] ? {color: "gray", fontSize: "24px", fontFamily: "monospace"} : {color: "white", fontSize: "24px", fontFamily: "monospace"}}],
-                        ], {width: "200px"}],
-                    ]],
-                    ["row", [["buyable", 32], ["clickable", 121], ["clickable", 122], 
-                        ["style-row", [
-                            ["raw-html", function () { return player.ta.dimensionAutobuyTimer[10].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[10].toStringWithDecimalPlaces(2) + "s" },
-                            () => { return getBuyableAmount("ta", 32).lte(0) ? {color: "#444", fontSize: "24px", fontFamily: "monospace"} : !player.ta.dimensionAutobuyToggles[10] ? {color: "gray", fontSize: "24px", fontFamily: "monospace"} : {color: "white", fontSize: "24px", fontFamily: "monospace"}}],
-                        ], {width: "200px"}],
-                    ]],
-                ]
-            },
-            "Control Panel": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return hasUpgrade("ta", 14) },
-                content: [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "<h3>Dimboost Autobuy limit: " + formatWhole(player.ta.dimboostLimit) + "." }],
-                    ["text-input", "dimboostLimitInput", {
-                        color: "var(--color)",
-                        width: "300px",
-                        fontFamily: "Calibri",
-                        "text-align": "left",
-                        fontSize: "32px",
-                        border: "2px solid #ffffff17",
-                        background: "var(--background)",
-                    }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "<h3>Only Dimboost to unlock new Dimensions until Galaxy Autobuy Limit" }],
-                    ["row", [["clickable", 18], ["clickable", 19]]],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "<h3>Galaxy Autobuy limit: " + formatWhole(player.ta.galaxyLimit) + "." }],
-                    ["text-input", "galaxyLimitInput", {
-                        color: "var(--color)",
-                        width: "300px",
-                        fontFamily: "Calibri",
-                        "text-align": "left",
-                        fontSize: "32px",
-                        border: "2px solid #ffffff17",
-                        background: "var(--background)",
-                    }],
                 ]
             },
         },

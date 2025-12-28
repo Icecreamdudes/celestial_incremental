@@ -29,7 +29,6 @@ var systemComponents = {
 				smallNode: size == 'small',
 				[layer]: true,
 				tooltipBox: true,
-				forceTooltip: player[layer].forceTooltip,
 				ghost: tmp[layer].layerShown == 'ghost',
 				hidden: !tmp[layer].layerShown,
 				locked: tmp[layer].isLayer ? !(player[layer].unlocked || tmp[layer].canReset) : !(tmp[layer].canClick),
@@ -43,17 +42,18 @@ var systemComponents = {
 			<tooltip
       v-if="tmp[layer].tooltip != ''"
 			:text="(tmp[layer].isLayer) ? (
-				player[layer].unlocked ? (tmp[layer].tooltip ? tmp[layer].tooltip : formatWhole(player[layer].points) + ' ' + tmp[layer].resource)
+				player[layer].unlocked ? (run(layers[layer].tooltip, layers[layer]) ? run(layers[layer].tooltip, layers[layer]) : formatWhole(player[layer].points) + ' ' + tmp[layer].resource)
 				: (tmp[layer].tooltipLocked ? tmp[layer].tooltipLocked : 'Reach ' + formatWhole(tmp[layer].requires) + ' ' + tmp[layer].baseResource + ' to unlock (You have ' + formatWhole(tmp[layer].baseAmount) + ' ' + tmp[layer].baseResource + ')')
 			)
 			: (
-				tmp[layer].canClick ? (tmp[layer].tooltip ? tmp[layer].tooltip : 'I am a button!')
+				tmp[layer].canClick ? (run(layers[layer].tooltip, layers[layer]) ? run(layers[layer].tooltip, layers[layer]) : 'I am a button!')
 				: (tmp[layer].tooltipLocked ? tmp[layer].tooltipLocked : 'I am a button!')
 			)"></tooltip>
 			<node-mark :layer='layer' :data='tmp[layer].marked'></node-mark></span>
 		</button>
 		`
 	},
+	//forceTooltip: player[layer].forceTooltip,
 
 	'tab-node': {
 		props: ['layer', 'abb', 'size', 'prev'],
@@ -86,7 +86,7 @@ var systemComponents = {
 
 	'layer-tab': {
 		props: ['layer', 'back', 'spacing', 'embedded'],
-		template: `<div v-bind:style="[tmp[layer].style ? tmp[layer].style : {}, (tmp[layer].tabFormat && !Array.isArray(tmp[layer].tabFormat)) ? tmp[layer].tabFormat[player.subtabs[layer].mainTabs].style : {}]" class="noBackground">
+		template: `<div v-bind:style="[run(layers[layer].style, layers[layer]) ? run(layers[layer].style, layers[layer]) : {}, (tmp[layer].tabFormat && !Array.isArray(tmp[layer].tabFormat)) ? run(layers[layer].tabFormat[player.subtabs[layer].mainTabs].style, layers[layer].tabFormat[player.subtabs[layer].mainTabs]) : {}]" class="noBackground">
 		<div v-if="!tmp[layer].tabFormat">
 			<div v-if="spacing" v-bind:style="{'height': spacing}" :key="this.$vnode.key + '-spacing'"></div>
 			<infobox v-if="tmp[layer].infoboxes" :layer="layer" :data="Object.keys(tmp[layer].infoboxes)[0]":key="this.$vnode.key + '-info'"></infobox>
@@ -207,7 +207,7 @@ var systemComponents = {
 
 	'tooltip': {
 		props: ['text'],
-		template: `<div class="tooltip" v-html="text"></div>
+		template: `<div class="tooltip" v-html="text" v-bind:style="text == '' ? {display: 'none !important'} : {}"></div>
 		`
 	},
 
@@ -236,7 +236,7 @@ var systemComponents = {
 
 	'bg': {
 		props: ['layer'],
-		template: `<div class ="bg" v-bind:style="[tmp[layer].style ? tmp[layer].style : {}, (tmp[layer].tabFormat && !Array.isArray(tmp[layer].tabFormat)) ? tmp[layer].tabFormat[player.subtabs[layer].mainTabs].style : {}]"></div>
+		template: `<div class ="bg" v-bind:style="[run(layers[layer].style, layers[layer]) ? run(layers[layer].style, layers[layer]) : {}, (tmp[layer].tabFormat && !Array.isArray(tmp[layer].tabFormat)) ? run(layers[layer].tabFormat[player.subtabs[layer].mainTabs].style, layers[layer].tabFormat[player.subtabs[layer].mainTabs]) : {}]"></div>
 		`
 	}
 

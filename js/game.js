@@ -346,33 +346,33 @@ function gameLoop(diff) {
 	player.points = player.points.add(tmp.pointGen.times(diff)).max(0)
 
 	for (let x = 0; x <= maxRow; x++){
-    	for (item in TREE_LAYERS[x]) {
-        	let layer = TREE_LAYERS[x][item]
-        	player[layer].resetTime += diff
-        	if (tmp[layer].passiveGeneration) generatePoints(layer, diff*tmp[layer].passiveGeneration);
-        	if (layers[layer].update && !tmp[layer].deactivated) {
-            	if (layers[layer].universe) {
-                	layers[layer].update(Decimal.mul(diff, player.uni[layers[layer].universe].tickspeed))
-            	} else {
-                	layers[layer].update(diff)
-            	}
-        	};
-    	}
+		for (item in TREE_LAYERS[x]) {
+			let layer = TREE_LAYERS[x][item]
+			player[layer].resetTime += diff
+			if (tmp[layer].passiveGeneration) generatePoints(layer, diff*tmp[layer].passiveGeneration);
+			if (layers[layer].update && !tmp[layer].deactivated) {
+				if (layers[layer].universe) {
+					layers[layer].update(Decimal.mul(diff, player.uni[layers[layer].universe].tickspeed))
+				} else {
+					layers[layer].update(diff)
+				}
+			};
+		}
 	}
 
 	for (row in OTHER_LAYERS){
-    	for (item in OTHER_LAYERS[row]) {
-        	let layer = OTHER_LAYERS[row][item]
-        	player[layer].resetTime += diff
-        	if (tmp[layer].passiveGeneration) generatePoints(layer, diff*tmp[layer].passiveGeneration);
-        	if (layers[layer].update && !tmp[layer].deactivated) {
-            	if (layers[layer].universe) {
-                	layers[layer].update(Decimal.mul(diff, player.uni[layers[layer].universe].tickspeed))
-            	} else {
-                	layers[layer].update(diff)
-            	}
-        	};
-    	}
+		for (item in OTHER_LAYERS[row]) {
+			let layer = OTHER_LAYERS[row][item]
+			player[layer].resetTime += diff
+			if (tmp[layer].passiveGeneration) generatePoints(layer, diff*tmp[layer].passiveGeneration);
+			if (layers[layer].update && !tmp[layer].deactivated) {
+				if (layers[layer].universe) {
+					layers[layer].update(Decimal.mul(diff, player.uni[layers[layer].universe].tickspeed))
+				} else {
+					layers[layer].update(diff)
+				}
+			};
+		}
 	}
 
 	for (let x = maxRow; x >= 0; x--){
@@ -396,7 +396,6 @@ function gameLoop(diff) {
 
 	for (layer in layers){
 		if (layers[layer].milestones) updateMilestones(layer);
-		if (layers[layer].achievements) updateAchievements(layer)
 	}
 
 }

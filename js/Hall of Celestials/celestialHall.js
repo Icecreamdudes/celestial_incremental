@@ -1,5 +1,4 @@
-﻿var treeCH = [["ch"]]
-addLayer("ch", {
+﻿addLayer("ch", {
     name: "Hall", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "CH", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
@@ -30,6 +29,11 @@ addLayer("ch", {
             "Tav, the Celestial of Limits",
             "Cante, the Celestial of Replicanti",
             "Jocus, the Celestial of Fun",
+            "Matos, the Celestial of Machinery",
+            "Iridite, the Astral Celestial",
+            "Aleph, the Celestial of Swarms",
+            "Tera, the Celestial of Tiers",
+            "Zar, the Celestial of Chance",
         ]
     },
     clickables: {
@@ -41,8 +45,7 @@ addLayer("ch", {
             onClick() {
                 player.ch.celestialIndex = new Decimal(0)
             },
-            style: { width: '50px', "min-height": '50px' }, //tav
-            branches: [12]
+            style: { width: '50px', "min-height": '50px' }, // Tav
         },
         12: {
             title() { return "<h1>Ξ" },
@@ -52,7 +55,8 @@ addLayer("ch", {
             onClick() {
                 player.ch.celestialIndex = new Decimal(1)
             },
-            style: { width: '50px', "min-height": '50px' }, //cante
+            style: { width: '50px', "min-height": '50px' }, // Cante
+            branches: [11],
         },
         13: {
             title() { return "<h1>☻" },
@@ -62,8 +66,8 @@ addLayer("ch", {
             onClick() {
                 player.ch.celestialIndex = new Decimal(2)
             },
-            style: { width: '50px', "min-height": '50px' }, //jocus
-            branches: [11]
+            style: { width: '50px', "min-height": '50px' }, // Jocus
+            branches: [12],
         },
         14: {
             title() { return player.ma.matosDefeated ? "<h1>⊘" : "<h1>?" },
@@ -73,51 +77,54 @@ addLayer("ch", {
             onClick() {
                 player.ch.celestialIndex = new Decimal(3)
             },
-            style: { width: '50px', "min-height": '50px' }, //matos
-            branches: [12]
+            style: { width: '50px', "min-height": '50px' }, // Matos
+            branches() {return player.ma.matosDefeated ? [13] : []},
         },
         15: {
-            title() { return "<h1>?" },
-            canClick() { return false },
+            title() { return player.ir.iriditeDefeated ? "<h1>✦" : "<h1>?" },
+            canClick() { return player.ir.iriditeDefeated },
             unlocked() { return true },
+            tooltip() { return player.ir.iriditeDefeated ? "Iridite, the Astral Celestial" : "" },
             onClick() {
-                //player.ch.celestialIndex = new Decimal(2)
+                player.ch.celestialIndex = new Decimal(4)
             },
-            style: { width: '50px', "min-height": '50px' }, //aleph
+            style: { width: '50px', "min-height": '50px' }, // Iridite
+            branches() {return player.ir.iriditeDefeated ? [14] : []},
         },
         16: {
-            title() { return "<h1>?" },
+            title() { return false ? "<h1>ℵ" : "<h1>?" },
             canClick() { return false },
             unlocked() { return true },
             onClick() {
-                //player.ch.celestialIndex = new Decimal(2)
+                player.ch.celestialIndex = new Decimal(5)
             },
-            style: { width: '50px', "min-height": '50px' }, //zar
+            style: { width: '50px', "min-height": '50px' }, // Aleph
+            branches() {return false ? [15] : []},
         },
         17: {
             title() { return "<h1>?" },
             canClick() { return false },
             unlocked() { return true },
             onClick() {
-                //player.ch.celestialIndex = new Decimal(2)
+                //player.ch.celestialIndex = new Decimal(6)
             },
-            style: { width: '50px', "min-height": '50px' }, //iridite
+            style: { width: '50px', "min-height": '50px' }, // Tera
         },
         18: {
             title() { return "<h1>?" },
             canClick() { return false },
             unlocked() { return true },
             onClick() {
-                //player.ch.celestialIndex = new Decimal(2)
+                //player.ch.celestialIndex = new Decimal(7)
             },
-            style: { width: '50px', "min-height": '50px' }, //tera
+            style: { width: '50px', "min-height": '50px' }, // Zar
         },
         19: {
             title() { return "<h1>☉" },
             canClick() { return false },
             unlocked() { return true },
             onClick() {
-                //player.ch.celestialIndex = new Decimal(2)
+                //player.ch.celestialIndex = new Decimal(8)
             },
             style: { width: '75px', "min-height": '75px' }, //nova
         },
@@ -201,14 +208,19 @@ addLayer("ch", {
             unlocked() { return player.ch.celestialIndex.eq(2) },      
         },
         4: {
-            title: "Matos",
+            title: "Matos, the Celestial of Machinery",
             body() { return "The human civilization from the domain of singularity... A world polluted with industry, corruption in government, and ongoing conflict. This hatred all accumulating into one, mean, celestial. The human version of Matos had a dream. To experience the beauty and wonders of the natural world. But that dream was stripped away from him a long, long time ago. I've never met Matos, but I have heard many things about him. Matos is being used to ressurect Nova and the Novasent after they have been banished by ????????. Having taken part in Nova's religion, Matos believes that working for Nova in order to reach his goal will help him reach true freedom, which is one step closer to his goal. Despite having intent to harm, I completely understand the reasons for Matos' hatred." },
             unlocked() { return player.ch.celestialIndex.eq(3) },      
         },
         5: {
-            title: "Iridite",
+            title: "Iridite, the Astral Celestial",
             body() { return "The first of the novasent, Iridite was born as a member of the celestial hunting corporation. Living her entire life under these conditions, she never got to live her life like a normal human being. One day, she went on a mission that somehow got her turned into a celestial. When she was a celestial, she became obsessed with how celestials are made, and conducted many experiments on countless universes. Nova took sight of this, and asked her to join him as a novasent. She agreed, and was tasked with finding a universe suitable enough for Nova to take over as his own. That's how Nova discovered the domain of singularity." },
             unlocked() { return player.ch.celestialIndex.eq(4) },      
+        },
+        6: {
+            title: "Aleph, the Celestial of Swarms",
+            body() { return "From everything that I have heard, Aleph has always been a very strange celestial. She has always lived solely for the sake of furthering the existance of her swarm, even if it might be at the cost of her own well-being. It seems the only thing that matters to her is a prosperous swarm." },
+            unlocked() { return player.ch.celestialIndex.eq(5) },      
         },
     },
     microtabs: {
@@ -250,23 +262,24 @@ addLayer("ch", {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
-                    ["row", [["raw-html", function () { return "Celestial Constellation #1 - ????, the Celestial of ???????????" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],]],
+                    ["row", [["raw-html", () => { return "<small>Celestial Constellation #" + formatWhole(player.ch.celestialIndex.add(1)) + "</small><br>" + player.ch.celestialTexts[player.ch.celestialIndex] }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],]],
                     ["blank", "25px"],
-                    ["row", [["clickable", 11], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["clickable", 12], ]],
+                    ["row", [["clickable", 12], ["blank", ["50px", "25px"]], ["clickable", 13]]],
                     ["blank", "12.5px"],
-                    ["row", [["clickable", 13], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "50px", "font-family": "monospace" }], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "50px", "font-family": "monospace" }], ["clickable", 14],]],
+                    ["row", [["clickable", 11], ["blank", ["200px", "25px"]], ["clickable", 14]]],
                     ["blank", "6.125px"],
-                    ["row", [["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "0px", "font-family": "monospace" }],  ["clickable", 19],]],
+                    ["clickable", 19],
                     ["blank", "6.125px"],
-                    ["row", [["clickable", 15], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "50px", "font-family": "monospace" }], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "50px", "font-family": "monospace" }], ["clickable", 16],]],
+                    ["row", [["clickable", 18], ["blank", ["200px", "25px"]], ["clickable", 15]]],
                     ["blank", "12.5px"],
-                    ["row", [["clickable", 17], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["clickable", 18], ]],
+                    ["row", [["clickable", 17], ["blank", ["50px", "25px"]], ["clickable", 16]]],
                     ["blank", "25px"],
                     ["infobox", 1],
                     ["infobox", 2],
                     ["infobox", 3],
                     ["infobox", 4],
-                    //NOTE: REMEMBER TO KEEP PASTING THIS INTO MENULAYERS.JS
+                    ["infobox", 5],
+                    ["infobox", 6],
                 ]
             },
             "Matos Perks": {

@@ -165,6 +165,7 @@ addLayer("ep2", {
         goldenTimerMax: new Decimal(600),
         averageGoldenCooldown: new Decimal(600),
         goldenClicks: new Decimal(0),
+        goldClickTimer: new Decimal(0),
 
         barClicks: 0,
         barMax: new Decimal(100),
@@ -173,8 +174,10 @@ addLayer("ep2", {
 
         shopMult: 1,
         upgIndex: 0,
+
+        autoClick: false,
+        clickTime: 0,
     }},
-    automate() {},
     nodeStyle: {
         background: "radial-gradient(#C19F68, #86562E)",
         borderColor: "#422B21",
@@ -186,7 +189,7 @@ addLayer("ep2", {
         let onepersec = new Decimal(1)
         
         player.ep2.cookiesPerSecond = new Decimal(0)
-        for (let i = 1; i < 15; i++) {
+        for (let i = 1; i < 19; i++) {
             player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.add(buyableEffect("ep2", i))
         }
         player.ep2.cpsbm = player.ep2.cookiesPerSecond // Cookies Per Second Before Multipliers
@@ -232,6 +235,14 @@ addLayer("ep2", {
             }
         }
 
+        if (levelableEffect("pet", 2004)[0].gt(0)) {
+            player.ep2.goldClickTimer = player.ep2.goldClickTimer.add(delta)
+            if (player.ep2.goldClickTimer.gte(Decimal.div(1, levelableEffect("pet", 2004)[0]))) {
+                player.ep2.barClicks += 1
+                player.ep2.goldClickTimer = new Decimal(0)
+            }
+        }
+
         let goldenBarDiv = new Decimal(1)
         goldenBarDiv = goldenBarDiv.mul(levelableEffect("pet", 2002)[0])
         if (hasUpgrade("ep2", 9102)) goldenBarDiv = goldenBarDiv.mul(1.5)
@@ -258,6 +269,20 @@ addLayer("ep2", {
         }
 
         if (!player.ep2.obtainedShards && player.ep2.chocoShards.gte(1)) player.ep2.obtainedShards = true
+        if (typeof player.ep2.barClicks != "number") player.ep2.barClicks = 0
+
+        // Autoclicker
+        if (player.ep2.autoClick) {
+            player.ep2.clickTime += 1
+            if (player.ep2.clickTime > 2) {
+                layers.ep2.cookieClick()
+                player.ep2.clickTime = 0
+            }
+        }
+
+        if (player.tab != "ep2") {
+            player.ep2.autoClick = false
+        }
     },
     clickables: {
         1: {
@@ -478,6 +503,54 @@ addLayer("ep2", {
             currencyDisplayName: "Cookies",
             currencyInternalName: "cookies",
             effect() {return getBuyableAmount("ep2", 14).mul(0.02).add(1)},
+            style: {background: "radial-gradient(closest-side, #E9D67388, #9AB83488, #3A812B88, #112D3F88 110%)"},
+        },
+        15: {
+            img: "resources/currencies/antimatter.png",
+            unlocked() {return getBuyableAmount("ep2", 15).gte(15)},
+            title: "<span style='color:#3A812Bcc'>Galactic Expansion</span>",
+            description() {return "Antimatter buildings increase AD galaxy cap.<br>Currently: +" + formatWhole(upgradeEffect(this.layer, this.id))},
+            cost: new Decimal(4e19),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            effect() {return getBuyableAmount("ep2", 15)},
+            style: {background: "radial-gradient(closest-side, #E9D67388, #9AB83488, #3A812B88, #112D3F88 110%)"},
+        },
+        16: {
+            img: "resources/currencies/infinity_points.png",
+            unlocked() {return getBuyableAmount("ep2", 16).gte(15)},
+            title: "<span style='color:#3A812Bcc'>Water Purifier</span>",
+            description() {return "IP buildings boost water pollinator.<br>Currently: ^" + formatSimple(upgradeEffect(this.layer, this.id), 3)},
+            cost: new Decimal(5e20),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            effect() {return getBuyableAmount("ep2", 16).add(1).log(2).div(25).add(1)},
+            style: {background: "radial-gradient(closest-side, #E9D67388, #9AB83488, #3A812B88, #112D3F88 110%)"},
+        },
+        17: {
+            img: "resources/currencies/negative_infinity_points.png",
+            unlocked() {return getBuyableAmount("ep2", 17).gte(15)},
+            title: "<span style='color:#3A812Bcc'>Negatives Attract</span>",
+            description() {return "NIP buildings boost curses.<br>Currently: x" + formatSimple(upgradeEffect(this.layer, this.id), 3)},
+            cost: new Decimal(5e22),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            effect() {return getBuyableAmount("ep2", 17).add(1).pow(1.2)},
+            style: {background: "radial-gradient(closest-side, #E9D67388, #9AB83488, #3A812B88, #112D3F88 110%)"},
+        },
+        18: {
+            img: "resources/currencies/dimensional_power.png",
+            unlocked() {return getBuyableAmount("ep2", 18).gte(15)},
+            title: "<span style='color:#3A812Bcc'>Dimensional Fuel</span>",
+            description() {return "Dimension Power buildings reduce star exploration time.<br>Currently: /" + formatSimple(upgradeEffect(this.layer, this.id), 3)},
+            cost: new Decimal(5e24),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            effect() {return getBuyableAmount("ep2", 18).pow(0.5).div(10).add(1)},
             style: {background: "radial-gradient(closest-side, #E9D67388, #9AB83488, #3A812B88, #112D3F88 110%)"},
         },
 
@@ -1573,6 +1646,318 @@ addLayer("ep2", {
             style: {background: "radial-gradient(#6E575588, #432D2A88)"},
         },
 
+        1501: {
+            img: "resources/currencies/antimatter.png",
+            unlocked() {return getBuyableAmount("ep2", 15).gte(1)},
+            title: "First Dimension",
+            description: "Antimatters are twice as efficient.",
+            cost: new Decimal(8e17),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            style: {background: "radial-gradient(#cccccc88, #aaaaaa88)"},
+        },
+        1502: {
+            img: "resources/currencies/antimatter.png",
+            unlocked() {return getBuyableAmount("ep2", 15).gte(5)},
+            title: "<span style='color:#FF89E7cc'>Second Dimension</span>",
+            description: "Antimatters are twice as efficient.",
+            cost: new Decimal(4e18),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            style: {background: "radial-gradient(#FF89E788, #EA0E6889)"},
+        },
+        1503: {
+            img: "resources/currencies/antimatter.png",
+            unlocked() {return getBuyableAmount("ep2", 15).gte(25)},
+            title: "<span style='color:#00DEFFcc'>Third Dimension</span>",
+            description: "Antimatters are twice as efficient.",
+            cost: new Decimal(5e19),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            style: {background: "radial-gradient(#00DEFF88, #01829288)"},
+        },
+        1504: {
+            img: "resources/currencies/antimatter.png",
+            unlocked() {return getBuyableAmount("ep2", 15).gte(50)},
+            title: "<span style='color:#FFCC2Fcc'>Fourth Dimension</span>",
+            description: "Antimatters are twice as efficient.",
+            cost: new Decimal(4e21),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            style: {background: "radial-gradient(#E9D67388, #FF790088)"},
+        },
+        1505: {
+            img: "resources/currencies/antimatter.png",
+            unlocked() {return getBuyableAmount("ep2", 15).gte(100)},
+            title: "<span style='color:#E9D673cc'>Fifth Dimension</span>",
+            description: "Antimatters are twice as efficient.",
+            cost: new Decimal(4e24),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            style: {background: "radial-gradient(#E9D67388, #A6721E88)"},
+        },
+        1506: {
+            img: "resources/currencies/antimatter.png",
+            unlocked() {return getBuyableAmount("ep2", 15).gte(150)},
+            title: "<span style='color:#A8BF91cc'>Sixth Dimension</span>",
+            description: "Antimatters are twice as efficient.",
+            cost: new Decimal(4e27),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            style: {background: "radial-gradient(#A8BF9188, #955E3988)"},
+        },
+        1507: {
+            img: "resources/currencies/antimatter.png",
+            unlocked() {return getBuyableAmount("ep2", 15).gte(200)},
+            title: "<span style='color:#6E5755cc'>Seventh Dimension</span>",
+            description: "Antimatters are twice as efficient.",
+            cost: new Decimal(4e30),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            style: {background: "radial-gradient(#6E575588, #432D2A88)"},
+        },
+
+        1601: {
+            img: "resources/currencies/infinity_points.png",
+            unlocked() {return getBuyableAmount("ep2", 16).gte(1)},
+            title: "Boundless Points",
+            description: "IPs are twice as efficient.",
+            cost: new Decimal(1e19),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            style: {background: "radial-gradient(#cccccc88, #aaaaaa88)"},
+        },
+        1602: {
+            img: "resources/currencies/infinity_points.png",
+            unlocked() {return getBuyableAmount("ep2", 16).gte(5)},
+            title: "<span style='color:#FF89E7cc'>Ceaseless Points</span>",
+            description: "IPs are twice as efficient.",
+            cost: new Decimal(5e19),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            style: {background: "radial-gradient(#FF89E788, #EA0E6889)"},
+        },
+        1603: {
+            img: "resources/currencies/infinity_points.png",
+            unlocked() {return getBuyableAmount("ep2", 16).gte(25)},
+            title: "<span style='color:#00DEFFcc'>Countless Points</span>",
+            description: "IPs are twice as efficient.",
+            cost: new Decimal(7.5e20),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            style: {background: "radial-gradient(#00DEFF88, #01829288)"},
+        },
+        1604: {
+            img: "resources/currencies/infinity_points.png",
+            unlocked() {return getBuyableAmount("ep2", 16).gte(50)},
+            title: "<span style='color:#FFCC2Fcc'>Limitless Points</span>",
+            description: "IPs are twice as efficient.",
+            cost: new Decimal(5e22),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            style: {background: "radial-gradient(#E9D67388, #FF790088)"},
+        },
+        1605: {
+            img: "resources/currencies/infinity_points.png",
+            unlocked() {return getBuyableAmount("ep2", 16).gte(100)},
+            title: "<span style='color:#E9D673cc'>Unending Points</span>",
+            description: "IPs are twice as efficient.",
+            cost: new Decimal(5e25),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            style: {background: "radial-gradient(#E9D67388, #A6721E88)"},
+        },
+        1606: {
+            img: "resources/currencies/infinity_points.png",
+            unlocked() {return getBuyableAmount("ep2", 16).gte(150)},
+            title: "<span style='color:#A8BF91cc'>Perpetual Points</span>",
+            description: "IPs are twice as efficient.",
+            cost: new Decimal(5e28),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            style: {background: "radial-gradient(#A8BF9188, #955E3988)"},
+        },
+        1607: {
+            img: "resources/currencies/infinity_points.png",
+            unlocked() {return getBuyableAmount("ep2", 16).gte(200)},
+            title: "<span style='color:#6E5755cc'>Endless Points</span>",
+            description: "IPs are twice as efficient.",
+            cost: new Decimal(5e31),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            style: {background: "radial-gradient(#6E575588, #432D2A88)"},
+        },
+
+        1701: {
+            img: "resources/currencies/negative_infinity_points.png",
+            unlocked() {return getBuyableAmount("ep2", 17).gte(1)},
+            title: "stnioP sseldnuoB",
+            description: "NIPs are twice as efficient.",
+            cost: new Decimal(1e21),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            style: {background: "radial-gradient(#cccccc88, #aaaaaa88)"},
+        },
+        1702: {
+            img: "resources/currencies/negative_infinity_points.png",
+            unlocked() {return getBuyableAmount("ep2", 17).gte(5)},
+            title: "<span style='color:#FF89E7cc'>stnioP sselesaeC</span>",
+            description: "NIPs are twice as efficient.",
+            cost: new Decimal(5e21),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            style: {background: "radial-gradient(#FF89E788, #EA0E6889)"},
+        },
+        1703: {
+            img: "resources/currencies/negative_infinity_points.png",
+            unlocked() {return getBuyableAmount("ep2", 17).gte(25)},
+            title: "<span style='color:#00DEFFcc'>stnioP sseltnuoC</span>",
+            description: "NIPs are twice as efficient.",
+            cost: new Decimal(7.5e22),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            style: {background: "radial-gradient(#00DEFF88, #01829288)"},
+        },
+        1704: {
+            img: "resources/currencies/negative_infinity_points.png",
+            unlocked() {return getBuyableAmount("ep2", 17).gte(50)},
+            title: "<span style='color:#FFCC2Fcc'>stnioP sseltimiL</span>",
+            description: "NIPs are twice as efficient.",
+            cost: new Decimal(5e24),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            style: {background: "radial-gradient(#E9D67388, #FF790088)"},
+        },
+        1705: {
+            img: "resources/currencies/negative_infinity_points.png",
+            unlocked() {return getBuyableAmount("ep2", 17).gte(100)},
+            title: "<span style='color:#E9D673cc'>stnioP gnidnenU</span>",
+            description: "NIPs are twice as efficient.",
+            cost: new Decimal(5e27),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            style: {background: "radial-gradient(#E9D67388, #A6721E88)"},
+        },
+        1706: {
+            img: "resources/currencies/negative_infinity_points.png",
+            unlocked() {return getBuyableAmount("ep2", 17).gte(150)},
+            title: "<span style='color:#A8BF91cc'>stnioP lautepreP</span>",
+            description: "NIPs are twice as efficient.",
+            cost: new Decimal(5e30),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            style: {background: "radial-gradient(#A8BF9188, #955E3988)"},
+        },
+        1707: {
+            img: "resources/currencies/negative_infinity_points.png",
+            unlocked() {return getBuyableAmount("ep2", 17).gte(200)},
+            title: "<span style='color:#6E5755cc'>stnioP sseldnE</span>",
+            description: "NIPs are twice as efficient.",
+            cost: new Decimal(5e33),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            style: {background: "radial-gradient(#6E575588, #432D2A88)"},
+        },
+
+        1801: {
+            img: "resources/currencies/dimensional_power.png",
+            unlocked() {return getBuyableAmount("ep2", 18).gte(1)},
+            title: "Dotted Power",
+            description: "Dimension Powers are twice as efficient.",
+            cost: new Decimal(1e23),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            style: {background: "radial-gradient(#cccccc88, #aaaaaa88)"},
+        },
+        1802: {
+            img: "resources/currencies/dimensional_power.png",
+            unlocked() {return getBuyableAmount("ep2", 18).gte(5)},
+            title: "<span style='color:#FF89E7cc'>Lined Power</span>",
+            description: "Dimension Powers are twice as efficient.",
+            cost: new Decimal(5e23),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            style: {background: "radial-gradient(#FF89E788, #EA0E6889)"},
+        },
+        1803: {
+            img: "resources/currencies/dimensional_power.png",
+            unlocked() {return getBuyableAmount("ep2", 18).gte(25)},
+            title: "<span style='color:#00DEFFcc'>Squared Power</span>",
+            description: "Dimension Powers are twice as efficient.",
+            cost: new Decimal(7.5e24),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            style: {background: "radial-gradient(#00DEFF88, #01829288)"},
+        },
+        1804: {
+            img: "resources/currencies/dimensional_power.png",
+            unlocked() {return getBuyableAmount("ep2", 18).gte(50)},
+            title: "<span style='color:#FFCC2Fcc'>Cubed Power</span>",
+            description: "Dimension Powers are twice as efficient.",
+            cost: new Decimal(5e26),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            style: {background: "radial-gradient(#E9D67388, #FF790088)"},
+        },
+        1805: {
+            img: "resources/currencies/dimensional_power.png",
+            unlocked() {return getBuyableAmount("ep2", 18).gte(100)},
+            title: "<span style='color:#E9D673cc'>Tesseracted Power</span>",
+            description: "Dimension Powers are twice as efficient.",
+            cost: new Decimal(5e29),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            style: {background: "radial-gradient(#E9D67388, #A6721E88)"},
+        },
+        1806: {
+            img: "resources/currencies/dimensional_power.png",
+            unlocked() {return getBuyableAmount("ep2", 18).gte(150)},
+            title: "<span style='color:#A8BF91cc'>Penteracted Power</span>",
+            description: "Dimension Powers are twice as efficient.",
+            cost: new Decimal(5e32),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            style: {background: "radial-gradient(#A8BF9188, #955E3988)"},
+        },
+        1807: {
+            img: "resources/currencies/dimensional_power.png",
+            unlocked() {return getBuyableAmount("ep2", 18).gte(200)},
+            title: "<span style='color:#6E5755cc'>Hexeracted Power</span>",
+            description: "Dimension Powers are twice as efficient.",
+            cost: new Decimal(5e35),
+            currencyLocation() { return player.ep2 },
+            currencyDisplayName: "Cookies",
+            currencyInternalName: "cookies",
+            style: {background: "radial-gradient(#6E575588, #432D2A88)"},
+        },
+
         9001: {
             img: "resources/checkback/gold_simple.png",
             unlocked() {return getLevelableAmount("pet", 2002).gte(1)},
@@ -1844,7 +2229,7 @@ addLayer("ep2", {
                 }
                 return eff.mul(getBuyableAmount(this.layer, this.id))
             },
-            unlocked() {return getLevelableAmount("pet", 403).gte(2)},
+            unlocked: true,
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/currencies/leaves.png",
@@ -1867,7 +2252,7 @@ addLayer("ep2", {
                 }
                 return eff.mul(getBuyableAmount(this.layer, this.id))
             },
-            unlocked() {return getLevelableAmount("pet", 403).gte(3)},
+            unlocked() {return getLevelableAmount("pet", 403).gte(2) || getLevelableTier("pet", 403).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/currencies/trees.png",
@@ -1890,7 +2275,7 @@ addLayer("ep2", {
                 }
                 return eff.mul(getBuyableAmount(this.layer, this.id))
             },
-            unlocked() {return getLevelableAmount("pet", 403).gte(4)},
+            unlocked() {return getLevelableAmount("pet", 403).gte(3) || getLevelableTier("pet", 403).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/currencies/grass.png",
@@ -1913,7 +2298,7 @@ addLayer("ep2", {
                 }
                 return eff.mul(getBuyableAmount(this.layer, this.id))
             },
-            unlocked() {return getLevelableAmount("pet", 403).gte(5)},
+            unlocked() {return getLevelableAmount("pet", 403).gte(4) || getLevelableTier("pet", 403).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/currencies/pent.png",
@@ -1936,7 +2321,7 @@ addLayer("ep2", {
                 }
                 return eff.mul(getBuyableAmount(this.layer, this.id))
             },
-            unlocked() {return getLevelableAmount("pet", 403).gte(6)},
+            unlocked() {return getLevelableAmount("pet", 403).gte(5) || getLevelableTier("pet", 403).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/currencies/grasshoppers.png",
@@ -1959,7 +2344,7 @@ addLayer("ep2", {
                 }
                 return eff.mul(getBuyableAmount(this.layer, this.id))
             },
-            unlocked() {return getLevelableAmount("pet", 403).gte(7)},
+            unlocked() {return getLevelableAmount("pet", 403).gte(6) || getLevelableTier("pet", 403).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/currencies/fertilizer.png",
@@ -1982,7 +2367,7 @@ addLayer("ep2", {
                 }
                 return eff.mul(getBuyableAmount(this.layer, this.id))
             },
-            unlocked() {return getLevelableAmount("pet", 403).gte(8)},
+            unlocked() {return getLevelableAmount("pet", 403).gte(7) || getLevelableTier("pet", 403).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/currencies/code_experience.png",
@@ -2005,7 +2390,7 @@ addLayer("ep2", {
                 }
                 return eff.mul(getBuyableAmount(this.layer, this.id))
             },
-            unlocked() {return getLevelableAmount("pet", 403).gte(9)},
+            unlocked() {return getLevelableAmount("pet", 403).gte(8) || getLevelableTier("pet", 403).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/currencies/mods.png",
@@ -2028,7 +2413,7 @@ addLayer("ep2", {
                 }
                 return eff.mul(getBuyableAmount(this.layer, this.id))
             },
-            unlocked() {return getLevelableAmount("pet", 403).gte(10)},
+            unlocked() {return getLevelableAmount("pet", 403).gte(9) || getLevelableTier("pet", 403).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/currencies/dice.png",
@@ -2051,11 +2436,103 @@ addLayer("ep2", {
                 }
                 return eff.mul(getBuyableAmount(this.layer, this.id))
             },
-            unlocked() {return getLevelableAmount("pet", 403).gte(11)},
+            unlocked() {return getLevelableAmount("pet", 403).gte(10) || getLevelableTier("pet", 403).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/currencies/infinity.png",
             title: "Infinity",
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(player.ep2.shopMult))
+                player.ep2.totalBuildings = player.ep2.totalBuildings.add(player.ep2.shopMult)
+            },
+        },
+        15: {
+            costBase: new Decimal(8e16),
+            costGrowth: new Decimal(1.15),
+            currency() {return player.ep2.cookies},
+            pay(amt) {player.ep2.cookies = player.ep2.cookies.sub(amt)},
+            effect(x) {
+                let eff = new Decimal(2e10)
+                for (let i = 1501; i < 1508; i++) {
+                    if (hasUpgrade("ep2", i)) eff = eff.mul(2)
+                }
+                return eff.mul(getBuyableAmount(this.layer, this.id))
+            },
+            unlocked() {return getLevelableAmount("pet", 2004).gte(1)},
+            cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
+            canAfford() {return player.ep2.cookies.gte(this.cost())},
+            img: "resources/currencies/antimatter.png",
+            title: "Antimatter",
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(player.ep2.shopMult))
+                player.ep2.totalBuildings = player.ep2.totalBuildings.add(player.ep2.shopMult)
+            },
+        },
+        16: {
+            costBase: new Decimal(1e18),
+            costGrowth: new Decimal(1.15),
+            currency() {return player.ep2.cookies},
+            pay(amt) {player.ep2.cookies = player.ep2.cookies.sub(amt)},
+            effect(x) {
+                let eff = new Decimal(1.5e11)
+                for (let i = 1601; i < 1608; i++) {
+                    if (hasUpgrade("ep2", i)) eff = eff.mul(2)
+                }
+                return eff.mul(getBuyableAmount(this.layer, this.id))
+            },
+            unlocked() {return getLevelableAmount("pet", 2004).gte(1) && ((getLevelableAmount("pet", 403).gte(5) && getLevelableTier("pet", 403).gte(1)) || getLevelableTier("pet", 403).gte(2))},
+            cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
+            canAfford() {return player.ep2.cookies.gte(this.cost())},
+            img: "resources/currencies/infinity_points.png",
+            title: "IP",
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(player.ep2.shopMult))
+                player.ep2.totalBuildings = player.ep2.totalBuildings.add(player.ep2.shopMult)
+            },
+        },
+        17: {
+            costBase: new Decimal(1e20),
+            costGrowth: new Decimal(1.15),
+            currency() {return player.ep2.cookies},
+            pay(amt) {player.ep2.cookies = player.ep2.cookies.sub(amt)},
+            effect(x) {
+                let eff = new Decimal(2e12)
+                for (let i = 1701; i < 1708; i++) {
+                    if (hasUpgrade("ep2", i)) eff = eff.mul(2)
+                }
+                return eff.mul(getBuyableAmount(this.layer, this.id))
+            },
+            unlocked() {return getLevelableAmount("pet", 2004).gte(1) && ((getLevelableAmount("pet", 403).gte(10) && getLevelableTier("pet", 403).gte(1)) || getLevelableTier("pet", 403).gte(2))},
+            cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
+            canAfford() {return player.ep2.cookies.gte(this.cost())},
+            img: "resources/currencies/negative_infinity_points.png",
+            title: "NIP",
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(player.ep2.shopMult))
+                player.ep2.totalBuildings = player.ep2.totalBuildings.add(player.ep2.shopMult)
+            },
+        },
+        18: {
+            costBase: new Decimal(1e22),
+            costGrowth: new Decimal(1.15),
+            currency() {return player.ep2.cookies},
+            pay(amt) {player.ep2.cookies = player.ep2.cookies.sub(amt)},
+            effect(x) {
+                let eff = new Decimal(5e13)
+                for (let i = 1801; i < 1808; i++) {
+                    if (hasUpgrade("ep2", i)) eff = eff.mul(2)
+                }
+                return eff.mul(getBuyableAmount(this.layer, this.id))
+            },
+            unlocked() {return getLevelableAmount("pet", 2004).gte(1) && ((getLevelableAmount("pet", 403).gte(15) && getLevelableTier("pet", 403).gte(1)) || getLevelableTier("pet", 403).gte(2))},
+            cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
+            canAfford() {return player.ep2.cookies.gte(this.cost())},
+            img: "resources/currencies/dimensional_power.png",
+            title: "<small style='font-size:16px'>Dimension Power</small>",
             buy() {
                 this.pay(this.cost())
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(player.ep2.shopMult))
@@ -2068,8 +2545,11 @@ addLayer("ep2", {
             costGrowth: new Decimal(1.5),
             currency() {return player.ep2.cookies},
             pay(amt) {player.ep2.cookies = player.ep2.cookies.sub(amt)},
-            effect(x) {return getLevelableAmount("pet", 401).pow(0.7).mul(0.01).mul(getBuyableAmount(this.layer, this.id)).add(1)},
-            unlocked() {return getLevelableAmount("pet", 401).gte(1)},
+            effect(x) {
+                let amt = getLevelableAmount("pet", 401).add(getLevelableTier("pet", 401).mul(5).min(40))
+                return amt.pow(0.7).mul(0.01).mul(getBuyableAmount(this.layer, this.id)).mul(getLevelableTier("pet", 401).add(1)).add(1)
+            },
+            unlocked() {return getLevelableAmount("pet", 401).gte(1) || getLevelableTier("pet", 401).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/checkback/dotknightPetBuilding.png",
@@ -2085,8 +2565,11 @@ addLayer("ep2", {
             costGrowth: new Decimal(2),
             currency() {return player.ep2.cookies},
             pay(amt) {player.ep2.cookies = player.ep2.cookies.sub(amt)},
-            effect(x) {return getLevelableAmount("pet", 402).pow(0.7).mul(0.01).mul(getBuyableAmount(this.layer, this.id)).add(1)},
-            unlocked() {return getLevelableAmount("pet", 402).gte(1)},
+            effect(x) {
+                let amt = getLevelableAmount("pet", 402).add(getLevelableTier("pet", 402).mul(5).min(40))
+                return amt.pow(0.7).mul(0.01).mul(getBuyableAmount(this.layer, this.id)).mul(getLevelableTier("pet", 402).add(1)).add(1)
+            },
+            unlocked() {return getLevelableAmount("pet", 402).gte(1) || getLevelableTier("pet", 402).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/checkback/dragonPetBuilding.png",
@@ -2102,7 +2585,10 @@ addLayer("ep2", {
             costGrowth: new Decimal(4),
             currency() {return player.ep2.cookies},
             pay(amt) {player.ep2.cookies = player.ep2.cookies.sub(amt)},
-            effect(x) {return getLevelableAmount("pet", 403).pow(0.7).mul(0.01).mul(getBuyableAmount(this.layer, this.id)).add(1)},
+            effect(x) {
+                let amt = getLevelableAmount("pet", 403).add(getLevelableTier("pet", 403).mul(5).min(40))
+                return amt.pow(0.7).mul(0.01).mul(getBuyableAmount(this.layer, this.id)).mul(getLevelableTier("pet", 403).add(1)).add(1)
+            },
             unlocked: true,
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
@@ -2119,8 +2605,11 @@ addLayer("ep2", {
             costGrowth: new Decimal(8),
             currency() {return player.ep2.cookies},
             pay(amt) {player.ep2.cookies = player.ep2.cookies.sub(amt)},
-            effect(x) {return getLevelableAmount("pet", 404).pow(0.7).mul(0.01).mul(getBuyableAmount(this.layer, this.id)).add(1)},
-            unlocked() {return getLevelableAmount("pet", 404).gte(1)},
+            effect(x) {
+                let amt = getLevelableAmount("pet", 404).add(getLevelableTier("pet", 404).mul(5).min(40))
+                return amt.pow(0.7).mul(0.01).mul(getBuyableAmount(this.layer, this.id)).mul(getLevelableTier("pet", 404).add(1)).add(1)
+            },
+            unlocked() {return getLevelableAmount("pet", 404).gte(1) || getLevelableTier("pet", 404).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/checkback/kresPetBuilding.png",
@@ -2136,8 +2625,11 @@ addLayer("ep2", {
             costGrowth: new Decimal(16),
             currency() {return player.ep2.cookies},
             pay(amt) {player.ep2.cookies = player.ep2.cookies.sub(amt)},
-            effect(x) {return getLevelableAmount("pet", 405).pow(0.7).mul(0.01).mul(getBuyableAmount(this.layer, this.id)).add(1)},
-            unlocked() {return getLevelableAmount("pet", 405).gte(1)},
+            effect(x) {
+                let amt = getLevelableAmount("pet", 405).add(getLevelableTier("pet", 405).mul(5).min(40))
+                return amt.pow(0.7).mul(0.01).mul(getBuyableAmount(this.layer, this.id)).mul(getLevelableTier("pet", 405).add(1)).add(1)
+            },
+            unlocked() {return getLevelableAmount("pet", 405).gte(1) || getLevelableTier("pet", 405).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/checkback/navPetBuilding.png",
@@ -2153,8 +2645,11 @@ addLayer("ep2", {
             costGrowth: new Decimal(32),
             currency() {return player.ep2.cookies},
             pay(amt) {player.ep2.cookies = player.ep2.cookies.sub(amt)},
-            effect(x) {return getLevelableAmount("pet", 406).pow(0.7).mul(0.01).mul(getBuyableAmount(this.layer, this.id)).add(1)},
-            unlocked() {return getLevelableAmount("pet", 406).gte(1)},
+            effect(x) {
+                let amt = getLevelableAmount("pet", 406).add(getLevelableTier("pet", 406).mul(5).min(40))
+                return amt.pow(0.7).mul(0.01).mul(getBuyableAmount(this.layer, this.id)).mul(getLevelableTier("pet", 406).add(1)).add(1)
+            },
+            unlocked() {return getLevelableAmount("pet", 406).gte(1) || getLevelableTier("pet", 406).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/checkback/selPetBuilding.png",
@@ -2208,9 +2703,16 @@ addLayer("ep2", {
                         ["cookie-building", 12],
                         ["cookie-building", 13],
                         ["cookie-building", 14],
+                        ["cookie-building", 15],
+                        ["cookie-building", 16],
+                        ["cookie-building", 17],
+                        ["cookie-building", 18],
                         ["style-row", [
                             ["raw-html", () => {return "Next building unlocked at Pet Level " + formatWhole(getLevelableAmount("pet", 403).add(1))}, {color: "#ccc", fontSize: "13px", textShadow: "0px 1px 0px #000,0px 0px 1px #ccc"}],
-                        ], () => {return getLevelableAmount("pet", 403).lt(11) ? {width:"330px", height: "30px", background: "#181818", border: "2px solid #888", borderRadius: "5px", margin: "15px 0"} : {display: "none !important"}}],
+                        ], () => {return getLevelableAmount("pet", 403).lt(11) && getLevelableTier("pet", 403).lt(1) ? {width:"330px", height: "30px", background: "#181818", border: "2px solid #888", borderRadius: "5px", margin: "15px 0"} : {display: "none !important"}}],
+                        ["style-row", [
+                            ["raw-html", () => {return "Next building unlocked at Asc-1 Lvl-" + formatWhole(getLevelableAmount("pet", 403).div(5).add(0.1).ceil().mul(5))}, {color: "#ccc", fontSize: "13px", textShadow: "0px 1px 0px #000,0px 0px 1px #ccc"}],
+                        ], () => {return getLevelableAmount("pet", 2004).gte(1) && getLevelableAmount("pet", 403).lt(16) && getLevelableTier("pet", 403).lt(2) ? {width:"330px", height: "30px", background: "#181818", border: "2px solid #888", borderRadius: "5px", margin: "15px 0"} : {display: "none !important"}}],
                     ], {width: "365px", height: "722px"}],
                 ],
             },
@@ -2261,6 +2763,10 @@ addLayer("ep2", {
                         ["left-row", [["cookie-upgrade", 1201], ["cookie-upgrade", 1202], ["cookie-upgrade", 1203], ["cookie-upgrade", 1204], ["cookie-upgrade", 1205], ["cookie-upgrade", 1206], ["cookie-upgrade", 1207]], {width: "350px"}],
                         ["left-row", [["cookie-upgrade", 1301], ["cookie-upgrade", 1302], ["cookie-upgrade", 1303], ["cookie-upgrade", 1304], ["cookie-upgrade", 1305], ["cookie-upgrade", 1306], ["cookie-upgrade", 1307]], {width: "350px"}],
                         ["left-row", [["cookie-upgrade", 1401], ["cookie-upgrade", 1402], ["cookie-upgrade", 1403], ["cookie-upgrade", 1404], ["cookie-upgrade", 1405], ["cookie-upgrade", 1406], ["cookie-upgrade", 1407]], {width: "350px"}],
+                        ["left-row", [["cookie-upgrade", 1501], ["cookie-upgrade", 1502], ["cookie-upgrade", 1503], ["cookie-upgrade", 1504], ["cookie-upgrade", 1505], ["cookie-upgrade", 1506], ["cookie-upgrade", 1507]], {width: "350px"}],
+                        ["left-row", [["cookie-upgrade", 1601], ["cookie-upgrade", 1602], ["cookie-upgrade", 1603], ["cookie-upgrade", 1604], ["cookie-upgrade", 1605], ["cookie-upgrade", 1606], ["cookie-upgrade", 1607]], {width: "350px"}],
+                        ["left-row", [["cookie-upgrade", 1701], ["cookie-upgrade", 1702], ["cookie-upgrade", 1703], ["cookie-upgrade", 1704], ["cookie-upgrade", 1705], ["cookie-upgrade", 1706], ["cookie-upgrade", 1707]], {width: "350px"}],
+                        ["left-row", [["cookie-upgrade", 1801], ["cookie-upgrade", 1802], ["cookie-upgrade", 1803], ["cookie-upgrade", 1804], ["cookie-upgrade", 1805], ["cookie-upgrade", 1806], ["cookie-upgrade", 1807]], {width: "350px"}],
                         ["style-row", [
                             ["raw-html", "Cookie Upgrades", {color: "white", textShadow: "0px 1px 0px #000,0px 0px 1px #fff"}],
                         ], () => {return getLevelableAmount("pet", 2002).gte(1) || getLevelableAmount("pet", 2003).gte(1) ? {width: "350px", height: "30px", background: "#181818", borderTop: "8px solid #422B21"} : {display: "none !important"}}],
@@ -2272,6 +2778,7 @@ addLayer("ep2", {
                         ], () => {return player.ep2.totalBuildings.gte(15) ? {width: "350px", height: "30px", background: "#181818", borderTop: "8px solid #422B21"} : {display: "none !important"}}],
                         ["left-row", [["cookie-upgrade", 1], ["cookie-upgrade", 2], ["cookie-upgrade", 3], ["cookie-upgrade", 4], ["cookie-upgrade", 5], ["cookie-upgrade", 6], ["cookie-upgrade", 7]], {width: "350px"}],
                         ["left-row", [["cookie-upgrade", 8], ["cookie-upgrade", 9], ["cookie-upgrade", 10], ["cookie-upgrade", 11], ["cookie-upgrade", 12], ["cookie-upgrade", 13], ["cookie-upgrade", 14]], {width: "350px"}],
+                        ["left-row", [["cookie-upgrade", 15], ["cookie-upgrade", 16], ["cookie-upgrade", 17], ["cookie-upgrade", 18]], {width: "350px"}],
                     ], {width: "365px", height: "672px"}],
                 ],
             },
@@ -2299,7 +2806,7 @@ addLayer("ep2", {
                         ]],
                     ], {width: "350px", background: "rgba(0,0,0,0.4)", padding: "2px 0"}],
                     ["blank", "130px"],
-                    ["raw-html", "<button id='bigCookie' class='bigCookie' onmousedown='startAutoClick();event.preventDefault()' onmouseup='stopAutoClick()' onmouseleave='stopAutoClick()' ontouchstart='startAutoClick()' ontouchend='stopAutoClick()' ontouchcancel='stopAutoClick()' onclick='layers.ep2.cookieClick()'>"],
+                    ["raw-html", "<button id='bigCookie' class='bigCookie' onmousedown='player.ep2.autoClick=true;event.preventDefault()' onmouseup='player.ep2.autoClick=false' onmouseleave='player.ep2.autoClick=false' ontouchstart='player.ep2.autoClick=true' ontouchend='player.ep2.autoClick=false' ontouchcancel='player.ep2.autoClick=false' onclick='layers.ep2.cookieClick()'>"],
                 ], {width: "350px", height: "722px", background:"linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,0.8))"}],
                 ["style-column", [
                     ["left-row", [
@@ -2350,27 +2857,5 @@ addLayer("ep2", {
         ], {width: "723px", background: "repeating-linear-gradient(90deg, #2D6C95 0px, #2D6C95 50px, #2A5B83 50px, #2A5B83 100px)", border: "8px solid #422B21"}],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && getLevelableAmount("pet", 403).gte(1) }
+    layerShown() { return player.startedGame && (getLevelableAmount("pet", 403).gte(1) || getLevelableTier("pet", 403).gte(1)) }
 })
-
-let autoClickInterval
-
-function startAutoClick() {
-    let time = 0
-    autoClickInterval = setInterval(() => {
-        if (time > 0) {
-            layers.ep2.cookieClick()
-        } else {
-            time++
-        }
-    }, 150);
-}
-
-// Function to stop auto-clicking
-function stopAutoClick() {
-    clearInterval(autoClickInterval);
-}
-
-document.getElementById("bigCookie")?.addEventListener('mousedown', startAutoClick)
-document.getElementById("bigCookie")?.addEventListener('mouseup', stopAutoClick)
-document.getElementById("bigCookie")?.addEventListener('mouseleave', stopAutoClick)

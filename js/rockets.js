@@ -37,6 +37,7 @@
         //display
         petTitle: "",
         petLevel: new Decimal(0),
+        petAscension: new Decimal(0),
         spacePetXPToGet: new Decimal(0),
         passengerText: "",
 
@@ -107,13 +108,18 @@
         player.ro.rocketParts = player.ro.rocketParts.add(player.ro.rocketPartsToGet.mul(buyableEffect("st", 205).mul(delta)))
 
         //passenger selection
-        if (player.ro.rarityIndex.eq(0)) player.ro.petTitle = tmp.pet.levelables[Decimal.add(100, player.ro.commonPassengerIndex.add(1))].title
-        if (player.ro.rarityIndex.eq(1)) player.ro.petTitle = tmp.pet.levelables[Decimal.add(200, player.ro.uncommonPassengerIndex.add(1))].title
+        if (player.ro.rarityIndex.eq(0)) {
+            player.ro.petTitle = run(layers.pet.levelables[Decimal.add(100, player.ro.commonPassengerIndex.add(1))].title, layers.pet.levelables[Decimal.add(100, player.ro.commonPassengerIndex.add(1))])
+            player.ro.petLevel = player.pet.levelables[Decimal.add(100, player.ro.commonPassengerIndex.add(1))][0]
+            player.ro.petAscension = player.pet.levelables[Decimal.add(100, player.ro.commonPassengerIndex.add(1))][2]
+        }
+        if (player.ro.rarityIndex.eq(1)) {
+            player.ro.petTitle = run(layers.pet.levelables[Decimal.add(200, player.ro.uncommonPassengerIndex.add(1))].title, layers.pet.levelables[Decimal.add(200, player.ro.uncommonPassengerIndex.add(1))])
+            player.ro.petLevel = player.pet.levelables[Decimal.add(200, player.ro.uncommonPassengerIndex.add(1))][0]
+            player.ro.petAscension = player.pet.levelables[Decimal.add(200, player.ro.uncommonPassengerIndex.add(1))][2]
+        }
 
-        if (player.ro.rarityIndex.eq(0)) player.ro.petLevel = player.pet.levelables[Decimal.add(100, player.ro.commonPassengerIndex.add(1))][0]
-        if (player.ro.rarityIndex.eq(1)) player.ro.petLevel = player.pet.levelables[Decimal.add(200, player.ro.uncommonPassengerIndex.add(1))][0]
-
-        player.ro.spacePetXPToGet = Decimal.pow(player.ro.petLevel, 1.2).floor()
+        player.ro.spacePetXPToGet = player.ro.petLevel.mul(Decimal.pow(2, player.ro.petAscension)).pow(Decimal.mul(1.2, Decimal.pow(1.1, player.ro.petAscension))).floor()
         if (hasUpgrade("sma", 203)) player.ro.spacePetXPToGet = player.ro.spacePetXPToGet.mul(1.2).floor()
         player.ro.spacePetXPToGet = player.ro.spacePetXPToGet.mul(levelableEffect("pu", 306)[2]).floor()
 
@@ -121,10 +127,14 @@
         player.ro.paragonCost = Decimal.mul(player.ro.selectedPassengersUncommon.length, Decimal.add(2, player.ro.selectedPassengersUncommon.length)).add(player.ro.paragonShardsReq)
 
         for (let i = 0; i < player.ro.selectedPassengersCommon.length; i++) {
-            player.ro.commonXPToGet[i] = Decimal.pow(player.pet.levelables[Decimal.add(100, Decimal.add(1, player.ro.selectedPassengersCommon[i]))][0], 1.2).add(1)
+            let lvl = player.pet.levelables[Decimal.add(101, player.ro.selectedPassengersCommon[i])][0]
+            let tier = player.pet.levelables[Decimal.add(101, player.ro.selectedPassengersCommon[i])][2]
+            player.ro.commonXPToGet[i] = lvl.mul(Decimal.pow(2, tier)).pow(Decimal.mul(1.2, Decimal.pow(1.1, tier))).floor()
         }
         for (let i = 0; i < player.ro.selectedPassengersUncommon.length; i++) {
-            player.ro.uncommonXPToGet[i] = Decimal.pow(player.pet.levelables[Decimal.add(200, Decimal.add(1, player.ro.selectedPassengersUncommon[i]))][0], 1.2).add(1)
+            let lvl = player.pet.levelables[Decimal.add(201, player.ro.selectedPassengersUncommon[i])][0]
+            let tier = player.pet.levelables[Decimal.add(201, player.ro.selectedPassengersUncommon[i])][2]
+            player.ro.uncommonXPToGet[i] = lvl.mul(Decimal.pow(2, tier)).pow(Decimal.mul(1.2, Decimal.pow(1.1, tier))).floor()
         }
 
         player.ro.rocketImages = [
@@ -381,7 +391,7 @@
             },
         },
         100: {
-            title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[101].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+            title() { return this.canClick() ? "<img src='resources/Pets/gwaCommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
             canClick() { return true },
             unlocked() { return true },
             onClick() {
@@ -402,7 +412,7 @@
             },
         },
         101: {
-            title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[102].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+            title() { return this.canClick() ? "<img src='resources/Pets/eggCommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
             canClick() { return true },
             unlocked() { return true },
             onClick() {
@@ -423,7 +433,7 @@
             },
         },
         102: {
-            title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[103].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+            title() { return this.canClick() ? "<img src='resources/Pets/unsmithCommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
             canClick() { return true },
             unlocked() { return true },
             onClick() {
@@ -444,7 +454,7 @@
             },
         },
         103: {
-            title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[104].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+            title() { return this.canClick() ? "<img src='resources/Pets/checkpointCommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
             canClick() { return true },
             unlocked() { return true },
             onClick() {
@@ -465,7 +475,7 @@
             },
         },
 104: {
-    title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[105].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    title() { return this.canClick() ? "<img src='resources/Pets/slaxCommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
     unlocked() { return true },
     onClick() {
@@ -486,7 +496,7 @@
     },
 },
 105: {
-    title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[106].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    title() { return this.canClick() ? "<img src='resources/Pets/spiderCommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
     unlocked() { return true },
     onClick() {
@@ -507,7 +517,7 @@
     },
 },
 106: {
-    title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[107].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    title() { return this.canClick() ? "<img src='resources/Pets/blobCommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
     unlocked() { return true },
     onClick() {
@@ -528,7 +538,7 @@
     },
 },
 107: {
-    title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[108].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    title() { return this.canClick() ? "<img src='resources/Pets/replicatorCommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
     unlocked() { return true },
     onClick() {
@@ -549,7 +559,7 @@
     },
 },
 108: {
-    title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[109].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    title() { return this.canClick() ? "<img src='resources/Pets/smokeCommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
     unlocked() { return true },
     onClick() {
@@ -570,7 +580,7 @@
     },
 },
 200: {
-    title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[201].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    title() { return this.canClick() ? "<img src='resources/Pets/testeUncommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
     unlocked() { return true },
     onClick() {
@@ -591,7 +601,7 @@
     },
 },
 201: {
-    title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[202].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    title() { return this.canClick() ? "<img src='resources/Pets/starUncommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
     unlocked() { return true },
     onClick() {
@@ -612,7 +622,7 @@
     },
 },
 202: {
-    title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[203].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    title() { return this.canClick() ? "<img src='resources/Pets/normalFaceUncommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
     unlocked() { return true },
     onClick() {
@@ -633,7 +643,7 @@
     },
 },
 203: {
-    title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[204].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    title() { return this.canClick() ? "<img src='resources/Pets/sharkUncommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
     unlocked() { return true },
     onClick() {
@@ -654,7 +664,7 @@
     },
 },
 204: {
-    title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[205].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    title() { return this.canClick() ? "<img src='resources/Pets/eyeUncommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
     unlocked() { return true },
     onClick() {
@@ -675,7 +685,7 @@
     },
 },
 205: {
-    title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[206].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    title() { return this.canClick() ? "<img src='resources/Pets/clockUncommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
     unlocked() { return true },
     onClick() {
@@ -696,7 +706,7 @@
     },
 },
 206: {
-    title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[207].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    title() { return this.canClick() ? "<img src='resources/Pets/trollUncommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
     unlocked() { return true },
     onClick() {
@@ -717,7 +727,7 @@
     },
 },
 207: {
-    title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[208].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    title() { return this.canClick() ? "<img src='resources/Pets/infinityBreakerUncommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
     unlocked() { return true },
     onClick() {
@@ -738,7 +748,7 @@
     },
 },
 208: {
-    title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[209].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    title() { return this.canClick() ? "<img src='resources/Pets/johnUncommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
     unlocked() { return true },
     onClick() {
@@ -836,8 +846,15 @@
                     ["style-row", [
                         ["style-column", [
                     ["blank", "25px"],
-                    ["raw-html", function () { return player.ro.petTitle }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Level: " + formatWhole(player.ro.petLevel) + " -> " + formatWhole(player.ro.spacePetXPToGet) + " Space Pet XP." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", () => { return player.ro.petTitle }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["row", [
+                        ["column", [
+                            ["raw-html", () => {return "Level: " + formatWhole(player.ro.petLevel)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return "Ascension: " + formatWhole(player.ro.petAscension)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ]],
+                        ["raw-html", "→", {color: "white", fontSize: "24px", fontFamily: "monospace", marginRight: "20px", marginLeft: "20px"}],
+                        ["raw-html", () => {return formatWhole(player.ro.spacePetXPToGet) + " Space Pet XP."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ]],
                     ["blank", "25px"],
                     ["style-row", [["clickable", 13],["clickable", 14],]],
                     ["blank", "25px"],

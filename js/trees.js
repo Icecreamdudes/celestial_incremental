@@ -51,7 +51,7 @@
         if (hasUpgrade("cs", 201)) player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("f", 104))
         player.t.treesToGet = player.t.treesToGet.mul(player.m.modEffect)
         player.t.treesToGet = player.t.treesToGet.mul(levelableEffect("pet", 102)[1])
-        player.t.treesToGet = player.t.treesToGet.mul(player.d.diceEffects[3])
+        player.t.treesToGet = player.t.treesToGet.mul(player.d.boosterEffects[3])
         player.t.treesToGet = player.t.treesToGet.mul(player.rf.abilityEffects[1])
         if (hasUpgrade("g", 12)) player.t.treesToGet = player.t.treesToGet.mul(player.g.grassEffect2)
         if (hasMilestone("r", 19)) player.t.treesToGet = player.t.treesToGet.mul(player.r.pentMilestone9Effect[0])
@@ -61,8 +61,6 @@
 
         // CHALLENGE MODIFIERS
         if (inChallenge("ip", 13)) player.t.treesToGet = player.t.treesToGet.pow(0.75)
-        if (player.de.antidebuffIndex.eq(3)) player.t.treesToGet = player.t.treesToGet.mul(player.de.antidebuffEffect)
-        if (inChallenge("tad", 11)) player.t.treesToGet = player.t.treesToGet.pow(0.5)
 
         // CONTINUED REGULAR MODIFIERS
         if (player.pol.pollinatorEffects.bat.enabled) player.t.treesToGet = player.t.treesToGet.mul(player.pol.pollinatorEffects.bat.effects[1])
@@ -77,10 +75,8 @@
         if (hasUpgrade("cs", 401)) player.t.treesToGet = player.t.treesToGet.pow(1.1)
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
-        player.t.treesToGet = player.t.treesToGet.div(player.po.halterEffects[4])
-        if (inChallenge("ip", 18) && player.t.trees.gt(player.t.trees.mul(0.3 * delta))) {
-            player.t.trees = player.t.trees.sub(player.t.trees.mul(0.3 * delta))
-        }
+        if (player.po.halter.trees.enabled == 1) player.t.treesToGet = player.t.treesToGet.div(player.po.halter.trees.halt)
+        if (player.po.halter.trees.enabled == 2 && player.t.treesToGet.gt(player.po.halter.trees.halt)) player.t.treesToGet = player.po.halter.trees.halt
 
         // TREE EFFECT
         player.t.treeEffect = player.t.trees.div(6).pow(1.1).add(1)
@@ -95,7 +91,7 @@
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.gh.grasshopperEffects[3])
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(buyableEffect("gh", 17))
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(levelableEffect("pet", 202)[1])
-        player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.d.diceEffects[4])
+        player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.d.boosterEffects[4])
         if (hasUpgrade("ip", 22) && !inChallenge("ip", 14)) player.t.leavesPerSecond = player.t.leavesPerSecond.mul(upgradeEffect("ip", 22))
         if (hasUpgrade("ad", 15) && !inChallenge("ip", 14)) player.t.leavesPerSecond = player.t.leavesPerSecond.mul(upgradeEffect("ad", 15))
 
@@ -112,7 +108,6 @@
         // CHALLENGE MODIFIERS
         player.t.leavesPerSecond = player.t.leavesPerSecond.div(player.pe.pestEffect[3])
         if (inChallenge("ip", 13)) player.t.leavesPerSecond = player.t.leavesPerSecond.pow(0.75)
-        if (inChallenge("tad", 11)) player.t.leavesPerSecond = player.t.leavesPerSecond.pow(0.5)
 
         // CONTINUED REGULAR MODIFIERS
         if (player.pol.pollinatorEffects.bat.enabled) player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.pol.pollinatorEffects.bat.effects[0])
@@ -123,7 +118,6 @@
         player.t.leavesPerSecond = player.t.leavesPerSecond.pow(player.co.cores.tree.effect[2])
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
-        player.t.leavesPerSecond = player.t.leavesPerSecond.div(player.po.halterEffects[3])
         if (player.r.timeReversed) player.t.leavesPerSecond = player.t.leavesPerSecond.mul(0)
         
         // LEAVES PER SECOND
@@ -187,6 +181,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 8)) completeAchievement("achievements", 8)
                 if (mult != true && !hasMilestone("r", 12)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -460,6 +455,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Trees"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 12)) completeAchievement("achievements", 12)
                 if (mult != true && !hasMilestone("r", 12)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)

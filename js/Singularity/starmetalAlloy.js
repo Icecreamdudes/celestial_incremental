@@ -81,12 +81,10 @@
         }
         }
 
-        if (player.sme.autoEnterToggle)
-        {
+        if (player.sme.autoEnterToggle) {
             player.sma.inStarmetalChallenge = true
-            player.universe = -0.1
+            player.universe = "D1"
             player.tab = "le"
-            player.uniTab = 1
 
             layers.pu.generateSelection();
 
@@ -123,13 +121,13 @@
             style: {width: "600px", minHeight: "200px", color: "white", backgroundImage: "radial-gradient(circle, black 60%, #13292f 70%, #54265e 80%, #8d3947 90%, #e6eb57 110%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
         },
         12: {
-            title() { return player.pet.legendaryPetAbilityCooldowns[0].lte(0) ? "<h1>START WARPING LIGHT<br><h3>And enter an eclipse..." : "<h1>Check Back in " + formatTime(player.pet.legendaryPetAbilityCooldowns[0]) + "."},
-            canClick() {return player.pet.legendaryPetAbilityCooldowns[0].lte(0)},
+            title() { return player.pet.legPetTimers[0].cooldown.lte(0) ? "<h1>START WARPING LIGHT<br><h3>And enter an eclipse..." : "<h1>Check Back in " + formatTime(player.pet.legPetTimers[0].cooldown) + "."},
+            canClick() {return player.pet.legPetTimers[0].cooldown.lte(0)},
             unlocked() {return getLevelableAmount("pet", 501).gte(1)},
             onClick() {
-                player.pet.legendaryPetAbilityTimers[0] = player.pet.legendaryPetAbilityTimersMax[0]
-                player.pet.legendaryPetAbilityCooldowns[0] = player.pet.legendaryPetAbilityCooldownsMax[0]
-                player.pet.activeAbilities[0] = true
+                player.pet.legPetTimers[0].cooldown = player.pet.legPetTimers[0].cooldownMax
+                player.pet.legPetTimers[0].current = player.pet.legPetTimers[0].max
+                player.pet.legPetTimers[0].active = true
 
                 player.sma.inStarmetalChallenge = true
                 player.universe = "D1"
@@ -148,7 +146,11 @@
                 pauseUniverse("U3")
                 pauseUniverse("CB")
             },
-            style: {width: "600px", minHeight: "200px", color: "#ffe066", backgroundImage: "radial-gradient(circle, #222 80%, #664900 95%, #b29c47 110%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
+            style() {
+                let look = {width: "600px", minHeight: "200px", color: "#ffe066", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"}
+                this.canClick() ? look.background = "radial-gradient(circle, #222 80%, #664900 95%, #b29c47 110%)" : look.background = "#bf8f8f"
+                return look
+            },
         },
         13: {
             title() {return player.sma.toggle ? "Auto-Singularity: ON" : "Auto-Singularity: OFF"},
@@ -456,7 +458,7 @@
         108: {
             title: "Light Starmetal Upgrade VIII",
             unlocked() { return hasUpgrade("sma", 107) && player.ma.secondAreaUnlock},
-            description: "Number of dice sides is multiplied based on best depth 1 combo, and singularity preserves pent milestones and halter values.",
+            description: "Number of dice sides is multiplied based on best depth 1 combo, and unlock new singularity milestones.",
             cost: new Decimal("1111"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",

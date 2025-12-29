@@ -27,7 +27,7 @@
 		"Hex/purity.js", "Hex/power.js", "Hex/realms.js", "Hex/vex.js", "Hex/sacrifice.js",
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js",
 		"Check Back/cookie.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
-		"Interspace/rift.js", "Interspace/tasks.js", "Interspace/well.js", "Interspace/bumpy.js", "Interspace/developmentXp.js", "Interspace/antiSingularity.js", "Interspace/cere.js",
+		"Interspace/well.js", "Interspace/tasks.js", "Interspace/bumpy.js", "Interspace/developmentXp.js", "Interspace/antiSingularity.js", "Interspace/cere.js",
 
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
@@ -200,9 +200,6 @@ function updateStyles() {
 			break;
 		case "au2":
 			layerBG = "#151230"
-			break;
-		case "rif":
-			layerBG = "#301830"
 			break;
 		case "tas":
 			layerBG = "#241830"

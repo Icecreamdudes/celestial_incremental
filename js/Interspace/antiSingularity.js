@@ -58,5 +58,5 @@
         ["raw-html", () => { return player.cer.cereUnlocked ? "The product of your abstract values is <h3>" + format(player.cer.abstractProduct) + "</h3>." : ""}, {color: "#ff7fbf", fontSize: "18px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true}
+    layerShown() { return player.startedGame == true && false}
 })

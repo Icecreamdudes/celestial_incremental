@@ -47,7 +47,7 @@
             player.tas.tasks[i+1].time = player.tas.tasks[i+1].time.add(delta)
         }
     },
-    branches: ["wel", "dxp"],
+    branches: ["bum", "ans"],
     clickables: {
         1: {
             title() { return "<h3>Use</h3>" },
@@ -170,7 +170,7 @@
         }
     },
     tabFormat: [
-        ["raw-html", () => { return "You have <h3>" + format(player.tas.light) + "</h3> light." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+        ["raw-html", () => { return "You have <h3>" + format(player.wel.light) + "</h3> light." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true}

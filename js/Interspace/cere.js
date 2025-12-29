@@ -77,5 +77,5 @@
         ["raw-html", () => { return player.cer.cereUnlocked ? "Boosts negative infinity points by ^" + format(player.cer.abstractEffect) + "" : "" }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true}
+    layerShown() { return player.startedGame == true && false}
 })

@@ -147,13 +147,44 @@ addLayer("ir", {
 
         shipType: 0,
 
-        shipCooldownMax: [new Decimal(0), new Decimal(600), new Decimal(900)],
-        shipCooldownTimers: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),],
-        
-        sendCooldownMax: [new Decimal(0), new Decimal(900), new Decimal(1200), new Decimal(10), new Decimal(4800), new Decimal(12000), new Decimal(24000)],
-        sendCooldownTimer: new Decimal(0),
-        sendResource: ["ir", "spaceRock"],
-        sendGain: new Decimal(50),
+        timers: {
+            0: {
+                current: new Decimal(0),
+                max: new Decimal(0),
+            },
+            1: {
+                current: new Decimal(0),
+                max: new Decimal(600),
+            },
+            2: {
+                current: new Decimal(0),
+                max: new Decimal(900),
+            },
+            3: {
+                current: new Decimal(0),
+                max: new Decimal(1500),
+            },
+            4: {
+                current: new Decimal(0),
+                max: new Decimal(1200),
+            },
+            5: {
+                current: new Decimal(0),
+                max: new Decimal(1800),
+            },
+            6: {
+                current: new Decimal(0),
+                max: new Decimal(1200),
+            },
+            7: {
+                current: new Decimal(0),
+                max: new Decimal(600),
+            },
+            8: {
+                current: new Decimal(0),
+                max: new Decimal(2100),
+            },
+        },
 
         battleLevel: new Decimal(0),
         battleXP: new Decimal(0),
@@ -229,6 +260,13 @@ addLayer("ir", {
             player.ir.sendResource = ["ir", "spaceGem"]
             player.ir.sendGain = new Decimal(5)
         }
+        if (player.ir.shipType == 7) {
+            player.ir.shipHealthMax = new Decimal(75)
+
+            player.ir.sendResource = ["ir", "spaceRock"]
+            player.ir.sendGain = new Decimal(20)
+            .mul(levelableEffect("pet", 502)[1])
+        }
 
         if (hasUpgrade("ir", 102)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.25)
         if (player.ir.shipType != 0) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(levelableEffect("ir", player.ir.shipType)[3])
@@ -253,23 +291,19 @@ addLayer("ir", {
             if (arena) arena.showUpgradeChoice();
         }
 
-        if (player.ir.battleLevel.gte(8) && hasUpgrade("ir", 16) && !player.ir.ufoFought)
-        {
+        if (player.ir.battleLevel.gte(8) && hasUpgrade("ir", 16) && !player.ir.ufoFought) {
             spawnUfoBoss();
             player.ir.ufoFought = true
         }
 
-        if (player.ir.battleLevel.gte(16) && hasUpgrade("ir", 19) && !player.ir.iriditeFought)
-        {
+        if (player.ir.battleLevel.gte(16) && hasUpgrade("ir", 19) && !player.ir.iriditeFought) {
             summonIridite();
             player.ir.iriditeFought = true
         }
 
-        if (cutsceneActive)
-        {
+        if (cutsceneActive) {
             pauseAsteroidMinigame()
-        } else
-        {
+        } else {
             resumeAsteroidMinigame()
         }
     },
@@ -324,7 +358,7 @@ addLayer("ir", {
             lore() {
                 return "Fast, slim, and rapid-firing bullets. Pretty average ship ngl."
             },
-            // levelLimit() { return new Decimal(99) },
+            levelLimit() { return new Decimal(50)},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).pow(0.6).add(1), //Stars
@@ -363,12 +397,12 @@ addLayer("ir", {
             image() { return this.canClick() ? "resources/ships/impact.png" : "resources/secret.png"},
             title() { return "Impact" },
             description() {
-                return "^" + format(this.effect()[0]) + " to points.<br>x" + format(this.effect()[1]) + " to infinities.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
+                return "^" + format(this.effect()[0], 3) + " to points.<br>x" + format(this.effect()[1]) + " to infinities.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
             },
             lore() {
                 return "Bigger, slower, but larger and more powerful bullets."
             },
-            // levelLimit() { return new Decimal(99) },
+            levelLimit() { return new Decimal(50)},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).pow(0.3).mul(0.07).add(1), //points
@@ -407,12 +441,12 @@ addLayer("ir", {
             image() { return this.canClick() ? "resources/ships/unarmed.png" : "resources/secret.png"},
             title() { return "Unarmed" },
             description() {
-                return "^" + format(this.effect()[0]) + " to antimatter dimensions.<br>x" + format(this.effect()[1]) + " to core scraps.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
+                return "^" + format(this.effect()[0], 3) + " to antimatter dimensions.<br>x" + format(this.effect()[1]) + " to core scraps.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
             },
             lore() {
                 return "Don't underestimate the goat."
             },
-            // levelLimit() { return new Decimal(99) },
+            levelLimit() { return new Decimal(50)},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).pow(0.35).mul(0.06).add(1), //ad
@@ -452,16 +486,16 @@ addLayer("ir", {
             image() { return this.canClick() ? "resources/ships/sniper.png" : "resources/secret.png"},
             title() { return "Sniper" },
             description() {
-                return "x" + format(this.effect()[0]) + " to space energy.<br>^" + format(this.effect()[1]) + " to infinity points.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
+                return "x" + format(this.effect()[0]) + " to space energy.<br>^" + format(this.effect()[1], 3) + " to infinity points.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
             },
             lore() {
                 return "Shoots extremely fast piercing bullets with precision. Automatically aims at cosmic celestialites, might affect movement."
             },
-            // levelLimit() { return new Decimal(99) },
+            levelLimit() { return new Decimal(50)},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).mul(0.3).add(1), //space energy
-                    getLevelableAmount(this.layer, this.id).pow(0.3).mul(0.085).add(1), //core scraps
+                    getLevelableAmount(this.layer, this.id).pow(0.3).mul(0.08).add(1), // infinity points
                     getLevelableAmount(this.layer, this.id).mul(0.02).add(1), //Damage
                     getLevelableAmount(this.layer, this.id).mul(0.02).add(1), //Health
                 ]
@@ -502,7 +536,7 @@ addLayer("ir", {
             lore() {
                 return "Has omnidirectional movement and shoots shotgun-like bursts towards the mouse."
             },
-            // levelLimit() { return new Decimal(99) },
+            levelLimit() { return new Decimal(50)},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).pow(0.7).mul(0.1).add(1), //xpboost
@@ -542,16 +576,16 @@ addLayer("ir", {
             image() { return this.canClick() ? "resources/ships/streamliner.png" : "resources/secret.png"},
             title() { return "Streamliner" },
             description() {
-                return "^" + format(this.effect()[0]) + " to mastery point effects.<br>^" + format(this.effect()[1]) + " to negative infinity points.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
+                return "^" + format(this.effect()[0], 3) + " to mastery point effects.<br>^" + format(this.effect()[1], 3) + " to negative infinity points.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
             },
             lore() {
                 return "Shoots very fast streams of bullets, but with slow movement speed."
             },
-            // levelLimit() { return new Decimal(99) },
+            levelLimit() {return new Decimal(50)},
             effect() { 
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(2.5).pow(1.5).add(1), //mastery point effects
-                    getLevelableAmount(this.layer, this.id).pow(0.3).mul(0.1).add(1), //neginf
+                    getLevelableAmount(this.layer, this.id).pow(0.5).add(1), //mastery point effects
+                    getLevelableAmount(this.layer, this.id).pow(0.3).mul(0.07).add(1), //neginf
                     getLevelableAmount(this.layer, this.id).mul(0.06).add(1), //Damage
                     getLevelableAmount(this.layer, this.id).mul(0.03).add(1), //Health
                 ]
@@ -569,6 +603,51 @@ addLayer("ir", {
             pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
             xpReq() { return getLevelableAmount(this.layer, this.id).pow(1.45).mul(100).add(500).floor() },  
+            currency() { return getLevelableXP(this.layer, this.id) },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#37078f"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#5e4ee6ff" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }  
+        },
+        7: {
+            image() { return this.canClick() ? "resources/ships/stinger.png" : "resources/secret.png"},
+            title() { return "Stinger" },
+            description() {
+                return "^" + format(this.effect()[0], 3) + " to pollinators.<br>x" + format(this.effect()[1]) + " to radiation.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
+            },
+            lore() {
+                return "Lacks a gun, but makes up for it with spikes."
+            },
+            levelLimit() { return new Decimal(50)},
+            effect() { 
+                return [
+                    getLevelableAmount(this.layer, this.id).pow(0.3).mul(0.1).add(1), // pollinators
+                    getLevelableAmount(this.layer, this.id).pow(1.5).add(1), // radiation
+                    getLevelableAmount(this.layer, this.id).mul(0.02).add(1), //Damage
+                    getLevelableAmount(this.layer, this.id).mul(0.02).add(1), //Health
+                ]
+            },
+            sacValue() { return new Decimal(1)},
+            // CLICK CODE
+            tooltip() { return  (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || hasUpgrade("fu", 110) ? "" : "Progress through Aleph content." },
+            unlocked() { return player.al.show },
+            canClick() { return (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || hasUpgrade("fu", 110)},
+            onClick() { 
+                player.ir.shipType = this.id
+                return layers[this.layer].levelables.index = this.id 
+            },
+            // BUY CODE
+            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
+            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
+            xpReq() { return getLevelableAmount(this.layer, this.id).pow(1.5).mul(150).add(1000).floor() },  
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
                 this.pay(this.xpReq())
@@ -617,8 +696,8 @@ addLayer("ir", {
             },
         },
         11: {
-            title() { return player.ir.shipCooldownTimers[player.ir.shipType].lte(0) ? "<h2>Enter Space Battle" : "<h2>Enter Space Battle<br>Cooldown: " + formatTime(player.ir.shipCooldownTimers[player.ir.shipType])},
-            canClick() { return player.ir.shipCooldownTimers[player.ir.shipType].lte(0) },
+            title() { return player.ir.timers[player.ir.shipType].current.lte(0) ? "<h2>Enter Space Battle" : "<h2>Cooldown: " + formatTime(player.ir.timers[player.ir.shipType].current)},
+            canClick() { return player.ir.timers[player.ir.shipType].current.lte(0) },
             unlocked() { return true },
             tooltip() { return "Universes are paused to save performance." },
             onClick() {
@@ -679,7 +758,7 @@ addLayer("ir", {
                 pauseUniverse("U3")
                 pauseUniverse("CB")
 
-                player.ir.shipCooldownTimers[player.ir.shipType] = player.ir.shipCooldownMax[player.ir.shipType]
+                player.ir.timers[player.ir.shipType].current = player.ir.timers[player.ir.shipType].max
 
                 player.ir.battleXP = new Decimal(0)
                 player.ir.battleLevel = new Decimal(0)
@@ -809,7 +888,11 @@ addLayer("ir", {
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px", color: "white"},
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                return look
+            },
         },
         12: {
             title: "Replenish",
@@ -823,7 +906,11 @@ addLayer("ir", {
                 return player.ir.spaceRock.pow(2.5).mul(5).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px", color: "white"},
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                return look
+            },
         },
         13: {
             title: "Servitude",
@@ -837,7 +924,11 @@ addLayer("ir", {
                 return player.ir.spaceGem.pow(0.25).mul(0.3).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px", color: "white"},
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                return look
+            },
         },
         14: {
             title: "Healing",
@@ -847,7 +938,11 @@ addLayer("ir", {
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px", color: "white"},
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                return look
+            },
         },
         15: {
             title: "Civilization",
@@ -857,7 +952,11 @@ addLayer("ir", {
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px", color: "white"},
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                return look
+            },
         },
         16: {
             title: "Miniboss",
@@ -867,7 +966,11 @@ addLayer("ir", {
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px", color: "white"},
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                return look
+            },
         },
         17: {
             title: "Reinforcement II",
@@ -877,7 +980,11 @@ addLayer("ir", {
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px", color: "white"},
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                return look
+            },
         },
         18: {
             title: "Timekeeper",
@@ -891,7 +998,11 @@ addLayer("ir", {
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px", color: "white"},
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                return look
+            },
         },
         19: {
             title: "Iridite",
@@ -901,7 +1012,11 @@ addLayer("ir", {
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px", color: "white"},
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                return look
+            },
         },
 
         //gems
@@ -913,7 +1028,11 @@ addLayer("ir", {
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px", color: "white"},
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                return look
+            },
         },
         102: {
             title: "Reinforcement",
@@ -923,7 +1042,11 @@ addLayer("ir", {
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px", color: "white"},
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                return look
+            },
         },
         103: {
             title: "Alleviator",
@@ -933,7 +1056,11 @@ addLayer("ir", {
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px", color: "white"},
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                return look
+            },
         },
         104: {
             title: "Treasure",
@@ -943,7 +1070,11 @@ addLayer("ir", {
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px", color: "white"},
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                return look
+            },
         },
         105: {
             title: "Exploration",
@@ -953,7 +1084,11 @@ addLayer("ir", {
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px", color: "white"},
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                return look
+            },
         },
         106: {
             title: "Alleviator II",
@@ -963,18 +1098,17 @@ addLayer("ir", {
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px", color: "white"},
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                return look
+            },
         },
-
     },
-    buyables: {},
-    milestones: {},
-    challenges: {},
-    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
                 unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
                 content: [
                     ["blank", "25px"],
@@ -987,7 +1121,7 @@ addLayer("ir", {
                 ]
             },
             "Space Battle": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
                 unlocked() { return player.ir.iriditeUnlocked && !player.ir.inBattle },
                 content: [
                     ["blank", "25px"],
@@ -1013,7 +1147,7 @@ addLayer("ir", {
                             ], {width: "541px", height: "40px", backgroundColor: "#241d66ff", borderBottom: "3px solid #5e4ee6ff",  borderLeft: "3px solid #5e4ee6ff",  userSelect: "none"}],
                             ["style-column", [
                                 ["row", [["levelable", 1], ["levelable", 2],["levelable", 3],["levelable", 4],["levelable", 5],]],
-                                ["row", [["levelable", 6],]],
+                                ["row", [["levelable", 6],["levelable", 7],]],
                             ], {width: "531px", height: "250px", backgroundColor: "#151230", borderLeft: "3px solid #5e4ee6ff", padding: "5px"}],
                         ], {width: "556px", height: "220px"}],
                     ["blank", "25px"],
@@ -1022,7 +1156,7 @@ addLayer("ir", {
                 ]
             },
             "Upgrades": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
                 unlocked() { return player.ir.iriditeUnlocked && !player.ir.inBattle },
                 content: [
                     ["blank", "25px"],
@@ -1038,7 +1172,7 @@ addLayer("ir", {
                 ]
             },
             "Perks": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"} },
                 unlocked() { return player.ir.iriditeDefeated && !player.ir.inBattle },
                 content: [
                     ["blank", "25px"],
@@ -1046,19 +1180,18 @@ addLayer("ir", {
                         ["raw-html", "Perks for defeating Iridite", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ], {width: "1000px", border: "3px solid rgb(27, 0, 36)", backgroundImage: "linear-gradient(120deg, #480e8aff 0%, rgba(20, 7, 24, 1) 100%)", borderBottom: "5px", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}],
                     ["style-column", [
-                        ["raw-html", () => { return "Unlocks: COMING SOON!" }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return player.pol.unlockHive == 2 ? "Unlocks: The Hive" : "Unlocks: Larva (In Pollinators)" }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "15px"],
                         ["raw-html", () => { return "Greatly weakened antimatter softcap." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "Weakened 3rd replicanti point softcap.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", () => { return "x50 dice sides." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", () => { return "Keep hex of power upgrades on singularity reset." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", () => { return "Keep hex of realms challenge completions on singularity reset." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", () => { return "Keep hex of vexes on singularity resets and subsequent reset tiers." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", () => { return "Keep hex of purity on singularity resets and subsequent reset tiers." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return "x1e12 post-OTF currencies." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return "Keep hex progress on singularity reset." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                     ], {width: "1000px", border: "3px solid rgb(27, 0, 36)", backgroundImage: "linear-gradient(120deg, #480e8aff 0%, rgba(20, 7, 24, 1) 100%)", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px"}]
                 ]
             },
             "Battle": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
                 unlocked() { return false },
                 content: [
                     ["raw-html", function () { return "Level: " + formatWhole(player.ir.battleLevel) }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
@@ -1075,7 +1208,7 @@ addLayer("ir", {
                 ]
             },
             "Refresh Page :(": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
                 unlocked() { return false },
                 content: [
                     ["blank", "25px"],
@@ -1337,6 +1470,20 @@ class SpaceArena {
                 lastShot: 0,
                 damage: 4,
                 collisionDamage: 5,
+            };
+        }
+        if (player.ir.shipType == 7) {
+            this.ship = {
+                x: width / 2,
+                y: height / 2,
+                angle: 0,
+                velocity: 0,
+                angularVelocity: 0,
+                maxVelocity: 5,
+                acceleration: 0.3,
+                deceleration: 0.15,
+                rotationSpeed: 0.04,
+                collisionDamage: 10,
             };
         }
         if (player.ir.shipType == 0) {
@@ -1885,7 +2032,7 @@ class SpaceArena {
         let cooldown = this.ship.cooldown * this.upgradeEffects.attackSpeed;
         if (now - this.ship.lastShot < cooldown) return;
         this.ship.lastShot = now
-        let petMul = (player.pet && player.pet.legendaryPetAbilityTimers && player.pet.legendaryPetAbilityTimers[1] && typeof player.pet.legendaryPetAbilityTimers[1].gt === "function" && player.pet.legendaryPetAbilityTimers[1].gt(0)) ? 1.5 : 1;
+        let petMul = (player.pet && player.pet.legPetTimers && player.pet.legPetTimers[1] && player.pet.legPetTimers[1].current && typeof player.pet.legPetTimers[1].current.gt === "function" && player.pet.legPetTimers[1].current.gt(0)) ? 1.5 : 1;
         let angle = this.ship.angle || 0;
         // shipType 5 aims at the mouse and fires burst shots toward it
         if (player.ir.shipType == 5 && typeof this.mouseX === "number" && typeof this.mouseY === "number") {
@@ -2023,6 +2170,10 @@ class SpaceArena {
         let vertexCount = big ? 8 + Math.floor(Math.random() * 4) : 8 + Math.floor(Math.random() * 3);
         let shape = this.generateConvexPolygon(size, vertexCount);
 
+        if (player.ir.battleLevel.gte(20)) {
+            health = health * Decimal.pow(1.04, player.ir.battleLevel.sub(19)).toNumber()
+        }
+
         this.asteroids.push({
             x: x !== null ? x : Math.random() * this.width,
             y: y !== null ? y : Math.random() * this.height,
@@ -2077,6 +2228,11 @@ class SpaceArena {
         }
         if (typeName === "etaShip") {
             enemy.shootCooldown = type.bulletCooldown || 120;
+        }
+
+        if (player.ir.battleLevel.gte(20)) {
+            enemy.health = enemy.health * Decimal.pow(1.04, player.ir.battleLevel.sub(19)).toNumber()
+            enemy.maxHealth = enemy.health
         }
 
         this.enemies.push(enemy);
@@ -2139,6 +2295,9 @@ class SpaceArena {
             this.enterIriditeFullscreen();
         }
 
+        let amt = 1
+        if (player.ir.shipType == 7) amt = 3
+        for (let i = 0; i < amt; i++) {
         // Decide a spawn position that is NOT on top of the player.
         // Compute safe minimum separation based on both radii and a buffer.
         const enemyRadius = (this.enemyTypes.iriditeBoss && this.enemyTypes.iriditeBoss.radius) ? this.enemyTypes.iriditeBoss.radius : 64;
@@ -2199,6 +2358,7 @@ class SpaceArena {
             _recentlyHit: 0,
         };
         this.enemies.push(enemy);
+        }
     }
 
     generateConvexPolygon(radius, vertexCount) {
@@ -2337,7 +2497,7 @@ class SpaceArena {
                 if (this.keys['KeyD']) this.ship.angle += this.ship.rotationSpeed;
             }
 
-            if (this.keys['Space'] || this.mouseDown) this.shoot();
+            if (player.ir.shipType != 7 && (this.keys['Space'] || this.mouseDown)) this.shoot();
 
             if (this.keys['KeyW']) {
                 this.ship.velocity += this.ship.acceleration + this.upgradeEffects.moveSpeed * 0.1;
@@ -3237,7 +3397,8 @@ class SpaceArena {
                     let dx = this.ship.x - enemy.x;
                     let dy = this.ship.y - enemy.y;
                     let dist = Math.hypot(dx, dy) || 1;
-                    const desiredDist = 220;
+                    let desiredDist = 220;
+                    if (player.ir.shipType == 7) desiredDist = 110
                     // Move toward or away to keep distance
                     let moveSpeed = 2.5;
                     if (dist > desiredDist + 10) {
@@ -3741,6 +3902,7 @@ class SpaceArena {
                 if (dist < trail.radius + shipRadius && trail.timer > 0) {
                     let dmg = trail.damage * this.upgradeEffects.damageReduction;
                     if (player.ir.shipType == 3) dmg /= 4;
+                    if (player.ir.shipType == 7) dmg /= 2;
                     player.ir.shipHealth = player.ir.shipHealth.sub(dmg);
                     if (player.ir.shipHealth.lte(0)) {
                         this.onShipDeath();
@@ -3920,13 +4082,14 @@ class SpaceArena {
             if (dist < enemy.radius + shipRadius) {
                 let enemyDmg = this.ship.collisionDamage * this.upgradeEffects.attackDamage;
                 if (Number.isNaN(enemyDmg) || !isFinite(enemyDmg) || enemyDmg < 0) enemyDmg = 0;
-                if (player.ir.shipType != 3) enemy.health -= enemyDmg * 0.05;
+                if (player.ir.shipType != 3 && player.ir.shipType != 7) enemy.health -= enemyDmg * 0.05;
                 if (player.ir.shipType == 3) enemy.health -= enemyDmg * 2.5;
+                if (player.ir.shipType == 7) enemy.health -= enemyDmg;
 
                 let shipDmg = enemy.damage * this.upgradeEffects.damageReduction * 6;
                 if (Number.isNaN(shipDmg) || !isFinite(shipDmg) || shipDmg < 0) shipDmg = 3 * this.upgradeEffects.damageReduction;
                 if (player.ir.iriditeFightActive) shipDmg /= 12;
-                if (player.ir.shipType == 3) shipDmg /= 20;
+                if (player.ir.shipType == 3 || player.ir.shipType == 7) shipDmg /= 20;
                 player.ir.shipHealth = player.ir.shipHealth.sub(shipDmg);
 
                 if (player.ir.shipType == 3) {
@@ -3935,6 +4098,12 @@ class SpaceArena {
                     if (Number.isNaN(bounceSpeed) || !isFinite(bounceSpeed) || bounceSpeed < 0) bounceSpeed = 8;
                     this.ship.vy = Math.sin(angle) * bounceSpeed;
                     this.ship.x += Math.cos(angle) * bounceSpeed;
+                } else if (player.ir.shipType == 7) {
+                    if (this.ship.velocity < 0) {
+                        this.ship.velocity = 2 * this.upgradeEffects.attackSpeed;
+                    } else {
+                        this.ship.velocity = -2 * this.upgradeEffects.attackSpeed;
+                    }
                 } else {
                     this.ship.velocity = -2;
                 }
@@ -3967,6 +4136,7 @@ class SpaceArena {
 
                     // guaranteed gem drop for UFO miniboss
                     if (enemy.type === "ufoBoss") {
+                        this.bossActive = false;
                         player.ir.ufoDefeated = true;
                         player.ir.spaceGem = player.ir.spaceGem.add(2);
                         lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 2, type: "gem" });
@@ -4001,13 +4171,19 @@ class SpaceArena {
             if (dist < asteroid.size + shipRadius) {
                 asteroid.health -= this.ship.collisionDamage * this.upgradeEffects.attackDamage;
                 let dmg = (asteroid.big ? 3 : 2) * this.upgradeEffects.damageReduction;
-                if (player.ir.shipType == 3) dmg /= 6;
+                if (player.ir.shipType == 3 || player.ir.shipType == 7) dmg /= 6;
                 player.ir.shipHealth = player.ir.shipHealth.sub(dmg);
                 if (player.ir.shipType == 3) {
                     let angle = Math.atan2(dy, dx);
                     let bounceSpeed = Math.max(8, Math.abs(this.ship.vy) * this.ship.bounce);
                     this.ship.vy = Math.sin(angle) * bounceSpeed;
                     this.ship.x += Math.cos(angle) * bounceSpeed;
+                } else if (player.ir.shipType == 7) {
+                    if (this.ship.velocity < 0) {
+                        this.ship.velocity = 2 * this.upgradeEffects.attackSpeed;
+                    } else {
+                        this.ship.velocity = -2 * this.upgradeEffects.attackSpeed;
+                    }
                 } else {
                     this.ship.velocity = -2;
                 }
@@ -4135,6 +4311,11 @@ class SpaceArena {
         let speed = 2 + Math.random() * 2;
         let phaseTime = 99999999999999;
         let shape = this.generateConvexPolygon(size, 5 + Math.floor(Math.random() * 3));
+
+        if (player.ir.battleLevel.gte(20)) {
+            health = health * Decimal.pow(1.04, player.ir.battleLevel.sub(19)).toNumber()
+        }
+
         return {
             x: x,
             y: y,
@@ -4280,6 +4461,30 @@ class SpaceArena {
 
             this.ctx.fill();
             this.ctx.stroke(); 
+
+            this.ctx.restore();
+        }
+        if (player.ir.shipType == 7) {
+            this.ctx.save();
+            this.ctx.translate(this.ship.x, this.ship.y);
+            this.ctx.rotate(this.ship.angle);
+ 
+            // BODY
+            this.ctx.fillStyle = "#f8de7eff";
+            this.ctx.strokeStyle = "#000000ff";
+            this.ctx.lineWidth = 2;
+            this.ctx.beginPath();
+            this.ctx.moveTo(0, 15);
+            this.ctx.lineTo(6, 6); 
+            this.ctx.lineTo(30, 0); 
+            this.ctx.lineTo(6, -6);
+            this.ctx.lineTo(0, -15);
+            this.ctx.lineTo(-6, -6);
+            this.ctx.lineTo(-18, 0);
+            this.ctx.lineTo(-6, 6);
+            this.ctx.closePath();
+            this.ctx.fill();
+            this.ctx.stroke();
 
             this.ctx.restore();
         }

@@ -95,6 +95,8 @@ addLayer("rg", {
                 player.rg.repliGrass = player.rg.repliGrass.mul(mult.mul(buyableEffect("fa", 203)).add(1))
             }
         }
+
+        if (player.rg.repliGrassTimer.gt(player.rg.repliGrassReq)) player.rg.repliGrassTimer = player.rg.repliGrassReq
     },
     updateSoftcap() {
         if (!hasMilestone("gs", 21)) {

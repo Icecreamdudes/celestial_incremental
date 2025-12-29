@@ -8,28 +8,28 @@ addLayer("fl", {
         unlocked: true,
         timers: {
             red: {
-                current: new Decimal(20),
-                max: new Decimal(20),
+                current: new Decimal(15),
+                max: new Decimal(15),
                 pause: false,
             },
             blue: {
-                current: new Decimal(40),
-                max: new Decimal(40),
+                current: new Decimal(15),
+                max: new Decimal(15),
                 pause: false,
             },
             green: {
-                current: new Decimal(40),
-                max: new Decimal(40),
+                current: new Decimal(30),
+                max: new Decimal(30),
                 pause: false,
             },
             pink: {
-                current: new Decimal(60),
-                max: new Decimal(60),
+                current: new Decimal(45),
+                max: new Decimal(45),
                 pause: false,
             },
             yellow: {
-                current: new Decimal(60),
-                max: new Decimal(60),
+                current: new Decimal(45),
+                max: new Decimal(45),
                 pause: false,
             },
         },
@@ -171,27 +171,27 @@ addLayer("fl", {
         if (player.al.cocoonLevel >= 8) allCooldownDiv = allCooldownDiv.mul(2)
         if (hasUpgrade("al", 503)) allCooldownDiv = allCooldownDiv.mul(upgradeEffect("ne", 503))
 
-        player.fl.timers.red.max = new Decimal(20)
+        player.fl.timers.red.max = new Decimal(15)
         player.fl.timers.red.max = player.fl.timers.red.max.div(buyableEffect("bee", 21))
         player.fl.timers.red.max = player.fl.timers.red.max.div(allCooldownDiv)
         if (player.bee.totalResearch.gte(1) && !player.fl.timers.red.pause) player.fl.timers.red.current = player.fl.timers.red.current.sub(delta)
 
-        player.fl.timers.blue.max = new Decimal(40)
+        player.fl.timers.blue.max = new Decimal(30)
         if (hasUpgrade("bpl", 18)) player.fl.timers.blue.max = player.fl.timers.blue.max.div(2)
         player.fl.timers.blue.max = player.fl.timers.blue.max.div(allCooldownDiv)
         if (hasUpgrade("bpl", 14) && !player.fl.timers.blue.pause) player.fl.timers.blue.current = player.fl.timers.blue.current.sub(delta)
 
-        player.fl.timers.green.max = new Decimal(40)
+        player.fl.timers.green.max = new Decimal(30)
         if (hasUpgrade("ne", 402)) player.fl.timers.green.max = player.fl.timers.green.max.div(2)
         player.fl.timers.green.max = player.fl.timers.green.max.div(allCooldownDiv)
         if (hasUpgrade("ne", 201) && !player.fl.timers.green.pause) player.fl.timers.green.current = player.fl.timers.green.current.sub(delta)
 
-        player.fl.timers.pink.max = new Decimal(60)
+        player.fl.timers.pink.max = new Decimal(45)
         if (player.bb.breadMilestone >= 8) player.fl.timers.pink.max = player.fl.timers.pink.max.div(player.bb.breadEffects[7])
         player.fl.timers.pink.max = player.fl.timers.pink.max.div(allCooldownDiv)
         if (buyableEffect("bee", 53).gte(1) && !player.fl.timers.pink.pause) player.fl.timers.pink.current = player.fl.timers.pink.current.sub(delta)
 
-        player.fl.timers.yellow.max = new Decimal(60)
+        player.fl.timers.yellow.max = new Decimal(45)
         if (player.ho.cell.gte(CELL_MILESTONES[player.bee.path][4])) player.fl.timers.yellow.max = player.fl.timers.yellow.max.div(2)
         player.fl.timers.yellow.max = player.fl.timers.yellow.max.div(allCooldownDiv)
         if (player.ho.cell.gte(CELL_MILESTONES[player.bee.path][2]) && !player.fl.timers.yellow.pause) player.fl.timers.yellow.current = player.fl.timers.yellow.current.sub(delta)

@@ -12,6 +12,8 @@
 
         cutsceneInput: new Decimal(0),
         cutsceneInputAmount: new Decimal(0),
+
+        doomSoftcapStart: new Decimal("1e1000000"),
     }
     },
     automate() {
@@ -157,6 +159,18 @@
         player.gain = player.gain.pow(levelableEffect("ir", 2)[0])
         player.gain = player.gain.pow(player.cof.coreFragmentEffects[0])
         player.gain = player.gain.pow(buyableEffect("cof", 12))
+
+        // SOFTCAP OF DOOM
+        player.i.doomSoftcap = new Decimal(0.5)
+
+        // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
+        player.i.doomSoftcap = player.i.doomSoftcap.div(player.points.div(player.i.doomSoftcapStart).add(1).log(player.i.doomSoftcapStart).add(1))
+
+        // SOFTCAP OF DOOM START
+        player.i.doomSoftcapStart = new Decimal("1e10000000")
+
+        // APPLY DOOM SOFTCAP
+        if (player.gain.gt(player.i.doomSoftcapStart)) player.gain = player.gain.div(player.i.doomSoftcapStart).pow(player.i.doomSoftcap).mul(player.i.doomSoftcapStart)
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.r.timeReversed) {
@@ -505,7 +519,8 @@
         },
     },
     tabFormat: [
-        ["raw-html", () => { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => {return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => {return player.gain.gt(player.i.doomSoftcapStart) ? "SOFTCAP OF DOOM: Gain past " + format(player.i.doomSoftcapStart) + " is raised by ^" + format(player.i.doomSoftcap, 3) + "." : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],

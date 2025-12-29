@@ -15,6 +15,8 @@ function getStartOptions() {
 		oldStyle: false,
 		forceTooltips: true,
 		hideMilestonePopups: false,
+		hideAchievementPopups: false,
+		hideGeneralPopups: false,
 		musicToggle: true,
 		musicVolume: 3,
 		toggleHotkey: true,

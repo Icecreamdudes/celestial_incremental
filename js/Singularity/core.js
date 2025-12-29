@@ -354,9 +354,9 @@ addLayer("co", {
 
         for (let prop in player.co.cores) {
             player.co.cores[prop].req = Decimal.pow(10, player.co.cores[prop].level)
-            if (player.co.cores[prop].xp.gte(player.co.cores[prop].req)) {
+            if (player.co.cores[prop].xp.gte(player.co.cores[prop].req) && player.co.cores[prop].level.lt(99)) {
                 let gain = player.co.cores[prop].totalxp.ln().div(Decimal.ln(10)).add(1).sub(player.co.cores[prop].level).floor()
-                player.co.cores[prop].level = player.co.cores[prop].level.add(gain)
+                player.co.cores[prop].level = player.co.cores[prop].level.add(gain).min(99)
                 player.co.cores[prop].xp = player.co.cores[prop].totalxp.sub(Decimal.pow(10, player.co.cores[prop].level.sub(1)))
             }
         }
@@ -538,6 +538,7 @@ addLayer("co", {
         //     <----     U1 STUFF     ---->
         player.points = new Decimal(10)
         player.gain = new Decimal(0)
+        player.i.bestPoints = new Decimal(10)
 
         player.i.upgrades.splice(0, player.i.upgrades.length)
 
@@ -552,10 +553,12 @@ addLayer("co", {
         player.r.tetrsToGet = new Decimal(0)
         player.r.pentToGet = new Decimal(0)
 
-        for (let i = 0; i < player.r.milestones.length; i++) {
-            if ((!hasMilestone("s", 12) && +player.r.milestones[i] < 20) || +player.r.milestones[i] >= 20) {
-                player.r.milestones.splice(i, 1);
-                i--;
+        if (!hasMilestone("s", 25)) {
+            for (let i = 0; i < player.r.milestones.length; i++) {
+                if ((!hasMilestone("s", 12) && +player.r.milestones[i] < 20) || +player.r.milestones[i] >= 20) {
+                    player.r.milestones.splice(i, 1);
+                    i--;
+                }
             }
         }
 
@@ -600,14 +603,10 @@ addLayer("co", {
         //     <----     GRASS LAYER     ---->
         player.g.grass = new Decimal(0)
         player.g.grassVal = new Decimal(0)
-        player.g.savedGrass = new Decimal(0)
-        player.g.grassCount = new Decimal(0)
         player.g.grassTimer = new Decimal(0)
 
         player.g.goldGrass = new Decimal(0)
         player.g.goldGrassVal = new Decimal(0)
-        player.g.savedGoldGrass = new Decimal(0)
-        player.g.goldGrassCount = new Decimal(0)
         player.g.goldGrassTimer = new Decimal(0)
 
         for (let i = 11; i < 20; i++) {
@@ -629,6 +628,17 @@ addLayer("co", {
             }
         }
 
+        for (let i = 1; i < 509; ) {
+            setGridData("g", i, [0, new Decimal(1), new Decimal(1)])
+
+            // Increase i value
+            if (i % 10 == 8) {
+                i = i+93
+            } else {
+                i++
+            }
+        }
+        
         //     <----     GRASSHOPPER LAYER     ---->
         player.gh.grasshoppers = new Decimal(0)
         player.gh.grasshoppersToGet = new Decimal(0)
@@ -667,7 +677,7 @@ addLayer("co", {
         player.d.upgrades.splice(0, player.d.upgrades.length)
 
         for (let i = 0; !hasUpgrade("s", 13) ? i < 15 : i < 11; i++) {
-            player.d.diceEffects[i] = new Decimal(1)
+            player.d.boosterEffects[i] = new Decimal(1)
         }
 
         //     <----     ROCKETFUEL LAYER     ---->
@@ -702,19 +712,6 @@ addLayer("co", {
         player.pe.pests = new Decimal(0)
         player.pe.pestsPerSecond = new Decimal(0)
         player.pe.pestEffect = [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(0)]
-
-        player.de.antidebuffPoints = new Decimal(0)
-        player.de.antidebuffPointsToGet = new Decimal(0)
-        player.de.tavEssence = new Decimal(0)
-        player.de.tavEssencePerSecond = new Decimal(0)
-        player.de.tavPoints = new Decimal(0)
-        player.de.tavPointsToGet = new Decimal(0)
-
-        for (let i in player.de.buyables) {
-            player.de.buyables[i] = new Decimal(0)
-        }
-
-        player.de.upgrades.splice(0, player.de.upgrades.length)
 
         //     <----     POLLINATOR LAYER     ---->
         player.pol.pollinators = new Decimal(0)
@@ -824,30 +821,28 @@ addLayer("co", {
         player.ta.upgrades.splice(0, player.ta.upgrades.length)
 
         //     <----     TAV'S DOMAIN LAYER     ---->
-        player.tad.activeChallenge = null
-        player.tad.currentConversion = new Decimal(-1)
-        player.tad.shatteredInfinities = new Decimal(0)
-        player.tad.shatteredInfinitiesToGet = new Decimal(0)
-        player.tad.disfiguredInfinities = new Decimal(0)
-        player.tad.disfiguredInfinitiesToGet = new Decimal(0)
-        player.tad.corruptedInfinities = new Decimal(0)
-        player.tad.corruptedInfinitiesToGet = new Decimal(0)
+        layers.tad.domainReset(10)
 
-        player.tad.upgrades.splice(0, player.tad.upgrades.length)
+        if (!hasMilestone("s", 15)) {
+            player.tad.upgrades.splice(0, player.tad.upgrades.length)
+        }
 
-        for (let i in player.tad.buyables) {
-            player.tad.buyables[i] = new Decimal(0)
+        if (!hasMilestone("s", 18)) {
+            player.tad.infinitum = new Decimal(0)
+            player.tad.infinitumGain = new Decimal(0)
+            player.tad.infinitumResets = new Decimal(0)
+            player.tad.altSelection = "none"
+            for (let i in player.tad.altInfinities) {
+                player.tad.altInfinities[i].amount = new Decimal(0)
+                player.tad.altInfinities[i].highest = new Decimal(0)
+                player.tad.altInfinities[i].gain = new Decimal(0)
+                player.tad.altInfinities[i].milestone = new Decimal(0)
+            }
         }
 
         //     <----     BREAK INFINITY LAYER     ---->
-        player.bi.brokenInfinities = new Decimal(0)
-        player.bi.brokenInfinitiesToGet = new Decimal(0)
         if (!hasMilestone("s", 18)) player.bi.IACtoggle = false
         if (!hasMilestone("s", 18)) player.bi.NACtoggle = false
-
-        for (let i in player.bi.buyables) {
-            player.bi.buyables[i] = new Decimal(0)
-        }
 
         player.bi.upgrades.splice(0, player.bi.upgrades.length)
 
@@ -875,7 +870,6 @@ addLayer("co", {
         if (!hasMilestone("s", 18)) player.ca.canteEnergy = new Decimal(0)
         player.ca.replicantiGalaxies = new Decimal(0)
         if (!hasMilestone("s", 18)) player.ca.rememberanceCores = new Decimal(0)
-        player.ca.defeatedCante = false
         
         for (let i in player.ca.buyables) {
             player.ca.buyables[i] = new Decimal(0)
@@ -928,11 +922,20 @@ addLayer("co", {
         //     <----     REPLI-GRASS LAYER     ---->
         player.rg.repliGrass = new Decimal(1)
         player.rg.repliGrassMult = new Decimal(1)
-        player.rg.savedRepliGrass = 0
-        player.rg.repliGrassCount = 0
 
         for (let i in player.rg.buyables) {
             player.rg.buyables[i] = new Decimal(0)
+        }
+
+        for (let i = 1; i < 509; ) {
+            setGridData("rg", i, new Decimal(1))
+
+            // Increase i value
+            if (i % 10 == 8) {
+                i = i+93
+            } else {
+                i++
+            }
         }
 
         //     <----     GRASS-SKIP LAYER     ---->
@@ -991,7 +994,6 @@ addLayer("co", {
         player.subtabs["p"]['stuff'] = 'Main'
         player.subtabs["g"]['stuff'] = 'Grass'
         player.subtabs["gh"]['stuff'] = 'Main'
-        player.subtabs["de"]['stuff'] = 'Antidebuff'
         player.subtabs["oi"]['stuff'] = 'Main'
         player.subtabs["id"]['stuff'] = 'Dimensions'
 
@@ -1008,9 +1010,14 @@ addLayer("co", {
             player.po.featureSlots = player.po.featureSlotsMax
         }
 
-        for (let i = 0; i < player.po.halterEffects.length; i++) {
-            player.po.halterEffects[i] = new Decimal(1)
+        if (!hasMilestone("s", 24)) {
+            for (let i in player.po.halter) {
+                player.po.halter[i].enabled = 0
+            }
         }
+
+        // KEEP HEX STUFF AFTER IRIDITE
+        if (!player.ir.iriditeDefeated) {
 
         //     <----     HEX OF SACRIFICE LAYER     ---->
         player.hsa.sacredEnergy = new Decimal(0)
@@ -1029,16 +1036,12 @@ addLayer("co", {
         player.hrm.blessLimit = new Decimal(0)
         player.hrm.dreamTimer = new Decimal(60)
         player.hrm.activeChallenge = null
-        
-        if (!player.ir.iriditeDefeated)
-        {
         if (getBuyableAmount("hpw", 1).lt(1)) player.hrm.challenges[11] = 0
         if (getBuyableAmount("hpw", 2).lt(1)) player.hrm.challenges[12] = 0
         if (getBuyableAmount("hpw", 3).lt(1)) player.hrm.challenges[13] = 0
         if (getBuyableAmount("hpw", 4).lt(1)) player.hrm.challenges[14] = 0
         if (getBuyableAmount("hpw", 5).lt(1)) player.hrm.challenges[15] = 0
         if (getBuyableAmount("hpw", 6).lt(1)) player.hrm.challenges[16] = 0
-        }
 
         //     <----     HEX OF POWER LAYER     ---->
         if (player.hpw.totalPower.gte(buyableEffect("hrm", 1))) player.hpw.totalPower = buyableEffect("hrm", 1)
@@ -1049,21 +1052,17 @@ addLayer("co", {
         }
         if (!hasMilestone("s", 16)) player.hpw.vigor = 0
 
-        if (!player.ir.iriditeDefeated)
-        {
         player.hpw.upgrades.splice(0, player.hpw.upgrades.length)
         if (!hasMilestone("s", 16)) player.hpw.milestones.splice(0, player.hpw.milestones.length)
-        }
 
         //     <----     HEX OF PURITY LAYER     ---->
-        if (!player.ir.iriditeDefeated)
-        {
         player.hpu.purity = new Decimal(0)
         player.hpu.totalPurity = new Decimal(0)
         player.hpu.purityGain = new Decimal(0)
         if (!hasMilestone("s", 20)) player.hpu.purifierAssign = 1
-        player.hpu.purifier = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)]
-        player.hpu.purifierEffects = [new Decimal(1), new Decimal(1), new Decimal(0), new Decimal(1), new Decimal(0), new Decimal(1)]
+        for (let i in player.hpu.purifiers) {
+            player.hpu.purifiers[i].amount = new Decimal(0)
+            if (i != "2" || i != "5") player.hpu.purifiers[i].effect = new Decimal(1)
         }
 
         //     <----     HEX OF CURSES LAYER     ---->
@@ -1079,16 +1078,13 @@ addLayer("co", {
         if (!hasMilestone("s", 20)) player.hcu.buyables[112] = new Decimal(0)
 
         //     <----     HEX OF VEXES LAYER     ---->
-        if (!player.ir.iriditeDefeated)
-        {
-            player.hve.vex = new Decimal(0)
-            player.hve.vexTotal = new Decimal(0)
-            player.hve.vexGain = new Decimal(0)
-            player.hve.rowCurrent = [0, 0, 0, 0, 0, 0]
-            player.hve.rowSpent = [0, 0, 0, 0, 0, 0]
+        player.hve.vex = new Decimal(0)
+        player.hve.vexTotal = new Decimal(0)
+        player.hve.vexGain = new Decimal(0)
+        player.hve.rowCurrent = [0, 0, 0, 0, 0, 0]
+        player.hve.rowSpent = [0, 0, 0, 0, 0, 0]
 
-            player.hve.upgrades.splice(0, player.hve.upgrades.length)
-        }
+        player.hve.upgrades.splice(0, player.hve.upgrades.length)
     
 
         //     <----     HEX OF BLESSINGS LAYER     ---->
@@ -1101,14 +1097,12 @@ addLayer("co", {
         player.hbl.minRefineInput = new Decimal(18)
         player.hbl.minRefine = new Decimal(18)
         if (!hasMilestone("s", 20)) player.hbl.boosterDeposit = 0.05
-        player.hbl.boosterLevels[0] = new Decimal(0)
-        player.hbl.boosterLevels[1] = new Decimal(0)
-        if (!hasMilestone("s", 20)) player.hbl.boosterLevels[2] = new Decimal(0)
-        player.hbl.boosterLevels[3] = new Decimal(0)
-        player.hbl.boosterLevels[4] = new Decimal(0)
-        if (!hasMilestone("s", 20)) player.hbl.boosterLevels[5] = new Decimal(0)
-        player.hbl.boosterXP = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)]
-        player.hbl.boosterEffects = [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(0)]
+        for (let i in player.hbl.boosters) {
+            if (hasMilestone("s", 20) && (i == "2" || i == "5")) continue;
+            player.hbl.boosters[i].level = new Decimal(0)
+            player.hbl.boosters[i].xp = new Decimal(0)
+            if (i != "5") player.hbl.boosters[i].effect = new Decimal(1)
+        }
 
         if (!hasMilestone("s", 20)) player.hbl.upgrades.splice(0, player.hbl.upgrades.length)
 
@@ -1135,6 +1129,7 @@ addLayer("co", {
         //     <----     HEX STUFF     ---->
         player.h.hexPointGain = new Decimal(0)
         player.h.hexPoint = new Decimal(0)
+    }
     },
     clickables: {
         100: {
@@ -1357,7 +1352,7 @@ addLayer("co", {
             },
         },
         201: {
-            title() {return "Point<br>Core<br><small>Lv." + player.co.cores.point.level},
+            title() {return "Point<br>Core<br><small>Lv." + player.co.cores.point.level + "/99"},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1370,7 +1365,7 @@ addLayer("co", {
             },
         },
         202: {
-            title() {return "Factor<br>Core<br><small>Lv." + player.co.cores.factor.level},
+            title() {return "Factor<br>Core<br><small>Lv." + player.co.cores.factor.level + "/99"},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1383,7 +1378,7 @@ addLayer("co", {
             },
         },
         203: {
-            title() {return "Prestige<br>Core<br><small>Lv." + player.co.cores.prestige.level},
+            title() {return "Prestige<br>Core<br><small>Lv." + player.co.cores.prestige.level + "/99"},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1396,7 +1391,7 @@ addLayer("co", {
             },
         },
         204: {
-            title() {return "Tree<br>Core<br><small>Lv." + player.co.cores.tree.level},
+            title() {return "Tree<br>Core<br><small>Lv." + player.co.cores.tree.level + "/99"},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1409,7 +1404,7 @@ addLayer("co", {
             },
         },
         205: {
-            title() {return "Grass<br>Core<br><small>Lv." + player.co.cores.grass.level},
+            title() {return "Grass<br>Core<br><small>Lv." + player.co.cores.grass.level + "/99"},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1422,7 +1417,7 @@ addLayer("co", {
             },
         },
         206: {
-            title() {return "<h2 style='font-size:14px'>Grasshopper</h2><br>Core<br><small>Lv." + player.co.cores.grasshopper.level},
+            title() {return "<h2 style='font-size:14px'>Grasshopper</h2><br>Core<br><small>Lv." + player.co.cores.grasshopper.level + "/99"},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1435,7 +1430,7 @@ addLayer("co", {
             },
         },
         207: {
-            title() {return "Code<br>Core<br><small>Lv." + player.co.cores.code.level},
+            title() {return "Code<br>Core<br><small>Lv." + player.co.cores.code.level + "/99"},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1448,7 +1443,7 @@ addLayer("co", {
             },
         },
         208: {
-            title() {return "Dice<br>Core<br><small>Lv." + player.co.cores.dice.level},
+            title() {return "Dice<br>Core<br><small>Lv." + player.co.cores.dice.level + "/99"},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1461,7 +1456,7 @@ addLayer("co", {
             },
         },
         209: {
-            title() {return "Rocket<br>Core<br><small>Lv." + player.co.cores.rocket.level},
+            title() {return "Rocket<br>Core<br><small>Lv." + player.co.cores.rocket.level + "/99"},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1474,7 +1469,7 @@ addLayer("co", {
             },
         },
         210: {
-            title() {return "<h2 style='font-size:14px'>Antimatter</h2><br>Core<br><small>Lv." + player.co.cores.antimatter.level},
+            title() {return "<h2 style='font-size:14px'>Antimatter</h2><br>Core<br><small>Lv." + player.co.cores.antimatter.level + "/99"},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1487,7 +1482,7 @@ addLayer("co", {
             },
         },
         211: {
-            title() {return "Infinity<br>Core<br><small>Lv." + player.co.cores.infinity.level},
+            title() {return "Infinity<br>Core<br><small>Lv." + player.co.cores.infinity.level + "/99"},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1500,7 +1495,7 @@ addLayer("co", {
             },
         },
         212: {
-            title() {return "<h2 style='font-size:14px'>Check Back</h2><br>Core<br><small>Lv." + player.co.cores.checkback.level},
+            title() {return "<h2 style='font-size:14px'>Check Back</h2><br>Core<br><small>Lv." + player.co.cores.checkback.level + "/99"},
             canClick: true,
             unlocked() {return hasUpgrade("s", 20)},
             onClick() {
@@ -1513,7 +1508,7 @@ addLayer("co", {
             },
         },
         213: {
-            title() {return "<h2 style='font-size:14px'>Radioactive</h2><br>Core<br><small>Lv." + player.co.cores.radioactive.level},
+            title() {return "<h2 style='font-size:14px'>Radioactive</h2><br>Core<br><small>Lv." + player.co.cores.radioactive.level + "/99"},
             canClick: true,
             unlocked() {return hasUpgrade("sma", 106)},
             onClick() {
@@ -1560,12 +1555,14 @@ addLayer("co", {
             width: 519,
             height: 37,
             progress() {
+                if (player.co.cores[player.co.coreIndex].level.gte(99)) return new Decimal(1)
                 return player.co.cores[player.co.coreIndex].xp.div(player.co.cores[player.co.coreIndex].req)
             },
             baseStyle: {backgroundColor: "black"},
             fillStyle: {backgroundColor: "#933"},
             borderStyle: {border: "0px", borderLeft: "3px solid white", borderRadius: "0px"},
             display() {
+                if (player.co.cores[player.co.coreIndex].level.gte(99)) return "<h3>Level Maxed</h3>"
                 return "<h3>" + format(player.co.cores[player.co.coreIndex].xp) + "/" + format(player.co.cores[player.co.coreIndex].req) + "</h3>";
             },
         },
@@ -1582,7 +1579,7 @@ addLayer("co", {
                             ["raw-html", "Core Fueling", {color: "white", fontSize: "30px", fontFamily: "monospace"}],
                         ], {width: "700px", height: "50px", borderBottom: "3px solid white"}],
                         ["style-column", [
-                            ["raw-html", () => {return "Currently Fueling: " + CORE_INFO[player.co.resetIndex].name + " (Lv." + formatWhole(player.co.cores[player.co.resetIndex].level) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return "Currently Fueling: " + CORE_INFO[player.co.resetIndex].name + " (Lv." + formatWhole(player.co.cores[player.co.resetIndex].level) + "/99)"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ["blank", "5px"],
                             ["raw-html", () => {return "Which will give +" + format(layers.co.coreXPCalc(player.co.resetIndex, player.s.singularityPointsToGet)) + " XP"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ], () => {return player.s.highestSingularityPoints.gt(0) ? {width: "700px", height: "80px", backgroundColor: "#411", borderBottom: "3px solid white"} : {width: "700px", height: "80px", backgroundColor: "#411", borderRadius: "0 0 12px 12px"}}],
@@ -1612,7 +1609,7 @@ addLayer("co", {
                         }],
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", () => {return "Lv." + formatWhole(player.co.cores[player.co.coreIndex].level) + " " + CORE_STRENGTH[player.co.cores[player.co.coreIndex].strength].name + " " + CORE_INFO[player.co.coreIndex].name}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "Lv." + formatWhole(player.co.cores[player.co.coreIndex].level) + "/99 " + CORE_STRENGTH[player.co.cores[player.co.coreIndex].strength].name + " " + CORE_INFO[player.co.coreIndex].name}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ], {width: "500px", height: "40px", borderBottom: "3px solid white"}],
                             ["style-column", [
                                 ["raw-html", () => {return CORE_INFO[player.co.coreIndex].effect[0] + format(player.co.cores[player.co.coreIndex].effect[0])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],

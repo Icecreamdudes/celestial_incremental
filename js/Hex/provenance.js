@@ -7,7 +7,14 @@ addLayer("hpr", {
     color: "#0061ff", // Decides the nodes color.
     startData() { return {
         rank: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
-        rankReq: [new Decimal(60), new Decimal(6), new Decimal(36), new Decimal(216), new Decimal(1296), new Decimal(7776)],
+        rankReq: {
+            0: new Decimal(60),
+            1: new Decimal(6),
+            2: new Decimal(36),
+            3: new Decimal(216),
+            4: new Decimal(1296),
+            5: new Decimal(7776)
+        },
         rankGain: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
         rankEffect: [[new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)]],
         divider: new Decimal(1),
@@ -18,6 +25,8 @@ addLayer("hpr", {
         if (hasUpgrade("hsa", 15)) player.hpr.divider = player.hpr.divider.mul(1.3)
         if (hasUpgrade("hpw", 132)) player.hpr.divider = player.hpr.divider.mul(1.5)
 
+        player.hpr.rankReq = {0: new Decimal(60), 1: new Decimal(6), 2: new Decimal(36), 3: new Decimal(216), 4: new Decimal(1296), 5: new Decimal(7776)}
+
         if (player.hpr.rank[0].lt(1200)) player.hpr.rankReq[0] = layers.h.hexReq(player.hpr.rank[0], 60, 1.6, player.hpr.divider)
         if (player.hpr.rank[0].gte(1200) && player.hpr.rank[0].lt(6000000)) player.hpr.rankReq[0] = layers.h.hexReq(player.hpr.rank[0], 60, 2.4, player.hpr.divider, -1087)
         if (player.hpr.rank[0].gte(6000000) && player.hpr.rank[0].lt(2.4e8)) player.hpr.rankReq[0] = layers.h.hexReq(player.hpr.rank[0], 60, 6, player.hpr.divider, new Decimal(-5999485))
@@ -27,8 +36,11 @@ addLayer("hpr", {
         if (player.h.hexPoint.gte(Decimal.div(1.11e18, player.hpr.divider)) && player.h.hexPoint.lt(Decimal.div(9.85e51, player.hpr.divider))) player.hpr.rankGain[0] = layers.h.hexGain(player.h.hexPoint, 60, 6, player.hpr.divider).sub(player.hpr.rank[0]).add(5999486)
         if (player.h.hexPoint.gte(Decimal.div(9.85e51, player.hpr.divider))) player.hpr.rankGain[0] = layers.h.hexGain(player.h.hexPoint, 60, 30, player.hpr.divider).sub(player.hpr.rank[0]).add(239999953)
 
-        player.hpr.rankReq[1] = layers.h.hexReq(player.hpr.rank[1], 6, 1.5, player.hpr.divider)
-        player.hpr.rankGain[1] = layers.h.hexGain(player.hpr.rank[0], 6, 1.5, player.hpr.divider).sub(player.hpr.rank[1])
+        let betaDiv = new Decimal(1)
+        if (hasAchievement("achievements", 110)) betaDiv = betaDiv.mul(1.1)
+
+        player.hpr.rankReq[1] = layers.h.hexReq(player.hpr.rank[1], 6, 1.5, player.hpr.divider.mul(betaDiv))
+        player.hpr.rankGain[1] = layers.h.hexGain(player.hpr.rank[0], 6, 1.5, player.hpr.divider.mul(betaDiv)).sub(player.hpr.rank[1])
 
         player.hpr.rankReq[2] = layers.h.hexReq(player.hpr.rank[2], 36, 1.4, player.hpr.divider)
         player.hpr.rankGain[2] = layers.h.hexGain(player.hpr.rank[1], 36, 1.4, player.hpr.divider).sub(player.hpr.rank[2])
@@ -81,7 +93,7 @@ addLayer("hpr", {
         player.hpr.rankEffect[5][0] = player.hpr.rank[5].pow(4).mul(32).mul(player.hpr.effectMult).add(1)
         player.hpr.rankEffect[5][1] = player.hpr.rank[5].pow(2.6).mul(16).mul(player.hpr.effectMult).add(1)
 
-        if (hasUpgrade("tad", 11)) {
+        if (hasUpgrade("tad", 1001)) {
             for (let i = 0; i < 6; i++) {
                 player.hpr.rankEffect[i][0] = player.hpr.rankEffect[i][0].pow(1.1)
             }
@@ -111,6 +123,7 @@ addLayer("hpr", {
             unlocked: true,
             onClick() {
                 player.hpr.rank[1] = player.hpr.rank[1].add(player.hpr.rankGain[1])
+                if (!hasAchievement("achievements", 110) && player.hpr.rank[1].gte(6)) completeAchievement("achievements", 110)
 
                 // RESET CODE
                 for (let i = 0; i < 1; i++) {

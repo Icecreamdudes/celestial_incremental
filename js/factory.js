@@ -75,7 +75,7 @@
 
         player.fa.milestoneEffect[0] = player.fa.charge.pow(0.3).div(3).add(1) //ip
         player.fa.milestoneEffect[1] = player.fa.charge.pow(3).add(1) //ad
-        player.fa.milestoneEffect[2] = player.fa.charge.pow(0.2).div(5).add(1) //bi
+        player.fa.milestoneEffect[2] = player.fa.charge.add(1).log(10).pow(0.5).add(1) //bi
         player.fa.milestoneEffect[3] = player.fa.charge.pow(0.35).div(5).add(1) //steel
         player.fa.milestoneEffect[4] = player.fa.charge.pow(0.25).div(5).add(1) //nip
         player.fa.milestoneEffect[5] = player.fa.charge.pow(0.3).div(2).add(1) //id
@@ -591,7 +591,7 @@
         },
         13: {
             requirementDescription: "<h3>10,000 Best Charge",
-            effectDescription() { return "Boosts broken infinities based on charge:<br>Currently: " + format(player.fa.milestoneEffect[2]) + "x" },
+            effectDescription() { return "Boosts infinities based on charge:<br>Currently: " + format(player.fa.milestoneEffect[2]) + "x" },
             done() { return player.fa.bestCharge.gte(10000) },
             style: {width: "600px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },

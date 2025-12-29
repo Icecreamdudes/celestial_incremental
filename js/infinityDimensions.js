@@ -91,15 +91,15 @@
             player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(levelableEffect("pet", 208)[0])
             player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(player.sd.singularityPowerEffect2)
             if (hasMilestone("fa", 16)) player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(player.fa.milestoneEffect[5])
-        if (hasUpgrade("bi", 29)) player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(upgradeEffect("bi", 29))
+            if (hasUpgrade("bi", 29)) player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(upgradeEffect("bi", 29))
 
             // SOFTCAP MODIFIER
             if (player.id.dimensionsPerSecond[i].gt(1e300)) player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].div(1e300).pow(0.95).mul(1e300)
 
             player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(buyableEffect("id", i+12).div(10))
-            player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(player.se.starsExploreEffect[0][2])
             // POWER MODIFIERS
             player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].pow(buyableEffect("fu", 42))
+            player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].pow(player.se.starsExploreEffect[0][2])
 
         }
 

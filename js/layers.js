@@ -1,5 +1,4 @@
-﻿var tree1 = [["i"], ["r", "f"], ["p", "t", "g"], ["gh", "pe", "pol", "m"], ["de", "rf", "d"], ["cb", "oi", "fa"]]
-addLayer("i", {
+﻿addLayer("i", {
     name: "Origin", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "OR", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
@@ -7,6 +6,7 @@ addLayer("i", {
     startData() { return {
         unlocked: true,
 
+        bestPoints: new Decimal(10),
         preOTFMult: new Decimal(1),
         postOTFMult: new Decimal(1),
 
@@ -78,7 +78,7 @@ addLayer("i", {
         player.i.preOTFMult = player.i.preOTFMult.mul(levelableEffect("pu", 301)[1])
         if (inChallenge("ip", 13) || player.po.hex || hasUpgrade("s", 18)) player.i.preOTFMult = player.i.preOTFMult.mul(player.hre.refinementEffect[5][1])
         if (hasMilestone("r", 20)) player.i.preOTFMult = player.i.preOTFMult.mul(100)
-        player.i.preOTFMult = player.i.preOTFMult.mul(player.d.diceEffects[15])
+        player.i.preOTFMult = player.i.preOTFMult.mul(player.d.boosterEffects[15])
         if (hasMilestone("fa", 22)) player.i.preOTFMult = player.i.preOTFMult.mul(player.fa.milestoneEffect[10])
 
         //----------------------------------------
@@ -89,6 +89,7 @@ addLayer("i", {
         // START OF POST-OTF-MULT MODIFIERS
         player.i.postOTFMult = new Decimal(1)
         player.i.postOTFMult = player.i.postOTFMult.mul(buyableEffect("ma", 22))
+        if (player.ir.iriditeDefeated) player.i.postOTFMult = player.i.postOTFMult.mul(1e12)
 
         //----------------------------------------
 
@@ -116,7 +117,7 @@ addLayer("i", {
         player.gain = player.gain.mul(buyableEffect("m", 14))
         if (player.cb.effectActivate) player.gain = player.gain.mul(player.cb.levelEffect)
         player.gain = player.gain.mul(levelableEffect("pet", 101)[0])
-        player.gain = player.gain.mul(player.d.diceEffects[0])
+        player.gain = player.gain.mul(player.d.boosterEffects[0])
         if (!inChallenge("ip", 16)) player.gain = player.gain.mul(player.rf.abilityEffects[0])
         player.gain = player.gain.mul(player.ad.antimatterEffect)
         if (inChallenge("ip", 13) || player.po.hex || hasUpgrade("s", 18)) player.gain = player.gain.mul(player.hpr.rankEffect[0][0])
@@ -135,13 +136,7 @@ addLayer("i", {
         if (hasUpgrade("d", 17)) player.gain = player.gain.mul(upgradeEffect("d", 17))
         if (inChallenge("ip", 16)) player.gain = player.gain.pow(0.05)
         if (inChallenge("ip", 16)) player.gain = player.gain.mul(player.rf.abilityEffects[0])
-        if (hasUpgrade("rf", 16)) player.gain = player.gain.mul(upgradeEffect("rf", 16))
-        if (inChallenge("ip", 18)) player.gain = player.gain.pow(0.4)
-        if (player.de.antidebuffIndex.eq(0)) player.gain = player.gain.mul(player.de.antidebuffEffect)
-        if (inChallenge("tad", 11)) player.gain = player.gain.pow(0.45)
-        if (inChallenge("tad", 11)) player.gain = player.gain.pow(buyableEffect("de", 11))
-        if (inChallenge("tad", 11)) player.gain = player.gain.mul(player.de.tavPointsEffect)
-        if (hasUpgrade("de", 15) && inChallenge("tad", 11)) player.gain = player.gain.mul(upgradeEffect("de", 15))
+        if (hasUpgrade("rf", 17)) player.gain = player.gain.mul(upgradeEffect("rf", 17))
 
         // CONTINUED REGULAR MODIFIERS
         if (player.pol.pollinatorEffects.beetle.enabled) player.gain = player.gain.mul(player.pol.pollinatorEffects.beetle.effects[0])
@@ -164,16 +159,19 @@ addLayer("i", {
         player.gain = player.gain.pow(buyableEffect("cof", 12))
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
-        if (inChallenge("ip", 18) && player.points.gt(player.points.mul(0.9 * delta))) player.points = player.points.sub(player.points.mul(0.9 * delta))
         if (player.r.timeReversed) {
             player.gain = player.gain.mul(0)
             player.points = player.points.div(player.points.add(1).log10().mul(0.1).add(1).mul(delta))
         }
-        player.gain = player.gain.div(player.po.halterEffects[0])
+        if (player.po.halter.points.enabled == 1) player.gain = player.gain.div(player.po.halter.points.halt)
+        if (player.po.halter.points.enabled == 2 && player.gain.gt(player.po.halter.points.halt)) player.gain = player.po.halter.points.halt
         if (!player.in.breakInfinity && player.gain.gte("9.99e309")) player.gain = new Decimal("9.99e309")
 
         // CELESTIAL POINT PER SECOND
         player.points = player.points.add(player.gain.mul(delta))
+
+        // BEST CELESTIAL POINTS
+        if (player.i.bestPoints.lt(player.points)) player.i.bestPoints = player.points
     },
     bars: {
         infbar: {
@@ -184,8 +182,9 @@ addLayer("i", {
             progress() {
                 return player.points.add(1).log10().div("308.25")
             },
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
             fillStyle: { backgroundColor: "#b28500" },
-            borderStyle: { border: "3px solid" },
+            borderStyle: { border: "3px solid", borderRadius: "20px"},
             display() {
                 return "<h2>" + format(player.points.add(1).log10().div("308.25").mul(100)) + "%</h2>";
             },
@@ -276,6 +275,9 @@ addLayer("i", {
             title: "Check Back",
             unlocked() { return hasUpgrade("i", 18) },
             description: "Unlocks Check Back.",
+            onPurchase() {
+                if (!hasAchievement("achievements", 18)) completeAchievement("achievements", 18)
+            },
             cost: new Decimal(1e100),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
@@ -295,7 +297,7 @@ addLayer("i", {
         22: {
             title: "Pollinate",
             unlocked() { return player.in.unlockedBreak},
-            description: "Use the experience of debuffs and pests to create Pollinators.",
+            description: "Use the experience of pests to create Pollinators.",
             cost: new Decimal("1e450"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
@@ -402,46 +404,6 @@ addLayer("i", {
             currencyInternalName: "points",
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        37: {
-            title: "Challenge I.",
-            unlocked() { return inChallenge("ip", 11) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
-            description: ".",
-            cost: new Decimal("1e9000"),
-            currencyLocation() { return player },
-            currencyDisplayName: "Celestial Points",
-            currencyInternalName: "points",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
-        },
-        38: {
-            title: "Challenge II.",
-            unlocked() { return inChallenge("ip", 12) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
-            description: ".",
-            cost: new Decimal("1e12000"),
-            currencyLocation() { return player },
-            currencyDisplayName: "Celestial Points",
-            currencyInternalName: "points",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
-        },
-        39: {
-            title: "Challenge III.",
-            unlocked() { return inChallenge("ip", 13) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
-            description: ".",
-            cost: new Decimal("1e2400"),
-            currencyLocation() { return player },
-            currencyDisplayName: "Celestial Points",
-            currencyInternalName: "points",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
-        },
-        41: {
-            title: "Challenge IV.",
-            unlocked() { return inChallenge("ip", 14) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
-            description: ".",
-            cost: new Decimal("1e7000"),
-            currencyLocation() { return player },
-            currencyDisplayName: "Celestial Points",
-            currencyInternalName: "points",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
-        },
         101: {
             title: "Factory",
             unlocked() { return hasMilestone("s", 11)},
@@ -464,9 +426,6 @@ addLayer("i", {
             style: { width: '300px', "min-height": '60px' },
         },
     },
-    buyables: {},
-    milestones: {},
-    challenges: {},
     infoboxes: {
         1: {
             title: "Superphysical Values",
@@ -495,12 +454,15 @@ addLayer("i", {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
-                    ["blank", "25px"],
-                    ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],
+                    ["blank", "10px"],
+                    ["bar", "infbar"],
+                    ["blank", "15px"],
+                    ["style-row", [
+                        ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],
                         ["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23],
                         ["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28], ["upgrade", 32],
                         ["upgrade", 29], ["upgrade", 30], ["upgrade", 31], ["upgrade", 101],
-                        ["upgrade", 37], ["upgrade", 38], ["upgrade", 39], ["upgrade", 41]], {maxWidth: "800px"}],
+                    ], {maxWidth: "800px"}],
                 ],
             },
             "Lore": {
@@ -606,7 +568,7 @@ function callAlert(message, imageUrl, imagePosition = 'top') {
         modalContainer.style.display = 'flex';
         modalContainer.style.alignItems = 'center';
         modalContainer.style.justifyContent = 'center';
-        modalContainer.style.zIndex = '5';
+        modalContainer.style.zIndex = '5000';
 
         // Apply background color and increase width
         modalContent.style.background = '#ccc'; // Grey background

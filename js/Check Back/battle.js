@@ -115,7 +115,7 @@ addLayer("ba", {
         {
                     player.ba.infoTexts = [];
         for (let i = 0; i < player.ba.petIDs.length; i++) {
-            let text = "<h1>" + tmp.sme.levelables[player.ba.petIDs[i]].title + ": <br><h2>" + formatWhole(player.ba.petHealths[i]) + " HP/" + formatWhole(player.ba.petMaxHealths[i]) + " HP<br>" + formatWhole(player.ba.petDamages[i]) + " DMG<br>";
+            let text = "<h1>" + run(layers.sme.levelables[player.ba.petIDs[i]].title, layers.sme.levelables[player.ba.petIDs[i]]) + ": <br><h2>" + formatWhole(player.ba.petHealths[i]) + " HP/" + formatWhole(player.ba.petMaxHealths[i]) + " HP<br>" + formatWhole(player.ba.petDamages[i]) + " DMG<br>";
             player.ba.infoTexts.push(text);
         }
         player.ba.celestialiteTexts = [];
@@ -155,7 +155,7 @@ addLayer("ba", {
             player.ba.petAbilitiesAvailable[0][5][1] = false
         }
 
-        if (player.fi.inBattle) player.ba.petImage = tmp.sme.levelables[player.ba.petIDs[player.ba.petIndex]].image
+        if (player.fi.inBattle) player.ba.petImage = run(layers.sme.levelables[player.ba.petIDs[player.ba.petIndex]].image, layers.sme.levelables[player.ba.petIDs[player.ba.petIndex]])
 
         player.ba.celestialiteImages = 
         [
@@ -246,10 +246,9 @@ addLayer("ba", {
             }
             //make all timer stuff here
 
-            if (player.ba.drainCelestialite >= 0)
-            {
-            let damage = player.ba.petDamages[player.ba.eclipseID].mul(0.01)
-            player.ba.celestialiteHealths[player.ba.drainCelestialite] = player.ba.celestialiteHealths[player.ba.drainCelestialite].sub(damage.mul(delta))
+            if (player.ba.drainCelestialite >= 0) {
+                let damage = player.ba.petDamages[player.ba.eclipseID].mul(0.01)
+                player.ba.celestialiteHealths[player.ba.drainCelestialite] = player.ba.celestialiteHealths[player.ba.drainCelestialite].sub(damage.mul(delta))
             }
         }
 
@@ -556,7 +555,7 @@ addLayer("ba", {
             if (player.ba.petHealths[lowestIndex].gt(player.ba.petMaxHealths[lowestIndex])) {
             player.ba.petHealths[lowestIndex] = player.ba.petMaxHealths[lowestIndex];
             }
-            logPrintBattle("Nav heals " + tmp.sme.levelables[player.ba.petIDs[lowestIndex]].title + " for " + formatWhole(healAmount) + " HP!");
+            logPrintBattle("Nav heals " + run(layers.sme.levelables[player.ba.petIDs[lowestIndex]].title, layers.sme.levelables[player.ba.petIDs[lowestIndex]]) + " for " + formatWhole(healAmount) + " HP!");
         }
         if (rarity == 0 && petID == 5 && attackID == 0)
         {
@@ -598,7 +597,7 @@ addLayer("ba", {
             let randomIndex = getRandomInt(teammateCount);
             player.ba.motivatedPets = [randomIndex]; // Store the index for reference
 
-            logPrintBattle("<span style='color: #ccb73dff;'>Eclipse motivates " + tmp.sme.levelables[player.ba.petIDs[randomIndex]].title + ", giving them x1.4 damage for the rest of the wave!");
+            logPrintBattle("<span style='color: #ccb73dff;'>Eclipse motivates " + run(layers.sme.levelables[player.ba.petIDs[randomIndex]].title, layers.sme.levelables[player.ba.petIDs[randomIndex]]) + ", giving them x1.4 damage for the rest of the wave!");
         }
         if (rarity == 1 && petID == 1 && attackID == 0)
         {
@@ -634,7 +633,7 @@ addLayer("ba", {
             if (player.ba.celestialiteAbilities[ID] == 0)
             {
                 player.ba.petHealths[random] = player.ba.petHealths[random].sub(damage)
-                logPrintBattle("The " + name + " attacks " + tmp.sme.levelables[player.ba.petIDs[random]].title + " for " + formatWhole(damage) + " damage." )
+                logPrintBattle("The " + name + " attacks " + run(layers.sme.levelables[player.ba.petIDs[random]].title, layers.sme.levelables[player.ba.petIDs[random]]) + " for " + formatWhole(damage) + " damage." )
             }
 
             if (player.ba.celestialiteAbilities[ID] == 1)
@@ -645,11 +644,11 @@ addLayer("ba", {
                 {
                     let newDamage = damage.mul(2.5)
                     player.ba.petHealths[random] = player.ba.petHealths[random].sub(damage)
-                    logPrintBattle("<span style='color: #910a0aff;'>The " + name + " attacks " + tmp.sme.levelables[player.ba.petIDs[random]].title + " for " + formatWhole(newDamage) + " damage. (CRIT!)" )
+                    logPrintBattle("<span style='color: #910a0aff;'>The " + name + " attacks " + run(layers.sme.levelables[player.ba.petIDs[random]].title, layers.sme.levelables[player.ba.petIDs[random]]) + " for " + formatWhole(newDamage) + " damage. (CRIT!)" )
                     player.ba.petHealths[random] = player.ba.petHealths[random].sub(damage)
                 } else
                 {
-                    logPrintBattle("The " + name + " attacks " + tmp.sme.levelables[player.ba.petIDs[random]].title + " for " + formatWhole(damage) + " damage." )
+                    logPrintBattle("The " + name + " attacks " + run(layers.sme.levelables[player.ba.petIDs[random]].title, layers.sme.levelables[player.ba.petIDs[random]]) + " for " + formatWhole(damage) + " damage." )
                 }
             }
             if (player.ba.celestialiteAbilities[ID] == 2)
@@ -658,7 +657,7 @@ addLayer("ba", {
 
                 player.ba.petHealths[random2] = player.ba.petHealths[random2].sub(damage)
                 player.ba.petHealths[random] = player.ba.petHealths[random].sub(damage)
-                logPrintBattle("The " + name + " attacks " + tmp.sme.levelables[player.ba.petIDs[random]].title + " and " + tmp.sme.levelables[player.ba.petIDs[random2]].title + " for " + formatWhole(damage) + " damage." )
+                logPrintBattle("The " + name + " attacks " + run(layers.sme.levelables[player.ba.petIDs[random]].title, layers.sme.levelables[player.ba.petIDs[random]]) + " and " + run(layers.sme.levelables[player.ba.petIDs[random2]].title, layers.sme.levelables[player.ba.petIDs[random2]]) + " for " + formatWhole(damage) + " damage." )
             }
 
 
@@ -797,7 +796,7 @@ addLayer("ba", {
         if (player.ba.petIndex.add(1).eq(player.ba.petIDs.length)) {
             player.ba.petIndex = player.ba.petIndex.sub(1)
         }
-        logPrintBattle("<span style='color: #bb0067ff;'>" + tmp.sme.levelables[player.ba.petIDs[index]].title + " is dead!" ) 
+        logPrintBattle("<span style='color: #bb0067ff;'>" + run(layers.sme.levelables[player.ba.petIDs[index]].title, layers.sme.levelables[player.ba.petIDs[index]]) + " is dead!" ) 
         // Remove only the element at 'index' from each array
         player.ba.petIDs.splice(index, 1);
         player.ba.petHealths.splice(index, 1);
@@ -994,6 +993,8 @@ celestialiteDeath(index){
                 pauseUniverse("A1")
                 pauseUniverse("A2")
                 pauseUniverse("U3")
+
+                player.universe = "CB"
             },
             style: { width: '100px', "min-height": '100px', 'color': "black", 'background-color': "white",},
         },
@@ -1079,6 +1080,14 @@ celestialiteDeath(index){
             canClick() { return !player.ba.currentlyAttacking && !player.ba.celestialitesAttacking  },
             unlocked() { return true },
             onClick() {
+                let timeDecrease = player.ba.actionTimer.sub(2).max(0)
+
+                // Make timer skills tick
+                if (player.ba.drainCelestialite >= 0) {
+                    let damage = player.ba.petDamages[player.ba.eclipseID].mul(0.01)
+                    player.ba.celestialiteHealths[player.ba.drainCelestialite] = player.ba.celestialiteHealths[player.ba.drainCelestialite].sub(damage.mul(timeDecrease))
+                }
+
                 player.ba.actionTimer = new Decimal(2)
             },
             style: { width: '100px', "min-height": '100px', 'color': "black",},
@@ -1199,59 +1208,61 @@ celestialiteDeath(index){
                 buttonStyle() { return {color: "#06366e"}},
                 unlocked() { return true },
                 content: [
-                        ["style-row", [
+                    ["style-row", [
                         ["style-column", [
-                           ["always-scroll-column", [
-                           ["raw-html", function () { return "<br><br><br>" + player.ba.infoTexts.join("<br>") }, { "color": "white", "font-size": "12px", "font-family": "monospace" }],
-                        ], {width: "300px", height: "350px", backgroundImage: "linear-gradient(90deg, #220d04ff, #4b0e07ff)", border: "0px solid rgb(218, 218, 218)", borderBottom: "0px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
-                           ["always-scroll-column", [
-                           ["raw-html", function () { return "<br><br><br>" + player.ba.currentAttackSequenceTexts.join("<br>") }, { "color": "white", "font-size": "10px", "font-family": "monospace" }],
-                        ], {width: "300px", height: "500px", backgroundImage: "linear-gradient(-90deg, #000000ff, #0f0f0fff)", border: "0px solid rgb(218, 218, 218)", borderRight: "0px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
-                        ], {width: "300px", height: "850px", bg: "linear-gradient(-90deg, #85300fff, #85300fff)", border: "0px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
+                            ["always-scroll-column", [
+                                ["raw-html", () => { return player.ba.infoTexts.join("<br>") }, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                            ], {width: "297px", height: "300px", padding: "25px 0", backgroundImage: "linear-gradient(90deg, #220d04ff, #4b0e07ff)", border: "0px solid rgb(218, 218, 218)", borderBottom: "3px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
+                            ["always-scroll-column", [
+                                ["raw-html", () => { return player.ba.currentAttackSequenceTexts.join("<br>") }, {color: "white", fontSize: "10px", fontFamily: "monospace"}],
+                            ], {width: "287px", height: "447px", padding: "25px 5px", backgroundImage: "linear-gradient(-90deg, #000000ff, #0f0f0fff)", border: "0px solid rgb(218, 218, 218)", borderRight: "0px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
+                        ], {width: "297px", height: "850px", bg: "linear-gradient(-90deg, #85300fff, #85300fff)", border: "0px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
                         ["style-column", [
+                            ["style-column", [
+                                ["raw-html", () => { return "Round " + formatWhole(player.ba.round) + ", Wave " + formatWhole(player.ba.wave) }, { "color": "white", "font-size": "36px", "font-family": "monospace" }],
+                                ["bar", "timeBar"],
+                                ["blank", "10px"],
+                                ["raw-html", () => { return "Prepare your attack!" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                            ], {width: "1200px", height: "148px", bg: "linear-gradient(-90deg, #85300fff, #4b1703ff)", borderBottom: "0px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
+                            ["style-row", [
+                                ["style-column", [
+                                ["row", [["clickable", 4],]],
+                                ["blank", "25px"],
+                                ["raw-html", () => { return run(layers.sme.levelables[player.ba.petIDs[player.ba.petIndex]].title, layers.sme.levelables[player.ba.petIDs[player.ba.petIndex]]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                                ["row", [["bar", "healthBar"]]],
+                                ["blank", "25px"],
+                                ["raw-html", () => { return formatWhole(player.ba.petIndex.add(1)) + "/" + formatWhole(player.ba.petIDs.length) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                ["row", [["clickable", 3],["clickable", 2],]],
+                                ], {width: "600px", height: "500px", bg: "linear-gradient(-90deg, #85300fff, #4b1703ff)", border: "0px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
+                                ["style-column", [
+                                    ["clickable", 7],
+                                    ["blank", "25px"],
+                                    ["raw-html", () => { return player.ba.celestialiteNames[player.ba.celestialiteIDs[player.ba.celestialiteIndex]] }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                                    ["bar", "celestialiteHealthBar"],
+                                    ["blank", "25px"],
+                                    ["raw-html", () => { return formatWhole(player.ba.celestialiteIndex.add(1)) + "/" + formatWhole(player.ba.celestialiteIDs.length) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                    ["row", [["clickable", 6],["clickable", 5]]],
+                                ], {width: "600px", height: "500px", bg: "linear-gradient(-90deg, #4b1703ff, #85300fff)", border: "0px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
+                            ], {width: "1200px", height: "500px", bg: "linear-gradient(-90deg, #85300fff, #4b1703ff)", border: "0px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
+                            ["style-row", [
+                                ["column", [
+                                    ["bar", "attackPowerBar"],
+                                    ["blank", "10px"],
+                                    ["row", [["clickable", 11],["clickable", 12], ["blank", "25px"],["clickable", 8],["clickable", 9],["clickable", 1]]],
+                                ]],
+                            ], {width: "1200px", height: "198px", bg: "linear-gradient(90deg, #220606ff, #180c02ff)", borderTop: "0px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
+                        ], {width: "1200px", height: "850px", bg: "linear-gradient(-90deg, #521c07ff, #4b1703ff)", border: "0px solid rgb(218, 218, 218)", borderLeft: "3px solid rgb(218, 218, 218)", borderRight: "3px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
                         ["style-column", [
-                        ["raw-html", function () { return "Round " + formatWhole(player.ba.round) + ", Wave " + formatWhole(player.ba.wave) }, { "color": "white", "font-size": "36px", "font-family": "monospace" }],
-                        ["row", [["bar", "timeBar"]]],
-                        ["blank", "10px"],
-                        ["raw-html", function () { return "Prepare your attack!" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                        ], {width: "1200px", height: "148px", bg: "linear-gradient(-90deg, #85300fff, #4b1703ff)", borderBottom: "0px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
-                        ["style-row", [
-                        ["style-column", [
-                        ["row", [["clickable", 4],]],
-                        ["blank", "25px"],
-                        ["raw-html", function () { return tmp.sme.levelables[player.ba.petIDs[player.ba.petIndex]].title }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                        ["row", [["bar", "healthBar"]]],
-                        ["blank", "25px"],
-                        ["raw-html", function () { return formatWhole(player.ba.petIndex.add(1)) + "/" + formatWhole(player.ba.petIDs.length) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                        ["row", [["clickable", 3],["clickable", 2],]],
-                        ], {width: "600px", height: "500px", bg: "linear-gradient(-90deg, #85300fff, #4b1703ff)", border: "0px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
-                        ["style-column", [
-                        ["row", [["clickable", 7],]],
-                        ["blank", "25px"],
-                        ["raw-html", function () { return player.ba.celestialiteNames[player.ba.celestialiteIDs[player.ba.celestialiteIndex]] }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                        ["row", [["bar", "celestialiteHealthBar"]]],
-                        ["blank", "25px"],
-                        ["raw-html", function () { return formatWhole(player.ba.celestialiteIndex.add(1)) + "/" + formatWhole(player.ba.celestialiteIDs.length) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                        ["row", [["clickable", 6],["clickable", 5],]],
-                        ], {width: "600px", height: "500px", bg: "linear-gradient(-90deg, #4b1703ff, #85300fff)", border: "0px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
-                        ], {width: "1200px", height: "500px", bg: "linear-gradient(-90deg, #85300fff, #4b1703ff)", border: "0px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
-                        ["style-row", [                    
-                        ["column", [["bar", "attackPowerBar"], ["blank", "10px"], ["row", [["clickable", 11],["clickable", 12], ["blank", "25px"], ["clickable", 8],  ["clickable", 9], ["clickable", 1],]],]],
-                        ], {width: "1200px", height: "198px", bg: "linear-gradient(90deg, #220606ff, #180c02ff)", borderTop: "0px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
-                        ], {width: "1200px", height: "850px", bg: "linear-gradient(-90deg, #521c07ff, #4b1703ff)", border: "0px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
-                        ["style-column", [
-                           ["always-scroll-column", [
-                           ["raw-html", function () { return "<br><br><br>" + player.ba.celestialiteTexts.join("<br>") }, { "color": "white", "font-size": "12px", "font-family": "monospace" }],
-                        ], {width: "298px", height: "350px", backgroundImage: "linear-gradient(-90deg, #03172eff, #0b284bff)", border: "0px solid rgb(218, 218, 218)", borderLeft: "3px solid rgb(218, 218, 218)", borderBottom: "0px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
-                           ["style-column", [
-                        ["raw-html", () => `
-                        <div style="width:296px;height:468px;text-align:center;margin:10px auto;background:#000000;border:2px solid #888;border-radius:0px;padding:12px 0;">
-                        ${player.ba.log.map((x, i) => `<span style="display:block;">${x}</span>`).join("")}
-                        </div>
-                        `],
-                        ], {width: "300px", height: "500px", bg: "linear-gradient(-90deg, #220d04ff, #1d0401ff)", border: "0px solid rgb(218, 218, 218)", borderRight: "0px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
-                        ], {width: "300px", height: "500px", bg: "linear-gradient(-90deg, #85300fff, #692205ff)", border: "0px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
-                        ], {width: "1800px", height: "850px", bg: "linear-gradient(-90deg, #85300fff, #85300fff)", border: "3px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
+                            ["always-scroll-column", [
+                                ["raw-html", () => { return player.ba.celestialiteTexts.join("<br>") }, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                            ], {width: "297px", height: "300px", padding: "25px 0", backgroundImage: "linear-gradient(-90deg, #03172eff, #0b284bff)", border: "0px solid rgb(218, 218, 218)", borderBottom: "3px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
+                            ["top-column", [
+                                ["raw-html", () => `
+                                ${player.ba.log.map((x, i) => `<span style="display:block;">${x}</span>`).join("")}
+                                `],
+                            ], {width: "287px", height: "447px", padding: "25px 5px", backgroundImage: "linear-gradient(-90deg, #000000ff, #0f0f0fff)", border: "0px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
+                        ], {width: "297px", height: "497px", bg: "linear-gradient(-90deg, #85300fff, #692205ff)", border: "0px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
+                    ], {width: "1800px", height: "850px", bg: "linear-gradient(-90deg, #85300fff, #85300fff)", border: "3px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
                 ],
             },
             "Lose": {

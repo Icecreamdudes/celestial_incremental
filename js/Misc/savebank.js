@@ -15,8 +15,8 @@ addLayer("savebank", {
     clickables: {
         2: {
             title() { return "Settings" },
-            canClick() { return true },
-            unlocked() { return true },
+            canClick: true,
+            unlocked: true,
             onClick() {
                 player.tab = "settings"
             },
@@ -24,7 +24,7 @@ addLayer("savebank", {
         },
         3: {
             title() { return "Stats" },
-            canClick() { return true },
+            canClick: true,
             unlocked() { return false },
             onClick() {
                 player.tab = "stats"
@@ -33,8 +33,8 @@ addLayer("savebank", {
         },
         4: {
             title() { return "Savebank" },
-            canClick() { return true },
-            unlocked() { return true },
+            canClick: true,
+            unlocked: true,
             onClick() {
                 player.tab = "savebank"
             },
@@ -42,8 +42,8 @@ addLayer("savebank", {
         },
         5: {
             title() { return "Changelog" },
-            canClick() { return true },
-            unlocked() { return true },
+            canClick: true,
+            unlocked: true,
             onClick() {
                 player.tab = "changelog"
             },
@@ -51,8 +51,8 @@ addLayer("savebank", {
         },
         6: {
             title() { return "Credits" },
-            canClick() { return true },
-            unlocked() { return true },
+            canClick: true,
+            unlocked: true,
             onClick() {
                 player.tab = "credits"
             },
@@ -60,8 +60,8 @@ addLayer("savebank", {
         },
         11: {
             title() { return "Info" },
-            canClick() { return true },
-            unlocked() { return true },
+            canClick: true,
+            unlocked: true,
             onClick() {
                 player.subtabs["savebank"]["stuff"] = "Info"
             },
@@ -69,8 +69,8 @@ addLayer("savebank", {
         },
         12: {
             title() { return "Start<br>Check Back" },
-            canClick() { return true },
-            unlocked() { return true },
+            canClick: true,
+            unlocked: true,
             onClick() {
                 player.subtabs["savebank"]["stuff"] = "Start-Checkback"
             },
@@ -78,8 +78,8 @@ addLayer("savebank", {
         },
         13: {
             title() { return "Check Back<br>Infinity" },
-            canClick() { return true },
-            unlocked() { return true },
+            canClick: true,
+            unlocked: true,
             onClick() {
                 player.subtabs["savebank"]["stuff"] = "Checkback-Infinity"
             },
@@ -87,8 +87,8 @@ addLayer("savebank", {
         },
         14: {
             title() { return "Infinity<br>Tav" },
-            canClick() { return true },
-            unlocked() { return true },
+            canClick: true,
+            unlocked: true,
             onClick() {
                 player.subtabs["savebank"]["stuff"] = "Infinity-Tav"
             },
@@ -96,8 +96,8 @@ addLayer("savebank", {
         },
         15: {
             title() { return "Tav<br>Break Infinity" },
-            canClick() { return true },
-            unlocked() { return true },
+            canClick: true,
+            unlocked: true,
             onClick() {
                 player.subtabs["savebank"]["stuff"] = "Tav-BreakInfinity"
             },
@@ -105,8 +105,8 @@ addLayer("savebank", {
         },
         16: {
             title() { return "Break Infinity<br>Cante" },
-            canClick() { return true },
-            unlocked() { return true },
+            canClick: true,
+            unlocked: true,
             onClick() {
                 player.subtabs["savebank"]["stuff"] = "BreakInfinity-Cante"
             },
@@ -114,8 +114,8 @@ addLayer("savebank", {
         },
         17: {
             title() { return "Cante<br>Singularity" },
-            canClick() { return true },
-            unlocked() { return true },
+            canClick: true,
+            unlocked: true,
             onClick() {
                 player.subtabs["savebank"]["stuff"] = "Cante-Singularity"
             },
@@ -123,8 +123,8 @@ addLayer("savebank", {
         },
         18: {
             title() { return "Singularity<br>Starmetal" },
-            canClick() { return true },
-            unlocked() { return true },
+            canClick: true,
+            unlocked: true,
             onClick() {
                 player.subtabs["savebank"]["stuff"] = "Singularity-Starmetal"
             },
@@ -132,8 +132,8 @@ addLayer("savebank", {
         },
         19: {
             title() { return "Starmetal<br>Matos" },
-            canClick() { return true },
-            unlocked() { return true },
+            canClick: true,
+            unlocked: true,
             onClick() {
                 player.subtabs["savebank"]["stuff"] = "Starmetal-Matos"
             },
@@ -141,8 +141,8 @@ addLayer("savebank", {
         },
         21: {
             title() { return "Matos<br>End" },
-            canClick() { return true },
-            unlocked() { return true },
+            canClick: true,
+            unlocked: true,
             onClick() {
                 player.subtabs["savebank"]["stuff"] = "Matos-End"
             },
@@ -150,9 +150,9 @@ addLayer("savebank", {
         },
         // Start-Checkback
         101: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -167,9 +167,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "#83cecf", borderRadius: '0px', border: '0px solid white'},
         },
         102: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -184,9 +184,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "#83cecf", borderRadius: '0px', border: '0px solid white'},
         },
         103: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -201,9 +201,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "#83cecf", borderRadius: '0px', border: '0px solid white'},
         },
         104: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -218,9 +218,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "#83cecf", borderRadius: '0px', border: '0px solid white'},
         },
         105: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -235,9 +235,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "#83cecf", borderRadius: '0px', border: '0px solid white'},
         },
         106: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -252,9 +252,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "#83cecf", borderRadius: '0px', border: '0px solid white'},
         },
         107: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -269,9 +269,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "#83cecf", borderRadius: '0px', border: '0px solid white'},
         },
         108: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -286,9 +286,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "#83cecf", borderRadius: '0px', border: '0px solid white'},
         },
         109: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -303,9 +303,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "#83cecf", borderRadius: '0px', border: '0px solid white'},
         },
         110: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -321,9 +321,9 @@ addLayer("savebank", {
         },
         // Checkback-Infinity
         201: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -338,9 +338,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "#06366e", borderRadius: '0px', border: '0px solid white'},
         },
         202: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -355,9 +355,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "#06366e", borderRadius: '0px', border: '0px solid white'},
         },
         203: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -372,9 +372,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "#06366e", borderRadius: '0px', border: '0px solid white'},
         },
         204: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -390,9 +390,9 @@ addLayer("savebank", {
         },
         // Infinity-Tav
         301: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -407,9 +407,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)", borderRadius: '0px', border: '0px solid white'},
         },
         302: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -424,9 +424,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)", borderRadius: '0px', border: '0px solid white'},
         },
         303: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -441,9 +441,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)", borderRadius: '0px', border: '0px solid white'},
         },
         304: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -458,9 +458,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)", borderRadius: '0px', border: '0px solid white'},
         },
         305: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -475,9 +475,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)", borderRadius: '0px', border: '0px solid white'},
         },
         306: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -492,9 +492,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)", borderRadius: '0px', border: '0px solid white'},
         },
         307: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -509,9 +509,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)", borderRadius: '0px', border: '0px solid white'},
         },
         308: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -526,9 +526,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)", borderRadius: '0px', border: '0px solid white'},
         },
         309: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -543,9 +543,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)", borderRadius: '0px', border: '0px solid white'},
         },
         310: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -560,9 +560,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)", borderRadius: '0px', border: '0px solid white'},
         },
         311: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -577,9 +577,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)", borderRadius: '0px', border: '0px solid white'},
         },
         312: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -594,9 +594,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)", borderRadius: '0px', border: '0px solid white'},
         },
         401: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -611,9 +611,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "linear-gradient(150deg, #008080, 0%, #b2d8d8 100%)", borderRadius: '0px', border: '0px solid white'},
         },
         402: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -628,9 +628,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "linear-gradient(150deg, #008080, 0%, #b2d8d8 100%)", borderRadius: '0px', border: '0px solid white'},
         },
         403: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -645,9 +645,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "linear-gradient(150deg, #008080, 0%, #b2d8d8 100%)", borderRadius: '0px', border: '0px solid white'},
         },
         404: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -662,9 +662,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "linear-gradient(150deg, #008080, 0%, #b2d8d8 100%)", borderRadius: '0px', border: '0px solid white'},
         },
         405: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -679,9 +679,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "linear-gradient(150deg, #008080, 0%, #b2d8d8 100%)", borderRadius: '0px', border: '0px solid white'},
         },
         406: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -696,9 +696,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "linear-gradient(150deg, #008080, 0%, #b2d8d8 100%)", borderRadius: '0px', border: '0px solid white'},
         },
         407: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -713,9 +713,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "linear-gradient(150deg, #008080, 0%, #b2d8d8 100%)", borderRadius: '0px', border: '0px solid white'},
         },
         408: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -730,9 +730,9 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "linear-gradient(150deg, #008080, 0%, #b2d8d8 100%)", borderRadius: '0px', border: '0px solid white'},
         },
         409: {
-            title() { return "Load" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Load",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to load this save?")) {
                     const xhttp = new XMLHttpRequest()
@@ -746,6 +746,210 @@ addLayer("savebank", {
             },
             style: { width: '100px', minHeight: '50px', background: "linear-gradient(150deg, #008080, 0%, #b2d8d8 100%)", borderRadius: '0px', border: '0px solid white'},
         },
+        501: {
+            title: "Load",
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                if (confirm("Are you sure you want to load this save?")) {
+                    const xhttp = new XMLHttpRequest()
+                    xhttp.open("GET", "Savebank/Stage_5/036.txt", true)
+                    xhttp.onload = function () {
+                        let file = this.responseText
+                        importSave(file)
+                    }
+                    xhttp.send()
+                }
+            },
+            style: { width: '100px', minHeight: '50px', background: "linear-gradient(150deg, #889110, 0%, #73A112 100%)", borderRadius: '0px', border: '0px solid white'},
+        },
+        502: {
+            title: "Load",
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                if (confirm("Are you sure you want to load this save?")) {
+                    const xhttp = new XMLHttpRequest()
+                    xhttp.open("GET", "Savebank/Stage_5/037.txt", true)
+                    xhttp.onload = function () {
+                        let file = this.responseText
+                        importSave(file)
+                    }
+                    xhttp.send()
+                }
+            },
+            style: { width: '100px', minHeight: '50px', background: "linear-gradient(150deg, #889110, 0%, #73A112 100%)", borderRadius: '0px', border: '0px solid white'},
+        },
+        503: {
+            title: "Load",
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                if (confirm("Are you sure you want to load this save?")) {
+                    const xhttp = new XMLHttpRequest()
+                    xhttp.open("GET", "Savebank/Stage_5/038.txt", true)
+                    xhttp.onload = function () {
+                        let file = this.responseText
+                        importSave(file)
+                    }
+                    xhttp.send()
+                }
+            },
+            style: { width: '100px', minHeight: '50px', background: "linear-gradient(150deg, #889110, 0%, #73A112 100%)", borderRadius: '0px', border: '0px solid white'},
+        },
+        504: {
+            title: "Load",
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                if (confirm("Are you sure you want to load this save?")) {
+                    const xhttp = new XMLHttpRequest()
+                    xhttp.open("GET", "Savebank/Stage_5/039.txt", true)
+                    xhttp.onload = function () {
+                        let file = this.responseText
+                        importSave(file)
+                    }
+                    xhttp.send()
+                }
+            },
+            style: { width: '100px', minHeight: '50px', background: "linear-gradient(150deg, #889110, 0%, #73A112 100%)", borderRadius: '0px', border: '0px solid white'},
+        },
+        505: {
+            title: "Load",
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                if (confirm("Are you sure you want to load this save?")) {
+                    const xhttp = new XMLHttpRequest()
+                    xhttp.open("GET", "Savebank/Stage_5/040.txt", true)
+                    xhttp.onload = function () {
+                        let file = this.responseText
+                        importSave(file)
+                    }
+                    xhttp.send()
+                }
+            },
+            style: { width: '100px', minHeight: '50px', background: "linear-gradient(150deg, #889110, 0%, #73A112 100%)", borderRadius: '0px', border: '0px solid white'},
+        },
+        506: {
+            title: "Load",
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                if (confirm("Are you sure you want to load this save?")) {
+                    const xhttp = new XMLHttpRequest()
+                    xhttp.open("GET", "Savebank/Stage_5/041.txt", true)
+                    xhttp.onload = function () {
+                        let file = this.responseText
+                        importSave(file)
+                    }
+                    xhttp.send()
+                }
+            },
+            style: { width: '100px', minHeight: '50px', background: "linear-gradient(150deg, #889110, 0%, #73A112 100%)", borderRadius: '0px', border: '0px solid white'},
+        },
+        507: {
+            title: "Load",
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                if (confirm("Are you sure you want to load this save?")) {
+                    const xhttp = new XMLHttpRequest()
+                    xhttp.open("GET", "Savebank/Stage_5/042.txt", true)
+                    xhttp.onload = function () {
+                        let file = this.responseText
+                        importSave(file)
+                    }
+                    xhttp.send()
+                }
+            },
+            style: { width: '100px', minHeight: '50px', background: "linear-gradient(150deg, #889110, 0%, #73A112 100%)", borderRadius: '0px', border: '0px solid white'},
+        },
+        508: {
+            title: "Load",
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                if (confirm("Are you sure you want to load this save?")) {
+                    const xhttp = new XMLHttpRequest()
+                    xhttp.open("GET", "Savebank/Stage_5/043.txt", true)
+                    xhttp.onload = function () {
+                        let file = this.responseText
+                        importSave(file)
+                    }
+                    xhttp.send()
+                }
+            },
+            style: { width: '100px', minHeight: '50px', background: "linear-gradient(150deg, #889110, 0%, #73A112 100%)", borderRadius: '0px', border: '0px solid white'},
+        },
+        509: {
+            title: "Load",
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                if (confirm("Are you sure you want to load this save?")) {
+                    const xhttp = new XMLHttpRequest()
+                    xhttp.open("GET", "Savebank/Stage_5/044.txt", true)
+                    xhttp.onload = function () {
+                        let file = this.responseText
+                        importSave(file)
+                    }
+                    xhttp.send()
+                }
+            },
+            style: { width: '100px', minHeight: '50px', background: "linear-gradient(150deg, #889110, 0%, #73A112 100%)", borderRadius: '0px', border: '0px solid white'},
+        },
+        510: {
+            title: "Load",
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                if (confirm("Are you sure you want to load this save?")) {
+                    const xhttp = new XMLHttpRequest()
+                    xhttp.open("GET", "Savebank/Stage_5/045.txt", true)
+                    xhttp.onload = function () {
+                        let file = this.responseText
+                        importSave(file)
+                    }
+                    xhttp.send()
+                }
+            },
+            style: { width: '100px', minHeight: '50px', background: "linear-gradient(150deg, #889110, 0%, #73A112 100%)", borderRadius: '0px', border: '0px solid white'},
+        },
+        511: {
+            title: "Load",
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                if (confirm("Are you sure you want to load this save?")) {
+                    const xhttp = new XMLHttpRequest()
+                    xhttp.open("GET", "Savebank/Stage_5/046.txt", true)
+                    xhttp.onload = function () {
+                        let file = this.responseText
+                        importSave(file)
+                    }
+                    xhttp.send()
+                }
+            },
+            style: { width: '100px', minHeight: '50px', background: "linear-gradient(150deg, #889110, 0%, #73A112 100%)", borderRadius: '0px', border: '0px solid white'},
+        },
+        512: {
+            title: "Load",
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                if (confirm("Are you sure you want to load this save?")) {
+                    const xhttp = new XMLHttpRequest()
+                    xhttp.open("GET", "Savebank/Stage_5/047.txt", true)
+                    xhttp.onload = function () {
+                        let file = this.responseText
+                        importSave(file)
+                    }
+                    xhttp.send()
+                }
+            },
+            style: { width: '100px', minHeight: '50px', background: "linear-gradient(150deg, #889110, 0%, #73A112 100%)", borderRadius: '0px', border: '0px solid white'},
+        },
     },
     bars: {},
     upgrades: {},
@@ -758,7 +962,7 @@ addLayer("savebank", {
             "Info": {
                 buttonStyle() { return { 'color': 'white' } },
                 style: { background: 'black' },
-                unlocked() { return true },
+                unlocked: true,
                 content: [
                     ["blank", "25px"],
                     ["raw-html", "The savebank allows you to load a save from any part of the game.<br>", { "color": "white", "font-size": "16px", "font-family": "monospace" }],
@@ -772,7 +976,7 @@ addLayer("savebank", {
             "Start-Checkback": {
                 buttonStyle() { return { 'color': 'white' } },
                 style: { background: 'black' },
-                unlocked() { return true },
+                unlocked: true,
                 content: [
                     ["row", [
                         ["style-row", [
@@ -829,7 +1033,7 @@ addLayer("savebank", {
             "Checkback-Infinity": {
                 buttonStyle() { return { 'color': 'white' } },
                 style: { background: '#021124' },
-                unlocked() { return true },
+                unlocked: true,
                 content: [
                     ["row", [
                         ["style-row", [
@@ -856,7 +1060,7 @@ addLayer("savebank", {
             "Infinity-Tav": {
                 buttonStyle() { return { 'color': 'white' } },
                 style: { background: '#001f18' },
-                unlocked() { return true },
+                unlocked: true,
                 content: [
                     ["row", [
                         ["style-row", [
@@ -923,7 +1127,7 @@ addLayer("savebank", {
             "Tav-BreakInfinity": {
                 buttonStyle() { return { 'color': 'white' } },
                 style: { background: '#001f18' },
-                unlocked() { return true },
+                unlocked: true,
                 content: [
                     ["row", [
                         ["style-row", [
@@ -976,17 +1180,77 @@ addLayer("savebank", {
             "BreakInfinity-Cante": {
                 buttonStyle() { return { 'color': 'white' } },
                 style: { background: '#001f18' },
-                unlocked() { return true },
+                unlocked: true,
                 content: [
-                    ["blank", "25px"],
-                    ["raw-html", "WIP"],
-                    ["blank", "25px"],
+                    ["row", [
+                        ["style-row", [
+                            ["style-row", [["raw-html", "036 - 10,000 Infinities post-TAD"]], { width: "296.5px", height: "50px" }],
+                            ["clickable", 501],
+                        ], { width: "396.5", height: "50px", border: "2px solid white" }],
+                        ["style-row", [
+                            ["style-row", [["raw-html", "037 - BI-IP:1 and BI-NIP:2"]], { width: "296.5px", height: "50px" }],
+                            ["clickable", 502],
+                        ], { width: "396.5", height: "50px", border: "2px solid white" }],
+                    ]],
+                    ["row", [
+                        ["style-row", [
+                            ["style-row", [["raw-html", "038 - BI-IP:2 and BI-NIP:3<br>All hex graces"]], { width: "296.5px", height: "50px" }],
+                            ["clickable", 503],
+                        ], { width: "396.5", height: "50px", border: "2px solid white" }],
+                        ["style-row", [
+                            ["style-row", [["raw-html", "039 - BI-IP:4 and BI-NIP:3"]], { width: "296.5px", height: "50px" }],
+                            ["clickable", 504],
+                        ], { width: "396.5", height: "50px", border: "2px solid white" }],
+                    ]],
+                    ["row", [
+                        ["style-row", [
+                            ["style-row", [["raw-html", "040 - BI-IP:4 and BI-NIP:7"]], { width: "296.5px", height: "50px" }],
+                            ["clickable", 505],
+                        ], { width: "396.5", height: "50px", border: "2px solid white" }],
+                        ["style-row", [
+                            ["style-row", [["raw-html", "041 - BI-IP:5 and BI-NIP:7"]], { width: "296.5px", height: "50px" }],
+                            ["clickable", 506],
+                        ], { width: "396.5", height: "50px", border: "2px solid white" }],
+                    ]],
+                    ["row", [
+                        ["style-row", [
+                            ["style-row", [["raw-html", "042 - BI-IP:6 and BI-NIP:8"]], { width: "296.5px", height: "50px" }],
+                            ["clickable", 507],
+                        ], { width: "396.5", height: "50px", border: "2px solid white" }],
+                        ["style-row", [
+                            ["style-row", [["raw-html", "043 - All Pollinator Upgrades"]], { width: "296.5px", height: "50px" }],
+                            ["clickable", 508],
+                        ], { width: "396.5", height: "50px", border: "2px solid white" }],
+                    ]],
+                    ["row", [
+                        ["style-row", [
+                            ["style-row", [["raw-html", "044 - BI-IP:7 and BI-NIP:8"]], { width: "296.5px", height: "50px" }],
+                            ["clickable", 509],
+                        ], { width: "396.5", height: "50px", border: "2px solid white" }],
+                        ["style-row", [
+                            ["style-row", [["raw-html", "045 - BI-IP:8 and BI-NIP:8"]], { width: "296.5px", height: "50px" }],
+                            ["clickable", 510],
+                        ], { width: "396.5", height: "50px", border: "2px solid white" }],
+                    ]],
+                    ["row", [
+                        ["style-row", [
+                            ["style-row", [["raw-html", "046 - BI-IP:9 and BI-NIP:8"]], { width: "296.5px", height: "50px" }],
+                            ["clickable", 511],
+                        ], { width: "396.5", height: "50px", border: "2px solid white" }],
+                        ["style-row", [
+                            ["style-row", [["raw-html", "047 - BI-IP:9 and BI-NIP:9"]], { width: "296.5px", height: "50px" }],
+                            ["clickable", 512],
+                        ], { width: "396.5", height: "50px", border: "2px solid white" }],
+                    ]],
+                    ["style-row", [
+                        ["raw-html", "Credits to Sophie for making these saves!"],
+                    ], { width: "796px", height: "50px", border: "2px solid white" }],
                 ]
             },
             "Cante-Singularity": {
                 buttonStyle() { return { 'color': 'white' } },
                 style: { background: '#2a3e66' },
-                unlocked() { return true },
+                unlocked: true,
                 content: [
                     ["blank", "25px"],
                     ["raw-html", "WIP"],
@@ -996,7 +1260,7 @@ addLayer("savebank", {
             "Singularity-Starmetal": {
                 buttonStyle() { return { 'color': 'white' } },
                 style: { background: '#2D0000' },
-                unlocked() { return true },
+                unlocked: true,
                 content: [
                     ["blank", "25px"],
                     ["raw-html", "WIP"],
@@ -1006,7 +1270,7 @@ addLayer("savebank", {
             "Starmetal-Matos": {
                 buttonStyle() { return { 'color': 'white' } },
                 style: { background: '#2D0000' },
-                unlocked() { return true },
+                unlocked: true,
                 content: [
                     ["blank", "25px"],
                     ["raw-html", "WIP"],
@@ -1016,7 +1280,7 @@ addLayer("savebank", {
             "Matos-End": {
                 buttonStyle() { return { 'color': 'white' } },
                 style: { background: '#2D0000' },
-                unlocked() { return true },
+                unlocked: true,
                 content: [
                     ["blank", "25px"],
                     ["raw-html", "WIP"],

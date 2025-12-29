@@ -64,8 +64,9 @@
         if (player.gh.grasshoppersToGet.lt(50000))  player.gh.grasshoppersToGet = player.g.grass.div(10000).pow(0.55)
         if (player.gh.grasshoppersToGet.gte(50000))  player.gh.grasshoppersToGet = player.g.grass.div(15000).pow(0.45).add(10000)
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(levelableEffect("pet", 201)[1])
-        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.d.diceEffects[6])
-        if (player.po.rocketFuel) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.rf.rocketFuelEffect)
+        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.d.boosterEffects[6])
+        if (hasAchievement("achievements", 23)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(2)
+        if (player.po.rocketFuel || inChallenge("ip", 16)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.rf.rocketFuelEffect)
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(levelableEffect("pet", 304)[0])
         if (hasUpgrade("ad", 16) && !inChallenge("ip", 14)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("ad", 16))
         if (hasUpgrade("ip", 32) && !inChallenge("ip", 14)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("ip", 32))
@@ -74,10 +75,6 @@
         // CHALLENGE MODIFIERS
         if (inChallenge("ip", 15)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(0.85)
         if (hasUpgrade("d", 14)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("d", 14))
-        if (inChallenge("ip", 18)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(0.6)
-        if (inChallenge("tad", 11)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(0.35)
-        if (inChallenge("tad", 11)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(buyableEffect("de", 16))
-        if (hasUpgrade("de", 11) && inChallenge("tad", 11)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("de", 11))
 
         // CONTINUED REGULAR MODIFIERS
         if (player.pol.pollinatorEffects.bee.enabled) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.pol.pollinatorEffects.bee.effects[0])
@@ -85,22 +82,24 @@
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.i.preOTFMult)
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.co.cores.grasshopper.effect[0])
         if (hasUpgrade("cs", 602)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.gs.grassSkipEffect2)
-        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.se.starsExploreEffect[0][4])
 
         // POWER MODIFIERS
         if (hasUpgrade("hpw", 1041)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(1.1)
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(buyableEffect("fu", 34))
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(buyableEffect("cof", 15))
+        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(player.se.starsExploreEffect[0][4])
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
-        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.div(player.po.halterEffects[6])
+        if (player.po.halter.grasshoppers.enabled == 1) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.div(player.po.halter.grasshoppers.halt)
+        if (player.po.halter.grasshoppers.enabled == 2 && player.gh.grasshoppersToGet.gt(player.po.halter.grasshoppers.halt)) player.gh.grasshoppersToGet = player.po.halter.grasshoppers.halt
         if (inChallenge("ip", 12) && player.gh.grasshoppers.gt(1)) {
             player.gh.grasshoppers = player.gh.grasshoppers.sub(player.gh.grasshoppers.mul(player.pe.pestEffect[7] * delta))
         }
         if (player.r.timeReversed) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(0)
 
         // GRASSHOPPERS PER SECOND
-        if (hasMilestone("ip", 22)) player.gh.grasshoppers = player.gh.grasshoppers.add(player.gh.grasshoppersToGet.mul(Decimal.mul(delta, 0.1)))
+        if (hasUpgrade("rf", 14)) player.gh.grasshoppers = player.gh.grasshoppers.add(player.gh.grasshoppersToGet.div(100).mul(delta))
+        if (hasMilestone("ip", 22)) player.gh.grasshoppers = player.gh.grasshoppers.add(player.gh.grasshoppersToGet.div(10).mul(delta))
 
         // GRASSHOPPER RESET CODE
         if (player.gh.grasshopPause.gt(0)) {
@@ -129,9 +128,9 @@
 
         // START OF FERTILIZER MODIFIERS
         player.gh.fertilizerPerSecond = player.gh.grasshoppers.pow(1.4).div(10)
+        if (hasAchievement("achievements", 15)) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(1.5)
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(levelableEffect("pet", 201)[2])
-        player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(levelableEffect("pet", 301)[0])
-        player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.d.diceEffects[7])
+        player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.d.boosterEffects[7])
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.rf.abilityEffects[3])
         if (hasUpgrade("ad", 16) && !inChallenge("ip", 14)) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(upgradeEffect("ad", 16))
 
@@ -146,9 +145,9 @@
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.i.preOTFMult)
 
         // POWER MODIFIERS
+        player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.pow(levelableEffect("pet", 301)[0])
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
-        player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.div(player.po.halterEffects[7])
         if (player.r.timeReversed) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(0)
 
         // FERTILIZER PER SECOND
@@ -179,7 +178,9 @@
         player.gh.steelToGet = player.gh.steelToGet.mul(player.co.cores.grasshopper.effect[2])
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("st", 104))
         player.gh.steelToGet = player.gh.steelToGet.mul(player.i.postOTFMult)
-        player.gh.steelToGet = player.gh.steelToGet.mul(player.se.starsExploreEffect[0][5])
+
+        // POWER MODIFIERS
+        player.gh.steelToGet = player.gh.steelToGet.pow(player.se.starsExploreEffect[0][5])
         player.gh.steelToGet = player.gh.steelToGet.pow(player.cof.coreFragmentEffects[2])
 
         // STEEL PER SECOND
@@ -244,10 +245,16 @@
             canClick() { return player.gh.grasshoppersToGet.gte(1) && player.points.gte(1e35) },
             unlocked() { return true },
             onClick() {
+                if (!hasAchievement("achievements", 13)) completeAchievement("achievements", 13)
+                if (!hasAchievement("achievements", 23) && player.gh.grasshoppersToGet.gte(1e25)) completeAchievement("achievements", 23)
                 player.gh.grasshopPause = new Decimal(3)
                 player.gh.grasshoppers = player.gh.grasshoppers.add(player.gh.grasshoppersToGet)
 
-                player.pe.pests = player.pe.pests.mul(0.9)
+                if (!hasAchievement("achievements", 108)) {
+                    player.pe.pests = player.pe.pests.mul(0.9)
+                } else {
+                    player.pe.pests = player.pe.pests.mul(0.8)
+                }
             },
             style: { width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
@@ -285,17 +292,18 @@
         player.r.factorPowerPerSecond = new Decimal(0)
         player.r.powerFactorUnlocks = [true, true, true, false, false, false, false, false]
 
-        for (let i = 11; i < 20; i++) {
-            player.f.buyables[i] = new Decimal(0)
-        }
-        for (let i = 21; i < 28; i++) {
-            player.f.buyables[i] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 20; i++) {
+                player.f.buyables[i] = new Decimal(0)
+            }
+            for (let i = 21; i < 28; i++) {
+                player.f.buyables[i] = new Decimal(0)
+            }
         }
 
         player.p.prestigePoints = new Decimal(0)
 
-        if (!hasMilestone("ip", 11))
-        {
+        if (!hasMilestone("ip", 11)) {
             for (let i = 0; i < player.p.upgrades.length; i++) {
                 if (+player.p.upgrades[i] < 24) {
                     player.p.upgrades.splice(i, 1);
@@ -304,8 +312,10 @@
             }
         }
 
-        for (let i = 11; i < 19; i++) {
-            player.t.buyables[i] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 19; i++) {
+                player.t.buyables[i] = new Decimal(0)
+            }
         }
 
         player.f.factorPower = new Decimal(0)
@@ -313,32 +323,38 @@
         player.t.leaves = new Decimal(0)
         player.t.trees = new Decimal(0)
 
-        for (let i = 11; i < 19; i++) {
-            player.g.buyables[i] = new Decimal(0)
-        }
-
-        if (!hasMilestone("ip", 11))
-        {
-        for (let i = 0; i < player.g.upgrades.length; i++) {
-            if (+player.g.upgrades[i] < 17) {
-                player.g.upgrades.splice(i, 1);
-                i--;
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 19; i++) {
+                player.g.buyables[i] = new Decimal(0)
             }
         }
-    }
+
+        if (!hasMilestone("ip", 11)) {
+            for (let i = 0; i < player.g.upgrades.length; i++) {
+                if (+player.g.upgrades[i] < 17) {
+                    player.g.upgrades.splice(i, 1);
+                    i--;
+                }
+            }
+        }
         player.g.grass = new Decimal(0)
-        player.g.savedGrass = new Decimal(0)
-        player.g.grassCount = new Decimal(0)
         player.g.grassTimer = new Decimal(0)
 
         player.g.goldGrass = new Decimal(0)
-        player.g.savedGoldGrass = new Decimal(0)
-        player.g.goldGrassCount = new Decimal(0)
         player.g.goldGrassTimer = new Decimal(0)
 
+        for (let i = 1; i < 509; ) {
+            setGridData("g", i, [0, new Decimal(1), new Decimal(1)])
+
+            // Increase i value
+            if (i % 10 == 8) {
+                i = i+93
+            } else {
+                i++
+            }
+        }
     },
-    steelieReset()
-    {
+    steelieReset() {
         player.pe.pests = new Decimal(0)
         player.points = new Decimal(10)
         player.r.rank = new Decimal(0)
@@ -357,23 +373,15 @@
         player.f.factorPowerEffect = new Decimal(1)
         player.f.factorPowerPerSecond = new Decimal(0)
         player.f.powerFactorUnlocks = [true, true, true, false, false, false, false, false]
-        for (let i = 1; i < 9; i++) {
-            player.f.buyables[i] = new Decimal(0)
-        }
-        for (let i = 11; i < 20; i++) {
-            player.f.buyables[i] = new Decimal(0)
-        }
-        for (let i = 21; i < 30; i++) {
-            player.f.buyables[i] = new Decimal(0)
-        }
-        for (let i = 31; i < 37; i++) {
-            player.f.buyables[i] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i in player.f.buyables) {
+                player.f.buyables[i] = new Decimal(0)
+            }
         }
 
         player.p.prestigePoints = new Decimal(0)
 
-        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14))
-        {
+        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14)) {
             for (let i = 0; i < player.p.upgrades.length; i++) {
                 if (+player.p.upgrades[i] < 24) {
                     player.p.upgrades.splice(i, 1);
@@ -382,8 +390,10 @@
             }
         }
 
-        for (let i = 11; i < 19; i++) {
-            player.t.buyables[i] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 19; i++) {
+                player.t.buyables[i] = new Decimal(0)
+            }
         }
 
         player.f.factorPower = new Decimal(0)
@@ -391,12 +401,13 @@
         player.t.leaves = new Decimal(0)
         player.t.trees = new Decimal(0)
 
-        for (let i = 11; i < 19; i++) {
-            player.g.buyables[i] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 19; i++) {
+                player.g.buyables[i] = new Decimal(0)
+            }
         }
 
-        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14))
-        {
+        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14)) {
         for (let i = 0; i < player.g.upgrades.length; i++) {
             if (+player.g.upgrades[i] < 22) {
                 player.g.upgrades.splice(i, 1);
@@ -405,8 +416,7 @@
         }
         }
 
-        if (!hasMilestone("ip", 15) && !inChallenge("ip", 14))
-        {
+        if (!hasMilestone("ip", 15) && !inChallenge("ip", 14)) {
             for (let i = 0; i < player.r.milestones.length; i++) {
                 if (+player.r.milestones[i] < 20) {
                     player.r.milestones.splice(i, 1);
@@ -416,20 +426,29 @@
         }
 
         player.g.grass = new Decimal(0)
-        player.g.savedGrass = new Decimal(0)
-        player.g.grassCount = new Decimal(0)
         player.g.grassTimer = new Decimal(0)
 
         player.g.goldGrass = new Decimal(0)
-        player.g.savedGoldGrass = new Decimal(0)
-        player.g.goldGrassCount = new Decimal(0)
         player.g.goldGrassTimer = new Decimal(0)
+
+        for (let i = 1; i < 509; ) {
+            setGridData("g", i, [0, new Decimal(1), new Decimal(1)])
+
+            // Increase i value
+            if (i % 10 == 8) {
+                i = i+93
+            } else {
+                i++
+            }
+        }
 
         player.gh.grasshoppers = new Decimal(0)
         player.gh.fertilizer = new Decimal(0)
 
-        for (let i = 11; i < 20; i++) {
-            player.gh.buyables[i] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 20; i++) {
+                player.gh.buyables[i] = new Decimal(0)
+            }
         }
         player.gh.buyables[21] = new Decimal(0)
         player.gh.buyables[22] = new Decimal(0)
@@ -438,8 +457,10 @@
         player.m.linesOfCode = new Decimal(0)
         player.m.mods = new Decimal(0)
 
-        for (let i = 11; i < 15; i++) {
-            player.m.buyables[i] = new Decimal(0)
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 15; i++) {
+                player.m.buyables[i] = new Decimal(0)
+            }
         }
 
         player.fa.foundryEffect = new Decimal(1)
@@ -630,11 +651,12 @@
             display() {
                 return "<h3>Factor Study I</h3>\n\
                     (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/20)\n\
-                    Add +" + format(tmp[this.layer].buyables[this.id].effect) + " to the factor effect base.\n\ \n\
+                    Add +" + commaFormat(tmp[this.layer].buyables[this.id].effect, 2) + " to the factor effect base.\n\ \n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
             branches: [14, 15],
             buy() {
+                if (!hasAchievement("achievements", 16)) completeAchievement("achievements", 16)
                 if (player.gh.studyMax == false && !hasMilestone("ip", 17)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -698,7 +720,7 @@
             display() {
                 return "<h3>Grass Study IV</h3>\n\
                     (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/100)\n\
-                    Produce " + format(tmp[this.layer].buyables[this.id].effect.mul(100), 1) + "% of golden grass value per second.\n\ \n\
+                    Produce " + formatSimple(tmp[this.layer].buyables[this.id].effect.mul(100), 1) + "% of golden grass value per second.\n\ \n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
             branches: [16, 15],
@@ -1287,25 +1309,25 @@
                         ]],
                         ["row", [
                             ["buyable", 15],
-                            ["style-row", [["buyable", 17]], {width: "140px", height: "140px"}],
+                            ["style-row", [["buyable", 17]], () => {return tmp.gh.buyables[17].unlocked ? {width: "140px", height: "140px"} : {width: "140px", height: "1px"}}],
                             ["buyable", 14],
                         ]],
                         ["row", [
                             ["buyable", 16],
                         ]],
                         ["row", [
-                            ["style-row", [["buyable", 18]], {width: "140px", height: "140px"}],
-                            ["style-row", [["buyable", 19]], {width: "140px", height: "140px"}],
+                            ["style-row", [["buyable", 18]], () => {return tmp.gh.buyables[18].unlocked ? {width: "140px", height: "140px"} : {width: "140px", height: "1px"}}],
+                            ["style-row", [["buyable", 19]], () => {return tmp.gh.buyables[19].unlocked ? {width: "140px", height: "140px"} : {width: "140px", height: "1px"}}],
                         ]],
                         ["row", [
-                            ["style-row", [["buyable", 21]], {width: "140px", height: "140px"}],
-                            ["style-row", [["buyable", 25]], {width: "140px", height: "140px"}],
-                            ["style-row", [["buyable", 23]], {width: "140px", height: "140px"}],
+                            ["style-row", [["buyable", 21]], () => {return tmp.gh.buyables[21].unlocked ? {width: "140px", height: "140px"} : {width: "140px", height: "1px"}}],
+                            ["style-row", [["buyable", 25]], () => {return tmp.gh.buyables[25].unlocked ? {width: "140px", height: "140px"} : {width: "140px", height: "1px"}}],
+                            ["style-row", [["buyable", 23]], () => {return tmp.gh.buyables[23].unlocked ? {width: "140px", height: "140px"} : {width: "140px", height: "1px"}}],
                         ]],
                         ["row", [
-                            ["style-row", [["buyable", 22]], {width: "140px", height: "140px"}],
-                            ["style-row", [["buyable", 26]], {width: "140px", height: "140px"}],
-                            ["style-row", [["buyable", 24]], {width: "140px", height: "140px"}],
+                            ["style-row", [["buyable", 22]], () => {return tmp.gh.buyables[22].unlocked ? {width: "140px", height: "140px"} : {width: "140px", height: "1px"}}],
+                            ["style-row", [["buyable", 26]], () => {return tmp.gh.buyables[26].unlocked ? {width: "140px", height: "140px"} : {width: "140px", height: "1px"}}],
+                            ["style-row", [["buyable", 24]], () => {return tmp.gh.buyables[24].unlocked ? {width: "140px", height: "140px"} : {width: "140px", height: "1px"}}],
                         ]],
                         ["blank", "10px"],
                     ], {width: "500px", backgroundColor: "rgba(0,0,0,0.3)", border: "3px solid #031d3b", borderRadius: "15px"}],

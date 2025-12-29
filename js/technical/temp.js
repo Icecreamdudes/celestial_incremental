@@ -16,6 +16,12 @@ var activeFunctions = [
 	"evoClick", "onHover"
 ]
 
+// Tmp will completely ignore these
+var ignoreFunctions = [
+	"title", "description", "requirementDescription", "challengeDescription", "rewardDescription",
+	"goalDescription", "image", "lore", "tooltip", "img", "style", "complete"
+]
+
 var noCall = doNotCallTheseFunctionsEveryTick
 for (item in noCall) {
 	activeFunctions.push(noCall[item])
@@ -69,6 +75,8 @@ function setupTempData(layerData, tmpData, funcsData) {
 		if (layerData[item] == null) {
 			tmpData[item] = null
 		}
+		else if (ignoreFunctions.includes(item))
+			continue;
 		else if (layerData[item] instanceof Decimal)
 			tmpData[item] = layerData[item]
 		else if (Array.isArray(layerData[item])) {

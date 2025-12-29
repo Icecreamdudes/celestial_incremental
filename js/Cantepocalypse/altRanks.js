@@ -39,7 +39,7 @@
         player.ar.rankPointsToGet = player.ar.rankPointsToGet.mul(player.ar.tetrPointsEffect)
         player.ar.rankPointsToGet = player.ar.rankPointsToGet.mul(player.gs.grassSkippersEffect)
         player.ar.rankPointsToGet = player.ar.rankPointsToGet.mul(buyableEffect("fu", 21))
-        if (inChallenge("fu", 11)) player.ar.rankPointsToGet = player.ar.rankPointsToGet.pow(0.2)
+        if (inChallenge("fu", 11) || inChallenge("fu", 12)) player.ar.rankPointsToGet = player.ar.rankPointsToGet.pow(Decimal.mul(0.2, buyableEffect("fu", 88)))
 
         player.ar.rankPointsPerSec = new Decimal(0)
         if (hasUpgrade("an", 13)) player.ar.rankPointsPerSec = player.ar.rankPointsPerSec.add(0.05)
@@ -55,7 +55,7 @@
         player.ar.tierPointsToGet = player.ar.tierPointsToGet.mul(player.ar.tetrPointsEffect)
         player.ar.tierPointsToGet = player.ar.tierPointsToGet.mul(player.gs.grassSkippersEffect)
         player.ar.tierPointsToGet = player.ar.tierPointsToGet.mul(buyableEffect("fu", 21))
-        if (inChallenge("fu", 11)) player.ar.tierPointsToGet = player.ar.tierPointsToGet.pow(0.2)
+        if (inChallenge("fu", 11) || inChallenge("fu", 12)) player.ar.tierPointsToGet = player.ar.tierPointsToGet.pow(Decimal.mul(0.2, buyableEffect("fu", 88)))
 
         player.ar.tierPointsPerSec = new Decimal(0)
         if (hasUpgrade("an", 15)) player.ar.tierPointsPerSec = player.ar.tierPointsPerSec.add(0.05)
@@ -69,7 +69,7 @@
         player.ar.tetrPointsToGet = player.ar.tetrPointsToGet.mul(buyableEffect("rg", 16))
         player.ar.tetrPointsToGet = player.ar.tetrPointsToGet.mul(player.gs.grassSkippersEffect)
         player.ar.tetrPointsToGet = player.ar.tetrPointsToGet.mul(buyableEffect("fu", 21))
-        if (inChallenge("fu", 11)) player.ar.tetrPointsToGet = player.ar.tetrPointsToGet.pow(0.2)
+        if (inChallenge("fu", 11) || inChallenge("fu", 12)) player.ar.tetrPointsToGet = player.ar.tetrPointsToGet.pow(Decimal.mul(0.2, buyableEffect("fu", 88)))
 
         player.ar.tetrPointsPerSec = new Decimal(0)
         if (hasUpgrade("an", 18)) player.ar.tetrPointsPerSec = player.ar.tetrPointsPerSec.add(0.05)
@@ -166,7 +166,7 @@
                     ], () => {return hasUpgrade("cp", 13) ? {width: "800px", height: "75px", backgroundColor: "#162e5e", border: "3px solid #0c1a36", borderBottom: "0px", borderRadius: "0px"} : {width: "800px", height: "75px", backgroundColor: "#162e5e", border: "3px solid #0c1a36", borderRadius: "0px 0px 15px 15px"}}],
                     ["style-row", [
                         ["style-column", [
-                            ["raw-html", function () { return format(player.ar.tetrPoints) + " Tetr Points (+" + format(player.ar.tetrPointsToGet) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", function () { return format(player.ar.tetrPoints) + " Tetr Points"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ["raw-html", function () { return player.ar.tetrPointsPerSec.gt(0) ? "(+" + formatWhole(player.ar.tetrPointsToGet.mul(player.ar.tetrPointsPerSec)) + "/s)" : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                             ["raw-html", function () { return "x" + format(player.ar.tetrPointsEffect) + " Rank and Tier Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],    
                         ], {width: "399px", height: "75px", borderRadius: "0px 0px 0px 13px"}],

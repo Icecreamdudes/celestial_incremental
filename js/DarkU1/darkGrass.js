@@ -52,12 +52,12 @@
         // MAX GRASS
         player.dgr.maxGrass = new Decimal(1)
         player.dgr.maxGrass = player.dgr.maxGrass.mul(buyableEffect("dgr", 11))
-        if (getLevelableBool("pu", 108)) player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("pu", 108)[1])
-        if (getLevelableBool("pu", 205)) player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("pu", 205)[0])
-        if (getLevelableBool("pu", 205)) player.dgr.maxGrass = player.dgr.maxGrass.mul(buyableEffect("dg", 16))
-        if (getLevelableBool("pu", 206)) player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("pu", 206)[0])
-        if (getLevelableBool("pu", 206)) player.dgr.maxGrass = player.dgr.maxGrass.mul(buyableEffect("dp", 15))
-        if (getLevelableBool("pu", 301)) player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("pu", 301)[0])
+        if (getLevelableTier("pu", 108, true)) player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("pu", 108)[1])
+        if (getLevelableTier("pu", 205, true)) player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("pu", 205)[0])
+        if (getLevelableTier("pu", 205, true)) player.dgr.maxGrass = player.dgr.maxGrass.mul(buyableEffect("dg", 16))
+        if (getLevelableTier("pu", 206, true)) player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("pu", 206)[0])
+        if (getLevelableTier("pu", 206, true)) player.dgr.maxGrass = player.dgr.maxGrass.mul(buyableEffect("dp", 15))
+        if (getLevelableTier("pu", 301, true)) player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("pu", 301)[0])
         player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("st", 109)[0])
         
         // MAX GRASS SOFTCAP
@@ -69,12 +69,12 @@
         // GRASS VALUE
         player.dgr.grassValue = new Decimal(1)
         player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("dgr", 12))
-        if (getLevelableBool("pu", 108)) player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("pu", 108)[1])
-        if (getLevelableBool("pu", 205)) player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("pu", 205)[0])
-        if (getLevelableBool("pu", 205)) player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("dg", 16))
-        if (getLevelableBool("pu", 206)) player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("pu", 206)[0])
-        if (getLevelableBool("pu", 206)) player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("dp", 15))
-        if (getLevelableBool("pu", 301)) player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("pu", 301)[0])
+        if (getLevelableTier("pu", 108, true)) player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("pu", 108)[1])
+        if (getLevelableTier("pu", 205, true)) player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("pu", 205)[0])
+        if (getLevelableTier("pu", 205, true)) player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("dg", 16))
+        if (getLevelableTier("pu", 206, true)) player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("pu", 206)[0])
+        if (getLevelableTier("pu", 206, true)) player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("dp", 15))
+        if (getLevelableTier("pu", 301, true)) player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("pu", 301)[0])
         player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("st", 108)[0])
 
         // GRASS VALUE SOFTCAP
@@ -174,7 +174,7 @@
             pay(amt) { player.dgr.grass = this.currency().sub(amt) },
             effect(x) {
                 let eff = getBuyableAmount(this.layer, this.id).mul(2).add(1).pow(1.3)
-                if (getLevelableBool("pu", 108)) eff = eff.pow(levelableEffect("pu", 108)[0])
+                if (getLevelableTier("pu", 108, true)) eff = eff.pow(levelableEffect("pu", 108)[0])
                 return eff
             },
             unlocked() { return true },
@@ -212,7 +212,7 @@
             pay(amt) { player.dgr.grass = this.currency().sub(amt) },
             effect(x) {
                 let eff = getBuyableAmount(this.layer, this.id).add(1).pow(1.25)
-                if (getLevelableBool("pu", 108)) eff = eff.pow(levelableEffect("pu", 108)[0])
+                if (getLevelableTier("pu", 108, true)) eff = eff.pow(levelableEffect("pu", 108)[0])
                 return eff
             },
             unlocked() { return true },
@@ -440,8 +440,8 @@
             ["raw-html", () => { return (player.dgr.grass.lt(1e35) && player.dgr.grass.gte(1e15)) ? "[SOFTCAPPED<sup>2</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
             ["raw-html", () => { return (player.dgr.grass.lt(1e75) && player.dgr.grass.gte(1e35)) ? "[SOFTCAPPED<sup>3</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
             ["raw-html", () => { return player.dgr.grass.gte(1e75) ? "[SOFTCAPPED<sup>4</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
-        ], () => {return player.pet.legendaryPetAbilityTimers[0].gt(0) ? {display: "none !important"} : {}}],
-        ["raw-html", () => { return player.pet.legendaryPetAbilityTimers[0].gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legendaryPetAbilityTimers[0]) + "." : ""}, {color: "#FEEF5F", fontSize: "20px", fontFamily: "monospace"}],
+        ], () => {return player.pet.legPetTimers[0].current.gt(0) ? {display: "none !important"} : {}}],
+        ["raw-html", () => { return player.pet.legPetTimers[0].current.gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legPetTimers[0].current) + "." : ""}, {color: "#FEEF5F", fontSize: "20px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],

@@ -131,13 +131,20 @@ function challengeButtonText(layer, id) {
 }
 
 function achievementStyle(layer, id){
-    ach = tmp[layer].achievements[id]
     let style = []
-    if (ach.image){
-        style.push({'background-image': 'url("' + ach.image + '")'})
+    if (layers[layer].achievements[id].image) {
+		if (hasAchievement(layer, id)) {
+			style.push({'background': 'url("' + run(layers[layer].achievements[id].image, layers[layer].achievements[id]) + '")'})
+		} else {
+			style.push({'background': 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("' + run(layers[layer].achievements[id].image, layers[layer].achievements[id]) + '")'})
+		}
     }
-    if (!hasAchievement(layer, id)) style.push({'visibility': 'hidden'})
-    style.push(ach.style)
+	if (run(layers[layer].achievements[id].complete, layers[layer].achievements[id]) && !hasAchievement(layer, id)) {
+		style.push({'border-color': '#77bf5f'})
+	} else {
+		style.push({'border-color': 'white'})
+	}
+    style.push(run(layers[layer].achievements[id].style, layers[layer].achievements[id]))
     return style
 }
 

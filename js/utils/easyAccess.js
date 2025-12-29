@@ -66,11 +66,26 @@ function addLevelableXP(layer, id, amt) {
 	player[layer].levelables[id][1] = player[layer].levelables[id][1].add(amt)
 }
 
-function getLevelableBool(layer, id) {
+function getLevelableTier(layer, id, bool = false) {
+	if (typeof player[layer].levelables[id][2] == "boolean") {
+		if (player[layer].levelables[id][2]) {
+			player[layer].levelables[id][2] = new Decimal(1)
+		} else {
+			player[layer].levelables[id][2] = new Decimal(0)
+		}
+	}
+	if (bool == true) {
+		if (typeof player[layer].levelables[id][2] == "number") {
+			if (player[layer].levelables[id][2] == 0) return false
+			return true
+		}
+		if (player[layer].levelables[id][2].eq(0)) return false
+		return true
+	}
 	return (player[layer].levelables[id][2])
 }
 
-function setLevelableBool(layer, id, val) {
+function setLevelableTier(layer, id, val) {
 	player[layer].levelables[id][2] = val
 }
 
@@ -106,7 +121,7 @@ function levelableEffect(layer, id) {
 	if (tmp[layer].levelables[id].effect != decimalOne) {
 		if (layer != "pet") {
 			return (tmp[layer].levelables[id].effect)
-		} else if (((player.points.gte(1e100) || hasMilestone("ip", 24) || (hasUpgrade("de", 13) && inChallenge("tad", 11)))) && !inChallenge("ip", 13)) {
+		} else if ((player.points.gte(1e100) || hasMilestone("ip", 24)) && !inChallenge("ip", 13)) {
 			return (tmp[layer].levelables[id].effect)
 		}
 	}

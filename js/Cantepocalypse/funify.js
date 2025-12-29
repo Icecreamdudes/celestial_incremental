@@ -28,27 +28,33 @@
 
         happiness: new Decimal(0),
         happinessPerSecond: new Decimal(0),
-        happinessEffect: new Decimal(1), //divides anger
-        happinessEffect2: new Decimal(1), //steel
+        happinessEffect: new Decimal(1), // divides anger
+        happinessEffect2: new Decimal(1), // steel
         happinessProduce: true,
 
         sadness: new Decimal(0),
         sadnessPerSecond: new Decimal(0),
-        sadnessEffect: new Decimal(1), //divides happiness
-        sadnessEffect2: new Decimal(1), //infinity points
+        sadnessEffect: new Decimal(1), // divides happiness
+        sadnessEffect2: new Decimal(1), // infinity points
         sadnessProduce: true,
 
         anger: new Decimal(0),
         angerPerSecond: new Decimal(0),
-        angerEffect: new Decimal(1), //divides sadness
-        angerEffect2: new Decimal(1), //singularity points
+        angerEffect: new Decimal(1), // divides sadness
+        angerEffect2: new Decimal(1), // singularity points
         angerProduce: true,
 
         fear: new Decimal(0),
         fearPerSecond: new Decimal(0),
         fearEffect: new Decimal(1), //divides fear
-        fearEffect2: new Decimal(1), //singularity points
+        fearEffect2: new Decimal(1), // replicanti point mult post softcap
         fearProduce: true,
+
+        numb: new Decimal(0),
+        numbPerSecond: new Decimal(0),
+        numbEffect: new Decimal(1), // divides other first emotion effects
+        numbEffect2: new Decimal(1), // raises anonymity
+        numbProduce: true,
 
         emotionIndex: new Decimal(0),
 
@@ -58,6 +64,11 @@
         jocusEssenceToGet: new Decimal(0),
 
         defeatedJocus: false,
+
+        enterNumb: false,
+        apathy: new Decimal(0),
+        apathyEffect: new Decimal(0), // Numbness Gain
+        apathyToGet: new Decimal(0),
     }
     },
     automate() {
@@ -136,8 +147,10 @@
         player.fu.funToGet = player.fu.funToGet.mul(buyableEffect("fu", 15))
         player.fu.funToGet = player.fu.funToGet.mul(buyableEffect("fu", 38))
         player.fu.funToGet = player.fu.funToGet.mul(levelableEffect("pet", 1205)[1])
-        player.fu.funToGet = player.fu.funToGet.mul(levelableEffect("pet", 405)[2])
         player.fu.funToGet = player.fu.funToGet.mul(buyableEffect("st", 109))
+
+        // POWER MODIFIERS
+        player.fu.funToGet = player.fu.funToGet.pow(levelableEffect("pet", 405)[2])
 
         player.fu.fun = player.fu.fun.add(player.fu.funToGet.mul(buyableEffect("fu", 74)))
 
@@ -162,9 +175,10 @@
         player.fu.happinessPerSecond = player.fu.happinessPerSecond.mul(buyableEffect("fu", 58))
         player.fu.happinessPerSecond = player.fu.happinessPerSecond.mul(buyableEffect("fu", 62))
         player.fu.happinessPerSecond = player.fu.happinessPerSecond.mul(buyableEffect("ep1", 12))
+        if (hasUpgrade("fu", 115)) player.fu.happinessPerSecond = player.fu.happinessPerSecond.mul(upgradeEffect("fu", 115))
         
-        player.fu.happinessEffect = player.fu.happiness.pow(0.35).add(1)
-        player.fu.happinessEffect2 = player.fu.happiness.pow(2.2).add(1)
+        player.fu.happinessEffect = player.fu.happiness.pow(0.35).add(1).div(player.fu.numbEffect)
+        player.fu.happinessEffect2 = player.fu.happiness.pow(2.2).add(1).pow(buyableEffect("fu", 92))
 
 
         if (player.fu.sadnessProduce) player.fu.sadness = player.fu.sadness.add(player.fu.sadnessPerSecond.mul(delta))
@@ -174,9 +188,10 @@
         player.fu.sadnessPerSecond = player.fu.sadnessPerSecond.mul(buyableEffect("fu", 58))
         player.fu.sadnessPerSecond = player.fu.sadnessPerSecond.mul(buyableEffect("fu", 63))
         player.fu.sadnessPerSecond = player.fu.sadnessPerSecond.mul(buyableEffect("ep1", 12))
+        if (hasUpgrade("fu", 115)) player.fu.sadnessPerSecond = player.fu.sadnessPerSecond.mul(upgradeEffect("fu", 115))
 
-        player.fu.sadnessEffect = player.fu.sadness.pow(0.35).add(1)
-        player.fu.sadnessEffect2 = player.fu.sadness.pow(1.2).add(1)
+        player.fu.sadnessEffect = player.fu.sadness.pow(0.35).add(1).div(player.fu.numbEffect)
+        player.fu.sadnessEffect2 = player.fu.sadness.pow(1.2).add(1).pow(buyableEffect("fu", 92))
 
 
         if (player.fu.angerProduce) player.fu.anger = player.fu.anger.add(player.fu.angerPerSecond.mul(delta))
@@ -186,26 +201,48 @@
         player.fu.angerPerSecond = player.fu.angerPerSecond.mul(buyableEffect("fu", 58))
         player.fu.angerPerSecond = player.fu.angerPerSecond.mul(buyableEffect("fu", 64))
         player.fu.angerPerSecond = player.fu.angerPerSecond.mul(buyableEffect("ep1", 12))
+        if (hasUpgrade("fu", 115)) player.fu.angerPerSecond = player.fu.angerPerSecond.mul(upgradeEffect("fu", 115))
 
-        player.fu.angerEffect = player.fu.anger.pow(0.35).add(1)
-        player.fu.angerEffect2 = player.fu.anger.pow(0.25).div(15).add(1)
+        player.fu.angerEffect = player.fu.anger.pow(0.35).add(1).div(player.fu.numbEffect)
+        player.fu.angerEffect2 = player.fu.anger.pow(0.25).div(15).add(1).pow(buyableEffect("fu", 92))
 
         if (player.fu.fearProduce && inChallenge("fu", 11)) player.fu.fear = player.fu.fear.add(player.fu.fearPerSecond.mul(delta))
         player.fu.fearPerSecond = buyableEffect("fu", 61)
         player.fu.fearPerSecond = player.fu.fearPerSecond.mul(buyableEffect("fu", 71))
         player.fu.fearPerSecond = player.fu.fearPerSecond.mul(buyableEffect("ep1", 12))
         player.fu.fearPerSecond = player.fu.fearPerSecond.div(player.fu.fearEffect)
+        if (hasUpgrade("fu", 115)) player.fu.fearPerSecond = player.fu.fearPerSecond.mul(upgradeEffect("fu", 115))
         
-        player.fu.fearEffect = player.fu.fear.pow(0.35).add(1)
+        player.fu.fearEffect = player.fu.fear.pow(0.35).add(1).div(player.fu.numbEffect)
         player.fu.fearEffect2 = player.fu.fear.pow(0.5).add(1)
 
         //jocus
-        player.fu.jocusEssenceToGet = player.cp.replicantiPoints.plus(1).log10().pow(2).div(100)
+        player.fu.jocusEssenceToGet = player.cp.replicantiPoints.plus(1).log(10).pow(2).div(100)
         player.fu.jocusEssenceToGet = player.fu.jocusEssenceToGet.mul(buyableEffect("fu", 73))
+        player.fu.jocusEssenceToGet = player.fu.jocusEssenceToGet.mul(buyableEffect("fu", 90))
 
         player.fu.jocusEssenceEffect = player.fu.jocusEssence.pow(1.3).add(1)
 
         if (hasChallenge('fu', 11)) player.fu.defeatedJocus = true
+
+        if (player.fu.numbProduce && inChallenge("fu", 12)) player.fu.numb = player.fu.numb.add(player.fu.numbPerSecond.mul(delta))
+        if (player.fu.numbProduce && !inChallenge("fu", 12) && hasUpgrade("fu", 116)) player.fu.numb = player.fu.numb.add(player.fu.numbPerSecond.div(10).mul(delta))
+        player.fu.numbPerSecond = player.fu.apathyEffect
+        player.fu.numbPerSecond = player.fu.numbPerSecond.mul(buyableEffect("fu", 81))
+        if (hasUpgrade("fu", 114)) player.fu.numbPerSecond = player.fu.numbPerSecond.mul(2)
+
+        player.fu.numbEffect = player.fu.numb.pow(0.3).add(1)
+        if (hasUpgrade("fu", 113)) player.fu.numbEffect = player.fu.numb.pow(0.35).add(1)
+        player.fu.numbEffect2 = player.fu.numb.add(1).log(10).div(20).add(1).min(2.5)
+        if (hasUpgrade("fu", 104)) player.fu.numbEffect2 = player.fu.numbEffect2.sub(1).mul(4).add(1).min(2.5)
+
+        // APATHY
+        player.fu.apathyToGet = player.cp.replicantiPoints.div(1e20).pow(0.1)
+        if (hasUpgrade("fu", 102)) player.fu.apathyToGet = player.fu.apathyToGet.mul(2)
+        if (hasUpgrade("fu", 107)) player.fu.apathyToGet = player.fu.apathyToGet.mul(upgradeEffect("fu", 107))
+        player.fu.apathyToGet = player.fu.apathyToGet.mul(buyableEffect("fu", 89))
+
+        player.fu.apathyEffect = player.fu.apathy.pow(0.5).div(10)
     },
     funifyReset() {
         player.ar.rankPoints = new Decimal(0)
@@ -257,12 +294,24 @@
         player.rg.buyables[17] = new Decimal(0)
         player.rg.buyables[18] = new Decimal(0)
 
-        if (!hasUpgrade("fu", 13) || inChallenge("fu", 11)) {
+        for (let i = 1; i < 509; ) {
+            setGridData("rg", i, new Decimal(1))
+
+            // Increase i value
+            if (i % 10 == 8) {
+                i = i+93
+            } else {
+                i++
+            }
+        }
+
+        if (!hasUpgrade("fu", 13) || inChallenge("fu", 11) || inChallenge("fu", 12)) {
             player.gs.grassSkip = new Decimal(0)
         }
         player.gs.grassSkippers = new Decimal(0)
-        if (!hasMilestone("s", 12) || inChallenge("fu", 11)) {
+        if (!hasMilestone("s", 12) || inChallenge("fu", 11) || inChallenge("fu", 12)) {
             for (let i = 0; i < player.gs.milestones.length; i++) {
+                if (hasUpgrade("fu", 20) && +player.gs.milestones[i] == 18 || +player.gs.milestones[i] == 22) continue
                 if (+player.gs.milestones[i] < 100) {
                     player.gs.milestones.splice(i, 1);
                     i--;
@@ -401,6 +450,21 @@
             },
             branches: [23],
         },
+        27: {
+            title() { return "<img src='resources/numb.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>" },
+            canClick() { return true },
+            unlocked() { return inChallenge("fu", 12) || player.fu.enterNumb },
+            onClick() {
+                player.fu.emotionIndex = new Decimal(4)
+                player.subtabs["fu"]["mood"] = "Numbness"
+            },
+            style() {
+                let look = {width: '100px', minHeight: '100px', backgroundColor: "white", borderRadius: "10px", marginLeft: "25px"}
+                inChallenge("fu", 12) ? look.filter = "brightness(100%)" : look.filter = "brightness(50%)"
+                return look
+            },
+            branches: [25, 26],
+        },
         4: {
             title() { return "Reset All Emotions" },
             canClick() { return true  },
@@ -417,6 +481,7 @@
                 if (player.fu.emotionIndex.eq(1)) lookies.backgroundColor = "blue", lookies.color = "white"
                 if (player.fu.emotionIndex.eq(2)) lookies.backgroundColor = "red", lookies.color = "white"
                 if (player.fu.emotionIndex.eq(3)) lookies.backgroundColor = "grey", lookies.color = "white"
+                if (player.fu.emotionIndex.eq(4)) lookies.backgroundColor = "white", lookies.color = "black"
                 return lookies
             } 
         },
@@ -436,6 +501,7 @@
                 if (player.fu.emotionIndex.eq(1)) lookies.backgroundColor = "blue", lookies.color = "white", lookies.borderRadius = "0px"
                 if (player.fu.emotionIndex.eq(2)) lookies.backgroundColor = "red", lookies.color = "white", lookies.borderRadius = "0px"
                 if (player.fu.emotionIndex.eq(3)) lookies.backgroundColor = "grey", lookies.color = "white", lookies.borderRadius = "0px 10px 10px 0px"
+                if (player.fu.emotionIndex.eq(4)) lookies.backgroundColor = "white", lookies.color = "black", lookies.borderRadius = "0px 10px 10px 0px"
                 return lookies
             }
         },
@@ -532,6 +598,7 @@
                     }
                 }
                 for (let i = 0; i < player.gs.milestones.length; i++) {
+                    if (hasUpgrade("fu", 20) && +player.gs.milestones[i] == 18 || +player.gs.milestones[i] == 22) continue
                     if (+player.gs.milestones[i] < 100) {
                         player.gs.milestones.splice(i, 1);
                         i--;
@@ -540,6 +607,42 @@
                 player.fu.jocusEssence = player.fu.jocusEssence.add(player.fu.jocusEssenceToGet)
             },
             style: { width: '400px', "min-height": '75px', borderRadius: '15px' },
+
+        },
+        32: {
+            title() {
+                if (inChallenge("fu", 12)) {
+                    return "<h2>Reset all alt-uni 1 content for apathy</h2><br><h3>Req: 1e20 replicanti points</h3>"
+                } else {
+                    return "<h2>Reset only available in Numbness Challenge.</h2>"
+                }
+            },
+            canClick() { return player.fu.apathyToGet.gte(1) && inChallenge("fu", 12) && player.cp.replicantiPoints.gte(1e20)},
+            unlocked() { return inChallenge("fu", 12) || player.fu.enterNumb},
+            onClick() {
+                player.fu.funifyPause = new Decimal(12)
+                if (!hasUpgrade("fu", 105)) {
+                    for (let i = 0; i < player.an.upgrades.length; i++) {
+                        if (+player.an.upgrades[i] < 24) {
+                            player.an.upgrades.splice(i, 1);
+                            i--;
+                        }
+                    }
+                }
+                for (let i = 0; i < player.gs.milestones.length; i++) {
+                    if (hasUpgrade("fu", 20) && +player.gs.milestones[i] == 18 || +player.gs.milestones[i] == 22) continue
+                    if (+player.gs.milestones[i] < 100) {
+                        player.gs.milestones.splice(i, 1);
+                        i--;
+                    }
+                }
+                player.fu.apathy = player.fu.apathy.add(player.fu.apathyToGet)
+            },
+            style() {
+                let look = {width: "400px", minHeight: "75px", borderRadius: "15px"}
+                this.canClick() ? look.backgroundColor = "white" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
 
         },
     },
@@ -585,13 +688,13 @@
         12: {
             title: "Fun Upgrade II",
             unlocked() { return hasUpgrade("fu", 11) },
-            description: "Boost oil gain based on perk point chance.",
+            description: "Boost oil gain based on perk points.",
             cost: new Decimal(7000),
             currencyLocation() { return player.fu },
             currencyDisplayName: "Fun",
             currencyInternalName: "fun",
             effect() {
-                return player.pr.perkPointsChance.add(1).pow(1.6)
+                return player.pr.perkPoints.add(1).log(1e5).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
@@ -669,6 +772,264 @@
             currencyDisplayName: "Fun",
             currencyInternalName: "fun",
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
+        20: {
+            title: "Fun Upgrade X",
+            unlocked() { return hasUpgrade("fu", 19) && player.ir.iriditeDefeated},
+            description: "Always keep pollinator grass-skip milestones and effect is based on highest grass-skips.",
+            cost: new Decimal(1e150),
+            currencyLocation() { return player.fu },
+            currencyDisplayName: "Fun",
+            currencyInternalName: "fun",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
+
+        101: {
+            title: "Apathy I",
+            unlocked() {return player.fu.enterNumb},
+            description: "Triple replicanti mult",
+            cost: new Decimal(1),
+            currencyLocation() {return player.fu},
+            currencyDisplayName: "Apathy",
+            currencyInternalName: "apathy",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "white"
+                return look
+            },
+        },
+        102: {
+            title: "Apathy II",
+            unlocked() {return player.fu.enterNumb},
+            description: "Double apathy gain.",
+            cost: new Decimal(2),
+            currencyLocation() {return player.fu},
+            currencyDisplayName: "Apathy",
+            currencyInternalName: "apathy",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "white"
+                return look
+            },
+        },
+        103: {
+            title: "Apathy III",
+            unlocked() {return player.fu.enterNumb},
+            description: "Reduce the replicanti cooldown by 5% per apathy upgrade.",
+            cost: new Decimal(4),
+            currencyLocation() {return player.fu},
+            currencyDisplayName: "Apathy",
+            currencyInternalName: "apathy",
+            effect() {
+                let amt = new Decimal(0)
+                for (let i in player.fu.upgrades) {
+                    if (player.fu.upgrades[i] > 100) amt = amt.add(1)
+                }
+                return Decimal.pow(1.05, amt)
+            },
+            effectDisplay() { return "/" + formatSimple(upgradeEffect(this.layer, this.id), 2) }, // Add formatting to the effect
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "white"
+                return look
+            },
+        },
+        104: {
+            title: "Apathy IV",
+            unlocked() {return player.fu.enterNumb},
+            description: "Improve the first numbness effect.",
+            cost: new Decimal(6),
+            currencyLocation() {return player.fu},
+            currencyDisplayName: "Apathy",
+            currencyInternalName: "apathy",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "white"
+                return look
+            },
+        },
+        105: {
+            title: "Apathy V",
+            unlocked() {return player.fu.enterNumb},
+            description: "No longer reset anonymity upgrades on apathy reset.",
+            cost: new Decimal(8),
+            currencyLocation() {return player.fu},
+            currencyDisplayName: "Apathy",
+            currencyInternalName: "apathy",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "white"
+                return look
+            },
+        },
+        106: {
+            title: "Apathy VI",
+            unlocked() {return player.fu.enterNumb},
+            description: "Weaken replicanti softcaps in numbness challenge based on apathy.",
+            cost: new Decimal(10),
+            currencyLocation() {return player.fu},
+            currencyDisplayName: "Apathy",
+            currencyInternalName: "apathy",
+            effect() {
+                return Decimal.div(1, player.fu.apathy.add(1).log(10).div(10).add(1)).max(0.5)
+            },
+            effectDisplay() {
+                if (upgradeEffect(this.layer, this.id).lte(0.5)) return "^" + formatSimple(upgradeEffect(this.layer, this.id), 3) + "<small style='color:red'>[HARDCAPPED]</small>"
+                return "^" + formatSimple(upgradeEffect(this.layer, this.id), 3)
+            }, // Add formatting to the effect
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "white"
+                return look
+            },
+        },
+        107: {
+            title: "Apathy VII",
+            unlocked() {return player.fu.enterNumb},
+            description: "Boost apathy gain based on pollinators.",
+            cost: new Decimal(16),
+            currencyLocation() {return player.fu},
+            currencyDisplayName: "Apathy",
+            currencyInternalName: "apathy",
+            effect() {
+                return player.pol.pollinators.add(1).log(1e308).add(1).pow(1.5)
+            },
+            effectDisplay() { return "x" + formatSimple(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "white"
+                return look
+            },
+        },
+        108: {
+            title: "Apathy VIII",
+            unlocked() {return player.fu.enterNumb},
+            description: "Unlock the plant pollinator.",
+            cost: new Decimal(32),
+            currencyLocation() {return player.fu},
+            currencyDisplayName: "Apathy",
+            currencyInternalName: "apathy",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "white"
+                return look
+            },
+        },
+        109: {
+            title: "Apathy IX",
+            unlocked() {return player.fu.enterNumb},
+            description: "Gain 10% anonymity per second while in numbness challenge.",
+            cost: new Decimal(48),
+            currencyLocation() {return player.fu},
+            currencyDisplayName: "Apathy",
+            currencyInternalName: "apathy",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "white"
+                return look
+            },
+        },
+        110: {
+            title: "Apathy X",
+            unlocked() {return player.fu.enterNumb},
+            description: "Unlock a new ship: Stinger.",
+            cost: new Decimal(64),
+            currencyLocation() {return player.fu},
+            currencyDisplayName: "Apathy",
+            currencyInternalName: "apathy",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "white"
+                return look
+            },
+        },
+        111: {
+            title: "Apathy XI",
+            unlocked() {return player.fu.enterNumb},
+            description: "Half all A1 cooldowns.",
+            cost: new Decimal(128),
+            currencyLocation() {return player.fu},
+            currencyDisplayName: "Apathy",
+            currencyInternalName: "apathy",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "white"
+                return look
+            },
+        },
+        112: {
+            title: "Apathy XII",
+            unlocked() {return player.fu.enterNumb},
+            description: "Unlock new numbness buyables.",
+            cost: new Decimal(256),
+            currencyLocation() {return player.fu},
+            currencyDisplayName: "Apathy",
+            currencyInternalName: "apathy",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "white"
+                return look
+            },
+        },
+        113: {
+            title: "Apathy XIII",
+            unlocked() {return player.fu.enterNumb},
+            description: "Boost the 2nd effect of numbness.",
+            cost: new Decimal(7500),
+            currencyLocation() {return player.fu},
+            currencyDisplayName: "Apathy",
+            currencyInternalName: "apathy",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "white"
+                return look
+            },
+        },
+        114: {
+            title: "Apathy XIV",
+            unlocked() {return player.fu.enterNumb},
+            description: "Double numbness gain.",
+            cost: new Decimal(250000),
+            currencyLocation() {return player.fu},
+            currencyDisplayName: "Apathy",
+            currencyInternalName: "apathy",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "white"
+                return look
+            },
+        },
+        115: {
+            title: "Apathy XV",
+            unlocked() {return player.fu.enterNumb},
+            description: "Apathy boosts first four emotions.",
+            cost: new Decimal(7500000),
+            currencyLocation() {return player.fu},
+            currencyDisplayName: "Apathy",
+            currencyInternalName: "apathy",
+            effect() {
+                return player.fu.apathy.add(1).log(10).div(3).add(1)
+            },
+            effectDisplay() { return "x" + formatSimple(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "white"
+                return look
+            },
+        },
+        116: {
+            title: "Apathy XVI",
+            unlocked() {return player.fu.enterNumb},
+            description: "Gain 10% of numbness outside of numbness challenge.",
+            cost: new Decimal(100000000),
+            currencyLocation() {return player.fu},
+            currencyDisplayName: "Apathy",
+            currencyInternalName: "apathy",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "white"
+                return look
+            },
         },
     },
     buyables: {
@@ -1016,10 +1377,10 @@
         23: {
             costBase() { return new Decimal(7) },
             costGrowth() { return new Decimal(1.15) },
-            purchaseLimit() { return new Decimal(1000) },
+            purchaseLimit() { return new Decimal(100) },
             currency() { return player.fu.fun},
             pay(amt) { player.fu.fun = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.15).add(1).pow(0.95) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.02).min(2)},
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -1027,7 +1388,7 @@
                 return "Fun Repli-Grass"
             },
             display() {
-                return "which are boosting repli-grass mult by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are adding +" + format(tmp[this.layer].buyables[this.id].effect) + " to the repli-grass multiplier.\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fun."
             },
             buy(mult) {
@@ -1257,7 +1618,7 @@
         36: {
             costBase() { return new Decimal(30) },
             costGrowth() { return new Decimal(1.4) },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return new Decimal(75) },
             currency() { return player.fu.happiness},
             pay(amt) { player.fu.happiness = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.25).add(1) },
@@ -1324,7 +1685,7 @@
         },
         38: {
             costBase() { return new Decimal(1000) },
-            costGrowth() { return new Decimal(1.6) },
+            costGrowth() { return new Decimal(1.5) },
             purchaseLimit() { return new Decimal(50) },
             currency() { return player.fu.happiness},
             pay(amt) { player.fu.happiness = this.currency().sub(amt) },
@@ -1598,7 +1959,7 @@
         },
         48: {
             costBase() { return new Decimal(1000) },
-            costGrowth() { return new Decimal(1.6) },
+            costGrowth() { return new Decimal(1.5) },
             purchaseLimit() { return new Decimal(50) },
             currency() { return player.fu.sadness},
             pay(amt) { player.fu.sadness = this.currency().sub(amt) },
@@ -1872,7 +2233,7 @@
         },
         58: {
             costBase() { return new Decimal(1000) },
-            costGrowth() { return new Decimal(1.6) },
+            costGrowth() { return new Decimal(1.5) },
             purchaseLimit() { return new Decimal(50) },
             currency() { return player.fu.anger},
             pay(amt) { player.fu.anger = this.currency().sub(amt) },
@@ -2222,7 +2583,7 @@
         72: {
             costBase() { return new Decimal(4) },
             costGrowth() { return new Decimal(1.15) },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return new Decimal(75) },
             currency() { return player.fu.jocusEssence},
             pay(amt) { player.fu.jocusEssence = this.currency().sub(amt) },
             effect(x) { return Decimal.pow(7, getBuyableAmount(this.layer, this.id)) },
@@ -2321,16 +2682,426 @@
             },
             style: { width: '275px', height: '150px', backgroundColor: "gray", color: "white"},
         },
+
+        // NUMBNESS
+        81: {
+            costBase() { return new Decimal(10) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(8) },
+            currency() { return player.fu.numb},
+            pay(amt) { player.fu.numb = this.currency().sub(amt) },
+            effect(x) { return Decimal.pow(2, getBuyableAmount(this.layer, this.id)) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Numbness Doubler"
+            },
+            display() {
+                return "which are boosting numbness gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Numbness."
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: "275px", height: "150px", backgroundColor: "white"},
+        },
+        82: {
+            costBase() { return new Decimal(3) },
+            costGrowth() { return new Decimal(1.2) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.fu.numb},
+            pay(amt) { player.fu.numb = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(100).add(1) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Perk Raiser"
+            },
+            display() {
+                return "which are boosting perk gain by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Numbness."
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: "275px", height: "150px", backgroundColor: "white"},
+        },
+        83: {
+            costBase() { return new Decimal(8) },
+            costGrowth() { return new Decimal(1.22) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.fu.numb},
+            pay(amt) { player.fu.numb = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(100).add(1) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Fundamental Anonymity"
+            },
+            display() {
+                return "which are boosting anonymity formulas exponent by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Numbness."
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: "275px", height: "150px", backgroundColor: "white"},
+        },
+        84: {
+            costBase() { return new Decimal(20) },
+            costGrowth() { return new Decimal(1.24) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.fu.numb},
+            pay(amt) { player.fu.numb = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(100).add(1) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Repli-Leaf Raiser"
+            },
+            display() {
+                return "which are boosting repli-leaf mult by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Numbness."
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: "275px", height: "150px", backgroundColor: "white"},
+        },
+        85: {
+            costBase() { return new Decimal(50) },
+            costGrowth() { return new Decimal(1.26) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.fu.numb},
+            pay(amt) { player.fu.numb = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(100).add(1) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Repli-Tree Raiser"
+            },
+            display() {
+                return "which are boosting repli-tree gain by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Numbness."
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: "275px", height: "150px", backgroundColor: "white"},
+        },
+        86: {
+            costBase() { return new Decimal(100) },
+            costGrowth() { return new Decimal(1.28) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.fu.numb},
+            pay(amt) { player.fu.numb = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(100).add(1) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Repli-Grass Raiser"
+            },
+            display() {
+                return "which are boosting repli-grass mult by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Numbness."
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: "275px", height: "150px", backgroundColor: "white"},
+        },
+        87: {
+            costBase() { return new Decimal(250) },
+            costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.fu.numb},
+            pay(amt) { player.fu.numb = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(100).add(1) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Grass-Skipper Raiser"
+            },
+            display() {
+                return "which are boosting grass-skipper gain by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Numbness."
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: "275px", height: "150px", backgroundColor: "white"},
+        },
+        88: {
+            costBase() { return new Decimal(500) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(25) },
+            currency() { return player.fu.numb},
+            pay(amt) { player.fu.numb = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(50).add(1) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Challenge Reducer"
+            },
+            display() {
+                return "which are multiplying challenge pre-funify exponent by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Numbness."
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: "275px", height: "150px", backgroundColor: "white"},
+        },
+        89: {
+            costBase() { return new Decimal(1000) },
+            costGrowth() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(10) },
+            currency() { return player.fu.numb},
+            pay(amt) { player.fu.numb = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(2).add(1) },
+            unlocked() {return hasUpgrade("fu", 112)},
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Apathy Booster"
+            },
+            display() {
+                return "which are multiplying apathy gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Numbness."
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: "275px", height: "150px", backgroundColor: "white"},
+        },
+        90: {
+            costBase() { return new Decimal(3000) },
+            costGrowth() { return new Decimal(3) },
+            purchaseLimit() { return new Decimal(10) },
+            currency() { return player.fu.numb},
+            pay(amt) { player.fu.numb = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(2).add(1) },
+            unlocked() {return hasUpgrade("fu", 112)},
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Jocus Booster"
+            },
+            display() {
+                return "which are boosting jocus essence gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Numbness."
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: "275px", height: "150px", backgroundColor: "white"},
+        },
+        91: {
+            costBase() { return new Decimal(1000) },
+            costGrowth() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(10) },
+            currency() { return player.fu.numb},
+            pay(amt) { player.fu.numb = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(20).add(1) },
+            unlocked() {return hasUpgrade("fu", 112)},
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Core Fragment Booster"
+            },
+            display() {
+                return "which are multiplying core fragment score by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Numbness."
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: "275px", height: "150px", backgroundColor: "white"},
+        },
+        92: {
+            costBase() { return new Decimal(3000) },
+            costGrowth() { return new Decimal(3) },
+            purchaseLimit() { return new Decimal(10) },
+            currency() { return player.fu.numb},
+            pay(amt) { player.fu.numb = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.9).add(1) },
+            unlocked() {return hasUpgrade("fu", 112)},
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Emotion Effect Raiser"
+            },
+            display() {
+                return "which are boosting first emotion effects by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".<br>(Limited to happiness, sadness, and anger)\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Numbness."
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: "275px", height: "150px", backgroundColor: "white"},
+        },
     },
     milestones: {},
     challenges: {
         11: {
             name: "FEAR",
-            challengeDescription() { return "<h4>Alt-Uni 1 automation from singularity milestones is disabled, and a new emotion, fear is unlocked. All pre-funify currencies are raised to the ^0.2. Replicanti point softcaps are ^2 stronger." },
+            challengeDescription() { return "<h4>Alt-Uni 1 automation from singularity milestones is disabled, and a new emotion, fear is unlocked. All pre-funify currencies are raised by ^0.2. Replicanti point softcaps are ^2 stronger." },
             goal() { return new Decimal("10") },
             canComplete: function () { return player.gs.grassSkip.gte(10) },
             goalDescription() { return "10 Grass-Skip" },
-            rewardDescription: "Kill Jocus.",
+            rewardDescription: "Kill Jocus, and gain x10 Singularity Points.",
             onEnter() {
                 if (!player.fu.enterFear) player.fu.enterFear = true
                 player.fu.funifyPause = new Decimal(12)
@@ -2341,6 +3112,7 @@
                     }
                 }
                 for (let i = 0; i < player.gs.milestones.length; i++) {
+                    if (hasUpgrade("fu", 20) && +player.gs.milestones[i] == 18 || +player.gs.milestones[i] == 22) continue
                     if (+player.gs.milestones[i] < 100) {
                         player.gs.milestones.splice(i, 1);
                         i--;
@@ -2350,7 +3122,36 @@
             onExit() {
                 player.fu.funifyPause = new Decimal(12)
             },
-            style: { width: '350px', height: '275px', }
+            style: { width: '350px', height: '290px', }
+        },
+        12: {
+            name: "NUMBNESS",
+            challengeDescription() { return "<h4>All external A1 buffs are disabled, and a new emotion, numbness is unlocked. All pre-funify currencies are raised by ^0.2. All A1 softcaps (excluding replicanti softcap 4) start at 1 resource, and softcap modifiers are disabled." },
+            goal() { return new Decimal("1e75") },
+            canComplete: function () { return player.cp.replicantiPoints.gte(1e75) },
+            goalDescription() { return "1e75 Replicanti Points" },
+            rewardDescription: "Expand your hives limits.",
+            onEnter() {
+                if (!player.fu.enterNumb) player.fu.enterNumb = true
+                player.fu.funifyPause = new Decimal(12)
+                for (let i = 0; i < player.an.upgrades.length; i++) {
+                    if (+player.an.upgrades[i] < 24) {
+                        player.an.upgrades.splice(i, 1);
+                        i--;
+                    }
+                }
+                for (let i = 0; i < player.gs.milestones.length; i++) {
+                    if (hasUpgrade("fu", 20) && +player.gs.milestones[i] == 18 || +player.gs.milestones[i] == 22) continue
+                    if (+player.gs.milestones[i] < 100) {
+                        player.gs.milestones.splice(i, 1);
+                        i--;
+                    }
+                }
+            },
+            onExit() {
+                player.fu.funifyPause = new Decimal(12)
+            },
+            style: { width: '350px', height: '290px', }
         },
     },
     infoboxes: {},
@@ -2379,7 +3180,7 @@
                     ["row", [["clickable", 12]]],
                     ["style-row", [
                         ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15],
-                        ["upgrade", 16], ["upgrade", 17], ["upgrade", 18], ["upgrade", 19]], {maxWidth: "650px"}],
+                        ["upgrade", 16], ["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 20]], {maxWidth: "650px"}],
                 ]
             },
             "SFRGT": {
@@ -2413,10 +3214,15 @@
                         }],
                     ]],
                     ["blank", "10px"],
-                    ["row", [["clickable", 23],["blank", ["25px", "25px"]],["clickable", 26],]],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 24],["blank", ["25px", "25px"]],["clickable", 25],]],
-                    ["blank", "25px"],
+                    ["row", [
+                        ["style-column", [
+                            ["row", [["clickable", 23],["blank", ["25px", "25px"]],["clickable", 26],]],
+                            ["blank", "25px"],
+                            ["row", [["clickable", 24],["blank", ["25px", "25px"]],["clickable", 25],]],
+                        ]],
+                        ["clickable", 27],
+                    ]],
+                    ["blank", "20px"],
                     ["buttonless-microtabs", "mood", { 'border-width': '0px' }],
                 ]
             },
@@ -2441,9 +3247,39 @@
                         return look
                     }],
                     ["blank", "10px"],
-                    ["row", [["clickable", 31]]],
+                    ["clickable", 31],
                     ["blank", "25px"],
                     ["style-row", [["ex-buyable", 71], ["ex-buyable", 72], ["ex-buyable", 73], ["ex-buyable", 74]], {maxWidth: "1200px"}],
+                ]
+            },
+            "Numbness": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                unlocked() { return player.al.cocoonLevel >= 10},
+                content: [
+                    ["blank", "25px"],
+                    ["row", [["challenge", 12]]],
+                    ["blank", "10px"],
+                    ["row", [
+                        ["raw-html", () => { return player.fu.enterNumb ? "You have <h3>" + formatSimple(player.fu.apathy) + "</h3> apathy" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return inChallenge("fu", 12) ? "(+" + formatSimple(player.fu.apathyToGet) + ")" : "" }, () => {
+                            let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                            player.fu.apathyToGet.gte(1) ? look.color = "white" : look.color = "gray"
+                            return look
+                        }],
+                    ]],
+                    ["raw-html", () => { return inChallenge("fu", 12) ? "Produces +" + formatSimple(player.fu.apathyEffect) + " numbness per second" : player.fu.enterNumb ? "Effect only active in Numbness Challenge" : "" }, () => {
+                        let look = {fontSize: "20px", fontFamily: "monospace"}
+                        if (inChallenge("fu", 12)) {look.color = "white"} else {look.color = "gray"}
+                        return look
+                    }],
+                    ["blank", "10px"],
+                    ["clickable", 32],
+                    ["blank", "10px"],
+                    ["style-row", [
+                        ["upgrade", 101], ["upgrade", 102], ["upgrade", 103], ["upgrade", 104], ["upgrade", 105], ["upgrade", 106],
+                        ["upgrade", 107], ["upgrade", 108], ["upgrade", 109], ["upgrade", 110], ["upgrade", 111], ["upgrade", 112],
+                        ["upgrade", 113], ["upgrade", 114], ["upgrade", 115], ["upgrade", 116],
+                    ], {maxWidth: "750px"}],
                 ]
             },
         },
@@ -2526,6 +3362,32 @@
                     ["blank", "25px"],
                     ["style-row", [["ex-buyable", 61], ["ex-buyable", 62], ["ex-buyable", 63], ["ex-buyable", 64],
                         ["ex-buyable", 65], ["ex-buyable", 66], ["ex-buyable", 67], ["ex-buyable", 68]], {maxWidth: "1200px"}],
+                ]
+            },
+            "Numbness": {
+                content: [
+                    ["row", [
+                        ["raw-html", () => {return "You have <h3>" + format(player.fu.numb) + "</h3> numbness"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "(+" + format(player.fu.numbPerSecond) + "/s)"}, () => {
+                            let look = {fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                            if (player.fu.numbProduce && inChallenge("fu", 12)) {look.color = "white"} else {look.color = "gray"}
+                            return look
+                        }],
+                    ]],
+                    ["row", [
+                        ["raw-html", () => { return inChallenge("fu", 12) ? "Boosts anonymity by ^" + format(player.fu.numbEffect2) : "Effect only active in Numbness Challenge" }, () => {
+                            let look = {fontSize: "20px", fontFamily: "monospace"}
+                            if (inChallenge("fu", 12)) {look.color = "white"} else {look.color = "gray"}
+                            return look
+                        }],
+                        ["raw-html", () => {return player.fu.numbEffect2.gte(2.5) ? "<small style='margin-left:10px'>[HARDCAPPED]</small>" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace"}]
+                    ]],
+                    ["raw-html", () => { return "Divides other emotion dividers by /" + format(player.fu.numbEffect)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],   
+                    ["blank", "20px"],
+                    ["style-row", [["ex-buyable", 81], ["ex-buyable", 82], ["ex-buyable", 83], ["ex-buyable", 84],
+                        ["ex-buyable", 85], ["ex-buyable", 86], ["ex-buyable", 87], ["ex-buyable", 88],
+                        ["ex-buyable", 89], ["ex-buyable", 90], ["ex-buyable", 91], ["ex-buyable", 92],
+                    ], {maxWidth: "1200px"}],
                 ]
             },
         }

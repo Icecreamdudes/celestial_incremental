@@ -1,7 +1,7 @@
 ﻿addLayer("wel", {
-    name: "Well",
+    name: "Well of Light",
     symbol: "WE",
-    row: 1,
+    row: 0,
     position: 0,
     startData() { return {
         unlocked: true,
@@ -44,7 +44,7 @@
             "border-color": "#003f3f",
         };
     },
-    tooltip: "Well",
+    tooltip: "Well of Light",
     color: "#ffdfdf",
     update(delta) {
         player.wel.lightMult = new Decimal(1)
@@ -53,7 +53,7 @@
         }
         player.wel.lightEffect = player.wel.light.add(1).pow(0.1)
     },
-    branches: ["ans"],
+    branches: ["tas", "bum", ["cer", "#fff", 40], ["cer", "#402030", 8]],
     bars: {},
     upgrades: {
         /*11: {
@@ -124,58 +124,59 @@
             "Light Modules": {
                 buttonStyle() { return { color: "white", borderRadius: "8px"} },
                 unlocked() { return true },
-                content: [
-                    ["blank", "25px"],
-                    ["row", [
-                        ["style-column", [
+                content() {
+                    let look = [
+                        ["blank", "25px"],
+                        ["row", [
+                            ["style-column", [
+                            ["style-column", [
+                                ["style-column", [
+                                    ["raw-html", formatShortestWhole(player.wel.tasks[1].time.div(player.wel.tasks[1].maxTime()).min(1).max(0).mul(100)) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                ], {background: "#4d9973", border: "3px solid #336659", borderRadius: "100px", width: "75px", height:"75px"}]
+                            ], () => {
+                                let look = {borderRadius: "50%", width: "150px", height:"150px"}
+                                player.wel.tasks[1].time.lt(player.wel.tasks[1].maxTime()) ?
+                                look.background = "conic-gradient(#ffdfdf " + (player.wel.tasks[1].time.div(player.wel.tasks[1].maxTime())).min(1).max(0) * 360 + "deg, #0b1711 0deg)"
+                                : look.background = "#a8ffd3"
+                                return look
+                            }],
+                            ["blank", "9px"],
+                            ["raw-html", "Light Module α", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", player.wel.tasks[1].time.lt(player.wel.tasks[1].maxTime()) ? formatTime(player.wel.tasks[1].maxTime().sub(player.wel.tasks[1].time)) : formatTime(player.wel.tasks[1].maxTime()) + " CD", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["blank", "9px"],
+                            ["style-column", [
+                                    ["raw-html", "+" + formatShort(layers.wel.clickables[1].lightGain()) + " Light", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ], {background: "#4d9973", borderRadius: "5px 5px 0px 0px", width: "150px", height:"25px"}],
+                            ["blank", "3px"],
+                            ["clickable", 1]
+                        ], {background: "#336659",border: "3px solid #336659", borderRadius: "103px 103px 8px 8px", width: "150px"}],
+                        ["blank", "1px"],
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", () => { return formatShortestWhole(player.wel.tasks[1].time.div(player.wel.tasks[1].maxTime()).min(1).max(0).mul(100)) + "%" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                            ], {background: "#4d9973", border: "3px solid #336659", borderRadius: "100px", width: "75px", height:"75px"}]
-                        ], () => {
-                            let look = {borderRadius: "50%", width: "150px", height:"150px"}
-                            player.wel.tasks[1].time.lt(player.wel.tasks[1].maxTime()) ?
-                            look.background = "conic-gradient(#ffdfdf " + (player.wel.tasks[1].time.div(player.wel.tasks[1].maxTime())).min(1).max(0) * 360 + "deg, #0b1711 0deg)"
-                            : look.background = "#a8ffd3"
-                            return look
-                        }],
-                        ["blank", "9px"],
-                        ["raw-html", () => { return "Module α" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                        ["raw-html", () => { return player.wel.tasks[1].time.lt(player.wel.tasks[1].maxTime()) ? formatTime(player.wel.tasks[1].maxTime().sub(player.wel.tasks[1].time)) : formatTime(player.wel.tasks[1].maxTime()) + " CD"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                        ["blank", "9px"],
-                        ["style-column", [
-                                ["raw-html", () => { return "+" + formatShort(layers.wel.clickables[1].lightGain()) + " Light"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                            ], {background: "#4d9973", borderRadius: "5px 5px 0px 0px", width: "150px", height:"25px"}],
-                        ["blank", "3px"],
-                        ["clickable", 1]
-                    ], {background: "#336659",border: "3px solid #336659", borderRadius: "103px 103px 8px 8px", width: "150px"}],
-                    ["blank", "1px"],
-                    ["style-column", [
-                        ["style-column", [
+                                ["style-column", [
+                                    ["raw-html", formatShortestWhole(player.wel.tasks[2].time.div(player.wel.tasks[2].maxTime()).min(1).max(0).mul(100)) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                ], {background: "#4d9973", border: "3px solid #336659", borderRadius: "100px", width: "75px", height:"75px"}]
+                            ], () => {
+                                let look = {borderRadius: "50%", width: "150px", height:"150px"}
+                                player.wel.tasks[2].time.lt(player.wel.tasks[2].maxTime()) ?
+                                look.background = "conic-gradient(#ffdfdf " + (player.wel.tasks[2].time.div(player.wel.tasks[2].maxTime())).min(1).max(0) * 360 + "deg, #0b1711 0deg)"
+                                : look.background = "#a8ffd3"
+                                return look
+                            }],
+                            ["blank", "9px"],
+                            ["raw-html", "Light Module β", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", player.wel.tasks[2].time.lt(player.wel.tasks[2].maxTime()) ? formatTime(player.wel.tasks[2].maxTime().sub(player.wel.tasks[2].time)) : formatTime(player.wel.tasks[2].maxTime()) + " CD", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["blank", "9px"],
                             ["style-column", [
-                                ["raw-html", () => { return formatShortestWhole(player.wel.tasks[2].time.div(player.wel.tasks[2].maxTime()).min(1).max(0).mul(100)) + "%" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                            ], {background: "#4d9973", border: "3px solid #336659", borderRadius: "100px", width: "75px", height:"75px"}]
-                        ], () => {
-                            let look = {borderRadius: "50%", width: "150px", height:"150px"}
-                            player.wel.tasks[2].time.lt(player.wel.tasks[2].maxTime()) ?
-                            look.background = "conic-gradient(#ffdfdf " + (player.wel.tasks[2].time.div(player.wel.tasks[2].maxTime())).min(1).max(0) * 360 + "deg, #0b1711 0deg)"
-                            : look.background = "#a8ffd3"
-                            return look
-                        }],
-                        ["blank", "9px"],
-                        ["raw-html", () => { return "Module β" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                        ["raw-html", () => { return player.wel.tasks[2].time.lt(player.wel.tasks[2].maxTime()) ? formatTime(player.wel.tasks[2].maxTime().sub(player.wel.tasks[2].time)) : formatTime(player.wel.tasks[2].maxTime()) + " CD"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                        ["blank", "9px"],
-                        ["style-column", [
-                                ["raw-html", () => { return "+" + formatShort(layers.wel.clickables[2].lightGain()) + " Light"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                            ], {background: "#4d9973", borderRadius: "5px 5px 0px 0px", width: "150px", height:"25px"}],
-                        ["blank", "3px"],
-                        ["clickable", 2]
-                    ], {background: "#336659",border: "3px solid #336659", borderRadius: "103px 103px 8px 8px", width: "150px"}],
-                    ]],
-                    
-                    ["blank", "25px"],
-                ]
+                                    ["raw-html", "+" + formatShort(layers.wel.clickables[2].lightGain()) + " Light", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ], {background: "#4d9973", borderRadius: "5px 5px 0px 0px", width: "150px", height:"25px"}],
+                            ["blank", "3px"],
+                            ["clickable", 2]
+                        ], {background: "#336659",border: "3px solid #336659", borderRadius: "103px 103px 8px 8px", width: "150px"}],
+                        ]],
+                    ["blank", "25px"]]
+                    return look
+                },
             },
         },
     },

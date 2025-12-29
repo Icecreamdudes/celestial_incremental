@@ -20,7 +20,7 @@
     color: "#dfffdf",
     update(delta) {
     },
-    branches: [["cer", "#fff", 40], ["cer", "#402030", 8]],
+    branches: ["dxp"],
     clickables: {
         1: {
             title() { return "<h2>" + (player.cer.cereUnlocked ? (this.canClick() ? "Tier-up the transfigurator to tier " + formatWhole(player.cer.transfiguratorPower.add(1)): "Insufficient resources to tier-up") : "DESTROY CERE'S CORE") + "</h2>" },

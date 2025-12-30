@@ -142,23 +142,19 @@ addLayer("ba", {
         }
 
         //ability control
-        if (player.ba.curswordBlessing)
-        {
+        if (player.ba.curswordBlessing) {
             player.ba.petAbilitiesAvailable[0][0][1] = false
         }
-        if (player.ba.cookieThorns)
-        {
+        if (player.ba.cookieThorns) {
             player.ba.petAbilitiesAvailable[0][2][1] = false
         }
-        if (player.ba.turret)
-        {
+        if (player.ba.turret) {
             player.ba.petAbilitiesAvailable[0][5][1] = false
         }
 
         if (player.fi.inBattle) player.ba.petImage = run(layers.sme.levelables[player.ba.petIDs[player.ba.petIndex]].image, layers.sme.levelables[player.ba.petIDs[player.ba.petIndex]])
 
-        player.ba.celestialiteImages = 
-        [
+        player.ba.celestialiteImages = [
             "resources/battle/temporalAlpha.png",
             "resources/battle/temporalBeta.png",
             "resources/battle/temporalGamma.png",
@@ -168,8 +164,7 @@ addLayer("ba", {
             "resources/battle/temporalEta.png",
             "resources/battle/temporalTheta.png",
         ]
-        player.ba.celestialiteNames = 
-        [
+        player.ba.celestialiteNames = [
             "Temporal Alpha Celestialite",
             "Temporal Beta Celestialite",
             "Temporal Gamma Celestialite",

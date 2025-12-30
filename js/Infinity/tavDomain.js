@@ -172,6 +172,9 @@ addLayer("tad", {
     update(delta) {
         let onepersec = new Decimal(1)
 
+        // DOMAIN CAP FIXER ON SINGULARITY
+        if (!hasUpgrade("tad", 115) && player.tad.domainCap.gt(1e5)) player.tad.domainCap = new Decimal(1e5)
+
         // MATTER MODIFIERS
         player.tad.matterBase = new Decimal(0)
         for (let i = 11; i < 45; ) {

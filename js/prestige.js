@@ -131,7 +131,7 @@
         // CRYSTAL EFFECT
         player.p.crystalEffect = player.p.crystals.plus(1).log(10).pow(0.265).mul(0.045).add(1)
         if (hasUpgrade("cs", 303)) player.p.crystalEffect = player.p.crystals.plus(1).log(10).pow(0.3).mul(0.05).add(1)
-        player.p.crystalEffect = player.p.crystalEffect.min(10)
+        player.p.crystalEffect = player.p.crystalEffect.min(1.5)
     },
     prestigeReset()
     {
@@ -745,7 +745,10 @@
                         }],
                     ]],
                     ["raw-html", "(Gain based on Tetr)", { color: "#b6658c", fontSize: "16px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return "Boosts ranks, tiers, tetr, and pent effect by <h3>^" + format(player.p.crystalEffect, 5) + "</h3>."}, { color: "#b6658c", fontSize: "16px", fontFamily: "monospace" }],
+                    ["row", [
+                        ["raw-html", () => {return "Boosts ranks, tiers, tetr, and pent effect by <h3>^" + format(player.p.crystalEffect, 5) + "</h3>."}, {color: "#b6658c", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return player.p.crystalEffect.gte(1.5) ? "<small style='margin-left:8px'>[HARDCAPPED]</small>" : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
+                    ]],
                     ["blank", "25px"],
                     ["row", [["clickable", 12]]],
                     ["blank", "25px"],
@@ -758,6 +761,7 @@
 
     tabFormat: [
         ["raw-html", () => { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+        ["raw-html", () => {return player.gain.gt(player.i.doomSoftcapStart) ? "SOFTCAP OF DOOM: Gain past " + format(player.i.doomSoftcapStart) + " is raised by ^" + format(player.i.doomSoftcap, 3) + "." : ""}, {color: "red", fontSize: "12px", fontFamily: "monospace"}],
         ["row", [
             ["raw-html", () => { return "You have <h3>" + format(player.p.prestigePoints) + "</h3> prestige points." }, {color: "#31aeb0", fontSize: "24px", fontFamily: "monospace"}],
             ["raw-html", () => { return "(+" + format(player.p.prestigePointsToGet) + ")"}, () => {

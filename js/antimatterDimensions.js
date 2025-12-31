@@ -52,7 +52,6 @@
 
     tooltip: "Antimatter Dimensions",
     color: "#1eb516",
-    branches: [],
     update(delta) {
         let onepersec = new Decimal(1)
 

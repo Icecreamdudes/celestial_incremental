@@ -85,19 +85,19 @@ Format each task as
 Task instructions
 ```
 
-### [ ] Step: Nox Laser Warnings Implementation
+### [x] Step: Nox Laser Warnings Implementation
 Modify `BloodArena.update` to use `_vampireWarns` for Nox's `barrage` and `burstSpears` attacks.
 - Reference: `spec.md` Section 1
 - Deliverable: Nox's spears are preceded by laser warnings.
 - Verification: Start Blood Battle, trigger Nox, observe lasers.
 
-### [ ] Step: Phase-Based Betrayal Implementation
+### [x] Step: Phase-Based Betrayal Implementation
 Update the vampire knight ally's targeting logic in `BloodArena.update` to target the player in Phase 2+.
 - Reference: `spec.md` Section 2
 - Deliverable: Ally spears target the player in Phase 2/3.
 - Verification: Trigger Nox Phase 2, verify ally targeting.
 
-### [ ] Step: Returning Spear Logic Implementation
+### [x] Step: Returning Spear Logic Implementation
 Implement the return flight behavior for all vampire spears in Phase 2+.
 - Reference: `spec.md` Section 3
 - Deliverable: Spears reverse direction after initial flight in Phase 2+.

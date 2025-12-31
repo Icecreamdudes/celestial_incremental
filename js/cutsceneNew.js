@@ -2665,6 +2665,18 @@ const cutsceneDialogueA7 = [ //pylon
     { text: "You must investigate.", },
 
 ];  
+const cutsceneDialogueA8 = [ //start of nox battle
+    { text: "Where is it?", portrait: "resources/nox.png"  },
+    { text: "Where is what?", portrait: "resources/player.png"  },
+    { text: "My blood stones.", portrait: "resources/nox.png"  },
+    { text: "Why would I give you MY blood stones?", portrait: "resources/player.png"  },
+    { text: "I helped you defeat these blood creatures. Now give them to me.", portrait: "resources/nox.png"  },
+    { text: "Dude I don't owe you a damn thing.", portrait: "resources/player.png"  },
+    { text: "Come on man... My family is struggling. I need to help them, and blood stones are a valuable resource in my universe.", portrait: "resources/nox.png"  },
+    { text: "This guy is starting to piss you off. There are larger things at stake than this man's family.", },
+    { text: "If you don't give me your blood stones, I'll fight you for them!!!", portrait: "resources/nox.png"  },
+    { text: "You proceed to get ready for battle.", },
+];  
 
 // Happens when entering the hive
 const cutsceneDialogue113 = [

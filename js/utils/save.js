@@ -2,7 +2,7 @@
 function save(force) {
 	NaNcheck(player)
 	if (NaNalert && !force) return
-	localStorage.setItem(modInfo.id, btoa(unescape(encodeURIComponent(JSON.stringify(player)))));
+	window.ldb.set(modInfo.id, btoa(unescape(encodeURIComponent(JSON.stringify(player)))));
 	localStorage.setItem(modInfo.id+"_options", btoa(unescape(encodeURIComponent(JSON.stringify(options)))));
 }
 function startPlayerBase() {
@@ -214,42 +214,48 @@ function fixData(defaultData, newData) {
 	}
 }
 function load() {
-	let get = localStorage.getItem(modInfo.id);
+	window.ldb.get(modInfo.id, function (get) {
+		if (get === null || get === undefined) {
+			local = localStorage.getItem(modInfo.id);
+			if (local === null || local === undefined) {
+				player = getStartPlayer();
+				options = getStartOptions();
+			} else {
+				player = Object.assign(getStartPlayer(), JSON.parse(decodeURIComponent(escape(atob(local)))));
+				fixSave();
+				loadOptions();
+			}
+		} else {
+			player = Object.assign(getStartPlayer(), JSON.parse(decodeURIComponent(escape(atob(get)))));
+			fixSave();
+			loadOptions();
+		}
 
-	if (get === null || get === undefined) {
-		player = getStartPlayer();
-		options = getStartOptions();
-	}
-	else {
-		player = Object.assign(getStartPlayer(), JSON.parse(decodeURIComponent(escape(atob(get)))));
-		fixSave();
-		loadOptions();
-	}
+		versionCheck();
+		changeTheme();
+		changeTreeQuality();
+		updateLayers();
+		setupModInfo();
 
-	versionCheck();
-	changeTheme();
-	changeTreeQuality();
-	updateLayers();
-	setupModInfo();
-
-	setupTemp();
-	updateTemp();
-	updateTemp();
-	updateTabFormats()
-	loadVue();
-	if (!player.uni.CB.paused) layers.cb.instantProduction(new Decimal((Date.now() - player.time) / 1000))
-	player.time = Date.now();
+		setupTemp();
+		updateTemp();
+		updateTemp();
+		updateTabFormats()
+		loadVue();
+		if (!player.uni.CB.paused) layers.cb.instantProduction(new Decimal((Date.now() - player.time) / 1000))
+		player.time = Date.now();
+	});
 }
 
 function loadOptions() {
 	let get2 = localStorage.getItem(modInfo.id+"_options");
-	if (get2)
+	if (get2) {
 		options = Object.assign(getStartOptions(), JSON.parse(decodeURIComponent(escape(atob(get2)))));
-	else
+	} else {
 		options = getStartOptions()
+	}
 	if (themes.indexOf(options.theme) < 0) theme = "default"
 	fixData(options, getStartOptions())
-
 }
 
 function setupModInfo() {

@@ -494,11 +494,14 @@ addLayer("hpw", {
             currencyDisplayName: "Power",
             currencyInternalName: "power",
             effect() {
-                if (inChallenge("hrm", 16)) return Decimal.pow(1.05, player.hbl.boons.add(1).log(1e6)).sub(1)
+                if (inChallenge("hrm", 16)) return Decimal.pow(1.05, player.hbl.boons.add(1).log(1e6)).sub(1).min(1.5)
                 return Decimal.pow(1.1, player.hbl.boons.add(1).log(1e6))
             },
             effectDisplay() {
-                if (inChallenge("hrm", 16)) return "^+" + format(upgradeEffect(this.layer, this.id))
+                if (inChallenge("hrm", 16)) {
+                    if (upgradeEffect(this.layer, this.id).gte(1.5)) return "^+" + format(upgradeEffect(this.layer, this.id)) + " <small style='color:red'>[HARDCAPPED]</small>"
+                    return "^+" + format(upgradeEffect(this.layer, this.id))
+                }
                 return format(upgradeEffect(this.layer, this.id)) + "x"
             }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},

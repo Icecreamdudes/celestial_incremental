@@ -172,6 +172,9 @@ addLayer("tad", {
     update(delta) {
         let onepersec = new Decimal(1)
 
+        // DOMAIN CAP FIXER ON SINGULARITY
+        if (!hasUpgrade("tad", 115) && player.tad.domainCap.gt(1e5)) player.tad.domainCap = new Decimal(1e5)
+
         // MATTER MODIFIERS
         player.tad.matterBase = new Decimal(0)
         for (let i = 11; i < 45; ) {
@@ -660,7 +663,7 @@ addLayer("tad", {
             onClick() {
                 player.tad.accumulationMax = false
             },
-            style: {width: "80px", minHeight: "50px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0 10px 10px 0"}
+            style: {width: "80px", minHeight: "50px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0"}
         },
         23: {
             title: "Buy Max On",
@@ -687,6 +690,31 @@ addLayer("tad", {
                 if (this.canClick()) {look.color = "white";look.background = "#094242"} else {look.color = "black";look.background = "#bf8f8f"}
                 return look
             },
+        },
+        25: {
+            title() { return "Max All" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.tad.accumulationMax = true
+                buyBuyable("tad", 44)
+                buyBuyable("tad", 43)
+                buyBuyable("tad", 42)
+                buyBuyable("tad", 41)
+                buyBuyable("tad", 34)
+                buyBuyable("tad", 24)
+                buyBuyable("tad", 14)
+                buyBuyable("tad", 33)
+                buyBuyable("tad", 32)
+                buyBuyable("tad", 31)
+                buyBuyable("tad", 23)
+                buyBuyable("tad", 13)
+                buyBuyable("tad", 22)
+                buyBuyable("tad", 21)
+                buyBuyable("tad", 12)
+                buyBuyable("tad", 11)
+            },
+            style: { width: "80px", minHeight: '50px', border: "3px solid rgba(0,0,0,0.3)", borderRadius: '0px 10px 10px 0px' }
         },
         31: {
             title() {
@@ -2538,7 +2566,7 @@ addLayer("tad", {
                 content: [
                     ["clickable", 1],
                     ["blank", "25px"],
-                    ["row", [["clickable", 21], ["clickable", 22]]],
+                    ["row", [["clickable", 21], ["clickable", 22], ["clickable", 25]]],
                     ["blank", "10px"],
                     ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
                     ["row", [["buyable", 21], ["buyable", 22], ["buyable", 23], ["buyable", 24]]],

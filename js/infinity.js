@@ -1,4 +1,4 @@
-addLayer("in", {
+﻿addLayer("in", {
     name: "Roots", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "RO", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
@@ -19,6 +19,17 @@ addLayer("in", {
         delay: new Decimal(0),
 
         pylonBuilt: false,
+        pylonEnergyMax: new Decimal(1e308),
+        pylonEnergy: new Decimal(0),
+        pylonEnergyEffect: new Decimal(1),
+        pylonEnergyEffect2: new Decimal(1),
+        pylonEnergyEffect3: new Decimal(1),
+        pylonEnergyPerSecond: new Decimal(0),
+        
+        pylonPassiveEffect: new Decimal(1),
+
+        pylonTier: new Decimal(1),
+        pylonTierEffect: new Decimal(1),
     }},
     automate() {},
     nodeStyle() {
@@ -172,6 +183,7 @@ addLayer("in", {
         if (hasUpgrade("tad", 152)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(player.tad.infinitumEffect2)
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(levelableEffect("ir", 2)[1])
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("cof", 23))
+        if (hasUpgrade("tad", 152)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(player.in.pylonEnergyEffect2)
 
         // POWER MODIFIERS
         if (player.tad.altInfinities.infected.milestone.gte(2)) player.in.infinitiesToGet = player.in.infinitiesToGet.pow(player.tad.altInfinities.infected.effect2)
@@ -182,6 +194,41 @@ addLayer("in", {
 
         // PASSIVE GAIN
         if (player.tad.altInfinities.fragmented.milestone.gte(3)) player.in.infinities = player.in.infinities.add(player.in.infinitiesToGet.div(4).mul(delta))
+
+
+        player.in.pylonEnergyMax = Decimal.pow(1e308, player.in.pylonTier)
+
+        if (player.in.pylonBuilt)
+        {
+            player.in.pylonEnergyPerSecond = new Decimal(1.1)
+            player.in.pylonEnergyPerSecond = player.in.pylonEnergyPerSecond.pow(buyableEffect("in", 11))
+            player.in.pylonEnergyPerSecond = player.in.pylonEnergyPerSecond.pow(buyableEffect("in", 12))
+            player.in.pylonEnergyPerSecond = player.in.pylonEnergyPerSecond.pow(buyableEffect("in", 13))
+
+            player.in.pylonPassiveEffect = player.in.infinityPoints.pow(0.002).add(1).pow(player.in.pylonTierEffect)
+        } else
+        {
+            player.in.pylonEnergyPerSecond = new Decimal(0)
+
+            player.in.pylonPassiveEffect = new Decimal(1)
+        }
+
+        if (player.in.pylonEnergy.gte(player.in.pylonEnergyMax))
+        {
+            player.in.pylonEnergy = player.in.pylonEnergyMax
+            player.in.pylonEnergyPerSecond = new Decimal(0)
+        }
+        player.in.pylonEnergy = player.in.pylonEnergy.add(player.in.pylonEnergyPerSecond.mul(delta))
+
+        player.in.pylonEnergyEffect = player.in.pylonEnergy.pow(0.5).add(1).pow(player.in.pylonTierEffect)
+        player.in.pylonEnergyEffect2 = player.in.pylonEnergy.pow(0.25).add(1).pow(player.in.pylonTierEffect)
+        player.in.pylonEnergyEffect3 = player.in.pylonEnergy.pow(0.175).add(1).pow(player.in.pylonTierEffect)
+
+        player.in.pylonTierEffect = player.in.pylonTier.sub(1).div(10).add(1)
+
+        //tickspeed
+        player.uni["U2"].tickspeed = new Decimal(1)
+        player.uni["U2"].tickspeed = player.uni["U2"].tickspeed.mul(player.in.pylonEnergyEffect)
     },
     bigCrunch() {
         if (hasUpgrade("ta", 17)) {
@@ -406,10 +453,124 @@ addLayer("in", {
             },
             style: {width: "600px", minHeight: "200px", color: "#1b110eff", backgroundImage: "radial-gradient(circle, #1FF4B0 80%, #20ABC1 95%, #2161D2 110%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
         },
+        12: {
+            title() { return "<h2>Tier up the Paradox Pylon" },
+            canClick() { return player.in.pylonEnergy.gte(player.in.pylonEnergyMax) },
+            unlocked() { return player.in.pylonEnergy.gte(player.in.pylonEnergyMax) },
+            onClick() {
+                player.in.pylonEnergy = new Decimal(0)
+
+                player.in.pylonTier = player.in.pylonTier.add(1)
+            },
+            style: {width: "600px", minHeight: "200px", color: "#1b110eff", backgroundImage: "radial-gradient(circle, #1FF4B0 80%, #20ABC1 95%, #2161D2 110%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
+        },
     },
     bars: {},
     upgrades: {},
-    buyables: {},
+    buyables: {
+        11: {
+            costBase() { return new Decimal(200) },
+            costGrowth() { return new Decimal(1.2) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.cof.coreFragments[3] },
+            pay(amt) { player.cof.coreFragments[3] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(5).add(1)},
+            unlocked() { return player.in.pylonBuilt },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Paradox Pylon Power Factor I"
+            },
+            display() {
+                return 'which are boosting ancient pylon energy by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #20A3C2 0%, #20BBBD 100%)" }
+        },
+        12: {
+            costBase() { return new Decimal(500) },
+            costGrowth() { return new Decimal(1.25) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.cof.coreFragments[3] },
+            pay(amt) { player.cof.coreFragments[3] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(5).add(1)},
+            unlocked() { return player.in.pylonBuilt },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Paradox Pylon Power Factor II"
+            },
+            display() {
+                return 'which are boosting ancient pylon energy by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #20A3C2 0%, #20BBBD 100%)" }
+        },
+        13: {
+            costBase() { return new Decimal(1000) },
+            costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.cof.coreFragments[3] },
+            pay(amt) { player.cof.coreFragments[3] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(5).add(1)},
+            unlocked() { return player.in.pylonBuilt },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Paradox Pylon Power Factor III"
+            },
+            display() {
+                return 'which are boosting ancient pylon energy by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #20A3C2 0%, #20BBBD 100%)" }
+        },
+    },
     milestones: {},
     challenges: {},
     infoboxes: {
@@ -455,6 +616,17 @@ addLayer("in", {
         ], {width: "148px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
                     ["blank", "25px"],
                     ["clickable", 11],
+                    ["raw-html", () => { return player.in.pylonBuilt ? "You have <h3>" + format(player.in.pylonEnergy) + "/" + format(player.in.pylonEnergyMax) +  "</h3> paradox pylon energy (" + format(player.in.pylonEnergyPerSecond) + "/s)." : "" }, {color: "#000000ff", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.in.pylonBuilt ? "Boosts U2 tickspeed by x" + format(player.in.pylonEnergyEffect) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.in.pylonBuilt ? "Boosts infinities by x" + format(player.in.pylonEnergyEffect2) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.in.pylonBuilt ? "Boosts ancient pylon energy by x" + format(player.in.pylonEnergyEffect3) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.in.pylonBuilt ? "Passive effect: Boosts SP gain by x" + format(player.in.pylonPassiveEffect) + " (Based on infinity points)" : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                    ["blank", "25px"],
+                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13],]], 
+                    ["blank", "25px"],
+                    ["raw-html", () => {return player.in.pylonBuilt ? "Your ancient pylon is tier " + formatWhole(player.in.pylonTier) + ", which boosts all pylon effects by ^" + format(player.in.pylonTierEffect) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                    ["blank", "25px"],
+                    ["clickable", 12],
                 ]
             },
         },

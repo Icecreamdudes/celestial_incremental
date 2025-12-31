@@ -25,6 +25,7 @@
 
         pylonTier: new Decimal(1),
         pylonTierEffect: new Decimal(1),
+        doomSoftcapStart: new Decimal("1e1000000"),
     }
     },
     automate() {
@@ -175,6 +176,18 @@
         player.gain = player.gain.pow(player.cof.coreFragmentEffects[0])
         player.gain = player.gain.pow(buyableEffect("cof", 12))
 
+        // SOFTCAP OF DOOM
+        player.i.doomSoftcap = new Decimal(0.5)
+
+        // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
+        player.i.doomSoftcap = player.i.doomSoftcap.div(player.points.div(player.i.doomSoftcapStart).add(1).log(player.i.doomSoftcapStart).add(1))
+
+        // SOFTCAP OF DOOM START
+        player.i.doomSoftcapStart = new Decimal("1e10000000")
+
+        // APPLY DOOM SOFTCAP
+        if (player.gain.gt(player.i.doomSoftcapStart)) player.gain = player.gain.div(player.i.doomSoftcapStart).pow(player.i.doomSoftcap).mul(player.i.doomSoftcapStart)
+
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.r.timeReversed) {
             player.gain = player.gain.mul(0)
@@ -196,6 +209,7 @@
             player.i.pylonEnergyPerSecond = player.i.pylonEnergyPerSecond.mul(buyableEffect("i", 11))
             player.i.pylonEnergyPerSecond = player.i.pylonEnergyPerSecond.mul(buyableEffect("i", 12))
             player.i.pylonEnergyPerSecond = player.i.pylonEnergyPerSecond.mul(buyableEffect("i", 13))
+            player.i.pylonEnergyPerSecond = player.i.pylonEnergyPerSecond.mul(player.in.pylonEnergyEffect3)
 
             player.i.pylonPassiveEffect = player.points.pow(0.002).add(1).pow(player.i.pylonTierEffect)
         } else
@@ -673,7 +687,7 @@
                     ["raw-html", () => {return player.i.pylonBuilt ? "Boosts post-otf multiplier by ^" + format(player.i.pylonEnergyEffect3) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
                     ["raw-html", () => {return player.i.pylonBuilt ? "Passive effect: Boosts IP gain by x" + format(player.i.pylonPassiveEffect) + " (Based on points)" : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],
-                    ["row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13],]], 
+                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13],]], 
                     ["blank", "25px"],
                     ["raw-html", () => {return player.i.pylonBuilt ? "Your ancient pylon is tier " + formatWhole(player.i.pylonTier) + ", which boosts all pylon effects by ^" + format(player.i.pylonTierEffect) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
                     ["raw-html", () => {return player.i.pylonTier.gte(2) ? "Tier 2 Ancient Pylon unlocks the Universe 2 Pylon" : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
@@ -711,7 +725,8 @@
         },
     },
     tabFormat: [
-        ["raw-html", () => { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => {return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => {return player.gain.gt(player.i.doomSoftcapStart) ? "SOFTCAP OF DOOM: Gain past " + format(player.i.doomSoftcapStart) + " is raised by ^" + format(player.i.doomSoftcap, 3) + "." : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],

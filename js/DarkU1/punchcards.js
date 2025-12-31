@@ -77,7 +77,7 @@ addLayer("pu", {
         }
         if (player.pu.legendarySelectionActive) {
 
-            if (run(layers.pu.levelables[401].canSelect, layers.pu.levelables[401])) player.pu.selectedPunchcards[3] = 401 //MAKE THEM RANDOMISZED EVENTUALLY
+            if (run(layers.pu.levelables[401].canSelect, layers.pu.levelables[401])) player.pu.selectedPunchcards[3] = 401 //MAKE THEM RANDOMIZED EVENTUALLY
 
         }
     },

@@ -3932,7 +3932,6 @@ addLayer("pet", {
             evoTooltip() { return ""},
             evoClick() {
                 player.tab = "g"
-                player.subtabs["g"]['stuff'] = 'Moonstone'
             },
             // CLICK CODE
             unlocked() { return hasUpgrade("bi", 24) || player.s.highestSingularityPoints.gt(0) },

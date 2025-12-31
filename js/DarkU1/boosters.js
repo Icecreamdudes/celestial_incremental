@@ -125,6 +125,7 @@
             requirementDescription: "<h3>10 Best Boosters",
             effectDescription: "/1.4 to starmetal essence generator time.",
             done() { return player.db.bestBoosters.gte(10) && player.ma.matosDefeated },
+            unlocked() {return player.ma.matosDefeated},
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #6e64c4", borderRadius: "10px", margin: "-1.5px"}
                 if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}

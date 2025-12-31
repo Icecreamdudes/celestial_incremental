@@ -84,7 +84,7 @@
 
         player.bl.bloodStones = player.bl.bloodStones.floor()
 
-        if (player.ir.battleLevel.gte(20) && !player.bl.foughtNox && player.tab == "bl")
+        if (player.ir.battleLevel.gte(24) && !player.bl.foughtNox && player.tab == "bl")
         {
             spawnNox();
             player.bl.foughtNox = true
@@ -110,13 +110,15 @@
                 if (hasUpgrade("ir", 14)) arena.upgradeEffects.hpRegen += 0.5 / 60
 
                 arena.upgradeEffects.attackDamage *= levelableEffect("ir", player.ir.shipType)[2]
+                player.bl.noxFightActive = false
+
             },
             style: { width: '300px', "min-height": '100px', color: "white" },
         },
         12: {
             title() { return "<h2>Leave Battle" },
             canClick() { return true },
-            unlocked() { return !player.ir.iriditeFightActive || player.subtabs["ir"]["stuff"] == "Refresh Page :("},
+            unlocked() { return !player.bl.noxFightActive || player.subtabs["bl"]["stuff"] == "Refresh Page :("|| player.subtabs["bl"]["stuff"] == "Lose"},
             onClick() {
                 player.ir.inBattle = false
                 player.ma.inBlackHeart = false
@@ -134,7 +136,7 @@
                 player.ir.battleLevel = new Decimal(0)
 
                 player.bl.foughtNox = false
-
+                player.bl.noxFightActive = false
             },
             style: { width: '300px', "min-height": '100px', color: "white" },
         },
@@ -467,7 +469,7 @@
                             ], {width: "541px", height: "40px", backgroundColor: "#1f0000ff", borderBottom: "3px solid #ff8989ff",  borderLeft: "3px solid #ff8989ff",  userSelect: "none"}],
                             ["style-column", [
                                 ["row", [["levelable", 1], ["levelable", 2],["levelable", 3],["levelable", 4],["levelable", 5],]],
-                                ["row", [["levelable", 6], ["levelable", 7,]]],
+                                ["row", [["levelable", 6], ["levelable", 7], ["levelable", 8]]],
                             ], {width: "531px", height: "250px", backgroundColor: "rgba(43, 10, 18, 1)", borderLeft: "3px solid #ff8989ff", padding: "5px"}],
                         ], {width: "556px", height: "220px"}],
                     ["blank", "25px"],
@@ -780,7 +782,7 @@ class BloodArena extends SpaceArena {
                 ctx.restore();
             }
         };
-        // Nox, the Vampire Knight (boss) - appears as a glowing red orb; complex multi-phase attacks
+        // Nox, the Vampire Knight (boss) - animated humanoid vampire that turns into a bat
         this.enemyTypes.noxBoss = {
             name: "Nox, the Vampire Knight",
             radius: 64,
@@ -792,26 +794,127 @@ class BloodArena extends SpaceArena {
             draw: (ctx, enemy) => {
                 ctx.save();
                 ctx.translate(enemy.x, enemy.y);
-                // pulsing glow
-                let t = (enemy._pulseTimer || 0) / 60;
-                let pulse = 0.6 + 0.4 * Math.abs(Math.sin(t * Math.PI * 2));
+                
+                let t = (enemy._pulseTimer || 0);
                 let r = enemy.radius || 64;
-                // outer glow
-                ctx.beginPath();
-                ctx.fillStyle = `rgba(160,20,20,${0.14 * pulse})`;
-                ctx.arc(0, 0, r * 1.8, 0, Math.PI * 2);
-                ctx.fill();
-                // main orb
-                let g = ctx.createRadialGradient(-r * 0.2, -r * 0.2, r * 0.1, 0, 0, r);
-                g.addColorStop(0, '#ff9a9a');
-                g.addColorStop(0.5, '#ff4a4a');
-                g.addColorStop(1, '#5a0000');
-                ctx.fillStyle = g;
-                ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
-                // inner core
-                ctx.beginPath(); ctx.fillStyle = 'rgba(255,220,220,0.9)'; ctx.arc(0, 0, r * 0.28, 0, Math.PI * 2); ctx.fill();
-                // subtle vampire sigil
-                ctx.beginPath(); ctx.strokeStyle = 'rgba(255,120,120,0.18)'; ctx.lineWidth = 2; ctx.arc(0, -r * 0.1, r * 0.6, 0.1, Math.PI * 1.9); ctx.stroke();
+
+                // Check for bat transformation during batCircle attack
+                if (enemy._batTimer > 0) {
+                    // Draw Bat
+                    let flap = Math.sin(t * 0.2) * 0.5;
+                    ctx.fillStyle = "#330000";
+                    
+                    // Wings
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0);
+                    ctx.quadraticCurveTo(-r * 0.8, -r * (0.5 + flap), -r * 1.5, 0);
+                    ctx.quadraticCurveTo(-r * 0.8, r * 0.2, 0, 0);
+                    ctx.fill();
+
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0);
+                    ctx.quadraticCurveTo(r * 0.8, -r * (0.5 + flap), r * 1.5, 0);
+                    ctx.quadraticCurveTo(r * 0.8, r * 0.2, 0, 0);
+                    ctx.fill();
+
+                    // Body
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0, r * 0.4, r * 0.25, 0, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Eyes
+                    ctx.fillStyle = "#ff0000";
+                    ctx.beginPath(); ctx.arc(-r * 0.1, -r * 0.05, 3, 0, Math.PI * 2); ctx.fill();
+                    ctx.beginPath(); ctx.arc(r * 0.1, -r * 0.05, 3, 0, Math.PI * 2); ctx.fill();
+                } else {
+                    // Draw Vampire Knight
+                    let bob = Math.sin(t * 0.05) * 10;
+                    ctx.translate(0, bob);
+
+                    // Cape (animated flap)
+                    let flap = Math.sin(t * 0.1) * 5;
+                    ctx.fillStyle = "#6a0000"; // Deeper vampire red
+                    ctx.beginPath();
+                    ctx.moveTo(-r * 0.5, -r * 0.2);
+                    ctx.lineTo(-r * 1.3 - flap, r * 1.3);
+                    ctx.lineTo(0, r * 0.9);
+                    ctx.lineTo(r * 1.3 + flap, r * 1.3);
+                    ctx.lineTo(r * 0.5, -r * 0.2);
+                    ctx.closePath();
+                    ctx.fill();
+
+                    // Shield (as seen in image)
+                    ctx.save();
+                    ctx.translate(r * 0.6, r * 0.2);
+                    ctx.rotate(0.1);
+                    ctx.fillStyle = "#ffffff";
+                    ctx.strokeStyle = "#ff0000";
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.moveTo(0, -r * 0.5);
+                    ctx.lineTo(r * 0.4, -r * 0.3);
+                    ctx.lineTo(r * 0.4, r * 0.4);
+                    ctx.lineTo(0, r * 0.7);
+                    ctx.lineTo(-r * 0.4, r * 0.4);
+                    ctx.lineTo(-r * 0.4, -r * 0.3);
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.stroke();
+                    // Shield detail
+                    ctx.strokeStyle = "#ff0000";
+                    ctx.lineWidth = 1.5;
+                    ctx.beginPath(); ctx.moveTo(0, -r * 0.3); ctx.lineTo(0, r * 0.5); ctx.stroke();
+                    ctx.beginPath(); ctx.moveTo(-r * 0.2, 0); ctx.lineTo(r * 0.2, 0); ctx.stroke();
+                    ctx.restore();
+
+                    // Body/Armor (Red/White/Black armor as in image)
+                    ctx.fillStyle = "#ffffff";
+                    ctx.beginPath();
+                    ctx.moveTo(-r * 0.4, -r * 0.2);
+                    ctx.lineTo(r * 0.4, -r * 0.2);
+                    ctx.lineTo(r * 0.3, r * 0.6);
+                    ctx.lineTo(-r * 0.3, r * 0.6);
+                    ctx.closePath();
+                    ctx.fill();
+                    // Red armor trim
+                    ctx.fillStyle = "#ff0000";
+                    ctx.fillRect(-r * 0.4, -r * 0.2, r * 0.8, r * 0.1);
+                    ctx.fillRect(-r * 0.3, r * 0.4, r * 0.6, r * 0.1);
+
+                    // Red Hair (as seen in image)
+                    ctx.fillStyle = "#d40000";
+                    ctx.beginPath();
+                    ctx.arc(0, -r * 0.55, r * 0.32, Math.PI, 2 * Math.PI);
+                    ctx.fill();
+                    // Hair spikes
+                    ctx.beginPath();
+                    ctx.moveTo(-r * 0.3, -r * 0.6); ctx.lineTo(-r * 0.4, -r * 0.4); ctx.lineTo(-r * 0.2, -r * 0.5);
+                    ctx.moveTo(r * 0.3, -r * 0.6); ctx.lineTo(r * 0.4, -r * 0.4); ctx.lineTo(r * 0.2, -r * 0.5);
+                    ctx.fill();
+
+                    // Head (Pale skin)
+                    ctx.fillStyle = "#fff0f0";
+                    ctx.beginPath();
+                    ctx.arc(0, -r * 0.5, r * 0.25, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Eyes (glowing)
+                    let glow = 0.5 + 0.5 * Math.abs(Math.sin(t * 0.1));
+                    ctx.fillStyle = `rgba(255, 0, 0, ${glow})`;
+                    ctx.beginPath(); ctx.arc(-r * 0.08, -r * 0.55, 4, 0, Math.PI * 2); ctx.fill();
+                    ctx.beginPath(); ctx.arc(r * 0.08, -r * 0.55, 4, 0, Math.PI * 2); ctx.fill();
+
+                    // Pulsing Aura
+                    ctx.beginPath();
+                    let auraR = r * (1.2 + 0.1 * Math.sin(t * 0.1));
+                    let grad = ctx.createRadialGradient(0, 0, r * 0.5, 0, 0, auraR);
+                    grad.addColorStop(0, "rgba(255, 0, 0, 0.2)");
+                    grad.addColorStop(1, "rgba(255, 0, 0, 0)");
+                    ctx.fillStyle = grad;
+                    ctx.arc(0, 0, auraR, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
                 ctx.restore();
             }
         };
@@ -1113,25 +1216,21 @@ class BloodArena extends SpaceArena {
                             enemy._barrageTick = (enemy._barrageTick || 0) + 1;
                             if (enemy._barrageTick >= 24) { // ~0.4s
                                 enemy._barrageTick = 0;
-                                // spawn several random vampire spears (use the spear visuals/logic already in the arena)
+                                // schedule several random vampire spears via warning beams
                                 for (let i = 0; i < 3; i++) {
                                     let ang = Math.random() * Math.PI * 2;
                                     let spd = 12;
-                                    this.bullets.push({
-                                        x: enemy.x,
-                                        y: enemy.y,
-                                        vx: Math.cos(ang) * spd,
-                                        vy: Math.sin(ang) * spd,
-                                        life: 160,
-                                        damage: 18,
-                                        pierce: 1,
-                                        knockback: 8,
-                                        vampireSpear: true,
-                                        shaftLen: 56,
-                                        tipLen: 18,
-                                        shaftW: 6,
-                                        rot: ang,
-                                        fromEnemy: true
+                                    let dist = 800;
+                                    this._vampireWarns.push({
+                                        x1: enemy.x,
+                                        y1: enemy.y,
+                                        x2: enemy.x + Math.cos(ang) * dist,
+                                        y2: enemy.y + Math.sin(ang) * dist,
+                                        timer: this._vampirePrep,
+                                        dmg: 18,
+                                        speed: spd,
+                                        fromEnemy: true,
+                                        phase2Plus: enemy.phase >= 2
                                     });
                                 }
                             }
@@ -1191,25 +1290,21 @@ class BloodArena extends SpaceArena {
                                 enemy._burstTick = (enemy.phase === 1) ? 4 : 6; // faster cadence in phase 1
                                 if (this.ship) {
                                     for (let i = 0; i < burstCount; i++) {
-                                        // burst of vampire spears aimed at the ship
+                                        // burst of vampire spears aimed at the ship via warning beams
                                         let spread = (i - (burstCount - 1) / 2) * 0.035;
                                         let ang = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x) + spread;
                                         let spd = (enemy.phase === 1) ? 18 : 16;
-                                        this.bullets.push({
-                                            x: enemy.x,
-                                            y: enemy.y,
-                                            vx: Math.cos(ang) * spd,
-                                            vy: Math.sin(ang) * spd,
-                                            life: 120,
-                                            damage: 22,
-                                            pierce: 1,
-                                            knockback: 10,
-                                            vampireSpear: true,
-                                            shaftLen: 56,
-                                            tipLen: 18,
-                                            shaftW: 6,
-                                            rot: ang,
-                                            fromEnemy: true
+                                        let dist = 1000;
+                                        this._vampireWarns.push({
+                                            x1: enemy.x,
+                                            y1: enemy.y,
+                                            x2: enemy.x + Math.cos(ang) * dist,
+                                            y2: enemy.y + Math.sin(ang) * dist,
+                                            timer: this._vampirePrep,
+                                            dmg: 22,
+                                            speed: spd,
+                                            fromEnemy: true,
+                                            phase2Plus: enemy.phase >= 2
                                         });
                                     }
                                 }
@@ -1218,16 +1313,29 @@ class BloodArena extends SpaceArena {
                             } else enemy._burstTick--;
                         }
 
-                        // Spin sword: spawn a large fast projectile that tracks lightly
+                        // Spin sword: spawn a large massive sword projectile that bounces and lasts for 10 seconds
                         if (enemy._spinSword) {
                             if (!enemy._spinSwordSpawned) {
                                 enemy._spinSwordSpawned = true;
                                 let ang = Math.random() * Math.PI * 2;
-                                let spd = 9;
-                                // sword is a durable enemy projectile
-                                this.bullets.push({ x: enemy.x + Math.cos(ang) * 40, y: enemy.y + Math.sin(ang) * 40, vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd, life: 600, damage: 36, pierce: 0, fromEnemy: true, sword: true });
-                                // life-limited: allow another later
-                                setTimeout(() => { try { delete enemy._spinSwordSpawned; delete enemy._spinSword; } catch (e) {} }, 6000);
+                                let spd = 14;
+                                // massive sword projectile
+                                this.bullets.push({ 
+                                    x: enemy.x + Math.cos(ang) * 40, 
+                                    y: enemy.y + Math.sin(ang) * 40, 
+                                    vx: Math.cos(ang) * spd, 
+                                    vy: Math.sin(ang) * spd, 
+                                    life: 600, // 10 seconds at 60fps
+                                    damage: 40, 
+                                    pierce: 0, 
+                                    fromEnemy: true, 
+                                    massiveSword: true,
+                                    radius: 120,
+                                    rot: 0,
+                                    rotSpd: 0.15
+                                });
+                                // allow another later
+                                setTimeout(() => { try { delete enemy._spinSwordSpawned; delete enemy._spinSword; } catch (e) {} }, 10000);
                             }
                         }
 
@@ -1560,10 +1668,22 @@ class BloodArena extends SpaceArena {
                                 this._vampireTimer++;
                                 if (this._vampireTimer >= this._vampireInterval) {
                                     this._vampireTimer = 0;
-                                    // pick a random alive enemy to target
-                                    let alive = (this.enemies || []).filter(e => e && e.alive);
-                                    if (alive.length > 0) {
-                                        let target = alive[Math.floor(Math.random() * alive.length)];
+                                    
+                                    let boss = (this.enemies || []).find(e => e && e.alive && e.type === 'noxBoss');
+                                    let target = null;
+                                    
+                                    if (boss && boss.phase >= 2) {
+                                        // phase 2+ betrayal: target the player
+                                        target = this.ship;
+                                    } else {
+                                        // pick a random alive enemy to target (normal behavior)
+                                        let alive = (this.enemies || []).filter(e => e && e.alive && e.type !== 'noxBoss');
+                                        if (alive.length > 0) {
+                                            target = alive[Math.floor(Math.random() * alive.length)];
+                                        }
+                                    }
+                                    
+                                    if (target) {
                                         // choose an origin offscreen from a random side
                                         let side = Math.floor(Math.random() * 4);
                                         let ox = 0, oy = 0;
@@ -1572,7 +1692,12 @@ class BloodArena extends SpaceArena {
                                         if (side === 2) { ox = Math.random() * this.width; oy = this.height + 48; }
                                         if (side === 3) { ox = -48; oy = Math.random() * this.height; }
                                         // schedule a warning line from origin to the target's current position
-                                        this._vampireWarns.push({ x1: ox, y1: oy, x2: target.x, y2: target.y, timer: this._vampirePrep, dmg: 18, speed: 14 });
+                                        this._vampireWarns.push({ 
+                                            x1: ox, y1: oy, x2: target.x, y2: target.y, 
+                                            timer: this._vampirePrep, dmg: 18, speed: 14, 
+                                            fromEnemy: (boss && boss.phase >= 2),
+                                            phase2Plus: (boss && boss.phase >= 2)
+                                        });
                                     }
                                 }
                             }
@@ -1584,6 +1709,33 @@ class BloodArena extends SpaceArena {
 
         // Call base update to handle bullets, collisions and draw
         if (typeof super.update === 'function') super.update();
+
+        // Handle returning vampire spears in Phase 2+
+        try {
+            if (this.bullets && this.bullets.length) {
+                for (let b of this.bullets) {
+                    if (b.vampireSpear && b.phase2Plus && !b.hasReturned) {
+                        // When life reaches half, it "returns" toward the ship (player)
+                        if (b.life <= (b.initialLife || 100) / 2) {
+                            b.hasReturned = true;
+                            if (this.ship) {
+                                let dx = this.ship.x - b.x;
+                                let dy = this.ship.y - b.y;
+                                let dist = Math.hypot(dx, dy) || 1;
+                                let spd = Math.hypot(b.vx || 0, b.vy || 0) || 12;
+                                b.vx = (dx / dist) * spd;
+                                b.vy = (dy / dist) * spd;
+                                b.rot = Math.atan2(b.vy, b.vx);
+                                // ensure it has enough life to reach the player
+                                b.life = Math.max(b.life, Math.floor(dist / spd) + 20);
+                                // once returning, it MUST be fromEnemy to hurt the player
+                                b.fromEnemy = true;
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (e) {}
 
         // After base update, convert any loot that would have been space rocks
         // into `player.bl.bloodStones`. We only award once per-dead-enemy.
@@ -1798,10 +1950,11 @@ class BloodArena extends SpaceArena {
                                     vx: Math.cos(ang) * spd,
                                     vy: Math.sin(ang) * spd,
                                     life: spearLife,
+                                    initialLife: spearLife,
                                     damage: w.dmg || 18,
                                     pierce: 3,
                                     radius: 10,
-                                    fromEnemy: false,
+                                    fromEnemy: w.fromEnemy || false,
                                     vampireSpear: true,
                                     spear: true,
                                     rot: ang,
@@ -1811,6 +1964,9 @@ class BloodArena extends SpaceArena {
                                     tipLen: 18,
                                     // knockback strength applied to enemies on hit
                                     knockback: 12,
+                                    originX: w.x1,
+                                    originY: w.y1,
+                                    phase2Plus: w.phase2Plus || false
                                 });
                             } catch (e) {}
                             this._vampireWarns.splice(i, 1);

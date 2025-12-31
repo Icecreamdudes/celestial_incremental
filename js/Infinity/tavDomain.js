@@ -2197,7 +2197,7 @@ addLayer("tad", {
             },
             "Infinitum": {
                 buttonStyle() { return { color: "black", borderColor: "#9194FA", borderRadius: "5px" }},
-                unlocked() { return player.tad.infinitumResets.gt(0) },
+                unlocked() { return player.tad.infinitumResets.gt(0) || hasUpgrade("tad", 115) },
                 content: [
                     ["blank", "15px"],
                     ["row", [

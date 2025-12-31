@@ -60,6 +60,7 @@
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.cof.coreFragmentEffects[4])
         if (hasUpgrade("ir", 11)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(upgradeEffect("ir", 11))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("ir", 1)[1])
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.in.pylonPassiveEffect)
 
         //Power modifiers
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(buyableEffect("sb", 104))

@@ -830,7 +830,6 @@ addLayer("co", {
         if (!hasMilestone("s", 18)) {
             player.tad.infinitum = new Decimal(0)
             player.tad.infinitumGain = new Decimal(0)
-            player.tad.infinitumResets = new Decimal(0)
             player.tad.altSelection = "none"
             for (let i in player.tad.altInfinities) {
                 player.tad.altInfinities[i].amount = new Decimal(0)

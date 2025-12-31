@@ -2652,6 +2652,20 @@ const cutsceneDialogueA6 = [ //nox
     { text: "Oh well. I don't mind you helping me here.", portrait: "resources/player.png"  },
     { text: "As long as you let me take all these blood stones I'm fine!", portrait: "resources/nox.png"  },
 ];  
+const cutsceneDialogueA7 = [ //pylon
+    { text: "Your paradox core fragments construct into a large tower.", },
+    { text: "Building these pylons are great and all, but wouldn't it be beneficial if you fought some celestials right now?", },
+    { text: "You start to think.", },
+    { text: "If Iridite was a celestial centered around the cosmos, and getting there required a lot of rocket fuel...", },
+    { text: "...the next celestial must either be centered around hex, or dice.", },
+    { text: "Dice seems more plausible right now, so you should go for dice.", },
+    { text: "It's not like much is going on in the hex universe after all.", },
+    { text: "Then you remember something: Challenge Dice Points.", },
+    { text: "A superphysical value shrouded in mysterious vibes.", },
+    { text: "You must investigate.", },
+
+];  
+
 // Happens when entering the hive
 const cutsceneDialogue113 = [
     { text: "You appear in a giant plains, and an indiscernible being floats towards you." },

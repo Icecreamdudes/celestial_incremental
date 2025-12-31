@@ -1068,6 +1068,15 @@ if (player.c.cutscene2[5] && player.ir.battleLevel.gte(12) && player.subtabs["bl
     });
     player.c.cutscene2[5] = false
 }
+if (player.c.cutscene2[6] && player.in.pylonBuilt)
+{
+    showCutscene(cutsceneDialogueA7, {
+    cutsceneID: -7,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene2[6] = false
+}
+
 if (player.c.cutscene[112] && player.tab == "bee") {
     showCutscene(cutsceneDialogue113, {
         cutsceneID: 113,

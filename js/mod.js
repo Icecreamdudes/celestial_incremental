@@ -126,6 +126,15 @@ function updateStyles() {
 				layerBG = "#161616"
 			}
 			break;
+		case "in":
+			if (player.i.pylonBuilt && player.subtabs["in"]["stuff"] == "Pylon")
+			{
+				layerBG = "linear-gradient(0deg, #1FF8AF, #2162D2)"
+			} else
+			{
+				layerBG = "#001f18"
+			}
+			break;
 		case "t":
 			layerBG = "#02172f"
 			break;
@@ -590,7 +599,8 @@ function updateStyles() {
 			case "D1":
 				if (!player.pet.activeAbilities[0] && !player.ir.inBattle) playAndLoopAudio("music/darkUni1.mp3", options.musicVolume/10)
 				if (player.pet.activeAbilities[0] && !player.ir.inBattle) playAndLoopAudio("music/eclipse.mp3", options.musicVolume/10)
-			    if (player.ir.inBattle) playAndLoopAudio("music/bloodBattle.mp3", options.musicVolume/10);
+			    if (player.ir.inBattle && !player.bl.noxFightActive) playAndLoopAudio("music/bloodBattle.mp3", options.musicVolume/10);
+			    if (player.ir.inBattle && player.bl.noxFightActive) playAndLoopAudio("music/nox.mp3", options.musicVolume/10);
 				break;
 			case "CH":
 				if (player.tab == "ch") playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10)

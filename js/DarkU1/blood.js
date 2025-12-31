@@ -16,6 +16,9 @@
         bloodDrainPerSecond: new Decimal(0.1),
 
         xpGainPercentage: new Decimal(0),
+
+        noxFightActive: false,
+        foughtNox: false,
     }},
     automate() {
 
@@ -80,6 +83,12 @@
         }
 
         player.bl.bloodStones = player.bl.bloodStones.floor()
+
+        if (player.ir.battleLevel.gte(20) && !player.bl.foughtNox && player.tab == "bl")
+        {
+            spawnNox();
+            player.bl.foughtNox = true
+        }
     },
     bars: {},
     clickables: {
@@ -119,10 +128,13 @@
                 }
                 localStorage.setItem('arenaActive', 'false');
 
-                player.ir.shipCooldownTimers[player.ir.shipType] = player.ir.shipCooldownMax[player.ir.shipType]
+                player.ir.timers[player.ir.shipType].current = player.ir.timers[player.ir.shipType].max
 
                 player.ir.battleXP = new Decimal(0)
                 player.ir.battleLevel = new Decimal(0)
+
+                player.bl.foughtNox = false
+
             },
             style: { width: '300px', "min-height": '100px', color: "white" },
         },
@@ -455,7 +467,7 @@
                             ], {width: "541px", height: "40px", backgroundColor: "#1f0000ff", borderBottom: "3px solid #ff8989ff",  borderLeft: "3px solid #ff8989ff",  userSelect: "none"}],
                             ["style-column", [
                                 ["row", [["levelable", 1], ["levelable", 2],["levelable", 3],["levelable", 4],["levelable", 5],]],
-                                ["row", [["levelable", 6],]],
+                                ["row", [["levelable", 6], ["levelable", 7,]]],
                             ], {width: "531px", height: "250px", backgroundColor: "rgba(43, 10, 18, 1)", borderLeft: "3px solid #ff8989ff", padding: "5px"}],
                         ], {width: "556px", height: "220px"}],
                     ["blank", "25px"],
@@ -512,7 +524,7 @@
         ["raw-html", () => { return !player.ir.inBattle ? "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["raw-html", () => { return !player.ir.inBattle ? "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." : "" }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
         ["raw-html", () => { return !player.ir.inBattle && player.du.pointGain.gte(player.du.secondSoftcapStart) ? "UNAVOIDABLE SOFTCAP<sup>2</sup>: Gain past " + format(player.du.secondSoftcapStart) + " is raised by ^" + format(player.du.pointSoftcap2) + "." : "" }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
-        ["raw-html", () => { return !player.ir.inBattle && player.pet.legendaryPetAbilityTimers[0].gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legendaryPetAbilityTimers[0]) + "." : ""}, {color: "#FEEF5F", fontSize: "20px", fontFamily: "monospace"}],
+        ["raw-html", () => { return !player.ir.inBattle && player.pet.legPetTimers[0].active ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legendaryPetAbilityTimers[0]) + "." : ""}, {color: "#FEEF5F", fontSize: "20px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
@@ -768,6 +780,41 @@ class BloodArena extends SpaceArena {
                 ctx.restore();
             }
         };
+        // Nox, the Vampire Knight (boss) - appears as a glowing red orb; complex multi-phase attacks
+        this.enemyTypes.noxBoss = {
+            name: "Nox, the Vampire Knight",
+            radius: 64,
+            color: "#ff3333",
+            healthMin: 125000,
+            healthMax: 125000,
+            damage: 20,
+            wanderSpeed: 0.6,
+            draw: (ctx, enemy) => {
+                ctx.save();
+                ctx.translate(enemy.x, enemy.y);
+                // pulsing glow
+                let t = (enemy._pulseTimer || 0) / 60;
+                let pulse = 0.6 + 0.4 * Math.abs(Math.sin(t * Math.PI * 2));
+                let r = enemy.radius || 64;
+                // outer glow
+                ctx.beginPath();
+                ctx.fillStyle = `rgba(160,20,20,${0.14 * pulse})`;
+                ctx.arc(0, 0, r * 1.8, 0, Math.PI * 2);
+                ctx.fill();
+                // main orb
+                let g = ctx.createRadialGradient(-r * 0.2, -r * 0.2, r * 0.1, 0, 0, r);
+                g.addColorStop(0, '#ff9a9a');
+                g.addColorStop(0.5, '#ff4a4a');
+                g.addColorStop(1, '#5a0000');
+                ctx.fillStyle = g;
+                ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
+                // inner core
+                ctx.beginPath(); ctx.fillStyle = 'rgba(255,220,220,0.9)'; ctx.arc(0, 0, r * 0.28, 0, Math.PI * 2); ctx.fill();
+                // subtle vampire sigil
+                ctx.beginPath(); ctx.strokeStyle = 'rgba(255,120,120,0.18)'; ctx.lineWidth = 2; ctx.arc(0, -r * 0.1, r * 0.6, 0.1, Math.PI * 1.9); ctx.stroke();
+                ctx.restore();
+            }
+        };
         // Spawn timers / caps
         this._leechSpawnTimer = 0;
         // spawn much more infrequently by default (frames at ~60fps)
@@ -809,15 +856,16 @@ class BloodArena extends SpaceArena {
     }
 
     spawnArena() {
-        // Create a similar arena div/canvas but with a blood-red background
+        // Create a similar arena div/canvas but sized to the arena's configured width/height
+        // The arena will be expanded to fullscreen only when Nox is spawned.
         this.arenaDiv = document.createElement('div');
         this.arenaDiv.id = 'blood-arena';
         Object.assign(this.arenaDiv.style, {
             position: 'fixed',
             left: '50%',
             top: '50%',
-            width: this.width + 'px',
-            height: this.height + 'px',
+            width: (this.width || 800) + 'px',
+            height: (this.height || 600) + 'px',
             transform: `translate(-50%, -50%)`,
             background: '#2b0000', // dark red
             border: '3px solid #fff',
@@ -827,8 +875,9 @@ class BloodArena extends SpaceArena {
         document.body.appendChild(this.arenaDiv);
 
         this.canvas = document.createElement('canvas');
-        this.canvas.width = this.width;
-        this.canvas.height = this.height;
+        // use numeric width/height matching the configured arena size for drawing math
+        this.canvas.width = this.width || 800;
+        this.canvas.height = this.height || 600;
         this.arenaDiv.appendChild(this.canvas);
         this.ctx = this.canvas.getContext('2d');
 
@@ -888,6 +937,91 @@ class BloodArena extends SpaceArena {
         // intentionally left blank; asteroids disabled in BloodArena
     }
 
+    // Spawn Nox boss: clear normal enemies/bullets, expand arena fullscreen and spawn boss
+    spawnNox() {
+        // Prevent duplicate
+        if (this.enemies && this.enemies.some(e => e.type === 'noxBoss' && e.alive)) return;
+
+        // clear normal enemies and bullets for a fresh boss fight
+        if (this.enemies) {
+            for (let e of this.enemies) if (e) e.alive = false;
+        }
+        this.enemies = [];
+        this.bullets = this.bullets.filter(b => b.fromEnemy); // keep only enemy bullets (optional)
+
+        // mark boss active to stop normal spawns and vampire spear scheduling
+        this.bossActive = true;
+        player.bl.noxFightActive = true;
+
+        // expand the arena to fullscreen and make it transparent for the boss fight,
+        // saving previous styles/sizes so we can restore them when the boss ends
+        try {
+            if (!this._savedArenaState && this.arenaDiv) {
+                this._savedArenaState = {
+                    style: {
+                        left: this.arenaDiv.style.left,
+                        top: this.arenaDiv.style.top,
+                        width: this.arenaDiv.style.width,
+                        height: this.arenaDiv.style.height,
+                        transform: this.arenaDiv.style.transform,
+                        background: this.arenaDiv.style.background,
+                        border: this.arenaDiv.style.border,
+                        zIndex: this.arenaDiv.style.zIndex,
+                        overflow: this.arenaDiv.style.overflow
+                    },
+                    canvasWidth: (this.canvas && this.canvas.width) ? this.canvas.width : (this.width || 800),
+                    canvasHeight: (this.canvas && this.canvas.height) ? this.canvas.height : (this.height || 600),
+                    width: this.width,
+                    height: this.height
+                };
+            }
+
+            if (this.arenaDiv) {
+                Object.assign(this.arenaDiv.style, { left: '0', top: '0', width: '100vw', height: '100vh', transform: 'none', background: 'transparent', border: '0' });
+            }
+            if (this.canvas) {
+                this.canvas.width = (typeof window !== 'undefined' && window.innerWidth) ? window.innerWidth : (this.canvas.width || (this.width || 800));
+                this.canvas.height = (typeof window !== 'undefined' && window.innerHeight) ? window.innerHeight : (this.canvas.height || (this.height || 600));
+                this.canvas.style.background = 'transparent';
+            }
+            // update arena logical size
+            this.width = this.canvas ? this.canvas.width : ((typeof window !== 'undefined' && window.innerWidth) ? window.innerWidth : this.width);
+            this.height = this.canvas ? this.canvas.height : ((typeof window !== 'undefined' && window.innerHeight) ? window.innerHeight : this.height);
+        } catch (e) {}
+
+        // expand arena to fullscreen if available
+        if (typeof this.enterIriditeFullscreen === 'function') this.enterIriditeFullscreen();
+
+        // spawn boss at perimeter (prefer a safe distance)
+        let angle = Math.random() * Math.PI * 2;
+        let dist = Math.max(this.width, this.height) * 0.35;
+        let ex = Math.round(this.width / 2 + Math.cos(angle) * dist);
+        let ey = Math.round(this.height / 2 + Math.sin(angle) * dist);
+
+        // clamp
+        ex = Math.max(80, Math.min(this.width - 80, ex));
+        ey = Math.max(80, Math.min(this.height - 80, ey));
+
+        let t = this.enemyTypes.noxBoss || {};
+        let enemy = {
+            type: 'noxBoss',
+            x: ex, y: ey, vx: 0, vy: 0,
+            radius: t.radius || 64,
+            color: t.color || '#ff3333',
+            health: t.healthMax || t.healthMin || 125000,
+            maxHealth: t.healthMax || t.healthMin || 125000,
+            alive: true,
+            phase: 1,
+            state: 'idle',
+            attackTimer: 60,
+            _pulseTimer: 0,
+        };
+        this.enemies.push(enemy);
+
+        flashScreen("Nox, The Vampire Knight", 1200)
+
+    }
+
     // Per-frame update: run AI for blood enemies, auto-spawn, then call base update for physics/collisions
     update(delta) {
         // normalize delta to milliseconds (fallback to 60fps tick)
@@ -916,6 +1050,217 @@ class BloodArena extends SpaceArena {
                         }
                     } catch (err) { /* ignore */ }
                     const type = enemy.type;
+                    // NOX boss AI (multi-phase)
+                    if (type === 'noxBoss') {
+                        // basic init
+                        if (!enemy._noxInit) {
+                            enemy._noxInit = true;
+                            enemy.phase = 1;
+                            enemy.state = 'idle';
+                            enemy.attackTimer = 60;
+                            enemy._barrageTimer = 0;
+                            enemy._barrageTick = 0;
+                            enemy._chargeTimer = 0;
+                            enemy._fireTimer = 0;
+                            enemy._batTimer = 0;
+                            enemy._pulseTimer = 0;
+                        }
+
+                        // phase progression based on remaining health
+                        let pct = (enemy.health || 0) / Math.max(1, enemy.maxHealth || 1);
+                        let newPhase = pct > 0.66 ? 1 : (pct > 0.33 ? 2 : 3);
+                        if (newPhase !== enemy.phase) {
+                            enemy.phase = newPhase;
+                            enemy.state = 'idle';
+                            enemy.attackTimer = 90;
+                        }
+
+                        // pulse timer for draw
+                        enemy._pulseTimer = (enemy._pulseTimer || 0) + 1;
+
+                        // decrement generic timers
+                        enemy.attackTimer = (typeof enemy.attackTimer === 'number') ? enemy.attackTimer - 1 : 0;
+                        if (enemy._barrageTimer > 0) enemy._barrageTimer--;
+                        if (enemy._chargeTimer > 0) enemy._chargeTimer--;
+                        if (enemy._fireTimer > 0) enemy._fireTimer--;
+                        if (enemy._batTimer > 0) enemy._batTimer--;
+
+                        // Choose actions - phase affects available choices
+                        if (enemy.attackTimer <= 0) {
+                            enemy.attackTimer = 60 + Math.floor(Math.random() * 90);
+                            // choose an attack; more options available in higher phases
+                            let options = ['barrage','charge','fireball'];
+                            if (enemy.phase >= 2) options = options.concat(['burstSpears','spinSword','batCircle']);
+                            if (enemy.phase >= 3) {
+                                // phase 3 can do multiple things at once; pick 2
+                                let a1 = options[Math.floor(Math.random() * options.length)];
+                                let a2 = options[Math.floor(Math.random() * options.length)];
+                                [a1,a2].forEach(a => { if (a === 'barrage') enemy._barrageTimer = 180; if (a === 'charge') enemy._chargeTimer = 90; if (a === 'fireball') enemy._fireTimer = 120; if (a === 'burstSpears') enemy._burstSpears = 1; if (a === 'spinSword') enemy._spinSword = 1; if (a === 'batCircle') enemy._batTimer = 240; });
+                            } else {
+                                let a = options[Math.floor(Math.random() * options.length)];
+                                if (a === 'barrage') enemy._barrageTimer = 180; // 3s barrage
+                                if (a === 'charge') enemy._chargeTimer = 90; // charge duration
+                                if (a === 'fireball') enemy._fireTimer = 120; // fireballs for a while
+                                if (a === 'burstSpears') enemy._burstSpears = 1;
+                                if (a === 'spinSword') enemy._spinSword = 1;
+                                if (a === 'batCircle') enemy._batTimer = 240;
+                            } 
+                        } 
+
+                        // Active behaviors
+                        // Barrage: spawn spears in random directions at ~0.4s intervals
+                        if (enemy._barrageTimer > 0) {
+                            enemy._barrageTick = (enemy._barrageTick || 0) + 1;
+                            if (enemy._barrageTick >= 24) { // ~0.4s
+                                enemy._barrageTick = 0;
+                                // spawn several random vampire spears (use the spear visuals/logic already in the arena)
+                                for (let i = 0; i < 3; i++) {
+                                    let ang = Math.random() * Math.PI * 2;
+                                    let spd = 12;
+                                    this.bullets.push({
+                                        x: enemy.x,
+                                        y: enemy.y,
+                                        vx: Math.cos(ang) * spd,
+                                        vy: Math.sin(ang) * spd,
+                                        life: 160,
+                                        damage: 18,
+                                        pierce: 1,
+                                        knockback: 8,
+                                        vampireSpear: true,
+                                        shaftLen: 56,
+                                        tipLen: 18,
+                                        shaftW: 6,
+                                        rot: ang,
+                                        fromEnemy: true
+                                    });
+                                }
+                            }
+                        }
+
+                        // Charge: move rapidly toward player and leave blood-projectile trail that bursts outward
+                        if (enemy._chargeTimer > 0) {
+                            if (this.ship) {
+                                let dx = this.ship.x - enemy.x, dy = this.ship.y - enemy.y;
+                                let dist = Math.hypot(dx, dy) || 1;
+                                let vx = (dx / dist) * 10; let vy = (dy / dist) * 10;
+                                enemy.x += vx; enemy.y += vy;
+                                // trail spawn: small circular droplets that then radiate
+                                if (Math.random() < 0.28) {
+                                    // spawn a small orb that will immediately explode into outward droplets
+                                    let orbX = enemy.x + (Math.random()-0.5) * 30;
+                                    let orbY = enemy.y + (Math.random()-0.5) * 30;
+                                    // immediate outward droplets
+                                    for (let k = 0; k < 6; k++) {
+                                        let a = Math.random() * Math.PI * 2;
+                                        let s = 3 + Math.random() * 3;
+                                        this.bullets.push({ x: orbX, y: orbY, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: 80, damage: 6, pierce: 0, fromEnemy: true });
+                                    }
+                                }
+                            }
+                        }
+
+                        // Fireball: continuous projectile aimed at player
+                        if (enemy._fireTimer > 0 && this.ship) {
+                            if ((enemy._fireTick || 0) <= 0) {
+                                enemy._fireTick = 12;
+                                let ang = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
+                                let spd = 9;
+                                // fireball projectile (flagged for special drawing)
+                                this.bullets.push({
+                                    x: enemy.x + Math.cos(ang) * (enemy.radius || 64),
+                                    y: enemy.y + Math.sin(ang) * (enemy.radius || 64),
+                                    vx: Math.cos(ang) * spd,
+                                    vy: Math.sin(ang) * spd,
+                                    life: 240,
+                                    damage: 14,
+                                    pierce: 0,
+                                    fromEnemy: true,
+                                    fireball: true,
+                                    fireRadius: 14 + Math.floor(Math.random() * 6),
+                                    flamePulse: Math.random() * Math.PI * 2
+                                });
+                            } else enemy._fireTick--;
+                        }
+
+                        // Burst spears: fast direct spears toward player
+                        if (enemy._burstSpears) {
+                            // fire a quick volley of vampire spears
+                            if ((enemy._burstTick || 0) <= 0) {
+                                // phase 1: faster and more spears; later phases behave normally or stronger
+                                let burstCount = (enemy.phase === 1) ? 16 : 10;
+                                enemy._burstTick = (enemy.phase === 1) ? 4 : 6; // faster cadence in phase 1
+                                if (this.ship) {
+                                    for (let i = 0; i < burstCount; i++) {
+                                        // burst of vampire spears aimed at the ship
+                                        let spread = (i - (burstCount - 1) / 2) * 0.035;
+                                        let ang = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x) + spread;
+                                        let spd = (enemy.phase === 1) ? 18 : 16;
+                                        this.bullets.push({
+                                            x: enemy.x,
+                                            y: enemy.y,
+                                            vx: Math.cos(ang) * spd,
+                                            vy: Math.sin(ang) * spd,
+                                            life: 120,
+                                            damage: 22,
+                                            pierce: 1,
+                                            knockback: 10,
+                                            vampireSpear: true,
+                                            shaftLen: 56,
+                                            tipLen: 18,
+                                            shaftW: 6,
+                                            rot: ang,
+                                            fromEnemy: true
+                                        });
+                                    }
+                                }
+                                enemy._burstSpears = Math.max(0, (enemy._burstSpears - 1));
+                                if (enemy._burstSpears <= 0) delete enemy._burstSpears;
+                            } else enemy._burstTick--;
+                        }
+
+                        // Spin sword: spawn a large fast projectile that tracks lightly
+                        if (enemy._spinSword) {
+                            if (!enemy._spinSwordSpawned) {
+                                enemy._spinSwordSpawned = true;
+                                let ang = Math.random() * Math.PI * 2;
+                                let spd = 9;
+                                // sword is a durable enemy projectile
+                                this.bullets.push({ x: enemy.x + Math.cos(ang) * 40, y: enemy.y + Math.sin(ang) * 40, vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd, life: 600, damage: 36, pierce: 0, fromEnemy: true, sword: true });
+                                // life-limited: allow another later
+                                setTimeout(() => { try { delete enemy._spinSwordSpawned; delete enemy._spinSword; } catch (e) {} }, 6000);
+                            }
+                        }
+
+                        // Bat circle: fly in a circle while shooting blood droplets
+                        if (enemy._batTimer > 0) {
+                            enemy._batAngle = (enemy._batAngle || 0) + 0.06;
+                            let cx = this.width / 2, cy = this.height / 2;
+                            let r = Math.min(this.width, this.height) * 0.36;
+                            enemy.x = cx + Math.cos(enemy._batAngle) * r;
+                            enemy.y = cy + Math.sin(enemy._batAngle) * r;
+                            // shoot intermittently
+                            if ((enemy._batShootTick || 0) <= 0) {
+                                enemy._batShootTick = 8;
+                                // shoot several droplets toward player
+                                if (this.ship) {
+                                    let ang = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
+                                    for (let i = -1; i <= 1; i++) {
+                                        let a = ang + i * 0.12;
+                                        this.bullets.push({ x: enemy.x, y: enemy.y, vx: Math.cos(a) * 6, vy: Math.sin(a) * 6, life: 160, damage: 10, pierce: 0, fromEnemy: true });
+                                    }
+                                }
+                            } else enemy._batShootTick--;
+                        }
+
+                        // keep boss inside bounds
+                        if (enemy.x < enemy.radius) enemy.x = enemy.radius;
+                        if (enemy.x > this.width - enemy.radius) enemy.x = this.width - enemy.radius;
+                        if (enemy.y < enemy.radius) enemy.y = enemy.radius;
+                        if (enemy.y > this.height - enemy.radius) enemy.y = this.height - enemy.radius;
+
+                        // allow other part of loop to continue to subsequent enemy types
+                        continue;
+                    }
                     // LEECH behavior
                     if (type === 'leech') {
                         // seeker toward ship until attached
@@ -1302,6 +1647,36 @@ class BloodArena extends SpaceArena {
             }
         } catch (e) { console.warn('BloodArena loot conversion error', e); }
 
+        // If boss fight ended, restore arena visuals, sizes and flags
+        try {
+            if (this.bossActive) {
+                let aliveBoss = (this.enemies || []).some(e => e && e.alive && e.type === 'noxBoss');
+                if (!aliveBoss) {
+                    this.bossActive = false;
+                    try { if (player && player.bl) player.bl.noxFightActive = false; } catch (e) {}
+                    try {
+                        if (this._savedArenaState) {
+                            let s = this._savedArenaState;
+                            if (this.arenaDiv && s.style) {
+                                Object.assign(this.arenaDiv.style, s.style);
+                            }
+                            if (this.canvas) {
+                                this.canvas.width = s.canvasWidth || s.width || (this.canvas.width || 800);
+                                this.canvas.height = s.canvasHeight || s.height || (this.canvas.height || 600);
+                                this.canvas.style.background = '';
+                            }
+                            this.width = s.width || (this.canvas ? this.canvas.width : this.width);
+                            this.height = s.height || (this.canvas ? this.canvas.height : this.height);
+                            delete this._savedArenaState;
+                        } else {
+                            if (this.arenaDiv) this.arenaDiv.style.background = '#2b0000';
+                            if (this.canvas) this.canvas.style.background = '';
+                        }
+                    } catch (e) {}
+                }
+            }
+        } catch (e) {}
+
         // Draw health bars overlay (consistent with iridite.js style)
         try {
             if (!this.ctx) return;
@@ -1474,6 +1849,34 @@ class BloodArena extends SpaceArena {
                 }
             } catch (e) { console.warn('Vampire beams draw error', e); }
 
+            // draw Nox fireballs with a fiery gradient (special visuals)
+            try {
+                for (let fb of (this.bullets || [])) {
+                    if (!fb || !fb.fireball) continue;
+                    try {
+                        let r = fb.fireRadius || 12;
+                        // flame pulse for flicker
+                        let pulse = 0.8 + 0.2 * Math.sin((fb.flamePulse || 0) + (fb.life || 0) * 0.12);
+                        let grd = this.ctx.createRadialGradient(fb.x, fb.y, 0, fb.x, fb.y, r * 2);
+                        grd.addColorStop(0, `rgba(255,255,200,${0.95 * pulse})`);
+                        grd.addColorStop(0.3, `rgba(255,140,40,${0.9 * pulse})`);
+                        grd.addColorStop(0.6, `rgba(200,40,20,${0.7 * pulse})`);
+                        grd.addColorStop(1, `rgba(60,10,10,0)`);
+                        this.ctx.save();
+                        this.ctx.fillStyle = grd;
+                        this.ctx.beginPath();
+                        this.ctx.arc(fb.x, fb.y, r * (1 + 0.18 * Math.sin((fb.flamePulse || 0) + (fb.life || 0) * 0.08)), 0, Math.PI * 2);
+                        this.ctx.fill();
+                        // small core
+                        this.ctx.fillStyle = 'rgba(255,240,200,0.85)';
+                        this.ctx.beginPath();
+                        this.ctx.arc(fb.x, fb.y, Math.max(3, r * 0.28), 0, Math.PI * 2);
+                        this.ctx.fill();
+                        this.ctx.restore();
+                    } catch (err) {}
+                }
+            } catch (e) { console.warn('Fireball draw error', e); }
+
             // draw vampire spears (special bullets)
             try {
                 for (let b of (this.bullets || [])) {
@@ -1570,3 +1973,33 @@ class BloodArena extends SpaceArena {
         } catch (e) { console.warn('BloodArena draw overlay error', e); }
     }
 }
+
+// Global helper to summon Nox from anywhere (console or UI).
+// If a BloodArena is already active, it calls its spawnNox(), otherwise
+// it creates a BloodArena, opens it and then summons Nox.
+function spawnNox() {
+    try {
+        if (typeof arena !== 'undefined' && arena && arena.constructor && arena.constructor.name === 'BloodArena') {
+            if (typeof arena.spawnNox === 'function') {
+                arena.spawnNox();
+                return;
+            }
+        }
+    } catch (e) {
+        // fallthrough to create arena
+    }
+    flashScreen("- Nox, The Vampire Knight -", 1200);
+    // Create a new BloodArena sized to the window and spawn Nox
+    try {
+        const w = (typeof window !== 'undefined' && window.innerWidth) ? window.innerWidth : 1200;
+        const h = (typeof window !== 'undefined' && window.innerHeight) ? window.innerHeight : 600;
+        arena = new BloodArena(w, h);
+        arena.spawnArena();
+        if (typeof arena.spawnNox === 'function') arena.spawnNox();
+    } catch (err) {
+        console.warn('spawnNox failed:', err);
+    }
+}
+
+// expose on window for convenience in some environments
+try { if (typeof window !== 'undefined') window.spawnNox = spawnNox; } catch (e) {}

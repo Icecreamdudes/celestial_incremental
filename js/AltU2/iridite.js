@@ -256,12 +256,12 @@ addLayer("ir", {
             if (arena) arena.showUpgradeChoice();
         }
 
-        if (player.ir.battleLevel.gte(8) && hasUpgrade("ir", 16) && !player.ir.ufoFought) {
+        if (player.ir.battleLevel.gte(8) && hasUpgrade("ir", 16) && !player.ir.ufoFought && player.tab == "ir") {
             spawnUfoBoss();
             player.ir.ufoFought = true
         }
 
-        if (player.ir.battleLevel.gte(16) && hasUpgrade("ir", 19) && !player.ir.iriditeFought) {
+        if (player.ir.battleLevel.gte(16) && hasUpgrade("ir", 19) && !player.ir.iriditeFought && player.tab == "ir") {
             summonIridite();
             player.ir.iriditeFought = true
         }

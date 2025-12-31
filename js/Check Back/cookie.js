@@ -219,23 +219,25 @@ addLayer("ep2", {
         if (hasUpgrade("ep2", 9003)) player.ep2.averageGoldenCooldown = player.ep2.averageGoldenCooldown.div(1.5)
         if (hasUpgrade("ep2", 9005)) player.ep2.averageGoldenCooldown = player.ep2.averageGoldenCooldown.div(1.5)
 
-        if (player.tab == "ep2") {
-            player.ep2.goldenTimer = player.ep2.goldenTimer.sub(delta)
-        } else if (player.ep2.externalGolden) {
-            player.ep2.goldenTimer = player.ep2.goldenTimer.sub(Decimal.div(delta, 3))
+        if (getLevelableAmount("pet", 403).gt(0)) {
+            if (player.tab == "ep2") {
+                player.ep2.goldenTimer = player.ep2.goldenTimer.sub(delta)
+            } else if (player.ep2.externalGolden) {
+                player.ep2.goldenTimer = player.ep2.goldenTimer.sub(Decimal.div(delta, 3))
+            }
         }
         if (player.ep2.goldenTimer.lte(0)) {
             let time = Decimal.mul(player.ep2.averageGoldenCooldown.div(5), Math.random()).sub(player.ep2.averageGoldenCooldown.div(10))
             player.ep2.goldenTimer = player.ep2.averageGoldenCooldown.add(time)
             player.ep2.goldenTimerMax = player.ep2.averageGoldenCooldown.add(time)
-            if (Math.random() < levelableEffect("pet", 2003)[0]) {
+            if (getLevelableAmount("pet", 2003).gt(0) && Math.random() < levelableEffect("pet", 2003)[0]) {
                 makeShinies(WRATH_COOKIE, 1)
             } else {
                 makeShinies(GOLDEN_COOKIE, 1)
             }
         }
 
-        if (levelableEffect("pet", 2004)[0].gt(0)) {
+        if (getLevelableAmount("pet", 2004).gt(0)) {
             player.ep2.goldClickTimer = player.ep2.goldClickTimer.add(delta)
             if (player.ep2.goldClickTimer.gte(Decimal.div(1, levelableEffect("pet", 2004)[0]))) {
                 player.ep2.barClicks += 1
@@ -261,7 +263,7 @@ addLayer("ep2", {
         if (Decimal.gte(player.ep2.barClicks, player.ep2.barMax)) {
             player.ep2.barClicks = 0
             player.ep2.currScale = player.ep2.currScale.add(1)
-            if (Math.random() < levelableEffect("pet", 2003)[0]) {
+            if (getLevelableAmount("pet", 2003).gt(0) && Math.random() < levelableEffect("pet", 2003)[0]) {
                 makeShinies(WRATH_COOKIE, 1)
             } else {
                 makeShinies(GOLDEN_COOKIE, 1)

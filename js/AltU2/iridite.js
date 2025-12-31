@@ -471,9 +471,9 @@ addLayer("ir", {
             },
             sacValue() { return new Decimal(1)},
             // CLICK CODE
-            tooltip() { return  (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || (player.sb.maxBuildingSlots.gte(5)) ? "" : "Unlocks at 5 space building slots." },
+            tooltip() { return  (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || buyableEffect("sb", 12).gte(3) ? "" : "Unlocks at 3 space building cap." },
             unlocked() { return true },
-            canClick() { return (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || (player.sb.maxBuildingSlots.gte(5))},
+            canClick() { return (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || buyableEffect("sb", 12).gte(3)},
             onClick() { 
                 player.ir.shipType = this.id
                 return layers[this.layer].levelables.index = this.id 
@@ -904,7 +904,7 @@ addLayer("ir", {
         },
         16: {
             title: "Miniboss",
-            unlocked() { return player.sb.maxBuildingSlots.gte(5) },
+            unlocked() { return buyableEffect("sb", 12).gte(3) },
             description: "You are able to fight the UFO miniboss at level 8, and unlock a new legendary pet.",
             cost: new Decimal(3000),
             currencyLocation() { return player.ir },
@@ -918,7 +918,7 @@ addLayer("ir", {
         },
         17: {
             title: "Reinforcement II",
-            unlocked() { return player.sb.maxBuildingSlots.gte(5) },
+            unlocked() { return buyableEffect("sb", 12).gte(3) },
             description: "All ships have 30% increased max hp.",
             cost: new Decimal(5000),
             currencyLocation() { return player.ir },
@@ -932,7 +932,7 @@ addLayer("ir", {
         },
         18: {
             title: "Timekeeper",
-            unlocked() { return player.sb.maxBuildingSlots.gte(5) },
+            unlocked() { return buyableEffect("sb", 12).gte(3) },
             description: "Cut ship cooldown times based on space gems.",
             effect() {
                 return player.ir.spaceGem.pow(0.75).mul(0.02).add(1)
@@ -1022,7 +1022,7 @@ addLayer("ir", {
         },
         105: {
             title: "Exploration",
-            unlocked() { return player.sb.maxBuildingSlots.gte(5) },
+            unlocked() { return buyableEffect("sb", 12).gte(3) },
             description: "Unlock more star exploration nodes.",
             cost: new Decimal(12),
             currencyLocation() { return player.ir },
@@ -1036,7 +1036,7 @@ addLayer("ir", {
         },
         106: {
             title: "Alleviator II",
-            unlocked() { return player.sb.maxBuildingSlots.gte(5) },
+            unlocked() { return buyableEffect("sb", 12).gte(3) },
             description: "Battle XP requirements are cut by /1.4",
             cost: new Decimal(18),
             currencyLocation() { return player.ir },

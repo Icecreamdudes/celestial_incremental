@@ -486,11 +486,14 @@ addLayer("hbl", {
             effect() {
                 let eff = player.ta.highestDicePoints.add(1).log(60).pow(0.1).mul(0.6).add(1)
                 if (inChallenge("hrm", 12)) eff = eff.pow(0.3)
-                if (inChallenge("hrm", 16)) eff = eff.pow(0.5).sub(1)
+                if (inChallenge("hrm", 16)) eff = eff.pow(0.5).sub(1).min(0.5)
                 return eff
             },
             effectDisplay() {
-                if (inChallenge("hrm", 16)) return "+^" + format(upgradeEffect(this.layer, this.id))
+                if (inChallenge("hrm", 16)) {
+                    if (upgradeEffect(this.layer, this.id).gte(0.5)) return "+^" + format(upgradeEffect(this.layer, this.id)) + " <small style='color:red'>[HARDCAPPED]</small>"
+                    return "+^" + format(upgradeEffect(this.layer, this.id))
+                }
                 return format(upgradeEffect(this.layer, this.id)) + "x"
             }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},

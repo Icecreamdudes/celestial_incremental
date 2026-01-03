@@ -30,9 +30,8 @@
 		"Hive/honey.js", "Hive/wax.js", "Hive/aleph.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
 		
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js",
-		"Check Back/cookie.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
 		
-		"Interspace/well.js", "Interspace/tasks.js", "Interspace/bumpy.js", "Interspace/developmentXp.js", "Interspace/antiSingularity.js", "Interspace/cere.js",
+		"Interspace/well.js", "Interspace/tasks.js", "Interspace/bumpy.js", "Interspace/developmentXp.js", "Singularity/reactor.js", "Singularity/starmetalEnhancement.js", "Interspace/cere.js",
 
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
@@ -177,12 +176,12 @@ function updateStyles() {
 			layerBG = "#204387"
 			break;
 		case "s": case "co": case "ra": case "sd": case "cs":
-		case "cof":
+		case "cof": case "re":
 			if (!player.ma.matosDefeated) layerBG = "#260300"
 			if (player.ma.matosDefeated) layerBG = "linear-gradient(-180deg, #540818 0%, #3a0202 100%)"
 			if (player.tab == "co" && player.ma.matosDefeated) layerBG = "linear-gradient(-180deg,rgb(0, 0, 0) 0%, rgb(15, 15, 15) 100%)"
 			break;
-		case "sma": case "sme":
+		case "sma": case "sme": case "smn":
 			layerBG = "linear-gradient(120deg, #73752b 0%, #5f4d19 25%, #75303b 50%, #6a3075, 75%, #306775 100%)"
 			break;
 		case "ma": 
@@ -206,6 +205,31 @@ function updateStyles() {
 			break;
 		case "au2":
 			layerBG = "#151230"
+			break;
+		case "bee": case "fl": case "bpl": case "ne": case "bb":
+		case "ho": case "wa":
+			layerBG = "#2a1c00"
+			break;
+		case "al":
+			layerBG = "#1f001f"
+			break;
+		case "tas":
+			layerBG = "#241830"
+			break;
+		case "wel":
+			layerBG = "#183030"
+			break;
+		case "bum":
+			layerBG = "#180b18"
+			break;
+		case "dxp":
+			layerBG = "#181830"
+			break;
+		case "ans":
+			layerBG = "#183024"
+			break;
+		case "cer":
+			layerBG = "#402030"
 			break;
 		case "cb":
 			layerBG = "#021124"
@@ -449,6 +473,12 @@ function updateStyles() {
 				break;
 			case "A2":
 				sideBG = "radial-gradient(circle, #151230, #000000)"
+				break;
+			case "UB":
+				sideBG = "#150e00"
+				break;
+			case "UD":
+				sideBG = "linear-gradient(135deg, #402030 0%, #0f001f 100%)"
 				break;
 			case "CB":
 				sideBG = "#010812"
@@ -1287,9 +1317,9 @@ var doNotCallTheseFunctionsEveryTick = [
 	"generateCelestialite", "lootCelestialite", "startCutscene30", "startCutscene31", "startCutscene32",
 	"startCutscene33", "startCutscene34", "resetFightCooldown", "starReset", "legendarySummon",
 	"generatePhase1Attack", "generatePhase2Attack", "startCutscene35", "startCutscene36", "startCutscene37",
-	"startCutscene38", "startCutscene39", "selectCelestialites", "petDeath", "celestialiteDeath",
-	"petAbility", "celestialiteAbility", "arriveAtStar", "cookieClick", "spaceEnergyReset"
-
+	"startCutscene38", "startCutscene39", "cookieClick", "generateFlower", "generateMult", "flowerClick",
+	"selectCelestialites", "petDeath", "celestialiteDeath", "petAbility", "celestialiteAbility",
+	"arriveAtStar", "spaceEnergyReset", "createReactorNode", "createReactorBullet"
 ]
 
 function getStartPoints(){

@@ -62,6 +62,7 @@
             if (hasUpgrade("cs", 1303)) player.ra.radiationSoftcapEffect = player.ra.radiationSoftcapEffect.pow(player.ra.radiation.div(player.ra.radiationSoftcapStart).add(1).pow(0.45).log(player.ra.radiationSoftcapStart).add(1))
             player.ra.radiationSoftcapEffect = player.ra.radiationSoftcapEffect.div(buyableEffect("ra", 12))
             if (hasUpgrade("cs", 1301)) player.ra.radiationSoftcapEffect = player.ra.radiationSoftcapEffect.mul(10)
+            player.ra.radiationSoftcapEffect = player.ra.radiationSoftcapEffect.pow(buyableEffect("re", 13))
         }
     },
     clickables: {},
@@ -139,7 +140,7 @@
         13: {
             costBase() { return new Decimal(10000) },
             costGrowth() { return new Decimal(1000) },
-            purchaseLimit() { return new Decimal(25) },
+            purchaseLimit() { return new Decimal(250) },
             currency() { return player.ra.radiation},
             pay(amt) { player.ra.radiation = this.currency().sub(amt) },
             effect(x) { return Decimal.pow(2, getBuyableAmount(this.layer, this.id))},
@@ -241,7 +242,7 @@
         16: {
             costBase() { return new Decimal(12000) },
             costGrowth() { return new Decimal(2) },
-            purchaseLimit() { return new Decimal(375) },
+            purchaseLimit() { return new Decimal(250) },
             currency() { return player.ra.radiation},
             pay(amt) { player.ra.radiation = this.currency().sub(amt) },
             effect(x) { return Decimal.pow(3, getBuyableAmount(this.layer, this.id))},

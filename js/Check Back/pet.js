@@ -3875,7 +3875,7 @@ addLayer("pet", {
                 return "x" + format(this.effect()[0]) + " to ship damage.<br>" +
                     "x" + format(this.effect()[1]) + " to rocket parts.<br>"
             },
-            // levelLimit() { return new Decimal(99) },
+            levelLimit() { return new Decimal(10) },
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).pow(0.75).div(20).add(1), // All ship damage

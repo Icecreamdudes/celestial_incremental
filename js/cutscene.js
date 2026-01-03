@@ -1115,6 +1115,22 @@ if (player.c.cutscene[124] && hasChallenge("fu", 12) && player.universe == "UB" 
     });
     player.c.cutscene[124] = false
 }
+if (player.c.cutscene[125] && player.universe == "UD") {
+    showCutscene(cutsceneDialogue126, {
+        cutsceneID: 126,
+        background: "linear-gradient(135deg, #402030 0%, #0f001f 100%)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[125] = false
+}
+if (player.c.cutscene[126] && hasUpgrade("wel", 11)) {
+    showCutscene(cutsceneDialogue127, {
+        cutsceneID: 127,
+        background: "linear-gradient(135deg, #402030 0%, #0f001f 100%)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[126] = false
+}
 
 
 },

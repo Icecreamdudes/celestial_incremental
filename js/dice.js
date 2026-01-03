@@ -180,7 +180,7 @@
         player.d.diceSides = new Decimal(6)
         player.d.diceSides = player.d.diceSides.add(buyableEffect("d", 12))
         player.d.diceSides = player.d.diceSides.add(buyableEffect("d", 22))
-        if (hasUpgrade("sma", 108)) player.d.diceSides = player.d.diceSides.mul(upgradeEffect("sma", 108))
+        if (hasUpgrade("sma", 108)) player.d.diceSides = player.d.diceSides.mul(upgradeEffect("sma", 108)).floor()
         if (player.ir.iriditeDefeated) player.d.diceSides = player.d.diceSides.mul(50)
 
         // LOWEST ROLL
@@ -1328,6 +1328,7 @@
 
     tabFormat: [
         ["raw-html", () => { return "You have <h3>" + format(player.points) + "</h3> celestial points (+" + format(player.gain) + "/s)." }, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+        ["raw-html", () => {return player.gain.gt(player.i.doomSoftcapStart) ? "SOFTCAP OF DOOM: Gain past " + format(player.i.doomSoftcapStart) + " is raised by ^" + format(player.i.doomSoftcap, 3) + "." : ""}, {color: "red", fontSize: "10px", fontFamily: "monospace"}],
         ["raw-html", () => { return "You have <h3>" + formatWhole(player.d.dicePoints) + "</h3> dice points" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["raw-html", () => { return "Boosts check back level effect by ^" + format(player.d.dicePointsEffect) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
         ["raw-html", () => {return inChallenge("ip", 15) ? "IC5: Booster Collapse in " + formatTime(player.d.boosterDiceCooldown) : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],

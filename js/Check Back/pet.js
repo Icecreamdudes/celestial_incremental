@@ -3976,7 +3976,6 @@ addLayer("pet", {
             evoTooltip() { return ""},
             evoClick() {
                 player.tab = "g"
-                player.subtabs["g"]['stuff'] = 'Moonstone'
             },
             // CLICK CODE
             unlocked() { return hasUpgrade("bi", 24) || player.s.highestSingularityPoints.gt(0) },
@@ -4513,7 +4512,7 @@ addLayer("pet", {
                             ["clickable", 1003],
                             ["tooltip-row", [
                                 ["text-input", "shopInput", {width: "177px", height: "48px", backgroundColor: "#333", color: "white", fontSize: "24px", border: "0px", padding: "0px 10px"}],
-                                ["raw-html", "<div class='bottomTooltip'>Bulk Buy Amount<hr><small>Bulk buying increases costs by:<br>base*(amt*0.02+0.98)*amt</small></div>"],
+                                ["raw-html", "<div class='bottomTooltip'>Bulk Buy Amount<hr><small>Bulk buying increases costs by:<br>base*(amt*0.05+0.95)*amt</small></div>"],
                             ], {width: "197px", height: "48px", borderTop: "2px solid white"}],
                         ], {width: "197px"}],
                         ["style-column", [

@@ -183,7 +183,7 @@ addLayer("achievements", {
         22: {
             name: "All In",
             image: "resources/achievements/1_22.png",
-            tooltip: "<h3>All In</h3><hr style='margin-bottom:4px'>Do a booster dice roll<br>while having effect gain in<br>all tier 1 booster dice.<br><br>Reward: Unlock a toggle for<br>faster booster rolls.",
+            tooltip: "<h3>All In</h3><hr style='margin-bottom:4px'>Do a booster dice roll<br>while having all t1 boost<br>effects be greater then 1.<br><br>Reward: Unlock a toggle for<br>faster booster rolls.",
             color: "white",
             unlocked: true,
             marked: true,

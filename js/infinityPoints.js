@@ -334,10 +334,19 @@
             currencyDisplayName: "Infinity Points",
             currencyInternalName: "infinityPoints",
             effect() {
-                if (!hasUpgrade("cs", 1103)) return player.ta.negativeInfinityPoints.plus(1).log10().pow(1.2).mul(0.2).add(1)
-                return player.ta.negativeInfinityPoints.pow(0.08).add(1)
+                let eff = new Decimal(1)
+                if (!hasUpgrade("cs", 1103)) {
+                    eff = player.ta.negativeInfinityPoints.plus(1).log10().pow(1.2).mul(0.2).add(1)
+                } else {
+                    eff =  player.ta.negativeInfinityPoints.pow(0.08).add(1)
+                }
+                if (player.ta.negativeInfinityPoints.gte("1e6250")) eff = player.ta.negativeInfinityPoints.add(1).log(10).mul(5e58).pow(100).add(1)
+                return eff
             },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            effectDisplay() {
+                if (player.ta.negativeInfinityPoints.lt("1e6250")) return format(upgradeEffect(this.layer, this.id))+"x<br><small style='color:red'>[SOFTCAPPED]</small>"
+                return format(upgradeEffect(this.layer, this.id))+"x"
+            }, // Add formatting to the effect
             style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         43: {

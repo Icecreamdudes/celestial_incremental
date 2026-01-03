@@ -224,7 +224,13 @@ addLayer("fi", {
         },
         2: {
             title() { return "<h3>Select this pet" },
-            canClick() { return player.fi.battleCapacityAvailable.gte(player.fi.battleCapacityCost) && !getLevelableTier("sme", layers.sme.levelables.index, true) },
+            canClick() {
+                if (layers.sme.levelables.index > 100) {
+                    return player.fi.battleCapacityAvailable.gte(player.fi.battleCapacityCost) && !getLevelableTier("sme", layers.sme.levelables.index, true) && !player.fi.selectedPets[Number(layers.sme.levelables.index.toString()[0])-1][Number(layers.sme.levelables.index.toString()[2])-1]
+                } else {
+                    return player.fi.battleCapacityAvailable.gte(player.fi.battleCapacityCost) && !getLevelableTier("sme", layers.sme.levelables.index, true)
+                }
+            },
             unlocked() { return true },
             onClick() {
                 setLevelableTier("sme", layers.sme.levelables.index, true)
@@ -235,7 +241,13 @@ addLayer("fi", {
         },
         3: {
             title() { return "<h3>Unselect this pet" },
-            canClick() { return getLevelableTier("sme", layers.sme.levelables.index, true)  },
+            canClick() {
+                if (layers.sme.levelables.index > 100) {
+                    return getLevelableTier("sme", layers.sme.levelables.index, true) || player.fi.selectedPets[Number(layers.sme.levelables.index.toString()[0])-1][Number(layers.sme.levelables.index.toString()[2])-1]
+                } else {
+                    return getLevelableTier("sme", layers.sme.levelables.index, true)
+                }
+            },
             unlocked() { return true },
             onClick() {
                 setLevelableTier("sme", layers.sme.levelables.index, false)

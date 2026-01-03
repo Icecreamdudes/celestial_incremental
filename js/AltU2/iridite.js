@@ -146,6 +146,7 @@ addLayer("ir", {
         spaceGem: new Decimal(0),
 
         shipType: 0,
+        sendCooldownTimer: new Decimal(0),
 
         timers: {
             0: {
@@ -272,13 +273,20 @@ addLayer("ir", {
         if (player.ir.shipType != 0) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(levelableEffect("ir", player.ir.shipType)[3])
         if (hasUpgrade("ir", 17)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.3)
 
-        player.ir.shipCooldownMax = [new Decimal(0), new Decimal(600), new Decimal(900), new Decimal(1500), new Decimal(1200), new Decimal(1800), new Decimal(1200), new Decimal(600)];
-        for (let i = 0; i < player.ir.shipCooldownMax.length; i++) {
-            player.ir.shipCooldownTimers[i] = player.ir.shipCooldownTimers[i].sub(delta);
+        player.ir.timers[0].max = new Decimal(0)
+        player.ir.timers[1].max = new Decimal(600)
+        player.ir.timers[2].max = new Decimal(900)
+        player.ir.timers[3].max = new Decimal(1500)
+        player.ir.timers[4].max = new Decimal(1200)
+        player.ir.timers[5].max = new Decimal(1800)
+        player.ir.timers[6].max = new Decimal(1200)
+        player.ir.timers[7].max = new Decimal(600)
+        for (let i in player.ir.timers) {
+            if (hasUpgrade("ir", 18)) player.ir.timers[i].max = player.ir.timers[i].max.div(upgradeEffect("ir", 18))
 
-            if (hasUpgrade("ir", 18)) player.ir.shipCooldownMax[i] = player.ir.shipCooldownMax[i].div(upgradeEffect("ir", 18))
+            player.ir.timers[i].current = player.ir.timers[i].current.sub(delta)
         }
-        
+
         player.ir.sendCooldownTimer = player.ir.sendCooldownTimer.sub(delta);
 
         player.ir.battleXPReq = player.ir.battleLevel.pow(1.6).mul(5).add(40)

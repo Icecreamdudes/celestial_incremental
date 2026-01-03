@@ -2712,6 +2712,37 @@ const cutsceneDialogue125 = [
     { text: "Not much left to go, hopefully she keeps her promise.", portrait: "resources/player.png"},
 ];
 
+// Enter Well of Light layer
+const cutsceneDialogue126 = [
+    { text: "You find yourself surrounded in a pink haze."},
+    { text: "There's dark trees around you, as well as a green moon lighting up the air."},
+    { text: "You spot something made of stone."},
+    { text: "It's a well."},
+    { text: "Inside is something glowing..."},
+    { text: "...both literally, and with superphysical energy."},
+];
+
+// Enter Tasks layer
+const cutsceneDialogue127 = [
+    { text: "Oh? You're awfully early!", portrait: "resources/evoShard.png"},
+    { text: "A person?"},
+    { text: "I expected that transmission to reach you AFTER Nova was killed.", portrait: "resources/evoShard.png"},
+    { text: "Something must've let it through...", portrait: "resources/evoShard.png"},
+    { text: "They start walking away. Already??"},
+    { text: "Hey, what transmission? Why am I here?", portrait: "resources/player.png"},
+    { text: "Oh well, we can make this work.", portrait: "resources/evoShard.png"},
+    { text: "So, I was specifically instructed to NOT help you yet...", portrait: "resources/evoShard.png"},
+    { text: "...but SOMEONE seems to want you here NOW.", portrait: "resources/evoShard.png"},
+    { text: "Bro, calm down.", portrait: "resources/player.png"},
+    { text: "Alright.", portrait: "resources/evoShard.png"},
+    { text: "He takes a deep breath."},
+    { text: "You know what, play around in the light for a few.", portrait: "resources/evoShard.png"},
+    { text: "I'm going to go get something.", portrait: "resources/evoShard.png"},
+    { text: "Whatever."},
+];
+//
+//evoShard
+
 // Example with custom background:
 // showCutscene(cutsceneDialogue1, {
 //     background: \"url('img/bg.png') center/cover\", // or any valid CSS background

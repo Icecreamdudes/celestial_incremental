@@ -955,12 +955,12 @@
 
                 player.subtabs["ma"]["stuff"] = "Prep"
 
-                pauseUniverse("U1")
-                pauseUniverse("UA")
-                pauseUniverse("U2")
-                pauseUniverse("A1")
-                pauseUniverse("A2")
-                pauseUniverse("CB")
+                pauseUniverse("U1", "pause", true)
+                pauseUniverse("UA", "pause", true)
+                pauseUniverse("U2", "pause", true)
+                pauseUniverse("A1", "pause", true)
+                pauseUniverse("A2", "pause", true)
+                pauseUniverse("CB", "pause", true)
             },
             style: {width: "400px", minHeight: "150px", color: "white", backgroundColor: "black", border: "3px solid #8a0e79", borderRadius: "20px"},
         },
@@ -973,12 +973,12 @@
 
                 player.subtabs["ma"]["stuff"] = "Black Heart"
 
-                pauseUniverse("U1")
-                pauseUniverse("UA")
-                pauseUniverse("U2")
-                pauseUniverse("A1")
-                pauseUniverse("A2")
-                pauseUniverse("CB")
+                pauseUniverse("U1", "unpause", true)
+                pauseUniverse("UA", "unpause", true)
+                pauseUniverse("U2", "unpause", true)
+                pauseUniverse("A1", "unpause", true)
+                pauseUniverse("A2", "unpause", true)
+                pauseUniverse("CB", "unpause", true)
             },
             style() {
                 let look = {width: "200px", minHeight: "75px", color: "white", backgroundColor: "black", border: "3px solid #8a0e79", margin: "-1.5px"}

@@ -240,7 +240,7 @@ addLayer("ep2", {
             }
         }
 
-        if (getLevelableAmount("pet", 2004).gt(0)) {
+        if (getLevelableAmount("pet", 2004).gt(0) && !(player.tab != "ep2" && !player.ep2.externalGolden)) {
             player.ep2.goldClickTimer = player.ep2.goldClickTimer.add(delta)
             if (player.ep2.goldClickTimer.gte(Decimal.div(1, levelableEffect("pet", 2004)[0]))) {
                 player.ep2.barClicks += 1

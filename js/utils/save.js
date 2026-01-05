@@ -90,6 +90,8 @@ function getStartLayerData(layer) {
 	layerdata.grid = getStartGrid(layer);
 	layerdata.prevTab = ""
 
+	if (layer == "c") layerdata.cutscenes = getStartCutscenes(layer)
+
 	return layerdata;
 }
 function getStartUniData(uni) {
@@ -101,6 +103,8 @@ function getStartUniData(uni) {
 		unidata.unlocked = true;
 	if (unidata.paused === undefined)
 		unidata.paused = false;
+	if (unidata.lastPaused === undefined)
+		unidata.lastPaused = false;
 	if (unidata.pauseTime === undefined)
 		unidata.pauseTime = Date.now();
 	if (unidata.tickspeed === undefined)
@@ -154,6 +158,15 @@ function getStartGrid(layer) {
 		for (let x = 1; x <= layers[layer].grid.maxCols; x++) {
 			data[100*y + x] = layers[layer].grid.getStartData(100*y + x)
 		}
+	}
+	return data;
+}
+function getStartCutscenes(layer) {
+	let data = {};
+	if (layers[layer].cutscenes) {
+		for (id in layers[layer].cutscenes)
+			if (isPlainObject(layers[layer].cutscenes[id]))
+				data[id] = 1;
 	}
 	return data;
 }

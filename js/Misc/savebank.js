@@ -5,13 +5,9 @@ addLayer("savebank", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-    }
-    },
-    automate() {},
-    nodeStyle() {},
+    }},
     tooltip: "Savebank",
     color: "white",
-    branches: ["branch"],
     clickables: {
         2: {
             title() { return "Settings" },
@@ -19,15 +15,6 @@ addLayer("savebank", {
             unlocked: true,
             onClick() {
                 player.tab = "settings"
-            },
-            style: { width: '125px', minHeight: '50px', color: "white", background: "black", borderRadius: '0px', border: "2px solid white", margin: "0px 5px" },
-        },
-        3: {
-            title() { return "Stats" },
-            canClick: true,
-            unlocked() { return false },
-            onClick() {
-                player.tab = "stats"
             },
             style: { width: '125px', minHeight: '50px', color: "white", background: "black", borderRadius: '0px', border: "2px solid white", margin: "0px 5px" },
         },
@@ -55,6 +42,15 @@ addLayer("savebank", {
             unlocked: true,
             onClick() {
                 player.tab = "credits"
+            },
+            style: { width: '125px', minHeight: '50px', color: "white", background: "black", borderRadius: '0px', border: "2px solid white", margin: "0px 5px" },
+        },
+        7: {
+            title() { return "Jukebox" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.tab = "jukebox"
             },
             style: { width: '125px', minHeight: '50px', color: "white", background: "black", borderRadius: '0px', border: "2px solid white", margin: "0px 5px" },
         },
@@ -951,12 +947,6 @@ addLayer("savebank", {
             style: { width: '100px', minHeight: '50px', background: "linear-gradient(150deg, #889110, 0%, #73A112 100%)", borderRadius: '0px', border: '0px solid white'},
         },
     },
-    bars: {},
-    upgrades: {},
-    buyables: {},
-    milestones: {},
-    challenges: {},
-    infoboxes: {},
     microtabs: {
         stuff: {
             "Info": {
@@ -1290,11 +1280,8 @@ addLayer("savebank", {
         },
     },
     tabFormat: [
-
-        ["row", [["clickable", 2], ["clickable", 3], ["clickable", 4], ["clickable", 5], ["clickable", 6]]],
-
+        ["row", [["clickable", 2], ["clickable", 7], ["clickable", 4], ["clickable", 5], ["clickable", 6]]],
         ["blank", "50px"],
-
         ["style-column", [
             ["scroll-row", [
                 ["hoverless-clickable", 11], ["hoverless-clickable", 12], ["hoverless-clickable", 13], ["hoverless-clickable", 14], ["hoverless-clickable", 15],
@@ -1302,7 +1289,6 @@ addLayer("savebank", {
             ], {width: "800px", background: "repeating-linear-gradient(-45deg, #161616 0 15px, #101010 0 30px)"}],
             ["buttonless-microtabs", "stuff", { 'border-width': '0px' }],
         ], {border: "2px solid white"}],
-
         ["blank", "25px"],
     ],
     layerShown() { return false }

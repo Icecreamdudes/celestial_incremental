@@ -573,6 +573,23 @@ h1, h2, h3, b, input {
 	color: rgba(0, 0, 0, 0.5);
 }
 
+.jukebox {
+	width: 90px;
+	height: 120px;
+	background: #a68064;
+	border: 2px solid #644d3c;
+	margin: 2.5px;
+	color: white;
+	font-size: 10px;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+}
+
+.jukebox.selected {
+	border-color: #ded0c6;
+}
+
 .treeThing {
 	margin: 0 5px 0 5px;
 	vertical-align: middle;

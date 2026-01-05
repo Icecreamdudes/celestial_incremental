@@ -712,6 +712,10 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Fixed most nectar upgrades spelling it as 'nector'.<br>
 			- Fixed a bug when entering dark universe on a newer save.<br>
 			- Plus many bug fixes from hotfixes before this update.<br><br>
+		Backend:<br>
+			- Moved save storage from local storage to IndexedDB.<br>
+			<small>(Shouldn't cause any issues, and even if it does you still have your old save in local storage)</small><br>
+			- Changed the cutscene system to use non-numbered IDs.<br><br>
 
 	<h3>v1.10 - Aleph Update Part I: The Hive</h3><br>
 		Content:<br>

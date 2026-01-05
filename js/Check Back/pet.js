@@ -4789,24 +4789,24 @@ addLayer("pet", {
             },
         },
         8: {
-            costBase() { return new Decimal(10) },
-            costGrowth() { return new Decimal(10) },
-            purchaseLimit() { return new Decimal(20) },
+            costBase() { return new Decimal(5) },
+            costGrowth() { return new Decimal(5) },
+            purchaseLimit() { return new Decimal(25) },
             pay(amt) {
                 player.pet.lesserFragments = player.pet.lesserFragments.sub(amt)
                 player.pet.basicFragments = player.pet.basicFragments.sub(amt)
                 player.pet.greaterFragments = player.pet.greaterFragments.sub(amt)
             },
-            effect(x) {return getBuyableAmount(this.layer, this.id).div(5).add(1)},
+            effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.15).add(1)},
             unlocked() {return player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23)},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() {
                 return player.pet.lesserFragments.gte(this.cost()) && player.pet.basicFragments.gte(this.cost()) && player.pet.greaterFragments.gte(this.cost())
             },
             display() {
-                return "<h3>FB-8</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/20)\n\
-                    Decrease singularity pet cap-increase cost by 20%.\n\
-                    Currently: /" + formatSimple(tmp[this.layer].buyables[this.id].effect) + ".\n\ \n\
+                return "<h3>FB-8</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/25)\n\
+                    Decrease singularity pet cap-increase cost by 15%.\n\
+                    Currently: /" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + ".\n\ \n\
                     Cost: " + formatSimple(tmp[this.layer].buyables[this.id].cost) + "<br>LF/BF/GF"
             },
             buy() {

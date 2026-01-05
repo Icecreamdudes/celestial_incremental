@@ -1853,12 +1853,11 @@ addLayer("revc", {
     update(delta) {
         let onepersec = new Decimal(1)
 
-        if (player.tab == "revc" && !player.bigc.spawnedWisps)
-        {
+        if (player.tab == "revc" && !player.bigc.spawnedWisps) {
             createWisps('black', 50, 3);
             player.bigc.spawnedWisps = true
-        } else if (player.tab != "revc")
-        {
+        } else if (player.tab != "revc" && player.bigc.spawnedWisps) {
+            player.bigc.spawnedWisps = false
             removeWisps();
         }
 
@@ -1899,7 +1898,3 @@ addLayer("revc", {
     ],
     layerShown() { return (player.startedGame == true && hasChallenge("ip", 18)) || hasMilestone("s", 19)}
 })
-window.addEventListener('load', function() {
-    player.bigc.spawnedWisps = false
-
-});

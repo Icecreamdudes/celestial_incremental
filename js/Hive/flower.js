@@ -10,27 +10,22 @@ addLayer("fl", {
             red: {
                 current: new Decimal(15),
                 max: new Decimal(15),
-                pause: false,
             },
             blue: {
                 current: new Decimal(15),
                 max: new Decimal(15),
-                pause: false,
             },
             green: {
                 current: new Decimal(30),
                 max: new Decimal(30),
-                pause: false,
             },
             pink: {
                 current: new Decimal(45),
                 max: new Decimal(45),
-                pause: false,
             },
             yellow: {
                 current: new Decimal(45),
                 max: new Decimal(45),
-                pause: false,
             },
         },
         pickingPower: new Decimal(1),
@@ -174,27 +169,27 @@ addLayer("fl", {
         player.fl.timers.red.max = new Decimal(15)
         player.fl.timers.red.max = player.fl.timers.red.max.div(buyableEffect("bee", 21))
         player.fl.timers.red.max = player.fl.timers.red.max.div(allCooldownDiv)
-        if (player.bee.totalResearch.gte(1) && !player.fl.timers.red.pause) player.fl.timers.red.current = player.fl.timers.red.current.sub(delta)
+        if (player.bee.totalResearch.gte(1)) player.fl.timers.red.current = player.fl.timers.red.current.sub(delta)
 
         player.fl.timers.blue.max = new Decimal(30)
         if (hasUpgrade("bpl", 18)) player.fl.timers.blue.max = player.fl.timers.blue.max.div(2)
         player.fl.timers.blue.max = player.fl.timers.blue.max.div(allCooldownDiv)
-        if (hasUpgrade("bpl", 14) && !player.fl.timers.blue.pause) player.fl.timers.blue.current = player.fl.timers.blue.current.sub(delta)
+        if (hasUpgrade("bpl", 14)) player.fl.timers.blue.current = player.fl.timers.blue.current.sub(delta)
 
         player.fl.timers.green.max = new Decimal(30)
         if (hasUpgrade("ne", 402)) player.fl.timers.green.max = player.fl.timers.green.max.div(2)
         player.fl.timers.green.max = player.fl.timers.green.max.div(allCooldownDiv)
-        if (hasUpgrade("ne", 201) && !player.fl.timers.green.pause) player.fl.timers.green.current = player.fl.timers.green.current.sub(delta)
+        if (hasUpgrade("ne", 201)) player.fl.timers.green.current = player.fl.timers.green.current.sub(delta)
 
         player.fl.timers.pink.max = new Decimal(45)
         if (player.bb.breadMilestone >= 8) player.fl.timers.pink.max = player.fl.timers.pink.max.div(player.bb.breadEffects[7])
         player.fl.timers.pink.max = player.fl.timers.pink.max.div(allCooldownDiv)
-        if (buyableEffect("bee", 53).gte(1) && !player.fl.timers.pink.pause) player.fl.timers.pink.current = player.fl.timers.pink.current.sub(delta)
+        if (buyableEffect("bee", 53).gte(1)) player.fl.timers.pink.current = player.fl.timers.pink.current.sub(delta)
 
         player.fl.timers.yellow.max = new Decimal(45)
         if (player.ho.cell.gte(CELL_MILESTONES[player.bee.path][4])) player.fl.timers.yellow.max = player.fl.timers.yellow.max.div(2)
         player.fl.timers.yellow.max = player.fl.timers.yellow.max.div(allCooldownDiv)
-        if (player.ho.cell.gte(CELL_MILESTONES[player.bee.path][2]) && !player.fl.timers.yellow.pause) player.fl.timers.yellow.current = player.fl.timers.yellow.current.sub(delta)
+        if (player.ho.cell.gte(CELL_MILESTONES[player.bee.path][2])) player.fl.timers.yellow.current = player.fl.timers.yellow.current.sub(delta)
 
         for (let thing in player.fl.timers) {
             if (player.fl.timers[thing].current.lte(0)) {
@@ -1855,6 +1850,18 @@ addLayer("fl", {
                 setGridData("fl", id, [0, new Decimal(1)])
             }
         },
+        onHold(data, id) {
+            if (getGridData("fl", id)[1].gt(0)) {
+                setGridData("fl", id, [getGridData("fl", id)[0], getGridData("fl", id)[1].sub(player.fl.pickingPower.div(4))])
+                if (player.al.cocoonLevel >= 6 && getGridData("fl", id)[1].lte(0)) {
+                    player.fl.glossary[getGridData("fl", id)[0]] = player.fl.glossary[getGridData("fl", id)[0]].add(player.fl.flowerGain)
+                    setGridData("fl", id, [0, new Decimal(1)])
+                }
+            } else {
+                player.fl.glossary[getGridData("fl", id)[0]] = player.fl.glossary[getGridData("fl", id)[0]].add(player.fl.flowerGain)
+                setGridData("fl", id, [0, new Decimal(1)])
+            }
+        },
         getStyle(data, id) {
             let look = {width: "100px", height: "100px", background: "#136d15", border: "5px solid #0d4c0e", borderRadius: "0", padding: "0", margin: "-2.5px"}
             let gather1 = (player.fl.gatherer[1].id == id && player.fl.gatherer[1].power.gte(1))
@@ -1874,19 +1881,14 @@ addLayer("fl", {
             canClick: true,
             unlocked: true,
             onClick() {
-                if (player.fl.timers.red.pause) {
-                    player.fl.timers.red.pause = false
-                } else {
-                    player.fl.timers.red.pause = true
-                }
+                player.fl.timers.red.current = player.fl.timers.red.current.sub(0.1)
+            },
+            onHold() {
+                player.fl.timers.red.current = player.fl.timers.red.current.sub(0.05)
             },
             style() {
                 let look = {width: "10px", minHeight: "480px", height: "480px", border: "0", borderRadius: "0", padding: "0", marginTop: "4px", transform: "scale(1)", boxShadow: "0 0 black"}
-                if (player.fl.timers.red.pause) {
-                    look.background = `linear-gradient(to top, #b21c0e ${format(player.fl.timers.red.current.div(player.fl.timers.red.max).mul(100).min(100))}%, black ${format(player.fl.timers.red.current.div(player.fl.timers.red.max).mul(100).add(0.25).min(100))}%)`
-                } else {
-                    look.background = `linear-gradient(to top, #b21c0e ${format(player.fl.timers.red.current.div(player.fl.timers.red.max).mul(100).min(100))}%, black ${format(player.fl.timers.red.current.div(player.fl.timers.red.max).mul(100).add(0.25).min(100))}%)`
-                }
+                look.background = `linear-gradient(to top, #b21c0e ${format(player.fl.timers.red.current.div(player.fl.timers.red.max).mul(100).min(100))}%, black ${format(player.fl.timers.red.current.div(player.fl.timers.red.max).mul(100).add(0.25).min(100))}%)`
                 return look
             }
         },
@@ -1894,19 +1896,14 @@ addLayer("fl", {
             canClick: true,
             unlocked() {return hasUpgrade("bpl", 14)},
             onClick() {
-                if (player.fl.timers.blue.pause) {
-                    player.fl.timers.blue.pause = false
-                } else {
-                    player.fl.timers.blue.pause = true
-                }
+                player.fl.timers.blue.current = player.fl.timers.blue.current.sub(0.1)
+            },
+            onHold() {
+                player.fl.timers.blue.current = player.fl.timers.blue.current.sub(0.05)
             },
             style() {
                 let look = {width: "10px", minHeight: "480px", height: "480px", border: "0", borderRadius: "0", padding: "0", marginTop: "4px", transform: "scale(1)", boxShadow: "0 0 black"}
-                if (player.fl.timers.blue.pause) {
-                    look.background = `linear-gradient(to top, #80cec4 ${format(player.fl.timers.blue.current.div(player.fl.timers.blue.max).mul(100).min(100))}%, black ${format(player.fl.timers.blue.current.div(player.fl.timers.blue.max).mul(100).add(0.25).min(100))}%)`
-                } else {
-                    look.background = `linear-gradient(to top, #80cec4 ${format(player.fl.timers.blue.current.div(player.fl.timers.blue.max).mul(100).min(100))}%, black ${format(player.fl.timers.blue.current.div(player.fl.timers.blue.max).mul(100).add(0.25).min(100))}%)`
-                }
+                look.background = `linear-gradient(to top, #80cec4 ${format(player.fl.timers.blue.current.div(player.fl.timers.blue.max).mul(100).min(100))}%, black ${format(player.fl.timers.blue.current.div(player.fl.timers.blue.max).mul(100).add(0.25).min(100))}%)`
                 return look
             }
         },
@@ -1914,19 +1911,14 @@ addLayer("fl", {
             canClick: true,
             unlocked() {return hasUpgrade("ne", 201)},
             onClick() {
-                if (player.fl.timers.green.pause) {
-                    player.fl.timers.green.pause = false
-                } else {
-                    player.fl.timers.green.pause = true
-                }
+                player.fl.timers.green.current = player.fl.timers.green.current.sub(0.1)
+            },
+            onHold() {
+                player.fl.timers.green.current = player.fl.timers.green.current.sub(0.05)
             },
             style() {
                 let look = {width: "10px", minHeight: "480px", height: "480px", border: "0", borderRadius: "0", padding: "0", marginTop: "4px", transform: "scale(1)", boxShadow: "0 0 black"}
-                if (player.fl.timers.green.pause) {
-                    look.background = `linear-gradient(to top, #659157 ${format(player.fl.timers.green.current.div(player.fl.timers.green.max).mul(100).min(100))}%, black ${format(player.fl.timers.green.current.div(player.fl.timers.green.max).mul(100).add(0.25).min(100))}%)`
-                } else {
-                    look.background = `linear-gradient(to top, #659157 ${format(player.fl.timers.green.current.div(player.fl.timers.green.max).mul(100).min(100))}%, black ${format(player.fl.timers.green.current.div(player.fl.timers.green.max).mul(100).add(0.25).min(100))}%)`
-                }
+                look.background = `linear-gradient(to top, #659157 ${format(player.fl.timers.green.current.div(player.fl.timers.green.max).mul(100).min(100))}%, black ${format(player.fl.timers.green.current.div(player.fl.timers.green.max).mul(100).add(0.25).min(100))}%)`
                 return look
             }
         },
@@ -1934,19 +1926,14 @@ addLayer("fl", {
             canClick: true,
             unlocked() {return buyableEffect("bee", 53).gte(1)},
             onClick() {
-                if (player.fl.timers.pink.pause) {
-                    player.fl.timers.pink.pause = false
-                } else {
-                    player.fl.timers.pink.pause = true
-                }
+                player.fl.timers.pink.current = player.fl.timers.pink.current.sub(0.1)
+            },
+            onHold() {
+                player.fl.timers.pink.current = player.fl.timers.pink.current.sub(0.05)
             },
             style() {
                 let look = {width: "10px", minHeight: "480px", height: "480px", border: "0", borderRadius: "0", padding: "0", marginTop: "4px", transform: "scale(1)", boxShadow: "0 0 black"}
-                if (player.fl.timers.pink.pause) {
-                    look.background = `linear-gradient(to top, #FDE3E6 ${format(player.fl.timers.pink.current.div(player.fl.timers.pink.max).mul(100).min(100))}%, black ${format(player.fl.timers.pink.current.div(player.fl.timers.pink.max).mul(100).add(0.25).min(100))}%)`
-                } else {
-                    look.background = `linear-gradient(to top, #FDE3E6 ${format(player.fl.timers.pink.current.div(player.fl.timers.pink.max).mul(100).min(100))}%, black ${format(player.fl.timers.pink.current.div(player.fl.timers.pink.max).mul(100).add(0.25).min(100))}%)`
-                }
+                look.background = `linear-gradient(to top, #FDE3E6 ${format(player.fl.timers.pink.current.div(player.fl.timers.pink.max).mul(100).min(100))}%, black ${format(player.fl.timers.pink.current.div(player.fl.timers.pink.max).mul(100).add(0.25).min(100))}%)`
                 return look
             }
         },
@@ -1954,19 +1941,14 @@ addLayer("fl", {
             canClick: true,
             unlocked() {return player.ho.cell.gte(CELL_MILESTONES[player.bee.path][2])},
             onClick() {
-                if (player.fl.timers.yellow.pause) {
-                    player.fl.timers.yellow.pause = false
-                } else {
-                    player.fl.timers.yellow.pause = true
-                }
+                player.fl.timers.yellow.current = player.fl.timers.yellow.current.sub(0.1)
+            },
+            onHold() {
+                player.fl.timers.yellow.current = player.fl.timers.yellow.current.sub(0.05)
             },
             style() {
                 let look = {width: "10px", minHeight: "480px", height: "480px", border: "0", borderRadius: "0", padding: "0", marginTop: "4px", transform: "scale(1)", boxShadow: "0 0 black"}
-                if (player.fl.timers.yellow.pause) {
-                    look.background = `linear-gradient(to top, #fae033 ${format(player.fl.timers.yellow.current.div(player.fl.timers.yellow.max).mul(100).min(100))}%, black ${format(player.fl.timers.yellow.current.div(player.fl.timers.yellow.max).mul(100).add(0.25).min(100))}%)`
-                } else {
-                    look.background = `linear-gradient(to top, #fae033 ${format(player.fl.timers.yellow.current.div(player.fl.timers.yellow.max).mul(100).min(100))}%, black ${format(player.fl.timers.yellow.current.div(player.fl.timers.yellow.max).mul(100).add(0.25).min(100))}%)`
-                }
+                look.background = `linear-gradient(to top, #fae033 ${format(player.fl.timers.yellow.current.div(player.fl.timers.yellow.max).mul(100).min(100))}%, black ${format(player.fl.timers.yellow.current.div(player.fl.timers.yellow.max).mul(100).add(0.25).min(100))}%)`
                 return look
             }
         },

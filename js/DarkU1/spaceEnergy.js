@@ -274,7 +274,7 @@
             },
             display() {
                 return "which are multiplying prestige point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space Energy"
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space"
             },
             buy(mult) {
                 if (!mult) {
@@ -316,7 +316,7 @@
             },
             display() {
                 return "which are multiplying generator gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space Energy"
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space"
             },
             buy(mult) {
                 if (!mult) {
@@ -358,7 +358,7 @@
             },
             display() {
                 return "which are multiplying dark grass value and capacity by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space Energy"
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space"
             },
             buy(mult) {
                 if (!mult) {
@@ -400,7 +400,7 @@
             },
             display() {
                 return "which are multiplying normality gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space Energy"
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space"
             },
             buy(mult) {
                 if (!mult) {
@@ -442,7 +442,7 @@
             },
             display() {
                 return "which are multiplying space energy gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space Energy"
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space"
             },
             buy(mult) {
                 if (!mult) {
@@ -484,7 +484,7 @@
             },
             display() {
                 return "which are multiplying length, width, and depth gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space Energy"
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space"
             },
             buy(mult) {
                 if (!mult) {

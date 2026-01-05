@@ -753,7 +753,7 @@ function loadVue() {
 						<span v-html="run(layers[layer].levelables[layers[layer].levelables.index].description, layers[layer].levelables[layers[layer].levelables.index])"></span>
 					</div>
 					<div v-bind:class="{levelableDisplayLore: true, hide: (layers[layer].levelables.toggle || layers[layer].levelables[layers[layer].levelables.index].lore == null)}">
-						<span v-html="run(layers[layer].levelables[layers[layer].levelables.index].lore, layers[layer].levelables[layers[layer].levelables.index])"></span>
+						<span style="margin:0px 5px" v-html="run(layers[layer].levelables[layers[layer].levelables.index].lore, layers[layer].levelables[layers[layer].levelables.index])"></span>
 					</div>
 				</div>
 				<div class="levelableDisplayRow instant">
@@ -1074,7 +1074,7 @@ function loadVue() {
 		},
 		template: `<div class="trees">
 		<span class="upgRow" v-for="(row, r) in data"><table class="treeRow">
-			<span v-for="(node, id) in row" style = "{width: 0px}">
+			<span v-for="(node, id) in row">
 				<tree-node :layer='node' :prev='layer' :abb='tmp[node].symbol' :key="key + '-' + r + '-' + id"></tree-node>
 			</span>
 		</table></span></div>
@@ -1089,7 +1089,7 @@ function loadVue() {
 		},
 		template: `<div class="upgRow">
 		<span class="upgTable" v-for="(row, r) in data">
-			<span v-for="(node, id) in row" style = "{width: 0px}">
+			<span v-for="(node, id) in row">
 				<tree-node :layer='node' :prev='layer' :abb='tmp[node].symbol' :key="key + '-' + r + '-' + id"></tree-node>
 			</span>
 		</span></div>
@@ -1154,7 +1154,7 @@ function loadVue() {
 					</div>
 				</div>
 				<div class="tabRowHolder">
-					<span v-for="(node, id) in row" style = "{width: 0px}">
+					<span v-for="(node, id) in row">
 						<tab-node :layer='node' :prev='layer' :abb='tmp[node].name' :key="key + '-' + r + '-' + id"></tab-node>
 					</span>
 				</div>

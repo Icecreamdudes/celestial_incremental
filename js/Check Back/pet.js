@@ -55,6 +55,50 @@ const petShopBase = {
         6: new Decimal(500),
     },
 }
+const fragShopBase = {
+    0: {
+        name: "Dotknight Fragment",
+        0: new Decimal(2),
+        1: new Decimal(1),
+        2: new Decimal(1),
+    },
+    1: {
+        name: "Dragon Fragment",
+        0: new Decimal(1),
+        1: new Decimal(2),
+        2: new Decimal(1),
+    },
+    2: {
+        name: "Cookie Fragment",
+        0: new Decimal(1),
+        1: new Decimal(1),
+        2: new Decimal(2),
+    },
+    3: {
+        name: "Singularity Fragment",
+        0: new Decimal(2),
+        1: new Decimal(2),
+        2: new Decimal(2),
+    },
+    4: {
+        name: "Coin Fragment",
+        0: new Decimal(6),
+        1: new Decimal(2),
+        2: new Decimal(2),
+    },
+    5: {
+        name: "Refined Fragment",
+        0: new Decimal(3),
+        1: new Decimal(9),
+        2: new Decimal(3),
+    },
+    6: {
+        name: "Evolution Fragment",
+        0: new Decimal(4),
+        1: new Decimal(4),
+        2: new Decimal(12),
+    },
+}
 addLayer("pet", {
     name: "Pets", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "Pet", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -76,7 +120,8 @@ addLayer("pet", {
             5: new Decimal(1500),
             6: new Decimal(1),
             7: new Decimal(4500),
-            8: new Decimal(8000)
+            8: new Decimal(8000),
+            9: new Decimal(300),
         },
         petAverage: {
             0: new Decimal(0.02),
@@ -88,6 +133,7 @@ addLayer("pet", {
             6: new Decimal(0.02),
             7: new Decimal(0.02),
             8: new Decimal(0.02),
+            9: new Decimal(0.02),
         },
 
         lastDicePetRoll: new Decimal(0),
@@ -108,38 +154,84 @@ addLayer("pet", {
                 id: 101,
                 current: new Decimal(0),
                 max: new Decimal(900),
+                val: new Decimal(1),
             },
             1: {
                 id: 101,
                 current: new Decimal(0),
                 max: new Decimal(900),
+                val: new Decimal(1),
             },
             2: {
                 id: 201,
                 current: new Decimal(0),
                 max: new Decimal(3600),
+                val: new Decimal(1),
             },
             3: {
                 id: 201,
                 current: new Decimal(0),
                 max: new Decimal(3600),
+                val: new Decimal(1),
             },
             4: {
                 id: 301,
                 current: new Decimal(0),
                 max: new Decimal(7200),
+                val: new Decimal(1),
+            },
+            5: {
+                id: 301,
+                current: new Decimal(0),
+                max: new Decimal(7200),
+                val: new Decimal(1),
             },
         },
-        
-        //singularity
-        singularityTimers: {
+        evoInput: new Decimal(0),
+        evoIncUsed: false,
+        paraInput: new Decimal(0),
+        paraIncUsed: false,
+
+        lesserFragments: new Decimal(0),
+        basicFragments: new Decimal(0),
+        greaterFragments: new Decimal(0),
+        fragmentMult: new Decimal(1),
+
+        fragShopIndex: 0,
+        fragShopBulk: new Decimal(1),
+        fragShopInput: new Decimal(1),
+        fragShopCost1: new Decimal(1),
+        fragShopCost2: new Decimal(1),
+        fragShopCost3: new Decimal(1),
+
+        fragShop: {
             0: {
                 current: new Decimal(0),
-                max: new Decimal(1800),
+                max: new Decimal(900),
             },
             1: {
                 current: new Decimal(0),
-                max: new Decimal(10800),
+                max: new Decimal(900),
+            },
+            2: {
+                current: new Decimal(0),
+                max: new Decimal(900),
+            },
+            3: {
+                current: new Decimal(0),
+                max: new Decimal(1800),
+            },
+            4: {
+                current: new Decimal(0),
+                max: new Decimal(600),
+            },
+            5: {
+                current: new Decimal(0),
+                max: new Decimal(600),
+            },
+            6: {
+                current: new Decimal(0),
+                max: new Decimal(600),
             },
         },
 
@@ -425,7 +517,7 @@ addLayer("pet", {
         player.pet.petPointMult = player.pet.petPointMult.mul(levelableEffect("pet", 401)[0])
         player.pet.petPointMult = player.pet.petPointMult.mul(levelableEffect("pet", 406)[2])
         player.pet.petPointMult = player.pet.petPointMult.mul(player.pet.gemEffects[1])
-        player.pet.petPointMult = player.pet.petPointMult.mul(buyableEffect("ep4", 12))
+        player.pet.petPointMult = player.pet.petPointMult.mul(buyableEffect("sp", 24))
         player.pet.petPointMult = player.pet.petPointMult.mul(buyableEffect("pl", 14))
         if (hasMilestone("db", 101)) player.pet.petPointMult = player.pet.petPointMult.mul(1.15)
 
@@ -450,7 +542,7 @@ addLayer("pet", {
         }
 
         // =- FRAGMENTATION START -=
-        player.pet.bannerResetTimer = player.pet.bannerResetTimer.sub(onepersec.mul(delta))
+        player.pet.bannerResetTimer = player.pet.bannerResetTimer.sub(delta)
         if (player.pet.bannerResetTimer.lte(0)) {
             layers.pet.refreshBanner();
         }
@@ -461,18 +553,28 @@ addLayer("pet", {
         player.pet.banners[2].max = new Decimal(3600)
         player.pet.banners[3].max = new Decimal(3600)
         player.pet.banners[4].max = new Decimal(7200)
+        player.pet.banners[5].max = new Decimal(7200)
         for (let thing in player.pet.banners) {
-            player.pet.banners[thing].max = player.pet.banners[thing].max.div(buyableEffect("ep3", 13))
+            player.pet.banners[thing].max = player.pet.banners[thing].max.div(buyableEffect("sp", 15))
+            player.pet.banners[thing].max = player.pet.banners[thing].max.div(levelableEffect("pet", 210)[0])
 
             player.pet.banners[thing].current = player.pet.banners[thing].current.sub(onepersec.mul(delta))
         }
 
-        player.pet.singularityTimers[0].max = new Decimal(1800)
-        player.pet.singularityTimers[1].max = new Decimal(10800)
-        for (let thing in player.pet.singularityTimers) {
-            player.pet.singularityTimers[thing].max = player.pet.singularityTimers[thing].max.div(buyableEffect("ep4", 13))
- 
-            player.pet.singularityTimers[thing].current = player.pet.singularityTimers[thing].current.sub(onepersec.mul(delta))
+        player.pet.fragmentMult = new Decimal(1)
+        player.pet.fragmentMult = player.pet.fragmentMult.mul(buyableEffect("pet", 1))
+        player.pet.fragmentMult = player.pet.fragmentMult.mul(buyableEffect("sp", 25))
+        player.pet.fragmentMult = player.pet.fragmentMult.mul(levelableEffect("pet", 110)[0])
+
+        if (player.pet.fragShopInput.gte(1)) player.pet.fragShopBulk = player.pet.fragShopInput.floor()
+
+        let fragMul = player.pet.fragShopBulk.mul(Decimal.sub(0.05, buyableEffect("pet", 3))).add(Decimal.add(0.95, buyableEffect("pet", 3)))
+        player.pet.fragShopCost1 = fragShopBase[player.pet.fragShopIndex][0].mul(fragMul).mul(player.pet.fragShopBulk).mul(10).floor().div(10)
+        player.pet.fragShopCost2 = fragShopBase[player.pet.fragShopIndex][1].mul(fragMul).mul(player.pet.fragShopBulk).mul(10).floor().div(10)
+        player.pet.fragShopCost3 = fragShopBase[player.pet.fragShopIndex][2].mul(fragMul).mul(player.pet.fragShopBulk).mul(10).floor().div(10)
+
+        for (let i in player.pet.fragShop) {
+            player.pet.fragShop[i].current = player.pet.fragShop[i].current.sub(onepersec.mul(delta))
         }
 
         // =- LEGENDARY GEMS -=
@@ -911,35 +1013,39 @@ addLayer("pet", {
 
         // START OF FRAGMENTATION CLICKABLES
         100: {
-            title() { return player.pet.banners[player.pet.bannerIndex].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.pet.banners[player.pet.bannerIndex].current) + "." : "<h3>Fragment a pet for rewards!"},
-            canClick() { return player.pet.banners[player.pet.bannerIndex].current.lt(0) && getLevelableXP("pet", player.pet.banners[player.pet.bannerIndex].id).gte(1) },
+            title() { return player.pet.banners[player.pet.bannerIndex].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.pet.banners[player.pet.bannerIndex].current) + "." : "<h3>Fragment " + formatWhole(player.pet.banners[player.pet.bannerIndex].val.div(levelableEffect("pet", 310)[0]).ceil()) + " pets for rewards!"},
+            canClick() { return player.pet.banners[player.pet.bannerIndex].current.lt(0) && getLevelableXP("pet", player.pet.banners[player.pet.bannerIndex].id).gte(player.pet.banners[player.pet.bannerIndex].val.div(levelableEffect("pet", 310)[0]).ceil()) },
             unlocked() { return true},
             tooltip() {
+                let gain = player.pet.banners[player.pet.bannerIndex].val.pow(0.5).mul(player.pet.fragmentMult)
                 if (player.pet.bannerIndex == 0 || player.pet.bannerIndex == 1) {
-                    return "<h5>50% - Common Crate<br>10% - Common/Uncommon Crate<br>5% - Uncommon Crate<br>35% - Epic Pet Fragment"
+                    return "+" + formatSimple(gain.mul(20).floor().div(10)) + "-" + formatSimple(gain.mul(Decimal.add(30, buyableEffect("pet", 2))).floor().div(10)) +  " Lesser Fragments"
                 } else if (player.pet.bannerIndex == 2 || player.pet.bannerIndex == 3) {
-                    return "<h5>20% - Common/Uncommon Crate<br>15% - Uncommon Crate<br>15% - Replicanti Crate<br>50% - Epic Pet Fragment"
-                } else if (player.pet.bannerIndex == 4) {
-                    return "<h5>15% - Antimatter Crate<br>15% - Rare Crate<br>70% - Epic Pet Fragment"
+                    return "+" + formatSimple(gain.mul(20).floor().div(10)) + "-" + formatSimple(gain.mul(Decimal.add(30, buyableEffect("pet", 2))).floor().div(10)) + " Basic Fragments"
+                } else if (player.pet.bannerIndex == 4 || player.pet.bannerIndex == 5) {
+                    return "+" + formatSimple(gain.mul(20).floor().div(10)) + "-" + formatSimple(gain.mul(Decimal.add(30, buyableEffect("pet", 2))).floor().div(10)) + " Greater Fragments"
                 } else {
                     return ""
                 }
             },
             onClick() {
                 player.pet.banners[player.pet.bannerIndex].current = player.pet.banners[player.pet.bannerIndex].max
-                setLevelableXP("pet", player.pet.banners[player.pet.bannerIndex].id, getLevelableXP("pet", player.pet.banners[player.pet.bannerIndex].id).sub(1))
+                setLevelableXP("pet", player.pet.banners[player.pet.bannerIndex].id, getLevelableXP("pet", player.pet.banners[player.pet.bannerIndex].id).sub(player.pet.banners[player.pet.bannerIndex].val.div(levelableEffect("pet", 310)[0]).ceil()))
                 
+                let gain = player.pet.banners[player.pet.bannerIndex].val.pow(0.5).mul(player.pet.fragmentMult).mul(Decimal.mul(Math.random(), buyableEffect("pet", 2).div(10).add(1)).add(2)).mul(10).floor().div(10)
                 if (player.pet.bannerIndex == 0 || player.pet.bannerIndex == 1) {
-                    layers.pet.commonPetBanner()
+                    player.pet.lesserFragments = player.pet.lesserFragments.add(gain)
+                    doPopup("none", "+" + formatSimple(gain) + " Lesser Fragment", "Fragment Obtained!", 5, "#9bedff", "resources/checkback/lesser_fragment.png")
                 } else if (player.pet.bannerIndex == 2 || player.pet.bannerIndex == 3) {
-                    layers.pet.uncommonPetBanner()
-                } else if (player.pet.bannerIndex == 4) {
-                    layers.pet.rarePetBanner()
+                    player.pet.basicFragments = player.pet.basicFragments.add(gain)
+                    doPopup("none", "+" + formatSimple(gain) + " Basic Fragment", "Fragment Obtained!", 5, "#88e688", "resources/checkback/basic_fragment.png")
+                } else if (player.pet.bannerIndex == 4 || player.pet.bannerIndex == 5) {
+                    player.pet.greaterFragments = player.pet.greaterFragments.add(gain)
+                    doPopup("none", "+" + formatSimple(gain) + " Greater Fragment", "Fragment Obtained!", 5, "#4e7cff", "resources/checkback/greater_fragment.png")
                 }
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: '200px', minHeight: '50px', borderRadius: '30px / 15px'}
+                let look = {width: '200px', minHeight: '54px', borderRadius: '0', border: "3px solid rgba(0,0,0,0.3)"}
                 this.canClick() ? look.backgroundColor = "#cb79ed" : look.backgroundColor = "#bf8f8f"
                 return look
             },
@@ -952,8 +1058,8 @@ addLayer("pet", {
                 player.pet.bannerIndex = 0
             },
             style() {
-                let look = {width: "100px", minHeight: "100px", border: "0px", borderRadius: "0px", padding: "0px", margin: "2px"}
-                player.pet.bannerIndex == 0 ? look.outline = "2px solid white" : look.outline = "0px"
+                let look = {width: "100px", minHeight: "100px", border: "0px", borderRadius: "0px", padding: "0px"}
+                if (player.pet.bannerIndex == 0) {look.outline = "2px solid white";look.outlineOffset = "-2px"} else {look.outline = "0px"}
                 player.pet.banners[0].current.lt(0) ? look.filter = "brightness(1)" : look.filter = "brightness(0.5)"
                 return look
             },
@@ -966,8 +1072,8 @@ addLayer("pet", {
                 player.pet.bannerIndex = 1
             },
             style() {
-                let look = {width: "100px", minHeight: "100px", border: "0px", borderRadius: "0px", padding: "0px", margin: "2px"}
-                player.pet.bannerIndex == 1 ? look.outline = "2px solid white" : look.outline = "0px"
+                let look = {width: "100px", minHeight: "100px", border: "0px", borderRadius: "0px", padding: "0px"}
+                if (player.pet.bannerIndex == 1) {look.outline = "2px solid white";look.outlineOffset = "-2px"} else {look.outline = "0px"}
                 player.pet.banners[1].current.lt(0) ? look.filter = "brightness(1)" : look.filter = "brightness(0.5)"
                 return look
             },
@@ -980,8 +1086,8 @@ addLayer("pet", {
                 player.pet.bannerIndex = 2
             },
             style() {
-                let look = {width: "100px", minHeight: "100px", border: "0px", borderRadius: "0px", padding: "0px", margin: "2px"}
-                player.pet.bannerIndex == 2 ? look.outline = "2px solid white" : look.outline = "0px"
+                let look = {width: "100px", minHeight: "100px", border: "0px", borderRadius: "0px", padding: "0px"}
+                if (player.pet.bannerIndex == 2) {look.outline = "2px solid white";look.outlineOffset = "-2px"} else {look.outline = "0px"}
                 player.pet.banners[2].current.lt(0) ? look.filter = "brightness(1)" : look.filter = "brightness(0.5)"
                 return look
             },
@@ -994,8 +1100,8 @@ addLayer("pet", {
                 player.pet.bannerIndex = 3
             },
             style() {
-                let look = {width: "100px", minHeight: "100px", border: "0px", borderRadius: "0px", padding: "0px", margin: "2px"}
-                player.pet.bannerIndex == 3 ? look.outline = "2px solid white" : look.outline = "0px"
+                let look = {width: "100px", minHeight: "100px", border: "0px", borderRadius: "0px", padding: "0px"}
+                if (player.pet.bannerIndex == 3) {look.outline = "2px solid white";look.outlineOffset = "-2px"} else {look.outline = "0px"}
                 player.pet.banners[3].current.lt(0) ? look.filter = "brightness(1)" : look.filter = "brightness(0.5)"
                 return look
             },
@@ -1008,67 +1114,222 @@ addLayer("pet", {
                 player.pet.bannerIndex = 4
             },
             style() {
-                let look = {width: "100px", minHeight: "100px", border: "0px", borderRadius: "0px", padding: "0px", margin: "2px"}
-                player.pet.bannerIndex == 4 ? look.outline = "2px solid white" : look.outline = "0px"
+                let look = {width: "100px", minHeight: "100px", border: "0px", borderRadius: "0px", padding: "0px"}
+                if (player.pet.bannerIndex == 4) {look.outline = "2px solid white";look.outlineOffset = "-2px"} else {look.outline = "0px"}
                 player.pet.banners[4].current.lt(0) ? look.filter = "brightness(1)" : look.filter = "brightness(0.5)"
                 return look
             },
         },
-        // FRAGMENT TABS
-        111: {
-            title() { return "Epic"},
+        106: {
+            title() { return "<img src='" + run(layers.pet.levelables[player.pet.banners[5].id].image, layers.pet.levelables[player.pet.banners[5].id]) + "'style='width:100px;height:100px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true },
             unlocked() { return true },
             onClick() {
-                player.subtabs["pet"]["fragTabs"] = "Epic"
+                player.pet.bannerIndex = 5
             },
-            style: {width: "100px", minHeight: "47px", backgroundColor: "#cb79ed", color: "black", borderRadius: "0px", border: "0px", borderRight: "2px solid white"},
-        },
-        112: {
-            title() { return "Singularity"},
-            canClick() { return true },
-            unlocked() { return hasUpgrade("s", 23) && player.cb.highestLevel.gte(25000) },
-            onClick() {
-                player.subtabs["pet"]["fragTabs"] = "Singularity"
-            },
-            style: {width: "125px", minHeight: "47px", backgroundColor: "#aa4444", color: "black", borderRadius: "0px", border: "0px", borderRight: "2px solid white"},
-        },
-        // SINGULARITY FRAGMENTATION
-        121: {
-            title() { return player.pet.singularityTimers[0].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.pet.singularityTimers[0].current) + "." : "<h3>Sacrifice 3 evo shards for rewards!"},
-            canClick() { return player.pet.singularityTimers[0].current.lt(0) && player.cb.evolutionShards.gte(3)},
-            unlocked() { return true },
-            tooltip() { return "<h5>25% - Common Crate<br>25% - Rare Crate<br>50% - Singularity Fragments"},
-            onClick() {
-                player.pet.singularityTimers[0].current = player.pet.singularityTimers[0].max
-                player.cb.evolutionShards = player.cb.evolutionShards.sub(3)
-
-                layers.pet.evoBanner();
-            },
-            onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "225px", minHeight: "50px", borderRadius: "30px / 15px"}
+                let look = {width: "100px", minHeight: "100px", border: "0px", borderRadius: "0px", padding: "0px"}
+                if (player.pet.bannerIndex == 5) {look.outline = "2px solid white";look.outlineOffset = "-2px"} else {look.outline = "0px"}
+                player.pet.banners[5].current.lt(0) ? look.filter = "brightness(1)" : look.filter = "brightness(0.5)"
+                return look
+            },
+        },
+        // FRAGMENTATION INCREMENTORS
+        111: {
+            title() { return player.pet.evoIncUsed ? "<h3>Can be used after selection re-roll" : "<h3>Multiply this rows amounts by x" + formatSimple(player.pet.evoInput.pow(0.8).div(2).add(1)) + "."},
+            canClick() {return !player.pet.evoIncUsed && player.pet.evoInput.gt(0) && player.cb.evolutionShards.gte(player.pet.evoInput)},
+            unlocked: true,
+            tooltip() {
+                if (player.pet.evoIncUsed) return "Can only multiply this row once per selection refresh."
+                if (player.cb.evolutionShards.lt(player.pet.evoInput)) return "Not enough shards."
+                if (player.pet.evoInput.lte(0)) return "No shards inputted."
+                return "Sacrifice amount gives decreased rewards the more you have."
+            },
+            onClick() {
+                player.pet.evoIncUsed = true
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(player.pet.evoInput)
+
+                let gain = player.pet.evoInput.pow(0.7).div(2).add(1)
+                player.pet.banners[0].val = player.pet.banners[0].val.mul(gain).floor()
+                player.pet.banners[2].val = player.pet.banners[2].val.mul(gain).floor()
+                player.pet.banners[4].val = player.pet.banners[4].val.mul(gain).floor()
+            },
+            style() {
+                let look = {width: "241px", minHeight: '53px', borderRadius: '0', border: "3px solid rgba(0,0,0,0.3)"}
                 this.canClick() ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#bf8f8f"
                 return look
             },
         },
-        122: {
-            title() { return player.pet.singularityTimers[1].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.pet.singularityTimers[1].current) + "." : "<h3>Sacrifice 3 paragon shards for rewards!"},
-            canClick() { return player.pet.singularityTimers[1].current.lt(0) && player.cb.paragonShards.gte(3)},
-            unlocked() { return true },
-            tooltip() { return "<h5>12% - Rare Crate<br>16% - Singularity Crate<br>2% - Legendary Gems<br>70% - Singularity Fragments"},
-            onClick() {
-                player.pet.singularityTimers[1].current = player.pet.singularityTimers[1].max
-                player.cb.paragonShards = player.cb.paragonShards.sub(3)
-
-                layers.pet.paragonBanner();
+        112: {
+            title() { return player.pet.paraIncUsed ? "<h3>Can be used after selection re-roll" : "<h3>Multiply this rows amounts by x" + formatSimple(player.pet.paraInput.pow(1.2).add(1)) + "."},
+            canClick() {return !player.pet.paraIncUsed && player.pet.paraInput.gt(0) && player.cb.paragonShards.gte(player.pet.paraInput)},
+            unlocked: true,
+            tooltip() {
+                if (player.pet.paraIncUsed) return "Can only multiply this row once per selection refresh."
+                if (player.cb.paragonShards.lt(player.pet.paraInput)) return "Not enough shards."
+                if (player.pet.paraInput.lte(0)) return "No shards inputted."
+                return "Sacrifice amount gives decreased rewards the more you have."
             },
-            onHold() { clickClickable(this.layer, this.id) },
+            onClick() {
+                player.pet.paraIncUsed = true
+                player.cb.paragonShards = player.cb.paragonShards.sub(player.pet.paraInput)
+
+                let gain = player.pet.paraInput.pow(1.2).add(1)
+                player.pet.banners[1].val = player.pet.banners[1].val.mul(gain).floor()
+                player.pet.banners[3].val = player.pet.banners[3].val.mul(gain).floor()
+                player.pet.banners[5].val = player.pet.banners[5].val.mul(gain).floor()
+            },
             style() {
-                let look = {width: "225px", minHeight: "50px", borderRadius: "30px / 15px"}
-                this.canClick() ? look.backgroundColor = "#4c64ff" : look.backgroundColor = "#bf8f8f"
+                let look = {width: "241px", minHeight: '53px', borderRadius: '0', border: "3px solid rgba(0,0,0,0.3)"}
+                this.canClick() ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#bf8f8f"
                 return look
             },
+        },
+        113: {
+            title() { return "Shop"},
+            canClick() {return player.subtabs["pet"]["frags"] != "Shop"},
+            unlocked: true,
+            onClick() {
+                player.subtabs["pet"]["frags"] = "Shop"
+            },
+            style() {
+                let look = {width: "273px", minHeight: "35px", backgroundColor: "#cb79ed", borderRadius: "0px", border: "3px solid rgba(0,0,0,0.3)"}
+                this.canClick() ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
+        },
+        114: {
+            title() { return "Buyables"},
+            canClick() {return player.subtabs["pet"]["frags"] != "Buyables"},
+            unlocked: true,
+            onClick() {
+                player.subtabs["pet"]["frags"] = "Buyables"
+            },
+            style() {
+                let look = {width: "274px", minHeight: "35px", backgroundColor: "#cb79ed", borderRadius: "0px", border: "3px solid rgba(0,0,0,0.3)"}
+                this.canClick() ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
+        },
+        121: {
+            title() {
+                if (player.pet.fragShop[player.pet.fragShopIndex].current.gte(0)) {
+                    return "<h3>Check back in <br>" + formatTime(player.pet.fragShop[player.pet.fragShopIndex].current) + "."
+                } else {return "<h3>Buy"}
+            },
+            canClick() {
+                if (player.pet.fragShop[player.pet.fragShopIndex].current.lt(0)) {
+                    if (player.pet.lesserFragments.gte(player.pet.fragShopCost1) && player.pet.basicFragments.gte(player.pet.fragShopCost2) && player.pet.greaterFragments.gte(player.pet.fragShopCost3)) {
+                        return true
+                    }
+                }
+                return false
+            },
+            unlocked() { return typeof player.pet.fragShop[player.pet.fragShopIndex] != "undefined"},
+            onClick() {
+                player.pet.lesserFragments = player.pet.lesserFragments.sub(player.pet.fragShopCost1)
+                player.pet.basicFragments = player.pet.basicFragments.sub(player.pet.fragShopCost2)
+                player.pet.greaterFragments = player.pet.greaterFragments.sub(player.pet.fragShopCost3)
+                player.pet.fragShop[player.pet.fragShopIndex].current = player.pet.fragShop[player.pet.fragShopIndex].max
+                switch (player.pet.fragShopIndex) {
+                    case 0:
+                        addLevelableXP("pet", 401, player.pet.fragShopBulk)
+                        doPopup("none", "+" + formatSimple(player.pet.fragShopBulk) + " Dotknight Fragment", "Fragment Obtained!", 5, "#cb79ed", "resources/dotknightEpicPetFragment1.png")
+                        break;
+                    case 1:
+                        addLevelableXP("pet", 402, player.pet.fragShopBulk)
+                        doPopup("none", "+" + formatSimple(player.pet.fragShopBulk) + " Dragon Fragment", "Fragment Obtained!", 5, "#cb79ed", "resources/dragonEpicPetFragment1.png")
+                        break;
+                    case 2:
+                        addLevelableXP("pet", 403, player.pet.fragShopBulk)
+                        doPopup("none", "+" + formatSimple(player.pet.fragShopBulk) + " Cookie Fragment", "Fragment Obtained!", 5, "#cb79ed", "resources/cookieEpicPetFragment1.png")
+                        break;
+                    case 3:
+                        player.pet.singularityFragments = player.pet.singularityFragments.add(player.pet.fragShopBulk)
+                        doPopup("none", "+" + formatSimple(player.pet.fragShopBulk) + " Singularity Fragment", "Fragment Obtained!", 5, "#cb79ed", "resources/singularityEpicPetFragment.png")
+                        break;
+                    case 4:
+                        addLevelableXP("pet", 110, player.pet.fragShopBulk)
+                        doPopup("none", "+" + formatSimple(player.pet.fragShopBulk) + " Coin Fragment", "Pet Obtained!", 5, "#9bedff", "resources/Pets/coinFragmentCommonPet.png")
+                        break;
+                    case 5:
+                        addLevelableXP("pet", 210, player.pet.fragShopBulk)
+                        doPopup("none", "+" + formatSimple(player.pet.fragShopBulk) + " Refined Fragment", "Pet Obtained!", 5, "#88e688", "resources/Pets/refinedFragmentUncommonPet.png")
+                        break;
+                    case 6:
+                        addLevelableXP("pet", 310, player.pet.fragShopBulk)
+                        doPopup("none", "+" + formatSimple(player.pet.fragShopBulk) + " Evolution Fragment", "Pet Obtained!", 5, "#4e7cff", "resources/Pets/evolutionFragmentRarePet.png")
+                        break;
+                }
+            },
+            style() {
+                let look = {width: "197px", minHeight: "50px", borderRadius: "0px", border: "3px solid rgba(0,0,0,0.3)"}
+                this.canClick() ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
+        },
+        131: {
+            title() { return "<img src='resources/Pets/dotknightEpicPet.png'style='width:65px;height:65px;margin:0px;margin-bottom:-4px'></img>" },
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.pet.fragShopIndex = 0
+            },
+            style: {width: "75px", minHeight: "75px", background: "#d487fd", border: "5px solid #6600A6", borderRadius: "0px", padding: "0px"},
+        },
+        132: {
+            title() { return "<img src='resources/Pets/dragonEpicPet.png'style='width:65px;height:65px;margin:0px;margin-bottom:-4px'></img>" },
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.pet.fragShopIndex = 1
+            },
+            style: {width: "75px", minHeight: "75px", background: "#d487fd", border: "5px solid #6600A6", borderRadius: "0px", padding: "0px"},
+        },
+        133: {
+            title() { return "<img src='resources/Pets/cookieEpicPet.png'style='width:65px;height:65px;margin:0px;margin-bottom:-4px'></img>" },
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.pet.fragShopIndex = 2
+            },
+            style: {width: "75px", minHeight: "75px", background: "#d487fd", border: "5px solid #6600A6", borderRadius: "0px", padding: "0px"},
+        },
+        134: {
+            title() { return "<img src='resources/singularityEpicPetFragmentFull.png'style='width:65px;height:65px;margin:0px;margin-bottom:-4px'></img>" },
+            canClick: true,
+            unlocked() { return player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23) },
+            onClick() {
+                player.pet.fragShopIndex = 3
+            },
+            style: {width: "75px", minHeight: "75px", background: "#d487fd", border: "5px solid #6600A6", borderRadius: "0px", padding: "0px"},
+        },
+        135: {
+            title() { return "<img src='resources/Pets/coinFragmentCommonPet.png'style='width:65px;height:65px;margin:0px;margin-bottom:-4px'></img>" },
+            canClick: true,
+            unlocked() { return player.cb.highestLevel.gte(7500) },
+            onClick() {
+                player.pet.fragShopIndex = 4
+            },
+            style: {width: "75px", minHeight: "75px", background: "#9bedff", border: "5px solid #45BDD7", borderRadius: "0px", padding: "0px"},
+        },
+        136: {
+            title() { return "<img src='resources/Pets/refinedFragmentUncommonPet.png'style='width:65px;height:65px;margin:0px;margin-bottom:-4px'></img>" },
+            canClick: true,
+            unlocked() { return player.cb.highestLevel.gte(15000) },
+            onClick() {
+                player.pet.fragShopIndex = 5
+            },
+            style: {width: "75px", minHeight: "75px", background: "#88e688", border: "5px solid #008300", borderRadius: "0px", padding: "0px"},
+        },
+        137: {
+            title() { return "<img src='resources/Pets/evolutionFragmentRarePet.png'style='width:65px;height:65px;margin:0px;margin-bottom:-4px'></img>" },
+            canClick: true,
+            unlocked() { return player.cb.highestLevel.gte(250000) && player.ma.matosUnlock },
+            onClick() {
+                player.pet.fragShopIndex = 6
+            },
+            style: {width: "75px", minHeight: "75px", background: "#4e7cff", border: "5px solid #0031BF", borderRadius: "0px", padding: "0px"},
         },
         // LEGENDARY GEMS
         201: {
@@ -1105,10 +1366,10 @@ addLayer("pet", {
             canClick() { return player.pet.summonTimer.lte(0) && player.cb.legendaryPetGems[0].gte(player.pet.summonReqs[0]) && player.cb.legendaryPetGems[1].gte(player.pet.summonReqs[1]) && player.cb.legendaryPetGems[2].gte(player.pet.summonReqs[2]) && player.cb.evolutionShards.gte(player.pet.summonReqs[3]) && player.cb.paragonShards.gte(player.pet.summonReqs[4]) },
             unlocked() { return true },
             tooltip() {
-                return "20% - " + formatWhole(player.pet.petPointMult.mul(4.5).floor()) + " of every common pet<br>" +
-                "20% - " + formatWhole(player.pet.petPointMult.mul(2.5).floor()) + " of every uncommon pet<br>" +
-                "20% - " + formatWhole(player.pet.petPointMult.mul(0.8).floor()) + " of every rare pet<br>" +
-                "10% - " + formatWhole(player.pet.petPointMult.floor()) + " of every<br>epic/singularity fragment<br>" +
+                return "20% - " + formatWhole(player.pet.petPointMult.mul(4.5).floor()) + " of the first 9 common pets<br>" +
+                "20% - " + formatWhole(player.pet.petPointMult.mul(2.5).floor()) + " of the first 9 uncommon pets<br>" +
+                "20% - " + formatWhole(player.pet.petPointMult.mul(0.8).floor()) + " of the first 9 rare pets<br>" +
+                "10% - " + formatSimple(new Decimal(5000).mul(player.pet.fragmentMult).floor().div(10)) + " of every<br>fragmentation fragment<br>" +
                 "10% - +" + formatWhole(player.pet.petPointMult.mul(10000)) + " pet points<br>" +
                 "20% - LEGENDARY PET SUMMON" },
             onClick() {
@@ -1222,7 +1483,7 @@ addLayer("pet", {
                 }
             },
             onHold() { clickClickable(this.layer, this.id) },
-            style: {width: "197px", minHeight: "72px", borderRadius: "0px", border: "0px"},
+            style: {width: "197px", minHeight: "72px", borderRadius: "0px", border: "3px solid rgba(0,0,0,0.3)"},
         },
         1003: {
             title() {
@@ -1276,7 +1537,7 @@ addLayer("pet", {
                 }
             },
             onHold() { clickClickable(this.layer, this.id) },
-            style: {width: "197px", minHeight: "72px", borderRadius: "0px", border: "0px"},
+            style: {width: "197px", minHeight: "72px", borderRadius: "0px", border: "3px solid rgba(0,0,0,0.3)"},
         },
         1004: {
             title() {return "Misc."},
@@ -1658,43 +1919,6 @@ addLayer("pet", {
             },
             style: {width: "100px", minHeight: "100px", border: "5px solid #0031BF", borderRadius: "0px", padding: "0px"},
         },
-        // EPIC SELECTION
-        1401: {
-            title() { return "<img src='resources/dotknightEpicPetFragment1.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.pet.shopIndex = 401
-            },
-            style: {width: "100px", minHeight: "100px", border: "5px solid #6600A6", borderRadius: "0px", padding: "0px"},
-        },
-        1402: {
-            title() { return "<img src='resources/dragonEpicPetFragment1.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.pet.shopIndex = 402
-            },
-            style: {width: "100px", minHeight: "100px", border: "5px solid #6600A6", borderRadius: "0px", padding: "0px"},
-        },
-        1403: {
-            title() { return "<img src='resources/cookieEpicPetFragment1.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.pet.shopIndex = 403
-            },
-            style: {width: "100px", minHeight: "100px", border: "5px solid #6600A6", borderRadius: "0px", padding: "0px"},
-        },
-        1404: {
-            title() { return "<img src='resources/singularityEpicPetFragment.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.pet.shopIndex = 404
-            },
-            style: {width: "100px", minHeight: "100px", border: "5px solid #6600A6", borderRadius: "0px", padding: "0px"},
-        },
     },
     levelables: {
         // NO PET SELECTED INFO
@@ -2070,6 +2294,48 @@ addLayer("pet", {
             xpReq() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
                 return amt.mul(2).add(1).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#0B6623"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#45BDD7" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }  
+        },
+        110: {
+            image() { return this.canClick() ? "resources/Pets/coinFragmentCommonPet.png" : "resources/secret.png"},
+            title() { return "Coin Fragment" },
+            lore() { return "The forgotten third piece of the coins. Still usable at select venders." }, 
+            description() {
+                return "x" + format(this.effect()[0]) + " to fragmentation fragment gain.<br>" +
+                    "x" + format(this.effect()[1]) + " to coin dust currencies."
+            },
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
+                return [
+                    amt.mul(0.05).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Fragmentation Mult
+                    amt.mul(0.1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Coin Dust Currencies
+                ]
+            },
+            sellValue() { return new Decimal(20)},
+            // CLICK CODE
+            unlocked() { return player.cb.highestLevel.gte(7500) && player.ca.unlockedCante },
+            canClick() { return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
+            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(2.5).add(1).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
@@ -2480,6 +2746,48 @@ addLayer("pet", {
                 return look
             }  
         },
+        210: {
+            image() { return this.canClick() ? "resources/Pets/refinedFragmentUncommonPet.png" : "resources/secret.png"},
+            title() { return "Refined Fragment" },
+            lore() { return "The result of a bunch of fragments being fused together into something new." }, 
+            description() {
+                return "/" + format(this.effect()[0]) + " to fragmentation cooldowns.<br>" +
+                    "/" + format(this.effect()[1]) + " to refinement requirement."
+            },
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
+                return [
+                    amt.div(25).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Fragmentation Cooldowns
+                    amt.pow(1.2).div(4).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Refinement Requirement
+                ]
+            },
+            sellValue() { return new Decimal(50)},
+            // CLICK CODE
+            unlocked() { return player.cb.highestLevel.gte(15000) && player.ca.unlockedCante },
+            canClick() { return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
+            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(2.5).add(1).pow(1.1).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#0B6623"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#008300" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }  
+        },
         // RARE PETS
         301: {
             image() { return this.canClick() ? "resources/Pets/novaRarePet.png" : "resources/secret.png"},
@@ -2504,7 +2812,7 @@ addLayer("pet", {
                 return new Decimal(0.5).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id)))
             },
             pointCooldown() { return new Decimal(40).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
-            canteBase() { return new Decimal(0.12)},
+            canteBase() { return new Decimal(0.06)},
             pointTooltip() { return "" },
             pointClick() {
                 return this.pointValue()
@@ -2559,7 +2867,7 @@ addLayer("pet", {
                 return new Decimal(0.1).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id)))
             },
             pointCooldown() { return new Decimal(20).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
-            canteBase() { return new Decimal(0.05)},
+            canteBase() { return new Decimal(0.03)},
             pointTooltip() { return "<h5>Last roll: " + format(player.pet.dicePetPointsGain) + " PP<br>Last roll: " + player.pet.lastDicePetRoll + "<br>Current roll combo: " + player.pet.dicePetCombo + "<br>Highest roll combo: " + player.pet.highestDicePetCombo },
             pointClick() {
                 player.pet.dicePetRoll = getRandomInt(6) + 1
@@ -2623,7 +2931,7 @@ addLayer("pet", {
                 return new Decimal(10).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id)))
             },
             pointCooldown() { return new Decimal(900).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
-            canteBase() { return new Decimal(0.8)},
+            canteBase() { return new Decimal(1)},
             pointTooltip() { return "" },
             pointClick() {
                 return this.pointValue()
@@ -2677,7 +2985,7 @@ addLayer("pet", {
                 return new Decimal(90).mul(player.pet.petPointMult).mul(amt.add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id)))
             },
             pointCooldown() { return new Decimal(18000).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
-            canteBase() { return new Decimal(7)},
+            canteBase() { return new Decimal(18)},
             pointTooltip() { return "25% chance for an evo shard." },
             pointClick() {
                 let random = getRandomInt(4)
@@ -2736,10 +3044,10 @@ addLayer("pet", {
             // PET POINT CODE
             pointValue() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
-                return new Decimal(2).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id)))
+                return new Decimal(1.5).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id)))
             },
             pointCooldown() { return new Decimal(120).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
-            canteBase() { return new Decimal(0.3)},
+            canteBase() { return new Decimal(0.18)},
             pointTooltip() { return "" },
             pointClick() {
                 return this.pointValue()
@@ -2792,7 +3100,7 @@ addLayer("pet", {
                 return new Decimal(18).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id)))
             },
             pointCooldown() { return new Decimal(1500).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
-            canteBase() { return new Decimal(1)},
+            canteBase() { return new Decimal(1.8)},
             pointTooltip() { return "2% chance for an paragon shard." },
             pointClick() {
                 if (player.cb.highestLevel.gt(250)) {
@@ -2852,10 +3160,10 @@ addLayer("pet", {
             // PET POINT CODE
             pointValue() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
-                return new Decimal(0.2).mul(player.pet.petPointMult).mul(amt.div(5).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id)))
+                return new Decimal(0.1).mul(player.pet.petPointMult).mul(amt.div(5).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id)))
             },
             pointCooldown() { return new Decimal(5).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
-            canteBase() { return new Decimal(0.002)},
+            canteBase() { return new Decimal(0.0075)},
             pointTooltip() { return "+" + formatWhole(getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40)).mul(100)) + "% of golden grass value on claim.<br>(You have " + format(player.g.goldGrass) + " golden grass)" },
             pointClick() {
                 player.g.goldGrass = player.g.goldGrass.add(player.g.goldGrassVal.mul(getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))))
@@ -2909,7 +3217,7 @@ addLayer("pet", {
                 return new Decimal(50).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id)))
             },
             pointCooldown() { return new Decimal(4500).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
-            canteBase() { return new Decimal(0.3)},
+            canteBase() { return new Decimal(4.5)},
             pointTooltip() { return "" },
             pointClick() {
                 return this.pointValue()
@@ -2959,10 +3267,10 @@ addLayer("pet", {
             // PET POINT CODE
             pointValue() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
-                return new Decimal(100).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id)))
+                return new Decimal(75).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id)))
             },
             pointCooldown() { return new Decimal(8000).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
-            canteBase() { return new Decimal(0.5)},
+            canteBase() { return new Decimal(8)},
             pointTooltip() { return "" },
             pointClick() {
                 return this.pointValue()
@@ -2977,6 +3285,59 @@ addLayer("pet", {
             xpReq() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
                 return amt.mul(2).add(1).pow(1.2).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#0B6623"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#0031BF" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }
+        },
+        310: {
+            image() { return this.canClick() ? "resources/Pets/evolutionFragmentRarePet.png" : "resources/secret.png"},
+            title() { return "Evolution Fragment" },
+            lore() { return "Unsure if it actually originates from an evolution shard, or is just mimicking one." }, 
+            description() {
+                return "/" + format(this.effect()[0]) + " to pets consumed on fragmentation<br><small>(based on rememberance cores)</small><br>" +
+                    "[COMING SOON]"
+            },
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
+                return [
+                    amt.mul(player.ca.rememberanceCores.add(2).log(2).log(2).add(1)).div(50).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Pets Consumed On Fragmentation (Based on Rememberance Cores)
+                    new Decimal(1) // Black Heart Defense (Based on Evolution Shards)
+                ]
+            },
+            sellValue() { return new Decimal(400)},
+            // PET POINT CODE
+            pointValue() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
+                return new Decimal(3).mul(player.pet.petPointMult).mul(amt.div(2).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id)))
+            },
+            pointCooldown() { return new Decimal(300).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
+            canteBase() { return new Decimal(0.4)},
+            pointTooltip() { return "" },
+            pointClick() {
+                return this.pointValue()
+            },
+            // CLICK CODE
+            unlocked() { return player.cb.highestLevel.gte(250000) && player.ma.matosUnlock },
+            canClick() { return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
+            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(2.5).add(1).pow(1.2).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
@@ -3159,7 +3520,7 @@ addLayer("pet", {
                 ]
             },
             sellValue() { return new Decimal(500)},
-            shopLayer() { return "ep3" },
+            shopLayer() { return "sp" },
             // CLICK CODE
             unlocked() { return player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23) },
             canClick() { return player.pet.singularityFragments.gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
@@ -3208,7 +3569,7 @@ addLayer("pet", {
                 ]
             },
             sellValue() { return new Decimal(500)},
-            shopLayer() { return "ep4" },
+            shopLayer() { return "sp" },
             // CLICK CODE
             unlocked() { return player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23) },
             canClick() { return player.pet.singularityFragments.gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
@@ -3257,7 +3618,7 @@ addLayer("pet", {
                 ]
             },
             sellValue() { return new Decimal(500)},
-            shopLayer() { return "ep5" },
+            shopLayer() { return "sp" },
             // CLICK CODE
             unlocked() { return player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23) },
             canClick() { return player.pet.singularityFragments.gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
@@ -4112,140 +4473,15 @@ addLayer("pet", {
         player.pet.banners[2].id = 201 + getRandomInt(8)
         player.pet.banners[3].id = 201 + getRandomInt(8)
         player.pet.banners[4].id = 301 + getRandomInt(6)
+        player.pet.banners[5].id = 301 + getRandomInt(6)
+
+        for (let i in player.pet.banners) {
+            player.pet.banners[i].val = new Decimal(1).add(buyableEffect("pet", 4))
+        }
+        player.pet.evoIncUsed = false
+        player.pet.paraIncUsed = false
 
         player.pet.bannerResetTimer = player.pet.bannerResetTimerMax
-    },
-    commonPetBanner() {
-        let rng = Math.random()
-
-        if (rng > 0.5) {
-            layers.cb.petButton1(player.cb.crateTimers[0].base)
-        } else if (rng > 0.4 && rng < 0.5) {
-            layers.cb.petButton2(player.cb.crateTimers[1].base)
-        } else if (rng > 0.35 && rng < 0.4) {
-            layers.cb.petButton3(player.cb.crateTimers[2].base)
-        } else if (rng < 0.35) {
-            let random =  getRandomInt(3)
-            let random1 =  getRandomInt(4)
-            let gainedFragments = 1
-            if (random == 0) {
-                addLevelableXP("pet", 401, gainedFragments)
-                if (random1 == 0) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dotknightEpicPetFragment1.png");
-                if (random1 == 1) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dotknightEpicPetFragment2.png");
-                if (random1 == 2) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dotknightEpicPetFragment3.png");
-                if (random1 == 3) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dotknightEpicPetFragment4.png");
-            } else if (random == 1) {
-                addLevelableXP("pet", 402, gainedFragments)
-                if (random1 == 0) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dragonEpicPetFragment1.png");
-                if (random1 == 1) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dragonEpicPetFragment2.png");
-                if (random1 == 2) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dragonEpicPetFragment3.png");
-                if (random1 == 3) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dragonEpicPetFragment4.png");
-            } else if (random == 2) {
-                addLevelableXP("pet", 403, gainedFragments)
-                if (random1 == 0) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/cookieEpicPetFragment1.png");
-                if (random1 == 1) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/cookieEpicPetFragment2.png");
-                if (random1 == 2) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/cookieEpicPetFragment3.png");
-                if (random1 == 3) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/cookieEpicPetFragment4.png");
-            }
-        }
-    },
-    uncommonPetBanner() {
-        let rng = Math.random()
-
-        if (rng > 0.8) {
-            layers.cb.petButton2(player.cb.crateTimers[1].base)
-        } else if (rng > 0.65 && rng < 0.8) {
-            layers.cb.petButton3(player.cb.crateTimers[2].base)
-        } else if (rng > 0.5 && rng < 0.65) {
-            layers.cb.petButton5(player.cb.crateTimers[4].base)
-        } else if (rng < 0.5) {
-            let random = getRandomInt(3)
-            let random1 = getRandomInt(4)
-            let gainedFragments = getRandomInt(2) + 1
-            if (random == 0) {
-                addLevelableXP("pet", 401, gainedFragments)
-                if (random1 == 0) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dotknightEpicPetFragment1.png");
-                if (random1 == 1) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dotknightEpicPetFragment2.png");
-                if (random1 == 2) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dotknightEpicPetFragment3.png");
-                if (random1 == 3) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dotknightEpicPetFragment4.png");
-            } else if (random == 1) {
-                addLevelableXP("pet", 402, gainedFragments)
-                if (random1 == 0) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dragonEpicPetFragment1.png");
-                if (random1 == 1) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dragonEpicPetFragment2.png");
-                if (random1 == 2) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dragonEpicPetFragment3.png");
-                if (random1 == 3) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dragonEpicPetFragment4.png");
-            } else if (random == 2) {
-                addLevelableXP("pet", 403, gainedFragments)
-                if (random1 == 0) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/cookieEpicPetFragment1.png");
-                if (random1 == 1) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/cookieEpicPetFragment2.png");
-                if (random1 == 2) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/cookieEpicPetFragment3.png");
-                if (random1 == 3) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/cookieEpicPetFragment4.png");
-            }
-        }
-    },
-    rarePetBanner() {
-        let rng = Math.random()
-
-        if (rng > 0.85) {
-            layers.cb.petButton4(player.cb.crateTimers[3].base)
-        } else if (rng > 0.7 && rng < 0.85) {
-            layers.cb.petButton6(player.cb.crateTimers[5].base)
-        } else if (rng < 0.7) {
-            let random = getRandomInt(3)
-            let random1 = getRandomInt(4)
-            let gainedFragments = getRandomInt(2) + 2
-            if (random == 0) {
-                addLevelableXP("pet", 401, gainedFragments)
-                if (random1 == 0) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dotknightEpicPetFragment1.png");
-                if (random1 == 1) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dotknightEpicPetFragment2.png");
-                if (random1 == 2) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dotknightEpicPetFragment3.png");
-                if (random1 == 3) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dotknightEpicPetFragment4.png");
-            } else if (random == 1) {
-                addLevelableXP("pet", 402, gainedFragments)
-                if (random1 == 0) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dragonEpicPetFragment1.png");
-                if (random1 == 1) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dragonEpicPetFragment2.png");
-                if (random1 == 2) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dragonEpicPetFragment3.png");
-                if (random1 == 3) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dragonEpicPetFragment4.png");
-            }
-            else if (random == 2) {
-                addLevelableXP("pet", 403, gainedFragments)
-                if (random1 == 0) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/cookieEpicPetFragment1.png");
-                if (random1 == 1) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/cookieEpicPetFragment2.png");
-                if (random1 == 2) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/cookieEpicPetFragment3.png");
-                if (random1 == 3) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/cookieEpicPetFragment4.png");
-            }
-        }
-    },
-    evoBanner() {
-        let rng = Math.random()
-        if (rng > 0.3) {
-            let gainedFragments = getRandomInt(2) + 2
-            player.pet.singularityFragments = player.pet.singularityFragments.add(gainedFragments);
-            doPopup("none", "+" + formatWhole(gainedFragments) + " Singularity Fragments!", "Resource Obtained!", 5, "#cb79ed", "resources/singularityEpicPetFragment.png")
-        } else if (rng > 0.15) {
-            layers.cb.petButton1(player.cb.crateTimers[0].base)
-        } else if (rng < 0.15) {
-            layers.cb.petButton3(player.cb.crateTimers[2].base)
-        }
-    },
-    paragonBanner() {
-        let rng = Math.random()
-        if (rng > 0.3) {
-            let gainedFragments = getRandomInt(3) + 4
-            player.pet.singularityFragments = player.pet.singularityFragments.add(gainedFragments);
-            doPopup("none", "+" + formatWhole(gainedFragments) + " Singularity Fragments!", "Resource Obtained!", 5, "#cb79ed", "resources/singularityEpicPetFragment.png")
-        } else if (rng > 0.18) {
-            layers.cb.petButton6(player.cb.crateTimers[5].base)
-        } else if (rng > 0.02) {
-            layers.cb.petButton7(player.cb.crateTimers[6].base)
-        } else if (rng < 0.02) {
-            let random = getRandomInt(3)
-            let gainedGems = getRandomInt(5) + 10
-            player.cb.legendaryPetGems[0] = player.cb.legendaryPetGems[0].add(gainedGems);
-            player.cb.legendaryPetGems[1] = player.cb.legendaryPetGems[1].add(gainedGems);
-            player.cb.legendaryPetGems[2] = player.cb.legendaryPetGems[2].add(gainedGems);
-            doPopup("none", "+" + formatWhole(gainedGems) + " of each Legendary Gem!", "Resource Obtained!", 5, "#eed200", "resources/Pets/legendarybg.png")
-        }
     },
     legendarySummon() {
         if (player.pet.eclipsePity == 4) {
@@ -4272,7 +4508,7 @@ addLayer("pet", {
             player.pet.levelables[107][1] = player.pet.levelables[107][1].add(gain)
             player.pet.levelables[108][1] = player.pet.levelables[108][1].add(gain)
             player.pet.levelables[109][1] = player.pet.levelables[109][1].add(gain)
-            doPopup("none", "+" + formatWhole(gain) + " of every common pet!", "Pet Obtained!", 5, "#9bedff", "resources/Pets/commonbg.png")
+            doPopup("none", "+" + formatWhole(gain) + " of the first 9 common pets!", "Pet Obtained!", 5, "#9bedff", "resources/Pets/commonbg.png")
             player.pet.eclipsePity = player.pet.eclipsePity + 1
         } else if (random < 0.4) {
             let gain = player.pet.petPointMult.mul(2.5).floor()
@@ -4285,7 +4521,7 @@ addLayer("pet", {
             player.pet.levelables[207][1] = player.pet.levelables[207][1].add(gain)
             player.pet.levelables[208][1] = player.pet.levelables[208][1].add(gain)
             player.pet.levelables[209][1] = player.pet.levelables[209][1].add(gain)
-            doPopup("none", "+" + formatWhole(gain) + " of every uncommon pet!", "Pet Obtained!", 5, "#88e688", "resources/Pets/uncommonbg.png")
+            doPopup("none", "+" + formatWhole(gain) + " of the first 9 uncommon pets!", "Pet Obtained!", 5, "#88e688", "resources/Pets/uncommonbg.png")
             player.pet.eclipsePity = player.pet.eclipsePity + 1
         } else if (random < 0.6) {
             let gain = player.pet.petPointMult.mul(0.8).floor()
@@ -4298,16 +4534,15 @@ addLayer("pet", {
             player.pet.levelables[307][1] = player.pet.levelables[307][1].add(gain)
             player.pet.levelables[308][1] = player.pet.levelables[308][1].add(gain)
             player.pet.levelables[309][1] = player.pet.levelables[309][1].add(gain)
-            doPopup("none", "+" + formatWhole(gain) + " of every rare pet!", "Pet Obtained!", 5, "#4e7cff", "resources/Pets/rarebg.png")
+            doPopup("none", "+" + formatWhole(gain) + " of the first 9 rare pets!", "Pet Obtained!", 5, "#4e7cff", "resources/Pets/rarebg.png")
             player.pet.eclipsePity = player.pet.eclipsePity + 1
         } else if (random < 0.7) {
-            let gain = player.pet.petPointMult.floor()
-            player.pet.singularityFragments = player.pet.singularityFragments.add(gain)
-            addLevelableXP("pet", 401, gain)
-            addLevelableXP("pet", 402, gain)
-            addLevelableXP("pet", 403, gain)
+            let gain = new Decimal(5000).mul(player.pet.fragmentMult).floor().div(10)
+            player.pet.lesserFragments = player.pet.lesserFragments.add(gain)
+            player.pet.basicFragments = player.pet.basicFragments.add(gain)
+            player.pet.greaterFragments = player.pet.greaterFragments.add(gain)
 
-            doPopup("none", "+" + formatWhole(gain) + " of every epic and singularity fragment!", "Pet Obtained!", 5, "#cb79ed", "resources/Pets/epicbg.png")
+            doPopup("none", "+" + formatWhole(gain) + " of every fragmentation fragment!", "Pet Obtained!", 5, "#cb79ed", "resources/Pets/epicbg.png")
             player.pet.eclipsePity = player.pet.eclipsePity + 1
         } else if (random < 0.8) {
             let gain = player.pet.petPointMult.mul(10000)
@@ -4346,11 +4581,245 @@ addLayer("pet", {
             },
         },
     },
-    upgrades: {},
-    buyables: {},
-    milestones: {},
-    challenges: {},
-    infoboxes: {},
+    buyables: {
+        1: {
+            costBase() { return new Decimal(2) },
+            costGrowth() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.pet.lesserFragments},
+            pay(amt) { player.pet.lesserFragments = this.currency().sub(amt) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(20).add(1)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>FB-1</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/50)\n\
+                    Increase base fragment gain by +5%.\n\
+                    Currently: +" + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + "%\n\ \n\
+                    Cost: " + formatSimple(tmp[this.layer].buyables[this.id].cost) + "<br>Lesser Fragments"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "130px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "#9bedff"
+                return look
+            },
+        },
+        2: {
+            costBase() { return new Decimal(2) },
+            costGrowth() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.pet.basicFragments},
+            pay(amt) { player.pet.basicFragments = this.currency().sub(amt) },
+            effect(x) {return getBuyableAmount(this.layer, this.id)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>FB-2</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/50)\n\
+                    Increase base highest fragment gain by +0.1.\n\
+                    Currently: +" + formatSimple(tmp[this.layer].buyables[this.id].effect.div(10)) + "\n\ \n\
+                    Cost: " + formatSimple(tmp[this.layer].buyables[this.id].cost) + "<br>Basic Fragments"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "130px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "#88e688"
+                return look
+            },
+        },
+        3: {
+            costBase() { return new Decimal(5) },
+            costGrowth() { return new Decimal(5) },
+            purchaseLimit() { return new Decimal(20) },
+            currency() { return player.pet.greaterFragments},
+            pay(amt) { player.pet.greaterFragments = this.currency().sub(amt) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(500)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>FB-3</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/20)\n\
+                    Reduce fragment shop bulk buy penalty by -0.002.\n\
+                    Currently: -" + commaFormat(tmp[this.layer].buyables[this.id].effect, 3) + "\n\ \n\
+                    Cost: " + formatSimple(tmp[this.layer].buyables[this.id].cost) + "<br>Greater Fragments"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "130px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "#4e7cff"
+                return look
+            },
+        },
+        4: {
+            costBase() { return new Decimal(10) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(24) },
+            pay(amt) {
+                player.pet.lesserFragments = player.pet.lesserFragments.sub(amt)
+                player.pet.basicFragments = player.pet.basicFragments.sub(amt)
+                player.pet.greaterFragments = player.pet.greaterFragments.sub(amt)
+            },
+            effect(x) {return getBuyableAmount(this.layer, this.id)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() {
+                return player.pet.lesserFragments.gte(this.cost()) && player.pet.basicFragments.gte(this.cost()) && player.pet.greaterFragments.gte(this.cost())
+            },
+            display() {
+                return "<h3>FB-4</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/24)\n\
+                    Add 1 to sacrifice amount.\n\
+                    Currently: +" + formatWhole(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
+                    Cost: " + formatSimple(tmp[this.layer].buyables[this.id].cost) + "<br>LF/BF/GF"
+            },
+            tooltip: "Sacrifice amount effects gain by amt<sup>0.5</sup>.",
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                for (let i in player.pet.banners) {
+                    player.pet.banners[i].val = player.pet.banners[i].val.add(1)
+                }
+            },
+            style() {
+                let look = {width: "130px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "linear-gradient(90deg , #9bedff, #88e688, #4e7cff)"
+                return look
+            },
+        },
+        5: {
+            costBase() { return new Decimal(2) },
+            costGrowth() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(50) },
+            pay(amt) {
+                player.pet.lesserFragments = player.pet.lesserFragments.sub(amt)
+                player.pet.basicFragments = player.pet.basicFragments.sub(amt)
+                player.pet.greaterFragments = player.pet.greaterFragments.sub(amt)
+            },
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(10).add(1)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() {
+                return player.pet.lesserFragments.gte(this.cost()) && player.pet.basicFragments.gte(this.cost()) && player.pet.greaterFragments.gte(this.cost())
+            },
+            display() {
+                return "<h3>FB-5</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/50)\n\
+                    Increase first 3 epic pet resource gains by +10%.\n\
+                    Currently: +" + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + "%\n\ \n\
+                    Cost: " + formatSimple(tmp[this.layer].buyables[this.id].cost) + "<br>LF/BF/GF"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "130px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "linear-gradient(90deg , #9bedff, #88e688, #4e7cff)"
+                return look
+            },
+        },
+        6: {
+            costBase() { return new Decimal(3) },
+            costGrowth() { return new Decimal(3) },
+            purchaseLimit() { return new Decimal(40) },
+            pay(amt) {
+                player.pet.lesserFragments = player.pet.lesserFragments.sub(amt)
+                player.pet.basicFragments = player.pet.basicFragments.sub(amt)
+                player.pet.greaterFragments = player.pet.greaterFragments.sub(amt)
+            },
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(20).add(1)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() {
+                return player.pet.lesserFragments.gte(this.cost()) && player.pet.basicFragments.gte(this.cost()) && player.pet.greaterFragments.gte(this.cost())
+            },
+            display() {
+                return "<h3>FB-6</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/40)\n\
+                    Decrease first 3 epic pet cooldowns by 5% <small>(10x less powerful for cookie)</small>.\n\
+                    Currently: +" + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + "%\n\ \n\
+                    Cost: " + formatSimple(tmp[this.layer].buyables[this.id].cost) + "<br>LF/BF/GF"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "130px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "linear-gradient(90deg , #9bedff, #88e688, #4e7cff)"
+                return look
+            },
+        },
+        7: {
+            costBase() { return new Decimal(5) },
+            costGrowth() { return new Decimal(5) },
+            purchaseLimit() { return new Decimal(25) },
+            pay(amt) {
+                player.pet.lesserFragments = player.pet.lesserFragments.sub(amt)
+                player.pet.basicFragments = player.pet.basicFragments.sub(amt)
+                player.pet.greaterFragments = player.pet.greaterFragments.sub(amt)
+            },
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(20).add(1)},
+            unlocked() {return player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23)},
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() {
+                return player.pet.lesserFragments.gte(this.cost()) && player.pet.basicFragments.gte(this.cost()) && player.pet.greaterFragments.gte(this.cost())
+            },
+            display() {
+                return "<h3>FB-7</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/25)\n\
+                    Increase singularity pet resource gains by +5%.\n\
+                    Currently: +" + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + "%\n\ \n\
+                    Cost: " + formatSimple(tmp[this.layer].buyables[this.id].cost) + "<br>LF/BF/GF"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "130px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "linear-gradient(90deg , #9bedff, #88e688, #4e7cff)"
+                return look
+            },
+        },
+        8: {
+            costBase() { return new Decimal(10) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(20) },
+            pay(amt) {
+                player.pet.lesserFragments = player.pet.lesserFragments.sub(amt)
+                player.pet.basicFragments = player.pet.basicFragments.sub(amt)
+                player.pet.greaterFragments = player.pet.greaterFragments.sub(amt)
+            },
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(5).add(1)},
+            unlocked() {return player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23)},
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() {
+                return player.pet.lesserFragments.gte(this.cost()) && player.pet.basicFragments.gte(this.cost()) && player.pet.greaterFragments.gte(this.cost())
+            },
+            display() {
+                return "<h3>FB-8</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/20)\n\
+                    Decrease singularity pet cap-increase cost by 20%.\n\
+                    Currently: /" + formatSimple(tmp[this.layer].buyables[this.id].effect) + ".\n\ \n\
+                    Cost: " + formatSimple(tmp[this.layer].buyables[this.id].cost) + "<br>LF/BF/GF"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "130px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "linear-gradient(90deg , #9bedff, #88e688, #4e7cff)"
+                return look
+            },
+        },
+    },
     microtabs: {
         content: {
             "Pets": {
@@ -4372,7 +4841,7 @@ addLayer("pet", {
                             ], {width: "535px", height: "40px", backgroundColor: "#1f2f33", borderBottom: "3px solid #9bedff", userSelect: "none"}],
                             ["style-column", [
                                 ["row", [["levelable", 101], ["levelable", 102], ["levelable", 103], ["levelable", 104], ["levelable", 105]]],
-                                ["row", [["levelable", 106], ["levelable", 107], ["levelable", 108], ["levelable", 109]]],
+                                ["row", [["levelable", 106], ["levelable", 107], ["levelable", 108], ["levelable", 109], ["levelable", 110]]],
                             ], {width: "525px", backgroundColor: "#0f1719", padding: "5px"}],
             
                             ["style-column", [
@@ -4380,19 +4849,19 @@ addLayer("pet", {
                             ], {width: "535px", height: "40px", backgroundColor: "#1b2e1b", borderTop: "3px solid #88e688", borderBottom: "3px solid #88e688", userSelect: "none"}],
                             ["style-column", [
                                 ["row", [["levelable", 201], ["levelable", 202], ["levelable", 203], ["levelable", 204], ["levelable", 205]]],
-                                ["row", [["levelable", 206], ["levelable", 207], ["levelable", 208], ["levelable", 209]]],
+                                ["row", [["levelable", 206], ["levelable", 207], ["levelable", 208], ["levelable", 209], ["levelable", 210]]],
                             ], () => {
                                 let look = {width: "525px", backgroundColor: "#0d170d", padding: "5px"}
                                 if (player.cb.highestLevel.lt(25)) look.borderBottom = "3px solid #88e688"
                                 return look
                             }],
-            
+
                             ["style-column", [
                                 ["raw-html", "Rare", {color: "#4e7cff", fontSize: "20px", fontFamily: "monospace"}],
                             ], () => { return player.cb.highestLevel.gte(25) ? {width: "535px", height: "40px", backgroundColor: "#0f1833", borderTop: "3px solid #4e7cff", borderBottom: "3px solid #4e7cff", userSelect: "none"} : {display: "none !important"}}],
                             ["style-column", [
                                 ["row", [["levelable", 301], ["levelable", 302], ["levelable", 303], ["levelable", 304], ["levelable", 305]]],
-                                ["row", [["levelable", 306], ["levelable", 307], ["levelable", 308], ["levelable", 309]]],
+                                ["row", [["levelable", 306], ["levelable", 307], ["levelable", 308], ["levelable", 309], ["levelable", 310]]],
                             ], () => { return player.cb.highestLevel.gte(25) ? {width: "525px", backgroundColor: "#070c19", padding: "5px"} : {display: "none !important"}}],
             
                             ["style-column", [
@@ -4495,10 +4964,75 @@ addLayer("pet", {
                 buttonStyle() { return {color: "#cb79ed"}},
                 unlocked() { return true },
                 content: [
-                    ["left-row", [
-                        ["hoverless-clickable", 111], ["hoverless-clickable", 112]
-                    ], {width: "550px", height: "47px", background: "repeating-linear-gradient(-45deg, #161616 0 15px, #101010 0 30px)", borderBottom: "3px solid white"}],
-                    ["buttonless-microtabs", "fragTabs", { 'border-width': '0px' }],
+                    ["top-column", [
+                        ["left-row", [
+                            ["tooltip-row", [
+                                ["raw-html", "<img src='resources/checkback/lesser_fragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                                ["raw-html", () => { return formatShortSimple(player.pet.lesserFragments)}, {width: "126px", height: "50px", color: "#9bedff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ["raw-html", () => { return "<div class='bottomTooltip'>Lesser Fragments</div>"}],
+                            ], {width: "181px", height: "50px", borderRight: "3px solid white"}],
+                            ["tooltip-row", [
+                                ["raw-html", "<img src='resources/checkback/basic_fragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                                ["raw-html", () => { return formatShortSimple(player.pet.basicFragments)}, {width: "127px", height: "50px", color: "#88e688", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ["raw-html", () => { return "<div class='bottomTooltip'>Basic Fragments</div>"}],
+                            ], {width: "182px", height: "50px", borderRight: "3px solid white"}],
+                            ["tooltip-row", [
+                                ["raw-html", "<img src='resources/checkback/greater_fragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                                ["raw-html", () => { return formatShortSimple(player.pet.greaterFragments)}, {width: "126px", height: "50px", color: "#4e7cff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ["raw-html", () => { return "<div class='bottomTooltip'>Greater Fragments</div>"}],
+                            ], {width: "181px", height: "50px"}],
+                        ], {width: "550px", height: "50px", backgroundColor: "black", borderBottom: "3px solid white", userSelect: "none"}],
+                        ["style-column", [
+                            ["raw-html", () => { return "Selections re-roll in " + formatTime(player.pet.bannerResetTimer) + "."}, {color: "white", fontSize: "22px", fontFamily: "monospace"}],
+                        ], {width: "550px", height: "40px", backgroundColor: "#572c6a", borderBottom: "3px solid #190c1e"}],
+                        ["style-row", [
+                            ["style-column", [
+                                ["raw-html", () => { return "Currently selecting: " + run(layers.pet.levelables[player.pet.banners[player.pet.bannerIndex].id].title, layers.pet.levelables[player.pet.banners[player.pet.bannerIndex].id])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", () => { return "You have " + formatWhole(getLevelableXP("pet", player.pet.banners[player.pet.bannerIndex].id)) + " of this pet."}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ], {width: "347px", height: "54px", borderRight: "3px solid #190c1e"}],
+                            ["style-column", [
+                                ["clickable", 100],
+                            ], {width: "200px", height: "54px"}],
+                        ], {width: "550px", height: "54px", borderBottom: "3px solid #190c1e"}],
+                        ["style-row", [
+                            ["style-row", [
+                                ["style-column", [
+                                    ["clickable", 101],
+                                    ["style-column", [["raw-html", () => {return formatWhole(player.pet.banners[0].val)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}]], {width: "100px", height: "22px", borderTop: "3px solid #190c1e", borderBottom: "3px solid #190c1e"}],
+                                    ["clickable", 102],
+                                    ["style-column", [["raw-html", () => {return formatWhole(player.pet.banners[1].val)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}]], {width: "100px", height: "22px", borderTop: "3px solid #190c1e"}],
+                                ], {width: "100px", height: "253px", backgroundColor: "#2e474c", borderRight: "3px solid #190c1e"}],
+                                ["style-column", [
+                                    ["clickable", 103],
+                                    ["style-column", [["raw-html", () => {return formatWhole(player.pet.banners[2].val)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}]], {width: "100px", height: "22px", borderTop: "3px solid #190c1e", borderBottom: "3px solid #190c1e"}],
+                                    ["clickable", 104],
+                                    ["style-column", [["raw-html", () => {return formatWhole(player.pet.banners[3].val)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}]], {width: "100px", height: "22px", borderTop: "3px solid #190c1e"}],
+                                ], {width: "100px", height: "253px", backgroundColor: "#284528", borderRight: "3px solid #190c1e"}],
+                                ["style-column", [
+                                    ["clickable", 105],
+                                    ["style-column", [["raw-html", () => {return formatWhole(player.pet.banners[4].val)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}]], {width: "100px", height: "22px", borderTop: "3px solid #190c1e", borderBottom: "3px solid #190c1e"}],
+                                    ["clickable", 106],
+                                    ["style-column", [["raw-html", () => {return formatWhole(player.pet.banners[5].val)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}]], {width: "100px", height: "22px", borderTop: "3px solid #190c1e"}],
+                                ], {width: "100px", height: "253px", backgroundColor: "#17254c"}],
+                            ], {width: "306px", height: "253px", borderRight: "3px solid #190c1e"}],
+                            ["style-column", [
+                                ["style-column", [
+                                    ["style-row", [["raw-html", "Evo-Shards", {color: "white", fontSize: "20px", fontFamily: "monospace"}]], {width: "241px", height: "32px"}],
+                                    ["text-input", "evoInput", {width: "221px", height: "40px", backgroundColor: "rgba(0,0,0,0.4)", color: "white", fontSize: "20px", border: "0px", padding: "0px 10px"}],
+                                    ["clickable", 111],
+                                ], {width: "241px", height: "125px", borderBottom: "3px solid #190c1e"}],
+                                ["style-column", [
+                                    ["style-row", [["raw-html", "Para-Shards", {color: "white", fontSize: "20px", fontFamily: "monospace"}]], {width: "241px", height: "32px"}],
+                                    ["text-input", "paraInput", {width: "221px", height: "40px", backgroundColor: "rgba(0,0,0,0.4)", color: "white", fontSize: "20px", border: "0px", padding: "0px 10px"}],
+                                    ["clickable", 112],
+                                ], {width: "241px", height: "125px"}],
+                            ], () => {return hasUpgrade("s", 23) && player.cb.highestLevel.gte(25000) ? {width: "241px", height: "253px", backgroundColor: "#3e1f4c"} : {display: "none !important"}}],
+                        ], {width: "550px", height: "253px", backgroundColor: "#190c1e"}],
+                        ["style-row", [
+                            ["clickable", 113], ["style-row", [], {width: "3px", height: "35px", background: "white"}], ["clickable", 114],
+                        ], {width: "550px", height: "35px", borderTop: "3px solid white", borderBottom: "3px solid white"}],
+                        ["buttonless-microtabs", "frags", { 'border-width': '0px' }],
+                    ], {width: "550px", height: "700px", backgroundColor: "#7d3f98"}],
                 ],
             },
             "Legendary Gems": {
@@ -4665,39 +5199,85 @@ addLayer("pet", {
                 ],
             },
         },
-        fragTabs: {
-            "Epic": {
-                buttonStyle() { return { color: "black" } },
-                unlocked() { return true },
+        frags: {
+            "Shop": {
+                buttonStyle: {color: "#cb79ed"},
+                unlocked: true,
                 content: [
-                    ["scroll-column", [
-                        ["blank", "25px"],
-                        ["raw-html", () => { return "Pets re-roll in " + formatTime(player.pet.bannerResetTimer) + "."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["raw-html", () => { return "Currently selecting: " + run(layers.pet.levelables[player.pet.banners[player.pet.bannerIndex].id].title, layers.pet.levelables[player.pet.banners[player.pet.bannerIndex].id])}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["blank", "25px"],
-                        ["row", [["clickable", 101], ["clickable", 102], ["clickable", 103], ["clickable", 104], ["clickable", 105]]],
-                        ["blank", "25px"],
-                        ["raw-html", () => { return "You have " + formatWhole(getLevelableXP("pet", player.pet.banners[player.pet.bannerIndex].id)) + " of this pet."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["blank", "25px"],
-                        ["clickable", 100],
-                        ["blank", "25px"],
-                    ], {width: "550px", height: "650px", backgroundColor: "#7d3f98"}],
+                    ["style-row", [
+                        ["style-column", [
+                            ["clickable", 121],
+                            ["tooltip-row", [
+                                ["text-input", "fragShopInput", {width: "177px", height: "46px", backgroundColor: "#333", color: "white", fontSize: "24px", border: "0px", padding: "0px 10px"}],
+                                ["raw-html", () => {return "<div class='bottomTooltip'>Bulk Buy Amount<hr><small>Bulk buying increases costs by:<br>base*(amt*" + commaFormat(Decimal.sub(0.05, buyableEffect("pet", 3)), 3) + "+" + commaFormat(Decimal.add(0.95, buyableEffect("pet", 3)), 3) +  ")*amt</small></div>"}],
+                            ], {width: "197px", height: "46px", borderTop: "2px solid white"}],
+                        ], {width: "197px", height: "98px"}],
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", () => { return fragShopBase[player.pet.fragShopIndex] ? fragShopBase[player.pet.fragShopIndex].name : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                ["raw-html", () => {
+                                    switch (player.pet.fragShopIndex) {
+                                        case 0: case 1: case 2:
+                                            return "(" + player.pet.levelables[player.pet.fragShopIndex+401][1] + "/" + tmp.pet.levelables[player.pet.fragShopIndex+401].xpReq + ")"
+                                        case 3:
+                                            return "(" + formatWhole(player.pet.singularityFragments) + ")"
+                                        case 4:
+                                            return "(" + player.pet.levelables[110][1] + "/" + tmp.pet.levelables[110].xpReq + ")"
+                                        case 5:
+                                            return "(" + player.pet.levelables[210][1] + "/" + tmp.pet.levelables[210].xpReq + ")"
+                                        case 6:
+                                            return "(" + player.pet.levelables[310][1] + "/" + tmp.pet.levelables[310].xpReq + ")"
+                                        default:
+                                            return ""
+                                    }
+                                }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ], {width: "350px", height: "50px", borderBottom: "2px solid white"}],
+                            ["left-row", [
+                                ["tooltip-row", [
+                                    ["raw-html", "<img src='resources/checkback/lesser_fragment.png'style='width:40px;height:40px;margin:3px'></img>", {width: "46px", height: "46px", display: "block"}],
+                                    ["raw-html", () => { return formatShortSimple(player.pet.fragShopCost1)}, {width: "64px", height: "46px", fontSize: "14px", color: "#9bedff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ], {width: "115px", height: "46px", borderRight: "2px solid white"}],
+                                ["tooltip-row", [
+                                    ["raw-html", "<img src='resources/checkback/basic_fragment.png'style='width:40px;height:40px;margin:3px'></img>", {width: "46px", height: "46px", display: "block"}],
+                                    ["raw-html", () => { return formatShortSimple(player.pet.fragShopCost2)}, {width: "65px", height: "46px", fontSize: "14px", color: "#88e688", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ], {width: "116px", height: "46px", borderRight: "2px solid white"}],
+                                ["tooltip-row", [
+                                    ["raw-html", "<img src='resources/checkback/greater_fragment.png'style='width:40px;height:40px;margin:3px'></img>", {width: "46px", height: "46px", display: "block"}],
+                                    ["raw-html", () => { return formatShortSimple(player.pet.fragShopCost3)}, {width: "64px", height: "46px", fontSize: "14px", color: "#4e7cff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ], {width: "115px", height: "46px", borderRight: "2px solid white"}],
+                            ], {width: "350px", height: "46px", backgroundColor: "black", userSelect: "none"}],
+                        ], {width: "350px", height: "98px", borderLeft: "3px solid white"}],
+                    ], {width: "550px", height: "98px", borderBottom: "3px solid white", backgroundColor: "#161616"}],
+                    ["always-scroll-column", [
+                        ["style-row", [
+                            ["style-row", [["hoverless-clickable", 131]], {width: "75px", height: "75px", borderRight: "2px solid white"}],
+                            ["style-row", [["hoverless-clickable", 132]], {width: "75px", height: "75px", borderRight: "2px solid white"}],
+                            ["style-row", [["hoverless-clickable", 133]], {width: "75px", height: "75px", borderRight: "2px solid white"}],
+                            ["style-row", [["hoverless-clickable", 134]], {width: "75px", height: "75px", borderRight: "2px solid white"}],
+                            ["style-row", [["hoverless-clickable", 135]], {width: "75px", height: "75px", borderRight: "2px solid white"}],
+                            ["style-row", [["hoverless-clickable", 136]], {width: "75px", height: "75px", borderRight: "2px solid white"}],
+                            ["style-row", [["hoverless-clickable", 137]], {width: "74px", height: "75px"}],
+                        ], {width: "535px", height: "75px", borderBottom: "3px solid white"}],
+                        ["style-row", [
+                            ["style-row", [], {width: "75px", height: "75px", borderRight: "2px solid white"}],
+                            ["style-row", [], {width: "75px", height: "75px", borderRight: "2px solid white"}],
+                            ["style-row", [], {width: "75px", height: "75px", borderRight: "2px solid white"}],
+                            ["style-row", [], {width: "75px", height: "75px", borderRight: "2px solid white"}],
+                            ["style-row", [], {width: "75px", height: "75px", borderRight: "2px solid white"}],
+                            ["style-row", [], {width: "75px", height: "75px", borderRight: "2px solid white"}],
+                            ["style-row", [], {width: "74px", height: "75px"}],
+                        ], {width: "535px", height: "75px"}],
+                    ], {width: "550px", height: "153px", backgroundColor: "#190c1e"}],
                 ],
             },
-            "Singularity": {
-                buttonStyle() { return { color: "black" } },
-                unlocked() { return hasUpgrade("s", 23) },
+            "Buyables": {
+                buttonStyle: {color: "#cb79ed"},
+                unlocked: true,
                 content: [
-                    ["scroll-column", [
-                        ["blank", "25px"],
-                        ["raw-html", () => { return "You have <h3>" + formatWhole(player.pet.singularityFragments) + "</h3> singularity fragments." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["blank", "25px"],
-                        ["raw-html", () => { return "You have <h3>" + formatWhole(player.cb.evolutionShards) + "</h3> evolution shards."  }, { "color": "#d487fd", "font-size": "24px", "font-family": "monospace" }],
-                        ["raw-html", () => { return "You have <h3>" + formatWhole(player.cb.paragonShards) + "</h3> paragon shards."  }, { "color": "#2842eb", "font-size": "24px", "font-family": "monospace" }],
-                        ["blank", "25px"],
-                        ["clickable", 121],
-                        ["clickable", 122],
-                    ], {width: "550px", height: "650px", backgroundColor: "#662222"}],
+                    ["style-column", [
+                        ["row", [["buyable", 1], ["buyable", 2], ["buyable", 3], ["buyable", 4]]],
+                        ["row", [["buyable", 5], ["buyable", 6], ["buyable", 7], ["buyable", 8]]],
+                    ], {width: "550px", height: "254px", background: "linear-gradient(0deg, #3e1f4c, #190c1e, #3e1f4c)"}]
                 ],
             },
         },

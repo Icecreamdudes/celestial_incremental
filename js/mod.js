@@ -28,9 +28,8 @@
 		"Check Back/cookie.js", "Check Back/coinDust.js", "Check Back/buttonEnhancement.js", "Check Back/dailyOrbs.js", "Misc/achievements.js",
 		"Hive/unih.js", "Hive/flower.js", "Hive/pollen.js", "Hive/nectar.js", "Hive/beebread.js",
 		"Hive/honey.js", "Hive/wax.js", "Hive/aleph.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
-		
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js",
-
+		"Check Back/singularityPet.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 	],
@@ -43,7 +42,7 @@
 
 // Set your version in num and name
 let VERSION = {
-	num: 190, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
+	num: 190.1, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
 	name: "Aleph Update I: The Hive",
 }
 
@@ -230,8 +229,7 @@ function updateStyles() {
 		case "ev8":
 			layerBG = "#252525"
 			break;
-		case "ep0": case "ep1": case "ep2": case "ep3": case "ep4":
-		case "ep5":
+		case "ep0": case "ep1": case "ep2": case "sp":
 			layerBG = "#7d3f98"
 			break;
 		case "leg":
@@ -335,7 +333,7 @@ function updateStyles() {
 	}
 
 	// Solar Eclipse Effect (moving sun/moon)
-	if (player.sma.inStarmetalChallenge && player.pet.activeAbilities[0]) {
+	if (player.sma.inStarmetalChallenge && player.pet.legPetTimers[0].active) {
 	    if (!document.getElementById("solar-eclipse-bg")) {
     	    // Create the eclipse overlay
 	        const eclipse = document.createElement("div");
@@ -528,7 +526,7 @@ function updateStyles() {
 			break;
 		case "cb": case "ev0": case "ev1": case "ev2": case "ev4":
 		case "ev8": case "ev10": case "ep0": case "ep1":
-		case "ep2": case "ep3": case "ep4": case "ep5":
+		case "ep2": case "sp":
             player.musuniverse = "CB"
 			break;
 		case "od": case "mu":
@@ -575,8 +573,8 @@ function updateStyles() {
             	}
 				break;
 			case "D1":
-				if (!player.pet.activeAbilities[0]) playAndLoopAudio("music/darkUni1.mp3", options.musicVolume/10)
-				if (player.pet.activeAbilities[0]) playAndLoopAudio("music/eclipse.mp3", options.musicVolume/10)
+				if (!player.pet.legPetTimers[0].active) playAndLoopAudio("music/darkUni1.mp3", options.musicVolume/10)
+				if (player.pet.legPetTimers[0].active) playAndLoopAudio("music/eclipse.mp3", options.musicVolume/10)
 				break;
 			case "CH":
 				if (player.tab == "ch") playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10)
@@ -693,6 +691,28 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.10.5 - Fragment Revamp</h3><br>
+		Content:<br>
+			- Revamped check back fragmentation.<br>
+			- Slightly revamped singularity epic pet layers.<br>
+			- Added 3 new pets.<br>
+			- Revamped the stinger ship to only use mouse/touch controls.<br><br>
+		QoL:<br>
+			- Added the ability to hold click on flowers to pick them.<br>
+			- Added the ability to hold click on flower bars to speed them up.<br><br>
+		Bugfixes:<br>
+			- Fixed attack speed not working with unarmed ship.<br>
+			- Removed the reverse break infinity note in BI (Not applicable now).<br>
+			- Fixed 'Eclipse Shard Value Increaser' not rounding the cost.<br>
+			- Fixed space buyables accidentally saying they cost space.<br>
+			- Fixed dice roll text sometimes not being rounded.<br>
+			- Fixed wrath cookie evolution being unaccessible.<br>
+			- Fixed star evo accidentally requiring 5 Teste levels.<br>
+			- Fixed Vex:32 throwing up console errors.<br>
+			- Fixed most nectar upgrades spelling it as 'nector'.<br>
+			- Fixed a bug when entering dark universe on a newer save.<br>
+			- Plus many bug fixes from hotfixes before this update.<br><br>
+
 	<h3>v1.10 - Aleph Update Part I: The Hive</h3><br>
 		Content:<br>
 			- Added a new universe, The Hive.<br>
@@ -1635,5 +1655,19 @@ function fixOldSave(oldVersion){
 			player.cb.paragonShards = player.cb.paragonShards.add(paraRefund)
             doPopup("none", "+" + formatWhole(paraRefund) + " Paragon Shard!", "REFUND", 5, "#4c64ff", "resources/paragonShard.png")
 		}
+	}
+	if (oldVersion < 190.1 && player.ep3) {
+		player.sp.buyables[11] = new Decimal(player.ep3.buyables[11])
+		player.sp.buyables[12] = new Decimal(player.ep3.buyables[2])
+		player.sp.buyables[14] = new Decimal(player.ep3.buyables[12])
+		player.sp.buyables[15] = new Decimal(player.ep3.buyables[13])
+		player.sp.buyables[21] = new Decimal(player.ep4.buyables[11])
+		player.sp.buyables[22] = new Decimal(player.ep4.buyables[1])
+		player.sp.buyables[24] = new Decimal(player.ep4.buyables[12])
+		player.sp.buyables[25] = new Decimal(player.ep4.buyables[13])
+		player.sp.buyables[31] = new Decimal(player.ep5.buyables[11])
+		player.sp.buyables[32] = new Decimal(player.ep5.buyables[3])
+		player.sp.buyables[34] = new Decimal(player.ep5.buyables[12])
+		player.sp.buyables[35] = new Decimal(player.ep5.buyables[13])
 	}
 }

@@ -242,7 +242,7 @@ addLayer("ne", {
     },
     upgrades: {
         101: {
-            title: "Nector α-1",
+            title: "Nectar α-1",
             unlocked: true,
             description: "Double Nectar α Gain.",
             cost() {
@@ -255,7 +255,7 @@ addLayer("ne", {
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         102: {
-            title: "Nector α-2",
+            title: "Nectar α-2",
             unlocked: true,
             description: "Triple bees per second.",
             cost() {
@@ -268,7 +268,7 @@ addLayer("ne", {
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         103: {
-            title: "Nector α-3",
+            title: "Nectar α-3",
             unlocked: true,
             description: "Unlock Nectar β.",
             cost() {
@@ -282,7 +282,7 @@ addLayer("ne", {
         },
 
         201: {
-            title: "Nector β-1",
+            title: "Nectar β-1",
             unlocked: true,
             description: "Unlock green flowers.",
             cost() {
@@ -295,7 +295,7 @@ addLayer("ne", {
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         202: {
-            title: "Nector β-2",
+            title: "Nectar β-2",
             unlocked: true,
             description: "Buff nectar α based on total nectar upgrades.",
             cost() {
@@ -312,7 +312,7 @@ addLayer("ne", {
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         203: {
-            title: "Nector β-3",
+            title: "Nectar β-3",
             unlocked: true,
             description: "Unlock Nectar γ.",
             cost() {
@@ -326,7 +326,7 @@ addLayer("ne", {
         },
 
         301: {
-            title: "Nector γ-1",
+            title: "Nectar γ-1",
             unlocked: true,
             description: "Boost nectar α based on total research.",
             cost() {
@@ -343,9 +343,9 @@ addLayer("ne", {
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         302: {
-            title: "Nector γ-2",
+            title: "Nectar γ-2",
             unlocked: true,
-            description: "Improve nector α effect.",
+            description: "Improve nectar α effect.",
             cost() {
                 if (player.bee.path != 2) return new Decimal(8000)
                 return new Decimal(20)
@@ -356,7 +356,7 @@ addLayer("ne", {
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         303: {
-            title: "Nector γ-3",
+            title: "Nectar γ-3",
             unlocked: true,
             description: "Unlock Nectar δ.",
             cost() {
@@ -370,7 +370,7 @@ addLayer("ne", {
         },
 
         401: {
-            title: "Nector δ-1",
+            title: "Nectar δ-1",
             unlocked: true,
             description: "Unlock a new nectar research.",
             cost() {
@@ -383,7 +383,7 @@ addLayer("ne", {
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         402: {
-            title: "Nector δ-2",
+            title: "Nectar δ-2",
             unlocked: true,
             description: "Decrease time between green flower growth by /2.",
             cost() {
@@ -396,7 +396,7 @@ addLayer("ne", {
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         403: {
-            title: "Nector δ-3",
+            title: "Nectar δ-3",
             unlocked: true,
             description() {
                 if (hasUpgrade("al", 211)) return "Double picking power and unlock nectar ε."
@@ -412,7 +412,7 @@ addLayer("ne", {
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         501: {
-            title: "Nector δ-1",
+            title: "Nectar δ-1",
             unlocked: true,
             description: "Improve nectar γ's effect",
             cost() {
@@ -425,7 +425,7 @@ addLayer("ne", {
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         502: {
-            title: "Nector δ-2",
+            title: "Nectar δ-2",
             unlocked: true,
             description: "Multiply nectar cell base by x1.1",
             cost() {
@@ -438,7 +438,7 @@ addLayer("ne", {
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         503: {
-            title: "Nector δ-3",
+            title: "Nectar δ-3",
             unlocked: true,
             description: "Divide all flower cooldowns based on nectar ε",
             cost() {

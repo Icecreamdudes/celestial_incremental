@@ -48,8 +48,7 @@
             "background-origin": "border-box",
             "border-color": "#7c5423",
         };
-      },
-
+    },
     tooltip: "Infinity",
     color: "#ffbf00",
     branches: ["ad"],

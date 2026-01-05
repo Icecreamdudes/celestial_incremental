@@ -197,7 +197,9 @@ addLayer("ep2", {
             player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(buyableEffect("ep2", i))
         }
         player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(buyableEffect("ep0", 13))
+        player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(buyableEffect("pet", 5))
         if (hasUpgrade("ep1", 13)) player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(upgradeEffect("ep1", 13))
+        player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(buyableEffect("sp", 33))
         if (hasUpgrade("fi", 22)) player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(upgradeEffect("fi", 22))
 
         player.ep2.cookies = player.ep2.cookies.add(player.ep2.cookiesPerSecond.mul(delta))
@@ -218,6 +220,7 @@ addLayer("ep2", {
         if (hasUpgrade("ep2", 9001)) player.ep2.averageGoldenCooldown = player.ep2.averageGoldenCooldown.div(1.5)
         if (hasUpgrade("ep2", 9003)) player.ep2.averageGoldenCooldown = player.ep2.averageGoldenCooldown.div(1.5)
         if (hasUpgrade("ep2", 9005)) player.ep2.averageGoldenCooldown = player.ep2.averageGoldenCooldown.div(1.5)
+        player.ep2.averageGoldenCooldown = player.ep2.averageGoldenCooldown.div(buyableEffect("pet", 6).sub(1).div(10).add(1))
 
         if (getLevelableAmount("pet", 403).gt(0)) {
             if (player.tab == "ep2") {
@@ -257,6 +260,7 @@ addLayer("ep2", {
             if (Decimal.gte(player.ep2.barClicks, base.div(goldenBarDiv).max(base.mul(0.1)))) player.ep2.barClicks = Decimal.div(base, goldenBarDiv).max(base.mul(0.1)).sub(1).floor()
             player.ep2.currScale = new Decimal(1)
             player.ep2.scaleCooldown = new Decimal(3600)
+            player.ep2.scaleCooldown = player.ep2.scaleCooldown.div(buyableEffect("pet", 6).sub(1).div(10).add(1))
         }
         player.ep2.barMax = base.mul(player.ep2.currScale.mul(Decimal.pow(1.1, player.ep2.currScale.sub(2)).max(1)).div(goldenBarDiv).max(0.1)).floor()
 

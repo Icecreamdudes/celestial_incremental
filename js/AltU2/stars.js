@@ -67,6 +67,7 @@ addLayer("st", {
         player.st.starPowerPerSecond = player.st.dimensionPowerEffects[0]
         player.st.starPowerPerSecond = player.st.starPowerPerSecond.mul(buyableEffect("ma", 32))
         player.st.starPowerPerSecond = player.st.starPowerPerSecond.mul(levelableEffect("pu", 208)[1])
+        player.st.starPowerPerSecond = player.st.starPowerPerSecond.mul(levelableEffect("st", 210)[0])
 
         // Star Power Softcap
         let base = new Decimal(300)
@@ -639,6 +640,45 @@ addLayer("st", {
                 return look
             }  
         },
+        110: {
+            image() { return this.canClick() ? "resources/Pets/coinFragmentCommonPet.png" : "resources/secret.png"},
+            title() { return "Coin Fragment" },
+            description() {
+                return "x" + format(this.effect()[0]) + " to starmetal alloy.<br>"
+            },
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
+                return [
+                    amt.div(25).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Starmetal Alloy
+                ]
+            },
+            sacValue() { return new Decimal(1)},
+            // CLICK CODE
+            unlocked() { return player.cb.highestLevel.gte(7500) && player.ca.unlockedCante },
+            canClick() { return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
+            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(3).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#37078f"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#9badff" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }  
+        },
 
         //Unc
         201: {
@@ -969,6 +1009,45 @@ addLayer("st", {
             sacValue() { return new Decimal(1)},
             // CLICK CODE
             unlocked() { return true },
+            canClick() { return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
+            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(5).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#37078f"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#6ddea9" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }  
+        },
+        210: {
+            image() { return this.canClick() ? "resources/Pets/refinedFragmentUncommonPet.png" : "resources/secret.png"},
+            title() { return "Refined Fragment" },
+            description() {
+                return "x" + format(this.effect()[0]) + " to star power.<br>"
+            },
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
+                return [
+                    amt.div(2).add(1).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Star Power
+                ]
+            },
+            sacValue() { return new Decimal(1)},
+            // CLICK CODE
+            unlocked() { return player.cb.highestLevel.gte(15000) && player.ca.unlockedCante },
             canClick() { return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
             onClick() { return layers[this.layer].levelables.index = this.id },
             // BUY CODE
@@ -2041,8 +2120,8 @@ addLayer("st", {
                                 ["raw-html", "Common", {color: "#9badff", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "535px", height: "40px", backgroundColor: "#293b54", borderBottom: "3px solid #9badff", userSelect: "none"}],
                             ["style-column", [
-                                ["row", [["levelable", 101],["levelable", 102],["levelable", 103],["levelable", 104],["levelable", 105],]],
-                                ["row", [["levelable", 106],["levelable", 107],["levelable", 108],["levelable", 109],]],
+                                ["row", [["levelable", 101],["levelable", 102],["levelable", 103],["levelable", 104],["levelable", 105]]],
+                                ["row", [["levelable", 106],["levelable", 107],["levelable", 108],["levelable", 109],["levelable", 110]]],
                             ], {width: "525px", backgroundColor: "#1f2133", padding: "5px"}],
             
                             ["style-column", [
@@ -2050,7 +2129,7 @@ addLayer("st", {
                             ], {width: "535px", height: "40px", backgroundColor: "#1b2e1b", borderTop: "3px solid #6ddea9", borderBottom: "3px solid #6ddea9", userSelect: "none"}],
                             ["style-column", [
                                 ["row", [["levelable", 201], ["levelable", 202], ["levelable", 203], ["levelable", 204], ["levelable", 205]]],
-                                ["row", [["levelable", 206], ["levelable", 207], ["levelable", 208], ["levelable", 209]]],
+                                ["row", [["levelable", 206], ["levelable", 207], ["levelable", 208], ["levelable", 209], ["levelable", 210]]],
                             ], {width: "525px", backgroundColor: "#0f1c18", padding: "5px"}],
                         ], {width: "550px", height: "522px"}],
                     ], {width: "550px", height: "700px", backgroundColor: "#161616", border: "3px solid rgb(218, 218, 218)", borderRadius: "5px 5px 5px 5px"}],

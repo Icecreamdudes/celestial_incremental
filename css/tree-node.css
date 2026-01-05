@@ -1,7 +1,8 @@
 /* Tree nodes, button nodes, and side layers */
 .treeNode {
-	height: 75px;
-	width: 75px;
+	position: relative;
+	height: 75px !important;
+	width: 75px !important;
 	border: var(--hqProperty1);
 	border-color: rgba(0, 0, 0, 0.3);
 	border-radius: 50%;
@@ -108,8 +109,9 @@
 }
 
 .tabNode {
-	height: 50px;
-	width: 200px;
+	position: relative;
+	height: 50px !important;
+	width: 200px !important;
 	border: var(--hqProperty1);
 	border-color: rgba(0, 0, 0, 0.125);
 	border-radius: 15px;

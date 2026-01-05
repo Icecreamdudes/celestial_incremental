@@ -20,6 +20,7 @@ addLayer("hre", {
         player.hre.refinementDiv = player.hre.refinementDiv.mul(buyableEffect("ta", 47))
         if (hasUpgrade("hbl", 3)) player.hre.refinementDiv = player.hre.refinementDiv.mul(upgradeEffect("hbl", 3))
         if (inChallenge("hrm", 16)) player.hre.refinementDiv = player.hre.refinementDiv.mul(player.hre.refinementEffect[1][0])
+        player.hre.refinementDiv = player.hre.refinementDiv.mul(levelableEffect("pet", 210)[1])
         player.hre.refinementDiv = player.hre.refinementDiv.mul(player.h.prePowerMult)
 
         if (player.hre.refinement.lt(90)) player.hre.refinementReq = Decimal.pow(6, player.hre.refinement).mul(1e8).div(player.hre.refinementDiv)

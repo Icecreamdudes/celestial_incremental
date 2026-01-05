@@ -240,7 +240,7 @@ addLayer("cb", {
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(levelableEffect("pu", 202)[2])
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(levelableEffect("pet", 406)[0])
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(player.pet.gemEffects[0])
-            player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("ep3", 12))
+            player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("sp", 14))
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("pl", 12))
             if (hasMilestone("db", 101)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(1.25)
             if (player.ma.matosDefeated) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(2)
@@ -369,7 +369,7 @@ addLayer("cb", {
             if (hasUpgrade("ev8", 16)) player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(1.2)
             player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(levelableEffect("pet", 406)[1])
             player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(player.pet.gemEffects[2])
-            player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(buyableEffect("ep5", 12))
+            player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(buyableEffect("sp", 34))
             player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(buyableEffect("pl", 13))
             if (player.ma.matosDefeated) player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(1.5)
             player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(levelableEffect("ir", 5)[1])
@@ -380,7 +380,7 @@ addLayer("cb", {
         player.cb.boostTimers[2].max = new Decimal(129600)
         for (let i in player.cb.boostTimers) {
             player.cb.boostTimers[i].max = player.cb.boostTimers[i].max.div(levelableEffect("pet", 401)[2])
-            player.cb.boostTimers[i].max = player.cb.boostTimers[i].max.div(buyableEffect("ep5", 13))
+            player.cb.boostTimers[i].max = player.cb.boostTimers[i].max.div(buyableEffect("sp", 35))
             player.cb.boostTimers[i].max = player.cb.boostTimers[i].max.div(buyableEffect("ev2", 12))
             if (hasUpgrade("fi", 14)) player.cb.boostTimers[i].max = player.cb.boostTimers[i].max.div(2)
 
@@ -1186,12 +1186,38 @@ addLayer("cb", {
                 return look
             },
         },
+        210: {
+            title() { 
+                if (player.pet.petTimers[9].gt(0)) {
+                    return "<h3>Check back in<br>" + formatTime(player.pet.petTimers[9]) + "."
+                } else {
+                    return "<h3>+" + format(tmp.pet.levelables[310].pointValue) + "<br>Pet Points."
+                }
+            },
+            canClick() { return player.pet.petTimers[9].lte(0) && this.unlocked() },
+            tooltip() { return tmp.pet.levelables[310].pointTooltip },
+            unlocked() { return getLevelableAmount("pet", 310).gte(1) || getLevelableTier("pet", 310).gte(1) },
+            onClick() {
+                let pval = layers.pet.levelables[310].pointClick()
+
+                player.cb.petPoints = player.cb.petPoints.add(pval)
+                player.pet.petTimers[9] = tmp.pet.levelables[310].pointCooldown
+                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(tmp.pet.levelables[310].canteBase.mul(player.ca.canteEnergyMult))    
+            },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
+                this.canClick() ? look.backgroundColor = "#A2D800" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
+        },
 
         299: {
             title() {return "Claim All"},
             canClick() {return tmp.cb.clickables[201].canClick || tmp.cb.clickables[202].canClick || tmp.cb.clickables[203].canClick
                 || tmp.cb.clickables[204].canClick || tmp.cb.clickables[205].canClick || tmp.cb.clickables[206].canClick
-                || tmp.cb.clickables[207].canClick || tmp.cb.clickables[208].canClick || tmp.cb.clickables[209].canClick},
+                || tmp.cb.clickables[207].canClick || tmp.cb.clickables[208].canClick || tmp.cb.clickables[209].canClick
+                || tmp.cb.clickables[210].canClick},
             unlocked() {return player.cb.highestLevel.gte(200)},
             onClick() {
                 clickClickable("cb", 201)
@@ -1203,6 +1229,7 @@ addLayer("cb", {
                 clickClickable("cb", 207)
                 clickClickable("cb", 208)
                 clickClickable("cb", 209)
+                clickClickable("cb", 210)
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
@@ -2222,7 +2249,7 @@ addLayer("cb", {
                         ["column", [
                             ["clickable", 201], ["clickable", 202], ["clickable", 203], ["clickable", 204],
                             ["clickable", 205], ["clickable", 206], ["clickable", 207], ["clickable", 208],
-                            ["clickable", 209],
+                            ["clickable", 209], ["clickable", 210],
                             ["clickable", 299],
                         ]],
                     ]],
@@ -2281,25 +2308,28 @@ addLayer("cb", {
         ], {width: "825px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px 10px 0px 0px", userSelect: "none"}],
         ["row", [["bar", "xpbar"]]],
         ["blank", "10px"],
-        ["raw-html", function () { return player.cb.highestLevel.lt(3) ?  "You will unlock something at level 3! <small>[XP TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cb.highestLevel.lt(6) && player.cb.highestLevel.gte(3) ?  "You will unlock something at level 6! <small>[XP TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cb.highestLevel.lt(10) && player.cb.highestLevel.gte(6) ?  "You will unlock something at level 10! <small>[??? TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cb.highestLevel.lt(15) && player.cb.highestLevel.gte(10) ?  "You will unlock something at level 15! <small>[XP TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cb.highestLevel.lt(25) && player.cb.highestLevel.gte(15) ?  "You will unlock something at level 25! <small>[CRATE TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cb.highestLevel.lt(35) && player.cb.highestLevel.gte(25) ?  "You will unlock something at level 35! <small>[??? TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cb.highestLevel.lt(50) && player.cb.highestLevel.gte(35) ?  "You will unlock something at level 50! <small>[XP TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cb.highestLevel.lt(65) && player.cb.highestLevel.gte(50) ?  "You will unlock something at level 65! <small>[XP TAB] [PET SHOP]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cb.highestLevel.lt(75) && player.cb.highestLevel.gte(65) ?  "You will unlock something at level 75! <small>[CRATE TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cb.highestLevel.lt(100) && player.cb.highestLevel.gte(75) && (hasUpgrade("ip", 31) || hasMilestone("s", 14)) ?  "You will unlock something at level 100! <small>[??? TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cb.highestLevel.lt(125) && player.cb.highestLevel.gte(100) && (hasChallenge("ip", 12) || hasMilestone("s", 14)) ?  "You will unlock something at level 125! <small>[CRATE TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cb.highestLevel.lt(150) && player.cb.highestLevel.gte(125) ?  "You will unlock something at level 150! <small>[XP TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cb.highestLevel.lt(200) && player.cb.highestLevel.gte(150) ?  "You will unlock something at level 200! <small>[MOST MAIN TABS]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cb.highestLevel.lt(250) && player.cb.highestLevel.gte(200) ?  "You will unlock something at level 250! <small>[EVOLUTION TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cb.highestLevel.lt(666) && player.cb.highestLevel.gte(250) ?  "You will unlock something at level 666! <small>[XPBOOST TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cb.highestLevel.lt(1500) && player.cb.highestLevel.gte(666) ?  "You will unlock something at level 1,500! <small>[CRATE TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cb.highestLevel.lt(3000) && player.cb.highestLevel.gte(1500) ?  "You will unlock something at level 3,000! <small>[PET SHOP]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cb.highestLevel.lt(25000) && player.cb.highestLevel.gte(3000) && hasUpgrade("s", 23) ?  "You will unlock something at level 25,000! <small>[CRATE TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cb.highestLevel.lt(100000) && player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23) ?  "You will unlock something at level 100,000! <small>[CRATE TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", () => { return player.cb.highestLevel.lt(3) ?  "You will unlock something at level 3! <small>[XP TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(6) && player.cb.highestLevel.gte(3) ?  "You will unlock something at level 6! <small>[XP TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(10) && player.cb.highestLevel.gte(6) ?  "You will unlock something at level 10! <small>[??? TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(15) && player.cb.highestLevel.gte(10) ?  "You will unlock something at level 15! <small>[XP TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(25) && player.cb.highestLevel.gte(15) ?  "You will unlock something at level 25! <small>[CRATE TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(35) && player.cb.highestLevel.gte(25) ?  "You will unlock something at level 35! <small>[??? TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(50) && player.cb.highestLevel.gte(35) ?  "You will unlock something at level 50! <small>[XP TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(65) && player.cb.highestLevel.gte(50) ?  "You will unlock something at level 65! <small>[XP TAB] [PET SHOP]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(75) && player.cb.highestLevel.gte(65) ?  "You will unlock something at level 75! <small>[CRATE TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(100) && player.cb.highestLevel.gte(75) && (hasUpgrade("ip", 31) || hasMilestone("s", 14)) ?  "You will unlock something at level 100! <small>[??? TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(125) && player.cb.highestLevel.gte(100) && (hasChallenge("ip", 12) || hasMilestone("s", 14)) ?  "You will unlock something at level 125! <small>[CRATE TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(150) && player.cb.highestLevel.gte(125) ?  "You will unlock something at level 150! <small>[XP TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(200) && player.cb.highestLevel.gte(150) ?  "You will unlock something at level 200! <small>[MOST MAIN TABS]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(250) && player.cb.highestLevel.gte(200) ?  "You will unlock something at level 250! <small>[EVOLUTION TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(666) && player.cb.highestLevel.gte(250) ?  "You will unlock something at level 666! <small>[XPBOOST TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(1500) && player.cb.highestLevel.gte(666) ?  "You will unlock something at level 1,500! <small>[CRATE TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(3000) && player.cb.highestLevel.gte(1500) ?  "You will unlock something at level 3,000! <small>[PET SHOP]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(7500) && player.cb.highestLevel.gte(3000) ?  "You will unlock something at level 7,500! <small>[FRAGMENTATION]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(15000) && player.cb.highestLevel.gte(7500) ?  "You will unlock something at level 15,000! <small>[FRAGMENTATION]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(25000) && player.cb.highestLevel.gte(15000) && hasUpgrade("s", 23) ?  "You will unlock something at level 25,000! <small>[CRATE TAB] [FRAGMENTATION]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(100000) && player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23) ?  "You will unlock something at level 100,000! <small>[CRATE TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(250000) && player.cb.highestLevel.gte(100000) && player.ma.matosUnlock ?  "You will unlock something at level 250,000! <small>[FRAGMENTATION]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["blank", "10px"],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],

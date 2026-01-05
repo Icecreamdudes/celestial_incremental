@@ -691,7 +691,7 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v1.10.5 - Fragment Revamp</h3><br>
+	<h3>v1.10.5 - Fragmentation Revamp</h3><br>
 		Content:<br>
 			- Revamped check back fragmentation.<br>
 			- Slightly revamped singularity epic pet layers.<br>
@@ -1657,6 +1657,10 @@ function fixOldSave(oldVersion){
 		}
 	}
 	if (oldVersion < 190.1 && player.ep3) {
+		player.sp.kresPoints = new Decimal(player.ep3.kresPoints)
+		player.sp.navPoints = new Decimal(player.ep4.navPoints)
+		player.sp.selPoints = new Decimal(player.ep5.selPoints)
+
 		player.sp.buyables[11] = new Decimal(player.ep3.buyables[11])
 		player.sp.buyables[12] = new Decimal(player.ep3.buyables[2])
 		player.sp.buyables[14] = new Decimal(player.ep3.buyables[12])

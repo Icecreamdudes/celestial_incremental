@@ -1307,6 +1307,19 @@ function loadVue() {
 			</div>
 		`
 	})
+	
+	Vue.component('jukebox', {
+		props: ['layer', 'data'],
+		template: `
+		<div v-bind:class="{jukebox: true, selected: options.jukeboxID == data, tooltipBox: true, can: true}" v-if="run(layers[layer].songs[data].unlocked, layers[layer].songs[data])" v-on:click="options.jukeboxID = data">
+			<img v-bind:src="layers.jukebox.songs[data].img" style='width:85px;height:85px;border:2px solid #644d3c'></img>
+			<div style="width:85px;height:25px;background:#856650; border-radius:15px">
+				<span style="font-size:12px;user-select:none" v-html="data != 'none' ? layers[layer].songs[data].name + '<br>' : 'Disable'"></span>
+				<span style="font-size:10px;user-select:none" v-html="layers[layer].songs[data].description"></span>
+			</div>
+		</div>
+		`,
+	})
 
 	// [TEXT, SUBTAB, TAB, ENABLE]
 	Vue.component('category-button', {

@@ -29,7 +29,7 @@
 		"Hive/unih.js", "Hive/flower.js", "Hive/pollen.js", "Hive/nectar.js", "Hive/beebread.js",
 		"Hive/honey.js", "Hive/wax.js", "Hive/aleph.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js",
-		"Check Back/singularityPet.js",
+		"Check Back/singularityPet.js", "Misc/jukebox.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 	],
@@ -104,7 +104,7 @@ function updateStyles() {
 			if (player.c.cutscene1 || player.c.cutscene2 || player.c.cutscene13 || (player.c.currentCutscene == 35 && player.c.cutsceneIndex >= 24)) layerBG = "black"
 			if (player.c.currentCutscene == 33 || player.c.currentCutscene == 34 || (player.c.currentCutscene == 35 && player.c.cutsceneIndex < 24)) layerBG = "linear-gradient(-180deg,rgb(114, 8, 4) 0%, rgb(114, 4, 85) 100%)"
 			break;
-		case "settings": case "savebank": case "changelog": case "credits":
+		case "settings": case "jukebox": case "savebank": case "changelog": case "credits":
 			if (!player.sma.inStarmetalChallenge) layerBG = "linear-gradient(90deg, #57636d, #2e3d49)"
 			if (player.sma.inStarmetalChallenge) layerBG = "linear-gradient(90deg, #1b242b, #12181d)"
 			break;
@@ -535,146 +535,146 @@ function updateStyles() {
 	}
 
 	// Play/Stop Music
-	if (options.musicToggle && cutsceneActive == false) {
-		switch(player.musuniverse) {
-			case "PO":
-				playAndLoopAudio("music/portal.mp3", options.musicVolume/10)
-				break;
-			case "UA":
-				playAndLoopAudio("music/hex.mp3", options.musicVolume/10)
-				break;
-			case "U1":
-				if (player.startedGame && player.ip.activeChallenge == null) playAndLoopAudio("music/universe1.mp3", options.musicVolume/10)
-				if (player.ip.activeChallenge != null) playAndLoopAudio("music/tav.mp3", options.musicVolume/10)
-				break;
-			case "U2":
-				if (player.tab != "tad") {
-					playAndLoopAudio("music/universe2.mp3", options.musicVolume/10)
-				} else {
-					playAndLoopAudio("music/tavDomain.mp3", options.musicVolume/10)
+	if (options.musicToggle) {
+		if (options.jukeboxID != 'none') {
+			playAndLoopAudio(layers.jukebox.songs[options.jukeboxID].file, options.musicVolume/10)
+		} else {
+			if (!cutsceneActive && !window.cinematicCutsceneActive) {
+				switch(player.musuniverse) {
+					case "PO":
+						playAndLoopAudio("music/portal.mp3", options.musicVolume/10)
+						break;
+					case "UA":
+						playAndLoopAudio("music/hex.mp3", options.musicVolume/10)
+						break;
+					case "U1":
+						if (player.startedGame && player.ip.activeChallenge == null) playAndLoopAudio("music/universe1.mp3", options.musicVolume/10)
+						if (player.ip.activeChallenge != null) playAndLoopAudio("music/tav.mp3", options.musicVolume/10)
+						break;
+					case "U2":
+						if (player.tab != "tad") {
+							playAndLoopAudio("music/universe2.mp3", options.musicVolume/10)
+						} else {
+							playAndLoopAudio("music/tavDomain.mp3", options.musicVolume/10)
+						}
+						break;
+					case "A1":
+						playAndLoopAudio("music/alt-uni1.mp3", options.musicVolume/10)
+						break;
+					case "U3":
+						if (player.ma.inBlackHeart == false) {
+        		        	if (!player.ma.matosDefeated) playAndLoopAudio("music/singularity.mp3", options.musicVolume/10);
+		                	if (player.ma.matosDefeated) playAndLoopAudio("music/singularity2.mp3", options.musicVolume/10);
+            			} else {
+        		        	if (!player.ma.fightingCelestialites) {
+		                    	playAndLoopAudio("music/enteringBlackHeart.mp3", options.musicVolume/10);
+            				} else {
+        		            	if (player.ma.currentDepth.eq(1)) playAndLoopAudio("music/celestialites.mp3", options.musicVolume/10);
+		                    	if (player.ma.currentDepth.eq(2)) playAndLoopAudio("music/blackHeart.mp3", options.musicVolume/10);
+                		    	if (player.ma.currentDepth.eq(3) && !player.ma.matosFightActive && player.ma.currentCelestialiteType != 25) playAndLoopAudio("music/matosTheme.mp3", options.musicVolume/10);
+        		            	if (player.ma.currentDepth.eq(3) && player.ma.matosFightActive && player.ma.currentCelestialiteType == 25) playAndLoopAudio("music/matosFight.mp3", options.musicVolume/10);
+		                	} //use blackHeart.mp3 for depth 2, matosTheme.mp3 for depth 3
+            			}
+						break;
+					case "D1":
+						if (!player.pet.legPetTimers[0].active) playAndLoopAudio("music/darkUni1.mp3", options.musicVolume/10)
+						if (player.pet.legPetTimers[0].active) playAndLoopAudio("music/eclipse.mp3", options.musicVolume/10)
+						break;
+					case "CH":
+						if (player.tab == "ch") playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10)
+						//if (player.tab == "ch" && player.subtabs["ch"]["stuff"] != "???") playAndLoopAudio("music/aniciffoCutscene.mp3", options.musicVolume/10)
+						break;
+					case "A2":
+						if (!player.ir.inBattle) playAndLoopAudio("music/space.mp3", options.musicVolume/10)
+						if (player.ir.inBattle && !player.ir.iriditeFightActive) playAndLoopAudio("music/spaceBattle.mp3", options.musicVolume/10)
+						if (player.ir.inBattle && player.ir.iriditeFightActive) playAndLoopAudio("music/iridite.mp3", options.musicVolume/10)
+						break;
+					case "MI":
+						playAndLoopAudio("music/mining.mp3", options.musicVolume/10)
+						break;
+					case "UB":
+						playAndLoopAudio("music/hive.mp3", options.musicVolume/10)
+						break;
+					case "CB":
+						if (player.fi.battleTier.eq(0)) playAndLoopAudio("music/checkback.mp3", options.musicVolume/10)
+						if (player.fi.battleTier.eq(1)) playAndLoopAudio("music/fighting.mp3", options.musicVolume/10)
+						if (player.fi.battleTier.eq(2)) playAndLoopAudio("music/tier2.mp3", options.musicVolume/10)
+						break;
+					default:
+						stopAudio()
+						break;
 				}
-				break;
-			case "A1":
-				playAndLoopAudio("music/alt-uni1.mp3", options.musicVolume/10)
-				break;
-			case "U3":
-				if (player.ma.inBlackHeart == false) {
-                	if (!player.ma.matosDefeated) playAndLoopAudio("music/singularity.mp3", options.musicVolume/10);
-                	if (player.ma.matosDefeated) playAndLoopAudio("music/singularity2.mp3", options.musicVolume/10);
-            	} else {
-                	if (!player.ma.fightingCelestialites) {
-                    	playAndLoopAudio("music/enteringBlackHeart.mp3", options.musicVolume/10);
-            		} else {
-                    	if (player.ma.currentDepth.eq(1)) playAndLoopAudio("music/celestialites.mp3", options.musicVolume/10);
-                    	if (player.ma.currentDepth.eq(2)) playAndLoopAudio("music/blackHeart.mp3", options.musicVolume/10);
-                    	if (player.ma.currentDepth.eq(3) && !player.ma.matosFightActive && player.ma.currentCelestialiteType != 25) playAndLoopAudio("music/matosTheme.mp3", options.musicVolume/10);
-                    	if (player.ma.currentDepth.eq(3) && player.ma.matosFightActive && player.ma.currentCelestialiteType == 25) playAndLoopAudio("music/matosFight.mp3", options.musicVolume/10);
-                	} //use blackHeart.mp3 for depth 2, matosTheme.mp3 for depth 3
-            	}
-				break;
-			case "D1":
-				if (!player.pet.legPetTimers[0].active) playAndLoopAudio("music/darkUni1.mp3", options.musicVolume/10)
-				if (player.pet.legPetTimers[0].active) playAndLoopAudio("music/eclipse.mp3", options.musicVolume/10)
-				break;
-			case "CH":
-				if (player.tab == "ch") playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10)
-				//if (player.tab == "ch" && player.subtabs["ch"]["stuff"] != "???") playAndLoopAudio("music/aniciffoCutscene.mp3", options.musicVolume/10)
-				break;
-			case "A2":
-				if (!player.ir.inBattle) playAndLoopAudio("music/space.mp3", options.musicVolume/10)
-				if (player.ir.inBattle && !player.ir.iriditeFightActive) playAndLoopAudio("music/spaceBattle.mp3", options.musicVolume/10)
-				if (player.ir.inBattle && player.ir.iriditeFightActive) playAndLoopAudio("music/iridite.mp3", options.musicVolume/10)
-				break;
-			case "MI":
-				playAndLoopAudio("music/mining.mp3", options.musicVolume/10)
-				break;
-			case "UB":
-				playAndLoopAudio("music/hive.mp3", options.musicVolume/10)
-				break;
-			case "CB":
-				if (player.fi.battleTier.eq(0)) playAndLoopAudio("music/checkback.mp3", options.musicVolume/10)
-				if (player.fi.battleTier.eq(1)) playAndLoopAudio("music/fighting.mp3", options.musicVolume/10)
-				if (player.fi.battleTier.eq(2)) playAndLoopAudio("music/tier2.mp3", options.musicVolume/10)
-				break;
-			default:
-				stopAudio()
-				break;
-		}
-	}
-        //cutscene music logic
-        if ((cutsceneActive || window.cinematicCutsceneActive) && options.musicToggle) {
-            //if (cutsceneID == 12345 && cutsceneIndex == 2) playAndLoopAudio("music/space.mp3", options.musicVolume/10); examples
-            //if (cutsceneID == 12345 && cutsceneIndex == 3) playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
-
-			switch (cutsceneID) {
-				case 1: case 11: case 14: case 16: case 19:
-				case 41: case 43: case 46: case 61: case 95:
-				case 108:
-					playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-					break;
-				case 9: case 18: case 24: case 30: case 94:
-					playAndLoopAudio("music/marcel.mp3", options.musicVolume/10);
-					break;
-				case 15: case 26: case 58: case 70: case 106:
-					playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
-					break;
-				case 28: case 29: case 32: case 33: case 119:
-				case 120:
-					playAndLoopAudio("music/tavCutscene.mp3", options.musicVolume/10);
-					break;
-				case 31: case 37:
-					playAndLoopAudio("music/tavCutsceneBox.mp3", options.musicVolume/10);
-					break;
-				case 39:
-					playAndLoopAudio("music/tavDeath.mp3", options.musicVolume/10);
-					break;
-				case 47: case 48: case 50: case 52: case 53:
-				case 54: case 55: case 56: case 57: case 59:
-				case 60:
-					playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-					break;
-				case 62: case 63: case 65: case 66: case 73:
-				case 75: case 76: case 77: case 78: case 79:
-				case 93: case 112:
-					playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-					break;
-				case 69: case 71: case 72: case 123: case 124:
-					playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
-					break;
-				case 74:
-					playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10);
-					break;
-				case 81: case 82: case 83: case 84: case 91:
-					playAndLoopAudio("music/matosCutsceneBox.mp3", options.musicVolume/10);
-					break;
-				case 85: case 87: case 88: case 89: case 90:
-					playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
-					break;
-				case 92:
-					playAndLoopAudio("music/novaCutscene.mp3", options.musicVolume/10);
-					break;
-				case 96: case 97: case 98: case 99: case 100:
-				case 101: case 102: case 103: case 104: case 107:
-				case 109: case 110:
-					playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
-					break;
-				case 113: case 114: case 115: case 116: case 117:
-				case 118: case 121: case 122: case 125:
-					playAndLoopAudio("music/alephCutscene.mp3", options.musicVolume/10);
-					break;
+			} else {
+				if (player.c.cutscenes[cutsceneID] && player.c.cutscenes[cutsceneID].music) {
+					playAndLoopAudio(player.c.cutscenes[cutsceneID].music, options.musicVolume/10);
+				}
+				switch (cutsceneID) {
+					case 19:
+					case 41: case 43: case 46: case 61: case 95:
+					case 108:
+						playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
+						break;
+					case 18: case 24: case 30: case 94:
+						playAndLoopAudio("music/marcel.mp3", options.musicVolume/10);
+						break;
+					case 26: case 58: case 70: case 106:
+						playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
+						break;
+					case 28: case 29: case 32: case 33: case 119:
+					case 120:
+						playAndLoopAudio("music/tavCutscene.mp3", options.musicVolume/10);
+						break;
+					case 31: case 37:
+						playAndLoopAudio("music/tavCutsceneBox.mp3", options.musicVolume/10);
+						break;
+					case 39:
+						playAndLoopAudio("music/tavDeath.mp3", options.musicVolume/10);
+						break;
+					case 47: case 48: case 50: case 52: case 53:
+					case 54: case 55: case 56: case 57: case 59:
+					case 60:
+						playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
+						break;
+					case 62: case 63: case 65: case 66: case 73:
+					case 75: case 76: case 77: case 78: case 79:
+					case 93: case 112:
+						playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
+						break;
+					case 69: case 71: case 72: case 123: case 124:
+						playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
+						break;
+					case 74:
+						playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10);
+						break;
+					case 81: case 82: case 83: case 84: case 91:
+						playAndLoopAudio("music/matosCutsceneBox.mp3", options.musicVolume/10);
+						break;
+					case 85: case 87: case 88: case 89: case 90:
+						playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
+						break;
+					case 92:
+						playAndLoopAudio("music/novaCutscene.mp3", options.musicVolume/10);
+						break;
+					case 96: case 97: case 98: case 99: case 100:
+					case 101: case 102: case 103: case 104: case 107:
+					case 109: case 110:
+						playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
+						break;
+					case 113: case 114: case 115: case 116: case 117:
+					case 118: case 121: case 122: case 125:
+						playAndLoopAudio("music/alephCutscene.mp3", options.musicVolume/10);
+						break;
+				}
+            	if (cutsceneID == 68 && cutsceneIndex < 7) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
+        	    if (cutsceneID == 68 && cutsceneIndex >= 7) playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
+    	        if (cutsceneID == 111 && cutsceneIndex < 23) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
+	            if (cutsceneID == 111 && cutsceneIndex > 23) playAndLoopAudio("music/novaCutscene.mp3", options.musicVolume/10);
+            	if (cinematicCutsceneID == 40) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
 			}
-            if (cutsceneID == 68 && cutsceneIndex < 7) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 68 && cutsceneIndex >= 7) playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
-            if (cutsceneID == 111 && cutsceneIndex < 23) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 111 && cutsceneIndex > 23) playAndLoopAudio("music/novaCutscene.mp3", options.musicVolume/10);
-        }
-        if (window.cinematicCutsceneActive && options.musicToggle) {
-            if (cinematicCutsceneID == 40) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-        }
-	if (options.musicToggle == false) {
+		}
+	} else {
 		stopAudio();
 	}
-	
 }
 
 let hotkey = `<h1>Hotkeys:</h1><br>
@@ -696,6 +696,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Revamped check back fragmentation.<br>
 			- Slightly revamped singularity epic pet layers.<br>
 			- Added 3 new pets.<br>
+			- Added a jukebox in settings, which allows you to play any song you have seen in-game.<br>
 			- Revamped the stinger ship to only use mouse/touch controls.<br><br>
 		QoL:<br>
 			- Added the ability to hold click on flowers to pick them.<br>
@@ -715,7 +716,8 @@ let changelog = `<h1>Changelog:</h1><br>
 		Backend:<br>
 			- Moved save storage from local storage to IndexedDB.<br>
 			<small>(Shouldn't cause any issues, and even if it does you still have your old save in local storage)</small><br>
-			- Changed the cutscene system to use non-numbered IDs.<br><br>
+			- Changed auto-pausing to save previous pause state.<br>
+			- Reworked the backend for the cutscene system.<br><br>
 
 	<h3>v1.10 - Aleph Update Part I: The Hive</h3><br>
 		Content:<br>

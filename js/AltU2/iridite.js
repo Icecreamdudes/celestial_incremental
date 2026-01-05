@@ -672,12 +672,12 @@ addLayer("ir", {
                 arena.spawnArena();
                 localStorage.setItem('arenaActive', 'true');
 
-                pauseUniverse("U1")
-                pauseUniverse("UA")
-                pauseUniverse("U2")
-                pauseUniverse("A1")
-                pauseUniverse("U3")
-                pauseUniverse("CB")
+                pauseUniverse("U1", "pause", true)
+                pauseUniverse("UA", "pause", true)
+                pauseUniverse("U2", "pause", true)
+                pauseUniverse("A1", "pause", true)
+                pauseUniverse("U3", "pause", true)
+                pauseUniverse("CB", "pause", true)
 
                 player.ir.shipHealth = player.ir.shipHealthMax
                 if (hasUpgrade("ir", 14)) arena.upgradeEffects.hpRegen += 0.5 / 60
@@ -704,12 +704,12 @@ addLayer("ir", {
                 }
                 localStorage.setItem('arenaActive', 'false');
 
-                pauseUniverse("U1")
-                pauseUniverse("UA")
-                pauseUniverse("U2")
-                pauseUniverse("A1")
-                pauseUniverse("U3")
-                pauseUniverse("CB")
+                pauseUniverse("U1", "unpause", true)
+                pauseUniverse("UA", "unpause", true)
+                pauseUniverse("U2", "unpause", true)
+                pauseUniverse("A1", "unpause", true)
+                pauseUniverse("U3", "unpause", true)
+                pauseUniverse("CB", "unpause", true)
 
                 player.ir.timers[player.ir.shipType].current = player.ir.timers[player.ir.shipType].max
 

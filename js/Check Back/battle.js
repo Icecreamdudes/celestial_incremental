@@ -982,12 +982,12 @@ celestialiteDeath(index){
                 player.ba.petIndex = new Decimal(0)
                 player.ba.currentlyAttacking = false
 
-                pauseUniverse("U1")
-                pauseUniverse("UA")
-                pauseUniverse("U2")
-                pauseUniverse("A1")
-                pauseUniverse("A2")
-                pauseUniverse("U3")
+                pauseUniverse("U1", "unpause", true)
+                pauseUniverse("UA", "unpause", true)
+                pauseUniverse("U2", "unpause", true)
+                pauseUniverse("A1", "unpause", true)
+                pauseUniverse("A2", "unpause", true)
+                pauseUniverse("U3", "unpause", true)
 
                 player.universe = "CB"
             },

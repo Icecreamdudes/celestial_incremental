@@ -263,7 +263,7 @@
                 "<br>"  + formatWhole(getLevelableAmount("pet", 201)) + "/2 Teste Level" +
                 "<br>"  + formatWhole(getLevelableAmount("pet", 202)) + "/2 Star Level" +
                 "<br>"  + formatWhole(getLevelableAmount("pet", 203)) + "/2 Normal Face Level" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 204)) + "/4 Shark Level Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 204)) + "/4 Shark Level" +
                 "<br>"  + formatWhole(getLevelableAmount("pet", 205)) + "/2 THE WATCHING EYE Level" +
                 "<br>"  + formatWhole(getLevelableAmount("pet", 303)) + "/1 Drippy Ufo Level" +
                 "</div>"

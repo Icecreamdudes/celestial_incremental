@@ -5,13 +5,9 @@ addLayer("settings", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-    }
-    },
-    automate() {},
-    nodeStyle() {},
+    }},
     tooltip: "Settings",
     color: "white",
-    branches: ["branch"],
     clickables: {
         2: {
             title() { return "Settings" },
@@ -19,15 +15,6 @@ addLayer("settings", {
             unlocked() { return true },
             onClick() {
                 player.tab = "settings"
-            },
-            style: { width: '125px', minHeight: '50px', color: "white", background: "black", borderRadius: '0px', border: "2px solid white", margin: "0px 5px" },
-        },
-        3: {
-            title() { return "Stats" },
-            canClick() { return true },
-            unlocked() { return false },
-            onClick() {
-                player.tab = "stats"
             },
             style: { width: '125px', minHeight: '50px', color: "white", background: "black", borderRadius: '0px', border: "2px solid white", margin: "0px 5px" },
         },
@@ -58,39 +45,37 @@ addLayer("settings", {
             },
             style: { width: '125px', minHeight: '50px', color: "white", background: "black", borderRadius: '0px', border: "2px solid white", margin: "0px 5px" },
         },
+        7: {
+            title() { return "Jukebox" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.tab = "jukebox"
+            },
+            style: { width: '125px', minHeight: '50px', color: "white", background: "black", borderRadius: '0px', border: "2px solid white", margin: "0px 5px" },
+        },
     },
-    bars: {},
-    upgrades: {},
-    buyables: {},
-    milestones: {},
-    challenges: {},
-    infoboxes: {},
-    microtabs: {},
     tabFormat: [
-        ["row", [["clickable", 2], ["clickable", 3], ["clickable", 4], ["clickable", 5], ["clickable", 6]]],
+        ["row", [["clickable", 2], ["clickable", 7], ["clickable", 4], ["clickable", 5], ["clickable", 6]]],
         ["blank", "50px"],
-
         ["row", [
             ["raw-html", () => "<button class=opt onclick=save()>Save</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
             ["raw-html", () => "<button class=opt onclick=toggleOpt('autosave')>Autosave:<br>" + options.autosave + "</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
             ["raw-html", () => "<button class=opt onclick=hardReset() style='color:darkred'>HARD RESET</button>", {"color": "red", "font-size": "18px", "font-family": "monospace",}],
             ["raw-html", () => "<button class=opt onclick=toggleOpt('hideMilestonePopups'); needsCanvasUpdate = true>Hide Milestone Popups:<br>" + options.hideMilestonePopups + "</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
         ]],
-
         ["row", [
             ["raw-html", () => "<button class=opt onclick=exportSave()>Export to clipboard</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
             ["raw-html", () => "<button class=opt onclick=importSave()>Import string</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
             ["raw-html", () => "<button class=opt onclick=toggleOpt('toggleHotkey'); needsCanvasUpdate = true>Toggle Hotkeys:<br>" + options.toggleHotkey + "</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
             ["raw-html", () => "<button class=opt onclick=toggleOpt('hideAchievementPopups'); needsCanvasUpdate = true>Hide Achievement Popups:<br>" + options.hideAchievementPopups + "</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
         ]],
-
         ["row", [
             ["raw-html", () => "<button class=opt onclick=exportFile()>Export file</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
             ["raw-html", () => "<label class=opt for='importfile' style='display:flex;align-items:center;justify-content:center;width:92px;height:92px;'>Import<br>file</label><input id='importfile' type='file' onchange='importFile()' style='display:none' />", {"color": "white", "font-size": "13.3333px", "font-family": "monospace",}],
             ["raw-html", () => "<button class=opt onclick=toggleOpt('musicToggle'); needsCanvasUpdate = true>Toggle Music:<br>" + options.musicToggle + "</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
             ["raw-html", () => "<button class=opt onclick=toggleOpt('hideGeneralPopups'); needsCanvasUpdate = true>Hide General Popups:<br>" + options.hideGeneralPopups + "</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
         ]],
-
         ["row", [
             ["raw-html", () => "<button class=opt onclick=switchTheme()>Change Theme</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
             ["raw-html", () => "<button class=opt onclick=selectMenu()>Layout:<br>" + options.menuType + "</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],

@@ -8,8 +8,8 @@ function uniPaused(uni){
     return player.uni[uni].paused || tmp.uni[uni].disabled;
 }
 
-function pauseUniverse(universe) {
-    if (player.uni[universe].paused) {
+function pauseUniverse(universe, type = "toggle", temp = false) {
+    if (type == "unpause" || type == "toggle" && player.uni[universe].paused) {
         let time = (Date.now() - player.uni[universe].pauseTime) / 1000
         let tree = universes[universe].tree
 		for (row in tree) {
@@ -17,8 +17,13 @@ function pauseUniverse(universe) {
                 layers[tree[row][thing]].update(time)
             }
         }
-        player.uni[universe].paused = false
+        if (!temp) {
+            player.uni[universe].paused = false
+        } else {
+            player.uni[universe].paused = player.uni[universe].lastPaused
+        }
     } else {
+        if (temp) player.uni[universe].lastPaused = player.uni[universe].paused
         player.uni[universe].pauseTime = Date.now()
         if (player.universe == universe) player.universe = 0
         player.uni[universe].paused = true

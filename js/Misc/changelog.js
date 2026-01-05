@@ -5,13 +5,9 @@ addLayer("changelog", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-    }
-    },
-    automate() {},
-    nodeStyle() {},
+    }},
     tooltip: "Changelog",
     color: "white",
-    branches: ["branch"],
     clickables: {
         2: {
             title() { return "Settings" },
@@ -19,15 +15,6 @@ addLayer("changelog", {
             unlocked() { return true },
             onClick() {
                 player.tab = "settings"
-            },
-            style: { width: '125px', minHeight: '50px', color: "white", background: "black", borderRadius: '0px', border: "2px solid white", margin: "0px 5px" },
-        },
-        3: {
-            title() { return "Stats" },
-            canClick() { return true },
-            unlocked() { return false },
-            onClick() {
-                player.tab = "stats"
             },
             style: { width: '125px', minHeight: '50px', color: "white", background: "black", borderRadius: '0px', border: "2px solid white", margin: "0px 5px" },
         },
@@ -58,22 +45,20 @@ addLayer("changelog", {
             },
             style: { width: '125px', minHeight: '50px', color: "white", background: "black", borderRadius: '0px', border: "2px solid white", margin: "0px 5px" },
         },
+        7: {
+            title() { return "Jukebox" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.tab = "jukebox"
+            },
+            style: { width: '125px', minHeight: '50px', color: "white", background: "black", borderRadius: '0px', border: "2px solid white", margin: "0px 5px" },
+        },
     },
-    bars: {},
-    upgrades: {},
-    buyables: {},
-    milestones: {},
-    challenges: {},
-    infoboxes: {},
-    microtabs: {},
     tabFormat: [
-
-        ["row", [["clickable", 2], ["clickable", 3], ["clickable", 4], ["clickable", 5], ["clickable", 6]]],
-
+        ["row", [["clickable", 2], ["clickable", 7], ["clickable", 4], ["clickable", 5], ["clickable", 6]]],
         ["blank", "50px"],
-
         ["raw-html", () => changelog, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-        
         ["blank", "25px"],
     ],
     layerShown() { return false }

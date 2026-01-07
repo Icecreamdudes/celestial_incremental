@@ -111,6 +111,7 @@ addLayer("ba", {
     color: "white",
     branches: [],
     update(delta) {
+        if (player.ba.petIndex < 0) player.ba.petIndex = 0
         if (player.fi.battleTier.neq(0))
         {
                     player.ba.infoTexts = [];
@@ -790,6 +791,7 @@ addLayer("ba", {
     petDeath(index){
         if (player.ba.petIndex.add(1).eq(player.ba.petIDs.length)) {
             player.ba.petIndex = player.ba.petIndex.sub(1)
+            if (player.ba.petIndex < 0) player.ba.petIndex = 0
         }
         logPrintBattle("<span style='color: #bb0067ff;'>" + run(layers.sme.levelables[player.ba.petIDs[index]].title, layers.sme.levelables[player.ba.petIDs[index]]) + " is dead!" ) 
         // Remove only the element at 'index' from each array
@@ -1008,6 +1010,7 @@ celestialiteDeath(index){
             unlocked() { return true },
             onClick() {
                 player.ba.petIndex = player.ba.petIndex.sub(1)
+                if (player.ba.petIndex < 0) player.ba.petIndex = 0
             },
             style: { width: '75px', "min-height": '75px', 'color': "black",},
         },

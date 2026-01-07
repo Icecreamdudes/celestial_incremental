@@ -53,7 +53,7 @@
 				<button class="uniButton" v-if="uniShown('CH')" v-bind:style="universes.CH.nodeStyle()" onclick="player.universe='CH'"><span class="buttonText">γ</span></button>
 			</div>
 			<div class="layerHolder">
-				<div v-bind:class="{titleHolder:true,darkTitle:player.sma.inStarmetalChallenge}">
+				<div v-bind:class="{titleHolder:true}">
 					<p v-html="run(universes[player.universe].name, universes[player.universe])" v-if="typeof universes[player.universe] === 'object'"></p>
 				</div>
 				<span v-if="options.menuType == 'Tree'">
@@ -76,10 +76,10 @@
 					<img class="miscImg" src="resources/ui/halter.png" v-if="tmp.po.microtabs.stuff.Halter.unlocked"></img>
 					<div class="miscText" v-if="!tmp.po.microtabs.stuff.Halter.unlocked">?</div>
 				</button>
-				<button v-bind:class="{miscButton:true,darkButton:player.sma.inStarmetalChallenge}" onclick="showTab('achievements')">
+				<button v-bind:class="{miscButton:true}" onclick="showTab('achievements')">
 					<img class="miscImg" src="resources/ui/achievements.png"></img>
 				</button>
-				<button v-bind:class="{miscButton:true,darkButton:player.sma.inStarmetalChallenge}" onclick="showTab('settings')" style="border-right:0px">
+				<button v-bind:class="{miscButton:true}" onclick="showTab('settings')" style="border-right:0px">
 					<img class="miscImg" src="resources/ui/settings.png"></img>
 				</button>
 			</div>

@@ -704,6 +704,7 @@ addLayer("pet", {
             player.universe = "U3"
             player.tab = "sma"
             player.subtabs.pu["stuff"] = "Collection"
+            changeTheme()
 
             layers.pu.generateSelection();
         }
@@ -980,6 +981,7 @@ addLayer("pet", {
                 player.sma.inStarmetalChallenge = true
                 player.universe = "D1"
                 player.tab = "le"
+                changeTheme()
 
                 layers.le.starmetalResetAgain()
                 layers.pu.generateSelection();

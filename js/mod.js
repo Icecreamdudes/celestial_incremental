@@ -236,7 +236,7 @@ function updateStyles() {
 			layerBG = "#eed200"
 			break;
 		default:
-			layerBG = "#161616"
+			layerBG = "var(--layerBackground)"
 			break;
 	}
 
@@ -465,11 +465,11 @@ function updateStyles() {
 	}
 	if (options.menuType == "Tab") {
 		if (window.innerWidth > 1250) {
-			sideBG = "linear-gradient(to right, #444 103px, #7a7a7a 103px, #7a7a7a 106px, #161616 106px)"
-			if (player.universe == "D1") sideBG = "linear-gradient(to right, #0f011c 103px, #7a7a7a 103px, #7a7a7a 106px, black 106px)"
+			sideBG = "linear-gradient(to right, var(--tabTitle) 103px, var(--regBorder) 103px, var(--regBorder) 106px, var(--layerBackground) 106px)"
+			if (player.universe == "D1") sideBG = "linear-gradient(to right, #0f011c 103px, var(--regBorder) 103px, var(--regBorder) 106px, black 106px)"
 		} else {
-			sideBG = "linear-gradient(to bottom, #444 80px, #7a7a7a 80px, #7a7a7a 83px, #161616 83px)"
-			if (player.universe == "D1") sideBG = "linear-gradient(to bottom, #0f011c 80px, #7a7a7a 80px, #7a7a7a 83px, black 83px)"
+			sideBG = "linear-gradient(to bottom, var(--tabTitle) 80px, var(--regBorder) 80px, var(--regBorder) 83px, (--layerBackground) 83px)"
+			if (player.universe == "D1") sideBG = "linear-gradient(to bottom, #0f011c 80px, var(--regBorder) 80px, var(--regBorder) 83px, black 83px)"
 		}
 	}
 
@@ -608,68 +608,10 @@ function updateStyles() {
 				if (player.c.cutscenes[cutsceneID] && player.c.cutscenes[cutsceneID].music) {
 					playAndLoopAudio(player.c.cutscenes[cutsceneID].music, options.musicVolume/10);
 				}
-				switch (cutsceneID) {
-					case 19:
-					case 41: case 43: case 46: case 61: case 95:
-					case 108:
-						playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-						break;
-					case 18: case 24: case 30: case 94:
-						playAndLoopAudio("music/marcel.mp3", options.musicVolume/10);
-						break;
-					case 26: case 58: case 70: case 106:
-						playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
-						break;
-					case 28: case 29: case 32: case 33: case 119:
-					case 120:
-						playAndLoopAudio("music/tavCutscene.mp3", options.musicVolume/10);
-						break;
-					case 31: case 37:
-						playAndLoopAudio("music/tavCutsceneBox.mp3", options.musicVolume/10);
-						break;
-					case 39:
-						playAndLoopAudio("music/tavDeath.mp3", options.musicVolume/10);
-						break;
-					case 47: case 48: case 50: case 52: case 53:
-					case 54: case 55: case 56: case 57: case 59:
-					case 60:
-						playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-						break;
-					case 62: case 63: case 65: case 66: case 73:
-					case 75: case 76: case 77: case 78: case 79:
-					case 93: case 112:
-						playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-						break;
-					case 69: case 71: case 72: case 123: case 124:
-						playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
-						break;
-					case 74:
-						playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10);
-						break;
-					case 81: case 82: case 83: case 84: case 91:
-						playAndLoopAudio("music/matosCutsceneBox.mp3", options.musicVolume/10);
-						break;
-					case 85: case 87: case 88: case 89: case 90:
-						playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
-						break;
-					case 92:
-						playAndLoopAudio("music/novaCutscene.mp3", options.musicVolume/10);
-						break;
-					case 96: case 97: case 98: case 99: case 100:
-					case 101: case 102: case 103: case 104: case 107:
-					case 109: case 110:
-						playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
-						break;
-					case 113: case 114: case 115: case 116: case 117:
-					case 118: case 121: case 122: case 125:
-						playAndLoopAudio("music/alephCutscene.mp3", options.musicVolume/10);
-						break;
-				}
-            	if (cutsceneID == 68 && cutsceneIndex < 7) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-        	    if (cutsceneID == 68 && cutsceneIndex >= 7) playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
-    	        if (cutsceneID == 111 && cutsceneIndex < 23) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
-	            if (cutsceneID == 111 && cutsceneIndex > 23) playAndLoopAudio("music/novaCutscene.mp3", options.musicVolume/10);
-            	if (cinematicCutsceneID == 40) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
+            	if (cutsceneID == "A1-Funify-Start" && cutsceneIndex < 7) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
+        	    if (cutsceneID == "A1-Funify-Start" && cutsceneIndex >= 7) playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
+    	        if (cutsceneID == "A2-Iridite-Battle-End" && cutsceneIndex < 23) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
+	            if (cutsceneID == "A2-Iridite-Battle-End" && cutsceneIndex > 23) playAndLoopAudio("music/novaCutscene.mp3", options.musicVolume/10);
 			}
 		}
 	} else {
@@ -697,6 +639,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Slightly revamped singularity epic pet layers.<br>
 			- Added 3 new pets.<br>
 			- Added a jukebox in settings, which allows you to play any song you have seen in-game.<br>
+			- Fixed up themes to change the color of your UI. Currently it is just default and wood<br>
 			- Revamped the stinger ship to only use mouse/touch controls.<br><br>
 		QoL:<br>
 			- Added the ability to hold click on flowers to pick them.<br>

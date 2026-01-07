@@ -1,36 +1,100 @@
 // ************ Themes ************
-var themes = ["default", "aqua"]
+var themes = ["default", "wood"]
 
+//var(--points)
 var colors = {
 	default: {
-		1: "#ffffff",//Branch color 1
-		2: "#bfbfbf",//Branch color 2
-		3: "#7f7f7f",//Branch color 3
-		color: "#dfdfdf",
-		points: "#ffffff",
-		locked: "#bf8f8f",
-		background: "#161616",
-		background_tooltip: "rgba(0, 0, 0, 0.75)",
+		regBorder: "#7a7a7a",
+		menuBackground: "#0f0f0f",
+		layerBackground: "#161616",
+		miscButton: "#333",
+		miscButtonHover: "#444",
+		miscButtonDisable: "#222",
+		titleGradient: "linear-gradient(90deg, #555555 0%, #3e3e3e 50%, #555555 100%)",
+		tabTitle: "#444",
+		scrollBackground: "#000",
+		scroll1: "#343434",
+		scroll2: "#3B3B3B",
+		scroll3: "#424242",
+		scroll4: "#545454",
+
+		darkLayerBackground: "#000",
+		darkBorder: "#3d3d3d",
+		darkButton: "#111",
+		darkButtonHover: "#222",
+		darkButtonDisable: "#000",
+		darkTitleGradient: "linear-gradient(90deg, #0f011c 0%, #000000 50%, #0f011c 100%)",
+		darkTabTitle: "#0f011c",
+		darkScrollBackground: "#000",
+		darkScroll1: "#1a1a1a",
+		darkScroll2: "#1d1d1d",
+		darkScroll3: "#212121",
+		darkScroll4: "#2a2a2a",
 	},
-	aqua: {
-		1: "#bfdfff",
-		2: "#8fa7bf",
-		3: "#5f6f7f",
-		color: "#bfdfff",
-		points: "#dfefff",
-		locked: "#c4a7b3",
-		background: "#001f3f",
-		background_tooltip: "rgba(0, 15, 31, 0.75)",
+	wood: {
+		regBorder: "#745a46",
+		menuBackground: "#080605",
+		layerBackground: "#110d0a",
+		miscButton: "#32261e",
+		miscButtonHover: "#423328",
+		miscButtonDisable: "#211a14",
+		titleGradient: "linear-gradient(90deg, #534032 0%, #32261e 50%, #534032 100%)",
+		tabTitle: "#423328",
+		scrollBackground: "#000",
+		scroll1: "#32261e",
+		scroll2: "#3A2D23",
+		scroll3: "#423328",
+		scroll4: "#534032",
+
+		darkLayerBackground: "#000",
+		darkBorder: "#32261e",
+		darkButton: "#110d0a",
+		darkButtonHover: "#211a14",
+		darkButtonDisable: "#000",
+		darkTitleGradient: "linear-gradient(90deg, #0f011c 0%, #000000 50%, #0f011c 100%)",
+		darkTabTitle: "#0f011c",
+		darkScrollBackground: "#000",
+		darkScroll1: "#19130f",
+		darkScroll2: "#1d1611",
+		darkScroll3: "#211914",
+		darkScroll4: "#292019",
 	},
 }
 function changeTheme() {
-
 	colors_theme = colors[options.theme || "default"];
-	document.body.style.setProperty('--background', colors_theme["background"]);
-	document.body.style.setProperty('--background_tooltip', colors_theme["background_tooltip"]);
-	document.body.style.setProperty('--color', colors_theme["color"]);
-	document.body.style.setProperty('--points', colors_theme["points"]);
-	document.body.style.setProperty("--locked", colors_theme["locked"]);
+	if (!player.sma.inStarmetalChallenge) {
+		document.body.style.setProperty('--regBorder', colors_theme["regBorder"]);
+		document.body.style.setProperty('--menuBackground', colors_theme["menuBackground"]);
+		document.body.style.setProperty('--layerBackground', colors_theme["layerBackground"]);
+		document.body.style.setProperty('--miscButton', colors_theme["miscButton"]);
+		document.body.style.setProperty('--miscButtonHover', colors_theme["miscButtonHover"]);
+		document.body.style.setProperty('--miscButtonDisable', colors_theme["miscButtonDisable"]);
+		document.body.style.setProperty('--titleGradient', colors_theme["titleGradient"]);
+		document.body.style.setProperty('--tabTitle', colors_theme["tabTitle"]);
+		document.body.style.setProperty('--scrollBackground', colors_theme["scrollBackground"]);
+		document.body.style.setProperty('--scroll1', colors_theme["scroll1"]);
+		document.body.style.setProperty('--scroll2', colors_theme["scroll2"]);
+		document.body.style.setProperty('--scroll3', colors_theme["scroll3"]);
+		document.body.style.setProperty('--scroll4', colors_theme["scroll4"]);
+		document.body.style.setProperty('--scrollDecrement', "url(data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23" + colors_theme["regBorder"].slice(1) + "'><polygon points='50,00 0,50 100,50'/></svg>)");
+		document.body.style.setProperty('--scrollIncrement', "url(data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23" + colors_theme["regBorder"].slice(1) + "'><polygon points='0,0 100,0 50,50'/></svg>)");
+	} else {
+		document.body.style.setProperty('--regBorder', colors_theme["darkBorder"]);
+		document.body.style.setProperty('--menuBackground', colors_theme["menuBackground"]);
+		document.body.style.setProperty('--layerBackground', colors_theme["darkLayerBackground"]);
+		document.body.style.setProperty('--miscButton', colors_theme["darkButton"]);
+		document.body.style.setProperty('--miscButtonHover', colors_theme["darkButtonHover"]);
+		document.body.style.setProperty('--miscButtonDisable', colors_theme["darkButtonDisable"]);
+		document.body.style.setProperty('--titleGradient', colors_theme["darkTitleGradient"]);
+		document.body.style.setProperty('--tabTitle', colors_theme["darkTabTitle"]);
+		document.body.style.setProperty('--scrollBackground', colors_theme["darkScrollBackground"]);
+		document.body.style.setProperty('--scroll1', colors_theme["darkScroll1"]);
+		document.body.style.setProperty('--scroll2', colors_theme["darkScroll2"]);
+		document.body.style.setProperty('--scroll3', colors_theme["darkScroll3"]);
+		document.body.style.setProperty('--scroll4', colors_theme["darkScroll4"]);
+		document.body.style.setProperty('--scrollDecrement', "url(data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23" + colors_theme["darkBorder"].slice(1) + "'><polygon points='50,00 0,50 100,50'/></svg>)");
+		document.body.style.setProperty('--scrollIncrement', "url(data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23" + colors_theme["darkBorder"].slice(1) + "'><polygon points='0,0 100,0 50,50'/></svg>)");
+	}
 }
 function getThemeName() {
 	return options.theme? options.theme : "default";

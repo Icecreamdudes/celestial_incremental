@@ -14,12 +14,29 @@
 		webkit-outline: none;
 	}
 
+:root {
+	--background: #161616;
+
+	--regBorder: "#7a7a7a";
+	--menuBackground: "#0f0f0f";
+	--layerBackground: "#161616";
+	--miscButton: "#333";
+	--miscButtonHover: "#444";
+	--miscButtonDisable: "#222";
+	--titleGradient: "linear-gradient(90deg, #555555 0%, #3e3e3e 50%, #555555 100%)";
+	--tabTitle: "#444";
+	--scrollBackground: "#000";
+	--scroll1: "#343434";
+	--scroll2: "#3B3B3B";
+	--scroll3: "#424242";
+	--scroll4: "#545454";
+	--scrollDecrement: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%237a7a7a'><polygon points='50,00 0,50 100,50'/></svg>");
+	--scrollIncrement: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%237a7a7a'><polygon points='0,0 100,0 50,50'/></svg>");
+}
+
 body {
-	color: var(--color);
+	color: #dfdfdf;
 	overflow: hidden;
-	--background: #0f0f0f;
-	--color: #dfdfdf;
-	--points: #ffffff;
 	background: var(--background);
 	touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
@@ -41,32 +58,32 @@ button {
 }
 
 ::-webkit-scrollbar-track {
-    background: black;
-	border: 2px solid #7a7a7a;
+    background: var(--scrollBackground);
+	border: 2px solid var(--regBorder);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: linear-gradient(0deg, #343434 0%, #3B3B3B 50%, #424242 100%);
-	border: 2px solid #7a7a7a;
+    background: linear-gradient(0deg, var(--scroll1) 0%, var(--scroll2) 50%, var(--scroll3) 100%);
+	border: 2px solid var(--regBorder);
 	height: 50px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(0deg, #3B3B3B 0%, #424242 50%, #545454 100%);
-	border: 2px solid #7a7a7a;
+    background: linear-gradient(0deg, var(--scroll2) 0%, var(--scroll3) 50%, var(--scroll4) 100%);
+	border: 2px solid var(--regBorder);
 	height: 50px;
 }
 
 ::-webkit-scrollbar-button:single-button {
-    background-color: #3B3B3B;
-	border: 2px solid #7a7a7a;
+    background-color: var(--scroll2);
+	border: 2px solid var(--regBorder);
 
     display: block;
     background-size: 9px;
     background-repeat: no-repeat;
 }
 ::-webkit-scrollbar-button:single-button:hover {
-    background-color: #424242;
-	border: 2px solid #7a7a7a;
+    background-color: var(--scroll3);
+	border: 2px solid var(--regBorder);
 
     display: block;
     background-size: 9px;
@@ -76,17 +93,17 @@ button {
     height: 16px;
     width: 16px;
     background-position: center 4px;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='rgb(122, 122, 122)'><polygon points='50,00 0,50 100,50'/></svg>");
+    background-image: var(--scrollDecrement);
 }
 ::-webkit-scrollbar-button:single-button:vertical:increment {
     height: 16px;
     width: 16px;
     background-position: center 4px;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='rgb(122, 122, 122)'><polygon points='0,0 100,0 50,50'/></svg>");
+    background-image: var(--scrollIncrement);
 }
 
 ::-webkit-scrollbar-corner {
-	background-color: #7a7a7a;
+	background-color: var(--regBorder);
 }
 
 td {
@@ -526,7 +543,7 @@ h1, h2, h3, b, input {
 	}
 
 .levelableDisplayButtonSelect {
-	box-shadow: 0 0 5px var(--points);
+	box-shadow: 0 0 5px #ffffff;
 }
 
 .levelableDisplayLore {
@@ -606,7 +623,7 @@ h1, h2, h3, b, input {
 
 	.can:hover {
 		transform: scale(1.15, 1.15);
-		box-shadow: 0 0 20px var(--points)
+		box-shadow: 0 0 20px #ffffff
 	}
 
 	.can.upg:hover {
@@ -648,7 +665,7 @@ h1, h2, h3, b, input {
 
 .treeNode.can:hover {
 	transform: scale(1.15, 1.15);
-	box-shadow: var(--hqProperty2a), 0 0 20px var(--points);
+	box-shadow: var(--hqProperty2a), 0 0 20px #ffffff;
 }
 
 .notify {
@@ -668,7 +685,7 @@ h1, h2, h3, b, input {
 	left: 0;
 	background-color: transparent;
 	border: 1px solid transparent;
-	color: var(--color);
+	color: #dfdfdf;
 	font-size: 40px;
 	cursor: pointer;
 }
@@ -679,7 +696,7 @@ h1, h2, h3, b, input {
 	left: 60px;
 	background-color: transparent;
 	border: 1px solid transparent;
-	color: var(--color);
+	color: #dfdfdf;
 	font-size: 60px;
 	cursor: pointer;
 }
@@ -687,7 +704,7 @@ h1, h2, h3, b, input {
 
 .back:hover {
 	transform: scale(1.1, 1.1);
-	text-shadow: 0 0 7px var(--color);
+	text-shadow: 0 0 7px #dfdfdf;
 }
 
 .barBase {
@@ -699,7 +716,7 @@ h1, h2, h3, b, input {
 .barBorder {
 	border: 2px solid;
 	border-radius: 8px;
-	border-color: var(--color);
+	border-color: #dfdfdf;
 	overflow: hidden;
 	-webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
 	margin: 0
@@ -716,7 +733,7 @@ h1, h2, h3, b, input {
 }
 
 .fill {
-	background-color: var(--color);
+	background-color: #dfdfdf;
 	z-index: 2;
 	position: absolute;
 	overflow: hidden;
@@ -730,19 +747,19 @@ h1, h2, h3, b, input {
 
 .tabButton {
 	background-color: transparent;
-	color: var(--color);
+	color: #dfdfdf;
 	font-size: 20px;
 	cursor: pointer;
 	border-radius: 5%;
 	padding: 5px 20px;
 	margin: 5px;
 	border: 2px solid;
-	color: var(--color);
+	color: #dfdfdf;
 }
 
 	.tabButton:hover {
 		transform: scale(1.1, 1.1);
-		text-shadow: 0 0 7px var(--color);
+		text-shadow: 0 0 7px #dfdfdf;
 	}
 
 .reset {
@@ -777,7 +794,7 @@ h1, h2, h3, b, input {
 }
 
 	.achievement:hover {
-		box-shadow: 0 0 10px var(--points);
+		box-shadow: 0 0 10px #ffffff;
 		z-index: 7;
 	}
 
@@ -802,7 +819,7 @@ h1, h2, h3, b, input {
 }
 
 	.tile.can:hover {
-		box-shadow: 0 0 10px var(--points);
+		box-shadow: 0 0 10px #ffffff;
 		transform: scale(1.1, 1.1);
 		z-index: 7;
 	}
@@ -818,7 +835,7 @@ h1, h2, h3, b, input {
 .longUpg {
 	height: 50px;
 	width: 120px;
-	background: var(--points);
+	background: #ffffff;
 	border-radius: 50%;
 	border: 2px solid;
 	border-color: rgba(0, 0, 0, 0.125);
@@ -834,8 +851,8 @@ h1, h2, h3, b, input {
 }
 
 #points {
-	color: var(--points);
-	text-shadow: 0 0 10px var(--points);
+	color: #ffffff;
+	text-shadow: 0 0 10px #ffffff;
 }
 
 #optionWheel {
@@ -900,8 +917,8 @@ h1, h2, h3, b, input {
 	right: 4px;
 	top: 4px;
 	text-align: right;
-	color: var(--points);
-	text-shadow: 0 0 10px var(--points);
+	color: #ffffff;
+	text-shadow: 0 0 10px #ffffff;
 	cursor: pointer;
 }
 
@@ -937,7 +954,7 @@ a {
 	width: 100px;
 	border-radius: 25%;
 	border: 4px solid;
-	background-color: var(--color);
+	background-color: #dfdfdf;
 	border-color: rgba(0, 0, 0, 0.125);
 	color: rgba(0, 0, 0, 0.5);
 	cursor: pointer;
@@ -1033,7 +1050,7 @@ a {
 }
 
 .vl {
-	border-left: 6px solid var(--color);
+	border-left: 6px solid #dfdfdf;
 	height: 100%;
 	position: absolute;
 	left: 50%;
@@ -1042,12 +1059,12 @@ a {
 }
 
 .vl2 {
-	border-left: 3px solid var(--color);
+	border-left: 3px solid #dfdfdf;
 	height: 100%;
 }
 
 .hl {
-	border-top: 3px solid var(--color);
+	border-top: 3px solid #dfdfdf;
 }
 
 ul {
@@ -1110,7 +1127,7 @@ ul {
 		margin-left: -5px;
 		border-width: 5px;
 		border-style: solid;
-		border-color: var(--background_tooltip) transparent transparent transparent;
+		border-color: rgba(0, 0, 0, 0.75) transparent transparent transparent;
 	}
 
 .bottomTooltip { 
@@ -1137,8 +1154,8 @@ ul {
 	position: absolute;
 	z-index: 20000;
   
-	background-color: var(--background_tooltip);
-	color: var(--points);
+	background-color: rgba(0, 0, 0, 0.75);
+	color: #ffffff;
 	content: attr(tooltip);
 	font-size:14px;
 }
@@ -1154,7 +1171,7 @@ ul {
 	width: 0;
 
 	border-color: rgba(0, 0, 0, 0);
-	border-bottom-color: var(--background_tooltip);
+	border-bottom-color: rgba(0, 0, 0, 0.75);
 	border-width: 5px;
 	margin-left: -5px;
 }
@@ -1316,7 +1333,6 @@ button > * {
 .noBackground {
 	background: transparent !important;
 	background-image: none !important;
-	--background: transparent !important;
 }
 .demonin-text {
 	font-family: 'Courier', monospace;
@@ -1537,28 +1553,6 @@ button > * {
     transform: translate(100vw, 100vh); /* Move outside the viewport */
   }
 }
-
-.singularityCore {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background: linear-gradient(-45deg, var(--color1) 50%, var(--color2) 50%);
-    border: 3px solid white; /* White border */
-    display: inline-block;
-    margin: 10px;
-    position: relative;
-  }
-
-  .centerCircle {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: var(--centerColor, transparent);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
 
 .evoContainer {
 	background: rgba(0,0,0,0.2);

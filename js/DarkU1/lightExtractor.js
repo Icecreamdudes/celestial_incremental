@@ -130,6 +130,7 @@
             player.universe = "U3"
             player.tab = "sma"
             player.subtabs.pu["stuff"] = "Collection"
+            changeTheme()
 
             layers.pu.generateSelection();
         }
@@ -180,6 +181,7 @@
                 player.universe = "U3"
                 player.tab = "sma"
                 player.subtabs.pu["stuff"] = "Collection"
+                changeTheme()
 
                 layers.pu.generateSelection();
             },
@@ -234,6 +236,7 @@
                 player.universe = "U3"
                 player.tab = "sma"
                 player.subtabs.pu["stuff"] = "Collection"
+                changeTheme()
 
                 player.pet.legPetTimers[0].active = false
                 player.pet.legPetTimers[0].current = new Decimal(0)

@@ -77,7 +77,7 @@ addLayer("settings", {
             ["raw-html", () => "<button class=opt onclick=toggleOpt('hideGeneralPopups'); needsCanvasUpdate = true>Hide General Popups:<br>" + options.hideGeneralPopups + "</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
         ]],
         ["row", [
-            ["raw-html", () => "<button class=opt onclick=switchTheme()>Change Theme</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
+            ["raw-html", () => "<button class=opt onclick=switchTheme()>Change Theme<br>[" + options.theme + "]</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
             ["raw-html", () => "<button class=opt onclick=selectMenu()>Layout:<br>" + options.menuType + "</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
         ]],
         ["blank", "25px"],

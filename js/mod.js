@@ -1,11 +1,6 @@
 ﻿let modInfo = {
 	name: "Celestial Incremental",
-	id: "celestial", //PLEASE CHANGE THIS LATER PLEASE
-
-
-	//CHANGE THIS BACK TO THE ORIGINAL VERSION ^
-
-
+	id: "celestial", // NEVER CHANGE THIS, IF YOU DO ALL SAVES WILL DIE
 	author: "Icecreamdude",
 	pointsName: "celestial points",
 	modFiles: [
@@ -18,7 +13,7 @@
 		"Cantepocalypse/perks.js", "Cantepocalypse/anonymity.js", "Cantepocalypse/repliTrees.js", "Cantepocalypse/repliGrass.js", "Cantepocalypse/grassSkip.js",
 		"Cantepocalypse/oil.js", "Singularity/singularity.js", "epicPets.js", "pollinator.js", "factory.js",
 		"Singularity/radiation.js", "Singularity/singularityDimensions.js", "Cantepocalypse/funify.js", "Singularity/coreScraps.js", "Hall of Celestials/celestialHall.js",
-		"Misc/settings.js", "Misc/savebank.js", "Misc/changelog.js", "Misc/credits.js", "Check Back/pet.js",
+		"Misc/settings.js", "Misc/savebank.js", "Misc/changelog.js", "Misc/jukebox.js", "Check Back/pet.js",
 		"Singularity/starmetalAlloy.js", "DarkU1/darkU1.js", "DarkU1/lightExtractor.js", "DarkU1/darkRanks.js", "DarkU1/darkPrestige.js",
 		"DarkU1/boosters.js", "DarkU1/vaporizer.js", "DarkU1/generators.js", "DarkU1/darkGrass.js", "DarkU1/normality.js",
 		"Singularity/matos.js", "Singularity/core.js", "Singularity/matosAttacks.js", "Singularity/matosAttacks.js", "Singularity/coreFragments.js", 
@@ -29,7 +24,7 @@
 		"Hive/unih.js", "Hive/flower.js", "Hive/pollen.js", "Hive/nectar.js", "Hive/beebread.js",
 		"Hive/honey.js", "Hive/wax.js", "Hive/aleph.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js",
-		"Check Back/singularityPet.js", "Misc/jukebox.js",
+		"Check Back/singularityPet.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 	],
@@ -633,13 +628,14 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v1.10.5 - Fragmentation Revamp</h3><br>
+	<h3>v1.10.5 - Checklist Update</h3><br>
 		Content:<br>
+			- Redid the visuals of the options menu.<br>
+			- Fixed up themes to change the color of your UI. Currently it is just default and wood.<br>
+			- Added a jukebox in settings, which allows you to play any song you have seen in-game.<br>
 			- Revamped check back fragmentation.<br>
 			- Slightly revamped singularity epic pet layers.<br>
 			- Added 3 new pets.<br>
-			- Added a jukebox in settings, which allows you to play any song you have seen in-game.<br>
-			- Fixed up themes to change the color of your UI. Currently it is just default and wood<br>
 			- Revamped the stinger ship to only use mouse/touch controls.<br><br>
 		QoL:<br>
 			- Added the ability to hold click on flowers to pick them.<br>

@@ -36,15 +36,6 @@ addLayer("jukebox", {
             },
             style: { width: '125px', minHeight: '50px', color: "white", background: "black", borderRadius: '0px', border: "2px solid white", margin: "0px 5px" },
         },
-        6: {
-            title() { return "Credits" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.tab = "credits"
-            },
-            style: { width: '125px', minHeight: '50px', color: "white", background: "black", borderRadius: '0px', border: "2px solid white", margin: "0px 5px" },
-        },
         7: {
             title() { return "Jukebox" },
             canClick() { return true },
@@ -450,7 +441,7 @@ addLayer("jukebox", {
         },
     },
     tabFormat: [
-        ["row", [["clickable", 2], ["clickable", 7], ["clickable", 4], ["clickable", 5], ["clickable", 6]]],
+        ["row", [["clickable", 2], ["clickable", 7], ["clickable", 4], ["clickable", 5]]],
         ["blank", "50px"],
         ["style-column", [
             ["raw-html", "Jukebox", {color: "white", fontSize: "24px", fontFamily: "monospace"}],

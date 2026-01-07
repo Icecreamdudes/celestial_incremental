@@ -2343,6 +2343,10 @@ addLayer("fl", {
                 ["raw-html", () => {return formatSimple(player.fl.glossaryBase, 2)}, {color: "#ccc", fontSize: "14px", fontFamily: "monospace"}],
             ], {width: "175px", height: "50px"}],
         ], {width: "535px", height: "50px", background: "#181309", border: "5px solid #3e3117", marginTop: "-5px"}],
+        ["style-column", [
+            ["raw-html", "Click/hold flowers to pick them.", {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
+            ["raw-html", "Click/hold flower bars to speed them up.", {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
+        ], {width: "535px", height: "40px", background: "#181309", border: "5px solid #3e3117", marginTop: "-5px"}],
     ],
     layerShown() { return player.startedGame && player.bee.totalResearch.gte(1) }
 })

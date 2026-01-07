@@ -19,7 +19,7 @@ addLayer("settings", {
             style: { width: '125px', minHeight: '50px', color: "white", background: "black", borderRadius: '0px', border: "2px solid white", margin: "0px 5px" },
         },
         4: {
-            title() { return "Savebank" },
+            title() { return "Savebank<br><small style='color:#f44'>[HEAVILY WIP]</small>" },
             canClick() { return true },
             unlocked() { return true },
             onClick() {
@@ -73,7 +73,7 @@ addLayer("settings", {
             style: { width: '100px', minHeight: '80px', color: "#ccc", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
         },
         14: {
-            title() { return "Autosave<hr>" + options.autosave },
+            title() { return "Autosave<hr style='border:1px solid #888;margin-top:1px'>" + options.autosave },
             canClick: true,
             unlocked: true,
             onClick() {
@@ -109,7 +109,7 @@ addLayer("settings", {
             style: { width: '100px', minHeight: '80px', color: "#c88", background: "#300", borderRadius: '0', border: "3px solid #200"},
         },
         21: {
-            title() { return "Hide Milestone Popups<hr>" + options.hideMilestonePopups },
+            title() { return "Hide Milestone Popups<hr style='border:1px solid #888;margin-top:1px'>" + options.hideMilestonePopups },
             canClick: true,
             unlocked: true,
             onClick() {
@@ -118,7 +118,7 @@ addLayer("settings", {
             style: { width: '100px', minHeight: '80px', color: "#ccc", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
         },
         22: {
-            title() { return "Hide Achievement Popups<hr>" + options.hideAchievementPopups },
+            title() { return "Hide Achievement Popups<hr style='border:1px solid #888;margin-top:1px'>" + options.hideAchievementPopups },
             canClick: true,
             unlocked: true,
             onClick() {
@@ -127,7 +127,7 @@ addLayer("settings", {
             style: { width: '100px', minHeight: '80px', color: "#ccc", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
         },
         23: {
-            title() { return "Hide General Popups<hr>" + options.hideGeneralPopups },
+            title() { return "Hide General Popups<hr style='border:1px solid #888;margin-top:1px'>" + options.hideGeneralPopups },
             canClick: true,
             unlocked: true,
             onClick() {
@@ -136,7 +136,7 @@ addLayer("settings", {
             style: { width: '100px', minHeight: '80px', color: "#ccc", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
         },
         24: {
-            title() { return "Toggle Hotkeys<hr>" + options.toggleHotkey },
+            title() { return "Toggle Hotkeys<hr style='border:1px solid #888;margin-top:1px'>" + options.toggleHotkey },
             canClick: true,
             unlocked: true,
             onClick() {
@@ -145,7 +145,7 @@ addLayer("settings", {
             style: { width: '100px', minHeight: '80px', color: "#ccc", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
         },
         25: {
-            title() { return "Toggle Music<hr>" + options.musicToggle },
+            title() { return "Toggle Music<hr style='border:1px solid #888;margin-top:1px'>" + options.musicToggle },
             canClick: true,
             unlocked: true,
             onClick() {

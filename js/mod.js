@@ -1606,21 +1606,27 @@ function fixOldSave(oldVersion){
 		}
 	}
 	if (oldVersion < 190.1 && player.ep3) {
-		player.sp.kresPoints = new Decimal(player.ep3.kresPoints)
-		player.sp.navPoints = new Decimal(player.ep4.navPoints)
-		player.sp.selPoints = new Decimal(player.ep5.selPoints)
+		if (player.c.cutscenes) {
+			player.c.cutscenes = {}
+			if (player.ca.unlockedCante) player.c.cutscenes["U2-Tav-End"] = 2
+		}
+		if (player.ep3) {
+			player.sp.kresPoints = new Decimal(player.ep3.kresPoints)
+			player.sp.navPoints = new Decimal(player.ep4.navPoints)
+			player.sp.selPoints = new Decimal(player.ep5.selPoints)
 
-		player.sp.buyables[11] = new Decimal(player.ep3.buyables[11])
-		player.sp.buyables[12] = new Decimal(player.ep3.buyables[2])
-		player.sp.buyables[14] = new Decimal(player.ep3.buyables[12])
-		player.sp.buyables[15] = new Decimal(player.ep3.buyables[13])
-		player.sp.buyables[21] = new Decimal(player.ep4.buyables[11])
-		player.sp.buyables[22] = new Decimal(player.ep4.buyables[1])
-		player.sp.buyables[24] = new Decimal(player.ep4.buyables[12])
-		player.sp.buyables[25] = new Decimal(player.ep4.buyables[13])
-		player.sp.buyables[31] = new Decimal(player.ep5.buyables[11])
-		player.sp.buyables[32] = new Decimal(player.ep5.buyables[3])
-		player.sp.buyables[34] = new Decimal(player.ep5.buyables[12])
-		player.sp.buyables[35] = new Decimal(player.ep5.buyables[13])
+			player.sp.buyables[11] = new Decimal(player.ep3.buyables[11])
+			player.sp.buyables[12] = new Decimal(player.ep3.buyables[2])
+			player.sp.buyables[14] = new Decimal(player.ep3.buyables[12])
+			player.sp.buyables[15] = new Decimal(player.ep3.buyables[13])
+			player.sp.buyables[21] = new Decimal(player.ep4.buyables[11])
+			player.sp.buyables[22] = new Decimal(player.ep4.buyables[1])
+			player.sp.buyables[24] = new Decimal(player.ep4.buyables[12])
+			player.sp.buyables[25] = new Decimal(player.ep4.buyables[13])
+			player.sp.buyables[31] = new Decimal(player.ep5.buyables[11])
+			player.sp.buyables[32] = new Decimal(player.ep5.buyables[3])
+			player.sp.buyables[34] = new Decimal(player.ep5.buyables[12])
+			player.sp.buyables[35] = new Decimal(player.ep5.buyables[13])
+		}
 	}
 }

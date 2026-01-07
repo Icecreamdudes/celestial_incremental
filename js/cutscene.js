@@ -889,7 +889,7 @@
             type: "cinematic",
             background: "#000000",
             portrait: "resources/secret.png",
-            trigger() {return player.c.cutscenes["U2-Tav-Death"] == 2},
+            trigger() {return player.c.cutscenes["U2-Tav-Death"] == 2 && !player.ca.unlockedCante},
             dialogue: [
                 { text: "<h1>Hello.</h1>", duration: 5000, style: { color: "#ffffff", fontSize: "4vw" } },
                 { text: "<h1>I am the narrator.</h1>", duration: 5000, style: { color: "#ffffff", fontSize: "4vw" } },

@@ -655,6 +655,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Fixed Vex:32 throwing up console errors.<br>
 			- Fixed most nectar upgrades spelling it as 'nector'.<br>
 			- Fixed a bug when entering dark universe on a newer save.<br>
+			- Added checks in CB-Fighting to prevent index from going negative.<br>
 			- Plus many bug fixes from hotfixes before this update.<br><br>
 		Backend:<br>
 			- Moved save storage from local storage to IndexedDB.<br>

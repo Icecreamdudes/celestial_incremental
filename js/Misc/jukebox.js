@@ -175,7 +175,7 @@ addLayer("jukebox", {
             unlocked() {return hasUpgrade("s", 21)},
         },
         "black-heart": {
-            artist: "Icecreamdude",
+            artist: "Citrine/Niko/Flushmak",
             name: "N/A",
             description: "Black Heart",
             img: "resources/music/black-heart.png",
@@ -191,7 +191,7 @@ addLayer("jukebox", {
             unlocked() {return player.ma.matosUnlock},
         },
         "depth-2": {
-            artist: "Icecreamdude",
+            artist: "150percent",
             name: "N/A",
             description: "Depth 2",
             img: "resources/music/depth-2.png",
@@ -353,7 +353,7 @@ addLayer("jukebox", {
             unlocked() {return player.s.highestSingularityPoints.gt(0)},
         },
         "jocus": {
-            artist: "Icecreamdude",
+            artist: "Citrine/Niko/Flushmak",
             name: "N/A",
             description: "Jocus",
             img: "resources/music/jocus.png",

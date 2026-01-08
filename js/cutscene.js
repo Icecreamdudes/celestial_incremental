@@ -1076,6 +1076,68 @@ if (player.c.cutscene2[6] && player.in.pylonBuilt)
     });
     player.c.cutscene2[6] = false
 }
+if (player.c.cutscene2[7] && player.bl.noxFightActive)
+{
+    showCutscene(cutsceneDialogueA8, {
+    cutsceneID: -8,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene2[7] = false
+}
+if (player.c.cutscene2[8] && player.bl.noxDefeated)
+{
+    showCutscene(cutsceneDialogueA9, {
+    cutsceneID: -9,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene2[8] = false
+}
+if (player.c.cutscene2[9] && player.d.diceSpaceUnlocked)
+{
+    showCutscene(cutsceneDialogueA10, {
+    cutsceneID: -10,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene2[9] = false
+
+    layers.wof.randomizeSegments()
+}
+if (player.c.cutscene2[10] && (player.za.zarReqs[0] || player.za.zarReqs[1] || player.za.zarReqs[2] || player.za.zarReqs[3] || player.za.zarReqs[4] || player.za.zarReqs[5]))
+{
+    showCutscene(cutsceneDialogueA11, {
+    background: "linear-gradient(45deg, #666666ff 0%, #585858ff 100%)",
+    cutsceneID: -11,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene2[10] = false
+}
+if (player.c.cutscene2[11] && player.za.zarUnlocked)
+{
+    showCutscene(cutsceneDialogueA12, {
+    background: "linear-gradient(45deg, #666666ff 0%, #585858ff 100%)",
+    cutsceneID: -12,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene2[11] = false
+}
+if (player.c.cutscene2[12] && hasUpgrade("za", 12))
+{
+    showCutscene(cutsceneDialogueA13, {
+    background: "linear-gradient(45deg, #666666ff 0%, #585858ff 100%)",
+    cutsceneID: -13,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene2[12] = false
+}
+if (player.c.cutscene2[13] && hasUpgrade("za", 13))
+{
+    showCutscene(cutsceneDialogueA14, {
+    background: "linear-gradient(45deg, #666666ff 0%, #585858ff 100%)",
+    cutsceneID: -14,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene2[13] = false
+}
 
 if (player.c.cutscene[112] && player.tab == "bee") {
     showCutscene(cutsceneDialogue113, {

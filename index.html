@@ -50,6 +50,7 @@
 				<button class="uniButton" v-if="uniShown('UB')" v-bind:style="universes.UB.nodeStyle()" :disabled="uniPaused('UB')" onclick="player.universe='UB'"><span class="buttonText">β</span></button>
  				<button class="uniButton" v-if="uniShown('D1')" v-bind:style="universes.D1.nodeStyle()" onclick="player.universe='D1'"><span class="buttonText">D1</span></button>
 				<button class="uniButton" v-if="uniShown('CH')" v-bind:style="universes.CH.nodeStyle()" onclick="player.universe='CH'"><span class="buttonText">γ</span></button>
+				<button class="uniButton" v-if="uniShown('DS')" v-bind:style="universes.DS.nodeStyle()" onclick="player.universe='DS'"><span class="buttonText">ε</span></button>
 			</div>
 			<div class="layerHolder">
 				<div v-bind:class="{titleHolder:true,darkTitle:player.sma.inStarmetalChallenge}">

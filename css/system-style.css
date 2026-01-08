@@ -72,7 +72,7 @@
 	align-items: center;
 	width: 100%;
 	height: 50px;
-	color: rgba(255, 255, 255, 0.9);
+	color: var(--textColor);
 	font-size: 20px;
 	line-height: 1;
 	background: var(--titleGradient);
@@ -193,7 +193,7 @@
 	height: 6vh;
 }
 .miscText {
-	color: white;
+	color: var(--textColor);
 	font-size: 6vh;
 }
 .treeRow {

@@ -31,7 +31,7 @@
 		
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js",
 		
-		"Interspace/well.js", "Interspace/tasks.js", "Interspace/bumpy.js", "Interspace/developmentXp.js", "Singularity/reactor.js", "Singularity/starmetalEnhancement.js", "Interspace/cere.js",
+		"Interspace/well.js", "Interspace/bumpy.js", "Interspace/developmentXp.js", "Singularity/reactor.js", "Singularity/starmetalEnhancement.js", "Interspace/cere.js",
 
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
@@ -213,11 +213,11 @@ function updateStyles() {
 		case "al":
 			layerBG = "#1f001f"
 			break;
-		case "tas":
-			layerBG = "#241830"
-			break;
 		case "wel":
-			layerBG = "#183030"
+			layerBG = "linear-gradient(0deg, #1f4040 0%, #0f1f1f 100%)"
+			break;
+		case "bon":
+			layerBG = "linear-gradient(0deg, #2f1f40 0%, #170f1f 100%)"
 			break;
 		case "bum":
 			layerBG = "#180b18"
@@ -516,7 +516,7 @@ function updateStyles() {
 			break;
 		case "i": case "r": case "f": case "p": case "t":
 		case "g": case "pe": case "pol": case "gh": case "rf":
-		case "m": case "d": case "re": case "fa":
+		case "m": case "d": case "fa":
 			player.musuniverse = "U1"
 			break;
 		case "in": case "ad": case "ip": case "id": case "tad":
@@ -529,7 +529,7 @@ function updateStyles() {
             player.musuniverse = "A1"
 			break;
 		case "s": case "co": case "ra": case "sd": case "cs":
-		case "sma": case "ma": case "cof": case "sme":
+		case "sma": case "ma": case "cof": case "sme": case "re":
             player.musuniverse = "U3"
 			break;
 		case "du": case "le": case "dr": case "dp": case "dg":

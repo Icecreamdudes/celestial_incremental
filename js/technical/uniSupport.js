@@ -268,7 +268,7 @@ addUniverse("CH", {
 addUniverse("UD", {
     name: "Universe δ<br>Interspace",
     symbol: "δ",
-    tree: [["wel"], ["tas", "bum"], ["ans", "dxp"], ["cer"]],
+    tree: [["wel"], ["bum"], [ "dxp"], ["cer"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(135deg, #ff7fbf 0%, #bf7fff 100%)",

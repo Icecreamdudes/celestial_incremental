@@ -77,13 +77,6 @@
                 player.wel.tasks[1].time = new Decimal(0)
                 player.wel.tasks[2].time = new Decimal(0)
                 player.wel.tasks[3].time = new Decimal(0)
-
-                player.tas.tasks[1].time = player.tas.tasks[1].maxTime()
-                player.tas.tasks[2].time = player.tas.tasks[2].maxTime()
-                player.tas.tasks[1].completions = new Decimal(0)
-                player.tas.tasks[2].completions = new Decimal(0)
-                player.tas.tasks[1].canAddCompletion = false
-                player.tas.tasks[2].canAddCompletion = false
             },
             lightGain() {
                 let gain = player.wel.lightMult

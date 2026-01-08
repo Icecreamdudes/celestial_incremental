@@ -496,6 +496,7 @@
                 content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return "Note: THIS FEATURE IS HEAVILY BUGGED AND UNOPTIMIZED" }, { "color": "red", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Note 2: i completely broke this with the backend revamp lmao" }, { "color": "red", "font-size": "20px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return "(Note: Cutscene requirements must be met in order to rewatch a cutscene.)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "(Cutscene IDs start at 0.)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],

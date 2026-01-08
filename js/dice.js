@@ -86,6 +86,8 @@
         boosterDiceStatsPerSecond: new Decimal(0),
 
         boosterDiceAutomation: false,
+
+        diceSpaceUnlocked: false,
     }},
     automate() {
         if (hasUpgrade("d", 11) || player.tad.altInfinities.shattered.milestone.gte(3))
@@ -702,6 +704,17 @@
                 player.d.rigIndex == 18 ? look.border = "3px solid red" : look.border = "3px solid white"
                 return look
             },
+        },
+        201: {
+            title() { return "<h2>Open the rift to Dice Space<br>Req: 1e450 Challenge Dice Points" },
+            canClick() { return player.d.challengeDicePoints.gte("1e450")},
+            unlocked() { return true },
+            onClick() {
+                player.d.diceSpaceUnlocked = true
+                player.tab = "za"
+                player.universe = "ds"
+            },
+            style: {width: "600px", minHeight: "200px", color: "#1b110eff", backgroundImage: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)", border: "3px solid #0061ff", borderRadius: "15px"},
         },
     },
     addDiceEffect() {
@@ -1321,6 +1334,14 @@
                     ["blank", "10px"],
                     ["raw-html", "Tip:", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", "Pets only work after getting<br>1e100 celestial points", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                ]
+            },
+            "The Rift": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                unlocked() { return player.in.pylonBuilt && !player.d.diceSpaceUnlocked },
+                content: [
+                    ["blank", "25px"],
+                    ["row", [["clickable", 201]]],
                 ]
             },
         },

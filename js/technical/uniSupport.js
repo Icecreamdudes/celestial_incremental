@@ -264,3 +264,26 @@ addUniverse("UB", {
     uniShown() { return player.startedGame && player.pol.unlockHive >= 2 && !player.sma.inStarmetalChallenge},
     disabled() {return !player.startedGame && player.pol.unlockHive < 2}
 })
+
+addUniverse("DS", {
+    name() {
+        return "Universe ε<br>Dice Space"
+    },
+    symbol: "ε",
+    tree: [["za",],["cf","wof",],],
+    nodeStyle() {
+        let style = {
+            background: "linear-gradient(45deg, #666666ff 0%, #585858ff 100%)",
+            backgroundOrigin: "border-box",
+            borderColor: "#cececeff",
+        }
+        if (player.universe=="DS") {
+            style.outline = "2px solid white"
+            style.outlineOffset = "-2px"
+            style.borderWidth = "5px"
+        }
+        return style
+    },
+    uniShown() { return player.d.diceSpaceUnlocked && !player.sma.inStarmetalChallenge }, //make it something
+    disabled() {return false}
+})

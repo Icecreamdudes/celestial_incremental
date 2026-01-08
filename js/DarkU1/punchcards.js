@@ -1539,7 +1539,7 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.ds.space.pow(0.3).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = player.ds.space.plus(1).log10().pow(1.5).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
                 eff[1] = getLevelableAmount(this.layer, this.id).mul(0.05).add(1)
                 return eff
             },
@@ -1813,8 +1813,8 @@ addLayer("pu", {
                 return eff
             },
             // CLICK CODE
-            unlocked() {return (player.ir.iriditeDefeated && player.le.resetAmount.lte(0)) || this.canClick()},
-            canSelect() {return player.ir.iriditeDefeated && player.le.resetAmount.lte(0)},
+            unlocked() {return (player.ir.iriditeDefeated && player.le.resetAmount.lte(0) && !player.pet.legPetTimers[0].active) || this.canClick()},
+            canSelect() {return player.ir.iriditeDefeated && player.le.resetAmount.lte(0) && !player.pet.legPetTimers[0].active},
             canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE

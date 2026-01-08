@@ -2677,6 +2677,98 @@ const cutsceneDialogueA8 = [ //start of nox battle
     { text: "If you don't give me your blood stones, I'll fight you for them!!!", portrait: "resources/nox.png"  },
     { text: "You proceed to get ready for battle.", },
 ];  
+const cutsceneDialogueA9 = [ //defeating nox
+    { text: "Damn... You're kinda strong. I'll just let you keep your blood stones.", portrait: "resources/nox.png"  },
+    { text: "I sense the presence of a celestial in this universe. I don't know if you do, but I do.", portrait: "resources/nox.png"  },
+    { text: "There's a celestial here? I didn't even notice it.", portrait: "resources/player.png"  },
+    { text: "You have foresight powers, right? You should be able to detect this celestial.", portrait: "resources/nox.png"  },
+    { text: "Anyways. I won't bother you anymore if we go and defeat this celestial together.", portrait: "resources/nox.png"  },
+    { text: "I will take most of your loot though.", portrait: "resources/nox.png"  },
+    { text: "I guess you should help him with it... Defeating a celestial will make you stronger after all."  },
+    { text: "Fine. I will help you.", portrait: "resources/player.png"  },
+    { text: "This vampire... What is this superphysical power???"  },
+    { text: "It's so strong... The strongest you've ever seen."  },
+    { text: "Is he also using magic? Raw strength?"  },
+    { text: "Is this what happens when multiple power systems combine into one?"  },
+    { text: "If you want any luck at defeating all the celestials, you must become stronger."  },
+    { text: "And now you realize that you have a much longer way to go than you thought."  },
+];  
+const cutsceneDialogueA10 = [ //unlocking dice space
+    { text: "The accuracy of your intuition frightens you." },
+    { text: "A rift has formed in the overworld, due to an excess of challenge dice points." },
+    { text: "You enter the rift, and find yourself in a strange universe." },
+    { text: "It is a small universe, that appears to be a liminal, abandoned casino." },
+    { text: "The presence of a celestial is strong." },
+    { text: "It must be the next celestial." },
+    { text: "You begin to explore this strange universe." },
+];  
+const cutsceneDialogueA11 = [ //filling out zar reqs
+    { text: "As you explore the universe, you find a small structure." },
+    { text: "It is a person-sized dice, with six notches, signifying six requirements." },
+    { text: "You must fill these out in order to summon the next celestial." },
+    { text: "You see a strange dice-person walk up to you." },
+    { text: "Hello. We haven't recieved visitors in a long, long, time.", portrait: "resources/diceThree.png"  },
+    { text: "He appears to have be a person with a dice head, and wearing a tuxedo with a vibrant red tie. For some reason there are only 3 dots on his face."  },
+    { text: "This person isn't a celestial either."  },
+    { text: "I am visiting so I can defeat a celestial. Would you be able to help me with that?", portrait: "resources/player.png"  },
+    { text: "You must be referring to Zar. Please don't kill him. He may be a celestial, but he's the reason I'm even alive to begin with.", portrait: "resources/diceThree.png"  },
+    { text: "Then who are you?", portrait: "resources/player.png"  },
+    { text: "I am only a mere byproduct of Zar's superphysical powers, but Zar has taken care of me and provided for me ever since I was created.", portrait: "resources/diceThree.png"  },
+    { text: "Another being with only one dot appears."  },
+    { text: "Come on three. We must go back to the card room. There is something important we need to discuss with Zar.", portrait: "resources/diceOne.png"  },
+    { text: "I have to go now... Please. Please don't kill Zar.", portrait: "resources/diceThree.png"  },
+    { text: "How strange. Zar must have an entire family of dice-people." },
+];  
+const cutsceneDialogueA12 = [ //UNLOCKING ZAR
+    { text: "You activate all six dots on the dice, and begin to feel shaking." },
+    { text: "You hear laughter coming from the distance." },
+    { text: "Heehee!!! You use your silly little superphysical powers to find me! This will make my job a lot easier now!", portrait: "resources/zar.png"  },
+    { text: "This gives you a bad feeling. You remember Kres and Nav. They are still in danger. You must find Zar before they get killed." },
+    { text: "Oh really? I know what your plan is. You know I already defeated Iridite. You should be no different.", portrait: "resources/player.png"  },
+    { text: "I know who you are. Mister Nova told me all about you. I know what I have to do now!", portrait: "resources/zar.png"  },
+    { text: "I'm not weak, like Iridite. Unlike her, I actually have a family that I care about!", portrait: "resources/zar.png"  },
+    { text: "Do you think that matters? The damage you have inflicted on others. The pain and suffering you have caused. I will be sure to end it.", portrait: "resources/player.png"  },
+    { text: "Very well then. I would love to see you try me!", portrait: "resources/zar.png"  },
+    { text: "..." },
+];  
+const cutsceneDialogueA13 = [ //coin flip
+    { text: "Think. How will you get to Zar? How will you fight him?" },
+    { text: "These are questions that you must answer. You must decide what you will do.", },
+    { text: "You remember the dice in the previous room talking about a \"Card Room\". Maybe Zar is in there.", },
+    { text: "You walk through the abandoned casino, and find a strange glowing room.", },
+    { text: "You enter it, and you find a room with nothing, but a single coin.", },
+    { text: "Hello. Would you like to flip the coin?", portrait: "resources/diceTwo.png"  },
+    { text: "What do you want... You are just one of Zar's children.", portrait: "resources/player.png"  },
+    { text: "We may be Zar's children, but we control the superphysical values that hold this universe together.", portrait: "resources/diceTwo.png"  },
+    { text: "If you actually want to gain something out of this place, at least try flipping the coin.", portrait: "resources/diceTwo.png"  },
+    { text: "Is this a trick? Oh well. It's just a coin. What's the worst that could happen.", },
+    { text: "And besides, you'll just spend more time with this strange dice guy. You can probably get information out of him.", },
+];  
+const cutsceneDialogueA14 = [ //wheel of fortune
+    { text: "So... What were you guys talking about in the card room?", portrait: "resources/player.png"  },
+    { text: "I can't say anything.", portrait: "resources/diceTwo.png"  },
+    { text: "Oh really? I've already flipped this coin enough times. I think that pleased you enough, didn't it?", portrait: "resources/player.png"  },
+    { text: "I'm telling you, I can't say anything.", portrait: "resources/diceTwo.png"  },
+    { text: "You are getting annoyed. You grab the dice man by his collar and slam him onto the ground." },
+    { text: "Tell me now, or else I'm going to flip you instead of the coin!", portrait: "resources/player.png"  },
+    { text: "You suddenly have a horrible migraine. It's almost as if your neurons are firing at random intervals." },
+    { text: "You hear a voice in play in your head." },
+    { text: "Haehheahhahahhaa!!!!! This is hilarious!", portrait: "resources/zar.png"  },
+    { text: "You think you're so tuff, trying to mess with my children, but you're just a fool.", portrait: "resources/zar.png"  },
+    { text: "Who knows, maybe poor Nav might have to pay with her life if you keep trying to mess with my family!", portrait: "resources/zar.png"  },
+    { text: "You have been warned.", portrait: "resources/zar.png"  },
+    { text: "For the first time ever since you woke up, you felt a slight sen" },
+    { text: "All of a sudden, the dice guy dissapears for some strange reason." },
+    { text: "You find a new door appear in front of you." },
+    { text: "You walk through the door and find a green room with a giant wheel in the back." },
+    { text: "You see a new dice guy in this room." },
+    { text: "Spin the wheel.", portrait: "resources/diceFour.png"  },
+    { text: "I guess you must continue forward." },
+];  
+const cutsceneDialogueA15 = [ //flashback
+    { text: "You appear in a flashback."  },
+    { text: "It looks like the celestial hunting corporation office again."  },
+];  
 
 // Happens when entering the hive
 const cutsceneDialogue113 = [

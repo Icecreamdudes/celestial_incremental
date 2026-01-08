@@ -18,6 +18,7 @@
         xpGainPercentage: new Decimal(0),
 
         noxFightActive: false,
+        noxDefeated: false,
         foughtNox: false,
     }},
     automate() {
@@ -84,7 +85,7 @@
 
         player.bl.bloodStones = player.bl.bloodStones.floor()
 
-        if (player.ir.battleLevel.gte(24) && !player.bl.foughtNox && player.tab == "bl")
+        if (player.ir.battleLevel.gte(20) && !player.bl.foughtNox && player.tab == "bl")
         {
             spawnNox();
             player.bl.foughtNox = true
@@ -517,6 +518,14 @@
 
                     ["blank", "25px"],
                     ["clickable", 12],
+                ]
+            },
+            "Nox, The Vampire Knight": {
+                buttonStyle() { return { border: "2px solid #f57171ff", borderRadius: "10px" } },
+                unlocked() { return player.bl.noxDefeated },
+                content: [
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "Coming soon." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
             },
         },
@@ -1744,6 +1753,12 @@ class BloodArena extends SpaceArena {
             for (let enemy of (this.enemies || [])) {
                 if (!enemy) continue;
                 if (!enemy.alive && !enemy._bloodLootHandled) {
+                    // If Nox, the Vampire Knight died, set the defeat flag
+                    try {
+                        if (enemy.type === 'noxBoss') {
+                            player.bl.noxDefeated = true;
+                        }
+                    } catch (e) {}
                     // If a Large Leech died, spawn several small leeches at its position
                     try {
                         if (enemy.type === 'largeLeech' && !enemy._bloodSplitDone) {

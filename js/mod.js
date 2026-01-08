@@ -30,8 +30,8 @@
 		"Hive/honey.js", "Hive/wax.js", "Hive/aleph.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
 		
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js",
-		"Check Back/cookie.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js", "DarkU1/blood.js",
-
+		"Check Back/cookie.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js", "DarkU1/blood.js", "Zar/zar.js", "Zar/coinFlip.js",
+ 		"Zar/wheelOfFortune.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 	],
@@ -134,6 +134,9 @@ function updateStyles() {
 			{
 				layerBG = "#001f18"
 			}
+			break;
+	    case "za": case "cf": case "wof":
+			layerBG = "linear-gradient(-180deg, #3b3b3bff 0%, #8d8d8dff 100%)"
 			break;
 		case "t":
 			layerBG = "#02172f"
@@ -482,6 +485,9 @@ function updateStyles() {
 			case "CB":
 				sideBG = "#010812"
 				break;
+			case "DS":
+				sideBG = "radial-gradient(circle, #303030ff, #000000)"
+				break;	
 			default:
 				sideBG = "#0b0b0b"
 				break;
@@ -532,7 +538,7 @@ function updateStyles() {
             player.musuniverse = "U3"
 			break;
 		case "du": case "le": case "dr": case "dp": case "dg":
-		case "dgr": case "dn": case "ds":
+		case "dgr": case "dn": case "ds": case "dv": case "bl":
             player.musuniverse = "D1"
 			break;
 		case "ch":
@@ -555,6 +561,9 @@ function updateStyles() {
 			break;
 		case "od": case "mu":
             player.musuniverse = "OD"
+			break;
+		case "za": case "cf": case "wof":
+            player.musuniverse = "DS"
 			break;
 	}
 
@@ -580,6 +589,9 @@ function updateStyles() {
 				break;
 			case "A1":
 				playAndLoopAudio("music/alt-uni1.mp3", options.musicVolume/10)
+				break;
+			case "DS":
+				playAndLoopAudio("music/diceSpace.mp3", options.musicVolume/10)
 				break;
 			case "U3":
 				if (player.ma.inBlackHeart == false) {
@@ -694,6 +706,19 @@ function updateStyles() {
             if (cutsceneID == 111 && cutsceneIndex < 23) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
             if (cutsceneID == 111 && cutsceneIndex > 23) playAndLoopAudio("music/novaCutscene.mp3", options.musicVolume/10);
             if (cutsceneID == 112) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
+
+			//arbitary IDs
+			if (cutsceneID == -1) playAndLoopAudio("music/aniciffoCutscene.mp3", options.musicVolume/10);
+			if (cutsceneID == -2) playAndLoopAudio("music/aniciffoCutscene.mp3", options.musicVolume/10);
+			//no music for -3
+			if (cutsceneID == -6) playAndLoopAudio("music/aniciffoCutscene.mp3", options.musicVolume/10);
+			if (cutsceneID == -8) playAndLoopAudio("music/aniciffoCutscene.mp3", options.musicVolume/10);
+			if (cutsceneID == -9) playAndLoopAudio("music/aniciffoCutscene.mp3", options.musicVolume/10);
+
+			if (cutsceneID == -11) playAndLoopAudio("music/zarCutscene.mp3", options.musicVolume/10);
+			if (cutsceneID == -12) playAndLoopAudio("music/zarCutscene.mp3", options.musicVolume/10);
+			if (cutsceneID == -13) playAndLoopAudio("music/zarCutscene.mp3", options.musicVolume/10);
+			if (cutsceneID == -14) playAndLoopAudio("music/zarCutscene.mp3", options.musicVolume/10);
         }
         if (window.cinematicCutsceneActive && options.musicToggle) {
             if (cinematicCutsceneID == 40) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
@@ -1321,7 +1346,7 @@ var doNotCallTheseFunctionsEveryTick = [
 	"generatePhase1Attack", "generatePhase2Attack", "startCutscene35", "startCutscene36", "startCutscene37",
 	"startCutscene38", "startCutscene39", "cookieClick", "generateFlower", "generateMult", "flowerClick",
 	"selectCelestialites", "petDeath", "celestialiteDeath", "petAbility", "celestialiteAbility",
-	"arriveAtStar", "spaceEnergyReset",
+	"arriveAtStar", "spaceEnergyReset", "coinFlip", "randomizeSegments", "spinWheel"
 ]
 
 function getStartPoints(){

@@ -85,7 +85,6 @@
             player.sma.inStarmetalChallenge = true
             player.universe = "D1"
             player.tab = "le"
-
             layers.pu.generateSelection();
 
             player.subtabs["le"]["stuff"] = "Main"

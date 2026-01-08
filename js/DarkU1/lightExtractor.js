@@ -643,6 +643,8 @@
         player.bl.buyables[21] = new Decimal(0)
         player.bl.buyables[22] = new Decimal(0)
         player.bl.buyables[23] = new Decimal(0)
+
+        player.bl.bloodDrain = false
     },
     upgrades: {
         11: {

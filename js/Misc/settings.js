@@ -304,10 +304,10 @@ addLayer("settings", {
                         ["style-column", [
                             ["style-column", [
                                 ["raw-html", () => {return "Volume: " + options.musicVolume}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
-                            ], {width: "203px", height: "27px", borderBottom: "3px solid var(--regBorder)"}],
+                            ], {width: "203px", height: "38px", borderBottom: "3px solid var(--regBorder)"}],
                             ["style-column", [
                                 ["raw-html", () => {return "</td><td><div style=\"margin: 0 10px\"><input type=range id=volume name=Music Volume min=1 max=10 value=" + options.musicVolume + " oninput=updateMusicVolume()><br>"}, {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
-                            ], {width: "203px", height: "50px"}],
+                            ], {width: "203px", height: "39px"}],
                         ], {width: "203px", height: "80px", borderLeft: "3px solid var(--regBorder)"}],
                     ], {width: "306px"}],
                 ], {width: "306px", background: "var(--layerBackground)", border: "3px solid var(--regBorder)"}],

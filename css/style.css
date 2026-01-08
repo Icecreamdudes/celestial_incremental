@@ -778,6 +778,7 @@ h1, h2, h3, b, input {
 	border-radius: 5%;
 	border: 2px solid;
 	border-color: rgba(0, 0, 0, 0.125);
+	color: black;
 	font-size: 10px;
 	overflow: visible;
 }

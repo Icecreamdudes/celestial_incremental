@@ -629,7 +629,7 @@ let changelog = `<h1>Changelog:</h1><br>
 	<h3>v1.10.5 - Checklist Update</h3><br>
 		Content:<br>
 			- Redid the visuals of the options menu.<br>
-			- Fixed up themes to change the color of your UI. Currently it is just default, wood, and coral.<br>
+			- Fixed up themes to change the color of your UI. More will be released in the future.<br>
 			- Added a jukebox in settings, which allows you to play any song you have seen in-game.<br>
 			- Revamped check back fragmentation.<br>
 			- Slightly revamped singularity epic pet layers.<br>

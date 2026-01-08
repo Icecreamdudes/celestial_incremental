@@ -371,7 +371,7 @@
         28: {
             title: "2nd OTF slot...",
             unlocked() { return hasUpgrade("i", 27) && hasUpgrade("bi", 106)},
-            description: "Gain a 2nd OTF slot. (doesn't stack with tav's domain)",
+            description: "Gain a 2nd OTF slot.",
             cost: new Decimal("1e1800"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",

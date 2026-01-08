@@ -98,6 +98,18 @@ const fragShopBase = {
         1: new Decimal(4),
         2: new Decimal(12),
     },
+    7: {
+        name: "Eclipse",
+        0: new Decimal(2500),
+        1: new Decimal(2500),
+        2: new Decimal(2500),
+    },
+    8: {
+        name: "Geroa",
+        0: new Decimal(2500),
+        1: new Decimal(2500),
+        2: new Decimal(2500),
+    },
 }
 addLayer("pet", {
     name: "Pets", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -232,6 +244,14 @@ addLayer("pet", {
             6: {
                 current: new Decimal(0),
                 max: new Decimal(600),
+            },
+            7: {
+                current: new Decimal(0),
+                max: new Decimal(21600),
+            },
+            8: {
+                current: new Decimal(0),
+                max: new Decimal(21600),
             },
         },
 
@@ -1262,6 +1282,14 @@ addLayer("pet", {
                         addLevelableXP("pet", 310, player.pet.fragShopBulk)
                         doPopup("none", "+" + formatSimple(player.pet.fragShopBulk) + " Evolution Fragment", "Pet Obtained!", 5, "#4e7cff", "resources/Pets/evolutionFragmentRarePet.png")
                         break;
+                    case 7:
+                        addLevelableXP("pet", 501, new Decimal(1))
+                        doPopup("none", "Eclipse becomes stronger", "Pet Obtained!", 5, "#eed200", "resources/Pets/eclipseLegendaryPet.png")
+                        break;
+                    case 8:
+                        addLevelableXP("pet", 502, new Decimal(1))
+                        doPopup("none", "Geroa gets enhancements", "Pet Obtained!", 5, "#eed200", "resources/Pets/geroaLegendaryPet.png")
+                        break;
                 }
             },
             style() {
@@ -1332,6 +1360,24 @@ addLayer("pet", {
                 player.pet.fragShopIndex = 6
             },
             style: {width: "75px", minHeight: "75px", background: "#4e7cff", border: "5px solid #0031BF", borderRadius: "0px", padding: "0px"},
+        },
+        138: {
+            title() { return "<img src='resources/Pets/eclipseLegendaryPet.png'style='width:65px;height:65px;margin:0px;margin-bottom:-4px'></img>" },
+            canClick: true,
+            unlocked() { return getLevelableAmount("pet", 501).gt(0) },
+            onClick() {
+                player.pet.fragShopIndex = 7
+            },
+            style: {width: "75px", minHeight: "75px", background: "#eed200", border: "5px solid #776900", borderRadius: "0px", padding: "0px"},
+        },
+        139: {
+            title() { return "<img src='resources/Pets/geroaLegendaryPet.png'style='width:65px;height:65px;margin:0px;margin-bottom:-4px'></img>" },
+            canClick: true,
+            unlocked() { return getLevelableAmount("pet", 502).gt(0) },
+            onClick() {
+                player.pet.fragShopIndex = 8
+            },
+            style: {width: "75px", minHeight: "75px", background: "#eed200", border: "5px solid #776900", borderRadius: "0px", padding: "0px"},
         },
         // LEGENDARY GEMS
         201: {
@@ -5229,6 +5275,10 @@ addLayer("pet", {
                                             return "(" + player.pet.levelables[210][1] + "/" + tmp.pet.levelables[210].xpReq + ")"
                                         case 6:
                                             return "(" + player.pet.levelables[310][1] + "/" + tmp.pet.levelables[310].xpReq + ")"
+                                        case 7:
+                                            return "(" + player.pet.levelables[501][1] + "/" + tmp.pet.levelables[501].xpReq + ")"
+                                        case 8:
+                                            return "(" + player.pet.levelables[502][1] + "/" + tmp.pet.levelables[502].xpReq + ")"
                                         default:
                                             return ""
                                     }
@@ -5261,8 +5311,8 @@ addLayer("pet", {
                             ["style-row", [["hoverless-clickable", 137]], {width: "74px", height: "75px"}],
                         ], {width: "535px", height: "75px", borderBottom: "3px solid white"}],
                         ["style-row", [
-                            ["style-row", [], {width: "75px", height: "75px", borderRight: "2px solid white"}],
-                            ["style-row", [], {width: "75px", height: "75px", borderRight: "2px solid white"}],
+                            ["style-row", [["hoverless-clickable", 138]], {width: "75px", height: "75px", borderRight: "2px solid white"}],
+                            ["style-row", [["hoverless-clickable", 139]], {width: "75px", height: "75px", borderRight: "2px solid white"}],
                             ["style-row", [], {width: "75px", height: "75px", borderRight: "2px solid white"}],
                             ["style-row", [], {width: "75px", height: "75px", borderRight: "2px solid white"}],
                             ["style-row", [], {width: "75px", height: "75px", borderRight: "2px solid white"}],

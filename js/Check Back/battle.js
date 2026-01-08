@@ -805,6 +805,7 @@ celestialiteDeath(index){
 
     if (player.ba.celestialiteIndex.add(1).eq(player.ba.celestialiteIDs.length)) {
         player.ba.celestialiteIndex = player.ba.celestialiteIndex.sub(1)
+        if (player.ba.celestialiteIndex < 0) player.ba.celestialiteIndex = 0
     }
     logPrintBattle("<span style='color: #625fffff;'>" + player.ba.celestialiteNames[player.ba.celestialiteIDs[index]] + " is dead!" ) 
 
@@ -1037,6 +1038,7 @@ celestialiteDeath(index){
             unlocked() { return true },
             onClick() {
                 player.ba.celestialiteIndex = player.ba.celestialiteIndex.sub(1)
+                if (player.ba.celestialiteIndex < 0) player.ba.celestialiteIndex = 0
             },
             style: { width: '75px', "min-height": '75px', 'color': "black",},
         },

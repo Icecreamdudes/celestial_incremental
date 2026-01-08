@@ -161,6 +161,7 @@ addLayer("ep2", {
         shardPity: 0,
 
         externalGolden: false,
+        crumbClicks: true,
         goldenTimer: new Decimal(600),
         goldenTimerMax: new Decimal(600),
         averageGoldenCooldown: new Decimal(600),
@@ -240,7 +241,7 @@ addLayer("ep2", {
             }
         }
 
-        if (getLevelableAmount("pet", 2004).gt(0) && !(player.tab != "ep2" && !player.ep2.externalGolden)) {
+        if (getLevelableAmount("pet", 2004).gt(0) && player.ep2.crumbClicks) {
             player.ep2.goldClickTimer = player.ep2.goldClickTimer.add(delta)
             if (player.ep2.goldClickTimer.gte(Decimal.div(1, levelableEffect("pet", 2004)[0]))) {
                 player.ep2.barClicks += 1
@@ -314,6 +315,23 @@ addLayer("ep2", {
             unlocked() {return player.ep2.obtainedShards},
             tooltip() {return "<div style='line-height:1.1;font-size:12px'>Chocolate Shards<hr><small>Obtained from golden cookies<br>Pity: " + player.ep2.shardPity + "/20</small></div>" },
             style: {width: "32px", minHeight: "32px", background: "transparent", border: "none", borderRadius: "15px", padding: "0", marginLeft: "3px", marginRight: "3px", boxShadow: "0 0 !important"}
+        },
+        3: {
+            title() {
+                if (player.ep2.crumbClicks) return "<img src='resources/checkback/crumb_simple.png' width='40px' height='40px' style='margin-bottom:-5px'></img>"
+                return "<img src='resources/checkback/crumb_simple.png' width='40px' height='40px' style='margin-bottom:-5px;opacity:0.3'></img>"
+            },
+            canClick: true,
+            unlocked() {return getLevelableAmount("pet", 2004).gt(0)},
+            tooltip: "Toggle passive golden click gain.",
+            onClick() {
+                if (player.ep2.crumbClicks) {
+                    player.ep2.crumbClicks = false
+                } else {
+                    player.ep2.crumbClicks = true
+                }
+            },
+            style: {width: "50px", minHeight: "50px", background: "transparent", border: "none", borderRadius: "50%", padding: "0", boxShadow: "0 0 !important"}
         },
     },
     bars: {
@@ -2817,6 +2835,7 @@ addLayer("ep2", {
                 ["style-column", [
                     ["left-row", [
                         ["clickable", 1],
+                        ["clickable", 3],
                     ], {paddingLeft: "5px"}],
                     ["tooltip-row", [
                         ["style-column", [

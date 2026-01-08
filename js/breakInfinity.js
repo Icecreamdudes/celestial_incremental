@@ -642,8 +642,6 @@
                         ["upgrade", 109], ["upgrade", 111], ["upgrade", 112], ["upgrade", 113], ["upgrade", 114], ["upgrade", 115], ["upgrade", 116], ["upgrade", 117],
                         ["upgrade", 118]
                     ], {maxWidth: "1000px", padding: "5px 0", backgroundColor: "#232b2b", border: "3px solid #596c6c", borderRadius: "20px"}],
-                    ["blank", "25px"],
-                    ["raw-html", () => { return !player.ta.unlockedReverseBreak ? "Wanna break infinity for antimatter? Check pet evolutions." : ""}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                 ]
             },
             "Autocruncher(s)": {

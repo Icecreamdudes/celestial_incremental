@@ -5,13 +5,9 @@ addLayer("settings", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-    }
-    },
-    automate() {},
-    nodeStyle() {},
+    }},
     tooltip: "Settings",
     color: "white",
-    branches: ["branch"],
     clickables: {
         2: {
             title() { return "Settings" },
@@ -20,25 +16,16 @@ addLayer("settings", {
             onClick() {
                 player.tab = "settings"
             },
-            style: { width: '125px', minHeight: '50px', color: "white", background: "black", borderRadius: '0px', border: "2px solid white", margin: "0px 5px" },
-        },
-        3: {
-            title() { return "Stats" },
-            canClick() { return true },
-            unlocked() { return false },
-            onClick() {
-                player.tab = "stats"
-            },
-            style: { width: '125px', minHeight: '50px', color: "white", background: "black", borderRadius: '0px', border: "2px solid white", margin: "0px 5px" },
+            style: { width: '125px', minHeight: '50px', color: "var(--textColor)", background: "var(--miscButtonDisable)", borderRadius: '0px', border: "3px solid var(--regBorder)", margin: "0px 5px" },
         },
         4: {
-            title() { return "Savebank" },
+            title() { return "Savebank<br><small style='color:#f44'>[HEAVILY WIP]</small>" },
             canClick() { return true },
             unlocked() { return true },
             onClick() {
                 player.tab = "savebank"
             },
-            style: { width: '125px', minHeight: '50px', color: "white", background: "black", borderRadius: '0px', border: "2px solid white", margin: "0px 5px" },
+            style: { width: '125px', minHeight: '50px', color: "var(--textColor)", background: "var(--miscButtonDisable)", borderRadius: '0px', border: "3px solid var(--regBorder)", margin: "0px 5px" },
         },
         5: {
             title() { return "Changelog" },
@@ -47,59 +34,441 @@ addLayer("settings", {
             onClick() {
                 player.tab = "changelog"
             },
-            style: { width: '125px', minHeight: '50px', color: "white", background: "black", borderRadius: '0px', border: "2px solid white", margin: "0px 5px" },
+            style: { width: '125px', minHeight: '50px', color: "var(--textColor)", background: "var(--miscButtonDisable)", borderRadius: '0px', border: "3px solid var(--regBorder)", margin: "0px 5px" },
         },
-        6: {
-            title() { return "Credits" },
+        7: {
+            title() { return "Jukebox" },
             canClick() { return true },
             unlocked() { return true },
             onClick() {
-                player.tab = "credits"
+                player.tab = "jukebox"
             },
-            style: { width: '125px', minHeight: '50px', color: "white", background: "black", borderRadius: '0px', border: "2px solid white", margin: "0px 5px" },
+            style: { width: '125px', minHeight: '50px', color: "var(--textColor)", background: "var(--miscButtonDisable)", borderRadius: '0px', border: "3px solid var(--regBorder)", margin: "0px 5px" },
+        },
+        9: {
+            title: "Join the Discord!",
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                window.location='https://discord.gg/icecreamdude-s-incremental-games-850817562040467556'
+            },
+            style: { width: "306px", minHeight: "30px", color: "#9fa6f8", background: "#5865F2", border: "3px solid #2c3279", borderRadius: "0px"},
+        },
+        11: {
+            title() { return "Save" },
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                save()
+            },
+            style: { width: '100px', minHeight: '80px', color: "var(--textColor)", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+        },
+        13: {
+            title() { return "Import String" },
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                importSave()
+            },
+            style: { width: '100px', minHeight: '80px', color: "var(--textColor)", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+        },
+        14: {
+            title() { return "Autosave<hr style='border:1px solid #888;margin-top:1px'>" + options.autosave },
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                toggleOpt('autosave')
+            },
+            style: { width: '100px', minHeight: '80px', color: "var(--textColor)", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+        },
+        15: {
+            title() { return "Export File" },
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                exportFile()
+            },
+            style: { width: '100px', minHeight: '80px', color: "var(--textColor)", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+        },
+        16: {
+            title() { return "Export to Clipboard" },
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                exportSave()
+            },
+            style: { width: '100px', minHeight: '80px', color: "var(--textColor)", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+        },
+        17: {
+            title() { return "HARD RESET" },
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                hardReset()
+            },
+            style: { width: '100px', minHeight: '80px', color: "#c88", background: "#300", borderRadius: '0', border: "3px solid #200"},
+        },
+        21: {
+            title() { return "Hide Milestone Popups<hr style='border:1px solid #888;margin-top:1px'>" + options.hideMilestonePopups },
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                toggleOpt('hideMilestonePopups')
+            },
+            style: { width: '100px', minHeight: '80px', color: "var(--textColor)", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+        },
+        22: {
+            title() { return "Hide Achievement Popups<hr style='border:1px solid #888;margin-top:1px'>" + options.hideAchievementPopups },
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                toggleOpt('hideAchievementPopups')
+            },
+            style: { width: '100px', minHeight: '80px', color: "var(--textColor)", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+        },
+        23: {
+            title() { return "Hide General Popups<hr style='border:1px solid #888;margin-top:1px'>" + options.hideGeneralPopups },
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                toggleOpt('hideGeneralPopups')
+            },
+            style: { width: '100px', minHeight: '80px', color: "var(--textColor)", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+        },
+        24: {
+            title() { return "Toggle Hotkeys<hr style='border:1px solid #888;margin-top:1px'>" + options.toggleHotkey },
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                toggleOpt('toggleHotkey')
+            },
+            style: { width: '100px', minHeight: '80px', color: "var(--textColor)", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+        },
+        25: {
+            title() { return "Toggle Music<hr style='border:1px solid #888;margin-top:1px'>" + options.musicToggle },
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                toggleOpt('musicToggle')
+            },
+            style: { width: '100px', minHeight: '80px', color: "var(--textColor)", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+        },
+        31: {
+            title: "Tree Layout",
+            canClick() {return options.menuType != "Tree"},
+            unlocked: "true",
+            onClick() {
+                options.menuType = "Tree"
+            },
+            style() {
+                let look = {width: '100px', minHeight: '80px', color: "var(--textColor)", borderRadius: '0'}
+                if (this.canClick()) {
+                    look.background = "var(--miscButton)"
+                    look.border = "3px solid var(--miscButtonDisable)"
+                } else {
+                    look.background = "var(--miscButtonDisable)"
+                    look.border = "3px solid var(--layerBackground)"
+                }
+                return look
+            },
+        },
+        32: {
+            title: "Tab Layout",
+            canClick() {return options.menuType != "Tab"},
+            unlocked: "true",
+            onClick() {
+                options.menuType = "Tab"
+            },
+            style() {
+                let look = {width: '100px', minHeight: '80px', color: "var(--textColor)", borderRadius: '0'}
+                if (this.canClick()) {
+                    look.background = "var(--miscButton)"
+                    look.border = "3px solid var(--miscButtonDisable)"
+                } else {
+                    look.background = "var(--miscButtonDisable)"
+                    look.border = "3px solid var(--layerBackground)"
+                }
+                return look
+            },
+        },
+        101: {
+            title: "Default Theme",
+            canClick() {return options.theme != "default"},
+            unlocked: "true",
+            onClick() {
+                options.theme = "default"
+	            changeTheme();
+	            resizeCanvas();
+            },
+            style() {
+                let look = {width: '100px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
+                if (!player.sma.inStarmetalChallenge) {
+                    if (this.canClick()) {
+                        look.background = colors["default"].miscButton;look.border = "3px solid " + colors["default"].miscButtonDisable
+                    } else {
+                        look.background = colors["default"].miscButtonDisable;look.border = "3px solid " + colors["default"].layerBackground
+                    }
+                } else {
+                    if (this.canClick()) {
+                        look.background = colors["default"].darkButton;look.border = "3px solid " + colors["default"].darkButtonDisable
+                    } else {
+                        look.background = colors["default"].darkButtonDisable;look.border = "3px solid " + colors["default"].darkLayerBackground
+                    }
+                }
+                return look
+            },
+        },
+        102: {
+            title: "Wood Theme",
+            canClick() {return options.theme != "wood"},
+            unlocked: "true",
+            onClick() {
+                options.theme = "wood"
+	            changeTheme();
+	            resizeCanvas();
+            },
+            style() {
+                let look = {width: '100px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
+                if (!player.sma.inStarmetalChallenge) {
+                    if (this.canClick()) {
+                        look.background = colors["wood"].miscButton;look.border = "3px solid " + colors["wood"].miscButtonDisable
+                    } else {
+                        look.background = colors["wood"].miscButtonDisable;look.border = "3px solid " + colors["wood"].layerBackground
+                    }
+                } else {
+                    if (this.canClick()) {
+                        look.background = colors["wood"].darkButton;look.border = "3px solid " + colors["wood"].darkButtonDisable
+                    } else {
+                        look.background = colors["wood"].darkButtonDisable;look.border = "3px solid " + colors["wood"].darkLayerBackground
+                    }
+                }
+                return look
+            },
+        },
+        103: {
+            title: "Coral Theme",
+            canClick() {return options.theme != "coral"},
+            unlocked: "true",
+            onClick() {
+                options.theme = "coral"
+	            changeTheme();
+	            resizeCanvas();
+            },
+            style() {
+                let look = {width: '100px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
+                if (!player.sma.inStarmetalChallenge) {
+                    if (this.canClick()) {
+                        look.background = colors["coral"].miscButton;look.border = "3px solid " + colors["coral"].miscButtonDisable
+                    } else {
+                        look.background = colors["coral"].miscButtonDisable;look.border = "3px solid " + colors["coral"].layerBackground
+                    }
+                } else {
+                    if (this.canClick()) {
+                        look.background = colors["coral"].darkButton;look.border = "3px solid " + colors["coral"].darkButtonDisable
+                    } else {
+                        look.background = colors["coral"].darkButtonDisable;look.border = "3px solid " + colors["coral"].darkLayerBackground
+                    }
+                }
+                return look
+            },
+        },
+        104: {
+            title() {return player.in.unlockedInfinity ? "Gold Theme" : "[LOCKED]"},
+            canClick() {return options.theme != "gold" && player.in.unlockedInfinity},
+            unlocked: "true",
+            tooltip() {return !player.in.unlockedInfinity ? "Obtained from reaching your limits." : ""},
+            onClick() {
+                options.theme = "gold"
+	            changeTheme();
+	            resizeCanvas();
+            },
+            style() {
+                let look = {width: '100px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
+                if (!player.sma.inStarmetalChallenge) {
+                    if (this.canClick()) {
+                        look.background = colors["gold"].miscButton;look.border = "3px solid " + colors["gold"].miscButtonDisable
+                    } else {
+                        look.background = colors["gold"].miscButtonDisable;look.border = "3px solid " + colors["gold"].layerBackground
+                    }
+                } else {
+                    if (this.canClick()) {
+                        look.background = colors["gold"].darkButton;look.border = "3px solid " + colors["gold"].darkButtonDisable
+                    } else {
+                        look.background = colors["gold"].darkButtonDisable;look.border = "3px solid " + colors["gold"].darkLayerBackground
+                    }
+                }
+                return look
+            },
+        },
+        105: {
+            title() {return player.c.cutscenes["U3-Earned-Starmetal"] > 1 ? "Dark Theme" : "[LOCKED]"},
+            canClick() {return options.theme != "dark" && player.c.cutscenes["U3-Earned-Starmetal"] > 1},
+            unlocked: "true",
+            tooltip() {return player.c.cutscenes["U3-Earned-Starmetal"] < 2 ? "Obtained from a dark place." : ""},
+            onClick() {
+                options.theme = "dark"
+	            changeTheme();
+	            resizeCanvas();
+            },
+            style() {
+                let look = {width: '100px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
+                if (!player.sma.inStarmetalChallenge) {
+                    if (this.canClick()) {
+                        look.background = colors["dark"].miscButton;look.border = "3px solid " + colors["dark"].miscButtonDisable
+                    } else {
+                        look.background = colors["dark"].miscButtonDisable;look.border = "3px solid " + colors["dark"].layerBackground
+                    }
+                } else {
+                    if (this.canClick()) {
+                        look.background = colors["dark"].darkButton;look.border = "3px solid " + colors["dark"].darkButtonDisable
+                    } else {
+                        look.background = colors["dark"].darkButtonDisable;look.border = "3px solid " + colors["dark"].darkLayerBackground
+                    }
+                }
+                return look
+            },
+        },
+        106: {
+            title() {return player.au2.au2Unlocked ? "Midnight Theme" : "[LOCKED]"},
+            canClick() {return options.theme != "midnight" && player.au2.au2Unlocked},
+            unlocked: "true",
+            tooltip() {return !player.au2.au2Unlocked ? "Obtained from the vast expanse." : ""},
+            onClick() {
+                options.theme = "midnight"
+	            changeTheme();
+	            resizeCanvas();
+            },
+            style() {
+                let look = {width: '100px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
+                if (!player.sma.inStarmetalChallenge) {
+                    if (this.canClick()) {
+                        look.background = colors["midnight"].miscButton;look.border = "3px solid " + colors["midnight"].miscButtonDisable
+                    } else {
+                        look.background = colors["midnight"].miscButtonDisable;look.border = "3px solid " + colors["midnight"].layerBackground
+                    }
+                } else {
+                    if (this.canClick()) {
+                        look.background = colors["midnight"].darkButton;look.border = "3px solid " + colors["midnight"].darkButtonDisable
+                    } else {
+                        look.background = colors["midnight"].darkButtonDisable;look.border = "3px solid " + colors["midnight"].darkLayerBackground
+                    }
+                }
+                return look
+            },
         },
     },
-    bars: {},
-    upgrades: {},
-    buyables: {},
-    milestones: {},
-    challenges: {},
-    infoboxes: {},
-    microtabs: {},
     tabFormat: [
-        ["row", [["clickable", 2], ["clickable", 3], ["clickable", 4], ["clickable", 5], ["clickable", 6]]],
+        ["row", [["clickable", 2], ["clickable", 7], ["clickable", 4], ["clickable", 5]]],
         ["blank", "50px"],
-
-        ["row", [
-            ["raw-html", () => "<button class=opt onclick=save()>Save</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=toggleOpt('autosave')>Autosave:<br>" + options.autosave + "</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=hardReset() style='color:darkred'>HARD RESET</button>", {"color": "red", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=toggleOpt('hideMilestonePopups'); needsCanvasUpdate = true>Hide Milestone Popups:<br>" + options.hideMilestonePopups + "</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-        ]],
-
-        ["row", [
-            ["raw-html", () => "<button class=opt onclick=exportSave()>Export to clipboard</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=importSave()>Import string</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=toggleOpt('toggleHotkey'); needsCanvasUpdate = true>Toggle Hotkeys:<br>" + options.toggleHotkey + "</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=toggleOpt('hideAchievementPopups'); needsCanvasUpdate = true>Hide Achievement Popups:<br>" + options.hideAchievementPopups + "</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-        ]],
-
-        ["row", [
-            ["raw-html", () => "<button class=opt onclick=exportFile()>Export file</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<label class=opt for='importfile' style='display:flex;align-items:center;justify-content:center;width:92px;height:92px;'>Import<br>file</label><input id='importfile' type='file' onchange='importFile()' style='display:none' />", {"color": "white", "font-size": "13.3333px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=toggleOpt('musicToggle'); needsCanvasUpdate = true>Toggle Music:<br>" + options.musicToggle + "</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=toggleOpt('hideGeneralPopups'); needsCanvasUpdate = true>Hide General Popups:<br>" + options.hideGeneralPopups + "</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-        ]],
-
-        ["row", [
-            ["raw-html", () => "<button class=opt onclick=switchTheme()>Change Theme</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=selectMenu()>Layout:<br>" + options.menuType + "</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-        ]],
-        ["blank", "25px"],
-        ["raw-html", () => "</td><td><div style=\"margin: 0 10px\"><input type=range id=volume name=Music Volume min=1 max=10 value=" + options.musicVolume + " oninput=updateMusicVolume()><br>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-        ["raw-html", () =>  "Volume: " + options.musicVolume, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-        ["blank", "25px"],
-        ["raw-html", () => hotkey, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
+        ["style-column", [
+            ["blank", "8px"],
+            ["row", [
+                ["blank", "8px"],
+                ["style-column", [
+                    ["style-row", [
+                        ["raw-html", "Save Options", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}]
+                    ], {width: "306px", height: "30px", borderBottom: "3px solid var(--regBorder)"}],
+                    ["style-row", [
+                        ["clickable", 11], ["style-row", [], {width: "3px", height: "80px", background: "var(--regBorder)"}],
+                        ["raw-html", () => "<label class=can for='importfile' style='display:flex;align-items:center;justify-content:center;width:94px;height:74px;background:var(--miscButton);border:3px solid var(--miscButtonDisable)'>Import<br>file</label><input id='importfile' type='file' onchange='importFile()' style='display:none' />", {color: "var(--textColor)", fontFamily: "monospace"}], ["style-row", [], {width: "3px", height: "80px", background: "var(--regBorder)"}],
+                        ["clickable", 13],
+                    ], {width: "306px", borderBottom: "3px solid var(--regBorder)"}],
+                    ["style-row", [
+                        ["clickable", 14], ["style-row", [], {width: "3px", height: "80px", background: "var(--regBorder)"}],
+                        ["clickable", 15], ["style-row", [], {width: "3px", height: "80px", background: "var(--regBorder)"}],
+                        ["clickable", 16],
+                    ], {width: "306px", borderBottom: "3px solid var(--regBorder)"}],
+                    ["row", [
+                        ["style-row", [], {width: "3px", height: "80px", background: "var(--regBorder)"}],
+                        ["clickable", 17], ["style-row", [], {width: "3px", height: "80px", background: "var(--regBorder)"}],
+                    ]],
+                ], {width: "306px", background: "var(--layerBackground)", border: "3px solid var(--regBorder)"}],
+                ["blank", "8px"],
+                ["style-column", [
+                    ["style-row", [
+                        ["raw-html", "Toggle Options", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}]
+                    ], {width: "306px", height: "30px", borderBottom: "3px solid var(--regBorder)"}],
+                    ["style-row", [
+                        ["clickable", 21], ["style-row", [], {width: "3px", height: "80px", background: "var(--regBorder)"}],
+                        ["clickable", 22], ["style-row", [], {width: "3px", height: "80px", background: "var(--regBorder)"}],
+                        ["clickable", 23],
+                    ], {width: "306px", borderBottom: "3px solid var(--regBorder)"}],
+                    ["style-row", [
+                        ["clickable", 24],
+                        ["style-column", [
+                            ["raw-html", "General Hotkeys", {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", "Alt - Toggle Music Off", {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                            ["raw-html", "[More in the future]", {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
+                        ], {width: "203px", height: "80px", borderLeft: "3px solid var(--regBorder)"}],
+                    ], {width: "306px", borderBottom: "3px solid var(--regBorder)"}],
+                    ["style-row", [
+                        ["clickable", 25],
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", () => {return "Volume: " + options.musicVolume}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                            ], {width: "203px", height: "38px", borderBottom: "3px solid var(--regBorder)"}],
+                            ["style-column", [
+                                ["raw-html", () => {return "</td><td><div style=\"margin: 0 10px\"><input type=range id=volume name=Music Volume min=1 max=10 value=" + options.musicVolume + " oninput=updateMusicVolume()><br>"}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                            ], {width: "203px", height: "39px"}],
+                        ], {width: "203px", height: "80px", borderLeft: "3px solid var(--regBorder)"}],
+                    ], {width: "306px"}],
+                ], {width: "306px", background: "var(--layerBackground)", border: "3px solid var(--regBorder)"}],
+                ["blank", "8px"],
+            ]],
+            ["blank", "8px"],
+            ["row", [
+                ["blank", "8px"],
+                ["style-column", [
+                    ["style-row", [
+                        ["raw-html", "Visual Options", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                    ], {width: "306px", height: "30px", borderBottom: "3px solid var(--regBorder)"}],
+                    ["style-row", [
+                        ["raw-html", "Themes", {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                    ], {width: "306px", height: "20px", background: "var(--miscButtonDisable)", borderBottom: "3px solid var(--regBorder)"}],
+                    ["style-row", [
+                        ["clickable", 101], ["style-row", [], {width: "3px", height: "45px", background: "var(--regBorder)"}],
+                        ["clickable", 102], ["style-row", [], {width: "3px", height: "45px", background: "var(--regBorder)"}],
+                        ["clickable", 103],
+                    ], {width: "306px", borderBottom: "3px solid var(--regBorder)"}],
+                    ["style-row", [
+                        ["clickable", 104], ["style-row", [], {width: "3px", height: "45px", background: "var(--regBorder)"}],
+                        ["clickable", 105], ["style-row", [], {width: "3px", height: "45px", background: "var(--regBorder)"}],
+                        ["clickable", 106],
+                    ], {width: "306px", borderBottom: "3px solid var(--regBorder)"}],
+                    ["style-row", [
+                        ["raw-html", "Layouts", {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                    ], {width: "306px", height: "20px", background: "var(--miscButtonDisable)", borderBottom: "3px solid var(--regBorder)"}],
+                    ["style-row", [
+                        ["style-row", [], {width: "3px", height: "80px", background: "var(--regBorder)"}],
+                        ["clickable", 31], ["style-row", [], {width: "3px", height: "80px", background: "var(--regBorder)"}],
+                        ["clickable", 32], ["style-row", [], {width: "3px", height: "80px", background: "var(--regBorder)"}],
+                    ], {width: "306px"}],
+                ], {width: "306px", background: "var(--layerBackground)", border: "3px solid var(--regBorder)"}],
+                ["blank", "8px"],
+                ["top-column", [
+                    ["style-row", [
+                        ["raw-html", "Credits", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                    ], {width: "306px", height: "30px", borderBottom: "3px solid var(--regBorder)"}],
+                    ["style-column", [
+                        ["raw-html", "Game by Icecreamdude", {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                        ["raw-html", "Music: Icecreamdude !Sweet 150percent Citrine/Niko/Flushmak<br>" +
+                            "Content: Icecreamdude Forwaken<br>" +
+                            "Ideas: Nova<br>" +
+                            "Art: Jtoh_Sc Lemonsja<br>" +
+                            "Testing: Nova Piterpicher<br>" +
+                            "Bug Fixing: Tsanth Forwaken", {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
+                    ], {width: "306px", height: "156px"}],
+                    ["style-row", [
+                        ["raw-html", () => "<a href=https://discord.gg/icecreamdude-s-incremental-games-850817562040467556><button class=can style='display:flex;align-items:center;justify-content:center;width:306px;height:30px;font-size:16px;color:#dde0fc;background:#5865f2;border:3px solid #2c3279'>Join the Discord!</button></a>", {fontFamily: "monospace",}],
+                    ], {width: "306px", height: "30px", borderTop: "3px solid var(--regBorder)"}],
+                    ["style-row", [
+                        ["raw-html", () => {return "Playtime: " + formatTime(player.timePlayed)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                    ], {width: "306px", height: "29px", borderTop: "3px solid var(--regBorder)"}],
+                ], {width: "306px", height: "254px", background: "var(--layerBackground)", border: "3px solid var(--regBorder)"}],
+                ["blank", "8px"],
+            ]],
+            ["blank", "8px"],
+        ], {width: "650px", background: "var(--miscButtonHover)", border: "3px solid var(--regBorder)"}],
         ["blank", "25px"],
     ],
     layerShown() { return false }

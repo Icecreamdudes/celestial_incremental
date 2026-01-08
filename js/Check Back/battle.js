@@ -111,6 +111,7 @@ addLayer("ba", {
     color: "white",
     branches: [],
     update(delta) {
+        if (player.ba.petIndex < 0) player.ba.petIndex = 0
         if (player.fi.battleTier.neq(0))
         {
                     player.ba.infoTexts = [];
@@ -790,6 +791,7 @@ addLayer("ba", {
     petDeath(index){
         if (player.ba.petIndex.add(1).eq(player.ba.petIDs.length)) {
             player.ba.petIndex = player.ba.petIndex.sub(1)
+            if (player.ba.petIndex < 0) player.ba.petIndex = 0
         }
         logPrintBattle("<span style='color: #bb0067ff;'>" + run(layers.sme.levelables[player.ba.petIDs[index]].title, layers.sme.levelables[player.ba.petIDs[index]]) + " is dead!" ) 
         // Remove only the element at 'index' from each array
@@ -803,6 +805,7 @@ celestialiteDeath(index){
 
     if (player.ba.celestialiteIndex.add(1).eq(player.ba.celestialiteIDs.length)) {
         player.ba.celestialiteIndex = player.ba.celestialiteIndex.sub(1)
+        if (player.ba.celestialiteIndex < 0) player.ba.celestialiteIndex = 0
     }
     logPrintBattle("<span style='color: #625fffff;'>" + player.ba.celestialiteNames[player.ba.celestialiteIDs[index]] + " is dead!" ) 
 
@@ -982,12 +985,12 @@ celestialiteDeath(index){
                 player.ba.petIndex = new Decimal(0)
                 player.ba.currentlyAttacking = false
 
-                pauseUniverse("U1")
-                pauseUniverse("UA")
-                pauseUniverse("U2")
-                pauseUniverse("A1")
-                pauseUniverse("A2")
-                pauseUniverse("U3")
+                pauseUniverse("U1", "unpause", true)
+                pauseUniverse("UA", "unpause", true)
+                pauseUniverse("U2", "unpause", true)
+                pauseUniverse("A1", "unpause", true)
+                pauseUniverse("A2", "unpause", true)
+                pauseUniverse("U3", "unpause", true)
 
                 player.universe = "CB"
             },
@@ -1008,6 +1011,7 @@ celestialiteDeath(index){
             unlocked() { return true },
             onClick() {
                 player.ba.petIndex = player.ba.petIndex.sub(1)
+                if (player.ba.petIndex < 0) player.ba.petIndex = 0
             },
             style: { width: '75px', "min-height": '75px', 'color': "black",},
         },
@@ -1034,6 +1038,7 @@ celestialiteDeath(index){
             unlocked() { return true },
             onClick() {
                 player.ba.celestialiteIndex = player.ba.celestialiteIndex.sub(1)
+                if (player.ba.celestialiteIndex < 0) player.ba.celestialiteIndex = 0
             },
             style: { width: '75px', "min-height": '75px', 'color': "black",},
         },

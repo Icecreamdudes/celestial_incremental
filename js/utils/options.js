@@ -22,6 +22,7 @@ function getStartOptions() {
 		toggleHotkey: true,
 		toggleParticle: true,
 		menuType: "Tree",
+		jukeboxID: "none",
 	}
 }
 function updateMusicVolume() {

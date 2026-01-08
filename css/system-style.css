@@ -9,6 +9,52 @@
 	text-size-adjust: none;
 
 }
+.themeTrack::-webkit-scrollbar-track {
+    background: var(--scrollBackground) !important;
+	border: 2px solid var(--regBorder) !important;
+}
+.themeTrack::-webkit-scrollbar-thumb {
+    background: linear-gradient(0deg, var(--scroll1) 0%, var(--scroll2) 50%, var(--scroll3) 100%) !important;
+	border: 2px solid var(--regBorder) !important;
+	height: 50px;
+}
+.themeTrack::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(0deg, var(--scroll2) 0%, var(--scroll3) 50%, var(--scroll4) 100%) !important;
+	border: 2px solid var(--regBorder) !important;
+	height: 50px;
+}
+.themeTrack::-webkit-scrollbar-button:single-button {
+    background-color: var(--scroll2) !important;
+	border: 2px solid var(--regBorder) !important;
+
+    display: block;
+    background-size: 9px;
+    background-repeat: no-repeat;
+}
+.themeTrack::-webkit-scrollbar-button:single-button:hover {
+    background-color: var(--scroll3) !important;
+	border: 2px solid var(--regBorder) !important;
+
+    display: block;
+    background-size: 9px;
+    background-repeat: no-repeat;
+}
+.themeTrack::-webkit-scrollbar-button:single-button:vertical:decrement {
+    height: 16px;
+    width: 16px;
+    background-position: center 4px;
+    background-image: var(--scrollDecrement) !important;
+}
+.themeTrack::-webkit-scrollbar-button:single-button:vertical:increment {
+    height: 16px;
+    width: 16px;
+    background-position: center 4px;
+    background-image: var(--scrollIncrement) !important;
+}
+.themeTrack::-webkit-scrollbar-corner {
+	background-color: var(--regBorder) !important;
+}
+
 .uiHolder {
 	position: absolute;
 	top: 0px;
@@ -16,6 +62,7 @@
 	width: 100%;
 	height: 100%;
 }
+
 .titleHolder {
 	position: absolute;
 	top: 0px;
@@ -25,11 +72,11 @@
 	align-items: center;
 	width: 100%;
 	height: 50px;
-	color: rgba(255, 255, 255, 0.9);
+	color: var(--textColor);
 	font-size: 20px;
 	line-height: 1;
-	background: linear-gradient(90deg, #555555 0%, #3e3e3e 50%, #555555 100%);
-	border-bottom: 3px solid #7a7a7a;
+	background: var(--titleGradient);
+	border-bottom: 3px solid var(--regBorder);
 	padding: 0px;
 	user-select: none;
 	z-index: 1500;
@@ -46,9 +93,9 @@
 	align-items: start;
 	width: 400px;
 	height: calc(86% - 63px);
-	border-left: 3px solid #7a7a7a;
-	border-right: 3px solid #7a7a7a;
-	border-bottom: 3px solid #7a7a7a;
+	border-left: 3px solid var(--regBorder);
+	border-right: 3px solid var(--regBorder);
+	border-bottom: 3px solid var(--regBorder);
 	padding-left: 0px;
 	padding-top: 53px;
 	user-select: none;
@@ -61,7 +108,7 @@
 	position: absolute;
 	top: calc(7% + 5px);
 	left: 0px;
-	background: #0f0f0f
+	background: var(--menuBackground)
 }
 .uniHolder {
 	position: absolute;
@@ -77,8 +124,8 @@
 	scroll-behavior: smooth;
   	-webkit-overflow-scrolling: touch;
 	white-space: nowrap;
-	background: #0f0f0f;
-	border: 3px solid #7a7a7a;
+	background: var(--menuBackground);
+	border: 3px solid var(--regBorder);
 	z-index: 1000;
 }
 .uniButton {
@@ -92,7 +139,7 @@
 	font-size: 3vh;
 	cursor: pointer;
 	pointer-events: auto;
-	background: #a3a3a3;
+	background: var(--regBorder);
 	border: var(--hqProperty1);
 	border-width: 0.3vh;
 	border-color: rgba(0, 0, 0, 0.125);
@@ -105,33 +152,6 @@
 	filter: brightness(30%);
 	cursor: default;
 }
-.arrowHolder {
-	width: 35px;
-	height: 100%;
-	flex-grow: 0;
-	background-color: #222;
-	border-left: 3px solid #7a7a7a;
-}
-.arrowButton {
-	display: flex;
-	width: 100%;
-	height: 50%;
-	color: rgba(255, 255, 255, 0.6);
-	font-size: 2vh;
-	background-color: #444;
-	border-width: 0px;
-	cursor: pointer;
-	pointer-events: auto;
-	transition: all 0s;
-}
-.arrowButton:hover {
-	background-color: #555;
-}
-.arrowButton:disabled {
-	color: rgba(255, 255, 255, 0.3);
-	background-color: #222;
-	cursor: default;
-}
 .miscMenu {
 	position: absolute;
 	bottom: 1px;
@@ -141,10 +161,10 @@
 	display: flex;
 	flex-direction: row;
 	justify-content: auto;
-	background: #0f0f0f;
-	border-left: 3px solid #7a7a7a;
-	border-right: 3px solid #7a7a7a;
-	border-bottom: 3px solid #7a7a7a;
+	background: var(--menuBackground);
+	border-left: 3px solid var(--regBorder);
+	border-right: 3px solid var(--regBorder);
+	border-bottom: 3px solid var(--regBorder);
 	z-index: 1000;
 }
 .miscButton {
@@ -152,20 +172,20 @@
 	height: 100%;
 	display: flex;
 	flex-grow: 1;
-	background-color: #333;
+	background-color: var(--miscButton);
 	border-top: 0px;
 	border-bottom: 0px;
-	border-left: 1.5px solid #7a7a7a;
-	border-right: 1.5px solid #7a7a7a;
+	border-left: 1.5px solid var(--regBorder);
+	border-right: 1.5px solid var(--regBorder);
 	cursor: pointer;
 	pointer-events: auto;
 	transition: all 0.5s;
 }
 .miscButton:hover {
-	background-color: #444;
+	background-color: var(--miscButtonHover);
 }
 .miscButton:disabled {
-	background-color: #222;
+	background-color: var(--miscButtonDisable);
 	cursor: default;
 }
 .miscImg {
@@ -173,27 +193,11 @@
 	height: 6vh;
 }
 .miscText {
-	color: white;
+	color: var(--textColor);
 	font-size: 6vh;
 }
 .treeRow {
 	margin: 0px 0px 10px 0px;
-}
-.darkTitle {
-	background: linear-gradient(90deg, #0f011c 0%, #000000 50%, #0f011c 100%);
-}
-.darkTabTitle {
-	background: #0f011c !important;
-}
-.darkButton {
-	background-color: #111;
-}
-.darkButton:hover {
-	background-color: #222;
-}
-.darkButton:disabled {
-	background-color: black;
-	cursor: default;
 }
 .trees {
 	margin-top: 25px;
@@ -233,7 +237,7 @@
 	}
 	.miscMenu {
 		width: calc(100% - 6px);
-		border-top: 3px solid #7a7a7a;
+		border-top: 3px solid var(--regBorder);
 	}
 	.trees {
 		display: inline-flex;
@@ -263,7 +267,7 @@
 		height: 100%;
 		flex-direction: column !important;
 		border-bottom: 0px;
-		border-right: 3px solid #7a7a7a;
+		border-right: 3px solid var(--regBorder);
 	}
 	.tabRowHolder {
 		width: auto !important;
@@ -286,7 +290,7 @@
 		height: 80px;
 	}
 	.tabTitle {
-		border-bottom: 3px solid #7a7a7a;
+		border-bottom: 3px solid var(--regBorder);
 		border-right: 0px !important;
 	}
 }
@@ -350,7 +354,7 @@ td {
 	left: 0;
 	background-color: transparent;
 	border: 1px solid transparent;
-	color: var(--color);
+	color: #dfdfdf;
 	font-size: 40px;
 	cursor: pointer;
 }
@@ -361,14 +365,14 @@ td {
 	left: 60px;
 	background-color: transparent;
 	border: 1px solid transparent;
-	color: var(--color);
+	color: #dfdfdf;
 	font-size: 60px;
 	cursor: pointer;
 }
 
 .back:hover {
 	transform: scale(1.1, 1.1);
-	text-shadow: 0 0 7px var(--color);
+	text-shadow: 0 0 7px #dfdfdf;
 }
 
 .hidden {
@@ -413,7 +417,7 @@ td {
 }
 
 .vl2 {
-	border-left: 3px solid var(--color);
+	border-left: 3px solid #dfdfdf;
 	height: 100%;
 }
 
@@ -509,5 +513,4 @@ button > * {
 .noBackground {
 	background: transparent !important;
 	background-image: none !important;
-	--background: transparent !important;
 }

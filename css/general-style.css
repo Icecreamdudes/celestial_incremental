@@ -1,11 +1,11 @@
 /* Global things */
 body {
-	color: var(--color);
+	color: #dfdfdf;
 	overflow: hidden;
-	--background: #0f0f0f;
-	--color: #dfdfdf;
-	--points: #ffffff;
-	background: var(--background)
+	background: var(--background);
+	touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 /* General text */
@@ -31,6 +31,6 @@ h1, h2, h3, b, input {
 }
 
 #points {
-	color: var(--points);
-	text-shadow: 0 0 10px var(--points);
+	color: #ffffff;
+	text-shadow: 0 0 10px #ffffff;
 }

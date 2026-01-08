@@ -10,20 +10,20 @@
 
 .tabButton {
 	background-color: transparent;
-	color: var(--color);
+	color: #dfdfdf;
 	font-size: 20px;
 	cursor: pointer;
 	padding: 5px 20px;
 	margin: 5px;
 	border-radius: 10px;
 	border: 2px solid;
-	color: var(--color);
+	color: #dfdfdf;
 
 }
 
 .tabButton:hover {
 	transform: scale(1.1, 1.1);
-	text-shadow: 0 0 7px var(--color);
+	text-shadow: 0 0 7px #dfdfdf;
 }
 
 .tooltip { 
@@ -47,8 +47,8 @@
     position: absolute;
     z-index: 20000;
   
-    background-color: var(--background_tooltip);
-    color: var(--points);
+    background-color: rgba(0, 0, 0, 0.75);
+    color: #ffffff;
     content: attr(tooltip);
     font-size:14px;
 
@@ -65,12 +65,12 @@
     margin-left: -5px;
     border-width: 5px;
     border-style: solid;
-    border-color: var(--background_tooltip) transparent transparent transparent;
+    border-color: rgba(0, 0, 0, 0.75) transparent transparent transparent;
 }
 
 /* Horizontal/vertical lines */
 .vl {
-	border-left: 6px solid var(--color);
+	border-left: 6px solid #dfdfdf;
 	height: 100%;
 	position: absolute;
 	left: 50%;
@@ -79,7 +79,7 @@
 }
 
 .hl {
-	border-top: 3px solid var(--color);
+	border-top: 3px solid #dfdfdf;
 }
 
 @keyframes glitch {

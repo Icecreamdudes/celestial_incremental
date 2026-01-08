@@ -460,12 +460,12 @@ addLayer("fi", {
                 player.ba.celestialiteIndex = new Decimal(0)
                 layers.ba.selectCelestialites()
 
-                pauseUniverse("U1")
-                pauseUniverse("UA")
-                pauseUniverse("U2")
-                pauseUniverse("A1")
-                pauseUniverse("A2")
-                pauseUniverse("U3")
+                pauseUniverse("U1", "pause", true)
+                pauseUniverse("UA", "pause", true)
+                pauseUniverse("U2", "pause", true)
+                pauseUniverse("A1", "pause", true)
+                pauseUniverse("A2", "pause", true)
+                pauseUniverse("U3", "pause", true)
             },
             style() {
                 let look = {width: "300px", minHeight: "75px", borderRadius: "30px / 15px"}
@@ -542,12 +542,12 @@ addLayer("fi", {
                 player.ba.celestialiteIndex = new Decimal(0)
                 layers.ba.selectCelestialites()
 
-                pauseUniverse("U1")
-                pauseUniverse("UA")
-                pauseUniverse("U2")
-                pauseUniverse("A1")
-                pauseUniverse("A2")
-                pauseUniverse("U3")
+                pauseUniverse("U1", "pause", true)
+                pauseUniverse("UA", "pause", true)
+                pauseUniverse("U2", "pause", true)
+                pauseUniverse("A1", "pause", true)
+                pauseUniverse("A2", "pause", true)
+                pauseUniverse("U3", "pause", true)
             },
             style() {
                 let look = {width: "300px", minHeight: "75px", borderRadius: "30px / 15px"}

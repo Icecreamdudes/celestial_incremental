@@ -16,6 +16,9 @@
 
         inBlackHeart: false,
 
+        kresStats: [new Decimal(7), new Decimal(8), new Decimal(5)],
+        navStats: [new Decimal(9), new Decimal(6), new Decimal(5)],
+        selStats: [new Decimal(6), new Decimal(6), new Decimal(8)],
         eclipseStats: [new Decimal(0), new Decimal(0), new Decimal(0)], // Eclipse stats, 0 - damage, 1 - health, 2 - cooldown
 
         // IDEA: SKILLS TAKE SKILL POINTS THAT CAN BE INCREASED INDIVIDUALLY FOR A CHARACTER VIA XP DROPPED BY ENEMIES. MAKES POWERFUL SKILLS MORE RISKY TO ADD.
@@ -158,25 +161,53 @@
             }
         }
 
-        player.ma.healthMax[0] = player.ep3.kresStats[1].add(60)
-        player.ma.damage[0] = player.ep3.kresStats[0].mul(0.2).add(5)
-        player.ma.cooldown[0] = Decimal.div(8, player.ep3.kresStats[2].mul(0.01).add(1))
-        player.ma.cooldown2[0] = Decimal.div(20, player.ep3.kresStats[2].mul(0.005).add(1))
-        player.ma.cooldown3[0] = Decimal.div(25, player.ep3.kresStats[2].mul(0.008).add(1))
+        // STATS 0 - STRENGTH, 1 - DEFENSE, 2 - AGILITY
+        player.ma.kresStats = [new Decimal(7), new Decimal(8), new Decimal(5)]
+        player.ma.kresStats[0] = player.ma.kresStats[0].add(buyableEffect("sp", 22))
+        player.ma.kresStats[1] = player.ma.kresStats[1].add(buyableEffect("sp", 12))
+        player.ma.kresStats[2] = player.ma.kresStats[2].add(buyableEffect("sp", 32))
+        player.ma.kresStats[0] = player.ma.kresStats[0].add(buyableEffect("ma", 11))
+        player.ma.kresStats[1] = player.ma.kresStats[1].add(buyableEffect("ma", 12))
+        player.ma.kresStats[2] = player.ma.kresStats[2].add(buyableEffect("ma", 13))
 
-        player.ma.healthMax[1] = player.ep4.navStats[1].add(30)
-        player.ma.damage[1] = player.ep4.navStats[0].mul(0.2).add(7)
-        player.ma.cooldown[1] = Decimal.div(6, player.ep4.navStats[2].mul(0.01).add(1))
-        player.ma.cooldown2[1] = Decimal.div(15, player.ep4.navStats[2].mul(0.005).add(1))
-        player.ma.cooldown3[1] = Decimal.div(30, player.ep4.navStats[2].mul(0.008).add(1))
+        player.ma.navStats = [new Decimal(7), new Decimal(6), new Decimal(7)]
+        player.ma.navStats[0] = player.ma.navStats[0].add(buyableEffect("sp", 22))
+        player.ma.navStats[1] = player.ma.navStats[1].add(buyableEffect("sp", 12))
+        player.ma.navStats[2] = player.ma.navStats[2].add(buyableEffect("sp", 32))
+        player.ma.navStats[0] = player.ma.navStats[0].add(buyableEffect("ma", 11))
+        player.ma.navStats[1] = player.ma.navStats[1].add(buyableEffect("ma", 12))
+        player.ma.navStats[2] = player.ma.navStats[2].add(buyableEffect("ma", 13))
+        
+        player.ma.selStats = [new Decimal(6), new Decimal(6), new Decimal(8)]
+        player.ma.selStats[0] = player.ma.selStats[0].add(buyableEffect("sp", 22))
+        player.ma.selStats[1] = player.ma.selStats[1].add(buyableEffect("sp", 12))
+        player.ma.selStats[2] = player.ma.selStats[2].add(buyableEffect("sp", 32))
+        player.ma.selStats[0] = player.ma.selStats[0].add(buyableEffect("ma", 11))
+        player.ma.selStats[1] = player.ma.selStats[1].add(buyableEffect("ma", 12))
+        player.ma.selStats[2] = player.ma.selStats[2].add(buyableEffect("ma", 13))
 
-        player.ma.healthMax[2] = player.ep5.selStats[1].add(45)
-        player.ma.damage[2] = player.ep5.selStats[0].mul(0.2).add(3)
-        player.ma.cooldown[2] = Decimal.div(4, player.ep5.selStats[2].mul(0.01).add(1))
-        player.ma.cooldown2[2] = Decimal.div(30, player.ep5.selStats[2].mul(0.01).add(1))
-        player.ma.cooldown3[2] = Decimal.div(20, player.ep5.selStats[2].mul(0.008).add(1))
+        player.ma.healthMax[0] = player.ma.kresStats[1].add(60)
+        player.ma.damage[0] = player.ma.kresStats[0].mul(0.2).add(5)
+        player.ma.cooldown[0] = Decimal.div(8, player.ma.kresStats[2].mul(0.01).add(1))
+        player.ma.cooldown2[0] = Decimal.div(20, player.ma.kresStats[2].mul(0.005).add(1))
+        player.ma.cooldown3[0] = Decimal.div(25, player.ma.kresStats[2].mul(0.008).add(1))
+
+        player.ma.healthMax[1] = player.ma.navStats[1].add(30)
+        player.ma.damage[1] = player.ma.navStats[0].mul(0.2).add(7)
+        player.ma.cooldown[1] = Decimal.div(6, player.ma.navStats[2].mul(0.01).add(1))
+        player.ma.cooldown2[1] = Decimal.div(15, player.ma.navStats[2].mul(0.005).add(1))
+        player.ma.cooldown3[1] = Decimal.div(30, player.ma.navStats[2].mul(0.008).add(1))
+
+        player.ma.healthMax[2] = player.ma.selStats[1].add(45)
+        player.ma.damage[2] = player.ma.selStats[0].mul(0.2).add(3)
+        player.ma.cooldown[2] = Decimal.div(4, player.ma.selStats[2].mul(0.01).add(1))
+        player.ma.cooldown2[2] = Decimal.div(30, player.ma.selStats[2].mul(0.01).add(1))
+        player.ma.cooldown3[2] = Decimal.div(20, player.ma.selStats[2].mul(0.008).add(1))
 
         player.ma.eclipseStats = [new Decimal(25),new Decimal(25),new Decimal(25),]
+        player.ma.eclipseStats[0] = player.ma.eclipseStats[0].add(buyableEffect("sp", 22))
+        player.ma.eclipseStats[1] = player.ma.eclipseStats[1].add(buyableEffect("sp", 12))
+        player.ma.eclipseStats[2] = player.ma.eclipseStats[2].add(buyableEffect("sp", 32))
         player.ma.eclipseStats[0] = player.ma.eclipseStats[0].add(buyableEffect("ma", 201))
         player.ma.eclipseStats[1] = player.ma.eclipseStats[1].add(buyableEffect("ma", 202))
         player.ma.eclipseStats[2] = player.ma.eclipseStats[2].add(buyableEffect("ma", 203))
@@ -925,12 +956,12 @@
 
                 player.subtabs["ma"]["stuff"] = "Prep"
 
-                pauseUniverse("U1")
-                pauseUniverse("UA")
-                pauseUniverse("U2")
-                pauseUniverse("A1")
-                pauseUniverse("A2")
-                pauseUniverse("CB")
+                pauseUniverse("U1", "pause", true)
+                pauseUniverse("UA", "pause", true)
+                pauseUniverse("U2", "pause", true)
+                pauseUniverse("A1", "pause", true)
+                pauseUniverse("A2", "pause", true)
+                pauseUniverse("CB", "pause", true)
             },
             style: {width: "400px", minHeight: "150px", color: "white", backgroundColor: "black", border: "3px solid #8a0e79", borderRadius: "20px"},
         },
@@ -943,12 +974,12 @@
 
                 player.subtabs["ma"]["stuff"] = "Black Heart"
 
-                pauseUniverse("U1")
-                pauseUniverse("UA")
-                pauseUniverse("U2")
-                pauseUniverse("A1")
-                pauseUniverse("A2")
-                pauseUniverse("CB")
+                pauseUniverse("U1", "unpause", true)
+                pauseUniverse("UA", "unpause", true)
+                pauseUniverse("U2", "unpause", true)
+                pauseUniverse("A1", "unpause", true)
+                pauseUniverse("A2", "unpause", true)
+                pauseUniverse("CB", "unpause", true)
             },
             style() {
                 let look = {width: "200px", minHeight: "75px", color: "white", backgroundColor: "black", border: "3px solid #8a0e79", margin: "-1.5px"}
@@ -4089,9 +4120,9 @@
                                 ["raw-html", "Kres: Warrior Class", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "247px", height: "40px", backgroundColor: "#480513", borderBottom: "3px solid #8a0e79"}],
                             ["style-column", [
-                                ["raw-html", () => {return "Strength: <h3>" + formatWhole(player.ep3.kresStats[0])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                ["raw-html", () => {return "Defense: <h3>" + formatWhole(player.ep3.kresStats[1])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                ["raw-html", () => {return "Agility: <h3>" + formatWhole(player.ep3.kresStats[2])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "Strength: <h3>" + formatWhole(player.ma.kresStats[0])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "Defense: <h3>" + formatWhole(player.ma.kresStats[1])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "Agility: <h3>" + formatWhole(player.ma.kresStats[2])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                             ], {width: "247px", height: "87px", backgroundColor: "#1d0207", borderRadius: "0 0 0 17px"}],
                         ], {width: "247px", height: "130px", borderRadius: "0 0 0 17px"}],
                         ["style-column", [], {width: "3px", height: "130px", backgroundColor: "#8a0e79"}],
@@ -4100,9 +4131,9 @@
                                 ["raw-html", "Nav: Mage Class", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "250px", height: "40px", backgroundColor: "#380548", borderBottom: "3px solid #8a0e79"}],
                             ["style-column", [
-                                ["raw-html", () => {return "Strength: <h3>" + formatWhole(player.ep4.navStats[0])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                ["raw-html", () => {return "Defense: <h3>" + formatWhole(player.ep4.navStats[1])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                ["raw-html", () => {return "Agility: <h3>" + formatWhole(player.ep4.navStats[2])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "Strength: <h3>" + formatWhole(player.ma.navStats[0])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "Defense: <h3>" + formatWhole(player.ma.navStats[1])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "Agility: <h3>" + formatWhole(player.ma.navStats[2])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                             ], {width: "250px", height: "87px", backgroundColor: "#16021d"}],
                         ], {width: "250px", height: "130px"}],
                         ["style-column", [], {width: "3px", height: "130px", backgroundColor: "#8a0e79"}],
@@ -4112,9 +4143,9 @@
                             ["raw-html", () => {return player.ir.iriditeDefeated ? "<s>Sel: Ranger Class</s>" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "247px", height: "40px", backgroundColor: "#065c19", borderBottom: "3px solid #8a0e79"}],
                             ["style-column", [
-                                ["raw-html", () => {return "Strength: <h3>" + formatWhole(player.ep5.selStats[0])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                ["raw-html", () => {return "Defense: <h3>" + formatWhole(player.ep5.selStats[1])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                ["raw-html", () => {return "Agility: <h3>" + formatWhole(player.ep5.selStats[2])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "Strength: <h3>" + formatWhole(player.ma.selStats[0])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "Defense: <h3>" + formatWhole(player.ma.selStats[1])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "Agility: <h3>" + formatWhole(player.ma.selStats[2])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                             ], {width: "247px", height: "87px", backgroundColor: "#032e0c", borderRadius: "0 0 17px 0"}],
                         ], {width: "247px", height: "130px", borderRadius: "0 0 17px 0"}],
                     ], {width: "750px", height: "130px", backgroundColor: "#8a0e79", border: "3px solid #8a0e79", borderRadius: "0 0 20px 20px", marginTop: "-3px"}],

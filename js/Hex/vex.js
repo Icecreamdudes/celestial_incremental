@@ -238,8 +238,8 @@ addLayer("hve", {
             onPurchase() {
                 player.hve.rowSpent[2] = player.hve.rowSpent[2] + 1
                 player.hve.rowCurrent[2] = player.hve.rowCurrent[2] - 1
-                player.hpu.purifier[1] = player.hpu.purifier[1].add(1)
-                player.hpu.purifier[4] = player.hpu.purifier[4].add(1)
+                player.hpu.purifiers[1].amount = player.hpu.purifiers[1].amount.add(1)
+                player.hpu.purifiers[4].amount = player.hpu.purifiers[4].amount.add(1)
             },
             currencyLocation() { return player.hve },
             currencyDisplayName: "Vex",

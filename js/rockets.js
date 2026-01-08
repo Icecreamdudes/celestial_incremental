@@ -579,6 +579,28 @@
         return look;
     },
 },
+109: {
+    title() { return this.canClick() ? "<img src='resources/Pets/coinFragmentCommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    canClick() {return true},
+    unlocked() { return player.cb.highestLevel.gte(7500) && player.ca.unlockedCante },
+    onClick() {
+        player.ro.commonPassengerIndex = new Decimal(9);
+        player.ro.rarityIndex = new Decimal(0);
+    },
+    style() {
+        let look = { width: "100px", minHeight: "100px" };
+
+        // Set background color to red if the pet is selected as a passenger
+        if (player.ro.selectedPassengersCommon.some(index => new Decimal(index).eq(9))) {
+            look.backgroundColor = "#FF0000"; // Red background
+        } else {
+            look.backgroundColor = "#45BDD7"; // Default background
+        }
+
+        return look;
+    },
+},
+
 200: {
     title() { return this.canClick() ? "<img src='resources/Pets/testeUncommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
@@ -768,6 +790,27 @@
         return look;
     },
 },
+209: {
+    title() { return this.canClick() ? "<img src='resources/Pets/refinedFragmentUncommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    canClick() { return true },
+    unlocked() { return player.cb.highestLevel.gte(15000) && player.ca.unlockedCante },
+    onClick() {
+        player.ro.uncommonPassengerIndex = new Decimal(9);
+        player.ro.rarityIndex = new Decimal(1);
+    },
+    style() {
+        let look = { width: "100px", minHeight: "100px" };
+
+        // Set background color to red if the pet is selected as a passenger
+        if (player.ro.selectedPassengersUncommon.some(index => new Decimal(index).eq(9))) {
+            look.backgroundColor = "#FF0000"; // Red background
+        } else {
+            look.backgroundColor = "#008300"; // Default background
+        }
+
+        return look;
+    },
+},
     },
     levelables: {},
     bars: {},
@@ -867,7 +910,7 @@
                     ["style-row", [
                         ["style-column", [
                     ["blank", "25px"],
-                    ["style-row", [["clickable", 100],["clickable", 101],["clickable", 102],["clickable", 103],["clickable", 104],["clickable", 105],["clickable", 106],["clickable", 107],["clickable", 108],]],
+                    ["style-row", [["clickable", 100],["clickable", 101],["clickable", 102],["clickable", 103],["clickable", 104],["clickable", 105],["clickable", 106],["clickable", 107],["clickable", 108],["clickable", 109]]],
                     ["blank", "25px"],
                 ], {width: "1000px", borderRight: "2px solid srgb(27, 0, 36)"}],
                     ], {width: "1000px", border: "3px solid #9bedff", borderBottom: "0px", backgroundColor: "#1f2f33"}],
@@ -880,7 +923,7 @@
                     ["style-row", [
                         ["style-column", [
                     ["blank", "25px"],
-                    ["style-row", [["clickable", 200],["clickable", 201],["clickable", 202],["clickable", 203],["clickable", 204],["clickable", 205],["clickable", 206],["clickable", 207],["clickable", 208],]],
+                    ["style-row", [["clickable", 200],["clickable", 201],["clickable", 202],["clickable", 203],["clickable", 204],["clickable", 205],["clickable", 206],["clickable", 207],["clickable", 208],["clickable", 209]]],
                     ["blank", "25px"],
                 ], {width: "1000px", borderRight: "2px solid srgb(27, 0, 36)"}],
                     ], {width: "1000px", border: "3px solid #88e688", backgroundColor: "#1b2e1b", borderRadius: "0px 0px 15px 15px"}],

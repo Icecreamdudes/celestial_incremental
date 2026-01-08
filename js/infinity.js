@@ -665,8 +665,8 @@ addLayer("bigc", {
         if (player.tab == "bigc" && !player.bigc.spawnedWisps)
         {
             player.bigc.spawnedWisps = true
-        } else if (player.tab != "bigc")
-        {
+        } else if (player.tab != "bigc" && player.bigc.spawnedWisps) {
+            player.bigc.spawnedWisps = false
             removeWisps();
         }
     },
@@ -721,7 +721,3 @@ addLayer("bigc", {
     ],
     layerShown() { return player.startedGame == true }
 })
-window.addEventListener('load', function() {
-    player.bigc.spawnedWisps = false
-
-});

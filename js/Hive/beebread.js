@@ -100,7 +100,7 @@ addLayer("bb", {
         if (!hasUpgrade("al", 113) || player.bb.breadEffects[3].lt(1.5)) {
             player.bb.breadEffects[3] = amt.div(bbMilestone[player.bee.path][3]).mul(player.bb.breadTierMult).pow(0.1).add(1).log(10).mul(2).sub(0.5).max(0).min(1.5) // Glossary Effect Base
         } else {
-            player.bb.breadEffects[3] = amt.div(bbMilestone[player.bee.path][3]).mul(player.bb.breadTierMult).pow(0.1).add(1).log(10).div(1.25).add(0.6).max(0) // Glossary Effect Base Without Cap
+            player.bb.breadEffects[3] = amt.div(bbMilestone[player.bee.path][3]).mul(player.bb.breadTierMult).pow(0.1).add(1).log(10).div(1.25).add(0.7).max(0) // Glossary Effect Base Without Cap
         }
         player.bb.breadEffects[4] = amt.div(bbMilestone[player.bee.path][4]).mul(player.bb.breadTierMult).pow(0.1).add(1).log(10).add(0.8).max(1) // Pollen Conversion Rate
         player.bb.breadEffects[5] = amt.div(bbMilestone[player.bee.path][5]).mul(player.bb.breadTierMult).pow(0.2).add(1).log(10).add(0.8).max(1) // Picking Power

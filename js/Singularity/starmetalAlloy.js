@@ -85,6 +85,8 @@
             player.sma.inStarmetalChallenge = true
             player.universe = "D1"
             player.tab = "le"
+            changeTheme()
+
             layers.pu.generateSelection();
 
             player.subtabs["le"]["stuff"] = "Main"
@@ -102,6 +104,7 @@
                 player.sma.inStarmetalChallenge = true
                 player.universe = "D1"
                 player.tab = "le"
+                changeTheme()
 
                 layers.le.starmetalResetAgain()
                 
@@ -131,6 +134,7 @@
                 player.sma.inStarmetalChallenge = true
                 player.universe = "D1"
                 player.tab = "le"
+                changeTheme()
 
                 layers.le.starmetalResetAgain()
                 layers.pu.generateSelection();

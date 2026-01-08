@@ -723,12 +723,12 @@ addLayer("ir", {
                 arena.spawnArena();
                 localStorage.setItem('arenaActive', 'true');
 
-                pauseUniverse("U1")
-                pauseUniverse("UA")
-                pauseUniverse("U2")
-                pauseUniverse("A1")
-                pauseUniverse("U3")
-                pauseUniverse("CB")
+                pauseUniverse("U1", "pause", true)
+                pauseUniverse("UA", "pause", true)
+                pauseUniverse("U2", "pause", true)
+                pauseUniverse("A1", "pause", true)
+                pauseUniverse("U3", "pause", true)
+                pauseUniverse("CB", "pause", true)
 
                 player.ir.shipHealth = player.ir.shipHealthMax
                 if (hasUpgrade("ir", 14)) arena.upgradeEffects.hpRegen += 0.5 / 60
@@ -755,12 +755,12 @@ addLayer("ir", {
                 }
                 localStorage.setItem('arenaActive', 'false');
 
-                pauseUniverse("U1")
-                pauseUniverse("UA")
-                pauseUniverse("U2")
-                pauseUniverse("A1")
-                pauseUniverse("U3")
-                pauseUniverse("CB")
+                pauseUniverse("U1", "unpause", true)
+                pauseUniverse("UA", "unpause", true)
+                pauseUniverse("U2", "unpause", true)
+                pauseUniverse("A1", "unpause", true)
+                pauseUniverse("U3", "unpause", true)
+                pauseUniverse("CB", "unpause", true)
 
                 player.ir.timers[player.ir.shipType].current = player.ir.timers[player.ir.shipType].max
 
@@ -1350,6 +1350,7 @@ class SpaceArena {
             this.bounceCooldown = 2000; // 2 seconds in ms
             this.canvasClickListener = (e) => {
                 let now = Date.now();
+                this.bounceCooldown = 2000 / this.upgradeEffects.attackSpeed
                 if (now - this.lastBounceClick < this.bounceCooldown) return;
                 this.lastBounceClick = now;
                 let rect = this.canvas.getBoundingClientRect();
@@ -1419,14 +1420,29 @@ class SpaceArena {
             this.ship = {
                 x: width / 2,
                 y: height / 2,
+                vx: 0,
+                vy: 0,
+                radius: 20,
                 angle: 0,
-                velocity: 0,
-                angularVelocity: 0,
-                maxVelocity: 5,
-                acceleration: 0.3,
-                deceleration: 0.15,
-                rotationSpeed: 0.04,
+                deceleration: 0.98,
+                dash: 0.8,
+                dashTarget: null,
+                dashing: false,
+                dashFrames: 0,
+                maxVelocity: 10,
                 collisionDamage: 10,
+            };
+            this.lastDashClick = 0;
+            this.dashCooldown = 2000; // 2 seconds in ms
+            this.canvasClickListener = (e) => {
+                let now = Date.now();
+                this.dashCooldown = 2000 / this.upgradeEffects.attackSpeed
+                if (now - this.lastDashClick < this.dashCooldown) return;
+                this.lastDashClick = now;
+                let rect = this.canvas.getBoundingClientRect();
+                let mx = e.clientX - rect.left;
+                let my = e.clientY - rect.top;
+                this.ship.dashTarget = { x: mx, y: my };
             };
         }
         if (player.ir.shipType == 8) {
@@ -1952,7 +1968,7 @@ class SpaceArena {
         this.running = true;
         this.loop = setInterval(() => this.update(), 1000 / 60);
 
-        if (player.ir.shipType == 3) {
+        if (player.ir.shipType == 3 || player.ir.shipType == 7) {
             this.canvas.addEventListener('click', this.canvasClickListener);
         }
     }
@@ -1967,7 +1983,7 @@ class SpaceArena {
         window.removeEventListener('mousemove', this.handleMouseMove);
         if (this.arenaDiv) document.body.removeChild(this.arenaDiv);
 
-        if (player.ir.shipType == 3 && this.canvasClickListener) {
+        if ((player.ir.shipType == 3 || player.ir.shipType == 7) && this.canvasClickListener) {
             this.canvas.removeEventListener('click', this.canvasClickListener);
         }
 
@@ -2368,7 +2384,6 @@ class SpaceArena {
         }
 
         let amt = 1
-        if (player.ir.shipType == 7) amt = 3
         for (let i = 0; i < amt; i++) {
         // Decide a spawn position that is NOT on top of the player.
         // Compute safe minimum separation based on both radii and a buffer.
@@ -2583,6 +2598,37 @@ class SpaceArena {
                 this.ship.x = this.ship.radius;
                 this.ship.vx = -this.ship.vx * this.ship.bounce;
             }
+        } else if (player.ir.shipType == 7) {
+            if (this.ship.dashTarget) {
+                let dx = this.ship.dashTarget.x - this.ship.x;
+                let dy = this.ship.dashTarget.y - this.ship.y;
+                let dist = Math.sqrt(dx * dx + dy * dy);
+
+                // Calculate velocity to move toward the target, but keep moving after
+                let frames = 30;
+                let speed = Math.max(12, dist / frames);
+                let angle = Math.atan2(dy, dx);
+
+                this.ship.vx = Math.cos(angle) * speed;
+                this.ship.vy = Math.sin(angle) * speed;
+                this.ship.dashing = true;
+                this.ship.dashFrames = frames;
+                this.ship.dashTarget = null;
+                this.ship.angle = angle;
+            }
+            // Apply velocities
+            this.ship.x += this.ship.vx;
+            this.ship.y += this.ship.vy;
+
+            // Apply deceleration
+            this.ship.vx *= this.ship.deceleration;
+            this.ship.vy *= this.ship.deceleration;
+
+            // Wrap ship around arena edges
+            if (this.ship.x < 0) this.ship.x = this.width;
+            if (this.ship.x > this.width) this.ship.x = 0;
+            if (this.ship.y < 0) this.ship.y = this.height;
+            if (this.ship.y > this.height) this.ship.y = 0;
         } else {
             // Ship movement for other types
             // Sniper (shipType == 4): automatically rotate to face closest enemy and expose currentTarget for drawing
@@ -2627,7 +2673,7 @@ class SpaceArena {
                 if (this.keys['KeyD']) this.ship.angle += this.ship.rotationSpeed;
             }
 
-            if (player.ir.shipType != 7 && (this.keys['Space'] || this.mouseDown)) this.shoot();
+            if (this.keys['Space'] || this.mouseDown) this.shoot();
 
             if (this.keys['KeyW']) {
                 this.ship.velocity += this.ship.acceleration + this.upgradeEffects.moveSpeed * 0.1;
@@ -3121,7 +3167,7 @@ class SpaceArena {
                         enemy.y += vy;
 
                         // light contact damage while lunging (once per hit cooldown)
-                        let shipRadius = player.ir.shipType == 3 ? this.ship.radius : 12;
+                        let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
                         let sdx = this.ship.x - enemy.x;
                         let sdy = this.ship.y - enemy.y;
                         let sdist = Math.hypot(sdx, sdy);
@@ -3410,7 +3456,7 @@ class SpaceArena {
                             // beam effective length and thickness
                             let beamLen = Math.max(this.width, this.height) * 1.5;
                             let thickness = enemy.radius * 0.9;
-                            if (proj > -enemy.radius && proj < beamLen && perp < thickness + (player.ir.shipType == 3 ? this.ship.radius : 12)) {
+                            if (proj > -enemy.radius && proj < beamLen && perp < thickness + (player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12)) {
                                 // apply damage once per short cooldown
                                 let dmg = (6 + enemy.phase * 1) * this.upgradeEffects.damageReduction;
                                 this.applyShipDamage(dmg);
@@ -3513,7 +3559,7 @@ class SpaceArena {
                         let sx = this.ship.x - enemy.x;
                         let sy = this.ship.y - enemy.y;
                         let sdist = Math.hypot(sx, sy);
-                        let shipRadius = player.ir.shipType == 3 ? this.ship.radius : 12;
+                        let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
                         if (sdist < enemy.radius + shipRadius) {
                             // prevent fast repeated damage by using a short cooldown flag on enemy
                             if (!enemy._recentlyHit) {
@@ -3523,7 +3569,7 @@ class SpaceArena {
                                 this.applyShipDamage(impactDmg);
                                 // reduced knockback
                                 let kn = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
-                                if (player.ir.shipType == 3) {
+                                if (player.ir.shipType == 3 || player.ir.shipType == 7) {
                                     this.ship.vx += Math.cos(kn) * 6;
                                     this.ship.vy += Math.sin(kn) * 6;
                                 } else {
@@ -3602,7 +3648,6 @@ class SpaceArena {
                     let dy = this.ship.y - enemy.y;
                     let dist = Math.hypot(dx, dy) || 1;
                     let desiredDist = 220;
-                    if (player.ir.shipType == 7) desiredDist = 110
                     // Move toward or away to keep distance
                     let moveSpeed = 2.5;
                     if (dist > desiredDist + 10) {
@@ -4102,15 +4147,17 @@ class SpaceArena {
                 trail.timer--;
                 let dx = this.ship.x - trail.x;
                 let dy = this.ship.y - trail.y;
-                let shipRadius = player.ir.shipType == 3 ? this.ship.radius : 12;
+                let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
                 let dist = Math.sqrt(dx * dx + dy * dy);
                 if (dist < trail.radius + shipRadius && trail.timer > 0) {
-                    // Skip ship damage if asteroid minigame is paused
+                    let dmg = trail.damage * this.upgradeEffects.damageReduction;
+                    
                     if (!this._asteroidMinigamePaused) {
-                        let dmg = trail.damage * this.upgradeEffects.damageReduction;
-                        if (player.ir.shipType == 3) dmg /= 4;
-                        if (player.ir.shipType == 7) dmg /= 2;
-                        this.applyShipDamage(dmg);
+                        if (player.ir.shipType == 3 || player.ir.shipType == 7) dmg /= 4;
+                            player.ir.shipHealth = player.ir.shipHealth.sub(dmg);
+                        if (player.ir.shipHealth.lte(0)) {
+                            this.onShipDeath();
+                        }
                     }
                 }
             }
@@ -4222,7 +4269,7 @@ class SpaceArena {
             if (!bullet.fromEnemy && !bullet.vampireSpear) continue;
             let dx = bullet.x - this.ship.x;
             let dy = bullet.y - this.ship.y;
-            let shipRadius = player.ir.shipType == 3 ? this.ship.radius : 12;
+            let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
             let dist = Math.sqrt(dx * dx + dy * dy);
             if (dist < shipRadius) {
             // account for projectile radius (giant bullets are larger)
@@ -4232,9 +4279,9 @@ class SpaceArena {
                 if (!bullet._hitPlayer) {
                     bullet._hitPlayer = true;
                     let dmg = bullet.damage * this.upgradeEffects.damageReduction;
-                    if (player.ir.shipType == 3) dmg /= 1.5;
-                    this.applyShipDamage(dmg);
-
+                    if (player.ir.shipType == 3 || player.ir.shipType == 7) dmg /= 1.5;
+                    player.ir.shipHealth = player.ir.shipHealth.sub(dmg);
+ 
                     // remove the projectile immediately so it can't deal damage again
                     bullet.life = 0;
                 }
@@ -4252,7 +4299,7 @@ class SpaceArena {
             if (enemy._pausedBoss) continue;
             let dx = this.ship.x - enemy.x;
             let dy = this.ship.y - enemy.y;
-            let shipRadius = player.ir.shipType == 3 ? this.ship.radius : 12;
+            let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
             let dist = Math.sqrt(dx * dx + dy * dy);
             if (dist < enemy.radius + shipRadius) {
                 let enemyDmgRaw = this.ship.collisionDamage * this.upgradeEffects.attackDamage;
@@ -4260,7 +4307,7 @@ class SpaceArena {
                 if (Number.isNaN(enemyDmg) || !isFinite(enemyDmg) || enemyDmg < 0) enemyDmg = 0;
                 if (player.ir.shipType != 3 && player.ir.shipType != 7) enemy.health -= enemyDmg * 0.05;
                 if (player.ir.shipType == 3) enemy.health -= enemyDmg * 2.5;
-                if (player.ir.shipType == 7) enemy.health -= enemyDmg;
+                if (player.ir.shipType == 7) enemy.health -= enemyDmg * 1.5;
 
                 let shipDmgRaw = enemy.damage * this.upgradeEffects.damageReduction * 6;
                 let shipDmg = (typeof shipDmgRaw === 'number') ? shipDmgRaw : (shipDmgRaw.toNumber ? shipDmgRaw.toNumber() : Number(shipDmgRaw));
@@ -4276,11 +4323,11 @@ class SpaceArena {
                     this.ship.vy = Math.sin(angle) * bounceSpeed;
                     this.ship.x += Math.cos(angle) * bounceSpeed;
                 } else if (player.ir.shipType == 7) {
-                    if (this.ship.velocity < 0) {
-                        this.ship.velocity = 2 * this.upgradeEffects.attackSpeed;
-                    } else {
-                        this.ship.velocity = -2 * this.upgradeEffects.attackSpeed;
-                    }
+                    let angle = Math.atan2(dy, dx);
+                    let speed = Math.abs(Math.sqrt(Math.pow(this.ship.vx, 2) + Math.pow(this.ship.vy, 2)))
+                    if (Number.isNaN(speed) || !isFinite(speed) || speed < 0) speed = 0
+                    this.ship.vy += Math.sin(angle) * 6/(Math.sqrt(speed+1));
+                    this.ship.vx += Math.cos(angle) * 6/(Math.sqrt(speed+1));
                 } else {
                     this.ship.velocity = -2;
                 }
@@ -4303,7 +4350,7 @@ class SpaceArena {
             let dx = this.ship.x - asteroid.x;
             let dy = this.ship.y - asteroid.y;
             let dist = Math.sqrt(dx * dx + dy * dy);
-            let shipRadius = player.ir.shipType == 3 ? this.ship.radius : 12;
+            let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
             if (dist < asteroid.size + shipRadius) {
                 let aDmgRaw = this.ship.collisionDamage * this.upgradeEffects.attackDamage;
                 let aDmg = (typeof aDmgRaw === 'number') ? aDmgRaw : (aDmgRaw.toNumber ? aDmgRaw.toNumber() : Number(aDmgRaw));
@@ -4317,11 +4364,11 @@ class SpaceArena {
                     this.ship.vy = Math.sin(angle) * bounceSpeed;
                     this.ship.x += Math.cos(angle) * bounceSpeed;
                 } else if (player.ir.shipType == 7) {
-                    if (this.ship.velocity < 0) {
-                        this.ship.velocity = 2 * this.upgradeEffects.attackSpeed;
-                    } else {
-                        this.ship.velocity = -2 * this.upgradeEffects.attackSpeed;
-                    }
+                    let angle = Math.atan2(dy, dx);
+                    let speed = Math.abs(Math.sqrt(Math.pow(this.ship.vx, 2) + Math.pow(this.ship.vy, 2)))
+                    if (speed < 0) speed = 0
+                    this.ship.vy += Math.sin(angle) * 6/(Math.sqrt(speed+1));
+                    this.ship.vx += Math.cos(angle) * 6/(Math.sqrt(speed+1));
                 } else {
                     this.ship.velocity = -2;
                 }

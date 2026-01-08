@@ -161,6 +161,7 @@ addLayer("ep2", {
         shardPity: 0,
 
         externalGolden: false,
+        crumbClicks: true,
         goldenTimer: new Decimal(600),
         goldenTimerMax: new Decimal(600),
         averageGoldenCooldown: new Decimal(600),
@@ -197,7 +198,9 @@ addLayer("ep2", {
             player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(buyableEffect("ep2", i))
         }
         player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(buyableEffect("ep0", 13))
+        player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(buyableEffect("pet", 5))
         if (hasUpgrade("ep1", 13)) player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(upgradeEffect("ep1", 13))
+        player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(buyableEffect("sp", 33))
         if (hasUpgrade("fi", 22)) player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(upgradeEffect("fi", 22))
 
         player.ep2.cookies = player.ep2.cookies.add(player.ep2.cookiesPerSecond.mul(delta))
@@ -218,6 +221,7 @@ addLayer("ep2", {
         if (hasUpgrade("ep2", 9001)) player.ep2.averageGoldenCooldown = player.ep2.averageGoldenCooldown.div(1.5)
         if (hasUpgrade("ep2", 9003)) player.ep2.averageGoldenCooldown = player.ep2.averageGoldenCooldown.div(1.5)
         if (hasUpgrade("ep2", 9005)) player.ep2.averageGoldenCooldown = player.ep2.averageGoldenCooldown.div(1.5)
+        player.ep2.averageGoldenCooldown = player.ep2.averageGoldenCooldown.div(buyableEffect("pet", 6).sub(1).div(10).add(1))
 
         if (getLevelableAmount("pet", 403).gt(0)) {
             if (player.tab == "ep2") {
@@ -237,7 +241,7 @@ addLayer("ep2", {
             }
         }
 
-        if (getLevelableAmount("pet", 2004).gt(0)) {
+        if (getLevelableAmount("pet", 2004).gt(0) && player.ep2.crumbClicks) {
             player.ep2.goldClickTimer = player.ep2.goldClickTimer.add(delta)
             if (player.ep2.goldClickTimer.gte(Decimal.div(1, levelableEffect("pet", 2004)[0]))) {
                 player.ep2.barClicks += 1
@@ -257,6 +261,7 @@ addLayer("ep2", {
             if (Decimal.gte(player.ep2.barClicks, base.div(goldenBarDiv).max(base.mul(0.1)))) player.ep2.barClicks = Decimal.div(base, goldenBarDiv).max(base.mul(0.1)).sub(1).floor()
             player.ep2.currScale = new Decimal(1)
             player.ep2.scaleCooldown = new Decimal(3600)
+            player.ep2.scaleCooldown = player.ep2.scaleCooldown.div(buyableEffect("pet", 6).sub(1).div(10).add(1))
         }
         player.ep2.barMax = base.mul(player.ep2.currScale.mul(Decimal.pow(1.1, player.ep2.currScale.sub(2)).max(1)).div(goldenBarDiv).max(0.1)).floor()
 
@@ -310,6 +315,23 @@ addLayer("ep2", {
             unlocked() {return player.ep2.obtainedShards},
             tooltip() {return "<div style='line-height:1.1;font-size:12px'>Chocolate Shards<hr><small>Obtained from golden cookies<br>Pity: " + player.ep2.shardPity + "/20</small></div>" },
             style: {width: "32px", minHeight: "32px", background: "transparent", border: "none", borderRadius: "15px", padding: "0", marginLeft: "3px", marginRight: "3px", boxShadow: "0 0 !important"}
+        },
+        3: {
+            title() {
+                if (player.ep2.crumbClicks) return "<img src='resources/checkback/crumb_simple.png' width='40px' height='40px' style='margin-bottom:-5px'></img>"
+                return "<img src='resources/checkback/crumb_simple.png' width='40px' height='40px' style='margin-bottom:-5px;opacity:0.3'></img>"
+            },
+            canClick: true,
+            unlocked() {return getLevelableAmount("pet", 2004).gt(0)},
+            tooltip: "Toggle passive golden click gain.",
+            onClick() {
+                if (player.ep2.crumbClicks) {
+                    player.ep2.crumbClicks = false
+                } else {
+                    player.ep2.crumbClicks = true
+                }
+            },
+            style: {width: "50px", minHeight: "50px", background: "transparent", border: "none", borderRadius: "50%", padding: "0", boxShadow: "0 0 !important"}
         },
     },
     bars: {
@@ -2043,7 +2065,7 @@ addLayer("ep2", {
             img: "resources/checkback/wrath_simple.png",
             unlocked() {return getLevelableAmount("pet", 2003).gte(1)},
             title: "Annoyance",
-            description() {return "Total buildings boost matos character health.<br>Currently: x" + formatSimple(upgradeEffect(this.layer, this.id), 2)},
+            description() {return "Total buildings boost black heart health.<br>Currently: x" + formatSimple(upgradeEffect(this.layer, this.id), 2)},
             cost: new Decimal(6.66e12),
             currencyLocation() { return player.ep2 },
             currencyDisplayName: "Cookies",
@@ -2066,7 +2088,7 @@ addLayer("ep2", {
             img: "resources/checkback/wrath_simple.png",
             unlocked() {return getLevelableAmount("pet", 2003).gte(1)},
             title: "<span style='color:#F97448cc'>Resentment</span>",
-            description() {return "CPS boosts matos character damage.<br>Currently: x" + formatSimple(upgradeEffect(this.layer, this.id), 2)},
+            description() {return "CPS boosts black heart damage.<br>Currently: x" + formatSimple(upgradeEffect(this.layer, this.id), 2)},
             cost: new Decimal(6.66e16),
             currencyLocation() { return player.ep2 },
             currencyDisplayName: "Cookies",
@@ -2089,7 +2111,7 @@ addLayer("ep2", {
             img: "resources/checkback/wrath_simple.png",
             unlocked() {return getLevelableAmount("pet", 2003).gte(1)},
             title: "<span style='color:#D4410Dcc'>Anger</span>",
-            description() {return "Golden Cookie Clicks boost matos character regen.<br>Currently: x" + formatSimple(upgradeEffect(this.layer, this.id), 2)},
+            description() {return "Golden Cookie Clicks boost black heart regen.<br>Currently: x" + formatSimple(upgradeEffect(this.layer, this.id), 2)},
             cost: new Decimal(6.66e20),
             currencyLocation() { return player.ep2 },
             currencyDisplayName: "Cookies",
@@ -2112,7 +2134,7 @@ addLayer("ep2", {
             img: "resources/checkback/wrath_simple.png",
             unlocked() {return getLevelableAmount("pet", 2003).gte(1)},
             title: "<span style='color:#8C0000cc'>Fury</span>",
-            description: "Reduce matos combo softcap scaling by -0.1%",
+            description: "Reduce black heart combo softcap scaling by -0.1%",
             cost: new Decimal(6.66e24),
             currencyLocation() { return player.ep2 },
             currencyDisplayName: "Cookies",
@@ -2813,6 +2835,7 @@ addLayer("ep2", {
                 ["style-column", [
                     ["left-row", [
                         ["clickable", 1],
+                        ["clickable", 3],
                     ], {paddingLeft: "5px"}],
                     ["tooltip-row", [
                         ["style-column", [

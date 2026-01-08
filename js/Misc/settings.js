@@ -233,6 +233,27 @@ addLayer("settings", {
                 return look
             },
         },
+        103: {
+            title: "Coral Theme",
+            canClick() {return options.theme != "coral"},
+            unlocked: "true",
+            onClick() {
+                options.theme = "coral"
+	            changeTheme();
+	            resizeCanvas();
+            },
+            style() {
+                let look = {width: '100px', minHeight: '80px', color: "#ccc", borderRadius: '0'}
+                if (this.canClick()) {
+                    look.background = "#331919"
+                    look.border = "3px solid #261313"
+                } else {
+                    look.background = "#261313"
+                    look.border = "3px solid #1a0d0d"
+                }
+                return look
+            },
+        },
     },
     tabFormat: [
         ["row", [["clickable", 2], ["clickable", 7], ["clickable", 4], ["clickable", 5]]],
@@ -303,9 +324,9 @@ addLayer("settings", {
                         ["raw-html", "Themes", {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
                     ], {width: "306px", height: "20px", background: "var(--miscButtonDisable)", borderBottom: "3px solid var(--regBorder)"}],
                     ["style-row", [
-                        ["style-row", [], {width: "3px", height: "80px", background: "var(--regBorder)"}],
                         ["clickable", 101], ["style-row", [], {width: "3px", height: "80px", background: "var(--regBorder)"}],
                         ["clickable", 102], ["style-row", [], {width: "3px", height: "80px", background: "var(--regBorder)"}],
+                        ["clickable", 103]
                     ], {width: "306px", borderBottom: "3px solid var(--regBorder)"}],
                     ["style-row", [
                         ["raw-html", "Layouts", {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],

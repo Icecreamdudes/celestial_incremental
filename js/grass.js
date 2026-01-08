@@ -321,7 +321,7 @@ addLayer('g', {
             }
         },
         getStyle(data, id) {
-            let look = {width: "80px", height: "80px", lineHeight: "0.8", backgroundColor: "#074317", border: "5px solid rgba(0,0,0,0.3)", borderRadius: "0", padding: "0", margin: "0", cursor: "default"}
+            let look = {width: "80px", height: "80px", lineHeight: "0.8", color: "black", backgroundColor: "#074317", border: "5px solid rgba(0,0,0,0.3)", borderRadius: "0", padding: "0", margin: "0", cursor: "default"}
             switch (getGridData("g", id)[0]) {
                 case 0:
                     look.background = "#074317"

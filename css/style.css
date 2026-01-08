@@ -30,6 +30,7 @@
 	--scroll2: "#3B3B3B";
 	--scroll3: "#424242";
 	--scroll4: "#545454";
+	--selected: "#a0a0a0";
 	--scrollDecrement: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%237a7a7a'><polygon points='50,00 0,50 100,50'/></svg>");
 	--scrollIncrement: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%237a7a7a'><polygon points='0,0 100,0 50,50'/></svg>");
 }
@@ -593,8 +594,8 @@ h1, h2, h3, b, input {
 .jukebox {
 	width: 90px;
 	height: 120px;
-	background: #a68064;
-	border: 2px solid #644d3c;
+	background: var(--tabTitle);
+	border: 2px solid var(--regBorder);
 	margin: 2.5px;
 	color: white;
 	font-size: 10px;
@@ -604,7 +605,7 @@ h1, h2, h3, b, input {
 }
 
 .jukebox.selected {
-	border-color: #ded0c6;
+	border-color: var(--selected);
 }
 
 .treeThing {

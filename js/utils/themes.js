@@ -17,19 +17,21 @@ var colors = {
 		scroll2: "#3B3B3B",
 		scroll3: "#424242",
 		scroll4: "#545454",
+		selected: "#a0a0a0",
 
 		darkLayerBackground: "#000",
 		darkBorder: "#3d3d3d",
 		darkButton: "#111",
 		darkButtonHover: "#222",
 		darkButtonDisable: "#000",
-		darkTitleGradient: "linear-gradient(90deg, #0f011c 0%, #000000 50%, #0f011c 100%)",
-		darkTabTitle: "#0f011c",
+		darkTitleGradient: "linear-gradient(90deg, #222 0%, #111 50%, #222 100%)",
+		darkTabTitle: "#222",
 		darkScrollBackground: "#000",
 		darkScroll1: "#1a1a1a",
 		darkScroll2: "#1d1d1d",
 		darkScroll3: "#212121",
 		darkScroll4: "#2a2a2a",
+		darkSelected: "#636363",
 	},
 	wood: {
 		regBorder: "#745a46",
@@ -45,19 +47,21 @@ var colors = {
 		scroll2: "#3A2D23",
 		scroll3: "#423328",
 		scroll4: "#534032",
+		selected: "#a27f65",
 
 		darkLayerBackground: "#000",
 		darkBorder: "#32261e",
-		darkButton: "#110d0a",
+		darkButton: "#19130f",
 		darkButtonHover: "#211a14",
 		darkButtonDisable: "#000",
-		darkTitleGradient: "linear-gradient(90deg, #0f011c 0%, #000000 50%, #0f011c 100%)",
-		darkTabTitle: "#0f011c",
+		darkTitleGradient: "linear-gradient(90deg, #211a14 0%, #19130f 50%, #211a14 100%)",
+		darkTabTitle: "#211a14",
 		darkScrollBackground: "#000",
 		darkScroll1: "#19130f",
 		darkScroll2: "#1d1611",
 		darkScroll3: "#211914",
 		darkScroll4: "#292019",
+		darkSelected: "#624a3b",
 	},
 	coral: {
 		regBorder: "#733939",
@@ -72,20 +76,22 @@ var colors = {
 		scroll1: "#331919",
 		scroll2: "#402020",
 		scroll3: "#4d2626",
-		scroll4: "#5a0000",
+		scroll4: "#5a2d2d",
+		selected: "#a65252",
 
 		darkLayerBackground: "#000",
-		darkBorder: "#3d3d3d",
-		darkButton: "#111",
-		darkButtonHover: "#222",
+		darkBorder: "#391c1c",
+		darkButton: "#190c0c",
+		darkButtonHover: "#261313",
 		darkButtonDisable: "#000",
-		darkTitleGradient: "linear-gradient(90deg, #0f011c 0%, #000000 50%, #0f011c 100%)",
-		darkTabTitle: "#0f011c",
+		darkTitleGradient: "linear-gradient(90deg, #261313 0%, #201010 50%, #261313 100%)",
+		darkTabTitle: "#261313",
 		darkScrollBackground: "#000",
-		darkScroll1: "#1a1a1a",
-		darkScroll2: "#1d1d1d",
-		darkScroll3: "#212121",
-		darkScroll4: "#2a2a2a",
+		darkScroll1: "#190c0c",
+		darkScroll2: "#201010",
+		darkScroll3: "#261313",
+		darkScroll4: "#2d1616",
+		darkSelected: "#6c3535",
 	},
 }
 function changeTheme() {
@@ -104,6 +110,7 @@ function changeTheme() {
 		document.body.style.setProperty('--scroll2', colors_theme["scroll2"]);
 		document.body.style.setProperty('--scroll3', colors_theme["scroll3"]);
 		document.body.style.setProperty('--scroll4', colors_theme["scroll4"]);
+		document.body.style.setProperty('--selected', colors_theme["selected"]);
 		document.body.style.setProperty('--scrollDecrement', "url(data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23" + colors_theme["regBorder"].slice(1) + "'><polygon points='50,00 0,50 100,50'/></svg>)");
 		document.body.style.setProperty('--scrollIncrement', "url(data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23" + colors_theme["regBorder"].slice(1) + "'><polygon points='0,0 100,0 50,50'/></svg>)");
 	} else {
@@ -120,6 +127,7 @@ function changeTheme() {
 		document.body.style.setProperty('--scroll2', colors_theme["darkScroll2"]);
 		document.body.style.setProperty('--scroll3', colors_theme["darkScroll3"]);
 		document.body.style.setProperty('--scroll4', colors_theme["darkScroll4"]);
+		document.body.style.setProperty('--selected', colors_theme["darkSelected"]);
 		document.body.style.setProperty('--scrollDecrement', "url(data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23" + colors_theme["darkBorder"].slice(1) + "'><polygon points='50,00 0,50 100,50'/></svg>)");
 		document.body.style.setProperty('--scrollIncrement', "url(data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23" + colors_theme["darkBorder"].slice(1) + "'><polygon points='0,0 100,0 50,50'/></svg>)");
 	}

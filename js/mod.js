@@ -634,6 +634,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Revamped check back fragmentation.<br>
 			- Slightly revamped singularity epic pet layers.<br>
 			- Revamped the visuals of core fragments.<br>
+			- Added a new layer to tav's domain that never resets.<br>
 			- Added 3 new pets.<br>
 			- Revamped the stinger ship to only use mouse/touch controls.<br><br>
 		QoL:<br>

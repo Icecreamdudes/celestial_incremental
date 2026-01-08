@@ -31,7 +31,6 @@ addLayer('g', {
 
         moonstoneMaxHealth: new Decimal(100),
         moonstoneDamage: new Decimal(20),
-        reloadTime: new Decimal(400),
         moonstoneLevel: new Decimal(1),
         moonstoneLevelEffects: [
             new Decimal(1),
@@ -312,8 +311,8 @@ addLayer('g', {
                 case 3:
                     setGridData("g", id, [3, getGridData("g", id)[1], getGridData("g", id)[2].sub(player.g.moonstoneDamage)])
                     if (getGridData("g", id)[2].lte(0)) {
-                        player.g.grass = player.g.grass.add(player.g.grassVal.mul(player.g.grassCap))
-                        player.g.goldGrass = player.g.goldGrass.add(player.g.goldGrassVal.mul(player.g.goldGrassCap))
+                        player.g.grass = player.g.grass.add(player.g.grassVal.mul(player.g.grassCap).mul(buyableEffect("g", 23)))
+                        player.g.goldGrass = player.g.goldGrass.add(player.g.goldGrassVal.mul(player.g.goldGrassCap).mul(buyableEffect("g", 23)))
                         player.g.moonstone = player.g.moonstone.add(player.g.moonstoneVal.mul(getGridData("g", id)[1]))
                         setGridData("g", id, [0, new Decimal(0), new Decimal(1)])
                     }
@@ -951,15 +950,15 @@ addLayer('g', {
             purchaseLimit() { return new Decimal(250) },
             currency() { return player.g.moonstone},
             pay(amt) { player.g.moonstone = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).pow(0.6).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.2).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return 'Moonstone Reload Time'
+                return 'Moonstone Previous Gain'
             },
             display() {
-                return 'which are dividing moonstone reload time by /' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are multiplying grass and golden grass gain from moonstone by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Moonstone'
             },
             buy(mult) {

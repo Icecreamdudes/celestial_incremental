@@ -49,7 +49,9 @@ addLayer("changelog", {
     tabFormat: [
         ["row", [["clickable", 2], ["clickable", 7], ["clickable", 4], ["clickable", 5]]],
         ["blank", "50px"],
-        ["raw-html", () => changelog, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
+        ["style-column", [
+            ["raw-html", () => changelog, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+        ], {width: "780px", padding: "10px", background: "var(--layerBackground)", border: "3px solid var(--regBorder)", borderRadius: "20px"}],
         ["blank", "25px"],
     ],
     layerShown() { return false }

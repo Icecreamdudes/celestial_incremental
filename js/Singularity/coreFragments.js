@@ -950,7 +950,7 @@
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-        ["raw-html", function () { return "You will <h3>" + formatWhole(player.cof.coreFragments[player.cof.fragmentIndex]) + "</h3> " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You have <h3>" + formatWhole(player.cof.coreFragments[player.cof.fragmentIndex]) + "</h3> " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return player.cof.fragmentIndex == 0 ? "Your " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + " boosts points by ^" + format(player.cof.coreFragmentEffects[player.cof.fragmentIndex], 3) + "." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return player.cof.fragmentIndex == 1 ? "Your " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + " boosts golden grass by x" + format(player.cof.coreFragmentEffects[player.cof.fragmentIndex]) + "." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return player.cof.fragmentIndex == 2 ? "Your " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + " boosts steel by ^" + format(player.cof.coreFragmentEffects[player.cof.fragmentIndex], 3) + "." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],

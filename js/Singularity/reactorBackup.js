@@ -47,7 +47,7 @@
 
         player.re.plasmaToGet = new Decimal(1)
 
-        createReactorNode()
+        setGridData("re", 108, [2, new Decimal(1), new Decimal(1)])
     },
     branches: ["ra", "sd"],
     clickables: {
@@ -276,6 +276,39 @@
     milestones: {},
     challenges: {},
     infoboxes: {},
+    grid: {
+        rows: 15,
+        cols: 15,
+        getStartData(id) {
+            return [0, new Decimal(0), new Decimal(1)]
+        },
+        getTitle(data, id) {
+            switch (getGridData("re", id)[0]) {
+                case 2:
+                    return "∞"
+                default:
+                    return ""
+            }
+        },
+        getCanClick(data, id) {return false},
+        onHover(data, id) {
+        },
+        getStyle(data, id) {
+            let look = {width: "40px", height: "40px",  backgroundColor: "#074317", border: "3px solid rgba(0,0,0,0.125)", lineHeight: "0.8", fontSize: "24px", borderRadius: "0", padding: "0", margin: "0", cursor: "default"}
+            switch (getGridData("re", id)[0]) {
+                case 0:
+                    look.background = "#00000000"
+                    break;
+                case 1:
+                    look.background = "#8bff17"
+                    break;
+                case 2:
+                    look.background = "#c6ff8c"
+                    break;
+            }
+            return look
+        }
+    },
     microtabs: {
         stuff: {
             "Main": {
@@ -306,8 +339,8 @@
                             // LEVEL
                         ], {background: "#0d2904", border: "3px solid #2d8a0e", borderRadius: "8px 0px 0px 8px", width: "200px", height: "600px"}],
                         ["style-row", [
-                            ["raw-html", function () { return "<canvas id='reactorCanvas' width='600' height='600'></canvas>" }, {}],
-                        ], {border: "3px solid #2d8a0e", borderLeft: "0px", width: "600px", height: "600px"}],
+                            "grid",
+                        ], {border: "3px solid #2d8a0e", borderLeft: "0px", borderRadius: "0px 8px 8px 0px", width: "600px", height: "600px"}],
                     ], {background: "#0000007f", borderRadius: "8px", width: "809px", height: "600px"}],
                     ["blank", "25px"],
                 ]
@@ -361,96 +394,96 @@
     layerShown() { return player.startedGame == true && true}
 })
 
-function animate() {
-    const canvas = document.getElementById("reactorCanvas")
-    if (canvas) {
-        let ctx = canvas.getContext('2d')
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.lineWidth = 3;
-        ctx.fillStyle = "#0d2904";
-        ctx.strokeStyle = "#2d8a0e";
-        ctx.save()
-        ctx.beginPath();
-        ctx.arc(300, 600, 20, 20, -90, 90);
-        ctx.fill()
-        ctx.stroke();
-        ctx.textAlign = "center"
-        ctx.textBaseline = "middle"
-        ctx.font = "16px Monospace"
-        for (let i = 0; i < 14; i++) {
-            for (let j = 0; j < 15; j++) {
-                let t = tiles[i][j]
-                if(t != 0) {
-                    if (t == 1) {
-                        ctx.fillStyle = "#8bff17"
-                        ctx.strokeStyle = "#2d8a0e"
-                    } else {
-                        ctx.fillStyle = "#0d2904"
-                        ctx.strokeStyle = "#2d8a0e"
-                    }
-                    ctx.fillRect(40*j, 40*i, 40, 40)
-                    ctx.strokeRect(40*j, 40*i, 40, 40)
-                    if (t == 1) {
-                        ctx.fillStyle = "#0d2904"
-                        ctx.fillText("1", 40*j + 20, 40*i + 20)
-                    }
-                }
-            }
-        }
-        ctx.fillStyle = "#c6ff8c"
-        for (let i = 0; i < bullets.length; i++) {
-        ctx.beginPath();
-            bullets[i][0] += Math.cos(bullets[i][2])
-            bullets[i][1] += Math.sin(bullets[i][2])
-            ctx.arc(bullets[i][0], bullets[i][1], 5, 5, 0, 360);
-            ctx.fill()
-        }
-        ctx.restore()
-    }
-    requestAnimationFrame(animate);
-}
-
-animate()
-
-let tiles = []
-for (let i = 0; i < 14; i++) {
-    tiles.push([])
-    for (let j = 0; j < 15; j++) {
-        tiles[tiles.length-1].push(0)
-    }
+function createReactorNode() {
+    
 }
 
 let canShoot = true
-let bullets = []
-
-function createReactorNode() {
-
-    let moveOn = true
-    let elligibleRow = 13
-    let elligibleTiles = []
-    
-    for (let i = 0; i < 14; i++) {
-        for (let j = 0; j < 15; j++) {
-            if (tiles[i][j] == 0) {
-                moveOn = false
-                elligibleTiles.push(j)
-            }
-        }
-        if (!moveOn) {
-            elligibleRow = i
-            break
-        }
-    }
-    tiles[elligibleRow][elligibleTiles[Math.floor(Math.random() * elligibleTiles.length)]] = Math.floor(Math.random() * 1.1) + 1
-}
-
-function createReactorBullet(event) {
+function createReactorBullet() {
     if (!canShoot) return
 
     if (player.tab != 're' || player.subtabs.re.stuff != 'Main') return
 
-    bullets.push([300, 575, Math.atan2(event.pageX, event.pageY)])
+    let cont = document.getElementsByClassName("upgTable instant")[0]
+    
+    let rect = cont.getBoundingClientRect();
+    let centerX = event.clientX - (rect.width / 2) - rect.x;
+    let centerY = event.clientY - (rect.height / 2) - rect.y;
+
+    const smallCircle = document.createElement('div')
+    smallCircle.stop = false
+    Object.assign(smallCircle.style, {
+        width: '10px',
+        height: '10px',
+        backgroundColor: '#c6ff8c',
+        borderRadius: '50%',
+        position: 'relative',
+        left: `101.5px`,
+        top: `-76.5px`,
+        margin: `-8px`,
+        border: '3px solid #0000001f',
+        zIndex: '99',
+    })
+
+    cont.appendChild(smallCircle)
+
+    let x = parseFloat(smallCircle.style.left);
+    let y = parseFloat(smallCircle.style.top);
+    var angle = Math.atan2(centerY + y - 293.5, centerX - 101.5)
+
+    let last = -1
+    function move(timestamp) {
+        if (smallCircle.stop) return
+        if (last < 0) last = timestamp
+        requestAnimationFrame(move)
+
+        // Target FPS is limited by TMT's framecap
+        const targetFps = 20
+        const frameMs = 1000 / targetFps
+        const elapsedMs = timestamp - last
+        if (elapsedMs < frameMs) return
+
+        const speed = 10 // pixels per frame
+        x += Math.cos(angle) * speed * elapsedMs / frameMs
+        y += Math.sin(angle) * speed * elapsedMs / frameMs
+
+        if (x < -197) {
+            angle = Math.PI - angle
+            x = -197
+        }
+        if (x > 397) {
+            angle = Math.PI - angle
+            x = 397
+        }
+        if (y < -643) {
+            angle = -angle
+            y = -643
+        }
+        if (y > -47) {
+            angle = -angle
+            y = -47
+        }
+
+        Object.assign(smallCircle.style, {
+            left: `${x}px`,
+            top: `${y}px`,
+        })
+
+        last = timestamp
+    }
+
+    requestAnimationFrame(move)
+
+    const lifetimeMs = 60*1000
+    setTimeout(() => {
+        smallCircle.stop = true
+        smallCircle.remove()
+    }, lifetimeMs)
+
+    canShoot = false
+    setTimeout(() => {
+        canShoot = true
+    }, player.g.reloadTime)
 }
 
-addEventListener("click", createReactorBullet)
+document.addEventListener('click', (event) => createReactorBullet(event))

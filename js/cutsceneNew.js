@@ -208,7 +208,7 @@ function showCutscene(dialogue, options = {}) {
         cutsceneDialogue = null;
         cutsceneOptions = null;
         saveCutsceneState();
-        if (typeof stopAudio === 'function') stopAudio();
+        if (typeof stopAudio === 'function' && options.jukeboxID == "none") stopAudio();
         if (options.onEnd) options.onEnd();
     }
 

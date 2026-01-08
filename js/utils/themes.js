@@ -1,5 +1,5 @@
 // ************ Themes ************
-var themes = ["default", "wood"]
+var themes = ["default", "wood", "coral"]
 
 //var(--points)
 var colors = {
@@ -58,6 +58,34 @@ var colors = {
 		darkScroll2: "#1d1611",
 		darkScroll3: "#211914",
 		darkScroll4: "#292019",
+	},
+	coral: {
+		regBorder: "#733939",
+		menuBackground: "#0d0606",
+		layerBackground: "#1a0d0d",
+		miscButton: "#331919",
+		miscButtonHover: "#4d2626",
+		miscButtonDisable: "#261313",
+		titleGradient: "linear-gradient(90deg, #5a2d2d 0%, #402020 50%, #5a2d2d 100%)",
+		tabTitle: "#4d2626",
+		scrollBackground: "#000",
+		scroll1: "#331919",
+		scroll2: "#402020",
+		scroll3: "#4d2626",
+		scroll4: "#5a0000",
+
+		darkLayerBackground: "#000",
+		darkBorder: "#3d3d3d",
+		darkButton: "#111",
+		darkButtonHover: "#222",
+		darkButtonDisable: "#000",
+		darkTitleGradient: "linear-gradient(90deg, #0f011c 0%, #000000 50%, #0f011c 100%)",
+		darkTabTitle: "#0f011c",
+		darkScrollBackground: "#000",
+		darkScroll1: "#1a1a1a",
+		darkScroll2: "#1d1d1d",
+		darkScroll3: "#212121",
+		darkScroll4: "#2a2a2a",
 	},
 }
 function changeTheme() {

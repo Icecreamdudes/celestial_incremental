@@ -631,7 +631,7 @@ let changelog = `<h1>Changelog:</h1><br>
 	<h3>v1.10.5 - Checklist Update</h3><br>
 		Content:<br>
 			- Redid the visuals of the options menu.<br>
-			- Fixed up themes to change the color of your UI. Currently it is just default and wood.<br>
+			- Fixed up themes to change the color of your UI. Currently it is just default, wood, and coral.<br>
 			- Added a jukebox in settings, which allows you to play any song you have seen in-game.<br>
 			- Revamped check back fragmentation.<br>
 			- Slightly revamped singularity epic pet layers.<br>
@@ -1602,7 +1602,8 @@ function fixOldSave(oldVersion){
             doPopup("none", "+" + formatWhole(paraRefund) + " Paragon Shard!", "REFUND", 5, "#4c64ff", "resources/paragonShard.png")
 		}
 	}
-	if (oldVersion < 190.1 && player.ep3) {
+	if (oldVersion < 190.1) {
+		if (options.theme == "aqua") options.theme = "default"
 		if (player.c.cutscenes) {
 			player.c.cutscenes = {}
 			if (player.ca.unlockedCante) player.c.cutscenes["U2-Tav-End"] = 2

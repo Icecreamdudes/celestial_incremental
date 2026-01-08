@@ -211,7 +211,7 @@
             },
             style: { width: "100px", minHeight: "100px", border: "5px solid #16364a", borderRadius: "0px", padding: "0px" },
         },
-        203: {
+        204: {
             title() { return "<img src='resources/Pets/cookie/crumbCookieEvo.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
             unlocked() { return tmp.pet.levelables[403].canClick && player.ep2.obtainedShards && player.ir.iriditeUnlocked && getLevelableAmount("pet", 2001).gte(1) && getLevelableAmount("pet", 2004).lt(1)},
@@ -263,7 +263,7 @@
                 "<br>"  + formatWhole(getLevelableAmount("pet", 201)) + "/2 Teste Level" +
                 "<br>"  + formatWhole(getLevelableAmount("pet", 202)) + "/2 Star Level" +
                 "<br>"  + formatWhole(getLevelableAmount("pet", 203)) + "/2 Normal Face Level" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 204)) + "/4 Shark Level Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 204)) + "/4 Shark Level" +
                 "<br>"  + formatWhole(getLevelableAmount("pet", 205)) + "/2 THE WATCHING EYE Level" +
                 "<br>"  + formatWhole(getLevelableAmount("pet", 303)) + "/1 Drippy Ufo Level" +
                 "</div>"
@@ -361,9 +361,13 @@
             },
             canClick() {
                 return (player.cb.evolutionShards.gte(20) && player.cb.paragonShards.gte(1) && player.cb.petPoints.gte(250)
-                && player.in.infinityPoints.gte(1e11) && getLevelableAmount("pet", 201).gte(4) && getLevelableAmount("pet", 202).gte(8)
-                && getLevelableAmount("pet", 203).gte(4) && getLevelableAmount("pet", 204).gte(4) && getLevelableAmount("pet", 201).gte(5)
-                && getLevelableAmount("pet", 206).gte(2) && getLevelableAmount("pet", 207).gte(2))
+                && player.in.infinityPoints.gte(1e11) && (getLevelableAmount("pet", 201).gte(4) || getLevelableTier("pet", 201).gt(0))
+                && (getLevelableAmount("pet", 202).gte(8) || getLevelableTier("pet", 202).gt(0))
+                && (getLevelableAmount("pet", 203).gte(4) || getLevelableTier("pet", 203).gt(0))
+                && (getLevelableAmount("pet", 204).gte(4) || getLevelableTier("pet", 204).gt(0))
+                && (getLevelableAmount("pet", 205).gte(4) || getLevelableTier("pet", 204).gt(0))
+                && (getLevelableAmount("pet", 206).gte(2) || getLevelableTier("pet", 206).gt(0))
+                && (getLevelableAmount("pet", 207).gte(2) || getLevelableTier("pet", 207).gt(0)))
             },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
@@ -396,7 +400,7 @@
             canClick() {
                 return (player.cb.evolutionShards.gte(25) && player.cb.paragonShards.gte(1) && player.ta.highestDicePoints.gte(1e45)
                 && getLevelableAmount("pet", 1103).gte(6) && getLevelableAmount("pet", 1204).gte(3) && getLevelableAmount("pet", 1203).gte(3)
-                && player.cb.XPBoost.gte(7) && getLevelableAmount("pet", 302).gte(3))
+                && player.cb.XPBoost.gte(7) && (getLevelableAmount("pet", 302).gte(3) || getLevelableTier("pet", 302).gt(0)))
             },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
@@ -475,7 +479,8 @@
             },
             canClick() {
                 return (player.cb.evolutionShards.gte(30) && player.cb.paragonShards.gte(1) && player.cb.level.gte(1500)
-                && getLevelableAmount("pet", 206).gte(6) && getLevelableAmount("pet", 207).gte(6) && player.ca.rememberanceCores.gte(5))
+                && (getLevelableAmount("pet", 206).gte(6) || getLevelableTier("pet", 206).gt(0))
+                && (getLevelableAmount("pet", 207).gte(6) || getLevelableTier("pet", 207).gt(0)) && player.ca.rememberanceCores.gte(5))
             },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)

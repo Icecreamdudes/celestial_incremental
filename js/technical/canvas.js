@@ -83,15 +83,13 @@ function isVisibleInViewport(element) {
 
 function drawTreeBranch(num1, data, prefix) { // taken from Antimatter Dimensions & adjusted slightly
 	let num2 = data
-	let color_id = 1
+	let color_id = "#ffffff"
 	let width = 15
 	if (Array.isArray(data)) {
 		num2 = data[0]
 		color_id = data[1]
 		width = data[2] || width
 	}
-	if(typeof(color_id) == "number")
-		color_id = colors_theme[color_id]
 	if (prefix) {
 		num1 = prefix + num1
 		num2 = prefix + num2

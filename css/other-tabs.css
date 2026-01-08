@@ -62,8 +62,8 @@
 	right: 4px;
 	top: 4px;
 	text-align: right;
-	color: var(--points);
-	text-shadow: 0 0 10px var(--points);
+	color: #ffffff;
+	text-shadow: 0 0 10px #ffffff;
 	cursor: pointer;
 }
 
@@ -100,7 +100,7 @@ a {
 	width: 100px;
 	border-radius: 25%;
 	border: 4px solid;
-	background-color: var(--color);
+	background-color: #dfdfdf;
 	border-color: rgba(0, 0, 0, 0.125);
 	color: rgba(0, 0, 0, 0.5);
 	cursor: pointer;

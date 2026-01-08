@@ -19,7 +19,7 @@
 	text-shadow: 0 0 2px #000000;
 }
 .achievement:hover {
-	box-shadow: 0 0 10px var(--points);
+	box-shadow: 0 0 10px #ffffff;
 	z-index: 7;
 }
 
@@ -85,7 +85,7 @@
 .challengeButton {
 	height: 50px;
 	width: 120px;
-	background: var(--points);
+	background: #ffffff;
 	border-radius: 25px;
 	border: 2px solid;
 	border-color: rgba(0, 0, 0, 0.125);
@@ -146,7 +146,7 @@
 }
 
 .tile.can:hover {
-	box-shadow: 0 0 10px var(--points);
+	box-shadow: 0 0 10px #ffffff;
 	transform: scale(1.1, 1.1);
 	z-index: 7;
 }
@@ -163,7 +163,7 @@
 .longUpg {
 	height: 50px;
 	width: 120px;
-	background: var(--points);
+	background: #ffffff;
 	border-radius: 50%;
 	border: 2px solid;
 	border-color: rgba(0, 0, 0, 0.125);

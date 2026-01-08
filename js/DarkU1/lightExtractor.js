@@ -83,6 +83,7 @@
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("ma", 23))
         if (hasUpgrade("sma", 204)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(upgradeEffect("sma", 204))
         if (hasMilestone("db", 102)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(1.2)
+        player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(levelableEffect("st", 110)[0])
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(player.ds.spaceEffect)
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("cof", 26))
         if (getLevelableTier("pu", 305, true)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(levelableEffect("pu", 305)[0])
@@ -126,6 +127,7 @@
                 setLevelableTier("pu", prop, new Decimal(0))
             }
             player.le.starmetalAlloyToGet = new Decimal(0)
+            player.le.eclipseShardsToGet = new Decimal(0)
             player.le.resetAmount = new Decimal(0)
 
             if (!hasUpgrade("sma", 15)) player.pu.storedSelections = new Decimal(0)
@@ -135,6 +137,7 @@
             player.universe = "U3"
             player.tab = "sma"
             player.subtabs.pu["stuff"] = "Collection"
+            changeTheme()
 
             layers.pu.generateSelection();
         }
@@ -185,6 +188,7 @@
                 player.universe = "U3"
                 player.tab = "sma"
                 player.subtabs.pu["stuff"] = "Collection"
+                changeTheme()
 
                 layers.pu.generateSelection();
 
@@ -246,6 +250,7 @@
                 player.universe = "U3"
                 player.tab = "sma"
                 player.subtabs.pu["stuff"] = "Collection"
+                changeTheme()
 
                 player.pet.legPetTimers[0].active = false
                 player.pet.legPetTimers[0].current = new Decimal(0)
@@ -897,14 +902,14 @@
             },
             buy(mult) {
                 if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
                     this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
                     this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))

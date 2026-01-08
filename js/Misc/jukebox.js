@@ -472,7 +472,7 @@ addLayer("jukebox", {
                     ["hoverless-clickable", 13],
                 ], {width: "200px", height: "327px", background: "var(--layerBackground)"}],
             ], {width: "200px", height: "600px", borderRight: "3px solid var(--menuBackground)"}],
-            ["always-scroll-column", [
+            ["theme-scroll-column", [
                 ["buttonless-microtabs", "stuff", { 'border-width': '0px' }],
             ], {width: "447px", height: "600px", background: "var(--miscButtonDisable)"}],
         ], {width: "650px", height: "600px", background: "var(--tabTitle)", border: "3px solid var(--menuBackground)"}],

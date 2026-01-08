@@ -41,7 +41,7 @@
 <body onload="load()" onmousemove="updateMouse(event)">
 	<div id="app">
 		<div class="uiHolder" v-if="!player.hideMenu" v-bind:style="!player.startedGame || player.tab == 'c' ?{'left':'-110%'}:{'left':'0px'}">
-			<div class="uniHolder">
+			<div class="uniHolder themeTrack">
 				<button class="uniButton" v-if="uniShown('U1')" v-bind:style="universes.U1.nodeStyle()" :disabled="uniPaused('U1')" onclick="player.universe='U1'"><span class="buttonText">1</span></button>
 				<button class="uniButton" v-if="uniShown('UA')" v-bind:style="universes.UA.nodeStyle()" :disabled="uniPaused('UA')" onclick="player.universe='UA'"><span class="buttonText">α</span></button>
  				<button class="uniButton" v-if="uniShown('U2')" v-bind:style="universes.U2.nodeStyle()" :disabled="uniPaused('U2')" onclick="player.universe='U2'"><span class="buttonText">2</span></button>
@@ -52,7 +52,7 @@
  				<button class="uniButton" v-if="uniShown('D1')" v-bind:style="universes.D1.nodeStyle()" onclick="player.universe='D1'"><span class="buttonText">D1</span></button>
 				<button class="uniButton" v-if="uniShown('CH')" v-bind:style="universes.CH.nodeStyle()" onclick="player.universe='CH'"><span class="buttonText">γ</span></button>
 			</div>
-			<div class="layerHolder">
+			<div class="layerHolder themeTrack">
 				<div v-bind:class="{titleHolder:true}">
 					<p v-html="run(universes[player.universe].name, universes[player.universe])" v-if="typeof universes[player.universe] === 'object'"></p>
 				</div>

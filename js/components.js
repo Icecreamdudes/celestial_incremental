@@ -255,6 +255,25 @@ function loadVue() {
 		`
 	})
 
+	// data = an array of Components to be displayed in a column
+	// look = Object that defines style
+	Vue.component('theme-scroll-column', {
+		props: ['layer', 'data', 'look'],
+		computed: {
+			key() {return this.$vnode.key}
+		},
+		template: `
+		<div id="scrCon" class="upgScrollColTable upgAlwaysScrollCol themeTrack instant" >
+			<div class="upgScrollCol" v-bind:style="look" >
+				<div v-for="(item, index) in data">
+					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
+				</div>
+			</div>
+		</div>
+		`
+	})
 	// data = an array of functions returning the content (actually HTML)
 	// look = Object that defines style
 	Vue.component('stat-row', {

@@ -461,10 +461,8 @@ function updateStyles() {
 	if (options.menuType == "Tab") {
 		if (window.innerWidth > 1250) {
 			sideBG = "linear-gradient(to right, var(--tabTitle) 103px, var(--regBorder) 103px, var(--regBorder) 106px, var(--layerBackground) 106px)"
-			if (player.universe == "D1") sideBG = "linear-gradient(to right, #0f011c 103px, var(--regBorder) 103px, var(--regBorder) 106px, black 106px)"
 		} else {
 			sideBG = "linear-gradient(to bottom, var(--tabTitle) 80px, var(--regBorder) 80px, var(--regBorder) 83px, (--layerBackground) 83px)"
-			if (player.universe == "D1") sideBG = "linear-gradient(to bottom, #0f011c 80px, var(--regBorder) 80px, var(--regBorder) 83px, black 83px)"
 		}
 	}
 

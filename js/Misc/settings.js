@@ -16,7 +16,7 @@ addLayer("settings", {
             onClick() {
                 player.tab = "settings"
             },
-            style: { width: '125px', minHeight: '50px', color: "#ccc", background: "var(--miscButtonDisable)", borderRadius: '0px', border: "3px solid var(--regBorder)", margin: "0px 5px" },
+            style: { width: '125px', minHeight: '50px', color: "var(--textColor)", background: "var(--miscButtonDisable)", borderRadius: '0px', border: "3px solid var(--regBorder)", margin: "0px 5px" },
         },
         4: {
             title() { return "Savebank<br><small style='color:#f44'>[HEAVILY WIP]</small>" },
@@ -25,7 +25,7 @@ addLayer("settings", {
             onClick() {
                 player.tab = "savebank"
             },
-            style: { width: '125px', minHeight: '50px', color: "#ccc", background: "var(--miscButtonDisable)", borderRadius: '0px', border: "3px solid var(--regBorder)", margin: "0px 5px" },
+            style: { width: '125px', minHeight: '50px', color: "var(--textColor)", background: "var(--miscButtonDisable)", borderRadius: '0px', border: "3px solid var(--regBorder)", margin: "0px 5px" },
         },
         5: {
             title() { return "Changelog" },
@@ -34,7 +34,7 @@ addLayer("settings", {
             onClick() {
                 player.tab = "changelog"
             },
-            style: { width: '125px', minHeight: '50px', color: "#ccc", background: "var(--miscButtonDisable)", borderRadius: '0px', border: "3px solid var(--regBorder)", margin: "0px 5px" },
+            style: { width: '125px', minHeight: '50px', color: "var(--textColor)", background: "var(--miscButtonDisable)", borderRadius: '0px', border: "3px solid var(--regBorder)", margin: "0px 5px" },
         },
         7: {
             title() { return "Jukebox" },
@@ -43,7 +43,7 @@ addLayer("settings", {
             onClick() {
                 player.tab = "jukebox"
             },
-            style: { width: '125px', minHeight: '50px', color: "#ccc", background: "var(--miscButtonDisable)", borderRadius: '0px', border: "3px solid var(--regBorder)", margin: "0px 5px" },
+            style: { width: '125px', minHeight: '50px', color: "var(--textColor)", background: "var(--miscButtonDisable)", borderRadius: '0px', border: "3px solid var(--regBorder)", margin: "0px 5px" },
         },
         9: {
             title: "Join the Discord!",
@@ -61,7 +61,7 @@ addLayer("settings", {
             onClick() {
                 save()
             },
-            style: { width: '100px', minHeight: '80px', color: "#ccc", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+            style: { width: '100px', minHeight: '80px', color: "var(--textColor)", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
         },
         13: {
             title() { return "Import String" },
@@ -70,7 +70,7 @@ addLayer("settings", {
             onClick() {
                 importSave()
             },
-            style: { width: '100px', minHeight: '80px', color: "#ccc", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+            style: { width: '100px', minHeight: '80px', color: "var(--textColor)", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
         },
         14: {
             title() { return "Autosave<hr style='border:1px solid #888;margin-top:1px'>" + options.autosave },
@@ -79,7 +79,7 @@ addLayer("settings", {
             onClick() {
                 toggleOpt('autosave')
             },
-            style: { width: '100px', minHeight: '80px', color: "#ccc", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+            style: { width: '100px', minHeight: '80px', color: "var(--textColor)", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
         },
         15: {
             title() { return "Export File" },
@@ -88,7 +88,7 @@ addLayer("settings", {
             onClick() {
                 exportFile()
             },
-            style: { width: '100px', minHeight: '80px', color: "#ccc", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+            style: { width: '100px', minHeight: '80px', color: "var(--textColor)", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
         },
         16: {
             title() { return "Export to Clipboard" },
@@ -97,7 +97,7 @@ addLayer("settings", {
             onClick() {
                 exportSave()
             },
-            style: { width: '100px', minHeight: '80px', color: "#ccc", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+            style: { width: '100px', minHeight: '80px', color: "var(--textColor)", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
         },
         17: {
             title() { return "HARD RESET" },
@@ -115,7 +115,7 @@ addLayer("settings", {
             onClick() {
                 toggleOpt('hideMilestonePopups')
             },
-            style: { width: '100px', minHeight: '80px', color: "#ccc", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+            style: { width: '100px', minHeight: '80px', color: "var(--textColor)", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
         },
         22: {
             title() { return "Hide Achievement Popups<hr style='border:1px solid #888;margin-top:1px'>" + options.hideAchievementPopups },
@@ -124,7 +124,7 @@ addLayer("settings", {
             onClick() {
                 toggleOpt('hideAchievementPopups')
             },
-            style: { width: '100px', minHeight: '80px', color: "#ccc", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+            style: { width: '100px', minHeight: '80px', color: "var(--textColor)", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
         },
         23: {
             title() { return "Hide General Popups<hr style='border:1px solid #888;margin-top:1px'>" + options.hideGeneralPopups },
@@ -133,7 +133,7 @@ addLayer("settings", {
             onClick() {
                 toggleOpt('hideGeneralPopups')
             },
-            style: { width: '100px', minHeight: '80px', color: "#ccc", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+            style: { width: '100px', minHeight: '80px', color: "var(--textColor)", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
         },
         24: {
             title() { return "Toggle Hotkeys<hr style='border:1px solid #888;margin-top:1px'>" + options.toggleHotkey },
@@ -142,7 +142,7 @@ addLayer("settings", {
             onClick() {
                 toggleOpt('toggleHotkey')
             },
-            style: { width: '100px', minHeight: '80px', color: "#ccc", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+            style: { width: '100px', minHeight: '80px', color: "var(--textColor)", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
         },
         25: {
             title() { return "Toggle Music<hr style='border:1px solid #888;margin-top:1px'>" + options.musicToggle },
@@ -151,7 +151,7 @@ addLayer("settings", {
             onClick() {
                 toggleOpt('musicToggle')
             },
-            style: { width: '100px', minHeight: '80px', color: "#ccc", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+            style: { width: '100px', minHeight: '80px', color: "var(--textColor)", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
         },
         31: {
             title: "Tree Layout",
@@ -161,7 +161,7 @@ addLayer("settings", {
                 options.menuType = "Tree"
             },
             style() {
-                let look = {width: '100px', minHeight: '80px', color: "#ccc", borderRadius: '0'}
+                let look = {width: '100px', minHeight: '80px', color: "var(--textColor)", borderRadius: '0'}
                 if (this.canClick()) {
                     look.background = "var(--miscButton)"
                     look.border = "3px solid var(--miscButtonDisable)"
@@ -180,7 +180,7 @@ addLayer("settings", {
                 options.menuType = "Tab"
             },
             style() {
-                let look = {width: '100px', minHeight: '80px', color: "#ccc", borderRadius: '0'}
+                let look = {width: '100px', minHeight: '80px', color: "var(--textColor)", borderRadius: '0'}
                 if (this.canClick()) {
                     look.background = "var(--miscButton)"
                     look.border = "3px solid var(--miscButtonDisable)"
@@ -201,7 +201,7 @@ addLayer("settings", {
 	            resizeCanvas();
             },
             style() {
-                let look = {width: '100px', minHeight: '80px', color: "#ccc", borderRadius: '0'}
+                let look = {width: '100px', minHeight: '80px', color: "var(--textColor)", borderRadius: '0'}
                 if (this.canClick()) {
                     look.background = "#333"
                     look.border = "3px solid #222"
@@ -222,7 +222,7 @@ addLayer("settings", {
 	            resizeCanvas();
             },
             style() {
-                let look = {width: '100px', minHeight: '80px', color: "#ccc", borderRadius: '0'}
+                let look = {width: '100px', minHeight: '80px', color: "var(--textColor)", borderRadius: '0'}
                 if (this.canClick()) {
                     look.background = "#32261e"
                     look.border = "3px solid #211a14"
@@ -243,7 +243,7 @@ addLayer("settings", {
 	            resizeCanvas();
             },
             style() {
-                let look = {width: '100px', minHeight: '80px', color: "#ccc", borderRadius: '0'}
+                let look = {width: '100px', minHeight: '80px', color: "var(--textColor)", borderRadius: '0'}
                 if (this.canClick()) {
                     look.background = "#331919"
                     look.border = "3px solid #261313"
@@ -264,11 +264,11 @@ addLayer("settings", {
                 ["blank", "8px"],
                 ["style-column", [
                     ["style-row", [
-                        ["raw-html", "Save Options", {color: "#ccc", fontSize: "20px", fontFamily: "monospace"}]
+                        ["raw-html", "Save Options", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}]
                     ], {width: "306px", height: "30px", borderBottom: "3px solid var(--regBorder)"}],
                     ["style-row", [
                         ["clickable", 11], ["style-row", [], {width: "3px", height: "80px", background: "var(--regBorder)"}],
-                        ["raw-html", () => "<label class=can for='importfile' style='display:flex;align-items:center;justify-content:center;width:94px;height:74px;background:var(--miscButton);border:3px solid var(--miscButtonDisable)'>Import<br>file</label><input id='importfile' type='file' onchange='importFile()' style='display:none' />", {color: "#ccc", fontFamily: "monospace"}], ["style-row", [], {width: "3px", height: "80px", background: "var(--regBorder)"}],
+                        ["raw-html", () => "<label class=can for='importfile' style='display:flex;align-items:center;justify-content:center;width:94px;height:74px;background:var(--miscButton);border:3px solid var(--miscButtonDisable)'>Import<br>file</label><input id='importfile' type='file' onchange='importFile()' style='display:none' />", {color: "var(--textColor)", fontFamily: "monospace"}], ["style-row", [], {width: "3px", height: "80px", background: "var(--regBorder)"}],
                         ["clickable", 13],
                     ], {width: "306px", borderBottom: "3px solid var(--regBorder)"}],
                     ["style-row", [
@@ -284,7 +284,7 @@ addLayer("settings", {
                 ["blank", "8px"],
                 ["style-column", [
                     ["style-row", [
-                        ["raw-html", "Toggle Options", {color: "#ccc", fontSize: "20px", fontFamily: "monospace"}]
+                        ["raw-html", "Toggle Options", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}]
                     ], {width: "306px", height: "30px", borderBottom: "3px solid var(--regBorder)"}],
                     ["style-row", [
                         ["clickable", 21], ["style-row", [], {width: "3px", height: "80px", background: "var(--regBorder)"}],
@@ -294,19 +294,19 @@ addLayer("settings", {
                     ["style-row", [
                         ["clickable", 24],
                         ["style-column", [
-                            ["raw-html", "General Hotkeys", {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
-                            ["raw-html", "Alt - Toggle Music Off", {color: "#ccc", fontSize: "14px", fontFamily: "monospace"}],
-                            ["raw-html", "[More in the future]", {color: "#ccc", fontSize: "12px", fontFamily: "monospace"}],
+                            ["raw-html", "General Hotkeys", {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", "Alt - Toggle Music Off", {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                            ["raw-html", "[More in the future]", {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
                         ], {width: "203px", height: "80px", borderLeft: "3px solid var(--regBorder)"}],
                     ], {width: "306px", borderBottom: "3px solid var(--regBorder)"}],
                     ["style-row", [
                         ["clickable", 25],
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", () => {return "Volume: " + options.musicVolume}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "Volume: " + options.musicVolume}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
                             ], {width: "203px", height: "38px", borderBottom: "3px solid var(--regBorder)"}],
                             ["style-column", [
-                                ["raw-html", () => {return "</td><td><div style=\"margin: 0 10px\"><input type=range id=volume name=Music Volume min=1 max=10 value=" + options.musicVolume + " oninput=updateMusicVolume()><br>"}, {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "</td><td><div style=\"margin: 0 10px\"><input type=range id=volume name=Music Volume min=1 max=10 value=" + options.musicVolume + " oninput=updateMusicVolume()><br>"}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
                             ], {width: "203px", height: "39px"}],
                         ], {width: "203px", height: "80px", borderLeft: "3px solid var(--regBorder)"}],
                     ], {width: "306px"}],
@@ -318,10 +318,10 @@ addLayer("settings", {
                 ["blank", "8px"],
                 ["style-column", [
                     ["style-row", [
-                        ["raw-html", "Visual Options", {color: "#ccc", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", "Visual Options", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
                     ], {width: "306px", height: "30px", borderBottom: "3px solid var(--regBorder)"}],
                     ["style-row", [
-                        ["raw-html", "Themes", {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", "Themes", {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
                     ], {width: "306px", height: "20px", background: "var(--miscButtonDisable)", borderBottom: "3px solid var(--regBorder)"}],
                     ["style-row", [
                         ["clickable", 101], ["style-row", [], {width: "3px", height: "80px", background: "var(--regBorder)"}],
@@ -329,7 +329,7 @@ addLayer("settings", {
                         ["clickable", 103]
                     ], {width: "306px", borderBottom: "3px solid var(--regBorder)"}],
                     ["style-row", [
-                        ["raw-html", "Layouts", {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", "Layouts", {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
                     ], {width: "306px", height: "20px", background: "var(--miscButtonDisable)", borderBottom: "3px solid var(--regBorder)"}],
                     ["style-row", [
                         ["style-row", [], {width: "3px", height: "80px", background: "var(--regBorder)"}],
@@ -340,22 +340,22 @@ addLayer("settings", {
                 ["blank", "8px"],
                 ["top-column", [
                     ["style-row", [
-                        ["raw-html", "Credits", {color: "#ccc", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", "Credits", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
                     ], {width: "306px", height: "30px", borderBottom: "3px solid var(--regBorder)"}],
                     ["blank", "5px"],
-                    ["raw-html", "Game by Icecreamdude<hr>", {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", "Game by Icecreamdude<hr>", {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", "Music: !Sweet 150percent Icecreamdude<br>" +
                         "Content: Icecreamdude Forwaken<br>" +
                         "Ideas: Nova<br>" +
                         "Art: Jtoh_Sc Lemonsja<br>" +
                         "Testing: Nova Piterpicher<br>" +
-                        "Bug Fixing: Tsanth Forwaken", {color: "#ccc", fontSize: "12px", fontFamily: "monospace"}],
+                        "Bug Fixing: Tsanth Forwaken", {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
                     ["blank", "5px"],
                     ["style-row", [
                         ["raw-html", () => "<a href=https://discord.gg/icecreamdude-s-incremental-games-850817562040467556><button class=can style='display:flex;align-items:center;justify-content:center;width:306px;height:30px;font-size:16px;color:#dde0fc;background:#5865f2;border:3px solid #2c3279'>Join the Discord!</button></a>", {fontFamily: "monospace",}],
                     ], {width: "306px", height: "30px", borderTop: "3px solid var(--regBorder)"}],
                     ["style-row", [
-                        ["raw-html", () => {return "Playtime: " + formatTime(player.timePlayed)}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "Playtime: " + formatTime(player.timePlayed)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
                     ], {width: "306px", height: "29px", borderTop: "3px solid var(--regBorder)"}],
                 ], {width: "306px", height: "241px", background: "var(--layerBackground)", border: "3px solid var(--regBorder)"}],
                 ["blank", "8px"],

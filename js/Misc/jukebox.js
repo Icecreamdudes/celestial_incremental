@@ -16,7 +16,7 @@ addLayer("jukebox", {
             onClick() {
                 player.tab = "settings"
             },
-            style: { width: '125px', minHeight: '50px', color: "#ccc", background: "var(--miscButtonDisable)", borderRadius: '0px', border: "3px solid var(--regBorder)", margin: "0px 5px" },
+            style: { width: '125px', minHeight: '50px', color: "var(--textColor)", background: "var(--miscButtonDisable)", borderRadius: '0px', border: "3px solid var(--regBorder)", margin: "0px 5px" },
         },
         4: {
             title() { return "Savebank<br><small style='color:#f44'>[HEAVILY WIP]</small>" },
@@ -25,7 +25,7 @@ addLayer("jukebox", {
             onClick() {
                 player.tab = "savebank"
             },
-            style: { width: '125px', minHeight: '50px', color: "#ccc", background: "var(--miscButtonDisable)", borderRadius: '0px', border: "3px solid var(--regBorder)", margin: "0px 5px" },
+            style: { width: '125px', minHeight: '50px', color: "var(--textColor)", background: "var(--miscButtonDisable)", borderRadius: '0px', border: "3px solid var(--regBorder)", margin: "0px 5px" },
         },
         5: {
             title() { return "Changelog" },
@@ -34,7 +34,7 @@ addLayer("jukebox", {
             onClick() {
                 player.tab = "changelog"
             },
-            style: { width: '125px', minHeight: '50px', color: "#ccc", background: "var(--miscButtonDisable)", borderRadius: '0px', border: "3px solid var(--regBorder)", margin: "0px 5px" },
+            style: { width: '125px', minHeight: '50px', color: "var(--textColor)", background: "var(--miscButtonDisable)", borderRadius: '0px', border: "3px solid var(--regBorder)", margin: "0px 5px" },
         },
         7: {
             title() { return "Jukebox" },
@@ -43,7 +43,7 @@ addLayer("jukebox", {
             onClick() {
                 player.tab = "jukebox"
             },
-            style: { width: '125px', minHeight: '50px', color: "#ccc", background: "var(--miscButtonDisable)", borderRadius: '0px', border: "3px solid var(--regBorder)", margin: "0px 5px" },
+            style: { width: '125px', minHeight: '50px', color: "var(--textColor)", background: "var(--miscButtonDisable)", borderRadius: '0px', border: "3px solid var(--regBorder)", margin: "0px 5px" },
         },
         11: {
             title: "Universes",
@@ -53,7 +53,7 @@ addLayer("jukebox", {
                 player.subtabs["jukebox"]["stuff"] = "Universes"
             },
             style() {
-                let look = {width: "200px", minHeight: "40px", fontSize: "14px", color: "white", background: "var(--miscButton)", border: "3px solid var(--miscButtonDisable)", borderRadius: "0"}
+                let look = {width: "200px", minHeight: "40px", fontSize: "14px", color: "var(--textColor)", background: "var(--miscButton)", border: "3px solid var(--miscButtonDisable)", borderRadius: "0"}
                 if (player.subtabs["jukebox"]["stuff"] == "Universes") look.borderColor = "var(--selected)"
                 return look
             },
@@ -66,7 +66,7 @@ addLayer("jukebox", {
                 player.subtabs["jukebox"]["stuff"] = "Cutscenes"
             },
             style() {
-                let look = {width: "200px", minHeight: "40px", fontSize: "14px", color: "white", background: "var(--miscButton)", border: "3px solid var(--miscButtonDisable)", borderRadius: "0"}
+                let look = {width: "200px", minHeight: "40px", fontSize: "14px", color: "var(--textColor)", background: "var(--miscButton)", border: "3px solid var(--miscButtonDisable)", borderRadius: "0"}
                 if (player.subtabs["jukebox"]["stuff"] == "Cutscenes") look.borderColor = "var(--selected)"
                 return look
             },
@@ -79,7 +79,7 @@ addLayer("jukebox", {
                 player.subtabs["jukebox"]["stuff"] = "Black Heart"
             },
             style() {
-                let look = {width: "200px", minHeight: "40px", fontSize: "14px", color: "white", background: "var(--miscButton)", border: "3px solid var(--miscButtonDisable)", borderRadius: "0"}
+                let look = {width: "200px", minHeight: "40px", fontSize: "14px", color: "var(--textColor)", background: "var(--miscButton)", border: "3px solid var(--miscButtonDisable)", borderRadius: "0"}
                 if (player.subtabs["jukebox"]["stuff"] == "Black Heart") look.borderColor = "var(--selected)"
                 return look
             },
@@ -450,7 +450,7 @@ addLayer("jukebox", {
         ["row", [["clickable", 2], ["clickable", 7], ["clickable", 4], ["clickable", 5]]],
         ["blank", "50px"],
         ["style-column", [
-            ["raw-html", "Jukebox", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", "Jukebox", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
         ], {width: "650px", height: "40px", background: "var(--scroll4)", border: "3px solid var(--menuBackground)", marginBottom: "-3px", borderRadius: "30px 30px 0 0"}],
         ["style-row", [
             ["style-column", [
@@ -459,11 +459,11 @@ addLayer("jukebox", {
                         ["raw-html", () => {return "<img src='" + layers.jukebox.songs[options.jukeboxID].img + "'style='width:177px;height:177px'></img>"}, {width: "177px", height: "177px", display: "block"}],
                     ], {width: "177px", height: "177px", background: "black", border: "3px solid var(--menuBackground)", marginBottom: "5px"}],
                     ["style-column", [
-                        ["raw-html", () => {return layers.jukebox.songs[options.jukeboxID].name}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return "<i>", layers.jukebox.songs[options.jukeboxID].description + "</i>"}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return layers.jukebox.songs[options.jukeboxID].name}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "<i>", layers.jukebox.songs[options.jukeboxID].description + "</i>"}, {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
                     ], {width: "177px", height: "40px", background: "var(--miscButton)", borderRadius: "20px", marginBottom: "5px"}],
                     ["style-column", [
-                        ["raw-html", () => {return layers.jukebox.songs[options.jukeboxID].artist}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return layers.jukebox.songs[options.jukeboxID].artist}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
                     ], {width: "177px", height: "20px", background: "var(--miscButton)", borderRadius: "10px"}],
                 ], {width: "180px", height: "250px", borderBottom: "3px solid var(--menuBackground)", padding: "10px"}],
                 ["top-column", [
@@ -477,7 +477,7 @@ addLayer("jukebox", {
             ], {width: "447px", height: "600px", background: "var(--miscButtonDisable)"}],
         ], {width: "650px", height: "600px", background: "var(--tabTitle)", border: "3px solid var(--menuBackground)"}],
         ["style-row", [
-            ["raw-html", "Song names have not been decided.", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+            ["raw-html", "Song names have not been decided.", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
         ], {width: "650px", height: "30px", background: "var(--scroll4)", border: "3px solid var(--menuBackground)", marginTop: "-3px", borderRadius: "0 0 30px 30px"}],
     ],
     layerShown() { return false }

@@ -18,6 +18,7 @@ var colors = {
 		scroll3: "#424242",
 		scroll4: "#545454",
 		selected: "#a0a0a0",
+		textColor: "#ccc",
 
 		darkLayerBackground: "#000",
 		darkBorder: "#3d3d3d",
@@ -32,6 +33,7 @@ var colors = {
 		darkScroll3: "#212121",
 		darkScroll4: "#2a2a2a",
 		darkSelected: "#636363",
+		darkTextColor: "#ccc",
 	},
 	wood: {
 		regBorder: "#745a46",
@@ -48,6 +50,7 @@ var colors = {
 		scroll3: "#423328",
 		scroll4: "#534032",
 		selected: "#a27f65",
+		textColor: "#ccc",
 
 		darkLayerBackground: "#000",
 		darkBorder: "#32261e",
@@ -62,6 +65,7 @@ var colors = {
 		darkScroll3: "#211914",
 		darkScroll4: "#292019",
 		darkSelected: "#624a3b",
+		darkTextColor: "#ccc",
 	},
 	coral: {
 		regBorder: "#733939",
@@ -78,6 +82,7 @@ var colors = {
 		scroll3: "#4d2626",
 		scroll4: "#5a2d2d",
 		selected: "#a65252",
+		textColor: "#ccc",
 
 		darkLayerBackground: "#000",
 		darkBorder: "#391c1c",
@@ -92,6 +97,7 @@ var colors = {
 		darkScroll3: "#261313",
 		darkScroll4: "#2d1616",
 		darkSelected: "#6c3535",
+		darkTextColor: "#ccc",
 	},
 }
 function changeTheme() {
@@ -111,6 +117,7 @@ function changeTheme() {
 		document.body.style.setProperty('--scroll3', colors_theme["scroll3"]);
 		document.body.style.setProperty('--scroll4', colors_theme["scroll4"]);
 		document.body.style.setProperty('--selected', colors_theme["selected"]);
+		document.body.style.setProperty('--textColor', colors_theme["textColor"]);
 		document.body.style.setProperty('--scrollDecrement', "url(data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23" + colors_theme["regBorder"].slice(1) + "'><polygon points='50,00 0,50 100,50'/></svg>)");
 		document.body.style.setProperty('--scrollIncrement', "url(data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23" + colors_theme["regBorder"].slice(1) + "'><polygon points='0,0 100,0 50,50'/></svg>)");
 	} else {
@@ -128,6 +135,7 @@ function changeTheme() {
 		document.body.style.setProperty('--scroll3', colors_theme["darkScroll3"]);
 		document.body.style.setProperty('--scroll4', colors_theme["darkScroll4"]);
 		document.body.style.setProperty('--selected', colors_theme["darkSelected"]);
+		document.body.style.setProperty('--textColor', colors_theme["darkTextColor"]);
 		document.body.style.setProperty('--scrollDecrement', "url(data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23" + colors_theme["darkBorder"].slice(1) + "'><polygon points='50,00 0,50 100,50'/></svg>)");
 		document.body.style.setProperty('--scrollIncrement', "url(data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23" + colors_theme["darkBorder"].slice(1) + "'><polygon points='0,0 100,0 50,50'/></svg>)");
 	}

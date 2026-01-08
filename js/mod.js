@@ -633,6 +633,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added a jukebox in settings, which allows you to play any song you have seen in-game.<br>
 			- Revamped check back fragmentation.<br>
 			- Slightly revamped singularity epic pet layers.<br>
+			- Revamped the visuals of core fragments.<br>
 			- Added 3 new pets.<br>
 			- Revamped the stinger ship to only use mouse/touch controls.<br><br>
 		QoL:<br>

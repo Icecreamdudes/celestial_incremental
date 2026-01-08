@@ -413,7 +413,7 @@ addLayer("ne", {
         },
         501: {
             title: "Nectar δ-1",
-            unlocked: true,
+            unlocked() {return hasUpgrade("al", 220)},
             description: "Improve nectar γ's effect",
             cost() {
                 if (player.bee.path != 2) return new Decimal(1e60)
@@ -426,7 +426,7 @@ addLayer("ne", {
         },
         502: {
             title: "Nectar δ-2",
-            unlocked: true,
+            unlocked() {return hasUpgrade("al", 220)},
             description: "Multiply nectar cell base by x1.1",
             cost() {
                 if (player.bee.path != 2) return new Decimal(1e75)
@@ -439,7 +439,7 @@ addLayer("ne", {
         },
         503: {
             title: "Nectar δ-3",
-            unlocked: true,
+            unlocked() {return hasUpgrade("al", 220)},
             description: "Divide all flower cooldowns based on nectar ε",
             cost() {
                 if (player.bee.path != 2) return new Decimal(1e90)

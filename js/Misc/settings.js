@@ -449,9 +449,9 @@ addLayer("settings", {
                     ["style-row", [
                         ["raw-html", "Credits", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
                     ], {width: "306px", height: "30px", borderBottom: "3px solid var(--regBorder)"}],
-                    ["top-column", [
-                        ["blank", "10px"],
-                        ["raw-html", "Music: !Sweet 150percent Icecreamdude<br>" +
+                    ["style-column", [
+                        ["raw-html", "Game by Icecreamdude", {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                        ["raw-html", "Music: Icecreamdude !Sweet 150percent Citrine/Niko/Flushmak<br>" +
                             "Content: Icecreamdude Forwaken<br>" +
                             "Ideas: Nova<br>" +
                             "Art: Jtoh_Sc Lemonsja<br>" +

@@ -655,7 +655,8 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Moved save storage from local storage to IndexedDB.<br>
 			<small>(Shouldn't cause any issues, and even if it does you still have your old save in local storage)</small><br>
 			- Changed auto-pausing to save previous pause state.<br>
-			- Reworked the backend for the cutscene system.<br><br>
+			- Reworked the backend for the cutscene system.<br>
+			<small>(Unfortunately means that viewed cutscenes are reset, shouldn't happen again)</small><br><br>
 
 	<h3>v1.10 - Aleph Update Part I: The Hive</h3><br>
 		Content:<br>

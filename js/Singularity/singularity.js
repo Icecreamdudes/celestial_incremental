@@ -361,7 +361,7 @@
     milestones: {
         11: {
             requirementDescription: "<h3>1 Singularity",
-            effectDescription: "Start every singularity reset with 8 infinities. Keep alt-infinity limit breaks. Unlock realm essence and the factory.",
+            effectDescription: "Start every singularity reset with 8 infinities. Keep alt-infinity limit breaks. Unlock realm essence, stabilization, and the factory.",
             done() { return player.s.singularities.gte(1) },
             style: {width: "800px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },

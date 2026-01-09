@@ -802,9 +802,9 @@ addLayer("co", {
             player.ta.dimensionPowerPerSecond[i] = new Decimal(0)
         }
 
-        if (!hasMilestone("s", 16)) {
-            for (let i = 0; i < player.ta.dimensionAutobuyToggles.length; i++) {
-                player.ta.dimensionAutobuyToggles[i] = false
+        if (!hasMilestone("s", 17)) {
+            for (let i = 0; i < Object.keys(player.ta.autoBuy).length; i++) {
+                player.ta.autoBuy[Object.keys(player.ta.autoBuy)[i]].toggle = false
             }
         }
 

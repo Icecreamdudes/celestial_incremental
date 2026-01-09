@@ -110,8 +110,8 @@
 
 .tabNode {
 	position: relative;
-	height: 50px !important;
-	width: 200px !important;
+	height: 50px;
+	width: 200px;
 	border: var(--hqProperty1);
 	border-color: rgba(0, 0, 0, 0.125);
 	border-radius: 15px;

@@ -153,7 +153,8 @@
         player.d.dicePointsMult = player.d.dicePointsMult.pow(player.co.cores.dice.effect[1])
 
         // DICE POINT EFFECT
-        player.d.dicePointsEffect = player.d.dicePoints.plus(1).log10().mul(0.1).add(1)
+        player.d.dicePointsEffect = player.d.dicePoints.add(1).log(10).mul(0.1).add(1)
+        if (player.d.dicePointsEffect.eq(NaN) || player.d.dicePointsEffect.lt(1)) player.d.dicePointsEffect = new Decimal(1)
 
         //----------------------------------------
 

@@ -1190,7 +1190,7 @@ function loadVue() {
 		},
 		template: `
 		<div class="gridTrees">
-			<span class="gridCol" v-for="(row, r) in data">
+			<span class="gridCol" v-for="(row, r) in data" v-bind:class="{hide:!rowShown(data[r])}">
 				<div class="gridTitleHolder">
 					<div v-bind:class="{gridTitle:true}">
 						<span v-bind:class="{gridTitleText:true}" v-html="'Row ' + r"></span>

@@ -1168,7 +1168,7 @@ function loadVue() {
 		<div class="tabHolder">
 			<div class="tabRow" v-for="(row, r) in data" v-bind:class="{hide:!rowShown(data[r])}">
 				<div class="tabTitleHolder">
-					<div v-bind:class="{tabTitle:true,darkTabTitle:player.sma.inStarmetalChallenge}">
+					<div v-bind:class="{tabTitle:true}">
 						<span v-html="'Row ' + r"></span>
 					</div>
 				</div>
@@ -1180,6 +1180,32 @@ function loadVue() {
 			</div>
 		</div>
 	`
+	})
+
+	// Data is an array with the structure of the tree
+	Vue.component('grid-tree', {
+		props: ['layer', 'data'],
+		computed: {
+			key() {return this.$vnode.key}
+		},
+		template: `
+		<div class="gridTrees">
+			<span class="gridCol" v-for="(row, r) in data">
+				<div class="gridTitleHolder">
+					<div v-bind:class="{gridTitle:true}">
+						<span v-bind:class="{gridTitleText:true}" v-html="'Row ' + r"></span>
+					</div>
+				</div>
+				<span class="upgRow gridRowHolder">
+					<table class="gridRow">
+						<span v-for="(node, id) in row">
+							<grid-node :layer='node' :prev='layer' :abb='tmp[node].symbol' :key="key + '-' + r + '-' + id"></grid-node>
+						</span>
+					</table>
+				</span>
+			</span>
+		</div>
+		`
 	})
 
 
@@ -1361,6 +1387,7 @@ function loadVue() {
 	Vue.component('tab-buttons', systemComponents['tab-buttons'])
 	Vue.component('tree-node', systemComponents['tree-node'])
 	Vue.component('tab-node', systemComponents['tab-node'])
+	Vue.component('grid-node', systemComponents['grid-node'])
 	Vue.component('layer-tab', systemComponents['layer-tab'])
 	Vue.component('overlay-head', systemComponents['overlay-head'])
 	Vue.component('info-tab', systemComponents['info-tab'])

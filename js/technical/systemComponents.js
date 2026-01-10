@@ -84,6 +84,45 @@ var systemComponents = {
 		`
 	},
 
+	'grid-node': {
+		props: ['layer', 'abb', 'size', 'prev'],
+		template: `
+		<button v-if="nodeShown(layer)"
+			v-on:click="function() {
+				if(tmp[layer].isLayer) {
+					showTab(layer, prev)
+				}
+				else {run(layers[layer].onClick, layers[layer])}
+			}"
+			v-bind:class="{
+				gridNode: true,
+				smallNode: size == 'small',
+				[layer]: true,
+				tooltipBox: true,
+				ghost: tmp[layer].layerShown == 'ghost',
+				hidden: !tmp[layer].layerShown,
+				locked: tmp[layer].isLayer ? !(player[layer].unlocked || tmp[layer].canReset) : !(tmp[layer].canClick),
+				notify: tmp[layer].notify && player[layer].unlocked,
+				resetNotify: tmp[layer].prestigeNotify,
+				can: ((player[layer].unlocked || tmp[layer].canReset) && tmp[layer].isLayer) || (!tmp[layer].isLayer && tmp[layer].canClick),
+				front: !tmp.scrolled,
+			}"
+			v-bind:style="constructNodeStyle(layer)">
+			<span class="nodeLabel" v-html="(abb !== '' && tmp[layer].image === undefined) ? abb : '&nbsp;'"></span>
+			<tooltip v-if="tmp[layer].tooltip != ''"
+				:text="(tmp[layer].isLayer) ? (
+					player[layer].unlocked ? (run(layers[layer].tooltip, layers[layer]) ? run(layers[layer].tooltip, layers[layer]) : formatWhole(player[layer].points) + ' ' + tmp[layer].resource)
+					: (tmp[layer].tooltipLocked ? tmp[layer].tooltipLocked : 'Reach ' + formatWhole(tmp[layer].requires) + ' ' + tmp[layer].baseResource + ' to unlock (You have ' + formatWhole(tmp[layer].baseAmount) + ' ' + tmp[layer].baseResource + ')')
+				)
+				: (
+					tmp[layer].canClick ? (run(layers[layer].tooltip, layers[layer]) ? run(layers[layer].tooltip, layers[layer]) : 'I am a button!')
+					: (tmp[layer].tooltipLocked ? tmp[layer].tooltipLocked : 'I am a button!')
+			)"></tooltip>
+			<node-mark :layer='layer' :data='tmp[layer].marked'></node-mark></span>
+		</button>
+		`
+	},
+
 	'layer-tab': {
 		props: ['layer', 'back', 'spacing', 'embedded'],
 		template: `<div v-bind:style="[run(layers[layer].style, layers[layer]) ? run(layers[layer].style, layers[layer]) : {}, (tmp[layer].tabFormat && !Array.isArray(tmp[layer].tabFormat)) ? run(layers[layer].tabFormat[player.subtabs[layer].mainTabs].style, layers[layer].tabFormat[player.subtabs[layer].mainTabs]) : {}]" class="noBackground">

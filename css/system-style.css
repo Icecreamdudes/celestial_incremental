@@ -293,6 +293,48 @@
 		border-bottom: 3px solid var(--regBorder);
 		border-right: 0px !important;
 	}
+	.gridTrees {
+		display: inline-flex;
+		width: auto;
+		height: 290px;
+		flex-direction: row;
+	}
+	.gridNode {
+		margin: 2px 0px 2px 0px !important;
+	}
+	.gridRowHolder {
+		border-bottom: 0px !important;
+		border-right: 3px solid var(--regBorder);
+	}
+	.gridRow {
+		max-height: 290px;
+		display: flex !important;
+		flex-flow: column wrap !important;
+		margin: 0px 4px 0px 7px !important;
+	}
+	.gridCol {
+		display: inline-flex;
+		width: auto;
+		height: 290px;
+		flex-direction: row;
+	}
+	.gridTitleHolder {
+		min-height: 0px !important;
+		text-wrap: wrap !important;
+		width: 35px !important;
+		height: 290px !important;
+	}
+	.gridTitle {
+		width: 35px !important;
+		border-bottom: 0px !important;
+		border-right: 3px solid var(--regBorder);
+	}
+	.gridTitleText {
+		position: relative;
+		left: -8px;
+		text-wrap: nowrap;
+		transform: rotate(-90deg);
+	}
 }
 
 *:focus {

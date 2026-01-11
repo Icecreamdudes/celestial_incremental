@@ -101,12 +101,18 @@ function updateStyles() {
 			if (player.c.currentCutscene == 33 || player.c.currentCutscene == 34 || (player.c.currentCutscene == 35 && player.c.cutsceneIndex < 24)) layerBG = "linear-gradient(-180deg,rgb(114, 8, 4) 0%, rgb(114, 4, 85) 100%)"
 			break;
 		case "settings": case "jukebox": case "savebank": case "changelog": case "credits":
-			if (!player.sma.inStarmetalChallenge) layerBG = "linear-gradient(90deg, #57636d, #2e3d49)"
-			if (player.sma.inStarmetalChallenge) layerBG = "linear-gradient(90deg, #1b242b, #12181d)"
+			if (!player.sma.inStarmetalChallenge && !options.themeDarken) {
+				layerBG = "linear-gradient(90deg, #57636d, #2e3d49)"
+			} else {
+				layerBG = "linear-gradient(90deg, #1b242b, #12181d)"
+			}
 			break;
 		case "achievements":
-			if (!player.sma.inStarmetalChallenge) layerBG = "linear-gradient(45deg, #450054, #00307f)"
-			if (player.sma.inStarmetalChallenge) layerBG = "linear-gradient(90deg, #0d0010, #000919)"
+			if (!player.sma.inStarmetalChallenge && !options.themeDarken) {
+				layerBG = "linear-gradient(45deg, #450054, #00307f)"
+			} else {
+				layerBG = "linear-gradient(90deg, #0d0010, #000919)"
+			}
 			break;
 		case "po":
 			layerBG = "linear-gradient(45deg, #450054, #00307f)"
@@ -452,7 +458,7 @@ function updateStyles() {
 	let sideBG = ""
 
 	// Find background color
-	if (options.menuType == "Tree") {
+	if (options.menuType != "Tab") {
 		switch(player.universe) {
 			case "U2": 
 				sideBG = "#000f0c"
@@ -485,12 +491,11 @@ function updateStyles() {
 				sideBG = "#0b0b0b"
 				break;
 		}
-	}
-	if (options.menuType == "Tab") {
+	} else {
 		if (window.innerWidth > 1250) {
 			sideBG = "linear-gradient(to right, var(--tabTitle) 103px, var(--regBorder) 103px, var(--regBorder) 106px, var(--layerBackground) 106px)"
 		} else {
-			sideBG = "linear-gradient(to bottom, var(--tabTitle) 80px, var(--regBorder) 80px, var(--regBorder) 83px, (--layerBackground) 83px)"
+			sideBG = "linear-gradient(to bottom, var(--tabTitle) 80px, var(--regBorder) 80px, var(--regBorder) 83px, var(--layerBackground) 83px)"
 		}
 	}
 

@@ -857,6 +857,31 @@
         player.ma.depth3Cooldown = new Decimal(0)
     },
     clickables: {
+        1: {
+            title: "Emergency Escape",
+            canClick: true,
+            unlocked() { return player.ma.deadCharacters[0] && player.ma.deadCharacters[1] && player.ma.deadCharacters[2] && player.ma.deadCharacters[3]},
+            onClick() {
+                player.subtabs["ma"]["stuff"] = "Dead"
+
+                for (let i = 0; i < player.ma.deadCharacters.length; i++) {
+                    player.ma.health[i] = player.ma.healthMax[i]
+                    player.ma.deadCharacters[i] = false
+                }
+
+                player.ma.fightingCelestialites = false
+                player.ma.currentDepth = new Decimal(0)
+                player.ma.combo = new Decimal(0)
+                player.ma.currentCelestialiteType = new Decimal(0)
+
+                player.ma.attacksDone = new Decimal(0)
+                player.ma.epsilonCelestialitesKilled = new Decimal(0)
+                player.ma.omegaCelestialitesKilled = new Decimal(0)
+                player.ma.motivationCount  = new Decimal(0)
+                player.ma.matosFightActive = false
+            },
+            style: {width: "200px", minHeight: "80px", background: "black", border: "3px solid #8a0e79", borderRadius: "15px"},
+        },
         4: {
             title() { return "<h2>" + player.ma.matosUnlockConditionCount + "/4<br><h1 style='font-size: 80px;'>⊘</h1>" }, // Increased font size
             canClick() { return player.ma.matosUnlockConditions[0] && player.ma.matosUnlockConditions[1] && player.ma.matosUnlockConditions[2] && player.ma.matosUnlockConditions[3] },
@@ -4331,6 +4356,8 @@
                             ["row", [["clickable", 1002], ["clickable", 1003], ["clickable", 1004]]],
                         ], {width: "150px", height: "100px"}],
                     ]],
+                    ["blank", "50px"],
+                    ["clickable", 1],
                 ]
             },
             "Fight": {

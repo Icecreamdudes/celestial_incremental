@@ -490,31 +490,17 @@
                     ["infobox", "4"],
                 ],
             },
-            "Cutscene Rewatch": {
+            "Cutscene Viewer": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true},
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Note: THIS FEATURE IS HEAVILY BUGGED AND UNOPTIMIZED" }, { "color": "red", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Note 2: i completely broke this with the backend revamp lmao" }, { "color": "red", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "(Note: Cutscene requirements must be met in order to rewatch a cutscene.)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "(Cutscene IDs start at 0.)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Current Cutscene ID: " + formatWhole(player.i.cutsceneInput) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [
-                    ["text-input", "cutsceneInput", {
-                        color: "var(--color)",
-                        width: "400px",
-                        height: "48px",
-                        "font-family": "Calibri",
-                        "text-align": "left",
-                        "font-size": "32px",
-                        border: "2px solid #ffffff17",
-                        background: "var(--background)",
-                    }],
-                    ["clickable", 11],
-                    ]],
+                    ["style-row", [
+                        ["raw-html", "Cutscene Viewer", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
+                    ], {width: "700px", height: "40px", background: "var(--scroll4)", border: "3px solid var(--regBorder)", marginBottom: "-3px"}],
+                    ["always-scroll-column", [
+                        "cutscene-nodes",
+                    ], {width: "690px", height: "590px", background: "var(--layerBackground)", border: "3px solid var(--regBorder)", padding: "5px"}],
                 ],
             },
         },

@@ -3053,7 +3053,7 @@
             background: "radial-gradient(circle, #2a1c00, #150e00)",
             portrait: "resources/secret.png",
             music: "music/alephCutscene.mp3",
-            trigger() {return hasChallenge("fu", 12) && player.universe == "UB" && ((player.bee.path == 1 && player.bee.totalResearch.gte(165)) || (player.bee.path == 2 && player.bee.totalResearch.gte(170)))},
+            trigger() {return hasUpgrade("le", 201)},
             dialogue: [
                 { text: "It seems the paths have mostly converged.", portrait: "resources/aleph.png"},
                 { text: "This should allow you to build up enough power to unseal me.", portrait: "resources/aleph.png"},
@@ -3061,6 +3061,315 @@
                 { text: "No reason to potentially make the process harder for you.", portrait: "resources/aleph.png"},
                 { text: "You feel Aleph's presence weaken."},
                 { text: "Not much left to go, hopefully she keeps her promise.", portrait: "resources/player.png"},
+            ],
+        },
+        "D1-Legendary-Punchcards": {
+            type: "normal",
+            background: "linear-gradient(-180deg, #000000 100%)",
+            portrait: "resources/secret.png",
+            music: "music/aniciffoCutscene.mp3",
+            trigger() {return hasUpgrade("le", 201)},
+            dialogue: [
+                { text: "Your arsenal of superphysical values in the dark universe grows.", },
+                { text: "The collection of punchcards somewhat amuses you.", },
+                { text: "It's almost as if you have a strange personal connection with them.", },
+                { text: "Eclipse appears in front of you.", },
+                { text: "Finally, I'm able to speak.", portrait: "resources/eclipse.png"  },
+                { text: "No way... You can talk? How???", portrait: "resources/player.png"  },
+                { text: "The superphysical powers of this world have allowed me to speak to you telepathically.", portrait: "resources/eclipse.png"  },
+                { text: "I have a lot of things to ask you. Who really are you? Why have you decided to help us with defeating celestials.", portrait: "resources/player.png"  },
+                { text: "I am Nova, the Celestial of Singularity.", portrait: "resources/eclipse.png"  }, 
+                { text: "All the tortured souls of the domain of singularity...", portrait: "resources/eclipse.png"  },
+                { text: "They are currently in Nova's possesion.", portrait: "resources/eclipse.png"  },
+                { text: "I don't know what he plans on doing with those souls, but it's definitely not good.", portrait: "resources/eclipse.png"  },
+                { text: "Matos was only used to harvest those souls.", portrait: "resources/eclipse.png"  },
+                { text: "You seem to know a lot that of things we don't know. Why was Nova stuck in captive?", portrait: "resources/player.png"  },
+                { text: "There is another celestial out there. This celestial is responsible for capturing Nova.", portrait: "resources/eclipse.png"  },
+                { text: "This celestial is also responsible for my continued existence.", portrait: "resources/eclipse.png"  },
+                { text: "My time is up. We will continue our conversation later.", portrait: "resources/eclipse.png"  },
+            ],
+        },
+        "D1-Humanity-Punchcard": {
+            type: "normal",
+            background: "linear-gradient(-180deg, #000000 100%)",
+            portrait: "resources/secret.png",
+            music: "music/aniciffoCutscene.mp3",
+            trigger() {return getLevelableTier("pu", 401, true)},
+            dialogue: [
+                { text: "You see a strange reddish-pink punchcard appear in front of you.", },
+                { text: "The punchcard of humanity.", },
+                { text: "You have a sudden sense of realization.", },
+                { text: "After all of this, you are still human after all.", },
+                { text: "Have you ever truly lived a human life?", },
+                { text: "You still don't remember your life before waking up in the overworld.", },
+                { text: "Eclipse appears in front of you.", },
+                { text: "You know, I am also human as well.", portrait: "resources/eclipse.png"  },
+                { text: "How did he know what I was thinking about?", },
+                { text: "I've actually ruled the domain of singularity before in my past.", portrait: "resources/eclipse.png"  },
+                { text: "If it wasn't for me...", portrait: "resources/eclipse.png"  },
+                { text: "None of this would have happened.", portrait: "resources/eclipse.png"  },
+                { text: "I was the reason why our civilization fell into ruin.", portrait: "resources/eclipse.png"  },
+                { text: "I must save these souls. I must stop Nova.", portrait: "resources/eclipse.png"  },
+                { text: "I must stop Nova.", portrait: "resources/eclipse.png"  },
+                { text: "I must...", portrait: "resources/eclipse.png"  },
+                { text: "All of a sudden, Eclipse's smoke starts to glitch, phasing in and out of the universe.", },
+                { text: "Interesting.", },
+                { text: "Eclipse's story interests you. You must learn more.", },
+            ],
+        },
+        "D1-Blood": {
+            type: "normal",
+            portrait: "resources/secret.png",
+            trigger() {return player.bl.blood.gte(1)},
+            dialogue: [
+                { text: "You soon realize that you have superphysical powers imbued into your own blood.", },
+                { text: "Are these powers constructed into your very own physical being?", },
+                { text: "This raises a lot of questions.", },
+                { text: "You shoot out a small quantity of blood from your fingertips.", },
+                { text: "This blood is your very own. The pain is very minimal.", },
+                { text: "You remember seeing the infinity keeper use her own blood for certain situations.", },
+                { text: "But what could you possibly do with this blood?", },
+            ],
+        },
+        "D1-Blood-Battle": {
+            type: "normal",
+            portrait: "resources/secret.png",
+            trigger() {return player.subtabs["bl"]['stuff'] == 'Battle'},
+            dialogue: [
+                { text: "You notice a swarm of leeches, bats, and other creatures come in your way.", },
+                { text: "They must be attracted to the blood.", },
+                { text: "All of a sudden, you find yourself creating a spaceship using superphysical values.", },
+                { text: "The same ship as the ones you used against Iridite...", },
+                { text: "You kill a leech, and a singular red stone appears.", },
+                { text: "How interesting.", },
+            ],
+        },
+        "D1-Nox-Intro": {
+            type: "normal",
+            portrait: "resources/secret.png",
+            music: "music/aniciffoCutscene.mp3",
+            trigger() {return player.ir.battleLevel.gte(12) && player.subtabs["bl"]['stuff'] == 'Battle'},
+            dialogue: [
+                { text: "You become tired of fighting these blood creatures.", },
+                { text: "All of a sudden, you see a spear fly towards one of the creatures.", },
+                { text: "The smell of blood... It intruiges me.", portrait: "resources/nox.png"  },
+                { text: "Who are you?", portrait: "resources/player.png"  },
+                { text: "I'm glad you asked. I am Nox, the Vampire Knight!", portrait: "resources/nox.png"  },
+                { text: "I hunt celestials for a living, and I must make as much money as I can by doing so.", portrait: "resources/nox.png"  },
+                { text: "That's interesting. I also hunt celestials.", portrait: "resources/player.png"  },
+                { text: "Are you associated with the celestial hunting corporation?", portrait: "resources/player.png"  },
+                { text: "Never joined them. I don't see the point.", portrait: "resources/nox.png"  },
+                { text: "Why let a company take all the treasures when you can take them for yourself?", portrait: "resources/nox.png"  },
+                { text: "Oh well. I don't mind you helping me here.", portrait: "resources/player.png"  },
+                { text: "As long as you let me take all these blood stones I'm fine!", portrait: "resources/nox.png"  },
+            ],
+        },
+        "D1-Nox-Battle-Start": {
+            type: "normal",
+            portrait: "resources/secret.png",
+            music: "music/aniciffoCutscene.mp3",
+            trigger() {return player.bl.noxFightActive},
+            dialogue: [
+                { text: "Where is it?", portrait: "resources/nox.png"  },
+                { text: "Where is what?", portrait: "resources/player.png"  },
+                { text: "My blood stones.", portrait: "resources/nox.png"  },
+                { text: "Why would I give you MY blood stones?", portrait: "resources/player.png"  },
+                { text: "I helped you defeat these blood creatures. Now give them to me.", portrait: "resources/nox.png"  },
+                { text: "Dude I don't owe you a damn thing.", portrait: "resources/player.png"  },
+                { text: "Come on man... My family is struggling. I need to help them, and blood stones are a valuable resource in my universe.", portrait: "resources/nox.png"  },
+                { text: "This guy is starting to piss you off. There are larger things at stake than this man's family.", },
+                { text: "If you don't give me your blood stones, I'll fight you for them!!!", portrait: "resources/nox.png"  },
+                { text: "You proceed to get ready for battle.", },
+            ],
+        },
+        "D1-Nox-Battle-End": {
+            type: "normal",
+            portrait: "resources/secret.png",
+            music: "music/aniciffoCutscene.mp3",
+            trigger() {return player.bl.noxDefeated},
+            dialogue: [
+                { text: "Damn... You're kinda strong. I'll just let you keep your blood stones.", portrait: "resources/nox.png"  },
+                { text: "I sense the presence of a celestial in this universe. I don't know if you do, but I do.", portrait: "resources/nox.png"  },
+                { text: "There's a celestial here? I didn't even notice it.", portrait: "resources/player.png"  },
+                { text: "You have foresight powers, right? You should be able to detect this celestial.", portrait: "resources/nox.png"  },
+                { text: "Anyways. I won't bother you anymore if we go and defeat this celestial together.", portrait: "resources/nox.png"  },
+                { text: "I will take most of your loot though.", portrait: "resources/nox.png"  },
+                { text: "I guess you should help him with it... Defeating a celestial will make you stronger after all."  },
+                { text: "Fine. I will help you.", portrait: "resources/player.png"  },
+                { text: "This vampire... What is this superphysical power???"  },
+                { text: "It's so strong... The strongest you've ever seen."  },
+                { text: "Is he also using magic? Raw strength?"  },
+                { text: "Is this what happens when multiple power systems combine into one?"  },
+                { text: "If you want any luck at defeating all the celestials, you must become stronger."  },
+                { text: "And now you realize that you have a much longer way to go than you thought."  },
+            ],
+        },
+        "U1-Pylon": {
+            type: "normal",
+            portrait: "resources/secret.png",
+            trigger() {return player.i.pylonBuilt },
+            dialogue: [
+                { text: "Your ancient core fragments construct into a large tower.", },
+                { text: "A straight beam of beige light gets shot out of the tower.", },
+                { text: "You notice time to shift differently in this universe.", },
+                { text: "These pylons... They speed up time in a universe?", },
+                { text: "Time is a superphysical value after all.", },
+                { text: "You start to worry for Nav and Kres.", },
+                { text: "Celestials are going after them after all.", },
+                { text: "But what if...", },
+                { text: "Instead of waiting for the celestial, you go after the celestial yourself?", },
+            ],
+        },
+        "U2-Pylon": {
+            type: "normal",
+            portrait: "resources/secret.png",
+            trigger() {return player.in.pylonBuilt },
+            dialogue: [
+                { text: "Your paradox core fragments construct into a large tower.", },
+                { text: "Building these pylons are great and all, but wouldn't it be beneficial if you fought some celestials right now?", },
+                { text: "You start to think.", },
+                { text: "If Iridite was a celestial centered around the cosmos, and getting there required a lot of rocket fuel...", },
+                { text: "...the next celestial must either be centered around hex, or dice.", },
+                { text: "Dice seems more plausible right now, so you should go for dice.", },
+                { text: "It's not like much is going on in the hex universe after all.", },
+                { text: "Then you remember something: Challenge Dice Points.", },
+                { text: "A superphysical value shrouded in mysterious vibes.", },
+                { text: "You must investigate.", },
+            ],
+        },
+        "DS-Dice-Space": {
+            type: "normal",
+            portrait: "resources/secret.png",
+            background: "linear-gradient(45deg, #666666ff 0%, #585858ff 100%)",
+            music: "music/zarCutscene.mp3",
+            trigger() {return player.d.diceSpaceUnlocked },
+            dialogue: [
+                { text: "The accuracy of your intuition frightens you." },
+                { text: "A rift has formed in the overworld, due to an excess of challenge dice points." },
+                { text: "You enter the rift, and find yourself in a strange universe." },
+                { text: "It is a small universe, that appears to be a liminal, abandoned casino." },
+                { text: "The presence of a celestial is strong." },
+                { text: "It must be the next celestial." },
+                { text: "You begin to explore this strange universe." },
+            ],
+        },
+        "DS-Zar-Reqs": {
+            type: "normal",
+            portrait: "resources/secret.png",
+            music: "music/zarCutscene.mp3",
+            background: "linear-gradient(45deg, #666666ff 0%, #585858ff 100%)",
+            trigger() {return player.c.cutscene2[10] && (player.za.zarReqs[0] || player.za.zarReqs[1] || player.za.zarReqs[2] || player.za.zarReqs[3] || player.za.zarReqs[4] || player.za.zarReqs[5]) },
+            dialogue: [
+                { text: "As you explore the universe, you find a small structure." },
+                { text: "It is a person-sized dice, with six notches, signifying six requirements." },
+                { text: "You must fill these out in order to summon the next celestial." },
+                { text: "You see a strange dice-person walk up to you." },
+                { text: "Hello. We haven't recieved visitors in a long, long, time.", portrait: "resources/diceThree.png"  },
+                { text: "He appears to have be a person with a dice head, and wearing a tuxedo with a vibrant red tie. For some reason there are only 3 dots on his face."  },
+                { text: "This person isn't a celestial either."  },
+                { text: "I am visiting so I can defeat a celestial. Would you be able to help me with that?", portrait: "resources/player.png"  },
+                { text: "You must be referring to Zar. Please don't kill him. He may be a celestial, but he's the reason I'm even alive to begin with.", portrait: "resources/diceThree.png"  },
+                { text: "Then who are you?", portrait: "resources/player.png"  },
+                { text: "I am only a mere byproduct of Zar's superphysical powers, but Zar has taken care of me and provided for me ever since I was created.", portrait: "resources/diceThree.png"  },
+                { text: "Another being with only one dot appears."  },
+                { text: "Come on three. We must go back to the card room. There is something important we need to discuss with Zar.", portrait: "resources/diceOne.png"  },
+                { text: "I have to go now... Please. Please don't kill Zar.", portrait: "resources/diceThree.png"  },
+                { text: "How strange. Zar must have an entire family of dice-people." },
+            ],
+        },
+        "DS-Zar-Unlock": {
+            type: "normal",
+            portrait: "resources/secret.png",
+            music: "music/zarCutscene.mp3",
+            background: "linear-gradient(45deg, #666666ff 0%, #585858ff 100%)",
+            trigger() {return player.za.zarUnlocked },
+            dialogue: [
+                { text: "You activate all six dots on the dice, and begin to feel shaking." },
+                { text: "You hear laughter coming from the distance." },
+                { text: "Heehee!!! You use your silly little superphysical powers to find me! This will make my job a lot easier now!", portrait: "resources/zar.png"  },
+                { text: "This gives you a bad feeling. You remember Kres and Nav. They are still in danger. You must find Zar before they get killed." },
+                { text: "Oh really? I know what your plan is. You know I already defeated Iridite. You should be no different.", portrait: "resources/player.png"  },
+                { text: "I know who you are. Mister Nova told me all about you. I know what I have to do now!", portrait: "resources/zar.png"  },
+                { text: "I'm not weak, like Iridite. Unlike her, I actually have a family that I care about!", portrait: "resources/zar.png"  },
+                { text: "Do you think that matters? The damage you have inflicted on others. The pain and suffering you have caused. I will be sure to end it.", portrait: "resources/player.png"  },
+                { text: "Very well then. I would love to see you try me!", portrait: "resources/zar.png"  },
+                { text: "..." },
+            ],
+        },
+        "DS-Zar-CoinFlip": {
+            type: "normal",
+            portrait: "resources/secret.png",
+            music: "music/zarCutscene.mp3",
+            background: "linear-gradient(45deg, #666666ff 0%, #585858ff 100%)",
+            trigger() {return hasUpgrade("za", 12) },
+            dialogue: [
+                { text: "Think. How will you get to Zar? How will you fight him?" },
+                { text: "These are questions that you must answer. You must decide what you will do.", },
+                { text: "You remember the dice in the previous room talking about a \"Card Room\". Maybe Zar is in there.", },
+                { text: "You walk through the abandoned casino, and find a strange glowing room.", },
+                { text: "You enter it, and you find a room with nothing, but a single coin.", },
+                { text: "Hello. Would you like to flip the coin?", portrait: "resources/diceTwo.png"  },
+                { text: "What do you want... You are just one of Zar's children.", portrait: "resources/player.png"  },
+                { text: "We may be Zar's children, but we control the superphysical values that hold this universe together.", portrait: "resources/diceTwo.png"  },
+                { text: "If you actually want to gain something out of this place, at least try flipping the coin.", portrait: "resources/diceTwo.png"  },
+                { text: "Is this a trick? Oh well. It's just a coin. What's the worst that could happen.", },
+                { text: "And besides, you'll just spend more time with this strange dice guy. You can probably get information out of him.", },
+            ],
+        },
+        "DS-Zar-WheelOfFortune": {
+            type: "normal",
+            portrait: "resources/secret.png",
+            music: "music/zarCutscene.mp3",
+            background: "linear-gradient(45deg, #666666ff 0%, #585858ff 100%)",
+            trigger() {return hasUpgrade("za", 13) },
+            dialogue: [
+                { text: "So... What were you guys talking about in the card room?", portrait: "resources/player.png"  },
+                { text: "I can't say anything.", portrait: "resources/diceTwo.png"  },
+                { text: "Oh really? I've already flipped this coin enough times. I think that pleased you enough, didn't it?", portrait: "resources/player.png"  },
+                { text: "I'm telling you, I can't say anything.", portrait: "resources/diceTwo.png"  },
+                { text: "You are getting annoyed. You grab the dice man by his collar and slam him onto the ground." },
+                { text: "Tell me now, or else I'm going to flip you instead of the coin!", portrait: "resources/player.png"  },
+                { text: "You suddenly have a horrible migraine. It's almost as if your neurons are firing at random intervals." },
+                { text: "You hear a voice in play in your head." },
+                { text: "Haehheahhahahhaa!!!!! This is hilarious!", portrait: "resources/zar.png"  },
+                { text: "You think you're so tuff, trying to mess with my children, but you're just a fool.", portrait: "resources/zar.png"  },
+                { text: "Who knows, maybe poor Nav might have to pay with her life if you keep trying to mess with my family!", portrait: "resources/zar.png"  },
+                { text: "You have been warned.", portrait: "resources/zar.png"  },
+                { text: "For the first time ever since you woke up, you felt a slight sense of fear." },
+                { text: "All of a sudden, the dice guy dissapears for some strange reason." },
+                { text: "You find a new door appear in front of you." },
+                { text: "You walk through the door and find a green room with a giant wheel in the back." },
+                { text: "You see a new dice guy in this room." },
+                { text: "Spin the wheel.", portrait: "resources/diceFour.png"  },
+                { text: "I guess you must continue forward." },
+            ],
+        },
+        "DS-Zar-SpinWheel": {
+            type: "normal",
+            portrait: "resources/secret.png",
+            music: "music/pianoCutscene.mp3",
+            background: "#5c4b4b",
+            trigger() {return player.wof.wheelPoints.gte(1) },
+            dialogue: [
+                { text: "You are sent to another flashback."  },
+                { text: "It looks like the celestial hunting corporation's office again."  },
+                { text: "So, were going to leave tomorrow, right?", portrait: "resources/humanZar.png"  },
+                { text: "Yes. That is right.", portrait: "resources/iriditeHuman.png"  },
+                { text: "Thanks for talking to me then. I'm glad that us non-foresight users can go on this important mission.", portrait: "resources/humanZar.png"  },
+                { text: "Oh, it seems to me that I haven't introduced myself yet.", portrait: "resources/iriditeHuman.png"  },
+                { text: "My name is Illira. Nice to meet you, Raze.", portrait: "resources/iriditeHuman.png"  },
+                { text: "Well that's strange. Their names weren't censored."  },
+                { text: "That's a nice name. It reminds me of the title to a song I heard once. A song from a video game I played a long time ago.", portrait: "resources/humanZar.png"  },
+                { text: "What's a video game?", portrait: "resources/iriditeHuman.png"  },
+                { text: "Oh, I guess your home universe hasn't advanced to that point yet. Haha.", portrait: "resources/humanZar.png"  },
+                { text: "Well I have a lot of things to learn, I only started a few months ago.", portrait: "resources/iriditeHuman.png"  },
+                { text: "Damn. You've missed out on a lot. 21st century culture is very interesting.", portrait: "resources/humanZar.png"  },
+                { text: "I will certainly try everything, when we are on our year-long voyage to the other universe!", portrait: "resources/iriditeHuman.png"  },
+                { text: "Yes! I'm definitely binging like, twelve tv shows when were on there. You need to as well!", portrait: "resources/humanZar.png"  },
+                { text: "I certainly will.", portrait: "resources/iriditeHuman.png"  },
+                { text: "These are the people who will eventually be ruthless celestials."  },
+                { text: "Here you are, watching them have normal conversations."  },
+                { text: "How sad..."  },
             ],
         },
     },
@@ -3151,138 +3460,3 @@ if (!document.getElementById("embers-css")) {
 }
 // i wrote basically all of the cutscenes. and if i didnt, ice wrote them and god is he awful at writing. i cleaned up and polished all of the things he wrote. im writing this at 1:27 am, 10/4/24. the game is set to release today, either in the morning or in the afternoon.
 
-/*
-if (player.c.cutscene2[0] && hasUpgrade("le", 201)) //MAKE SURE A DIFFERENT CUTSCENE PLAYS IF YOU HAVE ALREADY BEATEN NOVA
-{
-    showCutscene(cutsceneDialogueA1, {
-    cutsceneID: -1,
-    background: "linear-gradient(-180deg, #000000 100%)",
-        portrait: "resources/secret.png"
-    });
-    player.c.cutscene2[0] = false
-}
-if (player.c.cutscene2[1] && getLevelableTier("pu", 401, true))
-{
-    showCutscene(cutsceneDialogueA2, {
-    cutsceneID: -2,
-    background: "linear-gradient(-180deg, #000000 100%)",
-        portrait: "resources/secret.png"
-    });
-    player.c.cutscene2[1] = false
-}
-if (player.c.cutscene2[2] && player.bl.blood.gte(1)) 
-{
-    showCutscene(cutsceneDialogueA3, {
-    cutsceneID: -3,
-        portrait: "resources/secret.png"
-    });
-    player.c.cutscene2[2] = false
-}
-if (player.c.cutscene2[3] && player.subtabs["bl"]['stuff'] == 'Battle')
-{
-    showCutscene(cutsceneDialogueA4, {
-    cutsceneID: -4,
-        portrait: "resources/secret.png"
-    });
-    player.c.cutscene2[3] = false
-}
-if (player.c.cutscene2[4] && player.i.pylonBuilt)
-{
-    showCutscene(cutsceneDialogueA5, {
-    cutsceneID: -5,
-        portrait: "resources/secret.png"
-    });
-    player.c.cutscene2[4] = false
-}
-if (player.c.cutscene2[5] && player.ir.battleLevel.gte(12) && player.subtabs["bl"]['stuff'] == 'Battle')
-{
-    showCutscene(cutsceneDialogueA6, {
-    cutsceneID: -6,
-        portrait: "resources/secret.png"
-    });
-    player.c.cutscene2[5] = false
-}
-if (player.c.cutscene2[6] && player.in.pylonBuilt)
-{
-    showCutscene(cutsceneDialogueA7, {
-    cutsceneID: -7,
-        portrait: "resources/secret.png"
-    });
-    player.c.cutscene2[6] = false
-}
-if (player.c.cutscene2[7] && player.bl.noxFightActive)
-{
-    showCutscene(cutsceneDialogueA8, {
-    cutsceneID: -8,
-        portrait: "resources/secret.png"
-    });
-    player.c.cutscene2[7] = false
-}
-if (player.c.cutscene2[8] && player.bl.noxDefeated)
-{
-    showCutscene(cutsceneDialogueA9, {
-    cutsceneID: -9,
-        portrait: "resources/secret.png"
-    });
-    player.c.cutscene2[8] = false
-}
-if (player.c.cutscene2[9] && player.d.diceSpaceUnlocked)
-{
-    showCutscene(cutsceneDialogueA10, {
-    cutsceneID: -10,
-        portrait: "resources/secret.png"
-    });
-    player.c.cutscene2[9] = false
-
-    layers.wof.randomizeSegments()
-}
-if (player.c.cutscene2[10] && (player.za.zarReqs[0] || player.za.zarReqs[1] || player.za.zarReqs[2] || player.za.zarReqs[3] || player.za.zarReqs[4] || player.za.zarReqs[5]))
-{
-    showCutscene(cutsceneDialogueA11, {
-    background: "linear-gradient(45deg, #666666ff 0%, #585858ff 100%)",
-    cutsceneID: -11,
-        portrait: "resources/secret.png"
-    });
-    player.c.cutscene2[10] = false
-}
-if (player.c.cutscene2[11] && player.za.zarUnlocked)
-{
-    showCutscene(cutsceneDialogueA12, {
-    background: "linear-gradient(45deg, #666666ff 0%, #585858ff 100%)",
-    cutsceneID: -12,
-        portrait: "resources/secret.png"
-    });
-    player.c.cutscene2[11] = false
-}
-if (player.c.cutscene2[12] && hasUpgrade("za", 12))
-{
-    showCutscene(cutsceneDialogueA13, {
-    background: "linear-gradient(45deg, #666666ff 0%, #585858ff 100%)",
-    cutsceneID: -13,
-        portrait: "resources/secret.png"
-    });
-    player.c.cutscene2[12] = false
-}
-if (player.c.cutscene2[13] && hasUpgrade("za", 13))
-{
-    showCutscene(cutsceneDialogueA14, {
-    background: "linear-gradient(45deg, #666666ff 0%, #585858ff 100%)",
-    cutsceneID: -14,
-        portrait: "resources/secret.png"
-    });
-    player.c.cutscene2[13] = false
-}
-
-			//arbitary IDs
-			if (cutsceneID == -1) playAndLoopAudio("music/aniciffoCutscene.mp3", options.musicVolume/10);
-			if (cutsceneID == -2) playAndLoopAudio("music/aniciffoCutscene.mp3", options.musicVolume/10);
-			//no music for -3
-			if (cutsceneID == -6) playAndLoopAudio("music/aniciffoCutscene.mp3", options.musicVolume/10);
-			if (cutsceneID == -8) playAndLoopAudio("music/aniciffoCutscene.mp3", options.musicVolume/10);
-			if (cutsceneID == -9) playAndLoopAudio("music/aniciffoCutscene.mp3", options.musicVolume/10);
-
-			if (cutsceneID == -11) playAndLoopAudio("music/zarCutscene.mp3", options.musicVolume/10);
-			if (cutsceneID == -12) playAndLoopAudio("music/zarCutscene.mp3", options.musicVolume/10);
-			if (cutsceneID == -13) playAndLoopAudio("music/zarCutscene.mp3", options.musicVolume/10);
-			if (cutsceneID == -14) playAndLoopAudio("music/zarCutscene.mp3", options.musicVolume/10);
-*/

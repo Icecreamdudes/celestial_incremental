@@ -28,6 +28,15 @@
 
         flipCost: new Decimal(10),
         coinsFlipped: new Decimal(0),
+
+        autoFlip: false,
+
+        //softcap
+        headsSoftcapStart: new Decimal(10000),
+        headsSoftcapEffect: new Decimal(1),
+
+        tailsSoftcapStart: new Decimal(10000),
+        tailsSoftcapEffect: new Decimal(1),
     }},
     automate() {},
     nodeStyle() {
@@ -68,6 +77,7 @@
         // keep a sensible default
         player.cf.flipLength = new Decimal(5)
         player.cf.flipLength = player.cf.flipLength.div(buyableEffect("cf", 32))
+        player.cf.flipLength = player.cf.flipLength.div(buyableEffect("wof", 12))
 
         //heads
         player.cf.headsToGet = new Decimal(1)
@@ -75,6 +85,8 @@
         player.cf.headsToGet = player.cf.headsToGet.mul(buyableEffect("cf", 11))
         player.cf.headsToGet = player.cf.headsToGet.mul(buyableEffect("cf", 21))
         player.cf.headsToGet = player.cf.headsToGet.mul(player.wof.wheelPointsEffect3)
+        player.cf.headsToGet = player.cf.headsToGet.mul(buyableEffect("wof", 11))
+        player.cf.headsToGet = player.cf.headsToGet.div(player.cf.headsSoftcapEffect)
 
         player.cf.headsEffect = player.cf.heads.pow(0.65).add(1).pow(buyableEffect("cf", 14))
         player.cf.headsEffect2 = player.cf.heads.div(10).pow(0.25).add(1).pow(buyableEffect("cf", 14))
@@ -85,6 +97,8 @@
         player.cf.tailsToGet = player.cf.tailsToGet.mul(buyableEffect("cf", 11))
         player.cf.tailsToGet = player.cf.tailsToGet.mul(buyableEffect("cf", 31))
         player.cf.tailsToGet = player.cf.tailsToGet.mul(player.wof.wheelPointsEffect3)
+        player.cf.tailsToGet = player.cf.tailsToGet.mul(buyableEffect("wof", 11))
+        player.cf.tailsToGet = player.cf.tailsToGet.div(player.cf.tailsSoftcapEffect)
 
         player.cf.tailsEffect = player.cf.tails.pow(0.5).add(1).pow(buyableEffect("cf", 14))
         player.cf.tailsEffect2 = player.cf.tails.div(10).pow(0.25).add(1).pow(buyableEffect("cf", 14))
@@ -92,8 +106,42 @@
         //flip prices
         if (player.cf.coinsFlipped.lt(25)) player.cf.flipCost = player.cf.coinsFlipped.pow(1.5).div(3).add(1).mul(10)
         if (player.cf.coinsFlipped.gte(25)) player.cf.flipCost = player.cf.coinsFlipped.pow(2.25).div(3).add(1).mul(10)
+        if (player.cf.coinsFlipped.gte(100)) player.cf.flipCost = player.cf.coinsFlipped.pow(2.5).add(1).mul(10)
         player.cf.flipCost = player.cf.flipCost.div(buyableEffect("cf", 22))
 
+        if (player.cf.autoFlip)
+        {
+            if (player.za.chancePoints.gte(player.cf.flipCost) && !player.cf.flipping)
+            {
+                layers.cf.coinFlip();
+
+                player.za.chancePoints = player.za.chancePoints.sub(player.cf.flipCost)
+
+                player.cf.coinsFlipped = player.cf.coinsFlipped.add(1)
+            }
+        }
+
+        player.cf.headsSoftcapStart = new Decimal(10000)
+        player.cf.headsSoftcapStart = player.cf.headsSoftcapStart.mul(buyableEffect("wof", 14))
+        player.cf.headsSoftcapStart = player.cf.headsSoftcapStart.mul(buyableEffect("cf", 33))
+        if (player.cf.heads.gte(player.cf.headsSoftcapStart))
+        {
+            player.cf.headsSoftcapEffect = player.cf.heads.sub(player.cf.headsSoftcapStart).pow(0.35).add(1)
+        } else
+        {
+            player.cf.headsSoftcapEffect = new Decimal(1)
+        }
+
+        player.cf.tailsSoftcapStart = new Decimal(10000)
+        player.cf.tailsSoftcapStart = player.cf.tailsSoftcapStart.mul(buyableEffect("wof", 14))
+        player.cf.tailsSoftcapStart = player.cf.tailsSoftcapStart.mul(buyableEffect("cf", 23))
+        if (player.cf.tails.gte(player.cf.tailsSoftcapStart))
+        {
+            player.cf.tailsSoftcapEffect = player.cf.tails.sub(player.cf.tailsSoftcapStart).pow(0.35).add(1)
+        } else
+        {
+            player.cf.tailsSoftcapEffect = new Decimal(1)
+        }
     },
     clickables: {
         11: {
@@ -110,6 +158,18 @@
             },
             onHold() { clickClickable(this.layer, this.id) },
             style: { width: '100px', "min-height": '100px', borderRadius: "1000px", backgroundColor: "#202020ff", borderColor: "#000000ff", color: "#ffffff" },
+        },
+        12: {
+            title() { return player.cf.autoFlip ? "Autoflip: ON" : "Autoflip: OFF" },
+            canClick() { return player.za.chancePoints.gte(player.cf.flipCost) },
+            unlocked() { return hasUpgrade("za", 14) },
+            onClick() {
+                if (!player.cf.autoFlip) player.cf.autoFlip = true
+                else player.cf.autoFlip = false
+            },
+            style() { 
+                return { width: '100px', "min-height": '100px', borderRadius: "15px 15px 15px 15px", border: "3px solid #9b5a48ff", backgroundColor: "#744335ff" }
+            },
         },
     },
     coinFlip() {
@@ -234,7 +294,7 @@
             },
             display() {
                 return 'which are boosting both heads and tails gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Chance Points'
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Chance Points'
             },
             buy(mult) {
                 if (mult != true) {
@@ -268,7 +328,7 @@
             },
             display() {
                 return 'which are boosting chance points by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Chance Points'
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Chance Points'
             },
             buy(mult) {
                 if (mult != true) {
@@ -302,7 +362,7 @@
             },
             display() {
                 return 'which are extending the chance points softcap by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Chance Points'
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Chance Points'
             },
             buy(mult) {
                 if (mult != true) {
@@ -323,8 +383,8 @@
         },
         14: {
             costBase() { return new Decimal(1000) },
-            costGrowth() { return new Decimal(10) },
-            purchaseLimit() { return new Decimal(25) },
+            costGrowth() { return new Decimal(100) },
+            purchaseLimit() { return new Decimal(10) },
             currency() { return player.za.chancePoints },
             pay(amt) { player.za.chancePoints = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1)},
@@ -336,7 +396,7 @@
             },
             display() {
                 return 'which are raising heads and tails effects by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Chance Points'
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Chance Points'
             },
             buy(mult) {
                 if (mult != true) {
@@ -360,19 +420,19 @@
         21: {
             costBase() { return new Decimal(2) },
             costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return new Decimal(1000) },
             currency() { return player.cf.heads },
             pay(amt) { player.cf.heads = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.2).mul(0.1).add(1)},
             unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase())},
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "Heads > Tails (I'm not biased because my symbol is on it)."
             },
             display() {
                 return 'which are boosting heads gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Heads'
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Heads'
             },
             buy(mult) {
                 if (mult != true) {
@@ -394,19 +454,19 @@
         22: {
             costBase() { return new Decimal(6) },
             costGrowth() { return new Decimal(1.4) },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return new Decimal(250) },
             currency() { return player.cf.heads },
             pay(amt) { player.cf.heads = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.25).mul(0.5).add(1)},
             unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "Let me flip more coins please!"
             },
             display() {
                 return 'which dividing coin flip cost by /' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Heads'
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Heads'
             },
             buy(mult) {
                 if (mult != true) {
@@ -425,24 +485,91 @@
             },
             style: { width: '192px', height: '221px', color: "black", backgroundImage: "linear-gradient(120deg, rgb(129, 112, 93) 0%, rgb(156, 93, 74) 100%)" }
         },
-        
+        23: {
+            costBase() { return new Decimal(10000) },
+            costGrowth() { return new Decimal(1.75) },
+            purchaseLimit() { return new Decimal(250) },
+            currency() { return player.cf.heads },
+            pay(amt) { player.cf.heads = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.15).mul(0.35).add(1)},
+            unlocked() { return hasUpgrade("za", 15) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Might as well just extend the softcap a bit more"
+            },
+            display() {
+                return 'which are extending the tails softcap by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Heads'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '192px', height: '221px', color: "black", backgroundImage: "linear-gradient(120deg, rgb(129, 112, 93) 0%, rgb(156, 93, 74) 100%)" }
+        },
+        24: {
+            costBase() { return new Decimal(50000) },
+            costGrowth() { return new Decimal(2.5) },
+            purchaseLimit() { return new Decimal(250) },
+            currency() { return player.cf.heads },
+            pay(amt) { player.cf.heads = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.5).add(1)},
+            unlocked() { return hasUpgrade("za", 15) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "You're such a gambling addict."
+            },
+            display() {
+                return 'which are boosting wheel point gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Heads'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '192px', height: '221px', color: "black", backgroundImage: "linear-gradient(120deg, rgb(129, 112, 93) 0%, rgb(156, 93, 74) 100%)" }
+        },
         //tails
         31: {
             costBase() { return new Decimal(2) },
             costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return new Decimal(1000) },
             currency() { return player.cf.tails },
             pay(amt) { player.cf.tails = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.2).mul(0.1).add(1)},
             unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "Bruh why is Iridite even the symbol for tails I hate her"
             },
             display() {
                 return 'which are boosting tails gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Tails'
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Tails'
             },
             buy(mult) {
                 if (mult != true) {
@@ -469,14 +596,82 @@
             pay(amt) { player.cf.tails = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.25).add(1)},
             unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "Let me flip coins faster!"
             },
             display() {
                 return 'which dividing coin flip length by /' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Tails'
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Tails'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '192px', height: '221px', color: "black", backgroundImage: "linear-gradient(120deg, rgb(129, 112, 93) 0%, rgb(156, 93, 74) 100%)" }
+        },
+        33: {
+            costBase() { return new Decimal(10000) },
+            costGrowth() { return new Decimal(1.75) },
+            purchaseLimit() { return new Decimal(250) },
+            currency() { return player.cf.tails },
+            pay(amt) { player.cf.tails = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.15).mul(0.35).add(1)},
+            unlocked() { return hasUpgrade("za", 15) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Why are everything just extending softcaps we need more creative boosts"
+            },
+            display() {
+                return 'which are extending the heads softcap by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Tails'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '192px', height: '221px', color: "black", backgroundImage: "linear-gradient(120deg, rgb(129, 112, 93) 0%, rgb(156, 93, 74) 100%)" }
+        },
+        34: {
+            costBase() { return new Decimal(50000) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(250) },
+            currency() { return player.cf.tails },
+            pay(amt) { player.cf.tails = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.25).mul(0.25).add(1)},
+            unlocked() { return hasUpgrade("za", 15) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Encourage your gambling addiction"
+            },
+            display() {
+                return 'which are dividing wheel spin cost by /' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Tails'
             },
             buy(mult) {
                 if (mult != true) {
@@ -513,11 +708,13 @@
                     ["style-column", [ //heads
                     ["style-column", [ 
                     ["raw-html", function () { return "You have <h3>" + format(player.cf.heads) + "</h3> heads. (+" + format(player.cf.headsToGet) + ")" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", () => { return player.cf.heads.gte(player.cf.headsSoftcapStart) ? "After " + format(player.cf.headsSoftcapStart) + " heads, gain is divided by /" + format(player.cf.headsSoftcapEffect) + "." : "" }, {color: "red", fontSize: "14px", fontFamily: "monospace"}],
                     ["raw-html", function () { return "Boosts chance points by x" + format(player.cf.headsEffect) + "." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Boosts tails gain by x" + format(player.cf.headsEffect2) + "." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ], {width: "400px", height: "97px", background: "rgb(129, 112, 93, 0.5)", border: "3px solid #ccc", borderBottom: "0px", borderTop: "0px", borderLeft: "0px", borderRadius: "15px 0px 0px 0px"}],   
                     ["style-column", [ 
                     ["row", [["ex-buyable", 21],["ex-buyable", 22],]],
+                    ["row", [["ex-buyable", 23],["ex-buyable", 24],]],
                     ], {width: "400px", height: "600px", background: "rgb(129, 112, 93, 0.5)", border: "3px solid #ccc", borderRight: "0px", borderLeft: "0px", borderRadius: "0px 0px 0px 15px"}],  
                     ], {width: "400px", height: "700px", background: "rgb(129, 112, 93, 0.5)", border: "0px solid #ccc", borderRight: "0px", borderLeft: "0px", borderRadius: "15px 0px 0px 15px"}],
                     
@@ -530,7 +727,7 @@
                     ["raw-html", function () { return "Coins flipped: " + formatWhole(player.cf.coinsFlipped) + "." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Cost to flip coin: " + format(player.cf.flipCost) + " Chance Points." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [ ["clickable", 11],]],
+                    ["row", [ ["clickable", 11], ["blank", "25px"], ["clickable", 12],]],
                     ], {width: "394px", height: "247px", background: "rgb(156, 93, 74, 0.5)", border: "0px solid #ccc",   borderRadius: "0px"}],
                     ["style-column", [ 
                     ["row", [["ex-buyable", 11],["ex-buyable", 12],]],
@@ -543,11 +740,13 @@
                     ["style-column", [ //tails
                     ["style-column", [ 
                     ["raw-html", function () { return "You have <h3>" + format(player.cf.tails) + "</h3> tails. (+" + format(player.cf.tailsToGet) + ")" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", () => { return player.cf.tails.gte(player.cf.tailsSoftcapStart) ? "After " + format(player.cf.tailsSoftcapStart) + " tails, gain is divided by /" + format(player.cf.tailsSoftcapEffect) + "." : "" }, {color: "red", fontSize: "14px", fontFamily: "monospace"}],
                     ["raw-html", function () { return "Extends chance point softcap by x" + format(player.cf.tailsEffect) + "." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Boosts heads gain by x" + format(player.cf.tailsEffect2) + "." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ], {width: "400px", height: "97px", background: "rgb(128, 87, 54, 0.5)", border: "3px solid #ccc",  borderBottom: "0px", borderTop: "0px", borderLeft: "0px", borderRadius: "15px 15px 0px 15px"}],
                     ["style-column", [ 
                     ["row", [["ex-buyable", 31],["ex-buyable", 32],]],
+                    ["row", [["ex-buyable", 33],["ex-buyable", 34],]],
 
 
 

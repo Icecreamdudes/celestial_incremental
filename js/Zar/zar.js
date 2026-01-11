@@ -45,6 +45,7 @@
         if (player.za.chancePoints.gte(player.za.chancePointsSoftcapStart))
         {
             player.za.chancePointsSoftcapEffect = player.za.chancePoints.sub(player.za.chancePointsSoftcapStart).pow(0.75).add(1)
+            player.za.chancePointsSoftcapEffect = player.za.chancePointsSoftcapEffect.pow(buyableEffect("wof", 15))
         } else
         {
             player.za.chancePointsSoftcapEffect = new Decimal(1)
@@ -182,6 +183,26 @@
             currencyInternalName: "chancePoints",
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
+        14: {
+            title: "Damn you're lazy",
+            unlocked() { return hasUpgrade("za", 13) },
+            description: "Unlock the autoflipper... get a load of this guy.",
+            cost: new Decimal(100000),
+            currencyLocation() { return player.za },
+            currencyDisplayName: "Chance Points",
+            currencyInternalName: "chancePoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
+        15: {
+            title: "More buyables cause why not :)",
+            unlocked() { return hasUpgrade("za", 14) },
+            description: "Unlock more heads and tails buyables.",
+            cost: new Decimal(1000000),
+            currencyLocation() { return player.za },
+            currencyDisplayName: "Chance Points",
+            currencyInternalName: "chancePoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
     },
     buyables: {},
     milestones: {},
@@ -214,7 +235,7 @@
                         ["blank", "5px"],
                         ["raw-html", function () { return "My amazing upgrades" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ["blank", "5px"],
-                        ["row", [ ["upgrade", 11],["upgrade", 12],["upgrade", 13],]],
+                        ["row", [ ["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14],["upgrade", 15],]],
                         ["blank", "5px"],
                     ], {width: "800px", background: "#313131ff", border: "3px solid #ccc", borderRadius: "15px"}],
                 ]

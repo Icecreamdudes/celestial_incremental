@@ -663,6 +663,23 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h4>v1.10.6 - Checklist Update Pt.2</h4><br>
+		Content:<br>
+			- Added 3 new themes.<br>
+			- Added an unlockable toggle feature for themes. (Vague due to spoilers)<br>
+			- Added a new node layout.<br>
+			- Added an instant cutscene text setting.<br>
+			- Redid the cutscene viewer in Origin.<br><br>
+		Balancing:<br>
+			- Improved base hex power formula, and made the old one start after 10 base power gain as a softcap.<br><br>
+		Bugfixes:<br>
+			- (Hopefully) fixed AD node not showing up on some browsers.<br>
+			- Fixed the border around buy-max in star dimensions not adapting when having all star dimensions.<br>
+			- Fixed buy max for Tav Domain's Compression buyables.<br>
+			- Fixed the post-iridite cutscene.<br>
+			- Fixed dice point effect being able to become NaN.<br>
+			- Fixed the text of 'Shard Research IV' saying it buffed offerings instead of CRC.<br>
+			- Fixed tab layouts background when in portrait mode.<br><br>
 	<h3>v1.10.5 - Checklist Update</h3><br>
 		Content:<br>
 			- Redid the visuals of the options menu.<br>

@@ -24,6 +24,7 @@ function getStartOptions() {
 		toggleParticle: true,
 		menuType: "Tree",
 		jukeboxID: "none",
+		instantCutsceneText: false
 	}
 }
 function updateMusicVolume() {

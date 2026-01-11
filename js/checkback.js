@@ -211,7 +211,8 @@ addLayer("cb", {
             layers.cb.levelup();
         }
 
-        player.cb.levelEffect = player.cb.level.pow(3).pow(player.d.dicePointsEffect)
+        player.cb.levelEffect = player.cb.level.pow(3)
+        if (player.d.dicePointsEffect.gte(0)) player.cb.levelEffect = player.cb.levelEffect.pow(player.d.dicePointsEffect)
         if (hasUpgrade("bi", 25) && (!player.po.dice)) player.cb.levelEffect = player.cb.levelEffect.pow(5)
         if (hasUpgrade("bi", 25) && (player.po.dice)) player.cb.levelEffect = player.cb.levelEffect.pow(2)
         if (hasUpgrade("s", 17)) player.cb.levelEffect = player.cb.levelEffect.pow(5)

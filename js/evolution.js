@@ -1075,7 +1075,7 @@ addLayer("ev8", {
         14: {
             title: "Shard Research IV",
             unlocked() { return true },
-            description: "Multiplies offering gain by x1.2.",
+            description: "Multiplies crate roll chance by x1.2.",
             cost: new Decimal(1),
             currencyLocation() { return player.cb },
             currencyDisplayName: "Paragon Shards",

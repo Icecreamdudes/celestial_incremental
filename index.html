@@ -62,6 +62,9 @@
 				<span v-if="options.menuType == 'Tab'">
 					<tab-tree :data="universes[player.universe].tree" v-if="typeof universes[player.universe] === 'object'"></tab-tree>
 				</span>
+				<span v-if="options.menuType == 'Grid'">
+					<grid-tree :data="universes[player.universe].tree" v-if="typeof universes[player.universe] === 'object'"></grid-tree>
+				</span>
 			</div>
 			<div class="miscMenu">
 				<button class="miscButton" v-if="!player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge" :disabled="!layerShown('cb')||player.uni.CB.paused" onclick="player.universe='CB';showTab('cb')">

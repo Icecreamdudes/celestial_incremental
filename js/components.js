@@ -1366,6 +1366,26 @@ function loadVue() {
 		`,
 	})
 
+	Vue.component('cutscene-nodes', {
+		props: ['layer', 'data'],
+		template: `
+		<div class="upgRow">
+			<div v-for="item in tmp.c.cutscenes" class="upgRow">
+				<cutscene-node :layer="layer" :data="item.id" v-bind:style="player.c.cutscenes[item.id] != 2 ? {'visibility':'hidden'} : {}"></cutscene-node>
+			</div>
+		</div>
+	`
+	})
+
+	Vue.component('cutscene-node', {
+		props: ['layer', 'data'],
+		template: `
+		<div v-bind:class="{cutscenes: true, can: true}" v-on:click="player.c.cutscenes[data] = 0">
+			<span style="font-size:12px;user-select:none" v-html="data"></span>
+		</div>
+		`,
+	})
+
 	// [TEXT, SUBTAB, TAB, ENABLE]
 	Vue.component('category-button', {
 		props: ['layer', 'data'],

@@ -50,15 +50,15 @@ if (cutsceneActive && cutsceneDialogue) {
     showCutscene(cutsceneDialogue, Object.assign({}, cutsceneOptions, { resume: true }));
 }
 
-function showCutscene(dialogue, options = {}) {
+function showCutscene(dialogue, opt = {}) {
     cutsceneActive = true;
     cutsceneDialogue = dialogue;
-    cutsceneOptions = options;
-    cutsceneID = (typeof options.cutsceneID !== 'undefined')
-        ? options.cutsceneID
+    cutsceneOptions = opt;
+    cutsceneID = (typeof opt.cutsceneID !== 'undefined')
+        ? opt.cutsceneID
         : Date.now() + Math.floor(Math.random() * 1000000);
 
-    let idx = (options.resume && cutsceneIndex > 0) ? cutsceneIndex : 0;
+    let idx = (opt.resume && cutsceneIndex > 0) ? cutsceneIndex : 0;
     cutsceneIndex = idx;
     saveCutsceneState();
 
@@ -70,7 +70,7 @@ function showCutscene(dialogue, options = {}) {
     Object.assign(overlay.style, {
         position: 'fixed',
         left: 0, top: 0, width: '100vw', height: '100vh',
-        background: options.background || 'rgba(0,0,0,0.7)',
+        background: opt.background || 'rgba(0,0,0,0.7)',
         zIndex: 99999,
         pointerEvents: 'auto'
     });
@@ -93,8 +93,8 @@ function showCutscene(dialogue, options = {}) {
         overlayImg.style.display = src ? 'block' : 'none';
         overlayImg.style.opacity = (opacity !== undefined) ? opacity : 1;
     }
-    if (options.overlayImage) {
-        setOverlayImage(options.overlayImage, options.overlayImageOpacity);
+    if (opt.overlayImage) {
+        setOverlayImage(opt.overlayImage, opt.overlayImageOpacity);
     }
 
     // Text box
@@ -120,8 +120,8 @@ function showCutscene(dialogue, options = {}) {
     overlay.appendChild(box);
 
     const portrait = document.createElement('img');
-    if (options.portrait) {
-        portrait.src = options.portrait;
+    if (opt.portrait) {
+        portrait.src = opt.portrait;
         Object.assign(portrait.style, {
             width: '128px',
             height: '128px',
@@ -179,6 +179,12 @@ function showCutscene(dialogue, options = {}) {
     function typeLine(line, cb) {
         typing = true;
         textArea.innerHTML = '';
+        if (options.instantCutsceneText) {
+            textArea.textContent = line;
+            typing = false;
+            if (cb) cb();
+            return;
+        }
         // If line contains HTML show instantly
         if (/<[a-z][\s\S]*>/i.test(line)) {
             textArea.innerHTML = line;
@@ -208,8 +214,8 @@ function showCutscene(dialogue, options = {}) {
         cutsceneDialogue = null;
         cutsceneOptions = null;
         saveCutsceneState();
-        if (typeof stopAudio === 'function' && options.jukeboxID == "none") stopAudio();
-        if (options.onEnd) options.onEnd();
+        if (typeof stopAudio === 'function' && opt.jukeboxID == "none") stopAudio();
+        if (opt.onEnd) opt.onEnd();
     }
 
     function showNext() {
@@ -220,8 +226,8 @@ function showCutscene(dialogue, options = {}) {
             let entry = dialogue[idx];
             if (typeof entry === 'object' && entry.overlayImage) {
                 setOverlayImage(entry.overlayImage, entry.overlayImageOpacity);
-            } else if (options.overlayImage) {
-                setOverlayImage(options.overlayImage, options.overlayImageOpacity);
+            } else if (opt.overlayImage) {
+                setOverlayImage(opt.overlayImage, opt.overlayImageOpacity);
             } else {
                 setOverlayImage('', 1);
             }
@@ -261,8 +267,8 @@ function showCutscene(dialogue, options = {}) {
         let entry = dialogue[idx];
         if (typeof entry === 'object' && entry.overlayImage) {
             setOverlayImage(entry.overlayImage, entry.overlayImageOpacity);
-        } else if (options.overlayImage) {
-            setOverlayImage(options.overlayImage, options.overlayImageOpacity);
+        } else if (opt.overlayImage) {
+            setOverlayImage(opt.overlayImage, opt.overlayImageOpacity);
         } else {
             setOverlayImage('', 1);
         }
@@ -282,20 +288,20 @@ function showCutscene(dialogue, options = {}) {
     showNext();
 }
 
-function showCinematicCutscene(dialogue, options = {}) {
+function showCinematicCutscene(dialogue, opt = {}) {
     // dialogue: [{ text: "...", duration: 2000, style: { ... } }, ...]
-    // options: { background, overlayImage, onEnd, cutsceneID }
-    let idx = (options.resume && typeof options.cutsceneIndex === 'number') ? options.cutsceneIndex : 0;
+    // opt: { background, overlayImage, onEnd, cutsceneID }
+    let idx = (opt.resume && typeof opt.cutsceneIndex === 'number') ? opt.cutsceneIndex : 0;
 
     // Cinematic cutscene state
     window.cinematicCutsceneActive = true;
     cutsceneActive = true;
-    window.cinematicCutsceneID = (typeof options.cutsceneID !== 'undefined')
-        ? options.cutsceneID
+    window.cinematicCutsceneID = (typeof opt.cutsceneID !== 'undefined')
+        ? opt.cutsceneID
         : Date.now() + Math.floor(Math.random() * 1000000);
     window.cinematicCutsceneIndex = idx;
     window.cinematicCutsceneDialogue = dialogue;
-    window.cinematicCutsceneOptions = options;
+    window.cinematicCutsceneOptions = opt;
 
     // Save cinematic cutscene state to localStorage
     function saveCinematicCutsceneState() {
@@ -317,7 +323,7 @@ function showCinematicCutscene(dialogue, options = {}) {
     Object.assign(overlay.style, {
         position: 'fixed',
         left: 0, top: 0, width: '100vw', height: '100vh',
-        background: options.background || 'rgba(0,0,0,1)',
+        background: opt.background || 'rgba(0,0,0,1)',
         zIndex: 100000,
         pointerEvents: 'auto',
         overflow: 'hidden'
@@ -325,9 +331,9 @@ function showCinematicCutscene(dialogue, options = {}) {
 
     // Overlay image (optional)
     let overlayImg = null;
-    if (options.overlayImage) {
+    if (opt.overlayImage) {
         overlayImg = document.createElement('img');
-        overlayImg.src = options.overlayImage;
+        overlayImg.src = opt.overlayImage;
         Object.assign(overlayImg.style, {
             position: 'absolute',
             left: '50%',
@@ -336,7 +342,7 @@ function showCinematicCutscene(dialogue, options = {}) {
             maxWidth: '80vw',
             maxHeight: '80vh',
             pointerEvents: 'none',
-            opacity: options.overlayImageOpacity !== undefined ? options.overlayImageOpacity : 1
+            opacity: opt.overlayImageOpacity !== undefined ? opt.overlayImageOpacity : 1
         });
         overlay.appendChild(overlayImg);
     }
@@ -384,8 +390,8 @@ function showCinematicCutscene(dialogue, options = {}) {
             overlayImg.style.display = '';
             overlayImg.style.opacity = entry.overlayImageOpacity !== undefined ? entry.overlayImageOpacity : 1;
         } else if (overlayImg) {
-            overlayImg.style.display = options.overlayImage ? '' : 'none';
-            overlayImg.style.opacity = options.overlayImageOpacity !== undefined ? options.overlayImageOpacity : 1;
+            overlayImg.style.display = opt.overlayImage ? '' : 'none';
+            overlayImg.style.opacity = opt.overlayImageOpacity !== undefined ? opt.overlayImageOpacity : 1;
         }
     }
 
@@ -399,7 +405,7 @@ function showCinematicCutscene(dialogue, options = {}) {
             window.cinematicCutsceneDialogue = null;
             window.cinematicCutsceneOptions = null;
             saveCinematicCutsceneState();
-            if (typeof options.onEnd === 'function') options.onEnd();
+            if (typeof opt.onEnd === 'function') opt.onEnd();
             return;
         }
         let entry = dialogue[idx];

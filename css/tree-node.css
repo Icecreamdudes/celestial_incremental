@@ -1,5 +1,6 @@
 /* Tree nodes, button nodes, and side layers */
 .treeNode {
+	display: inline-block !important;
 	position: relative;
 	height: 75px !important;
 	width: 75px !important;
@@ -21,6 +22,7 @@
 }
 
 .treeButton {
+	display: inline-block !important;
 	height: 75px;
 	width: 75px;
 	border: var(--hqProperty1);
@@ -109,9 +111,10 @@
 }
 
 .tabNode {
+	display: inline-block !important;
 	position: relative;
-	height: 50px !important;
-	width: 200px !important;
+	height: 50px;
+	width: 200px;
 	border: var(--hqProperty1);
 	border-color: rgba(0, 0, 0, 0.125);
 	border-radius: 15px;
@@ -156,4 +159,48 @@
 	flex-direction: column;
 	flex-wrap: nowrap;
 	padding: 4px 0 4px 0;
+}
+
+.gridNode {
+	display: inline-block !important;
+	position: relative;
+	height: 85px !important;
+	width: 85px !important;
+	border: var(--hqProperty1);
+	border-color: rgba(0, 0, 0, 0.3);
+	border-radius: 20%;
+	box-shadow: var(--hqProperty2a), var(--hqProperty2b);
+	font-size: 35px;
+	font-family: "Roboto Mono", monospace;
+	color: rgba(0, 0, 0, 0.5);
+	text-shadow: var(--hqProperty3);
+	padding: 0;
+	margin: 0 2px 0 2px;
+}
+
+.gridNode.can:hover {
+	box-shadow: var(--hqProperty2a), 0 0 20px #ffffff;
+}
+
+.gridRowHolder {
+	border-bottom: 3px solid var(--regBorder);
+}
+
+.gridRow {
+	margin: 6px 0px 4px 0px;
+}
+
+.gridTitleHolder {
+	width: 100%;
+	height: 35px;
+	margin: 0px;
+}
+
+.gridTitle {
+	width: 100%;
+	height: 100%;
+	font-size: 18px;
+	display: flex;
+	background: var(--tabTitle);
+	border-bottom: 3px solid var(--regBorder);
 }

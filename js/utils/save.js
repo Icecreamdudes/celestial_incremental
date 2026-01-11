@@ -394,3 +394,15 @@ window.onbeforeunload = () => {
         save();
     }
 };
+
+function removePlayerExcess() {
+	let origin = getStartPlayer()
+
+	let filteredPlayer = Object.keys(player)
+  .filter(key => Object.keys(origin).includes(key)) // Keep only keys present in objB
+  .reduce((acc, key) => {
+    acc[key] = player[key]; // Build new object with filtered keys
+    return acc;
+  }, {}) 
+  	player = filteredPlayer
+}

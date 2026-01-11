@@ -498,7 +498,7 @@
                     ["style-row", [
                         ["raw-html", "Cutscene Viewer", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
                     ], {width: "700px", height: "40px", background: "var(--scroll4)", border: "3px solid var(--regBorder)", marginBottom: "-3px"}],
-                    ["always-scroll-column", [
+                    ["theme-scroll-column", [
                         "cutscene-nodes",
                     ], {width: "690px", height: "590px", background: "var(--layerBackground)", border: "3px solid var(--regBorder)", padding: "5px"}],
                 ],

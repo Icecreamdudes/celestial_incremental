@@ -106,7 +106,7 @@ addLayer("settings", {
             onClick() {
                 toggleOpt('hideMilestonePopups')
             },
-            style: { width: '100px', minHeight: '80px', color: "var(--textColor)", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+            style: { width: '100px', minHeight: '60px', color: "var(--textColor)", background: "var(--miscButton)", fontSize: "8px", lineHeight: "1", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
         },
         22: {
             title() { return "Hide Achievement Popups<hr style='border:1px solid #888;margin-top:1px'>" + options.hideAchievementPopups },
@@ -115,7 +115,7 @@ addLayer("settings", {
             onClick() {
                 toggleOpt('hideAchievementPopups')
             },
-            style: { width: '100px', minHeight: '80px', color: "var(--textColor)", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+            style: { width: '100px', minHeight: '60px', color: "var(--textColor)", background: "var(--miscButton)", fontSize: "8px", lineHeight: "1", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
         },
         23: {
             title() { return "Hide General Popups<hr style='border:1px solid #888;margin-top:1px'>" + options.hideGeneralPopups },
@@ -124,25 +124,34 @@ addLayer("settings", {
             onClick() {
                 toggleOpt('hideGeneralPopups')
             },
-            style: { width: '100px', minHeight: '80px', color: "var(--textColor)", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+            style: { width: '100px', minHeight: '60px', color: "var(--textColor)", background: "var(--miscButton)", fontSize: "8px", lineHeight: "1", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
         },
         24: {
+            title() { return "Instant Cutscene Text<hr style='border:1px solid #888;margin-top:1px'>" + options.instantCutsceneText },
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                toggleOpt('instantCutsceneText')
+            },
+            style: { width: '100px', minHeight: '60px', color: "var(--textColor)", background: "var(--miscButton)", fontSize: "8px", lineHeight: "1", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+        },
+        27: {
             title() { return "Toggle Hotkeys<hr style='border:1px solid #888;margin-top:1px'>" + options.toggleHotkey },
             canClick: true,
             unlocked: true,
             onClick() {
                 toggleOpt('toggleHotkey')
             },
-            style: { width: '100px', minHeight: '80px', color: "var(--textColor)", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+            style: { width: '100px', minHeight: '60px', color: "var(--textColor)", background: "var(--miscButton)", fontSize: "9px", lineHeight: "1.1", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
         },
-        25: {
+        28: {
             title() { return "Toggle Music<hr style='border:1px solid #888;margin-top:1px'>" + options.musicToggle },
             canClick: true,
             unlocked: true,
             onClick() {
                 toggleOpt('musicToggle')
             },
-            style: { width: '100px', minHeight: '80px', color: "var(--textColor)", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+            style: { width: '100px', minHeight: '57px', color: "var(--textColor)", background: "var(--miscButton)", fontSize: "9px", lineHeight: "1.1", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
         },
         31: {
             title: "Tree Layout",
@@ -487,10 +496,8 @@ addLayer("settings", {
     tabFormat: [
         ["row", [["clickable", 2], ["clickable", 7], ["clickable", 4], ["clickable", 5]]],
         ["blank", "50px"],
-        ["style-column", [
-            ["blank", "8px"],
-            ["row", [
-                ["blank", "8px"],
+        ["style-row", [
+            ["column", [
                 ["style-column", [
                     ["style-row", [
                         ["raw-html", "Save Options", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}]
@@ -510,40 +517,6 @@ addLayer("settings", {
                         ["clickable", 17], ["style-row", [], {width: "3px", height: "80px", background: "var(--regBorder)"}],
                     ]],
                 ], {width: "306px", background: "var(--layerBackground)", border: "3px solid var(--regBorder)"}],
-                ["blank", "8px"],
-                ["style-column", [
-                    ["style-row", [
-                        ["raw-html", "Toggle Options", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}]
-                    ], {width: "306px", height: "30px", borderBottom: "3px solid var(--regBorder)"}],
-                    ["style-row", [
-                        ["clickable", 21], ["style-row", [], {width: "3px", height: "80px", background: "var(--regBorder)"}],
-                        ["clickable", 22], ["style-row", [], {width: "3px", height: "80px", background: "var(--regBorder)"}],
-                        ["clickable", 23],
-                    ], {width: "306px", borderBottom: "3px solid var(--regBorder)"}],
-                    ["style-row", [
-                        ["clickable", 24],
-                        ["style-column", [
-                            ["raw-html", "General Hotkeys", {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                            ["raw-html", "Alt - Toggle Music Off", {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
-                            ["raw-html", "[More in the future]", {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
-                        ], {width: "203px", height: "80px", borderLeft: "3px solid var(--regBorder)"}],
-                    ], {width: "306px", borderBottom: "3px solid var(--regBorder)"}],
-                    ["style-row", [
-                        ["clickable", 25],
-                        ["style-column", [
-                            ["style-column", [
-                                ["raw-html", () => {return "Volume: " + options.musicVolume}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                            ], {width: "203px", height: "38px", borderBottom: "3px solid var(--regBorder)"}],
-                            ["style-column", [
-                                ["raw-html", () => {return "</td><td><div style=\"margin: 0 10px\"><input type=range id=volume name=Music Volume min=1 max=10 value=" + options.musicVolume + " oninput=updateMusicVolume()><br>"}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
-                            ], {width: "203px", height: "39px"}],
-                        ], {width: "203px", height: "80px", borderLeft: "3px solid var(--regBorder)"}],
-                    ], {width: "306px"}],
-                ], {width: "306px", background: "var(--layerBackground)", border: "3px solid var(--regBorder)"}],
-                ["blank", "8px"],
-            ]],
-            ["blank", "8px"],
-            ["row", [
                 ["blank", "8px"],
                 ["style-column", [
                     ["style-row", [
@@ -579,13 +552,46 @@ addLayer("settings", {
                         ["clickable", 33],
                     ], {width: "306px"}],
                 ], {width: "306px", background: "var(--layerBackground)", border: "3px solid var(--regBorder)"}],
+            ]],
+            ["blank", "8px"],
+            ["column", [
+                ["style-column", [
+                    ["style-row", [
+                        ["raw-html", "Toggle Options", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}]
+                    ], {width: "306px", height: "30px", borderBottom: "3px solid var(--regBorder)"}],
+                    ["style-row", [
+                        ["clickable", 21], ["style-row", [], {width: "3px", height: "60px", background: "var(--regBorder)"}],
+                        ["clickable", 22], ["style-row", [], {width: "3px", height: "60px", background: "var(--regBorder)"}],
+                        ["clickable", 23],
+                    ], {width: "306px", borderBottom: "3px solid var(--regBorder)"}],
+                    ["style-row", [
+                        ["style-row", [], {width: "3px", height: "60px", background: "var(--regBorder)"}],
+                        ["clickable", 24], ["style-row", [], {width: "3px", height: "60px", background: "var(--regBorder)"}],
+                    ], {width: "306px", borderBottom: "3px solid var(--regBorder)"}],
+                    ["style-row", [
+                        ["clickable", 27],
+                        ["style-column", [
+                            ["raw-html", "General Hotkeys", {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                            ["raw-html", "Alt - Toggle Music Off", {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
+                            ["raw-html", "[More in the future]", {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
+                        ], {width: "203px", height: "60px", borderLeft: "3px solid var(--regBorder)"}],
+                    ], {width: "306px", borderBottom: "3px solid var(--regBorder)"}],
+                    ["style-row", [
+                        ["clickable", 28],
+                        ["style-column", [
+                            ["raw-html", () => {return "Volume: " + options.musicVolume}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                            ["blank", "5px"],
+                            ["raw-html", () => {return "</td><td><div style=\"margin: 0 10px\"><input type=range id=volume name=Music Volume min=1 max=10 value=" + options.musicVolume + " oninput=updateMusicVolume()><br>"}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                        ], {width: "203px", height: "57px", borderLeft: "3px solid var(--regBorder)"}],
+                    ], {width: "306px"}],
+                ], {width: "306px", background: "var(--layerBackground)", border: "3px solid var(--regBorder)"}],
                 ["blank", "8px"],
                 ["top-column", [
                     ["style-row", [
                         ["raw-html", "Credits", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
-                    ], {width: "306px", height: "35px", borderBottom: "3px solid var(--regBorder)"}],
+                    ], {width: "306px", height: "30px", borderBottom: "3px solid var(--regBorder)"}],
                     ["top-column", [
-                        ["blank", "10px"],
+                        ["blank", "10px"]
                         ["raw-html", "Game by Icecreamdude", {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
                         ["raw-html", "Music: Icecreamdude !Sweet 150percent Citrine/Niko/Flushmak<br>" +
                             "Content: Icecreamdude Forwaken<br>" +
@@ -593,18 +599,16 @@ addLayer("settings", {
                             "Art: Jtoh_Sc Lemonsja<br>" +
                             "Testing: Nova Piterpicher Vel<br>" +
                             "Bug Fixing: Tsanth Forwaken", {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
-                    ], {width: "306px", height: "196px"}],
+                    ], {width: "306px", height: "206px"}],
                     ["style-row", [
                         ["raw-html", () => "<a href=https://discord.gg/icecreamdude-s-incremental-games-850817562040467556><button class=can style='display:flex;align-items:center;justify-content:center;width:306px;height:40px;font-size:20px;color:#dde0fc;background:#5865f2;border:3px solid #2c3279'>Join the Discord!</button></a>", {fontFamily: "monospace",}],
                     ], {width: "306px", height: "40px", borderTop: "3px solid var(--regBorder)"}],
                     ["style-row", [
                         ["raw-html", () => {return "Playtime: " + formatTime(player.timePlayed)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                    ], {width: "306px", height: "35px", borderTop: "3px solid var(--regBorder)"}],
+                    ], {width: "306px", height: "30px", borderTop: "3px solid var(--regBorder)"}],
                 ], {width: "306px", height: "315px", background: "var(--layerBackground)", border: "3px solid var(--regBorder)"}],
-                ["blank", "8px"],
             ]],
-            ["blank", "8px"],
-        ], {width: "650px", background: "var(--miscButtonHover)", border: "3px solid var(--regBorder)"}],
+        ], {width: "634px", background: "var(--miscButtonHover)", border: "3px solid var(--regBorder)", padding: "8px"}],
         ["blank", "25px"],
     ],
     layerShown() { return false }

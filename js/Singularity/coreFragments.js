@@ -145,81 +145,77 @@
             style: { width: '100px', "min-height": '50px' },
         },
         11: {
-            title() { return "<img src='resources/fragments/ancientFragment.png'style='width:calc(120%);height:calc(120%);margin:-20%'></img>" },
-            canClick() { return true },
-            unlocked() { return true },
+            title() { return "<img src='resources/fragments/ancientFragment.png' style='width:94px;height:94px;padding-top:3%'></img>" },
+            canClick: true,
+            unlocked: true,
             onClick() {
                 player.cof.fragmentIndex = 0
             },
-            style: { width: '120px', "min-height": '120px', borderRadius: '15px' },
+            style: { width: '110px', minHeight: '110px', background: "#70523C", border: "3px solid #563F2E", borderRadius: '0'},
         },
         12: {
-            title() { return "<img src='resources/fragments/naturalFragment.png'style='width:calc(120%);height:calc(120%);margin:-20%'></img>" },
-            canClick() { return true },
-            unlocked() { return true },
+            title() { return "<img src='resources/fragments/naturalFragment.png' style='width:94px;height:94px;padding-top:3%'></img>" },
+            canClick: true,
+            unlocked: true,
             onClick() {
                 player.cof.fragmentIndex = 1
             },
-            style: { width: '120px', "min-height": '120px', borderRadius: '15px' },
+            style: { width: '110px', minHeight: '110px', background: "#004C0E", border: "3px solid #003309", borderRadius: '0'},
         },
         13: {
-            title() { return "<img src='resources/fragments/technologicalFragment.png'style='width:calc(120%);height:calc(120%);margin:-20%'></img>" },
-            canClick() { return true },
-            unlocked() { return true },
+            title() { return "<img src='resources/fragments/technologicalFragment.png' style='width:94px;height:94px;padding-top:3%'></img>" },
+            canClick: true,
+            unlocked: true,
             onClick() {
                 player.cof.fragmentIndex = 2
             },
-            style: { width: '120px', "min-height": '120px', borderRadius: '15px' },
+            style: { width: '110px', minHeight: '110px', background: "#2D2D2D", border: "3px solid #1E1E1E", borderRadius: '0'},
         },
         14: {
-            title() { return "<img src='resources/fragments/paradoxFragment.png'style='width:calc(120%);height:calc(120%);margin:-20%'></img>" },
-            canClick() { return true },
-            unlocked() { return true },
+            title() { return "<img src='resources/fragments/paradoxFragment.png' style='width:94px;height:94px;padding-top:3%'></img>" },
+            canClick: true,
+            unlocked: true,
             onClick() {
                 player.cof.fragmentIndex = 3
             },
-            style: { width: '120px', "min-height": '120px', borderRadius: '15px' },
+            style: { width: '110px', minHeight: '110px', background: "#0E00A8", border: "3px solid #09008C", borderRadius: '0'},
         },
         15: {
-            title() { return "<img src='resources/fragments/radioactiveFragment.png'style='width:calc(120%);height:calc(120%);margin:-20%'></img>" },
-            canClick() { return true },
-            unlocked() { return true },
+            title() { return "<img src='resources/fragments/radioactiveFragment.png' style='width:94px;height:94px;padding-top:3%'></img>" },
+            canClick: true,
+            unlocked: true,
             onClick() {
                 player.cof.fragmentIndex = 4
             },
-            style: { width: '120px', "min-height": '120px', borderRadius: '15px' },
+            style: { width: '110px', minHeight: '110px', background: "#260000", border: "3px solid #190000", borderRadius: '0'},
         },
         16: {
-            title() { return "<img src='resources/fragments/cosmicFragment.png'style='width:calc(120%);height:calc(120%);margin:-20%'></img>" },
-            canClick() { return true },
-            unlocked() { return true },
+            title() { return "<img src='resources/fragments/cosmicFragment.png' style='width:94px;height:94px;padding-top:3%'></img>" },
+            canClick: true,
+            unlocked: true,
             onClick() {
                 player.cof.fragmentIndex = 5
             },
-            style: { width: '120px', "min-height": '120px', borderRadius: '15px' },
+            style: { width: '110px', minHeight: '110px', background: "#250059", border: "3px solid #19003F", borderRadius: '0'},
         },
         17: {
-            title() { return "<img src='resources/fragments/temporalFragment.png'style='width:calc(120%);height:calc(120%);margin:-20%'></img>" },
-            canClick() { return true },
-            unlocked() { return true },
+            title() { return "<img src='resources/fragments/temporalFragment.png' style='width:94px;height:94px;padding-top:3%'></img>" },
+            canClick: true,
+            unlocked: true,
             onClick() {
                 player.cof.fragmentIndex = 6
             },
-            style: { width: '120px', "min-height": '120px', borderRadius: '15px' },
+            style: { width: '110px', minHeight: '110px', background: "#001738", border: "3px solid #000C1E", borderRadius: '0'},
         },
         18: {
-            title() { return "<img src='resources/fragments/celestialFragment.png'style='width:calc(120%);height:calc(120%);margin:-20%'></img>" },
-            canClick() { return true },
-            unlocked() { return false },
+            title() { return "<img src='resources/fragments/celestialFragment.png' style='width:94px;height:94px;padding-top:3%'></img>" },
+            canClick: true,
+            unlocked: false,
             onClick() {
                 player.cof.fragmentIndex = 7
             },
-            style: { width: '120px', "min-height": '120px', borderRadius: '15px' },
+            style: { width: '110px', minHeight: '110px', background: "#0E00A8", border: "3px solid #09008C", borderRadius: '0'},
         },
-    },
-    bars: {
-    },
-    upgrades: { 
     },
     buyables: {
             11: {
@@ -233,7 +229,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Ancient Core Fragment Buyable I"
+                return "Ancient CF Buyable I"
             },
             display() {
                 return 'which are extending replicanti point limit by ^' + format(tmp[this.layer].buyables[this.id].effect, 3) + '.\n\
@@ -254,7 +250,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #B8916A 0%, #BE8267 100%)" }
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#B8916A", backgroundImage: "linear-gradient(120deg, #B8916A 0%, #BE8267 100%)" }
         },
         12: {
             costBase() { return new Decimal(3) },
@@ -267,7 +263,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Ancient Core Fragment Buyable II"
+                return "Ancient CF Buyable II"
             },
             display() {
                 return 'which are boosting points by ^' + format(tmp[this.layer].buyables[this.id].effect, 3) + '.\n\
@@ -288,7 +284,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #B8916A 0%, #BE8267 100%)" }
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#B8916A", backgroundImage: "linear-gradient(120deg, #B8916A 0%, #BE8267 100%)" }
         },
         13: {
             costBase() { return new Decimal(5) },
@@ -301,7 +297,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Ancient Core Fragment Buyable III"
+                return "Ancient CF Buyable II"
             },
             display() {
                 return 'which are extending both replicanti point softcaps by ^' + format(tmp[this.layer].buyables[this.id].effect, 3) + '.\n\
@@ -322,7 +318,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #B8916A 0%, #BE8267 100%)" }
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#B8916A", backgroundImage: "linear-gradient(120deg, #B8916A 0%, #BE8267 100%)" }
         },
         14: {
             costBase() { return new Decimal(2) },
@@ -335,7 +331,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Natural Core Fragment Buyable I"
+                return "Natural CF Buyable I"
             },
             display() {
                 return 'which are boosting grass value by ^' + format(tmp[this.layer].buyables[this.id].effect, 3) + '.\n\
@@ -356,7 +352,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #63C964 0%, #007917 100%)" }
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#63C964", backgroundImage: "linear-gradient(120deg, #63C964 0%, #007917 100%)" }
         },
         15: {
             costBase() { return new Decimal(3) },
@@ -369,7 +365,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Natural Core Fragment Buyable II"
+                return "Natural CF Buyable II"
             },
             display() {
                 return 'which are boosting grasshopper gain by ^' + format(tmp[this.layer].buyables[this.id].effect, 3) + '.\n\
@@ -390,7 +386,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #63C964 0%, #007917 100%)" }
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#63C964", backgroundImage: "linear-gradient(120deg, #63C964 0%, #007917 100%)" }
         },
         16: {
             costBase() { return new Decimal(5) },
@@ -403,7 +399,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Natural Core Fragment Buyable III"
+                return "Natural CF Buyable III"
             },
             display() {
                 return 'which are boosting pollinator gain by ^' + format(tmp[this.layer].buyables[this.id].effect, 3) + '.\n\
@@ -424,7 +420,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #63C964 0%, #007917 100%)" }
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#63C964", backgroundImage: "linear-gradient(120deg, #63C964 0%, #007917 100%)" }
         },
         17: {
             costBase() { return new Decimal(2) },
@@ -437,7 +433,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Technological Core Fragment Buyable I"
+                return "Technological CF Buyable I"
             },
             display() {
                 return 'which are boosting mod gain by ^' + format(tmp[this.layer].buyables[this.id].effect, 3) + '.\n\
@@ -458,7 +454,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #595A5C 0%, rgb(156, 156, 156) 100%)" }
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#595A5C", backgroundImage: "linear-gradient(120deg, #595A5C 0%, rgb(156, 156, 156) 100%)" }
         },
         18: {
             costBase() { return new Decimal(3) },
@@ -471,7 +467,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Technological Core Fragment Buyable II"
+                return "Technological CF Buyable II"
             },
             display() {
                 return 'which are boosting rocket fuel gain by ^' + format(tmp[this.layer].buyables[this.id].effect, 3) + '.\n\
@@ -492,7 +488,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #595A5C 0%, rgb(156, 156, 156) 100%)" }
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#595A5C", backgroundImage: "linear-gradient(120deg, #595A5C 0%, rgb(156, 156, 156) 100%)" }
         },
         19: {
             costBase() { return new Decimal(5) },
@@ -505,7 +501,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Technological Core Fragment Buyable III"
+                return "Technological CF Buyable III"
             },
             display() {
                 return 'which are boosting activated fuel and rocket parts gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
@@ -526,7 +522,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #595A5C 0%,rgb(156, 156, 156) 100%)" }
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#595A5C", backgroundImage: "linear-gradient(120deg, #595A5C 0%,rgb(156, 156, 156) 100%)" }
         },
         21: {
             costBase() { return new Decimal(2) },
@@ -539,7 +535,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Paradox Core Fragment Buyable I"
+                return "Paradox CF Buyable I"
             },
             display() {
                 return 'which are boosting antimatter gain by ^' + format(tmp[this.layer].buyables[this.id].effect, 3) + '.\n\
@@ -560,7 +556,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #20A3C2 0%, #20BBBD 100%)" }
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#20A3C2", backgroundImage: "linear-gradient(120deg, #20A3C2 0%, #20BBBD 100%)" }
         },
         22: {
             costBase() { return new Decimal(3) },
@@ -573,7 +569,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Paradox Core Fragment Buyable II"
+                return "Paradox CF Buyable II"
             },
             display() {
                 return 'which are boosting negative infinity point gain by ^' + format(tmp[this.layer].buyables[this.id].effect, 3) + '.\n\
@@ -594,7 +590,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #20A3C2 0%, #20BBBD 100%)" }
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#20A3C2", backgroundImage: "linear-gradient(120deg, #20A3C2 0%, #20BBBD 100%)" }
         },
         23: {
             costBase() { return new Decimal(5) },
@@ -607,7 +603,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Paradox Core Fragment Buyable III"
+                return "Paradox CF Buyable III"
             },
             display() {
                 return 'which are boosting infinity gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
@@ -628,7 +624,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #20A3C2 0%, #20BBBD 100%)" }
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#20A3C2", backgroundImage: "linear-gradient(120deg, #20A3C2 0%, #20BBBD 100%)" }
         },
         24: {
             costBase() { return new Decimal(2) },
@@ -641,7 +637,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Radioactive Core Fragment Buyable I"
+                return "Radioactive CF Buyable I"
             },
             display() {
                 return 'which are boosting radiation gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
@@ -662,7 +658,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #801757 0%, #D3173A 100%)" }
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#801757", backgroundImage: "linear-gradient(120deg, #801757 0%, #D3173A 100%)" }
         },
         25: {
             costBase() { return new Decimal(3) },
@@ -675,7 +671,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Radioactive Core Fragment Buyable II"
+                return "Radioactive CF Buyable II"
             },
             display() {
                 return 'which are boosting singularity power gain by ^' + format(tmp[this.layer].buyables[this.id].effect, 3) + '.\n\
@@ -696,7 +692,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #801757 0%, #D3173A 100%)" }
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#801757", backgroundImage: "linear-gradient(120deg, #801757 0%, #D3173A 100%)" }
         },
         26: {
             costBase() { return new Decimal(5) },
@@ -709,7 +705,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Radioactive Core Fragment Buyable III"
+                return "Radioactive CF Buyable III"
             },
             display() {
                 return 'which are boosting starmetal alloy gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
@@ -730,7 +726,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #801757 0%, #D3173A 100%)" }
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#801757", backgroundImage: "linear-gradient(120deg, #801757 0%, #D3173A 100%)" }
         },
         27: {
             costBase() { return new Decimal(2) },
@@ -743,7 +739,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Cosmic Core Fragment Buyable I"
+                return "Cosmic CF Buyable I"
             },
             display() {
                 return 'which are raising galaxy dust effect by ^' + format(tmp[this.layer].buyables[this.id].effect, 3) + '.\n\
@@ -764,7 +760,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white", backgroundImage: "linear-gradient(120deg, #0F0D25 0%, #0E0921 100%)" }
+            style: { width: '250px', height: '150px', color: "white", backgroundColor: "#0F0D25", backgroundImage: "linear-gradient(120deg, #0F0D25 0%, #0E0921 100%)" }
         },
         28: {
             costBase() { return new Decimal(3) },
@@ -777,7 +773,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Cosmic Core Fragment Buyable II"
+                return "Cosmic CF Buyable II"
             },
             display() {
                 return 'which are boosting galaxy dust gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
@@ -798,7 +794,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white", backgroundImage: "linear-gradient(120deg, #0F0D25 0%, #0E0921 100%)" }
+            style: { width: '250px', height: '150px', color: "white", backgroundColor: "#0F0D25", backgroundImage: "linear-gradient(120deg, #0F0D25 0%, #0E0921 100%)" }
         },
         29: {
             costBase() { return new Decimal(5) },
@@ -811,7 +807,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Cosmic Core Fragment Buyable III"
+                return "Cosmic CF Buyable III"
             },
             display() {
                 return 'which are boosting star gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
@@ -832,7 +828,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white", backgroundImage: "linear-gradient(120deg, #0F0D25 0%, #0E0921 100%)" }
+            style: { width: '250px', height: '150px', color: "white", backgroundColor: "#0F0D25", backgroundImage: "linear-gradient(120deg, #0F0D25 0%, #0E0921 100%)" }
         },
         31: {
             costBase() { return new Decimal(2) },
@@ -845,7 +841,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Temporal Core Fragment Buyable I"
+                return "Temporal CF Buyable I"
             },
             display() {
                 return 'which are dividing XP button cooldown by /' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
@@ -866,7 +862,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white", backgroundImage: "linear-gradient(120deg, #2B6476 0%, #012454 100%)" }
+            style: { width: '250px', height: '150px', color: "white", backgroundColor: "#2B6476", backgroundImage: "linear-gradient(120deg, #2B6476 0%, #012454 100%)" }
         },
         32: {
             costBase() { return new Decimal(3) },
@@ -879,7 +875,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Temporal Core Fragment Buyable II"
+                return "Temporal CF Buyable II"
             },
             display() {
                 return 'which are multiplying crate roll chance by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
@@ -900,7 +896,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white", backgroundImage: "linear-gradient(120deg, #2B6476 0%, #012454 100%)" }
+            style: { width: '250px', height: '150px', color: "white", backgroundColor: "#2B6476", backgroundImage: "linear-gradient(120deg, #2B6476 0%, #012454 100%)" }
         },
         33: {
             costBase() { return new Decimal(5) },
@@ -913,7 +909,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Temporal Core Fragment Buyable III"
+                return "Temporal CF Buyable III"
             },
             display() {
                 return 'which are boosting legendary pet gem gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
@@ -934,133 +930,195 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white", backgroundImage: "linear-gradient(120deg, #2B6476 0%, #012454 100%)" }
+            style: { width: '250px', height: '150px', color: "white", backgroundColor: "#2B6476", backgroundImage: "linear-gradient(120deg, #2B6476 0%, #012454 100%)" }
         },
-    },
-    milestones: {
-    },
-    challenges: {
-    },
-    infoboxes: {
     },
     microtabs: {
-        stuff: {
-            "Main": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return true },
-                content: [
-                    ["blank", "25px"],
-        ["raw-html", function () { return "You will <h3>" + formatWhole(player.cof.coreFragments[player.cof.fragmentIndex]) + "</h3> " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cof.fragmentIndex == 0 ? "Your " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + " boosts points by ^" + format(player.cof.coreFragmentEffects[player.cof.fragmentIndex], 3) + "." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cof.fragmentIndex == 1 ? "Your " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + " boosts golden grass by x" + format(player.cof.coreFragmentEffects[player.cof.fragmentIndex]) + "." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cof.fragmentIndex == 2 ? "Your " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + " boosts steel by ^" + format(player.cof.coreFragmentEffects[player.cof.fragmentIndex], 3) + "." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cof.fragmentIndex == 3 ? "Your " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + " boosts infinity points by ^" + format(player.cof.coreFragmentEffects[player.cof.fragmentIndex], 3) + "." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cof.fragmentIndex == 4 ? "Your " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + " boosts singularity points x" + format(player.cof.coreFragmentEffects[player.cof.fragmentIndex]) + "." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cof.fragmentIndex == 5 ? "Your " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + " boosts replicanti mult by x" + format(player.cof.coreFragmentEffects[player.cof.fragmentIndex]) + "." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cof.fragmentIndex == 6 ? "Your " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + " boosts check back XP by x" + format(player.cof.coreFragmentEffects[player.cof.fragmentIndex]) + "." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"], 
-        ["buttonless-microtabs", "buyables", { 'border-width': '0px' }],
-
-                    ["blank", "25px"], 
-        ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15], ["clickable", 16], ["clickable", 17],]],
-                    ["blank", "50px"],
-                    ["layer-proxy", ["co", [
-                        ["clickable", 1000]
-                    ]]],
-                    ["blank", "25px"],
-                ]
-            },
-            "Score": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return true },
-                content: [
-                    ["blank", "25px"],
-        ["raw-html", function () { return "You will gain <h3>" + formatWhole(player.cof.coreFragmentsToGet[player.cof.highestScore]) + "</h3> " + player.cof.coreFragmentNames[player.cof.highestScore] + " on singularity reset." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["style-column", [
-                        ["row", [["raw-html", function () { return "Core Fragment Scores:" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],]],
-                        ["row", [["raw-html", function () { return "(The core fragment with the highest score is gained.)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],]],
-                        ["row", [["raw-html", function () { return "(HALTER 2.0 can be used to adjust these scores, and if not there is a way to set scores very low.)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],]],
-                    ], { width: "1000px", border: "3px solid rgb(27, 0, 36)", backgroundImage: "linear-gradient(120deg,rgb(138, 14, 121) 0%,rgb(168, 12, 51) 100%)", borderBottom: "5px", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px" }],
-                    ["style-column", [
-        ["raw-html", function () { return "Ancient Fragment Score: <h3>" + formatWhole(player.cof.fragmentScore[0]) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                        ["row", [["raw-html", function () { return "(Points, Factor Power, Prestige Points)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],]],
-                    ["blank", "10px"],
-        ["raw-html", function () { return "Natural Fragment Score: <h3>" + formatWhole(player.cof.fragmentScore[1]) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                        ["row", [["raw-html", function () { return "(Trees, Grass, Grasshoppers)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],]],
-                    ["blank", "10px"],
-        ["raw-html", function () { return "Technological Fragment Score: <h3>" + formatWhole(player.cof.fragmentScore[2]) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                        ["row", [["raw-html", function () { return "(Code Experience, Steel, Oil)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],]],
-                    ["blank", "10px"],
-        ["raw-html", function () { return "Paradox Fragment Score: <h3>" + formatWhole(player.cof.fragmentScore[3]) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                        ["row", [["raw-html", function () { return "(Infinity Points, Infinities, Negative Infinity Points)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],]],
-                    ["blank", "10px"],
-        ["raw-html", function () { return "Radioactive Fragment Score: <h3>" + formatWhole(player.cof.fragmentScore[4]) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                        ["row", [["raw-html", function () { return "(Singularity Points, Radiation, Singularity Power)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],]],
-                    ["blank", "10px"],
-        ["raw-html", function () { return "Cosmic Fragment Score: <h3>" + formatWhole(player.cof.fragmentScore[5]) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                        ["row", [["raw-html", function () { return "(Antimatter, Replicanti, Stars)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],]],
-                    ["blank", "10px"],
-        ["raw-html", function () { return "Temporal Fragment Score: <h3>" + formatWhole(player.cof.fragmentScore[6]) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                        ["row", [["raw-html", function () { return "(Check Back Level, XPBoost, Pet Points)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],]],
-                    ], { width: "1000px", border: "3px solid rgb(27, 0, 36)", backgroundImage: "linear-gradient(120deg,rgb(138, 14, 121) 0%,rgb(168, 12, 51) 100%)", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px" }]
-                ]
-            },
-        },
-                buyables: {
+        buyables: {
             0: {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
-        ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13],]],
+                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13],]],
                 ]
             },
             1: {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
-        ["row", [["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16],]],
+                    ["row", [["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16],]],
                 ]
             },
             2: {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
-        ["row", [["ex-buyable", 17], ["ex-buyable", 18], ["ex-buyable", 19],]],
+                    ["row", [["ex-buyable", 17], ["ex-buyable", 18], ["ex-buyable", 19],]],
                 ]
             },
             3: {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
-        ["row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23],]],
+                    ["row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23],]],
                 ]
             },
             4: {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
-        ["row", [["ex-buyable", 24], ["ex-buyable", 25], ["ex-buyable", 26],]],
+                    ["row", [["ex-buyable", 24], ["ex-buyable", 25], ["ex-buyable", 26],]],
                 ]
             },
             5: {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
-        ["row", [["ex-buyable", 27], ["ex-buyable", 28], ["ex-buyable", 29],]],
+                    ["row", [["ex-buyable", 27], ["ex-buyable", 28], ["ex-buyable", 29],]],
                 ]
             },
             6: {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
-        ["row", [["ex-buyable", 31], ["ex-buyable", 32], ["ex-buyable", 33],]],
+                    ["row", [["ex-buyable", 31], ["ex-buyable", 32], ["ex-buyable", 33],]],
                 ]
             },
         },
     }, 
     tabFormat: [
-        ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["row", [
+            ["raw-html", () => {return "You have <h3>" + format(player.s.singularityPoints) + "</h3> singularity points"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(+" + format(player.s.singularityPointsToGet) + ")"}, () => {
+                let look = {fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                if (player.in.infinityPoints.gte(1e40)) {look.color = "white"} else {look.color = "gray"} 
+                return look
+            }],
+            ["raw-html", () => {return player.in.infinityPoints.gte("2.71e3793") ? "[SOFTCAPPED<sup>2</sup>]" : player.in.infinityPoints.gte(2.5e193) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace", marginLeft: "10px"}],
+        ]],
+        ["raw-html", () => { return "(Highest: " + format(player.s.highestSingularityPoints) + ")" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+        ["blank", "20px"],
+        ["layer-proxy", ["co", [
+            ["clickable", 1000]
+        ]]],
+        ["blank", "25px"],
+        ["top-column", [
+            ["style-row", [
+                ["top-column", [
+                    ["clickable", 11],
+                    ["style-column", [
+                        ["raw-html", () => {return "Score<br>" + formatWhole(player.cof.fragmentScore[0])}, () => {
+                            let look = {color: "#aaa", fontSize: "16px", fontFamily: "monospace"}
+                            if (player.cof.highestScore == 0) look.color = "var(--textColor)"
+                            return look
+                        }],
+                    ], {width: "110px", height: "37px", background: "#33251B", borderTop: "3px solid var(--regBorder)"}],
+                    ["style-column", [
+                        ["raw-html", "<p style='line-height:1'>Points, Factor Power, Prestige Points", {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
+                    ], {width: "110px", height: "47px", background: "#19120D", borderTop: "3px solid var(--regBorder)"}],
+                ], {width: "110px", height: "200px", borderRight: "3px solid var(--regBorder)"}],
+                ["top-column", [
+                    ["clickable", 12],
+                    ["style-column", [
+                        ["raw-html", () => {return "Score<br>" + formatWhole(player.cof.fragmentScore[1])}, () => {
+                            let look = {color: "#aaa", fontSize: "16px", fontFamily: "monospace"}
+                            if (player.cof.highestScore == 1) look.color = "var(--textColor)"
+                            return look
+                        }],
+                    ], {width: "110px", height: "37px", background: "#003309", borderTop: "3px solid var(--regBorder)"}],
+                    ["style-column", [
+                        ["raw-html", "<p style='line-height:1'>Trees, Grass, Grasshoppers", {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
+                    ], {width: "110px", height: "47px", background: "#001904", borderTop: "3px solid var(--regBorder)"}],
+                ], {width: "110px", height: "200px", borderRight: "3px solid var(--regBorder)"}],
+                ["top-column", [
+                    ["clickable", 13],
+                    ["style-column", [
+                        ["raw-html", () => {return "Score<br>" + formatWhole(player.cof.fragmentScore[2])}, () => {
+                            let look = {color: "#aaa", fontSize: "16px", fontFamily: "monospace"}
+                            if (player.cof.highestScore == 2) look.color = "var(--textColor)"
+                            return look
+                        }],
+                    ], {width: "110px", height: "37px", background: "#333333", borderTop: "3px solid var(--regBorder)"}],
+                    ["style-column", [
+                        ["raw-html", "<p style='line-height:1'>Code Experience, Steel, Oil", {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
+                    ], {width: "110px", height: "47px", background: "#191919", borderTop: "3px solid var(--regBorder)"}],
+                ], {width: "110px", height: "200px", borderRight: "3px solid var(--regBorder)"}],
+                ["top-column", [
+                    ["clickable", 14],
+                    ["style-column", [
+                        ["raw-html", () => {return "Score<br>" + formatWhole(player.cof.fragmentScore[3])}, () => {
+                            let look = {color: "#aaa", fontSize: "16px", fontFamily: "monospace"}
+                            if (player.cof.highestScore == 3) look.color = "var(--textColor)"
+                            return look
+                        }],
+                    ], {width: "110px", height: "37px", background: "#030033", borderTop: "3px solid var(--regBorder)"}],
+                    ["style-column", [
+                        ["raw-html", "<p style='line-height:1'>IP, Infinities, NIP", {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
+                    ], {width: "110px", height: "47px", background: "#010019", borderTop: "3px solid var(--regBorder)"}],
+                ], {width: "110px", height: "200px", borderRight: "3px solid var(--regBorder)"}],
+                ["top-column", [
+                    ["clickable", 15],
+                    ["style-column", [
+                        ["raw-html", () => {return "Score<br>" + formatWhole(player.cof.fragmentScore[4])}, () => {
+                            let look = {color: "#aaa", fontSize: "16px", fontFamily: "monospace"}
+                            if (player.cof.highestScore == 4) look.color = "var(--textColor)"
+                            return look
+                        }],
+                    ], {width: "110px", height: "37px", background: "#330000", borderTop: "3px solid var(--regBorder)"}],
+                    ["style-column", [
+                        ["raw-html", "<p style='line-height:1'>SP, Radiation, Singularity Power", {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
+                    ], {width: "110px", height: "47px", background: "#190000", borderTop: "3px solid var(--regBorder)"}],
+                ], {width: "110px", height: "200px", borderRight: "3px solid var(--regBorder)"}],
+                ["top-column", [
+                    ["clickable", 16],
+                    ["style-column", [
+                        ["raw-html", () => {return "Score<br>" + formatWhole(player.cof.fragmentScore[5])}, () => {
+                            let look = {color: "#aaa", fontSize: "16px", fontFamily: "monospace"}
+                            if (player.cof.highestScore == 5) look.color = "var(--textColor)"
+                            return look
+                        }],
+                    ], {width: "110px", height: "37px", background: "#140033", borderTop: "3px solid var(--regBorder)"}],
+                    ["style-column", [
+                        ["raw-html", "<p style='line-height:1'>Antimatter, Replicanti, Stars", {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
+                    ], {width: "110px", height: "47px", background: "#090019", borderTop: "3px solid var(--regBorder)"}],
+                ], {width: "110px", height: "200px", borderRight: "3px solid var(--regBorder)"}],
+                ["top-column", [
+                    ["clickable", 17],
+                    ["style-column", [
+                        ["raw-html", () => {return "Score<br>" + formatWhole(player.cof.fragmentScore[6])}, () => {
+                            let look = {color: "#aaa", fontSize: "16px", fontFamily: "monospace"}
+                            if (player.cof.highestScore == 6) look.color = "var(--textColor)"
+                            return look
+                        }],
+                    ], {width: "110px", height: "37px", background: "#001533", borderTop: "3px solid var(--regBorder)"}],
+                    ["style-column", [
+                        ["raw-html", "<p style='line-height:1'>Check Back Level, XPBoost, Pet Points", {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
+                    ], {width: "110px", height: "47px", background: "#000A19", borderTop: "3px solid var(--regBorder)"}],
+                ], {width: "110px", height: "200px"}],
+            ], {width: "788px", height: "200px", borderBottom: "3px solid var(--regBorder)"}],
+            ["style-column", [
+                ["raw-html", () => { return "You will gain <h3>" + formatWhole(player.cof.coreFragmentsToGet[player.cof.highestScore]) + "</h3> " + player.cof.coreFragmentNames[player.cof.highestScore] + " on singularity reset." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace" }],
+            ], {width: "788px", height: "37px", background: "var(--miscButton)", borderBottom: "3px solid var(--regBorder)"}],
+            ["top-column", [
+                    ["blank", "10px"],
+                    ["raw-html", () => { return "You have <h3>" + formatWhole(player.cof.coreFragments[player.cof.fragmentIndex]) + "</h3> " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + "." }, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return player.cof.fragmentIndex == 0 ? "Your " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + " boosts points by ^" + format(player.cof.coreFragmentEffects[player.cof.fragmentIndex], 3) + "." : ""}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return player.cof.fragmentIndex == 1 ? "Your " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + " boosts golden grass by x" + format(player.cof.coreFragmentEffects[player.cof.fragmentIndex]) + "." : ""}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return player.cof.fragmentIndex == 2 ? "Your " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + " boosts steel by ^" + format(player.cof.coreFragmentEffects[player.cof.fragmentIndex], 3) + "." : ""}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return player.cof.fragmentIndex == 3 ? "Your " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + " boosts infinity points by ^" + format(player.cof.coreFragmentEffects[player.cof.fragmentIndex], 3) + "." : ""}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return player.cof.fragmentIndex == 4 ? "Your " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + " boosts singularity points x" + format(player.cof.coreFragmentEffects[player.cof.fragmentIndex]) + "." : ""}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return player.cof.fragmentIndex == 5 ? "Your " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + " boosts replicanti mult by x" + format(player.cof.coreFragmentEffects[player.cof.fragmentIndex]) + "." : ""}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return player.cof.fragmentIndex == 6 ? "Your " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + " boosts check back XP by x" + format(player.cof.coreFragmentEffects[player.cof.fragmentIndex]) + "." : ""}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                    ["blank", "20px"], 
+                    ["buttonless-microtabs", "buyables", { 'border-width': '0px' }],
+                    ["blank", "10px"],
+            ], {width: "788px", height: "257px"}],
+            ["style-column", [
+                ["raw-html", () => { return "(The core fragment with the highest score is gained)" }, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace" }],
+                ["raw-html", () => { return "(Score is increased based on the resources below each score)" }, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace" }],
+                ["raw-html", () => { return "(HALTER 2.0 can be used to adjust these scores, and if not there is a way to set scores very low)" }, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+            ], {width: "788px", height: "62px", background: "var(--miscButton)", borderTop: "3px solid var(--regBorder)"}],
+        ], {width: "788px", height: "565px", background: "var(--layerBackground)", border: "3px solid var(--regBorder)"}],
         ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && player.ma.matosDefeated }

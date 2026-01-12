@@ -398,6 +398,7 @@ function gameLoop(diff) {
 		if (layers[layer].milestones) updateMilestones(layer);
 	}
 
+	updateCutscenes();
 }
 
 function hardReset(resetOptions) {

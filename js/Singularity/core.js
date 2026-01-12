@@ -1647,7 +1647,7 @@ addLayer("co", {
                     ["raw-html", function () { return "All alt-universe 1 content - Including oil and grass-skip." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", function () { return "Performs an XPBoost equivalent reset, and also resets XPBoost, check back buyables, and highest check back level." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Only thing that you get to keep are pets, evolutions, pet shop, epic pet stuff, automation shards, and evolution special features." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", function () { return "Only thing that you get to keep are pets, evolutions, pet shop, epic pet stuff, and evolution special features." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", function () { return "You may keep them for now, but be prepared to lose them in the next layer :)" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "100px"],
                     ["raw-html", function () { return "One more word of advice: Good luck." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],

@@ -305,6 +305,25 @@ function completeAchievement(layer, id) {
 	}
 }
 
+function updateCutscenes() {
+	for (id in layers.c.cutscenes) {
+		if (player.c.cutscenes[id] == 0 || (player.c.cutscenes[id] == 1 && layers.c.cutscenes[id].trigger())) {
+			if (layers.c.cutscenes[id].onStart) layers.c.cutscenes[id].onStart()
+			let options = {}
+			options.cutsceneID = id
+			if (layers.c.cutscenes[id].portrait) options.portrait = layers.c.cutscenes[id].portrait
+			if (layers.c.cutscenes[id].background) options.background = layers.c.cutscenes[id].background
+			if (layers.c.cutscenes[id].overlayImage) options.overlayImage = layers.c.cutscenes[id].overlayImage
+			if (layers.c.cutscenes[id].overlayImageOpacity) options.overlayImageOpacity = layers.c.cutscenes[id].overlayImageOpacity
+			if (layers.c.cutscenes[id].onEnd) options.onEnd = layers.c.cutscenes[id].onEnd
+
+			if (layers.c.cutscenes[id].type == "normal") showCutscene(layers.c.cutscenes[id].dialogue, options)
+			if (layers.c.cutscenes[id].type == "cinematic") showCinematicCutscene(layers.c.cutscenes[id].dialogue, options)
+			player.c.cutscenes[id] = 2
+		}
+	}
+}
+
 function addTime(diff, layer) {
 	let data = player
 	let time = data.timePlayed

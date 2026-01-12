@@ -428,6 +428,110 @@ addLayer("achievements", {
                     ], {width: "621px", height: "409px", background: "#191300", borderLeft: "3px solid white", padding: "3px"}],
                 ],
             },
+            3: {
+                unlocked() {return hasAchievement("achievements", 201) || (hasChallenge("ip", 18) || player.s.highestSingularityPoints.gt(0))},
+                content: [
+                    ["top-column", [
+                        ["row", [
+                            ["achievement", 201], ["achievement", 202], ["achievement", 203], ["achievement", 204], ["achievement", 205], ["achievement", 206],
+                            ["achievement", 207], ["achievement", 208], ["achievement", 209], ["achievement", 210], ["achievement", 211], ["achievement", 212],
+                            ["achievement", 213], ["achievement", 214], ["achievement", 215], ["achievement", 216], ["achievement", 217], ["achievement", 218],
+                            ["achievement", 219], ["achievement", 220], ["achievement", 221], ["achievement", 222], ["achievement", 223], ["achievement", 224],
+                        ]],
+                    ], {width: "621px", height: "409px", background: "#232b2b", borderLeft: "3px solid white", padding: "3px"}],
+                ],
+            },
+            4: {
+                unlocked() {return hasAchievement("achievements", 301) || player.in.unlockedBreak},
+                content: [
+                    ["top-column", [
+                        ["row", [
+                            ["achievement", 301], ["achievement", 302], ["achievement", 303], ["achievement", 304], ["achievement", 305], ["achievement", 306],
+                            ["achievement", 307], ["achievement", 308], ["achievement", 309], ["achievement", 310], ["achievement", 311], ["achievement", 312],
+                            ["achievement", 313], ["achievement", 314], ["achievement", 315], ["achievement", 316], ["achievement", 317], ["achievement", 318],
+                            ["achievement", 319], ["achievement", 320], ["achievement", 321], ["achievement", 322], ["achievement", 323], ["achievement", 324],
+                        ]],
+                    ], {width: "621px", height: "409px", background: "#081902", borderLeft: "3px solid white", padding: "3px"}],
+                ],
+            },
+            5: {
+                unlocked() {return hasAchievement("achievements", 401) || (hasUpgrade("bi", 24) || player.s.highestSingularityPoints.gt(0))},
+                content: [
+                    ["top-column", [
+                        ["row", [
+                            ["achievement", 401], ["achievement", 402], ["achievement", 403], ["achievement", 404], ["achievement", 405], ["achievement", 406],
+                            ["achievement", 407], ["achievement", 408], ["achievement", 409], ["achievement", 410], ["achievement", 411], ["achievement", 412],
+                            ["achievement", 413], ["achievement", 414], ["achievement", 415], ["achievement", 416], ["achievement", 417], ["achievement", 418],
+                            ["achievement", 419], ["achievement", 420], ["achievement", 421], ["achievement", 422], ["achievement", 423], ["achievement", 424],
+                        ]],
+                    ], {width: "621px", height: "409px", background: "#021a25", borderLeft: "3px solid white", padding: "3px"}],
+                ],
+            },
+            6: {
+                unlocked() {return hasAchievement("achievements", 501) || player.s.highestSingularityPoints.gt(0)},
+                content: [
+                    ["top-column", [
+                        ["row", [
+                            ["achievement", 501], ["achievement", 502], ["achievement", 503], ["achievement", 504], ["achievement", 505], ["achievement", 506],
+                            ["achievement", 507], ["achievement", 508], ["achievement", 509], ["achievement", 510], ["achievement", 511], ["achievement", 512],
+                            ["achievement", 513], ["achievement", 514], ["achievement", 515], ["achievement", 516], ["achievement", 517], ["achievement", 518],
+                            ["achievement", 519], ["achievement", 520], ["achievement", 521], ["achievement", 522], ["achievement", 523], ["achievement", 524],
+                        ]],
+                    ], {width: "621px", height: "409px", background: "#190606", borderLeft: "3px solid white", padding: "3px"}],
+                ],
+            },
+            7: {
+                unlocked() {return hasAchievement("achievements", 601) || hasUpgrade("s", 21)},
+                content: [
+                    ["top-column", [
+                        ["row", [
+                            ["achievement", 601], ["achievement", 602], ["achievement", 603], ["achievement", 604], ["achievement", 605], ["achievement", 606],
+                            ["achievement", 607], ["achievement", 608], ["achievement", 609], ["achievement", 610], ["achievement", 611], ["achievement", 612],
+                            ["achievement", 613], ["achievement", 614], ["achievement", 615], ["achievement", 616], ["achievement", 617], ["achievement", 618],
+                            ["achievement", 619], ["achievement", 620], ["achievement", 621], ["achievement", 622], ["achievement", 623], ["achievement", 624],
+                        ]],
+                    ], {width: "621px", height: "409px", background: "#000", borderLeft: "3px solid white", padding: "3px"}],
+                ],
+            },
+            8: {
+                unlocked() {return hasAchievement("achievements", 701) || tmp.pu.levelables[302].canClick},
+                content: [
+                    ["top-column", [
+                        ["row", [
+                            ["achievement", 701], ["achievement", 702], ["achievement", 703], ["achievement", 704], ["achievement", 705], ["achievement", 706],
+                            ["achievement", 707], ["achievement", 708], ["achievement", 709], ["achievement", 710], ["achievement", 711], ["achievement", 712],
+                            ["achievement", 713], ["achievement", 714], ["achievement", 715], ["achievement", 716], ["achievement", 717], ["achievement", 718],
+                            ["achievement", 719], ["achievement", 720], ["achievement", 721], ["achievement", 722], ["achievement", 723], ["achievement", 724],
+                        ]],
+                    ], {width: "621px", height: "409px", background: "#1b0218", borderLeft: "3px solid white", padding: "3px"}],
+                ],
+            },
+            9: {
+                unlocked() {return hasAchievement("achievements", 801) || player.ma.matosDefeated},
+                content: [
+                    ["top-column", [
+                        ["row", [
+                            ["achievement", 801], ["achievement", 802], ["achievement", 803], ["achievement", 804], ["achievement", 805], ["achievement", 806],
+                            ["achievement", 807], ["achievement", 808], ["achievement", 809], ["achievement", 810], ["achievement", 811], ["achievement", 812],
+                            ["achievement", 813], ["achievement", 814], ["achievement", 815], ["achievement", 816], ["achievement", 817], ["achievement", 818],
+                            ["achievement", 819], ["achievement", 820], ["achievement", 821], ["achievement", 822], ["achievement", 823], ["achievement", 824],
+                        ]],
+                    ], {width: "621px", height: "409px", background: "#0b011c", borderLeft: "3px solid white", padding: "3px"}],
+                ],
+            },
+            10: {
+                unlocked() {return hasAchievement("achievements", 801) || player.ir.iriditeDefeated},
+                content: [
+                    ["top-column", [
+                        ["row", [
+                            ["achievement", 801], ["achievement", 802], ["achievement", 803], ["achievement", 804], ["achievement", 805], ["achievement", 806],
+                            ["achievement", 807], ["achievement", 808], ["achievement", 809], ["achievement", 810], ["achievement", 811], ["achievement", 812],
+                            ["achievement", 813], ["achievement", 814], ["achievement", 815], ["achievement", 816], ["achievement", 817], ["achievement", 818],
+                            ["achievement", 819], ["achievement", 820], ["achievement", 821], ["achievement", 822], ["achievement", 823], ["achievement", 824],
+                        ]],
+                    ], {width: "621px", height: "409px", background: "#201500", borderLeft: "3px solid white", padding: "3px"}],
+                ],
+            },
         },
     },
     tabFormat: [
@@ -437,11 +541,37 @@ addLayer("achievements", {
         ["style-row", [
             ["always-scroll-column", [
                 ["style-row", [
-                    ["category-button", ["☆", "stars", 1], {width: "155px", height: "40px", background: "#333", borderRight: "3px solid white"}],
+                    ["category-button", ["<span style='color:#9bedff'>★</span>★★★★", "stars", 1], {width: "155px", height: "40px", color: "#aaa", background: "#333", borderRight: "3px solid white"}],
                 ], {width: "155px", height: "40px", borderBottom: "3px solid white"}],
                 ["style-row", [
-                    ["category-button", ["☆☆", "stars", 2], {width: "155px", height: "40px", background: "#332600", borderRight: "3px solid white"}],
-                ], () => {return hasAchievement("achievements", 101) || player.in.unlockedInfinity ? {width: "155px", height: "40px", borderBottom: "3px solid white"} : {display: "none !important"}}],
+                    ["category-button", ["<span style='color:#9bedff'>★★</span>★★★", "stars", 2], {width: "155px", height: "40px", color: "#aaa", background: "#332600", borderRight: "3px solid white"}],
+                ], () => {return tmp.achievements.microtabs.stars[2].unlocked ? {width: "155px", height: "40px", borderBottom: "3px solid white"} : {display: "none !important"}}],
+                /*
+                ["style-row", [
+                    ["category-button", ["<span style='color:#9bedff'>★★★</span>★★<br><small style='color:#c00'>[NOT IMPLEMENTED]</small>", "stars", 3], {width: "155px", height: "40px", color: "#aaa", background: "#354040", borderRight: "3px solid white"}],
+                ], () => {return tmp.achievements.microtabs.stars[3].unlocked ? {width: "155px", height: "40px", borderBottom: "3px solid white"} : {display: "none !important"}}],
+                ["style-row", [
+                    ["category-button", ["<span style='color:#9bedff'>★★★★</span>★<br><small style='color:#c00'>[NOT IMPLEMENTED]</small>", "stars", 4], {width: "155px", height: "40px", color: "#aaa", background: "#113204", borderRight: "3px solid white"}],
+                ], () => {return tmp.achievements.microtabs.stars[4].unlocked ? {width: "155px", height: "40px", borderBottom: "3px solid white"} : {display: "none !important"}}],
+                ["style-row", [
+                    ["category-button", ["★★★★★<br><small style='color:#c00'>[NOT IMPLEMENTED]</small>", "stars", 5], {width: "155px", height: "40px", color: "#9bedff", background: "#032737", borderRight: "3px solid white"}],
+                ], () => {return tmp.achievements.microtabs.stars[5].unlocked ? {width: "155px", height: "40px", borderBottom: "3px solid white"} : {display: "none !important"}}],
+                ["style-row", [
+                    ["category-button", ["<span style='color:#88e688'>★</span>★★★★<br><small style='color:#c00'>[NOT IMPLEMENTED]</small>", "stars", 6], {width: "155px", height: "40px", color: "#9bedff", background: "#330d0d", borderRight: "3px solid white"}],
+                ], () => {return tmp.achievements.microtabs.stars[6].unlocked ? {width: "155px", height: "40px", borderBottom: "3px solid white"} : {display: "none !important"}}],
+                ["style-row", [
+                    ["category-button", ["<span style='color:#88e688'>★★</span>★★★<br><small style='color:#c00'>[NOT IMPLEMENTED]</small>", "stars", 7], {width: "155px", height: "40px", color: "#9bedff", background: "#111", borderRight: "3px solid white"}],
+                ], () => {return tmp.achievements.microtabs.stars[7].unlocked ? {width: "155px", height: "40px", borderBottom: "3px solid white"} : {display: "none !important"}}],
+                ["style-row", [
+                    ["category-button", ["<span style='color:#88e688'>★★★</span>★★<br><small style='color:#c00'>[NOT IMPLEMENTED]</small>", "stars", 8], {width: "155px", height: "40px", color: "#9bedff", background: "#370530", borderRight: "3px solid white"}],
+                ], () => {return tmp.achievements.microtabs.stars[8].unlocked ? {width: "155px", height: "40px", borderBottom: "3px solid white"} : {display: "none !important"}}],
+                ["style-row", [
+                    ["category-button", ["<span style='color:#88e688'>★★★★</span>★<br><small style='color:#c00'>[NOT IMPLEMENTED]</small>", "stars", 9], {width: "155px", height: "40px", color: "#9bedff", background: "#160239", borderRight: "3px solid white"}],
+                ], () => {return tmp.achievements.microtabs.stars[9].unlocked ? {width: "155px", height: "40px", borderBottom: "3px solid white"} : {display: "none !important"}}],
+                ["style-row", [
+                    ["category-button", ["★★★★★<br><small style='color:#c00'>[NOT IMPLEMENTED]</small>", "stars", 10], {width: "155px", height: "40px", color: "#88e688", background: "#352300", borderRight: "3px solid white"}],
+                ], () => {return tmp.achievements.microtabs.stars[10].unlocked ? {width: "155px", height: "40px"} : {display: "none !important"}}],
+                */
             ], {width: "170px", height: "415px"}],
             ["style-column", [
                 ["buttonless-microtabs", "stars", {borderWidth: "0"}],

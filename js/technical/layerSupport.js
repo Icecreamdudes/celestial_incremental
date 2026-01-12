@@ -207,8 +207,18 @@ function setupLayer(layer){
             layers[layer].grid.getUnlocked = true
         if (layers[layer].grid.getCanClick === undefined)
             layers[layer].grid.getCanClick = true
-
     }
+
+    if (layers[layer].cutscenes) {
+        layers[layer].cutscenes.layer = layer
+        for (thing in layers[layer].cutscenes) {
+            layers[layer].cutscenes[thing].id = thing
+            layers[layer].cutscenes[thing].layer = layer
+            if (layers[layer].cutscenes[thing].portrait === undefined)
+                layers[layer].cutscenes[thing].portrait = "resources/secret.png"
+        }
+    }
+
     if (layers[layer].startData) {
         data = layers[layer].startData()
         if (data.best !== undefined && data.showBest === undefined) layers[layer].showBest = true

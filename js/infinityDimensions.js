@@ -40,7 +40,7 @@
     },
     nodeStyle() {
         return {
-            background: "linear-gradient(315deg, rgba(255, 129, 38,1) 0%, #f5ea14 100%)",
+            background: "linear-gradient(315deg, #ff8126 0%, #f5ea14 100%)",
             "background-origin": "border-box",
             "border-color": "#b87400",
         };

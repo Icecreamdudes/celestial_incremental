@@ -7,7 +7,7 @@
 .barBorder {
 	border: 2px solid;
 	border-radius: 10px;
-	border-color: var(--color);
+	border-color: #dfdfdf;
 	overflow: hidden;
 	-webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
 	margin:0
@@ -24,7 +24,7 @@
 }
 
 .fill {
-	background-color: var(--color);
+	background-color: #dfdfdf;
 	z-index:2;
     position: absolute;
 	overflow: hidden;

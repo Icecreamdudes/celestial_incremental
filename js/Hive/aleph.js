@@ -72,9 +72,6 @@ addLayer("al", {
 
         // FLOWER
         player.subtabs.fl.Glossary = "Red"
-        for (let thing in player.fl.timers) {
-            player.fl.timers[thing].pause = false
-        }
         player.fl.pickingPower = new Decimal(1)
         player.fl.flowerGain = new Decimal(1)
         player.fl.glossaryBase = new Decimal(1)
@@ -742,7 +739,7 @@ addLayer("al", {
         211: {
             title: "Royal J. <small>(4, 2)</small>",
             unlocked() {return player.tad.hiveExpand},
-            description: "Unlock a second effect for Nector δ-3.",
+            description: "Unlock a second effect for Nectar δ-3.",
             cost: new Decimal(400000),
             currencyLocation() { return player.al },
             currencyDisplayName: "Royal Jelly",

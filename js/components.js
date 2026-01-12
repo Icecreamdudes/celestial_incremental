@@ -1168,7 +1168,7 @@ function loadVue() {
 		<div class="tabHolder">
 			<div class="tabRow" v-for="(row, r) in data" v-bind:class="{hide:!rowShown(data[r])}">
 				<div class="tabTitleHolder">
-					<div v-bind:class="{tabTitle:true,darkTabTitle:player.sma.inStarmetalChallenge}">
+					<div v-bind:class="{tabTitle:true}">
 						<span v-html="'Row ' + r"></span>
 					</div>
 				</div>
@@ -1180,6 +1180,32 @@ function loadVue() {
 			</div>
 		</div>
 	`
+	})
+
+	// Data is an array with the structure of the tree
+	Vue.component('grid-tree', {
+		props: ['layer', 'data'],
+		computed: {
+			key() {return this.$vnode.key}
+		},
+		template: `
+		<div class="gridTrees">
+			<span class="gridCol" v-for="(row, r) in data" v-bind:class="{hide:!rowShown(data[r])}">
+				<div class="gridTitleHolder">
+					<div v-bind:class="{gridTitle:true}">
+						<span v-bind:class="{gridTitleText:true}" v-html="'Row ' + r"></span>
+					</div>
+				</div>
+				<span class="upgRow gridRowHolder">
+					<table class="gridRow">
+						<span v-for="(node, id) in row">
+							<grid-node :layer='node' :prev='layer' :abb='tmp[node].symbol' :key="key + '-' + r + '-' + id"></grid-node>
+						</span>
+					</table>
+				</span>
+			</span>
+		</div>
+		`
 	})
 
 
@@ -1340,6 +1366,26 @@ function loadVue() {
 		`,
 	})
 
+	Vue.component('cutscene-nodes', {
+		props: ['layer', 'data'],
+		template: `
+		<div class="upgRow">
+			<div v-for="item in tmp.c.cutscenes" class="upgRow">
+				<cutscene-node :layer="layer" :data="item.id" v-bind:style="player.c.cutscenes[item.id] != 2 ? {'visibility':'hidden'} : {}"></cutscene-node>
+			</div>
+		</div>
+	`
+	})
+
+	Vue.component('cutscene-node', {
+		props: ['layer', 'data'],
+		template: `
+		<div v-bind:class="{cutscenes: true, can: true}" v-on:click="player.c.cutscenes[data] = 0">
+			<span style="font-size:12px;user-select:none" v-html="data"></span>
+		</div>
+		`,
+	})
+
 	// [TEXT, SUBTAB, TAB, ENABLE]
 	Vue.component('category-button', {
 		props: ['layer', 'data'],
@@ -1361,6 +1407,7 @@ function loadVue() {
 	Vue.component('tab-buttons', systemComponents['tab-buttons'])
 	Vue.component('tree-node', systemComponents['tree-node'])
 	Vue.component('tab-node', systemComponents['tab-node'])
+	Vue.component('grid-node', systemComponents['grid-node'])
 	Vue.component('layer-tab', systemComponents['layer-tab'])
 	Vue.component('overlay-head', systemComponents['overlay-head'])
 	Vue.component('info-tab', systemComponents['info-tab'])

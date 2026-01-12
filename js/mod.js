@@ -100,12 +100,18 @@ function updateStyles() {
 			if (player.c.currentCutscene == 33 || player.c.currentCutscene == 34 || (player.c.currentCutscene == 35 && player.c.cutsceneIndex < 24)) layerBG = "linear-gradient(-180deg,rgb(114, 8, 4) 0%, rgb(114, 4, 85) 100%)"
 			break;
 		case "settings": case "jukebox": case "savebank": case "changelog": case "credits":
-			if (!player.sma.inStarmetalChallenge) layerBG = "linear-gradient(90deg, #57636d, #2e3d49)"
-			if (player.sma.inStarmetalChallenge) layerBG = "linear-gradient(90deg, #1b242b, #12181d)"
+			if (!player.sma.inStarmetalChallenge && !options.themeDarken) {
+				layerBG = "linear-gradient(90deg, #57636d, #2e3d49)"
+			} else {
+				layerBG = "linear-gradient(90deg, #1b242b, #12181d)"
+			}
 			break;
 		case "achievements":
-			if (!player.sma.inStarmetalChallenge) layerBG = "linear-gradient(45deg, #450054, #00307f)"
-			if (player.sma.inStarmetalChallenge) layerBG = "linear-gradient(90deg, #0d0010, #000919)"
+			if (!player.sma.inStarmetalChallenge && !options.themeDarken) {
+				layerBG = "linear-gradient(45deg, #450054, #00307f)"
+			} else {
+				layerBG = "linear-gradient(90deg, #0d0010, #000919)"
+			}
 			break;
 		case "po":
 			layerBG = "linear-gradient(45deg, #450054, #00307f)"
@@ -427,7 +433,7 @@ function updateStyles() {
 	let sideBG = ""
 
 	// Find background color
-	if (options.menuType == "Tree") {
+	if (options.menuType != "Tab") {
 		switch(player.universe) {
 			case "U2": 
 				sideBG = "#000f0c"
@@ -457,12 +463,11 @@ function updateStyles() {
 				sideBG = "#0b0b0b"
 				break;
 		}
-	}
-	if (options.menuType == "Tab") {
+	} else {
 		if (window.innerWidth > 1250) {
 			sideBG = "linear-gradient(to right, var(--tabTitle) 103px, var(--regBorder) 103px, var(--regBorder) 106px, var(--layerBackground) 106px)"
 		} else {
-			sideBG = "linear-gradient(to bottom, var(--tabTitle) 80px, var(--regBorder) 80px, var(--regBorder) 83px, (--layerBackground) 83px)"
+			sideBG = "linear-gradient(to bottom, var(--tabTitle) 80px, var(--regBorder) 80px, var(--regBorder) 83px, var(--layerBackground) 83px)"
 		}
 	}
 
@@ -626,6 +631,23 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h4>v1.10.6 - Checklist Update Pt.2</h4><br>
+		Content:<br>
+			- Added 3 new themes.<br>
+			- Added an unlockable toggle feature for themes. (Vague due to spoilers)<br>
+			- Added a new node layout.<br>
+			- Added an instant cutscene text setting.<br>
+			- Redid the cutscene viewer in Origin.<br><br>
+		Balancing:<br>
+			- Improved base hex power formula, and made the old one start after 10 base power gain as a softcap.<br><br>
+		Bugfixes:<br>
+			- (Hopefully) fixed AD node not showing up on some browsers.<br>
+			- Fixed the border around buy-max in star dimensions not adapting when having all star dimensions.<br>
+			- Fixed buy max for Tav Domain's Compression buyables.<br>
+			- Fixed the post-iridite cutscene.<br>
+			- Fixed dice point effect being able to become NaN.<br>
+			- Fixed the text of 'Shard Research IV' saying it buffed offerings instead of CRC.<br>
+			- Fixed tab layouts background when in portrait mode.<br><br>
 	<h3>v1.10.5 - Checklist Update</h3><br>
 		Content:<br>
 			- Redid the visuals of the options menu.<br>

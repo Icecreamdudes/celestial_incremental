@@ -6,7 +6,7 @@ var systemComponents = {
 				<div style="margin:0px" v-for="tab in Object.keys(data)">
 					<button v-if="data[tab].unlocked == undefined || data[tab].unlocked" v-bind:class="{tabButton: true, notify: subtabShouldNotify(layer, name, tab), resetNotify: subtabResetNotify(layer, name, tab)}"
 					v-bind:style="[{'border-color': tmp[layer].color}, (subtabShouldNotify(layer, name, tab) ? {'box-shadow': 'var(--hqProperty2a), 0 0 20px '  + (data[tab].glowColor || defaultGlow)} : {}), tmp[layer].componentStyles['tab-button'], data[tab].buttonStyle]"
-						v-on:click="function(){player.subtabs[layer][name] = tab; updateTabFormats(); needCanvasUpdate = true;}">{{tab}}</button>
+						v-on:click="function(){player.subtabs[layer][name] = tab; updateTabFormats(); needCanvasUpdate = true;}" v-html="run(layers[layer].microtabs[name][tab].title, layers[layer].microtabs[name][tab]) === undefined ? tab : run(layers[layer].microtabs[name][tab].title, layers[layer].microtabs[name][tab])"></button>
 				</div>
 			</div>
 		`
@@ -79,6 +79,45 @@ var systemComponents = {
 			}"
 			v-bind:style="constructNodeStyle(layer)">
 			<span class="nodeLabel tabLabel" v-html="(abb !== '' && tmp[layer].image === undefined) ? abb : '&nbsp;'"></span>
+			<node-mark :layer='layer' :data='tmp[layer].marked'></node-mark></span>
+		</button>
+		`
+	},
+
+	'grid-node': {
+		props: ['layer', 'abb', 'size', 'prev'],
+		template: `
+		<button v-if="nodeShown(layer)"
+			v-on:click="function() {
+				if(tmp[layer].isLayer) {
+					showTab(layer, prev)
+				}
+				else {run(layers[layer].onClick, layers[layer])}
+			}"
+			v-bind:class="{
+				gridNode: true,
+				smallNode: size == 'small',
+				[layer]: true,
+				tooltipBox: true,
+				ghost: tmp[layer].layerShown == 'ghost',
+				hidden: !tmp[layer].layerShown,
+				locked: tmp[layer].isLayer ? !(player[layer].unlocked || tmp[layer].canReset) : !(tmp[layer].canClick),
+				notify: tmp[layer].notify && player[layer].unlocked,
+				resetNotify: tmp[layer].prestigeNotify,
+				can: ((player[layer].unlocked || tmp[layer].canReset) && tmp[layer].isLayer) || (!tmp[layer].isLayer && tmp[layer].canClick),
+				front: !tmp.scrolled,
+			}"
+			v-bind:style="constructNodeStyle(layer)">
+			<span class="nodeLabel" v-html="(abb !== '' && tmp[layer].image === undefined) ? abb : '&nbsp;'"></span>
+			<tooltip v-if="tmp[layer].tooltip != ''"
+				:text="(tmp[layer].isLayer) ? (
+					player[layer].unlocked ? (run(layers[layer].tooltip, layers[layer]) ? run(layers[layer].tooltip, layers[layer]) : formatWhole(player[layer].points) + ' ' + tmp[layer].resource)
+					: (tmp[layer].tooltipLocked ? tmp[layer].tooltipLocked : 'Reach ' + formatWhole(tmp[layer].requires) + ' ' + tmp[layer].baseResource + ' to unlock (You have ' + formatWhole(tmp[layer].baseAmount) + ' ' + tmp[layer].baseResource + ')')
+				)
+				: (
+					tmp[layer].canClick ? (run(layers[layer].tooltip, layers[layer]) ? run(layers[layer].tooltip, layers[layer]) : 'I am a button!')
+					: (tmp[layer].tooltipLocked ? tmp[layer].tooltipLocked : 'I am a button!')
+			)"></tooltip>
 			<node-mark :layer='layer' :data='tmp[layer].marked'></node-mark></span>
 		</button>
 		`

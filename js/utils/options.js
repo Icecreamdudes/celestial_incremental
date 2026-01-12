@@ -7,6 +7,7 @@ function getStartOptions() {
 		autosave: true,
 		msDisplay: "always",
 		theme: "default",
+		themeDarken: false,
 		hqTree: false,
 		offlineProd: true,
 		hideChallenges: false,
@@ -22,6 +23,8 @@ function getStartOptions() {
 		toggleHotkey: true,
 		toggleParticle: true,
 		menuType: "Tree",
+		jukeboxID: "none",
+		instantCutsceneText: false
 	}
 }
 function updateMusicVolume() {

@@ -255,6 +255,25 @@ function loadVue() {
 		`
 	})
 
+	// data = an array of Components to be displayed in a column
+	// look = Object that defines style
+	Vue.component('theme-scroll-column', {
+		props: ['layer', 'data', 'look'],
+		computed: {
+			key() {return this.$vnode.key}
+		},
+		template: `
+		<div id="scrCon" class="upgScrollColTable upgAlwaysScrollCol themeTrack instant" >
+			<div class="upgScrollCol" v-bind:style="look" >
+				<div v-for="(item, index) in data">
+					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
+				</div>
+			</div>
+		</div>
+		`
+	})
 	// data = an array of functions returning the content (actually HTML)
 	// look = Object that defines style
 	Vue.component('stat-row', {
@@ -753,7 +772,7 @@ function loadVue() {
 						<span v-html="run(layers[layer].levelables[layers[layer].levelables.index].description, layers[layer].levelables[layers[layer].levelables.index])"></span>
 					</div>
 					<div v-bind:class="{levelableDisplayLore: true, hide: (layers[layer].levelables.toggle || layers[layer].levelables[layers[layer].levelables.index].lore == null)}">
-						<span v-html="run(layers[layer].levelables[layers[layer].levelables.index].lore, layers[layer].levelables[layers[layer].levelables.index])"></span>
+						<span style="margin:0px 5px" v-html="run(layers[layer].levelables[layers[layer].levelables.index].lore, layers[layer].levelables[layers[layer].levelables.index])"></span>
 					</div>
 				</div>
 				<div class="levelableDisplayRow instant">
@@ -1074,7 +1093,7 @@ function loadVue() {
 		},
 		template: `<div class="trees">
 		<span class="upgRow" v-for="(row, r) in data"><table class="treeRow">
-			<span v-for="(node, id) in row" style = "{width: 0px}">
+			<span v-for="(node, id) in row">
 				<tree-node :layer='node' :prev='layer' :abb='tmp[node].symbol' :key="key + '-' + r + '-' + id"></tree-node>
 			</span>
 		</table></span></div>
@@ -1089,7 +1108,7 @@ function loadVue() {
 		},
 		template: `<div class="upgRow">
 		<span class="upgTable" v-for="(row, r) in data">
-			<span v-for="(node, id) in row" style = "{width: 0px}">
+			<span v-for="(node, id) in row">
 				<tree-node :layer='node' :prev='layer' :abb='tmp[node].symbol' :key="key + '-' + r + '-' + id"></tree-node>
 			</span>
 		</span></div>
@@ -1149,18 +1168,44 @@ function loadVue() {
 		<div class="tabHolder">
 			<div class="tabRow" v-for="(row, r) in data" v-bind:class="{hide:!rowShown(data[r])}">
 				<div class="tabTitleHolder">
-					<div v-bind:class="{tabTitle:true,darkTabTitle:player.sma.inStarmetalChallenge}">
+					<div v-bind:class="{tabTitle:true}">
 						<span v-html="'Row ' + r"></span>
 					</div>
 				</div>
 				<div class="tabRowHolder">
-					<span v-for="(node, id) in row" style = "{width: 0px}">
+					<span v-for="(node, id) in row">
 						<tab-node :layer='node' :prev='layer' :abb='tmp[node].name' :key="key + '-' + r + '-' + id"></tab-node>
 					</span>
 				</div>
 			</div>
 		</div>
 	`
+	})
+
+	// Data is an array with the structure of the tree
+	Vue.component('grid-tree', {
+		props: ['layer', 'data'],
+		computed: {
+			key() {return this.$vnode.key}
+		},
+		template: `
+		<div class="gridTrees">
+			<span class="gridCol" v-for="(row, r) in data" v-bind:class="{hide:!rowShown(data[r])}">
+				<div class="gridTitleHolder">
+					<div v-bind:class="{gridTitle:true}">
+						<span v-bind:class="{gridTitleText:true}" v-html="'Row ' + r"></span>
+					</div>
+				</div>
+				<span class="upgRow gridRowHolder">
+					<table class="gridRow">
+						<span v-for="(node, id) in row">
+							<grid-node :layer='node' :prev='layer' :abb='tmp[node].symbol' :key="key + '-' + r + '-' + id"></grid-node>
+						</span>
+					</table>
+				</span>
+			</span>
+		</div>
+		`
 	})
 
 
@@ -1307,6 +1352,39 @@ function loadVue() {
 			</div>
 		`
 	})
+	
+	Vue.component('jukebox', {
+		props: ['layer', 'data'],
+		template: `
+		<div v-bind:class="{jukebox: true, selected: options.jukeboxID == data, tooltipBox: true, can: true}" v-if="run(layers[layer].songs[data].unlocked, layers[layer].songs[data])" v-on:click="options.jukeboxID = data">
+			<img v-bind:src="layers.jukebox.songs[data].img" style='width:83px;height:83px;border:2px solid var(--regBorder);margin-top:1px'></img>
+			<div style="width:85px;height:25px;background:var(--miscButton);border-radius:15px;margin-top:1px">
+				<span style="font-size:12px;user-select:none" v-html="data != 'none' ? layers[layer].songs[data].name + '<br>' : 'Disable'"></span>
+				<span style="font-size:10px;user-select:none" v-html="layers[layer].songs[data].description"></span>
+			</div>
+		</div>
+		`,
+	})
+
+	Vue.component('cutscene-nodes', {
+		props: ['layer', 'data'],
+		template: `
+		<div class="upgRow">
+			<div v-for="item in tmp.c.cutscenes" class="upgRow">
+				<cutscene-node :layer="layer" :data="item.id" v-bind:style="player.c.cutscenes[item.id] != 2 ? {'visibility':'hidden'} : {}"></cutscene-node>
+			</div>
+		</div>
+	`
+	})
+
+	Vue.component('cutscene-node', {
+		props: ['layer', 'data'],
+		template: `
+		<div v-bind:class="{cutscenes: true, can: true}" v-on:click="player.c.cutscenes[data] = 0">
+			<span style="font-size:12px;user-select:none" v-html="data"></span>
+		</div>
+		`,
+	})
 
 	// [TEXT, SUBTAB, TAB, ENABLE]
 	Vue.component('category-button', {
@@ -1329,6 +1407,7 @@ function loadVue() {
 	Vue.component('tab-buttons', systemComponents['tab-buttons'])
 	Vue.component('tree-node', systemComponents['tree-node'])
 	Vue.component('tab-node', systemComponents['tab-node'])
+	Vue.component('grid-node', systemComponents['grid-node'])
 	Vue.component('layer-tab', systemComponents['layer-tab'])
 	Vue.component('overlay-head', systemComponents['overlay-head'])
 	Vue.component('info-tab', systemComponents['info-tab'])

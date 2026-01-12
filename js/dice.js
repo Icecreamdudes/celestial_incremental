@@ -153,7 +153,11 @@
         player.d.dicePointsMult = player.d.dicePointsMult.pow(player.co.cores.dice.effect[1])
 
         // DICE POINT EFFECT
-        player.d.dicePointsEffect = player.d.dicePoints.plus(1).log10().mul(0.1).add(1)
+        if (player.d.dicePoints.gte(0)) {
+            player.d.dicePointsEffect = player.d.dicePoints.add(1).log(10).mul(0.1).add(1)
+        } else {
+            player.d.dicePointsEffect = new Decimal(1)
+        }
 
         //----------------------------------------
 
@@ -168,7 +172,12 @@
         if (hasMilestone("s", 19)) player.d.autoRollTime = player.d.autoRollTime.div(10)
 
         // ROLL TEXT STUFF
-        player.d.rollText = player.d.diceRolls.join(", ")
+        player.d.rollText = ""
+        for (let i = 0; i < player.d.diceRolls.length; i++) {
+            let str = ""
+            if (i != 0) str = str + ", "
+            player.d.rollText = player.d.rollText + str + formatWhole(player.d.diceRolls[i])
+        }
 
         // CURRENT MANUAL DICE COOLDOWN VALUE
         player.d.diceCooldown = player.d.diceCooldown.sub(onepersec.mul(delta))

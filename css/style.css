@@ -609,6 +609,20 @@ h1, h2, h3, b, input {
 	border-color: var(--selected);
 }
 
+.cutscenes {
+	width: 100px;
+	height: 50px;
+	background: var(--tabTitle);
+	border: 2px solid var(--regBorder);
+	border-radius: 10px;
+	margin: 2.5px;
+	color: var(--textColor);
+	font-size: 10px;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+}
+
 .treeThing {
 	margin: 0 5px 0 5px;
 	vertical-align: middle;

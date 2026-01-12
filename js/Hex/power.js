@@ -15,7 +15,8 @@ addLayer("hpw", {
         vigor: 0,
     }},
     update(delta) {
-        player.hpw.powerGain = Decimal.pow(2, player.hbl.blessings.add(1).div(6e5).log(6))
+        player.hpw.powerGain = player.hbl.blessings.div(6e5).pow(0.6)
+        if (player.hbl.blessings.gte(2.8e7)) player.hpw.powerGain = Decimal.pow(2, player.hbl.blessings.add(1).div(6e5).log(6)).add(5.6)
         if (hasUpgrade("hpw", 11)) player.hpw.powerGain = player.hpw.powerGain.mul(2)
         player.hpw.powerGain = player.hpw.powerGain.mul(player.hre.refinementEffect[5][0])
         player.hpw.powerGain = player.hpw.powerGain.mul(player.hrm.realmEffect)
@@ -1365,7 +1366,8 @@ addLayer("hpw", {
                 player.hbl.blessings.gte(6e5) ? look.color = "white" : look.color = "gray"
                 return look
             }],
-            ["raw-html", "<div class='bottomTooltip'>Base Formula<hr><small>2^(log6(Blessings/600k))</small></div>"],
+            ["raw-html", () => {return player.hbl.blessings.gte(2.8e7) ? "<small style='margin-left:10px'>[SOFTCAPPED]</small>" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace"}],
+            ["raw-html", () => {return player.hbl.blessings.gte(2.8e7) ? "<div class='bottomTooltip'>Base Formula<hr><small>2^(log6(Blessings/600k))+5.6</small></div>" : "<div class='bottomTooltip'>Base Formula<hr><small>(Blessings/600k)^0.6</small></div>"}],
         ]],
         ["blank", "10px"],
         ["clickable", 1],

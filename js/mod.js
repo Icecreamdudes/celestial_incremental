@@ -603,8 +603,8 @@ function updateStyles() {
 						break;
 				}
 			} else {
-				if (player.c.cutscenes[cutsceneID] && player.c.cutscenes[cutsceneID].music) {
-					playAndLoopAudio(player.c.cutscenes[cutsceneID].music, options.musicVolume/10);
+				if (layers.c.cutscenes[cutsceneID] && layers.c.cutscenes[cutsceneID].music) {
+					playAndLoopAudio(layers.c.cutscenes[cutsceneID].music, options.musicVolume/10);
 				}
             	if (cutsceneID == "A1-Funify-Start" && cutsceneIndex < 7) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
         	    if (cutsceneID == "A1-Funify-Start" && cutsceneIndex >= 7) playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);

@@ -101,18 +101,12 @@ function updateStyles() {
 			if (player.c.currentCutscene == 33 || player.c.currentCutscene == 34 || (player.c.currentCutscene == 35 && player.c.cutsceneIndex < 24)) layerBG = "linear-gradient(-180deg,rgb(114, 8, 4) 0%, rgb(114, 4, 85) 100%)"
 			break;
 		case "settings": case "jukebox": case "savebank": case "changelog": case "credits":
-			if (!player.sma.inStarmetalChallenge && !options.themeDarken) {
-				layerBG = "linear-gradient(90deg, #57636d, #2e3d49)"
-			} else {
-				layerBG = "linear-gradient(90deg, #1b242b, #12181d)"
-			}
+			if (!player.sma.inStarmetalChallenge) layerBG = "linear-gradient(90deg, #57636d, #2e3d49)"
+			if (player.sma.inStarmetalChallenge) layerBG = "linear-gradient(90deg, #1b242b, #12181d)"
 			break;
 		case "achievements":
-			if (!player.sma.inStarmetalChallenge && !options.themeDarken) {
-				layerBG = "linear-gradient(45deg, #450054, #00307f)"
-			} else {
-				layerBG = "linear-gradient(90deg, #0d0010, #000919)"
-			}
+			if (!player.sma.inStarmetalChallenge) layerBG = "linear-gradient(45deg, #450054, #00307f)"
+			if (player.sma.inStarmetalChallenge) layerBG = "linear-gradient(90deg, #0d0010, #000919)"
 			break;
 		case "po":
 			layerBG = "linear-gradient(45deg, #450054, #00307f)"
@@ -458,7 +452,7 @@ function updateStyles() {
 	let sideBG = ""
 
 	// Find background color
-	if (options.menuType != "Tab") {
+	if (options.menuType == "Tree") {
 		switch(player.universe) {
 			case "U2": 
 				sideBG = "#000f0c"
@@ -491,11 +485,12 @@ function updateStyles() {
 				sideBG = "#0b0b0b"
 				break;
 		}
-	} else {
+	}
+	if (options.menuType == "Tab") {
 		if (window.innerWidth > 1250) {
 			sideBG = "linear-gradient(to right, var(--tabTitle) 103px, var(--regBorder) 103px, var(--regBorder) 106px, var(--layerBackground) 106px)"
 		} else {
-			sideBG = "linear-gradient(to bottom, var(--tabTitle) 80px, var(--regBorder) 80px, var(--regBorder) 83px, var(--layerBackground) 83px)"
+			sideBG = "linear-gradient(to bottom, var(--tabTitle) 80px, var(--regBorder) 80px, var(--regBorder) 83px, (--layerBackground) 83px)"
 		}
 	}
 
@@ -578,7 +573,7 @@ function updateStyles() {
 						break;
 					case "U1":
 						if (player.startedGame && player.ip.activeChallenge == null) playAndLoopAudio("music/universe1.mp3", options.musicVolume/10)
-						if (player.ip.activeChallenge != null) playAndLoopAudio("music/tav.mp3", options.musicVolume/10)
+						if (player.ip.activeChallenge != null) playAndLoopAudio("music/ipChallenge.mp3", options.musicVolume/10)
 						break;
 					case "U2":
 						if (player.tab != "tad") {
@@ -623,6 +618,9 @@ function updateStyles() {
 						break;
 					case "UB":
 						playAndLoopAudio("music/hive.mp3", options.musicVolume/10)
+						break;
+					case "DS":
+						playAndLoopAudio("music/diceSpace.mp3", options.musicVolume/10)
 						break;
 					case "CB":
 						if (player.fi.battleTier.eq(0)) playAndLoopAudio("music/checkback.mp3", options.musicVolume/10)

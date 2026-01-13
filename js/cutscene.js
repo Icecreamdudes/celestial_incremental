@@ -3258,7 +3258,7 @@
             portrait: "resources/secret.png",
             music: "music/zarCutscene.mp3",
             background: "linear-gradient(45deg, #666666ff 0%, #585858ff 100%)",
-            trigger() {return player.c.cutscene2[10] && (player.za.zarReqs[0] || player.za.zarReqs[1] || player.za.zarReqs[2] || player.za.zarReqs[3] || player.za.zarReqs[4] || player.za.zarReqs[5]) },
+            trigger() {return (player.za.zarReqs[0] || player.za.zarReqs[1] || player.za.zarReqs[2] || player.za.zarReqs[3] || player.za.zarReqs[4] || player.za.zarReqs[5]) },
             dialogue: [
                 { text: "As you explore the universe, you find a small structure." },
                 { text: "It is a person-sized dice, with six notches, signifying six requirements." },
@@ -3319,7 +3319,7 @@
         "DS-Zar-WheelOfFortune": {
             type: "normal",
             portrait: "resources/secret.png",
-            music: "music/zarCutscene.mp3",
+            music: "music/novasentFlashback.mp3",
             background: "linear-gradient(45deg, #666666ff 0%, #585858ff 100%)",
             trigger() {return hasUpgrade("za", 13) },
             dialogue: [
@@ -3347,7 +3347,7 @@
         "DS-Zar-SpinWheel": {
             type: "normal",
             portrait: "resources/secret.png",
-            music: "music/pianoCutscene.mp3",
+            music: "music/novasentFlashback.mp3",
             background: "#5c4b4b",
             trigger() {return player.wof.wheelPoints.gte(1) },
             dialogue: [
@@ -3376,9 +3376,9 @@
         "DS-Zar-Buyables": {
             type: "normal",
             portrait: "resources/secret.png",
-            music: "music/pianoCutscene.mp3",
+            music: "music/novasentFlashback.mp3",
             background: "#5c4b4b",
-            trigger() {return false },
+            trigger() {return hasUpgrade("za", 15) },
             dialogue: [
                 { text: "You are brought into another flashback."  },
                 { text: "This time, you are inside of a strange looking ship, flying through an unknown space."  },
@@ -3402,6 +3402,23 @@
                 { text: "He wasn't able to understand my language, and I wasn't able to understand his either.", portrait: "resources/humanTera.png"  },
                 { text: "All I was able to figure out was that Cere desired my soul. I wasn't able to figure out why.", portrait: "resources/humanTera.png"  },
                 { text: "He brought me to the CHC, and I was able to learn English.", portrait: "resources/humanTera.png"  },
+                { text: "It must've taken you a lot of time to adjust, dang.", portrait: "resources/humanZar.png"  },
+                { text: "It certainly has, and after 7 years of this job I can say I'm still adjusting.", portrait: "resources/humanTera.png"  },
+                { text: "As for my story, it's kinda hard to remember.", portrait: "resources/humanIridite.png"  },
+                { text: "I remember a world filled with bloodshed and horror. Celestials had long terrorized this world even long before I was born.", portrait: "resources/humanIridite.png"  },
+                { text: "My entire family has been slaughtered, and I was unable to do anything about it.", portrait: "resources/humanIridite.png"  },
+                { text: "Next thing you know, the recruiters visited, and I was brought to the CHC.", portrait: "resources/humanIridite.png"  },
+                { text: "That must be horrible...", portrait: "resources/humanZar.png"  },
+                { text: "Oh well, everything happens for a reason. I'm glad I joined the CHC. I have a purpose to fulfill now.", portrait: "resources/humanIridite.png"  },
+                { text: "And some great friends! You two are some amazing people, and I'd love to spend more time with y'all.", portrait: "resources/humanZar.png"  },
+                { text: "Thanks guys. I'll see you guys around. It's getting late, and it's hard to keep track of time in interdimensional space.", portrait: "resources/humanTera.png"  },
+                { text: "I think I'm gonna go get some sleep now.", portrait: "resources/humanTera.png"  },
+                { text: "Good night Taro. Good night Raze. Tomorrow we arrive at our first destination.", portrait: "resources/humanIridite.png"  },
+                { text: "All of these celestial hunters were once terrorized by celestials, only for them to end up as celestials."  },
+                { text: "Is this a cruel cycle? Were those previous celestials once celestial hunters as well? You are unsure."  },
+                { text: "All you know is that they were once human, just like you. They also wanted to put an end to celestials, just like you."  },
+                { text: "They had desires, they had wishes. They had hopes, they had dreams. They were human."  },
+                { text: "You must put an end to all of this."  },
             ],
         },
     },

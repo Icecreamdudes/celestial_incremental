@@ -110,6 +110,9 @@ addLayer('g', {
         player.g.grassVal = player.g.grassVal.pow(buyableEffect('st', 101))
         player.g.grassVal = player.g.grassVal.pow(buyableEffect("cof", 14))
 
+        // SOFTCAPPY
+        if (player.g.grassVal.gte("1e100000")) player.g.grassVal = player.g.grassVal.div("1e100000").pow(0.1).mul("1e100000")
+
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.po.halter.grass.enabled == 1) player.g.grassVal = player.g.grassVal.div(player.po.halter.grass.halt)
         if (player.po.halter.grass.enabled == 2 && player.g.grassVal.gt(player.po.halter.grass.halt)) player.g.grassVal = player.po.halter.grass.halt
@@ -1275,6 +1278,7 @@ addLayer('g', {
         ["row", [
             ["raw-html", () => {return "You have " + format(player.g.grass) + " grass"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
             ["raw-html", () => {return "(+" + format(player.g.grassVal) + " GV)"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+            ['raw-html', () => {return player.g.grassVal.gte("1e100000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}]
         ]],
         ["row", [
             ["raw-html", () => {return "Boosts leaf gain by x" + format(player.g.grassEffect)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],

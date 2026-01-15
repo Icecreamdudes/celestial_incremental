@@ -2849,7 +2849,7 @@ addLayer("pet", {
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    amt.pow(0.5).mul(0.0035).mul(player.g.grass.add(10).log(10).log(10).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Fertilizer (Based on Grass Magnitude^2)
+                    amt.pow(0.5).mul(0.0035).mul(player.g.grass.add(10).log(10).log(10).add(1)).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Fertilizer (Based on Grass Magnitude^2)
                     amt.div(8).mul(player.cb.level.add(2).log(2).log(2).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1) // Check Back XP (Based on Level Magnitude)
                 ]
             },
@@ -3254,7 +3254,7 @@ addLayer("pet", {
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    amt.pow(0.5).mul(0.0065).mul(player.ra.radiation.add(10).log(10).log(10).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Singularity Points (Based on Radiation)
+                    amt.pow(0.5).mul(0.0065).mul(player.ra.radiation.add(10).log(10).log(10).add(1)).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Singularity Points (Based on Radiation)
                     amt.mul(player.s.singularityPoints.add(2).log(2).log(2).add(1)).pow(2.5).pow(Decimal.pow(3, getLevelableTier(this.layer, this.id))).add(1) // Singularity Dimenstions (Based on Singularity Points)
                 ]
             },
@@ -3562,9 +3562,9 @@ addLayer("pet", {
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    amt.mul(player.cb.level.add(2).log(2).log(2).add(1)).div(3000).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Infinity Points (Based on Check Back Level)
-                    amt.pow(2).mul(player.cb.level.add(2).log(2).log(2).add(1)).pow(2.4).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Singularity Points (Based on Check Back Level)
-                    amt.mul(player.cb.level.add(2).log(2).log(2).add(1)).div(20).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Starmetal Alloy (Based on Check Back Level)
+                    amt.mul(player.cb.level.add(2).log(2).log(2).add(1)).div(3000).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Infinity Points (Based on Check Back Level)
+                    amt.pow(2).mul(player.cb.level.add(2).log(2).log(2).add(1)).pow(2.4).pow(getLevelableTier(this.layer, this.id).add(1)).add(1), // Singularity Points (Based on Check Back Level)
+                    amt.mul(player.cb.level.add(2).log(2).log(2).add(1)).div(20).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Starmetal Alloy (Based on Check Back Level)
                 ]
             },
             sellValue() { return new Decimal(500)},
@@ -3611,9 +3611,9 @@ addLayer("pet", {
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    amt.mul(player.ra.radiation.add(2).log(2).log(2).add(1)).div(300).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Anonymity (Based on Radiation)
-                    amt.mul(player.ra.radiation.add(2).log(2).log(2).add(1)).div(300).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Oil (Based on Radiation)
-                    amt.mul(player.ra.radiation.add(2).log(2).log(2).add(1)).div(220).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Fun (Based on Radiation)
+                    amt.mul(player.ra.radiation.add(2).log(2).log(2).add(1)).div(300).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Anonymity (Based on Radiation)
+                    amt.mul(player.ra.radiation.add(2).log(2).log(2).add(1)).div(300).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Oil (Based on Radiation)
+                    amt.mul(player.ra.radiation.add(2).log(2).log(2).add(1)).div(220).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Fun (Based on Radiation)
                 ]
             },
             sellValue() { return new Decimal(500)},

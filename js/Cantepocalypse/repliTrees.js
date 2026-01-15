@@ -103,6 +103,7 @@
         player.rt.repliTreesToGet = player.rt.repliTreesToGet.pow(buyableEffect("fu", 85))
 
         // REPLI-TREE NERFS
+        if (player.rt.repliTreesToGet.gte("1e1000")) player.rt.repliTreesToGet = player.rt.repliTreesToGet.div("1e1000").pow(0.2).mul("1e1000") 
         if (inChallenge("fu", 11) || inChallenge("fu", 12)) player.rt.repliTreesToGet = player.rt.repliTreesToGet.pow(Decimal.mul(0.2, buyableEffect("fu", 88)))
 
         // REPLI-TREE REQUIREMENT
@@ -460,6 +461,7 @@
                     ["raw-html", () => {return "Boosts anonymity gain by x" + format(player.rt.repliTreesEffect)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["raw-html", () => {return "Repli-Leaves mult: x" + format(player.rt.repliLeavesMult, 4)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["raw-html", () => {return player.rt.repliTrees.gte(player.rt.repliTreeSoftcapStart) ? "After " + formatWhole(player.rt.repliTreeSoftcapStart) + " repli-trees, repli-leaf mult is divided by " + format(player.rt.repliTreeSoftcapEffect) : "" }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.rt.repliTrees.gte("1e1000") ? "After 1e1000 repli-trees, repli-tree gain is raised by ^0.2." : "" }, {color: "red", fontSize: "14px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["bar", "repliTreeBar"]]],
                     ["row", [["bar", "repliLeafBar"]]],

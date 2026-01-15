@@ -1,0 +1,67 @@
+const BHP = {}
+BHP.none = {
+    name: "None",
+    color: "#333",
+    icon: "resources/secret.png",
+    health: new Decimal(0),
+    damage: new Decimal(0),
+    defense: new Decimal(0),
+    regen: new Decimal(0),
+    agility: new Decimal(0),
+    luck: new Decimal(0),
+}
+BHP.kres = {
+    name: "Kres",
+    color: "#910a27",
+    icon: "resources/kres.png",
+    health: new Decimal(80),
+    damage: new Decimal(7),
+    defense: new Decimal(0),
+    regen: new Decimal(0),
+    agility: new Decimal(5),
+    luck: new Decimal(0),
+}
+BHP.nav = {
+    name: "Nav",
+    color: "#710a91",
+    icon: "resources/nav.png",
+    health: new Decimal(60),
+    damage: new Decimal(9),
+    defense: new Decimal(0),
+    regen: new Decimal(0),
+    agility: new Decimal(5),
+    luck: new Decimal(0),
+}
+BHP.sel = {
+    name: "Sel",
+    color: "#065c19",
+    icon: "resources/sel.png",
+    health: new Decimal(60),
+    damage: new Decimal(6),
+    defense: new Decimal(0),
+    regen: new Decimal(0),
+    agility: new Decimal(8),
+    luck: new Decimal(0),
+}
+BHP.eclipse = {
+    name: "Eclipse",
+    color: "#b68c18",
+    icon: "resources/eclipse.png",
+    health: new Decimal(100),
+    damage: new Decimal(10),
+    defense: new Decimal(10),
+    regen: new Decimal(0),
+    agility: new Decimal(0),
+    luck: new Decimal(0),
+}
+BHP.geroa = {
+    name: "Geroa",
+    color: "#536bdb",
+    icon: "resources/geroa.png",
+    health: new Decimal(50),
+    damage: new Decimal(5),
+    defense: new Decimal(5),
+    regen: new Decimal(0.5),
+    agility: new Decimal(10),
+    luck: new Decimal(0),
+}

@@ -15,8 +15,8 @@
             color: "black",
         };
     },
-    tooltip: "Normality",
-    branches: ["dgr"],
+    tooltip: "Vaporizer",
+    branches: [["dgr", "#309"]],
     color: "rgba(193, 223, 0)",
     update(delta) {
         let onepersec = new Decimal(1)

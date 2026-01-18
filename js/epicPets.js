@@ -83,7 +83,11 @@
                     }
             },
             onHold() { clickClickable(this.layer, this.id) },
-            style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
+            style() {
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         12: {
             title() { return player.ep0.timers[1].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep0.timers[1].current) + "." : "<h3>+" + format(player.ep0.timers[1].base) + " Dotknight Points."},
@@ -104,7 +108,11 @@
                     }
             },
             onHold() { clickClickable(this.layer, this.id) },
-            style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
+            style() {
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         13: {
             title() { return player.ep0.timers[2].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep0.timers[2].current) + "." : "<h3>+" + format(player.ep0.timers[2].base) + " Dotknight Points."},
@@ -125,7 +133,11 @@
                     }
             },
             onHold() { clickClickable(this.layer, this.id) },
-            style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
+            style() {
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         99: {
             title() {return "Claim All"},
@@ -138,8 +150,8 @@
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "140px", minHeight: "40px", borderRadius: "0px", margin: "5px"}
-                this.canClick() ? look.backgroundColor = "#cb79ed" : look.backgroundColor = "#bf8f8f"
+                let look = {width: "140px", minHeight: "40px", borderRadius: "10px", margin: "5px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#cceaf9" : look.backgroundColor = "#bf8f8f"
                 return look
             },
         },
@@ -409,7 +421,11 @@ addLayer("ep1", {
                     }
             },
             onHold() { clickClickable(this.layer, this.id) },
-            style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
+            style() {
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         12: {
             title() { return player.ep1.timers[1].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep1.timers[1].current) + "." : "<h3>+" + format(player.ep1.timers[1].base) + " Dragon Points."},
@@ -430,7 +446,11 @@ addLayer("ep1", {
                     }
             },
             onHold() { clickClickable(this.layer, this.id) },
-            style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
+            style() {
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         13: {
             title() { return player.ep1.timers[2].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep1.timers[2].current) + "." : "<h3>+" + format(player.ep1.timers[2].base) + " Dragon Points."},
@@ -451,7 +471,11 @@ addLayer("ep1", {
                     }
             },
             onHold() { clickClickable(this.layer, this.id) },
-            style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
+            style() {
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         99: {
             title() {return "Claim All"},
@@ -464,8 +488,8 @@ addLayer("ep1", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "140px", minHeight: "40px", borderRadius: "0px", margin: "5px"}
-                this.canClick() ? look.backgroundColor = "#cb79ed" : look.backgroundColor = "#bf8f8f"
+                let look = {width: "140px", minHeight: "40px", borderRadius: "10px", margin: "5px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#cceaf9" : look.backgroundColor = "#bf8f8f"
                 return look
             },
         },

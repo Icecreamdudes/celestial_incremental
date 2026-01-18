@@ -98,6 +98,7 @@
 
         player.le.eclipseShardsValue = new Decimal(5)
         player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(buyableEffect("le", 11)).floor()
+        player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(player.dt.timeCapsuleEffect).floor()
 
         if (player.sme.starmetalResetToggle && player.du.points.gte(player.le.starmetalAlloyReq) && !player.pet.activeAbilities[0]) {
             player.le.resetAmount = player.le.resetAmount.add(1)
@@ -110,6 +111,7 @@
         }
         if (player.sme.autoLeaveToggle && player.le.starmetalAlloyToGetTrue.gte(player.sme.leaveAmount) && !player.pet.activeAbilities[0]) {
             player.sb.storedSpaceEnergy = player.sb.storedSpaceEnergy.add(player.ds.storedSpaceEnergyToGet)
+            player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.add(player.dt.storedToGet)
 
             player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.le.starmetalAlloyToGetTrue.floor())
             player.le.starmetalAlloyPauseAgain = new Decimal(10)

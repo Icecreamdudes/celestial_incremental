@@ -2446,7 +2446,7 @@ addLayer("ev1", {
             ["raw-html", "<img src='resources/petPoint.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
             ["raw-html", () => { return formatShort(player.cb.petPoints)}, {width: "95px", height: "50px", color: "#A2D800", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
             ["raw-html", "<div class='bottomTooltip'>Pet Points<hr><small>(Gained from rare pet buttons)</small></div>"],
-        ], {width: "150px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
+        ], {width: "150px", height: "50px", backgroundColor: "black", border: "2px solid #cc4533", borderRadius: "10px", userSelect: "none"}],
         ["blank", "10px"],
         ["microtabs", "Tabs", {borderWidth: "0"}],
         ["blank", "10px"],

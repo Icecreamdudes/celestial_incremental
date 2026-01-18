@@ -64,7 +64,7 @@
             "border-color": "#00664d",
         };
     },
-    tooltip: "Well of Light",
+    tooltip: "Wells of Light",
     color: "#ffdfdf",
     update(delta) {
         player.wel.bhLoop += delta / 10
@@ -78,6 +78,7 @@
             player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[2].completions.mul(0.1).add(1))
             player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[3].completions.mul(0.01).add(1))
         }
+        if (hasUpgrade("wel", 14)) player.wel.lightMult = player.wel.lightMult.mul(2)
         
         for (let i = 0; i < Object.keys(player.wel.modules).length; i++) {
             player.wel.modules[i+1].time = player.wel.modules[i+1].time.add(delta)
@@ -87,7 +88,7 @@
 
         if (player.wel.bestLight.lt(player.wel.light)) player.wel.bestLight = player.wel.light;
     },
-    branches: ["bum", ["cer", "#fff", 40], ["cer", "#402030", 8]],
+    branches: ["pri", "prj", ["bum", "#fff", 40], ["bum", "#402030", 8]],
     bars: {},
     upgrades: {
         11: {
@@ -95,7 +96,7 @@
             condition() { return player.in.infinities.gte(1e25) || true },
             fullDisplay() {
                 let s = "<h2>"
-                if (this.condition()) {
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
                     s += "Unlock light well α.</h2><br><br><h3>Cost: Free!</h3>"
                 } else {
                     s += "???</h2><br><h3>Req: 1e25 Infinities</h3>"
@@ -131,7 +132,7 @@
             condition() { return player.wel.bestLight.gte(5) },
             fullDisplay() {
                 let s = "<h2>"
-                if (this.condition()) {
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
                     s += "Unlock light buyables.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><h3>Req: 5 Light</h3>"
@@ -167,7 +168,7 @@
             condition() { return getBuyableAmount("wel", 11).gte(8) },
             fullDisplay() {
                 let s = "<h2>"
-                if (this.condition()) {
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
                     s += "Well cycles boost well yield.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><h3>Req: 8 Light Boost levels</h3>"
@@ -203,14 +204,16 @@
             condition() { return getBuyableAmount("wel", 12).gte(4) },
             fullDisplay() {
                 let s = "<h2>"
-                if (this.condition()) {
+                if (hasUpgrade(this.layer, this.id)) {
+                    s += "Double light gain and unlock prisms.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else if (this.condition()) {
                     s += "...</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><h3>Req: 4 Light Boost II levels</h3>"
                 }
                 return s
             },
-            cost: new Decimal(1e4),
+            cost: new Decimal(1.5e4),
             currencyLocation() { return player.wel },
             currencyDisplayName: "Light",
             currencyInternalName: "light",
@@ -312,7 +315,7 @@
     infoboxes: {},
     clickables: {
         1: {
-            title() { return "<h3>Collect</h3> ⭮" },
+            title() { return "<h3>Collect</h3> ↻" },
             canClick() { return player.wel.modules[1].time.gte(player.wel.modules[this.id].maxTime())},
             unlocked() { return true },
             onClick() {
@@ -335,7 +338,7 @@
             },
         },
         2: {
-            title() { return "<h3>Collect</h3> ⭮" },
+            title() { return "<h3>Collect</h3> ↻" },
             canClick() { return player.wel.modules[2].time.gte(player.wel.modules[this.id].maxTime())},
             unlocked() { return true },
             onClick() {
@@ -359,7 +362,7 @@
             },
         },
         3: {
-            title() { return "<h3>Collect</h3> ⭮" },
+            title() { return "<h3>Collect</h3> ↻" },
             canClick() { return player.wel.modules[3].time.gte(player.wel.modules[this.id].maxTime())},
             unlocked() { return true },
             onClick() {
@@ -457,7 +460,7 @@
                             ["clickable", 1],
                         ], {background: "#336659",border: "3px solid #336659", borderRadius: "103px 103px 8px 8px", width: "150px"}],
                     ["blank", "9px"],
-                    ["raw-html", formatShortestWhole(player.wel.modules[1].completions) + " α ⭮", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", formatShortestWhole(player.wel.modules[1].completions) + " α ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", "(x" + formatShort(player.wel.modules[1].completions.mul(0.02).add(1)) + " Light)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
                     ]],
                     ]],
@@ -489,7 +492,7 @@
                             ["clickable", 2],
                         ], {background: "#336659",border: "3px solid #336659", borderRadius: "103px 103px 8px 8px", width: "150px"}],
                     ["blank", "9px"],
-                    ["raw-html", formatShortestWhole(player.wel.modules[2].completions) + " β ⭮", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", formatShortestWhole(player.wel.modules[2].completions) + " β ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", "(x" + formatShort(player.wel.modules[2].completions.mul(0.1).add(1)) + " Light)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
                     ]],
                     )
@@ -499,10 +502,10 @@
                         look[1][1].push(
                             ["style-column", [
                                 ["style-column", [
-                                    ["raw-html", "<h2Light Well β<h2><br><h3>Req: 50 α ⭮</h3>", {color: "#ffdfdf", fontSize: "10px"}],
+                                    ["raw-html", "<h2>Light Well β<h2><br><h3>Req: 50 α ↻</h3>", {color: "#ffdfdf", fontSize: "10px"}],
                                 ], {background: "#2e2323",border: "3px solid #5e4747", borderRadius: "103px 103px 8px 8px", width: "150px", height: "283px", lineHeight: "1"}],
-                        ["blank", "9px"],
-                        ["style-column", [], {height: "40px"}],
+                            ["blank", "9px"],
+                            ["style-column", [], {height: "40px"}],
                         ]],
                     )
                     }
@@ -533,7 +536,7 @@
                             ["clickable", 3],
                         ], {background: "#336659",border: "3px solid #336659", borderRadius: "103px 103px 8px 8px", width: "150px"}],
                     ["blank", "9px"],
-                    ["raw-html", formatShortestWhole(player.wel.modules[3].completions) + " γ ⭮", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", formatShortestWhole(player.wel.modules[3].completions) + " γ ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", "(x" + formatShort(player.wel.modules[3].completions.mul(0.01).add(1)) + " Light)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
                     ]],
                     )
@@ -543,10 +546,10 @@
                         look[1][1].push(
                             ["style-column", [
                                 ["style-column", [
-                                    ["raw-html", "<h2>Light Well γ</h2><br><h3>Req: 500 β ⭮</h3>", {color: "#ffdfdf", fontSize: "10px"}],
+                                    ["raw-html", "<h2>Light Well γ</h2><br><h3>Req: 500 β ↻</h3>", {color: "#ffdfdf", fontSize: "10px"}],
                                 ], {background: "#2e2323",border: "3px solid #5e4747", borderRadius: "103px 103px 8px 8px", width: "150px", height: "283px", lineHeight: "1"}],
-                        ["blank", "9px"],
-                        ["style-column", [], {height: "40px"}],
+                            ["blank", "9px"],
+                            ["style-column", [], {height: "40px"}],
                         ]],
                     )
                     }

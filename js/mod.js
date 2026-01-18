@@ -24,8 +24,9 @@
 		"Hive/unih.js", "Hive/flower.js", "Hive/pollen.js", "Hive/nectar.js", "Hive/beebread.js",
 		"Hive/honey.js", "Hive/wax.js", "Hive/aleph.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js",
-		"Interspace/well.js", "Interspace/bumpy.js", "Interspace/developmentXp.js", "Singularity/reactor.js", "Singularity/starmetalEnhancement.js", "Interspace/cere.js",
-		"Check Back/singularityPet.js",
+		"Interspace/well.js", "Interspace/bumpy.js", "Interspace/prisms.js", "Interspace/projects.js", "Interspace/cere.js",
+		"Singularity/reactor.js", "Singularity/starmetalEnhancement.js",
+		"Check Back/singularityPet.js", "DarkU1/timeCapsules.js",
 
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
@@ -98,7 +99,7 @@ function updateStyles() {
 	// Find background color
 	switch(player.tab) {
 		case "c":
-			if (player.c.cutscene1 || player.c.cutscene2 || player.c.cutscene13 || (player.c.currentCutscene == 35 && player.c.cutsceneIndex >= 24)) layerBG = "black"
+			if (player.c.cutscene1 || player.c.cutscene2 || player.c.cutscene13 || (player.c.currentCutscene == 35 && player.c.cutsceneIndex >= 24)) layerBG = "linear-gradient(-0deg, #000)"
 			if (player.c.currentCutscene == 33 || player.c.currentCutscene == 34 || (player.c.currentCutscene == 35 && player.c.cutsceneIndex < 24)) layerBG = "linear-gradient(-180deg,rgb(114, 8, 4) 0%, rgb(114, 4, 85) 100%)"
 			break;
 		case "settings": case "jukebox": case "savebank": case "changelog": case "credits":
@@ -119,65 +120,65 @@ function updateStyles() {
 			layerBG = "linear-gradient(45deg, #450054, #00307f)"
 			break;
 		case "t":
-			layerBG = "#02172f"
+			layerBG = "linear-gradient(0deg, #02172f)"
 			break;
 		case "g":
-			layerBG = "#042347"
+			layerBG = "linear-gradient(0deg, #042347)"
 			break;
 		case "gh":
-			layerBG = "#073b77"
+			layerBG = "linear-gradient(0deg, #073b77)"
 			break;
 		case "hpr": case "m":
-			layerBG = "#000919"
+			layerBG = "linear-gradient(0deg, #000919)"
 			break;
 		case "hbl": case "pol":
-			layerBG = "#191300"
+			layerBG = "linear-gradient(0deg, #191300)"
 			break;
 		case "hcu":
-			layerBG = "#111515"
+			layerBG = "linear-gradient(0deg, #111515)"
 			break;
 		case "hpu":
-			layerBG = "#161511"
+			layerBG = "linear-gradient(0deg, #161511)"
 			break;
 		case "hpw": case "pe":
-			layerBG = "#200"
+			layerBG = "linear-gradient(0deg, #200)"
 			break;
 		case "hve":
-			layerBG = "#101"
+			layerBG = "linear-gradient(0deg, #101)"
 			break;
 		case "hrm":
 			layerBG = "linear-gradient(90deg, #311100, #313000, #163100, #003105, #003121, #002C31, #001431, #000031, #300031)"
 			break;
 		case "hsa":
-			layerBG = "#aaab88"
+			layerBG = "linear-gradient(0deg, #aaab88)"
 			break;
 		case "bigc":
-			layerBG = "#b87c34"
+			layerBG = "linear-gradient(0deg, #b87c34)"
 			break;
 		case "in": case "ad": case "ip": case "ta": case "bi":
 		case "om": case "id":
-			layerBG = "#001f18"
+			layerBG = "linear-gradient(0deg, #001f18)"
 			break;
 		case "revc":
-			layerBG = "#31aeb0"
+			layerBG = "linear-gradient(0deg, #31aeb0)"
 			break;
 		case "tad":
-			if (player.subtabs["tad"]["Tabs"] == "Domain") layerBG = "#b2d8d8"
-			if (player.subtabs["tad"]["Tabs"] == "Infinitum") layerBG = "#c8c9fc"
-			if (player.subtabs["tad"]["Tabs"] == "Alternative Infinities") layerBG = "#9dc7fe"
+			if (player.subtabs["tad"]["Tabs"] == "Domain") layerBG = "linear-gradient(0deg, #b2d8d8)"
+			if (player.subtabs["tad"]["Tabs"] == "Infinitum") layerBG = "linear-gradient(0deg, #c8c9fc)"
+			if (player.subtabs["tad"]["Tabs"] == "Alternative Infinities") layerBG = "linear-gradient(0deg, #9dc7fe)"
 			break;
 		case "ca":
-			layerBG = "#2a3e66"
-			if (player.subtabs["ca"]['stuff'] == "Galaxy Dust") layerBG = "#0f1226"
-			if (player.subtabs["ca"]["stuff"] == "Trials" || player.subtabs["ca"]["stuff"] == "THE BARRIER") layerBG = "#1f1e33"
+			layerBG = "linear-gradient(0deg, #2a3e66)"
+			if (player.subtabs["ca"]['stuff'] == "Galaxy Dust") layerBG = "linear-gradient(0deg, #1f1e33)"
+			if (player.subtabs["ca"]["stuff"] == "Trials" || player.subtabs["ca"]["stuff"] == "THE BARRIER") layerBG = "linear-gradient(0deg, #1f1e33)"
 			break;
 		case "cp": case "ar": case "pr": case "an": case "rt":
 		case "rg": case "gs": case "oi": case "fu":
-			layerBG = "#204387"
+			layerBG = "linear-gradient(0deg, #204387)"
 			break;
 		case "s": case "co": case "ra": case "sd": case "cs":
 		case "cof": case "re":
-			if (!player.ma.matosDefeated) layerBG = "#260300"
+			if (!player.ma.matosDefeated) layerBG = "linear-gradient(0deg, #260300)"
 			if (player.ma.matosDefeated) layerBG = "linear-gradient(-180deg, #540818 0%, #3a0202 100%)"
 			if (player.tab == "co" && player.ma.matosDefeated) layerBG = "linear-gradient(-180deg,rgb(0, 0, 0) 0%, rgb(15, 15, 15) 100%)"
 			break;
@@ -186,16 +187,16 @@ function updateStyles() {
 			break;
 		case "ma": 
 			if (!player.ma.inBlackHeart) {
-				if (!player.ma.matosDefeated) layerBG = "#260300"
+				if (!player.ma.matosDefeated) layerBG = "linear-gradient(0deg, #260300)"
 				if (player.ma.matosDefeated) layerBG = "linear-gradient(-180deg, #540818 0%, #3a0202 100%)"
 			}
-			if (player.ma.inBlackHeart) layerBG = "black"
+			if (player.ma.inBlackHeart) layerBG = "linear-gradient(0deg, #000)"
 			if (player.ma.currentDepth.eq(2)) layerBG = "linear-gradient(-180deg, #720455 0%, #250121 100%)"
 			if (player.ma.currentDepth.eq(3)) layerBG = "linear-gradient(-180deg, #720804 0%, #720455 100%)"
 			break;
 		case "du": case "le": case "dr": case "dp": case "dg":
 		case "dgr": case "dn": case "db": case "dv": case "ds": case "pu":
-			layerBG = "black"
+			layerBG = "linear-gradient(0deg, #000)"
 			break;
 		case "ch":
 			layerBG = "linear-gradient(90deg, #260b36, #0920b5)"
@@ -204,35 +205,32 @@ function updateStyles() {
 			layerBG = "radial-gradient(circle, #1d1738, #1e0d61)"
 			break;
 		case "au2":
-			layerBG = "#151230"
+			layerBG = "linear-gradient(0deg, #151230)"
 			break;
 		case "bee": case "fl": case "bpl": case "ne": case "bb":
 		case "ho": case "wa":
-			layerBG = "#2a1c00"
+			layerBG = "linear-gradient(0deg, #2a1c00)"
 			break;
 		case "al":
-			layerBG = "#1f001f"
+			layerBG = "linear-gradient(0deg, #1f001f)"
 			break;
 		case "wel":
 			layerBG = "linear-gradient(0deg, #1f4040 0%, #0f1f1f 100%)"
 			break;
-		case "bon":
-			layerBG = "linear-gradient(0deg, #2f1f40 0%, #170f1f 100%)"
+		case "pri":
+			layerBG = "linear-gradient(0deg, #303440 0%, #17191f 100%)"
+			break;
+		case "prj":
+			layerBG = "linear-gradient(0deg, #2e152e 0%, #2e152e 100%)"
 			break;
 		case "bum":
-			layerBG = "#180b18"
-			break;
-		case "dxp":
-			layerBG = "#181830"
-			break;
-		case "ans":
-			layerBG = "#183024"
+			layerBG = "linear-gradient(0deg, #180b18 0%, #180b18 100%)"
 			break;
 		case "cer":
-			layerBG = "#402030"
+			layerBG = "linear-gradient(0deg, #402030)"
 			break;
 		case "cb":
-			layerBG = "#021124"
+			layerBG = "linear-gradient(0deg, #021924)"
 			break;
 		case "ba":
 			if (player.fi.battleTier.eq(1)) layerBG = "linear-gradient(-90deg, #5c2109ff, #5c0e04ff)"
@@ -248,16 +246,16 @@ function updateStyles() {
 			layerBG = "url(resources/gdbg.jpg)"
 			break;
 		case "ev8":
-			layerBG = "#252525"
+			layerBG = "linear-gradient(0deg, #252525)"
 			break;
 		case "ep0": case "ep1": case "ep2": case "sp":
-			layerBG = "#7d3f98"
+			layerBG = "linear-gradient(0deg, #7d3f98)"
 			break;
 		case "leg":
-			layerBG = "#eed200"
+			layerBG = "linear-gradient(0deg, #eed200)"
 			break;
 		default:
-			layerBG = "var(--layerBackground)"
+			layerBG = "linear-gradient(0deg, var(--layerBackground))"
 			break;
 	}
 
@@ -654,6 +652,28 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+
+	<h3>v1.12 - The Bumpy Bupdate Part I: Bumpy</h3><br>
+		Content:<br>
+			- Added universe δ.<br>
+			- Added two pet evolutions.<span style="color:yellow"> [WIP, one is NYI]</span><br>
+			- Iridite content can now be progressed through without ever entering space battles via a pet evolution.<span style="color:yellow"> [WIP]</span><br>
+			- Added an epic pet.<span style="color:yellow"> [WIP]</span><br>
+			- Added two fragmentation buyables.<span style="color:red"> [NYI]</span><br>
+			- Added a ship.<span style="color:red"> [NYI]</span><br>
+			- Added two themes unlocked in the new universe.<span style="color:yellow"> [WIP]</span><br>
+		<br>QoL:<br>
+			- Added a legendary matos fragment upgrade that unlocks a toggle for matos's bullet hell attacks. (mobile players are eating good!)<span style="color:red"> [NYI]</span><br>
+			- Redesigned a lot of checkback UI.<br>
+			- Redrew the art of most pet icons.<br>
+			- Added icons beside pet point buttons to indicate which pet corresponds to each button.<br>
+			- Moved evo and para shard pity to below the checkback XP bar.<br>
+		<br>Balancing:<br>
+			- Added an additional pet button effect for evolution fragment.<br>
+		<br>Bugfixes:<br>
+			- buh.<br>
+		<br>
+
 	<h4>v1.10.6 - Checklist Update Pt.2</h4><br>
 		Content:<br>
 			- Added 3 new themes.<br>
@@ -1308,7 +1328,8 @@ var doNotCallTheseFunctionsEveryTick = [
 	"generatePhase1Attack", "generatePhase2Attack", "startCutscene35", "startCutscene36", "startCutscene37",
 	"startCutscene38", "startCutscene39", "cookieClick", "generateFlower", "generateMult", "flowerClick",
 	"selectCelestialites", "petDeath", "celestialiteDeath", "petAbility", "celestialiteAbility",
-	"arriveAtStar", "spaceEnergyReset", "createReactorNode", "createReactorBullet"
+	"arriveAtStar", "spaceEnergyReset", "createReactorNode", "createReactorBullet",
+	"prismReset", "timeCapsuleReset",
 ]
 
 function getStartPoints(){

@@ -226,7 +226,7 @@ addLayer("settings", {
 	            resizeCanvas();
             },
             style() {
-                let look = {width: '306px', minHeight: '35px', color: "var(--textColor)", borderRadius: '0'}
+                let look = {width: '306px', minHeight: '35px', color: "white", borderRadius: '0'}
                 if (!options.themeDarken) {
                     if (this.canClick()) {
                         look.background = colors["default"].miscButton;look.border = "3px solid " + colors["default"].miscButtonDisable
@@ -253,7 +253,7 @@ addLayer("settings", {
 	            resizeCanvas();
             },
             style() {
-                let look = {width: '100px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
+                let look = {width: '100px', minHeight: '45px', color: "white", borderRadius: '0'}
                 if (!player.sma.inStarmetalChallenge && !options.themeDarken) {
                     if (this.canClick()) {
                         look.background = colors["default"].miscButton;look.border = "3px solid " + colors["default"].miscButtonDisable
@@ -280,7 +280,7 @@ addLayer("settings", {
 	            resizeCanvas();
             },
             style() {
-                let look = {width: '100px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
+                let look = {width: '100px', minHeight: '45px', color: "white", borderRadius: '0'}
                 if (!player.sma.inStarmetalChallenge && !options.themeDarken) {
                     if (this.canClick()) {
                         look.background = colors["bright"].miscButton;look.border = "3px solid " + colors["bright"].miscButtonDisable
@@ -307,7 +307,7 @@ addLayer("settings", {
 	            resizeCanvas();
             },
             style() {
-                let look = {width: '100px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
+                let look = {width: '100px', minHeight: '45px', color: "white", borderRadius: '0'}
                 if (!player.sma.inStarmetalChallenge && !options.themeDarken) {
                     if (this.canClick()) {
                         look.background = colors["dark"].miscButton;look.border = "3px solid " + colors["dark"].miscButtonDisable
@@ -335,7 +335,7 @@ addLayer("settings", {
 	            resizeCanvas();
             },
             style() {
-                let look = {width: '100px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
+                let look = {width: '100px', minHeight: '45px', color: "white", borderRadius: '0'}
                 if (!player.sma.inStarmetalChallenge && !options.themeDarken) {
                     if (this.canClick()) {
                         look.background = colors["wood"].miscButton;look.border = "3px solid " + colors["wood"].miscButtonDisable
@@ -363,7 +363,7 @@ addLayer("settings", {
 	            resizeCanvas();
             },
             style() {
-                let look = {width: '100px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
+                let look = {width: '100px', minHeight: '45px', color: "white", borderRadius: '0'}
                 if (!player.sma.inStarmetalChallenge && !options.themeDarken) {
                     if (this.canClick()) {
                         look.background = colors["gold"].miscButton;look.border = "3px solid " + colors["gold"].miscButtonDisable
@@ -391,7 +391,7 @@ addLayer("settings", {
 	            resizeCanvas();
             },
             style() {
-                let look = {width: '100px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
+                let look = {width: '100px', minHeight: '45px', color: "white", borderRadius: '0'}
                 if (!player.sma.inStarmetalChallenge && !options.themeDarken) {
                     if (this.canClick()) {
                         look.background = colors["silver"].miscButton;look.border = "3px solid " + colors["silver"].miscButtonDisable
@@ -419,7 +419,7 @@ addLayer("settings", {
 	            resizeCanvas();
             },
             style() {
-                let look = {width: '100px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
+                let look = {width: '100px', minHeight: '45px', color: "white", borderRadius: '0'}
                 if (!player.sma.inStarmetalChallenge && !options.themeDarken) {
                     if (this.canClick()) {
                         look.background = colors["moss"].miscButton;look.border = "3px solid " + colors["moss"].miscButtonDisable
@@ -447,7 +447,7 @@ addLayer("settings", {
 	            resizeCanvas();
             },
             style() {
-                let look = {width: '100px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
+                let look = {width: '100px', minHeight: '45px', color: "white", borderRadius: '0'}
                 if (!player.sma.inStarmetalChallenge && !options.themeDarken) {
                     if (this.canClick()) {
                         look.background = colors["coral"].miscButton;look.border = "3px solid " + colors["coral"].miscButtonDisable
@@ -475,7 +475,7 @@ addLayer("settings", {
 	            resizeCanvas();
             },
             style() {
-                let look = {width: '100px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
+                let look = {width: '100px', minHeight: '45px', color: "white", borderRadius: '0'}
                 if (!player.sma.inStarmetalChallenge && !options.themeDarken) {
                     if (this.canClick()) {
                         look.background = colors["midnight"].miscButton;look.border = "3px solid " + colors["midnight"].miscButtonDisable
@@ -487,6 +487,61 @@ addLayer("settings", {
                         look.background = colors["midnight"].darkButton;look.border = "3px solid " + colors["midnight"].darkButtonDisable
                     } else {
                         look.background = colors["midnight"].darkButtonDisable;look.border = "3px solid " + colors["midnight"].darkLayerBackground
+                    }
+                }
+                return look
+            },
+        },
+        110: {
+            title() {return true ? "Teal Theme" : "[LOCKED]"},
+            canClick() {return options.theme != "teal" && true},
+            unlocked: "true",
+            tooltip() {return !true ? "Obtained from the brilliant abyss." : ""},
+            onClick() {
+                options.theme = "teal"
+	            changeTheme();
+	            resizeCanvas();
+            },
+            style() {
+                let look = {width: '100px', minHeight: '45px', color: "white", borderRadius: '0'}
+                if (!player.sma.inStarmetalChallenge && !options.themeDarken) {
+                    if (this.canClick()) {
+                        look.background = colors["teal"].miscButton;look.border = "3px solid " + colors["teal"].miscButtonDisable
+                    } else {
+                        look.background = colors["teal"].miscButtonDisable;look.border = "3px solid " + colors["teal"].layerBackground
+                    }
+                } else {
+                    if (this.canClick()) {
+                        look.background = colors["teal"].darkButton;look.border = "3px solid " + colors["teal"].darkButtonDisable
+                    } else {
+                        look.background = colors["teal"].darkButtonDisable;look.border = "3px solid " + colors["teal"].darkLayerBackground
+                    }
+                }
+                return look
+            },
+        },
+        111: {
+            title: "Blossom Theme",
+            canClick() {return options.theme != "blossom"},
+            unlocked: "true",
+            onClick() {
+                options.theme = "blossom"
+	            changeTheme();
+	            resizeCanvas();
+            },
+            style() {
+                let look = {width: '100px', minHeight: '45px', color: "white", borderRadius: '0'}
+                if (!player.sma.inStarmetalChallenge && !options.themeDarken) {
+                    if (this.canClick()) {
+                        look.background = colors["blossom"].miscButton;look.border = "3px solid " + colors["blossom"].miscButtonDisable
+                    } else {
+                        look.background = colors["blossom"].miscButtonDisable;look.border = "3px solid " + colors["blossom"].layerBackground
+                    }
+                } else {
+                    if (this.canClick()) {
+                        look.background = colors["blossom"].darkButton;look.border = "3px solid " + colors["blossom"].darkButtonDisable
+                    } else {
+                        look.background = colors["blossom"].darkButtonDisable;look.border = "3px solid " + colors["blossom"].darkLayerBackground
                     }
                 }
                 return look
@@ -539,6 +594,11 @@ addLayer("settings", {
                         ["clickable", 107], ["style-row", [], {width: "3px", height: "45px", background: "var(--regBorder)"}],
                         ["clickable", 108], ["style-row", [], {width: "3px", height: "45px", background: "var(--regBorder)"}],
                         ["clickable", 109],
+                    ], {width: "306px", borderBottom: "3px solid var(--regBorder)"}],
+                    ["style-row", [
+                        ["style-row", [], {width: "3px", height: "45px", background: "var(--regBorder)"}],
+                        ["clickable", 110], ["style-row", [], {width: "3px", height: "45px", background: "var(--regBorder)"}],
+                        ["clickable", 111], ["style-row", [], {width: "3px", height: "45px", background: "var(--regBorder)"}],
                     ], {width: "306px", borderBottom: "3px solid var(--regBorder)"}],
                     ["style-row", [
                         ["clickable", 100]
@@ -599,14 +659,14 @@ addLayer("settings", {
                             "Art: Jtoh_Sc Lemonsja<br>" +
                             "Testing: Nova Piterpicher Vel<br>" +
                             "Bug Fixing: Tsanth Forwaken", {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
-                    ], {width: "306px", height: "206px"}],
+                    ], {width: "306px", height: "255px"}],
                     ["style-row", [
                         ["raw-html", () => "<a href=https://discord.gg/icecreamdude-s-incremental-games-850817562040467556><button class=can style='display:flex;align-items:center;justify-content:center;width:306px;height:40px;font-size:20px;color:#dde0fc;background:#5865f2;border:3px solid #2c3279'>Join the Discord!</button></a>", {fontFamily: "monospace",}],
                     ], {width: "306px", height: "40px", borderTop: "3px solid var(--regBorder)"}],
                     ["style-row", [
                         ["raw-html", () => {return "Playtime: " + formatTime(player.timePlayed)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
                     ], {width: "306px", height: "30px", borderTop: "3px solid var(--regBorder)"}],
-                ], {width: "306px", height: "315px", background: "var(--layerBackground)", border: "3px solid var(--regBorder)"}],
+                ], {width: "306px", height: "364px", background: "var(--layerBackground)", border: "3px solid var(--regBorder)"}],
             ]],
         ], {width: "634px", background: "var(--miscButtonHover)", border: "3px solid var(--regBorder)", padding: "8px"}],
         ["blank", "25px"],

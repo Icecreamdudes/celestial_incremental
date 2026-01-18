@@ -563,7 +563,7 @@ function swarmParticles(particleColor, flashColor) {
   function flashBackground(color) {
 	document.body.style.backgroundColor = color;
 	setTimeout(() => {
-	  document.body.style.backgroundColor = 'white'; // Reset background color
+	  document.body.style.backgroundColor = 'black'; // Reset background color
 	}, 1000);
   }
 

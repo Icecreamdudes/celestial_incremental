@@ -1027,7 +1027,7 @@
                         ]],
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
-                        ["upgrade", 101], ["upgrade", 102], ["upgrade", 103],
+                        ["upgrade", 101], ["upgrade", 102], ["upgrade", 103], ["upgrade", 104], ["upgrade", 105], ["upgrade", 106],
                     ], () => {return !player.ma.matosDefeated ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
@@ -1048,7 +1048,7 @@
                         ]],
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
-                        ["upgrade", 201], ["upgrade", 202], ["upgrade", 203],
+                        ["upgrade", 201], ["upgrade", 202], ["upgrade", 203], ["upgrade", 204], ["upgrade", 205], ["upgrade", 206],
                     ], () => {return !player.ma.matosDefeated ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
@@ -1069,7 +1069,7 @@
                         ]],
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
-                        ["upgrade", 301], ["upgrade", 302], ["upgrade", 303],
+                        ["upgrade", 301], ["upgrade", 302], ["upgrade", 303], ["upgrade", 304], ["upgrade", 305], ["upgrade", 306],
                     ], () => {return !player.ma.matosDefeated ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
@@ -1090,7 +1090,7 @@
                         ]],
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
-                        ["upgrade", 401], ["upgrade", 402], ["upgrade", 403],
+                        ["upgrade", 401], ["upgrade", 402], ["upgrade", 403], ["upgrade", 404], ["upgrade", 405], ["upgrade", 406],
                     ], () => {return !player.ma.matosDefeated ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
@@ -1111,7 +1111,7 @@
                         ]],
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
-                        ["upgrade", 501], ["upgrade", 502], ["upgrade", 503],
+                        ["upgrade", 501], ["upgrade", 502], ["upgrade", 503], ["upgrade", 504], ["upgrade", 505], ["upgrade", 506],
                     ], () => {return !player.ma.matosDefeated ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
@@ -1132,7 +1132,7 @@
                         ]],
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
-                        ["upgrade", 601], ["upgrade", 602], ["upgrade", 603],
+                        ["upgrade", 601], ["upgrade", 602], ["upgrade", 603], ["upgrade", 604], ["upgrade", 605], ["upgrade", 606],
                     ], () => {return !player.ma.matosDefeated ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
@@ -1153,7 +1153,7 @@
                         ]],
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
-                        ["upgrade", 701], ["upgrade", 702], ["upgrade", 703],
+                        ["upgrade", 701], ["upgrade", 702], ["upgrade", 703], ["upgrade", 704], ["upgrade", 705], ["upgrade", 706],
                     ], () => {return !player.ma.matosDefeated ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
@@ -1174,7 +1174,7 @@
                         ]],
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
-                        ["upgrade", 801], ["upgrade", 802], ["upgrade", 803],
+                        ["upgrade", 801], ["upgrade", 802], ["upgrade", 803], ["upgrade", 804], ["upgrade", 805], ["upgrade", 806],
                     ], () => {return !player.ma.matosDefeated ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
@@ -1195,7 +1195,7 @@
                         ]],
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
-                        ["upgrade", 901], ["upgrade", 902], ["upgrade", 903],
+                        ["upgrade", 901], ["upgrade", 902], ["upgrade", 903], ["upgrade", 904], ["upgrade", 905], ["upgrade", 906],
                     ], () => {return !player.ma.matosDefeated ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
@@ -1216,7 +1216,7 @@
                         ]],
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
-                        ["upgrade", 1001], ["upgrade", 1002], ["upgrade", 1003],
+                        ["upgrade", 1001], ["upgrade", 1002], ["upgrade", 1003], ["upgrade", 1004], ["upgrade", 1005], ["upgrade", 1006],
                     ], () => {return !player.ma.matosDefeated ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
@@ -1237,7 +1237,7 @@
                         ]],
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
-                        ["upgrade", 1101], ["upgrade", 1102], ["upgrade", 1103],
+                        ["upgrade", 1101], ["upgrade", 1102], ["upgrade", 1103], ["upgrade", 1104], ["upgrade", 1105], ["upgrade", 1106],
                     ], () => {return !player.ma.matosDefeated ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
@@ -1258,7 +1258,7 @@
                         ]],
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
-                        ["upgrade", 1201], ["upgrade", 1202], ["upgrade", 1203],
+                        ["upgrade", 1201], ["upgrade", 1202], ["upgrade", 1203], ["upgrade", 1204], ["upgrade", 1205], ["upgrade", 1206],
                     ], () => {return !player.ma.matosDefeated ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
@@ -1279,7 +1279,7 @@
                         ]],
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
-                        ["upgrade", 1301], ["upgrade", 1302], ["upgrade", 1303],
+                        ["upgrade", 1301], ["upgrade", 1302], ["upgrade", 1303], ["upgrade", 1304], ["upgrade", 1305], ["upgrade", 1306],
                     ], () => {return !player.ma.matosDefeated ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },

@@ -172,7 +172,7 @@ addUniverse("A2", {
 addUniverse("U3", {
     name: "Universe 3<br>Domain of Singularity",
     symbol: "3",
-    tree: [["s"], ["co", "cof"], ["ra", "re", "sd"], ["sma", "sme"], ["smn", "ma"]],
+    tree: [["s"], ["co", "cof"], ["ra", "cs", "sd"], ["sma", "sme"], ["smn", "ma"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(140deg, red 0%, black 125%)",
@@ -193,7 +193,7 @@ addUniverse("U3", {
 addUniverse("D1", {
     name: "Dark Universe 1<br>Shadow Overworld",
     symbol: "D1",
-    tree: [["le"], ["dr", "dp"], ["dg", "db", "dgr"], ["dn", "dv", "ds"]],
+    tree: [["le"], ["dr", "dp"], ["dg", "db", "dgr"], ["dn", "dv", "ds", "dt"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(145deg, #2e2e2e 0%, #0d0d0d 100%)",
@@ -273,7 +273,7 @@ addUniverse("CH", {
 addUniverse("UD", {
     name: "Universe δ<br>Interspace",
     symbol: "δ",
-    tree: [["wel"], ["bum"], [ "dxp"], ["cer"]],
+    tree: [["wel"], ["pri", "blank", "prj"], ["bum"], ["cer"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(135deg, #ff7fbf 0%, #bf7fff 100%)",

@@ -24,29 +24,12 @@
                 maxCompletions: new Decimal(0),
             },
         },
-
-        /* Projects:
-
-        Pre-Cere Stage 1:
-            Reactor (Layer in 3)
-            Time Capsules (Layer in D1 during Eclipse)
-            Development Experience (Layer in Delta)
-            Well Creature (Epic Pet)
-
-        Post-Cere Stage 1:
-            Anti-Singularity (Layer in 3)
-            Torment (Legendary Punchcard during Eclipse)
-            Relics (Layer in Delta)
-            Starlight (Layer in A2)
-
-        Defeating Cere unlocks the _ meta-progression feature.
-        */
     }},
     automate() {},
     nodeStyle() {
         return {
             color: "#dfffdf",
-            background: "#663366",
+            background: "#401d40",
             "background-origin": "border-box",
             "border-color": "#dfffdf",
         };
@@ -54,7 +37,7 @@
     tooltip: "Bumpy",
     color: "#dfffdf",
     update(delta) {
-        player.bum.starlightToGet = player.wel.light.div(5e3).pow(0.125)
+        player.bum.starlightToGet = player.wel.light.div(3.4e38).pow(0.125)
 
         for (let i = 0; i < Object.keys(player.bum.tasks).length; i++) {
             player.bum.tasks[i+1].time = player.bum.tasks[i+1].time.add(delta)
@@ -64,11 +47,11 @@
             }
         }
     },
-    branches: ["dxp"],
+    branches: [],
     clickables: {
         11: {
-            title() { return "<h2>Gain starlight, but reset previous content.</h2><br><h3><small>Req: 5,000 Light</small></h3>" },
-            canClick() { return player.wel.light.gte(5e3)},
+            title() { return "<h2>Gain starlight, but reset previous content.</h2><br><h3><small>Req: 3.40e38 Light</small></h3>" },
+            canClick() { return player.wel.light.gte(3.4e38)},
             unlocked() { return true },
             onClick() {
                 player.bum.starlight = player.bum.starlight.add(player.bum.starlightToGet)
@@ -216,5 +199,5 @@
         ]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && hasUpgrade("wel", 16)}
+    layerShown() { return player.startedGame == true && false}
 })

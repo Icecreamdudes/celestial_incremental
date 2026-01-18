@@ -55,9 +55,10 @@ addLayer("ev2", {
         doubleCurrent: new Decimal(0),
     }},
     nodeStyle: {
-        background: "#106ccc",
+        color: "#004099",
+        background: "radial-gradient(circle, #fff 0%, #4bdec3 75%)",
 		backgroundOrigin: "border-box",
-		borderColor: "black",
+		borderColor: "#004099",
     },
     tooltip: "Daily Orbs",
     color: "#96DED1",
@@ -128,7 +129,11 @@ addLayer("ev2", {
                 player.cb.paragonShards = player.cb.paragonShards.sub(player.ev2.paraInput)
                 player.ev2.shardBoost = player.ev2.potentialBoost
             },
-            style: {width: '180px', minHeight: '50px', borderRadius: "30px"},
+            style() {
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "23px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#96DED1" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         11: {
             title() {return player.ev2.timers[0].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev2.timers[0].current) + "." : "<h3>+" + formatSimple(player.ev2.timers[0].base) + " Orb"},
@@ -141,7 +146,11 @@ addLayer("ev2", {
                 player.ev2.day = player.ev2.day.add(1)
                 doPopup("none", "+" + formatSimple(player.ev2.timers[0].base) + " orbs!", "Resource Obtained!", 5, "#96DED1", "resources/orbs.png")
             },
-            style: {width: '200px', minHeight: '50px', borderRadius: "30px / 15px"},
+            style() {
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "23px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#96DED1" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         12: {
             title() {return player.ev2.timers[1].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev2.timers[1].current) + "." : "<h3>+" + formatSimple(player.ev2.timers[1].base) + " Orb"},
@@ -153,7 +162,11 @@ addLayer("ev2", {
                 player.ev2.shardBoost = new Decimal(1)
                 doPopup("none", "+" + formatSimple(player.ev2.timers[1].base) + " orbs!", "Resource Obtained!", 5, "#96DED1", "resources/orbs.png")
             },
-            style: {width: '200px', minHeight: '50px', borderRadius: "30px / 15px"},
+            style() {
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "23px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#96DED1" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         13: {
             title() {return player.ev2.timers[2].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev2.timers[2].current) + "." : "<h3>+" + formatSimple(player.ev2.timers[2].base) + " Orb"},
@@ -165,7 +178,11 @@ addLayer("ev2", {
                 player.ev2.shardBoost = new Decimal(1)
                 doPopup("none", "+" + formatSimple(player.ev2.timers[2].base) + " orbs!", "Resource Obtained!", 5, "#96DED1", "resources/orbs.png")
             },
-            style: {width: '200px', minHeight: '50px', borderRadius: "30px / 15px"},
+            style() {
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "23px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#96DED1" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         14: {
             title() {return player.ev2.timers[3].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev2.timers[3].current) + "." : "<h3>+" + formatSimple(player.ev2.timers[3].base) + " Orb"},
@@ -177,7 +194,11 @@ addLayer("ev2", {
                 player.ev2.shardBoost = new Decimal(1)
                 doPopup("none", "+" + formatSimple(player.ev2.timers[3].base) + " orbs!", "Resource Obtained!", 5, "#96DED1", "resources/orbs.png")
             },
-            style: {width: '200px', minHeight: '50px', borderRadius: "30px / 15px"},
+            style() {
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "23px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#96DED1" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         21: {
             title() {return "Spend an orb to gain<br>" + formatSimple(player.ev2.xpTime, 1) + " minutes of XP"},
@@ -699,18 +720,18 @@ addLayer("ev2", {
                 ["raw-html", "<img src='resources/orbs.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                 ["raw-html", () => { return formatSimple(player.ev2.orbs, 1)}, {width: "68px", height: "50px", color: "#96DED1", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", "<div class='bottomTooltip'>Orbs<hr><small>(Gained from Daily Buttons)</small></div>"],
-            ], {width: "123px", height: "50px", borderRight: "2px solid white"}],
+            ], {width: "123px", height: "50px", borderRight: "2px solid #54a89a"}],
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                 ["raw-html", () => { return formatShortWhole(player.cb.evolutionShards)}, {width: "68px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
-            ], () => { return player.cb.highestLevel.gte(35) ? {width: "123px", height: "50px", borderRight: "2px solid white"} : {display: "none !important"}}],
+            ], () => { return player.cb.highestLevel.gte(35) ? {width: "123px", height: "50px", borderRight: "2px solid #54a89a"} : {display: "none !important"}}],
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                 ["raw-html", () => { return formatShortWhole(player.cb.paragonShards)}, {width: "68px", height: "50px", color: "#4c64ff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
             ], () => { return player.cb.highestLevel.gte(250) ? {width: "125px", height: "50px"} : {display: "none !important"}}],
-        ], {width: "375px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
+        ], {width: "375px", height: "50px", backgroundColor: "black", border: "2px solid #54a89a", borderRadius: "10px", userSelect: "none"}],
         ["blank", "25px"],
         ["style-column", [
             ["raw-html", () => {return "<h2>Day " + formatWhole(player.ev2.day) }, {color: "white", fontSize: "30px", fontFamily: "monospace"}],

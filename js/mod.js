@@ -28,8 +28,9 @@
 		"Singularity/reactor.js", "Singularity/starmetalEnhancement.js",
 		"Check Back/singularityPet.js", "DarkU1/timeCapsules.js",
 
-
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
+
+		"something/evilLayer.js",
 	],
 
 	discordName: "",
@@ -228,6 +229,9 @@ function updateStyles() {
 			break;
 		case "cer":
 			layerBG = "linear-gradient(0deg, #402030)"
+			break;
+		case "evil":
+			layerBG = "linear-gradient(0deg, #300040 0%, #300040 100%)"
 			break;
 		case "cb":
 			layerBG = "linear-gradient(0deg, #021924)"
@@ -474,8 +478,11 @@ function updateStyles() {
 			case "UB":
 				sideBG = "#150e00"
 				break;
+			case "CH":
+            	sideBG = "#0b0129"
+				break;
 			case "UD":
-				sideBG = "linear-gradient(135deg, #402030 0%, #0f001f 100%)"
+				sideBG = "linear-gradient(135deg, #2e152e 0%, #384038 100%)"
 				break;
 			case "CB":
 				sideBG = "#010812"

@@ -215,6 +215,26 @@ function loadVue() {
 		`
 	})
 
+	// data = an array of Components to be displayed in a row
+	// look = Object that defines style
+	Vue.component('centered-draggable-scroll-row', {
+		props: ['layer', 'data', 'look'],
+		computed: {
+			key() {return this.$vnode.key}
+		},
+		template: `
+		<div id="scrCon" class="upgScrollRowTable upgDraggableScrollRow scrollCentered instant">
+			<div class="upgScrollRow" v-bind:style="look" >
+				<div style="margin:0" v-for="(item, index) in data">
+					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
+				</div>
+			</div>
+		</div>
+		`
+	})
+
 	// data = an array of Components to be displayed in a column
 	// look = Object that defines style
 	Vue.component('scroll-column', {
@@ -1467,4 +1487,47 @@ function loadVue() {
 			gridRun,
 		},
 	})
+	
+	let items = document.getElementsByClassName("scrollCentered")
+	for (let i = 0; i < items.length; i++) {
+        items[i].scrollLeft = (items[i].scrollWidth - items[i].clientWidth ) / 2;
+        items[i].scrollTop = (items[i].scrollHeight - items[i].clientHeight ) / 2;
+		
+		items[i].addEventListener('mousemove', function (e) {
+			move(e, items[i])
+		}, false);
+		items[i].addEventListener('mousedown', function (e) {
+			startDragging(e, items[i])
+		}, false);
+		items[i].addEventListener('mouseup', function (e) {
+			stopDragging(e, items[i])
+		}, false);
+		items[i].addEventListener('mouseleave', function (e) {
+			stopDragging(e, items[i])
+		}, false);
+	}
+}
+let mouseDown = false;
+let startX, startY, scrollLeft, scrollTop;
+
+const startDragging = (e, v) => {
+  e.preventDefault();
+  mouseDown = true;
+  startX = e.pageX - v.offsetLeft;
+  startY = e.pageY - v.offsetTop;
+  scrollLeft = v.scrollLeft;
+  scrollTop = v.scrollTop;
+}
+
+const stopDragging = (e, v) => {
+  mouseDown = false;
+}
+
+const move = (e, v) => {
+  e.preventDefault();
+  if(!mouseDown) { return; }
+  const scrollX = e.pageX - v.offsetLeft - startX;
+  const scrollY = e.pageY - v.offsetTop - startY;
+  v.scrollLeft = scrollLeft - scrollX;
+  v.scrollTop = scrollTop - scrollY;
 }

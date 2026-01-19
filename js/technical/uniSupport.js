@@ -172,7 +172,7 @@ addUniverse("A2", {
 addUniverse("U3", {
     name: "Universe 3<br>Domain of Singularity",
     symbol: "3",
-    tree: [["s"], ["co", "cof"], ["ra", "cs", "sd"], ["sma", "sme"], ["smn", "ma"]],
+    tree: [["s"], ["co", "cof"], ["ra", "cs", "sd"], ["sma", "sme"], ["smn", "ma"], ["evil"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(140deg, red 0%, black 125%)",
@@ -259,6 +259,7 @@ addUniverse("CH", {
             background: "linear-gradient(45deg, #8801aa 0%, #0260fe 100%)",
             backgroundOrigin: "border-box",
             borderColor: "#2e0054",
+            color: "white",
         }
         if (player.universe=="CH") {
             style.outline = "2px solid white"

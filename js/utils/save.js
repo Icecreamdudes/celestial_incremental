@@ -255,6 +255,7 @@ function load() {
 		updateTemp();
 		updateTabFormats()
 		loadVue();
+
 		if (!player.uni.CB.paused) layers.cb.instantProduction(new Decimal((Date.now() - player.time) / 1000))
 		player.time = Date.now();
 	});

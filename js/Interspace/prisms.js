@@ -15,7 +15,7 @@
             Yellow: Golden Grass
             Green: Light
             Blue: Check Back XP
-            Indigo: Moonstone
+            Indigo: ???
             Violet: SMA
             White: Celestial Points
         */
@@ -54,18 +54,14 @@
     branches: ["ans"],
     clickables: {
         11: {
-            title() { return "<h2>Gain prisms, but reset previous content.</h2><br><h3><small>Req: 65,536 Light</small></h3>" },
+            title() { return "<h2>Form your light into prisms.</h2><br><h3><small>Req: 65,536 Light</small></h3>" },
             canClick() { return player.wel.light.gte(65536)},
             unlocked() { return true },
             onClick() {
                 layers.pri.prismReset(true)
             },
-            lightGain() {
-                let gain = player.wel.lightMult
-                return gain
-            },
             style() {
-                let look = {width: "400px", minHeight: "100px", borderRadius: "8px", color: "#d6ebff", borderColor: "#d6ebff", padding: "8px"}
+                let look = {width: "400px", minHeight: "100px", borderRadius: "10px", color: "#d6ebff", border: "2px solid #d6ebff", padding: "8px"}
                 if (this.canClick()) {
                     look.background = "linear-gradient(45deg, #403030 0%, #204030 33%, #303840 66%, #402040 100%)"
                 } else {
@@ -91,11 +87,17 @@
                         ["blank", "25px"],
                         ["clickable", 11],
                         ["blank", "25px"],
-                        ["row", [
-                        ["row", [
-                            ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], 
-                        ]],
-                        ]]
+                    ]
+                }
+            },
+            "Wavelength": {
+                buttonStyle() { return { color: "white", borderRadius: "8px"} },
+                unlocked() { return true },
+                content() {
+                    return [
+                        ["blank", "25px"],
+                        ["raw-html", "this will unlock after having an alpha well timer under 0.1s...", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["blank", "25px"],
                     ]
                 }
             },

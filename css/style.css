@@ -186,6 +186,16 @@ td {
 	overflow-x: scroll !important;
 }
 
+.upgDraggableScrollRow {
+	overflow-x: hidden;
+	overflow-y: hidden;
+	cursor: grab;
+}
+
+.upgDraggableScrollRow.active {
+	cursor: grabbing;
+}
+
 .upgAlign {
 	vertical-align: 0
 }

@@ -920,7 +920,7 @@ addLayer("ev8", {
             onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
-                this.canClick() ? look.backgroundColor = "#4b79ff" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#bf8f8f"
                 return look
             },
         },
@@ -936,7 +936,7 @@ addLayer("ev8", {
             onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
-                this.canClick() ? look.backgroundColor = "#4b79ff" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#bf8f8f"
                 return look
             },
         },
@@ -952,7 +952,7 @@ addLayer("ev8", {
             onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
-                this.canClick() ? look.backgroundColor = "#4b79ff" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#bf8f8f"
                 return look
             },
         },
@@ -968,7 +968,7 @@ addLayer("ev8", {
             onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
-                this.canClick() ? look.backgroundColor = "#4b79ff" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#bf8f8f"
                 return look
             },
         },

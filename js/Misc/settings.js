@@ -496,7 +496,7 @@ addLayer("settings", {
             title() {return true ? "Teal Theme" : "[LOCKED]"},
             canClick() {return options.theme != "teal" && true},
             unlocked: "true",
-            tooltip() {return !true ? "Obtained from the brilliant abyss." : ""},
+            tooltip() {return !true ? "Obtained from an array of teal." : ""},
             onClick() {
                 options.theme = "teal"
 	            changeTheme();
@@ -522,8 +522,9 @@ addLayer("settings", {
         },
         111: {
             title: "Blossom Theme",
-            canClick() {return options.theme != "blossom"},
+            canClick() {return options.theme != "blossom" && true},
             unlocked: "true",
+            tooltip() {return !true ? "Obtained from a narrow escape." : ""},
             onClick() {
                 options.theme = "blossom"
 	            changeTheme();

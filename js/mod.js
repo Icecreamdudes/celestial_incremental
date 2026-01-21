@@ -30,7 +30,7 @@
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 
-		"something/evilLayer.js",
+		"Hall of Celestials/multiverseMap.js",
 	],
 
 	discordName: "",
@@ -199,7 +199,7 @@ function updateStyles() {
 		case "dgr": case "dn": case "db": case "dv": case "ds": case "pu":
 			layerBG = "linear-gradient(0deg, #000)"
 			break;
-		case "ch":
+		case "ch": case "mm":
 			layerBG = "linear-gradient(90deg, #260b36, #0920b5)"
 			break;
 		case "ro": case "mi":
@@ -229,9 +229,6 @@ function updateStyles() {
 			break;
 		case "cer":
 			layerBG = "linear-gradient(0deg, #402030)"
-			break;
-		case "evil":
-			layerBG = "linear-gradient(0deg, #300040 0%, #300040 100%)"
 			break;
 		case "cb":
 			layerBG = "linear-gradient(0deg, #021924)"

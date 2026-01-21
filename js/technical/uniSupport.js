@@ -172,7 +172,7 @@ addUniverse("A2", {
 addUniverse("U3", {
     name: "Universe 3<br>Domain of Singularity",
     symbol: "3",
-    tree: [["s"], ["co", "cof"], ["ra", "cs", "sd"], ["sma", "sme"], ["smn", "ma"], ["evil"]],
+    tree: [["s"], ["co", "cof"], ["ra", "cs", "sd"], ["sma", "sme"], ["smn", "ma"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(140deg, red 0%, black 125%)",
@@ -253,13 +253,13 @@ addUniverse("UB", {
 addUniverse("CH", {
     name: "Universe γ<br>Hall of Celestials",
     symbol: "γ",
-    tree: [["ch"]],
+    tree: [["ch"], ["mm"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(45deg, #8801aa 0%, #0260fe 100%)",
             backgroundOrigin: "border-box",
             borderColor: "#2e0054",
-            color: "white",
+            color: "black",
         }
         if (player.universe=="CH") {
             style.outline = "2px solid white"

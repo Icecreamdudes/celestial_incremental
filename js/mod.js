@@ -25,6 +25,8 @@
 		"Hive/honey.js", "Hive/wax.js", "Hive/aleph.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js",
 		"Check Back/singularityPet.js",
+		"Black Heart/blackheart.js", "Black Heart/blackHeartFunctions.js", "Black Heart/characters.js", "Black Heart/skills.js", "Black Heart/depth1.js",
+		"Black Heart/depth2.js", "Black Heart/depth3.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 	],
@@ -190,6 +192,19 @@ function updateStyles() {
 			if (player.ma.inBlackHeart) layerBG = "black"
 			if (player.ma.currentDepth.eq(2)) layerBG = "linear-gradient(-180deg, #720455 0%, #250121 100%)"
 			if (player.ma.currentDepth.eq(3)) layerBG = "linear-gradient(-180deg, #720804 0%, #720455 100%)"
+			break;
+		case "bh":
+			switch (player.bh.currentStage) {
+				case "depth2":
+					layerBG = "linear-gradient(-180deg, #720455 0%, #250121 100%)"
+					break;
+				case "depth3":
+					layerBG = "linear-gradient(-180deg, #720804 0%, #720455 100%)"
+					break;
+				default: 
+					layerBG = "black"
+					break;
+			}
 			break;
 		case "du": case "le": case "dr": case "dp": case "dg":
 		case "dgr": case "dn": case "db": case "dv": case "ds": case "pu":

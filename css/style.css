@@ -1761,3 +1761,34 @@ button > * {
 	background: #251d0d;
 	border-bottom: 5px solid #3e3117;
 }
+
+.bhMilestoneButton {
+	padding-left: 5px;
+	padding-right: 5px;
+	background-color: #bf8f8f;
+	font-size: 14px;
+	line-height: 1;
+	cursor: default;
+	border: 4px solid;
+	border-radius: 0;
+	border-color: rgba(0, 0, 0, 0.125);
+	color: rgba(0, 0, 0, 0.5);
+}
+
+.bhMilestoneButton.selected {
+	border-color:#ccc;
+}
+
+.bhMilestoneButton.semiFinish {
+	background-color: #77bf5f;
+}
+
+.bhMilestoneButton.finish {
+	background-color: #ffbf00;
+}
+
+.bhMilestoneButton.base {
+	color: var(--textColor);
+	background-color: var(--miscButton);
+	border-color: rgba(0,0,0,0.3);
+}

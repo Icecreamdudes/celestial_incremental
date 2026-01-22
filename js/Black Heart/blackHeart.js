@@ -1,14 +1,24 @@
-const BHC = {}
-const BHS = {}
-
+// BH variables are declared in game.js
 BHC.none = {
-    name: "",
+    name: "No Celestialite",
     symbol: "?",
     style: {
-        background: "#333",
+        background: "#555",
         color: "black",
-        borderColor: "#111",
+        borderColor: "black",
     },
+    actions: {},
+}
+
+BHS.none = {
+    nameCap: "None",
+    nameLow: "none",
+    music: "music/celestialites.mp3",
+    cooldown: new Decimal(0),
+    comboLimit: 25,
+    comboScaling: 1.015,
+    comboScalingStart: 100,
+    generateCelestialite(combo) {},
 }
 
 BHS.template = {
@@ -93,18 +103,22 @@ BHC.template = {
     },
     reward() {
         let gain = {}
-        gain.commonMatosFragment = 100
-        gain.rareMatosFragment = 25
-        gain.epicMatosFragment = 10
-        gain.legendaryMatosFragment = 5
+        gain.gloomingUmbrite = 100
+        gain.dimUmbrite = 25
+        gain.darkEssence = 10
         return gain
     },
 }
 
+// Add a delay tag to actions that delays the start of the action. [DONE]
+// Add interval attack/heal for active actions.
+// Add an attack/heal property that stuns. (maybe with a chance parameter also) [DONE]
+
 addLayer("bh", {
     name: "Black Heart", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "♥", // This appears on the layer's node. Default is the id with the first letter capitalized
+    symbol: "BH", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "BH",
+    innerNodes: [["depth1", "depth2"], ["depth3"]],
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -122,26 +136,33 @@ addLayer("bh", {
             defense: new Decimal(0),
             regen: new Decimal(0),
             shield: new Decimal(0), // Not same as previous, is a prevent damage stack
+            stun: new Decimal(0),
+            randomMult: new Decimal(1),
+            attributes: {},
             actions: {
                 0: {
                     variables: {},
                     duration: new Decimal(0),
                     cooldown: new Decimal(0),
+                    interval: new Decimal(0),
                 },
                 1: {
                     variables: {},
                     duration: new Decimal(0),
                     cooldown: new Decimal(0),
+                    interval: new Decimal(0),
                 },
                 2: {
                     variables: {},
                     duration: new Decimal(0),
                     cooldown: new Decimal(0),
+                    interval: new Decimal(0),
                 },
                 3: {
                     variables: {},
                     duration: new Decimal(0),
                     cooldown: new Decimal(0),
+                    interval: new Decimal(0),
                 },
             },
         },
@@ -158,12 +179,16 @@ addLayer("bh", {
                 agility: new Decimal(0),
                 luck: new Decimal(0),
                 shield: new Decimal(0),
+                stun: new Decimal(0),
+                attributes: {},
                 skills: {
                     0: {
                         id: "none",
                         variables: {},
                         duration: new Decimal(0),
                         cooldown: new Decimal(0),
+                        cooldownMax: new Decimal(0),
+                        interval: new Decimal(0),
                         auto: false,
                     },
                     1: {
@@ -171,6 +196,8 @@ addLayer("bh", {
                         variables: {},
                         duration: new Decimal(0),
                         cooldown: new Decimal(0),
+                        cooldownMax: new Decimal(0),
+                        interval: new Decimal(0),
                         auto: false,
                     },
                     2: {
@@ -178,6 +205,8 @@ addLayer("bh", {
                         variables: {},
                         duration: new Decimal(0),
                         cooldown: new Decimal(0),
+                        cooldownMax: new Decimal(0),
+                        interval: new Decimal(0),
                         auto: false,
                     },
                     3: {
@@ -185,6 +214,8 @@ addLayer("bh", {
                         variables: {},
                         duration: new Decimal(0),
                         cooldown: new Decimal(0),
+                        cooldownMax: new Decimal(0),
+                        interval: new Decimal(0),
                         auto: false,
                     },
                 },
@@ -199,12 +230,16 @@ addLayer("bh", {
                 agility: new Decimal(0),
                 luck: new Decimal(0),
                 shield: new Decimal(0),
+                stun: new Decimal(0),
+                attributes: {},
                 skills: {
                     0: {
                         id: "none",
                         variables: {},
                         duration: new Decimal(0),
                         cooldown: new Decimal(0),
+                        cooldownMax: new Decimal(0),
+                        interval: new Decimal(0),
                         auto: false,
                     },
                     1: {
@@ -212,6 +247,8 @@ addLayer("bh", {
                         variables: {},
                         duration: new Decimal(0),
                         cooldown: new Decimal(0),
+                        cooldownMax: new Decimal(0),
+                        interval: new Decimal(0),
                         auto: false,
                     },
                     2: {
@@ -219,6 +256,8 @@ addLayer("bh", {
                         variables: {},
                         duration: new Decimal(0),
                         cooldown: new Decimal(0),
+                        cooldownMax: new Decimal(0),
+                        interval: new Decimal(0),
                         auto: false,
                     },
                     3: {
@@ -226,6 +265,8 @@ addLayer("bh", {
                         variables: {},
                         duration: new Decimal(0),
                         cooldown: new Decimal(0),
+                        cooldownMax: new Decimal(0),
+                        interval: new Decimal(0),
                         auto: false,
                     },
                 },
@@ -240,12 +281,16 @@ addLayer("bh", {
                 agility: new Decimal(0),
                 luck: new Decimal(0),
                 shield: new Decimal(0),
+                stun: new Decimal(0),
+                attributes: {},
                 skills: {
                     0: {
                         id: "none",
                         variables: {},
                         duration: new Decimal(0),
                         cooldown: new Decimal(0),
+                        cooldownMax: new Decimal(0),
+                        interval: new Decimal(0),
                         auto: false,
                     },
                     1: {
@@ -253,6 +298,8 @@ addLayer("bh", {
                         variables: {},
                         duration: new Decimal(0),
                         cooldown: new Decimal(0),
+                        cooldownMax: new Decimal(0),
+                        interval: new Decimal(0),
                         auto: false,
                     },
                     2: {
@@ -260,6 +307,8 @@ addLayer("bh", {
                         variables: {},
                         duration: new Decimal(0),
                         cooldown: new Decimal(0),
+                        cooldownMax: new Decimal(0),
+                        interval: new Decimal(0),
                         auto: false,
                     },
                     3: {
@@ -267,6 +316,8 @@ addLayer("bh", {
                         variables: {},
                         duration: new Decimal(0),
                         cooldown: new Decimal(0),
+                        cooldownMax: new Decimal(0),
+                        interval: new Decimal(0),
                         auto: false,
                     },
                 },
@@ -319,27 +370,88 @@ addLayer("bh", {
 
         // Saved Skill Stats
         skillData: {
+            // GENERAL
+            "general_slap": {
+                selected: false,
+                level: new Decimal(0),
+            },
+
+            // KRES
+            "kres_chop": {
+                selected: false,
+                level: new Decimal(0),
+            },
             "kres_bigAttack": {
                 selected: false,
                 level: new Decimal(0),
             },
+            "kres_battleCry": {
+                selected: false,
+                level: new Decimal(0),
+            },
+            "kres_berserker": {
+                selected: false,
+                level: new Decimal(0),
+            },
+            "kres_decapitate": {
+                selected: false,
+                level: new Decimal(0),
+            },
+
+            // NAV
+            "nav_magicMissle": {
+                selected: false,
+                level: new Decimal(0),
+            },
+            "nav_healSpell": {
+                selected: false,
+                level: new Decimal(0),
+            },
+            "nav_reboundingAura": {
+                selected: false,
+                level: new Decimal(0),
+            },
+
+            // SEL
+            "sel_singleShot": {
+                selected: false,
+                level: new Decimal(0),
+            },
+            "sel_turret": {
+                selected: false,
+                level: new Decimal(0),
+            },
+
+            // GEROA
+            "geroa_orbitalCannon": {
+                selected: false,
+                level: new Decimal(0),
+            }
         },
 
         // General Variables
         bhPause: false,
         respawnTimer: new Decimal(5),
+        respawnMax: new Decimal(5),
         combo: new Decimal(0),
         comboScaling: new Decimal(1.015),
         comboScalingStart: new Decimal(100),
-        timeSpeed: new Decimal(1)
+        comboSoftcap: new Decimal(1),
+        timeSpeed: new Decimal(1),
+        log: ["", "", "", "", "", "", "", "", "", ""],
+
+        // General Currencies
+        darkEssence: new Decimal(0),
+        //darkEther
     }},
     automate() {},
     nodeStyle() {
         return {
-            background: "linear-gradient(120deg, #333 0%, #222 100%)",
+            background: "radial-gradient(#222, black)",
             backgroundOrigin: "border-box",
             borderColor: "#8a0e79",
-            color: "black",
+            color: "#aa2798",
+            textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
         };
     },
     tooltip: "Black Heart",
@@ -359,6 +471,11 @@ addLayer("bh", {
                 defenseAdd: new Decimal(0),
                 regenMult: new Decimal(1),
                 regenAdd: new Decimal(0),
+                agilityMult: new Decimal(1),
+                agilityAdd: new Decimal(0),
+                luckMult: new Decimal(1),
+                luckAdd: new Decimal(0),
+                attributes: [],
             },
             1: {
                 healthMult: new Decimal(1),
@@ -369,6 +486,11 @@ addLayer("bh", {
                 defenseAdd: new Decimal(0),
                 regenMult: new Decimal(1),
                 regenAdd: new Decimal(0),
+                agilityMult: new Decimal(1),
+                agilityAdd: new Decimal(0),
+                luckMult: new Decimal(1),
+                luckAdd: new Decimal(0),
+                attributes: [],
             },
             2: {
                 healthMult: new Decimal(1),
@@ -379,6 +501,11 @@ addLayer("bh", {
                 defenseAdd: new Decimal(0),
                 regenMult: new Decimal(1),
                 regenAdd: new Decimal(0),
+                agilityMult: new Decimal(1),
+                agilityAdd: new Decimal(0),
+                luckMult: new Decimal(1),
+                luckAdd: new Decimal(0),
+                attributes: [],
             },
             3: {
                 healthMult: new Decimal(1),
@@ -389,22 +516,36 @@ addLayer("bh", {
                 defenseAdd: new Decimal(0),
                 regenMult: new Decimal(1),
                 regenAdd: new Decimal(0),
+                agilityMult: new Decimal(1),
+                agilityAdd: new Decimal(0),
+                luckMult: new Decimal(1),
+                luckAdd: new Decimal(0),
+                attributes: [],
             }
         }
 
+        // Stage Code
+        player.bh.comboSoftcap = new Decimal(1)
+        if (player.bh.combo.gte(player.bh.comboScalingStart)) player.bh.comboSoftcap = Decimal.pow(player.bh.comboScaling, player.bh.combo.sub(player.bh.comboScalingStart))
+
         // Check if unpaused, in tab, and in stage
-        if (!player.bh.bhPause && player.tab == "bh" && player.bh.currentStage != "none") {
+        if (!player.bh.bhPause && player.tab == "bh" && player.subtabs["bh"]["stuff"] == "battle" && player.bh.currentStage != "none") {
             // Only trigger when celestialite id is set
             if (player.bh.celestialite.id != "none") {
                 // Celestialite Regen
-                if (player.bh.celestialite.health.lt(player.bh.celestialite.maxHealth) && player.bh.celestialite.regen.gt(0)) {
+                if (player.bh.celestialite.regen.neq(0)) {
                     player.bh.celestialite.health = player.bh.celestialite.health.add(player.bh.celestialite.regen.mul(delta)).min(player.bh.celestialite.maxHealth)
+                }
+
+                if (player.bh.celestialite.stun.gt(0)) {
+                    player.bh.celestialite.stun = player.bh.celestialite.stun.sub(delta)
                 }
 
                 // Cycle, increment cooldowns, and trigger celestialite actions
                 for (let i = 0; i < 4; i++) {
+                    if (player.bh.celestialite.stun.gt(0)) continue
                     if (BHC[player.bh.celestialite.id].actions[i]) {
-                        let effect = BHA[player.bh.celestialite.actions[i].id].effect
+                        let effect = BHC[player.bh.celestialite.id].actions[i].effect
                         if (player.bh.celestialite.actions[i].duration.gt(0)) player.bh.celestialite.actions[i].duration = player.bh.celestialite.actions[i].duration.sub(delta)
                         if (effect == "instant" || effect == "active") {
                             player.bh.celestialite.actions[i].cooldown = player.bh.celestialite.actions[i].cooldown.add(delta)
@@ -412,26 +553,59 @@ addLayer("bh", {
                                 if (effect == "instant") bhAction(3, i)
                                 if (effect == "active") {
                                     player.bh.celestialite.actions[i].cooldown = new Decimal(0)
-                                    player.bh.celestialite.actions[i].duration = BHA[player.bh.celestialite.actions[i].id].duration
+                                    player.bh.celestialite.actions[i].duration = BHC[player.bh.celestialite.id].actions[i].duration
                                 }
                             }
                         }
 
                         // Calculate Variables (and remove inactive active)
-                        if (effect == "active" && player.bh.celestialite.actions[i].duration.lte(0)) continue
-                        let variables = player.bh.celestialite.actions[i].variables
-                        if (Object.keys(variables).length === 0) continue
-                        let target = variables.target
-                        for (let k in variables) {
-                            if (k == "target") continue
-                            for (let t in target) {
-                                if (k.includes("Mult")) {
-                                    bhTemp[t][k] = bhTemp[t][k].mul(variables[k])
-                                } else {
-                                    bhTemp[t][k] = bhTemp[t][k].add(variables[k])
+                        if (effect == "passive" || (effect == "active" && player.bh.celestialite.actions[i].duration.gt(0))) {
+                            if (BHC[player.bh.celestialite.id].actions[i].interval) {
+                                player.bh.celestialite.actions[i].interval = player.bh.celestialite.actions[i].interval.add(delta)
+                                if (player.bh.celestialite.actions[i].interval.gte(BHC[player.bh.celestialite.id].actions[i].interval)) {
+                                    player.bh.celestialite.actions[i].interval = new Decimal(0)
+                                    bhAction(3, i)
+                                }
+                            } else {
+                                let properties = BHC[player.bh.celestialite.id].actions[i].properties
+                                if (Object.keys(properties).length === 0) continue
+                                let target = calcTarget(i, BHC[player.bh.celestialite.id].actions[i].target)
+                                for (let k in properties) {
+                                    if (k == "target") continue
+                                    for (let t in target) {
+                                        let val = run(properties[k], properties)
+                                        if (k == "attributes") {
+                                            bhTemp[t][k] = Object.assign({}, bhTemp[t][k], val)
+                                            continue
+                                        }
+                                        if (k.includes("Mult")) {
+                                            bhTemp[t][k] = bhTemp[t][k].mul(val)
+                                        } else {
+                                            bhTemp[t][k] = bhTemp[t][k].mul(val)
+                                        }
+                                    }
                                 }
                             }
                         }
+
+                        let variables = player.bh.celestialite.actions[i].variables
+                        if (Object.keys(variables).length === 0) continue
+                        let target = calcTarget(i, variables.target)
+                        for (let k in variables) {
+                            if (k == "target") continue
+                            for (let t in target) {
+                                let val = run(variables[k], properties)
+                                if (k == "attributes") {
+                                    bhTemp[t][k] = Object.assign({}, bhTemp[t][k], val)
+                                    continue
+                                }
+                                if (k.includes("Mult")) {
+                                    bhTemp[t][k] = bhTemp[t][k].mul(val)
+                                } else {
+                                    bhTemp[t][k] = bhTemp[t][k].add(val)
+                                }
+                            }
+                        }                        
                     }
                 }
 
@@ -447,18 +621,23 @@ addLayer("bh", {
                 if (player.bh.characters[i].health.lte(0)) continue
 
                 // Character Regen
-                if (player.bh.characters[i].health.lt(player.bh.characters[i].maxHealth) && player.bh.characters[i].regen.gt(0)) {
+                if (player.bh.characters[i].regen.neq(0)) {
                     player.bh.characters[i].health = player.bh.characters[i].health.add(player.bh.characters[i].regen.mul(delta)).min(player.bh.characters[i].maxHealth)
                 }
 
+                if (player.bh.characters[i].stun.gt(0)) {
+                    player.bh.characters[i].stun = player.bh.characters[i].stun.sub(delta)
+                    continue
+                }
+
                 // Cycle through character skills
-                for (let j = 0; j < 4; i++) {
+                for (let j = 0; j < 4; j++) {
                     if (player.bh.characters[i].skills[j].id == "none") continue
                     let effect = BHA[player.bh.characters[i].skills[j].id].effect
                     if (player.bh.characters[i].skills[j].duration.gt(0)) player.bh.characters[i].skills[j].duration = player.bh.characters[i].skills[j].duration.sub(delta)
                     if (effect == "instant" || effect == "active") {
                         player.bh.characters[i].skills[j].cooldown = player.bh.characters[i].skills[j].cooldown.add(delta)
-                        if (player.bh.characters[i].skills[j].auto && player.bh.characters[i].skills[j].cooldown.gte(BHA[player.bh.characters[i].skills[j].id].cooldown.mul(2))) {
+                        if (player.bh.characters[i].skills[j].auto && player.bh.characters[i].skills[j].cooldown.gte(player.bh.characters[i].skills[j].cooldownMax.mul(2))) {
                             if (effect == "instant") bhAction(i, j)
                             if (effect == "active") {
                                 player.bh.characters[i].skills[j].cooldown = new Decimal(0)
@@ -468,17 +647,50 @@ addLayer("bh", {
                     }
 
                     // Calculate Variables (and remove inactive active)
-                    if (effect == "active" && player.bh.characters[i].skills[j].duration.lte(0)) continue
+                    if (effect == "passive" || (effect == "active" && player.bh.characters[i].skills[j].duration.gt(0))) {
+                        if (BHA[player.bh.characters[i].skills[j].id].interval) {
+                            player.bh.characters[i].skills[j].interval = player.bh.characters[i].skills[j].interval.add(delta)
+                            if (player.bh.characters[i].skills[j].interval.gte(BHA[player.bh.characters[i].skills[j].id].interval)) {
+                                player.bh.characters[i].skills[j].interval = new Decimal(0)
+                                bhAction(i, j)
+                            }
+                        } else {
+                            let properties = BHA[player.bh.characters[i].skills[j].id].properties
+                            if (Object.keys(properties).length === 0) continue
+                            let target = calcTarget(i, BHA[player.bh.characters[i].skills[j].id].target)
+                            for (let k in properties) {
+                                if (k == "target") continue
+                                for (let t in target) {
+                                    let val = run(properties[k], properties)
+                                    if (k == "attributes") {
+                                        bhTemp[t][k] = Object.assign({}, bhTemp[t][k], val)
+                                        continue
+                                    }
+                                    if (k.includes("Mult")) {
+                                        bhTemp[t][k] = bhTemp[t][k].mul(val)
+                                    } else {
+                                        bhTemp[t][k] = bhTemp[t][k].mul(val)
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     let variables = player.bh.characters[i].skills[j].variables
                     if (Object.keys(variables).length === 0) continue
-                    let target = variables.target
+                    let target = calcTarget(i, variables.target)
                     for (let k in variables) {
                         if (k == "target") continue
                         for (let t in target) {
+                            let val = run(variables[k], properties)
+                            if (k == "attributes") {
+                                bhTemp[t][k] = Object.assign({}, bhTemp[t][k], val)
+                                continue
+                            }
                             if (k.includes("Mult")) {
-                                bhTemp[t][k] = bhTemp[t][k].mul(variables[k])
+                                bhTemp[t][k] = bhTemp[t][k].mul(val)
                             } else {
-                                bhTemp[t][k] = bhTemp[t][k].add(variables[k])
+                                bhTemp[t][k] = bhTemp[t][k].add(val)
                             }
                         }
                     }
@@ -490,6 +702,23 @@ addLayer("bh", {
             if (player.bh.celestialite.id == "none" && player.bh.respawnTimer.lte(0)) {
                 celestialiteSpawn()
             }
+
+            // Death Code
+            if ((player.bh.characters[0].health.lte(0) || player.bh.characters[0].id == "none") && (player.bh.characters[1].health.lte(0) || player.bh.characters[1].id == "none") && (player.bh.characters[2].health.lte(0) || player.bh.characters[2].id == "none")) {
+                for (let i = 0; i < 3; i++) {
+                    player.bh.characters[i].health = player.bh.characters[i].maxHealth
+                    player.bh.characters[i].shield = new Decimal(0)
+                    for (let j = 0; j < 4; j++) {
+                        player.bh.characters[i].skills[j].variables = {}
+                    }
+                }
+
+                player.bh.currentStage = "none"
+                player.bh.combo = new Decimal(0)
+                player.bh.celestialite.id = "none"
+
+                player.subtabs["bh"]["stuff"] = "dead"
+            }
         }
 
         // =-- Calculate celestialite stats --=
@@ -497,28 +726,36 @@ addLayer("bh", {
         if (player.bh.combo.gte(player.bh.comboScalingStart)) scale = Decimal.pow(player.bh.comboScaling, player.bh.combo.sub(player.bh.comboScalingStart))
             
         player.bh.celestialite.maxHealth = BHC[player.bh.celestialite.id].health ?? new Decimal(0)
+        player.bh.celestialite.maxHealth = player.bh.celestialite.maxHealth.mul(player.bh.celestialite.randomMult)
         player.bh.celestialite.maxHealth = player.bh.celestialite.maxHealth.add(bhTemp[3].healthAdd)
         player.bh.celestialite.maxHealth = player.bh.celestialite.maxHealth.mul(bhTemp[3].healthMult)
         player.bh.celestialite.maxHealth = player.bh.celestialite.maxHealth.mul(scale)
 
         player.bh.celestialite.damage = BHC[player.bh.celestialite.id].damage ?? new Decimal(0)
+        player.bh.celestialite.damage = player.bh.celestialite.damage.mul(player.bh.celestialite.randomMult)
         player.bh.celestialite.damage = player.bh.celestialite.damage.add(bhTemp[3].damageAdd)
         player.bh.celestialite.damage = player.bh.celestialite.damage.mul(bhTemp[3].damageMult)
         player.bh.celestialite.damage = player.bh.celestialite.damage.mul(scale)
 
         player.bh.celestialite.defense = BHC[player.bh.celestialite.id].defense ?? new Decimal(0)
+        player.bh.celestialite.defense = player.bh.celestialite.defense.mul(player.bh.celestialite.randomMult)
         player.bh.celestialite.defense = player.bh.celestialite.defense.add(bhTemp[3].defenseAdd)
         player.bh.celestialite.defense = player.bh.celestialite.defense.mul(bhTemp[3].defenseMult)
         player.bh.celestialite.defense = player.bh.celestialite.defense.mul(scale)
 
         player.bh.celestialite.regen = BHC[player.bh.celestialite.id].regen ?? new Decimal(0)
+        player.bh.celestialite.regen = player.bh.celestialite.regen.mul(player.bh.celestialite.randomMult)
         player.bh.celestialite.regen = player.bh.celestialite.regen.add(bhTemp[3].regenAdd)
         player.bh.celestialite.regen = player.bh.celestialite.regen.mul(bhTemp[3].regenMult)
         player.bh.celestialite.regen = player.bh.celestialite.regen.mul(scale)
 
+        player.bh.celestialite.attributes = BHC[player.bh.celestialite.id].attributes ?? {}
+        player.bh.celestialite.attributes = Object.assign({}, player.bh.celestialite.attributes, bhTemp[3].attributes)
+
         // =-- Calculate character stats --=
         for (let i = 0; i < 3; i++) {
             player.bh.characters[i].maxHealth = BHP[player.bh.characters[i].id].health ?? new Decimal(0)
+            player.bh.characters[i].maxHealth = player.bh.characters[i].maxHealth.mul(buyableEffect("depth1", 1))
             player.bh.characters[i].maxHealth = player.bh.characters[i].maxHealth.add(bhTemp[i].healthAdd)
             player.bh.characters[i].maxHealth = player.bh.characters[i].maxHealth.mul(bhTemp[i].healthMult)
 
@@ -535,19 +772,1345 @@ addLayer("bh", {
             player.bh.characters[i].regen = player.bh.characters[i].regen.mul(bhTemp[i].regenMult)
 
             player.bh.characters[i].agility = BHP[player.bh.characters[i].id].agility ?? new Decimal(0)
+            player.bh.characters[i].agility = player.bh.characters[i].agility.add(bhTemp[i].agilityAdd)
+            player.bh.characters[i].agility = player.bh.characters[i].agility.mul(bhTemp[i].agilityMult)
 
             player.bh.characters[i].luck = BHP[player.bh.characters[i].id].luck ?? new Decimal(0)
+            player.bh.characters[i].luck = player.bh.characters[i].luck.add(bhTemp[i].luckAdd)
+            player.bh.characters[i].luck = player.bh.characters[i].luck.mul(bhTemp[i].luckMult)
+
+            player.bh.characters[i].attributes = BHP[player.bh.characters[i].id].attributes ?? {}
+            player.bh.characters[i].attributes = Object.assign({}, player.bh.characters[i].attributes, bhTemp[i].attributes)
+
+            for (let j = 0; j < 4; j++) {
+                player.bh.characters[i].skills[j].cooldownMax = BHA[player.bh.characters[i].skills[j].id].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.characters[i].agility)))
+            }
         }
     },
-    clickables: {},
-    bars: {},
-    microtabs: {
-        stuff: {
+    clickables: {
+        "Leave": {
+            title() { return "<h2>Leave the black heart" },
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.ma.inBlackHeart = false
 
+                player.subtabs["bh"]["stuff"] = "black-heart"
+
+                pauseUniverse("U1", "unpause", true)
+                pauseUniverse("UA", "unpause", true)
+                pauseUniverse("U2", "unpause", true)
+                pauseUniverse("A1", "unpause", true)
+                pauseUniverse("A2", "unpause", true)
+                pauseUniverse("CB", "unpause", true)
+            },
+            style() {
+                let look = {width: "200px", minHeight: "75px", color: "white", backgroundColor: "black", border: "3px solid #8a0e79", borderRadius: "20px", margin: "-1.5px"}
+                return look
+            },
+        },
+        "Pause": {
+            title() { return player.bh.bhPause ? "Unpause" : "Pause" },
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                if (player.bh.bhPause) {
+                    player.bh.bhPause = false
+                } else {
+                    player.bh.bhPause = true
+                }
+            },
+            style() {
+                let look = {width: "125px", minHeight: "50px", color: "black", border: "3px solid rgba(0,0,0,0.5)", backgroundColor: "white", borderRadius: "15px"}
+                if (player.bh.bhPause) look.backgroundColor = "#888"
+                return look
+            },
+        },
+        "Give-Up": {
+            title() { return "Give up" },
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                for (let i = 0; i < 3; i++) {
+                    player.bh.characters[i].health = new Decimal(-Infinity)
+                }
+            },
+            style: {width: "125px", minHeight: "50px", color: "black", border: "3px solid rgba(0,0,0,0.5)", backgroundColor: "white", borderRadius: "15px"},
+        },
+        "C0-Icon": {
+            title() {
+                if (player.bh.characters[0].health.lte(0) && player.bh.characters[0].id != "none") {
+                    return "<img src='resources/dead.png'style='width:149px;height:149px;margin-left:-1.5px;margin-bottom:-6px'></img>"
+                } else {
+                    return "<img src='" + BHP[player.bh.characters[0].id].icon + "'style='width:149px;height:149px;margin-left:-1.5px;margin-bottom:-6px'></img>"
+                }
+            },
+            canClick: false,
+            unlocked() {return player.bh.characters[0].id != "none"},
+            onClick() {},
+            style: {width: "150px", minHeight: "150px", color: "white", background: "transparent", padding: "0", cursor: "default", userSelect: "none"},
+        },
+        "C0-Skill-0": {
+            title() {
+                if (player.bh.characters[0].skills[0].id == "none") return ""
+                let str = BHA[player.bh.characters[0].skills[0].id].name
+                if (player.bh.characters[0].skills[0].auto) str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[0].skills[0].cooldown.sub(player.bh.characters[0].skills[0].cooldownMax)) + "/" + formatTime(player.bh.characters[0].skills[0].cooldownMax) + "]"
+                if (player.bh.characters[0].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+            tooltip() {return run(BHA[player.bh.characters[0].skills[0].id].description, BHA[player.bh.characters[0].skills[0].id])},
+            canClick() {return player.bh.characters[0].health.gt(0) && player.bh.characters[0].skills[0].id != "none" && BHA[player.bh.characters[0].skills[0].id].effect != "passive" && player.bh.characters[0].stun.lte(0)},
+            unlocked() {return (player.bh.characters[0].skills[0].cooldown.gte(player.bh.characters[0].skills[0].cooldownMax) && player.bh.characters[0].health.gt(0)) || player.bh.characters[0].skills[0].id == "none" || BHA[player.bh.characters[0].skills[0].id].effect == "passive"},
+            onClick() {
+                if (BHA[player.bh.characters[0].skills[0].id].effect == "instant") bhAction(0, 0)
+                if (BHA[player.bh.characters[0].skills[0].id].effect == "active") {
+                    player.bh.characters[0].skills[0].cooldown = new Decimal(0)
+                    player.bh.characters[0].skills[0].duration = BHA[player.bh.characters[0].skills[0].id].duration
+                }
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
+                if (player.bh.characters[0].skills[0].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
+                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[player.bh.characters[0].id].color
+                return look
+            },
+        },
+        "C0-Skill-1": {
+            title() {
+                if (player.bh.characters[0].skills[1].id == "none") return ""
+                let str = BHA[player.bh.characters[0].skills[1].id].name
+                if (player.bh.characters[0].skills[1].auto) str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[0].skills[1].cooldown.sub(player.bh.characters[0].skills[1].cooldownMax)) + "/" + formatTime(player.bh.characters[0].skills[1].cooldownMax) + "]"
+                if (player.bh.characters[0].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+            tooltip() {return run(BHA[player.bh.characters[0].skills[1].id].description, BHA[player.bh.characters[0].skills[1].id])},
+            canClick() {return player.bh.characters[0].health.gt(0) && player.bh.characters[0].skills[1].id != "none" && BHA[player.bh.characters[0].skills[1].id].effect != "passive" && player.bh.characters[0].stun.lte(0)},
+            unlocked() {return (player.bh.characters[0].skills[1].cooldown.gte(player.bh.characters[0].skills[1].cooldownMax) && player.bh.characters[0].health.gt(0)) || player.bh.characters[0].skills[1].id == "none" || BHA[player.bh.characters[0].skills[1].id].effect == "passive"},
+            onClick() {
+                if (BHA[player.bh.characters[0].skills[1].id].effect == "instant") bhAction(0, 1)
+                if (BHA[player.bh.characters[0].skills[1].id].effect == "active") {
+                    player.bh.characters[0].skills[1].cooldown = new Decimal(0)
+                    player.bh.characters[0].skills[1].duration = BHA[player.bh.characters[0].skills[1].id].duration
+                }
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
+                if (player.bh.characters[0].skills[1].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
+                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[player.bh.characters[0].id].color
+                return look
+            },
+        },
+        "C0-Skill-2": {
+            title() {
+                if (player.bh.characters[0].skills[2].id == "none") return ""
+                let str = BHA[player.bh.characters[0].skills[2].id].name
+                if (player.bh.characters[0].skills[2].auto) str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[0].skills[2].cooldown.sub(player.bh.characters[0].skills[2].cooldownMax)) + "/" + formatTime(player.bh.characters[0].skills[2].cooldownMax) + "]"
+                if (player.bh.characters[0].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+            tooltip() {return run(BHA[player.bh.characters[0].skills[2].id].description, BHA[player.bh.characters[0].skills[2].id])},
+            canClick() {return player.bh.characters[0].health.gt(0) && player.bh.characters[0].skills[2].id != "none" && BHA[player.bh.characters[0].skills[2].id].effect != "passive" && player.bh.characters[0].stun.lte(0)},
+            unlocked() {return (player.bh.characters[0].skills[2].cooldown.gte(player.bh.characters[0].skills[2].cooldownMax) && player.bh.characters[0].health.gt(0)) || player.bh.characters[0].skills[2].id == "none" || BHA[player.bh.characters[0].skills[2].id].effect == "passive"},
+            onClick() {
+                if (BHA[player.bh.characters[0].skills[2].id].effect == "instant") bhAction(0, 2)
+                if (BHA[player.bh.characters[0].skills[2].id].effect == "active") {
+                    player.bh.characters[0].skills[2].cooldown = new Decimal(0)
+                    player.bh.characters[0].skills[2].duration = BHA[player.bh.characters[0].skills[2].id].duration
+                }
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
+                if (player.bh.characters[0].skills[2].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
+                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[player.bh.characters[0].id].color
+                return look
+            },
+        },
+        "C0-Skill-3": {
+            title() {
+                if (player.bh.characters[0].skills[3].id == "none") return ""
+                let str = BHA[player.bh.characters[0].skills[3].id].name
+                if (player.bh.characters[0].skills[3].auto) str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[0].skills[3].cooldown.sub(player.bh.characters[0].skills[3].cooldownMax)) + "/" + formatTime(player.bh.characters[0].skills[3].cooldownMax) + "]"
+                if (player.bh.characters[0].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+            tooltip() {return run(BHA[player.bh.characters[0].skills[3].id].description, BHA[player.bh.characters[0].skills[3].id])},
+            canClick() {return player.bh.characters[0].health.gt(0) && player.bh.characters[0].skills[3].id != "none" && BHA[player.bh.characters[0].skills[3].id].effect != "passive" && player.bh.characters[0].stun.lte(0)},
+            unlocked() {return (player.bh.characters[0].skills[3].cooldown.gte(player.bh.characters[0].skills[3].cooldownMax) && player.bh.characters[0].health.gt(0)) || player.bh.characters[0].skills[3].id == "none" || BHA[player.bh.characters[0].skills[3].id].effect == "passive"},
+            onClick() {
+                if (BHA[player.bh.characters[0].skills[3].id].effect == "instant") bhAction(0, 3)
+                if (BHA[player.bh.characters[0].skills[3].id].effect == "active") {
+                    player.bh.characters[0].skills[3].cooldown = new Decimal(0)
+                    player.bh.characters[0].skills[3].duration = BHA[player.bh.characters[0].skills[3].id].duration
+                }
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
+                if (player.bh.characters[0].skills[3].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
+                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[player.bh.characters[0].id].color
+                return look
+            },
+        },
+        "C1-Icon": {
+            title() {
+                if (player.bh.characters[1].health.lte(0) && player.bh.characters[1].id != "none") {
+                    return "<img src='resources/dead.png'style='width:149px;height:149px;margin-left:-1.5px;margin-bottom:-6px'></img>"
+                } else {
+                    return "<img src='" + BHP[player.bh.characters[1].id].icon + "'style='width:149px;height:149px;margin-left:-1.5px;margin-bottom:-6px'></img>"
+                }
+            },
+            canClick: false,
+            unlocked() {return player.bh.characters[1].id != "none"},
+            onClick() {},
+            style: {width: "150px", minHeight: "150px", color: "white", backgroundColor: "transparent", margin: "10px", padding: "0", cursor: "default", userSelect: "none"},
+        },
+        "C1-Skill-0": {
+            title() {
+                if (player.bh.characters[1].skills[0].id == "none") return ""
+                let str = BHA[player.bh.characters[1].skills[0].id].name
+                if (player.bh.characters[1].skills[0].auto) str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[1].skills[0].cooldown.sub(player.bh.characters[1].skills[0].cooldownMax)) + "/" + formatTime(player.bh.characters[1].skills[0].cooldownMax) + "]"
+                if (player.bh.characters[1].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+            tooltip() {return run(BHA[player.bh.characters[1].skills[0].id].description, BHA[player.bh.characters[1].skills[0].id])},
+            canClick() {return player.bh.characters[1].health.gt(0) && player.bh.characters[1].skills[0].id != "none" && BHA[player.bh.characters[1].skills[0].id].effect != "passive" && player.bh.characters[1].stun.lte(0)},
+            unlocked() {return (player.bh.characters[1].skills[0].cooldown.gte(player.bh.characters[1].skills[0].cooldownMax) && player.bh.characters[1].health.gt(0)) || player.bh.characters[1].skills[0].id == "none" || BHA[player.bh.characters[1].skills[0].id].effect == "passive"},
+            onClick() {
+                if (BHA[player.bh.characters[1].skills[0].id].effect == "instant") bhAction(1, 0)
+                if (BHA[player.bh.characters[1].skills[0].id].effect == "active") {
+                    player.bh.characters[1].skills[0].cooldown = new Decimal(0)
+                    player.bh.characters[1].skills[0].duration = BHA[player.bh.characters[1].skills[0].id].duration
+                }
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
+                if (player.bh.characters[1].skills[0].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
+                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[player.bh.characters[1].id].color
+                return look
+            },
+        },
+        "C1-Skill-1": {
+            title() {
+                if (player.bh.characters[1].skills[1].id == "none") return ""
+                let str = BHA[player.bh.characters[1].skills[1].id].name
+                if (player.bh.characters[1].skills[1].auto) str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[1].skills[1].cooldown.sub(player.bh.characters[1].skills[1].cooldownMax)) + "/" + formatTime(player.bh.characters[1].skills[1].cooldownMax) + "]"
+                if (player.bh.characters[1].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+            tooltip() {return run(BHA[player.bh.characters[1].skills[1].id].description, BHA[player.bh.characters[1].skills[1].id])},
+            canClick() {return player.bh.characters[1].health.gt(0) && player.bh.characters[1].skills[1].id != "none" && BHA[player.bh.characters[1].skills[1].id].effect != "passive" && player.bh.characters[1].stun.lte(0)},
+            unlocked() {return (player.bh.characters[1].skills[1].cooldown.gte(player.bh.characters[1].skills[1].cooldownMax) && player.bh.characters[1].health.gt(0)) || player.bh.characters[1].skills[1].id == "none" || BHA[player.bh.characters[1].skills[1].id].effect == "passive"},
+            onClick() {
+                if (BHA[player.bh.characters[1].skills[1].id].effect == "instant") bhAction(1, 1)
+                if (BHA[player.bh.characters[1].skills[1].id].effect == "active") {
+                    player.bh.characters[1].skills[1].cooldown = new Decimal(0)
+                    player.bh.characters[1].skills[1].duration = BHA[player.bh.characters[1].skills[1].id].duration
+                }
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
+                if (player.bh.characters[1].skills[1].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
+                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[player.bh.characters[1].id].color
+                return look
+            },
+        },
+        "C1-Skill-2": {
+            title() {
+                if (player.bh.characters[1].skills[2].id == "none") return ""
+                let str = BHA[player.bh.characters[1].skills[2].id].name
+                if (player.bh.characters[1].skills[2].auto) str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[1].skills[2].cooldown.sub(player.bh.characters[1].skills[2].cooldownMax)) + "/" + formatTime(player.bh.characters[1].skills[2].cooldownMax) + "]"
+                if (player.bh.characters[1].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+            tooltip() {return run(BHA[player.bh.characters[1].skills[2].id].description, BHA[player.bh.characters[1].skills[2].id])},
+            canClick() {return player.bh.characters[1].health.gt(0) && player.bh.characters[1].skills[2].id != "none" && BHA[player.bh.characters[1].skills[2].id].effect != "passive" && player.bh.characters[1].stun.lte(0)},
+            unlocked() {return (player.bh.characters[1].skills[2].cooldown.gte(player.bh.characters[1].skills[2].cooldownMax) && player.bh.characters[1].health.gt(0)) || player.bh.characters[1].skills[2].id == "none" || BHA[player.bh.characters[1].skills[2].id].effect == "passive"},
+            onClick() {
+                if (BHA[player.bh.characters[1].skills[2].id].effect == "instant") bhAction(1, 2)
+                if (BHA[player.bh.characters[1].skills[2].id].effect == "active") {
+                    player.bh.characters[1].skills[2].cooldown = new Decimal(0)
+                    player.bh.characters[1].skills[2].duration = BHA[player.bh.characters[1].skills[2].id].duration
+                }
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
+                if (player.bh.characters[1].skills[2].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
+                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[player.bh.characters[1].id].color
+                return look
+            },
+        },
+        "C1-Skill-3": {
+            title() {
+                if (player.bh.characters[1].skills[3].id == "none") return ""
+                let str = BHA[player.bh.characters[1].skills[3].id].name
+                if (player.bh.characters[1].skills[3].auto) str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[1].skills[3].cooldown.sub(player.bh.characters[1].skills[3].cooldownMax)) + "/" + formatTime(player.bh.characters[1].skills[3].cooldownMax) + "]"
+                if (player.bh.characters[1].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+            tooltip() {return run(BHA[player.bh.characters[1].skills[3].id].description, BHA[player.bh.characters[1].skills[3].id])},
+            canClick() {return player.bh.characters[1].health.gt(0) && player.bh.characters[1].skills[3].id != "none" && BHA[player.bh.characters[1].skills[3].id].effect != "passive" && player.bh.characters[1].stun.lte(0)},
+            unlocked() {return (player.bh.characters[1].skills[3].cooldown.gte(player.bh.characters[1].skills[3].cooldownMax) && player.bh.characters[1].health.gt(0)) || player.bh.characters[1].skills[3].id == "none" || BHA[player.bh.characters[1].skills[3].id].effect == "passive"},
+            onClick() {
+                if (BHA[player.bh.characters[1].skills[3].id].effect == "instant") bhAction(1, 3)
+                if (BHA[player.bh.characters[1].skills[3].id].effect == "active") {
+                    player.bh.characters[1].skills[3].cooldown = new Decimal(0)
+                    player.bh.characters[1].skills[3].duration = BHA[player.bh.characters[1].skills[3].id].duration
+                }
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
+                if (player.bh.characters[1].skills[3].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
+                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[player.bh.characters[1].id].color
+                return look
+            },
+        },
+        "C2-Icon": {
+            title() {
+                if (player.bh.characters[2].health.lte(0) && player.bh.characters[2].id != "none") {
+                    return "<img src='resources/dead.png'style='width:149px;height:149px;margin-left:-1.5px;margin-bottom:-6px'></img>"
+                } else {
+                    return "<img src='" + BHP[player.bh.characters[2].id].icon + "'style='width:149px;height:149px;margin-left:-1.5px;margin-bottom:-6px'></img>"
+                }
+            },
+            canClick: false,
+            unlocked() {return player.bh.characters[2].id != "none"},
+            onClick() {},
+            style: {width: "150px", minHeight: "150px", color: "white", backgroundColor: "transparent", margin: "10px", padding: "0", cursor: "default", userSelect: "none"},
+        },
+        "C2-Skill-0": {
+            title() {
+                if (player.bh.characters[2].skills[0].id == "none") return ""
+                let str = BHA[player.bh.characters[2].skills[0].id].name
+                if (player.bh.characters[2].skills[0].auto) str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[2].skills[0].cooldown.sub(player.bh.characters[2].skills[0].cooldownMax)) + "/" + formatTime(player.bh.characters[2].skills[0].cooldownMax) + "]"
+                if (player.bh.characters[2].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+            tooltip() {return run(BHA[player.bh.characters[2].skills[0].id].description, BHA[player.bh.characters[2].skills[0].id])},
+            canClick() {return player.bh.characters[2].health.gt(0) && player.bh.characters[2].skills[0].id != "none" && BHA[player.bh.characters[2].skills[0].id].effect != "passive" && player.bh.characters[2].stun.lte(0)},
+            unlocked() {return (player.bh.characters[2].skills[0].cooldown.gte(player.bh.characters[2].skills[0].cooldownMax) && player.bh.characters[2].health.gt(0)) || player.bh.characters[2].skills[0].id == "none" || BHA[player.bh.characters[2].skills[0].id].effect == "passive"},
+            onClick() {
+                if (BHA[player.bh.characters[2].skills[0].id].effect == "instant") bhAction(2, 0)
+                if (BHA[player.bh.characters[2].skills[0].id].effect == "active") {
+                    player.bh.characters[2].skills[0].cooldown = new Decimal(0)
+                    player.bh.characters[2].skills[0].duration = BHA[player.bh.characters[2].skills[0].id].duration
+                }
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
+                if (player.bh.characters[2].skills[0].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
+                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[player.bh.characters[2].id].color
+                return look
+            },
+        },
+        "C2-Skill-1": {
+            title() {
+                if (player.bh.characters[2].skills[1].id == "none") return ""
+                let str = BHA[player.bh.characters[2].skills[1].id].name
+                if (player.bh.characters[2].skills[1].auto) str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[2].skills[1].cooldown.sub(player.bh.characters[2].skills[1].cooldownMax)) + "/" + formatTime(player.bh.characters[2].skills[1].cooldownMax) + "]"
+                if (player.bh.characters[2].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+            tooltip() {return run(BHA[player.bh.characters[2].skills[1].id].description, BHA[player.bh.characters[2].skills[1].id])},
+            canClick() {return player.bh.characters[2].health.gt(0) && player.bh.characters[2].skills[1].id != "none" && BHA[player.bh.characters[2].skills[1].id].effect != "passive" && player.bh.characters[2].stun.lte(0)},
+            unlocked() {return (player.bh.characters[2].skills[1].cooldown.gte(player.bh.characters[2].skills[1].cooldownMax) && player.bh.characters[2].health.gt(0)) || player.bh.characters[2].skills[1].id == "none" || BHA[player.bh.characters[2].skills[1].id].effect == "passive"},
+            onClick() {
+                if (BHA[player.bh.characters[2].skills[1].id].effect == "instant") bhAction(2, 1)
+                if (BHA[player.bh.characters[2].skills[1].id].effect == "active") {
+                    player.bh.characters[2].skills[1].cooldown = new Decimal(0)
+                    player.bh.characters[2].skills[1].duration = BHA[player.bh.characters[2].skills[1].id].duration
+                }
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
+                if (player.bh.characters[2].skills[1].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
+                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[player.bh.characters[2].id].color
+                return look
+            },
+        },
+        "C2-Skill-2": {
+            title() {
+                if (player.bh.characters[2].skills[2].id == "none") return ""
+                let str = BHA[player.bh.characters[2].skills[2].id].name
+                if (player.bh.characters[2].skills[2].auto) str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[2].skills[2].cooldown.sub(player.bh.characters[2].skills[2].cooldownMax)) + "/" + formatTime(player.bh.characters[2].skills[2].cooldownMax) + "]"
+                if (player.bh.characters[2].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+            tooltip() {return run(BHA[player.bh.characters[2].skills[2].id].description, BHA[player.bh.characters[2].skills[2].id])},
+            canClick() {return player.bh.characters[2].health.gt(0) && player.bh.characters[2].skills[2].id != "none" && BHA[player.bh.characters[2].skills[2].id].effect != "passive" && player.bh.characters[2].stun.lte(0)},
+            unlocked() {return (player.bh.characters[2].skills[2].cooldown.gte(player.bh.characters[2].skills[2].cooldownMax) && player.bh.characters[2].health.gt(0)) || player.bh.characters[2].skills[2].id == "none" || BHA[player.bh.characters[2].skills[2].id].effect == "passive"},
+            onClick() {
+                if (BHA[player.bh.characters[2].skills[2].id].effect == "instant") bhAction(2, 2)
+                if (BHA[player.bh.characters[2].skills[2].id].effect == "active") {
+                    player.bh.characters[2].skills[2].cooldown = new Decimal(0)
+                    player.bh.characters[2].skills[2].duration = BHA[player.bh.characters[2].skills[2].id].duration
+                }
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
+                if (player.bh.characters[2].skills[2].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
+                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[player.bh.characters[2].id].color
+                return look
+            },
+        },
+        "C2-Skill-3": {
+            title() {
+                if (player.bh.characters[2].skills[3].id == "none") return ""
+                let str = BHA[player.bh.characters[2].skills[3].id].name
+                if (player.bh.characters[2].skills[3].auto) str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[2].skills[3].cooldown.sub(player.bh.characters[2].skills[3].cooldownMax)) + "/" + formatTime(player.bh.characters[2].skills[3].cooldownMax) + "]"
+                if (player.bh.characters[2].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+            tooltip() {return run(BHA[player.bh.characters[2].skills[3].id].description, BHA[player.bh.characters[2].skills[3].id])},
+            canClick() {return player.bh.characters[2].health.gt(0) && player.bh.characters[2].skills[3].id != "none" && BHA[player.bh.characters[2].skills[3].id].effect != "passive" && player.bh.characters[2].stun.lte(0)},
+            unlocked() {return (player.bh.characters[2].skills[3].cooldown.gte(player.bh.characters[2].skills[3].cooldownMax) && player.bh.characters[2].health.gt(0)) || player.bh.characters[2].skills[3].id == "none" || BHA[player.bh.characters[2].skills[3].id].effect == "passive"},
+            onClick() {
+                if (BHA[player.bh.characters[2].skills[3].id].effect == "instant") bhAction(2, 3)
+                if (BHA[player.bh.characters[2].skills[3].id].effect == "active") {
+                    player.bh.characters[2].skills[3].cooldown = new Decimal(0)
+                    player.bh.characters[2].skills[3].duration = BHA[player.bh.characters[2].skills[3].id].duration
+                }
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
+                if (player.bh.characters[2].skills[3].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
+                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[player.bh.characters[2].id].color
+                return look
+            },
+        },
+        "Celestialite-Icon": {
+            title() {
+                if (BHC[player.bh.celestialite.id].icon) {
+                    return "<img src='" + BHC[player.bh.celestialite.id].icon + "'style='width:149px;height:149px;margin-left:-1.5px;margin-bottom:-6px'></img>"
+                } else {
+                    return BHC[player.bh.celestialite.id].symbol
+                }
+            },
+            canClick: false,
+            unlocked: true,
+            onClick() {},
+            style() {
+                let look = {width: "150px", minHeight: "150px", color: "white", fontSize: "75px", backgroundColor: "transparent", border: "6px solid", padding: "0", borderRadius: "0", cursor: "default", userSelect: "none"}
+                if (BHC[player.bh.celestialite.id].style) look = Object.assign({}, look, BHC[player.bh.celestialite.id].style)
+                return look
+            },
+        },
+    },
+    bars: {
+        "celestialite-Health": {
+            unlocked: true,
+            direction: RIGHT,
+            width: 250,
+            height: 40,
+            progress() {
+                if (player.bh.celestialite.id == "none") return player.bh.respawnTimer.div(player.bh.respawnMax)
+                return player.bh.celestialite.health.div(player.bh.celestialite.maxHealth)
+            },
+            borderStyle: {border: "2px solid white", borderRadius: "15px", margin: "-1px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.celestialite.stun.gt(0)) return {backgroundColor: "#73741A"}
+                return {backgroundColor: "#8a0e79"}
+            },
+            textStyle: {userSelect: "none", lineHeight: "1"},
+            display() {
+                if (player.bh.celestialite.id == "none") return "<h5>" + formatTime(player.bh.respawnTimer) + "/" + formatTime(player.bh.respawnMax)
+                let str = "<h5>" + format(player.bh.celestialite.health) + "/" + format(player.bh.celestialite.maxHealth) + " HP"
+                if (player.bh.celestialite.stun.gt(0)) str = str + "<br>[Stunned for " + formatTime(player.bh.celestialite.stun) + "]"
+                return str
+            },
+        },
+        "celestialite-A0": {
+            unlocked() { return player.bh.celestialite.id != "none" && BHC[player.bh.celestialite.id].actions[0] },
+            direction: RIGHT,
+            width: 125,
+            height: 40,
+            progress() {
+                if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[0]) return new Decimal(0)
+                return player.bh.celestialite.actions[0].cooldown.div(BHC[player.bh.celestialite.id].actions[0].cooldown)
+            },
+            borderStyle: {border: "2px solid white", borderRadius: "15px", margin: "-1px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.celestialite.stun.gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: "#8a0e79"}
+            },
+            textStyle: {userSelect: "none"},
+            display() {
+                if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[0]) return ""
+                let str = "<h5>" + formatTime(player.bh.celestialite.actions[0].cooldown) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[0].cooldown)
+                if (player.bh.celestialite.stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+        },
+        "celestialite-A1": {
+            unlocked() { return player.bh.celestialite.id != "none" && BHC[player.bh.celestialite.id].actions[1] },
+            direction: RIGHT,
+            width: 125,
+            height: 40,
+            progress() {
+                if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[1]) return new Decimal(0)
+                return player.bh.celestialite.actions[1].cooldown.div(BHC[player.bh.celestialite.id].actions[1].cooldown)
+            },
+            borderStyle: {border: "2px solid white", borderRadius: "15px", margin: "-1px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.celestialite.stun.gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: "#8a0e79"}
+            },
+            textStyle: {userSelect: "none"},
+            display() {
+                if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[1]) return ""
+                let str = "<h5>" + formatTime(player.bh.celestialite.actions[1].cooldown) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[1].cooldown)
+                if (player.bh.celestialite.stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+        },
+        "celestialite-A2": {
+            unlocked() { return player.bh.celestialite.id != "none" && BHC[player.bh.celestialite.id].actions[2] },
+            direction: RIGHT,
+            width: 125,
+            height: 40,
+            progress() {
+                if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[2]) return new Decimal(0)
+                return player.bh.celestialite.actions[2].cooldown.div(BHC[player.bh.celestialite.id].actions[2].cooldown)
+            },
+            borderStyle: {border: "2px solid white", borderRadius: "15px", margin: "-1px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.celestialite.stun.gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: "#8a0e79"}
+            },
+            textStyle: {userSelect: "none"},
+            display() {
+                if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[2]) return ""
+                let str = "<h5>" + formatTime(player.bh.celestialite.actions[2].cooldown) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[2].cooldown)
+                if (player.bh.celestialite.stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+        },
+        "celestialite-A3": {
+            unlocked() { return player.bh.celestialite.id != "none" && BHC[player.bh.celestialite.id].actions[3] },
+            direction: RIGHT,
+            width: 125,
+            height: 40,
+            progress() {
+                if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[3]) return new Decimal(0)
+                return player.bh.celestialite.actions[3].cooldown.div(BHC[player.bh.celestialite.id].actions[3].cooldown)
+            },
+            borderStyle: {border: "2px solid white", borderRadius: "15px", margin: "-1px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.celestialite.stun.gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: "#8a0e79"}
+            },
+            textStyle: {userSelect: "none"},
+            display() {
+                if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[3]) return ""
+                let str = "<h5>" + formatTime(player.bh.celestialite.actions[3].cooldown) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[3].cooldown)
+                if (player.bh.celestialite.stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+        },
+        "C0-Health": {
+            unlocked: true,
+            direction: RIGHT,
+            width: 200,
+            height: 30,
+            progress() {
+                if (player.bh.characters[0].maxHealth.lte(0)) return new Decimal(0)
+                return player.bh.characters[0].health.div(player.bh.characters[0].maxHealth)
+            },
+            borderStyle: {border: "2px solid white", borderRadius: "15px", margin: "-1px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.characters[0].stun.gt(0)) return {backgroundColor: "#73741A"}
+                return {backgroundColor: "#449353"}
+            },
+            textStyle: {userSelect: "none", lineHeight: "1"},
+            display() {
+                if (player.bh.characters[0].id == "none") return ""
+                if (player.bh.characters[0].health.lte(0)) return BHP[player.bh.characters[0].id].name + " is dead"
+                let str = "<h5>" + formatSimple(player.bh.characters[0].health) + "/" + formatSimple(player.bh.characters[0].maxHealth) + " HP"
+                if (player.bh.characters[0].stun.gt(0)) str = str + "<br>[Stunned for " + formatTime(player.bh.characters[0].stun) + "]"
+                return str
+            },
+        },
+        "C0-S0-Cooldown": {
+            unlocked() { return !tmp.bh.clickables["C0-Skill-0"].unlocked }, 
+            direction: RIGHT,
+            width: 100,
+            height() { return player.bh.characters[0].skills[0].duration.gt(0) ? 50 : 100 },
+            progress() {
+                return player.bh.characters[0].skills[0].cooldown.div(player.bh.characters[0].skills[0].cooldownMax);
+            },
+            borderStyle() {return player.bh.characters[0].skills[0].duration.gt(0) ? {border: "0", borderRadius: "15px 15px 0 0"} : {border: "0", borderRadius: "15px"}},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.characters[0].stun.gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: BHP[player.bh.characters[0].id].color}
+            },
+            textStyle: {userSelect: "none"},
+            display() {
+                let str = "<h5>" + formatTime(player.bh.characters[0].skills[0].cooldown) + "/" + formatTime(player.bh.characters[0].skills[0].cooldownMax)
+                if (player.bh.characters[0].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+        },
+        "C0-S0-Duration": {
+            unlocked() {return player.bh.characters[0].skills[0].duration.gt(0)}, 
+            direction: RIGHT,
+            width: 100,
+            height: 48,
+            progress() {
+                if (!BHA[player.bh.characters[0].skills[0].id].duration) return new Decimal(0)
+                return player.bh.characters[0].skills[0].duration.div(BHA[player.bh.characters[0].skills[0].id].duration);
+            },
+            borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.characters[0].stun.gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: BHP[player.bh.characters[0].id].color}
+            },
+            textStyle: {userSelect: "none"},
+            display() {
+                if (!BHA[player.bh.characters[0].skills[0].id].duration) return new Decimal(0)
+                let str = "<h5>" + formatTime(player.bh.characters[0].skills[0].duration) + "/" + formatTime(BHA[player.bh.characters[0].skills[0].id].duration)
+                if (player.bh.characters[0].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+        },
+        "C0-S1-Cooldown": {
+            unlocked() { return !tmp.bh.clickables["C0-Skill-1"].unlocked }, 
+            direction: RIGHT,
+            width: 100,
+            height() { return player.bh.characters[0].skills[1].duration.gt(0) ? 50 : 100 },
+            progress() {
+                return player.bh.characters[0].skills[1].cooldown.div(player.bh.characters[0].skills[1].cooldownMax);
+            },
+            borderStyle() {return player.bh.characters[0].skills[1].duration.gt(0) ? {border: "0", borderRadius: "15px 15px 0 0"} : {border: "0", borderRadius: "15px"}},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.characters[0].stun.gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: BHP[player.bh.characters[0].id].color}
+            },
+            textStyle: {userSelect: "none"},
+            display() {
+                let str = "<h5>" + formatTime(player.bh.characters[0].skills[1].cooldown) + "/" + formatTime(player.bh.characters[0].skills[1].cooldownMax)
+                if (player.bh.characters[0].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+        },
+        "C0-S1-Duration": {
+            unlocked() {return player.bh.characters[0].skills[1].duration.gt(0)}, 
+            direction: RIGHT,
+            width: 100,
+            height: 48,
+            progress() {
+                if (!BHA[player.bh.characters[0].skills[1].id].duration) return new Decimal(0)
+                return player.bh.characters[0].skills[1].duration.div(BHA[player.bh.characters[0].skills[1].id].duration);
+            },
+            borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.characters[0].stun.gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: BHP[player.bh.characters[0].id].color}
+            },
+            textStyle: {userSelect: "none"},
+            display() {
+                if (!BHA[player.bh.characters[0].skills[1].id].duration) return new Decimal(0)
+                let str = "<h5>" + formatTime(player.bh.characters[0].skills[1].duration) + "/" + formatTime(BHA[player.bh.characters[0].skills[1].id].duration)
+                if (player.bh.characters[0].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+        },
+        "C0-S2-Cooldown": {
+            unlocked() { return !tmp.bh.clickables["C0-Skill-2"].unlocked }, 
+            direction: RIGHT,
+            width: 100,
+            height() { return player.bh.characters[0].skills[2].duration.gt(0) ? 50 : 100 },
+            progress() {
+                return player.bh.characters[0].skills[2].cooldown.div(player.bh.characters[0].skills[2].cooldownMax);
+            },
+            borderStyle() {return player.bh.characters[0].skills[2].duration.gt(0) ? {border: "0", borderRadius: "15px 15px 0 0"} : {border: "0", borderRadius: "15px"}},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.characters[0].stun.gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: BHP[player.bh.characters[0].id].color}
+            },
+            textStyle: {userSelect: "none"},
+            display() {
+                let str = "<h5>" + formatTime(player.bh.characters[0].skills[2].cooldown) + "/" + formatTime(player.bh.characters[0].skills[2].cooldownMax)
+                if (player.bh.characters[0].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+        },
+        "C0-S2-Duration": {
+            unlocked() {return player.bh.characters[0].skills[2].duration.gt(0)}, 
+            direction: RIGHT,
+            width: 100,
+            height: 48,
+            progress() {
+                if (!BHA[player.bh.characters[0].skills[2].id].duration) return new Decimal(0)
+                return player.bh.characters[0].skills[2].duration.div(BHA[player.bh.characters[0].skills[2].id].duration);
+            },
+            borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.characters[0].stun.gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: BHP[player.bh.characters[0].id].color}
+            },
+            textStyle: {userSelect: "none"},
+            display() {
+                if (!BHA[player.bh.characters[0].skills[2].id].duration) return new Decimal(0)
+                let str = "<h5>" + formatTime(player.bh.characters[0].skills[2].duration) + "/" + formatTime(BHA[player.bh.characters[0].skills[2].id].duration)
+                if (player.bh.characters[0].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+        },
+        "C0-S3-Cooldown": {
+            unlocked() { return !tmp.bh.clickables["C0-Skill-3"].unlocked }, 
+            direction: RIGHT,
+            width: 100,
+            height() { return player.bh.characters[0].skills[3].duration.gt(0) ? 50 : 100 },
+            progress() {
+                return player.bh.characters[0].skills[3].cooldown.div(player.bh.characters[0].skills[3].cooldownMax);
+            },
+            borderStyle() {return player.bh.characters[0].skills[3].duration.gt(0) ? {border: "0", borderRadius: "15px 15px 0 0"} : {border: "0", borderRadius: "15px"}},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.characters[0].stun.gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: BHP[player.bh.characters[0].id].color}
+            },
+            textStyle: {userSelect: "none"},
+            display() {
+                let str = "<h5>" + formatTime(player.bh.characters[0].skills[3].cooldown) + "/" + formatTime(player.bh.characters[0].skills[3].cooldownMax)
+                if (player.bh.characters[0].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+        },
+        "C0-S3-Duration": {
+            unlocked() {return player.bh.characters[0].skills[3].duration.gt(0)}, 
+            direction: RIGHT,
+            width: 100,
+            height: 48,
+            progress() {
+                if (!BHA[player.bh.characters[0].skills[3].id].duration) return new Decimal(0)
+                return player.bh.characters[0].skills[3].duration.div(BHA[player.bh.characters[0].skills[3].id].duration);
+            },
+            borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.characters[0].stun.gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: BHP[player.bh.characters[0].id].color}
+            },
+            textStyle: {userSelect: "none"},
+            display() {
+                if (!BHA[player.bh.characters[0].skills[3].id].duration) return new Decimal(0)
+                let str = "<h5>" + formatTime(player.bh.characters[0].skills[3].duration) + "/" + formatTime(BHA[player.bh.characters[0].skills[3].id].duration)
+                if (player.bh.characters[0].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+        },
+        "C1-Health": {
+            unlocked: true,
+            direction: RIGHT,
+            width: 200,
+            height: 30,
+            progress() {
+                if (player.bh.characters[1].maxHealth.lte(0)) return new Decimal(0)
+                return player.bh.characters[1].health.div(player.bh.characters[1].maxHealth)
+            },
+            borderStyle: {border: "2px solid white", borderRadius: "15px", margin: "-1px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.characters[1].stun.gt(0)) return {backgroundColor: "#73741A"}
+                return {backgroundColor: "#449353"}
+            },
+            textStyle: {userSelect: "none", lineHeight: "1"},
+            display() {
+                if (player.bh.characters[1].id == "none") return ""
+                if (player.bh.characters[1].health.lte(0)) return BHP[player.bh.characters[1].id].name + " is dead"
+                let str = "<h5>" + formatSimple(player.bh.characters[1].health) + "/" + formatSimple(player.bh.characters[1].maxHealth) + " HP"
+                if (player.bh.characters[1].stun.gt(0)) str = str + "<br>[Stunned for " + formatTime(player.bh.characters[1].stun) + "]"
+                return str
+            },
+        },
+        "C1-S0-Cooldown": {
+            unlocked() { return !tmp.bh.clickables["C1-Skill-0"].unlocked }, 
+            direction: RIGHT,
+            width: 100,
+            height() { return player.bh.characters[1].skills[0].duration.gt(0) ? 50 : 100 },
+            progress() {
+                return player.bh.characters[1].skills[0].cooldown.div(player.bh.characters[1].skills[0].cooldownMax);
+            },
+            borderStyle() {return player.bh.characters[1].skills[0].duration.gt(0) ? {border: "0", borderRadius: "15px 15px 0 0"} : {border: "0", borderRadius: "15px"}},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.characters[1].stun.gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: BHP[player.bh.characters[1].id].color}
+            },
+            textStyle: {userSelect: "none"},
+            display() {
+                let str = "<h5>" + formatTime(player.bh.characters[1].skills[0].cooldown) + "/" + formatTime(player.bh.characters[1].skills[0].cooldownMax)
+                if (player.bh.characters[1].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+        },
+        "C1-S0-Duration": {
+            unlocked() {return player.bh.characters[1].skills[0].duration.gt(0)}, 
+            direction: RIGHT,
+            width: 100,
+            height: 48,
+            progress() {
+                if (!BHA[player.bh.characters[1].skills[0].id].duration) return new Decimal(0)
+                return player.bh.characters[1].skills[0].duration.div(BHA[player.bh.characters[1].skills[0].id].duration);
+            },
+            borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.characters[1].stun.gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: BHP[player.bh.characters[1].id].color}
+            },
+            textStyle: {userSelect: "none"},
+            display() {
+                if (!BHA[player.bh.characters[1].skills[0].id].duration) return new Decimal(0)
+                let str = "<h5>" + formatTime(player.bh.characters[1].skills[0].duration) + "/" + formatTime(BHA[player.bh.characters[1].skills[0].id].duration)
+                if (player.bh.characters[1].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+        },
+        "C1-S1-Cooldown": {
+            unlocked() { return !tmp.bh.clickables["C1-Skill-1"].unlocked }, 
+            direction: RIGHT,
+            width: 100,
+            height() { return player.bh.characters[1].skills[1].duration.gt(0) ? 50 : 100 },
+            progress() {
+                return player.bh.characters[1].skills[1].cooldown.div(player.bh.characters[1].skills[1].cooldownMax);
+            },
+            borderStyle() {return player.bh.characters[1].skills[1].duration.gt(0) ? {border: "0", borderRadius: "15px 15px 0 0"} : {border: "0", borderRadius: "15px"}},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.characters[1].stun.gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: BHP[player.bh.characters[1].id].color}
+            },
+            textStyle: {userSelect: "none"},
+            display() {
+                let str = "<h5>" + formatTime(player.bh.characters[1].skills[1].cooldown) + "/" + formatTime(player.bh.characters[1].skills[1].cooldownMax)
+                if (player.bh.characters[1].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+        },
+        "C1-S1-Duration": {
+            unlocked() {return player.bh.characters[1].skills[1].duration.gt(0)}, 
+            direction: RIGHT,
+            width: 100,
+            height: 48,
+            progress() {
+                if (!BHA[player.bh.characters[1].skills[1].id].duration) return new Decimal(0)
+                return player.bh.characters[1].skills[1].duration.div(BHA[player.bh.characters[1].skills[1].id].duration);
+            },
+            borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.characters[1].stun.gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: BHP[player.bh.characters[1].id].color}
+            },
+            textStyle: {userSelect: "none"},
+            display() {
+                if (!BHA[player.bh.characters[1].skills[1].id].duration) return new Decimal(0)
+                let str = "<h5>" + formatTime(player.bh.characters[1].skills[1].duration) + "/" + formatTime(BHA[player.bh.characters[1].skills[1].id].duration)
+                if (player.bh.characters[1].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+        },
+        "C1-S2-Cooldown": {
+            unlocked() { return !tmp.bh.clickables["C1-Skill-2"].unlocked }, 
+            direction: RIGHT,
+            width: 100,
+            height() { return player.bh.characters[1].skills[2].duration.gt(0) ? 50 : 100 },
+            progress() {
+                return player.bh.characters[1].skills[2].cooldown.div(player.bh.characters[1].skills[2].cooldownMax);
+            },
+            borderStyle() {return player.bh.characters[1].skills[2].duration.gt(0) ? {border: "0", borderRadius: "15px 15px 0 0"} : {border: "0", borderRadius: "15px"}},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.characters[1].stun.gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: BHP[player.bh.characters[1].id].color}
+            },
+            textStyle: {userSelect: "none"},
+            display() {
+                let str = "<h5>" + formatTime(player.bh.characters[1].skills[2].cooldown) + "/" + formatTime(player.bh.characters[1].skills[2].cooldownMax)
+                if (player.bh.characters[1].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+        },
+        "C1-S2-Duration": {
+            unlocked() {return player.bh.characters[1].skills[2].duration.gt(0)}, 
+            direction: RIGHT,
+            width: 100,
+            height: 48,
+            progress() {
+                if (!BHA[player.bh.characters[1].skills[2].id].duration) return new Decimal(0)
+                return player.bh.characters[1].skills[2].duration.div(BHA[player.bh.characters[1].skills[2].id].duration);
+            },
+            borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.characters[1].stun.gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: BHP[player.bh.characters[1].id].color}
+            },
+            textStyle: {userSelect: "none"},
+            display() {
+                if (!BHA[player.bh.characters[1].skills[2].id].duration) return new Decimal(0)
+                let str = "<h5>" + formatTime(player.bh.characters[1].skills[2].duration) + "/" + formatTime(BHA[player.bh.characters[1].skills[2].id].duration)
+                if (player.bh.characters[1].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+        },
+        "C1-S3-Cooldown": {
+            unlocked() { return !tmp.bh.clickables["C1-Skill-3"].unlocked }, 
+            direction: RIGHT,
+            width: 100,
+            height() { return player.bh.characters[1].skills[3].duration.gt(0) ? 50 : 100 },
+            progress() {
+                return player.bh.characters[1].skills[3].cooldown.div(player.bh.characters[1].skills[3].cooldownMax);
+            },
+            borderStyle() {return player.bh.characters[1].skills[3].duration.gt(0) ? {border: "0", borderRadius: "15px 15px 0 0"} : {border: "0", borderRadius: "15px"}},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.characters[1].stun.gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: BHP[player.bh.characters[1].id].color}
+            },
+            textStyle: {userSelect: "none"},
+            display() {
+                let str = "<h5>" + formatTime(player.bh.characters[1].skills[3].cooldown) + "/" + formatTime(player.bh.characters[1].skills[3].cooldownMax)
+                if (player.bh.characters[1].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+        },
+        "C1-S3-Duration": {
+            unlocked() {return player.bh.characters[1].skills[3].duration.gt(0)}, 
+            direction: RIGHT,
+            width: 100,
+            height: 48,
+            progress() {
+                if (!BHA[player.bh.characters[1].skills[3].id].duration) return new Decimal(0)
+                return player.bh.characters[1].skills[3].duration.div(BHA[player.bh.characters[1].skills[3].id].duration);
+            },
+            borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.characters[1].stun.gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: BHP[player.bh.characters[1].id].color}
+            },
+            textStyle: {userSelect: "none"},
+            display() {
+                if (!BHA[player.bh.characters[1].skills[3].id].duration) return new Decimal(0)
+                let str = "<h5>" + formatTime(player.bh.characters[1].skills[3].duration) + "/" + formatTime(BHA[player.bh.characters[1].skills[3].id].duration)
+                if (player.bh.characters[1].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+        },
+        "C2-Health": {
+            unlocked: true,
+            direction: RIGHT,
+            width: 200,
+            height: 30,
+            progress() {
+                if (player.bh.characters[2].maxHealth.lte(0)) return new Decimal(0)
+                return player.bh.characters[2].health.div(player.bh.characters[2].maxHealth)
+            },
+            borderStyle: {border: "2px solid white", borderRadius: "15px", margin: "-1px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.characters[2].stun.gt(0)) return {backgroundColor: "#73741A"}
+                return {backgroundColor: "#449353"}
+            },
+            textStyle: {userSelect: "none", lineHeight: "1"},
+            display() {
+                if (player.bh.characters[2].id == "none") return ""
+                if (player.bh.characters[2].health.lte(0)) return BHP[player.bh.characters[2].id].name + " is dead"
+                let str = "<h5>" + formatSimple(player.bh.characters[2].health) + "/" + formatSimple(player.bh.characters[2].maxHealth) + " HP"
+                if (player.bh.characters[2].stun.gt(0)) str = str + "<br>[Stunned for " + formatTime(player.bh.characters[2].stun) + "]"
+                return str
+            },
+        },
+        "C2-S0-Cooldown": {
+            unlocked() { return !tmp.bh.clickables["C2-Skill-0"].unlocked }, 
+            direction: RIGHT,
+            width: 100,
+            height() { return player.bh.characters[2].skills[0].duration.gt(0) ? 50 : 100 },
+            progress() {
+                return player.bh.characters[2].skills[0].cooldown.div(player.bh.characters[2].skills[0].cooldownMax);
+            },
+            borderStyle() {return player.bh.characters[2].skills[0].duration.gt(0) ? {border: "0", borderRadius: "15px 15px 0 0"} : {border: "0", borderRadius: "15px"}},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.characters[2].stun.gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: BHP[player.bh.characters[2].id].color}
+            },
+            textStyle: {userSelect: "none"},
+            display() {
+                let str = "<h5>" + formatTime(player.bh.characters[2].skills[0].cooldown) + "/" + formatTime(player.bh.characters[2].skills[0].cooldownMax)
+                if (player.bh.characters[2].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+        },
+        "C2-S0-Duration": {
+            unlocked() {return player.bh.characters[2].skills[0].duration.gt(0)}, 
+            direction: RIGHT,
+            width: 100,
+            height: 48,
+            progress() {
+                if (!BHA[player.bh.characters[2].skills[0].id].duration) return new Decimal(0)
+                return player.bh.characters[2].skills[0].duration.div(BHA[player.bh.characters[2].skills[0].id].duration);
+            },
+            borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.characters[2].stun.gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: BHP[player.bh.characters[2].id].color}
+            },
+            textStyle: {userSelect: "none"},
+            display() {
+                if (!BHA[player.bh.characters[2].skills[0].id].duration) return new Decimal(0)
+                let str = "<h5>" + formatTime(player.bh.characters[2].skills[0].duration) + "/" + formatTime(BHA[player.bh.characters[2].skills[0].id].duration)
+                if (player.bh.characters[2].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+        },
+        "C2-S1-Cooldown": {
+            unlocked() { return !tmp.bh.clickables["C2-Skill-1"].unlocked }, 
+            direction: RIGHT,
+            width: 100,
+            height() { return player.bh.characters[2].skills[1].duration.gt(0) ? 50 : 100 },
+            progress() {
+                return player.bh.characters[2].skills[1].cooldown.div(player.bh.characters[2].skills[1].cooldownMax);
+            },
+            borderStyle() {return player.bh.characters[2].skills[1].duration.gt(0) ? {border: "0", borderRadius: "15px 15px 0 0"} : {border: "0", borderRadius: "15px"}},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.characters[2].stun.gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: BHP[player.bh.characters[2].id].color}
+            },
+            textStyle: {userSelect: "none"},
+            display() {
+                let str = "<h5>" + formatTime(player.bh.characters[2].skills[1].cooldown) + "/" + formatTime(player.bh.characters[2].skills[1].cooldownMax)
+                if (player.bh.characters[2].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+        },
+        "C2-S1-Duration": {
+            unlocked() {return player.bh.characters[2].skills[1].duration.gt(0)}, 
+            direction: RIGHT,
+            width: 100,
+            height: 48,
+            progress() {
+                if (!BHA[player.bh.characters[2].skills[1].id].duration) return new Decimal(0)
+                return player.bh.characters[2].skills[1].duration.div(BHA[player.bh.characters[2].skills[1].id].duration);
+            },
+            borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.characters[2].stun.gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: BHP[player.bh.characters[2].id].color}
+            },
+            textStyle: {userSelect: "none"},
+            display() {
+                if (!BHA[player.bh.characters[2].skills[1].id].duration) return new Decimal(0)
+                let str = "<h5>" + formatTime(player.bh.characters[2].skills[1].duration) + "/" + formatTime(BHA[player.bh.characters[2].skills[1].id].duration)
+                if (player.bh.characters[2].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+        },
+        "C2-S2-Cooldown": {
+            unlocked() { return !tmp.bh.clickables["C2-Skill-2"].unlocked }, 
+            direction: RIGHT,
+            width: 100,
+            height() { return player.bh.characters[2].skills[2].duration.gt(0) ? 50 : 100 },
+            progress() {
+                return player.bh.characters[2].skills[2].cooldown.div(player.bh.characters[2].skills[2].cooldownMax);
+            },
+            borderStyle() {return player.bh.characters[2].skills[2].duration.gt(0) ? {border: "0", borderRadius: "15px 15px 0 0"} : {border: "0", borderRadius: "15px"}},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.characters[2].stun.gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: BHP[player.bh.characters[2].id].color}
+            },
+            textStyle: {userSelect: "none"},
+            display() {
+                let str = "<h5>" + formatTime(player.bh.characters[2].skills[2].cooldown) + "/" + formatTime(player.bh.characters[2].skills[2].cooldownMax)
+                if (player.bh.characters[2].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+        },
+        "C2-S2-Duration": {
+            unlocked() {return player.bh.characters[2].skills[2].duration.gt(0)}, 
+            direction: RIGHT,
+            width: 100,
+            height: 48,
+            progress() {
+                if (!BHA[player.bh.characters[2].skills[2].id].duration) return new Decimal(0)
+                return player.bh.characters[2].skills[2].duration.div(BHA[player.bh.characters[2].skills[2].id].duration);
+            },
+            borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.characters[2].stun.gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: BHP[player.bh.characters[2].id].color}
+            },
+            textStyle: {userSelect: "none"},
+            display() {
+                if (!BHA[player.bh.characters[2].skills[2].id].duration) return new Decimal(0)
+                let str = "<h5>" + formatTime(player.bh.characters[2].skills[2].duration) + "/" + formatTime(BHA[player.bh.characters[2].skills[2].id].duration)
+                if (player.bh.characters[2].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+        },
+        "C2-S3-Cooldown": {
+            unlocked() { return !tmp.bh.clickables["C2-Skill-3"].unlocked }, 
+            direction: RIGHT,
+            width: 100,
+            height() { return player.bh.characters[2].skills[3].duration.gt(0) ? 50 : 100 },
+            progress() {
+                return player.bh.characters[2].skills[3].cooldown.div(player.bh.characters[2].skills[3].cooldownMax);
+            },
+            borderStyle() {return player.bh.characters[2].skills[3].duration.gt(0) ? {border: "0", borderRadius: "15px 15px 0 0"} : {border: "0", borderRadius: "15px"}},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.characters[2].stun.gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: BHP[player.bh.characters[2].id].color}
+            },
+            textStyle: {userSelect: "none"},
+            display() {
+                let str = "<h5>" + formatTime(player.bh.characters[2].skills[3].cooldown) + "/" + formatTime(player.bh.characters[2].skills[3].cooldownMax)
+                if (player.bh.characters[2].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+        },
+        "C2-S3-Duration": {
+            unlocked() {return player.bh.characters[2].skills[3].duration.gt(0)}, 
+            direction: RIGHT,
+            width: 100,
+            height: 48,
+            progress() {
+                if (!BHA[player.bh.characters[2].skills[3].id].duration) return new Decimal(0)
+                return player.bh.characters[2].skills[3].duration.div(BHA[player.bh.characters[2].skills[3].id].duration);
+            },
+            borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.characters[2].stun.gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: BHP[player.bh.characters[2].id].color}
+            },
+            textStyle: {userSelect: "none"},
+            display() {
+                if (!BHA[player.bh.characters[2].skills[3].id].duration) return new Decimal(0)
+                let str = "<h5>" + formatTime(player.bh.characters[2].skills[3].duration) + "/" + formatTime(BHA[player.bh.characters[2].skills[3].id].duration)
+                if (player.bh.characters[2].stun.gt(0)) str = str + "<br>[STUNNED]"
+                return str
+            },
+        },
+        // #588b3e / #1d881d / #449353 for health maybe
+        // #64476d for corruption maybe
+    },
+    microtabs: {
+        stages: {
+            "depth1": {
+                unlocked: true,
+                embedLayer: 'depth1',
+            },
+            "depth2": {
+                unlocked: true,
+                embedLayer: 'depth2',
+            },
+            "depth3": {
+                unlocked: true,
+                embedLayer: 'depth3',
+            },
+        },
+        stuff: {
+            "black-heart": {
+                content: [
+                    ["style-column", [
+                        ["theme-scroll-row", [
+                            ["row-tree", universes.BH.tree],
+                        ], {width: "750px", height: "297px", padding: "0 25px", background: "linear-gradient(90deg, rgba(50, 50, 50, 0.5) 0%, rgba(0, 0, 0, 0.5) 150%)", borderBottom: "3px solid var(--regBorder)", borderRadius: "27px 27px 0 0"}],
+                        ["style-column", [
+                            ["buttonless-microtabs", "stages", {borderWidth: "0"}],
+                        ], {width: "800px", height: "400px", background: "var(--tabTitle)", borderRadius: "0 0 27px 27px"}],
+                    ], {width: "800px", height: "700px", border: "3px solid var(--regBorder)", borderRadius: "30px"}],
+                ],
+            },
+            "battle": {
+                content: [
+                    ["row", [
+                        ["column", [
+                            ["row", [
+                                ["style-column", [
+                                    ["clickable", "C0-Icon"], 
+                                    ["style-row", [
+                                        ["tooltip-row", [
+                                            ["raw-html", () => {return player.bh.characters[0].attributes.air ? "≋" : ""}, {color: "#ccc", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
+                                            ["raw-html", () => {return player.bh.characters[0].attributes.air ? "<div class='bottomTooltip' style='margin-top:0px'>Air<hr>Has resistance to<br>melee attacks.</div>" : ""}],
+                                        ]],
+                                        /*["tooltip-row", [
+                                            ["raw-html", () => {return player.ma.shieldCelestialite ? "⛊" : ""}, {color: "#5c5c5c", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
+                                            ["raw-html", () => {return player.ma.shieldCelestialite ? "<div class='bottomTooltip' style='margin-top:0px'>Shield<hr>Starts with a shield<br>that is immune to<br>ranged and magic<br>attacks.</div>" : ""}],
+                                        ]],*/
+                                        ["tooltip-row", [
+                                            ["raw-html", () => {return player.bh.characters[0].attributes.berserk ? "✹" : ""}, {color: "#ff6666", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
+                                            ["raw-html", () => {return player.bh.characters[0].attributes.berserk ? "<div class='bottomTooltip' style='margin-top:0px'>Berserk<hr>Actions always do<br>self damage.</div>" : ""}],
+                                        ]],
+                                        ["tooltip-row", [
+                                            ["raw-html", () => {return player.bh.characters[0].attributes.stealthy ? "☉" : ""}, {color: "#78866b", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
+                                            ["raw-html", () => {return player.bh.characters[0].attributes.stealthy ? "<div class='bottomTooltip' style='margin-top:0px'>Stealthy<hr>Has resistance to<br>melee and magic<br>attacks.</div>" : ""}],
+                                        ]],
+                                        ["tooltip-row", [
+                                            ["raw-html", () => {return player.bh.characters[0].attributes.cursed ? "✶" : ""}, {color: "#8b0e7a", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
+                                            ["raw-html", () => {return player.bh.characters[0].attributes.cursed ? "<div class='bottomTooltip' style='margin-top:0px'>Cursed<hr>Has a 30% chance to<br>reflect damage back<br>towards you.</div>" : ""}],
+                                        ]],
+                                        ["tooltip-row", [
+                                            ["raw-html", () => {return player.bh.characters[0].attributes.explosive ? "✺" : ""}, {color: "#ee8700", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
+                                            ["raw-html", () => {return player.bh.characters[0].attributes.explosive ? "<div class='bottomTooltip' style='margin-top:0px'>Explosive<hr>Explodes upon death,<br>dealing damage to<br>all team members.</div>" : ""}],
+                                        ]],
+                                    ], {width: "50px", height: "30px", marginTop: "-35px"}],
+                                ], {margin: "10px"}],
+                                ["clickable", "C1-Icon"],
+                            ]],
+                            ["clickable", "C2-Icon"],
+                        ]],
+                        ["blank", ["100px", "100px"]],
+                        ["column", [
+                            ["clickable", "Celestialite-Icon"],
+                            ["style-row", [
+                                ["tooltip-row", [
+                                    ["raw-html", () => {return player.bh.celestialite.attributes.air ? "≋" : ""}, {color: "#ccc", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
+                                    ["raw-html", () => {return player.bh.celestialite.attributes.air ? "<div class='bottomTooltip' style='margin-top:0px'>Air<hr>Has resistance to<br>melee attacks.</div>" : ""}],
+                                ]],
+                                /*["tooltip-row", [
+                                    ["raw-html", () => {return player.ma.shieldCelestialite ? "⛊" : ""}, {color: "#5c5c5c", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
+                                    ["raw-html", () => {return player.ma.shieldCelestialite ? "<div class='bottomTooltip' style='margin-top:0px'>Shield<hr>Starts with a shield<br>that is immune to<br>ranged and magic<br>attacks.</div>" : ""}],
+                                ]],*/
+                                ["tooltip-row", [
+                                    ["raw-html", () => {return player.bh.celestialite.attributes.berserk ? "✹" : ""}, {color: "#ff6666", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
+                                    ["raw-html", () => {return player.bh.celestialite.attributes.berserk ? "<div class='bottomTooltip' style='margin-top:0px'>Berserk<hr>Actions always do<br>self damage.</div>" : ""}],
+                                ]],
+                                ["tooltip-row", [
+                                    ["raw-html", () => {return player.bh.celestialite.attributes.stealthy ? "☉" : ""}, {color: "#78866b", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
+                                    ["raw-html", () => {return player.bh.celestialite.attributes.stealthy ? "<div class='bottomTooltip' style='margin-top:0px'>Stealthy<hr>Has resistance to<br>melee and magic<br>attacks.</div>" : ""}],
+                                ]],
+                                ["tooltip-row", [
+                                    ["raw-html", () => {return player.bh.celestialite.attributes.cursed ? "✶" : ""}, {color: "#8b0e7a", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
+                                    ["raw-html", () => {return player.bh.celestialite.attributes.cursed ? "<div class='bottomTooltip' style='margin-top:0px'>Cursed<hr>Has a 30% chance to<br>reflect damage back<br>towards you.</div>" : ""}],
+                                ]],
+                                ["tooltip-row", [
+                                    ["raw-html", () => {return player.bh.celestialite.attributes.explosive ? "✺" : ""}, {color: "#ee8700", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
+                                    ["raw-html", () => {return player.bh.celestialite.attributes.explosive ? "<div class='bottomTooltip' style='margin-top:0px'>Explosive<hr>Explodes upon death,<br>dealing damage to<br>all team members.</div>" : ""}],
+                                ]],
+                            ], {width: "50px", height: "30px", marginTop: "-40px"}],
+                        ], {}],
+                    ]],
+                    ["blank", "50px"],
+                    ["row", [
+                        ["style-column", [
+                            ["blank", "5px"],
+                            ["raw-html", () => {return BHP[player.bh.characters[0].id].name}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["blank", "5px"],
+                            ["bar", "C0-Health"],
+                            ["row", [
+                                ["style-column", [["clickable", "C0-Skill-0"], ["bar", "C0-S0-Cooldown"], ["bar", "C0-S0-Duration"]], {width: "100px", height: "100px", border: "2px solid white", borderRadius: "17px", margin: "-1px"}],
+                                ["style-column", [["clickable", "C0-Skill-1"], ["bar", "C0-S1-Cooldown"], ["bar", "C0-S1-Duration"]], {width: "100px", height: "100px", border: "2px solid white", borderRadius: "17px", margin: "-1px"}],
+                            ]],
+                            ["row", [
+                                ["style-column", [["clickable", "C0-Skill-2"], ["bar", "C0-S2-Cooldown"], ["bar", "C0-S2-Duration"]], {width: "100px", height: "100px", border: "2px solid white", borderRadius: "17px", margin: "-1px"}],
+                                ["style-column", [["clickable", "C0-Skill-3"], ["bar", "C0-S3-Cooldown"], ["bar", "C0-S3-Duration"]], {width: "100px", height: "100px", border: "2px solid white", borderRadius: "17px", margin: "-1px"}],
+                            ]],
+                            ["blank", "10px"],
+                        ], () => {return player.bh.characters[0].id != "none" ? {width: "225px", height: "300px", background: "rgba(0,0,0,0.2)", border: "3px solid white", borderRadius: "30px", margin: "5px",} : {display: "none !important"}}],
+                        ["style-column", [
+                            ["blank", "5px"],
+                            ["raw-html", () => {return BHP[player.bh.characters[1].id].name}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["blank", "5px"],
+                            ["bar", "C1-Health"],
+                            ["row", [
+                                ["style-column", [["clickable", "C1-Skill-0"], ["bar", "C1-S0-Cooldown"], ["bar", "C1-S0-Duration"]], {width: "100px", height: "100px", border: "2px solid white", borderRadius: "17px", margin: "-1px"}],
+                                ["style-column", [["clickable", "C1-Skill-1"], ["bar", "C1-S1-Cooldown"], ["bar", "C1-S1-Duration"]], {width: "100px", height: "100px", border: "2px solid white", borderRadius: "17px", margin: "-1px"}],
+                            ]],
+                            ["row", [
+                                ["style-column", [["clickable", "C1-Skill-2"], ["bar", "C1-S2-Cooldown"], ["bar", "C1-S2-Duration"]], {width: "100px", height: "100px", border: "2px solid white", borderRadius: "17px", margin: "-1px"}],
+                                ["style-column", [["clickable", "C1-Skill-3"], ["bar", "C1-S3-Cooldown"], ["bar", "C1-S3-Duration"]], {width: "100px", height: "100px", border: "2px solid white", borderRadius: "17px", margin: "-1px"}],
+                            ]],
+                            ["blank", "10px"],
+                        ], () => {return player.bh.characters[1].id != "none" ? {width: "225px", height: "300px", background: "rgba(0,0,0,0.2)", border: "3px solid white", borderRadius: "30px", margin: "5px",} : {display: "none !important"}}],
+                        ["style-column", [
+                            ["blank", "5px"],
+                            ["raw-html", () => {return BHP[player.bh.characters[2].id].name}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["blank", "5px"],
+                            ["bar", "C2-Health"],
+                            ["row", [
+                                ["style-column", [["clickable", "C2-Skill-0"], ["bar", "C2-S0-Cooldown"], ["bar", "C2-S0-Duration"]], {width: "100px", height: "100px", border: "2px solid white", borderRadius: "17px", margin: "-1px"}],
+                                ["style-column", [["clickable", "C2-Skill-1"], ["bar", "C2-S1-Cooldown"], ["bar", "C2-S1-Duration"]], {width: "100px", height: "100px", border: "2px solid white", borderRadius: "17px", margin: "-1px"}],
+                            ]],
+                            ["row", [
+                                ["style-column", [["clickable", "C2-Skill-2"], ["bar", "C2-S2-Cooldown"], ["bar", "C2-S2-Duration"]], {width: "100px", height: "100px", border: "2px solid white", borderRadius: "17px", margin: "-1px"}],
+                                ["style-column", [["clickable", "C2-Skill-3"], ["bar", "C2-S3-Cooldown"], ["bar", "C2-S3-Duration"]], {width: "100px", height: "100px", border: "2px solid white", borderRadius: "17px", margin: "-1px"}],
+                            ]],
+                            ["blank", "10px"],
+                        ], () => {return player.bh.characters[2].id != "none" ? {width: "225px", height: "300px", background: "rgba(0,0,0,0.2)", border: "3px solid white", borderRadius: "30px", margin: "5px",} : {display: "none !important"}}],
+                        ["blank", ["50px", "50px"]],
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", () => {return BHC[player.bh.celestialite.id].name}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                ["raw-html", () => {
+                                    if (player.bh.currentStage == "none") {
+                                        return "Kill Combo: " + formatShortestWhole(player.bh.combo)
+                                    } else if (player.bh.combo.gte(player[player.bh.currentStage].highestCombo)) {
+                                        return "Kill Combo: " + formatShortestWhole(player.bh.combo) + "/" + BHS[player.bh.currentStage].comboLimit
+                                    } else {
+                                        return "Kill Combo: <span style='color:gray'>" + formatShortestWhole(player.bh.combo) + "</span>/" + BHS[player.bh.currentStage].comboLimit
+                                    }
+                                }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return player.bh.combo.gte(player.bh.comboScalingStart) ? "[SOFTCAP: x" + formatShort(player.bh.comboSoftcap) + " Celestialite Stats]" : ""}, {color: "red", fontSize: "12px", fontFamily: "monospace"}],
+                            ], {width: "300px", height: "60px"}],
+                            ["style-column", [
+                                ["bar", "celestialite-Health"],
+                                ["row", [
+                                    ["bar", "celestialite-A0"],
+                                    ["bar", "celestialite-A1"],
+                                ]],
+                                ["row", [
+                                    ["bar", "celestialite-A2"],
+                                    ["bar", "celestialite-A3"],
+                                ]],
+                            ], {width: "300px", height: "155px"}],
+                            ["blank", "10px"],
+                            ["row", [
+                                ["clickable", "Pause"],
+                                ["clickable", "Give-Up"],
+                            ]],
+                        ], {width: "300px", height: "300px", background: "rgba(0,0,0,0.2)", border: "3px solid white", borderRadius: "30px"}],
+                    ]],
+                    ["style-column", [
+                        ["raw-html", () => `${player.bh.log.map((x, i) => `<span style="display:block;">${x}</span>`).join("")}`],
+                    ], {width: "600px", minHeight: "200px", textAlign: "center", background: "rgba(0,0,0,0.5)", border: "2px solid white", borderRadius: "30px", padding: "12px 0", marginTop: "5px"}],
+                ],
+            },
+            "dead": {
+                content: [
+                    ["blank", "200px"],
+                    ["style-column", [
+                        ["raw-html", () => { return "Everyone has passed out." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return "<i>Something</i> pulls you out of the black heart." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ], {width: "800px", height: "80px", backgroundColor: "#1b0218", border: "3px solid #8a0e79", borderRadius: "20px"}],
+                    ["blank", "25px"],
+                    ["clickable", "Leave"],
+                    ["blank", "25px"],
+                ],
+            },
         },
     },
     tabFormat: [
-        ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["buttonless-microtabs", "stuff", {borderWidth: "0"}],
         ["blank", "25px"],
     ],
     layerShown() {return player.startedGame && tmp.pu.levelables[302].canClick},

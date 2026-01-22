@@ -172,7 +172,7 @@ addUniverse("A2", {
 addUniverse("U3", {
     name: "Universe 3<br>Domain of Singularity",
     symbol: "3",
-    tree: [["s"], ["co", "cof"], ["ra", "cs", "sd"], ["sma", "sme"], ["ma"]],
+    tree: [["s"], ["co", "cof"], ["ra", "cs", "sd"], ["sma", "sme"], ["ma", "bh"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(140deg, red 0%, black 125%)",
@@ -268,6 +268,28 @@ addUniverse("UB", {
     },
     uniShown() { return player.startedGame && player.pol.unlockHive >= 2 && !player.sma.inStarmetalChallenge},
     disabled() {return !player.startedGame && player.pol.unlockHive < 2}
+})
+
+addUniverse("BH", {
+    name: "Black Heart",
+    symbol: "♥",
+    tree: [["depth1", "depth2"], ["depth3"]],
+    nodeStyle() {
+        let style = {
+            background: "black",
+            backgroundOrigin: "border-box",
+            borderColor: "#8a0e79",
+            color: "#cf15b6",
+        }
+        if (player.universe=="BH") {
+            style.outline = "2px solid white"
+            style.outlineOffset = "-2px"
+            style.borderWidth = "5px"
+        }
+        return style
+    },
+    uniShown() { return player.startedGame && tmp.pu.levelables[302].canClick && !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge},
+    disabled() {return !player.startedGame || !tmp.pu.levelables[302].canClick}
 })
 
 addUniverse("DS", {

@@ -274,6 +274,28 @@ function loadVue() {
 		</div>
 		`
 	})
+
+
+	// data = an array of Components to be displayed in a row
+	// look = Object that defines style
+	Vue.component('theme-scroll-row', {
+		props: ['layer', 'data', 'look'],
+		computed: {
+			key() {return this.$vnode.key}
+		},
+		template: `
+		<div id="scrCon" class="upgScrollRowTable upgAlwaysScrollRow themeTrack instant">
+			<div class="upgScrollRow" v-bind:style="look" >
+				<div style="margin:0" v-for="(item, index) in data">
+					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
+				</div>
+			</div>
+		</div>
+		`
+	})
+
 	// data = an array of functions returning the content (actually HTML)
 	// look = Object that defines style
 	Vue.component('stat-row', {
@@ -1383,6 +1405,16 @@ function loadVue() {
 		<div v-bind:class="{cutscenes: true, can: true}" v-on:click="player.c.cutscenes[data] = 0">
 			<span style="font-size:12px;user-select:none" v-html="data"></span>
 		</div>
+		`,
+	})
+
+	Vue.component('bh-milestone', {
+		props: ['layer', 'data'],
+		template: `
+		<button v-bind:class="{bhMilestoneButton: true, selected: player[data[1]].comboStart == data[0], semiFinish: player[data[1]].milestone[data[0]]>0 && player[data[1]].milestone[data[0]]<3, finish: player[data[1]].milestone[data[0]]>2}"
+			style="width:257px;height:50px" v-on:click="if(player[data[1]].milestone[data[0]]>0)player[data[1]].comboStart=data[0]"
+			v-html="data[0] + ' Combo (' + player[data[1]].milestone[data[0]] + '/3)<br><small>[' + (player[data[1]].milestone[data[0]]>2 ? '1 Character' : formatWhole(3-player[data[1]].milestone[data[0]]) + ' Characters') + ']</small>' + data[2]">
+		</button>
 		`,
 	})
 

@@ -1,4 +1,3 @@
-const BHP = {}
 BHP.none = {
     name: "None",
     color: "#333",
@@ -37,7 +36,7 @@ BHP.sel = {
     color: "#065c19",
     icon: "resources/sel.png",
     health: new Decimal(60),
-    damage: new Decimal(6),
+    damage: new Decimal(5),
     defense: new Decimal(0),
     regen: new Decimal(0),
     agility: new Decimal(8),

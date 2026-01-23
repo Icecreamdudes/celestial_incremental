@@ -5,7 +5,7 @@ addLayer("depth3", {
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     onClick() {
-        player.subtabs["bh"]["stages"] = "depth3"
+        if (player.depth3.unlocked) player.subtabs["bh"]["stages"] = "depth3"
     },
     startData() { return {
         unlocked: true,
@@ -34,6 +34,13 @@ addLayer("depth3", {
     }},
     automate() {},
     nodeStyle() {
+        if (!player.depth3.unlocked) return {
+            background: "radial-gradient(#220201, #220119)",
+            backgroundOrigin: "border-box",
+            borderColor: "#2d0823",
+            color: "#35102c",
+            textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
+        }
         return {
             background: "radial-gradient(#720804, #720455)",
             backgroundOrigin: "border-box",
@@ -43,9 +50,11 @@ addLayer("depth3", {
         };
     },
     tooltip: "Depth 3",
+    tooltipLocked: "Reach 25 combo in depth 2 to unlock.",
     branches: ["depth2"],
     color: "#b33793",
     update(delta) {
+        player.depth3.unlocked = player.depth2.milestone[25] > 0
         if (player.depth3.cooldown.gt(0)) player.depth3.cooldown = player.depth3.cooldown.sub(delta)
 
         player.depth3.comboEffect = Decimal.pow(1.15, player.depth3.highestCombo)
@@ -104,8 +113,8 @@ addLayer("depth3", {
                     ["row", [["buyable", 1], ["buyable", 2]]],
                     ["row", [["buyable", 3], ["buyable", 4]]],
                     ["blank", "2px"],
-                ], {width: "272px", height: "325px", background: "var(--miscButton)", borderRadius: "0 0 0 27px"}],
-            ], {width: "272px", height: "400px", borderRight: "3px solid var(--regBorder)"}],
+                ], {width: "272px", height: "345px", background: "var(--miscButton)", borderRadius: "0 0 0 27px"}],
+            ], {width: "272px", height: "420px", borderRight: "3px solid var(--regBorder)"}],
             ["style-column", [
                 ["style-column", [
                     ["style-column", [
@@ -123,8 +132,8 @@ addLayer("depth3", {
                     ["blank", "5px"],
                     ["raw-html", "<u>Combo Scaling", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
                     ["raw-html", "1.5% starting at 100", {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                ], {width: "250px", height: "250px", background: "var(--layerBackground)"}],
-            ], {width: "250px", height: "400px"}],
+                ], {width: "250px", height: "270px", background: "var(--layerBackground)"}],
+            ], {width: "250px", height: "420px"}],
             ["style-column", [
                 ["top-column", [
                     ["style-column", [
@@ -150,14 +159,14 @@ addLayer("depth3", {
                     ["bh-milestone", [200, "depth3", ""]],
                     ["bh-milestone", [225, "depth3", ""]],
                     ["bh-milestone", [250, "depth3", ""]],
-                ], {width: "272px", height: "247px", background: "var(--miscButton)", borderBottom: "3px solid var(--regBorder)"}],
+                ], {width: "272px", height: "267px", background: "var(--miscButton)", borderBottom: "3px solid var(--regBorder)"}],
                 ["style-column", [
                     ["raw-html", "<p style='line-height:1'>Clicking on a cleared milestone allows you to start at that milestones combo value.", {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
                 ], {width: "272px", height: "50px", background: "var(--miscButtonHover)", borderRadius: "0 0 27px 0"}],
-            ], {width: "272px", height: "400px", borderLeft: "3px solid var(--regBorder)"}],
-        ], {width: "800px", height: "400px"}],
+            ], {width: "272px", height: "420px", borderLeft: "3px solid var(--regBorder)"}],
+        ], {width: "800px", height: "420px"}],
     ],
-    layerShown() {return player.startedGame && tmp.pu.levelables[302].canClick},
+    layerShown() {return player.startedGame && player.depth1.milestone[25] > 0},
 })
 
 BHS.depth3 = {

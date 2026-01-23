@@ -171,6 +171,7 @@ addLayer("bh", {
         characters: {
             0: {
                 id: "none",
+                page: 0,
                 health: new Decimal(100),
                 maxHealth: new Decimal(100),
                 damage: new Decimal(0),
@@ -222,6 +223,7 @@ addLayer("bh", {
             },
             1: {
                 id: "none",
+                page: 0,
                 health: new Decimal(100),
                 maxHealth: new Decimal(100),
                 damage: new Decimal(0),
@@ -273,6 +275,7 @@ addLayer("bh", {
             },
             2: {
                 id: "none",
+                page: 0,
                 health: new Decimal(100),
                 maxHealth: new Decimal(100),
                 damage: new Decimal(0),
@@ -324,9 +327,17 @@ addLayer("bh", {
             },
         },
 
-        // Saved Character Stats
+        // Saved Character Data
         characterData: {
             "kres": {
+                selected: false,
+                skills: {
+                    0: "none",
+                    1: "none",
+                    2: "none",
+                    3: "none",
+                },
+                usedSP: new Decimal(0),
                 health: new Decimal(80),
                 damage: new Decimal(7),
                 defense: new Decimal(0),
@@ -335,6 +346,14 @@ addLayer("bh", {
                 luck: new Decimal(0),
             },
             "nav": {
+                selected: false,
+                skills: {
+                    0: "none",
+                    1: "none",
+                    2: "none",
+                    3: "none",
+                },
+                usedSP: new Decimal(0),
                 health: new Decimal(60),
                 damage: new Decimal(9),
                 defense: new Decimal(0),
@@ -343,6 +362,14 @@ addLayer("bh", {
                 luck: new Decimal(0),
             },
             "sel": {
+                selected: false,
+                skills: {
+                    0: "none",
+                    1: "none",
+                    2: "none",
+                    3: "none",
+                },
+                usedSP: new Decimal(0),
                 health: new Decimal(60),
                 damage: new Decimal(6),
                 defense: new Decimal(0),
@@ -351,6 +378,14 @@ addLayer("bh", {
                 luck: new Decimal(0),
             },
             "eclipse": {
+                selected: false,
+                skills: {
+                    0: "none",
+                    1: "none",
+                    2: "none",
+                    3: "none",
+                },
+                usedSP: new Decimal(0),
                 health: new Decimal(100),
                 damage: new Decimal(10),
                 defense: new Decimal(10),
@@ -359,6 +394,14 @@ addLayer("bh", {
                 luck: new Decimal(0),
             },
             "geroa": {
+                selected: false,
+                skills: {
+                    0: "none",
+                    1: "none",
+                    2: "none",
+                    3: "none",
+                },
+                usedSP: new Decimal(0),
                 health: new Decimal(50),
                 damage: new Decimal(5),
                 defense: new Decimal(5),
@@ -371,62 +414,27 @@ addLayer("bh", {
         // Saved Skill Stats
         skillData: {
             // GENERAL
-            "general_slap": {
-                selected: false,
-                level: new Decimal(0),
-            },
+            "general_slap": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)},
+            "general_bandage": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)},
 
             // KRES
-            "kres_chop": {
-                selected: false,
-                level: new Decimal(0),
-            },
-            "kres_bigAttack": {
-                selected: false,
-                level: new Decimal(0),
-            },
-            "kres_battleCry": {
-                selected: false,
-                level: new Decimal(0),
-            },
-            "kres_berserker": {
-                selected: false,
-                level: new Decimal(0),
-            },
-            "kres_decapitate": {
-                selected: false,
-                level: new Decimal(0),
-            },
+            "kres_chop": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)},
+            "kres_bigAttack": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)},
+            "kres_battleCry": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)},
+            "kres_berserker": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)},
+            "kres_decapitate": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)},
 
             // NAV
-            "nav_magicMissle": {
-                selected: false,
-                level: new Decimal(0),
-            },
-            "nav_healSpell": {
-                selected: false,
-                level: new Decimal(0),
-            },
-            "nav_reboundingAura": {
-                selected: false,
-                level: new Decimal(0),
-            },
+            "nav_magicMissle": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)},
+            "nav_healSpell": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)},
+            "nav_reboundingAura": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)},
 
             // SEL
-            "sel_singleShot": {
-                selected: false,
-                level: new Decimal(0),
-            },
-            "sel_turret": {
-                selected: false,
-                level: new Decimal(0),
-            },
+            "sel_singleShot": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)},
+            "sel_turret": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)},
 
             // GEROA
-            "geroa_orbitalCannon": {
-                selected: false,
-                level: new Decimal(0),
-            }
+            "geroa_orbitalCannon": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)}
         },
 
         // General Variables
@@ -438,7 +446,12 @@ addLayer("bh", {
         comboScalingStart: new Decimal(100),
         comboSoftcap: new Decimal(1),
         timeSpeed: new Decimal(1),
+        maxSkillPoints: new Decimal(10),
         log: ["", "", "", "", "", "", "", "", "", ""],
+        inputCharSelection: 0,
+        inputSkillSelection: 0,
+        characterSelection: "kres",
+        skillSelection: "kres_chop",
 
         // General Currencies
         darkEssence: new Decimal(0),
@@ -786,6 +799,23 @@ addLayer("bh", {
                 player.bh.characters[i].skills[j].cooldownMax = BHA[player.bh.characters[i].skills[j].id].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.characters[i].agility)))
             }
         }
+
+        // =-- Calculate stored character stats --=
+        for (let i in player.bh.characterData) {
+            player.bh.characterData[i].health = BHP[i].health
+            player.bh.characterData[i].health = player.bh.characterData[i].health.mul(buyableEffect("depth1", 1))
+
+            player.bh.characterData[i].damage = BHP[i].damage
+
+            player.bh.characterData[i].defense = BHP[i].defense
+
+            player.bh.characterData[i].regen = BHP[i].regen
+
+            player.bh.characterData[i].agility = BHP[i].agility
+
+            player.bh.characterData[i].luck = BHP[i].luck
+
+        }
     },
     clickables: {
         "Leave": {
@@ -795,7 +825,7 @@ addLayer("bh", {
             onClick() {
                 player.ma.inBlackHeart = false
 
-                player.subtabs["bh"]["stuff"] = "black-heart"
+                player.subtabs["bh"]["stuff"] = "stages"
 
                 pauseUniverse("U1", "unpause", true)
                 pauseUniverse("UA", "unpause", true)
@@ -871,7 +901,7 @@ addLayer("bh", {
             style() {
                 let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
                 if (player.bh.characters[0].skills[0].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
-                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[player.bh.characters[0].id].color
+                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[BHA[player.bh.characters[0].skills[0].id].char].color
                 return look
             },
         },
@@ -896,7 +926,7 @@ addLayer("bh", {
             style() {
                 let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
                 if (player.bh.characters[0].skills[1].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
-                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[player.bh.characters[0].id].color
+                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[BHA[player.bh.characters[0].skills[1].id].char].color
                 return look
             },
         },
@@ -921,7 +951,7 @@ addLayer("bh", {
             style() {
                 let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
                 if (player.bh.characters[0].skills[2].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
-                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[player.bh.characters[0].id].color
+                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[BHA[player.bh.characters[0].skills[2].id].char].color
                 return look
             },
         },
@@ -946,7 +976,7 @@ addLayer("bh", {
             style() {
                 let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
                 if (player.bh.characters[0].skills[3].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
-                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[player.bh.characters[0].id].color
+                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[BHA[player.bh.characters[0].skills[3].id].char].color
                 return look
             },
         },
@@ -984,7 +1014,7 @@ addLayer("bh", {
             style() {
                 let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
                 if (player.bh.characters[1].skills[0].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
-                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[player.bh.characters[1].id].color
+                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[BHA[player.bh.characters[1].skills[0].id].char].color
                 return look
             },
         },
@@ -1009,7 +1039,7 @@ addLayer("bh", {
             style() {
                 let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
                 if (player.bh.characters[1].skills[1].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
-                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[player.bh.characters[1].id].color
+                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[BHA[player.bh.characters[1].skills[1].id].char].color
                 return look
             },
         },
@@ -1034,7 +1064,7 @@ addLayer("bh", {
             style() {
                 let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
                 if (player.bh.characters[1].skills[2].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
-                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[player.bh.characters[1].id].color
+                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[BHA[player.bh.characters[1].skills[2].id].char].color
                 return look
             },
         },
@@ -1059,7 +1089,7 @@ addLayer("bh", {
             style() {
                 let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
                 if (player.bh.characters[1].skills[3].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
-                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[player.bh.characters[1].id].color
+                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[BHA[player.bh.characters[1].skills[3].id].char].color
                 return look
             },
         },
@@ -1097,7 +1127,7 @@ addLayer("bh", {
             style() {
                 let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
                 if (player.bh.characters[2].skills[0].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
-                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[player.bh.characters[2].id].color
+                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[BHA[player.bh.characters[2].skills[0].id].char].color
                 return look
             },
         },
@@ -1122,7 +1152,7 @@ addLayer("bh", {
             style() {
                 let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
                 if (player.bh.characters[2].skills[1].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
-                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[player.bh.characters[2].id].color
+                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[BHA[player.bh.characters[2].skills[1].id].char].color
                 return look
             },
         },
@@ -1147,7 +1177,7 @@ addLayer("bh", {
             style() {
                 let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
                 if (player.bh.characters[2].skills[2].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
-                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[player.bh.characters[2].id].color
+                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[BHA[player.bh.characters[2].skills[2].id].char].color
                 return look
             },
         },
@@ -1172,7 +1202,7 @@ addLayer("bh", {
             style() {
                 let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
                 if (player.bh.characters[2].skills[3].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
-                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[player.bh.characters[2].id].color
+                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[BHA[player.bh.characters[2].skills[3].id].char].color
                 return look
             },
         },
@@ -1188,8 +1218,422 @@ addLayer("bh", {
             unlocked: true,
             onClick() {},
             style() {
+                if (BHC[player.bh.celestialite.id].icon) return {width: "150px", minHeight: "150px", color: "white", backgroundColor: "transparent", margin: "10px", padding: "0", cursor: "default", userSelect: "none"}
                 let look = {width: "150px", minHeight: "150px", color: "white", fontSize: "75px", backgroundColor: "transparent", border: "6px solid", padding: "0", borderRadius: "0", cursor: "default", userSelect: "none"}
                 if (BHC[player.bh.celestialite.id].style) look = Object.assign({}, look, BHC[player.bh.celestialite.id].style)
+                return look
+            },
+        },
+        "Char-C0-Icon": {
+            title() {
+                return "<img src='" + BHP[player.bh.characters[0].id].icon + "'style='width:100px;height:100px;margin-left:-2px;margin-bottom:-4px'></img>"
+            },
+            canClick() {return player.subtabs["bh"]["party"] == "characters"},
+            unlocked: true,
+            onClick() {
+                player.bh.inputCharSelection = 0
+            },
+            style: {width: "100px", minHeight: "100px", color: "white", backgroundColor: "transparent", padding: "0", cursor: "default", userSelect: "none", borderRadius: "0"},
+        },
+        "Char-C0-S0": {
+            title() {
+                if (player.bh.characters[0].skills[0].id == "none") return ""
+                return BHA[player.bh.characters[0].skills[0].id].name
+            },
+            tooltip() {return run(BHA[player.bh.characters[0].skills[0].id].description, BHA[player.bh.characters[0].skills[0].id])},
+            canClick() {return player.subtabs["bh"]["party"] == "skills"},
+            unlocked: true,
+            onClick() {
+                player.bh.inputSkillSelection = 0
+            },
+            style() {
+                let look = {width: "45px", minHeight: "45px", color: "white", fontSize: "5px", backgroundColor: "transparent", padding: "0", cursor: "default", userSelect: "none", borderRadius: "0"}
+                player.bh.characters[0].skills[0].id != "none" ? look.backgroundColor = BHP[BHA[player.bh.characters[0].skills[0].id].char].color : look.backgroundColor = "#333"
+                return look
+            },
+        },
+        "Char-C0-S1": {
+            title() {
+                if (player.bh.characters[0].skills[1].id == "none") return ""
+                return BHA[player.bh.characters[0].skills[1].id].name
+            },
+            tooltip() {return run(BHA[player.bh.characters[0].skills[1].id].description, BHA[player.bh.characters[0].skills[1].id])},
+            canClick() {return player.subtabs["bh"]["party"] == "skills"},
+            unlocked: true,
+            onClick() {
+                player.bh.inputSkillSelection = 1
+            },
+            style() {
+                let look = {width: "45px", minHeight: "45px", color: "white", fontSize: "5px", backgroundColor: "transparent", padding: "0", cursor: "default", userSelect: "none", borderRadius: "0"}
+                player.bh.characters[0].skills[1].id != "none" ? look.backgroundColor = BHP[BHA[player.bh.characters[0].skills[1].id].char].color : look.backgroundColor = "#333"
+                return look
+            },
+        },
+        "Char-C0-S2": {
+            title() {
+                if (player.bh.characters[0].skills[2].id == "none") return ""
+                return BHA[player.bh.characters[0].skills[2].id].name
+            },
+            tooltip() {return run(BHA[player.bh.characters[0].skills[2].id].description, BHA[player.bh.characters[0].skills[2].id])},
+            canClick() {return player.subtabs["bh"]["party"] == "skills"},
+            unlocked: true,
+            onClick() {
+                player.bh.inputSkillSelection = 2
+            },
+            style() {
+                let look = {width: "45px", minHeight: "45px", color: "white", fontSize: "5px", backgroundColor: "transparent", padding: "0", cursor: "default", userSelect: "none", borderRadius: "0"}
+                player.bh.characters[0].skills[2].id != "none" ? look.backgroundColor = BHP[BHA[player.bh.characters[0].skills[2].id].char].color : look.backgroundColor = "#333"
+                return look
+            },
+        },
+        "Char-C0-S3": {
+            title() {
+                if (player.bh.characters[0].skills[3].id == "none") return ""
+                return BHA[player.bh.characters[0].skills[3].id].name
+            },
+            tooltip() {return run(BHA[player.bh.characters[0].skills[3].id].description, BHA[player.bh.characters[0].skills[3].id])},
+            canClick() {return player.subtabs["bh"]["party"] == "skills"},
+            unlocked: true,
+            onClick() {
+                player.bh.inputSkillSelection = 3
+            },
+            style() {
+                let look = {width: "45px", minHeight: "45px", color: "white", fontSize: "5px", backgroundColor: "transparent", padding: "0", cursor: "default", userSelect: "none", borderRadius: "0"}
+                player.bh.characters[0].skills[3].id != "none" ? look.backgroundColor = BHP[BHA[player.bh.characters[0].skills[3].id].char].color : look.backgroundColor = "#333"
+                return look
+            },
+        },
+        "Char-C0-Page": {
+            title: "???",
+            canClick: false,
+            unlocked: true,
+            onClick() {
+                if (player.bh.characters[0].page == 0) {
+                    player.bh.characters[0].page = 1
+                } else {
+                    player.bh.characters[0].page = 0
+                }
+            },
+            style: {width: "148px", minHeight: "26px", color: "var(--textColor)", background: "var(--miscButton)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "10px"},
+        },
+        "Char-C1-Icon": {
+            title() {
+                return "<img src='" + BHP[player.bh.characters[1].id].icon + "'style='width:100px;height:100px;margin-left:-2px;margin-bottom:-4px'></img>"
+            },
+            canClick() {return player.subtabs["bh"]["party"] == "characters"},
+            unlocked: true,
+            onClick() {
+                player.bh.inputCharSelection = 1
+            },
+            style: {width: "100px", minHeight: "100px", color: "white", backgroundColor: "transparent", padding: "0", cursor: "default", userSelect: "none", borderRadius: "0"},
+        },
+        "Char-C1-S0": {
+            title() {
+                if (player.bh.characters[1].skills[0].id == "none") return ""
+                return BHA[player.bh.characters[1].skills[0].id].name
+            },
+            tooltip() {return run(BHA[player.bh.characters[1].skills[0].id].description, BHA[player.bh.characters[1].skills[0].id])},
+            canClick() {return player.subtabs["bh"]["party"] == "skills"},
+            unlocked: true,
+            onClick() {
+                player.bh.inputSkillSelection = 4
+            },
+            style() {
+                let look = {width: "45px", minHeight: "45px", color: "white", fontSize: "5px", backgroundColor: "transparent", padding: "0", cursor: "default", userSelect: "none", borderRadius: "0"}
+                player.bh.characters[1].skills[0].id != "none" ? look.backgroundColor = BHP[BHA[player.bh.characters[1].skills[0].id].char].color : look.backgroundColor = "#333"
+                return look
+            },
+        },
+        "Char-C1-S1": {
+            title() {
+                if (player.bh.characters[1].skills[1].id == "none") return ""
+                return BHA[player.bh.characters[1].skills[1].id].name
+            },
+            tooltip() {return run(BHA[player.bh.characters[1].skills[1].id].description, BHA[player.bh.characters[1].skills[1].id])},
+            canClick() {return player.subtabs["bh"]["party"] == "skills"},
+            unlocked: true,
+            onClick() {
+                player.bh.inputSkillSelection = 5
+            },
+            style() {
+                let look = {width: "45px", minHeight: "45px", color: "white", fontSize: "5px", backgroundColor: "transparent", padding: "0", cursor: "default", userSelect: "none", borderRadius: "0"}
+                player.bh.characters[1].skills[1].id != "none" ? look.backgroundColor = BHP[BHA[player.bh.characters[1].skills[1].id].char].color : look.backgroundColor = "#333"
+                return look
+            },
+        },
+        "Char-C1-S2": {
+            title() {
+                if (player.bh.characters[1].skills[2].id == "none") return ""
+                return BHA[player.bh.characters[1].skills[2].id].name
+            },
+            tooltip() {return run(BHA[player.bh.characters[1].skills[2].id].description, BHA[player.bh.characters[1].skills[2].id])},
+            canClick() {return player.subtabs["bh"]["party"] == "skills"},
+            unlocked: true,
+            onClick() {
+                player.bh.inputSkillSelection = 6
+            },
+            style() {
+                let look = {width: "45px", minHeight: "45px", color: "white", fontSize: "5px", backgroundColor: "transparent", padding: "0", cursor: "default", userSelect: "none", borderRadius: "0"}
+                player.bh.characters[1].skills[2].id != "none" ? look.backgroundColor = BHP[BHA[player.bh.characters[1].skills[2].id].char].color : look.backgroundColor = "#333"
+                return look
+            },
+        },
+        "Char-C1-S3": {
+            title() {
+                if (player.bh.characters[1].skills[3].id == "none") return ""
+                return BHA[player.bh.characters[1].skills[3].id].name
+            },
+            tooltip() {return run(BHA[player.bh.characters[1].skills[3].id].description, BHA[player.bh.characters[1].skills[3].id])},
+            canClick() {return player.subtabs["bh"]["party"] == "skills"},
+            unlocked: true,
+            onClick() {
+                player.bh.inputSkillSelection = 7
+            },
+            style() {
+                let look = {width: "45px", minHeight: "45px", color: "white", fontSize: "5px", backgroundColor: "transparent", padding: "0", cursor: "default", userSelect: "none", borderRadius: "0"}
+                player.bh.characters[1].skills[3].id != "none" ? look.backgroundColor = BHP[BHA[player.bh.characters[1].skills[3].id].char].color : look.backgroundColor = "#333"
+                return look
+            },
+        },
+        "Char-C1-Page": {
+            title: "???",
+            canClick: false,
+            unlocked: true,
+            onClick() {
+                if (player.bh.characters[1].page == 0) {
+                    player.bh.characters[1].page = 1
+                } else {
+                    player.bh.characters[1].page = 0
+                }
+            },
+            style: {width: "148px", minHeight: "26px", color: "var(--textColor)", background: "var(--miscButton)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "10px"},
+        },
+        "Char-C2-Icon": {
+            title() {
+                return "<img src='" + BHP[player.bh.characters[2].id].icon + "'style='width:100px;height:100px;margin-left:-2px;margin-bottom:-4px'></img>"
+            },
+            canClick() {return player.subtabs["bh"]["party"] == "characters"},
+            unlocked: true,
+            onClick() {
+                player.bh.inputCharSelection = 2
+            },
+            style: {width: "100px", minHeight: "100px", color: "white", backgroundColor: "transparent", padding: "0", cursor: "default", userSelect: "none", borderRadius: "0"},
+        },
+        "Char-C2-S0": {
+            title() {
+                if (player.bh.characters[2].skills[0].id == "none") return ""
+                return BHA[player.bh.characters[2].skills[0].id].name
+            },
+            tooltip() {return run(BHA[player.bh.characters[2].skills[0].id].description, BHA[player.bh.characters[2].skills[0].id])},
+            canClick() {return player.subtabs["bh"]["party"] == "skills"},
+            unlocked: true,
+            onClick() {
+                player.bh.inputSkillSelection = 8
+            },
+            style() {
+                let look = {width: "45px", minHeight: "45px", color: "white", fontSize: "5px", backgroundColor: "transparent", padding: "0", cursor: "default", userSelect: "none", borderRadius: "0"}
+                player.bh.characters[2].skills[0].id != "none" ? look.backgroundColor = BHP[BHA[player.bh.characters[2].skills[0].id].char].color : look.backgroundColor = "#333"
+                return look
+            },
+        },
+        "Char-C2-S1": {
+            title() {
+                if (player.bh.characters[2].skills[1].id == "none") return ""
+                return BHA[player.bh.characters[2].skills[1].id].name
+            },
+            tooltip() {return run(BHA[player.bh.characters[2].skills[1].id].description, BHA[player.bh.characters[2].skills[1].id])},
+            canClick() {return player.subtabs["bh"]["party"] == "skills"},
+            unlocked: true,
+            onClick() {
+                player.bh.inputSkillSelection = 9
+            },
+            style() {
+                let look = {width: "45px", minHeight: "45px", color: "white", fontSize: "5px", backgroundColor: "transparent", padding: "0", cursor: "default", userSelect: "none", borderRadius: "0"}
+                player.bh.characters[2].skills[1].id != "none" ? look.backgroundColor = BHP[BHA[player.bh.characters[2].skills[1].id].char].color : look.backgroundColor = "#333"
+                return look
+            },
+        },
+        "Char-C2-S2": {
+            title() {
+                if (player.bh.characters[2].skills[2].id == "none") return ""
+                return BHA[player.bh.characters[2].skills[2].id].name
+            },
+            tooltip() {return run(BHA[player.bh.characters[2].skills[2].id].description, BHA[player.bh.characters[2].skills[2].id])},
+            canClick() {return player.subtabs["bh"]["party"] == "skills"},
+            unlocked: true,
+            onClick() {
+                player.bh.inputSkillSelection = 10
+            },
+            style() {
+                let look = {width: "45px", minHeight: "45px", color: "white", fontSize: "5px", backgroundColor: "transparent", padding: "0", cursor: "default", userSelect: "none", borderRadius: "0"}
+                player.bh.characters[2].skills[2].id != "none" ? look.backgroundColor = BHP[BHA[player.bh.characters[2].skills[2].id].char].color : look.backgroundColor = "#333"
+                return look
+            },
+        },
+        "Char-C2-S3": {
+            title() {
+                if (player.bh.characters[2].skills[3].id == "none") return ""
+                return BHA[player.bh.characters[2].skills[3].id].name
+            },
+            tooltip() {return run(BHA[player.bh.characters[2].skills[3].id].description, BHA[player.bh.characters[2].skills[3].id])},
+            canClick() {return player.subtabs["bh"]["party"] == "skills"},
+            unlocked: true,
+            onClick() {
+                player.bh.inputSkillSelection = 11
+            },
+            style() {
+                let look = {width: "45px", minHeight: "45px", color: "white", fontSize: "5px", backgroundColor: "transparent", padding: "0", cursor: "default", userSelect: "none", borderRadius: "0"}
+                player.bh.characters[2].skills[3].id != "none" ? look.backgroundColor = BHP[BHA[player.bh.characters[2].skills[3].id].char].color : look.backgroundColor = "#333"
+                return look
+            },
+        },
+        "Char-C2-Page": {
+            title: "???",
+            canClick: false,
+            unlocked: true,
+            onClick() {
+                if (player.bh.characters[2].page == 0) {
+                    player.bh.characters[2].page = 1
+                } else {
+                    player.bh.characters[2].page = 0
+                }
+            },
+            style: {width: "148px", minHeight: "26px", color: "var(--textColor)", background: "var(--miscButton)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "10px"},
+        },
+        "Select-Character": {
+            title() {return player.bh.characterData[player.bh.characterSelection].selected ? "Unselect Character" : "Select Character"},
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                if (player.bh.characterData[player.bh.characterSelection].selected) {
+                    player.bh.characterData[player.bh.characterSelection].selected = false
+                    for (let i = 0; i < 3; i++) {
+                        if (player.bh.characters[i].id == player.bh.characterSelection) {
+                            player.bh.characters[i].id = "none"
+                            for (let j = 0; j < 4; j++) {
+                                player.bh.characters[i].skills[j].id = "none"
+                            }
+                        }
+                    }
+                } else {
+                    if (player.bh.characters[player.bh.inputCharSelection].id != "none") player.bh.characterData[player.bh.characters[player.bh.inputCharSelection].id].selected = false
+                    player.bh.characters[player.bh.inputCharSelection].id = player.bh.characterSelection
+
+                    player.bh.characterData[player.bh.characterSelection].selected = true
+                    for (let i = 0; i < 4; i++) {
+                        player.bh.characters[player.bh.inputCharSelection].skills[i].id = player.bh.characterData[player.bh.characterSelection].skills[i]
+                    }
+                }
+            },
+            style() {
+                let look = {width: "340px", minHeight: "40px", color: "var(--textColor)", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0"}
+                !player.bh.characterData[player.bh.characterSelection].selected ? look.backgroundColor = "var(--miscButtonHover)" : look.backgroundColor = "var(--miscButton)"
+                return look
+            },
+        },
+        "Char-Kres": {
+            title() {return "<img src='" + BHP["kres"].icon + "'style='width:100px;height:100px;margin-left:-2px;margin-bottom:-4px'></img>"},
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.bh.characterSelection = "kres"
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", color: "white", background: "transparent", padding: "0", borderRadius: "0", margin: "2px"}
+                if (player.bh.characterData.kres.selected) look.filter = "brightness(50%)"
+                return look
+            },
+        },
+        "Char-Nav": {
+            title() {return "<img src='" + BHP["nav"].icon + "'style='width:100px;height:100px;margin-left:-2px;margin-bottom:-4px'></img>"},
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.bh.characterSelection = "nav"
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", color: "white", background: "transparent", padding: "0", borderRadius: "0", margin: "2px"}
+                if (player.bh.characterData.nav.selected) look.filter = "brightness(50%)"
+                return look
+            },
+        },
+        "Char-Sel": {
+            title() {return "<img src='" + BHP["sel"].icon + "'style='width:100px;height:100px;margin-left:-2px;margin-bottom:-4px'></img>"},
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.bh.characterSelection = "sel"
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", color: "white", background: "transparent", padding: "0", borderRadius: "0", margin: "2px"}
+                if (player.bh.characterData.sel.selected) look.filter = "brightness(50%)"
+                return look
+            },
+        },
+        "Char-Eclipse": {
+            title() {return "<img src='" + BHP["eclipse"].icon + "'style='width:100px;height:100px;margin-left:-2px;margin-bottom:-4px'></img>"},
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.bh.characterSelection = "eclipse"
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", color: "white", background: "transparent", padding: "0", borderRadius: "0", margin: "2px"}
+                if (player.bh.characterData.eclipse.selected) look.filter = "brightness(50%)"
+                return look
+            },
+        },
+        "Char-Geroa": {
+            title() {return "<img src='" + BHP["geroa"].icon + "'style='width:100px;height:100px;margin-left:-2px;margin-bottom:-4px'></img>"},
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.bh.characterSelection = "geroa"
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", color: "white", background: "transparent", padding: "0", borderRadius: "0", margin: "2px"}
+                if (player.bh.characterData.geroa.selected) look.filter = "brightness(50%)"
+                return look
+            },
+        },
+        "Skill-Equip": {
+            title() {return player.bh.skillData[player.bh.skillSelection].selected > 0 ? "Unequip Skill" : "Equip Skill"},
+            canClick() {
+                if (player.bh.characters[Math.floor(player.bh.inputSkillSelection/4)].id == "none") return false
+                if (player.bh.skillData[player.bh.skillSelection].selected > 0) return true
+                if (BHA[player.bh.skillSelection].effect == "passive") {
+                    return player.bh.maxSkillPoints.sub(player.bh.characterData[player.bh.characters[Math.floor(player.bh.inputSkillSelection/4)].id].usedSP).gte(BHA[player.bh.skillSelection].spCost.add(player.bh.skillData[player.bh.skillSelection].level))
+                } else {
+                    return player.bh.maxSkillPoints.sub(player.bh.characterData[player.bh.characters[Math.floor(player.bh.inputSkillSelection/4)].id].usedSP).gte(BHA[player.bh.skillSelection].spCost.add(player.bh.skillData[player.bh.skillSelection].level.mul(2)))
+                }
+            },
+            unlocked: true,
+            onClick() {
+                let spCost = new Decimal(0)
+                BHA[player.bh.skillSelection].effect == "passive" ? spCost = BHA[player.bh.skillSelection].spCost.add(player.bh.skillData[player.bh.skillSelection].level) : spCost = BHA[player.bh.skillSelection].spCost.add(player.bh.skillData[player.bh.skillSelection].level.mul(2))
+                let currChar = Math.floor((player.bh.skillData[player.bh.skillSelection].selected-1)/4)
+                let currSkill = (player.bh.skillData[player.bh.skillSelection].selected-1)%4
+                let pastChar = Math.floor(player.bh.inputSkillSelection/4)
+                let pastSkill = player.bh.inputSkillSelection%4
+                if (player.bh.skillData[player.bh.skillSelection].selected > 0) {
+                    player.bh.skillData[player.bh.skillSelection].selected = 0
+                    player.bh.characters[currChar].skills[currSkill].id = "none"
+                    player.bh.characterData[player.bh.characters[currChar].id].usedSP = player.bh.characterData[player.bh.characters[currChar].id].usedSP.sub(spCost)
+                    player.bh.characterData[player.bh.characters[currChar].id].skills[currSkill] = "none"
+                } else {
+                    if (player.bh.characters[pastChar].skills[pastSkill].id != "none") {
+
+                    } else {
+                        player.bh.skillData[player.bh.skillSelection].selected = player.bh.inputSkillSelection+1
+                        player.bh.characters[pastChar].skills[pastSkill].id = player.bh.skillSelection
+                        player.bh.characterData[player.bh.characters[pastChar].id].usedSP = player.bh.characterData[player.bh.characters[pastChar].id].usedSP.add(spCost)
+                        player.bh.characterData[player.bh.characters[pastChar].id].skills[pastSkill] = player.bh.skillSelection
+                    }
+                }
+            },
+            style() {
+                let look = {width: "100px", minHeight: "40px", color: "var(--textColor)", fontSize: "9px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0"}
+                player.bh.skillData[player.bh.skillSelection].selected > 0 ? look.backgroundColor = "var(--miscButton)" : this.canClick() ? look.backgroundColor = "var(--miscButtonHover)" : look.backgroundColor = "var(--miscButtonDisable)"
                 return look
             },
         },
@@ -1928,17 +2372,410 @@ addLayer("bh", {
                 embedLayer: 'depth3',
             },
         },
-        stuff: {
-            "black-heart": {
+        party: {
+            "characters": {
                 content: [
+                    ["style-column", [
+                        ["style-row", [
+                            ["style-column", [
+                                ["style-column", [
+                                    ["raw-html", () => {return BHP[player.bh.characterSelection].name}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                                ], {width: "145px", height: "30px", background: "var(--miscButtonDisable)", borderRadius: "10px"}],
+                                ["blank", "6px"],
+                                ["raw-html", () => {return "<img src='" + BHP[player.bh.characterSelection].icon + "'style='width:140px;height:140px;margin-bottom:-3px;border:3px solid black'></img>"}],
+                            ], {width: "154px", height: "195px", background: "black", borderRight: "3px solid var(--regBorder)"}],
+                            ["style-column", [
+                                ["row", [
+                                    ["column", [
+                                        ["row", [
+                                            ["style-column", [
+                                                ["raw-html", () => {return "<h3>HP</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characterData[player.bh.characterSelection].health)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                            ], {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px", marginRight: "4px"}],
+                                            ["style-column", [
+                                                ["raw-html", () => {return "<h3>DMG</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characterData[player.bh.characterSelection].damage)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                            ], {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px"}],
+                                        ]],
+                                        ["blank", "4px"],
+                                        ["row", [
+                                            ["style-column", [
+                                                ["raw-html", () => {return "<h3>RGN</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characterData[player.bh.characterSelection].regen)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                            ], {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px", marginRight: "4px"}],
+                                            ["style-column", [
+                                                ["raw-html", () => {return "<h3>AGI</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characterData[player.bh.characterSelection].agility)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                            ], {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px"}],
+                                        ]],
+                                        ["blank", "4px"],
+                                        ["row", [
+                                            ["style-column", [
+                                                ["raw-html", () => {return "<h3>DEF</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characterData[player.bh.characterSelection].defense)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                            ], {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px", marginRight: "4px"}],
+                                            ["style-column", [
+                                                ["raw-html", () => {return "<h3>LUCK</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characterData[player.bh.characterSelection].luck)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                            ], {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px"}],
+                                        ]],
+                                    ]],
+                                    ["style-column", [
+                                        ["row", [
+                                            ["style-column", [
+                                                ["raw-html", () => {return "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                            ], {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px", marginRight: "4px"}],
+                                            ["style-column", [
+                                                ["raw-html", () => {return "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                            ], {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px"}],
+                                        ]],
+                                        ["blank", "4px"],
+                                        ["row", [
+                                            ["style-column", [
+                                                ["raw-html", () => {return "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                            ], {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px", marginRight: "4px"}],
+                                            ["style-column", [
+                                                ["raw-html", () => {return "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                            ], {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px"}],
+                                        ]],
+                                        ["blank", "4px"],
+                                        ["row", [
+                                            ["style-column", [
+                                                ["raw-html", () => {return "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                            ], {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px", marginRight: "4px"}],
+                                            ["style-column", [
+                                                ["raw-html", () => {return "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                            ], {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px"}],
+                                        ]],
+                                    ], {filter: "brightness(25%) blur(2px)", marginLeft: "4px"}],
+                                ], {width: "340px", height: "152px"}],
+                                ["left-row", [
+                                    ["clickable", "Select-Character"],
+                                ], {width: "340px", height: "40px", borderTop: "3px solid var(--regBorder)"}]
+                            ], {width: "340px", height: "195px"}],
+                        ], {width: "497px", height: "195px", background: "var(--miscButtonDisable)", borderBottom: "3px solid var(--regBorder)"}],
+                        ["theme-scroll-column", [
+                            ["blank", "2px"],
+                            ["row", [
+                                ["clickable", "Char-Kres"], ["clickable", "Char-Nav"], ["clickable", "Char-Sel"], ["clickable", "Char-Eclipse"], ["clickable", "Char-Geroa"],
+                            ]],
+                        ], {width: "497px", height: "480px"}],
+                    ], {width: "497px", height: "677px"}],
+                ]
+            },
+            "skills": {
+                content: [
+                    ["style-column", [
+                        ["style-row", [
+                            ["style-column", [
+                                ["style-column", [
+                                    ["raw-html", () => {return "Selecting:<br><small>" + BHP[player.bh.characters[Math.floor(player.bh.inputSkillSelection/4)].id].name + " S" + (player.bh.inputSkillSelection%4+1)}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                                ], {width: "100px", height: "40px", background: "var(--layerBackground)", borderRadius: "10px"}],
+                                ["blank", "5px"],
+                                ["raw-html", () => {return "<img src='" + BHP[player.bh.characters[Math.floor(player.bh.inputSkillSelection/4)].id].icon + "'style='width:85px;height:85px;margin-bottom:-3px;border:3px solid black'></img>"}],
+                                ["blank", "5px"],
+                                ["style-column", [
+                                    ["raw-html", () => {
+                                        if (player.bh.characters[Math.floor(player.bh.inputSkillSelection/4)].id == "none") return "Skill Points<br>0/" + formatWhole(player.bh.maxSkillPoints)
+                                        return "Skill Points<br>" + formatWhole(player.bh.maxSkillPoints.sub(player.bh.characterData[player.bh.characters[Math.floor(player.bh.inputSkillSelection/4)].id].usedSP)) + "/" + formatWhole(player.bh.maxSkillPoints)
+                                    }, {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
+                                ], {width: "100px", height: "40px", background: "var(--layerBackground)", borderRadius: "10px"}],
+                            ], {width: "110px", height: "195px", borderRight: "3px solid var(--regBorder)"}],
+                            ["style-column", [
+                                ["top-column", [
+                                    ["blank", "10px"],
+                                    ["row", [
+                                        ["style-column", [
+                                            ["raw-html", () => {
+                                                if (BHA[player.bh.skillSelection].effect == "passive") return BHA[player.bh.skillSelection].name + "<br><p style='font-size:14px'>[PASSIVE]"
+                                                return BHA[player.bh.skillSelection].name + "<br><p style='font-size:14px'>Cooldown: " + formatTime(BHA[player.bh.skillSelection].cooldown)
+                                            }, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                                        ], {width: "235px", height: "50px", background: "var(--layerBackground)", borderRadius: "10px", marginRight: "5px"}],
+                                        ["column", [
+                                            ["style-column", [
+                                                ["raw-html", () => {return "[Lv " + formatWhole(player.bh.skillData[player.bh.skillSelection].level.add(1)) + "/" + formatWhole(player.bh.skillData[player.bh.skillSelection].maxLevel.add(1)) + "]"}, {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
+                                            ], {width: "100px", height: "24px", background: "var(--layerBackground)", borderRadius: "10px"}],
+                                            ["blank", "2px"],
+                                            ["style-column", [
+                                                ["raw-html", () => {
+                                                    if (BHA[player.bh.skillSelection].effect == "passive") {
+                                                        return "Cost: " + formatWhole(BHA[player.bh.skillSelection].spCost.add(player.bh.skillData[player.bh.skillSelection].level)) + " SP"
+                                                    } else {
+                                                        return "Cost: " + formatWhole(BHA[player.bh.skillSelection].spCost.add(player.bh.skillData[player.bh.skillSelection].level.mul(2))) + " SP"
+                                                    }
+                                                }, {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
+                                            ], {width: "100px", height: "24px", background: "var(--layerBackground)", borderRadius: "10px"}],
+                                        ]],
+                                    ]],
+                                    ["blank", "5px"],
+                                    ["style-column", [
+                                        ["raw-html", () => {return run(BHA[player.bh.skillSelection].description, BHA[player.bh.skillSelection])}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                    ], {width: "330px", height: "70px", padding: "5px 5px", background: "var(--layerBackground)", borderRadius: "10px"}],
+                                ], {width: "384px", height: "152px"}],
+                                ["left-row", [
+                                    ["clickable", "Skill-Equip"],
+                                    ["style-row", [], {width: "3px", height: "40px", background: "var(--regBorder)"}],
+                                ], {width: "384px", height: "40px", borderTop: "3px solid var(--regBorder)"}],
+                            ], {width: "384px", height: "195px"}],
+                        ], {width: "497px", height: "195px", background: "var(--miscButtonDisable)", borderBottom: "3px solid var(--regBorder)"}],
+                        ["theme-scroll-column", [
+                            ["blank", "4px"],
+                            "bh-skills",
+                        ], {width: "497px", height: "480px"}],
+                    ], {width: "497px", height: "677px"}],
+                ]
+            },
+            "equipment": {
+                content: [
+                    ["style-column", [
+                        
+                    ], {width: "497px", height: "677px"}],
+                ]
+            },
+        },
+        stuff: {
+            "party": {
+                content: [
+                    ["style-row", [
+                        ["category-button", ["Party", "stuff", "party"], {width: "399px", height: "40px", background: "var(--layerBackground)", borderRadius: "27px 0 0 0"}],
+                        ["style-row", [], {width: "3px", height: "40px", backgroundColor: "var(--regBorder)"}],
+                        ["category-button", ["Stages", "stuff", "stages"], {width: "398px", height: "40px", background: "var(--layerBackground)", borderRadius: "0 27px 0 0"}],
+                    ], {width: "800px", height: "40px", border: "3px solid var(--regBorder)", borderRadius: "30px 30px 0 0", marginBottom: "-3px"}],
+                    ["style-row", [
+                        ["style-column", [
+                            ["style-row", [
+                                ["style-column", [
+                                    ["style-column", [["hoverless-clickable", "Char-C0-Icon"]], () => {
+                                        let look = {width: "100px", height: "100px", border: "3px solid"}
+                                        player.bh.inputCharSelection == 0 && player.subtabs["bh"]["party"] == "characters" ? look.borderColor = "white" : look.borderColor = "black"
+                                        return look
+                                    }],
+                                    ["blank", "4px"],
+                                    ["style-row", [
+                                        ["style-column", [["hoverless-clickable", "Char-C0-S0"]], () => {
+                                            let look = {width: "45px", height: "45px", border: "3px solid", marginRight: "4px"}
+                                            player.bh.inputSkillSelection == 0 && player.subtabs["bh"]["party"] == "skills" ? look.borderColor = "white" : look.borderColor = "black"
+                                            return look
+                                        }],
+                                        ["style-column", [["hoverless-clickable", "Char-C0-S1"]], () => {
+                                            let look = {width: "45px", height: "45px", border: "3px solid"}
+                                            player.bh.inputSkillSelection == 1 && player.subtabs["bh"]["party"] == "skills" ? look.borderColor = "white" : look.borderColor = "black"
+                                            return look
+                                        }],
+                                    ]],
+                                    ["blank", "4px"],
+                                    ["style-row", [
+                                        ["style-column", [["hoverless-clickable", "Char-C0-S2"]], () => {
+                                            let look = {width: "45px", height: "45px", border: "3px solid", marginRight: "4px"}
+                                            player.bh.inputSkillSelection == 2 && player.subtabs["bh"]["party"] == "skills" ? look.borderColor = "white" : look.borderColor = "black"
+                                            return look
+                                        }],
+                                        ["style-column", [["hoverless-clickable", "Char-C0-S3"]], () => {
+                                            let look = {width: "45px", height: "45px", border: "3px solid"}
+                                            player.bh.inputSkillSelection == 3 && player.subtabs["bh"]["party"] == "skills" ? look.borderColor = "white" : look.borderColor = "black"
+                                            return look
+                                        }],
+                                    ]],
+                                ], {width: "106px", height: "218px", marginRight: "10px"}],
+                                ["style-column", [
+                                    ["style-column", [
+                                        ["raw-html", () => {return BHP[player.bh.characters[0].id].name}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                                    ], {width: "148px", height: "26px", background: "var(--miscButton)", borderRadius: "10px"}],
+                                    ["blank", "4px"],
+                                    ["row", [
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>HP</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[0].maxHealth)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"}],
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>DMG</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[0].damage)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"}],
+                                    ]],
+                                    ["blank", "4px"],
+                                    ["row", [
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>RGN</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[0].regen)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"}],
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>AGI</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[0].agility)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"}],
+                                    ]],
+                                    ["blank", "4px"],
+                                    ["row", [
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>DEF</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[0].defense)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"}],
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>LUCK</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[0].luck)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"}],
+                                    ]],
+                                    ["blank", "4px"],
+                                    ["clickable", "Char-C0-Page"],
+                                ], {width: "148px", height: "202px", padding: "8px", background: "var(--miscButtonHover)", borderRadius: "10px"}],
+                            ], {width: "280px", height: "218px", padding: "10px", borderBottom: "3px solid var(--regBorder)"}],
+                            ["style-row", [
+                                ["style-column", [
+                                    ["style-column", [["hoverless-clickable", "Char-C1-Icon"]], () => {
+                                        let look = {width: "100px", height: "100px", border: "3px solid"}
+                                        player.bh.inputCharSelection == 1 && player.subtabs["bh"]["party"] == "characters" ? look.borderColor = "white" : look.borderColor = "black"
+                                        return look
+                                    }],
+                                    ["blank", "4px"],
+                                    ["style-row", [
+                                        ["style-column", [["hoverless-clickable", "Char-C1-S0"]], () => {
+                                            let look = {width: "45px", height: "45px", border: "3px solid", marginRight: "4px"}
+                                            player.bh.inputSkillSelection == 4 && player.subtabs["bh"]["party"] == "skills" ? look.borderColor = "white" : look.borderColor = "black"
+                                            return look
+                                        }],
+                                        ["style-column", [["hoverless-clickable", "Char-C1-S1"]], () => {
+                                            let look = {width: "45px", height: "45px", border: "3px solid"}
+                                            player.bh.inputSkillSelection == 5 && player.subtabs["bh"]["party"] == "skills" ? look.borderColor = "white" : look.borderColor = "black"
+                                            return look
+                                        }],
+                                    ]],
+                                    ["blank", "4px"],
+                                    ["style-row", [
+                                        ["style-column", [["hoverless-clickable", "Char-C1-S2"]], () => {
+                                            let look = {width: "45px", height: "45px", border: "3px solid", marginRight: "4px"}
+                                            player.bh.inputSkillSelection == 6 && player.subtabs["bh"]["party"] == "skills" ? look.borderColor = "white" : look.borderColor = "black"
+                                            return look
+                                        }],
+                                        ["style-column", [["hoverless-clickable", "Char-C1-S3"]], () => {
+                                            let look = {width: "45px", height: "45px", border: "3px solid"}
+                                            player.bh.inputSkillSelection == 7 && player.subtabs["bh"]["party"] == "skills" ? look.borderColor = "white" : look.borderColor = "black"
+                                            return look
+                                        }],
+                                    ]],
+                                ], {width: "106px", height: "218px", marginRight: "10px"}],
+                                ["style-column", [
+                                    ["style-column", [
+                                        ["raw-html", () => {return BHP[player.bh.characters[1].id].name}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                                    ], {width: "148px", height: "26px", background: "var(--miscButton)", borderRadius: "10px"}],
+                                    ["blank", "4px"],
+                                    ["row", [
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>HP</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[1].maxHealth)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"}],
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>DMG</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[1].damage)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"}],
+                                    ]],
+                                    ["blank", "4px"],
+                                    ["row", [
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>RGN</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[1].regen)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"}],
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>AGI</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[1].agility)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"}],
+                                    ]],
+                                    ["blank", "4px"],
+                                    ["row", [
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>DEF</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[1].defense)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"}],
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>LUCK</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[1].luck)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"}],
+                                    ]],
+                                    ["blank", "4px"],
+                                    ["clickable", "Char-C1-Page"],
+                                ], {width: "148px", height: "202px", padding: "8px", background: "var(--miscButtonHover)", borderRadius: "10px"}],
+                            ], {width: "280px", height: "218px", padding: "10px", borderBottom: "3px solid var(--regBorder)"}],
+                            ["style-row", [
+                                ["style-column", [
+                                    ["style-column", [["hoverless-clickable", "Char-C2-Icon"]], () => {
+                                        let look = {width: "100px", height: "100px", border: "3px solid"}
+                                        player.bh.inputCharSelection == 2 && player.subtabs["bh"]["party"] == "characters" ? look.borderColor = "white" : look.borderColor = "black"
+                                        return look
+                                    }],
+                                    ["blank", "4px"],
+                                    ["style-row", [
+                                        ["style-column", [["hoverless-clickable", "Char-C2-S0"]], () => {
+                                            let look = {width: "45px", height: "45px", border: "3px solid", marginRight: "4px"}
+                                            player.bh.inputSkillSelection == 8 && player.subtabs["bh"]["party"] == "skills" ? look.borderColor = "white" : look.borderColor = "black"
+                                            return look
+                                        }],
+                                        ["style-column", [["hoverless-clickable", "Char-C2-S1"]], () => {
+                                            let look = {width: "45px", height: "45px", border: "3px solid"}
+                                            player.bh.inputSkillSelection == 9 && player.subtabs["bh"]["party"] == "skills" ? look.borderColor = "white" : look.borderColor = "black"
+                                            return look
+                                        }],
+                                    ]],
+                                    ["blank", "4px"],
+                                    ["style-row", [
+                                        ["style-column", [["hoverless-clickable", "Char-C2-S2"]], () => {
+                                            let look = {width: "45px", height: "45px", border: "3px solid", marginRight: "4px"}
+                                            player.bh.inputSkillSelection == 10 && player.subtabs["bh"]["party"] == "skills" ? look.borderColor = "white" : look.borderColor = "black"
+                                            return look
+                                        }],
+                                        ["style-column", [["hoverless-clickable", "Char-C2-S3"]], () => {
+                                            let look = {width: "45px", height: "45px", border: "3px solid"}
+                                            player.bh.inputSkillSelection == 11 && player.subtabs["bh"]["party"] == "skills" ? look.borderColor = "white" : look.borderColor = "black"
+                                            return look
+                                        }],
+                                    ]],
+                                ], {width: "106px", height: "218px", marginRight: "10px"}],
+                                ["style-column", [
+                                    ["style-column", [
+                                        ["raw-html", () => {return BHP[player.bh.characters[2].id].name}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                                    ], {width: "148px", height: "26px", background: "var(--miscButton)", borderRadius: "10px"}],
+                                    ["blank", "4px"],
+                                    ["row", [
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>HP</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[2].maxHealth)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"}],
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>DMG</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[2].damage)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"}],
+                                    ]],
+                                    ["blank", "4px"],
+                                    ["row", [
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>RGN</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[2].regen)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"}],
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>AGI</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[2].agility)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"}],
+                                    ]],
+                                    ["blank", "4px"],
+                                    ["row", [
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>DEF</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[2].defense)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"}],
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>LUCK</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[2].luck)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"}],
+                                    ]],
+                                    ["blank", "4px"],
+                                    ["clickable", "Char-C2-Page"],
+                                ], {width: "148px", height: "202px", padding: "8px", background: "var(--miscButtonHover)", borderRadius: "10px"}],
+
+                            ], {width: "280px", height: "218px", padding: "10px"}],
+                        ], {width: "300px", height: "720px", background: "var(--scroll4)", borderRight: "3px solid var(--regBorder)", borderRadius: "0 0 0 27px"}],
+                        ["style-column", [
+                            ["style-row", [
+                                ["category-button", ["Characters", "party", "characters"], {width: "164px", height: "40px", background: "var(--miscButton)"}],
+                                ["style-row", [], {width: "3px", height: "40px", backgroundColor: "var(--regBorder)"}],
+                                ["category-button", ["Skills", "party", "skills"], {width: "163px", height: "40px", background: "var(--miscButton)"}],
+                                ["style-row", [], {width: "3px", height: "40px", backgroundColor: "var(--regBorder)"}],
+                                ["category-button", [() => {return false ? "Equipment" : "???"}, "party", "equipment"], {width: "164px", height: "40px", background: "var(--miscButton)"}],
+                            ], {width: "497px", height: "40px", borderBottom: "3px solid var(--regBorder)"}],
+                            ["style-column", [
+                                ["buttonless-microtabs", "party", {borderWidth: "0"}],
+                            ], {width: "497px", height: "677px"}],
+                        ], {width: "497px", height: "720px", background: "var(--miscButton)"}],
+                    ], {width: "800px", height: "720px", border: "3px solid var(--regBorder)", borderRadius: "0 0 0 30px"}],
+                ],
+            },
+            "stages": {
+                content: [
+                    ["style-row", [
+                        ["category-button", ["Party", "stuff", "party"], {width: "399px", height: "40px", background: "var(--layerBackground)", borderRadius: "27px 0 0 0"}],
+                        ["style-row", [], {width: "3px", height: "40px", backgroundColor: "var(--regBorder)"}],
+                        ["category-button", ["Stages", "stuff", "stages"], {width: "398px", height: "40px", background: "var(--layerBackground)", borderRadius: "0 27px 0 0"}],
+                    ], {width: "800px", height: "40px", border: "3px solid var(--regBorder)", borderRadius: "30px 30px 0 0", marginBottom: "-3px"}],
                     ["style-column", [
                         ["theme-scroll-row", [
                             ["row-tree", universes.BH.tree],
-                        ], {width: "750px", height: "297px", padding: "0 25px", background: "linear-gradient(90deg, rgba(50, 50, 50, 0.5) 0%, rgba(0, 0, 0, 0.5) 150%)", borderBottom: "3px solid var(--regBorder)", borderRadius: "27px 27px 0 0"}],
+                        ], {width: "750px", height: "297px", padding: "0 25px", background: "linear-gradient(90deg, rgba(50, 50, 50, 0.5) 0%, rgba(0, 0, 0, 0.5) 150%)", borderBottom: "3px solid var(--regBorder)"}],
                         ["style-column", [
                             ["buttonless-microtabs", "stages", {borderWidth: "0"}],
-                        ], {width: "800px", height: "400px", background: "var(--tabTitle)", borderRadius: "0 0 27px 27px"}],
-                    ], {width: "800px", height: "700px", border: "3px solid var(--regBorder)", borderRadius: "30px"}],
+                        ], {width: "800px", height: "420px", background: "var(--tabTitle)", borderRadius: "0 0 27px 27px"}],
+                    ], {width: "800px", height: "720px", border: "3px solid var(--regBorder)", borderRadius: "0 0 30px 30px"}],
                 ],
             },
             "battle": {

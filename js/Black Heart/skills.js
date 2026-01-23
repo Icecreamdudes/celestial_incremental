@@ -1,11 +1,12 @@
 BHA.none = {
     name: "",
     description: "",
-    char: "",
+    char: "none",
     spCost: new Decimal(0),
     curCostBase: new Decimal(1),
     curCostScale: new Decimal(1),
     currency: "commonMatosFragment",
+    unlocked: false,
 
     effect: "instant",
     cooldown: new Decimal(Infinity),
@@ -20,6 +21,7 @@ BHA.general_slap = {
     curCostBase: new Decimal(25),
     curCostScale: new Decimal(25),
     currency: "gloomingUmbrite",
+    unlocked: true,
 
     effect: "instant",
     type: "damage",
@@ -29,7 +31,23 @@ BHA.general_slap = {
         "stun": [new Decimal(1), new Decimal(1)], // Chance / Time
     },
     value() {return new Decimal(0.75).add(player.bh.skillData["general_slap"].level.mul(0.075))},
-    cooldown: new Decimal(8),
+    cooldown: new Decimal(10),
+}
+BHA.general_bandage = {
+    name: "Bandage",
+    description() {return "Heal yourself by " + formatWhole(new Decimal(10).add(player.bh.skillData["general_bandage"].level.mul(2))) + " health"},
+    char: "general",
+    spCost: new Decimal(8),
+    curCostBase: new Decimal(10),
+    curCostScale: new Decimal(10),
+    currency: "dimUmbrite",
+    unlocked: true,
+
+    effect: "instant",
+    type: "heal",
+    target: "self",
+    value() {return new Decimal(10).add(player.bh.skillData["general_bandage"].level.mul(2))},
+    cooldown: new Decimal(15),
 }
 
 // Kres Skills
@@ -41,6 +59,7 @@ BHA.kres_chop = {
     curCostBase: new Decimal(25),
     curCostScale: new Decimal(25),
     currency: "gloomingUmbrite",
+    unlocked: true,
 
     effect: "instant",
     type: "damage",
@@ -56,7 +75,8 @@ BHA.kres_bigAttack = {
     spCost: new Decimal(4),
     curCostBase: new Decimal(10),
     curCostScale: new Decimal(10),
-    currency: "uncommonMatosFragments",
+    currency: "dimUmbrite",
+    unlocked: true,
 
     effect: "instant",
     type: "damage",
@@ -76,6 +96,7 @@ BHA.kres_battleCry = {
     curCostBase: new Decimal(5),
     curCostScale: new Decimal(5),
     currency: "rareMatosFragments",
+    unlocked: true,
 
     effect: "active",
     type: "effect",
@@ -94,6 +115,7 @@ BHA.kres_berserker = {
     curCostBase: new Decimal(2),
     curCostScale: new Decimal(2),
     currency: "legendaryMatosFragments",
+    unlocked: true,
 
     effect: "passive",
     type: "effect",
@@ -114,6 +136,7 @@ BHA.kres_decapitate = {
     curCostBase: new Decimal(3),
     curCostScale: new Decimal(3),
     currency: "legendaryMatosFragments",
+    unlocked: true,
 
     effect: "instant",
     type: "damage",
@@ -137,6 +160,7 @@ BHA.nav_magicMissle = {
     curCostBase: new Decimal(25),
     curCostScale: new Decimal(25),
     currency: "gloomingUmbrite",
+    unlocked: true,
 
     effect: "instant",
     type: "damage",
@@ -152,7 +176,8 @@ BHA.nav_healSpell = {
     spCost: new Decimal(8),
     curCostBase: new Decimal(10),
     curCostScale: new Decimal(10),
-    currency: "uncommonMatosFragments",
+    currency: "dimUmbrite",
+    unlocked: true,
 
     effect: "instant",
     type: "heal",
@@ -168,6 +193,7 @@ BHA.nav_reboundingAura = {
     curCostBase: new Decimal(5),
     curCostScale: new Decimal(5),
     currency: "rareMatosFragments",
+    unlocked: true,
 
     effect: "active",
     type: "effect",
@@ -189,6 +215,7 @@ BHA.sel_singleShot = {
     curCostBase: new Decimal(25),
     curCostScale: new Decimal(25),
     currency: "gloomingUmbrite",
+    unlocked: true,
 
     effect: "instant",
     type: "damage",
@@ -202,9 +229,10 @@ BHA.sel_turret = {
     description() {return "A turret will attack every 0.5s for 12s, dealing " + formatWhole(new Decimal(20).add(player.bh.skillData["sel_turret"].level.mul(2))) + "% ranged damage"},
     char: "sel",
     spCost: new Decimal(6),
-    curCostBase: new Decimal(25),
-    curCostScale: new Decimal(25),
-    currency: "commonMatosFragments",
+    curCostBase: new Decimal(10),
+    curCostScale: new Decimal(10),
+    currency: "dimUmbrite",
+    unlocked: true,
 
     effect: "active",
     type: "damage",
@@ -229,6 +257,7 @@ BHA.geroa_orbitalCannon = {
     curCostBase: new Decimal(25),
     curCostScale: new Decimal(5),
     currency: "legendaryMatosFramgents", // Temp, probably something else
+    unlocked: true,
 
     effect: "instant",
     type: "damage",

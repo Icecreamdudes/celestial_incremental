@@ -1418,6 +1418,18 @@ function loadVue() {
 		`,
 	})
 
+	Vue.component('bh-skills', {
+		props: ['layer', 'data'],
+		template: `
+		<div class="upgRow">
+			<div style="margin:0" v-for="(value, name, index) in BHA"  v-if="run(value.unlocked, value)">
+				<button v-bind:class="{can: true, bhSkill: true, selected: player.bh.skillData[name].selected > 0}" v-bind:style="{background: BHP[value.char].color, filter: (value.char == 'general' || value.char == player.bh.characters[Math.floor(player.bh.inputSkillSelection/4)].id) ? '' : 'brightness(25%)'}" v-on:click="player.bh.skillSelection = name"
+				v-html="value.name + '<br><small>[Lv ' + formatWhole(player.bh.skillData[name].level.add(1)) + '/' + formatWhole(player.bh.skillData[name].maxLevel.add(1)) + ']'"></button>
+			</div>
+		</div>
+		`,
+	})
+
 	// [TEXT, SUBTAB, TAB, ENABLE]
 	Vue.component('category-button', {
 		props: ['layer', 'data'],

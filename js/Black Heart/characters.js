@@ -1,3 +1,4 @@
+// Sadly a necessary addition to the code
 BHP.none = {
     name: "None",
     color: "#333",
@@ -9,6 +10,18 @@ BHP.none = {
     agility: new Decimal(0),
     luck: new Decimal(0),
 }
+BHP.general = {
+    name: "Player",
+    color: "#666",
+    icon: "resources/player.png",
+    health: new Decimal(100),
+    damage: new Decimal(10),
+    defense: new Decimal(10),
+    regen: new Decimal(1),
+    agility: new Decimal(10),
+    luck: new Decimal(10),
+}
+// Start of characters
 BHP.kres = {
     name: "Kres",
     color: "#910a27",

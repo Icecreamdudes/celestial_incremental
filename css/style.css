@@ -633,6 +633,10 @@ h1, h2, h3, b, input {
 	cursor: not-allowed;
 }
 
+.front:hover {
+	z-index: 50000;
+}
+
 .can {
 	cursor: pointer;
 }
@@ -1169,7 +1173,7 @@ ul {
 	transition: opacity 0.5s;
   
 	position: absolute;
-	z-index: 20000;
+	z-index: 50000;
   
 	background-color: rgba(0, 0, 0, 0.75);
 	color: #ffffff;
@@ -1791,4 +1795,19 @@ button > * {
 	color: var(--textColor);
 	background-color: var(--miscButton);
 	border-color: rgba(0,0,0,0.3);
+}
+
+.bhSkill {
+	width: 100px;
+	height: 100px;
+	font-size: 12px;
+	color: white;
+	border: 5px solid rgba(0,0,0,0.5);
+	border-radius: 15px;
+	margin: 2px;
+	overflow: visible;
+}
+
+.bhSkill.selected {
+	border-color: rgba(255,255,255,0.25);
 }

@@ -43,6 +43,16 @@ BHS.template = {
         return "template"
     },
 }
+BH_CURRENCY = {
+    "gloomingUmbrite": ["Glooming Umbrite", "depth1"],
+    "dimUmbrite": ["Dim Umbrite", "depth1"],
+    "faintUmbrite": ["Faint Umbrite", "depth2"],
+    "clearUmbrite": ["Clear Umbrite", "depth2"],
+    "vividUmbrite": ["Vivid Umbrite", "depth3"],
+    "lustrousUmbrite": ["Lustrous Umbrite", "depth3"],
+    "darkEssence": ["Dark Essence", "bh"],
+    "eclipseShards": ["Eclipse Shards", "sma"]
+}
 
 BHC.template = {
     name: "Celestialite Template",
@@ -433,6 +443,9 @@ addLayer("bh", {
             "sel_singleShot": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)},
             "sel_turret": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)},
 
+            // ECLIPSE
+            "eclipse_drain": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)},
+
             // GEROA
             "geroa_orbitalCannon": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)}
         },
@@ -585,16 +598,16 @@ addLayer("bh", {
                                 let target = calcTarget(i, BHC[player.bh.celestialite.id].actions[i].target)
                                 for (let k in properties) {
                                     if (k == "target") continue
-                                    for (let t in target) {
+                                    for (let t = 0; t < target.length; t++) {
                                         let val = run(properties[k], properties)
                                         if (k == "attributes") {
-                                            bhTemp[t][k] = Object.assign({}, bhTemp[t][k], val)
+                                            bhTemp[target[t]][k] = Object.assign({}, bhTemp[target[t]][k], val)
                                             continue
                                         }
                                         if (k.includes("Mult")) {
-                                            bhTemp[t][k] = bhTemp[t][k].mul(val)
+                                            bhTemp[target[t]][k] = bhTemp[target[t]][k].mul(val)
                                         } else {
-                                            bhTemp[t][k] = bhTemp[t][k].mul(val)
+                                            bhTemp[target[t]][k] = bhTemp[target[t]][k].add(val)
                                         }
                                     }
                                 }
@@ -606,16 +619,16 @@ addLayer("bh", {
                         let target = calcTarget(i, variables.target)
                         for (let k in variables) {
                             if (k == "target") continue
-                            for (let t in target) {
+                            for (let t = 0; t < target.length; t++) {
                                 let val = run(variables[k], properties)
                                 if (k == "attributes") {
-                                    bhTemp[t][k] = Object.assign({}, bhTemp[t][k], val)
+                                    bhTemp[target[t]][k] = Object.assign({}, bhTemp[target[t]][k], val)
                                     continue
                                 }
                                 if (k.includes("Mult")) {
-                                    bhTemp[t][k] = bhTemp[t][k].mul(val)
+                                    bhTemp[target[t]][k] = bhTemp[target[t]][k].mul(val)
                                 } else {
-                                    bhTemp[t][k] = bhTemp[t][k].add(val)
+                                    bhTemp[target[t]][k] = bhTemp[target[t]][k].add(val)
                                 }
                             }
                         }                        
@@ -673,16 +686,16 @@ addLayer("bh", {
                             let target = calcTarget(i, BHA[player.bh.characters[i].skills[j].id].target)
                             for (let k in properties) {
                                 if (k == "target") continue
-                                for (let t in target) {
+                                for (let t = 0; t < target.length; t++) {
                                     let val = run(properties[k], properties)
                                     if (k == "attributes") {
-                                        bhTemp[t][k] = Object.assign({}, bhTemp[t][k], val)
+                                        bhTemp[target[t]][k] = Object.assign({}, bhTemp[target[t]][k], val)
                                         continue
                                     }
                                     if (k.includes("Mult")) {
-                                        bhTemp[t][k] = bhTemp[t][k].mul(val)
+                                        bhTemp[target[t]][k] = bhTemp[target[t]][k].mul(val)
                                     } else {
-                                        bhTemp[t][k] = bhTemp[t][k].mul(val)
+                                        bhTemp[target[t]][k] = bhTemp[target[t]][k].add(val)
                                     }
                                 }
                             }
@@ -694,16 +707,16 @@ addLayer("bh", {
                     let target = calcTarget(i, variables.target)
                     for (let k in variables) {
                         if (k == "target") continue
-                        for (let t in target) {
+                        for (let t = 0; t < target.length; t++) {
                             let val = run(variables[k], properties)
                             if (k == "attributes") {
-                                bhTemp[t][k] = Object.assign({}, bhTemp[t][k], val)
+                                bhTemp[target[t]][k] = Object.assign({}, bhTemp[target[t]][k], val)
                                 continue
                             }
                             if (k.includes("Mult")) {
-                                bhTemp[t][k] = bhTemp[t][k].mul(val)
+                                bhTemp[target[t]][k] = bhTemp[target[t]][k].mul(val)
                             } else {
-                                bhTemp[t][k] = bhTemp[t][k].add(val)
+                                bhTemp[target[t]][k] = bhTemp[target[t]][k].add(val)
                             }
                         }
                     }
@@ -765,33 +778,89 @@ addLayer("bh", {
         player.bh.celestialite.attributes = BHC[player.bh.celestialite.id].attributes ?? {}
         player.bh.celestialite.attributes = Object.assign({}, player.bh.celestialite.attributes, bhTemp[3].attributes)
 
+        // =-- Calculate general stats --=
+        player.bh.maxSkillPoints = new Decimal(10)
+        player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(player.depth1.milestoneEffect)
+        player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(player.depth2.milestoneEffect)
+        player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(player.depth3.milestoneEffect)
+
+        let healthAdd = new Decimal(0)
+        healthAdd = healthAdd.add(player.bh.skillData["general_bandage"].maxLevel)
+        healthAdd = healthAdd.add(player.bh.skillData["kres_bigAttack"].maxLevel)
+        healthAdd = healthAdd.add(player.bh.skillData["nav_healSpell"].maxLevel)
+
+        let damageAdd = new Decimal(0)
+        damageAdd = damageAdd.add(player.bh.skillData["general_slap"].maxLevel.div(5))
+        damageAdd = damageAdd.add(player.bh.skillData["kres_chop"].maxLevel.div(5))
+        damageAdd = damageAdd.add(player.bh.skillData["kres_battleCry"].maxLevel.div(5))
+        damageAdd = damageAdd.add(player.bh.skillData["nav_magicMissle"].maxLevel.div(5))
+        damageAdd = damageAdd.add(player.bh.skillData["geroa_orbitalCannon"].maxLevel.div(5))
+
+        let regenAdd = new Decimal(0)
+        regenAdd = regenAdd.add(player.bh.skillData["kres_berserker"].maxLevel.div(20))
+
+        let agilityAdd = new Decimal(0)
+        agilityAdd = agilityAdd.add(player.bh.skillData["sel_singleShot"].maxLevel.div(2))
+        agilityAdd = agilityAdd.add(player.bh.skillData["sel_turret"].maxLevel.div(2))
+
+        let defenseAdd = new Decimal(0)
+        defenseAdd = defenseAdd.add(player.bh.skillData["nav_reboundingAura"].maxLevel.div(2))
+
+        let luckAdd = new Decimal(0)
+        luckAdd = luckAdd.add(player.bh.skillData["kres_decapitate"].maxLevel.div(2))
+
         // =-- Calculate character stats --=
         for (let i = 0; i < 3; i++) {
+            // BASE HEALTH MODIFIERS
             player.bh.characters[i].maxHealth = BHP[player.bh.characters[i].id].health ?? new Decimal(0)
             player.bh.characters[i].maxHealth = player.bh.characters[i].maxHealth.mul(buyableEffect("depth1", 1))
+
+            // ADDITIONAL HEALTH MODIFIERS
+            player.bh.characters[i].maxHealth = player.bh.characters[i].maxHealth.add(healthAdd)
             player.bh.characters[i].maxHealth = player.bh.characters[i].maxHealth.add(bhTemp[i].healthAdd)
             player.bh.characters[i].maxHealth = player.bh.characters[i].maxHealth.mul(bhTemp[i].healthMult)
 
+            // BASE DAMAGE MODIFIERS
             player.bh.characters[i].damage = BHP[player.bh.characters[i].id].damage ?? new Decimal(0)
+
+            // ADDITIONAL DAMAGE MODIFIERS
+            player.bh.characters[i].damage = player.bh.characters[i].damage.add(damageAdd)
             player.bh.characters[i].damage = player.bh.characters[i].damage.add(bhTemp[i].damageAdd)
             player.bh.characters[i].damage = player.bh.characters[i].damage.mul(bhTemp[i].damageMult)
 
+            // BASE DEFENSE MODIFIERS
             player.bh.characters[i].defense = BHP[player.bh.characters[i].id].defense ?? new Decimal(0)
+
+            // ADDITIONAL DEFENSE MODIFIERS
+            player.bh.characters[i].defense = player.bh.characters[i].defense.add(defenseAdd)
             player.bh.characters[i].defense = player.bh.characters[i].defense.add(bhTemp[i].defenseAdd)
             player.bh.characters[i].defense = player.bh.characters[i].defense.mul(bhTemp[i].defenseMult)
 
+            // BASE REGEN MODIFIERS
             player.bh.characters[i].regen = BHP[player.bh.characters[i].id].regen ?? new Decimal(0)
+
+            // ADDITIONAL REGEN MODIFIERS
+            player.bh.characters[i].regen = player.bh.characters[i].regen.add(regenAdd)
             player.bh.characters[i].regen = player.bh.characters[i].regen.add(bhTemp[i].regenAdd)
             player.bh.characters[i].regen = player.bh.characters[i].regen.mul(bhTemp[i].regenMult)
 
+            // BASE AGILITY MODIFIERS
             player.bh.characters[i].agility = BHP[player.bh.characters[i].id].agility ?? new Decimal(0)
+
+            // ADDITIONAL AGILITY MODIFIERS
+            player.bh.characters[i].agility = player.bh.characters[i].agility.add(agilityAdd)
             player.bh.characters[i].agility = player.bh.characters[i].agility.add(bhTemp[i].agilityAdd)
             player.bh.characters[i].agility = player.bh.characters[i].agility.mul(bhTemp[i].agilityMult)
 
+            // BASE LUCK MODIFIERS
             player.bh.characters[i].luck = BHP[player.bh.characters[i].id].luck ?? new Decimal(0)
+
+            // ADDITIONAL LUCK MODIFERS
+            player.bh.characters[i].luck = player.bh.characters[i].luck.add(luckAdd)
             player.bh.characters[i].luck = player.bh.characters[i].luck.add(bhTemp[i].luckAdd)
             player.bh.characters[i].luck = player.bh.characters[i].luck.mul(bhTemp[i].luckMult)
 
+            // ATTRIBUTES
             player.bh.characters[i].attributes = BHP[player.bh.characters[i].id].attributes ?? {}
             player.bh.characters[i].attributes = Object.assign({}, player.bh.characters[i].attributes, bhTemp[i].attributes)
 
@@ -802,19 +871,42 @@ addLayer("bh", {
 
         // =-- Calculate stored character stats --=
         for (let i in player.bh.characterData) {
+            // BASE HEALTH MODIFIERS
             player.bh.characterData[i].health = BHP[i].health
             player.bh.characterData[i].health = player.bh.characterData[i].health.mul(buyableEffect("depth1", 1))
 
+            // ADDITIONAL HEALTH MODIFIERS
+            player.bh.characterData[i].health = player.bh.characterData[i].health.add(healthAdd)
+
+            // BASE DAMAGE MODIFIERS
             player.bh.characterData[i].damage = BHP[i].damage
 
+            // ADDITIONAL DAMAGE MODIFIERS
+            player.bh.characterData[i].damage = player.bh.characterData[i].damage.add(damageAdd)
+
+            // BASE DEFENSE MODIFIERS
             player.bh.characterData[i].defense = BHP[i].defense
 
+            // ADDITIONAL DEFENSE MODIFIERS
+            player.bh.characterData[i].defense = player.bh.characterData[i].defense.add(defenseAdd)
+            
+            // BASE REGEN MODIFIERS
             player.bh.characterData[i].regen = BHP[i].regen
 
+            // ADDITIONAL REGEN MODIFIERS
+            player.bh.characterData[i].regen = player.bh.characterData[i].regen.add(regenAdd)
+            
+            // BASE AGILITY MODIFIERS
             player.bh.characterData[i].agility = BHP[i].agility
 
+            // ADDITIONAL AGILITY MODIFIERS
+            player.bh.characterData[i].agility = player.bh.characterData[i].agility.add(agilityAdd)
+            
+            // BASE LUCK MODIFIERS
             player.bh.characterData[i].luck = BHP[i].luck
 
+            // ADDITIONAL LUCK MODIFIERS
+            player.bh.characterData[i].luck = player.bh.characterData[i].luck.add(luckAdd)
         }
     },
     clickables: {
@@ -851,8 +943,25 @@ addLayer("bh", {
                 }
             },
             style() {
-                let look = {width: "125px", minHeight: "50px", color: "black", border: "3px solid rgba(0,0,0,0.5)", backgroundColor: "white", borderRadius: "15px"}
+                let look = {width: "125px", minHeight: "40px", color: "black", border: "3px solid rgba(0,0,0,0.5)", backgroundColor: "white", borderRadius: "15px"}
                 if (player.bh.bhPause) look.backgroundColor = "#888"
+                return look
+            },
+        },
+        "Fullscreen": {
+            title: "Fullscreen",
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                if (player.ma.inBlackHeart) {
+                    player.ma.inBlackHeart = false
+                } else {
+                    player.ma.inBlackHeart = true
+                }
+            },
+            style() {
+                let look = {width: "125px", minHeight: "40px", color: "black", fontSize: "9px", border: "3px solid rgba(0,0,0,0.5)", backgroundColor: "white", borderRadius: "15px"}
+                if (player.ma.inBlackHeart) look.backgroundColor = "#888"
                 return look
             },
         },
@@ -865,7 +974,7 @@ addLayer("bh", {
                     player.bh.characters[i].health = new Decimal(-Infinity)
                 }
             },
-            style: {width: "125px", minHeight: "50px", color: "black", border: "3px solid rgba(0,0,0,0.5)", backgroundColor: "white", borderRadius: "15px"},
+            style: {width: "250px", minHeight: "40px", color: "black", border: "3px solid rgba(0,0,0,0.5)", backgroundColor: "white", borderRadius: "15px"},
         },
         "C0-Icon": {
             title() {
@@ -884,13 +993,15 @@ addLayer("bh", {
             title() {
                 if (player.bh.characters[0].skills[0].id == "none") return ""
                 let str = BHA[player.bh.characters[0].skills[0].id].name
-                if (player.bh.characters[0].skills[0].auto) str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[0].skills[0].cooldown.sub(player.bh.characters[0].skills[0].cooldownMax)) + "/" + formatTime(player.bh.characters[0].skills[0].cooldownMax) + "]"
+                if (player.bh.characters[0].skills[0].auto && player.bh.characters[0].skills[0].id != "none" && BHA[player.bh.characters[0].skills[0].id].effect != "passive") {
+                    str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[0].skills[0].cooldown.sub(player.bh.characters[0].skills[0].cooldownMax)) + "/" + formatTime(player.bh.characters[0].skills[0].cooldownMax) + "]"
+                }
                 if (player.bh.characters[0].stun.gt(0)) str = str + "<br>[STUNNED]"
                 return str
             },
             tooltip() {return run(BHA[player.bh.characters[0].skills[0].id].description, BHA[player.bh.characters[0].skills[0].id])},
             canClick() {return player.bh.characters[0].health.gt(0) && player.bh.characters[0].skills[0].id != "none" && BHA[player.bh.characters[0].skills[0].id].effect != "passive" && player.bh.characters[0].stun.lte(0)},
-            unlocked() {return (player.bh.characters[0].skills[0].cooldown.gte(player.bh.characters[0].skills[0].cooldownMax) && player.bh.characters[0].health.gt(0)) || player.bh.characters[0].skills[0].id == "none" || BHA[player.bh.characters[0].skills[0].id].effect == "passive"},
+            unlocked() {return player.bh.characters[0].skills[0].cooldown.gte(player.bh.characters[0].skills[0].cooldownMax) || player.bh.characters[0].skills[0].id == "none" || BHA[player.bh.characters[0].skills[0].id].effect == "passive"},
             onClick() {
                 if (BHA[player.bh.characters[0].skills[0].id].effect == "instant") bhAction(0, 0)
                 if (BHA[player.bh.characters[0].skills[0].id].effect == "active") {
@@ -899,9 +1010,11 @@ addLayer("bh", {
                 }
             },
             style() {
-                let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
+                let passive = BHA[player.bh.characters[0].skills[0].id].effect == "passive"
+                let look = {width: "100px", minHeight: "100px", background: "#361e1e", color: "white", borderRadius: "15px"}
                 if (player.bh.characters[0].skills[0].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
-                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[BHA[player.bh.characters[0].skills[0].id].char].color
+                if (this.canClick() || passive) look.background = BHP[BHA[player.bh.characters[0].skills[0].id].char].color
+                if (passive) look.backgroundImage = "linear-gradient(rgba(0,0,0,0.5))"
                 return look
             },
         },
@@ -909,13 +1022,15 @@ addLayer("bh", {
             title() {
                 if (player.bh.characters[0].skills[1].id == "none") return ""
                 let str = BHA[player.bh.characters[0].skills[1].id].name
-                if (player.bh.characters[0].skills[1].auto) str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[0].skills[1].cooldown.sub(player.bh.characters[0].skills[1].cooldownMax)) + "/" + formatTime(player.bh.characters[0].skills[1].cooldownMax) + "]"
+                if (player.bh.characters[0].skills[1].auto && player.bh.characters[0].skills[1].id != "none" && BHA[player.bh.characters[0].skills[1].id].effect != "passive") {
+                    str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[0].skills[1].cooldown.sub(player.bh.characters[0].skills[1].cooldownMax)) + "/" + formatTime(player.bh.characters[0].skills[1].cooldownMax) + "]"
+                }
                 if (player.bh.characters[0].stun.gt(0)) str = str + "<br>[STUNNED]"
                 return str
             },
             tooltip() {return run(BHA[player.bh.characters[0].skills[1].id].description, BHA[player.bh.characters[0].skills[1].id])},
             canClick() {return player.bh.characters[0].health.gt(0) && player.bh.characters[0].skills[1].id != "none" && BHA[player.bh.characters[0].skills[1].id].effect != "passive" && player.bh.characters[0].stun.lte(0)},
-            unlocked() {return (player.bh.characters[0].skills[1].cooldown.gte(player.bh.characters[0].skills[1].cooldownMax) && player.bh.characters[0].health.gt(0)) || player.bh.characters[0].skills[1].id == "none" || BHA[player.bh.characters[0].skills[1].id].effect == "passive"},
+            unlocked() {return player.bh.characters[0].skills[1].cooldown.gte(player.bh.characters[0].skills[1].cooldownMax) || player.bh.characters[0].skills[1].id == "none" || BHA[player.bh.characters[0].skills[1].id].effect == "passive"},
             onClick() {
                 if (BHA[player.bh.characters[0].skills[1].id].effect == "instant") bhAction(0, 1)
                 if (BHA[player.bh.characters[0].skills[1].id].effect == "active") {
@@ -924,9 +1039,11 @@ addLayer("bh", {
                 }
             },
             style() {
-                let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
+                let passive = BHA[player.bh.characters[0].skills[1].id].effect == "passive"
+                let look = {width: "100px", minHeight: "100px", background: "#361e1e", color: "white", borderRadius: "15px"}
                 if (player.bh.characters[0].skills[1].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
-                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[BHA[player.bh.characters[0].skills[1].id].char].color
+                if (this.canClick() || passive) look.background = BHP[BHA[player.bh.characters[0].skills[1].id].char].color
+                if (passive) look.backgroundImage = "linear-gradient(rgba(0,0,0,0.5))"
                 return look
             },
         },
@@ -934,13 +1051,15 @@ addLayer("bh", {
             title() {
                 if (player.bh.characters[0].skills[2].id == "none") return ""
                 let str = BHA[player.bh.characters[0].skills[2].id].name
-                if (player.bh.characters[0].skills[2].auto) str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[0].skills[2].cooldown.sub(player.bh.characters[0].skills[2].cooldownMax)) + "/" + formatTime(player.bh.characters[0].skills[2].cooldownMax) + "]"
+                if (player.bh.characters[0].skills[2].auto && player.bh.characters[0].skills[2].id != "none" && BHA[player.bh.characters[0].skills[2].id].effect != "passive") {
+                    str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[0].skills[2].cooldown.sub(player.bh.characters[0].skills[2].cooldownMax)) + "/" + formatTime(player.bh.characters[0].skills[2].cooldownMax) + "]"
+                }
                 if (player.bh.characters[0].stun.gt(0)) str = str + "<br>[STUNNED]"
                 return str
             },
             tooltip() {return run(BHA[player.bh.characters[0].skills[2].id].description, BHA[player.bh.characters[0].skills[2].id])},
             canClick() {return player.bh.characters[0].health.gt(0) && player.bh.characters[0].skills[2].id != "none" && BHA[player.bh.characters[0].skills[2].id].effect != "passive" && player.bh.characters[0].stun.lte(0)},
-            unlocked() {return (player.bh.characters[0].skills[2].cooldown.gte(player.bh.characters[0].skills[2].cooldownMax) && player.bh.characters[0].health.gt(0)) || player.bh.characters[0].skills[2].id == "none" || BHA[player.bh.characters[0].skills[2].id].effect == "passive"},
+            unlocked() {return player.bh.characters[0].skills[2].cooldown.gte(player.bh.characters[0].skills[2].cooldownMax) || player.bh.characters[0].skills[2].id == "none" || BHA[player.bh.characters[0].skills[2].id].effect == "passive"},
             onClick() {
                 if (BHA[player.bh.characters[0].skills[2].id].effect == "instant") bhAction(0, 2)
                 if (BHA[player.bh.characters[0].skills[2].id].effect == "active") {
@@ -949,9 +1068,11 @@ addLayer("bh", {
                 }
             },
             style() {
-                let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
+                let passive = BHA[player.bh.characters[0].skills[2].id].effect == "passive"
+                let look = {width: "100px", minHeight: "100px", background: "#361e1e", color: "white", borderRadius: "15px"}
                 if (player.bh.characters[0].skills[2].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
-                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[BHA[player.bh.characters[0].skills[2].id].char].color
+                if (this.canClick() || passive) look.background = BHP[BHA[player.bh.characters[0].skills[2].id].char].color
+                if (passive) look.backgroundImage = "linear-gradient(rgba(0,0,0,0.5))"
                 return look
             },
         },
@@ -959,13 +1080,15 @@ addLayer("bh", {
             title() {
                 if (player.bh.characters[0].skills[3].id == "none") return ""
                 let str = BHA[player.bh.characters[0].skills[3].id].name
-                if (player.bh.characters[0].skills[3].auto) str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[0].skills[3].cooldown.sub(player.bh.characters[0].skills[3].cooldownMax)) + "/" + formatTime(player.bh.characters[0].skills[3].cooldownMax) + "]"
+                if (player.bh.characters[0].skills[3].auto && player.bh.characters[0].skills[3].id != "none" && BHA[player.bh.characters[0].skills[3].id].effect != "passive") {
+                    str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[0].skills[3].cooldown.sub(player.bh.characters[0].skills[3].cooldownMax)) + "/" + formatTime(player.bh.characters[0].skills[3].cooldownMax) + "]"
+                }
                 if (player.bh.characters[0].stun.gt(0)) str = str + "<br>[STUNNED]"
                 return str
             },
             tooltip() {return run(BHA[player.bh.characters[0].skills[3].id].description, BHA[player.bh.characters[0].skills[3].id])},
             canClick() {return player.bh.characters[0].health.gt(0) && player.bh.characters[0].skills[3].id != "none" && BHA[player.bh.characters[0].skills[3].id].effect != "passive" && player.bh.characters[0].stun.lte(0)},
-            unlocked() {return (player.bh.characters[0].skills[3].cooldown.gte(player.bh.characters[0].skills[3].cooldownMax) && player.bh.characters[0].health.gt(0)) || player.bh.characters[0].skills[3].id == "none" || BHA[player.bh.characters[0].skills[3].id].effect == "passive"},
+            unlocked() {return player.bh.characters[0].skills[3].cooldown.gte(player.bh.characters[0].skills[3].cooldownMax) || player.bh.characters[0].skills[3].id == "none" || BHA[player.bh.characters[0].skills[3].id].effect == "passive"},
             onClick() {
                 if (BHA[player.bh.characters[0].skills[3].id].effect == "instant") bhAction(0, 3)
                 if (BHA[player.bh.characters[0].skills[3].id].effect == "active") {
@@ -974,9 +1097,11 @@ addLayer("bh", {
                 }
             },
             style() {
-                let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
+                let passive = BHA[player.bh.characters[0].skills[3].id].effect == "passive"
+                let look = {width: "100px", minHeight: "100px", background: "#361e1e", color: "white", borderRadius: "15px"}
                 if (player.bh.characters[0].skills[3].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
-                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[BHA[player.bh.characters[0].skills[3].id].char].color
+                if (this.canClick() || passive) look.background = BHP[BHA[player.bh.characters[0].skills[3].id].char].color
+                if (passive) look.backgroundImage = "linear-gradient(rgba(0,0,0,0.5))"
                 return look
             },
         },
@@ -997,13 +1122,15 @@ addLayer("bh", {
             title() {
                 if (player.bh.characters[1].skills[0].id == "none") return ""
                 let str = BHA[player.bh.characters[1].skills[0].id].name
-                if (player.bh.characters[1].skills[0].auto) str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[1].skills[0].cooldown.sub(player.bh.characters[1].skills[0].cooldownMax)) + "/" + formatTime(player.bh.characters[1].skills[0].cooldownMax) + "]"
+                if (player.bh.characters[1].skills[0].auto && player.bh.characters[1].skills[0].id != "none" && BHA[player.bh.characters[1].skills[0].id].effect != "passive") {
+                    str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[1].skills[0].cooldown.sub(player.bh.characters[1].skills[0].cooldownMax)) + "/" + formatTime(player.bh.characters[1].skills[0].cooldownMax) + "]"
+                }
                 if (player.bh.characters[1].stun.gt(0)) str = str + "<br>[STUNNED]"
                 return str
             },
             tooltip() {return run(BHA[player.bh.characters[1].skills[0].id].description, BHA[player.bh.characters[1].skills[0].id])},
             canClick() {return player.bh.characters[1].health.gt(0) && player.bh.characters[1].skills[0].id != "none" && BHA[player.bh.characters[1].skills[0].id].effect != "passive" && player.bh.characters[1].stun.lte(0)},
-            unlocked() {return (player.bh.characters[1].skills[0].cooldown.gte(player.bh.characters[1].skills[0].cooldownMax) && player.bh.characters[1].health.gt(0)) || player.bh.characters[1].skills[0].id == "none" || BHA[player.bh.characters[1].skills[0].id].effect == "passive"},
+            unlocked() {return player.bh.characters[1].skills[0].cooldown.gte(player.bh.characters[1].skills[0].cooldownMax) || player.bh.characters[1].skills[0].id == "none" || BHA[player.bh.characters[1].skills[0].id].effect == "passive"},
             onClick() {
                 if (BHA[player.bh.characters[1].skills[0].id].effect == "instant") bhAction(1, 0)
                 if (BHA[player.bh.characters[1].skills[0].id].effect == "active") {
@@ -1012,9 +1139,11 @@ addLayer("bh", {
                 }
             },
             style() {
-                let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
+                let passive = BHA[player.bh.characters[1].skills[0].id].effect == "passive"
+                let look = {width: "100px", minHeight: "100px", background: "#361e1e", color: "white", borderRadius: "15px"}
                 if (player.bh.characters[1].skills[0].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
-                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[BHA[player.bh.characters[1].skills[0].id].char].color
+                if (this.canClick() || passive) look.background = BHP[BHA[player.bh.characters[1].skills[0].id].char].color
+                if (passive) look.backgroundImage = "linear-gradient(rgba(0,0,0,0.5))"
                 return look
             },
         },
@@ -1022,13 +1151,15 @@ addLayer("bh", {
             title() {
                 if (player.bh.characters[1].skills[1].id == "none") return ""
                 let str = BHA[player.bh.characters[1].skills[1].id].name
-                if (player.bh.characters[1].skills[1].auto) str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[1].skills[1].cooldown.sub(player.bh.characters[1].skills[1].cooldownMax)) + "/" + formatTime(player.bh.characters[1].skills[1].cooldownMax) + "]"
+                if (player.bh.characters[1].skills[1].auto && player.bh.characters[1].skills[1].id != "none" && BHA[player.bh.characters[1].skills[1].id].effect != "passive") {
+                    str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[1].skills[1].cooldown.sub(player.bh.characters[1].skills[1].cooldownMax)) + "/" + formatTime(player.bh.characters[1].skills[1].cooldownMax) + "]"
+                }
                 if (player.bh.characters[1].stun.gt(0)) str = str + "<br>[STUNNED]"
                 return str
             },
             tooltip() {return run(BHA[player.bh.characters[1].skills[1].id].description, BHA[player.bh.characters[1].skills[1].id])},
             canClick() {return player.bh.characters[1].health.gt(0) && player.bh.characters[1].skills[1].id != "none" && BHA[player.bh.characters[1].skills[1].id].effect != "passive" && player.bh.characters[1].stun.lte(0)},
-            unlocked() {return (player.bh.characters[1].skills[1].cooldown.gte(player.bh.characters[1].skills[1].cooldownMax) && player.bh.characters[1].health.gt(0)) || player.bh.characters[1].skills[1].id == "none" || BHA[player.bh.characters[1].skills[1].id].effect == "passive"},
+            unlocked() {return player.bh.characters[1].skills[1].cooldown.gte(player.bh.characters[1].skills[1].cooldownMax) || player.bh.characters[1].skills[1].id == "none" || BHA[player.bh.characters[1].skills[1].id].effect == "passive"},
             onClick() {
                 if (BHA[player.bh.characters[1].skills[1].id].effect == "instant") bhAction(1, 1)
                 if (BHA[player.bh.characters[1].skills[1].id].effect == "active") {
@@ -1037,9 +1168,11 @@ addLayer("bh", {
                 }
             },
             style() {
-                let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
+                let passive = BHA[player.bh.characters[1].skills[1].id].effect == "passive"
+                let look = {width: "100px", minHeight: "100px", background: "#361e1e", color: "white", borderRadius: "15px"}
                 if (player.bh.characters[1].skills[1].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
-                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[BHA[player.bh.characters[1].skills[1].id].char].color
+                if (this.canClick() || passive) look.background = BHP[BHA[player.bh.characters[1].skills[1].id].char].color
+                if (passive) look.backgroundImage = "linear-gradient(rgba(0,0,0,0.5))"
                 return look
             },
         },
@@ -1047,13 +1180,15 @@ addLayer("bh", {
             title() {
                 if (player.bh.characters[1].skills[2].id == "none") return ""
                 let str = BHA[player.bh.characters[1].skills[2].id].name
-                if (player.bh.characters[1].skills[2].auto) str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[1].skills[2].cooldown.sub(player.bh.characters[1].skills[2].cooldownMax)) + "/" + formatTime(player.bh.characters[1].skills[2].cooldownMax) + "]"
+                if (player.bh.characters[1].skills[2].auto && player.bh.characters[1].skills[2].id != "none" && BHA[player.bh.characters[1].skills[2].id].effect != "passive") {
+                    str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[1].skills[2].cooldown.sub(player.bh.characters[1].skills[2].cooldownMax)) + "/" + formatTime(player.bh.characters[1].skills[2].cooldownMax) + "]"
+                }
                 if (player.bh.characters[1].stun.gt(0)) str = str + "<br>[STUNNED]"
                 return str
             },
             tooltip() {return run(BHA[player.bh.characters[1].skills[2].id].description, BHA[player.bh.characters[1].skills[2].id])},
             canClick() {return player.bh.characters[1].health.gt(0) && player.bh.characters[1].skills[2].id != "none" && BHA[player.bh.characters[1].skills[2].id].effect != "passive" && player.bh.characters[1].stun.lte(0)},
-            unlocked() {return (player.bh.characters[1].skills[2].cooldown.gte(player.bh.characters[1].skills[2].cooldownMax) && player.bh.characters[1].health.gt(0)) || player.bh.characters[1].skills[2].id == "none" || BHA[player.bh.characters[1].skills[2].id].effect == "passive"},
+            unlocked() {return player.bh.characters[1].skills[2].cooldown.gte(player.bh.characters[1].skills[2].cooldownMax) || player.bh.characters[1].skills[2].id == "none" || BHA[player.bh.characters[1].skills[2].id].effect == "passive"},
             onClick() {
                 if (BHA[player.bh.characters[1].skills[2].id].effect == "instant") bhAction(1, 2)
                 if (BHA[player.bh.characters[1].skills[2].id].effect == "active") {
@@ -1062,9 +1197,11 @@ addLayer("bh", {
                 }
             },
             style() {
-                let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
+                let passive = BHA[player.bh.characters[1].skills[2].id].effect == "passive"
+                let look = {width: "100px", minHeight: "100px", background: "#361e1e", color: "white", borderRadius: "15px"}
                 if (player.bh.characters[1].skills[2].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
-                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[BHA[player.bh.characters[1].skills[2].id].char].color
+                if (this.canClick() || passive) look.background = BHP[BHA[player.bh.characters[1].skills[2].id].char].color
+                if (passive) look.backgroundImage = "linear-gradient(rgba(0,0,0,0.5))"
                 return look
             },
         },
@@ -1072,13 +1209,15 @@ addLayer("bh", {
             title() {
                 if (player.bh.characters[1].skills[3].id == "none") return ""
                 let str = BHA[player.bh.characters[1].skills[3].id].name
-                if (player.bh.characters[1].skills[3].auto) str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[1].skills[3].cooldown.sub(player.bh.characters[1].skills[3].cooldownMax)) + "/" + formatTime(player.bh.characters[1].skills[3].cooldownMax) + "]"
+                if (player.bh.characters[1].skills[3].auto && player.bh.characters[1].skills[3].id != "none" && BHA[player.bh.characters[1].skills[3].id].effect != "passive") {
+                    str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[1].skills[3].cooldown.sub(player.bh.characters[1].skills[3].cooldownMax)) + "/" + formatTime(player.bh.characters[1].skills[3].cooldownMax) + "]"
+                }
                 if (player.bh.characters[1].stun.gt(0)) str = str + "<br>[STUNNED]"
                 return str
             },
             tooltip() {return run(BHA[player.bh.characters[1].skills[3].id].description, BHA[player.bh.characters[1].skills[3].id])},
             canClick() {return player.bh.characters[1].health.gt(0) && player.bh.characters[1].skills[3].id != "none" && BHA[player.bh.characters[1].skills[3].id].effect != "passive" && player.bh.characters[1].stun.lte(0)},
-            unlocked() {return (player.bh.characters[1].skills[3].cooldown.gte(player.bh.characters[1].skills[3].cooldownMax) && player.bh.characters[1].health.gt(0)) || player.bh.characters[1].skills[3].id == "none" || BHA[player.bh.characters[1].skills[3].id].effect == "passive"},
+            unlocked() {return player.bh.characters[1].skills[3].cooldown.gte(player.bh.characters[1].skills[3].cooldownMax) || player.bh.characters[1].skills[3].id == "none" || BHA[player.bh.characters[1].skills[3].id].effect == "passive"},
             onClick() {
                 if (BHA[player.bh.characters[1].skills[3].id].effect == "instant") bhAction(1, 3)
                 if (BHA[player.bh.characters[1].skills[3].id].effect == "active") {
@@ -1087,9 +1226,11 @@ addLayer("bh", {
                 }
             },
             style() {
-                let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
+                let passive = BHA[player.bh.characters[1].skills[3].id].effect == "passive"
+                let look = {width: "100px", minHeight: "100px", background: "#361e1e", color: "white", borderRadius: "15px"}
                 if (player.bh.characters[1].skills[3].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
-                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[BHA[player.bh.characters[1].skills[3].id].char].color
+                if (this.canClick() || passive) look.background = BHP[BHA[player.bh.characters[1].skills[3].id].char].color
+                if (passive) look.backgroundImage = "linear-gradient(rgba(0,0,0,0.5))"
                 return look
             },
         },
@@ -1110,13 +1251,15 @@ addLayer("bh", {
             title() {
                 if (player.bh.characters[2].skills[0].id == "none") return ""
                 let str = BHA[player.bh.characters[2].skills[0].id].name
-                if (player.bh.characters[2].skills[0].auto) str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[2].skills[0].cooldown.sub(player.bh.characters[2].skills[0].cooldownMax)) + "/" + formatTime(player.bh.characters[2].skills[0].cooldownMax) + "]"
+                if (player.bh.characters[2].skills[0].auto && player.bh.characters[2].skills[0].id != "none" && BHA[player.bh.characters[2].skills[0].id].effect != "passive") {
+                    str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[2].skills[0].cooldown.sub(player.bh.characters[2].skills[0].cooldownMax)) + "/" + formatTime(player.bh.characters[2].skills[0].cooldownMax) + "]"
+                }
                 if (player.bh.characters[2].stun.gt(0)) str = str + "<br>[STUNNED]"
                 return str
             },
             tooltip() {return run(BHA[player.bh.characters[2].skills[0].id].description, BHA[player.bh.characters[2].skills[0].id])},
             canClick() {return player.bh.characters[2].health.gt(0) && player.bh.characters[2].skills[0].id != "none" && BHA[player.bh.characters[2].skills[0].id].effect != "passive" && player.bh.characters[2].stun.lte(0)},
-            unlocked() {return (player.bh.characters[2].skills[0].cooldown.gte(player.bh.characters[2].skills[0].cooldownMax) && player.bh.characters[2].health.gt(0)) || player.bh.characters[2].skills[0].id == "none" || BHA[player.bh.characters[2].skills[0].id].effect == "passive"},
+            unlocked() {return player.bh.characters[2].skills[0].cooldown.gte(player.bh.characters[2].skills[0].cooldownMax) || player.bh.characters[2].skills[0].id == "none" || BHA[player.bh.characters[2].skills[0].id].effect == "passive"},
             onClick() {
                 if (BHA[player.bh.characters[2].skills[0].id].effect == "instant") bhAction(2, 0)
                 if (BHA[player.bh.characters[2].skills[0].id].effect == "active") {
@@ -1125,9 +1268,11 @@ addLayer("bh", {
                 }
             },
             style() {
-                let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
+                let passive = BHA[player.bh.characters[2].skills[0].id].effect == "passive"
+                let look = {width: "100px", minHeight: "100px", background: "#361e1e", color: "white", borderRadius: "15px"}
                 if (player.bh.characters[2].skills[0].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
-                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[BHA[player.bh.characters[2].skills[0].id].char].color
+                if (this.canClick() || passive) look.background = BHP[BHA[player.bh.characters[2].skills[0].id].char].color
+                if (passive) look.backgroundImage = "linear-gradient(rgba(0,0,0,0.5))"
                 return look
             },
         },
@@ -1135,13 +1280,15 @@ addLayer("bh", {
             title() {
                 if (player.bh.characters[2].skills[1].id == "none") return ""
                 let str = BHA[player.bh.characters[2].skills[1].id].name
-                if (player.bh.characters[2].skills[1].auto) str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[2].skills[1].cooldown.sub(player.bh.characters[2].skills[1].cooldownMax)) + "/" + formatTime(player.bh.characters[2].skills[1].cooldownMax) + "]"
+                if (player.bh.characters[2].skills[1].auto && player.bh.characters[2].skills[1].id != "none" && BHA[player.bh.characters[2].skills[1].id].effect != "passive") {
+                    str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[2].skills[1].cooldown.sub(player.bh.characters[2].skills[1].cooldownMax)) + "/" + formatTime(player.bh.characters[2].skills[1].cooldownMax) + "]"
+                }
                 if (player.bh.characters[2].stun.gt(0)) str = str + "<br>[STUNNED]"
                 return str
             },
             tooltip() {return run(BHA[player.bh.characters[2].skills[1].id].description, BHA[player.bh.characters[2].skills[1].id])},
             canClick() {return player.bh.characters[2].health.gt(0) && player.bh.characters[2].skills[1].id != "none" && BHA[player.bh.characters[2].skills[1].id].effect != "passive" && player.bh.characters[2].stun.lte(0)},
-            unlocked() {return (player.bh.characters[2].skills[1].cooldown.gte(player.bh.characters[2].skills[1].cooldownMax) && player.bh.characters[2].health.gt(0)) || player.bh.characters[2].skills[1].id == "none" || BHA[player.bh.characters[2].skills[1].id].effect == "passive"},
+            unlocked() {return player.bh.characters[2].skills[1].cooldown.gte(player.bh.characters[2].skills[1].cooldownMax) || player.bh.characters[2].skills[1].id == "none" || BHA[player.bh.characters[2].skills[1].id].effect == "passive"},
             onClick() {
                 if (BHA[player.bh.characters[2].skills[1].id].effect == "instant") bhAction(2, 1)
                 if (BHA[player.bh.characters[2].skills[1].id].effect == "active") {
@@ -1150,9 +1297,11 @@ addLayer("bh", {
                 }
             },
             style() {
-                let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
+                let passive = BHA[player.bh.characters[2].skills[1].id].effect == "passive"
+                let look = {width: "100px", minHeight: "100px", background: "#361e1e", color: "white", borderRadius: "15px"}
                 if (player.bh.characters[2].skills[1].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
-                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[BHA[player.bh.characters[2].skills[1].id].char].color
+                if (this.canClick() || passive) look.background = BHP[BHA[player.bh.characters[2].skills[1].id].char].color
+                if (passive) look.backgroundImage = "linear-gradient(rgba(0,0,0,0.5))"
                 return look
             },
         },
@@ -1160,13 +1309,15 @@ addLayer("bh", {
             title() {
                 if (player.bh.characters[2].skills[2].id == "none") return ""
                 let str = BHA[player.bh.characters[2].skills[2].id].name
-                if (player.bh.characters[2].skills[2].auto) str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[2].skills[2].cooldown.sub(player.bh.characters[2].skills[2].cooldownMax)) + "/" + formatTime(player.bh.characters[2].skills[2].cooldownMax) + "]"
+                if (player.bh.characters[2].skills[2].auto && player.bh.characters[2].skills[2].id != "none" && BHA[player.bh.characters[2].skills[2].id].effect != "passive") {
+                    str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[2].skills[2].cooldown.sub(player.bh.characters[2].skills[2].cooldownMax)) + "/" + formatTime(player.bh.characters[2].skills[2].cooldownMax) + "]"
+                }
                 if (player.bh.characters[2].stun.gt(0)) str = str + "<br>[STUNNED]"
                 return str
             },
             tooltip() {return run(BHA[player.bh.characters[2].skills[2].id].description, BHA[player.bh.characters[2].skills[2].id])},
             canClick() {return player.bh.characters[2].health.gt(0) && player.bh.characters[2].skills[2].id != "none" && BHA[player.bh.characters[2].skills[2].id].effect != "passive" && player.bh.characters[2].stun.lte(0)},
-            unlocked() {return (player.bh.characters[2].skills[2].cooldown.gte(player.bh.characters[2].skills[2].cooldownMax) && player.bh.characters[2].health.gt(0)) || player.bh.characters[2].skills[2].id == "none" || BHA[player.bh.characters[2].skills[2].id].effect == "passive"},
+            unlocked() {return player.bh.characters[2].skills[2].cooldown.gte(player.bh.characters[2].skills[2].cooldownMax) || player.bh.characters[2].skills[2].id == "none" || BHA[player.bh.characters[2].skills[2].id].effect == "passive"},
             onClick() {
                 if (BHA[player.bh.characters[2].skills[2].id].effect == "instant") bhAction(2, 2)
                 if (BHA[player.bh.characters[2].skills[2].id].effect == "active") {
@@ -1175,9 +1326,11 @@ addLayer("bh", {
                 }
             },
             style() {
-                let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
+                let passive = BHA[player.bh.characters[2].skills[2].id].effect == "passive"
+                let look = {width: "100px", minHeight: "100px", background: "#361e1e", color: "white", borderRadius: "15px"}
                 if (player.bh.characters[2].skills[2].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
-                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[BHA[player.bh.characters[2].skills[2].id].char].color
+                if (this.canClick() || passive) look.background = BHP[BHA[player.bh.characters[2].skills[2].id].char].color
+                if (passive) look.backgroundImage = "linear-gradient(rgba(0,0,0,0.5))"
                 return look
             },
         },
@@ -1185,13 +1338,15 @@ addLayer("bh", {
             title() {
                 if (player.bh.characters[2].skills[3].id == "none") return ""
                 let str = BHA[player.bh.characters[2].skills[3].id].name
-                if (player.bh.characters[2].skills[3].auto) str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[2].skills[3].cooldown.sub(player.bh.characters[2].skills[3].cooldownMax)) + "/" + formatTime(player.bh.characters[2].skills[3].cooldownMax) + "]"
+                if (player.bh.characters[2].skills[3].auto && player.bh.characters[2].skills[3].id != "none" && BHA[player.bh.characters[2].skills[3].id].effect != "passive") {
+                    str = str + "<br><small style='font-size:10px'>[" + formatTime(player.bh.characters[2].skills[3].cooldown.sub(player.bh.characters[2].skills[3].cooldownMax)) + "/" + formatTime(player.bh.characters[2].skills[3].cooldownMax) + "]"
+                }
                 if (player.bh.characters[2].stun.gt(0)) str = str + "<br>[STUNNED]"
                 return str
             },
             tooltip() {return run(BHA[player.bh.characters[2].skills[3].id].description, BHA[player.bh.characters[2].skills[3].id])},
             canClick() {return player.bh.characters[2].health.gt(0) && player.bh.characters[2].skills[3].id != "none" && BHA[player.bh.characters[2].skills[3].id].effect != "passive" && player.bh.characters[2].stun.lte(0)},
-            unlocked() {return (player.bh.characters[2].skills[3].cooldown.gte(player.bh.characters[2].skills[3].cooldownMax) && player.bh.characters[2].health.gt(0)) || player.bh.characters[2].skills[3].id == "none" || BHA[player.bh.characters[2].skills[3].id].effect == "passive"},
+            unlocked() {return player.bh.characters[2].skills[3].cooldown.gte(player.bh.characters[2].skills[3].cooldownMax) || player.bh.characters[2].skills[3].id == "none" || BHA[player.bh.characters[2].skills[3].id].effect == "passive"},
             onClick() {
                 if (BHA[player.bh.characters[2].skills[3].id].effect == "instant") bhAction(2, 3)
                 if (BHA[player.bh.characters[2].skills[3].id].effect == "active") {
@@ -1200,9 +1355,227 @@ addLayer("bh", {
                 }
             },
             style() {
-                let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
+                let passive = BHA[player.bh.characters[2].skills[3].id].effect == "passive"
+                let look = {width: "100px", minHeight: "100px", background: "#361e1e", color: "white", borderRadius: "15px"}
                 if (player.bh.characters[2].skills[3].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
-                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = BHP[BHA[player.bh.characters[2].skills[3].id].char].color
+                if (this.canClick() || passive) look.background = BHP[BHA[player.bh.characters[2].skills[3].id].char].color
+                if (passive) look.backgroundImage = "linear-gradient(rgba(0,0,0,0.5))"
+                return look
+            },
+        },
+        "C0-Auto-S0": {
+            title: "Auto<br>S1",
+            canClick() {return player.bh.characters[0].skills[0].id != "none"},
+            unlocked: true,
+            onClick() {
+                if (player.bh.characters[0].skills[0].auto) {
+                    player.bh.characters[0].skills[0].auto = false
+                } else {
+                    player.bh.characters[0].skills[0].auto = true
+                }
+            },
+            style() {
+                let look = {width: "50px", minHeight: "30px", color: "white", fontSize: "8px", lineHeight: "1", background: "#340000", borderRadius: "10px"}
+                look.background = BHP[BHA[player.bh.characters[0].skills[0].id].char].color
+                if (!player.bh.characters[0].skills[0].auto) look.filter = "brightness(50%)"
+                return look
+            },
+        },
+        "C0-Auto-S1": {
+            title: "Auto<br>S2",
+            canClick() {return player.bh.characters[0].skills[1].id != "none"},
+            unlocked: true,
+            onClick() {
+                if (player.bh.characters[0].skills[1].auto) {
+                    player.bh.characters[0].skills[1].auto = false
+                } else {
+                    player.bh.characters[0].skills[1].auto = true
+                }
+            },
+            style() {
+                let look = {width: "50px", minHeight: "30px", color: "white", fontSize: "8px", lineHeight: "1", background: "#340000", borderRadius: "10px"}
+                look.background = BHP[BHA[player.bh.characters[0].skills[1].id].char].color
+                if (!player.bh.characters[0].skills[1].auto) look.filter = "brightness(50%)"
+                return look
+            },
+        },
+        "C0-Auto-S2": {
+            title: "Auto<br>S3",
+            canClick() {return player.bh.characters[0].skills[2].id != "none"},
+            unlocked: true,
+            onClick() {
+                if (player.bh.characters[0].skills[2].auto) {
+                    player.bh.characters[0].skills[2].auto = false
+                } else {
+                    player.bh.characters[0].skills[2].auto = true
+                }
+            },
+            style() {
+                let look = {width: "50px", minHeight: "30px", color: "white", fontSize: "8px", lineHeight: "1", background: "#340000", borderRadius: "10px"}
+                look.background = BHP[BHA[player.bh.characters[0].skills[2].id].char].color
+                if (!player.bh.characters[0].skills[2].auto) look.filter = "brightness(50%)"
+                return look
+            },
+        },
+        "C0-Auto-S3": {
+            title: "Auto<br>S4",
+            canClick() {return player.bh.characters[0].skills[3].id != "none"},
+            unlocked: true,
+            onClick() {
+                if (player.bh.characters[0].skills[3].auto) {
+                    player.bh.characters[0].skills[3].auto = false
+                } else {
+                    player.bh.characters[0].skills[3].auto = true
+                }
+            },
+            style() {
+                let look = {width: "50px", minHeight: "30px", color: "white", fontSize: "8px", lineHeight: "1", background: "#340000", borderRadius: "10px"}
+                look.background = BHP[BHA[player.bh.characters[0].skills[3].id].char].color
+                if (!player.bh.characters[0].skills[3].auto) look.filter = "brightness(50%)"
+                return look
+            },
+        },
+        "C1-Auto-S0": {
+            title: "Auto<br>S1",
+            canClick() {return player.bh.characters[1].skills[0].id != "none"},
+            unlocked: true,
+            onClick() {
+                if (player.bh.characters[1].skills[0].auto) {
+                    player.bh.characters[1].skills[0].auto = false
+                } else {
+                    player.bh.characters[1].skills[0].auto = true
+                }
+            },
+            style() {
+                let look = {width: "50px", minHeight: "30px", color: "white", fontSize: "8px", lineHeight: "1", background: "#340000", borderRadius: "10px"}
+                look.background = BHP[BHA[player.bh.characters[1].skills[0].id].char].color
+                if (!player.bh.characters[1].skills[0].auto) look.filter = "brightness(50%)"
+                return look
+            },
+        },
+        "C1-Auto-S1": {
+            title: "Auto<br>S2",
+            canClick() {return player.bh.characters[1].skills[1].id != "none"},
+            unlocked: true,
+            onClick() {
+                if (player.bh.characters[1].skills[1].auto) {
+                    player.bh.characters[1].skills[1].auto = false
+                } else {
+                    player.bh.characters[1].skills[1].auto = true
+                }
+            },
+            style() {
+                let look = {width: "50px", minHeight: "30px", color: "white", fontSize: "8px", lineHeight: "1", background: "#340000", borderRadius: "10px"}
+                look.background = BHP[BHA[player.bh.characters[1].skills[1].id].char].color
+                if (!player.bh.characters[1].skills[1].auto) look.filter = "brightness(50%)"
+                return look
+            },
+        },
+        "C1-Auto-S2": {
+            title: "Auto<br>S3",
+            canClick() {return player.bh.characters[1].skills[2].id != "none"},
+            unlocked: true,
+            onClick() {
+                if (player.bh.characters[1].skills[2].auto) {
+                    player.bh.characters[1].skills[2].auto = false
+                } else {
+                    player.bh.characters[1].skills[2].auto = true
+                }
+            },
+            style() {
+                let look = {width: "50px", minHeight: "30px", color: "white", fontSize: "8px", lineHeight: "1", background: "#340000", borderRadius: "10px"}
+                look.background = BHP[BHA[player.bh.characters[1].skills[2].id].char].color
+                if (!player.bh.characters[1].skills[2].auto) look.filter = "brightness(50%)"
+                return look
+            },
+        },
+        "C1-Auto-S3": {
+            title: "Auto<br>S4",
+            canClick() {return player.bh.characters[1].skills[3].id != "none"},
+            unlocked: true,
+            onClick() {
+                if (player.bh.characters[1].skills[3].auto) {
+                    player.bh.characters[1].skills[3].auto = false
+                } else {
+                    player.bh.characters[1].skills[3].auto = true
+                }
+            },
+            style() {
+                let look = {width: "50px", minHeight: "30px", color: "white", fontSize: "8px", lineHeight: "1", background: "#340000", borderRadius: "10px"}
+                look.background = BHP[BHA[player.bh.characters[1].skills[3].id].char].color
+                if (!player.bh.characters[1].skills[3].auto) look.filter = "brightness(50%)"
+                return look
+            },
+        },
+        "C2-Auto-S0": {
+            title: "Auto<br>S1",
+            canClick() {return player.bh.characters[2].skills[0].id != "none"},
+            unlocked: true,
+            onClick() {
+                if (player.bh.characters[2].skills[0].auto) {
+                    player.bh.characters[2].skills[0].auto = false
+                } else {
+                    player.bh.characters[2].skills[0].auto = true
+                }
+            },
+            style() {
+                let look = {width: "50px", minHeight: "30px", color: "white", fontSize: "8px", lineHeight: "1", background: "#340000", borderRadius: "10px"}
+                look.background = BHP[BHA[player.bh.characters[2].skills[0].id].char].color
+                if (!player.bh.characters[2].skills[0].auto) look.filter = "brightness(50%)"
+                return look
+            },
+        },
+        "C2-Auto-S1": {
+            title: "Auto<br>S2",
+            canClick() {return player.bh.characters[2].skills[1].id != "none"},
+            unlocked: true,
+            onClick() {
+                if (player.bh.characters[2].skills[1].auto) {
+                    player.bh.characters[2].skills[1].auto = false
+                } else {
+                    player.bh.characters[2].skills[1].auto = true
+                }
+            },
+            style() {
+                let look = {width: "50px", minHeight: "30px", color: "white", fontSize: "8px", lineHeight: "1", background: "#340000", borderRadius: "10px"}
+                look.background = BHP[BHA[player.bh.characters[2].skills[1].id].char].color
+                if (!player.bh.characters[2].skills[1].auto) look.filter = "brightness(50%)"
+                return look
+            },
+        },
+        "C2-Auto-S2": {
+            title: "Auto<br>S3",
+            canClick() {return player.bh.characters[2].skills[2].id != "none"},
+            unlocked: true,
+            onClick() {
+                if (player.bh.characters[2].skills[2].auto) {
+                    player.bh.characters[2].skills[2].auto = false
+                } else {
+                    player.bh.characters[2].skills[2].auto = true
+                }
+            },
+            style() {
+                let look = {width: "50px", minHeight: "30px", color: "white", fontSize: "8px", lineHeight: "1", background: "#340000", borderRadius: "10px"}
+                look.background = BHP[BHA[player.bh.characters[2].skills[2].id].char].color
+                if (!player.bh.characters[2].skills[2].auto) look.filter = "brightness(50%)"
+                return look
+            },
+        },
+        "C2-Auto-S3": {
+            title: "Auto<br>S4",
+            canClick() {return player.bh.characters[2].skills[3].id != "none"},
+            unlocked: true,
+            onClick() {
+                if (player.bh.characters[2].skills[3].auto) {
+                    player.bh.characters[2].skills[3].auto = false
+                } else {
+                    player.bh.characters[2].skills[3].auto = true
+                }
+            },
+            style() {
+                let look = {width: "50px", minHeight: "30px", color: "white", fontSize: "8px", lineHeight: "1", background: "#340000", borderRadius: "10px"}
+                look.background = BHP[BHA[player.bh.characters[2].skills[3].id].char].color
+                if (!player.bh.characters[2].skills[3].auto) look.filter = "brightness(50%)"
                 return look
             },
         },
@@ -1632,8 +2005,82 @@ addLayer("bh", {
                 }
             },
             style() {
-                let look = {width: "100px", minHeight: "40px", color: "var(--textColor)", fontSize: "9px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0"}
+                let look = {width: "110px", minHeight: "40px", color: "var(--textColor)", fontSize: "9px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0"}
                 player.bh.skillData[player.bh.skillSelection].selected > 0 ? look.backgroundColor = "var(--miscButton)" : this.canClick() ? look.backgroundColor = "var(--miscButtonHover)" : look.backgroundColor = "var(--miscButtonDisable)"
+                return look
+            },
+        },
+        "Skill-Buy-Level": {
+            title: "Increase<br>Level Cap",
+            canClick() {
+                let cost = BHA[player.bh.skillSelection].curCostScale.pow(player.bh.skillData[player.bh.skillSelection].maxLevel).mul(BHA[player.bh.skillSelection].curCostBase)
+                return player[BH_CURRENCY[BHA[player.bh.skillSelection].currency][1]][BHA[player.bh.skillSelection].currency].gte(cost)
+            },
+            unlocked: true,
+            onClick() {
+                let cost = BHA[player.bh.skillSelection].curCostScale.pow(player.bh.skillData[player.bh.skillSelection].maxLevel).mul(BHA[player.bh.skillSelection].curCostBase)
+                player[BH_CURRENCY[BHA[player.bh.skillSelection].currency][1]][BHA[player.bh.skillSelection].currency] = player[BH_CURRENCY[BHA[player.bh.skillSelection].currency][1]][BHA[player.bh.skillSelection].currency].sub(cost)
+                player.bh.skillData[player.bh.skillSelection].maxLevel = player.bh.skillData[player.bh.skillSelection].maxLevel.add(1)
+            },
+            style() {
+                let look = {width: "110px", minHeight: "40px", color: "var(--textColor)", fontSize: "9px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0"}
+                this.canClick() ? look.backgroundColor = "var(--miscButtonHover)" : look.backgroundColor = "var(--miscButtonDisable)"
+                return look
+            },
+        },
+        "Skill-Level-Increase": {
+            title: "Increase Level",
+            canClick() {
+                if (player.bh.skillData[player.bh.skillSelection].level.gte(player.bh.skillData[player.bh.skillSelection].maxLevel)) return false
+                if (player.bh.skillData[player.bh.skillSelection].selected > 0) {
+                    let currChar = player.bh.characters[Math.floor((player.bh.skillData[player.bh.skillSelection].selected-1)/4)].id
+                    if (BHA[player.bh.skillSelection].effect == "passive") {
+                        return player.bh.maxSkillPoints.sub(player.bh.characterData[currChar].usedSP).gte(1)
+                    } else {
+                        return player.bh.maxSkillPoints.sub(player.bh.characterData[currChar].usedSP).gte(2)
+                    }
+                }
+                return true
+            },
+            unlocked: true,
+            onClick() {
+                player.bh.skillData[player.bh.skillSelection].level = player.bh.skillData[player.bh.skillSelection].level.add(1)
+                if (player.bh.skillData[player.bh.skillSelection].selected > 0) {
+                    let currChar = player.bh.characters[Math.floor((player.bh.skillData[player.bh.skillSelection].selected-1)/4)].id
+                    if (BHA[player.bh.skillSelection].effect == "passive") {
+                        player.bh.characterData[currChar].usedSP = player.bh.characterData[currChar].usedSP.add(1)
+                    } else {
+                        player.bh.characterData[currChar].usedSP = player.bh.characterData[currChar].usedSP.add(2)
+                    }
+                }
+                
+            },
+            style() {
+                let look = {width: "78px", minHeight: "40px", color: "var(--textColor)", fontSize: "9px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0"}
+                this.canClick() ? look.backgroundColor = "var(--miscButtonHover)" : look.backgroundColor = "var(--miscButtonDisable)"
+                return look
+            },
+        },
+        "Skill-Level-Decrease": {
+            title: "Decrease Level",
+            canClick() {
+                return player.bh.skillData[player.bh.skillSelection].level.gt(0)
+            },
+            unlocked: true,
+            onClick() {
+                player.bh.skillData[player.bh.skillSelection].level = player.bh.skillData[player.bh.skillSelection].level.sub(1)
+                if (player.bh.skillData[player.bh.skillSelection].selected > 0) {
+                    let currChar = player.bh.characters[Math.floor((player.bh.skillData[player.bh.skillSelection].selected-1)/4)].id
+                    if (BHA[player.bh.skillSelection].effect == "passive") {
+                        player.bh.characterData[currChar].usedSP = player.bh.characterData[currChar].usedSP.sub(1)
+                    } else {
+                        player.bh.characterData[currChar].usedSP = player.bh.characterData[currChar].usedSP.sub(2)
+                    }
+                }
+            },
+            style() {
+                let look = {width: "77px", minHeight: "40px", color: "var(--textColor)", fontSize: "9px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0"}
+                this.canClick() ? look.backgroundColor = "var(--miscButtonHover)" : look.backgroundColor = "var(--miscButtonDisable)"
                 return look
             },
         },
@@ -1790,7 +2237,7 @@ addLayer("bh", {
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
                 if (player.bh.characters[0].stun.gt(0)) return {backgroundColor: "#361e1e"}
-                return {backgroundColor: BHP[player.bh.characters[0].id].color}
+                return {backgroundColor: BHP[BHA[player.bh.characters[0].skills[0].id].char].color}
             },
             textStyle: {userSelect: "none"},
             display() {
@@ -1812,7 +2259,7 @@ addLayer("bh", {
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
                 if (player.bh.characters[0].stun.gt(0)) return {backgroundColor: "#361e1e"}
-                return {backgroundColor: BHP[player.bh.characters[0].id].color}
+                return {backgroundColor: BHP[BHA[player.bh.characters[0].skills[0].id].char].color}
             },
             textStyle: {userSelect: "none"},
             display() {
@@ -1834,7 +2281,7 @@ addLayer("bh", {
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
                 if (player.bh.characters[0].stun.gt(0)) return {backgroundColor: "#361e1e"}
-                return {backgroundColor: BHP[player.bh.characters[0].id].color}
+                return {backgroundColor: BHP[BHA[player.bh.characters[0].skills[1].id].char].color}
             },
             textStyle: {userSelect: "none"},
             display() {
@@ -1856,7 +2303,7 @@ addLayer("bh", {
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
                 if (player.bh.characters[0].stun.gt(0)) return {backgroundColor: "#361e1e"}
-                return {backgroundColor: BHP[player.bh.characters[0].id].color}
+                return {backgroundColor: BHP[BHA[player.bh.characters[0].skills[1].id].char].color}
             },
             textStyle: {userSelect: "none"},
             display() {
@@ -1878,7 +2325,7 @@ addLayer("bh", {
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
                 if (player.bh.characters[0].stun.gt(0)) return {backgroundColor: "#361e1e"}
-                return {backgroundColor: BHP[player.bh.characters[0].id].color}
+                return {backgroundColor: BHP[BHA[player.bh.characters[0].skills[2].id].char].color}
             },
             textStyle: {userSelect: "none"},
             display() {
@@ -1900,7 +2347,7 @@ addLayer("bh", {
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
                 if (player.bh.characters[0].stun.gt(0)) return {backgroundColor: "#361e1e"}
-                return {backgroundColor: BHP[player.bh.characters[0].id].color}
+                return {backgroundColor: BHP[BHA[player.bh.characters[0].skills[2].id].char].color}
             },
             textStyle: {userSelect: "none"},
             display() {
@@ -1922,7 +2369,7 @@ addLayer("bh", {
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
                 if (player.bh.characters[0].stun.gt(0)) return {backgroundColor: "#361e1e"}
-                return {backgroundColor: BHP[player.bh.characters[0].id].color}
+                return {backgroundColor: BHP[BHA[player.bh.characters[0].skills[3].id].char].color}
             },
             textStyle: {userSelect: "none"},
             display() {
@@ -1944,7 +2391,7 @@ addLayer("bh", {
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
                 if (player.bh.characters[0].stun.gt(0)) return {backgroundColor: "#361e1e"}
-                return {backgroundColor: BHP[player.bh.characters[0].id].color}
+                return {backgroundColor: BHP[BHA[player.bh.characters[0].skills[3].id].char].color}
             },
             textStyle: {userSelect: "none"},
             display() {
@@ -1990,7 +2437,7 @@ addLayer("bh", {
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
                 if (player.bh.characters[1].stun.gt(0)) return {backgroundColor: "#361e1e"}
-                return {backgroundColor: BHP[player.bh.characters[1].id].color}
+                return {backgroundColor: BHP[BHA[player.bh.characters[1].skills[0].id].char].color}
             },
             textStyle: {userSelect: "none"},
             display() {
@@ -2012,7 +2459,7 @@ addLayer("bh", {
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
                 if (player.bh.characters[1].stun.gt(0)) return {backgroundColor: "#361e1e"}
-                return {backgroundColor: BHP[player.bh.characters[1].id].color}
+                return {backgroundColor: BHP[BHA[player.bh.characters[1].skills[0].id].char].color}
             },
             textStyle: {userSelect: "none"},
             display() {
@@ -2034,7 +2481,7 @@ addLayer("bh", {
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
                 if (player.bh.characters[1].stun.gt(0)) return {backgroundColor: "#361e1e"}
-                return {backgroundColor: BHP[player.bh.characters[1].id].color}
+                return {backgroundColor: BHP[BHA[player.bh.characters[1].skills[1].id].char].color}
             },
             textStyle: {userSelect: "none"},
             display() {
@@ -2056,7 +2503,7 @@ addLayer("bh", {
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
                 if (player.bh.characters[1].stun.gt(0)) return {backgroundColor: "#361e1e"}
-                return {backgroundColor: BHP[player.bh.characters[1].id].color}
+                return {backgroundColor: BHP[BHA[player.bh.characters[1].skills[1].id].char].color}
             },
             textStyle: {userSelect: "none"},
             display() {
@@ -2078,7 +2525,7 @@ addLayer("bh", {
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
                 if (player.bh.characters[1].stun.gt(0)) return {backgroundColor: "#361e1e"}
-                return {backgroundColor: BHP[player.bh.characters[1].id].color}
+                return {backgroundColor: BHP[BHA[player.bh.characters[1].skills[2].id].char].color}
             },
             textStyle: {userSelect: "none"},
             display() {
@@ -2100,7 +2547,7 @@ addLayer("bh", {
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
                 if (player.bh.characters[1].stun.gt(0)) return {backgroundColor: "#361e1e"}
-                return {backgroundColor: BHP[player.bh.characters[1].id].color}
+                return {backgroundColor: BHP[BHA[player.bh.characters[1].skills[2].id].char].color}
             },
             textStyle: {userSelect: "none"},
             display() {
@@ -2122,7 +2569,7 @@ addLayer("bh", {
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
                 if (player.bh.characters[1].stun.gt(0)) return {backgroundColor: "#361e1e"}
-                return {backgroundColor: BHP[player.bh.characters[1].id].color}
+                return {backgroundColor: BHP[BHA[player.bh.characters[1].skills[3].id].char].color}
             },
             textStyle: {userSelect: "none"},
             display() {
@@ -2144,7 +2591,7 @@ addLayer("bh", {
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
                 if (player.bh.characters[1].stun.gt(0)) return {backgroundColor: "#361e1e"}
-                return {backgroundColor: BHP[player.bh.characters[1].id].color}
+                return {backgroundColor: BHP[BHA[player.bh.characters[1].skills[3].id].char].color}
             },
             textStyle: {userSelect: "none"},
             display() {
@@ -2190,7 +2637,7 @@ addLayer("bh", {
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
                 if (player.bh.characters[2].stun.gt(0)) return {backgroundColor: "#361e1e"}
-                return {backgroundColor: BHP[player.bh.characters[2].id].color}
+                return {backgroundColor: BHP[BHA[player.bh.characters[2].skills[0].id].char].color}
             },
             textStyle: {userSelect: "none"},
             display() {
@@ -2212,7 +2659,7 @@ addLayer("bh", {
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
                 if (player.bh.characters[2].stun.gt(0)) return {backgroundColor: "#361e1e"}
-                return {backgroundColor: BHP[player.bh.characters[2].id].color}
+                return {backgroundColor: BHP[BHA[player.bh.characters[2].skills[0].id].char].color}
             },
             textStyle: {userSelect: "none"},
             display() {
@@ -2234,7 +2681,7 @@ addLayer("bh", {
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
                 if (player.bh.characters[2].stun.gt(0)) return {backgroundColor: "#361e1e"}
-                return {backgroundColor: BHP[player.bh.characters[2].id].color}
+                return {backgroundColor: BHP[BHA[player.bh.characters[2].skills[1].id].char].color}
             },
             textStyle: {userSelect: "none"},
             display() {
@@ -2256,7 +2703,7 @@ addLayer("bh", {
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
                 if (player.bh.characters[2].stun.gt(0)) return {backgroundColor: "#361e1e"}
-                return {backgroundColor: BHP[player.bh.characters[2].id].color}
+                return {backgroundColor: BHP[BHA[player.bh.characters[2].skills[1].id].char].color}
             },
             textStyle: {userSelect: "none"},
             display() {
@@ -2278,7 +2725,7 @@ addLayer("bh", {
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
                 if (player.bh.characters[2].stun.gt(0)) return {backgroundColor: "#361e1e"}
-                return {backgroundColor: BHP[player.bh.characters[2].id].color}
+                return {backgroundColor: BHP[BHA[player.bh.characters[2].skills[2].id].char].color}
             },
             textStyle: {userSelect: "none"},
             display() {
@@ -2300,7 +2747,7 @@ addLayer("bh", {
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
                 if (player.bh.characters[2].stun.gt(0)) return {backgroundColor: "#361e1e"}
-                return {backgroundColor: BHP[player.bh.characters[2].id].color}
+                return {backgroundColor: BHP[BHA[player.bh.characters[2].skills[2].id].char].color}
             },
             textStyle: {userSelect: "none"},
             display() {
@@ -2322,7 +2769,7 @@ addLayer("bh", {
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
                 if (player.bh.characters[2].stun.gt(0)) return {backgroundColor: "#361e1e"}
-                return {backgroundColor: BHP[player.bh.characters[2].id].color}
+                return {backgroundColor: BHP[BHA[player.bh.characters[2].skills[3].id].char].color}
             },
             textStyle: {userSelect: "none"},
             display() {
@@ -2344,7 +2791,7 @@ addLayer("bh", {
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
                 if (player.bh.characters[2].stun.gt(0)) return {backgroundColor: "#361e1e"}
-                return {backgroundColor: BHP[player.bh.characters[2].id].color}
+                return {backgroundColor: BHP[BHA[player.bh.characters[2].skills[3].id].char].color}
             },
             textStyle: {userSelect: "none"},
             display() {
@@ -2398,7 +2845,7 @@ addLayer("bh", {
                                         ["blank", "4px"],
                                         ["row", [
                                             ["style-column", [
-                                                ["raw-html", () => {return "<h3>RGN</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characterData[player.bh.characterSelection].regen)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                                ["raw-html", () => {return "<h3>RGN</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characterData[player.bh.characterSelection].regen, 2)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
                                             ], {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px", marginRight: "4px"}],
                                             ["style-column", [
                                                 ["raw-html", () => {return "<h3>AGI</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characterData[player.bh.characterSelection].agility)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
@@ -2484,31 +2931,50 @@ addLayer("bh", {
                                                 if (BHA[player.bh.skillSelection].effect == "passive") return BHA[player.bh.skillSelection].name + "<br><p style='font-size:14px'>[PASSIVE]"
                                                 return BHA[player.bh.skillSelection].name + "<br><p style='font-size:14px'>Cooldown: " + formatTime(BHA[player.bh.skillSelection].cooldown)
                                             }, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
-                                        ], {width: "235px", height: "50px", background: "var(--layerBackground)", borderRadius: "10px", marginRight: "5px"}],
+                                        ], {width: "250px", height: "50px", background: "var(--layerBackground)", borderRadius: "10px", marginRight: "5px"}],
                                         ["column", [
                                             ["style-column", [
                                                 ["raw-html", () => {return "[Lv " + formatWhole(player.bh.skillData[player.bh.skillSelection].level.add(1)) + "/" + formatWhole(player.bh.skillData[player.bh.skillSelection].maxLevel.add(1)) + "]"}, {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
-                                            ], {width: "100px", height: "24px", background: "var(--layerBackground)", borderRadius: "10px"}],
-                                            ["blank", "2px"],
+                                            ], {width: "110px", height: "20px", paddingBottom: "2px", background: "var(--layerBackground)", borderRadius: "10px"}],
+                                            ["blank", "5px"],
                                             ["style-column", [
                                                 ["raw-html", () => {
                                                     if (BHA[player.bh.skillSelection].effect == "passive") {
-                                                        return "Cost: " + formatWhole(BHA[player.bh.skillSelection].spCost.add(player.bh.skillData[player.bh.skillSelection].level)) + " SP"
+                                                        return "SP Cost: " + formatWhole(BHA[player.bh.skillSelection].spCost.add(player.bh.skillData[player.bh.skillSelection].level))
                                                     } else {
-                                                        return "Cost: " + formatWhole(BHA[player.bh.skillSelection].spCost.add(player.bh.skillData[player.bh.skillSelection].level.mul(2))) + " SP"
+                                                        return "SP Cost: " + formatWhole(BHA[player.bh.skillSelection].spCost.add(player.bh.skillData[player.bh.skillSelection].level.mul(2)))
                                                     }
                                                 }, {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
-                                            ], {width: "100px", height: "24px", background: "var(--layerBackground)", borderRadius: "10px"}],
+                                            ], {width: "110px", height: "21px", paddingBottom: "2px", background: "var(--layerBackground)", borderRadius: "10px"}],
                                         ]],
                                     ]],
                                     ["blank", "5px"],
-                                    ["style-column", [
-                                        ["raw-html", () => {return run(BHA[player.bh.skillSelection].description, BHA[player.bh.skillSelection])}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "330px", height: "70px", padding: "5px 5px", background: "var(--layerBackground)", borderRadius: "10px"}],
+                                    ["row", [
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<p style='line-height:1.2'>" + run(BHA[player.bh.skillSelection].description, BHA[player.bh.skillSelection])}, {color: "var(--textColor)", fontSize: "13px", fontFamily: "monospace"}],
+                                        ], {width: "240px", height: "70px", padding: "5px 5px", background: "var(--layerBackground)", borderRadius: "10px", marginRight: "5px"}],
+                                        ["column", [
+                                            ["style-column", [
+                                                ["raw-html", () => {return "<p style='line-height:1'><u>Passive</u><br><small>" + run(BHA[player.bh.skillSelection].passiveText, BHA[player.bh.skillSelection]) + "</small></p>"}, {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
+                                            ], {width: "110px", height: "30px", background: "var(--layerBackground)", borderRadius: "10px", marginBottom: "5px"}],
+                                            ["style-column", [
+                                                ["raw-html", () => {
+                                                    let str = "<p style='line-height:1'><u>Level Up Cost</u><br><small>"
+                                                    let cost = BHA[player.bh.skillSelection].curCostScale.pow(player.bh.skillData[player.bh.skillSelection].maxLevel).mul(BHA[player.bh.skillSelection].curCostBase)
+                                                    return str + cost + " " + BH_CURRENCY[BHA[player.bh.skillSelection].currency][0] + "</small></p>"
+                                                }, {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
+                                            ], {width: "100px", height: "35px", padding: "5px", background: "var(--layerBackground)", borderRadius: "10px"}],
+                                        ]],
+                                    ]],
                                 ], {width: "384px", height: "152px"}],
                                 ["left-row", [
                                     ["clickable", "Skill-Equip"],
                                     ["style-row", [], {width: "3px", height: "40px", background: "var(--regBorder)"}],
+                                    ["clickable", "Skill-Buy-Level"],
+                                    ["style-row", [], {width: "3px", height: "40px", background: "var(--regBorder)"}],
+                                    ["clickable", "Skill-Level-Decrease"],
+                                    ["style-row", [], {width: "3px", height: "40px", background: "var(--regBorder)"}],
+                                    ["clickable", "Skill-Level-Increase"],
                                 ], {width: "384px", height: "40px", borderTop: "3px solid var(--regBorder)"}],
                             ], {width: "384px", height: "195px"}],
                         ], {width: "497px", height: "195px", background: "var(--miscButtonDisable)", borderBottom: "3px solid var(--regBorder)"}],
@@ -2587,7 +3053,7 @@ addLayer("bh", {
                                     ["blank", "4px"],
                                     ["row", [
                                         ["style-column", [
-                                            ["raw-html", () => {return "<h3>RGN</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[0].regen)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                            ["raw-html", () => {return "<h3>RGN</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[0].regen, 2)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
                                         ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"}],
                                         ["style-column", [
                                             ["raw-html", () => {return "<h3>AGI</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[0].agility)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
@@ -2656,7 +3122,7 @@ addLayer("bh", {
                                     ["blank", "4px"],
                                     ["row", [
                                         ["style-column", [
-                                            ["raw-html", () => {return "<h3>RGN</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[1].regen)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                            ["raw-html", () => {return "<h3>RGN</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[1].regen, 2)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
                                         ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"}],
                                         ["style-column", [
                                             ["raw-html", () => {return "<h3>AGI</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[1].agility)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
@@ -2725,7 +3191,7 @@ addLayer("bh", {
                                     ["blank", "4px"],
                                     ["row", [
                                         ["style-column", [
-                                            ["raw-html", () => {return "<h3>RGN</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[2].regen)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                            ["raw-html", () => {return "<h3>RGN</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[2].regen, 2)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
                                         ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"}],
                                         ["style-column", [
                                             ["raw-html", () => {return "<h3>AGI</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[2].agility)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
@@ -2862,8 +3328,14 @@ addLayer("bh", {
                                 ["style-column", [["clickable", "C0-Skill-2"], ["bar", "C0-S2-Cooldown"], ["bar", "C0-S2-Duration"]], {width: "100px", height: "100px", border: "2px solid white", borderRadius: "17px", margin: "-1px"}],
                                 ["style-column", [["clickable", "C0-Skill-3"], ["bar", "C0-S3-Cooldown"], ["bar", "C0-S3-Duration"]], {width: "100px", height: "100px", border: "2px solid white", borderRadius: "17px", margin: "-1px"}],
                             ]],
+                            ["row", [
+                                ["style-row", [["clickable", "C0-Auto-S0"]], {width: "50px", height: "30px", border: "2px solid white", borderRadius: "12px", margin: "-1px"}],
+                                ["style-row", [["clickable", "C0-Auto-S1"]], {width: "50px", height: "30px", border: "2px solid white", borderRadius: "12px", margin: "-1px"}],
+                                ["style-row", [["clickable", "C0-Auto-S2"]], {width: "50px", height: "30px", border: "2px solid white", borderRadius: "12px", margin: "-1px"}],
+                                ["style-row", [["clickable", "C0-Auto-S3"]], {width: "50px", height: "30px", border: "2px solid white", borderRadius: "12px", margin: "-1px"}],
+                            ]],
                             ["blank", "10px"],
-                        ], () => {return player.bh.characters[0].id != "none" ? {width: "225px", height: "300px", background: "rgba(0,0,0,0.2)", border: "3px solid white", borderRadius: "30px", margin: "5px",} : {display: "none !important"}}],
+                        ], () => {return player.bh.characters[0].id != "none" && player.bh.characters[0].health.gt(0) ? {width: "225px", height: "320px", background: "rgba(0,0,0,0.2)", border: "3px solid white", borderRadius: "30px", margin: "5px",} : {display: "none !important"}}],
                         ["style-column", [
                             ["blank", "5px"],
                             ["raw-html", () => {return BHP[player.bh.characters[1].id].name}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
@@ -2877,8 +3349,14 @@ addLayer("bh", {
                                 ["style-column", [["clickable", "C1-Skill-2"], ["bar", "C1-S2-Cooldown"], ["bar", "C1-S2-Duration"]], {width: "100px", height: "100px", border: "2px solid white", borderRadius: "17px", margin: "-1px"}],
                                 ["style-column", [["clickable", "C1-Skill-3"], ["bar", "C1-S3-Cooldown"], ["bar", "C1-S3-Duration"]], {width: "100px", height: "100px", border: "2px solid white", borderRadius: "17px", margin: "-1px"}],
                             ]],
+                            ["row", [
+                                ["style-row", [["clickable", "C1-Auto-S0"]], {width: "50px", height: "30px", border: "2px solid white", borderRadius: "12px", margin: "-1px"}],
+                                ["style-row", [["clickable", "C1-Auto-S1"]], {width: "50px", height: "30px", border: "2px solid white", borderRadius: "12px", margin: "-1px"}],
+                                ["style-row", [["clickable", "C1-Auto-S2"]], {width: "50px", height: "30px", border: "2px solid white", borderRadius: "12px", margin: "-1px"}],
+                                ["style-row", [["clickable", "C1-Auto-S3"]], {width: "50px", height: "30px", border: "2px solid white", borderRadius: "12px", margin: "-1px"}],
+                            ]],
                             ["blank", "10px"],
-                        ], () => {return player.bh.characters[1].id != "none" ? {width: "225px", height: "300px", background: "rgba(0,0,0,0.2)", border: "3px solid white", borderRadius: "30px", margin: "5px",} : {display: "none !important"}}],
+                        ], () => {return player.bh.characters[1].id != "none" && player.bh.characters[1].health.gt(0) ? {width: "225px", height: "320px", background: "rgba(0,0,0,0.2)", border: "3px solid white", borderRadius: "30px", margin: "5px",} : {display: "none !important"}}],
                         ["style-column", [
                             ["blank", "5px"],
                             ["raw-html", () => {return BHP[player.bh.characters[2].id].name}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
@@ -2892,8 +3370,14 @@ addLayer("bh", {
                                 ["style-column", [["clickable", "C2-Skill-2"], ["bar", "C2-S2-Cooldown"], ["bar", "C2-S2-Duration"]], {width: "100px", height: "100px", border: "2px solid white", borderRadius: "17px", margin: "-1px"}],
                                 ["style-column", [["clickable", "C2-Skill-3"], ["bar", "C2-S3-Cooldown"], ["bar", "C2-S3-Duration"]], {width: "100px", height: "100px", border: "2px solid white", borderRadius: "17px", margin: "-1px"}],
                             ]],
+                            ["row", [
+                                ["style-row", [["clickable", "C2-Auto-S0"]], {width: "50px", height: "30px", border: "2px solid white", borderRadius: "12px", margin: "-1px"}],
+                                ["style-row", [["clickable", "C2-Auto-S1"]], {width: "50px", height: "30px", border: "2px solid white", borderRadius: "12px", margin: "-1px"}],
+                                ["style-row", [["clickable", "C2-Auto-S2"]], {width: "50px", height: "30px", border: "2px solid white", borderRadius: "12px", margin: "-1px"}],
+                                ["style-row", [["clickable", "C2-Auto-S3"]], {width: "50px", height: "30px", border: "2px solid white", borderRadius: "12px", margin: "-1px"}],
+                            ]],
                             ["blank", "10px"],
-                        ], () => {return player.bh.characters[2].id != "none" ? {width: "225px", height: "300px", background: "rgba(0,0,0,0.2)", border: "3px solid white", borderRadius: "30px", margin: "5px",} : {display: "none !important"}}],
+                        ], () => {return player.bh.characters[2].id != "none" && player.bh.characters[2].health.gt(0) ? {width: "225px", height: "320px", background: "rgba(0,0,0,0.2)", border: "3px solid white", borderRadius: "30px", margin: "5px",} : {display: "none !important"}}],
                         ["blank", ["50px", "50px"]],
                         ["style-column", [
                             ["style-column", [
@@ -2923,13 +3407,14 @@ addLayer("bh", {
                             ["blank", "10px"],
                             ["row", [
                                 ["clickable", "Pause"],
+                                ["clickable", "Fullscreen"],
                                 ["clickable", "Give-Up"],
                             ]],
-                        ], {width: "300px", height: "300px", background: "rgba(0,0,0,0.2)", border: "3px solid white", borderRadius: "30px"}],
+                        ], {width: "300px", height: "320px", background: "rgba(0,0,0,0.2)", border: "3px solid white", borderRadius: "30px"}],
                     ]],
-                    ["style-column", [
+                    ["top-column", [
                         ["raw-html", () => `${player.bh.log.map((x, i) => `<span style="display:block;">${x}</span>`).join("")}`],
-                    ], {width: "600px", minHeight: "200px", textAlign: "center", background: "rgba(0,0,0,0.5)", border: "2px solid white", borderRadius: "30px", padding: "12px 0", marginTop: "5px"}],
+                    ], {width: "600px", minHeight: "206px", textAlign: "center", background: "rgba(0,0,0,0.5)", border: "3px solid white", borderRadius: "30px", padding: "12px 0", marginTop: "5px"}],
                 ],
             },
             "dead": {

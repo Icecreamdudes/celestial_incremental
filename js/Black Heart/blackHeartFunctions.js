@@ -18,12 +18,12 @@ function bhAction(index, slot) {
     target = action.target
     if (action.stun) {
         if (index == 3) {
-            player.bh.celestialite.stun = action.stun
+            player.bh.celestialite.stun = run(action.stun, action)
         } else {
-            player.bh.characters[index].stun = action.stun
+            player.bh.characters[index].stun = run(action.stun, action)
         }
     }
-    if (action.delay) delay = action.delay
+    if (action.delay) delay = run(action.delay, action)
     setTimeout(() => {
         // All action attribute effects
         if (attribute["berserk"]) {
@@ -58,7 +58,7 @@ function bhAction(index, slot) {
                         } else {
                             damage = run(action.value, action).mul(player.bh.characters[index].damage)
                         }
-                        damage = damage.mul(Decimal.add(0.85, Decimal.mul(Math.random(), 0.3)))
+                        damage = damage.mul(Decimal.add(0.9, Decimal.mul(Math.random(), 0.2)))
 
                         // =-- Properties --=
                         if (action.properties) {
@@ -71,11 +71,11 @@ function bhAction(index, slot) {
                             // Stun Modifier
                             if (action.properties["stun"] && Decimal.gte(action.properties["stun"][0].mul(luckMult), Math.random())) {
                                 let arr = calcTarget(index, target)
-                                for (let recieve of arr) {
-                                    if (recieve == 3) {
+                                for (let receive of arr) {
+                                    if (receive == 3) {
                                         player.bh.celestialite.stun = action.properties["stun"][1]
                                     } else {
-                                        player.bh.characters[recieve].stun = action.properties["stun"][1]
+                                        player.bh.characters[receive].stun = action.properties["stun"][1]
                                     }
                                 }
                                 str = str + "<span style='color:#73741A'>[STUN] </span>"
@@ -109,7 +109,7 @@ function bhAction(index, slot) {
                 }
                 for(let i = 0; i < healAmt; i++) {
                     setTimeout(() => {
-                        let heal = Decimal.mul(run(action.value, action), Decimal.add(0.85, Decimal.mul(Math.random(), 0.3)))
+                        let heal = Decimal.mul(run(action.value, action), Decimal.add(0.9, Decimal.mul(Math.random(), 0.2)))
                         let str = ""
 
                         // =-- Target Change Modifiers --=
@@ -125,11 +125,11 @@ function bhAction(index, slot) {
                             // Stun Modifier
                             if (action.properties["stun"] && Decimal.gte(action.properties["stun"][0].mul(luckMult), Math.random())) {
                                 let arr = calcTarget(index, target)
-                                for (let recieve of arr) {
-                                    if (recieve == 3) {
+                                for (let receive of arr) {
+                                    if (receive == 3) {
                                         player.bh.celestialite.stun = action.properties["stun"][1]
                                     } else {
-                                        player.bh.characters[recieve].stun = action.properties["stun"][1]
+                                        player.bh.characters[receive].stun = action.properties["stun"][1]
                                     }
                                 }
                                 str = str + "<span style='color:#73741A'>[STUN] </span>"
@@ -159,7 +159,7 @@ function bhAction(index, slot) {
                 // =-- Variable Effect --=
                 if (!action.properties) return 
                 for (let i in action.properties) {
-                    let val = action.properties[i]
+                    let val = run(action.properties[i], action.properties)
                     if (val == "attributes") { // Doesn't give a message currently.
                         if (index == 3) {
                             if (!player.bh.celestialite.actions[slot].variables[i]) player.bh.celestialite.actions[slot].variables[i] = {}
@@ -173,31 +173,51 @@ function bhAction(index, slot) {
                         continue
                     }
                     // PAST THIS IS ADD/MULT STAT
-                    val = val
-                    let perc = i.includes("Mult")
+                    let perc = 0
+                    if (i.includes("Mult")) perc = 1
+                    if (i.includes("Diminish")) perc = 2
                     let name = ""
-                    if (perc) {
-                        name = i.slice(0, i.indexOf("M"))
-                    } else {
-                        name = i.slice(0, i.indexOf("A"))
+                    switch (perc) {
+                        case 0:
+                            name = i.slice(0, i.indexOf("A"))
+                            if (index == 3) {
+                                if (!player.bh.celestialite.actions[slot].variables[i]) player.bh.celestialite.actions[slot].variables[i] = new Decimal(0)
+                                player.bh.celestialite.actions[slot].variables[i] = Decimal.add(player.bh.celestialite.actions[slot].variables[i], val)
+                            } else {
+                                if (!player.bh.characters[index].skills[slot].variables[i]) player.bh.characters[index].skills[slot].variables[i] = new Decimal(0)
+                                player.bh.characters[index].skills[slot].variables[i] = Decimal.add(player.bh.characters[index].skills[slot].variables[i], val)
+                            }
+                            break;
+                        case 1:
+                            name = i.slice(0, i.indexOf("M"))
+                            if (index == 3) {
+                                if (!player.bh.celestialite.actions[slot].variables[i]) player.bh.celestialite.actions[slot].variables[i] = new Decimal(1)
+                                player.bh.celestialite.actions[slot].variables[i] = Decimal.mul(player.bh.celestialite.actions[slot].variables[i], val)
+                            } else {
+                                if (!player.bh.characters[index].skills[slot].variables[i]) player.bh.characters[index].skills[slot].variables[i] = new Decimal(1)
+                                player.bh.characters[index].skills[slot].variables[i] = Decimal.mul(player.bh.characters[index].skills[slot].variables[i], val)
+                            }
+                            break;
+                        case 2:
+                            name = i.slice(0, i.indexOf("D"))
+                            i = name + "Mult"
+                            let pre
+                            if (index == 3) {
+                                if (!player.bh.celestialite.actions[slot].variables[i]) player.bh.celestialite.actions[slot].variables[i] = new Decimal(1)
+                                pre = player.bh.celestialite.actions[slot].variables[i]
+                                player.bh.celestialite.actions[slot].variables[i] = Decimal.pow(player.bh.celestialite.actions[slot].variables[i], 2).add(val).pow(0.5)
+                                val = Decimal.sub(player.bh.celestialite.actions[slot].variables[i], pre)
+                            } else {
+                                if (!player.bh.characters[index].skills[slot].variables[i]) player.bh.characters[index].skills[slot].variables[i] = new Decimal(1)
+                                pre = player.bh.characters[index].skills[slot].variables[i]
+                                player.bh.characters[index].skills[slot].variables[i] = Decimal.pow(player.bh.characters[index].skills[slot].variables[i], 2).add(val).pow(0.5)
+                                val = Decimal.sub(player.bh.characters[index].skills[slot].variables[i], pre)
+                            }
+                            break;
                     }
                     if (index == 3) {
-                        if (perc) {
-                            if (!player.bh.celestialite.actions[slot].variables[i]) player.bh.celestialite.actions[slot].variables[i] = new Decimal(1)
-                            player.bh.celestialite.actions[slot].variables[i] = player.bh.celestialite.actions[slot].variables[i].mul(val)
-                        } else {
-                            if (!player.bh.celestialite.actions[slot].variables[i]) player.bh.celestialite.actions[slot].variables[i] = new Decimal(0)
-                            player.bh.celestialite.actions[slot].variables[i] = player.bh.celestialite.actions[slot].variables[i].add(val)
-                        }
                         player.bh.celestialite.actions[slot].variables.target = target
                     } else {
-                        if (perc) {
-                            if (!player.bh.characters[index].skills[slot].variables[i]) player.bh.characters[index].skills[slot].variables[i] = new Decimal(1)
-                            player.bh.characters[index].skills[slot].variables[i] = player.bh.characters[index].skills[slot].variables[i].mul(val)
-                        } else {
-                            if (!player.bh.characters[index].skills[slot].variables[i]) player.bh.characters[index].skills[slot].variables[i] = new Decimal(0)
-                            player.bh.characters[index].skills[slot].variables[i] = player.bh.characters[index].skills[slot].variables[i].add(val)
-                        }
                         player.bh.characters[index].skills[slot].variables.target = target
                     }
                     bhEffectText(name, val, index, target, perc)
@@ -207,31 +227,99 @@ function bhAction(index, slot) {
                 let arr = calcTarget(index, target)
 
                 // Reset all other skill cooldowns
-                for (let recieve of arr) {
-                    if (recieve != 3) {
-                        if (slot != 0 && player.bh.characters[recieve].actions[0].id != "none") player.bh.characters[recieve].actions[0].cooldown = BHA[player.bh.characters[recieve].actions[0].id].cooldown
-                        if (slot != 1 && player.bh.characters[recieve].actions[1].id != "none") player.bh.characters[recieve].actions[1].cooldown = BHA[player.bh.characters[recieve].actions[1].id].cooldown
-                        if (slot != 2 && player.bh.characters[recieve].actions[2].id != "none") player.bh.characters[recieve].actions[2].cooldown = BHA[player.bh.characters[recieve].actions[2].id].cooldown
-                        if (slot != 3 && player.bh.characters[recieve].actions[3].id != "none") player.bh.characters[recieve].actions[3].cooldown = BHA[player.bh.characters[recieve].actions[3].id].cooldown
+                for (let receive of arr) {
+                    let avoid = 0
+                    if (receive == index) avoid = slot+1
+                    if (receive != 3) {
+                        if (avoid != 1 && player.bh.characters[receive].skills[0].id != "none") player.bh.characters[receive].skills[0].cooldown = BHA[player.bh.characters[receive].skills[0].id].cooldown
+                        if (avoid != 2 && player.bh.characters[receive].skills[1].id != "none") player.bh.characters[receive].skills[1].cooldown = BHA[player.bh.characters[receive].skills[1].id].cooldown
+                        if (avoid != 3 && player.bh.characters[receive].skills[2].id != "none") player.bh.characters[receive].skills[2].cooldown = BHA[player.bh.characters[receive].skills[2].id].cooldown
+                        if (avoid != 4 && player.bh.characters[receive].skills[3].id != "none") player.bh.characters[receive].skills[3].cooldown = BHA[player.bh.characters[receive].skills[3].id].cooldown
                     } else {
-                        if (slot != 0) player.bh.celestialite.actions[0].cooldown = BHC[player.bh.celestialite.id].actions[0].cooldown
-                        if (slot != 1) player.bh.celestialite.actions[1].cooldown = BHC[player.bh.celestialite.id].actions[1].cooldown
-                        if (slot != 2) player.bh.celestialite.actions[2].cooldown = BHC[player.bh.celestialite.id].actions[2].cooldown
-                        if (slot != 3) player.bh.celestialite.actions[3].cooldown = BHC[player.bh.celestialite.id].actions[3].cooldown
+                        if (avoid != 1) player.bh.celestialite.actions[0].cooldown = BHC[player.bh.celestialite.id].actions[0].cooldown
+                        if (avoid != 2) player.bh.celestialite.actions[1].cooldown = BHC[player.bh.celestialite.id].actions[1].cooldown
+                        if (avoid != 3) player.bh.celestialite.actions[2].cooldown = BHC[player.bh.celestialite.id].actions[2].cooldown
+                        if (avoid != 4) player.bh.celestialite.actions[3].cooldown = BHC[player.bh.celestialite.id].actions[3].cooldown
                     }
                     if (index == 3) {
-                        if (recieve == 3) {
+                        if (receive == 3) {
                             bhLog("<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " reset its skills.")
                         } else {
-                            bhLog("<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " reset " + BHP[player.bh.characters[recieve].id].name + "'s skills.")
+                            bhLog("<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " reset " + BHP[player.bh.characters[receive].id].name + "'s skills.")
                         }
                     } else {
-                        if (index == recieve) {
+                        if (index == receive) {
                             bhLog("<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " reset their skills.")
-                        } else if (recieve != 3) {
-                            bhLog("<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " reset " + BHP[player.bh.characters[recieve].id].name + "'s skills.")
+                        } else if (receive != 3) {
+                            bhLog("<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " reset " + BHP[player.bh.characters[receive].id].name + "'s skills.")
                         } else {
                             bhLog("<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " reset " + BHC[player.bh.celestialite.id].name + "'s skills.")
+                        }
+                    }
+                }
+                break;
+            case "cooldown":
+                let val = run(action.value, action)
+                let tar = calcTarget(index, target)
+
+                // Reduce cooldowns of target
+                for (let receive of tar) {
+                    let avoid = 0
+                    if (receive == index) avoid = slot+1
+                    if (receive != 3) {
+                        if (avoid != 1 && player.bh.characters[receive].skills[0].id != "none") player.bh.characters[receive].skills[0].cooldown = player.bh.characters[receive].skills[0].cooldown.add(val)
+                        if (avoid != 2 && player.bh.characters[receive].skills[1].id != "none") player.bh.characters[receive].skills[1].cooldown = player.bh.characters[receive].skills[1].cooldown.add(val)
+                        if (avoid != 3 && player.bh.characters[receive].skills[2].id != "none") player.bh.characters[receive].skills[2].cooldown = player.bh.characters[receive].skills[2].cooldown.add(val)
+                        if (avoid != 4 && player.bh.characters[receive].skills[3].id != "none") player.bh.characters[receive].skills[3].cooldown = player.bh.characters[receive].skills[3].cooldown.add(val)
+                    } else {
+                        if (avoid != 1) player.bh.celestialite.actions[0].cooldown = player.bh.celestialite.actions[0].cooldown.add(val)
+                        if (avoid != 2) player.bh.celestialite.actions[1].cooldown = player.bh.celestialite.actions[1].cooldown.add(val)
+                        if (avoid != 3) player.bh.celestialite.actions[2].cooldown = player.bh.celestialite.actions[2].cooldown.add(val)
+                        if (avoid != 4) player.bh.celestialite.actions[3].cooldown = player.bh.celestialite.actions[3].cooldown.add(val)
+                    }
+                    if (index == 3) {
+                        if (receive == 3) {
+                            bhLog("<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " reduced its cooldowns by " + formatTime(val) + ".")
+                        } else {
+                            bhLog("<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " reduced " + BHP[player.bh.characters[receive].id].name + "'s cooldowns by " + formatTime(val) + ".")
+                        }
+                    } else {
+                        if (index == receive) {
+                            bhLog("<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " reduced their cooldowns by " + formatTime(val) + ".")
+                        } else if (receive != 3) {
+                            bhLog("<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " reduced " + BHP[player.bh.characters[receive].id].name + "'s cooldowns by " + formatTime(val) + ".")
+                        } else {
+                            bhLog("<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " reduced " + BHC[player.bh.celestialite.id].name + "'s cooldowns by " + formatTime(val) + ".")
+                        }
+                    }
+                }
+                break;
+            case "shield":
+                let num = run(action.value, action)
+                let targ = calcTarget(index, target)
+                let str = "time"
+                if (num.neq(1)) str = "times"
+
+                // Add shield to target(s)
+                for (let receive of targ) {
+                    if (receive == 3) {
+                        player.bh.celestialite.shield = player.bh.celestialite.shield.add(num)
+                    } else {
+                        player.bh.characters[receive].shield = player.bh.characters[receive].shield.add(num)
+                    }
+                    if (index == 3) {
+                        if (receive == 3) {
+                            bhLog("<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " shielded itself " + formatWhole(num) + " " + str + ".")
+                        } else {
+                            bhLog("<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " shielded " + BHP[player.bh.characters[receive].id].name + " " + formatWhole(num) + " " + str + ".")
+                        }
+                    } else {
+                        if (index == receive) {
+                            bhLog("<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " shielded themself " + formatWhole(num) + " " + str + ".")
+                        } else if (receive != 3) {
+                            bhLog("<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " shielded " + BHP[player.bh.characters[receive].id].name + " " + formatWhole(num) + " " + str + ".")
+                        } else {
+                            bhLog("<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " shielded " + BHC[player.bh.celestialite.id].name + " " + formatWhole(num) + " " + str + ".")
                         }
                     }
                 }
@@ -240,29 +328,34 @@ function bhAction(index, slot) {
     }, delay)
 }
 
-function bhEffectText(type, val, index, target, percentage = false) {
-    let sign = val.gte(0) ? ["buffed", "+"] : ["nerfed", "-"]
-    let format = ""
-    if (percentage) {
-        format = format(val.sub(1).mul(100)) + "%."
+function bhEffectText(type, val, index, target, percentage = 0) {
+    let sign
+    let num = ""
+    if (percentage == 0) {
+        sign = Decimal.gte(val, 0) ? ["buffed", "+"] : ["nerfed", "-"]
+        num = format(new Decimal(val)) + "."
+    } else if (percentage == 1) {
+        sign = Decimal.gte(val, 1) ? ["buffed", "+"] : ["nerfed", "-"]
+        num = format(Decimal.sub(val, 1).mul(100)) + "%."
     } else {
-        format = format(val) + "."
+        sign = Decimal.gte(val, 0) ? ["buffed", "+"] : ["nerfed", "-"]
+        num = format(Decimal.mul(val, 100)) + "%."
     }
     let arr = calcTarget(index, target)
-    for (let recieve of arr) {
+    for (let receive of arr) {
         if (index == 3) {
-            if (recieve == 3) {
-                bhLog("<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " " + sign[0] + " its " + type + " by " + sign[1] + format)
+            if (receive == 3) {
+                bhLog("<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " " + sign[0] + " its " + type + " by " + sign[1] + num)
             } else {
-                bhLog("<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " " + sign[0] + " " + BHP[player.bh.characters[recieve].id] + "'s " + type + " by " + sign[1] + format)
+                bhLog("<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " " + sign[0] + " " + BHP[player.bh.characters[receive].id].name + "'s " + type + " by " + sign[1] + num)
             }
         } else {
-            if (index == recieve) {
-                bhLog("<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " " + sign[0] + " its " + type + " by " + sign[1] + format)
-            } else if (recieve != 3) {
-                bhLog("<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " " + sign[0] + " " + BHP[player.bh.characters[recieve].id] + "'s " + type + " by " + sign[1] + format)
+            if (index == receive) {
+                bhLog("<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " " + sign[0] + " its " + type + " by " + sign[1] + num)
+            } else if (receive != 3) {
+                bhLog("<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " " + sign[0] + " " + BHP[player.bh.characters[receive].id].name + "'s " + type + " by " + sign[1] + num)
             } else {
-                bhLog("<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " " + sign[0] + " " + BHC[player.bh.celestialite.id].name + "'s " + type + " by " + sign[1] + format)
+                bhLog("<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " " + sign[0] + " " + BHC[player.bh.celestialite.id].name + "'s " + type + " by " + sign[1] + num)
             }
         }
     }
@@ -271,84 +364,84 @@ function bhEffectText(type, val, index, target, percentage = false) {
 function bhAttack(damage, index, target, str = "", attr = false) {
     let arr = calcTarget(index, target)
     if (typeof target == "number") arr = [target]
-    for (let recieve of arr) {
-        if (recieve == 3 && player.bh.celestialite.id == "none") continue
+    for (let receive of arr) {
+        if (receive == 3 && player.bh.celestialite.id == "none") continue
         // =-- Target Attributes --=
         let attribute
-        if (recieve == 3) {
+        if (receive == 3) {
             attribute = player.bh.celestialite.attributes
         } else {
-            attribute = player.bh.characters[recieve].attributes
+            attribute = player.bh.characters[receive].attributes
         }
         if (attribute == undefined) attribute = {}
 
         if (attribute["rebound"] && !attr && target != "self") {
             let attStr = "<span style='color:cyan'>[REBOUND] </span>"
-            bhAttack(damage.mul(attribute["rebound"]), recieve, index, attStr, true)
+            bhAttack(damage.mul(attribute["rebound"]), receive, index, attStr, true)
         }
 
         // Shield and Defense Calc
-        if (recieve != 3) {
+        if (receive != 3) {
             // Shield Calc
-            if (player.bh.characters[recieve].shield.gt(0)) {
-                player.bh.characters[recieve].shield = player.bh.characters[recieve].shield.sub(1)
-                bhLog("<span style='color: " + BHP[player.bh.characters[recieve].id].color + "'>Shield blocked damage towards" + BHP[player.bh.characters[recieve].id].name + ".")
+            if (player.bh.characters[receive].shield.gt(0)) {
+                player.bh.characters[receive].shield = player.bh.characters[receive].shield.sub(1)
+                bhLog("<span style='color: " + BHP[player.bh.characters[receive].id].color + "'>Shield blocked damage towards " + BHP[player.bh.characters[receive].id].name + ".")
                 return
             }
             // Defense Calc
-            damage = damage.mul(Decimal.div(100, Decimal.add(100, player.bh.characters[recieve].defense)))
+            damage = damage.mul(Decimal.div(100, Decimal.add(100, player.bh.characters[receive].defense)))
         } else {
             // Shield Calc
             if (player.bh.celestialite.shield.gt(0)) {
                 player.bh.celestialite.shield = player.bh.celestialite.shield.sub(1)
-                bhLog("<span style='color: #8b0e7a'>Shield blocked damage towards" + BHC[player.bh.celestialite.id].name + ".")
+                bhLog("<span style='color: #8b0e7a'>Shield blocked damage towards " + BHC[player.bh.celestialite.id].name + ".")
                 return
             }
             // Defense Calc
             damage = damage.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.defense)))
         }
         if (index == 3) {
-            if (recieve == 3) {
+            if (receive == 3) {
                 player.bh.celestialite.health = player.bh.celestialite.health.sub(damage)
                 bhLog(str + "<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " attacks itself for " +format(damage) + " damage.")
             } else {
-                player.bh.characters[recieve].health = player.bh.characters[recieve].health.sub(damage)
-                bhLog(str + "<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " attacks " + BHP[player.bh.characters[recieve].id].name + " for " +format(damage) + " damage.")
+                player.bh.characters[receive].health = player.bh.characters[receive].health.sub(damage)
+                bhLog(str + "<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " attacks " + BHP[player.bh.characters[receive].id].name + " for " +format(damage) + " damage.")
             }
         } else {
-            if (index == recieve) {
-                player.bh.characters[recieve].health = player.bh.characters[recieve].health.sub(damage)
+            if (index == receive) {
+                player.bh.characters[receive].health = player.bh.characters[receive].health.sub(damage)
                 bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " attacks themself for " +format(damage) + " damage.")
-            } else if (recieve != 3) {
-                player.bh.characters[recieve].health = player.bh.characters[recieve].health.sub(damage)
-                bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " attacks " + BHP[player.bh.characters[recieve].id].name + " for " +format(damage) + " damage.")
+            } else if (receive != 3) {
+                player.bh.characters[receive].health = player.bh.characters[receive].health.sub(damage)
+                bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " attacks " + BHP[player.bh.characters[receive].id].name + " for " +format(damage) + " damage.")
             } else {
                 player.bh.celestialite.health = player.bh.celestialite.health.sub(damage)
                 bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " attacks " + BHC[player.bh.celestialite.id].name + " for " +format(damage) + " damage.")
             }
         }
-        if (recieve != 3 && player.bh.characters[recieve].health.lte(0)) bhLog("<span style='color: " + BHP[player.bh.characters[recieve].id].color + "'>" + BHP[player.bh.characters[recieve].id].name + " fainted!")
+        if (receive != 3 && player.bh.characters[receive].health.lte(0)) bhLog("<span style='color: " + BHP[player.bh.characters[receive].id].color + "'>" + BHP[player.bh.characters[receive].id].name + " fainted!")
     }
 }
 
 function bhHeal(heal, index, target, str = "") {
     let arr = calcTarget(index, target)
-    for (let recieve of arr) {
+    for (let receive of arr) {
         if (index == 3) {
-            if (recieve == 3) {
+            if (receive == 3) {
                 player.bh.celestialite.health = player.bh.celestialite.health.add(heal).min(player.bh.celestialite.maxHealth)
                 bhLog(str + "<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " healed itself for " +format(heal) + " health.")
             } else {
-                player.bh.characters[recieve].health = player.bh.characters[recieve].health.add(heal).min(player.bh.characters[recieve].maxHealth)
-                bhLog(str + "<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " healed " + BHP[player.bh.characters[recieve].id].name + " for " +format(heal) + " health.")
+                player.bh.characters[receive].health = player.bh.characters[receive].health.add(heal).min(player.bh.characters[receive].maxHealth)
+                bhLog(str + "<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " healed " + BHP[player.bh.characters[receive].id].name + " for " +format(heal) + " health.")
             }
         } else {
-            if (index == recieve) {
-                player.bh.characters[recieve].health = player.bh.characters[recieve].health.add(heal).min(player.bh.characters[recieve].maxHealth)
+            if (index == receive) {
+                player.bh.characters[receive].health = player.bh.characters[receive].health.add(heal).min(player.bh.characters[receive].maxHealth)
                 bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " healed themself for " +format(heal) + " health.")
-            } else if (recieve != 3) {
-                player.bh.characters[recieve].health = player.bh.characters[recieve].health.add(heal).min(player.bh.characters[recieve].maxHealth)
-                bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " healed " + BHP[player.bh.characters[recieve].id].name + " for " +format(heal) + " health.")
+            } else if (receive != 3) {
+                player.bh.characters[receive].health = player.bh.characters[receive].health.add(heal).min(player.bh.characters[receive].maxHealth)
+                bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " healed " + BHP[player.bh.characters[receive].id].name + " for " +format(heal) + " health.")
             } else {
                 player.bh.celestialite.health = player.bh.celestialite.health.add(heal).min(player.bh.celestialite.maxHealth)
                 bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " healed " + BHC[player.bh.celestialite.id].name + " for " +format(heal) + " health.")

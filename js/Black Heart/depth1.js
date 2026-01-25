@@ -574,9 +574,9 @@ BHC.lesserZeta = {
         let gain = {}
         let random = Math.random()
         if (random < 0.5) {
-            gain.gloomingUmbrite = Decimal.add(10, getRandomInt(5))
+            gain.gloomingUmbrite = Decimal.add(12, getRandomInt(7))
         } else if (random > 0.5 && random < 0.9) {
-            gain.dimUmbrite = Decimal.add(4, getRandomInt(2))
+            gain.dimUmbrite = Decimal.add(5, getRandomInt(3))
         } else {
             gain.darkEssence = Decimal.add(1, getRandomInt(1))
         }
@@ -610,7 +610,7 @@ BHC.lesserEta = {
         if (random < 0.4) {
             gain.gloomingUmbrite = Decimal.add(15, getRandomInt(10))
         } else if (random > 0.4 && random < 0.85) {
-            gain.dimUmbrite = Decimal.add(5, getRandomInt(3))
+            gain.dimUmbrite = Decimal.add(5, getRandomInt(4))
         } else {
             gain.darkEssence = Decimal.add(1, getRandomInt(2))
         }
@@ -642,11 +642,11 @@ BHC.lesserTheta = {
         let gain = {}
         let random = Math.random()
         if (random < 0.4) {
-            gain.gloomingUmbrite = Decimal.add(12, getRandomInt(8))
+            gain.gloomingUmbrite = Decimal.add(18, getRandomInt(12))
         } else if (random > 0.4 && random < 0.85) {
-            gain.dimUmbrite = Decimal.add(4, getRandomInt(3))
+            gain.dimUmbrite = Decimal.add(6, getRandomInt(4))
         } else {
-            gain.darkEssence = Decimal.add(1, getRandomInt(1))
+            gain.darkEssence = Decimal.add(2, getRandomInt(2))
         }
         return gain
     },
@@ -676,11 +676,11 @@ BHC.lesserIota = {
         let gain = {}
         let random = Math.random()
         if (random < 0.4) {
-            gain.gloomingUmbrite = Decimal.add(20, getRandomInt(12))
+            gain.gloomingUmbrite = Decimal.add(24, getRandomInt(16))
         } else if (random > 0.4 && random < 0.85) {
-            gain.dimUmbrite = Decimal.add(5, getRandomInt(4))
+            gain.dimUmbrite = Decimal.add(10, getRandomInt(5))
         } else {
-            gain.darkEssence = Decimal.add(1, getRandomInt(2))
+            gain.darkEssence = Decimal.add(2, getRandomInt(3))
         }
         return gain
     },
@@ -710,11 +710,11 @@ BHC.lesserKappa = {
         let gain = {}
         let random = Math.random()
         if (random < 0.4) {
-            gain.gloomingUmbrite = Decimal.add(25, getRandomInt(15))
+            gain.gloomingUmbrite = Decimal.add(35, getRandomInt(15))
         } else if (random > 0.4 && random < 0.85) {
-            gain.dimUmbrite = Decimal.add(6, getRandomInt(6))
+            gain.dimUmbrite = Decimal.add(15, getRandomInt(8))
         } else {
-            gain.darkEssence = Decimal.add(2, getRandomInt(2))
+            gain.darkEssence = Decimal.add(3, getRandomInt(3))
         }
         return gain
     },
@@ -753,7 +753,7 @@ BHC.lesserEnas = {
         let gain = {}
         gain.gloomingUmbrite = new Decimal(30)
         gain.dimUmbrite = new Decimal(15)
-        gain.darkEssence = new Decimal(5)
+        gain.darkEssence = new Decimal(3)
         return gain
     },
 }
@@ -787,9 +787,9 @@ BHC.lesserPente = {
     },
     reward() {
         let gain = {}
-        gain.gloomingUmbrite = new Decimal(50)
-        gain.dimUmbrite = new Decimal(25)
-        gain.darkEssence = new Decimal(8)
+        gain.gloomingUmbrite = new Decimal(60)
+        gain.dimUmbrite = new Decimal(30)
+        gain.darkEssence = new Decimal(6)
         return gain
     },
 }
@@ -824,9 +824,9 @@ BHC.lesserDeka = {
     },
     reward() {
         let gain = {}
-        gain.gloomingUmbrite = new Decimal(70)
-        gain.dimUmbrite = new Decimal(35)
-        gain.darkEssence = new Decimal(12)
+        gain.gloomingUmbrite = new Decimal(100)
+        gain.dimUmbrite = new Decimal(50)
+        gain.darkEssence = new Decimal(10)
         return gain
     },
 }
@@ -862,8 +862,8 @@ BHC.lesserHekaton = {
     },
     reward() {
         let gain = {}
-        gain.gloomingUmbrite = new Decimal(100)
-        gain.dimUmbrite = new Decimal(50)
+        gain.gloomingUmbrite = new Decimal(150)
+        gain.dimUmbrite = new Decimal(75)
         gain.darkEssence = new Decimal(15)
         return gain
     },
@@ -907,9 +907,9 @@ BHC.lesserKhilioi = {
     },
     reward() {
         let gain = {}
-        gain.gloomingUmbrite = new Decimal(150)
-        gain.dimUmbrite = new Decimal(75)
-        gain.darkEssence = new Decimal(20)
+        gain.gloomingUmbrite = new Decimal(250)
+        gain.dimUmbrite = new Decimal(125)
+        gain.darkEssence = new Decimal(30)
         return gain
     },
 }
@@ -952,9 +952,9 @@ BHC.lesserMyrioi = {
     },
     reward() {
         let gain = {}
-        gain.gloomingUmbrite = new Decimal(250)
-        gain.dimUmbrite = new Decimal(125)
-        gain.darkEssence = new Decimal(30)
+        gain.gloomingUmbrite = new Decimal(500)
+        gain.dimUmbrite = new Decimal(250)
+        gain.darkEssence = new Decimal(60)
         return gain
     },
 }

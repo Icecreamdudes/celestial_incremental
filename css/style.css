@@ -1811,3 +1811,8 @@ button > * {
 .bhSkill.selected {
 	border-color: rgba(255,255,255,0.25);
 }
+
+.bhSkill.outline {
+	outline: 2px solid white;
+	outline-offset: -2px;
+}

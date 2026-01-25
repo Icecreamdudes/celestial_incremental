@@ -424,30 +424,34 @@ addLayer("bh", {
         // Saved Skill Stats
         skillData: {
             // GENERAL
-            "general_slap": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)},
-            "general_bandage": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)},
+            "general_slap": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "general_bandage": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
 
             // KRES
-            "kres_chop": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)},
-            "kres_bigAttack": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)},
-            "kres_battleCry": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)},
-            "kres_berserker": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)},
-            "kres_decapitate": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)},
+            "kres_chop": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "kres_bigAttack": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "kres_battleCry": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "kres_berserker": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "kres_decapitate": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
 
             // NAV
-            "nav_magicMissle": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)},
-            "nav_healSpell": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)},
-            "nav_reboundingAura": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)},
+            "nav_magicMissle": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "nav_healSpell": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "nav_reboundingAura": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
 
             // SEL
-            "sel_singleShot": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)},
-            "sel_turret": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)},
+            "sel_singleShot": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "sel_turret": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "sel_energyBoost": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
 
             // ECLIPSE
-            "eclipse_drain": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)},
+            "eclipse_drain": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "eclipse_motivation": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "eclipse_lightBarrier": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "eclipse_syzygy": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
 
             // GEROA
-            "geroa_orbitalCannon": {selected: 0, level: new Decimal(0), maxLevel: new Decimal(0)}
+            "geroa_orbitalCannon": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)}
         },
 
         // General Variables
@@ -547,7 +551,9 @@ addLayer("bh", {
                 luckMult: new Decimal(1),
                 luckAdd: new Decimal(0),
                 attributes: [],
-            }
+            },
+            timeAdd: new Decimal(0),
+            timeMult: new Decimal(1),
         }
 
         // Stage Code
@@ -604,10 +610,18 @@ addLayer("bh", {
                                             bhTemp[target[t]][k] = Object.assign({}, bhTemp[target[t]][k], val)
                                             continue
                                         }
-                                        if (k.includes("Mult")) {
-                                            bhTemp[target[t]][k] = bhTemp[target[t]][k].mul(val)
-                                        } else {
+                                        if (k.includes("time")) {
+                                            if (k == "timeAdd") {
+                                                bhTemp[k] = bhTemp[k].add(val)
+                                            } else {
+                                                bhTemp[k] = bhTemp[k].mul(val)
+                                            }
+                                            continue
+                                        }
+                                        if (k.includes("Add")) {
                                             bhTemp[target[t]][k] = bhTemp[target[t]][k].add(val)
+                                        } else {
+                                            bhTemp[target[t]][k] = bhTemp[target[t]][k].mul(val)
                                         }
                                     }
                                 }
@@ -620,15 +634,23 @@ addLayer("bh", {
                         for (let k in variables) {
                             if (k == "target") continue
                             for (let t = 0; t < target.length; t++) {
-                                let val = run(variables[k], properties)
+                                let val = run(variables[k], variables)
                                 if (k == "attributes") {
                                     bhTemp[target[t]][k] = Object.assign({}, bhTemp[target[t]][k], val)
                                     continue
                                 }
-                                if (k.includes("Mult")) {
-                                    bhTemp[target[t]][k] = bhTemp[target[t]][k].mul(val)
-                                } else {
+                                if (k.includes("time")) {
+                                    if (k == "timeAdd") {
+                                        bhTemp[k] = bhTemp[k].add(val)
+                                    } else {
+                                        bhTemp[k] = bhTemp[k].mul(val)
+                                    }
+                                    continue
+                                }
+                                if (k.includes("Add")) {
                                     bhTemp[target[t]][k] = bhTemp[target[t]][k].add(val)
+                                } else {
+                                    bhTemp[target[t]][k] = bhTemp[target[t]][k].mul(val)
                                 }
                             }
                         }                        
@@ -692,10 +714,18 @@ addLayer("bh", {
                                         bhTemp[target[t]][k] = Object.assign({}, bhTemp[target[t]][k], val)
                                         continue
                                     }
-                                    if (k.includes("Mult")) {
-                                        bhTemp[target[t]][k] = bhTemp[target[t]][k].mul(val)
-                                    } else {
+                                    if (k.includes("time")) {
+                                        if (k == "timeAdd") {
+                                            bhTemp[k] = bhTemp[k].add(val)
+                                        } else {
+                                            bhTemp[k] = bhTemp[k].mul(val)
+                                        }
+                                        continue
+                                    }
+                                    if (k.includes("Add")) {
                                         bhTemp[target[t]][k] = bhTemp[target[t]][k].add(val)
+                                    } else {
+                                        bhTemp[target[t]][k] = bhTemp[target[t]][k].mul(val)
                                     }
                                 }
                             }
@@ -708,15 +738,23 @@ addLayer("bh", {
                     for (let k in variables) {
                         if (k == "target") continue
                         for (let t = 0; t < target.length; t++) {
-                            let val = run(variables[k], properties)
+                            let val = run(variables[k], variables)
                             if (k == "attributes") {
                                 bhTemp[target[t]][k] = Object.assign({}, bhTemp[target[t]][k], val)
                                 continue
                             }
-                            if (k.includes("Mult")) {
-                                bhTemp[target[t]][k] = bhTemp[target[t]][k].mul(val)
-                            } else {
+                            if (k.includes("time")) {
+                                if (k == "timeAdd") {
+                                    bhTemp[k] = bhTemp[k].add(val)
+                                } else {
+                                    bhTemp[k] = bhTemp[k].mul(val)
+                                }
+                                continue
+                            }
+                            if (k.includes("Add")) {
                                 bhTemp[target[t]][k] = bhTemp[target[t]][k].add(val)
+                            } else {
+                                bhTemp[target[t]][k] = bhTemp[target[t]][k].mul(val)
                             }
                         }
                     }
@@ -784,6 +822,10 @@ addLayer("bh", {
         player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(player.depth2.milestoneEffect)
         player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(player.depth3.milestoneEffect)
 
+        player.bh.timeSpeed = new Decimal(1)
+        player.bh.timeSpeed = player.bh.timeSpeed.add(bhTemp.timeAdd)
+        player.bh.timeSpeed = player.bh.timeSpeed.mul(bhTemp.timeMult)
+
         let healthAdd = new Decimal(0)
         healthAdd = healthAdd.add(player.bh.skillData["general_bandage"].maxLevel)
         healthAdd = healthAdd.add(player.bh.skillData["kres_bigAttack"].maxLevel)
@@ -794,6 +836,8 @@ addLayer("bh", {
         damageAdd = damageAdd.add(player.bh.skillData["kres_chop"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["kres_battleCry"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["nav_magicMissle"].maxLevel.div(5))
+        damageAdd = damageAdd.add(player.bh.skillData["eclipse_drain"].maxLevel.div(5))
+        damageAdd = damageAdd.add(player.bh.skillData["eclipse_motivation"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["geroa_orbitalCannon"].maxLevel.div(5))
 
         let regenAdd = new Decimal(0)
@@ -802,9 +846,12 @@ addLayer("bh", {
         let agilityAdd = new Decimal(0)
         agilityAdd = agilityAdd.add(player.bh.skillData["sel_singleShot"].maxLevel.div(2))
         agilityAdd = agilityAdd.add(player.bh.skillData["sel_turret"].maxLevel.div(2))
+        agilityAdd = agilityAdd.add(player.bh.skillData["sel_energyBoost"].maxLevel.div(2))
+        agilityAdd = agilityAdd.add(player.bh.skillData["eclipse_syzygy"].maxLevel.div(2))
 
         let defenseAdd = new Decimal(0)
         defenseAdd = defenseAdd.add(player.bh.skillData["nav_reboundingAura"].maxLevel.div(2))
+        defenseAdd = defenseAdd.add(player.bh.skillData["eclipse_lightBarrier"].maxLevel.div(2))
 
         let luckAdd = new Decimal(0)
         luckAdd = luckAdd.add(player.bh.skillData["kres_decapitate"].maxLevel.div(2))
@@ -866,6 +913,7 @@ addLayer("bh", {
 
             for (let j = 0; j < 4; j++) {
                 player.bh.characters[i].skills[j].cooldownMax = BHA[player.bh.characters[i].skills[j].id].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.characters[i].agility)))
+                if (BHA[player.bh.characters[i].skills[j].id].cooldownCap) player.bh.characters[i].skills[j].cooldownMax = player.bh.characters[i].skills[j].cooldownMax.min(BHA[player.bh.characters[i].skills[j].id].cooldownCap)
             }
         }
 
@@ -918,13 +966,6 @@ addLayer("bh", {
                 player.ma.inBlackHeart = false
 
                 player.subtabs["bh"]["stuff"] = "stages"
-
-                pauseUniverse("U1", "unpause", true)
-                pauseUniverse("UA", "unpause", true)
-                pauseUniverse("U2", "unpause", true)
-                pauseUniverse("A1", "unpause", true)
-                pauseUniverse("A2", "unpause", true)
-                pauseUniverse("CB", "unpause", true)
             },
             style() {
                 let look = {width: "200px", minHeight: "75px", color: "white", backgroundColor: "black", border: "3px solid #8a0e79", borderRadius: "20px", margin: "-1.5px"}
@@ -1970,43 +2011,60 @@ addLayer("bh", {
             },
         },
         "Skill-Equip": {
-            title() {return player.bh.skillData[player.bh.skillSelection].selected > 0 ? "Unequip Skill" : "Equip Skill"},
+            title() {return player.bh.skillData[player.bh.skillSelection].selected[0] != "none" ? "Unequip Skill" : "Equip Skill"},
             canClick() {
-                if (player.bh.characters[Math.floor(player.bh.inputSkillSelection/4)].id == "none") return false
-                if (player.bh.skillData[player.bh.skillSelection].selected > 0) return true
-                if (BHA[player.bh.skillSelection].effect == "passive") {
-                    return player.bh.maxSkillPoints.sub(player.bh.characterData[player.bh.characters[Math.floor(player.bh.inputSkillSelection/4)].id].usedSP).gte(BHA[player.bh.skillSelection].spCost.add(player.bh.skillData[player.bh.skillSelection].level))
-                } else {
-                    return player.bh.maxSkillPoints.sub(player.bh.characterData[player.bh.characters[Math.floor(player.bh.inputSkillSelection/4)].id].usedSP).gte(BHA[player.bh.skillSelection].spCost.add(player.bh.skillData[player.bh.skillSelection].level.mul(2)))
+                let skillsel = player.bh.skillData[player.bh.skillSelection]
+                let inputchar = player.bh.characters[Math.floor(player.bh.inputSkillSelection/4)].id
+                let oldSkillName = player.bh.characters[Math.floor(player.bh.inputSkillSelection/4)].skills[player.bh.inputSkillSelection%4].id
+                if (inputchar == "none") return false // Set false if input character is none
+                if (skillsel.selected[0] != "none") return true // Set true if skill is already equipped
+                if (BHA[player.bh.skillSelection].char != "general" && BHA[player.bh.skillSelection].char != inputchar) return false // Set false if skill isn't equippable by character
+                let baseCost = BHA[player.bh.skillSelection].spCost.add(skillsel.level)
+                if (BHA[player.bh.skillSelection].effect != "passive") baseCost = baseCost.add(skillsel.level)
+                if (oldSkillName != "none") { // If there is already a skill equipped, subtract its cost from the current skills cost
+                    let oldCost = BHA[oldSkillName].spCost.add(player.bh.skillData[oldSkillName].level)
+                    if (BHA[oldSkillName].effect != "passive") oldCost = oldCost.add(player.bh.skillData[oldSkillName].level)
+                    baseCost = baseCost.sub(oldCost)
                 }
+                return player.bh.maxSkillPoints.sub(player.bh.characterData[inputchar].usedSP).gte(baseCost) // Compare skill cost to SP left, and if you have enough, return true
             },
             unlocked: true,
             onClick() {
                 let spCost = new Decimal(0)
                 BHA[player.bh.skillSelection].effect == "passive" ? spCost = BHA[player.bh.skillSelection].spCost.add(player.bh.skillData[player.bh.skillSelection].level) : spCost = BHA[player.bh.skillSelection].spCost.add(player.bh.skillData[player.bh.skillSelection].level.mul(2))
-                let currChar = Math.floor((player.bh.skillData[player.bh.skillSelection].selected-1)/4)
-                let currSkill = (player.bh.skillData[player.bh.skillSelection].selected-1)%4
+                let currChar = player.bh.skillData[player.bh.skillSelection].selected[0]
+                let currSkill = player.bh.skillData[player.bh.skillSelection].selected[1]
                 let pastChar = Math.floor(player.bh.inputSkillSelection/4)
                 let pastSkill = player.bh.inputSkillSelection%4
-                if (player.bh.skillData[player.bh.skillSelection].selected > 0) {
-                    player.bh.skillData[player.bh.skillSelection].selected = 0
-                    player.bh.characters[currChar].skills[currSkill].id = "none"
-                    player.bh.characterData[player.bh.characters[currChar].id].usedSP = player.bh.characterData[player.bh.characters[currChar].id].usedSP.sub(spCost)
-                    player.bh.characterData[player.bh.characters[currChar].id].skills[currSkill] = "none"
-                } else {
-                    if (player.bh.characters[pastChar].skills[pastSkill].id != "none") {
-
-                    } else {
-                        player.bh.skillData[player.bh.skillSelection].selected = player.bh.inputSkillSelection+1
-                        player.bh.characters[pastChar].skills[pastSkill].id = player.bh.skillSelection
-                        player.bh.characterData[player.bh.characters[pastChar].id].usedSP = player.bh.characterData[player.bh.characters[pastChar].id].usedSP.add(spCost)
-                        player.bh.characterData[player.bh.characters[pastChar].id].skills[pastSkill] = player.bh.skillSelection
+                if (player.bh.skillData[player.bh.skillSelection].selected[0] != "none") { // If skill is selected
+                    player.bh.skillData[player.bh.skillSelection].selected = ["none", 0] // Unselect skill
+                    for (let i = 0; i < 3; i++) { // If character is currently equipped, unequip the skill from it
+                        if (player.bh.characters[i].id == currChar) {
+                            for (let j = 0; j < 4; j++) {
+                                if (player.bh.characters[i].skills[j].id == player.bh.skillSelection) player.bh.characters[i].skills[j].id = "none"
+                            }
+                        }
                     }
+                    player.bh.characterData[currChar].usedSP = player.bh.characterData[currChar].usedSP.sub(spCost) // Give back SP from that equipped skill
+                    player.bh.characterData[currChar].skills[currSkill] = "none" // Unequip skill from stored skill data
+                } else {
+                    if (player.bh.characters[pastChar].skills[pastSkill].id != "none") { // If there is an old skill, remove the old one
+                        let pastSkillName = player.bh.characters[pastChar].skills[pastSkill].id
+                        let pastSkillCost
+                        BHA[pastSkillName].effect == "passive" ? pastSkillCost = BHA[pastSkillName].spCost.add(player.bh.skillData[pastSkillName].level) : pastSkillCost = BHA[pastSkillName].spCost.add(player.bh.skillData[pastSkillName].level.mul(2))
+                        player.bh.skillData[pastSkillName].selected = ["none", 0] // Unselect old skill
+                        player.bh.characterData[player.bh.characters[pastChar].id].usedSP = player.bh.characterData[player.bh.characters[pastChar].id].usedSP.sub(pastSkillCost) // Give back SP from old skill
+                        player.bh.characterData[player.bh.characters[pastChar].id].skills[pastSkill] = "none" // Unequip old skill from stored character data
+                    }
+                    player.bh.skillData[player.bh.skillSelection].selected = [player.bh.characters[pastChar].id, pastSkill] // Equip new skill
+                    player.bh.characters[pastChar].skills[pastSkill].id = player.bh.skillSelection // Equip new skill to character
+                    player.bh.characterData[player.bh.characters[pastChar].id].usedSP = player.bh.characterData[player.bh.characters[pastChar].id].usedSP.add(spCost) // Subtract SP cost for that character
+                    player.bh.characterData[player.bh.characters[pastChar].id].skills[pastSkill] = player.bh.skillSelection // Equip skill to character data
                 }
             },
             style() {
                 let look = {width: "110px", minHeight: "40px", color: "var(--textColor)", fontSize: "9px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0"}
-                player.bh.skillData[player.bh.skillSelection].selected > 0 ? look.backgroundColor = "var(--miscButton)" : this.canClick() ? look.backgroundColor = "var(--miscButtonHover)" : look.backgroundColor = "var(--miscButtonDisable)"
+                player.bh.skillData[player.bh.skillSelection].selected[0] != "none" ? look.backgroundColor = "var(--miscButton)" : this.canClick() ? look.backgroundColor = "var(--miscButtonHover)" : look.backgroundColor = "var(--miscButtonDisable)"
                 return look
             },
         },
@@ -2032,8 +2090,8 @@ addLayer("bh", {
             title: "Increase Level",
             canClick() {
                 if (player.bh.skillData[player.bh.skillSelection].level.gte(player.bh.skillData[player.bh.skillSelection].maxLevel)) return false
-                if (player.bh.skillData[player.bh.skillSelection].selected > 0) {
-                    let currChar = player.bh.characters[Math.floor((player.bh.skillData[player.bh.skillSelection].selected-1)/4)].id
+                if (player.bh.skillData[player.bh.skillSelection].selected[0] != "none") {
+                    let currChar = player.bh.skillData[player.bh.skillSelection].selected[0]
                     if (BHA[player.bh.skillSelection].effect == "passive") {
                         return player.bh.maxSkillPoints.sub(player.bh.characterData[currChar].usedSP).gte(1)
                     } else {
@@ -2045,8 +2103,8 @@ addLayer("bh", {
             unlocked: true,
             onClick() {
                 player.bh.skillData[player.bh.skillSelection].level = player.bh.skillData[player.bh.skillSelection].level.add(1)
-                if (player.bh.skillData[player.bh.skillSelection].selected > 0) {
-                    let currChar = player.bh.characters[Math.floor((player.bh.skillData[player.bh.skillSelection].selected-1)/4)].id
+                if (player.bh.skillData[player.bh.skillSelection].selected[0] != "none") {
+                    let currChar = player.bh.skillData[player.bh.skillSelection].selected[0]
                     if (BHA[player.bh.skillSelection].effect == "passive") {
                         player.bh.characterData[currChar].usedSP = player.bh.characterData[currChar].usedSP.add(1)
                     } else {
@@ -2069,8 +2127,8 @@ addLayer("bh", {
             unlocked: true,
             onClick() {
                 player.bh.skillData[player.bh.skillSelection].level = player.bh.skillData[player.bh.skillSelection].level.sub(1)
-                if (player.bh.skillData[player.bh.skillSelection].selected > 0) {
-                    let currChar = player.bh.characters[Math.floor((player.bh.skillData[player.bh.skillSelection].selected-1)/4)].id
+                if (player.bh.skillData[player.bh.skillSelection].selected[0] != "none") {
+                    let currChar = player.bh.skillData[player.bh.skillSelection].selected[0]
                     if (BHA[player.bh.skillSelection].effect == "passive") {
                         player.bh.characterData[currChar].usedSP = player.bh.characterData[currChar].usedSP.sub(1)
                     } else {
@@ -2105,6 +2163,7 @@ addLayer("bh", {
             display() {
                 if (player.bh.celestialite.id == "none") return "<h5>" + formatTime(player.bh.respawnTimer) + "/" + formatTime(player.bh.respawnMax)
                 let str = "<h5>" + format(player.bh.celestialite.health) + "/" + format(player.bh.celestialite.maxHealth) + " HP"
+                if (player.bh.celestialite.shield.gt(0)) str = str + " [⛊" + formatWhole(player.bh.celestialite.shield) + "]"
                 if (player.bh.celestialite.stun.gt(0)) str = str + "<br>[Stunned for " + formatTime(player.bh.celestialite.stun) + "]"
                 return str
             },
@@ -2221,6 +2280,7 @@ addLayer("bh", {
                 if (player.bh.characters[0].id == "none") return ""
                 if (player.bh.characters[0].health.lte(0)) return BHP[player.bh.characters[0].id].name + " is dead"
                 let str = "<h5>" + formatSimple(player.bh.characters[0].health) + "/" + formatSimple(player.bh.characters[0].maxHealth) + " HP"
+                if (player.bh.characters[0].shield.gt(0)) str = str + " [⛊" + formatWhole(player.bh.characters[0].shield) + "]"
                 if (player.bh.characters[0].stun.gt(0)) str = str + "<br>[Stunned for " + formatTime(player.bh.characters[0].stun) + "]"
                 return str
             },
@@ -2421,6 +2481,7 @@ addLayer("bh", {
                 if (player.bh.characters[1].id == "none") return ""
                 if (player.bh.characters[1].health.lte(0)) return BHP[player.bh.characters[1].id].name + " is dead"
                 let str = "<h5>" + formatSimple(player.bh.characters[1].health) + "/" + formatSimple(player.bh.characters[1].maxHealth) + " HP"
+                if (player.bh.characters[1].shield.gt(0)) str = str + " [⛊" + formatWhole(player.bh.characters[1].shield) + "]"
                 if (player.bh.characters[1].stun.gt(0)) str = str + "<br>[Stunned for " + formatTime(player.bh.characters[1].stun) + "]"
                 return str
             },
@@ -2621,6 +2682,7 @@ addLayer("bh", {
                 if (player.bh.characters[2].id == "none") return ""
                 if (player.bh.characters[2].health.lte(0)) return BHP[player.bh.characters[2].id].name + " is dead"
                 let str = "<h5>" + formatSimple(player.bh.characters[2].health) + "/" + formatSimple(player.bh.characters[2].maxHealth) + " HP"
+                if (player.bh.characters[2].shield.gt(0)) str = str + " [⛊" + formatWhole(player.bh.characters[2].shield) + "]"
                 if (player.bh.characters[2].stun.gt(0)) str = str + "<br>[Stunned for " + formatTime(player.bh.characters[2].stun) + "]"
                 return str
             },
@@ -3256,10 +3318,6 @@ addLayer("bh", {
                                             ["raw-html", () => {return player.bh.characters[0].attributes.air ? "≋" : ""}, {color: "#ccc", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
                                             ["raw-html", () => {return player.bh.characters[0].attributes.air ? "<div class='bottomTooltip' style='margin-top:0px'>Air<hr>Has resistance to<br>melee attacks.</div>" : ""}],
                                         ]],
-                                        /*["tooltip-row", [
-                                            ["raw-html", () => {return player.ma.shieldCelestialite ? "⛊" : ""}, {color: "#5c5c5c", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
-                                            ["raw-html", () => {return player.ma.shieldCelestialite ? "<div class='bottomTooltip' style='margin-top:0px'>Shield<hr>Starts with a shield<br>that is immune to<br>ranged and magic<br>attacks.</div>" : ""}],
-                                        ]],*/
                                         ["tooltip-row", [
                                             ["raw-html", () => {return player.bh.characters[0].attributes.berserk ? "✹" : ""}, {color: "#ff6666", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
                                             ["raw-html", () => {return player.bh.characters[0].attributes.berserk ? "<div class='bottomTooltip' style='margin-top:0px'>Berserk<hr>Actions always do<br>self damage.</div>" : ""}],
@@ -3290,10 +3348,6 @@ addLayer("bh", {
                                     ["raw-html", () => {return player.bh.celestialite.attributes.air ? "≋" : ""}, {color: "#ccc", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
                                     ["raw-html", () => {return player.bh.celestialite.attributes.air ? "<div class='bottomTooltip' style='margin-top:0px'>Air<hr>Has resistance to<br>melee attacks.</div>" : ""}],
                                 ]],
-                                /*["tooltip-row", [
-                                    ["raw-html", () => {return player.ma.shieldCelestialite ? "⛊" : ""}, {color: "#5c5c5c", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
-                                    ["raw-html", () => {return player.ma.shieldCelestialite ? "<div class='bottomTooltip' style='margin-top:0px'>Shield<hr>Starts with a shield<br>that is immune to<br>ranged and magic<br>attacks.</div>" : ""}],
-                                ]],*/
                                 ["tooltip-row", [
                                     ["raw-html", () => {return player.bh.celestialite.attributes.berserk ? "✹" : ""}, {color: "#ff6666", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
                                     ["raw-html", () => {return player.bh.celestialite.attributes.berserk ? "<div class='bottomTooltip' style='margin-top:0px'>Berserk<hr>Actions always do<br>self damage.</div>" : ""}],

@@ -34,20 +34,26 @@ addLayer("depth3", {
     }},
     automate() {},
     nodeStyle() {
-        if (!player.depth3.unlocked) return {
-            background: "radial-gradient(#220201, #220119)",
-            backgroundOrigin: "border-box",
-            borderColor: "#2d0823",
-            color: "#35102c",
-            textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
+        let str = {}
+        if (!player.depth3.unlocked) {
+            str = {
+                background: "radial-gradient(#220201, #220119)",
+                backgroundOrigin: "border-box",
+                borderColor: "#2d0823",
+                color: "#35102c",
+                textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
+            }
+        } else {
+            str = {
+                background: "radial-gradient(#720804, #720455)",
+                backgroundOrigin: "border-box",
+                borderColor: "#961d76",
+                color: "#b33793",
+                textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
+            }
         }
-        return {
-            background: "radial-gradient(#720804, #720455)",
-            backgroundOrigin: "border-box",
-            borderColor: "#961d76",
-            color: "#b33793",
-            textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
-        };
+        if (player.subtabs["bh"]["stages"] == "depth3") str.outline = "3px solid #999"
+        return str
     },
     tooltip: "Depth 3",
     tooltipLocked: "Reach 25 combo in depth 2 to unlock.",

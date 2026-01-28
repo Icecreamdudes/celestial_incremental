@@ -195,15 +195,13 @@ addLayer("ba", {
                 }
             }
             //celestialite deaths
-            for (let i = 0; i < player.ba.celestialiteIDs.length; i++)
-            {
+            for (let i = 0; i < Math.max(player.ba.celestialiteIDs.length, 1); i++) {
                 if (player.ba.celestialiteHealths[i].lte(0) && player.ba.celestialiteIDs.length >= 1)
                 {
                     layers.ba.celestialiteDeath(i)
                     if (player.ba.drainCelestialite >= player.ba.celestialiteIDs.length) player.ba.drainCelestialite = -1
                 }
-                if (player.ba.celestialiteIDs[i] == 0)
-                {
+                if (player.ba.celestialiteIDs[i] == 0 || player.ba.celestialiteIDs[i] == undefined) {
                     layers.ba.selectCelestialites();
                     player.ba.wave = player.ba.wave.add(1)
                     player.ba.round = new Decimal(1)
@@ -225,19 +223,17 @@ addLayer("ba", {
                     player.ba.cookieThorns = false
                     player.ba.turret = false
 
-                                for (let i = 0; i < player.ba.petAbilitiesAvailable.length; i++) {
-                for (let j = 0; j < player.ba.petAbilitiesAvailable[i].length; j++) {
-                    if (Array.isArray(player.ba.petAbilitiesAvailable[i][j])) {
-                        for (let k = 0; k < player.ba.petAbilitiesAvailable[i][j].length; k++) {
-                            player.ba.petAbilitiesAvailable[i][j][k] = true;
+                    for (let i = 0; i < player.ba.petAbilitiesAvailable.length; i++) {
+                        for (let j = 0; j < player.ba.petAbilitiesAvailable[i].length; j++) {
+                            if (Array.isArray(player.ba.petAbilitiesAvailable[i][j])) {
+                                for (let k = 0; k < player.ba.petAbilitiesAvailable[i][j].length; k++) {
+                                    player.ba.petAbilitiesAvailable[i][j][k] = true;
+                                }
+                            } else {
+                                player.ba.petAbilitiesAvailable[i][j] = true;
                             }
-                        } 
-                    else {
-                    player.ba.petAbilitiesAvailable[i][j] = true;
-                }
-                }
-              
-            }
+                        }
+                    }
                 }
             }
             //make all timer stuff here
@@ -245,9 +241,10 @@ addLayer("ba", {
             if (player.ba.drainCelestialite >= 0) {
                 let damage = new Decimal(0)
                 if (player.ba.petDamages[player.ba.eclipseID]) damage = Decimal.mul(player.ba.petDamages[player.ba.eclipseID], 0.01)
-                player.ba.celestialiteHealths[player.ba.drainCelestialite] = player.ba.celestialiteHealths[player.ba.drainCelestialite].sub(damage.mul(delta))
+                if (player.ba.celestialiteHealths[player.ba.drainCelestialite]) player.ba.celestialiteHealths[player.ba.drainCelestialite] = player.ba.celestialiteHealths[player.ba.drainCelestialite].sub(damage.mul(delta))
             }
         }
+        if (player.ba.drainCelestialite >= player.ba.celestialiteIDs.length) player.ba.drainCelestialite = -1
 
 
         player.ba.attackPowerMax = new Decimal(25)

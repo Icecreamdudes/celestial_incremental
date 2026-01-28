@@ -154,7 +154,7 @@
 
         // DICE POINT EFFECT
         if (player.d.dicePoints.gte(0)) {
-            player.d.dicePointsEffect = player.d.dicePoints.add(1).log(10).mul(0.1).add(1)
+            player.d.dicePointsEffect = player.d.dicePoints.add(1).log(10).mul(0.1).add(1).max(1)
         } else {
             player.d.dicePointsEffect = new Decimal(1)
         }

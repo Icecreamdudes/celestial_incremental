@@ -200,7 +200,7 @@ addLayer("ba", {
                 if (player.ba.celestialiteHealths[i].lte(0) && player.ba.celestialiteIDs.length >= 1)
                 {
                     layers.ba.celestialiteDeath(i)
-                    if (i == player.ba.drainCelestialite) player.ba.drainCelestialite = -1
+                    if (player.ba.drainCelestialite >= player.ba.celestialiteIDs.length) player.ba.drainCelestialite = -1
                 }
                 if (player.ba.celestialiteIDs[i] == 0)
                 {
@@ -806,7 +806,7 @@ celestialiteDeath(index){
 
     if (player.ba.celestialiteIndex.add(1).eq(player.ba.celestialiteIDs.length)) {
         player.ba.celestialiteIndex = player.ba.celestialiteIndex.sub(1)
-        if (player.ba.celestialiteIndex < 0) player.ba.celestialiteIndex = 0
+        if (player.ba.celestialiteIndex < 0) player.ba.celestialiteIndex = new Decimal(0)
     }
     logPrintBattle("<span style='color: #625fffff;'>" + player.ba.celestialiteNames[player.ba.celestialiteIDs[index]] + " is dead!" ) 
 
@@ -1039,12 +1039,12 @@ celestialiteDeath(index){
             unlocked() { return true },
             onClick() {
                 player.ba.celestialiteIndex = player.ba.celestialiteIndex.sub(1)
-                if (player.ba.celestialiteIndex < 0) player.ba.celestialiteIndex = 0
+                if (player.ba.celestialiteIndex < 0) player.ba.celestialiteIndex = new Decimal(0)
             },
             style: { width: '75px', "min-height": '75px', 'color': "black",},
         },
         7: {
-            title() { return "<img src='" + player.ba.celestialiteImages[player.ba.celestialiteIDs[player.ba.celestialiteIndex]] + "'style='width:calc(115%);height:calc(115%);margin:-20%'></img>" },
+            title() { return "<img src='" + player.ba.celestialiteImages[player.ba.celestialiteIDs[player.ba.celestialiteIndex.toNumber()]] + "'style='width:calc(115%);height:calc(115%);margin:-20%'></img>" },
             canClick() { return false },
             unlocked() { return true },
             onClick() {
@@ -1099,7 +1099,7 @@ celestialiteDeath(index){
             canClick() { return player.fi.battleTier.neq(0) ? player.ba.petAbilitiesAvailable[player.ba.abilityID[0]][player.ba.abilityID[1]][0] && player.ba.attackPower.gte(player.ba.petAbilityAPCosts[player.ba.abilityID[0]][player.ba.abilityID[1]][0]) : false },
             unlocked() { return true },
             onClick() {
-                player.ba.currentAttackSequence.push([player.ba.petIDs[player.ba.petIndex], 0, player.ba.celestialiteIndex, player.ba.petIndex, player.ba.abilityID[0], player.ba.abilityID[1]])
+                player.ba.currentAttackSequence.push([player.ba.petIDs[player.ba.petIndex], 0, player.ba.celestialiteIndex.toNumber(), player.ba.petIndex, player.ba.abilityID[0], player.ba.abilityID[1]])
 
                 player.ba.attackPower = player.ba.attackPower.sub(player.ba.petAbilityAPCosts[player.ba.abilityID[0]][player.ba.abilityID[1]][0])
                 player.ba.spentAttackPower = player.ba.spentAttackPower.add(player.ba.petAbilityAPCosts[player.ba.abilityID[0]][player.ba.abilityID[1]][0])
@@ -1113,7 +1113,7 @@ celestialiteDeath(index){
             canClick() { return player.fi.battleTier.neq(0) ? player.ba.petAbilitiesAvailable[player.ba.abilityID[0]][player.ba.abilityID[1]][1] && player.ba.attackPower.gte(player.ba.petAbilityAPCosts[player.ba.abilityID[0]][player.ba.abilityID[1]][1]) : false },
             unlocked() { return true },
             onClick() {
-                player.ba.currentAttackSequence.push([player.ba.petIDs[player.ba.petIndex], 1, player.ba.celestialiteIndex, player.ba.petIndex, player.ba.abilityID[0], player.ba.abilityID[1]])
+                player.ba.currentAttackSequence.push([player.ba.petIDs[player.ba.petIndex], 1, player.ba.celestialiteIndex.toNumber(), player.ba.petIndex, player.ba.abilityID[0], player.ba.abilityID[1]])
 
                 player.ba.attackPower = player.ba.attackPower.sub(player.ba.petAbilityAPCosts[player.ba.abilityID[0]][player.ba.abilityID[1]][1])
                 player.ba.spentAttackPower = player.ba.spentAttackPower.add(player.ba.petAbilityAPCosts[player.ba.abilityID[0]][player.ba.abilityID[1]][1])
@@ -1155,13 +1155,13 @@ celestialiteDeath(index){
             width: 200,
             height: 50,
             progress() {
-                return player.fi.inBattle ? player.ba.celestialiteHealths[player.ba.celestialiteIndex].div(player.ba.celestialiteMaxHealths[player.ba.celestialiteIndex]) : new Decimal(0)
+                return player.fi.inBattle ? player.ba.celestialiteHealths[player.ba.celestialiteIndex.toNumber()].div(player.ba.celestialiteMaxHealths[player.ba.celestialiteIndex.toNumber()]) : new Decimal(0)
             },
             fillStyle: {
                 "background-color": "#073b77",
             },
             display() {
-                return "<h5>" + format(player.ba.celestialiteHealths[player.ba.celestialiteIndex]) + "/" + format(player.ba.celestialiteMaxHealths[player.ba.celestialiteIndex]) + "<h5> HP.</h5>";
+                return "<h5>" + format(player.ba.celestialiteHealths[player.ba.celestialiteIndex.toNumber()]) + "/" + format(player.ba.celestialiteMaxHealths[player.ba.celestialiteIndex.toNumber()]) + "<h5> HP.</h5>";
             },
             baseStyle: {background: "rgba(0,0,0,0.5)"},
         },
@@ -1238,7 +1238,7 @@ celestialiteDeath(index){
                                 ["style-column", [
                                     ["clickable", 7],
                                     ["blank", "25px"],
-                                    ["raw-html", () => { return player.ba.celestialiteNames[player.ba.celestialiteIDs[player.ba.celestialiteIndex]] }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                                    ["raw-html", () => { return player.ba.celestialiteNames[player.ba.celestialiteIDs[player.ba.celestialiteIndex.toNumber()]] }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                                     ["bar", "celestialiteHealthBar"],
                                     ["blank", "25px"],
                                     ["raw-html", () => { return formatWhole(player.ba.celestialiteIndex.add(1)) + "/" + formatWhole(player.ba.celestialiteIDs.length) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],

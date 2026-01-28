@@ -200,9 +200,9 @@ addLayer("ba", {
                 if (player.ba.celestialiteHealths[i].lte(0) && player.ba.celestialiteIDs.length >= 1)
                 {
                     layers.ba.celestialiteDeath(i)
-                    player.ba.drainCelestialite = -1
+                    if (i == player.ba.drainCelestialite) player.ba.drainCelestialite = -1
                 }
-                if (player.ba.celestialiteIDs.length == 0)
+                if (player.ba.celestialiteIDs[i] == 0)
                 {
                     layers.ba.selectCelestialites();
                     player.ba.wave = player.ba.wave.add(1)
@@ -243,7 +243,8 @@ addLayer("ba", {
             //make all timer stuff here
 
             if (player.ba.drainCelestialite >= 0) {
-                let damage = player.ba.petDamages[player.ba.eclipseID].mul(0.01)
+                let damage = new Decimal(0)
+                if (player.ba.petDamages[player.ba.eclipseID]) damage = Decimal.mul(player.ba.petDamages[player.ba.eclipseID], 0.01)
                 player.ba.celestialiteHealths[player.ba.drainCelestialite] = player.ba.celestialiteHealths[player.ba.drainCelestialite].sub(damage.mul(delta))
             }
         }

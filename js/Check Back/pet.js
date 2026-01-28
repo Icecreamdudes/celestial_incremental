@@ -802,7 +802,7 @@ addLayer("pet", {
             onClick() {
                 let amount = getLevelableXP("pet", layers.pet.levelables.index)
                 setLevelableXP("pet", layers.pet.levelables.index, new Decimal(0))
-                player.cb.petPoints = player.cb.petPoints.add(tmp.pet.levelables[layers.pet.levelables.index].sellValue)
+                player.cb.petPoints = player.cb.petPoints.add(tmp.pet.levelables[layers.pet.levelables.index].sellValue.mul(getLevelableXP("pet", layers.pet.levelables.index)))
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {

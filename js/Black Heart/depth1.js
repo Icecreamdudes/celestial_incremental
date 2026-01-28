@@ -34,14 +34,16 @@ addLayer("depth1", {
     }},
     automate() {},
     nodeStyle() {
-        return {
+        let str = {
             background: "radial-gradient(#250121, black)",
             backgroundOrigin: "border-box",
             borderColor: "#720455",
             color: "#961d76",
             textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
             marginTop: "60px",
-        };
+        }
+        if (player.subtabs["bh"]["stages"] == "depth1") str.outline = "3px solid #999"
+        return str
     },
     tooltip: "Depth 1",
     color: "#8a0e79",
@@ -262,7 +264,7 @@ addLayer("depth1", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() {return this.currency().gte(this.cost())},
             display() {
-                return "<h3>Singular (wait no)</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
+                return "<h3>Singular <small>[wait no]</small></h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
                     Boost singularity points\n\
                     Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 1) + "\n\ \n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Dim Umbrite"
@@ -398,7 +400,8 @@ BHC.lesserAlpha = {
     damage: new Decimal(6),
     actions: {
         0: {
-            effect: "instant",
+            name: "Chop",
+            instant: true,
             type: "damage",
             target: "randomPlayer",
             method: "physical",
@@ -430,10 +433,11 @@ BHC.lesserBeta = {
     damage: new Decimal(6),
     actions: {
         0: {
-            effect: "instant",
+            name: "Magic Missile",
+            instant: true,
             type: "damage",
             target: "randomPlayer",
-            method: "physical",
+            method: "magic",
             value: new Decimal(1),
             cooldown: new Decimal(5),
         },
@@ -462,7 +466,8 @@ BHC.lesserGamma = {
     damage: new Decimal(8),
     actions: {
         0: {
-            effect: "instant",
+            name: "Stab",
+            instant: true,
             type: "damage",
             target: "randomPlayer",
             method: "physical",
@@ -494,7 +499,8 @@ BHC.lesserDelta = {
     damage: new Decimal(1.5),
     actions: {
         0: {
-            effect: "instant",
+            name: "Pummel",
+            instant: true,
             type: "damage",
             target: "randomPlayer",
             method: "physical",
@@ -528,7 +534,8 @@ BHC.lesserEpsilon = {
     damage: new Decimal(10),
     actions: {
         0: {
-            effect: "instant",
+            name: "Bludgeon",
+            instant: true,
             type: "damage",
             target: "randomPlayer",
             method: "physical",
@@ -562,10 +569,11 @@ BHC.lesserZeta = {
     damage: new Decimal(15),
     actions: {
         0: {
-            effect: "instant",
+            name: "Magic Missile",
+            instant: true,
             type: "damage",
             target: "randomPlayer",
-            method: "physical",
+            method: "magic",
             value: new Decimal(1),
             cooldown: new Decimal(6),
         },
@@ -596,7 +604,8 @@ BHC.lesserEta = {
     damage: new Decimal(4),
     actions: {
         0: {
-            effect: "instant",
+            name: "Slash",
+            instant: true,
             type: "damage",
             target: "allPlayer",
             method: "physical",
@@ -630,10 +639,11 @@ BHC.lesserTheta = {
     damage: new Decimal(2),
     actions: {
         0: {
-            effect: "instant",
+            name: "Triple Shot",
+            instant: true,
             type: "damage",
             target: "allPlayer",
-            method: "physical",
+            method: "ranged",
             value: new Decimal(1),
             cooldown: new Decimal(2),
         },
@@ -664,10 +674,11 @@ BHC.lesserIota = {
     damage: new Decimal(8),
     actions: {
         0: {
-            effect: "instant",
+            name: "Aerial Missile",
+            instant: true,
             type: "damage",
             target: "random",
-            method: "physical",
+            method: "magic",
             value: new Decimal(1),
             cooldown: new Decimal(8),
         },
@@ -698,7 +709,8 @@ BHC.lesserKappa = {
     damage: new Decimal(10),
     actions: {
         0: {
-            effect: "instant",
+            name: "Earthquake",
+            instant: true,
             type: "damage",
             target: "all",
             method: "physical",
@@ -733,7 +745,8 @@ BHC.lesserEnas = {
     damage: new Decimal(15),
     actions: {
         0: {
-            effect: "instant",
+            name: "Chop",
+            instant: true,
             type: "damage",
             target: "randomPlayer",
             method: "physical",
@@ -741,7 +754,8 @@ BHC.lesserEnas = {
             cooldown: new Decimal(10),
         },
         1: {
-            effect: "instant",
+            name: "Slash",
+            instant: true,
             type: "damage",
             target: "allPlayer",
             method: "physical",
@@ -752,7 +766,7 @@ BHC.lesserEnas = {
     reward() {
         let gain = {}
         gain.gloomingUmbrite = new Decimal(30)
-        gain.dimUmbrite = new Decimal(15)
+        gain.dimUmbrite = new Decimal(10)
         gain.darkEssence = new Decimal(3)
         return gain
     },
@@ -770,7 +784,8 @@ BHC.lesserPente = {
     damage: new Decimal(20),
     actions: {
         0: {
-            effect: "instant",
+            name: "Magic Missile",
+            instant: true,
             type: "damage",
             target: "randomPlayer",
             method: "physical",
@@ -778,7 +793,8 @@ BHC.lesserPente = {
             cooldown: new Decimal(8),
         },
         1: {
-            effect: "instant",
+            name: "Bandage",
+            instant: true,
             type: "heal",
             target: "celestialite",
             value: new Decimal(20),
@@ -788,7 +804,7 @@ BHC.lesserPente = {
     reward() {
         let gain = {}
         gain.gloomingUmbrite = new Decimal(60)
-        gain.dimUmbrite = new Decimal(30)
+        gain.dimUmbrite = new Decimal(20)
         gain.darkEssence = new Decimal(6)
         return gain
     },
@@ -806,7 +822,8 @@ BHC.lesserDeka = {
     damage: new Decimal(15),
     actions: {
         0: {
-            effect: "instant",
+            name: "Stab",
+            instant: true,
             type: "damage",
             target: "randomPlayer",
             method: "physical",
@@ -814,7 +831,8 @@ BHC.lesserDeka = {
             cooldown: new Decimal(8),
         },
         1: {
-            effect: "instant",
+            name: "Lunge",
+            instant: true,
             type: "damage",
             target: "randomPlayer",
             method: "physical",
@@ -825,7 +843,7 @@ BHC.lesserDeka = {
     reward() {
         let gain = {}
         gain.gloomingUmbrite = new Decimal(100)
-        gain.dimUmbrite = new Decimal(50)
+        gain.dimUmbrite = new Decimal(35)
         gain.darkEssence = new Decimal(10)
         return gain
     },
@@ -843,15 +861,17 @@ BHC.lesserHekaton = {
     damage: new Decimal(30),
     actions: {
         0: {
-            effect: "instant",
+            name: "Blast",
+            instant: true,
             type: "damage",
             target: "randomPlayer",
-            method: "physical",
+            method: "magic",
             value: new Decimal(1),
             cooldown: new Decimal(20),
         },
         1: {
-            effect: "instant",
+            name: "Damage Enchantment",
+            instant: true,
             type: "effect",
             target: "celestialite",
             properties: {
@@ -863,7 +883,7 @@ BHC.lesserHekaton = {
     reward() {
         let gain = {}
         gain.gloomingUmbrite = new Decimal(150)
-        gain.dimUmbrite = new Decimal(75)
+        gain.dimUmbrite = new Decimal(50)
         gain.darkEssence = new Decimal(15)
         return gain
     },
@@ -881,26 +901,29 @@ BHC.lesserKhilioi = {
     damage: new Decimal(25),
     actions: {
         0: {
-            effect: "instant",
+            name: "Quick Shot",
+            instant: true,
             type: "damage",
             target: "randomPlayer",
-            method: "physical",
+            method: "ranged",
             value: new Decimal(0.5),
             cooldown: new Decimal(4),
         },
         1: {
-            effect: "instant",
+            name: "Basic Shot",
+            instant: true,
             type: "damage",
             target: "randomPlayer",
-            method: "physical",
+            method: "ranged",
             value: new Decimal(1),
             cooldown: new Decimal(10),
         },
         2: {
-            effect: "instant",
+            name: "Focus Shot",
+            instant: true,
             type: "damage",
             target: "randomPlayer",
-            method: "physical",
+            method: "ranged",
             value: new Decimal(2),
             cooldown: new Decimal(24),
         },
@@ -908,7 +931,7 @@ BHC.lesserKhilioi = {
     reward() {
         let gain = {}
         gain.gloomingUmbrite = new Decimal(250)
-        gain.dimUmbrite = new Decimal(125)
+        gain.dimUmbrite = new Decimal(80)
         gain.darkEssence = new Decimal(30)
         return gain
     },
@@ -926,7 +949,8 @@ BHC.lesserMyrioi = {
     damage: new Decimal(20),
     actions: {
         0: {
-            effect: "instant",
+            name: "Slash",
+            instant: true,
             type: "damage",
             target: "allPlayer",
             method: "physical",
@@ -934,14 +958,16 @@ BHC.lesserMyrioi = {
             cooldown: new Decimal(8),
         },
         1: {
-            effect: "instant",
+            name: "First Aid",
+            instant: true,
             type: "heal",
             target: "celestialite",
             value: new Decimal(50),
             cooldown: new Decimal(20),
         },
         2: {
-            effect: "instant",
+            name: "Rage",
+            instant: true,
             type: "effect",
             target: "celestialite",
             properties: {
@@ -953,7 +979,7 @@ BHC.lesserMyrioi = {
     reward() {
         let gain = {}
         gain.gloomingUmbrite = new Decimal(500)
-        gain.dimUmbrite = new Decimal(250)
+        gain.dimUmbrite = new Decimal(175)
         gain.darkEssence = new Decimal(60)
         return gain
     },

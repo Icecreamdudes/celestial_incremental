@@ -3149,7 +3149,7 @@ addLayer("pet", {
             },
             pointCooldown() { return new Decimal(1500).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
             canteBase() { return new Decimal(1.8)},
-            pointTooltip() { return "2% chance for an paragon shard." },
+            pointTooltip() { return "2% chance for a paragon shard." },
             pointClick() {
                 if (player.cb.highestLevel.gt(250)) {
                     let random = getRandomInt(50)

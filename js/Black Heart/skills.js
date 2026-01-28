@@ -9,28 +9,28 @@ BHA.none = {
     currency: "darkEssence",
     unlocked: false,
 
-    effect: "instant",
+    instant: true,
     cooldown: new Decimal(Infinity),
 }
 
 // General Skills
 BHA.general_slap = {
     name: "Slap",
-    description() {return "Deals " + formatWhole(new Decimal(75).add(player.bh.skillData["general_slap"].level.mul(15))) + "% physical damage and stuns the celestialite for a second."},
+    description() {return "Deals " + formatWhole(new Decimal(75).add(player.bh.skillData["general_slap"].level.mul(15))) + "% physical damage and soft-stuns the celestialite for a second."},
     passiveText() {return "+" + formatSimple(player.bh.skillData["general_slap"].maxLevel.div(5)) + " DMG"},
     char: "general",
     spCost: new Decimal(6),
     curCostBase: new Decimal(2),
     curCostScale: new Decimal(2),
     currency: "darkEssence",
-    unlocked: true,
+    unlocked() {return hasUpgrade("depth1", 4)},
 
-    effect: "instant",
+    instant: true,
     type: "damage",
     target: "celestialite",
     method: "physical",
     properties: {
-        "stun": [new Decimal(1), new Decimal(1)], // Chance / Time
+        "stun": [new Decimal(1), "soft", new Decimal(1)], // Chance / Stun-Type / Stun-Time
     },
     value() {return new Decimal(0.75).add(player.bh.skillData["general_slap"].level.mul(0.15))},
     cooldown: new Decimal(10),
@@ -47,7 +47,7 @@ BHA.general_bandage = {
     currency: "darkEssence",
     unlocked: true,
 
-    effect: "instant",
+    instant: true,
     type: "heal",
     target: "self",
     value() {return new Decimal(10).add(player.bh.skillData["general_bandage"].level.mul(2))},
@@ -66,7 +66,7 @@ BHA.kres_chop = {
     currency: "gloomingUmbrite",
     unlocked: true,
 
-    effect: "instant",
+    instant: true,
     type: "damage",
     target: "celestialite",
     method: "physical",
@@ -82,9 +82,9 @@ BHA.kres_bigAttack = {
     curCostBase: new Decimal(10),
     curCostScale: new Decimal(3),
     currency: "dimUmbrite",
-    unlocked: true,
+    unlocked() {return hasUpgrade("depth1", 1)},
 
-    effect: "instant",
+    instant: true,
     type: "damage",
     target: "celestialite",
     method: "physical",
@@ -105,10 +105,10 @@ BHA.kres_battleCry = {
     currency: "faintUmbrite",
     unlocked: true,
 
-    effect: "active",
+    active: true,
     type: "effect",
-    target: "allPlayer",
-    properties: {
+    constantTarget: "allPlayer",
+    effects: {
         "damageMult"() {return new Decimal(1.5).add(player.bh.skillData["kres_battleCry"].level.mul(0.1))}, // Multiplicative Effect
     },
     cooldown: new Decimal(25),
@@ -125,10 +125,10 @@ BHA.kres_berserker = {
     currency: "vividUmbrite",
     unlocked: true,
 
-    effect: "passive",
+    passive: true,
     type: "effect",
-    target: "self",
-    properties: {
+    constantTarget: "self",
+    effects: {
         "damageMult"() {return new Decimal(1.5).add(player.bh.skillData["kres_berserker"].level.mul(0.1))}, // Multiplicative Effect
         "agilityMult"() {return new Decimal(1.5).add(player.bh.skillData["kres_berserker"].level.mul(0.1))}, // Multiplicative Effect
         "regenMult"() {return new Decimal(1.5).add(player.bh.skillData["kres_berserker"].level.mul(0.1))}, // Multiplicative Effect
@@ -138,7 +138,7 @@ BHA.kres_berserker = {
 }
 BHA.kres_decapitate = {
     name: "Decapitate",
-    description() {return "Stuns kres for 5 seconds, then deals " + formatWhole(new Decimal(200).add(player.bh.skillData["kres_decapitate"].level.mul(40))) + "% physical damage, with a 50% chance to deal double damage"},
+    description() {return "Soft-stuns kres for 5 seconds, then deals " + formatWhole(new Decimal(200).add(player.bh.skillData["kres_decapitate"].level.mul(40))) + "% physical damage, with a 50% chance to deal double damage"},
     passiveText() {return "+" + formatSimple(player.bh.skillData["kres_decapitate"].maxLevel.div(2), 2) + " LUCK"},
     char: "kres",
     spCost: new Decimal(10),
@@ -147,7 +147,7 @@ BHA.kres_decapitate = {
     currency: "lustrousUmbrite",
     unlocked: true,
 
-    effect: "instant",
+    instant: true,
     type: "damage",
     target: "celestialite",
     method: "physical",
@@ -156,7 +156,7 @@ BHA.kres_decapitate = {
     },
     value() {return new Decimal(2).add(player.bh.skillData["kres_decapitate"].level.mul(0.4))},
     delay: 5000, // In ms
-    stun: new Decimal(5),
+    stun: ["soft", new Decimal(5)],
     cooldown: new Decimal(40),
 }
 
@@ -172,7 +172,7 @@ BHA.nav_magicMissle = {
     currency: "gloomingUmbrite",
     unlocked: true,
 
-    effect: "instant",
+    instant: true,
     type: "damage",
     target: "celestialite",
     method: "magic",
@@ -188,9 +188,9 @@ BHA.nav_healSpell = {
     curCostBase: new Decimal(10),
     curCostScale: new Decimal(3),
     currency: "dimUmbrite",
-    unlocked: true,
+    unlocked() {return hasUpgrade("depth1", 2)},
 
-    effect: "instant",
+    instant: true,
     type: "heal",
     target: "randomPlayer",
     value() {return new Decimal(10).add(player.bh.skillData["nav_healSpell"].level.mul(2))},
@@ -207,10 +207,10 @@ BHA.nav_reboundingAura = {
     currency: "faintUmbrite",
     unlocked: true,
 
-    effect: "active",
+    active: true,
     type: "effect",
-    target: "allPlayer",
-    properties: {
+    constantTarget: "allPlayer",
+    effects: {
         "attributes"() {return {"rebound": new Decimal(0.5).add(player.bh.skillData["nav_reboundingAura"].level.mul(0.1))}},
     },
     cooldown: new Decimal(30),
@@ -221,7 +221,7 @@ BHA.nav_reboundingAura = {
 // Sel Skills
 BHA.sel_singleShot = {
     name: "Single Shot",
-    description() {return "Deals " + formatWhole(new Decimal(100).add(player.bh.skillData["sel_singleShot"].level.mul(20))) + "% ranged damage"},
+    description() {return "Deals " + formatWhole(new Decimal(75).add(player.bh.skillData["sel_singleShot"].level.mul(15))) + "% ranged damage"},
     passiveText() {return "+" + formatSimple(player.bh.skillData["sel_singleShot"].maxLevel.div(2)) + " AGI"},
     char: "sel",
     spCost: new Decimal(6),
@@ -230,11 +230,11 @@ BHA.sel_singleShot = {
     currency: "gloomingUmbrite",
     unlocked: true,
 
-    effect: "instant",
+    instant: true,
     type: "damage",
     target: "celestialite",
     method: "ranged",
-    value() {return new Decimal(1).add(player.bh.skillData["sel_singleShot"].level.mul(0.2))},
+    value() {return new Decimal(0.75).add(player.bh.skillData["sel_singleShot"].level.mul(0.15))},
     cooldown: new Decimal(4),
 }
 BHA.sel_turret = {
@@ -246,9 +246,9 @@ BHA.sel_turret = {
     curCostBase: new Decimal(10),
     curCostScale: new Decimal(3),
     currency: "dimUmbrite",
-    unlocked: true,
+    unlocked() {return hasUpgrade("depth1", 3)},
 
-    effect: "active",
+    active: true,
     type: "damage",
     target: "celestialite",
     method: "ranged",
@@ -268,7 +268,7 @@ BHA.sel_energyBoost = {
     currency: "clearUmbrite",
     unlocked: true,
 
-    effect: "instant",
+    instant: true,
     type: "cooldown",
     target: "randomPlayer",
     value() {return new Decimal(6).add(player.bh.skillData["sel_energyBoost"].level.mul(1.2))},
@@ -291,10 +291,10 @@ BHA.eclipse_drain = {
     currency: "eclipseShards",
     unlocked: true,
 
-    effect: "passive",
+    passive: true,
     type: "effect",
-    target: "celestialite",
-    properties: {
+    constantTarget: "celestialite",
+    effects: {
         "regenAdd"() {return player.bh.characterData["eclipse"].damage.mul(Decimal.sub(-0.1, player.bh.skillData["eclipse_drain"].level.mul(0.02)))}, // Multiplicative Effect
     },
     cooldown: new Decimal(Infinity),
@@ -330,7 +330,7 @@ BHA.eclipse_motivation = {
     currency: "eclipseShards",
     unlocked: true,
 
-    effect: "instant",
+    instant: true,
     type: "effect",
     target: "allPlayer",
     properties: {
@@ -344,7 +344,7 @@ BHA.eclipse_lightBarrier = {
     description() {
         let time = "time"
         if (new Decimal(1).add(player.bh.skillData["eclipse_lightBarrier"].level.mul(0.2).floor()).neq(1)) time = "times"
-        let str = "Stuns you for " + formatTime(new Decimal(8).sub(player.bh.skillData["eclipse_lightBarrier"].level.modulo(5).div(2))) + ", then shield all players " + formatWhole(new Decimal(1).add(player.bh.skillData["eclipse_lightBarrier"].level.mul(0.2).floor())) + " " + time
+        let str = "Soft-stuns you for " + formatTime(new Decimal(8).sub(player.bh.skillData["eclipse_lightBarrier"].level.modulo(5).div(2))) + ", then shield all players " + formatWhole(new Decimal(1).add(player.bh.skillData["eclipse_lightBarrier"].level.mul(0.2).floor())) + " " + time
         return str
     },
     passiveText() {return "+" + formatSimple(player.bh.skillData["eclipse_lightBarrier"].maxLevel.div(2)) + " DEF"},
@@ -355,12 +355,12 @@ BHA.eclipse_lightBarrier = {
     currency: "eclipseShards",
     unlocked: true,
 
-    effect: "instant",
+    instant: true,
     type: "shield",
     target: "allPlayer",
     value() {return new Decimal(1).add(player.bh.skillData["eclipse_lightBarrier"].level.mul(0.2).floor())},
     delay() {return 8000-(player.bh.skillData["eclipse_lightBarrier"].level.modulo(5).mul(500).toNumber())}, // In ms
-    stun() {return new Decimal(8).sub(player.bh.skillData["eclipse_lightBarrier"].level.modulo(5).div(2))},
+    stun() {return ["soft", new Decimal(8).sub(player.bh.skillData["eclipse_lightBarrier"].level.modulo(5).div(2))]},
     cooldown: new Decimal(30),
     cooldownCap: new Decimal(10),
 }
@@ -375,19 +375,61 @@ BHA.eclipse_syzygy = {
     currency: "eclipseShards",
     unlocked: true,
 
-    effect: "passive",
+    passive: true,
     type: "effect",
-    target: "self",
-    properties: {
+    constantTarget: "self",
+    effects: {
         "timeMult"() {return new Decimal(1.25).add(player.bh.skillData["eclipse_syzygy"].level.mul(0.05))}, // Multiplicative Effect
     },
     cooldown: new Decimal(Infinity),
 }
 
 // Geroa Skills
+BHA.geroa_radioactiveMissile = {
+    name: "Radioactive Missile",
+    description() {return "Shoot 4 missiles that deal " + formatWhole(new Decimal(30).add(player.bh.skillData["geroa_radioactiveMissile"].level.mul(6))) + "% ranged damage"},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["geroa_radioactiveMissile"].maxLevel.div(2)) + " AGI"},
+    char: "geroa",
+    spCost: new Decimal(8),
+    curCostBase: new Decimal(10),
+    curCostScale: new Decimal(3),
+    currency: "lustrousUmbrite",
+    unlocked: true,
+
+    instant: true,
+    type: "damage",
+    target: "celestialite",
+    method: "ranged",
+    properties: {
+        "multi-hit": [4, 250],
+    },
+    value() {return new Decimal(0.3).add(player.bh.skillData["geroa_radioactiveMissile"].level.mul(0.06))},
+    cooldown: new Decimal(6),
+}
+BHA.geroa_selfRepair = {
+    name: "Self Repair",
+    description() {return "If under 25% health, heal yourself for " + formatWhole(new Decimal(25).add(player.bh.skillData["geroa_selfRepair"].level.mul(5))) + " health"},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["geroa_selfRepair"].maxLevel) + " HP"},
+    char: "geroa",
+    spCost: new Decimal(12),
+    curCostBase: new Decimal(10),
+    curCostScale: new Decimal(3),
+    currency: "lustrousUmbrite",
+    unlocked: true,
+
+    instant: true,
+    type: "heal",
+    target: "self",
+    value() {return new Decimal(25).add(player.bh.skillData["geroa_selfRepair"].level.mul(5))},
+    conditional(index, slot) {
+        if (index == 3) {console.log("what");return false}
+        return player.bh.characters[index].health.lte(player.bh.characters[index].maxHealth.div(4))
+    },
+    cooldown: new Decimal(30),
+}
 BHA.geroa_orbitalCannon = {
     name: "Orbital Cannon",
-    description() {return "Stuns Geroa for 10 seconds, then deals " + formatWhole(new Decimal(400).add(player.bh.skillData["geroa_orbitalCannon"].level.mul(80))) + "% ranged damage split into 10 hits, and stuns the celestialite for 5 seconds"},
+    description() {return "Hard-stuns Geroa for 10 seconds, then deals " + formatWhole(new Decimal(400).add(player.bh.skillData["geroa_orbitalCannon"].level.mul(80))) + "% ranged damage split into 10 hits, and hard-stuns the celestialite for 5 seconds"},
     passiveText() {return "+" + formatSimple(player.bh.skillData["geroa_orbitalCannon"].maxLevel.div(5)) + " DMG"},
     char: "geroa",
     spCost: new Decimal(12),
@@ -396,16 +438,16 @@ BHA.geroa_orbitalCannon = {
     currency: "lustrousUmbrite", // Temp, probably something else
     unlocked: true,
 
-    effect: "instant",
+    instant: true,
     type: "damage",
     target: "celestialite",
     method: "ranged",
     properties: {
-        "stun": [new Decimal(1), new Decimal(5)], // Chance / Time
+        "stun": [new Decimal(1), "hard", new Decimal(5)], // Chance / Stun-Type / Stun-Time
         "multi-hit": [10, 100], // Amount / Delay
     },
     value() {return new Decimal(0.4).add(player.bh.skillData["geroa_orbitalCannon"].level.mul(0.08))},
     delay: 10000, // In ms
-    stun: new Decimal(10),
+    stun: ["hard", new Decimal(10)],
     cooldown: new Decimal(60),
 }

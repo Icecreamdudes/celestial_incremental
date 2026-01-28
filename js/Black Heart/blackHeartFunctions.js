@@ -70,15 +70,19 @@ function bhAction(index, slot) {
 
                             // Stun Modifier
                             if (action.properties["stun"] && Decimal.gte(action.properties["stun"][0].mul(luckMult), Math.random())) {
-                                let arr = calcTarget(index, target)
+                                let arr = calcTarget(index, target, "effect")
                                 for (let receive of arr) {
                                     if (receive == 3) {
-                                        player.bh.celestialite.stun = action.properties["stun"][1]
+                                        player.bh.celestialite.stun = [action.properties["stun"][1], action.properties["stun"][2]]
                                     } else {
-                                        player.bh.characters[receive].stun = action.properties["stun"][1]
+                                        player.bh.characters[receive].stun = [action.properties["stun"][1], action.properties["stun"][2]]
                                     }
                                 }
-                                str = str + "<span style='color:#73741A'>[STUN] </span>"
+                                if (action.properties["stun"][1] == "hard") {
+                                    str = str + "<span style='color:#73741A'>[H-STUN] </span>"
+                                } else {
+                                    str = str + "<span style='color:#73741A'>[S-STUN] </span>"
+                                }
                             }
 
                             // (Keep at end of properties)
@@ -124,15 +128,19 @@ function bhAction(index, slot) {
 
                             // Stun Modifier
                             if (action.properties["stun"] && Decimal.gte(action.properties["stun"][0].mul(luckMult), Math.random())) {
-                                let arr = calcTarget(index, target)
+                                let arr = calcTarget(index, target, "effect")
                                 for (let receive of arr) {
                                     if (receive == 3) {
-                                        player.bh.celestialite.stun = action.properties["stun"][1]
+                                        player.bh.celestialite.stun = [action.properties["stun"][1], action.properties["stun"][2]]
                                     } else {
-                                        player.bh.characters[receive].stun = action.properties["stun"][1]
+                                        player.bh.characters[receive].stun = [action.properties["stun"][1], action.properties["stun"][2]]
                                     }
                                 }
-                                str = str + "<span style='color:#73741A'>[STUN] </span>"
+                                if (action.properties["stun"][1] == "hard") {
+                                    str = str + "<span style='color:#73741A'>[H-STUN] </span>"
+                                } else {
+                                    str = str + "<span style='color:#73741A'>[S-STUN] </span>"
+                                }
                             }
 
                             // Backfire (Keep at end of properties)
@@ -202,15 +210,17 @@ function bhAction(index, slot) {
                             name = i.slice(0, i.indexOf("D"))
                             i = name + "Mult"
                             let pre
+
+                            //1-1/50^2+1
                             if (index == 3) {
                                 if (!player.bh.celestialite.actions[slot].variables[i]) player.bh.celestialite.actions[slot].variables[i] = new Decimal(1)
                                 pre = player.bh.celestialite.actions[slot].variables[i]
-                                player.bh.celestialite.actions[slot].variables[i] = Decimal.pow(player.bh.celestialite.actions[slot].variables[i], 2).add(val).pow(0.5)
+                                player.bh.celestialite.actions[slot].variables[i] = Decimal.sub(player.bh.celestialite.actions[slot].variables[i], 1).div(val).pow(2).add(1).pow(0.5).mul(val).add(1)
                                 val = Decimal.sub(player.bh.celestialite.actions[slot].variables[i], pre)
                             } else {
                                 if (!player.bh.characters[index].skills[slot].variables[i]) player.bh.characters[index].skills[slot].variables[i] = new Decimal(1)
                                 pre = player.bh.characters[index].skills[slot].variables[i]
-                                player.bh.characters[index].skills[slot].variables[i] = Decimal.pow(player.bh.characters[index].skills[slot].variables[i], 2).add(val).pow(0.5)
+                                player.bh.characters[index].skills[slot].variables[i] = Decimal.sub(player.bh.characters[index].skills[slot].variables[i], 1).div(val).pow(2).add(1).pow(0.5).mul(val).add(1)
                                 val = Decimal.sub(player.bh.characters[index].skills[slot].variables[i], pre)
                             }
                             break;
@@ -224,7 +234,7 @@ function bhAction(index, slot) {
                 }
                 break;
             case "reset":
-                let arr = calcTarget(index, target)
+                let arr = calcTarget(index, target, "effect")
 
                 // Reset all other skill cooldowns
                 for (let receive of arr) {
@@ -260,7 +270,7 @@ function bhAction(index, slot) {
                 break;
             case "cooldown":
                 let val = run(action.value, action)
-                let tar = calcTarget(index, target)
+                let tar = calcTarget(index, target, "effect")
 
                 // Reduce cooldowns of target
                 for (let receive of tar) {
@@ -296,7 +306,7 @@ function bhAction(index, slot) {
                 break;
             case "shield":
                 let num = run(action.value, action)
-                let targ = calcTarget(index, target)
+                let targ = calcTarget(index, target, "effect")
                 let str = "time"
                 if (num.neq(1)) str = "times"
 
@@ -341,7 +351,7 @@ function bhEffectText(type, val, index, target, percentage = 0) {
         sign = Decimal.gte(val, 0) ? ["buffed", "+"] : ["nerfed", "-"]
         num = format(Decimal.mul(val, 100)) + "%."
     }
-    let arr = calcTarget(index, target)
+    let arr = calcTarget(index, target, "effect")
     for (let receive of arr) {
         if (index == 3) {
             if (receive == 3) {
@@ -362,7 +372,7 @@ function bhEffectText(type, val, index, target, percentage = 0) {
 }
 
 function bhAttack(damage, index, target, str = "", attr = false) {
-    let arr = calcTarget(index, target)
+    let arr = calcTarget(index, target, "damage")
     if (typeof target == "number") arr = [target]
     for (let receive of arr) {
         if (receive == 3 && player.bh.celestialite.id == "none") continue
@@ -425,7 +435,7 @@ function bhAttack(damage, index, target, str = "", attr = false) {
 }
 
 function bhHeal(heal, index, target, str = "") {
-    let arr = calcTarget(index, target)
+    let arr = calcTarget(index, target, "heal")
     for (let receive of arr) {
         if (index == 3) {
             if (receive == 3) {
@@ -565,7 +575,7 @@ function celestialiteSpawn() {
     }
 }
 
-function calcTarget(index, target) {
+function calcTarget(index, target, action = "none") {
     switch (target) {
         case "randomPlayer":
             let potTarget = []

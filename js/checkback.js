@@ -301,6 +301,7 @@ addLayer("cb", {
         for (let i in player.cb.xpTimers) {
             player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(mult)
             player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(levelableEffect("pet", 1102)[1])
+            player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(levelableEffect("ir", 9)[0])
         }
 
         player.cb.crateTimers[0].base = buyableEffect("ev1", 201).mul(buyableEffect("ev1", 204))

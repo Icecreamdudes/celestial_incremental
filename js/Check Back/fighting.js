@@ -211,6 +211,8 @@ addLayer("fi", {
         }
 
     player.fi.milestone101Effect = player.fi.tier1BestWave.pow(0.6).div(25).add(1)
+
+    player.fi.temporalShards = player.fi.temporalShards.floor()
     },
     clickables: {
         1: {

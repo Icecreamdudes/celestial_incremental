@@ -94,7 +94,7 @@
     bars: {},
     clickables: {
         11: {
-            title() { return player.ir.timers[player.ir.shipType].current.lte(0) ? "<h2>Enter Blood Battle" : "<h2>Cooldown: " + formatTime(player.ir.shipCooldownTimers[player.ir.shipType])},
+            title() { return player.ir.timers[player.ir.shipType].current.lte(0) ? "<h2>Enter Blood Battle" : "<h2>Cooldown: " + formatTime(player.ir.timers[player.ir.shipType].current)},
             canClick() { return player.ir.timers[player.ir.shipType].current.lte(0) },
             unlocked() { return true },
             tooltip() { return "Blood... The elixir of humanity." },
@@ -470,7 +470,7 @@
                             ], {width: "541px", height: "40px", backgroundColor: "#1f0000ff", borderBottom: "3px solid #ff8989ff",  borderLeft: "3px solid #ff8989ff",  userSelect: "none"}],
                             ["style-column", [
                                 ["row", [["levelable", 1], ["levelable", 2],["levelable", 3],["levelable", 4],["levelable", 5],]],
-                                ["row", [["levelable", 6], ["levelable", 7], ["levelable", 8]]],
+                                ["row", [["levelable", 6], ["levelable", 7], ["levelable", 8], ["levelable", 9]]],
                             ], {width: "531px", height: "250px", backgroundColor: "rgba(43, 10, 18, 1)", borderLeft: "3px solid #ff8989ff", padding: "5px"}],
                         ], {width: "556px", height: "220px"}],
                     ["blank", "25px"],
@@ -504,7 +504,6 @@
                 content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return "You baboon. WHY DID YOU REFRESH THE PAGE???" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-
                     ["blank", "25px"],
                     ["clickable", 12],
                 ]
@@ -515,14 +514,13 @@
                 content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return "You lost." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-
                     ["blank", "25px"],
                     ["clickable", 12],
                 ]
             },
             "Nox, The Vampire Knight": {
                 buttonStyle() { return { border: "2px solid #f57171ff", borderRadius: "10px" } },
-                unlocked() { return player.bl.noxDefeated },
+                unlocked() { return player.bl.noxDefeated && !player.ir.inBattle},
                 content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return "Coming soon." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],

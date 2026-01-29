@@ -631,7 +631,21 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h4>v1.10.6 - Checklist Update Pt.2</h4><br>
+	<h3>v1.10.7 - Bug Hotfix</h3><br>
+		Bugfixes:<br>
+			- Fixed star gain not working until after first rocket launch<br>
+			- Fixed a ton of CB Fighting bugs/crashes<br>
+			- Fixed Iridite click cooldown bugs<br>
+			- Fixed sell all pets<br>
+			- Fixed typo on hex shadow pet button tooltip<br>
+			- Fixed wrong name on nectar epsilon upgrades<br>
+			- (Maybe) Fixed buy max compressions<br>
+			- Fixed singularity resets not working properly before milestone 6<br>
+			- Fixed being able to softlock yourself by turning on IP auto before having IP Challenge 4 and the big crunch skip milestone<br>
+			- Fixed dice buyable autobuy sometimes spending currency (which ends up crashing the game when at the start of an infinity)<br>
+			- Made planet estimation formula also calculate the chance for the remainder to be successful<br>
+			- Fixed multiple instances of upgrades/milestones saying they keep CB content on singularity<br><br>
+	<h3>v1.10.6 - Checklist Update Pt.2</h3><br>
 		Content:<br>
 			- Added 3 new themes.<br>
 			- Added an unlockable toggle feature for themes. (Vague due to spoilers)<br>

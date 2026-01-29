@@ -167,6 +167,11 @@
         player.ro.rocketCooldown = player.ro.rocketCooldown.sub(onepersec.mul(delta))
 
         player.ro.rocketCooldownMax = [new Decimal(300), new Decimal(1200)]
+
+        // TO FIX STAR BUG WHEN AU2 IS NOT UNLOCKED
+        if (player.tab == "ro" && tmp.uni.A2.disabled) {
+            layers.au2.update(delta)
+        }
     },
     starReset() {
         clickClickable("co", 1000)

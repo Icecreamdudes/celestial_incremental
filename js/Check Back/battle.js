@@ -195,15 +195,13 @@ addLayer("ba", {
                 }
             }
             //celestialite deaths
-            for (let i = 0; i < player.ba.celestialiteIDs.length; i++)
-            {
+            for (let i = 0; i < Math.max(player.ba.celestialiteIDs.length, 1); i++) {
                 if (player.ba.celestialiteHealths[i].lte(0) && player.ba.celestialiteIDs.length >= 1)
                 {
                     layers.ba.celestialiteDeath(i)
-                    player.ba.drainCelestialite = -1
+                    if (player.ba.drainCelestialite >= player.ba.celestialiteIDs.length) player.ba.drainCelestialite = -1
                 }
-                if (player.ba.celestialiteIDs.length == 0)
-                {
+                if (player.ba.celestialiteIDs[i] == 0 || player.ba.celestialiteIDs[i] == undefined) {
                     layers.ba.selectCelestialites();
                     player.ba.wave = player.ba.wave.add(1)
                     player.ba.round = new Decimal(1)
@@ -225,28 +223,28 @@ addLayer("ba", {
                     player.ba.cookieThorns = false
                     player.ba.turret = false
 
-                                for (let i = 0; i < player.ba.petAbilitiesAvailable.length; i++) {
-                for (let j = 0; j < player.ba.petAbilitiesAvailable[i].length; j++) {
-                    if (Array.isArray(player.ba.petAbilitiesAvailable[i][j])) {
-                        for (let k = 0; k < player.ba.petAbilitiesAvailable[i][j].length; k++) {
-                            player.ba.petAbilitiesAvailable[i][j][k] = true;
+                    for (let i = 0; i < player.ba.petAbilitiesAvailable.length; i++) {
+                        for (let j = 0; j < player.ba.petAbilitiesAvailable[i].length; j++) {
+                            if (Array.isArray(player.ba.petAbilitiesAvailable[i][j])) {
+                                for (let k = 0; k < player.ba.petAbilitiesAvailable[i][j].length; k++) {
+                                    player.ba.petAbilitiesAvailable[i][j][k] = true;
+                                }
+                            } else {
+                                player.ba.petAbilitiesAvailable[i][j] = true;
                             }
-                        } 
-                    else {
-                    player.ba.petAbilitiesAvailable[i][j] = true;
-                }
-                }
-              
-            }
+                        }
+                    }
                 }
             }
             //make all timer stuff here
 
             if (player.ba.drainCelestialite >= 0) {
-                let damage = player.ba.petDamages[player.ba.eclipseID].mul(0.01)
-                player.ba.celestialiteHealths[player.ba.drainCelestialite] = player.ba.celestialiteHealths[player.ba.drainCelestialite].sub(damage.mul(delta))
+                let damage = new Decimal(0)
+                if (player.ba.petDamages[player.ba.eclipseID]) damage = Decimal.mul(player.ba.petDamages[player.ba.eclipseID], 0.01)
+                if (player.ba.celestialiteHealths[player.ba.drainCelestialite]) player.ba.celestialiteHealths[player.ba.drainCelestialite] = player.ba.celestialiteHealths[player.ba.drainCelestialite].sub(damage.mul(delta))
             }
         }
+        if (player.ba.drainCelestialite >= player.ba.celestialiteIDs.length) player.ba.drainCelestialite = -1
 
 
         player.ba.attackPowerMax = new Decimal(25)
@@ -805,7 +803,7 @@ celestialiteDeath(index){
 
     if (player.ba.celestialiteIndex.add(1).eq(player.ba.celestialiteIDs.length)) {
         player.ba.celestialiteIndex = player.ba.celestialiteIndex.sub(1)
-        if (player.ba.celestialiteIndex < 0) player.ba.celestialiteIndex = 0
+        if (player.ba.celestialiteIndex < 0) player.ba.celestialiteIndex = new Decimal(0)
     }
     logPrintBattle("<span style='color: #625fffff;'>" + player.ba.celestialiteNames[player.ba.celestialiteIDs[index]] + " is dead!" ) 
 
@@ -1038,12 +1036,12 @@ celestialiteDeath(index){
             unlocked() { return true },
             onClick() {
                 player.ba.celestialiteIndex = player.ba.celestialiteIndex.sub(1)
-                if (player.ba.celestialiteIndex < 0) player.ba.celestialiteIndex = 0
+                if (player.ba.celestialiteIndex < 0) player.ba.celestialiteIndex = new Decimal(0)
             },
             style: { width: '75px', "min-height": '75px', 'color': "black",},
         },
         7: {
-            title() { return "<img src='" + player.ba.celestialiteImages[player.ba.celestialiteIDs[player.ba.celestialiteIndex]] + "'style='width:calc(115%);height:calc(115%);margin:-20%'></img>" },
+            title() { return "<img src='" + player.ba.celestialiteImages[player.ba.celestialiteIDs[player.ba.celestialiteIndex.toNumber()]] + "'style='width:calc(115%);height:calc(115%);margin:-20%'></img>" },
             canClick() { return false },
             unlocked() { return true },
             onClick() {
@@ -1098,7 +1096,7 @@ celestialiteDeath(index){
             canClick() { return player.fi.battleTier.neq(0) ? player.ba.petAbilitiesAvailable[player.ba.abilityID[0]][player.ba.abilityID[1]][0] && player.ba.attackPower.gte(player.ba.petAbilityAPCosts[player.ba.abilityID[0]][player.ba.abilityID[1]][0]) : false },
             unlocked() { return true },
             onClick() {
-                player.ba.currentAttackSequence.push([player.ba.petIDs[player.ba.petIndex], 0, player.ba.celestialiteIndex, player.ba.petIndex, player.ba.abilityID[0], player.ba.abilityID[1]])
+                player.ba.currentAttackSequence.push([player.ba.petIDs[player.ba.petIndex], 0, player.ba.celestialiteIndex.toNumber(), player.ba.petIndex, player.ba.abilityID[0], player.ba.abilityID[1]])
 
                 player.ba.attackPower = player.ba.attackPower.sub(player.ba.petAbilityAPCosts[player.ba.abilityID[0]][player.ba.abilityID[1]][0])
                 player.ba.spentAttackPower = player.ba.spentAttackPower.add(player.ba.petAbilityAPCosts[player.ba.abilityID[0]][player.ba.abilityID[1]][0])
@@ -1112,7 +1110,7 @@ celestialiteDeath(index){
             canClick() { return player.fi.battleTier.neq(0) ? player.ba.petAbilitiesAvailable[player.ba.abilityID[0]][player.ba.abilityID[1]][1] && player.ba.attackPower.gte(player.ba.petAbilityAPCosts[player.ba.abilityID[0]][player.ba.abilityID[1]][1]) : false },
             unlocked() { return true },
             onClick() {
-                player.ba.currentAttackSequence.push([player.ba.petIDs[player.ba.petIndex], 1, player.ba.celestialiteIndex, player.ba.petIndex, player.ba.abilityID[0], player.ba.abilityID[1]])
+                player.ba.currentAttackSequence.push([player.ba.petIDs[player.ba.petIndex], 1, player.ba.celestialiteIndex.toNumber(), player.ba.petIndex, player.ba.abilityID[0], player.ba.abilityID[1]])
 
                 player.ba.attackPower = player.ba.attackPower.sub(player.ba.petAbilityAPCosts[player.ba.abilityID[0]][player.ba.abilityID[1]][1])
                 player.ba.spentAttackPower = player.ba.spentAttackPower.add(player.ba.petAbilityAPCosts[player.ba.abilityID[0]][player.ba.abilityID[1]][1])
@@ -1154,13 +1152,13 @@ celestialiteDeath(index){
             width: 200,
             height: 50,
             progress() {
-                return player.fi.inBattle ? player.ba.celestialiteHealths[player.ba.celestialiteIndex].div(player.ba.celestialiteMaxHealths[player.ba.celestialiteIndex]) : new Decimal(0)
+                return player.fi.inBattle ? player.ba.celestialiteHealths[player.ba.celestialiteIndex.toNumber()].div(player.ba.celestialiteMaxHealths[player.ba.celestialiteIndex.toNumber()]) : new Decimal(0)
             },
             fillStyle: {
                 "background-color": "#073b77",
             },
             display() {
-                return "<h5>" + format(player.ba.celestialiteHealths[player.ba.celestialiteIndex]) + "/" + format(player.ba.celestialiteMaxHealths[player.ba.celestialiteIndex]) + "<h5> HP.</h5>";
+                return "<h5>" + format(player.ba.celestialiteHealths[player.ba.celestialiteIndex.toNumber()]) + "/" + format(player.ba.celestialiteMaxHealths[player.ba.celestialiteIndex.toNumber()]) + "<h5> HP.</h5>";
             },
             baseStyle: {background: "rgba(0,0,0,0.5)"},
         },
@@ -1237,7 +1235,7 @@ celestialiteDeath(index){
                                 ["style-column", [
                                     ["clickable", 7],
                                     ["blank", "25px"],
-                                    ["raw-html", () => { return player.ba.celestialiteNames[player.ba.celestialiteIDs[player.ba.celestialiteIndex]] }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                                    ["raw-html", () => { return player.ba.celestialiteNames[player.ba.celestialiteIDs[player.ba.celestialiteIndex.toNumber()]] }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                                     ["bar", "celestialiteHealthBar"],
                                     ["blank", "25px"],
                                     ["raw-html", () => { return formatWhole(player.ba.celestialiteIndex.add(1)) + "/" + formatWhole(player.ba.celestialiteIDs.length) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],

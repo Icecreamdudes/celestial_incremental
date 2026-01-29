@@ -802,7 +802,7 @@ addLayer("pet", {
             onClick() {
                 let amount = getLevelableXP("pet", layers.pet.levelables.index)
                 setLevelableXP("pet", layers.pet.levelables.index, new Decimal(0))
-                player.cb.petPoints = player.cb.petPoints.add(tmp.pet.levelables[layers.pet.levelables.index].sellValue)
+                player.cb.petPoints = player.cb.petPoints.add(tmp.pet.levelables[layers.pet.levelables.index].sellValue.mul(getLevelableXP("pet", layers.pet.levelables.index)))
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
@@ -3149,7 +3149,7 @@ addLayer("pet", {
             },
             pointCooldown() { return new Decimal(1500).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
             canteBase() { return new Decimal(1.8)},
-            pointTooltip() { return "2% chance for an paragon shard." },
+            pointTooltip() { return "2% chance for a paragon shard." },
             pointClick() {
                 if (player.cb.highestLevel.gt(250)) {
                     let random = getRandomInt(50)

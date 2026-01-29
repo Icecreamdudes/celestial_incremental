@@ -1297,7 +1297,7 @@ class SpaceArena {
             this.bounceCooldown = 2000; // 2 seconds in ms
             this.canvasClickListener = (e) => {
                 let now = Date.now();
-                this.bounceCooldown = 2000 / this.upgradeEffects.attackSpeed
+                this.bounceCooldown = 2000 * this.upgradeEffects.attackSpeed
                 if (now - this.lastBounceClick < this.bounceCooldown) return;
                 this.lastBounceClick = now;
                 let rect = this.canvas.getBoundingClientRect();
@@ -1383,7 +1383,7 @@ class SpaceArena {
             this.dashCooldown = 2000; // 2 seconds in ms
             this.canvasClickListener = (e) => {
                 let now = Date.now();
-                this.dashCooldown = 2000 / this.upgradeEffects.attackSpeed
+                this.dashCooldown = 2000 * this.upgradeEffects.attackSpeed
                 if (now - this.lastDashClick < this.dashCooldown) return;
                 this.lastDashClick = now;
                 let rect = this.canvas.getBoundingClientRect();

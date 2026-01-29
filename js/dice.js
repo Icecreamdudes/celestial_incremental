@@ -153,6 +153,7 @@
 
         // POWER MODIFIERS
         player.d.dicePointsMult = player.d.dicePointsMult.pow(player.co.cores.dice.effect[1])
+        if (hasUpgrade("za", 17)) player.d.dicePointsMult = player.d.dicePointsMult.pow(upgradeEffect("za", 17))
 
         // DICE POINT EFFECT
         if (player.d.dicePoints.gte(0)) {
@@ -291,6 +292,9 @@
         player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(buyableEffect("d", 24))
         player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(buyableEffect("g", 28))
         player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(player.co.cores.dice.effect[2])
+
+        //POWER
+        if (hasUpgrade("za", 17)) player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.pow(upgradeEffect("za", 17))
 
         // CHALLENGE DICE PER SECOND
         if (hasUpgrade("i", 31)) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet.mul(0.05).mul(delta))

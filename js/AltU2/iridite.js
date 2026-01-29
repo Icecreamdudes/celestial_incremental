@@ -184,6 +184,14 @@ addLayer("ir", {
                 current: new Decimal(0),
                 max: new Decimal(2100),
             },
+            9: {
+                current: new Decimal(0),
+                max: new Decimal(1800),
+            },
+            10: {
+                current: new Decimal(0),
+                max: new Decimal(1800),
+            },
         },
 
         battleLevel: new Decimal(0),
@@ -228,6 +236,7 @@ addLayer("ir", {
         if (player.ir.shipType == 6) player.ir.shipHealthMax = new Decimal(75)
         if (player.ir.shipType == 7) player.ir.shipHealthMax = new Decimal(75)
         if (player.ir.shipType == 8) player.ir.shipHealthMax = new Decimal(100)
+        if (player.ir.shipType == 9) player.ir.shipHealthMax = new Decimal(125)
 
         if (hasUpgrade("ir", 102)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.25)
         if (player.ir.shipType != 0) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(levelableEffect("ir", player.ir.shipType)[3])
@@ -242,6 +251,7 @@ addLayer("ir", {
         player.ir.timers[6].max = new Decimal(1200)
         player.ir.timers[7].max = new Decimal(600)
         player.ir.timers[8].max = new Decimal(2100)
+        player.ir.timers[9].max = new Decimal(1500)
         for (let i in player.ir.timers) {
             if (hasUpgrade("ir", 18)) player.ir.timers[i].max = player.ir.timers[i].max.div(upgradeEffect("ir", 18))
 
@@ -676,6 +686,50 @@ addLayer("ir", {
                 return look
             }
         },
+        9: {
+            image() { return this.canClick() ? "resources/ships/evolver.png" : "resources/secret.png"},
+            title() { return "Evolver" },
+            description() {
+                return "x" + format(this.effect()[0]) + " to ESC.<br>^" + format(this.effect()[1]) + " to paradox pylon energy.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
+
+            },
+            lore() { return "An experimental vessel that fractures its projectiles into multiple seeking fragments." },
+            levelLimit() { return Decimal.add(25, levelableEffect("ir", 8)[1])},
+            effect() {
+                return [
+                    getLevelableAmount(this.layer, this.id).mul(0.03).add(1),
+                    getLevelableAmount(this.layer, this.id).mul(0.04).add(1),
+                    getLevelableAmount(this.layer, this.id).mul(0.02).add(1), //Damage
+                    getLevelableAmount(this.layer, this.id).mul(0.03).add(1), //Health
+                ]
+            },
+            sacValue() { return new Decimal(1)},
+            // CLICK CODE
+            tooltip() { return  (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || hasUpgrade("ev8", 23) ? "" : "Purchase a certain shard research." },
+            unlocked() { return true },
+            canClick() { return (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || hasUpgrade("ev8", 23)},
+            onClick() { 
+                player.ir.shipType = this.id
+                return layers[this.layer].levelables.index = this.id 
+            },
+            // BUY CODE
+            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
+            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
+            xpReq() { return getLevelableAmount(this.layer, this.id).pow(1.4).mul(200).add(1000).floor() },  
+            currency() { return getLevelableXP(this.layer, this.id) },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#37078f"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#5e4ee6ff" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }  
+        },
     },
     clickables: {
         1: {
@@ -1088,7 +1142,7 @@ addLayer("ir", {
                                 ], {width: "550px", height: "40px", backgroundColor: "#241d66ff", borderBottom: "3px solid #5e4ee6ff",  borderLeft: "3px solid #5e4ee6ff", borderRight: "3px solid #5e4ee6ff", userSelect: "none"}],
                                 ["style-column", [
                                     ["row", [["levelable", 1], ["levelable", 2],["levelable", 3],["levelable", 4],["levelable", 5],]],
-                                    ["row", [["levelable", 6], ["levelable", 7], ["levelable", 8]]],
+                                    ["row", [["levelable", 6], ["levelable", 7], ["levelable", 8], ["levelable", 9]]],
                                 ], {width: "540px", height: "270px", backgroundColor: "#151230", borderLeft: "3px solid #5e4ee6ff", borderRight: "3px solid #5e4ee6ff", borderBottom: "3px solid #5e4ee6ff", padding: "5px"}],
                             ], {width: "556px", height: "320px"}],
                             ["blank", "25px"],
@@ -1466,6 +1520,23 @@ class SpaceArena {
                 _laserAngle: 0,
                 _laserSpin: 0.006,
                 _laserHitCooldown: 0,
+            };
+        }
+        if (player.ir.shipType == 9) {
+            this.ship = {
+                x: width / 2,
+                y: height / 2,
+                angle: 0,
+                velocity: 0,
+                angularVelocity: 0,
+                maxVelocity: 4,
+                acceleration: 0.25,
+                deceleration: 0.2,
+                rotationSpeed: 0.06,
+                cooldown: 500,
+                lastShot: 0,
+                damage: 20,
+                collisionDamage: 0.1,
             };
         }
         if (player.ir.shipType == 0) {
@@ -2057,6 +2128,8 @@ class SpaceArena {
         }
 
         let speed = 10 + this.upgradeEffects.moveSpeed;
+        // evolver shards
+        if (player.ir.shipType == 9) speed = 12 + this.upgradeEffects.moveSpeed;
         if (player.ir.shipType == 4) speed = 25 + this.upgradeEffects.moveSpeed;
         if (player.ir.shipType == 6) speed = 20 + this.upgradeEffects.moveSpeed;
         let pierce = 0;
@@ -2088,22 +2161,40 @@ class SpaceArena {
             }
         }
 
-        this.bullets.push({
-            x: this.ship.x + Math.cos(angle) * 20,
-            y: this.ship.y + Math.sin(angle) * 20,
-            vx: Math.cos(angle) * speed,
-            vy: Math.sin(angle) * speed,
-            life: 120,
-            damage: this.ship.damage * this.upgradeEffects.attackDamage * petMul,
-            pierce: pierce,
-            piercedAsteroids: [],
-            piercedEnemies: [],
-            fromEnemy: false,
-            // homing properties (only used for sniper bullets)
-            homing: player.ir.shipType == null,
-            target: target,
-            homingStrength: 0.18, // radians/frame max turn (tweakable)
-        });
+        // Special evolver primary shard: breaks into 3 mini-shards on impact or on hitting arena edge
+        if (player.ir.shipType == 9) {
+            this.bullets.push({
+                x: this.ship.x + Math.cos(angle) * 20,
+                y: this.ship.y + Math.sin(angle) * 20,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                life: 240,
+                damage: this.ship.damage * this.upgradeEffects.attackDamage * petMul,
+                pierce: 0,
+                piercedAsteroids: [],
+                piercedEnemies: [],
+                fromEnemy: false,
+                evolverShard: true,
+                radius: 10,
+            });
+        } else {
+            this.bullets.push({
+                x: this.ship.x + Math.cos(angle) * 20,
+                y: this.ship.y + Math.sin(angle) * 20,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                life: 120,
+                damage: this.ship.damage * this.upgradeEffects.attackDamage * petMul,
+                pierce: pierce,
+                piercedAsteroids: [],
+                piercedEnemies: [],
+                fromEnemy: false,
+                // homing properties (only used for sniper bullets)
+                homing: player.ir.shipType == null,
+                target: target,
+                homingStrength: 0.18, // radians/frame max turn (tweakable)
+            });
+        }
     }
 
     // Pause asteroid minigame: freeze existing asteroids and prevent new spawns
@@ -2888,6 +2979,32 @@ class SpaceArena {
                 bullet.vy *= 0.998;
             }
 
+            // Evolver shard edge collision: primary shard breaks into 3 mini shards when hitting arena edge
+            if (bullet.evolverShard) {
+                if (bullet.x < 0 || bullet.x > this.width || bullet.y < 0 || bullet.y > this.height) {
+                    // spawn 3 mini shards
+                        for (let k = 0; k < 3; k++) {
+                        const ang = Math.random() * Math.PI * 2;
+                        const spd = 6 + Math.random() * 4;
+                        this.bullets.push({
+                            x: Math.max(0, Math.min(this.width, bullet.x)),
+                            y: Math.max(0, Math.min(this.height, bullet.y)),
+                            vx: Math.cos(ang) * spd,
+                            vy: Math.sin(ang) * spd,
+                            life: 120,
+                            damage: (bullet.damage || 1) * 0.2,
+                            pierce: 0,
+                            piercedAsteroids: [],
+                            piercedEnemies: [],
+                            fromEnemy: false,
+                            evolverMini: true,
+                            radius: 4,
+                        });
+                    }
+                    bullet.life = 0;
+                }
+            }
+
             // Massive sword bouncing logic
             if (bullet.massiveSword) {
                 bullet.rot = (bullet.rot || 0) + (bullet.rotSpd || 0.15);
@@ -2896,6 +3013,16 @@ class SpaceArena {
                 if (bullet.x > this.width) { bullet.x = this.width; bullet.vx = -bullet.vx; }
                 if (bullet.y < 0) { bullet.y = 0; bullet.vy = -bullet.vy; }
                 if (bullet.y > this.height) { bullet.y = this.height; bullet.vy = -bullet.vy; }
+            }
+            // mini evolver shards bounce off edges until they hit an enemy
+            if (bullet.evolverMini) {
+                if (bullet.x < 0) { bullet.x = 0; bullet.vx = -bullet.vx * 0.9; }
+                if (bullet.x > this.width) { bullet.x = this.width; bullet.vx = -bullet.vx * 0.9; }
+                if (bullet.y < 0) { bullet.y = 0; bullet.vy = -bullet.vy * 0.9; }
+                if (bullet.y > this.height) { bullet.y = this.height; bullet.vy = -bullet.vy * 0.9; }
+                // slight damping to avoid infinite bouncing
+                bullet.vx *= 0.998;
+                bullet.vy *= 0.998;
             }
         }
 
@@ -4250,6 +4377,27 @@ class SpaceArena {
                         if (bullet.pierce < 0) bullet.life = 0;
                     } else {
                         // non-piercing: destroy bullet on hit
+                        // If this is an evolver primary shard, spawn 3 mini shards on impact
+                        if (bullet.evolverShard) {
+                            for (let k = 0; k < 3; k++) {
+                                const ang = Math.random() * Math.PI * 2;
+                                const spd = 6 + Math.random() * 4;
+                                this.bullets.push({
+                                    x: enemy.x,
+                                    y: enemy.y,
+                                    vx: Math.cos(ang) * spd,
+                                    vy: Math.sin(ang) * spd,
+                                    life: 120,
+                                    damage: (bullet.damage || 1) * 0.2,
+                                    pierce: 0,
+                                    piercedAsteroids: [],
+                                    piercedEnemies: [],
+                                    fromEnemy: false,
+                                    evolverMini: true,
+                                    radius: 4,
+                                });
+                            }
+                        }
                         bullet.life = 0;
                     }
 
@@ -4841,6 +4989,44 @@ class SpaceArena {
             this.ctx.restore();
         }
 
+        // Evolver ship (shipType 9) — triangle shape with blue-purple gradient and dividing line
+        if (player.ir.shipType == 9) {
+            this.ctx.save();
+            this.ctx.translate(this.ship.x, this.ship.y);
+            this.ctx.rotate(this.ship.angle);
+            let lenShip = Math.max(18, this.ship.radius || 20);
+
+            // blue-purple gradient
+            let triG = this.ctx.createLinearGradient(15, 0, -15, 0);
+            triG.addColorStop(0, '#5fb8ff');
+            triG.addColorStop(0.5, '#7c4dff');
+            triG.addColorStop(1, '#9aa7ff');
+
+            this.ctx.beginPath();
+            this.ctx.moveTo(20, 0);
+            this.ctx.lineTo(-10, 15);
+            this.ctx.lineTo(-15, 0);
+            this.ctx.lineTo(-10, -15);
+            this.ctx.closePath();
+            this.ctx.fillStyle = triG;
+            this.ctx.fill();
+
+            // black outline
+            this.ctx.strokeStyle = '#000';
+            this.ctx.lineWidth = Math.max(2, lenShip * 0.1);
+            this.ctx.stroke();
+
+            // dividing line through the middle
+            this.ctx.beginPath();
+            this.ctx.moveTo(-15, 0);
+            this.ctx.lineTo(20, 0);
+            this.ctx.strokeStyle = '#000';
+            this.ctx.lineWidth = Math.max(1, lenShip * 0.05);
+            this.ctx.stroke();
+
+            this.ctx.restore();
+        }
+
         for (let enemy of this.enemies) {
             if (!enemy.alive) continue;
             let type = this.enemyTypes[enemy.type];
@@ -5141,6 +5327,115 @@ class SpaceArena {
                 this.ctx.arc(bullet.x, bullet.y, r, 0, 2 * Math.PI);
                 this.ctx.fillStyle = bullet.fromEnemy ? "#ff4444" : "#ffec8b";
                 this.ctx.fill();
+            }
+            // Evolver primary shard rendering (crystal shard with facets)
+            if (bullet.evolverShard) {
+                this.ctx.save();
+                this.ctx.translate(bullet.x, bullet.y);
+                let ang = Math.atan2(bullet.vy, bullet.vx || 0);
+                this.ctx.rotate(ang);
+                let len = Math.min(56, (bullet.radius || 26) * 2);
+
+                // crystal gradients matching ship
+                let mainG = this.ctx.createLinearGradient(len, 0, -len * 0.7, 0);
+                mainG.addColorStop(0, '#5fb8ff');
+                mainG.addColorStop(0.5, '#7c4dff');
+                mainG.addColorStop(1, '#9aa7ff');
+                let facetG = this.ctx.createLinearGradient(0, -len * 0.5, 0, len * 0.5);
+                facetG.addColorStop(0, '#3f51b5');
+                facetG.addColorStop(1, '#00bcd4');
+
+
+                // main crystal body
+                this.ctx.beginPath();
+                this.ctx.moveTo(len, 0);
+                this.ctx.lineTo(len * 0.3, -len * 0.4);
+                this.ctx.lineTo(-len * 0.5, -len * 0.2);
+                this.ctx.lineTo(-len * 0.7, 0);
+                this.ctx.lineTo(-len * 0.5, len * 0.2);
+                this.ctx.lineTo(len * 0.3, len * 0.4);
+                this.ctx.closePath();
+                this.ctx.fillStyle = mainG;
+                this.ctx.fill();
+                this.ctx.strokeStyle = '#000';
+                this.ctx.lineWidth = Math.max(2, len * 0.1);
+                this.ctx.stroke();
+
+                // facet lines
+                this.ctx.beginPath();
+                this.ctx.moveTo(len * 0.3, -len * 0.4);
+                this.ctx.lineTo(-len * 0.5, len * 0.2);
+                this.ctx.strokeStyle = 'rgba(255,255,255,0.6)';
+                this.ctx.lineWidth = Math.max(1, len * 0.05);
+                this.ctx.stroke();
+
+                this.ctx.beginPath();
+                this.ctx.moveTo(len * 0.3, len * 0.4);
+                this.ctx.lineTo(-len * 0.5, -len * 0.2);
+                this.ctx.stroke();
+
+                // side facets
+                this.ctx.beginPath();
+                this.ctx.moveTo(len * 0.3, -len * 0.4);
+                this.ctx.lineTo(0, -len * 0.6);
+                this.ctx.lineTo(-len * 0.5, -len * 0.2);
+                this.ctx.closePath();
+                this.ctx.fillStyle = facetG;
+                this.ctx.fill();
+
+                this.ctx.beginPath();
+                this.ctx.moveTo(len * 0.3, len * 0.4);
+                this.ctx.lineTo(0, len * 0.6);
+                this.ctx.lineTo(-len * 0.5, len * 0.2);
+                this.ctx.closePath();
+                this.ctx.fillStyle = facetG;
+                this.ctx.fill();
+
+                // highlights
+                this.ctx.beginPath();
+                this.ctx.moveTo(len * 0.5, -len * 0.1);
+                this.ctx.lineTo(len * 0.2, 0);
+                this.ctx.lineTo(len * 0.5, len * 0.1);
+                this.ctx.closePath();
+                this.ctx.fillStyle = 'rgba(255,255,255,0.4)';
+                this.ctx.fill();
+
+                this.ctx.restore();
+            }
+            // Evolver mini shard rendering (small blue bullet)
+            if (bullet.evolverMini) {
+                this.ctx.beginPath();
+                let r = bullet.radius || 4;
+                this.ctx.arc(bullet.x, bullet.y, r, 0, 2 * Math.PI);
+                this.ctx.fillStyle = '#5fb8ff';
+                this.ctx.fill();
+                this.ctx.strokeStyle = '#2c3e50';
+                this.ctx.lineWidth = 1;
+                this.ctx.stroke();
+            }
+            // Evolver mini shard rendering (smaller triangle)
+            if (bullet.evolverMini) {
+                this.ctx.save();
+                this.ctx.translate(bullet.x, bullet.y);
+                let ang = Math.atan2(bullet.vy, bullet.vx || 0);
+                this.ctx.rotate(ang);
+                let len = Math.min(8, bullet.radius || 6);
+                // mini shards use the same family as the ship but slightly desaturated
+                let g2 = this.ctx.createLinearGradient(len, 0, -len * 0.6, 0);
+                g2.addColorStop(0, 'rgba(241,182,255,0.95)');
+                g2.addColorStop(0.5, 'rgba(154,167,255,0.95)');
+                g2.addColorStop(1, 'rgba(95,184,255,0.95)');
+                this.ctx.beginPath();
+                this.ctx.moveTo(len, 0);
+                this.ctx.lineTo(-len * 0.6, -len * 0.5);
+                this.ctx.lineTo(-len * 0.6, len * 0.5);
+                this.ctx.closePath();
+                this.ctx.fillStyle = g2;
+                this.ctx.fill();
+                this.ctx.lineWidth = Math.max(1, len * 0.2);
+                this.ctx.strokeStyle = '#0b0b0b';
+                this.ctx.stroke();
+                this.ctx.restore();
             }
         }
 

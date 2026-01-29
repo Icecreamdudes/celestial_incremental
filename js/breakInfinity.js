@@ -58,6 +58,7 @@
             buyUpgrade("bi", 116)
             buyUpgrade("bi", 117)
             buyUpgrade("bi", 117)
+            buyUpgrade("bi", 118)
         }
     },
     nodeStyle() {

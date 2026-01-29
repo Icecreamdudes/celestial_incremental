@@ -26,6 +26,8 @@
         wheelPointsEffect2: new Decimal(1),
         wheelPointsEffect3: new Decimal(1),
         wheelPointsMult: new Decimal(1),
+
+        autoSpin: false,
     }},
     automate() {},
     nodeStyle() {
@@ -43,6 +45,7 @@
     branches: ["cf",],
     update(delta) {
         player.wof.spinLength = new Decimal(10)
+        player.wof.spinLength = player.wof.spinLength.div(buyableEffect("sm", 105))
 
         if (player.wof.spinActive)
         {
@@ -62,11 +65,28 @@
             {
                 player.wof.wheelPoints = player.wof.wheelPoints.add(player.wof.segmentGains[player.wof.currentlySelectedSegment])
                 player.wof.spinActive = false
+
+                    let guarantee = buyableEffect("sm", 106).div(100).floor()
+                    let chance = buyableEffect("sm", 106).sub(guarantee.mul(100))
+                    if (chance.gte(Math.random())) {
+                        guarantee = guarantee.add(1)
+                        chance = new Decimal(0)
+                    }
+                    if (guarantee.gt(0)) {
+                        player.cb.evolutionShards = player.cb.evolutionShards.add(guarantee);
+                        player.cb.pityEvoCurrent = new Decimal(0);
+                        if (inChallenge("ip", 17)) player.cb.IC7shardCount++
+                        doPopup("none", "+" + formatWhole(guarantee) + " Evolution Shard!", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
+                        if (player.tab == "wof") makeShinies(GOLDEN_EFFECT_TEXT, 1, {x: 560, y: 550, text: "Evolution Shards Earned!"})
+                    }
+                    player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(chance);
+
                 player.wof.trueTimer = new Decimal(0)
             }
         }
 
-        player.wof.spinCost = player.wof.wheelsSpinned.pow(1.5).add(1).mul(10000)
+        if (player.sm.spinAmount.lt(20)) player.wof.spinCost = player.wof.wheelsSpinned.pow(1.5).add(1).mul(10000)
+        if (player.sm.spinAmount.gte(20)) player.wof.spinCost = player.wof.wheelsSpinned.pow(2.25).add(1).mul(10000)
         player.wof.spinCost = player.wof.spinCost.div(buyableEffect("cf", 34))
 
         player.wof.spinPause = player.wof.spinPause.sub(1)
@@ -80,9 +100,20 @@
         player.wof.wheelPointsEffect3 = player.wof.wheelPoints.pow(0.3).div(2).add(1)
 
         player.wof.wheelPointsMult = new Decimal(1)
-        player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(player.wof.wheelsSpinned.pow(0.65).add(1))
+        player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(player.wof.wheelsSpinned.pow(buyableEffect("sm", 104)).pow(0.65).add(1))
         player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(buyableEffect("wof", 13))
         player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(buyableEffect("cf", 24))
+        player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(player.sm.chipsEffect[2])
+
+        if (player.wof.autoSpin) {
+            if (player.za.chancePoints.gte(player.wof.spinCost))
+            {
+                player.wof.spinPause = new Decimal(7)
+
+                player.wof.spinActive = true
+                player.wof.wheelsSpinned = player.wof.wheelsSpinned.add(1)
+            }
+        }
     },
     randomizeSegments() {
         for (let i = 0; i < 8; i++) {
@@ -131,7 +162,6 @@
         player.cf.buyables[21] = new Decimal(0)
         player.cf.buyables[22] = new Decimal(0)
         player.cf.buyables[23] = new Decimal(0)
-        player.cf.buyables[24] = new Decimal(0)
         player.cf.buyables[31] = new Decimal(0)
         player.cf.buyables[32] = new Decimal(0)
         player.cf.buyables[33] = new Decimal(0)
@@ -241,6 +271,18 @@
             unlocked() { return true },
             onClick() {
                 player.wof.spinPause = new Decimal(7)
+            },
+            style() { 
+                return { width: '250px', "min-height": '75px', borderRadius: "15px 15px 15px 15px", border: "3px solid #0f221aff", backgroundImage: "linear-gradient(180deg, #144b34ff 0%, #3d8165ff 50%, #144b34ff 100%)"}
+            },
+        },
+        23: {
+            title() { return player.wof.autoSpin ? "Autospin: ON" : "Autospin: OFF" },
+            canClick() { return true },
+            unlocked() { return player.sm.buyables[107].gte(1) },
+            onClick() {
+                if (!player.wof.autoSpin) player.wof.autoSpin = true
+                else player.wof.autoSpin = false
             },
             style() { 
                 return { width: '250px', "min-height": '75px', borderRadius: "15px 15px 15px 15px", border: "3px solid #0f221aff", backgroundImage: "linear-gradient(180deg, #144b34ff 0%, #3d8165ff 50%, #144b34ff 100%)"}
@@ -409,7 +451,7 @@
             purchaseLimit() { return new Decimal(15) },
             currency() { return player.wof.wheelPoints },
             pay(amt) { player.wof.wheelPoints = this.currency().sub(amt) },
-            effect(x) { return Decimal.div(1, getBuyableAmount(this.layer, this.id).pow(0.35).mul(0.1).add(1)) },
+            effect(x) { return Decimal.div(1, getBuyableAmount(this.layer, this.id).pow(0.35).mul(0.15).add(1)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -452,9 +494,9 @@
 
                     ["style-row", [
                     ["style-column", [ //wheel 
-                    ["blank", "25px"],
+                    ["blank", "10px"],
                     ["row", [["clickable", 22],]],
-                    ["blank", "25px"],
+                    ["blank", "10px"],
                     ["bar", "wheel"],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Requires " + format(player.wof.spinCost) + " chance points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
@@ -463,7 +505,8 @@
                     ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13],]],
                     ["row", [["clickable", 14], ["clickable", 21], ["clickable", 15],]],
                     ["row", [["clickable", 16], ["clickable", 17], ["clickable", 18],]],
-                    ["blank", "25px"],
+                    ["blank", "10px"],
+                    ["raw-html", function () { return player.sm.buyables[106].gte(1) ? "<h5>ESC: " + format(buyableEffect("sm", 106).mul(100)) + "%" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "<h5>Mult: " + format(player.wof.wheelPointsMult) + "x. (also based on amount of wheel spins)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ], {width: "600px", height: "700px", background: "rgba(5, 80, 28, 0.5)", border: "0px solid #ccc", borderRight: "0px", borderLeft: "0px", borderRadius: "15px 0px 0px 15px"}],
@@ -477,7 +520,9 @@
                     ["raw-html", function () { return "Boosts heads and tails gain by x" + format(player.wof.wheelPointsEffect3) + "." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ], {width: "597px", height: "100px", background: "rgba(34, 124, 61, 0.5)", border: "3px solid #ccc",  borderBottom: "0px", borderTop: "0px", borderRadius: "0px 15px 0px 0px"}],
                     ["style-column", [ 
-                    ["blank", "25px"],
+                    ["blank", "12.5px"],
+                    ["row", [["clickable", 23],]],
+                    ["blank", "12.5px"],
                     ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13],]],
                     ["row", [["ex-buyable", 14], ["ex-buyable", 15],]],
                     ], {width: "600px", height: "600px", background: "rgba(34, 124, 61, 0.5)", border: "3px solid #ccc", borderRight: "0px", borderRadius: "0px 0px 15px 0px"}],

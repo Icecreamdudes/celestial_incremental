@@ -384,12 +384,7 @@ addLayer("in", {
             player.po.featureSlots = player.po.featureSlotsMax
         }
 
-        //     <----     MASTERY POINT STUFF     ---->
-        if (hasUpgrade("bi", 14)) {
-            if (player.po.dice) player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(player.om.diceMasteryPointsToGet)
-            if (player.po.rocketFuel) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
-            if (player.po.hex || hasUpgrade("s", 18)) player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
-        }
+        awardOTFMasteryPoints();
     },
     clickables: {},
     bars: {},

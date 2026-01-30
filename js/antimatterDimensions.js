@@ -411,7 +411,9 @@ addLayer("ad", {
 
         setAntimatterDimensionCostScaling();
 
-        // REVERSE CRUNCH CODE
+        // TODO: a domino chain starting here seems to be the result of some 
+        // odd interactions between mechanics. 
+        // Maybe related to microtick structure? 
         player.ad.revCrunchPause = player.ad.revCrunchPause.sub(1)
         if (player.ad.revCrunchPause.gt(0)) {
             layers.revc.reverseCrunch();

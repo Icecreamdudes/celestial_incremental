@@ -597,7 +597,7 @@
         },
         117: {
             title: "BI NIP Upgrade XVI",
-            unlocked() {return hasMilestone("s", 12) && hasUpgrade("ma", 21)},
+            unlocked() {return hasMilestone("s", 12) && hasUpgrade("depth2", 6)},
             description: "Triple replicanti mult, and replicanti effects are buffed.",
             cost: new Decimal(1e300),
             currencyLocation() { return player.ta },

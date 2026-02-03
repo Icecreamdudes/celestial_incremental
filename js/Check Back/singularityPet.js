@@ -103,10 +103,10 @@ addLayer("sp", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Kres Defense"
+                return "Kres Health"
             },
             display() {
-                return 'which are boosting black heart defense by +' + formatWhole(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting black heart health by +' + formatWhole(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Kres Points'
             },
             buy(mult) {
@@ -260,15 +260,15 @@ addLayer("sp", {
             purchaseLimit() { return new Decimal(50) },
             currency() { return player.sp.navPoints},
             pay(amt) { player.sp.navPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(5) },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Nav Strength"
+                return "Nav Damage"
             },
             display() {
-                return 'which are boosting black heart strength by +' + formatWhole(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting black heart damage by +' + formatSimple(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Nav Points'
             },
             buy(mult) {
@@ -422,7 +422,7 @@ addLayer("sp", {
             purchaseLimit() { return new Decimal(50) },
             currency() { return player.sp.selPoints},
             pay(amt) { player.sp.selPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(2) },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -430,7 +430,7 @@ addLayer("sp", {
                 return "Sel Agility"
             },
             display() {
-                return 'which are boosting black heart agility by +' + formatWhole(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting black heart agility by +' + formatSimple(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Sel Points'
             },
             buy(mult) {

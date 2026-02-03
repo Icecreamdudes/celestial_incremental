@@ -297,7 +297,7 @@ addLayer("cb", {
         let mult = new Decimal(1)
         mult = mult.add(levelableEffect("pet", 1107)[1].sub(1))
         mult = mult.add(buyableEffect("ev2", 31).sub(1))
-        mult = mult.add(buyableEffect("ma", 33).sub(1))
+        mult = mult.add(buyableEffect("depth1", 4).sub(1))
         for (let i in player.cb.xpTimers) {
             player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(mult)
             player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(levelableEffect("pet", 1102)[1])
@@ -317,7 +317,7 @@ addLayer("cb", {
             player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(buyableEffect("ep0", 12))
             player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(buyableEffect("ev2", 21))
             if (hasUpgrade("cs", 1202)) player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(1.2)
-            player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(buyableEffect("ma", 34))
+            player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(buyableEffect("depth3", 4))
             player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(buyableEffect("cof", 32))
         }
 

@@ -45,6 +45,12 @@ function drawTree() {
 		drawComponentBranches(player.tab, tmp[player.tab].upgrades, "upgrade-")
 		drawComponentBranches(player.tab, tmp[player.tab].buyables, "buyable-")
 		drawComponentBranches(player.tab, tmp[player.tab].clickables, "clickable-")
+		if (layers[player.tab].innerLayer) {
+			let lay = run(layers[player.tab].innerLayer, layers[player.tab])
+			drawComponentBranches(lay, tmp[lay].upgrades, "upgrade-")
+			drawComponentBranches(lay, tmp[lay].buyables, "buyable-")
+			drawComponentBranches(lay, tmp[lay].clickables, "clickable-")
+		}
 	}
 }
 

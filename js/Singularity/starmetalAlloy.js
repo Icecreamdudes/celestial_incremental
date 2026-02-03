@@ -473,14 +473,14 @@
         },
         108: {
             title: "Light Starmetal Upgrade VIII",
-            unlocked() { return hasUpgrade("sma", 107) && player.ma.secondAreaUnlock},
+            unlocked() { return hasUpgrade("sma", 107) && player.depth2.unlocked},
             description: "Number of dice sides is multiplied based on best depth 1 combo, and unlock new singularity milestones.",
             cost: new Decimal("1111"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
             effect() {
-                return player.ma.bestComboDepth1.mul(0.01).add(1)
+                return player.depth1.highestCombo.mul(0.01).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style() {
@@ -581,10 +581,10 @@
         },
         //skills
         221: {
-            title: "Second Skill",
-            unlocked() { return hasUpgrade("sma", 201) && hasUpgrade("sma", 202) && hasUpgrade("sma", 203)},
-            description: "Unlock Eclipse's second skill.",
-            cost: new Decimal("20"),
+            title: "Encouragement",
+            unlocked: true,
+            description: "Unlock Eclipse's \"Motivation\" skill.",
+            cost: new Decimal("15"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Eclipse Shards",
             currencyInternalName: "eclipseShards",
@@ -595,10 +595,24 @@
             }
         },
         222: {
-            title: "Third Skill",
+            title: "Hard Light?",
             unlocked() { return hasUpgrade("sma", 221)},
-            description: "Unlock Eclipse's third skill.",
-            cost: new Decimal("50"),
+            description: "Unlock Eclipse's \"Light Barrier\" skill.",
+            cost: new Decimal("30"),
+            currencyLocation() { return player.sma },
+            currencyDisplayName: "Eclipse Shards",
+            currencyInternalName: "eclipseShards",
+            style() {
+                let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "#f5ff68"
+                return look
+            }
+        },
+        223: {
+            title: "Aligned Time",
+            unlocked() { return hasUpgrade("sma", 222)},
+            description: "Unlock Eclipse's \"Syzygy\" skill.",
+            cost: new Decimal("60"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Eclipse Shards",
             currencyInternalName: "eclipseShards",
@@ -832,7 +846,7 @@
                         ["blank", "5px"],
                         ["style-row", [], {width: "800px", height: "3px", backgroundColor: "#b29c47"}],
                         ["blank", "5px"],
-                        ["row", [["upgrade", 221], ["upgrade", 222]]],
+                        ["row", [["upgrade", 221], ["upgrade", 222], ["upgrade", 223]]],
                         ["blank", "5px"],
                     ], {width: "800px", backgroundColor: "#222", border: "3px solid #b29c47", borderRadius: "20px"}],
                 ]

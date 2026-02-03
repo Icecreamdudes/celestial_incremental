@@ -186,7 +186,7 @@ function formatShortSimple(decimal, precision = 1) {
     else if (decimal.gte(1e6)) return exponentialFormat(decimal, 2)
     else if (decimal.gte(1e3)) return commaFormat(decimal, 0)
     else if (decimal.gte(0.0001) && decimal.mag % 1 == 0) return regularFormat(decimal, 0)
-    else if (decimal.gte(0.0001)) return regularFormat(decimal, precision)
+    else if (decimal.gte(0.0001)) return commaFormat(decimal, precision)
     else if (decimal.eq(0)) return (0).toFixed(0)
 
     decimal = invertOOM(decimal)

@@ -12,8 +12,8 @@ addLayer("depth1", {
 
         gloomingUmbrite: new Decimal(0),
         dimUmbrite: new Decimal(0),
+        depth1Mult: new Decimal(1),
 
-        cooldown: new Decimal(0),
         highestCombo: new Decimal(0),
         comboEffect: new Decimal(1),
         comboStart: 0,
@@ -40,7 +40,7 @@ addLayer("depth1", {
             borderColor: "#720455",
             color: "#961d76",
             textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
-            marginTop: "60px",
+            marginRight: "50px !important",
         }
         if (player.subtabs["bh"]["stages"] == "depth1") str.outline = "3px solid #999"
         return str
@@ -48,44 +48,25 @@ addLayer("depth1", {
     tooltip: "Depth 1",
     color: "#8a0e79",
     update(delta) {
-        if (player.depth1.cooldown.gt(0)) player.depth1.cooldown = player.depth1.cooldown.sub(delta)
-
-        player.depth1.comboEffect = Decimal.pow(3, player.depth1.highestCombo)
+        player.depth1.comboEffect = Decimal.pow(3, player.depth1.highestCombo).pow(buyableEffect("depth1", 2))
 
         player.depth1.milestoneEffect = new Decimal(0)
         for (let i = 25; i < 251; i = i+25) {
             player.depth1.milestoneEffect = player.depth1.milestoneEffect.add(player.depth1.milestone[i])
         }
+        
+        player.depth1.depth1Mult = new Decimal(1)
+        player.depth1.depth1Mult = player.depth1.depth1Mult.mul(player.darkTemple.depth1CurMult)
     },
     clickables: {
         "enter": {
-            title() { return player.depth1.cooldown.lte(0) ? "<h2>Enter Depth 1" : "<h2>Cooldown: " + formatTime(player.depth1.cooldown) },
-            canClick() { return player.depth1.cooldown.lte(0) },
+            title: "<h2>Enter Depth 1",
+            canClick: true,
             unlocked: true,
             onClick() {
-                player.subtabs["bh"]["stuff"] = "battle"
-
-                for (let i = 0; i < 3; i++) {
-                    player.bh.characters[i].health = player.bh.characters[i].maxHealth
-
-                    for (let j = 0; j < 4; j++) {
-                        player.bh.characters[i].skills[j].cooldown = player.bh.characters[i].skills[j].cooldownMax
-                        player.bh.characters[i].skills[j].duration = new Decimal(0)
-                        player.bh.characters[i].skills[j].interval = new Decimal(0)
-                    }
-                }
-
-                player.bh.currentStage = "depth1"
-                player.bh.combo = new Decimal(player.depth1.comboStart)
-                celestialiteSpawn()
-
-                player.depth1.cooldown = BHS["depth1"].cooldown
+                BHStageEnter("depth1")
             },
-            style() {
-                let look = {width: "200px", minHeight: "75px", color: "white", border: "3px solid #8a0e79", borderRadius: "20px"}
-                player.depth1.cooldown.gt(0) ? look.backgroundColor = "#361e1e" : look.backgroundColor = "black"
-                return look
-            },
+            style: {width: "200px", minHeight: "75px", color: "white", background: "radial-gradient(#250121, black)", border: "3px solid #720455", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"},
         },
     },
     upgrades: {
@@ -149,7 +130,7 @@ addLayer("depth1", {
             title: "Old Formula",
             unlocked: true,
             description: "Buff antimatter formula by ^20.",
-            cost: new Decimal(500),
+            cost: new Decimal(400),
             currencyLocation() {return player.depth1 },
             currencyDisplayName: "Glooming Umbrite",
             currencyInternalName: "gloomingUmbrite",
@@ -163,7 +144,7 @@ addLayer("depth1", {
             title: "<small>Should've been here a long time ago",
             unlocked: true,
             description: "Gain 100% of time cubes per second.",
-            cost: new Decimal(120),
+            cost: new Decimal(100),
             currencyLocation() {return player.depth1 },
             currencyDisplayName: "Dim Umbrite",
             currencyInternalName: "dimUmbrite",
@@ -181,14 +162,14 @@ addLayer("depth1", {
             purchaseLimit() { return new Decimal(20) },
             currency() { return player.depth1.gloomingUmbrite},
             pay(amt) { player.depth1.gloomingUmbrite = this.currency().sub(amt) },
-            effect(x) {return getBuyableAmount(this.layer, this.id).div(20).add(1)},
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(10)},
             unlocked: true,
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {return this.currency().gte(this.cost())},
             display() {
                 return "<h3>Healthy</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/20)\n\
                     Boost base character health\n\
-                    Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\ \n\
+                    Currently: +" + formatWhole(tmp[this.layer].buyables[this.id].effect.mul(100)) + "%\n\ \n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Glooming Umbrite"
             },
             buy() {
@@ -209,7 +190,7 @@ addLayer("depth1", {
             pay(amt) { player.depth1.dimUmbrite = this.currency().sub(amt) },
             effect(x) {return getBuyableAmount(this.layer, this.id).div(10).add(1)},
             unlocked: true,
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {return this.currency().gte(this.cost())},
             display() {
                 return "<h3>Infinitier</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/20)\n\
@@ -233,13 +214,13 @@ addLayer("depth1", {
             purchaseLimit() { return new Decimal(10) },
             currency() { return player.depth1.gloomingUmbrite},
             pay(amt) { player.depth1.gloomingUmbrite = this.currency().sub(amt) },
-            effect(x) {return getBuyableAmount(this.layer, this.id).mul(10).pow(5).add(1) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).pow(3).add(1) },
             unlocked: true,
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {return this.currency().gte(this.cost())},
             display() {
-                return "<h3>Posted</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
-                    Boost post-otf resources\n\
+                return "<h3>Normality</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
+                    Boost normality gain\n\
                     Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 1) + "\n\ \n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Glooming Umbrite"
             },
@@ -259,14 +240,14 @@ addLayer("depth1", {
             purchaseLimit() { return new Decimal(10) },
             currency() { return player.depth1.dimUmbrite},
             pay(amt) { player.depth1.dimUmbrite = this.currency().sub(amt) },
-            effect(x) {return Decimal.pow(10, getBuyableAmount(this.layer, this.id))},
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(20).add(1)},
             unlocked: true,
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {return this.currency().gte(this.cost())},
             display() {
-                return "<h3>Singular <small>[wait no]</small></h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
-                    Boost singularity points\n\
-                    Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 1) + "\n\ \n\
+                return "<h3>Shards-o-Shards</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
+                    Boost CB XP Button ESC\n\
+                    Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\ \n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Dim Umbrite"
             },
             buy() {
@@ -310,12 +291,14 @@ addLayer("depth1", {
                     ["style-column", [
                         ["raw-html", "Properties", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
                     ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "10px"}],
-                    ["raw-html", "<u>Cooldown", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", "5 Minutes", {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                    ["blank", "5px"],
                     ["raw-html", "<u>Combo Scaling", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
                     ["raw-html", "1.5% starting at 100", {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                ], {width: "250px", height: "270px", background: "var(--layerBackground)"}],
+                ], {width: "250px", height: "197px", background: "var(--layerBackground)"}],
+                ["style-row", [
+                    ["layer-proxy", ["bh", [
+                        ["row", [["clickable", "Auto-Enter"], ["blank", ["10px", "10px"]], ["clickable", "Auto-Exit"]]],
+                    ]]],
+                ], {width: "250px", height: "70px", background: "var(--miscButtonDisable)", borderTop: "3px solid var(--regBorder)"}],
             ], {width: "250px", height: "420px"}],
             ["style-column", [
                 ["top-column", [
@@ -323,8 +306,8 @@ addLayer("depth1", {
                         ["raw-html", () => {return "Highest Combo: " + formatWhole(player.depth1.highestCombo) + "/" + BHS["depth1"].comboLimit}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
                     ], {width: "225px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "2px"}],
                     ["top-column", [
-                        ["raw-html", () => {return "Boosts infinity points by x" + formatSimple(player.depth1.comboEffect)}, {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
-                    ], {width: "250px", height: "25px"}],
+                        ["raw-html", () => {return "Boosts infinity points by x" + formatSimple(player.depth1.comboEffect)}, {color: "var(--textColor)", fontSize: "11px", fontFamily: "monospace"}],
+                    ], {width: "272px", height: "25px"}],
                     ["top-column", [
                         ["blank", "4px"],
                         ["raw-html", () => {return "Milestones increase skill points by +" + formatSimple(player.depth1.milestoneEffect)}, {color: "var(--textColor)", fontSize: "11px", fontFamily: "monospace"}],
@@ -356,22 +339,21 @@ BHS.depth1 = {
     nameCap: "Depth 1",
     nameLow: "depth 1",
     music: "music/celestialites.mp3",
-    cooldown: new Decimal(300),
     comboLimit: 250,
     comboScaling: 1.015,
     comboScalingStart: 100,
     generateCelestialite(combo) {
         if (typeof combo == "object") combo = combo.toNumber()
         switch (combo) {
-            case 24:
+            case 24: case 74:
                 return "lesserEnas"
-            case 49: case 74:
+            case 49: case 124:
                 return "lesserPente"
-            case 99: case 124:
+            case 99: case 174:
                 return "lesserDeka"
-            case 149: case 174:
+            case 149: case 224:
                 return "lesserHekaton"
-            case 199: case 224:
+            case 199:
                 return "lesserKhilioi"
             case 249:
                 return "lesserMyrioi"
@@ -390,7 +372,7 @@ BHS.depth1 = {
 
 BHC.lesserAlpha = {
     name: "Celestialite Lesser Alpha",
-    symbol: "↓α",
+    symbol: "⇓α",
     style: {
         background: "linear-gradient(90deg, #830000, #DE0000)",
         color: "black",
@@ -423,7 +405,7 @@ BHC.lesserAlpha = {
 
 BHC.lesserBeta = {
     name: "Celestialite Lesser Beta",
-    symbol: "↓β",
+    symbol: "⇓β",
     style: {
         background: "linear-gradient(90deg, #830000, #DE0000)",
         color: "black",
@@ -456,7 +438,7 @@ BHC.lesserBeta = {
 
 BHC.lesserGamma = {
     name: "Celestialite Lesser Gamma",
-    symbol: "↓γ",
+    symbol: "⇓γ",
     style: {
         background: "linear-gradient(90deg, #830000, #DE0000)",
         color: "black",
@@ -489,7 +471,7 @@ BHC.lesserGamma = {
 
 BHC.lesserDelta = {
     name: "Celestialite Lesser Delta",
-    symbol: "↓δ",
+    symbol: "⇓δ",
     style: {
         background: "linear-gradient(90deg, #830000, #DE0000)",
         color: "black",
@@ -524,7 +506,7 @@ BHC.lesserDelta = {
 
 BHC.lesserEpsilon = {
     name: "Celestialite Lesser Epsilon",
-    symbol: "↓ε",
+    symbol: "⇓ε",
     style: {
         background: "linear-gradient(90deg, #830000, #DE0000)",
         color: "black",
@@ -559,7 +541,7 @@ BHC.lesserEpsilon = {
 
 BHC.lesserZeta = {
     name: "Celestialite Lesser Zeta",
-    symbol: "↓ζ",
+    symbol: "⇓ζ",
     style: {
         background: "linear-gradient(90deg, #830000, #DE0000)",
         color: "black",
@@ -594,7 +576,7 @@ BHC.lesserZeta = {
 
 BHC.lesserEta = {
     name: "Celestialite Lesser Eta",
-    symbol: "↓η",
+    symbol: "⇓η",
     style: {
         background: "linear-gradient(90deg, #830000, #DE0000)",
         color: "black",
@@ -629,7 +611,7 @@ BHC.lesserEta = {
 
 BHC.lesserTheta = {
     name: "Celestialite Lesser Theta",
-    symbol: "↓θ",
+    symbol: "⇓θ",
     style: {
         background: "linear-gradient(90deg, #830000, #DE0000)",
         color: "black",
@@ -653,7 +635,7 @@ BHC.lesserTheta = {
         let random = Math.random()
         if (random < 0.4) {
             gain.gloomingUmbrite = Decimal.add(18, getRandomInt(12))
-        } else if (random > 0.4 && random < 0.85) {
+        } else if (random > 0.4 && random < 0.8) {
             gain.dimUmbrite = Decimal.add(6, getRandomInt(4))
         } else {
             gain.darkEssence = Decimal.add(2, getRandomInt(2))
@@ -664,7 +646,7 @@ BHC.lesserTheta = {
 
 BHC.lesserIota = {
     name: "Celestialite Lesser Iota",
-    symbol: "↓ι",
+    symbol: "⇓ι",
     style: {
         background: "linear-gradient(90deg, #830000, #DE0000)",
         color: "black",
@@ -688,7 +670,7 @@ BHC.lesserIota = {
         let random = Math.random()
         if (random < 0.4) {
             gain.gloomingUmbrite = Decimal.add(24, getRandomInt(16))
-        } else if (random > 0.4 && random < 0.85) {
+        } else if (random > 0.4 && random < 0.8) {
             gain.dimUmbrite = Decimal.add(10, getRandomInt(5))
         } else {
             gain.darkEssence = Decimal.add(2, getRandomInt(3))
@@ -699,7 +681,7 @@ BHC.lesserIota = {
 
 BHC.lesserKappa = {
     name: "Celestialite Lesser Kappa",
-    symbol: "↓κ",
+    symbol: "⇓κ",
     style: {
         background: "linear-gradient(90deg, #830000, #DE0000)",
         color: "black",
@@ -723,7 +705,7 @@ BHC.lesserKappa = {
         let random = Math.random()
         if (random < 0.4) {
             gain.gloomingUmbrite = Decimal.add(35, getRandomInt(15))
-        } else if (random > 0.4 && random < 0.85) {
+        } else if (random > 0.4 && random < 0.8) {
             gain.dimUmbrite = Decimal.add(15, getRandomInt(8))
         } else {
             gain.darkEssence = Decimal.add(3, getRandomInt(3))
@@ -735,7 +717,7 @@ BHC.lesserKappa = {
 // MINIBOSSES
 BHC.lesserEnas = {
     name: "Celestialite Lesser Enas",
-    symbol: "↓Ι",
+    symbol: "⇓Ι",
     style: {
         background: "linear-gradient(90deg, #830000, #DE0000)",
         color: "black",
@@ -774,7 +756,7 @@ BHC.lesserEnas = {
 
 BHC.lesserPente = {
     name: "Celestialite Lesser Pente",
-    symbol: "↓Π",
+    symbol: "⇓Π",
     style: {
         background: "linear-gradient(90deg, #830000, #DE0000)",
         color: "black",
@@ -812,7 +794,7 @@ BHC.lesserPente = {
 
 BHC.lesserDeka = {
     name: "Celestialite Lesser Deka",
-    symbol: "↓Δ",
+    symbol: "⇓Δ",
     style: {
         background: "linear-gradient(90deg, #830000, #DE0000)",
         color: "black",
@@ -851,7 +833,7 @@ BHC.lesserDeka = {
 
 BHC.lesserHekaton = {
     name: "Celestialite Lesser Hekaton",
-    symbol: "↓Η",
+    symbol: "⇓Η",
     style: {
         background: "linear-gradient(90deg, #830000, #DE0000)",
         color: "black",
@@ -891,7 +873,7 @@ BHC.lesserHekaton = {
 
 BHC.lesserKhilioi = {
     name: "Celestialite Lesser Khilioi",
-    symbol: "↓Χ",
+    symbol: "⇓Χ",
     style: {
         background: "linear-gradient(90deg, #830000, #DE0000)",
         color: "black",
@@ -939,7 +921,7 @@ BHC.lesserKhilioi = {
 
 BHC.lesserMyrioi = {
     name: "Celestialite Lesser Myrioi",
-    symbol: "↓Μ",
+    symbol: "⇓Μ",
     style: {
         background: "linear-gradient(90deg, #830000, #DE0000)",
         color: "black",

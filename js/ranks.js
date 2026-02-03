@@ -216,7 +216,7 @@
 
         //Time reversal
 
-        if (!player.r.timeReversed && !hasUpgrade("ma", 14)) {
+        if (!player.r.timeReversed && !hasUpgrade("depth1", 6)) {
             player.r.timeCubesPerSecond = new Decimal(0)
         } else {
             player.r.timeCubesPerSecond = player.points.plus(1).log10().pow(0.3)

@@ -26,7 +26,7 @@
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js",
 		"Check Back/singularityPet.js",
 		"Black Heart/blackheart.js", "Black Heart/blackHeartFunctions.js", "Black Heart/characters.js", "Black Heart/skills.js", "Black Heart/depth1.js",
-		"Black Heart/depth2.js", "Black Heart/depth3.js",
+		"Black Heart/depth2.js", "Black Heart/depth3.js", "Black Heart/matosLair.js", "Black Heart/darkTemple.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 	],
@@ -1478,9 +1478,6 @@ function fixOldSave(oldVersion){
 		if (player.cb.XPBoost.gte(100000)) player.cb.XPBoost = new Decimal(100000)
 		if (player.cb.xp.gte(50000000)) player.cb.xp = new Decimal(50000000)
 		if (player.cb.totalxp.gte(2.23e12)) player.cb.totalxp = new Decimal(2.23e12)
-		if (player.ma.bestComboDepth1.gte(100)) player.ma.bestComboDepth1 = new Decimal(100)
-		if (player.ma.bestComboDepth2.gte(100)) player.ma.bestComboDepth2 = new Decimal(100)
-		if (player.ma.bestComboDepth3.gte(100)) player.ma.bestComboDepth3 = new Decimal(100)
 		if (!player.pet.singularityFragments) player.pet.singularityFragments = new Decimal(0)
 		player.pet.highestDicePetCombo = new Decimal(player.pet.highestDicePetCombo)
 		player.cb.evolutionShards = new Decimal(player.cb.evolutionShards).floor()
@@ -1504,10 +1501,7 @@ function fixOldSave(oldVersion){
 		for (let prop in player.fu.buyables) {
 			if (getBuyableAmount("fu", prop).gt(layers.fu.buyables[prop].purchaseLimit())) setBuyableAmount("fu", prop, layers.fu.buyables[prop].purchaseLimit())
 		}
-		setBuyableAmount("sma", 12, new Decimal(getBuyableAmount("sma", 12).mul(2))),
-		setBuyableAmount("ma", 101, new Decimal(0))
-		setBuyableAmount("ma", 102, new Decimal(0))
-		setBuyableAmount("ma", 103, new Decimal(0))
+		setBuyableAmount("sma", 12, new Decimal(getBuyableAmount("sma", 12).mul(2)))
 
 		if (player.le.punchcardsXP != undefined) {
 			setLevelableXP("pu", 101, new Decimal(player.le.punchcardsXP[0]))
@@ -1664,5 +1658,38 @@ function fixOldSave(oldVersion){
 			player.sp.buyables[34] = new Decimal(player.ep5.buyables[12])
 			player.sp.buyables[35] = new Decimal(player.ep5.buyables[13])
 		}
+	}
+	if (oldVersion < 190.2) {
+		// Depth 1
+		player.depth1.highestCombo = new Decimal(player.ma.bestComboDepth1)
+		if (hasUpgrade("ma", 11)) player.depth1.upgrades.push(1)
+		if (hasUpgrade("ma", 12)) player.depth1.upgrades.push(2)
+		if (hasUpgrade("ma", 13)) player.depth1.upgrades.push(3)
+		if (hasUpgrade("ma", 19)) player.depth1.upgrades.push(5)
+		if (hasUpgrade("ma", 14)) player.depth1.upgrades.push(6)
+		player.depth1.buyables[1] = new Decimal(player.ma.buyables[14]).div(5).floor()
+		player.depth1.buyables[2] = new Decimal(player.ma.buyables[21]).div(5).floor()
+		player.depth1.buyables[3] = new Decimal(player.ma.buyables[24]).div(10).floor()
+		player.depth1.buyables[4] = new Decimal(player.ma.buyables[33])
+
+		// Depth 2
+		player.depth2.highestCombo = new Decimal(player.ma.bestComboDepth2)
+		if (hasUpgrade("ma", 23)) player.depth2.upgrades.push(1)
+		if (hasUpgrade("ma", 24)) player.depth2.upgrades.push(2)
+		if (hasUpgrade("ma", 25)) player.depth2.upgrades.push(3)
+		if (hasUpgrade("ma", 22)) player.depth2.upgrades.push(5)
+		if (hasUpgrade("ma", 21)) player.depth2.upgrades.push(6)
+		player.depth2.buyables[1] = new Decimal(player.ma.buyables[15]).div(5).floor()
+		player.depth2.buyables[3] = new Decimal(player.ma.buyables[32]).div(2.5).floor()
+		player.depth2.buyables[4] = new Decimal(player.ma.buyables[23]).div(10).floor()
+
+		// Depth 3
+		player.depth3.highestCombo = new Decimal(player.ma.bestComboDepth3)
+		if (hasUpgrade("ma", 29)) player.depth3.upgrades.push(5)
+		if (hasUpgrade("ma", 30)) player.depth3.upgrades.push(6)
+		player.depth3.buyables[1] = new Decimal(player.ma.buyables[16]).div(5).floor()
+		player.depth3.buyables[2] = new Decimal(player.ma.buyables[17]).div(5).floor().min(20)
+		player.depth3.buyables[3] = new Decimal(player.ma.buyables[31]).div(2.5).floor()
+		player.depth3.buyables[4] = new Decimal(player.ma.buyables[34])
 	}
 }

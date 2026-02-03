@@ -1,29 +1,30 @@
-function bhAction(index, slot) {
+function bhAction(index, slot, interval = false) {
     let action
     let target
     let attribute
     let delay = 0
     let luckMult = new Decimal(1)
     if (index == 3) {
-        player.bh.celestialite.actions[slot].cooldown = new Decimal(0)
+        if (!interval) player.bh.celestialite.actions[slot].cooldown = new Decimal(0)
         action = BHC[player.bh.celestialite.id].actions[slot]
         attribute = player.bh.celestialite.attributes
     } else {
-        player.bh.characters[index].skills[slot].cooldown = new Decimal(0)
+        if (!interval) player.bh.characters[index].skills[slot].cooldown = new Decimal(0)
         action = BHA[player.bh.characters[index].skills[slot].id]
         attribute = player.bh.characters[index].attributes
         luckMult = Decimal.div(Decimal.add(100, player.bh.characters[index].luck), 100)
     }
+    let type = !interval ? action.type : action.constantType
     if (attribute == undefined) attribute = {}
     target = action.target
     if (action.stun) {
         if (index == 3) {
-            player.bh.celestialite.stun = run(action.stun, action)
+            player.bh.celestialite.stun = [...run(action.stun, action)]
         } else {
-            player.bh.characters[index].stun = run(action.stun, action)
+            player.bh.characters[index].stun = [...run(action.stun, action)]
         }
     }
-    if (action.delay) delay = run(action.delay, action)
+    if (action.delay) delay = run(action.delay, action) / player.bh.timeSpeed.toNumber()
     setTimeout(() => {
         // All action attribute effects
         if (attribute["berserk"]) {
@@ -36,7 +37,7 @@ function bhAction(index, slot) {
             let str = "<span style='color:red'>[BERSERK] </span>"
             bhAttack(damage.mul(attribute["berserk"]), index, "self", str)
         }
-        switch(action.type) {
+        switch(type) {
             case "damage":
                 // Multi-hit modifier
                 let hitAmt = 1
@@ -62,14 +63,24 @@ function bhAction(index, slot) {
 
                         // =-- Properties --=
                         if (action.properties) {
+                            // Miss Modifier
+                            if (action.properties["miss"] && Decimal.gte(Decimal.div(action.properties["miss"], luckMult), Math.random())) {
+                                if (index == 3) {
+                                    bhLog("<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " missed.")
+                                } else {
+                                    bhLog("<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " missed.")
+                                }
+                                return
+                            }
+
                             // Crit Modifier
-                            if (action.properties["crit"] && Decimal.gte(action.properties["crit"][0].mul(luckMult), Math.random())) {
+                            if (action.properties["crit"] && Decimal.gte(Decimal.mul(action.properties["crit"][0], luckMult), Math.random())) {
                                 damage = damage.mul(action.properties["crit"][1])
                                 str = str + "<span style='color:#faa'>[CRIT] </span>"
                             }
 
                             // Stun Modifier
-                            if (action.properties["stun"] && Decimal.gte(action.properties["stun"][0].mul(luckMult), Math.random())) {
+                            if (action.properties["stun"] && Decimal.gte(Decimal.mul(action.properties["stun"][0], luckMult), Math.random())) {
                                 let arr = calcTarget(index, target, "effect")
                                 for (let receive of arr) {
                                     if (receive == 3) {
@@ -86,7 +97,7 @@ function bhAction(index, slot) {
                             }
 
                             // (Keep at end of properties)
-                            if (action.properties["backfire"] && Decimal.gte(action.properties["backfire"][0].div(luckMult), Math.random())) {
+                            if (action.properties["backfire"] && Decimal.gte(Decimal.div(action.properties["backfire"][0], luckMult), Math.random())) {
                                 let bfStr = str + "<span style='color:red'>[BACKFIRE] </span>"
                                 let newTarget = "self"
                                 if (index == 3) {
@@ -94,12 +105,12 @@ function bhAction(index, slot) {
                                 } else {
                                     if (target == "self") newTarget = "celestialite"
                                 }
-                                bhAttack(damage.mul(action.properties["backfire"][1]), index, newTarget, bfStr)
+                                bhAttack(damage.mul(action.properties["backfire"][1]), index, newTarget, bfStr, action.method)
                             }
                         }
 
                         // =-- Apply Damage --=
-                        bhAttack(damage, index, target, str)
+                        bhAttack(damage, index, target, str, action.method)
                     }, hitDelay*i)
                 }
                 break;
@@ -120,14 +131,24 @@ function bhAction(index, slot) {
 
                         // =-- Heal Modifiers --=
                         if (action.properties) {
+                            // Miss Modifier
+                            if (action.properties["miss"] && Decimal.gte(Decimal.div(action.properties["miss"], luckMult), Math.random())) {
+                                if (index == 3) {
+                                    bhLog("<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " missed.")
+                                } else {
+                                    bhLog("<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " missed.")
+                                }
+                                return
+                            }
+                            
                             // Crit Modifier
-                            if (action.properties["crit"] && Decimal.gte(action.properties["crit"][0].mul(luckMult), Math.random())) {
+                            if (action.properties["crit"] && Decimal.gte(Decimal.mul(action.properties["crit"][0], luckMult), Math.random())) {
                                 heal = heal.mul(action.properties["crit"][1])
                                 str = str + "<span style='color:red'>[CRIT] </span>"
                             }
 
                             // Stun Modifier
-                            if (action.properties["stun"] && Decimal.gte(action.properties["stun"][0].mul(luckMult), Math.random())) {
+                            if (action.properties["stun"] && Decimal.gte(Decimal.mul(action.properties["stun"][0], luckMult), Math.random())) {
                                 let arr = calcTarget(index, target, "effect")
                                 for (let receive of arr) {
                                     if (receive == 3) {
@@ -144,7 +165,7 @@ function bhAction(index, slot) {
                             }
 
                             // Backfire (Keep at end of properties)
-                            if (action.properties["backfire"] && Decimal.gte(action.properties["backfire"][0].div(luckMult), Math.random())) {
+                            if (action.properties["backfire"] && Decimal.gte(Decimal.div(action.properties["backfire"][0], luckMult), Math.random())) {
                                 let bfStr = str + "<span style='color:red'>[BACKFIRE] </span>"
                                 let newTarget = "self"
                                 if (index == 3) {
@@ -371,7 +392,7 @@ function bhEffectText(type, val, index, target, percentage = 0) {
     }
 }
 
-function bhAttack(damage, index, target, str = "", attr = false) {
+function bhAttack(damage, index, target, str = "", method = "none", attr = false) {
     let arr = calcTarget(index, target, "damage")
     if (typeof target == "number") arr = [target]
     for (let receive of arr) {
@@ -387,8 +408,16 @@ function bhAttack(damage, index, target, str = "", attr = false) {
 
         if (attribute["rebound"] && !attr && target != "self") {
             let attStr = "<span style='color:cyan'>[REBOUND] </span>"
-            bhAttack(damage.mul(attribute["rebound"]), receive, index, attStr, true)
+            bhAttack(damage.mul(attribute["rebound"]), receive, index, attStr, "none", true)
         }
+
+        let resist = false
+
+        if (attribute["air"] && !attr && method == "physical") {damage = damage.mul(attribute["air"]); resist = true}
+        if (attribute["warded"] && !attr && method == "magic") {damage = damage.mul(attribute["warded"]); resist = true}
+        if (attribute["stealthy"] && !attr && method == "ranged") {damage = damage.mul(attribute["stealthy"]); resist = true}
+
+        if (resist) str = str + "<span style='color:#aaa'>[RESISTED] </span>"
 
         // Shield and Defense Calc
         if (receive != 3) {
@@ -462,28 +491,34 @@ function bhHeal(heal, index, target, str = "") {
 
 function celestialiteReward(gain) {
     if (gain.gloomingUmbrite) {
+        gain.gloomingUmbrite = gain.gloomingUmbrite.mul(player.depth1.depth1Mult).floor()
         player.depth1.gloomingUmbrite = player.depth1.gloomingUmbrite.add(gain.gloomingUmbrite)
         bhLog("<span style='color: #eed200'>You gained " + formatWhole(gain.gloomingUmbrite) + " glooming umbrite! (You have " + formatWhole(player.depth1.gloomingUmbrite) + ")")
     }
     if (gain.dimUmbrite) {
+        gain.dimUmbrite = gain.dimUmbrite.mul(player.depth1.depth1Mult).floor()
         player.depth1.dimUmbrite = player.depth1.dimUmbrite.add(gain.dimUmbrite)
         bhLog("<span style='color: #eed200'>You gained " + formatWhole(gain.dimUmbrite) + " dim umbrite! (You have " + formatWhole(player.depth1.dimUmbrite) + ")")
     }
     if (gain.faintUmbrite) {
+        gain.faintUmbrite = gain.faintUmbrite.mul(player.depth2.depth2Mult).floor()
         player.depth2.faintUmbrite = player.depth2.faintUmbrite.add(gain.faintUmbrite)
-        bhLog("<span style='color: #eed200'>You gained " + formatWhole(gain.faintUmbrite) + " dim umbrite! (You have " + formatWhole(player.depth2.faintUmbrite) + ")")
+        bhLog("<span style='color: #eed200'>You gained " + formatWhole(gain.faintUmbrite) + " faint umbrite! (You have " + formatWhole(player.depth2.faintUmbrite) + ")")
     }
     if (gain.clearUmbrite) {
+        gain.clearUmbrite = gain.clearUmbrite.mul(player.depth2.depth2Mult).floor()
         player.depth2.clearUmbrite = player.depth2.clearUmbrite.add(gain.clearUmbrite)
-        bhLog("<span style='color: #eed200'>You gained " + formatWhole(gain.clearUmbrite) + " dim umbrite! (You have " + formatWhole(player.depth2.clearUmbrite) + ")")
+        bhLog("<span style='color: #eed200'>You gained " + formatWhole(gain.clearUmbrite) + " clear umbrite! (You have " + formatWhole(player.depth2.clearUmbrite) + ")")
     }
     if (gain.vividUmbrite) {
+        gain.vividUmbrite = gain.vividUmbrite.mul(player.depth3.depth3Mult).floor()
         player.depth3.vividUmbrite = player.depth3.vividUmbrite.add(gain.vividUmbrite)
-        bhLog("<span style='color: #eed200'>You gained " + formatWhole(gain.vividUmbrite) + " dim umbrite! (You have " + formatWhole(player.depth3.vividUmbrite) + ")")
+        bhLog("<span style='color: #eed200'>You gained " + formatWhole(gain.vividUmbrite) + " vivid umbrite! (You have " + formatWhole(player.depth3.vividUmbrite) + ")")
     }
     if (gain.lustrousUmbrite) {
+        gain.lustrousUmbrite = gain.lustrousUmbrite.mul(player.depth3.depth3Mult).floor()
         player.depth3.lustrousUmbrite = player.depth3.lustrousUmbrite.add(gain.lustrousUmbrite)
-        bhLog("<span style='color: #eed200'>You gained " + formatWhole(gain.lustrousUmbrite) + " dim umbrite! (You have " + formatWhole(player.depth3.lustrousUmbrite) + ")")
+        bhLog("<span style='color: #eed200'>You gained " + formatWhole(gain.lustrousUmbrite) + " lustrous umbrite! (You have " + formatWhole(player.depth3.lustrousUmbrite) + ")")
     }
     if (gain.darkEssence) {
         player.bh.darkEssence = player.bh.darkEssence.add(gain.darkEssence)
@@ -520,7 +555,7 @@ function celestialiteDeath() {
         }
     }
     
-    if (player.bh.currentStage != "none") {
+    if (player.bh.currentStage != "none" && Decimal.gt(BHS[player.bh.currentStage].comboLimit, 25)) {
         if (player.bh.combo.gt(player[player.bh.currentStage].highestCombo)) player[player.bh.currentStage].highestCombo = player.bh.combo
         if (player[player.bh.currentStage].milestone && Object.hasOwn(player[player.bh.currentStage].milestone, player.bh.combo)) {
             let curVal = player[player.bh.currentStage].milestone[player.bh.combo]
@@ -532,11 +567,26 @@ function celestialiteDeath() {
                 player[player.bh.currentStage].milestone[player.bh.combo] = charAmt
                 let charStr = 4 - charAmt
                 if (charStr == 1) {
-                    doPopup("milestone", BHS[player.bh.currentStage].name + ": " + player.bh.combo + " Combo<br>" + charStr + " Character", "Milestone Gotten!", 3, "#666")
+                    doPopup("milestone", BHS[player.bh.currentStage].nameCap + ": " + player.bh.combo + " Combo<br>" + charStr + " Character", "Milestone Gotten!", 3, "#888")
                 } else {
-                    doPopup("milestone", BHS[player.bh.currentStage].name + ": " + player.bh.combo + " Combo<br>" + charStr + " Characters", "Milestone Gotten!", 3, "#666")
+                    doPopup("milestone", BHS[player.bh.currentStage].nameCap + ": " + player.bh.combo + " Combo<br>" + charStr + " Characters", "Milestone Gotten!", 3, "#888")
                 }
             }
+        }
+        if (player.bh.combo.gte(BHS[player.bh.currentStage].comboLimit)) {
+            for (let i = 0; i < 3; i++) {
+                player.bh.characters[i].health = player.bh.characters[i].maxHealth
+                player.bh.characters[i].shield = new Decimal(0)
+                for (let j = 0; j < 4; j++) {
+                    player.bh.characters[i].skills[j].variables = {}
+                }
+            }
+
+            player.bh.currentStage = "none"
+            player.bh.combo = new Decimal(0)
+            player.bh.celestialite.id = "none"
+
+            player.subtabs["bh"]["stuff"] = "win"
         }
     }
 
@@ -576,8 +626,16 @@ function celestialiteSpawn() {
 }
 
 function calcTarget(index, target, action = "none") {
+    let playerTaunt = -1
+    let celestialiteTaunt = false
+    for (let i = 0; i < 3; i++) {
+        if (player.bh.characters[i].attributes["taunt"]) playerTaunt = i
+    }
+    if (player.bh.celestialite.attributes["taunt"]) celestialiteTaunt = true
     switch (target) {
         case "randomPlayer":
+            if (celestialiteTaunt && (action == "heal" || action == "effect")) return [3]
+            if (playerTaunt >= 0) return [playerTaunt]
             let potTarget = []
             for (let i = 0; i < 3; i++) {
                 if (player.bh.characters[i].health.gt(0) && player.bh.characters[i].id != "none") potTarget.push(i)
@@ -586,8 +644,12 @@ function calcTarget(index, target, action = "none") {
             return [rndP]
         case "random":
             let rndTarget = [3]
-            for (let i = 0; i < 3; i++) {
-                if (player.bh.characters[i].health.gt(0) && player.bh.characters[i].id != "none") rndTarget.push(i)
+            if (playerTaunt >= 0) {
+                rndTarget.push(playerTaunt)
+            } else {
+                for (let i = 0; i < 3; i++) {
+                    if (player.bh.characters[i].health.gt(0) && player.bh.characters[i].id != "none") rndTarget.push(i)
+                }
             }
             let rndA = rndTarget[Math.floor(Math.random()*rndTarget.length)]
             return [rndA]
@@ -596,13 +658,50 @@ function calcTarget(index, target, action = "none") {
         case "celestialite":
             return [3]
         case "allPlayer":
-            return [0, 1, 2]
+            let plays = []
+            for (let i = 0; i < 3; i++) {
+                if (player.bh.characters[i].health.gt(0) && player.bh.characters[i].id != "none") plays.push(i)
+            }
+            if (playerTaunt >= 0) {
+                for (let i = 0; i < plays.length; i++) {plays[i] = playerTaunt}
+            }
+            return plays
         case "all":
-            return [0, 1, 2, 3]
+            let play = []
+            for (let i = 0; i < 3; i++) {
+                if (player.bh.characters[i].health.gt(0) && player.bh.characters[i].id != "none") play.push(i)
+            }
+            if (playerTaunt >= 0) {
+                for (let i = 0; i < play.length; i++) {play[i] = playerTaunt}
+            }
+            play.push(3)
+            return play
     }
 }
 
 function bhLog(line) {
     player.bh.log.push(line); // Push the raw HTML string directly
     if (player.bh.log.length > 10) player.bh.log.shift(); // Ensure log size remains consistent
+}
+
+function BHStageEnter(stage) {
+    player.subtabs["bh"]["stuff"] = "battle"
+
+    for (let i = 0; i < 3; i++) {
+        player.bh.characters[i].health = player.bh.characters[i].maxHealth
+
+        for (let j = 0; j < 4; j++) {
+            player.bh.characters[i].skills[j].cooldown = player.bh.characters[i].skills[j].cooldownMax
+            player.bh.characters[i].skills[j].duration = new Decimal(0)
+            player.bh.characters[i].skills[j].interval = new Decimal(0)
+        }
+    }
+
+    player.bh.currentStage = stage
+    if (player[stage].comboStart) {
+        player.bh.combo = new Decimal(player[stage].comboStart)
+    } else {
+        player.bh.combo = new Decimal(0)
+    }
+    celestialiteSpawn()
 }

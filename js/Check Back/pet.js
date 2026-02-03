@@ -738,7 +738,9 @@ addLayer("pet", {
         }
 
         //cooldown
-        player.pet.legPetTimers[0].cooldownMax = new Decimal(3600)
+        player.pet.legPetTimers[0].cooldownMax = new Decimal(1800)
+        player.pet.legPetTimers[0].cooldownMax = player.pet.legPetTimers[0].cooldownMax.div(levelableEffect("pet", 501)[3])
+
         player.pet.legPetTimers[1].cooldownMax = new Decimal(7200)
         for (let thing in player.pet.legPetTimers) {
             player.pet.legPetTimers[thing].cooldown = player.pet.legPetTimers[thing].cooldown.sub(delta)
@@ -990,7 +992,7 @@ addLayer("pet", {
         //legendary pet skills
         31: {
             title() { return player.pet.legPetTimers[0].cooldown.lte(0) ? "<h3>Activate Skill</h3>" : "Check Back in " + formatTime(player.pet.legPetTimers[0].cooldown) + "."},
-            tooltip() { return "Activates the eclipse in DU1 for " + formatSimple(player.pet.legPetTimers[0].max, 1) + " minutes, unlocking alternate gameplay mechanics. (Also throws you into DU1 cause why not)"},
+            tooltip() { return "Activates the eclipse in DU1 for " + formatSimple(player.pet.legPetTimers[0].max.div(60), 1) + " minutes, unlocking alternate gameplay mechanics. (Also throws you into DU1 cause why not)"},
             canClick() { return player.pet.legPetTimers[0].cooldown.lte(0) },
             unlocked() { return layers.pet.levelables.index == 501 },
             onClick () {
@@ -1041,11 +1043,11 @@ addLayer("pet", {
             tooltip() {
                 let gain = player.pet.banners[player.pet.bannerIndex].val.pow(0.5).mul(player.pet.fragmentMult)
                 if (player.pet.bannerIndex == 0 || player.pet.bannerIndex == 1) {
-                    return "+" + formatSimple(gain.mul(20).floor().div(10)) + "-" + formatSimple(gain.mul(Decimal.add(30, buyableEffect("pet", 2))).floor().div(10)) +  " Lesser Fragments"
+                    return "+" + formatSimple(gain.mul(20).floor().div(10)) + "-" + formatSimple(gain.mul(Decimal.add(40, buyableEffect("pet", 2))).floor().div(10)) +  " Lesser Fragments"
                 } else if (player.pet.bannerIndex == 2 || player.pet.bannerIndex == 3) {
-                    return "+" + formatSimple(gain.mul(20).floor().div(10)) + "-" + formatSimple(gain.mul(Decimal.add(30, buyableEffect("pet", 2))).floor().div(10)) + " Basic Fragments"
+                    return "+" + formatSimple(gain.mul(20).floor().div(10)) + "-" + formatSimple(gain.mul(Decimal.add(40, buyableEffect("pet", 2))).floor().div(10)) + " Basic Fragments"
                 } else if (player.pet.bannerIndex == 4 || player.pet.bannerIndex == 5) {
-                    return "+" + formatSimple(gain.mul(20).floor().div(10)) + "-" + formatSimple(gain.mul(Decimal.add(30, buyableEffect("pet", 2))).floor().div(10)) + " Greater Fragments"
+                    return "+" + formatSimple(gain.mul(20).floor().div(10)) + "-" + formatSimple(gain.mul(Decimal.add(40, buyableEffect("pet", 2))).floor().div(10)) + " Greater Fragments"
                 } else {
                     return ""
                 }
@@ -1054,7 +1056,7 @@ addLayer("pet", {
                 player.pet.banners[player.pet.bannerIndex].current = player.pet.banners[player.pet.bannerIndex].max
                 setLevelableXP("pet", player.pet.banners[player.pet.bannerIndex].id, getLevelableXP("pet", player.pet.banners[player.pet.bannerIndex].id).sub(player.pet.banners[player.pet.bannerIndex].val.div(levelableEffect("pet", 310)[0]).ceil()))
                 
-                let gain = player.pet.banners[player.pet.bannerIndex].val.pow(0.5).mul(player.pet.fragmentMult).mul(Decimal.mul(Math.random(), buyableEffect("pet", 2).div(10).add(1)).add(2)).mul(10).floor().div(10)
+                let gain = player.pet.banners[player.pet.bannerIndex].val.pow(0.5).mul(player.pet.fragmentMult).mul(Decimal.mul(Math.random(), buyableEffect("pet", 2).div(10).add(2)).add(2)).mul(10).floor().div(10)
                 if (player.pet.bannerIndex == 0 || player.pet.bannerIndex == 1) {
                     player.pet.lesserFragments = player.pet.lesserFragments.add(gain)
                     doPopup("none", "+" + formatSimple(gain) + " Lesser Fragment", "Fragment Obtained!", 5, "#9bedff", "resources/checkback/lesser_fragment.png")
@@ -3354,14 +3356,14 @@ addLayer("pet", {
             lore() { return "Unsure if it actually originates from an evolution shard, or is just mimicking one." }, 
             description() {
                 return "/" + format(this.effect()[0]) + " to pets consumed on fragmentation<br><small>(based on rememberance cores)</small><br>" +
-                    "[COMING SOON]"
+                    "+" + format(this.effect()[1]) + " to black heart defense <small>(based on evo-shards)</small>"
             },
             levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
                     amt.mul(player.ca.rememberanceCores.add(2).log(2).log(2).add(1)).div(50).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Pets Consumed On Fragmentation (Based on Rememberance Cores)
-                    new Decimal(1) // Black Heart Defense (Based on Evolution Shards)
+                    amt.mul(player.cb.evolutionShards.add(2).log(2).log(2).add(1)).div(8).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id))) // Black Heart Defense (Based on Evolution Shards)
                 ]
             },
             sellValue() { return new Decimal(400)},
@@ -3704,7 +3706,8 @@ addLayer("pet", {
             description() {
                 return "x" + format(this.effect()[0]) + " to stars <small>(based on stars)</small>.<br>" +
                     "x" + format(this.effect()[1]) + " to activated fuel <small>(based on stars)</small>.<br>" +
-                    "x" + format(this.effect()[2]) + " to rocket parts <small>(based on stars)</small>."
+                    "x" + format(this.effect()[2]) + " to rocket parts <small>(based on stars)</small>.<br>" +
+                    "/" + format(this.effect()[3]) + " to eclipse cooldown."
             },
             levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
             effect() {
@@ -3713,6 +3716,7 @@ addLayer("pet", {
                     player.au2.stars.pow(0.04).add(1).pow(amt.pow(0.15)).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // stars (Based on Stars)
                     player.au2.stars.pow(0.15).div(2).add(1).pow(amt.pow(0.15)).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // fuel (Based on Stars)
                     player.au2.stars.pow(0.1).div(2).add(1).pow(amt.pow(0.15)).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // rocket parts (Based on Stars)
+                    amt.div(2).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1) // Eclipse Cooldown
                 ]
             },
             sellValue() { return new Decimal(10000)},
@@ -4683,8 +4687,8 @@ addLayer("pet", {
             },
         },
         3: {
-            costBase() { return new Decimal(5) },
-            costGrowth() { return new Decimal(5) },
+            costBase() { return new Decimal(4) },
+            costGrowth() { return new Decimal(4) },
             purchaseLimit() { return new Decimal(20) },
             currency() { return player.pet.greaterFragments},
             pay(amt) { player.pet.greaterFragments = this.currency().sub(amt) },

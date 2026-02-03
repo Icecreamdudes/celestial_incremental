@@ -90,7 +90,7 @@
         if (player.i.cutsceneInput.lt(0)) player.i.cutsceneInputAmount = new Decimal(0)
         // START OF POST-OTF-MULT MODIFIERS
         player.i.postOTFMult = new Decimal(1)
-        player.i.postOTFMult = player.i.postOTFMult.mul(buyableEffect("ma", 22))
+        player.i.postOTFMult = player.i.postOTFMult.mul(player.depth2.comboEffect)
         if (player.ir.iriditeDefeated) player.i.postOTFMult = player.i.postOTFMult.mul(1e12)
 
         //----------------------------------------

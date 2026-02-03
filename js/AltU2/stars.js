@@ -65,7 +65,7 @@ addLayer("st", {
 
         player.st.starPower = player.st.starPower.add(player.st.starPowerPerSecond.mul(delta))
         player.st.starPowerPerSecond = player.st.dimensionPowerEffects[0]
-        player.st.starPowerPerSecond = player.st.starPowerPerSecond.mul(buyableEffect("ma", 32))
+        player.st.starPowerPerSecond = player.st.starPowerPerSecond.mul(buyableEffect("depth2", 3))
         player.st.starPowerPerSecond = player.st.starPowerPerSecond.mul(levelableEffect("pu", 208)[1])
         player.st.starPowerPerSecond = player.st.starPowerPerSecond.mul(levelableEffect("st", 210)[0])
 

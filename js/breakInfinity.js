@@ -461,6 +461,10 @@ addLayer("bi", {
             currencyLocation() { return player.in },
             currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
+            effect() {
+                if (player.po.dice === true) return new Decimal(2);
+                return new Decimal(5);
+            },
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         26: {

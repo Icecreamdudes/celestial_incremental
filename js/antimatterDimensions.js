@@ -11,8 +11,7 @@ function getAntimatterPerSecond() {
     if (antimatterGain.gte(1e300)) {
         // The "softcap" asymptotically becomes a hardcap at 10^(300 + base). 
         const hardcapBase = getAntimatterHardcap();
-        let asymptoteExponent = antimatterGain.plus(1).log10().div(hardcapBase);
-        if (asymptoteExponent > 0.95) asymptoteExponent = 0.95;
+        let asymptoteExponent = antimatterGain.plus(1).log10().div(hardcapBase).recip().min(0.95);
 
         antimatterGain = antimatterGain.div(1e300).pow(asymptoteExponent).times(1e300);
     }
@@ -139,7 +138,7 @@ function updateAntimatterAmount(delta) {
     player.ad.antimatterPerSecond = getAntimatterPerSecond();
     player.ad.antimatter = player.ad.antimatter
             .plus(player.ad.antimatterPerSecond.times(delta))
-            .min(0);
+            .max(0);
     
     // Hardcap before Infinity Challenge 8
     if (player.ad.antimatter.gt(1e300) && !hasChallenge("ip", 18)) {
@@ -202,7 +201,7 @@ function updateAntimatterDimensionAmounts(delta) {
         player.ad.dimensionsPerSecond[dimensionId] = production;
     }
 
-    for (let i = player.ad.dimensionAmounts.length-1; i >= 0; i++) {
+    for (let i = player.ad.dimensionAmounts.length-1; i >= 0; i--) {
         player.ad.dimensionAmounts[i] = player.ad.dimensionAmounts[i].add(player.ad.dimensionsPerSecond[i].mul(delta))
     }
 }
@@ -287,7 +286,7 @@ function setAntimatterDimensionCostScaling() {
     // Post-1e300 scaling doesn't retroactively account for the number of 
     // purchases already made.
     // So, that's done with this terrible yet literal retcon. 
-    if (hasUpgrade("b1", 21)) {
+    if (hasUpgrade("bi", 21)) {
         player.ad.dimensionBase = [
             new Decimal("1e-1200"), 
             new Decimal("1e-1575"), 

@@ -113,7 +113,7 @@ function optionalUpgradeEffect(layer, id) {
 	return {
 		value: hasUpgrade(layer, id) ? upgradeEffect(layer, id) : "NOT BOUGHT",
 		orElse(defaultValue) {
-			if (value == "NOT_BOUGHT") return defaultValue;
+			if (this.value === "NOT BOUGHT") return defaultValue;
 			return this.value;
 		}
 	}

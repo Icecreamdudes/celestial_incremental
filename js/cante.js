@@ -59,7 +59,7 @@ function updateReplicanti(delta) {
     if (!player.ca.unlockedCante) return;
     if (!hasUpgrade("bi", 24)) return;
 
-    const multiplierBeforeSoftcap = getReplicantiMultiplierBeforeSoftcap
+    const multiplierBeforeSoftcap = getReplicantiMultiplierBeforeSoftcap();
 
     player.ca.replicantiSoftcap = getReplicantiSoftcap();
     player.ca.replicantiMult = multiplierBeforeSoftcap.dividedBy(player.ca.replicantiSoftcap);
@@ -101,7 +101,7 @@ function updateReplicantiEffects() {
 
     player.ca.replicantiEffect  = logReplicanti.pow(1.05).times(10).plus(1);
     player.ca.replicantiEffect2 = logReplicanti.pow(1.17).times(10).plus(1);
-    player.ca.replicantiEffect3 = player.replicanti.sqrt();
+    player.ca.replicantiEffect3 = player.ca.replicanti.sqrt();
 
     if (!hasUpgrade("bi", 117)) return;
 

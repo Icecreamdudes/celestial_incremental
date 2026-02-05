@@ -1103,6 +1103,50 @@ addLayer("ir", {
                 return look
             },
         },
+
+        // Geroa BH Upgrades
+        201: {
+            title: "Medkit",
+            unlocked() { return getLevelableAmount("pet", 502).gt(0) },
+            description: "Unlock Geroa's \"Self Repair\" skill",
+            cost: new Decimal(2000),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                return look
+            },
+        },
+        202: {
+            title: "Spicy Energy",
+            unlocked() { return getLevelableAmount("pet", 502).gt(0) },
+            description: "Unlock Geroa's \"Cosmic Ray\" skill",
+            cost: new Decimal(10000),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                return look
+            },
+        },
+        203: {
+            title: "I'M A FIRIN' MY LASAR",
+            unlocked() { return getLevelableAmount("pet", 502).gt(0) },
+            description: "Unlock Geroa's \"Orbital Cannon\" skill",
+            cost: new Decimal(50000),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                return look
+            },
+        },
     },
     microtabs: {
         stuff: {
@@ -1159,12 +1203,15 @@ addLayer("ir", {
                     ["raw-html", function () { return "You have " + formatWhole(player.ir.spaceRock) + " space rocks." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You have " + formatWhole(player.ir.spaceGem) + " space gem." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Space Rocks" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", "Space Rocks", { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["row", [["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14],["upgrade", 15],["upgrade", 16],]],
                     ["row", [["upgrade", 17],["upgrade", 18],["upgrade", 19],]],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Space Gems" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", "Space Gems", { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["row", [["upgrade", 101],["upgrade", 102],["upgrade", 103],["upgrade", 104],["upgrade", 105],["upgrade", 106],]],
+                    ["blank", "25px"],
+                    ["raw-html", () => {return getLevelableAmount("pet", 502).gt(0) ? "Geroa Skills" : ""}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["row", [["upgrade", 201], ["upgrade", 202], ["upgrade", 203]]],
                 ]
             },
             "Perks": {

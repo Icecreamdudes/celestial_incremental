@@ -943,7 +943,10 @@ addLayer("co", {
         player.gs.grassSkippers = new Decimal(0)
         player.gs.grassSkippersPerSecond = new Decimal(0)
 
-        if (!hasMilestone("s", 12)) player.gs.milestones.splice(0, player.gs.milestones.length)
+        if (!hasMilestone("s", 12)) {
+            player.gs.milestones.splice(0, player.gs.milestones.length)
+            player.subtabs["gs"]["stuff"] = "Grass-Skip"
+        }
 
         for (let i in player.gs.buyables) {
             player.gs.buyables[i] = new Decimal(0)

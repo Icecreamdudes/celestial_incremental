@@ -132,7 +132,7 @@ addLayer("depth2", {
             title: "Anti-Boo-Boo",
             unlocked: true,
             description: "Unlock the general skill \"Bandage\".",
-            cost: new Decimal(10),
+            cost: new Decimal(16),
             currencyLocation() { return player.bh },
             currencyDisplayName: "Dark Essence",
             currencyInternalName: "darkEssence",

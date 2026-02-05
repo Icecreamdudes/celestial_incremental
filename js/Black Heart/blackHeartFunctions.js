@@ -101,6 +101,7 @@ function bhAction(index, slot, interval = false) {
                                 let bfStr = str + "<span style='color:red'>[BACKFIRE] </span>"
                                 let newTarget = "self"
                                 if (index == 3) {
+                                    newTarget = "celestialite"
                                     if (target == "self") newTarget = "randomPlayer"
                                 } else {
                                     if (target == "self") newTarget = "celestialite"
@@ -537,10 +538,10 @@ function celestialiteDeath() {
         if (BHC[player.bh.celestialite.id].attributes["explosive"]) {
             for (let i = 0; i < 3; i++) {
                 // If dead, go to next character
-                if (player.bh.celestialite.health.lte(0)) continue
+                if (player.bh.characters[i].health.lte(0)) continue
                 // If has shield, block damage
-                if (player.bh.celestialite.shield.gt(0)) {
-                    player.bh.celestialite.shield = player.bh.celestialite.shield.sub(1)
+                if (player.bh.characters[i].shield.gt(0)) {
+                    player.bh.characters[i].shield = player.bh.characters[i].shield.sub(1)
                     bhLog("<span style='color: #ee8700;'>Shield blocked explosive damage towards " + BHP[player.bh.characters[i].id].name + ".</span>")
                     continue
                 }
@@ -550,14 +551,14 @@ function celestialiteDeath() {
 
                 // Damage Application
                 player.bh.characters[i].health = player.bh.characters[i].health.sub(damage)
-                bhLog("<span style='color: #ee8700;'>Explosion! " + BHP[player.bh.characters[i].id].name + " takes " + format(damage) + " damage!</span>")
+                bhLog("<span style='color: #ee8700;'>[EXPLOSION] " + BHP[player.bh.characters[i].id].name + " takes " + format(damage) + " damage.</span>")
             }
         }
     }
     
-    if (player.bh.currentStage != "none" && Decimal.gt(BHS[player.bh.currentStage].comboLimit, 25)) {
-        if (player.bh.combo.gt(player[player.bh.currentStage].highestCombo)) player[player.bh.currentStage].highestCombo = player.bh.combo
-        if (player[player.bh.currentStage].milestone && Object.hasOwn(player[player.bh.currentStage].milestone, player.bh.combo)) {
+    if (player.bh.currentStage != "none") {
+        if (player[player.bh.currentStage].highestCombo && player.bh.combo.gt(player[player.bh.currentStage].highestCombo)) player[player.bh.currentStage].highestCombo = player.bh.combo
+        if (player[player.bh.currentStage].milestone && Object.hasOwn(player[player.bh.currentStage].milestone, player.bh.combo) && Decimal.gt(BHS[player.bh.currentStage].comboLimit, 25)) {
             let curVal = player[player.bh.currentStage].milestone[player.bh.combo]
             let charAmt = 4
             for (let i = 0; i < 3; i++) {

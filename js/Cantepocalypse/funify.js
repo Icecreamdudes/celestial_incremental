@@ -317,6 +317,7 @@
                     i--;
                 }
             }
+            player.subtabs["gs"]["stuff"] = "Grass-Skip"
         }
         player.gs.buyables[11] = new Decimal(0)
         player.gs.buyables[12] = new Decimal(0)

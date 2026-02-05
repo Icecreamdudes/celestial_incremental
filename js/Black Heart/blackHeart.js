@@ -51,7 +51,8 @@ BH_CURRENCY = {
     "vividUmbrite": ["Vivid Umbrite", "depth3"],
     "lustrousUmbrite": ["Lustrous Umbrite", "depth3"],
     "darkEssence": ["Dark Essence", "bh"],
-    "eclipseShards": ["Eclipse Shards", "sma"]
+    "eclipseShards": ["Eclipse Shards", "sma"],
+    "spaceRock": ["Space Rocks", "ir"],
 }
 
 BHC.template = {
@@ -458,6 +459,7 @@ addLayer("bh", {
             // GEROA
             "geroa_radioactiveMissile": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "geroa_selfRepair": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "geroa_cosmicRay": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "geroa_orbitalCannon": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
         },
 
@@ -605,6 +607,7 @@ addLayer("bh", {
                         let active = BHC[player.bh.celestialite.id].actions[i].active
                         let passive = BHC[player.bh.celestialite.id].actions[i].passive
                         if (player.bh.celestialite.actions[i].duration.gt(0)) player.bh.celestialite.actions[i].duration = player.bh.celestialite.actions[i].duration.sub(delta)
+                        if (BHC[player.bh.celestialite.id].actions[i].func) BHC[player.bh.celestialite.id].actions[i].func() // Run function if there
                         if (instant || active) {
                             if (!curStun) player.bh.celestialite.actions[i].cooldown = player.bh.celestialite.actions[i].cooldown.add(delta)
                             if (player.bh.celestialite.actions[i].cooldown.gte(BHC[player.bh.celestialite.id].actions[i].cooldown)) {
@@ -895,6 +898,7 @@ addLayer("bh", {
         damageAdd = damageAdd.add(player.bh.skillData["nav_magicMissle"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["eclipse_drain"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["eclipse_motivation"].maxLevel.div(5))
+        damageAdd = damageAdd.add(player.bh.skillData["geroa_cosmicRay"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["geroa_orbitalCannon"].maxLevel.div(5))
         damageAdd = damageAdd.add(buyableEffect("sp", 22))
 
@@ -2157,7 +2161,7 @@ addLayer("bh", {
         "Char-Eclipse": {
             title() {return "<img src='" + BHP["eclipse"].icon + "'style='width:100px;height:100px;margin-left:-2px;margin-bottom:-4px'></img>"},
             canClick: true,
-            unlocked: true,
+            unlocked() {return getLevelableAmount("pet", 501).gt(0)},
             onClick() {
                 player.bh.characterSelection = "eclipse"
             },
@@ -2170,7 +2174,7 @@ addLayer("bh", {
         "Char-Geroa": {
             title() {return "<img src='" + BHP["geroa"].icon + "'style='width:100px;height:100px;margin-left:-2px;margin-bottom:-4px'></img>"},
             canClick: true,
-            unlocked: true,
+            unlocked() {return getLevelableAmount("pet", 502).gt(0)},
             onClick() {
                 player.bh.characterSelection = "geroa"
             },
@@ -2329,22 +2333,47 @@ addLayer("bh", {
             unlocked() { return player.bh.celestialite.id != "none" && BHC[player.bh.celestialite.id].actions[0] },
             direction: RIGHT,
             width: 125,
-            height: 40,
+            height() { return player.bh.celestialite.actions[0].duration.gt(0) ? 25 : 40 },
             progress() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[0]) return new Decimal(0)
+                if (BHC[player.bh.celestialite.id].actions[0].passive) return new Decimal(1)
                 return player.bh.celestialite.actions[0].cooldown.div(BHC[player.bh.celestialite.id].actions[0].cooldown)
             },
-            borderStyle: {border: "2px solid white", borderRadius: "15px", margin: "-1px"},
+            borderStyle() {return player.bh.celestialite.actions[0].duration.gt(0) ? {border: "0", borderRadius: "15px 15px 0 0"} : {border: "0", borderRadius: "15px"}},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
-                if (player.bh.celestialite.stun[1].gt(0)) return {backgroundColor: "#361e1e"}
+                if ((BHC[player.bh.celestialite.id].actions[0] && BHC[player.bh.celestialite.id].actions[0].passive) || player.bh.celestialite.stun[1].gt(0)) return {backgroundColor: "#361e1e"}
                 return {backgroundColor: "#8a0e79"}
             },
             textStyle: {userSelect: "none", lineHeight: "1"},
             display() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[0]) return ""
                 let str = "<h5>" + BHC[player.bh.celestialite.id].actions[0].name + "<br>" + formatTime(player.bh.celestialite.actions[0].cooldown) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[0].cooldown)
-                if (player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
+                if (BHC[player.bh.celestialite.id].actions[0].passive) str = "<h5>" + BHC[player.bh.celestialite.id].actions[0].name + "<br>[PASSIVE]"
+                if ((!BHC[player.bh.celestialite.id].actions[0].passive || player.bh.celestialite.stun[0] == "hard") && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
+                return str
+            },
+        },
+        "celestialite-A1-duration": {
+            unlocked() {return player.bh.celestialite.actions[0].duration.gt(0)},
+            direction: RIGHT,
+            width: 125,
+            height: 13,
+            progress() {
+                if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[0] || !BHC[player.bh.celestialite.id].actions[0].duration) return new Decimal(0)
+                return player.bh.celestialite.actions[0].duration.div(BHA[player.bh.celestialite.actions[0].id].duration);
+            },
+            borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: "#8a0e79"}
+            },
+            textStyle: {userSelect: "none", lineHeight: "1"},
+            display() {
+                if (!BHA[player.bh.celestialite.actions[0].id].duration) return new Decimal(0)
+                let str = "<h5>" + formatTime(player.bh.celestialite.actions[0].duration) + "/" + formatTime(BHA[player.bh.celestialite.actions[0].id].duration)
+                if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
                 return str
             },
         },
@@ -2352,22 +2381,47 @@ addLayer("bh", {
             unlocked() { return player.bh.celestialite.id != "none" && BHC[player.bh.celestialite.id].actions[1] },
             direction: RIGHT,
             width: 125,
-            height: 40,
+            height() { return player.bh.celestialite.actions[1].duration.gt(0) ? 25 : 40 },
             progress() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[1]) return new Decimal(0)
+                if (BHC[player.bh.celestialite.id].actions[1].passive) return new Decimal(1)
                 return player.bh.celestialite.actions[1].cooldown.div(BHC[player.bh.celestialite.id].actions[1].cooldown)
             },
-            borderStyle: {border: "2px solid white", borderRadius: "15px", margin: "-1px"},
+            borderStyle() {return player.bh.celestialite.actions[1].duration.gt(0) ? {border: "0", borderRadius: "15px 15px 0 0"} : {border: "0", borderRadius: "15px"}},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
-                if (player.bh.celestialite.stun[1].gt(0)) return {backgroundColor: "#361e1e"}
+                if ((BHC[player.bh.celestialite.id].actions[1] && BHC[player.bh.celestialite.id].actions[1].passive) || player.bh.celestialite.stun[1].gt(0)) return {backgroundColor: "#361e1e"}
                 return {backgroundColor: "#8a0e79"}
             },
             textStyle: {userSelect: "none", lineHeight: "1"},
             display() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[1]) return ""
                 let str = "<h5>" + BHC[player.bh.celestialite.id].actions[1].name + "<br>" + formatTime(player.bh.celestialite.actions[1].cooldown) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[1].cooldown)
-                if (player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
+                if (BHC[player.bh.celestialite.id].actions[1].passive) str = "<h5>" + BHC[player.bh.celestialite.id].actions[1].name + "<br>[PASSIVE]"
+                if ((!BHC[player.bh.celestialite.id].actions[1].passive || player.bh.celestialite.stun[0] == "hard") && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
+                return str
+            },
+        },
+        "celestialite-A1-duration": {
+            unlocked() {return player.bh.celestialite.actions[1].duration.gt(0)},
+            direction: RIGHT,
+            width: 125,
+            height: 13,
+            progress() {
+                if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[1] || !BHC[player.bh.celestialite.id].actions[1].duration) return new Decimal(0)
+                return player.bh.celestialite.actions[1].duration.div(BHA[player.bh.celestialite.actions[1].id].duration);
+            },
+            borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: "#8a0e79"}
+            },
+            textStyle: {userSelect: "none", lineHeight: "1"},
+            display() {
+                if (!BHA[player.bh.celestialite.actions[1].id].duration) return new Decimal(0)
+                let str = "<h5>" + formatTime(player.bh.celestialite.actions[1].duration) + "/" + formatTime(BHA[player.bh.celestialite.actions[1].id].duration)
+                if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
                 return str
             },
         },
@@ -2375,22 +2429,47 @@ addLayer("bh", {
             unlocked() { return player.bh.celestialite.id != "none" && BHC[player.bh.celestialite.id].actions[2] },
             direction: RIGHT,
             width: 125,
-            height: 40,
+            height() { return player.bh.celestialite.actions[2].duration.gt(0) ? 25 : 40 },
             progress() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[2]) return new Decimal(0)
+                if (BHC[player.bh.celestialite.id].actions[2].passive) return new Decimal(1)
                 return player.bh.celestialite.actions[2].cooldown.div(BHC[player.bh.celestialite.id].actions[2].cooldown)
             },
-            borderStyle: {border: "2px solid white", borderRadius: "15px", margin: "-1px"},
+            borderStyle() {return player.bh.celestialite.actions[2].duration.gt(0) ? {border: "0", borderRadius: "15px 15px 0 0"} : {border: "0", borderRadius: "15px"}},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
-                if (player.bh.celestialite.stun[1].gt(0)) return {backgroundColor: "#361e1e"}
+                if ((BHC[player.bh.celestialite.id].actions[2] && BHC[player.bh.celestialite.id].actions[2].passive) || player.bh.celestialite.stun[1].gt(0)) return {backgroundColor: "#361e1e"}
                 return {backgroundColor: "#8a0e79"}
             },
             textStyle: {userSelect: "none", lineHeight: "1"},
             display() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[2]) return ""
                 let str = "<h5>" + BHC[player.bh.celestialite.id].actions[2].name + "<br>" + formatTime(player.bh.celestialite.actions[2].cooldown) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[2].cooldown)
-                if (player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
+                if (BHC[player.bh.celestialite.id].actions[2].passive) str = "<h5>" + BHC[player.bh.celestialite.id].actions[2].name + "<br>[PASSIVE]"
+                if ((!BHC[player.bh.celestialite.id].actions[2].passive || player.bh.celestialite.stun[0] == "hard") && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
+                return str
+            },
+        },
+        "celestialite-A2-duration": {
+            unlocked() {return player.bh.celestialite.actions[2].duration.gt(0)},
+            direction: RIGHT,
+            width: 125,
+            height: 13,
+            progress() {
+                if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[2] || !BHC[player.bh.celestialite.id].actions[2].duration) return new Decimal(0)
+                return player.bh.celestialite.actions[2].duration.div(BHA[player.bh.celestialite.actions[2].id].duration);
+            },
+            borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: "#8a0e79"}
+            },
+            textStyle: {userSelect: "none", lineHeight: "1"},
+            display() {
+                if (!BHA[player.bh.celestialite.actions[2].id].duration) return new Decimal(0)
+                let str = "<h5>" + formatTime(player.bh.celestialite.actions[2].duration) + "/" + formatTime(BHA[player.bh.celestialite.actions[2].id].duration)
+                if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
                 return str
             },
         },
@@ -2398,22 +2477,47 @@ addLayer("bh", {
             unlocked() { return player.bh.celestialite.id != "none" && BHC[player.bh.celestialite.id].actions[3] },
             direction: RIGHT,
             width: 125,
-            height: 40,
+            height() { return player.bh.celestialite.actions[3].duration.gt(0) ? 25 : 40 },
             progress() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[3]) return new Decimal(0)
+                if (BHC[player.bh.celestialite.id].actions[3].passive) return new Decimal(1)
                 return player.bh.celestialite.actions[3].cooldown.div(BHC[player.bh.celestialite.id].actions[3].cooldown)
             },
-            borderStyle: {border: "2px solid white", borderRadius: "15px", margin: "-1px"},
+            borderStyle() {return player.bh.celestialite.actions[3].duration.gt(0) ? {border: "0", borderRadius: "15px 15px 0 0"} : {border: "0", borderRadius: "15px"}},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
-                if (player.bh.celestialite.stun[1].gt(0)) return {backgroundColor: "#361e1e"}
+                if ((BHC[player.bh.celestialite.id].actions[3] && BHC[player.bh.celestialite.id].actions[3].passive) || player.bh.celestialite.stun[1].gt(0)) return {backgroundColor: "#361e1e"}
                 return {backgroundColor: "#8a0e79"}
             },
             textStyle: {userSelect: "none", lineHeight: "1"},
             display() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[3]) return ""
                 let str = "<h5>" + BHC[player.bh.celestialite.id].actions[3].name + "<br>" + formatTime(player.bh.celestialite.actions[3].cooldown) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[3].cooldown)
-                if (player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
+                if (BHC[player.bh.celestialite.id].actions[3].passive) str = "<h5>" + BHC[player.bh.celestialite.id].actions[3].name + "<br>[PASSIVE]"
+                if ((!BHC[player.bh.celestialite.id].actions[3].passive || player.bh.celestialite.stun[0] == "hard") && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
+                return str
+            },
+        },
+        "celestialite-A3-duration": {
+            unlocked() {return player.bh.celestialite.actions[3].duration.gt(0)},
+            direction: RIGHT,
+            width: 125,
+            height: 13,
+            progress() {
+                if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[3] || !BHC[player.bh.celestialite.id].actions[3].duration) return new Decimal(0)
+                return player.bh.celestialite.actions[3].duration.div(BHA[player.bh.celestialite.actions[3].id].duration);
+            },
+            borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: "#8a0e79"}
+            },
+            textStyle: {userSelect: "none", lineHeight: "1"},
+            display() {
+                if (!BHA[player.bh.celestialite.actions[3].id].duration) return new Decimal(0)
+                let str = "<h5>" + formatTime(player.bh.celestialite.actions[3].duration) + "/" + formatTime(BHA[player.bh.celestialite.actions[3].id].duration)
+                if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
                 return str
             },
         },
@@ -3610,12 +3714,12 @@ addLayer("bh", {
                             ["style-column", [
                                 ["bar", "celestialite-Health"],
                                 ["row", [
-                                    ["bar", "celestialite-A0"],
-                                    ["bar", "celestialite-A1"],
+                                    ["style-column", [["bar", "celestialite-A0"], ["bar", "celestialite-A0-duration"]], () => {return BHC[player.bh.celestialite.id].actions[0] ? {width: "125px", height: "40px", border: "2px solid white", borderRadius: "17px", margin: "-1px"} : {display: "none !important"}}],
+                                    ["style-column", [["bar", "celestialite-A1"], ["bar", "celestialite-A1-duration"]], () => {return BHC[player.bh.celestialite.id].actions[1] ? {width: "125px", height: "40px", border: "2px solid white", borderRadius: "17px", margin: "-1px"} : {display: "none !important"}}],
                                 ]],
                                 ["row", [
-                                    ["bar", "celestialite-A2"],
-                                    ["bar", "celestialite-A3"],
+                                    ["style-column", [["bar", "celestialite-A2"], ["bar", "celestialite-A2-duration"]], () => {return BHC[player.bh.celestialite.id].actions[2] ? {width: "125px", height: "40px", border: "2px solid white", borderRadius: "17px", margin: "-1px"} : {display: "none !important"}}],
+                                    ["style-column", [["bar", "celestialite-A3"], ["bar", "celestialite-A3-duration"]], () => {return BHC[player.bh.celestialite.id].actions[3] ? {width: "125px", height: "40px", border: "2px solid white", borderRadius: "17px", margin: "-1px"} : {display: "none !important"}}],
                                 ]],
                             ], {width: "300px", height: "155px"}],
                             ["blank", "10px"],
@@ -3628,7 +3732,7 @@ addLayer("bh", {
                     ]],
                     ["top-column", [
                         ["raw-html", () => `${player.bh.log.map((x, i) => `<span style="display:block;">${x}</span>`).join("")}`],
-                    ], {width: "600px", minHeight: "206px", textAlign: "center", background: "rgba(0,0,0,0.5)", border: "3px solid white", borderRadius: "30px", padding: "12px 0", marginTop: "5px"}],
+                    ], {width: "700px", minHeight: "206px", textAlign: "center", background: "rgba(0,0,0,0.5)", border: "3px solid white", borderRadius: "30px", padding: "12px 0", marginTop: "5px"}],
                 ],
             },
             "dead": {

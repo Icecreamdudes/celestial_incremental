@@ -184,15 +184,6 @@ function updateStyles() {
 		case "sma": case "sme":
 			layerBG = "linear-gradient(120deg, #73752b 0%, #5f4d19 25%, #75303b 50%, #6a3075, 75%, #306775 100%)"
 			break;
-		case "ma": 
-			if (!player.ma.inBlackHeart) {
-				if (!player.ma.matosDefeated) layerBG = "#260300"
-				if (player.ma.matosDefeated) layerBG = "linear-gradient(-180deg, #540818 0%, #3a0202 100%)"
-			}
-			if (player.ma.inBlackHeart) layerBG = "black"
-			if (player.ma.currentDepth.eq(2)) layerBG = "linear-gradient(-180deg, #720455 0%, #250121 100%)"
-			if (player.ma.currentDepth.eq(3)) layerBG = "linear-gradient(-180deg, #720804 0%, #720455 100%)"
-			break;
 		case "bh":
 			switch (player.bh.currentStage) {
 				case "depth2":
@@ -200,6 +191,9 @@ function updateStyles() {
 					break;
 				case "depth3":
 					layerBG = "linear-gradient(-180deg, #720804 0%, #720455 100%)"
+					break;
+				case "matosLair":
+					layerBG = "linear-gradient(-180deg, #96221d 0%, #720804 100%)"
 					break;
 				default: 
 					layerBG = "black"
@@ -296,7 +290,7 @@ function updateStyles() {
 	    }
 	}
 
-	if (player.tab == "ma" && player.ma.currentDepth && player.ma.currentDepth.eq && player.ma.currentDepth.eq(3) && (player.subtabs["ma"]["stuff"] == "Fight")) {
+	if (player.tab == "bh" && (player.bh.currentStage == "depth3" || player.bh.currentStage == "matosLair") && (player.subtabs["bh"]["stuff"] == "battle")) {
 	    if (!document.getElementById("embers-background")) {
     	    // Create embers background container
 	        const embersBg = document.createElement("div");
@@ -517,7 +511,7 @@ function updateStyles() {
             player.musuniverse = "A1"
 			break;
 		case "s": case "co": case "ra": case "sd": case "cs":
-		case "sma": case "ma": case "cof": case "sme":
+		case "sma": case "bh": case "cof": case "sme":
             player.musuniverse = "U3"
 			break;
 		case "du": case "le": case "dr": case "dp": case "dg":
@@ -575,18 +569,23 @@ function updateStyles() {
 						playAndLoopAudio("music/alt-uni1.mp3", options.musicVolume/10)
 						break;
 					case "U3":
-						if (player.ma.inBlackHeart == false) {
+						if (player.tab != "bh") {
         		        	if (!player.ma.matosDefeated) playAndLoopAudio("music/singularity.mp3", options.musicVolume/10);
 		                	if (player.ma.matosDefeated) playAndLoopAudio("music/singularity2.mp3", options.musicVolume/10);
             			} else {
-        		        	if (!player.ma.fightingCelestialites) {
-		                    	playAndLoopAudio("music/enteringBlackHeart.mp3", options.musicVolume/10);
-            				} else {
-        		            	if (player.ma.currentDepth.eq(1)) playAndLoopAudio("music/celestialites.mp3", options.musicVolume/10);
-		                    	if (player.ma.currentDepth.eq(2)) playAndLoopAudio("music/blackHeart.mp3", options.musicVolume/10);
-                		    	if (player.ma.currentDepth.eq(3) && !player.ma.matosFightActive && player.ma.currentCelestialiteType != 25) playAndLoopAudio("music/matosTheme.mp3", options.musicVolume/10);
-        		            	if (player.ma.currentDepth.eq(3) && player.ma.matosFightActive && player.ma.currentCelestialiteType == 25) playAndLoopAudio("music/matosFight.mp3", options.musicVolume/10);
-		                	} //use blackHeart.mp3 for depth 2, matosTheme.mp3 for depth 3
+							// Exceptions
+							if (player.bh.currentStage == "matosLair" && player.bh.combo.eq(24)) {
+								playAndLoopAudio("music/matosFight.mp3", options.musicVolume/10)
+								break;
+							}
+							// Default Behavior
+							if (BHS[player.bh.currentStage] && BHS[player.bh.currentStage].music) {
+								playAndLoopAudio(BHS[player.bh.currentStage].music, options.musicVolume/10);
+								break;
+							} else {
+								playAndLoopAudio("music/enteringBlackHeart.mp3", options.musicVolume/10);
+								break;
+							}
             			}
 						break;
 					case "D1":

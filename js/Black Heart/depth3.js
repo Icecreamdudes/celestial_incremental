@@ -118,7 +118,7 @@ addLayer("depth3", {
             title: "Quintuple Kill",
             unlocked: true,
             description: "Unlock Sel's \"Arrow Barrage\" skill.",
-            cost: new Decimal(10),
+            cost: new Decimal(15),
             currencyLocation() { return player.bh },
             currencyDisplayName: "Dark Essence",
             currencyInternalName: "darkEssence",
@@ -132,7 +132,7 @@ addLayer("depth3", {
             title: "Now let me see your war face!",
             unlocked: true,
             description: "Unlock the general skill \"Scream\".",
-            cost: new Decimal(12),
+            cost: new Decimal(30),
             currencyLocation() { return player.bh },
             currencyDisplayName: "Dark Essence",
             currencyInternalName: "darkEssence",
@@ -360,33 +360,33 @@ addLayer("depth3", {
 BHS.depth3 = {
     nameCap: "Depth 3",
     nameLow: "depth 3",
-    music: "music/celestialites.mp3",
+    music: "music/matosTheme.mp3",
     comboLimit: 250,
     comboScaling: 1.015,
     comboScalingStart: 100,
     generateCelestialite(combo) {
         if (typeof combo == "object") combo = combo.toNumber()
         switch (combo) {
-            case 24:
-                return "lesserEnas"
-            case 49: case 74:
-                return "lesserPente"
-            case 99: case 124:
-                return "lesserDeka"
-            case 149: case 174:
-                return "lesserHekaton"
-            case 199: case 224:
-                return "lesserKhilioi"
+            case 24: case 74:
+                return "greaterEnas"
+            case 49: case 124:
+                return "greaterPente"
+            case 99: case 174:
+                return "greaterDeka"
+            case 149: case 224:
+                return "greaterHekaton"
+            case 199:
+                return "greaterKhilioi"
             case 249:
-                return "lesserMyrioi"
+                return "greaterMyrioi"
             default:
                 let random = Math.random()
-                let cel = ["lesserAlpha", "lesserBeta", "lesserGamma", "lesserDelta", "lesserEpsilon"]
-                if (combo >= 25) cel.push("lesserZeta")
-                if (combo >= 50) cel.push("lesserEta")
-                if (combo >= 100) cel.push("lesserTheta")
-                if (combo >= 150) cel.push("lesserIota")
-                if (combo >= 200) cel.push("lesserKappa")
+                let cel = ["greaterAlpha", "greaterBeta", "greaterGamma", "greaterDelta", "greaterEpsilon", "greaterZeta", "greaterEta", "greaterTheta", "greaterIota"]
+                if (combo >= 25) cel.push("greaterKappa")
+                if (combo >= 50) cel.push("greaterLambda")
+                if (combo >= 100) cel.push("greaterMu")
+                if (combo >= 150) cel.push("greaterNu")
+                if (combo >= 200) cel.push("greaterXi") //ξ
                 return cel[Math.floor(Math.random()*cel.length)]
         }
     },
@@ -424,6 +424,584 @@ BHC.greaterAlpha = {
         } else {
             gain.darkEssence = Decimal.add(1, getRandomInt(1))
         }
+        return gain
+    },
+}
+
+BHC.greaterBeta = {
+    name: "Celestialite Greater Beta",
+    symbol: "⬆β",
+    style: {
+        background: "linear-gradient(90deg, #5900B4, #8D0048)",
+        color: "black",
+        borderColor: "#520040",
+    },
+    health: new Decimal(220),
+    damage: new Decimal(6),
+    attributes: {
+        "air": new Decimal(0.2), // Resistance DMG Mult
+    },
+    actions: {
+        0: {
+            name: "Quick Shot",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            value: new Decimal(1),
+            cooldown: new Decimal(3),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.vividUmbrite = Decimal.add(10, getRandomInt(5))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.lustrousUmbrite = Decimal.add(2, getRandomInt(2))
+        } else {
+            gain.darkEssence = Decimal.add(1, getRandomInt(1))
+        }
+        return gain
+    },
+}
+
+BHC.greaterGamma = {
+    name: "Celestialite Greater Gamma",
+    symbol: "⬆γ",
+    style: {
+        background: "linear-gradient(90deg, #5900B4, #8D0048)",
+        color: "black",
+        borderColor: "#520040",
+    },
+    health: new Decimal(350),
+    damage: new Decimal(6),
+    attributes: {
+        "warded": new Decimal(0.2), // Resistance DMG Mult
+    },
+    actions: {
+        0: {
+            name: "Stab",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value: new Decimal(1),
+            cooldown: new Decimal(4),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.vividUmbrite = Decimal.add(10, getRandomInt(8))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.lustrousUmbrite = Decimal.add(3, getRandomInt(2))
+        } else {
+            gain.darkEssence = Decimal.add(2, getRandomInt(1))
+        }
+        return gain
+    },
+}
+
+BHC.greaterDelta = {
+    name: "Celestialite Greater Delta",
+    symbol: "⬆δ",
+    style: {
+        background: "linear-gradient(90deg, #5900B4, #8D0048)",
+        color: "black",
+        borderColor: "#520040",
+    },
+    health: new Decimal(165),
+    damage: new Decimal(2),
+    attributes: {
+        "stealthy": new Decimal(0.2), // Resistance DMG Mult
+    },
+    actions: {
+        0: {
+            name: "Pummel",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value: new Decimal(1),
+            cooldown: new Decimal(1),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.vividUmbrite = Decimal.add(10, getRandomInt(10))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.lustrousUmbrite = Decimal.add(3, getRandomInt(3))
+        } else {
+            gain.darkEssence = Decimal.add(2, getRandomInt(1))
+        }
+        return gain
+    },
+}
+
+BHC.greaterEpsilon = {
+    name: "Celestialite Greater Epsilon",
+    symbol: "⬆ε",
+    style: {
+        background: "linear-gradient(90deg, #5900B4, #8D0048)",
+        color: "black",
+        borderColor: "#520040",
+    },
+    health: new Decimal(225),
+    damage: new Decimal(6),
+    attributes: {
+        "stealthy": new Decimal(0.2), // Resistance DMG Mult
+    },
+    actions: {
+        0: {
+            name: "Magic Needle",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "magic",
+            value: new Decimal(1),
+            cooldown: new Decimal(3),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.vividUmbrite = Decimal.add(12, getRandomInt(10))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.lustrousUmbrite = Decimal.add(4, getRandomInt(3))
+        } else {
+            gain.darkEssence = Decimal.add(2, getRandomInt(2))
+        }
+        return gain
+    },
+}
+
+BHC.greaterZeta = {
+    name: "Celestialite Greater Zeta",
+    symbol: "⬆ζ",
+    style: {
+        background: "linear-gradient(90deg, #5900B4, #8D0048)",
+        color: "black",
+        borderColor: "#520040",
+    },
+    health: new Decimal(180),
+    damage: new Decimal(5),
+    attributes: {
+        "rebound": new Decimal(0.3), // Dmg Mult
+    },
+    actions: {
+        0: {
+            name: "Quick Shot",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            value: new Decimal(1),
+            cooldown: new Decimal(3),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.vividUmbrite = Decimal.add(14, getRandomInt(8))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.lustrousUmbrite = Decimal.add(4, getRandomInt(4))
+        } else {
+            gain.darkEssence = Decimal.add(2, getRandomInt(2))
+        }
+        return gain
+    },
+}
+
+BHC.greaterEta = {
+    name: "Celestialite Greater Eta",
+    symbol: "⬆η",
+    style: {
+        background: "linear-gradient(90deg, #5900B4, #8D0048)",
+        color: "black",
+        borderColor: "#520040",
+    },
+    health: new Decimal(260),
+    damage: new Decimal(6),
+    attributes: {
+        "rebound": new Decimal(0.3), // Dmg Mult
+    },
+    actions: {
+        0: {
+            name: "Stab",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value: new Decimal(1),
+            cooldown: new Decimal(6),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.vividUmbrite = Decimal.add(16, getRandomInt(10))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.lustrousUmbrite = Decimal.add(5, getRandomInt(4))
+        } else {
+            gain.darkEssence = Decimal.add(3, getRandomInt(2))
+        }
+        return gain
+    },
+}
+
+BHC.greaterTheta = {
+    name: "Celestialite Greater Theta",
+    symbol: "⬆θ",
+    style: {
+        background: "linear-gradient(90deg, #5900B4, #8D0048)",
+        color: "black",
+        borderColor: "#520040",
+    },
+    health: new Decimal(140),
+    damage: new Decimal(12),
+    attributes: {
+        "explosive": new Decimal(10), // Dmg Mult
+    },
+    actions: {
+        0: {
+            name: "Magic Missile",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "magic",
+            value: new Decimal(1),
+            cooldown: new Decimal(4),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.vividUmbrite = Decimal.add(16, getRandomInt(10))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.lustrousUmbrite = Decimal.add(5, getRandomInt(5))
+        } else {
+            gain.darkEssence = Decimal.add(3, getRandomInt(2))
+        }
+        return gain
+    },
+}
+
+BHC.greaterIota = {
+    name: "Celestialite Greater Iota",
+    symbol: "⬆ι",
+    style: {
+        background: "linear-gradient(90deg, #5900B4, #8D0048)",
+        color: "black",
+        borderColor: "#520040",
+    },
+    health: new Decimal(300),
+    damage: new Decimal(4),
+    attributes: {
+        "explosive": new Decimal(15), // Dmg Mult
+    },
+    actions: {
+        0: {
+            name: "Magic Needle",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "magic",
+            value: new Decimal(1),
+            cooldown: new Decimal(4),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.vividUmbrite = Decimal.add(20, getRandomInt(10))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.lustrousUmbrite = Decimal.add(6, getRandomInt(6))
+        } else {
+            gain.darkEssence = Decimal.add(3, getRandomInt(3))
+        }
+        return gain
+    },
+}
+
+BHC.greaterKappa = {
+    name: "Celestialite Greater Kappa",
+    symbol: "⬆κ",
+    style: {
+        background: "linear-gradient(90deg, #5900B4, #8D0048)",
+        color: "black",
+        borderColor: "#520040",
+    },
+    health: new Decimal(100),
+    damage: new Decimal(5),
+    regen: new Decimal(5),
+    actions: {
+        0: {
+            name: "Stab",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value: new Decimal(1),
+            cooldown: new Decimal(5),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.vividUmbrite = Decimal.add(24, getRandomInt(10))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.lustrousUmbrite = Decimal.add(8, getRandomInt(6))
+        } else {
+            gain.darkEssence = Decimal.add(3, getRandomInt(3))
+        }
+        return gain
+    },
+}
+
+BHC.greaterLambda = {
+    name: "Celestialite Greater Lambda",
+    symbol: "⬆λ",
+    style: {
+        background: "linear-gradient(90deg, #5900B4, #8D0048)",
+        color: "black",
+        borderColor: "#520040",
+    },
+    health: new Decimal(250),
+    damage: new Decimal(5),
+    attributes: {
+        "stealthy": new Decimal(0.2), // Resistance DMG Mult
+    },
+    actions: {
+        0: {
+            name: "Triple Shot",
+            instant: true,
+            type: "damage",
+            target: "allPlayer",
+            method: "ranged",
+            value: new Decimal(1),
+            cooldown: new Decimal(4),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.vividUmbrite = Decimal.add(25, getRandomInt(12))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.lustrousUmbrite = Decimal.add(10, getRandomInt(8))
+        } else {
+            gain.darkEssence = Decimal.add(4, getRandomInt(3))
+        }
+        return gain
+    },
+}
+
+BHC.greaterMu = {
+    name: "Celestialite Greater Mu",
+    symbol: "⬆μ",
+    style: {
+        background: "linear-gradient(90deg, #5900B4, #8D0048)",
+        color: "black",
+        borderColor: "#520040",
+    },
+    health: new Decimal(200),
+    damage: new Decimal(10),
+    attributes: {
+        "rebound": new Decimal(0.3), // Dmg Mult
+    },
+    actions: {
+        0: {
+            name: "Explode",
+            instant: true,
+            type: "damage",
+            target: "all",
+            method: "magic",
+            value: new Decimal(1),
+            cooldown: new Decimal(10),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.vividUmbrite = Decimal.add(30, getRandomInt(10))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.lustrousUmbrite = Decimal.add(12, getRandomInt(8))
+        } else {
+            gain.darkEssence = Decimal.add(4, getRandomInt(4))
+        }
+        return gain
+    },
+}
+
+BHC.greaterNu = {
+    name: "Celestialite Greater Nu",
+    symbol: "⬆ν",
+    style: {
+        background: "linear-gradient(90deg, #5900B4, #8D0048)",
+        color: "black",
+        borderColor: "#520040",
+    },
+    health: new Decimal(100),
+    damage: new Decimal(4),
+    attributes: {
+        "explosive": new Decimal(8), // Dmg Mult
+    },
+    actions: {
+        0: {
+            name: "Mini-Earthquake",
+            instant: true,
+            type: "damage",
+            target: "all",
+            method: "physical",
+            value: new Decimal(1),
+            cooldown: new Decimal(2),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.vividUmbrite = Decimal.add(35, getRandomInt(15))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.lustrousUmbrite = Decimal.add(15, getRandomInt(10))
+        } else {
+            gain.darkEssence = Decimal.add(5, getRandomInt(4))
+        }
+        return gain
+    },
+}
+
+BHC.greaterXi = {
+    name: "Celestialite Greater Xi",
+    symbol: "⬆ξ",
+    style: {
+        background: "linear-gradient(90deg, #5900B4, #8D0048)",
+        color: "black",
+        borderColor: "#520040",
+    },
+    health: new Decimal(100),
+    damage: new Decimal(45),
+    attributes: {
+        "air": new Decimal(0.2), // Resistance DMG Mult
+        "warded": new Decimal(0.2), // Resistance DMG Mult
+        "stealthy": new Decimal(0.2), // Resistance DMG Mult
+    },
+    actions: {
+        0: {
+            name: "Bludgeon",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value: new Decimal(1),
+            cooldown: new Decimal(10),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.vividUmbrite = Decimal.add(40, getRandomInt(20))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.lustrousUmbrite = Decimal.add(20, getRandomInt(12))
+        } else {
+            gain.darkEssence = Decimal.add(5, getRandomInt(5))
+        }
+        return gain
+    },
+}
+
+BHC.greaterEnas = {
+    name: "Celestialite Greater Enas",
+    symbol: "⬆Ι",
+    style: {
+        background: "linear-gradient(90deg, #5900B4, #8D0048)",
+        color: "black",
+        borderColor: "#520040",
+    },
+    health: new Decimal(500),
+    damage: new Decimal(5),
+    regen: new Decimal(3),
+    actions: {
+        0: {
+            name: "Quick Shot",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            value: new Decimal(1),
+            cooldown: new Decimal(5),
+        },
+        1: {
+            name: "Drain",
+            passive: true,
+            constantType: "effect",
+            constantTarget: "allPlayer",
+            effects: {
+                "regenAdd": new Decimal(-1), // Add to regen stat
+            },
+            cooldown: new Decimal(Infinity),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.vividUmbrite = new Decimal(50)
+        gain.lustrousUmbrite = new Decimal(15)
+        gain.darkEssence = new Decimal(6)
+        return gain
+    },
+}
+
+BHC.greaterPente = {
+    name: "Celestialite Greater Pente",
+    symbol: "⬆Π",
+    style: {
+        background: "linear-gradient(90deg, #5900B4, #8D0048)",
+        color: "black",
+        borderColor: "#520040",
+    },
+    health: new Decimal(750),
+    damage: new Decimal(15),
+    regen: new Decimal(5),
+    actions: {
+        0: {
+            name: "Chop",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value: new Decimal(1),
+            cooldown: new Decimal(5),
+        },
+        1: {
+            name: "Big Attack",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            properties: {
+                "backfire": [new Decimal(1), new Decimal(0.5)], // Backfire Chance / Backfire Damage (multiple of end damage)
+            },
+            value: new Decimal(2),
+            cooldown: new Decimal(15),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.vividUmbrite = new Decimal(50)
+        gain.lustrousUmbrite = new Decimal(15)
+        gain.darkEssence = new Decimal(6)
         return gain
     },
 }

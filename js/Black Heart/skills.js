@@ -20,8 +20,8 @@ BHA.general_slap = {
     passiveText() {return "+" + formatSimple(player.bh.skillData["general_slap"].maxLevel.div(5)) + " DMG"},
     char: "general",
     spCost: new Decimal(6),
-    curCostBase: new Decimal(2),
-    curCostScale: new Decimal(2),
+    curCostBase: new Decimal(3),
+    curCostScale: new Decimal(3),
     currency: "darkEssence",
     unlocked() {return hasUpgrade("depth1", 4)},
 
@@ -42,8 +42,8 @@ BHA.general_bandage = {
     passiveText() {return "+" + formatSimple(player.bh.skillData["general_bandage"].maxLevel) + " HP"},
     char: "general",
     spCost: new Decimal(8),
-    curCostBase: new Decimal(4),
-    curCostScale: new Decimal(2),
+    curCostBase: new Decimal(5),
+    curCostScale: new Decimal(4),
     currency: "darkEssence",
     unlocked() {return hasUpgrade("depth2", 4)},
 
@@ -56,11 +56,11 @@ BHA.general_bandage = {
 BHA.general_scream = {
     name: "Scream",
     description() {return "Taunt damage and buffs towards yourself and give yourself " + formatSimple(new Decimal(0.5).add(player.bh.skillData["general_scream"].level.mul(0.1)), 2) + " regen for 10 seconds"},
-    passiveText() {return "+" + formatSimple(player.bh.skillData["general_scream"].maxLevel.div(20)) + " RGN"},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["general_scream"].maxLevel.div(20), 2) + " RGN"},
     char: "general",
     spCost: new Decimal(12),
-    curCostBase: new Decimal(6),
-    curCostScale: new Decimal(2),
+    curCostBase: new Decimal(8),
+    curCostScale: new Decimal(5),
     currency: "darkEssence",
     unlocked() {return hasUpgrade("depth3", 4)},
 
@@ -80,8 +80,8 @@ BHA.general_block = {
     passiveText() {return "+" + formatSimple(player.bh.skillData["general_block"].maxLevel) + " DEF"},
     char: "general",
     spCost: new Decimal(10),
-    curCostBase: new Decimal(8),
-    curCostScale: new Decimal(2),
+    curCostBase: new Decimal(12),
+    curCostScale: new Decimal(6),
     currency: "darkEssence",
     unlocked: false,
 
@@ -479,9 +479,9 @@ BHA.geroa_radioactiveMissile = {
     passiveText() {return "+" + formatSimple(player.bh.skillData["geroa_radioactiveMissile"].maxLevel.div(2)) + " AGI"},
     char: "geroa",
     spCost: new Decimal(8),
-    curCostBase: new Decimal(20),
-    curCostScale: new Decimal(3),
-    currency: "lustrousUmbrite",
+    curCostBase: new Decimal(1000),
+    curCostScale: new Decimal(10),
+    currency: "spaceRock",
     unlocked: true,
 
     instant: true,
@@ -500,10 +500,10 @@ BHA.geroa_selfRepair = {
     passiveText() {return "+" + formatSimple(player.bh.skillData["geroa_selfRepair"].maxLevel) + " HP"},
     char: "geroa",
     spCost: new Decimal(10),
-    curCostBase: new Decimal(30),
-    curCostScale: new Decimal(3),
-    currency: "lustrousUmbrite",
-    unlocked: true,
+    curCostBase: new Decimal(5000),
+    curCostScale: new Decimal(25),
+    currency: "spaceRock",
+    unlocked() {return hasUpgrade("ir", 201)},
 
     instant: true,
     type: "heal",
@@ -515,16 +515,36 @@ BHA.geroa_selfRepair = {
     },
     cooldown: new Decimal(30),
 }
+BHA.geroa_cosmicRay = {
+    name: "Cosmic Ray",
+    description() {return "Deal " + formatWhole(new Decimal(50).add(player.bh.skillData["geroa_cosmicRay"].level.mul(10))) + "% true damage per second for 5 seconds"},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["geroa_cosmicRay"].maxLevel.div(5)) + " DMG"},
+    char: "geroa",
+    spCost: new Decimal(12),
+    curCostBase: new Decimal(20000),
+    curCostScale: new Decimal(50),
+    currency: "spaceRock",
+    unlocked() {return hasUpgrade("ir", 202)},
+
+    active: true,
+    constantType: "effect",
+    constantTarget: "celestialite",
+    effects: {
+        "regenAdd"() {return player.bh.characterData["geroa"].damage.mul(Decimal.sub(-0.5, player.bh.skillData["geroa_cosmicRay"].level.mul(0.1)))}, // Multiplicative Effect
+    },
+    duration: new Decimal(5),
+    cooldown: new Decimal(15),
+}
 BHA.geroa_orbitalCannon = {
     name: "Orbital Cannon",
     description() {return "Hard-stuns Geroa for 10 seconds, then deals x" + formatWhole(new Decimal(10).add(player.bh.skillData["geroa_orbitalCannon"].level.mul(2))) + " ranged damage split into 10 hits, and hard-stuns the celestialite for 5 seconds"},
     passiveText() {return "+" + formatSimple(player.bh.skillData["geroa_orbitalCannon"].maxLevel.div(5)) + " DMG"},
     char: "geroa",
-    spCost: new Decimal(12),
-    curCostBase: new Decimal(40),
-    curCostScale: new Decimal(3),
-    currency: "lustrousUmbrite", // Temp, probably something else
-    unlocked: true,
+    spCost: new Decimal(14),
+    curCostBase: new Decimal(100000),
+    curCostScale: new Decimal(100),
+    currency: "spaceRock", // Temp, probably something else
+    unlocked() {return hasUpgrade("ir", 203)},
 
     instant: true,
     type: "damage",

@@ -762,19 +762,3 @@ function screenFlash(message, duration) {
         }, 200);
     }, duration);
 }
-
-function addBHStage(id, data) {
-    BHS[id] = data
-}
-
-function addBHCelestialite(id, data) {
-    BHC[id] = data
-}
-
-function addBHCharacter(id, data) {
-    BHP[id] = data
-}
-
-function addBHSkill(id, data) {
-    BHA[id] = data
-}

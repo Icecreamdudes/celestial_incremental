@@ -1,16 +1,5 @@
 // BH variables are declared in game.js
-addBHCelestialite("none", {
-    name: "No Celestialite",
-    symbol: "?",
-    style: {
-        background: "#555",
-        color: "black",
-        borderColor: "black",
-    },
-    actions: {},
-})
-
-addBHStage("none", {
+BHS.none = {
     nameCap: "None",
     nameLow: "none",
     music: "music/celestialites.mp3",
@@ -19,9 +8,9 @@ addBHStage("none", {
     comboScaling: 1.015,
     comboScalingStart: 100,
     generateCelestialite(combo) {},
-})
+}
 
-addBHStage("template", {
+BHS.template = {
     nameCap: "Stage template",
     nameLow: "stage template",
     music: "music/celestialites.mp3",
@@ -42,9 +31,20 @@ addBHStage("template", {
         // Regular Rounds
         return "template"
     },
-})
+}
 
-addBHCelestialite("template", {
+BHC.none = {
+    name: "No Celestialite",
+    symbol: "?",
+    style: {
+        background: "#555",
+        color: "black",
+        borderColor: "black",
+    },
+    actions: {},
+}
+
+BHC.template = {
     name: "Celestialite Template",
     symbol: "Tmp",
     style: {
@@ -112,7 +112,7 @@ addBHCelestialite("template", {
         gain.darkEssence = 10
         return gain
     },
-})
+}
 
 BH_CURRENCY = {
     "gloomingUmbrite": ["Glooming Umbrite", "depth1"],

@@ -39,8 +39,8 @@
 
 // Set your version in num and name
 let VERSION = {
-	num: 190.1, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
-	name: "Aleph Update I: The Hive",
+	num: 190.2, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
+	name: "Black Heart Revamp",
 }
 
 function miscCode() {
@@ -1834,8 +1834,18 @@ function fixOldSave(oldVersion){
 			player.bh.unlockConditions.replicanti = player.ma.matosUnlockConditions[2]
 			player.bh.unlockConditions.points = player.ma.matosUnlockConditions[3]
 		}
+		player.depth1.gloomingUmbrite = Decimal.pow(player.ma.commonMatosFragments, 0.7)
+		player.depth1.dimUmbrite = Decimal.pow(player.ma.commonMatosFragments, 0.5)
+		player.depth2.faintUmbrite = Decimal.pow(player.ma.rareMatosFragments, 0.9)
+		player.depth2.clearUmbrite = Decimal.pow(player.ma.rareMatosFragments, 0.7)
+		player.depth3.vividUmbrite = new Decimal(player.ma.epicMatosFragments)
+		player.depth3.lustrousUmbrite = Decimal.pow(player.ma.epicMatosFragments, 0.8)
+		player.bh.darkEssence = new Decimal(player.ma.legendaryMatosFragments)
 		// Depth 1
-		player.depth1.highestCombo = new Decimal(player.ma.bestComboDepth1)
+		player.depth1.highestCombo = new Decimal(player.ma.bestComboDepth1).min(250)
+		for (let i in player.depth1.milestone) {
+			if (player.depth1.highestCombo.gte(i)) player.depth1.milestone[i] = 1
+		}
 		if (hasUpgrade("ma", 11)) player.depth1.upgrades.push(1)
 		if (hasUpgrade("ma", 12)) player.depth1.upgrades.push(2)
 		if (hasUpgrade("ma", 13)) player.depth1.upgrades.push(3)
@@ -1847,7 +1857,10 @@ function fixOldSave(oldVersion){
 		player.depth1.buyables[4] = new Decimal(player.ma.buyables[33])
 
 		// Depth 2
-		player.depth2.highestCombo = new Decimal(player.ma.bestComboDepth2)
+		player.depth2.highestCombo = new Decimal(player.ma.bestComboDepth2).min(250)
+		for (let i in player.depth2.milestone) {
+			if (player.depth2.highestCombo.gte(i)) player.depth2.milestone[i] = 1
+		}
 		if (hasUpgrade("ma", 23)) player.depth2.upgrades.push(1)
 		if (hasUpgrade("ma", 24)) player.depth2.upgrades.push(2)
 		if (hasUpgrade("ma", 25)) player.depth2.upgrades.push(3)
@@ -1858,7 +1871,10 @@ function fixOldSave(oldVersion){
 		player.depth2.buyables[4] = new Decimal(player.ma.buyables[23]).div(10).floor()
 
 		// Depth 3
-		player.depth3.highestCombo = new Decimal(player.ma.bestComboDepth3)
+		player.depth3.highestCombo = new Decimal(player.ma.bestComboDepth3).min(250)
+		for (let i in player.depth3.milestone) {
+			if (player.depth3.highestCombo.gte(i)) player.depth3.milestone[i] = 1
+		}
 		if (hasUpgrade("ma", 29)) player.depth3.upgrades.push(5)
 		if (hasUpgrade("ma", 30)) player.depth3.upgrades.push(6)
 		player.depth3.buyables[1] = new Decimal(player.ma.buyables[16]).div(5).floor()

@@ -1121,5 +1121,5 @@
         ], {width: "788px", height: "565px", background: "var(--layerBackground)", border: "3px solid var(--regBorder)"}],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && player.ma.matosDefeated }
+    layerShown() { return player.startedGame == true && player.matosLair.milestone[25] > 0 }
 })

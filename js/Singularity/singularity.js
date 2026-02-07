@@ -55,7 +55,7 @@
         if (hasChallenge("fu", 11)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(10)
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(buyableEffect("st", 303))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.depth3.comboEffect)
-        if (player.ma.matosDefeated) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(1e40)
+        if (player.matosLair.milestone[25] > 0) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(1e40)
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.cof.coreFragmentEffects[4])
         if (hasUpgrade("ir", 11)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(upgradeEffect("ir", 11))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("ir", 1)[1])

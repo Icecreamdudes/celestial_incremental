@@ -33,7 +33,7 @@
         for (let i in player.co.cores) {
             player.ra.radiationPerSecond = player.ra.radiationPerSecond.add(player.co.cores[i].level.pow(CORE_STRENGTH[player.co.cores[i].strength].buff).pow(0.8).div(4))
         }
-        if (player.ma.matosDefeated) player.ra.radiationPerSecond = player.ra.radiationPerSecond.add(1000)
+        if (player.matosLair.milestone[25] > 0) player.ra.radiationPerSecond = player.ra.radiationPerSecond.add(1000)
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.div(player.ra.radiationSoftcapEffect)
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(buyableEffect("ra", 13))
         if (hasUpgrade("ev8", 19)) player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(upgradeEffect("ev8", 19))
@@ -295,7 +295,7 @@
                         ["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16]
                     ], {maxWidth: "840px"}],
                     ["blank", "25px"],
-                    ["raw-html", () => { return !player.ma.matosDefeated ? "Radiation gain is based on core progress." : "" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return player.matosLair.milestone[25] == 0 ? "Radiation gain is based on core progress." : "" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                 ],
             },
         },

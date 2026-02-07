@@ -140,7 +140,7 @@
         if (hasMilestone("r", 21)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.r.pentMilestone11Effect)
         if (player.pol.pollinatorEffects.water.enabled) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.pol.pollinatorEffects.water.effects[0])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("st", 301))
-        if (player.ma.matosDefeated) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul("1e600")
+        if (player.matosLair.milestone[25] > 0) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul("1e600")
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.i.pylonPassiveEffect)
 
         // POWER MODIFIERS

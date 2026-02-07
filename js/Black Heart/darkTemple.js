@@ -30,6 +30,12 @@ const RUNE_EFFECTS = {
             hpMult: 0.1,
             dmgMult: 0.1,
         },
+        6: {
+            hp: 5,
+            dmg: 0.5,
+            d1c: 0.3,
+            agi: 4,
+        },
     },
     2: {
         1: {
@@ -61,6 +67,12 @@ const RUNE_EFFECTS = {
             scd: 1,
             hpMult: 0.2,
             dmgMult: 0.2,
+        },
+        6: {
+            hp: 6,
+            dmg: 0.6,
+            d2c: 0.3,
+            def: 4,
         },
     },
     3: {
@@ -94,6 +106,12 @@ const RUNE_EFFECTS = {
             hpMult: 0.3,
             dmgMult: 0.3,
         },
+        6: {
+            hp: 7,
+            dmg: 0.7,
+            d3c: 0.3,
+            luck: 4,
+        },
     },
 }
 addLayer("darkTemple", {
@@ -109,6 +127,7 @@ addLayer("darkTemple", {
         unlocked: true,
 
         selection: 1,
+        runeCap: new Decimal(5),
 
         spAdd: new Decimal(0),
         skillCost: new Decimal(1),
@@ -147,6 +166,9 @@ addLayer("darkTemple", {
     tooltip: '',
     color: "#88f",
     update(delta) {
+        player.darkTemple.runeCap = new Decimal(5)
+        if (player.matosLair.milestone[25] >= 3) player.darkTemple.runeCap = player.darkTemple.runeCap.add(1)
+
         let stats = {}
         for (let j = 1; j < 4; j++) {
             for (let i = 1; i < getBuyableAmount("darkTemple", j).add(1); i++) {
@@ -180,7 +202,7 @@ addLayer("darkTemple", {
                 let look = {width: "50px", minHeight: "50px", color: "#88f", fontSize: "16px", background: "#113", border: "3px solid #339", borderRadius: "15px"}
                 if (player.darkTemple.selection == 1) look.borderColor = "#ccf"
                 if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #113"} else {look.boxShadow = "0px 0px 15px #339"}
-                if (getBuyableAmount("darkTemple", 1).gte(5)) look.background = "#226"
+                if (getBuyableAmount("darkTemple", 1).gte(player.darkTemple.runeCap)) look.background = "#226"
                 return look
             },
         },
@@ -196,7 +218,7 @@ addLayer("darkTemple", {
                 let look = {width: "50px", minHeight: "50px", color: "#88f", fontSize: "16px", background: "#113", border: "3px solid #339", borderRadius: "15px"}
                 if (player.darkTemple.selection == 2) look.borderColor = "#ccf"
                 if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #113"} else {look.boxShadow = "0px 0px 15px #339"}
-                if (getBuyableAmount("darkTemple", 2).gte(5)) look.background = "#226"
+                if (getBuyableAmount("darkTemple", 2).gte(player.darkTemple.runeCap)) look.background = "#226"
                 return look
             },
         },
@@ -212,7 +234,7 @@ addLayer("darkTemple", {
                 let look = {width: "50px", minHeight: "50px", color: "#88f", fontSize: "16px", background: "#113", border: "3px solid #339", borderRadius: "15px"}
                 if (player.darkTemple.selection == 3) look.borderColor = "#ccf"
                 if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #113"} else {look.boxShadow = "0px 0px 15px #339"}
-                if (getBuyableAmount("darkTemple", 3).gte(5)) look.background = "#226"
+                if (getBuyableAmount("darkTemple", 3).gte(player.darkTemple.runeCap)) look.background = "#226"
                 return look
             },
         },
@@ -354,7 +376,7 @@ addLayer("darkTemple", {
     },
     buyables: {
         1: {
-            purchaseLimit() { return new Decimal(5) },
+            purchaseLimit() { return player.darkTemple.runeCap },
             pay() {
                 player.depth1.gloomingUmbrite = player.depth1.gloomingUmbrite.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(9).floor())
                 player.depth1.dimUmbrite = player.depth1.dimUmbrite.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(3).floor())
@@ -367,7 +389,7 @@ addLayer("darkTemple", {
                 && player.depth1.dimUmbrite.gte(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(3))
                 && player.sma.starmetalAlloy.gte(Decimal.pow(4, getBuyableAmount(this.layer, this.id)).mul(10000))
             },
-            display() {return "<div style='line-height:0.8'>Level Up<br><span style='font-size:10px'>[" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/5]</div>"},
+            display() {return "<div style='line-height:0.8'>Level Up<br><span style='font-size:10px'>[" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(player.darkTemple.runeCap) + "]</div>"},
             buy() {
                 this.pay()
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -379,7 +401,7 @@ addLayer("darkTemple", {
             },
         },
         2: {
-            purchaseLimit() { return new Decimal(5) },
+            purchaseLimit() { return player.darkTemple.runeCap },
             pay() {
                 player.depth2.faintUmbrite = player.depth2.faintUmbrite.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(12).floor())
                 player.depth2.clearUmbrite = player.depth2.clearUmbrite.sub(Decimal.pow(2.5, getBuyableAmount(this.layer, this.id)).mul(4).floor())
@@ -392,7 +414,7 @@ addLayer("darkTemple", {
                 && player.depth2.clearUmbrite.gte(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(4).floor())
                 && player.s.singularityPoints.gte(Decimal.pow(1e10, getBuyableAmount(this.layer, this.id)).mul(1e100))
             },
-            display() {return "<div style='line-height:0.8'>Level Up<br><span style='font-size:10px'>[" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/5]</div>"},
+            display() {return "<div style='line-height:0.8'>Level Up<br><span style='font-size:10px'>[" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(player.darkTemple.runeCap) + "]</div>"},
             buy() {
                 this.pay()
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -404,7 +426,7 @@ addLayer("darkTemple", {
             },
         },
         3: {
-            purchaseLimit() { return new Decimal(5) },
+            purchaseLimit() { return player.darkTemple.runeCap },
             pay() {
                 player.depth3.vividUmbrite = player.depth3.vividUmbrite.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(15).floor())
                 player.depth3.lustrousUmbrite = player.depth3.lustrousUmbrite.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(5).floor())
@@ -417,7 +439,7 @@ addLayer("darkTemple", {
                 && player.depth3.lustrousUmbrite.gte(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(5).floor())
                 && player.au2.stars.gte(Decimal.pow(10, getBuyableAmount(this.layer, this.id)).mul(10))
             },
-            display() {return "<div style='line-height:0.8'>Level Up<br><span style='font-size:10px'>[" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/5]</div>"},
+            display() {return "<div style='line-height:0.8'>Level Up<br><span style='font-size:10px'>[" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(player.darkTemple.runeCap) + "]</div>"},
             buy() {
                 this.pay()
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))

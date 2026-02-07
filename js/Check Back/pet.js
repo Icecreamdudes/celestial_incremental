@@ -1375,7 +1375,7 @@ addLayer("pet", {
         137: {
             title() { return "<img src='resources/Pets/evolutionFragmentRarePet.png'style='width:65px;height:65px;margin:0px;margin-bottom:-4px'></img>" },
             canClick: true,
-            unlocked() { return player.cb.highestLevel.gte(250000) && player.ma.matosUnlock },
+            unlocked() { return player.cb.highestLevel.gte(250000) && player.bh.unlockConditions.done },
             onClick() {
                 player.pet.fragShopIndex = 6
             },
@@ -3397,7 +3397,7 @@ addLayer("pet", {
                 return this.pointValue()
             },
             // CLICK CODE
-            unlocked() { return player.cb.highestLevel.gte(250000) && player.ma.matosUnlock },
+            unlocked() { return player.cb.highestLevel.gte(250000) && player.bh.unlockConditions.done },
             canClick() { return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id).gt(0)},
             onClick() { return layers[this.layer].levelables.index = this.id },
             // BUY CODE
@@ -3873,7 +3873,7 @@ addLayer("pet", {
                 player.tab = "ev1"
             },
             // CLICK CODE
-            unlocked() { return player.cb.highestLevel.gte(100000) && player.ma.matosDefeated },
+            unlocked() { return player.cb.highestLevel.gte(100000) && player.matosLair.milestone[25] > 0 },
             canClick() { return getLevelableAmount(this.layer, this.id).gt(0)},
             onClick() { return layers[this.layer].levelables.index = this.id },
             // BUY CODE
@@ -4477,7 +4477,7 @@ addLayer("pet", {
             levelTooltip() { return "Costs Chocolate Shards." },
             evoCan() { return true },
             // CLICK CODE
-            unlocked() { return player.ep2.obtainedShards && player.ma.matosUnlock},
+            unlocked() { return player.ep2.obtainedShards && player.matosLair.milestone[25] > 0},
             canClick() { return getLevelableAmount(this.layer, this.id).gt(0)},
             onClick() { return layers[this.layer].levelables.index = this.id },
             // BUY CODE

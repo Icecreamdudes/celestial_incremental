@@ -8,6 +8,7 @@ function bhAction(index, slot, interval = false) {
         if (!interval) player.bh.celestialite.actions[slot].cooldown = new Decimal(0)
         action = BHC[player.bh.celestialite.id].actions[slot]
         attribute = player.bh.celestialite.attributes
+        luckMult = Decimal.div(Decimal.add(100, player.bh.celestialite.luck), 100)
     } else {
         if (!interval) player.bh.characters[index].skills[slot].cooldown = new Decimal(0)
         action = BHA[player.bh.characters[index].skills[slot].id]
@@ -356,6 +357,9 @@ function bhAction(index, slot, interval = false) {
                     }
                 }
                 break;
+            case "function":
+                action.onTrigger(index, slot, target)
+                break;
         }
     }, delay)
 }
@@ -465,6 +469,11 @@ function bhAttack(damage, index, target, str = "", method = "none", attr = false
 }
 
 function bhHeal(heal, index, target, str = "") {
+    if (index == 3) {
+        heal = heal.mul(player.bh.celestialite.mending.div(10).add(1))
+    } else {
+        heal = heal.mul(player.bh.characters[index].mending.div(10).add(1))
+    }
     let arr = calcTarget(index, target, "heal")
     for (let receive of arr) {
         if (index == 3) {
@@ -530,6 +539,7 @@ function celestialiteReward(gain) {
 function celestialiteDeath() {
     bhLog(BHC[player.bh.celestialite.id].name + " died!")
     celestialiteReward(BHC[player.bh.celestialite.id].reward())
+    if (BHC[player.bh.celestialite.id].onDeath) BHC[player.bh.celestialite.id].onDeath()
     player.bh.respawnTimer = player.bh.respawnMax
     player.bh.combo = player.bh.combo.add(1)
 
@@ -558,7 +568,7 @@ function celestialiteDeath() {
     
     if (player.bh.currentStage != "none") {
         if (player[player.bh.currentStage].highestCombo && player.bh.combo.gt(player[player.bh.currentStage].highestCombo)) player[player.bh.currentStage].highestCombo = player.bh.combo
-        if (player[player.bh.currentStage].milestone && Object.hasOwn(player[player.bh.currentStage].milestone, player.bh.combo) && Decimal.gt(BHS[player.bh.currentStage].comboLimit, 25)) {
+        if (player[player.bh.currentStage].milestone && Object.hasOwn(player[player.bh.currentStage].milestone, player.bh.combo)) {
             let curVal = player[player.bh.currentStage].milestone[player.bh.combo]
             let charAmt = 4
             for (let i = 0; i < 3; i++) {
@@ -624,6 +634,8 @@ function celestialiteSpawn() {
             }
         }
     }
+
+    if (BHC[player.bh.celestialite.id].onSpawn) BHC[player.bh.celestialite.id].onSpawn()
 }
 
 function calcTarget(index, target, action = "none") {
@@ -705,4 +717,48 @@ function BHStageEnter(stage) {
         player.bh.combo = new Decimal(0)
     }
     celestialiteSpawn()
+}
+
+function screenFlash(message, duration) {
+    // Remove any existing flash overlay
+    const old = document.getElementById("flash-overlay");
+    if (old) old.remove();
+
+    if (!player.bh.bhPause) player.bh.bhPause = true
+
+    // Create overlay
+    const overlay = document.createElement("div");
+    overlay.id = "flash-overlay";
+    overlay.style.position = "fixed";
+    overlay.style.left = "0";
+    overlay.style.top = "0";
+    overlay.style.width = "100vw";
+    overlay.style.height = "100vh";
+    overlay.style.background = "black";
+    overlay.style.zIndex = "999999";
+    overlay.style.display = "flex";
+    overlay.style.alignItems = "center";
+    overlay.style.justifyContent = "center";
+    overlay.style.pointerEvents = "none";
+    overlay.style.transition = "opacity 0.2s";
+
+    // Create text
+    const text = document.createElement("div");
+    text.innerText = message;
+    text.style.color = "white";
+    text.style.fontSize = "3vw";
+    text.style.fontWeight = "bold";
+    text.style.textAlign = "center";
+    text.style.textShadow = "0 2px 8px #fff";
+    overlay.appendChild(text);
+
+    document.body.appendChild(overlay);
+
+    setTimeout(() => {
+        overlay.style.opacity = "0";
+        player.bh.bhPause = false
+        setTimeout(() => {
+            if (overlay.parentNode) overlay.remove();
+        }, 200);
+    }, duration);
 }

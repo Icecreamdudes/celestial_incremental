@@ -1952,7 +1952,7 @@
             background: "#830b00",
             portrait: "resources/secret.png",
             music: "music/matosCutsceneBox.mp3",
-            trigger() {return player.ma.matosUnlockConditions[0]},
+            trigger() {return player.bh.unlockConditions.core},
             dialogue: [
                 { text: "As one of the runes in the altar activates, you are sent to a flashback." },
                 { text: "You find yourself in an overly polluted world. Buildings stretch to the sky." },
@@ -1976,7 +1976,7 @@
             background: "#830b00",
             portrait: "resources/secret.png",
             music: "music/matosCutsceneBox.mp3",
-            trigger() {return player.ma.matosUnlockConditions[1]},
+            trigger() {return player.bh.unlockConditions.level},
             dialogue: [
                 { text: "As one of the runes in the altar activates, you are sent to a flashback." },
                 { text: "You arrive at what seems like a large temple." },
@@ -2006,7 +2006,7 @@
             background: "#830b00",
             portrait: "resources/secret.png",
             music: "music/matosCutsceneBox.mp3",
-            trigger() {return player.ma.matosUnlockConditions[2]},
+            trigger() {return player.bh.unlockConditions.replicanti},
             dialogue: [
                 { text: "As one of the runes in the altar activates, you are sent to a flashback." },
                 { text: "You find yourself in a labratory." },
@@ -2028,7 +2028,7 @@
             background: "#830b00",
             portrait: "resources/secret.png",
             music: "music/matosCutsceneBox.mp3",
-            trigger() {return player.ma.matosUnlockConditions[3]},
+            trigger() {return player.bh.unlockConditions.points},
             dialogue: [
                 { text: "As one of the runes in the altar activates, you are sent to a flashback." },
                 { text: "You see a world covered in flames." },
@@ -2047,7 +2047,7 @@
             background: "#260300",
             portrait: "resources/secret.png",
             music: "music/matosCutscene.mp3",
-            trigger() {return player.ma.matosUnlock},
+            trigger() {return player.bh.unlockConditions.done},
             dialogue: [
                 { text: "You and the others stand in front of the altar. The center glows with a bright red hue." },
                 { text: "The altar shakes violently, and the ground starts opening up." },
@@ -2117,7 +2117,7 @@
             background: "linear-gradient(-180deg, #540818 0%, #3a0202 100%)",
             portrait: "resources/secret.png",
             music: "music/matosCutscene.mp3",
-            trigger() {return player.ma.inBlackHeart && player.ma.currentDepth.eq(1)},
+            trigger() {return player.bh.currentStage == "depth1"},
             dialogue: [
                 { text: "You and the others descend into the hole, and the beating sound intensifies." },
                 { text: 'So you guys are what they call "Celestial Hunters". Mere humans.', portrait: "resources/matos.png"  },
@@ -2145,7 +2145,7 @@
             background: "linear-gradient(-180deg, #720455 0%, #250121 100%)",
             portrait: "resources/secret.png",
             music: "music/matosCutscene.mp3",
-            trigger() {return player.ma.inBlackHeart && player.ma.currentDepth.eq(2)},
+            trigger() {return player.bh.currentStage == "depth2"},
             dialogue: [
                 { text: "As you and the others go further in the hole, you notice the temperatures increase." },
                 { text: "How much further do we have to go... It's so damn hot in here.", portrait: "resources/sel.png"  },
@@ -2172,7 +2172,7 @@
             background: "linear-gradient(-180deg, #720804 0%, #720455 100%)",
             portrait: "resources/secret.png",
             music: "music/matosCutscene.mp3",
-            trigger() {return player.ma.inBlackHeart && player.ma.currentDepth.eq(3)},
+            trigger() {return player.bh.currentStage == "matosLair"},
             dialogue: [
                 { text: "You and the others somehow destroy this batch of celestialites." },
                 { text: "You are all lasting longer than I thought. How impresssive.", portrait: "resources/matos.png"  },
@@ -2208,7 +2208,7 @@
             background: "linear-gradient(-180deg, #720804 0%, #720455 100%)",
             portrait: "resources/secret.png",
             music: "music/matosCutscene.mp3",
-            trigger() {return player.ma.inBlackHeart && player.ma.currentDepth.eq(3) && player.ma.matosFightActive},
+            trigger() {return player.bh.currentStage == "matosLair" && player.bh.combo == 24},
             dialogue: [
                 { text: "As the fifth omega celestialite is slain, a light emanates from the deepest depths of the hole." },
                 { text: "Matos' form appears from the light. A metallic being made out of red-glowing rusted metal and steel." },
@@ -2235,7 +2235,7 @@
             background: "linear-gradient(-180deg, #720804 0%, #720455 100%)",
             portrait: "resources/secret.png",
             music: "music/matosCutsceneBox.mp3",
-            trigger() {return player.ma.matosDefeated},
+            trigger() {return player.matosLair.milestone[25] > 0},
             dialogue: [
                 { text: "After a long and grueling battle, you and your team manage to defeat Matos' core." },
                 { text: "Matos' body starts to disintegrate, and the light that was emanating from him starts to fade." },
@@ -2341,7 +2341,7 @@
             background: "#260300",
             portrait: "resources/secret.png",
             music: "music/marcel.mp3",
-            trigger() {return player.sme.starmetalEssence.gte(1) && player.ma.matosDefeated},
+            trigger() {return player.sme.starmetalEssence.gte(1) && player.matosLair.milestone[25] > 0},
             dialogue: [
                 { text: "Marcel visits you." },
                 { text: "Looks like you've defeated Matos. I'm pretty sure you want to refine your skills with superphysical combat.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },

@@ -399,7 +399,7 @@ addLayer("fi", {
             unlocked() { return true },
             onClick() {
                 layers.ba.selectCelestialites()
-                player.ma.inBlackHeart = true //bruh shouldve named this variable smth else :sob:
+                options.fullscreen = true
                 player.tab = "ba"
                 toggleOpt('menuShown')
                 player.ba.log = []
@@ -481,7 +481,7 @@ addLayer("fi", {
             unlocked() { return hasMilestone("fi", 102) },
             onClick() {
                 layers.ba.selectCelestialites()
-                player.ma.inBlackHeart = true //bruh shouldve named this variable smth else :sob:
+                options.fullscreen = true
                 player.tab = "ba"
                 toggleOpt('menuShown')
                 player.ba.log = []

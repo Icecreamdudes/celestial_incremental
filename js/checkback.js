@@ -256,7 +256,7 @@ addLayer("cb", {
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("sp", 14))
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("pl", 12))
             if (hasMilestone("db", 101)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(1.25)
-            if (player.ma.matosDefeated) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(2)
+            if (player.matosLair.milestone[25] > 0) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(2)
             if (hasUpgrade("fi", 11)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(upgradeEffect("fi", 11))
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(player.se.starsExploreEffect[2][0])
             if (hasUpgrade("ir", 13)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(upgradeEffect("ir", 13))
@@ -393,7 +393,7 @@ addLayer("cb", {
             player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(player.pet.gemEffects[2])
             player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(buyableEffect("sp", 34))
             player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(buyableEffect("pl", 13))
-            if (player.ma.matosDefeated) player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(1.5)
+            if (player.matosLair.milestone[25] > 0) player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(1.5)
             player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(levelableEffect("ir", 5)[1])
             player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(buyableEffect("cbs", 14))
             player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(buyableEffect("cbs", 15))
@@ -2258,7 +2258,7 @@ addLayer("cb", {
             },
             "Fighting": {
                 buttonStyle() { return {color: "#2e0000ff", borderColor: "#2e0000ff", backgroundImage: "linear-gradient(90deg, #ad0000ff, #920044ff)", borderRadius: "5px" }},
-                unlocked() { return player.ma.matosDefeated },
+                unlocked() { return player.matosLair.milestone[25] > 0 },
                 embedLayer: 'fi'
             },
         },
@@ -2395,7 +2395,7 @@ addLayer("cb", {
         ["raw-html", () => { return player.cb.highestLevel.lt(15000) && player.cb.highestLevel.gte(7500) ?  "You will unlock something at level 15,000! <small>[FRAGMENTATION]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["raw-html", () => { return player.cb.highestLevel.lt(25000) && player.cb.highestLevel.gte(15000) && hasUpgrade("s", 23) ?  "You will unlock something at level 25,000! <small>[CRATE TAB] [FRAGMENTATION]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["raw-html", () => { return player.cb.highestLevel.lt(100000) && player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23) ?  "You will unlock something at level 100,000! <small>[CRATE TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", () => { return player.cb.highestLevel.lt(250000) && player.cb.highestLevel.gte(100000) && player.ma.matosUnlock ?  "You will unlock something at level 250,000! <small>[FRAGMENTATION]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(250000) && player.cb.highestLevel.gte(100000) && player.bh.unlockConditions.done ?  "You will unlock something at level 250,000! <small>[FRAGMENTATION]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["blank", "10px"],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],

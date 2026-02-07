@@ -1679,7 +1679,7 @@ addLayer("st", {
             currency() { return player.au2.stars },
             pay(amt) { player.au2.stars = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.8).mul(0.1).add(1) },
-            unlocked() { return player.st.buyables[109].gte(50) && player.ma.matosDefeated  },
+            unlocked() { return player.st.buyables[109].gte(50) && player.matosLair.milestone[25] > 0},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             display() {
@@ -1776,7 +1776,7 @@ addLayer("st", {
             currency() { return player.au2.stars},
             pay(amt) { player.au2.stars = this.currency().sub(amt) },
             effect(x) { return true },
-            unlocked() { return player.st.buyables[202].gte(1) && player.ma.matosDefeated},
+            unlocked() { return player.st.buyables[202].gte(1) && player.matosLair.milestone[25] > 0},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             display() {

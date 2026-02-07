@@ -32,7 +32,7 @@
         };
     },
     tooltip: "Starmetal Essence",
-    branches: ["ma", "sd", "sma"],
+    branches: ["bh", "sd", "sma"],
     color: "#d460eb",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -1034,5 +1034,5 @@
         ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
-    layerShown() { return player.startedGame == true && player.ma.matosDefeated  }
+    layerShown() { return player.startedGame == true && player.matosLair.milestone[25] > 0  }
 })

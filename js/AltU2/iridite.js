@@ -665,7 +665,7 @@ addLayer("ir", {
             tooltip() { return "Universes are paused to save performance." },
             onClick() {
                 player.ir.inBattle = true
-                player.ma.inBlackHeart = true
+                options.fullscreen = true
                 player.subtabs["ir"]['stuff'] = 'Battle'
 
                 arena = new SpaceArena(1200, 600);
@@ -695,7 +695,7 @@ addLayer("ir", {
             unlocked() { return !player.ir.iriditeFightActive || player.subtabs["ir"]["stuff"] == "Refresh Page :("},
             onClick() {
                 player.ir.inBattle = false
-                player.ma.inBlackHeart = false
+                options.fullscreen = false
                 player.subtabs["ir"]['stuff'] = 'Space Battle'
 
                 if (arena) {

@@ -420,7 +420,7 @@
         29:
         {
             title: "BI IP Upgrade XVIII",
-            unlocked() { return player.ma.matosDefeated },
+            unlocked() { return player.matosLair.milestone[25] > 0 },
             description() { return "Boost infinity dimensions based on galaxy dust." },
             cost: new Decimal("1e4000"),
             currencyLocation() { return player.in },
@@ -607,7 +607,7 @@
         },
         118 :{
             title: "BI NIP Upgrade XVI",
-            unlocked() { return player.ma.matosDefeated },
+            unlocked() { return player.matosLair.milestone[25] > 0 },
             description: "Tickspeed effect boosts antimatter gain.",
             cost: new Decimal("1e1000"),
             currencyLocation() { return player.ta },

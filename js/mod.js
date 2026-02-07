@@ -16,7 +16,7 @@
 		"Misc/settings.js", "Misc/savebank.js", "Misc/changelog.js", "Misc/jukebox.js", "Check Back/pet.js",
 		"Singularity/starmetalAlloy.js", "DarkU1/darkU1.js", "DarkU1/lightExtractor.js", "DarkU1/darkRanks.js", "DarkU1/darkPrestige.js",
 		"DarkU1/boosters.js", "DarkU1/vaporizer.js", "DarkU1/generators.js", "DarkU1/darkGrass.js", "DarkU1/normality.js",
-		"Singularity/matos.js", "Singularity/core.js", "Singularity/matosAttacks.js", "Singularity/matosAttacks.js", "Singularity/coreFragments.js", 
+		"Singularity/core.js", "Singularity/coreFragments.js", 
 		"Singularity/starmetalEssence.js", "rockets.js", "AltU2/altUni2.js", "AltU2/stars.js", "AltU2/planets.js", "AltU2/exploration.js", "AltU2/iridite.js",
 		"Hex/hex.js", "Hex/provenance.js", "Hex/refinement.js", "Hex/blessings.js", "Hex/curses.js",
 		"Hex/purity.js", "Hex/power.js", "Hex/realms.js", "Hex/vex.js", "Hex/sacrifice.js",
@@ -55,7 +55,7 @@ function updateStyles() {
 	if (player.tab == 'bigc') player.hideMenu = true
 	if (player.tab == 'revc') player.hideMenu = true
 	if (player.tab == 'c') player.hideMenu = true
-	if (player.ma.inBlackHeart) player.hideMenu = true
+	if (options.fullscreen) player.hideMenu = true
 
 	// ===------   CHANGE LAYER SIZE   ------=== //
 	const LAYERHOLDER = document.getElementById('layerHolder')
@@ -177,9 +177,9 @@ function updateStyles() {
 			break;
 		case "s": case "co": case "ra": case "sd": case "cs":
 		case "cof":
-			if (!player.ma.matosDefeated) layerBG = "#260300"
-			if (player.ma.matosDefeated) layerBG = "linear-gradient(-180deg, #540818 0%, #3a0202 100%)"
-			if (player.tab == "co" && player.ma.matosDefeated) layerBG = "linear-gradient(-180deg,rgb(0, 0, 0) 0%, rgb(15, 15, 15) 100%)"
+			if (player.matosLair.milestone[25] == 0) layerBG = "#260300"
+			if (player.matosLair.milestone[25] > 0) layerBG = "linear-gradient(-180deg, #540818 0%, #3a0202 100%)"
+			if (player.tab == "co" && player.matosLair.milestone[25] > 0) layerBG = "linear-gradient(-180deg,rgb(0, 0, 0) 0%, rgb(15, 15, 15) 100%)"
 			break;
 		case "sma": case "sme":
 			layerBG = "linear-gradient(120deg, #73752b 0%, #5f4d19 25%, #75303b 50%, #6a3075, 75%, #306775 100%)"
@@ -570,8 +570,8 @@ function updateStyles() {
 						break;
 					case "U3":
 						if (player.tab != "bh") {
-        		        	if (!player.ma.matosDefeated) playAndLoopAudio("music/singularity.mp3", options.musicVolume/10);
-		                	if (player.ma.matosDefeated) playAndLoopAudio("music/singularity2.mp3", options.musicVolume/10);
+        		        	if (player.matosLair.milestone[25] == 0) playAndLoopAudio("music/singularity.mp3", options.musicVolume/10);
+		                	if (player.matosLair.milestone[25] > 0) playAndLoopAudio("music/singularity2.mp3", options.musicVolume/10);
             			} else {
 							// Exceptions
 							if (player.bh.currentStage == "matosLair" && player.bh.combo.eq(24)) {
@@ -1659,6 +1659,15 @@ function fixOldSave(oldVersion){
 		}
 	}
 	if (oldVersion < 190.2) {
+		// Matos Variables
+		if (player.ma.matosDefeated) player.matosLair.milestone[25] = 1
+		if (player.ma.matosUnlock) player.bh.unlockConditions.done = player.ma.matosUnlock
+		if (player.ma.matosUnlockConditions) {
+			player.bh.unlockConditions.core = player.ma.matosUnlockConditions[0]
+			player.bh.unlockConditions.level = player.ma.matosUnlockConditions[1]
+			player.bh.unlockConditions.replicanti = player.ma.matosUnlockConditions[2]
+			player.bh.unlockConditions.points = player.ma.matosUnlockConditions[3]
+		}
 		// Depth 1
 		player.depth1.highestCombo = new Decimal(player.ma.bestComboDepth1)
 		if (hasUpgrade("ma", 11)) player.depth1.upgrades.push(1)

@@ -223,7 +223,7 @@ addLayer("ep2", {
         if (hasUpgrade("ep2", 9005)) player.ep2.averageGoldenCooldown = player.ep2.averageGoldenCooldown.div(1.5)
         player.ep2.averageGoldenCooldown = player.ep2.averageGoldenCooldown.div(buyableEffect("pet", 6).sub(1).div(10).add(1))
 
-        if (getLevelableAmount("pet", 403).gt(0)) {
+        if (getLevelableAmount("pet", 403).gt(0) || getLevelableTier("pet", 403).gt(0)) {
             if (player.tab == "ep2") {
                 player.ep2.goldenTimer = player.ep2.goldenTimer.sub(delta)
             } else if (player.ep2.externalGolden) {

@@ -922,6 +922,7 @@ BHC.greaterXi = {
     },
 }
 
+// MINIBOSS START
 BHC.greaterEnas = {
     name: "Celestialite Greater Enas",
     symbol: "⬆Ι",
@@ -999,9 +1000,223 @@ BHC.greaterPente = {
     },
     reward() {
         let gain = {}
-        gain.vividUmbrite = new Decimal(50)
-        gain.lustrousUmbrite = new Decimal(15)
-        gain.darkEssence = new Decimal(6)
+        gain.vividUmbrite = new Decimal(100)
+        gain.lustrousUmbrite = new Decimal(35)
+        gain.darkEssence = new Decimal(10)
+        return gain
+    },
+}
+
+BHC.greaterDeka = {
+    name: "Celestialite Greater Deka",
+    symbol: "⬆Δ",
+    style: {
+        background: "linear-gradient(90deg, #5900B4, #8D0048)",
+        color: "black",
+        borderColor: "#520040",
+    },
+    health: new Decimal(1000),
+    damage: new Decimal(15),
+    attributes: {
+        "stealthy": new Decimal(0.2), // Resistance DMG Mult
+    },
+    actions: {
+        0: {
+            name: "Quick Shot",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            value: new Decimal(1),
+            cooldown: new Decimal(3),
+        },
+        1: {
+            name: "Turret",
+            active: true,
+            constantType: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            value: new Decimal(0.5),
+            interval: new Decimal(0.5),
+            duration: new Decimal(10),
+            cooldown: new Decimal(20),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.vividUmbrite = new Decimal(150)
+        gain.lustrousUmbrite = new Decimal(60)
+        gain.darkEssence = new Decimal(15)
+        return gain
+    },
+}
+
+BHC.greaterHekaton = {
+    name: "Celestialite Greater Hekaton",
+    symbol: "⬆Η",
+    style: {
+        background: "linear-gradient(90deg, #5900B4, #8D0048)",
+        color: "black",
+        borderColor: "#520040",
+    },
+    health: new Decimal(1250),
+    damage: new Decimal(5),
+    attributes: {
+        "rebound": new Decimal(0.05), // Resistance DMG Mult
+    },
+    actions: {
+        0: {
+            name: "Blood Whip",
+            instant: true,
+            type: "damage",
+            target: "allPlayer",
+            method: "ranged",
+            value: new Decimal(1),
+            cooldown: new Decimal(3),
+        },
+        1: {
+            name: "Bloodletting",
+            instant: true,
+            type: "effect",
+            target: "celestialite",
+            properties: {
+                "damageAdd": new Decimal(5), // Additive Effect
+            },
+            cooldown: new Decimal(30),
+            active: true,
+            constantType: "effect",
+            constantTarget: "celestialite",
+            effects: {
+                "regenAdd": new Decimal(-5), // Add to regen stat
+            },
+            duration: new Decimal(5),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.vividUmbrite = new Decimal(250)
+        gain.lustrousUmbrite = new Decimal(100)
+        gain.darkEssence = new Decimal(25)
+        return gain
+    },
+}
+
+BHC.greaterKhiloi = {
+    name: "Celestialite Greater Khilioi",
+    symbol: "⬆Χ",
+    style: {
+        background: "linear-gradient(90deg, #5900B4, #8D0048)",
+        color: "black",
+        borderColor: "#520040",
+    },
+    health: new Decimal(500),
+    damage: new Decimal(25),
+    attributes: {
+        "air": new Decimal(0.2), // Resistance DMG Mult
+        "warded": new Decimal(0.2), // Resistance DMG Mult
+        "stealthy": new Decimal(0.2), // Resistance DMG Mult
+    },
+    actions: {
+        0: {
+            name: "Magic Missile",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "magic",
+            value: new Decimal(1),
+            cooldown: new Decimal(5),
+        },
+        1: {
+            name: "Bandage",
+            instant: true,
+            type: "heal",
+            target: "celestialite",
+            value: new Decimal(25),
+            cooldown: new Decimal(12),
+        },
+        2: {
+            name: "Magic Stimulant",
+            active: true,
+            constantType: "effect",
+            constantTarget: "celestialite",
+            effects: {
+                "damageMult": new Decimal(2),
+            },
+            duration: new Decimal(5),
+            cooldown: new Decimal(25),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.vividUmbrite = new Decimal(400)
+        gain.lustrousUmbrite = new Decimal(150)
+        gain.darkEssence = new Decimal(50)
+        return gain
+    },
+}
+
+BHC.greaterMyrioi = {
+    name: "Celestialite Greater Myrioi",
+    symbol: "⬆Μ",
+    style: {
+        background: "linear-gradient(90deg, #5900B4, #8D0048)",
+        color: "black",
+        borderColor: "#520040",
+    },
+    health: new Decimal(2500),
+    damage: new Decimal(20),
+    regen: new Decimal(2),
+    attributes: {
+        "air": new Decimal(0.5), // Resistance DMG Mult
+        "warded": new Decimal(0.5), // Resistance DMG Mult
+        "stealthy": new Decimal(0.5), // Resistance DMG Mult
+        "rebound": new Decimal(0.05),
+        "explosive": new Decimal(20),
+    },
+    actions: {
+        0: {
+            name: "Chop",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value: new Decimal(1),
+            cooldown: new Decimal(5),
+        },
+        1: {
+            name: "Quick Shot",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            value: new Decimal(0.5),
+            cooldown: new Decimal(3),
+        },
+        2: {
+            name: "Magic Missile",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "magic",
+            value: new Decimal(2),
+            cooldown: new Decimal(8),
+        },
+        3: {
+            name: "Drain",
+            passive: true,
+            constantType: "effect",
+            constantTarget: "allPlayer",
+            effects: {
+                "regenAdd": new Decimal(-1), // Add to regen stat
+            },
+            cooldown: new Decimal(Infinity),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.vividUmbrite = new Decimal(800)
+        gain.lustrousUmbrite = new Decimal(300)
+        gain.darkEssence = new Decimal(100)
         return gain
     },
 }

@@ -517,7 +517,7 @@ BHA.geroa_selfRepair = {
 }
 BHA.geroa_cosmicRay = {
     name: "Cosmic Ray",
-    description() {return "Deal " + formatWhole(new Decimal(50).add(player.bh.skillData["geroa_cosmicRay"].level.mul(10))) + "% true damage per second for 5 seconds"},
+    description() {return "Deal " + formatWhole(new Decimal(40).add(player.bh.skillData["geroa_cosmicRay"].level.mul(8))) + "% true damage per second for 5 seconds"},
     passiveText() {return "+" + formatSimple(player.bh.skillData["geroa_cosmicRay"].maxLevel.div(5)) + " DMG"},
     char: "geroa",
     spCost: new Decimal(12),
@@ -530,7 +530,7 @@ BHA.geroa_cosmicRay = {
     constantType: "effect",
     constantTarget: "celestialite",
     effects: {
-        "regenAdd"() {return player.bh.characterData["geroa"].damage.mul(Decimal.sub(-0.5, player.bh.skillData["geroa_cosmicRay"].level.mul(0.1)))}, // Multiplicative Effect
+        "regenAdd"() {return player.bh.characterData["geroa"].damage.mul(Decimal.sub(-0.4, player.bh.skillData["geroa_cosmicRay"].level.mul(0.08)))}, // Multiplicative Effect
     },
     duration: new Decimal(5),
     cooldown: new Decimal(15),

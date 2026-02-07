@@ -74,7 +74,7 @@ addLayer("jukebox", {
         13: {
             title: "Black Heart",
             canClick: true,
-            unlocked() {return player.ma.matosUnlock},
+            unlocked() {return player.bh.unlockConditions.done},
             onClick() {
                 player.subtabs["jukebox"]["stuff"] = "Black Heart"
             },
@@ -180,7 +180,7 @@ addLayer("jukebox", {
             description: "Black Heart",
             img: "resources/music/black-heart.png",
             file: "music/enteringBlackHeart.mp3",
-            unlocked() {return player.ma.matosUnlock},
+            unlocked() {return player.bh.unlockConditions.done},
         },
         "depth-1": {
             artist: "Icecreamdude",
@@ -188,7 +188,7 @@ addLayer("jukebox", {
             description: "Depth 1",
             img: "resources/music/depth-1.png",
             file: "music/celestialites.mp3",
-            unlocked() {return player.ma.matosUnlock},
+            unlocked() {return player.bh.unlockConditions.done},
         },
         "depth-2": {
             artist: "150percent",
@@ -196,7 +196,7 @@ addLayer("jukebox", {
             description: "Depth 2",
             img: "resources/music/depth-2.png",
             file: "music/blackHeart.mp3",
-            unlocked() {return player.ma.secondAreaUnlock},
+            unlocked() {return player.depth2.unlocked},
         },
         "depth-3": {
             artist: "Icecreamdude",
@@ -204,7 +204,7 @@ addLayer("jukebox", {
             description: "Depth 3",
             img: "resources/music/depth-3.png",
             file: "music/matosTheme.mp3",
-            unlocked() {return hasUpgrade("ma", 27)},
+            unlocked() {return player.depth3.unlocked},
         },
         "matos-fight": {
             artist: "Icecreamdude",
@@ -212,7 +212,7 @@ addLayer("jukebox", {
             description: "Matos Fight",
             img: "resources/music/matos-fight.png",
             file: "music/matosFight.mp3",
-            unlocked() {return player.ma.matosDefeated},
+            unlocked() {return player.matosLair.milestone[25] > 0},
         },
         "universe-3-B": {
             artist: "Icecreamdude",
@@ -220,7 +220,7 @@ addLayer("jukebox", {
             description: "Universe 3:2",
             img: "resources/music/universe-3-B.png",
             file: "music/singularity2.mp3",
-            unlocked() {return player.ma.matosDefeated},
+            unlocked() {return player.matosLair.milestone[25] > 0},
         },
         "eclipse": {
             artist: "Icecreamdude",
@@ -252,7 +252,7 @@ addLayer("jukebox", {
             description: "CB-Fighting T1",
             img: "resources/music/cb-fighting-t1.png",
             file: "music/fighting.mp3",
-            unlocked() {return player.ma.matosDefeated},
+            unlocked() {return player.matosLair.milestone[25] > 0},
         },
         "cb-fighting-2": {
             artist: "Icecreamdude",
@@ -366,7 +366,7 @@ addLayer("jukebox", {
             description: "Matos Music-box",
             img: "resources/music/matos-box.png",
             file: "music/matosCutsceneBox.mp3",
-            unlocked() {return player.ma.matosUnlock || player.ma.matosUnlockConditions[0] || player.ma.matosUnlockConditions[1] || player.ma.matosUnlockConditions[2] || player.ma.matosUnlockConditions[3]},
+            unlocked() {return player.bh.unlockConditions.done || player.bh.unlockConditions.core || player.bh.unlockConditions.level || player.bh.unlockConditions.replicanti || player.bh.unlockConditions.points},
         },
         "matos": {
             artist: "Icecreamdude",
@@ -374,7 +374,7 @@ addLayer("jukebox", {
             description: "Matos",
             img: "resources/music/matos.png",
             file: "music/matosCutscene.mp3",
-            unlocked() {return player.ma.matosUnlock},
+            unlocked() {return player.bh.unlockConditions.done},
         },
         "nova": {
             artist: "Icecreamdude",
@@ -382,7 +382,7 @@ addLayer("jukebox", {
             description: "Nova",
             img: "resources/music/nova.png",
             file: "music/novaCutscene.mp3",
-            unlocked() {return player.ma.matosDefeated},
+            unlocked() {return player.matosLair.milestone[25] > 0},
         },
         "iridite": {
             artist: "Icecreamdude",

@@ -125,6 +125,8 @@ BHC.template = {
     },
 }
 
+// Celestialite who has there explosion value equal to their max health, and an action that constantly reduces their max health called defuse (FOR LAB)
+
 addLayer("bh", {
     name: "Black Heart", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "BH", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -135,6 +137,14 @@ addLayer("bh", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
+
+        unlockConditions: {
+            core: false,
+            level: false,
+            replicanti: false,
+            points: false,
+            done: false,
+        },
 
         // Stage Data
         currentStage: "none",
@@ -147,6 +157,9 @@ addLayer("bh", {
             damage: new Decimal(0),
             defense: new Decimal(0),
             regen: new Decimal(0),
+            agility: new Decimal(0),
+            luck: new Decimal(0),
+            mending: new Decimal(0),
             shield: new Decimal(0), // Not same as previous, is a prevent damage stack
             stun: ["none", new Decimal(0)],
             randomMult: new Decimal(1),
@@ -191,6 +204,7 @@ addLayer("bh", {
                 regen: new Decimal(0),
                 agility: new Decimal(0),
                 luck: new Decimal(0),
+                mending: new Decimal(0),
                 shield: new Decimal(0),
                 stun: ["none", new Decimal(0)],
                 attributes: {},
@@ -243,6 +257,7 @@ addLayer("bh", {
                 regen: new Decimal(0),
                 agility: new Decimal(0),
                 luck: new Decimal(0),
+                mending: new Decimal(0),
                 shield: new Decimal(0),
                 stun: ["none", new Decimal(0)],
                 attributes: {},
@@ -295,6 +310,7 @@ addLayer("bh", {
                 regen: new Decimal(0),
                 agility: new Decimal(0),
                 luck: new Decimal(0),
+                mending: new Decimal(0),
                 shield: new Decimal(0),
                 stun: ["none", new Decimal(0)],
                 attributes: {},
@@ -356,6 +372,7 @@ addLayer("bh", {
                 regen: new Decimal(0),
                 agility: new Decimal(5),
                 luck: new Decimal(0),
+                mending: new Decimal(0),
             },
             "nav": {
                 selected: false,
@@ -372,6 +389,7 @@ addLayer("bh", {
                 regen: new Decimal(0),
                 agility: new Decimal(5),
                 luck: new Decimal(0),
+                mending: new Decimal(0),
             },
             "sel": {
                 selected: false,
@@ -388,6 +406,7 @@ addLayer("bh", {
                 regen: new Decimal(0),
                 agility: new Decimal(8),
                 luck: new Decimal(0),
+                mending: new Decimal(0),
             },
             "eclipse": {
                 selected: false,
@@ -404,6 +423,7 @@ addLayer("bh", {
                 regen: new Decimal(0),
                 agility: new Decimal(0),
                 luck: new Decimal(0),
+                mending: new Decimal(0),
             },
             "geroa": {
                 selected: false,
@@ -420,6 +440,7 @@ addLayer("bh", {
                 regen: new Decimal(0.5),
                 agility: new Decimal(10),
                 luck: new Decimal(0),
+                mending: new Decimal(0),
             },
         },
 
@@ -498,8 +519,8 @@ addLayer("bh", {
         };
     },
     tooltip: "Black Heart",
-    branches: ["ma"],
     color: "#8a0e79",
+    branches: ["sma"],
     update(delta) {
         let normTime = delta
         // Increase time speed
@@ -519,6 +540,8 @@ addLayer("bh", {
                 agilityAdd: new Decimal(0),
                 luckMult: new Decimal(1),
                 luckAdd: new Decimal(0),
+                mendingMult: new Decimal(1),
+                mendingAdd: new Decimal(0),
                 attributes: [],
             },
             1: {
@@ -534,6 +557,8 @@ addLayer("bh", {
                 agilityAdd: new Decimal(0),
                 luckMult: new Decimal(1),
                 luckAdd: new Decimal(0),
+                mendingMult: new Decimal(1),
+                mendingAdd: new Decimal(0),
                 attributes: [],
             },
             2: {
@@ -549,6 +574,8 @@ addLayer("bh", {
                 agilityAdd: new Decimal(0),
                 luckMult: new Decimal(1),
                 luckAdd: new Decimal(0),
+                mendingMult: new Decimal(1),
+                mendingAdd: new Decimal(0),
                 attributes: [],
             },
             3: {
@@ -564,6 +591,8 @@ addLayer("bh", {
                 agilityAdd: new Decimal(0),
                 luckMult: new Decimal(1),
                 luckAdd: new Decimal(0),
+                mendingMult: new Decimal(1),
+                mendingAdd: new Decimal(0),
                 attributes: [],
             },
             timeAdd: new Decimal(0),
@@ -610,7 +639,7 @@ addLayer("bh", {
                         if (BHC[player.bh.celestialite.id].actions[i].func) BHC[player.bh.celestialite.id].actions[i].func() // Run function if there
                         if (instant || active) {
                             if (!curStun) player.bh.celestialite.actions[i].cooldown = player.bh.celestialite.actions[i].cooldown.add(delta)
-                            if (player.bh.celestialite.actions[i].cooldown.gte(BHC[player.bh.celestialite.id].actions[i].cooldown)) {
+                            if (player.bh.celestialite.actions[i].cooldown.gte(BHC[player.bh.celestialite.id].actions[i].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))) {
                                 if (!BHC[player.bh.celestialite.id].actions[i].conditional || BHC[player.bh.celestialite.id].actions[i].conditional(3, i)) {
                                     if (instant) bhAction(3, i)
                                     if (active) {
@@ -943,6 +972,10 @@ addLayer("bh", {
         luckAdd = luckAdd.add(player.bh.skillData["sel_arrowBarrage"].maxLevel.div(2))
         if (hasUpgrade("ep2", 9105)) luckAdd = luckAdd.add(upgradeEffect("ep2", 9105))
 
+        // =-- MENDING STUFF --= //
+        let mendingBase = new Decimal(1)
+
+        let mendingAdd = new Decimal(0)
 
         // =-- STAT CALCULATION --=
         for (let i = 0; i < 3; i++) {
@@ -988,6 +1021,15 @@ addLayer("bh", {
             player.bh.characters[i].luck = player.bh.characters[i].luck.add(bhTemp[i].luckAdd)
             player.bh.characters[i].luck = player.bh.characters[i].luck.mul(bhTemp[i].luckMult)
 
+            // MENDING
+            player.bh.characters[i].mending = BHP[player.bh.characters[i].id].mending ?? new Decimal(0)
+            player.bh.characters[i].mending = player.bh.characters[i].mending.mul(mendingBase)
+            player.bh.characters[i].mending = player.bh.characters[i].mending.add(mendingAdd)
+            player.bh.characters[i].mending = player.bh.characters[i].mending.add(bhTemp[i].mendingAdd)
+            player.bh.characters[i].mending = player.bh.characters[i].mending.mul(bhTemp[i].mendingMult)
+
+            if (player.matosLair.milestone[25] < 2) player.bh.characters[i].mending = new Decimal(0)
+
             // ATTRIBUTES
             player.bh.characters[i].attributes = BHP[player.bh.characters[i].id].attributes ?? {}
             player.bh.characters[i].attributes = Object.assign({}, player.bh.characters[i].attributes, bhTemp[i].attributes)
@@ -1029,15 +1071,122 @@ addLayer("bh", {
             player.bh.characterData[i].luck = BHP[i].luck
             player.bh.characterData[i].luck = player.bh.characterData[i].luck.mul(luckBase)
             player.bh.characterData[i].luck = player.bh.characterData[i].luck.add(luckAdd)
+            
+            // MENDING
+            player.bh.characterData[i].mending = BHP[i].mending
+            player.bh.characterData[i].mending = player.bh.characterData[i].mending.mul(mendingBase)
+            player.bh.characterData[i].mending = player.bh.characterData[i].mending.add(mendingAdd)
+
+            if (player.matosLair.milestone[25] < 2) player.bh.characterData[i].mending = new Decimal(0)
         }
     },
     clickables: {
+        "Unlock-Clear": {
+            title() {
+                let amt = 0
+                for (let i in player.bh.unlockConditions) {
+                    if (player.bh.unlockConditions[i]) amt += 1
+                }
+                return "<h2>" + amt + "/4<br><h1>OPEN THE DEPTHS</h1>"
+            }, // Increased font size
+            canClick() { return player.bh.unlockConditions.core && player.bh.unlockConditions.level && player.bh.unlockConditions.replicanti && player.bh.unlockConditions.points },
+            unlocked: true,
+            onClick() {
+                player.bh.unlockConditions.done = true
+                player.subtabs["bh"]["stuff"] = "party"
+            },
+            style: {width: "175px", minHeight: "175px", border: "5px solid #8a0e79", borderRadius: "15px"},
+        },
+        "Unlock-0": {
+            title() {
+                return !player.bh.unlockConditions.core ? "<h2>Max Strength Core</h2>" : "<h1>YOU"
+            },
+            canClick() {
+                let max = false
+                for (let prop in player.co.cores) {
+                    if (player.co.cores[prop].strength == 4) {
+                        max = true
+                    }
+                }
+                return max && !player.bh.unlockConditions.core
+            },
+            unlocked: true,
+            onClick() {
+                player.bh.unlockConditions.core = true
+            },
+            style() {
+                let look = {width: "150px", minHeight: "150px", border: "5px solid #8a0e79", borderRadius: "15px"}
+                if (player.bh.unlockConditions.core) {
+                    look.backgroundColor = "#45073c"
+                    look.color = "white"
+                    look.cursor = "default"
+                } else if (this.canClick()) {look.backgroundColor = "#8a0e79"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+            branches: [["Unlock-Clear", "#8a0e79"]]
+        },
+        "Unlock-1": {
+            title() {
+                return !player.bh.unlockConditions.level ? "<h2>Check Back Level</h2><br>" + formatShortWhole(player.cb.level) + "/20,000" : "<h1>HAVE"
+            },
+            canClick() { return player.cb.level.gte(20000) && !player.bh.unlockConditions.level },
+            unlocked: true,
+            onClick() {
+                player.bh.unlockConditions.level = true
+            },
+            style() {
+                let look = {width: "150px", minHeight: "150px", border: "5px solid #8a0e79", borderRadius: "15px"}
+                if (player.bh.unlockConditions.level) {
+                    look.backgroundColor = "#45073c"
+                    look.color = "white"
+                    look.cursor = "default"
+                } else if (this.canClick()) {look.backgroundColor = "#8a0e79"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+            branches: [["Unlock-Clear", "#8a0e79"]]
+        },
+        "Unlock-2": {
+            title() { return !player.bh.unlockConditions.replicanti ? "<h2>Replicanti Points</h2><br>" + formatWhole(player.cp.replicantiPoints) + "/1e280" : "<h1>BEEN" },
+            canClick() { return player.cp.replicantiPoints.gte(1e280) && !player.bh.unlockConditions.replicanti },
+            unlocked: true,
+            onClick() {
+                player.bh.unlockConditions.replicanti = true
+            },
+            style() {
+                let look = {width: "150px", minHeight: "150px", border: "5px solid #8a0e79", borderRadius: "15px"}
+                if (player.bh.unlockConditions.replicanti) {
+                    look.backgroundColor = "#45073c"
+                    look.color = "white"
+                    look.cursor = "default"
+                } else if (this.canClick()) {look.backgroundColor = "#8a0e79"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+            branches: [["Unlock-Clear", "#8a0e79"]]
+        },
+        "Unlock-3": {
+            title() { return !player.bh.unlockConditions.points ? "<h2>Points</h2><br>" + formatWhole(player.points) + "<br>/1e300,000" : "<h1>WARNED" },
+            canClick() { return player.points.gte("1e300000") && !player.bh.unlockConditions.points },
+            unlocked: true,
+            onClick() {
+                player.bh.unlockConditions.points = true
+            },
+            style() {
+                let look = {width: "150px", minHeight: "150px", border: "5px solid #8a0e79", borderRadius: "15px"}
+                if (player.bh.unlockConditions.points) {
+                    look.backgroundColor = "#45073c"
+                    look.color = "white"
+                    look.cursor = "default"
+                } else if (this.canClick()) {look.backgroundColor = "#8a0e79"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+            branches: [["Unlock-Clear", "#8a0e79"]]
+        },
         "Leave": {
             title() { return "<h2>Leave the black heart" },
             canClick: true,
             unlocked: true,
             onClick() {
-                player.ma.inBlackHeart = false
+                options.fullscreen = false
 
                 player.subtabs["bh"]["stuff"] = "stages"
             },
@@ -1068,15 +1217,15 @@ addLayer("bh", {
             canClick: true,
             unlocked: true,
             onClick() {
-                if (player.ma.inBlackHeart) {
-                    player.ma.inBlackHeart = false
+                if (options.fullscreen) {
+                    options.fullscreen = false
                 } else {
-                    player.ma.inBlackHeart = true
+                    options.fullscreen = true
                 }
             },
             style() {
                 let look = {width: "125px", minHeight: "40px", color: "black", fontSize: "9px", border: "3px solid rgba(0,0,0,0.5)", backgroundColor: "white", borderRadius: "15px"}
-                if (player.ma.inBlackHeart) look.backgroundColor = "#888"
+                if (options.fullscreen) look.backgroundColor = "#888"
                 return look
             },
         },
@@ -2337,7 +2486,7 @@ addLayer("bh", {
             progress() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[0]) return new Decimal(0)
                 if (BHC[player.bh.celestialite.id].actions[0].passive) return new Decimal(1)
-                return player.bh.celestialite.actions[0].cooldown.div(BHC[player.bh.celestialite.id].actions[0].cooldown)
+                return player.bh.celestialite.actions[0].cooldown.div(BHC[player.bh.celestialite.id].actions[0].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))
             },
             borderStyle() {return player.bh.celestialite.actions[0].duration.gt(0) ? {border: "0", borderRadius: "15px 15px 0 0"} : {border: "0", borderRadius: "15px"}},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
@@ -2345,23 +2494,23 @@ addLayer("bh", {
                 if ((BHC[player.bh.celestialite.id].actions[0] && BHC[player.bh.celestialite.id].actions[0].passive) || player.bh.celestialite.stun[1].gt(0)) return {backgroundColor: "#361e1e"}
                 return {backgroundColor: "#8a0e79"}
             },
-            textStyle: {userSelect: "none", lineHeight: "1"},
+            textStyle() {return player.bh.celestialite.actions[0].duration.gt(0) ? {userSelect: "none", lineHeight: "1", fontSize: "12px"} : {userSelect: "none", lineHeight: "1"}},
             display() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[0]) return ""
-                let str = "<h5>" + BHC[player.bh.celestialite.id].actions[0].name + "<br>" + formatTime(player.bh.celestialite.actions[0].cooldown) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[0].cooldown)
+                let str = "<h5>" + BHC[player.bh.celestialite.id].actions[0].name + "<br>" + formatTime(player.bh.celestialite.actions[0].cooldown) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[0].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))
                 if (BHC[player.bh.celestialite.id].actions[0].passive) str = "<h5>" + BHC[player.bh.celestialite.id].actions[0].name + "<br>[PASSIVE]"
                 if ((!BHC[player.bh.celestialite.id].actions[0].passive || player.bh.celestialite.stun[0] == "hard") && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
                 return str
             },
         },
-        "celestialite-A1-duration": {
+        "celestialite-A0-duration": {
             unlocked() {return player.bh.celestialite.actions[0].duration.gt(0)},
             direction: RIGHT,
             width: 125,
             height: 13,
             progress() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[0] || !BHC[player.bh.celestialite.id].actions[0].duration) return new Decimal(0)
-                return player.bh.celestialite.actions[0].duration.div(BHA[player.bh.celestialite.actions[0].id].duration);
+                return player.bh.celestialite.actions[0].duration.div(BHC[player.bh.celestialite.id].actions[0].duration);
             },
             borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
@@ -2369,10 +2518,10 @@ addLayer("bh", {
                 if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) return {backgroundColor: "#361e1e"}
                 return {backgroundColor: "#8a0e79"}
             },
-            textStyle: {userSelect: "none", lineHeight: "1"},
+            textStyle: {userSelect: "none", lineHeight: "1", fontSize: "10px"},
             display() {
-                if (!BHA[player.bh.celestialite.actions[0].id].duration) return new Decimal(0)
-                let str = "<h5>" + formatTime(player.bh.celestialite.actions[0].duration) + "/" + formatTime(BHA[player.bh.celestialite.actions[0].id].duration)
+                if (!BHC[player.bh.celestialite.id].actions[0].duration) return new Decimal(0)
+                let str = "<h5>" + formatTime(player.bh.celestialite.actions[0].duration) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[0].duration)
                 if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
                 return str
             },
@@ -2385,7 +2534,7 @@ addLayer("bh", {
             progress() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[1]) return new Decimal(0)
                 if (BHC[player.bh.celestialite.id].actions[1].passive) return new Decimal(1)
-                return player.bh.celestialite.actions[1].cooldown.div(BHC[player.bh.celestialite.id].actions[1].cooldown)
+                return player.bh.celestialite.actions[1].cooldown.div(BHC[player.bh.celestialite.id].actions[1].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))
             },
             borderStyle() {return player.bh.celestialite.actions[1].duration.gt(0) ? {border: "0", borderRadius: "15px 15px 0 0"} : {border: "0", borderRadius: "15px"}},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
@@ -2393,10 +2542,10 @@ addLayer("bh", {
                 if ((BHC[player.bh.celestialite.id].actions[1] && BHC[player.bh.celestialite.id].actions[1].passive) || player.bh.celestialite.stun[1].gt(0)) return {backgroundColor: "#361e1e"}
                 return {backgroundColor: "#8a0e79"}
             },
-            textStyle: {userSelect: "none", lineHeight: "1"},
+            textStyle() {return player.bh.celestialite.actions[1].duration.gt(0) ? {userSelect: "none", lineHeight: "1", fontSize: "12px"} : {userSelect: "none", lineHeight: "1"}},
             display() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[1]) return ""
-                let str = "<h5>" + BHC[player.bh.celestialite.id].actions[1].name + "<br>" + formatTime(player.bh.celestialite.actions[1].cooldown) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[1].cooldown)
+                let str = "<h5>" + BHC[player.bh.celestialite.id].actions[1].name + "<br>" + formatTime(player.bh.celestialite.actions[1].cooldown) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[1].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))
                 if (BHC[player.bh.celestialite.id].actions[1].passive) str = "<h5>" + BHC[player.bh.celestialite.id].actions[1].name + "<br>[PASSIVE]"
                 if ((!BHC[player.bh.celestialite.id].actions[1].passive || player.bh.celestialite.stun[0] == "hard") && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
                 return str
@@ -2409,7 +2558,7 @@ addLayer("bh", {
             height: 13,
             progress() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[1] || !BHC[player.bh.celestialite.id].actions[1].duration) return new Decimal(0)
-                return player.bh.celestialite.actions[1].duration.div(BHA[player.bh.celestialite.actions[1].id].duration);
+                return player.bh.celestialite.actions[1].duration.div(BHC[player.bh.celestialite.id].actions[1].duration);
             },
             borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
@@ -2417,10 +2566,10 @@ addLayer("bh", {
                 if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) return {backgroundColor: "#361e1e"}
                 return {backgroundColor: "#8a0e79"}
             },
-            textStyle: {userSelect: "none", lineHeight: "1"},
+            textStyle: {userSelect: "none", lineHeight: "1", fontSize: "10px"},
             display() {
-                if (!BHA[player.bh.celestialite.actions[1].id].duration) return new Decimal(0)
-                let str = "<h5>" + formatTime(player.bh.celestialite.actions[1].duration) + "/" + formatTime(BHA[player.bh.celestialite.actions[1].id].duration)
+                if (!BHC[player.bh.celestialite.id].actions[1].duration) return new Decimal(0)
+                let str = "<h5>" + formatTime(player.bh.celestialite.actions[1].duration) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[1].duration)
                 if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
                 return str
             },
@@ -2433,7 +2582,7 @@ addLayer("bh", {
             progress() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[2]) return new Decimal(0)
                 if (BHC[player.bh.celestialite.id].actions[2].passive) return new Decimal(1)
-                return player.bh.celestialite.actions[2].cooldown.div(BHC[player.bh.celestialite.id].actions[2].cooldown)
+                return player.bh.celestialite.actions[2].cooldown.div(BHC[player.bh.celestialite.id].actions[2].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))
             },
             borderStyle() {return player.bh.celestialite.actions[2].duration.gt(0) ? {border: "0", borderRadius: "15px 15px 0 0"} : {border: "0", borderRadius: "15px"}},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
@@ -2441,10 +2590,10 @@ addLayer("bh", {
                 if ((BHC[player.bh.celestialite.id].actions[2] && BHC[player.bh.celestialite.id].actions[2].passive) || player.bh.celestialite.stun[1].gt(0)) return {backgroundColor: "#361e1e"}
                 return {backgroundColor: "#8a0e79"}
             },
-            textStyle: {userSelect: "none", lineHeight: "1"},
+            textStyle() {return player.bh.celestialite.actions[2].duration.gt(0) ? {userSelect: "none", lineHeight: "1", fontSize: "12px"} : {userSelect: "none", lineHeight: "1"}},
             display() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[2]) return ""
-                let str = "<h5>" + BHC[player.bh.celestialite.id].actions[2].name + "<br>" + formatTime(player.bh.celestialite.actions[2].cooldown) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[2].cooldown)
+                let str = "<h5>" + BHC[player.bh.celestialite.id].actions[2].name + "<br>" + formatTime(player.bh.celestialite.actions[2].cooldown) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[2].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))
                 if (BHC[player.bh.celestialite.id].actions[2].passive) str = "<h5>" + BHC[player.bh.celestialite.id].actions[2].name + "<br>[PASSIVE]"
                 if ((!BHC[player.bh.celestialite.id].actions[2].passive || player.bh.celestialite.stun[0] == "hard") && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
                 return str
@@ -2457,7 +2606,7 @@ addLayer("bh", {
             height: 13,
             progress() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[2] || !BHC[player.bh.celestialite.id].actions[2].duration) return new Decimal(0)
-                return player.bh.celestialite.actions[2].duration.div(BHA[player.bh.celestialite.actions[2].id].duration);
+                return player.bh.celestialite.actions[2].duration.div(BHC[player.bh.celestialite.id].actions[2].duration);
             },
             borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
@@ -2465,10 +2614,10 @@ addLayer("bh", {
                 if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) return {backgroundColor: "#361e1e"}
                 return {backgroundColor: "#8a0e79"}
             },
-            textStyle: {userSelect: "none", lineHeight: "1"},
+            textStyle: {userSelect: "none", lineHeight: "1", fontSize: "10px"},
             display() {
-                if (!BHA[player.bh.celestialite.actions[2].id].duration) return new Decimal(0)
-                let str = "<h5>" + formatTime(player.bh.celestialite.actions[2].duration) + "/" + formatTime(BHA[player.bh.celestialite.actions[2].id].duration)
+                if (!BHC[player.bh.celestialite.id].actions[2].duration) return new Decimal(0)
+                let str = "<h5>" + formatTime(player.bh.celestialite.actions[2].duration) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[2].duration)
                 if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
                 return str
             },
@@ -2481,7 +2630,7 @@ addLayer("bh", {
             progress() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[3]) return new Decimal(0)
                 if (BHC[player.bh.celestialite.id].actions[3].passive) return new Decimal(1)
-                return player.bh.celestialite.actions[3].cooldown.div(BHC[player.bh.celestialite.id].actions[3].cooldown)
+                return player.bh.celestialite.actions[3].cooldown.div(BHC[player.bh.celestialite.id].actions[3].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))
             },
             borderStyle() {return player.bh.celestialite.actions[3].duration.gt(0) ? {border: "0", borderRadius: "15px 15px 0 0"} : {border: "0", borderRadius: "15px"}},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
@@ -2489,10 +2638,10 @@ addLayer("bh", {
                 if ((BHC[player.bh.celestialite.id].actions[3] && BHC[player.bh.celestialite.id].actions[3].passive) || player.bh.celestialite.stun[1].gt(0)) return {backgroundColor: "#361e1e"}
                 return {backgroundColor: "#8a0e79"}
             },
-            textStyle: {userSelect: "none", lineHeight: "1"},
+            textStyle() {return player.bh.celestialite.actions[3].duration.gt(0) ? {userSelect: "none", lineHeight: "1", fontSize: "12px"} : {userSelect: "none", lineHeight: "1"}},
             display() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[3]) return ""
-                let str = "<h5>" + BHC[player.bh.celestialite.id].actions[3].name + "<br>" + formatTime(player.bh.celestialite.actions[3].cooldown) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[3].cooldown)
+                let str = "<h5>" + BHC[player.bh.celestialite.id].actions[3].name + "<br>" + formatTime(player.bh.celestialite.actions[3].cooldown) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[3].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))
                 if (BHC[player.bh.celestialite.id].actions[3].passive) str = "<h5>" + BHC[player.bh.celestialite.id].actions[3].name + "<br>[PASSIVE]"
                 if ((!BHC[player.bh.celestialite.id].actions[3].passive || player.bh.celestialite.stun[0] == "hard") && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
                 return str
@@ -2505,7 +2654,7 @@ addLayer("bh", {
             height: 13,
             progress() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[3] || !BHC[player.bh.celestialite.id].actions[3].duration) return new Decimal(0)
-                return player.bh.celestialite.actions[3].duration.div(BHA[player.bh.celestialite.actions[3].id].duration);
+                return player.bh.celestialite.actions[3].duration.div(BHC[player.bh.celestialite.id].actions[3].duration);
             },
             borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
@@ -2513,10 +2662,10 @@ addLayer("bh", {
                 if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) return {backgroundColor: "#361e1e"}
                 return {backgroundColor: "#8a0e79"}
             },
-            textStyle: {userSelect: "none", lineHeight: "1"},
+            textStyle: {userSelect: "none", lineHeight: "1", fontSize: "10px"},
             display() {
-                if (!BHA[player.bh.celestialite.actions[3].id].duration) return new Decimal(0)
-                let str = "<h5>" + formatTime(player.bh.celestialite.actions[3].duration) + "/" + formatTime(BHA[player.bh.celestialite.actions[3].id].duration)
+                if (!BHC[player.bh.celestialite.id].actions[3].duration) return new Decimal(0)
+                let str = "<h5>" + formatTime(player.bh.celestialite.actions[3].duration) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[3].duration)
                 if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
                 return str
             },
@@ -3204,31 +3353,55 @@ addLayer("bh", {
                                     ["style-column", [
                                         ["row", [
                                             ["style-column", [
-                                                ["raw-html", () => {return "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                            ], {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px", marginRight: "4px"}],
+                                                ["raw-html", () => {return "<h3>MND</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characterData[player.bh.characterSelection].mending)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                            ], () => {
+                                                let look = {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px", marginRight: "4px"}
+                                                if (player.matosLair.milestone[25] < 2) {look.filter = "brightness(0%) blur(2px)"; look.userSelect = "none"}
+                                                return look
+                                            }],
                                             ["style-column", [
                                                 ["raw-html", () => {return "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                            ], {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px"}],
+                                            ], () => {
+                                                let look = {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px"}
+                                                if (true) {look.filter = "brightness(0%) blur(2px)"; look.userSelect = "none"}
+                                                return look
+                                            }],
                                         ]],
                                         ["blank", "4px"],
                                         ["row", [
                                             ["style-column", [
                                                 ["raw-html", () => {return "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                            ], {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px", marginRight: "4px"}],
+                                            ], () => {
+                                                let look = {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px", marginRight: "4px"}
+                                                if (true) {look.filter = "brightness(0%) blur(2px)"; look.userSelect = "none"}
+                                                return look
+                                            }],
                                             ["style-column", [
                                                 ["raw-html", () => {return "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                            ], {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px"}],
+                                            ], () => {
+                                                let look = {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px"}
+                                                if (true) {look.filter = "brightness(0%) blur(2px)"; look.userSelect = "none"}
+                                                return look
+                                            }],
                                         ]],
                                         ["blank", "4px"],
                                         ["row", [
                                             ["style-column", [
                                                 ["raw-html", () => {return "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                            ], {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px", marginRight: "4px"}],
+                                            ], () => {
+                                                let look = {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px", marginRight: "4px"}
+                                                if (true) {look.filter = "brightness(0%) blur(2px)"; look.userSelect = "none"}
+                                                return look
+                                            }],
                                             ["style-column", [
                                                 ["raw-html", () => {return "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                            ], {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px"}],
+                                            ], () => {
+                                                let look = {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px"}
+                                                if (true) {look.filter = "brightness(0%) blur(2px)"; look.userSelect = "none"}
+                                                return look
+                                            }],
                                         ]],
-                                    ], {filter: "brightness(25%) blur(2px)", marginLeft: "4px"}],
+                                    ], {marginLeft: "4px"}],
                                 ], {width: "340px", height: "152px"}],
                                 ["left-row", [
                                     ["clickable", "Select-Character"],
@@ -3328,6 +3501,23 @@ addLayer("bh", {
             },
         },
         stuff: {
+            "unlock": {
+                unlocked() { return !player.bh.unlockConditions.done },
+                content: [
+                    ["blank", "50px"],
+                    ["row", [["clickable", "Unlock-0"]]],
+                    ["blank", "50px"],
+                    ["row", [
+                        ["clickable", "Unlock-1"],
+                        ["raw-html", "&nbsp&nbsp", {color: "white", fontSize: "50px", fontFamily: "monospace"}],
+                        ["clickable", "Unlock-Clear"],
+                        ["raw-html", "&nbsp&nbsp", {color: "white", fontSize: "50px", fontFamily: "monospace"}],
+                        ["clickable", "Unlock-2"],
+                    ]],
+                    ["blank", "50px"],
+                    ["row", [["clickable", "Unlock-3"]]],
+                ]
+            },
             "party": {
                 content: [
                     ["style-row", [
@@ -3551,8 +3741,9 @@ addLayer("bh", {
                                 ["category-button", ["Characters", "party", "characters"], {width: "164px", height: "40px", background: "var(--miscButton)"}],
                                 ["style-row", [], {width: "3px", height: "40px", backgroundColor: "var(--regBorder)"}],
                                 ["category-button", ["Skills", "party", "skills"], {width: "163px", height: "40px", background: "var(--miscButton)"}],
-                                ["style-row", [], {width: "3px", height: "40px", backgroundColor: "var(--regBorder)"}],
-                                ["category-button", [() => {return false ? "Equipment" : "???"}, "party", "equipment"], {width: "164px", height: "40px", background: "var(--miscButton)"}],
+                                ["style-row", [
+                                    ["raw-html", "???", {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                ], {width: "164px", height: "40px", backgroundColor: "var(--miscButtonDisable)", borderLeft: "3px solid var(--regBorder)", userSelect: "none"}],
                             ], {width: "497px", height: "40px", borderBottom: "3px solid var(--regBorder)"}],
                             ["style-column", [
                                 ["buttonless-microtabs", "party", {borderWidth: "0"}],
@@ -3592,7 +3783,7 @@ addLayer("bh", {
                                         ["tooltip-row", [["raw-html", () => {return player.bh.characters[0].attributes.berserk ? "✹<div class='bottomTooltip' style='margin-top:0px'>Berserk<hr>Actions always do<br>" + formatSimple(Decimal.mul(player.bh.characters[0].attributes.berserk, 100)) + "% self damage.</div>" : ""}, {color: "#ff6666", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                         ["tooltip-row", [["raw-html", () => {return player.bh.characters[0].attributes.rebound ? "⭟<div class='bottomTooltip' style='margin-top:0px'>Rebound<hr>Reflects " + formatSimple(Decimal.mul(player.bh.characters[0].attributes.rebound, 100)) + "% damage back<br>towards the attacker.</div>" : ""}, {color: "#63697A", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                         ["tooltip-row", [["raw-html", () => {return player.bh.characters[0].attributes.explosive ? "✺<div class='bottomTooltip' style='margin-top:0px'>Explosive<hr>Explodes upon death,<br>dealing " + formatSimple(player.bh.characters[0].attributes.explosive) + " damage to<br>all team members.</div>" : ""}, {color: "#ee8700", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
-                                    ], {width: "50px", height: "30px", marginTop: "-35px"}],
+                                    ], {width: "100px", height: "30px", marginTop: "-35px"}],
                                 ], {margin: "5px"}],
                                 ["style-column", [
                                     ["clickable", "C1-Icon"],
@@ -3603,7 +3794,7 @@ addLayer("bh", {
                                         ["tooltip-row", [["raw-html", () => {return player.bh.characters[1].attributes.berserk ? "✹<div class='bottomTooltip' style='margin-top:0px'>Berserk<hr>Actions always do<br>" + formatSimple(Decimal.mul(player.bh.characters[1].attributes.berserk, 100)) + "% self damage.</div>" : ""}, {color: "#ff6666", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                         ["tooltip-row", [["raw-html", () => {return player.bh.characters[1].attributes.rebound ? "⭟<div class='bottomTooltip' style='margin-top:0px'>Rebound<hr>Reflects " + formatSimple(Decimal.mul(player.bh.characters[1].attributes.rebound, 100)) + "% damage back<br>towards the attacker.</div>" : ""}, {color: "#63697A", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                         ["tooltip-row", [["raw-html", () => {return player.bh.characters[1].attributes.explosive ? "✺<div class='bottomTooltip' style='margin-top:0px'>Explosive<hr>Explodes upon death,<br>dealing " + formatSimple(player.bh.characters[1].attributes.explosive) + " damage to<br>all team members.</div>" : ""}, {color: "#ee8700", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
-                                    ], {width: "50px", height: "30px", marginTop: "-35px"}],
+                                    ], {width: "100px", height: "30px", marginTop: "-35px"}],
                                 ], {margin: "5px"}],
                             ]],
                             ["style-column", [
@@ -3615,7 +3806,7 @@ addLayer("bh", {
                                     ["tooltip-row", [["raw-html", () => {return player.bh.characters[2].attributes.berserk ? "✹<div class='bottomTooltip' style='margin-top:0px'>Berserk<hr>Actions always do<br>" + formatSimple(Decimal.mul(player.bh.characters[2].attributes.berserk, 100)) + "% self damage.</div>" : ""}, {color: "#ff6666", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                     ["tooltip-row", [["raw-html", () => {return player.bh.characters[2].attributes.rebound ? "⭟<div class='bottomTooltip' style='margin-top:0px'>Rebound<hr>Reflects " + formatSimple(Decimal.mul(player.bh.characters[2].attributes.rebound, 100)) + "% damage back<br>towards the attacker.</div>" : ""}, {color: "#63697A", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                     ["tooltip-row", [["raw-html", () => {return player.bh.characters[2].attributes.explosive ? "✺<div class='bottomTooltip' style='margin-top:0px'>Explosive<hr>Explodes upon death,<br>dealing " + formatSimple(player.bh.characters[2].attributes.explosive) + " damage to<br>all team members.</div>" : ""}, {color: "#ee8700", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
-                                ], {width: "50px", height: "30px", marginTop: "-35px"}],
+                                ], {width: "100px", height: "30px", marginTop: "-35px"}],
                             ], {margin: "5px"}],
                         ]],
                         ["blank", ["100px", "100px"]],
@@ -3628,7 +3819,7 @@ addLayer("bh", {
                                 ["tooltip-row", [["raw-html", () => {return player.bh.celestialite.attributes.berserk ? "✹<div class='bottomTooltip' style='margin-top:0px'>Berserk<hr>Actions always do<br>" + formatSimple(Decimal.mul(player.bh.celestialite.attributes.berserk, 100)) + "% self damage.</div>" : ""}, {color: "#ff6666", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                 ["tooltip-row", [["raw-html", () => {return player.bh.celestialite.attributes.rebound ? "⭟<div class='bottomTooltip' style='margin-top:0px'>Rebound<hr>Reflects " + formatSimple(Decimal.mul(player.bh.celestialite.attributes.rebound, 100)) + "% damage back<br>towards the attacker.</div>" : ""}, {color: "#63697A", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                 ["tooltip-row", [["raw-html", () => {return player.bh.celestialite.attributes.explosive ? "✺<div class='bottomTooltip' style='margin-top:0px'>Explosive<hr>Explodes upon death,<br>dealing " + formatSimple(player.bh.celestialite.attributes.explosive) + " damage to<br>all team members.</div>" : ""}, {color: "#ee8700", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
-                            ], {width: "50px", height: "30px", marginTop: "-35px"}],
+                            ], {width: "100px", height: "30px", marginTop: "-35px"}],
                         ], {}],
                     ]],
                     ["blank", "40px"],

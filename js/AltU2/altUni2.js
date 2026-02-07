@@ -10,7 +10,7 @@
         au2Unlocked: false,
 
         stars: new Decimal(0),
-        starsToGet: new Decimal(0),
+        starsToGet: new Decimal(1),
         
         //softcap
         starSoftcapStart: new Decimal(1000000),

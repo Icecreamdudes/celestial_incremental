@@ -412,7 +412,7 @@ addLayer("ne", {
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         501: {
-            title: "Nectar δ-1",
+            title: "Nectar ε-1",
             unlocked() {return hasUpgrade("al", 220)},
             description: "Improve nectar γ's effect",
             cost() {
@@ -425,7 +425,7 @@ addLayer("ne", {
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         502: {
-            title: "Nectar δ-2",
+            title: "Nectar ε-2",
             unlocked() {return hasUpgrade("al", 220)},
             description: "Multiply nectar cell base by x1.1",
             cost() {
@@ -438,7 +438,7 @@ addLayer("ne", {
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         503: {
-            title: "Nectar δ-3",
+            title: "Nectar ε-3",
             unlocked() {return hasUpgrade("al", 220)},
             description: "Divide all flower cooldowns based on nectar ε",
             cost() {

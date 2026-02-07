@@ -803,8 +803,8 @@ addLayer("co", {
         }
 
         if (!hasMilestone("s", 16)) {
-            for (let i = 0; i < player.ta.dimensionAutobuyToggles.length; i++) {
-                player.ta.dimensionAutobuyToggles[i] = false
+            for (let i in player.ta.autoBuy) {
+                player.ta.autoBuy[i].toggle = false
             }
         }
 

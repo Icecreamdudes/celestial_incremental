@@ -1,5 +1,5 @@
 // BH variables are declared in game.js
-BHC.none = {
+addBHCelestialite("none", {
     name: "No Celestialite",
     symbol: "?",
     style: {
@@ -8,9 +8,9 @@ BHC.none = {
         borderColor: "black",
     },
     actions: {},
-}
+})
 
-BHS.none = {
+addBHStage("none", {
     nameCap: "None",
     nameLow: "none",
     music: "music/celestialites.mp3",
@@ -19,9 +19,9 @@ BHS.none = {
     comboScaling: 1.015,
     comboScalingStart: 100,
     generateCelestialite(combo) {},
-}
+})
 
-BHS.template = {
+addBHStage("template", {
     nameCap: "Stage template",
     nameLow: "stage template",
     music: "music/celestialites.mp3",
@@ -42,20 +42,9 @@ BHS.template = {
         // Regular Rounds
         return "template"
     },
-}
-BH_CURRENCY = {
-    "gloomingUmbrite": ["Glooming Umbrite", "depth1"],
-    "dimUmbrite": ["Dim Umbrite", "depth1"],
-    "faintUmbrite": ["Faint Umbrite", "depth2"],
-    "clearUmbrite": ["Clear Umbrite", "depth2"],
-    "vividUmbrite": ["Vivid Umbrite", "depth3"],
-    "lustrousUmbrite": ["Lustrous Umbrite", "depth3"],
-    "darkEssence": ["Dark Essence", "bh"],
-    "eclipseShards": ["Eclipse Shards", "sma"],
-    "spaceRock": ["Space Rocks", "ir"],
-}
+})
 
-BHC.template = {
+addBHCelestialite("template", {
     name: "Celestialite Template",
     symbol: "Tmp",
     style: {
@@ -123,6 +112,18 @@ BHC.template = {
         gain.darkEssence = 10
         return gain
     },
+})
+
+BH_CURRENCY = {
+    "gloomingUmbrite": ["Glooming Umbrite", "depth1"],
+    "dimUmbrite": ["Dim Umbrite", "depth1"],
+    "faintUmbrite": ["Faint Umbrite", "depth2"],
+    "clearUmbrite": ["Clear Umbrite", "depth2"],
+    "vividUmbrite": ["Vivid Umbrite", "depth3"],
+    "lustrousUmbrite": ["Lustrous Umbrite", "depth3"],
+    "darkEssence": ["Dark Essence", "bh"],
+    "eclipseShards": ["Eclipse Shards", "sma"],
+    "spaceRock": ["Space Rocks", "ir"],
 }
 
 // Celestialite who has there explosion value equal to their max health, and an action that constantly reduces their max health called defuse (FOR LAB)

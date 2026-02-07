@@ -30,7 +30,7 @@
         };
     },
     tooltip: "Starmetal Alloy",
-    branches() { return !player.ma.matosDefeated ? ["ra", "sd"] : ["ra"] },
+    branches() { return player.matosLair.milestone[25] == 0 ? ["ra", "sd"] : ["ra"] },
     color: "#d460eb",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -43,7 +43,7 @@
                 player.cof.coreFragments[player.cof.highestScore] = player.cof.coreFragments[player.cof.highestScore].add(player.cof.coreFragmentsToGet[player.cof.highestScore])
 
                 let val = layers.co.coreXPCalc(player.co.resetIndex, player.s.singularityPointsToGet)
-                if (!player.ma.matosDefeated) {
+                if (player.matosLair.milestone[25] == 0) {
                     player.co.cores[player.co.resetIndex].totalxp = player.co.cores[player.co.resetIndex].totalxp.add(val)
                     player.co.cores[player.co.resetIndex].xp = player.co.cores[player.co.resetIndex].xp.add(val)
                 }
@@ -65,7 +65,7 @@
                 player.cof.coreFragments[player.cof.highestScore] = player.cof.coreFragments[player.cof.highestScore].add(player.cof.coreFragmentsToGet[player.cof.highestScore])
 
                 let val = layers.co.coreXPCalc(player.co.resetIndex, player.s.singularityPointsToGet)
-                if (!player.ma.matosDefeated) {
+                if (player.matosLair.milestone[25] == 0) {
                     player.co.cores[player.co.resetIndex].totalxp = player.co.cores[player.co.resetIndex].totalxp.add(val)
                     player.co.cores[player.co.resetIndex].xp = player.co.cores[player.co.resetIndex].xp.add(val)
                 }
@@ -465,7 +465,7 @@
         109:
         {
             title: "Secondary Starmetal Upgrade IX",
-            unlocked() { return hasUpgrade("sma", 108) && player.ma.matosDefeated},
+            unlocked() { return hasUpgrade("sma", 108) && player.matosLair.milestone[25] > 0},
             description: "Unlocks auto starmetal (in starmetal essence).",
             cost: new Decimal("8888"),
             currencyLocation() { return player.sma },

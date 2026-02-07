@@ -173,7 +173,7 @@ addLayer('g', {
         player.g.goldGrassVal = player.g.goldGrassVal.mul(levelableEffect("pu", 108)[2])
         player.g.goldGrassVal = player.g.goldGrassVal.mul(player.ro.activatedFuelEffect)
         player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect('st', 103))
-        if (player.ma.matosDefeated) player.g.goldGrassVal = player.g.goldGrassVal.mul(1e20)
+        if (player.matosLair.milestone[25] > 0) player.g.goldGrassVal = player.g.goldGrassVal.mul(1e20)
         player.g.goldGrassVal = player.g.goldGrassVal.mul(player.cof.coreFragmentEffects[1])
 
         // POWER MODIFIERS
@@ -230,7 +230,7 @@ addLayer('g', {
         if (hasUpgrade("ep2", 7)) player.g.moonstoneVal = player.g.moonstoneVal.mul(upgradeEffect("ep2", 7))
         if (hasMilestone("r", 28)) player.g.moonstoneVal = player.g.moonstoneVal.mul(player.r.pentMilestone18Effect)
         player.g.moonstoneVal = player.g.moonstoneVal.mul(player.ro.rocketPartsEffect)
-        if (player.ma.matosDefeated) player.g.moonstoneVal = player.g.moonstoneVal.mul(5)
+        if (player.matosLair.milestone[25] > 0) player.g.moonstoneVal = player.g.moonstoneVal.mul(5)
         player.g.moonstoneVal = player.g.moonstoneVal.mul(buyableEffect("al", 204))
 
         // MOONSTONE AUTOMATION

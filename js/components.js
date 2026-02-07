@@ -1412,7 +1412,7 @@ function loadVue() {
 		props: ['layer', 'data'],
 		template: `
 		<button v-bind:class="{bhMilestoneButton: true, selected: player[data[1]].comboStart == data[0], semiFinish: player[data[1]].milestone[data[0]]>0 && player[data[1]].milestone[data[0]]<3, finish: player[data[1]].milestone[data[0]]>2}"
-			style="width:257px;height:50px" v-on:click="if(player[data[1]].milestone[data[0]]>0)player[data[1]].comboStart=data[0]"
+			style="width:257px;height:50px" v-on:click="if(player[data[1]].milestone[data[0]]>0 && !data[3])player[data[1]].comboStart=data[0]"
 			v-html="data[0] + ' Combo (' + player[data[1]].milestone[data[0]] + '/3)<br><small>[' + (player[data[1]].milestone[data[0]]>2 ? '1 Character' : formatWhole(3-player[data[1]].milestone[data[0]]) + ' Characters') + ']</small>' + data[2]">
 		</button>
 		`,

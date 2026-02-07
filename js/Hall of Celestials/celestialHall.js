@@ -70,15 +70,15 @@
             branches: [12],
         },
         14: {
-            title() { return player.ma.matosDefeated ? "<h1>⊘" : "<h1>?" },
-            canClick() { return player.ma.matosDefeated },
+            title() { return player.matosLair.milestone[25] > 0 ? "<h1>⊘" : "<h1>?" },
+            canClick() { return player.matosLair.milestone[25] > 0 },
             unlocked() { return true },
-            tooltip() { return player.ma.matosDefeated ? "Matos, the Celestial of Machinery" : "" },
+            tooltip() { return player.matosLair.milestone[25] > 0 ? "Matos, the Celestial of Machinery" : "" },
             onClick() {
                 player.ch.celestialIndex = new Decimal(3)
             },
             style: { width: '50px', "min-height": '50px' }, // Matos
-            branches() {return player.ma.matosDefeated ? [13] : []},
+            branches() {return player.matosLair.milestone[25] > 0 ? [13] : []},
         },
         15: {
             title() { return player.ir.iriditeDefeated ? "<h1>✦" : "<h1>?" },
@@ -238,7 +238,7 @@
 				backgroundOrigin: "border-box",
 				borderColor: "red",
 				color: "red",borderRadius: "5px"  } },
-                unlocked() { return player.ma.secondAreaUnlocked },
+                unlocked() { return player.depth2.unlocked },
                 content: [
                     ["blank", "25px"],
                     ["row", [["raw-html", function () { return "Celestial Constellation ??? - ????????????" }, { "color": "red", "font-size": "24px", "font-family": "monospace" }],]],

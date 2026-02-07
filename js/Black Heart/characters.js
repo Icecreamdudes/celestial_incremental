@@ -9,6 +9,7 @@ BHP.none = {
     regen: new Decimal(0),
     agility: new Decimal(0),
     luck: new Decimal(0),
+    mending: new Decimal(0),
 }
 BHP.general = {
     name: "Player",
@@ -20,6 +21,7 @@ BHP.general = {
     regen: new Decimal(1),
     agility: new Decimal(10),
     luck: new Decimal(10),
+    mending: new Decimal(0),
 }
 // Start of characters
 BHP.kres = {
@@ -32,6 +34,7 @@ BHP.kres = {
     regen: new Decimal(0),
     agility: new Decimal(5),
     luck: new Decimal(0),
+    mending: new Decimal(0),
 }
 BHP.nav = {
     name: "Nav",
@@ -43,6 +46,7 @@ BHP.nav = {
     regen: new Decimal(0),
     agility: new Decimal(5),
     luck: new Decimal(0),
+    mending: new Decimal(10),
 }
 BHP.sel = {
     name: "Sel",
@@ -54,6 +58,7 @@ BHP.sel = {
     regen: new Decimal(0),
     agility: new Decimal(8),
     luck: new Decimal(0),
+    mending: new Decimal(0),
 }
 BHP.eclipse = {
     name: "Eclipse",
@@ -65,6 +70,7 @@ BHP.eclipse = {
     regen: new Decimal(0),
     agility: new Decimal(0),
     luck: new Decimal(0),
+    mending: new Decimal(5),
 }
 BHP.geroa = {
     name: "Geroa",
@@ -76,4 +82,5 @@ BHP.geroa = {
     regen: new Decimal(0.5),
     agility: new Decimal(10),
     luck: new Decimal(0),
+    mending: new Decimal(5),
 }

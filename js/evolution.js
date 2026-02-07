@@ -173,7 +173,7 @@
         112: {
             title() { return "<img src='resources/Pets/eggEvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
-            unlocked() { return tmp.pet.levelables[102].canClick && !player.ev.evolutionsUnlocked[12] && (player.cb.highestLevel.gte(100000) && player.ma.matosDefeated)},
+            unlocked() { return tmp.pet.levelables[102].canClick && !player.ev.evolutionsUnlocked[12] && (player.cb.highestLevel.gte(100000) && player.matosLair.milestone[25] > 0)},
             tooltip() { return "██████ █████ automation<br>███ █████████████" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(12)
@@ -204,7 +204,7 @@
         203: {
             title() { return "<img src='resources/Pets/cookie/wrathCookieEvo.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
-            unlocked() { return tmp.pet.levelables[403].canClick && player.ep2.obtainedShards && player.ma.matosUnlock && getLevelableAmount("pet", 2002).gte(1) && getLevelableAmount("pet", 2003).lt(1)},
+            unlocked() { return tmp.pet.levelables[403].canClick && player.ep2.obtainedShards && player.bh.unlockConditions.done && getLevelableAmount("pet", 2002).gte(1) && getLevelableAmount("pet", 2003).lt(1)},
             tooltip() { return "██████ ███ wrath ██████ upgrades" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(103)
@@ -680,16 +680,16 @@
                 "</div>" +
                 "<div class='evoContainer'><h3>Requires:</h3>" +
                 "<br>"  + formatWhole(getLevelableAmount("pet", 403)) + "/6 Cookie Levels" +
-                "<br>" + formatWhole(player.ma.commonMatosFragments) + "/6,666 Common Matos Fragments" +
-                "<br>" + formatWhole(player.ma.rareMatosFragments) + "/666 Rare Matos Fragments" +
-                "<br>" + formatWhole(player.ma.epicMatosFragments) + "/66 Epic Matos Fragments" +
-                "<br>" + formatWhole(player.ma.legendaryMatosFragments) + "/6 Legendary Matos Fragments" +
+                "<br>" + formatWhole(player.depth1.gloomingUmbrite) + "/666 Glooming Umbrite" +
+                "<br>" + formatWhole(player.depth2.faintUmbrite) + "/666 Faint Umbrite" +
+                "<br>" + formatWhole(player.depth3.vividUmbrite) + "/666 Vivid Umbrite" +
+                "<br>" + formatWhole(player.bh.darkEssence) + "/66 Dark Essence" +
                 "</div>"
             },
             canClick() {
                 return (player.ep2.chocoShards.gte(6) && player.cb.petPoints.gte(6666) && player.ca.rememberanceCores.gte(36)
-                && player.ma.commonMatosFragments.gte(6666) && player.ma.rareMatosFragments.gte(666) && player.ma.epicMatosFragments.gte(66)
-                && player.ma.legendaryMatosFragments.gte(6) && getLevelableAmount("pet", 403).gte(6))
+                && player.depth1.gloomingUmbrite.gte(666) && player.depth2.faintUmbrite.gte(666) && player.depth3.vividUmbrite.gte(666)
+                && player.bh.darkEssence.gte(66) && getLevelableAmount("pet", 403).gte(6))
             },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)

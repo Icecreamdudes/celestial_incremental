@@ -1675,7 +1675,10 @@ function fixOldSave(oldVersion){
 	if (oldVersion < 190.2) {
 		// Matos Variables
 		if (player.ma.matosDefeated) player.matosLair.milestone[25] = 1
-		if (player.ma.matosUnlock) player.bh.unlockConditions.done = player.ma.matosUnlock
+		if (player.ma.matosUnlock) {
+			player.bh.unlockConditions.done = player.ma.matosUnlock
+			if (player.bh.unlockConditions.done) player.subtabs["bh"]["stuff"] = "party"
+		}
 		if (player.ma.matosUnlockConditions) {
 			player.bh.unlockConditions.core = player.ma.matosUnlockConditions[0]
 			player.bh.unlockConditions.level = player.ma.matosUnlockConditions[1]

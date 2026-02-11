@@ -22,7 +22,7 @@ function bulletHell(width, height, duration, centerX = window.innerWidth / 2, ce
         window.removeEventListener("keyup", bhState.keyupHandler);
     }
 
-    player.subtabs["ma"]["stuff"] = "Bullet Hell";
+    player.subtabs["bh"]["stuff"] = "bullet";
     bhState.active = true;
 
     // Create a fullscreen overlay
@@ -113,50 +113,10 @@ function bulletHell(width, height, duration, centerX = window.innerWidth / 2, ce
         window.removeEventListener("keydown", keydownHandler);
         window.removeEventListener("keyup", keyupHandler);
         if (overlay.parentNode) overlay.remove();
-        player.subtabs["ma"]["stuff"] = "Fight";
+        player.subtabs["bh"]["stuff"] = "battle";
         bhState.active = false;
     }, duration * 1000);
 }
-
-// --- AUTO-RESUME ON RELOAD ---
-if (window.__bh_state && window.__bh_state.active) {
-    const bhState = window.__bh_state;
-    // Calculate remaining time
-    const elapsed = (Date.now() - (bhState.startTime || Date.now())) / 1000;
-    const remaining = Math.max(0.1, (bhState.duration || 12) - elapsed);
-    if (remaining > 0.1) {
-        bulletHell(
-            bhState.width || 700,
-            bhState.height || 500,
-            remaining,
-            bhState.centerX || window.innerWidth / 2,
-            bhState.centerY || window.innerHeight / 2
-        );
-    } else {
-        // If time is up, clean up state
-        bhState.active = false;
-    }
-}
-// --- AUTO-RESUME ON RELOAD ---
-setTimeout(() => {
-    if (window.__bh_state && window.__bh_state.active) {
-        const bhState = window.__bh_state;
-        // Calculate remaining time
-        const elapsed = (Date.now() - (bhState.startTime || Date.now())) / 1000;
-        const remaining = Math.max(0.1, (bhState.duration || 12) - elapsed);
-        if (remaining > 0.1) {
-            bulletHell(
-                bhState.width || 700,
-                bhState.height || 500,
-                remaining,
-                bhState.centerX || window.innerWidth / 2,
-                bhState.centerY || window.innerHeight / 2
-            );
-        } else {
-            bhState.active = false;
-        }
-    }
-}, 100);
 
 
 function whiteDiamondAttack(duration, width, height, diamondCount) {

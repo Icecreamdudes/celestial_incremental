@@ -611,6 +611,7 @@ function celestialiteSpawn() {
     if (player.bh.combo.gte(player.bh.comboScalingStart)) scale = Decimal.pow(player.bh.comboScaling, player.bh.combo.sub(player.bh.comboScalingStart))
     player.bh.celestialite.id = celestialiteId
     player.bh.celestialite.randomMult = Decimal.add(0.85, Decimal.mul(Math.random(), 0.3))
+    if (BHC[player.bh.celestialite.id].noRandomStats) player.bh.celestialite.randomMult = new Decimal(1)
     player.bh.celestialite.health = BHC[celestialiteId].health ?? new Decimal(0)
     player.bh.celestialite.maxHealth = BHC[celestialiteId].health ?? new Decimal(0)
     player.bh.celestialite.damage = BHC[celestialiteId].damage ?? new Decimal(0)

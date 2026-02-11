@@ -25,8 +25,8 @@
 		"Hive/honey.js", "Hive/wax.js", "Hive/aleph.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "DarkU1/blood.js", "Zar/zar.js", "Zar/coinFlip.js",
  		"Zar/wheelOfFortune.js", "Check Back/singularityPet.js", "Zar/slotMachine.js", "Zar/checkBackShrine.js", "Zar/cards.js",
-		"Black Heart/blackheart.js", "Black Heart/blackHeartFunctions.js", "Black Heart/characters.js", "Black Heart/skills.js", "Black Heart/depth1.js",
-		"Black Heart/depth2.js", "Black Heart/depth3.js", "Black Heart/matosLair.js", "Black Heart/darkTemple.js",
+		"Black Heart/blackHeart.js", "Black Heart/blackHeartFunctions.js", "Black Heart/characters.js", "Black Heart/skills.js", "Black Heart/depth1.js",
+		"Black Heart/depth2.js", "Black Heart/depth3.js", "Black Heart/matosLair.js", "Black Heart/darkTemple.js",, "Black Heart/bulletHell.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 	],
@@ -311,7 +311,7 @@ function updateStyles() {
 	    }
 	}
 
-	if (player.tab == "bh" && (player.bh.currentStage == "depth3" || player.bh.currentStage == "matosLair") && (player.subtabs["bh"]["stuff"] == "battle")) {
+	if (player.tab == "bh" && (player.bh.currentStage == "depth3" || player.bh.currentStage == "matosLair") && (player.subtabs["bh"]["stuff"] == "battle" || player.subtabs["bh"]["stuff"] == "bullet")) {
 	    if (!document.getElementById("embers-background")) {
     	    // Create embers background container
 	        const embersBg = document.createElement("div");

@@ -504,6 +504,7 @@ addLayer("bh", {
         inputSkillSelection: 0,
         characterSelection: "kres",
         skillSelection: "kres_chop",
+        bulletHell: false,
 
         // General Currencies
         darkEssence: new Decimal(0),
@@ -607,6 +608,12 @@ addLayer("bh", {
         player.bh.comboSoftcap = new Decimal(1)
         if (player.bh.combo.gte(player.bh.comboScalingStart)) player.bh.comboSoftcap = Decimal.pow(player.bh.comboScaling, player.bh.combo.sub(player.bh.comboScalingStart))
 
+        if (player.subtabs["bh"]["stuff"] == "bullet") {
+            player.bh.bulletHell = true
+        } else {
+            player.bh.bulletHell = false
+        }
+
         if (player.bh.currentStage == "none" && player.bh.autoEnter) player.bh.autoCooldown = player.bh.autoCooldown.add(normTime)
         if (player.bh.autoCooldown.gte(30) && player.bh.autoEnter) {
             player.bh.autoCooldown = new Decimal(0)
@@ -631,7 +638,7 @@ addLayer("bh", {
                 // Cycle, increment cooldowns, and trigger celestialite actions
                 for (let i = 0; i < 4; i++) {
                     if (BHC[player.bh.celestialite.id].actions[i]) {
-                        if (player.bh.celestialite.stun[1].gt(0) && player.bh.celestialite.stun[0] == "hard") continue
+                        if ((player.bh.celestialite.stun[1].gt(0) && player.bh.celestialite.stun[0] == "hard") || player.bh.bulletHell) continue
                         let curStun = player.bh.celestialite.stun[1].gt(0) && player.bh.celestialite.stun[0] == "soft"
                         let instant = BHC[player.bh.celestialite.id].actions[i].instant
                         let active = BHC[player.bh.celestialite.id].actions[i].active
@@ -653,7 +660,9 @@ addLayer("bh", {
 
                         // Calculate Variables (and remove inactive active)
                         if (passive || (active && player.bh.celestialite.actions[i].duration.gt(0))) {
-                            if (BHC[player.bh.celestialite.id].actions[i].interval) {
+                            if (BHC[player.bh.celestialite.id].actions[i].onTrigger) {
+                                BHC[player.bh.celestialite.id].actions[i].onTrigger(3, i, BHC[player.bh.celestialite.id].actions[i].constantTarget)
+                            } else if (BHC[player.bh.celestialite.id].actions[i].interval) {
                                 player.bh.celestialite.actions[i].interval = player.bh.celestialite.actions[i].interval.add(delta)
                                 if (player.bh.celestialite.actions[i].interval.gte(BHC[player.bh.celestialite.id].actions[i].interval)) {
                                     player.bh.celestialite.actions[i].interval = new Decimal(0)
@@ -691,7 +700,8 @@ addLayer("bh", {
                             }
                         }
 
-                        let variables = player.bh.celestialite.actions[i].variables
+                        let variables = {...player.bh.celestialite.actions[i].variables}
+                        if (Object.hasOwn(variables, "attacks")) delete variables.attacks
                         if (Object.keys(variables).length === 0) continue
                         let target = calcTarget(i, variables.target, "effect")
                         for (let k in variables) {
@@ -721,7 +731,7 @@ addLayer("bh", {
                 }
 
                 // Kill Celestialite
-                if (player.bh.celestialite.health.lte(0)) {
+                if (player.bh.celestialite.health.lte(0) && !BHC[player.bh.celestialite.id].immortal) {
                     celestialiteDeath()
                 }
             }
@@ -743,7 +753,7 @@ addLayer("bh", {
                 // Cycle through character skills
                 for (let j = 0; j < 4; j++) {
                     if (player.bh.characters[i].skills[j].id == "none") continue
-                    if (player.bh.characters[i].stun[1].gt(0) && player.bh.characters[i].stun[0] == "hard") continue
+                    if ((player.bh.characters[i].stun[1].gt(0) && player.bh.characters[i].stun[0] == "hard") || player.bh.bulletHell) continue
                     let curStun = player.bh.characters[i].stun[1].gt(0) && player.bh.characters[i].stun[0] == "soft"
                     let instant = BHA[player.bh.characters[i].skills[j].id].instant
                     let active = BHA[player.bh.characters[i].skills[j].id].active
@@ -836,8 +846,10 @@ addLayer("bh", {
             if (player.bh.celestialite.id == "none" && player.bh.respawnTimer.lte(0)) {
                 celestialiteSpawn()
             }
+        }
 
-            // Death Code
+        // Death Code
+        if (player.bh.currentStage != "none") {
             if ((player.bh.characters[0].health.lte(0) || player.bh.characters[0].id == "none") && (player.bh.characters[1].health.lte(0) || player.bh.characters[1].id == "none") && (player.bh.characters[2].health.lte(0) || player.bh.characters[2].id == "none")) {
                 for (let i = 0; i < 3; i++) {
                     player.bh.characters[i].health = player.bh.characters[i].maxHealth
@@ -1433,7 +1445,7 @@ addLayer("bh", {
             canClick: false,
             unlocked() {return player.bh.characters[1].id != "none"},
             onClick() {},
-            style: {width: "150px", minHeight: "150px", color: "white", backgroundColor: "transparent", margin: "10px", padding: "0", cursor: "default", userSelect: "none"},
+            style: {width: "150px", minHeight: "150px", color: "white", background: "transparent", padding: "0", cursor: "default", userSelect: "none"},
         },
         "C1-Skill-0": {
             title() {
@@ -1586,7 +1598,7 @@ addLayer("bh", {
             canClick: false,
             unlocked() {return player.bh.characters[2].id != "none"},
             onClick() {},
-            style: {width: "150px", minHeight: "150px", color: "white", backgroundColor: "transparent", margin: "10px", padding: "0", cursor: "default", userSelect: "none"},
+            style: {width: "150px", minHeight: "150px", color: "white", background: "transparent", padding: "0", cursor: "default", userSelect: "none"},
         },
         "C2-Skill-0": {
             title() {
@@ -3925,6 +3937,30 @@ addLayer("bh", {
                     ["top-column", [
                         ["raw-html", () => `${player.bh.log.map((x, i) => `<span style="display:block;">${x}</span>`).join("")}`],
                     ], {width: "700px", minHeight: "206px", textAlign: "center", background: "rgba(0,0,0,0.5)", border: "3px solid white", borderRadius: "30px", padding: "12px 0", marginTop: "5px"}],
+                ],
+            },
+            "bullet": {
+                content: [
+                    ["blank", "10px"],
+                    ["row", [
+                        ["style-column", [
+                            ["raw-html", () => {return BHP[player.bh.characters[0].id].name}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["blank", "5px"],
+                            ["bar", "C0-Health"],
+                        ], {background: "rgba(0,0,0,0.3)", border: "2px solid white", padding: "-2px", borderRadius: "15px"}],
+                        ["blank", ["10px", "10px"]],
+                        ["style-column", [
+                            ["raw-html", () => {return BHP[player.bh.characters[1].id].name}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["blank", "5px"],
+                            ["bar", "C1-Health"],
+                        ], {background: "rgba(0,0,0,0.3)", border: "2px solid white", padding: "-2px", borderRadius: "15px"}],
+                        ["blank", ["10px", "10px"]],
+                        ["style-column", [
+                            ["raw-html", () => {return BHP[player.bh.characters[2].id].name}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["blank", "5px"],
+                            ["bar", "C2-Health"],
+                        ], {background: "rgba(0,0,0,0.3)", border: "2px solid white", padding: "-2px", borderRadius: "15px"}],
+                    ]],
                 ],
             },
             "dead": {

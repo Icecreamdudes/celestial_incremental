@@ -32,10 +32,12 @@ function pauseUniverse(universe, type = "toggle", temp = false) {
 
 function pauseUniverseAll(exemptions, type = "toggle", temp = false) {
     for (let universe in player.uni) {
-        if (!tmp.uni[universe].unlocked) continue
+        if (!tmp.uni[universe].uniShown) continue
+        let abort = false
         for (let j in exemptions) {
-            if (exemptions[j] == universe) continue
+            if (exemptions[j] == universe) abort = true
         }
+        if (abort) continue
         if (type == "unpause" || type == "toggle" && player.uni[universe].paused) {
             let time = (Date.now() - player.uni[universe].pauseTime) / 1000
             let tree = universes[universe].tree

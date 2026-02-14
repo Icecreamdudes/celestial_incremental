@@ -7,7 +7,7 @@ BHS.none = {
     comboLimit: 25,
     comboScaling: 1.015,
     comboScalingStart: 100,
-    generateCelestialite(combo) {},
+    generateCelestialite(combo) {return "none"},
 }
 
 BHS.template = {
@@ -1199,6 +1199,7 @@ addLayer("bh", {
             canClick: true,
             unlocked: true,
             onClick() {
+                console.log("ye")
                 options.fullscreen = false
 
                 player.subtabs["bh"]["stuff"] = "stages"
@@ -3947,19 +3948,19 @@ addLayer("bh", {
                             ["raw-html", () => {return BHP[player.bh.characters[0].id].name}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ["blank", "5px"],
                             ["bar", "C0-Health"],
-                        ], {background: "rgba(0,0,0,0.3)", border: "2px solid white", padding: "-2px", borderRadius: "15px"}],
+                        ], () => {return player.bh.characters[0].id != "none" ? {background: "rgba(0,0,0,0.3)", border: "2px solid white", padding: "-2px", borderRadius: "15px"} : {display: "none !important"}}],
                         ["blank", ["10px", "10px"]],
                         ["style-column", [
                             ["raw-html", () => {return BHP[player.bh.characters[1].id].name}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ["blank", "5px"],
                             ["bar", "C1-Health"],
-                        ], {background: "rgba(0,0,0,0.3)", border: "2px solid white", padding: "-2px", borderRadius: "15px"}],
+                        ], () => {return player.bh.characters[1].id != "none" ? {background: "rgba(0,0,0,0.3)", border: "2px solid white", padding: "-2px", borderRadius: "15px"} : {display: "none !important"}}],
                         ["blank", ["10px", "10px"]],
                         ["style-column", [
                             ["raw-html", () => {return BHP[player.bh.characters[2].id].name}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ["blank", "5px"],
                             ["bar", "C2-Health"],
-                        ], {background: "rgba(0,0,0,0.3)", border: "2px solid white", padding: "-2px", borderRadius: "15px"}],
+                        ], () => {return player.bh.characters[2].id != "none" ? {background: "rgba(0,0,0,0.3)", border: "2px solid white", padding: "-2px", borderRadius: "15px"} : {display: "none !important"}}],
                     ]],
                 ],
             },

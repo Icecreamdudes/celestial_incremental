@@ -533,7 +533,7 @@ BHA.geroa_cosmicRay = {
         "regenAdd"() {return player.bh.characterData["geroa"].damage.mul(Decimal.sub(-0.4, player.bh.skillData["geroa_cosmicRay"].level.mul(0.08)))}, // Multiplicative Effect
     },
     duration: new Decimal(5),
-    cooldown: new Decimal(15),
+    cooldown: new Decimal(20),
 }
 BHA.geroa_orbitalCannon = {
     name: "Orbital Cannon",

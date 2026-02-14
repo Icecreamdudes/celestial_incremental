@@ -377,7 +377,7 @@ BHA.eclipse_drain = {
     curCostBase: new Decimal(10),
     curCostScale: new Decimal(2),
     currency: "eclipseShards",
-    unlocked: true,
+    unlocked() {return getLevelableAmount("pet", 501).gt(0)},
 
     passive: true,
     constantType: "effect",
@@ -482,7 +482,7 @@ BHA.geroa_radioactiveMissile = {
     curCostBase: new Decimal(1000),
     curCostScale: new Decimal(10),
     currency: "spaceRock",
-    unlocked: true,
+    unlocked() {return getLevelableAmount("pet", 502).gt(0)},
 
     instant: true,
     type: "damage",

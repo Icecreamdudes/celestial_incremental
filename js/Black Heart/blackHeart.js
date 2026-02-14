@@ -196,7 +196,7 @@ addLayer("bh", {
         // Current Character Data
         characters: {
             0: {
-                id: "none",
+                id: "kres",
                 page: 0,
                 health: new Decimal(100),
                 maxHealth: new Decimal(100),
@@ -211,7 +211,7 @@ addLayer("bh", {
                 attributes: {},
                 skills: {
                     0: {
-                        id: "none",
+                        id: "kres_chop",
                         variables: {},
                         duration: new Decimal(0),
                         cooldown: new Decimal(0),
@@ -249,7 +249,7 @@ addLayer("bh", {
                 },
             },
             1: {
-                id: "none",
+                id: "nav",
                 page: 0,
                 health: new Decimal(100),
                 maxHealth: new Decimal(100),
@@ -264,7 +264,7 @@ addLayer("bh", {
                 attributes: {},
                 skills: {
                     0: {
-                        id: "none",
+                        id: "nav_magicMissle",
                         variables: {},
                         duration: new Decimal(0),
                         cooldown: new Decimal(0),
@@ -302,7 +302,7 @@ addLayer("bh", {
                 },
             },
             2: {
-                id: "none",
+                id: "sel",
                 page: 0,
                 health: new Decimal(100),
                 maxHealth: new Decimal(100),
@@ -317,7 +317,7 @@ addLayer("bh", {
                 attributes: {},
                 skills: {
                     0: {
-                        id: "none",
+                        id: "sel_singleShot",
                         variables: {},
                         duration: new Decimal(0),
                         cooldown: new Decimal(0),
@@ -359,14 +359,14 @@ addLayer("bh", {
         // Saved Character Data
         characterData: {
             "kres": {
-                selected: false,
+                selected: true,
                 skills: {
-                    0: "none",
+                    0: "kres_chop",
                     1: "none",
                     2: "none",
                     3: "none",
                 },
-                usedSP: new Decimal(0),
+                usedSP: new Decimal(4),
                 health: new Decimal(80),
                 damage: new Decimal(7),
                 defense: new Decimal(0),
@@ -376,14 +376,14 @@ addLayer("bh", {
                 mending: new Decimal(0),
             },
             "nav": {
-                selected: false,
+                selected: true,
                 skills: {
-                    0: "none",
+                    0: "nav_magicMissle",
                     1: "none",
                     2: "none",
                     3: "none",
                 },
-                usedSP: new Decimal(0),
+                usedSP: new Decimal(4),
                 health: new Decimal(60),
                 damage: new Decimal(9),
                 defense: new Decimal(0),
@@ -393,14 +393,14 @@ addLayer("bh", {
                 mending: new Decimal(0),
             },
             "sel": {
-                selected: false,
+                selected: true,
                 skills: {
-                    0: "none",
+                    0: "sel_singleShot",
                     1: "none",
                     2: "none",
                     3: "none",
                 },
-                usedSP: new Decimal(0),
+                usedSP: new Decimal(4),
                 health: new Decimal(60),
                 damage: new Decimal(6),
                 defense: new Decimal(0),
@@ -412,12 +412,12 @@ addLayer("bh", {
             "eclipse": {
                 selected: false,
                 skills: {
-                    0: "none",
+                    0: "eclipse_drain",
                     1: "none",
                     2: "none",
                     3: "none",
                 },
-                usedSP: new Decimal(0),
+                usedSP: new Decimal(6),
                 health: new Decimal(100),
                 damage: new Decimal(10),
                 defense: new Decimal(10),
@@ -429,12 +429,12 @@ addLayer("bh", {
             "geroa": {
                 selected: false,
                 skills: {
-                    0: "none",
+                    0: "geroa_radioactiveMissile",
                     1: "none",
                     2: "none",
                     3: "none",
                 },
-                usedSP: new Decimal(0),
+                usedSP: new Decimal(8),
                 health: new Decimal(50),
                 damage: new Decimal(5),
                 defense: new Decimal(5),

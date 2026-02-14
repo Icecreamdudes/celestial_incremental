@@ -3977,11 +3977,14 @@ addLayer("bh", {
             },
             "win": {
                 content: [
-                    ["blank", "200px"],
                     ["style-column", [
                         ["raw-html", "You have reached the end of this stage.", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ["raw-html", "You leave with your spoils.", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ], {width: "800px", height: "80px", backgroundColor: "#1b0218", border: "3px solid #8a0e79", borderRadius: "20px"}],
+                    ["blank", "25px"],
+                    ["top-column", [
+                        ["raw-html", () => `${player.bh.log.map((x, i) => `<span style="display:block;">${x}</span>`).join("")}`],
+                    ], {width: "700px", minHeight: "206px", textAlign: "center", background: "#1b0218", border: "3px solid #8a0e79", borderRadius: "30px", padding: "12px 0"}],
                     ["blank", "25px"],
                     ["clickable", "Leave"],
                     ["blank", "25px"],

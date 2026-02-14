@@ -4568,7 +4568,7 @@ bullets = bullets.filter(b => b.x > -100 && b.x < gameCanvas.width + 100 && b.y 
 // Draw big symbol (⊘)
 ctx.save();
 ctx.translate(symbolX, symbolY);
-ctx.font = 'bold 120px serif';
+ctx.font = 'bold ' + symbolR*2 + 'px serif';
 ctx.textAlign = 'center';
 ctx.textBaseline = 'middle';
 ctx.globalAlpha = 0.92;
@@ -4584,6 +4584,7 @@ ctx.strokeText('⊘', 0, 0);
 ctx.restore();
         // Draw a spiral pattern inside
         ctx.save();
+        ctx.translate(symbolX, symbolY);
         ctx.rotate(spiralAngle);
         ctx.strokeStyle = "#e22";
         ctx.lineWidth = 2;
@@ -4699,115 +4700,22 @@ function ultimateAttackPhase3(duration = 15) {
 
     
     
-    window.lastDamageTime = 0;
-    let running = true;
-    let overlay, gameCanvas, ctx;
-let px = (window.ultimateAttackPlayerPos && window.ultimateAttackPlayerPos.x != null) ? window.ultimateAttackPlayerPos.x : gameCanvas.width / 2;
-let py = (window.ultimateAttackPlayerPos && window.ultimateAttackPlayerPos.y != null) ? window.ultimateAttackPlayerPos.y : gameCanvas.height / 2;
-     pr = 18, pspeed = 4, keys = { up: false, down: false, left: false, right: false };
-    let symbol = {
-        x: window.innerWidth / 2,
-        y: window.innerHeight / 2,
-        r: 64,
-        vx: 0,
-        vy: 0,
-        pulse: 0,
-        color: '#fff',
-        pulsingRed: false,
-        visible: true
-    };
-    let bullets = window.ultimateAttackProjectiles.bullets;
-    let knives = window.ultimateAttackProjectiles.knives;
     let lastBurstTime = 0;
     let burstInterval = 650; // ms between bursts
     let burstBullets = 7 + Math.floor(Math.random() * 4); // 7-10 bullets per burst
     let burstViolence = 0.25 + Math.random() * 0.5; // randomness in burst
-    let lastKnifeTime = 0;
-    const knifeLength = 64, knifeWidth = 16, knifeSpeed = 8;
-    const knifeRate = 1.2; // knives per second
-    const bulletSpeed = 8;
-    const bulletRadius = 12;
     let lungeCooldown = 0;
     let lungeActive = false;
     let lungeTarget = { x: 0, y: 0 };
     let lungeTimer = 0;
     let lungeDuration = 1200; // ms (much slower lunge)
     let lungeSpeed = 7; // much slower
-    let phaseStart = Date.now();
-    let phaseEnd = phaseStart + duration * 1000;
-    let phase = 4;
     let burstDone = false;
     let explosionBursts = 4;
     let explosionBurstCount = 0;
     let explosionBurstInterval = 220;
     let explosionBurstTimer = 0;
-    let rainLastTime = 0;
-const rainBulletRadius = 12;
-const rainBulletSpeed = 5;
-const rainBulletRate = 12; // bullets per second (same as phase 1)
-function spawnRainBullet() {
-    // Rain from random x at top, straight down
-    let x = Math.random() * gameCanvas.width;
-    let y = -rainBulletRadius * 2;
-    bullets.push({ x, y, vx: 0, vy: rainBulletSpeed, rain: true });
-}
 
-    function removeOverlay() {
-        if (overlay && overlay.parentNode) overlay.remove();
-    }
-    function cleanup() {
-        running = false;
-        window.removeEventListener("keydown", keydownHandler);
-        window.removeEventListener("keyup", keyupHandler);
-        removeOverlay();
-    }
-    function allCharactersDead() {
-        if (!player || !player.ma || !Array.isArray(player.ma.health) || !Array.isArray(player.ma.deadCharacters)) return true;
-        for (let i = 0; i < player.ma.health.length; i++) {
-            const hp = player.ma.health[i];
-            const isAlive = !player.ma.deadCharacters[i] && (
-                (typeof hp === "object" && typeof hp.gt === "function") ? hp.gt(0) : hp > 0
-            );
-            if (isAlive) return false;
-        }
-        return true;
-    }
-    function updateKeys(e, isDown) {
-        if (["ArrowUp", "w", "W"].includes(e.key)) keys.up = isDown;
-        if (["ArrowDown", "s", "S"].includes(e.key)) keys.down = isDown;
-        if (["ArrowLeft", "a", "A"].includes(e.key)) keys.left = isDown;
-        if (["ArrowRight", "d", "D"].includes(e.key)) keys.right = isDown;
-    }
-    function keydownHandler(e) { updateKeys(e, true); e.preventDefault(); }
-    function keyupHandler(e) { updateKeys(e, false); e.preventDefault(); }
-
-    function setupOverlay() {
-        removeOverlay();
-        overlay = document.createElement("div");
-        overlay.id = "diamond-boss-overlay";
-        overlay.style.position = "fixed";
-        overlay.style.left = "0";
-        overlay.style.top = "0";
-        overlay.style.width = "100vw";
-        overlay.style.height = "100vh";
-        overlay.style.background = "rgba(0,0,0,0.1)";
-        overlay.style.zIndex = "100000";
-        overlay.style.pointerEvents = "none";
-        gameCanvas = document.createElement("canvas");
-        gameCanvas.width = window.innerWidth;
-        gameCanvas.height = window.innerHeight;
-        gameCanvas.style.background = "rgba(0,0,0,0)";
-        gameCanvas.style.border = "2px solid #fff";
-        gameCanvas.style.borderRadius = "0px";
-        gameCanvas.style.boxShadow = "0 0 32px #000";
-        gameCanvas.style.position = "absolute";
-        gameCanvas.style.left = `0px`;
-        gameCanvas.style.top = `0px`;
-        gameCanvas.style.zIndex = "100001";
-        overlay.appendChild(gameCanvas);
-        document.body.appendChild(overlay);
-        ctx = gameCanvas.getContext('2d');
-    }
 
     function shootBurstAtPlayer() {
         let dx = px - symbol.x;
@@ -4823,26 +4731,6 @@ function spawnRainBullet() {
         // Randomize next burst
         burstBullets = 7 + Math.floor(Math.random() * 4);
         burstViolence = 0.25 + Math.random() * 0.5;
-    }
-    function spawnKnife() {
-        // Pick a random edge and a random point on that edge
-        const edge = Math.floor(Math.random() * 4);
-        let x, y, angle;
-        if (edge === 0) { // top
-            x = Math.random() * gameCanvas.width;
-            y = -knifeLength;
-        } else if (edge === 1) { // right
-            x = gameCanvas.width + knifeLength;
-            y = Math.random() * gameCanvas.height;
-        } else if (edge === 2) { // bottom
-            x = Math.random() * gameCanvas.width;
-            y = gameCanvas.height + knifeLength;
-        } else { // left
-            x = -knifeLength;
-            y = Math.random() * gameCanvas.height;
-        }
-        angle = Math.atan2(py - y, px - x);
-        knives.push({ x, y, angle, x0: x, y0: y });
     }
     function doLunge() {
         lungeActive = true;
@@ -4884,16 +4772,6 @@ function spawnRainBullet() {
             explosionBurstCount = 0;
             explosionBurstTimer = 0;
         }
-        // Player movement
-        let dx = 0, dy = 0;
-        if (keys.up) dy -= pspeed;
-        if (keys.down) dy += pspeed;
-        if (keys.left) dx -= pspeed;
-        if (keys.right) dx += pspeed;
-        px += dx;
-        py += dy;
-        px = Math.max(pr, Math.min(gameCanvas.width - pr, px));
-        py = Math.max(pr, Math.min(gameCanvas.height - pr, py));
         // Phase 4: Symbol lunges, pulses, shoots in bursts, throws knives
         if (phase === 4) {
             // Lunge logic
@@ -4937,121 +4815,6 @@ function spawnRainBullet() {
                 setTimeout(() => { cleanup(); }, 1200);
             }
         }
-        // Move bullets
-        for (let b of bullets) {
-            b.x += b.vx;
-            b.y += b.vy;
-        }
-        bullets = bullets.filter(b => b.x > -100 && b.x < gameCanvas.width + 100 && b.y > -100 && b.y < gameCanvas.height + 100);
-        // Move knives
-        for (let k of knives) {
-            k.x += Math.cos(k.angle) * knifeSpeed;
-            k.y += Math.sin(k.angle) * knifeSpeed;
-        }
-        knives = knives.filter(k => k.x > -knifeLength && k.x < gameCanvas.width + knifeLength && k.y > -knifeLength && k.y < gameCanvas.height + knifeLength);
-        // Check collisions
-        let playerHit = false;
-        for (let b of bullets) {
-            let dist = Math.hypot(px - b.x, py - b.y);
-            if (dist < pr + bulletRadius) { playerHit = true; break; }
-        }
-        for (let k of knives) {
-            const dx = Math.cos(k.angle), dy = Math.sin(k.angle);
-            const t = ((px - k.x) * dx + (py - k.y) * dy);
-            if (t >= 0 && t <= knifeLength) {
-                const perp = Math.abs((px - k.x) * dy - (py - k.y) * dx);
-                if (perp < pr + knifeWidth / 2) { playerHit = true; break; }
-            }
-        }
-        // --- Bullet rain logic (from phase 1) ---
-if (!rainLastTime) rainLastTime = ts;
-let rainToSpawn = Math.floor(((ts - rainLastTime) / 1000) * rainBulletRate);
-for (let i = 0; i < rainToSpawn; i++) spawnRainBullet();
-if (rainToSpawn > 0) rainLastTime = ts;
-// --- End bullet rain logic ---
-        // Symbol collision (lunge)
-        if (phase === 4 && symbol.visible) {
-            let dist = Math.hypot(px - symbol.x, py - symbol.y);
-            if (dist < pr + symbol.r * 0.8) playerHit = true;
-        }
-        if (playerHit) takeDamage();
-        // Draw everything
-        ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
-        // Draw symbol (if visible)
-        if (symbol.visible) {
-            ctx.save();
-            ctx.translate(symbol.x, symbol.y);
-            let pulseScale = 1 + 0.18 * Math.sin(symbol.pulse * 2);
-            ctx.scale(pulseScale, pulseScale);
-            ctx.font = 'bold 120px serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.globalAlpha = 0.92;
-            ctx.shadowColor = symbol.pulsingRed ? '#e22' : '#fff';
-            ctx.shadowBlur = 32;
-            ctx.fillStyle = symbol.pulsingRed ? '#e22' : '#fff';
-            ctx.fillText('⊘', 0, 0);
-            ctx.globalAlpha = 1;
-            ctx.shadowBlur = 0;
-            ctx.lineWidth = 6;
-            ctx.strokeStyle = symbol.pulsingRed ? '#fff' : '#e22';
-            ctx.strokeText('⊘', 0, 0);
-            ctx.restore();
-        }
-        // Draw bullets
-        ctx.save();
-        ctx.shadowColor = "#fff";
-        ctx.shadowBlur = 8;
-        ctx.fillStyle = "#fff";
-        for (let b of bullets) {
-            ctx.beginPath();
-            ctx.arc(b.x, b.y, bulletRadius, 0, 2 * Math.PI);
-            ctx.fill();
-        }
-        ctx.restore();
-        // Draw knives and their path lines
-        for (let k of knives) {
-            ctx.save();
-            ctx.strokeStyle = '#f22';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(k.x0, k.y0);
-            let farX = k.x0 + Math.cos(k.angle) * (gameCanvas.width + gameCanvas.height);
-            let farY = k.y0 + Math.sin(k.angle) * (gameCanvas.width + gameCanvas.height);
-            ctx.lineTo(farX, farY);
-            ctx.stroke();
-            ctx.restore();
-            ctx.save();
-            ctx.translate(k.x, k.y);
-            ctx.rotate(k.angle);
-            ctx.beginPath();
-            ctx.moveTo(-knifeLength / 2, -knifeWidth / 2);
-            ctx.lineTo(knifeLength / 2, 0);
-            ctx.lineTo(-knifeLength / 2, knifeWidth / 2);
-            ctx.closePath();
-            ctx.fillStyle = '#ccc';
-            ctx.shadowColor = '#fff';
-            ctx.shadowBlur = 6;
-            ctx.fill();
-            ctx.restore();
-        }
-        // Draw player (red diamond)
-        ctx.save();
-        ctx.translate(px, py);
-        ctx.rotate(Math.PI / 2);
-        ctx.beginPath();
-        ctx.moveTo(0, -pr);
-        ctx.lineTo(pr, 0);
-        ctx.lineTo(0, pr);
-        ctx.lineTo(-pr, 0);
-        ctx.closePath();
-        ctx.fillStyle = "#e22";
-        ctx.shadowColor = "#e22";
-        ctx.shadowBlur = 8;
-        ctx.fill();
-        ctx.restore();
-        window.ultimateAttackPlayerPos = { x: px, y: py };
-        requestAnimationFrame(animate);
     }
     // Start
     if (player && player.subtabs && player.subtabs["ma"]) {

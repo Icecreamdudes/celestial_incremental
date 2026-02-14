@@ -30,6 +30,34 @@ function pauseUniverse(universe, type = "toggle", temp = false) {
     }
 }
 
+function pauseUniverseAll(exemptions, type = "toggle", temp = false) {
+    for (let universe in player.uni) {
+        if (!tmp.uni[universe].unlocked) continue
+        for (let j in exemptions) {
+            if (exemptions[j] == universe) continue
+        }
+        if (type == "unpause" || type == "toggle" && player.uni[universe].paused) {
+            let time = (Date.now() - player.uni[universe].pauseTime) / 1000
+            let tree = universes[universe].tree
+    		for (row in tree) {
+	    		for (thing in tree[row]) {
+                    layers[tree[row][thing]].update(time)
+                }
+            }
+            if (!temp) {
+                player.uni[universe].paused = false
+            } else {
+                player.uni[universe].paused = player.uni[universe].lastPaused
+            }
+        } else {
+            if (temp) player.uni[universe].lastPaused = player.uni[universe].paused
+            player.uni[universe].pauseTime = Date.now()
+            if (player.universe == universe) player.universe = 0
+            player.uni[universe].paused = true
+        }
+    }
+}
+
 var UNIS = Object.keys(universes);
 
 function updateUnis() {

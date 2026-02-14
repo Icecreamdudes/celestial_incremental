@@ -26,6 +26,22 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
     info.subMove = values.subMove || "bounce"
     info.moveWithSub = values.moveWithSub || true
     info.active = true;
+    if (info.values.saveContent) {
+        let storedInfo = localStorage.getItem('bhState')
+        if (storedInfo) {
+            storedInfo = JSON.parse(storedInfo)
+            if (storedInfo.px) {
+                info.px = storedInfo.px
+                info.py = storedInfo.py
+                info.bullets = storedInfo.bullets
+                info.bullets = info.bullets.filter(b => {
+                    if (b.draw) return true
+                    return false
+                });
+            }
+        }
+        if (!info.px) info.values.saveContent = false
+    }
 
     // Check if tabbed in, if not just deal a bunch of damage
     if (player && player.tab && player.tab != "bh") {
@@ -57,8 +73,14 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
     }
     bhState.active = true;
 
-    player.subtabs["bh"]["stuff"] = "bullet";
-    options.fullscreen = true
+    const old = document.getElementById("bh-overlay")
+    if (old) old.remove()
+
+    if (player.subtabs["bh"]["stuff"] != "bullet") {
+        player.subtabs["bh"]["stuff"] = "bullet";
+        pauseUniverseAll(["BH"], "pause", true)
+        options.fullscreen = true
+    }
 
     // Create a fullscreen overlay
     const overlay = document.createElement("div");
@@ -89,9 +111,15 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
     const gameCanvas = document.createElement("canvas");
     gameCanvas.width = info.width;
     gameCanvas.height = info.height;
-    gameCanvas.style.background = "#111";
-    gameCanvas.style.border = "2px solid #fff";
-    gameCanvas.style.borderRadius = "16px";
+    if (!info.values.transparent) {
+        gameCanvas.style.background = "#111";
+    } else {
+        gameCanvas.style.background = "rgba(0,0,0,0)";
+    }
+    if (gameCanvas.width != window.innerWidth && gameCanvas.height != window.innerHeight) {
+        gameCanvas.style.border = "2px solid #fff";
+        gameCanvas.style.borderRadius = "16px";
+    }
     gameCanvas.style.boxShadow = "0 0 32px #000";
     gameCanvas.style.position = "absolute";
     gameCanvas.style.left = `calc(50vw - ${info.width / 2}px)`;
@@ -164,7 +192,9 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
     }
 
     // Player Code (Red Diamond)
-    if (info.start == "cell") {
+    if (info.values.saveContent) {
+        // Lmao already done earlier
+    } else if (info.start == "cell") {
         info.px = info.cellSize / 2
         info.py = info.cellSize / 2;
     } else if (info.subArena) {
@@ -190,11 +220,11 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
     info.boxTop = gameCanvas.getBoundingClientRect().top;
 
     // Bullets
-    info.bullets = [];
+    if (!info.values.saveContent) info.bullets = [];
  
     // Bullet Code
     for (let i in info.actions) {
-        if (info.actions[i].codeFunc) info = info.actions[i].codeFunc(info, i)
+        if (info.actions[i].codeFunc && (!info.actions[i].duration || Date.now() < info.startTime + (info.actions[i].duration*1000))) info = info.actions[i].codeFunc(info, i)
     }
 
     function updatePos(e, touch = false) {
@@ -222,9 +252,9 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
             vx: (dx / dist) * speed,
             vy: (dy / dist) * speed,
             r: 10,
-            draw(x, y, r, bossCtx) {
+            draw(b, bossCtx) {
                 bossCtx.beginPath();
-                bossCtx.arc(x, y, r, 0, 2 * Math.PI);
+                bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);
                 bossCtx.fillStyle = "#fff";
                 bossCtx.fill();
             },
@@ -241,13 +271,102 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
                 vx: Math.cos(angle) * info.actions[id].bulletSpeed,
                 vy: Math.sin(angle) * info.actions[id].bulletSpeed,
                 r: 12,
-                draw(x, y, r, bossCtx) {
+                draw(b, bossCtx) {
                     bossCtx.beginPath();
-                    bossCtx.arc(x, y, r, 0, 2 * Math.PI);
+                    bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);
                     bossCtx.fillStyle = "#fff";
                     bossCtx.fill();
                 },
             });
+        }
+    }
+
+    // Shoot spread at coordinates
+    info.shootSpreadAtPlayer = (bx, by, id) => {
+        let dx = info.px - bx;
+        let dy = info.py - by;
+        let baseAngle = Math.atan2(dy, dx);
+        for (let i = 0; i < info.actions[id].spreadCount; i++) {
+            let angle = baseAngle + (i - (info.actions[id].spreadCount - 1) / 2) * (info.actions[id].spreadAngle / (info.actions[id].spreadCount - 1));
+            let vx = Math.cos(angle) * info.actions[id].bulletSpeed;
+            let vy = Math.sin(angle) * info.actions[id].bulletSpeed;
+            info.bullets.push({
+                x: bx,
+                y: by,
+                r: 12,
+                vx: vx,
+                vy: vy,
+                draw(b, bossCtx) {
+                    bossCtx.beginPath();
+                    bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);
+                    bossCtx.fillStyle = "#fff";
+                    bossCtx.fill();
+                }
+            });
+        }
+    }
+
+    // Shoot spiral from coordinates
+    info.spawnSpiralProjectile = (bx, by, br, id) => {
+        // Alternate between bullet and knife
+        let isKnife = info.actions[id].spiralKnives && (!info.actions[id].spiralBullets || (Math.floor(info.actions[id].spiralAngle/(Math.PI*2)) % 2 === 0));
+        let angle = info.actions[id].spiralAngle;
+        let speed = info.actions[id].bulletSpeed;
+        let x = bx + Math.cos(angle) * br;
+        let y = by + Math.sin(angle) * br;
+        if (isKnife) {
+            info.bullets.push({
+                name: "knife",
+                x: x,
+                y: y,
+                r: info.actions[id].knifeLength,
+                width: info.actions[id].knifeWidth,
+                angle: angle,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                draw(b, bossCtx) {
+                    // Draw path line (red, thin)
+                    bossCtx.save();
+                    bossCtx.strokeStyle = '#f22';
+                    bossCtx.lineWidth = 2;
+                    bossCtx.beginPath();
+                    bossCtx.moveTo(b.x, b.y);
+                    // Draw line in the direction of the knife, long enough to cross the arena
+                    let farX = b.x + Math.cos(b.angle) * (info.width + info.height);
+                    let farY = b.y + Math.sin(b.angle) * (info.width + info.height);
+                    bossCtx.lineTo(farX, farY);
+                    bossCtx.stroke();
+                    bossCtx.restore();
+                    // Draw knife
+                    bossCtx.save();
+                    bossCtx.translate(b.x, b.y);
+                    bossCtx.rotate(b.angle);
+                    bossCtx.beginPath();
+                    bossCtx.moveTo(-b.r / 2, -b.width / 2);
+                    bossCtx.lineTo(b.r / 2, 0);
+                    bossCtx.lineTo(-b.r / 2, b.width / 2);
+                    bossCtx.closePath();
+                    bossCtx.fillStyle = '#ccc';
+                    bossCtx.shadowColor = '#fff';
+                    bossCtx.shadowBlur = 6;
+                    bossCtx.fill();
+                    bossCtx.restore();
+                },
+            })
+        } else {
+            info.bullets.push({
+                x: x,
+                y: y,
+                r: 12,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                draw(b, bossCtx) {
+                    bossCtx.beginPath();
+                    bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);
+                    bossCtx.fillStyle = "#fff";
+                    bossCtx.fill();
+                },
+            })
         }
     }
 
@@ -291,29 +410,30 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
             y: by,
             angle: angle,
             r: info.actions[id].knifeLength,
+            width: info.actions[id].knifeWidth,
             vx: Math.cos(angle) * info.actions[id].enemySpeed,
             vy: Math.sin(angle) * info.actions[id].enemySpeed,
-            draw(x, y, angle, bossCtx) {
+            draw(b, bossCtx) {
                 // Draw path line (red, thin)
                 bossCtx.save();
                 bossCtx.strokeStyle = '#f22';
                 bossCtx.lineWidth = 2;
                 bossCtx.beginPath();
-                bossCtx.moveTo(x, y);
+                bossCtx.moveTo(b.x, b.y);
                 // Draw line in the direction of the knife, long enough to cross the arena
-                let farX = x + Math.cos(angle) * (info.width + info.height);
-                let farY = y + Math.sin(angle) * (info.width + info.height);
+                let farX = b.x + Math.cos(b.angle) * (info.width + info.height);
+                let farY = b.y + Math.sin(b.angle) * (info.width + info.height);
                 bossCtx.lineTo(farX, farY);
                 bossCtx.stroke();
                 bossCtx.restore();
                 // Draw knife
                 bossCtx.save();
-                bossCtx.translate(x, y);
-                bossCtx.rotate(angle);
+                bossCtx.translate(b.x, b.y);
+                bossCtx.rotate(b.angle);
                 bossCtx.beginPath();
-                bossCtx.moveTo(-info.actions[id].knifeLength / 2, -info.actions[id].knifeWidth / 2);
-                bossCtx.lineTo(info.actions[id].knifeLength / 2, 0);
-                bossCtx.lineTo(-info.actions[id].knifeLength / 2, info.actions[id].knifeWidth / 2);
+                bossCtx.moveTo(-b.r / 2, -b.width / 2);
+                bossCtx.lineTo(b.r / 2, 0);
+                bossCtx.lineTo(-b.r / 2, b.width / 2);
                 bossCtx.closePath();
                 bossCtx.fillStyle = '#ccc';
                 bossCtx.shadowColor = '#fff';
@@ -352,48 +472,47 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
                 y: spawnY,
                 angle: knifeAngle,
                 r: info.actions[id].knifeLength,
+                width: info.actions[id].knifeWidth,
                 vx: (dx / dist) * info.actions[id].enemySpeed,
                 vy: (dy / dist) * info.actions[id].enemySpeed,
                 timer: Date.now() - 500,
-                draw(x, y, angle, bossCtx, timer) {
+                draw(b, bossCtx) {
                     // Draw path line (red, thin) if knife is on screen, or if it left within the last 500ms
                     let knifeOnScreen = (
-                        x > 0 && x < info.width &&
-                        y > 0 && y < info.height
+                        b.x > 0 && b.x < info.width &&
+                        b.y > 0 && b.y < info.height
                     );
                     if (knifeOnScreen) {
-                        timer = Date.now();
+                        b.timer = Date.now();
                     }
-                    if (Date.now() - timer < 500) {
+                    if (Date.now() - b.timer < 500) {
                         // Draw path line (red, thin)
                         bossCtx.save();
                         bossCtx.strokeStyle = '#f22';
                         bossCtx.lineWidth = 2;
                         bossCtx.beginPath();
-                        bossCtx.moveTo(x, y);
+                        bossCtx.moveTo(b.x, b.y);
                         // Draw line in the direction of the knife, long enough to cover the screen
-                        let farX = x + Math.cos(angle) * 5000;
-                        let farY = y + Math.sin(angle) * 5000;
+                        let farX = b.x + Math.cos(b.angle) * 5000;
+                        let farY = b.y + Math.sin(b.angle) * 5000;
                         bossCtx.lineTo(farX, farY);
                         bossCtx.stroke();
                         bossCtx.restore();
                     }
                     // Draw knife
                     bossCtx.save();
-                    bossCtx.translate(x, y);
-                    bossCtx.rotate(angle);
+                    bossCtx.translate(b.x, b.y);
+                    bossCtx.rotate(b.angle);
                     bossCtx.beginPath();
-                    bossCtx.moveTo(-info.actions[id].knifeLength / 2, -info.actions[id].knifeWidth / 2);
-                    bossCtx.lineTo(info.actions[id].knifeLength / 2, 0);
-                    bossCtx.lineTo(-info.actions[id].knifeLength / 2, info.actions[id].knifeWidth / 2);
+                    bossCtx.moveTo(-b.r / 2, -b.width / 2);
+                    bossCtx.lineTo(b.r / 2, 0);
+                    bossCtx.lineTo(-b.r / 2, b.width / 2);
                     bossCtx.closePath();
                     bossCtx.fillStyle = '#ccc';
                     bossCtx.shadowColor = '#fff';
                     bossCtx.shadowBlur = 6;
                     bossCtx.fill();
                     bossCtx.restore();
-
-                    return timer
                 }
             });
         }
@@ -462,7 +581,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
             info.active = false;
             options.fullscreen = info.full;
             info.exitAction()
-            localStorage.setItem('bhState', "");
+            localStorage.setItem('bhState', JSON.stringify(info));
             return;
         }
 
@@ -524,18 +643,19 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
                 window.removeEventListener("touchmove", touchHandler);
                 if (overlay.parentNode) overlay.remove();
                 player.subtabs["bh"]["stuff"] = "battle";
+                pauseUniverseAll(["BH"], "unpause", true)
                 bhState.active = false;
                 info.active = false;
                 options.fullscreen = info.full;
                 info.exitAction()
-                localStorage.setItem('bhState', "");
+                localStorage.setItem('bhState', JSON.stringify(info));
                 return;
             }
         }
 
         // Bullet movement/spawn code
         for (let i in info.actions) {
-            if (info.actions[i].moveFunc) info = info.actions[i].moveFunc(info, ts, i)
+            if (info.actions[i].moveFunc && (!info.actions[i].duration || Date.now() < info.startTime + (info.actions[i].duration*1000))) info = info.actions[i].moveFunc(info, ts, i)
         }
 
         // Move bullets
@@ -561,7 +681,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         info.bossCtx.shadowBlur = 8;
         for (let b of info.bullets) {
             if (b.boxRender) continue
-            b.draw(b.x, b.y, b.r, info.bossCtx)
+            b.draw(b, info.bossCtx)
         }
         info.bossCtx.restore();
 
@@ -697,11 +817,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         info.ctx.save();
         for (let b of info.bullets) {
             if (b.boxRender) {
-                if (b.name && b.name == "knife") {
-                    if (b.timer) b.timer = b.draw(b.x, b.y, b.angle, info.ctx, b.timer)
-                    b.draw(b.x, b.y, b.angle, info.ctx)
-                }
-                else b.draw(b.x, b.y, b.r, info.ctx)
+                b.draw(b, info.ctx)
             }
         }
         // Draw player (red diamond) in the box
@@ -740,6 +856,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
 
     // Save handlers and overlay for cleanup on reload
     bhState.overlay = overlay;
+    bhState.bossCanvas = bossCanvas;
     bhState.mouseHandler = mouseHandler;
     bhState.touchHandler = touchHandler;
 
@@ -749,12 +866,13 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         window.removeEventListener("touchmove", touchHandler);
         if (overlay.parentNode) overlay.remove();
         player.subtabs["bh"]["stuff"] = "battle";
+        pauseUniverseAll(["BH"], "unpause", true)
         bhState.active = false;
         info.active = false;
         options.fullscreen = info.full;
         info.exitAction()
         if (info.timed) bhAttack(Decimal.mul(player.bh.celestialite.damage, 3), 3, "allPlayer")
-        localStorage.setItem('bhState', "");
+        localStorage.setItem('bhState', JSON.stringify(info));
     }, info.duration * 1000);
 }
 
@@ -769,18 +887,23 @@ if (storedInfo && storedInfo != "") {
         const remaining = Math.max(0.1, (bhState.duration || 12) - elapsed);
         let newValues = bhState.values
         newValues.duration = remaining
+        newValues.saveContent = true
         if (remaining > 0.1) {
             setTimeout(() => {
                 bulletHell(bhState.actions, newValues);
             }, 500)
         } else {
-            // If time is up, clean up state
-            player.subtabs["bh"]["stuff"] = "battle";
-            bhState.active = false;
-            options.fullscreen = bhState.full;
-            info.exitAction()
-            if (bhState.timed) bhAttack(Decimal.mul(player.bh.celestialite.damage, 3), 3, "allPlayer")
-            localStorage.setItem('bhState', "");
+            // If time is up, clean up state            
+            setTimeout(() => {
+                player.subtabs["bh"]["stuff"] = "battle";
+                pauseUniverseAll(["BH"], "unpause", true)
+                bhState.active = false;
+                options.fullscreen = bhState.full;
+                if (storedInfo.exitAction) storedInfo.exitAction()
+                if (bhState.timed) bhAttack(Decimal.mul(player.bh.celestialite.damage, 3), 3, "allPlayer")
+                storedInfo.active = false
+                localStorage.setItem('bhState', JSON.stringify(storedInfo));
+            }, 500)
         }
     }
 }
@@ -802,14 +925,14 @@ BHB.diamondAttack = {
                 orbitSpeed: 0.015 + 0.003 * i, // slightly different speeds
                 shootInterval: 500 + Math.floor(Math.random() * 600) + i * 150, // each diamond has a different interval
                 lastShotTime: 0,
-                draw(dx, dy, dr, bossCtx) {
-                    bossCtx.translate(dx, dy);
+                draw(b, bossCtx) {
+                    bossCtx.translate(b.x, b.y);
                     bossCtx.rotate(Math.PI / 2); // 90deg
                     bossCtx.beginPath();
-                    bossCtx.moveTo(0, -dr);
-                    bossCtx.lineTo(dr, 0);
-                    bossCtx.lineTo(0, dr);
-                    bossCtx.lineTo(-dr, 0);
+                    bossCtx.moveTo(0, -b.r);
+                    bossCtx.lineTo(b.r, 0);
+                    bossCtx.lineTo(0, b.r);
+                    bossCtx.lineTo(-b.r, 0);
                     bossCtx.closePath();
                     bossCtx.fillStyle = "#fff";
                     bossCtx.shadowColor = "#fff";
@@ -858,7 +981,7 @@ BHB.bulletRain = {
         for (let i = 0; i < bulletsToSpawn; i++) {
             let bx = Math.random() * info.width + info.boxLeft;
             let by = -bulletRadius;
-            let bul = {x: bx, y: by, vx: 0, vy: bulletSpeed, r: bulletRadius, draw(dx, dy, dr, bossCtx) {bossCtx.beginPath();bossCtx.arc(dx, dy, dr, 0, 2 * Math.PI);bossCtx.fillStyle = "#fff";bossCtx.fill()}}
+            let bul = {x: bx, y: by, vx: 0, vy: bulletSpeed, r: bulletRadius, draw(b, bossCtx) {bossCtx.beginPath();bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);bossCtx.fillStyle = "#fff";bossCtx.fill()}}
             info.bullets.push(bul);
         }
         if (bulletsToSpawn > 0) info.actions[id].lastTime = ticks;
@@ -878,9 +1001,9 @@ BHB.movingCircleRadialBurstAttack = {
                 vy: (Math.random() - 0.5) * info.actions[id].enemySpeed * 2,
                 r: 40,
                 lastBurstTime: 0,
-                draw(dx, dy, dr, ctx) {
+                draw(b, ctx) {
                     ctx.beginPath();
-                    ctx.arc(dx, dy, dr, 0, 2 * Math.PI);
+                    ctx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);
                     ctx.fillStyle = "#eee";
                     ctx.shadowColor = "#fff";
                     ctx.shadowBlur = 12;
@@ -947,14 +1070,14 @@ BHB.bouncingDiamond = {
                 vx: vx,
                 vy: vy,
                 r: br,
-                draw(dx, dy, dr, bossCtx) {
-                    bossCtx.translate(dx, dy);
+                draw(b, bossCtx) {
+                    bossCtx.translate(b.x, b.y);
                     bossCtx.rotate(Math.PI / 2); // 90deg
                     bossCtx.beginPath();
-                    bossCtx.moveTo(0, -dr);
-                    bossCtx.lineTo(dr, 0);
-                    bossCtx.lineTo(0, dr);
-                    bossCtx.lineTo(-dr, 0);
+                    bossCtx.moveTo(0, -b.r);
+                    bossCtx.lineTo(b.r, 0);
+                    bossCtx.lineTo(0, b.r);
+                    bossCtx.lineTo(-b.r, 0);
                     bossCtx.closePath();
                     bossCtx.fillStyle = "#fff";
                     bossCtx.shadowColor = "#fff";
@@ -1021,9 +1144,9 @@ BHB.bombAttack = {
                 vy: info.actions[id].bombFallSpeed,
                 exploded: false,
                 explodeTime: null,
-                draw(dx, dy, dr, bossCtx) {
+                draw(b, bossCtx) {
                     bossCtx.beginPath();
-                    bossCtx.arc(dx, dy, dr, 0, 2 * Math.PI);
+                    bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);
                     bossCtx.fillStyle = '#fff';
                     bossCtx.shadowColor = '#fff';
                     bossCtx.shadowBlur = 12;
@@ -1040,7 +1163,6 @@ BHB.bombAttack = {
                 b.explodeTime = Date.now()
                 // Spawn mini-bullets in a radial pattern
                 for (let j = 0; j < info.actions[id].miniBombCount; j++) {
-                    console.log("ye")
                     let angle = (2 * Math.PI * j) / info.actions[id].miniBombCount
                     info.bullets.push({
                         name: "minibomb",
@@ -1052,9 +1174,9 @@ BHB.bombAttack = {
                         vy: Math.sin(angle) * info.actions[id].miniBombSpeed,
                         exploded: false,
                         explodeTime: Date.now() + info.actions[id].miniBombDelay,
-                        draw(dx, dy, dr, bossCtx) {
+                        draw(b, bossCtx) {
                             bossCtx.beginPath();
-                            bossCtx.arc(dx, dy, dr, 0, 2 * Math.PI);
+                            bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);
                             bossCtx.fillStyle = '#fff';
                             bossCtx.shadowColor = '#fff';
                             bossCtx.shadowBlur = 8;
@@ -1075,9 +1197,9 @@ BHB.bombAttack = {
                         r: 8,
                         vx: Math.cos(angle) * info.actions[id].bulletSpeed,
                         vy: Math.sin(angle) * info.actions[id].bulletSpeed,
-                        draw(dx, dy, dr, bossCtx) {
+                        draw(b, bossCtx) {
                             bossCtx.beginPath();
-                            bossCtx.arc(dx, dy, dr, 0, 2 * Math.PI);
+                            bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);
                             bossCtx.fillStyle = '#fff';
                             bossCtx.shadowColor = '#fff';
                             bossCtx.shadowBlur = 4;
@@ -1093,3 +1215,225 @@ BHB.bombAttack = {
 }
 
 //bulletHell({"bulletRain": {bulletPerSec: 18}, "knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 8, knifePerSec: 1.5}}, {width: window.innerWidth, height: window.innerHeight, duration: 15})
+
+BHB.centerSpiralAttack = {
+    //bulletHell({"centerSpiralAttack": {spiralAngle: 0, spiralRate: 0.325, spiralInterval: 30, radialStart: 64, bulletSpeed: 7, spiralKnives: true, knifeLength: 64, knifeWidth: 16}}, {width: window.innerWidth, height: window.innerHeight, duration: 15})
+    moveFunc(info, ticks, id) {
+        // Spiral fire
+        if (!info.actions[id].lastTime) info.actions[id].lastTime = ticks;
+        if (ticks - info.actions[id].lastTime > info.actions[id].spiralInterval) {
+            info.spawnSpiralProjectile(info.width / 2, info.height / 2, info.actions[id].radialStart, id)
+            info.actions[id].spiralAngle += info.actions[id].spiralRate;
+            info.actions[id].lastTime = ticks;
+        }
+
+        return info
+    },
+}
+
+BHB.centerSpreadAttack = {
+    //bulletHell({"centerSpreadAttack": {bulletSpeed: 6, spreadInterval: 1000, spreadCount: 7, spreadAngle: Math.PI/3}}, {width: window.innerWidth, height: window.innerHeight, duration: 15})
+    moveFunc(info, ticks, id) {
+        if (!info.actions[id].lastTime) info.actions[id].lastTime = ticks;
+        if (ticks - info.actions[id].lastTime > info.actions[id].spreadInterval) {
+            info.shootSpreadAtPlayer(info.width / 2, info.height / 2, id);
+            info.actions[id].lastTime = ticks;
+        }
+
+        return info
+    },
+}
+
+BHB.centerIcon = {
+    //bulletHell({"centerIcon": {radius: 64, fillColor: "#fff", strokeColor: "#e22", symbol: "⊘"}}, {width: window.innerWidth, height: window.innerHeight, duration: 15})
+    codeFunc(info, id) {
+        info.bullets.push({
+            name: "symbol",
+            boxRender: true,
+            symbol: info.actions[id].symbol,
+            fill: info.actions[id].fillColor,
+            stroke: info.actions[id].strokeColor,
+            angle: 0,
+            x: info.width / 2,
+            y: info.height / 2,
+            vx: 0,
+            vy: 0,
+            r: info.actions[id].radius,
+            draw(b, bossCtx) {
+                // Draw big symbol (⊘)
+                bossCtx.save();
+                bossCtx.translate(b.x, b.y);
+                bossCtx.font = 'bold ' + b.r*2 + 'px serif';
+                bossCtx.textAlign = 'center';
+                bossCtx.textBaseline = 'middle';
+                bossCtx.globalAlpha = 0.92;
+                bossCtx.shadowColor = '#fff';
+                bossCtx.shadowBlur = 32;
+                bossCtx.fillStyle = b.fill;
+                bossCtx.fillText(b.symbol, 0, 0);
+                bossCtx.globalAlpha = 1;
+                bossCtx.shadowBlur = 0;
+                bossCtx.lineWidth = 6;
+                bossCtx.strokeStyle = b.stroke;
+                bossCtx.strokeText(b.symbol, 0, 0);
+                bossCtx.restore();
+                // Draw a spiral pattern inside
+                bossCtx.save();
+                bossCtx.translate(b.x, b.y - 5);
+                bossCtx.rotate(b.angle);
+                bossCtx.strokeStyle = b.stroke;
+                bossCtx.lineWidth = 2;
+                for (let i = 0; i < 8; i++) {
+                    bossCtx.beginPath();
+                    bossCtx.arc(0, 0, b.r, i * Math.PI / 4, i * Math.PI / 4 + Math.PI / 8);
+                    bossCtx.stroke();
+                }
+                bossCtx.restore();
+            },
+        })
+
+        return info
+    },
+    moveFunc(info, ticks, id) {
+        for (let b of info.bullets) {
+            if (b.name && b.name == "symbol") {
+                b.angle += 1.44
+            }
+        }
+
+        return info
+    },
+}
+
+//bulletHell({"centerSpiralAttack": {spiralAngle: 0, spiralRate: 0.325, spiralInterval: 30, radialStart: 64, bulletSpeed: 7, spiralKnives: true, knifeLength: 64, knifeWidth: 16}, "bouncingDiamond": {diamondCount: 3, enemySpeed: 4}, "centerSpreadAttack": {bulletSpeed: 6, spreadInterval: 1000, spreadCount: 7, spreadAngle: Math.PI/3}, "centerIcon": {radius: 64, fillColor: "#fff", strokeColor: "#e22", symbol: "⊘"}}, {width: window.innerWidth, height: window.innerHeight, duration: 15, transparent: true, saveContent: true})
+
+BHB.finalMatosAttack = {
+    //bulletHell({"finalMatosAttack": {radius: 64, fillColor: "#fff", strokeColor: "#e22", symbol: "⊘", burstBullets: 8, burstViolence: 0.5, lungeTimer: 0, lungeCooldown: 0, explosionBurstTimer: 0, explosionBurstCount: 0, lastTick: false}, "bulletRain": {bulletPerSec: 12, duration: 15}, "knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 8, knifePerSec: 1.2, duration: 15}}, {width: window.innerWidth, height: window.innerHeight, duration: 19, transparent: true, saveContent: true})
+    codeFunc(info, id) {
+        info.bullets = info.bullets.filter(b => {
+            if (b.name && (b.name == "diamond" || b.name == "symbol")) return false
+        });
+
+        info.bullets.push({
+            name: "symbol",
+            boxRender: true,
+            symbol: info.actions[id].symbol,
+            fill: info.actions[id].fillColor,
+            stroke: info.actions[id].strokeColor,
+            x: info.width / 2,
+            y: info.height / 2,
+            r: info.actions[id].radius,
+            vx: 0,
+            vy: 0,
+            pulse: 0,
+            pulsingRed: false,
+            visible: true,
+            burst: false,
+            draw(b, bossCtx) {
+                if (b.visible) {
+                    // Draw big symbol (⊘)
+                    bossCtx.save();
+                    bossCtx.translate(b.x, b.y);
+                    let pulseScale = 1 + 0.18 * Math.sin(b.pulse * 2);
+                    bossCtx.scale(pulseScale, pulseScale);
+                    bossCtx.font = 'bold ' + b.r*2 + 'px serif';
+                    bossCtx.textAlign = 'center';
+                    bossCtx.textBaseline = 'middle';
+                    bossCtx.globalAlpha = 0.92;
+                    bossCtx.shadowColor = b.pulsingRed ? '#e22' : '#fff';
+                    bossCtx.shadowBlur = 32;
+                    bossCtx.fillStyle = b.pulsingRed ? '#e22' : b.fill;
+                    bossCtx.fillText(b.symbol, 0, 0);
+                    bossCtx.globalAlpha = 1;
+                    bossCtx.shadowBlur = 0;
+                    bossCtx.lineWidth = 6;
+                    bossCtx.strokeStyle = b.pulsingRed ? '#fff' : b.stroke;
+                    bossCtx.strokeText(b.symbol, 0, 0);
+                    bossCtx.restore();
+                }
+            },
+        })
+
+        return info
+    },
+    moveFunc(info, ticks, id) {
+        let dt = ticks - (info.actions[id].lastTick || ticks);
+        info.actions[id].lastTick = ticks;
+        for (let b of info.bullets) {
+            if (b.name && b.name == "symbol") {
+                if (b.visible && Date.now() > info.startTime + 15000) {
+                    b.visible = false
+                }
+                
+                // Phase 4: Symbol lunges, pulses, shoots in bursts, throws knives
+                if (b.visible) {
+                    // Lunge logic
+                    if (!b.pulsingRed && info.actions[id].lungeCooldown <= 0) {
+                        info.actions[id].lungeTimer = 1200;
+                        let dx = info.px - b.x;
+                        let dy = info.py - b.y;
+                        let dist = Math.hypot(dx, dy);
+                        b.vx = (dx / dist) * 7;
+                        b.vy = (dy / dist) * 7;
+                        b.pulsingRed = true;
+                    } else if (!b.pulsingRed) {
+                        info.actions[id].lungeCooldown -= dt;
+                    }
+                    if (b.pulsingRed) {
+                        info.actions[id].lungeTimer -= dt;
+                        if (info.actions[id].lungeTimer <= 0) {
+                            b.vx = 0;
+                            b.vy = 0;
+                            b.pulsingRed = false;
+                            info.actions[id].lungeCooldown = 1200 + Math.random() * 800;
+                        }
+                    }
+
+                    // Pulse
+                    b.pulse += dt * 0.008
+
+                    // Shoot burst at player
+                    if (!info.actions[id].lastTime) info.actions[id].lastTime = ticks;
+                    if (ticks - info.actions[id].lastTime > 650) {
+                        let dx = info.px - b.x;
+                        let dy = info.py - b.y;
+                        let baseAngle = Math.atan2(dy, dx);
+                        for (let i = 0; i < info.actions[id].burstBullets; i++) {
+                            let spread = (i - (info.actions[id].burstBullets - 1) / 2) * info.actions[id].burstViolence;
+                            let angle = baseAngle + spread + (Math.random() - 0.5) * 0.18;
+                            let vx = Math.cos(angle) * 8 * (0.9 + Math.random() * 0.3);
+                            let vy = Math.sin(angle) * 8 * (0.9 + Math.random() * 0.3);
+                            info.bullets.push({x: b.x, y: b.y, r: 12, vx, vy, draw(b, bossCtx) {bossCtx.beginPath();bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);bossCtx.fillStyle = "#fff";bossCtx.fill()}});
+                        }
+                        // Randomize next burst
+                        info.actions[id].burstBullets = 7 + Math.floor(Math.random() * 4);
+                        info.actions[id].burstViolence = 0.25 + Math.random() * 0.5;
+
+                        info.actions[id].lastTime = ticks;
+                    }
+                } else {
+                    if (!b.burst) {
+                        info.actions[id].explosionBurstTimer += dt;
+                        if (info.actions[id].explosionBurstCount < 4 && info.actions[id].explosionBurstTimer > 220) {
+                            let N = 32;
+                            let baseAngle = Math.random() * Math.PI * 2;
+                            for (let i = 0; i < N; i++) {
+                                let angle = baseAngle + (2 * Math.PI * i) / N;
+                                let vx = Math.cos(angle) * 8 * (1.1 + Math.random() * 0.3);
+                                let vy = Math.sin(angle) * 8 * (1.1 + Math.random() * 0.3);
+                                info.bullets.push({x: b.x, y: b.y, r: 12, vx, vy, draw(b, bossCtx) {bossCtx.beginPath();bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);bossCtx.fillStyle = "#fff";bossCtx.fill()}});
+                            }
+                            info.actions[id].explosionBurstCount++;
+                            info.actions[id].explosionBurstTimer = 0;
+                        }
+                        if (info.actions[id].explosionBurstCount >= 4) {
+                            b.burst = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return info
+    },
+}

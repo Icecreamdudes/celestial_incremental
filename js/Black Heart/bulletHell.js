@@ -644,6 +644,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
                 if (overlay.parentNode) overlay.remove();
                 player.subtabs["bh"]["stuff"] = "battle";
                 pauseUniverseAll(["BH"], "unpause", true)
+                player.universe = "U3"
                 bhState.active = false;
                 info.active = false;
                 options.fullscreen = info.full;
@@ -867,6 +868,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         if (overlay.parentNode) overlay.remove();
         player.subtabs["bh"]["stuff"] = "battle";
         pauseUniverseAll(["BH"], "unpause", true)
+        player.universe = "U3"
         bhState.active = false;
         info.active = false;
         options.fullscreen = info.full;
@@ -897,6 +899,7 @@ if (storedInfo && storedInfo != "") {
             setTimeout(() => {
                 player.subtabs["bh"]["stuff"] = "battle";
                 pauseUniverseAll(["BH"], "unpause", true)
+                player.universe = "U3"
                 bhState.active = false;
                 options.fullscreen = bhState.full;
                 if (storedInfo.exitAction) storedInfo.exitAction()

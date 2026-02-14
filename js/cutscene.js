@@ -2172,6 +2172,17 @@
             background: "linear-gradient(-180deg, #720804 0%, #720455 100%)",
             portrait: "resources/secret.png",
             music: "music/matosCutscene.mp3",
+            trigger() {return player.bh.currentStage == "depth3"},
+            dialogue: [
+                { text: "The temperature increases, and Matos' core is even closer." },
+                { text: "Even so, you have to push further."},
+            ],
+        },
+        "BH-Matos-Lair": {
+            type: "normal",
+            background: "linear-gradient(-180deg, #96221d 0%, #720804 100%)",
+            portrait: "resources/secret.png",
+            music: "music/matosCutscene.mp3",
             trigger() {return player.bh.currentStage == "matosLair"},
             dialogue: [
                 { text: "You and the others somehow destroy this batch of celestialites." },
@@ -2210,7 +2221,7 @@
             music: "music/matosCutscene.mp3",
             trigger() {return player.bh.currentStage == "matosLair" && player.bh.combo == 24},
             dialogue: [
-                { text: "As the fifth omega celestialite is slain, a light emanates from the deepest depths of the hole." },
+                { text: "As the last of Matos' minions are slain, a light emanates from the deepest depths of the hole." },
                 { text: "Matos' form appears from the light. A metallic being made out of red-glowing rusted metal and steel." },
                 { text: "We have to fight... That???", portrait: "resources/sel.png"  },
                 { text: "Sel starts shaking in fear." },

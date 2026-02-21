@@ -46,7 +46,7 @@
         }
         player.mm.wasInThisTab = player.mm.isInThisTab
     },
-    branches: [],
+    branches: ["ch"],
     clickables: {
         401: {
             universeId() { return "U1"},

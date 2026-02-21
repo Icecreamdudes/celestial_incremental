@@ -219,14 +219,14 @@
             style: {width: "600px", minHeight: "200px", color: "#1b110eff", backgroundImage: "linear-gradient(180deg, #094599 0%, #062a5eff 50%, #094599 100%)", border: "3px solid rgba(0,0,0,0.5)", color: "#c6f7ff", borderRadius: "15px"},
         },
         14: {
-            title() { return "<h2>Build the Temporal Shard Pylon<br>Cost: 5 Shards of Ascension, 250 Paragon Shards, 1,000 Evolution Shards, and 5,000 Temporal Shards" },
-            canClick() { return player.cbs.ascensionShards.gte(5) && player.cb.paragonShards.gte(250) && player.cb.evolutionShards.gte(1000) && player.cof.coreFragments[6].gte(5000) },
+            title() { return "<h2>Build the Temporal Shard Pylon<br>Cost: 5 Shards of Ascension, 250 Paragon Shards, 1,000 Evolution Shards, and 10,000 Temporal Shards" },
+            canClick() { return player.cbs.ascensionShards.gte(5) && player.cb.paragonShards.gte(250) && player.cb.evolutionShards.gte(1000) && player.cof.coreFragments[6].gte(10000) },
             unlocked() { return !player.cbs.pylonBuilt},
             onClick() {
                 player.cbs.ascensionShards = player.cbs.ascensionShards.sub(5)
                 player.cb.paragonShards = player.cb.paragonShards.sub(250)
                 player.cb.evolutionShards = player.cb.evolutionShards.sub(1000)
-                player.cof.coreFragments[6] = player.cof.coreFragments[6].sub(5000)
+                player.cof.coreFragments[6] = player.cof.coreFragments[6].sub(10000)
 
                 player.cbs.pylonBuilt = true
             },

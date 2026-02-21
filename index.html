@@ -10,7 +10,7 @@
 	<link rel="stylesheet" type="text/css" href="css/popup.css" />
 	<link rel="stylesheet" type="text/css" href="css/tree-node.css" />
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
-	<link rel="icon" href="resources/gat.png">
+	<link rel="icon" href="resources/ascensionShard.png">
 	<link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
 
 	<script src="https://unpkg.com/vue@2.7.16/dist/vue.min.js"></script>
@@ -52,7 +52,7 @@
  				<button class="uniButton" v-if="uniShown('D1')" v-bind:style="universes.D1.nodeStyle()" onclick="player.universe='D1'"><span class="buttonText">D1</span></button>
 				<button class="uniButton" v-if="uniShown('CH')" v-bind:style="universes.CH.nodeStyle()" onclick="player.universe='CH'"><span class="buttonText">γ</span></button>
 				<button class="uniButton" v-if="uniShown('UD')" v-bind:style="universes.UD.nodeStyle()" :disabled="uniPaused('UD')" onclick="player.universe='UD'"><span class="buttonText">δ</span></button>
-				<button class="uniButton" v-if="uniShown('DS')" v-bind:style="universes.DS.nodeStyle()" onclick="player.universe='DS'"><span class="buttonText">ε</span></button>
+				<button class="uniButton" v-if="uniShown('DS')" v-bind:style="universes.DS.nodeStyle()" :disabled="uniPaused('DS')" onclick="player.universe='DS'"><span class="buttonText">ε</span></button>
 			</div>
 			<div class="layerHolder themeTrack">
 				<div v-bind:class="{titleHolder:true}">

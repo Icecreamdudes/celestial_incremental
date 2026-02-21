@@ -540,6 +540,7 @@ addLayer("pet", {
         player.pet.petPointMult = player.pet.petPointMult.mul(buyableEffect("sp", 24))
         player.pet.petPointMult = player.pet.petPointMult.mul(buyableEffect("pl", 14))
         if (hasMilestone("db", 101)) player.pet.petPointMult = player.pet.petPointMult.mul(1.15)
+        player.pet.petPointMult = player.pet.petPointMult.mul(player.cbs.pylonEnergyEffect2)
 
         // PET BUTTON COOLDOWN CALC
         for (let i in player.pet.petTimers) {
@@ -731,6 +732,14 @@ addLayer("pet", {
             player.subtabs.pu["stuff"] = "Collection"
             changeTheme()
 
+            pauseUniverse("U1")
+            pauseUniverse("UA")
+            pauseUniverse("U2")
+            pauseUniverse("A1")
+            pauseUniverse("U3")
+            pauseUniverse("CB")
+            pauseUniverse("DS")
+
             layers.pu.generateSelection();
         }
 
@@ -807,7 +816,7 @@ addLayer("pet", {
             onClick() {
                 let amount = getLevelableXP("pet", layers.pet.levelables.index)
                 setLevelableXP("pet", layers.pet.levelables.index, new Decimal(0))
-                player.cb.petPoints = player.cb.petPoints.add(tmp.pet.levelables[layers.pet.levelables.index].sellValue)
+                player.cb.petPoints = player.cb.petPoints.add(tmp.pet.levelables[layers.pet.levelables.index].sellValue.mul(getLevelableXP("pet", layers.pet.levelables.index)))
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
@@ -3153,7 +3162,7 @@ addLayer("pet", {
             },
             pointCooldown() { return new Decimal(1500).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
             canteBase() { return new Decimal(1.8)},
-            pointTooltip() { return "2% chance for an paragon shard." },
+            pointTooltip() { return "2% chance for a paragon shard." },
             pointClick() {
                 if (player.cb.highestLevel.gt(250)) {
                     let random = getRandomInt(50)
@@ -5510,3 +5519,4 @@ function randomInt(min, max) {
     max = Math.floor(max.toNumber());
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+

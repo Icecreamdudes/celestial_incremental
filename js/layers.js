@@ -237,6 +237,9 @@
         player.uni["U1"].tickspeed = player.uni["U1"].tickspeed.mul(player.i.pylonEnergyEffect)
         // BEST CELESTIAL POINTS
         if (player.i.bestPoints.lt(player.points)) player.i.bestPoints = player.points
+
+        // STEEL PER SECOND
+        if (hasUpgrade("sma", 103)) player.gh.steel = player.gh.steel.add(Decimal.mul(player.uni["U1"].tickspeed.mul(0.1), player.gh.steelToGet.mul(delta)))
     },
     bars: {
         infbar: {

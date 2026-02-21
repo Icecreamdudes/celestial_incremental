@@ -1231,7 +1231,7 @@ addLayer("ev8", {
                     ["blank", "25px"],
                     ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14],
                         ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18],
-                        ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], /*["upgrade", 23]*/], {maxWidth: "500px"}],
+                        ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]], {maxWidth: "500px"}],
                 ]
             },
         },

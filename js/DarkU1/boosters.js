@@ -192,7 +192,6 @@
                 return look
             },
         },
-
         101: {
             effectDescription: "x1.25 to check back XP gain.",
             done() { return player.db.bestBoosters.gte(1) },

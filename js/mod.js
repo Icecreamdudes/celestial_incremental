@@ -1,5 +1,5 @@
 ﻿let modInfo = {
-	name: "Celestial Incremental",
+	name: "Celestial Incremental Alchemiafactorim",
 	id: "celestial", // NEVER CHANGE THIS, IF YOU DO ALL SAVES WILL DIE
 	author: "Icecreamdude",
 	pointsName: "celestial points",

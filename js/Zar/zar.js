@@ -293,7 +293,7 @@
             },
             "Main": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return true },
+                unlocked() { return player.za.zarUnlocked },
                 content: [
                     ["blank", "25px"],
                     ["style-column", [

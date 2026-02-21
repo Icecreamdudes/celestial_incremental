@@ -72,7 +72,6 @@ function isVisibleInViewport(element) {
 			par = document.getElementById("scrCon").getBoundingClientRect()
 		}
 	}
-	
 	if (
 		rect.top >= par.top - (rect.height/2) &&
 		rect.left >= par.left - (rect.width/2) &&

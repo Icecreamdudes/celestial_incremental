@@ -85,6 +85,8 @@ addLayer("se", {
             for (let j = 0; j < player.se.starExploreTimes[i].length; j++) {
                 {
                     player.se.starExploreTimes[i][j] = player.se.starExploreTimes[i][j].div(levelableEffect("pet", 502)[0])
+                    if (hasMilestone("db", 104)) player.se.starExploreTimes[i][j] = player.se.starExploreTimes[i][j].div(player.db.permaMilestone4Effect)
+                    player.se.starExploreTimes[i][j] = player.se.starExploreTimes[i][j].div(levelableEffect("pu", 111)[1])
                     if (hasUpgrade("ep2", 18)) player.se.starExploreTimes[i][j] = player.se.starExploreTimes[i][j].div(upgradeEffect("ep2", 18))
                 }
             }
@@ -112,6 +114,7 @@ addLayer("se", {
     },
     arriveAtStar(x, y)
     {
+        doPopup("none", "Arrived at " + player.se.starNames[player.se.currentPosition[0].toNumber()][player.se.currentPosition[1].toNumber()] + "!", "Exploration complete!", 5, "#00a2ffff")
         player.se.starsExploreCount[x][y] = player.se.starsExploreCount[x][y].add(1)
         player.se.currentPosition = player.se.currentStar
         player.se.currentlyTravelling = false

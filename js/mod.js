@@ -24,9 +24,11 @@
 		"Hive/unih.js", "Hive/flower.js", "Hive/pollen.js", "Hive/nectar.js", "Hive/beebread.js",
 		"Hive/honey.js", "Hive/wax.js", "Hive/aleph.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js",
-		"Interspace/well.js", "Interspace/bumpy.js", "Interspace/prisms.js", "Interspace/projects.js", "Interspace/cere.js",
-		"Singularity/reactor.js", "Singularity/starmetalEnhancement.js",
-		"Check Back/singularityPet.js", "DarkU1/timeCapsules.js",
+		"Interspace/well.js", "Interspace/bumpy.js", "Interspace/prisms.js", "Interspace/projects.js",
+		"Singularity/reactor.js",
+		"Check Back/singularityPet.js", "DarkU1/timeCapsules.js", "Check Back/dragon.js",
+		"DarkU1/blood.js", "Zar/zar.js", "Zar/coinFlip.js",
+ 		"Zar/wheelOfFortune.js", "Check Back/singularityPet.js", "Zar/slotMachine.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 
@@ -119,6 +121,27 @@ function updateStyles() {
 			break;
 		case "po":
 			layerBG = "linear-gradient(45deg, #450054, #00307f)"
+			break;
+		case "i":
+			if (player.i.pylonBuilt && player.subtabs["i"]["stuff"] == "Pylon")
+			{
+				layerBG = "linear-gradient(90deg, #927550ff, #725442ff)"
+			} else
+			{
+				layerBG = "linear-gradient(0deg, #161616)"
+			}
+			break;
+		case "in":
+			if (player.i.pylonBuilt && player.subtabs["in"]["stuff"] == "Pylon")
+			{
+				layerBG = "linear-gradient(0deg, #1FF8AF, #2162D2)"
+			} else
+			{
+				layerBG = "linear-gradient(0deg, #001f18)"
+			}
+			break;
+	    case "za": case "cf": case "wof": case "sm":
+			layerBG = hasUpgrade('za', 16) ? "linear-gradient(-180deg, #260a0a 0%, #3b402d 100%)" : "linear-gradient(-180deg, #3b3b3bff 0%, #8d8d8dff 100%)"
 			break;
 		case "t":
 			layerBG = "linear-gradient(0deg, #02172f)"
@@ -222,16 +245,16 @@ function updateStyles() {
 			layerBG = "linear-gradient(0deg, #303440 0%, #17191f 100%)"
 			break;
 		case "prj":
-			layerBG = "linear-gradient(0deg, #2e152e 0%, #2e152e 100%)"
+			layerBG = "linear-gradient(0deg, #2e152e)"
 			break;
 		case "bum":
-			layerBG = "linear-gradient(0deg, #180b18 0%, #180b18 100%)"
-			break;
-		case "cer":
-			layerBG = "linear-gradient(0deg, #402030)"
+			layerBG = "linear-gradient(0deg, #180b18)"
 			break;
 		case "cb":
 			layerBG = "linear-gradient(0deg, #021924)"
+			break;
+	    case "bl":
+			layerBG = "linear-gradient(0deg, #130000ff)"
 			break;
 		case "ba":
 			if (player.fi.battleTier.eq(1)) layerBG = "linear-gradient(-90deg, #5c2109ff, #5c0e04ff)"
@@ -300,7 +323,9 @@ function updateStyles() {
 	    }
 	}
 
-	if (player.tab == "ma" && player.ma.currentDepth && player.ma.currentDepth.eq && player.ma.currentDepth.eq(3) && (player.subtabs["ma"]["stuff"] == "Fight")) {
+
+
+	if ((player.tab == "ma" && player.ma.currentDepth && player.ma.currentDepth.eq && player.ma.currentDepth.eq(3) && (player.subtabs["ma"]["stuff"] == "Fight"))) {
 	    if (!document.getElementById("embers-background")) {
     	    // Create embers background container
 	        const embersBg = document.createElement("div");
@@ -427,6 +452,95 @@ function updateStyles() {
     	if (eclipse) eclipse.remove();
 	}
 
+	if (player.musuniverse == "DS" && hasUpgrade("za", 16)) {
+		if (!document.getElementById("fireworks-bg")) {
+			const fwBg = document.createElement("div");
+			fwBg.id = "fireworks-bg";
+			fwBg.style.position = "fixed";
+			fwBg.style.top = "0";
+			fwBg.style.left = "0";
+			fwBg.style.width = "100%";
+			fwBg.style.height = "100%";
+			fwBg.style.pointerEvents = "none";
+			fwBg.style.zIndex = "9999";
+			document.body.appendChild(fwBg);
+			const canvas = document.createElement("canvas");
+			canvas.id = "fireworks-canvas";
+			canvas.style.width = "100%";
+			canvas.style.height = "100%";
+			canvas.style.display = "block";
+			fwBg.appendChild(canvas);
+			const ctx = canvas.getContext("2d");
+			function _fwResize(){
+				canvas.width = innerWidth;
+				canvas.height = innerHeight;
+			}
+			_fwResize();
+			window.addEventListener("resize", _fwResize);
+			let rockets = [], particles = [];
+			function randomColor(){
+				const colors = ["#ff4d4d","#ffb84d","#ffff4d","#4dff88","#4dffff","#4d4dff","#b84dff"]
+				return colors[Math.floor(Math.random()*colors.length)];
+			}
+			function createRocket(){
+				rockets.push({
+					x: Math.random()*canvas.width,
+					y: canvas.height + 10,
+					vx: (Math.random()-0.5)*3,
+					vy: -(6 + Math.random()*3),
+					color: randomColor(),
+					age: 0
+				});
+			}
+			function explode(x,y,color){
+				const count = 30 + Math.floor(Math.random()*30);
+				for (let i=0;i<count;i++){
+					const speed = Math.random()*4 + 1;
+					const angle = Math.random()*Math.PI*2;
+					particles.push({
+						x:x,y:y,
+						vx: Math.cos(angle)*speed,
+						vy: Math.sin(angle)*speed,
+						life: 60 + Math.random()*30,
+						age:0,
+						color: color
+					});
+				}
+			}
+			function _fwFrame(){
+				ctx.globalCompositeOperation = 'source-over';
+				// Clear canvas each frame so fireworks appear over existing page background
+				ctx.clearRect(0,0,canvas.width,canvas.height);
+				for (let i=rockets.length-1;i>=0;i--){
+					const r = rockets[i];
+					r.x += r.vx; r.y += r.vy; r.vy += 0.08; r.age++;
+					ctx.beginPath(); ctx.fillStyle = r.color; ctx.arc(r.x,r.y,2.5,0,Math.PI*2); ctx.fill();
+					if (r.vy >= 0 || r.age > 120){ explode(r.x,r.y,r.color); rockets.splice(i,1); }
+				}
+				if (Math.random() < 0.02) createRocket();
+				for (let i=particles.length-1;i>=0;i--){
+					const p = particles[i];
+					p.x += p.vx; p.y += p.vy; p.vy += 0.02; p.vx *= 0.995; p.vy *= 0.995; p.age++;
+					const t = 1 - p.age/p.life;
+					ctx.globalCompositeOperation = 'lighter';
+					ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x,p.y,Math.max(0.5,2.5*t),0,Math.PI*2); ctx.fill();
+					if (p.age >= p.life) particles.splice(i,1);
+				}
+				window._fireworksAnimationId = requestAnimationFrame(_fwFrame);
+			}
+			_fwFrame();
+			window._fireworksResize = _fwResize;
+		}
+	} else {
+		const fw = document.getElementById("fireworks-bg");
+		if (fw) {
+			if (window._fireworksAnimationId) cancelAnimationFrame(window._fireworksAnimationId);
+			window.removeEventListener("resize", window._fireworksResize);
+			delete window._fireworksAnimationId;
+			delete window._fireworksResize;
+			fw.remove();
+		}
+	}
 	if (player.tab == "mu" || player.tab == "od") {
 		if (!document.getElementById("grid-bg")) {
 	        const gridBackground = document.createElement("div");
@@ -452,7 +566,7 @@ function updateStyles() {
 	let sideBG = ""
 
 	// Find background color
-	if (options.menuType != "Tab") {
+	if (options.menuType == "Tree") {
 		switch(player.universe) {
 			case "U2": 
 				sideBG = "#000f0c"
@@ -484,15 +598,19 @@ function updateStyles() {
 			case "CB":
 				sideBG = "#010812"
 				break;
+			case "DS":
+				sideBG = "radial-gradient(circle, #303030ff, #000000)"
+				break;	
 			default:
 				sideBG = "#0b0b0b"
 				break;
 		}
-	} else {
+	}
+	if (options.menuType == "Tab") {
 		if (window.innerWidth > 1250) {
 			sideBG = "linear-gradient(to right, var(--tabTitle) 103px, var(--regBorder) 103px, var(--regBorder) 106px, var(--layerBackground) 106px)"
 		} else {
-			sideBG = "linear-gradient(to bottom, var(--tabTitle) 80px, var(--regBorder) 80px, var(--regBorder) 83px, var(--layerBackground) 83px)"
+			sideBG = "linear-gradient(to bottom, var(--tabTitle) 80px, var(--regBorder) 80px, var(--regBorder) 83px, (--layerBackground) 83px)"
 		}
 	}
 
@@ -514,7 +632,7 @@ function updateStyles() {
 			break;
 		case "i": case "r": case "f": case "p": case "t":
 		case "g": case "pe": case "pol": case "gh": case "rf":
-		case "m": case "d": case "fa":
+		case "m": case "d": case "re": case "fa":
 			player.musuniverse = "U1"
 			break;
 		case "in": case "ad": case "ip": case "id": case "tad":
@@ -527,14 +645,14 @@ function updateStyles() {
             player.musuniverse = "A1"
 			break;
 		case "s": case "co": case "ra": case "sd": case "cs":
-		case "sma": case "ma": case "cof": case "sme": case "re":
+		case "sma": case "ma": case "cof": case "sme": case "rea":
             player.musuniverse = "U3"
 			break;
 		case "du": case "le": case "dr": case "dp": case "dg":
 		case "dgr": case "dn": case "ds":
             player.musuniverse = "D1"
 			break;
-		case "ch":
+		case "ch": case "mm":
             player.musuniverse = "CH"
 			break;
 		case "au2": case "st": case "pl": case "ir": case "se": case "sb":
@@ -547,6 +665,9 @@ function updateStyles() {
 		case "ho": case "wa": case "al":
 			player.musuniverse = "UB"
 			break;
+		case "wel": case "pri": case "prj": case "bum":
+			player.musuniverse = "UD"
+			break;
 		case "cb": case "ev0": case "ev1": case "ev2": case "ev4":
 		case "ev8": case "ev10": case "ep0": case "ep1":
 		case "ep2": case "sp":
@@ -554,6 +675,9 @@ function updateStyles() {
 			break;
 		case "od": case "mu":
             player.musuniverse = "OD"
+			break;
+		case "za": case "cf": case "wof": case "sm":
+            player.musuniverse = "DS"
 			break;
 	}
 
@@ -618,6 +742,13 @@ function updateStyles() {
 					case "UB":
 						playAndLoopAudio("music/hive.mp3", options.musicVolume/10)
 						break;
+					case "UD":
+						playAndLoopAudio("music/interspace.mp3", options.musicVolume/10)
+						break;
+					case "DS":
+						if (!hasUpgrade("za", 16)) playAndLoopAudio("music/diceSpace.mp3", options.musicVolume/10)
+						if (hasUpgrade("za", 16)) playAndLoopAudio("music/casino.mp3", options.musicVolume/10)
+						break;
 					case "CB":
 						if (player.fi.battleTier.eq(0)) playAndLoopAudio("music/checkback.mp3", options.musicVolume/10)
 						if (player.fi.battleTier.eq(1)) playAndLoopAudio("music/fighting.mp3", options.musicVolume/10)
@@ -628,14 +759,16 @@ function updateStyles() {
 						break;
 				}
 			} else {
-				if (player.c.cutscenes[cutsceneID] && player.c.cutscenes[cutsceneID].music) {
-					playAndLoopAudio(player.c.cutscenes[cutsceneID].music, options.musicVolume/10);
+				if (layers.c.cutscenes[cutsceneID] && layers.c.cutscenes[cutsceneID].music) {
+					playAndLoopAudio(layers.c.cutscenes[cutsceneID].music, options.musicVolume/10);
 				}
             	if (cutsceneID == "A1-Funify-Start" && cutsceneIndex < 7) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
         	    if (cutsceneID == "A1-Funify-Start" && cutsceneIndex >= 7) playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
     	        if (cutsceneID == "A2-Iridite-Battle-End" && cutsceneIndex < 23) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
 	            if (cutsceneID == "A2-Iridite-Battle-End" && cutsceneIndex > 23) playAndLoopAudio("music/novaCutscene.mp3", options.musicVolume/10);
+	            if (cutsceneID == "Interspace-Unlock") playAndLoopAudio("music/bumpy.mp3", options.musicVolume/10);
 			}
+
 		}
 	} else {
 		stopAudio();
@@ -657,25 +790,30 @@ let credits = `<h1>Credits:</h1><br>
 
 let changelog = `<h1>Changelog:</h1><br>
 
-	<h3>v1.12 - The Bumpy Bupdate Part I: Bumpy</h3><br>
+	<h3>v1.13 - The Bumpy Bupdate Part I: Interspace</h3><br>
 		Content:<br>
 			- Added universe δ.<br>
-			- Added two pet evolutions.<span style="color:yellow"> [WIP, one is NYI]</span><br>
+			- Revamped the dragon pet.<br>
+			- Added two pet evolutions.<span style="color:yellow"> [WIP, one is NYI - will add when I merge the black heart revamp]</span><br>
+			- Matos content can now be progressed through without ever entering special attacks via a pet evolution.<span style="color:yellow"> [WIP]</span><br>
 			- Iridite content can now be progressed through without ever entering space battles via a pet evolution.<span style="color:yellow"> [WIP]</span><br>
 			- Added an epic pet.<span style="color:yellow"> [WIP]</span><br>
-			- Added two fragmentation buyables.<span style="color:red"> [NYI]</span><br>
-			- Added a ship.<span style="color:red"> [NYI]</span><br>
+			- Added a ship.<br>
+			- Added more punchcards.<br>
 			- Added two themes unlocked in the new universe.<span style="color:yellow"> [WIP]</span><br>
 		<br>QoL:<br>
-			- Added a legendary matos fragment upgrade that unlocks a toggle for matos's bullet hell attacks. (mobile players are eating good!)<span style="color:red"> [NYI]</span><br>
-			- Redesigned a lot of checkback UI.<br>
+			- Modernized a lot of check back UI.<br>
+			- Shifted the hue of check back's blue.<br>
 			- Redrew the art of most pet icons.<br>
 			- Added icons beside pet point buttons to indicate which pet corresponds to each button.<br>
 			- Moved evo and para shard pity to below the checkback XP bar.<br>
+			- Redesigned the otherworldly features UI.<br>
+			- Added space exploration completion popups.<br>
 		<br>Balancing:<br>
-			- Added an additional pet button effect for evolution fragment.<br>
+			- Added an additional pet point button effect for the evolution fragment pet.<br>
+			- Reduced the scaling of several effects in D1 eclipse.<br>
 		<br>Bugfixes:<br>
-			- buh.<br>
+			- ...<br>
 		<br>
 
 	<h4>v1.10.6 - Checklist Update Pt.2</h4><br>
@@ -1302,7 +1440,7 @@ let changelog = `<h1>Changelog:</h1><br>
 let winText = `Congratulations! You have completed the entirety of Celestial Incremental for now...`
 
 // If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
-// (The ones here are examples, all official functions are already taken care of)z
+// (The ones here are examples, all official functions are already taken care of)
 var doNotCallTheseFunctionsEveryTick = [
 	"blowUpEverything", "startCutscene1","startCutscene2", "startCutscene3", "rankReset",
 	"tierReset", "tetrReset", "prestigeReset",
@@ -1333,7 +1471,9 @@ var doNotCallTheseFunctionsEveryTick = [
 	"startCutscene38", "startCutscene39", "cookieClick", "generateFlower", "generateMult", "flowerClick",
 	"selectCelestialites", "petDeath", "celestialiteDeath", "petAbility", "celestialiteAbility",
 	"arriveAtStar", "spaceEnergyReset", "createReactorNode", "createReactorBullet",
-	"prismReset", "timeCapsuleReset",
+	"prismReset", "timeCapsuleReset", "createMultiverseMapConnection", "makeProject", "getTimeReq", "getTimeCapsuleReq", "getTimeSpeed", "lightGain",
+	"coinFlip", "randomizeSegments", "spinWheel", "spinSlots", "evaluateRewards",
+	"slotReset"
 ]
 
 function getStartPoints(){

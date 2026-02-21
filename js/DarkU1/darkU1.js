@@ -1,8 +1,9 @@
-﻿addLayer("du", {
+﻿﻿addLayer("du", {
     name: "Dark Universe I: Abscence of Light", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "1", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    universe: "D1",
     startData() { return {
         unlocked: true,
 
@@ -30,7 +31,7 @@
             player.tab = "du"
         } 
 
-        //Celestial Point boosts
+        //Dark Celestial Point boosts
         player.du.pointGain = new Decimal(1)
         if (hasUpgrade("sma", 10)) player.du.pointGain = player.du.pointGain.mul(upgradeEffect("sma", 10))
         player.du.pointGain = player.du.pointGain.mul(player.dr.rankEffect)
@@ -49,11 +50,15 @@
         player.du.pointGain = player.du.pointGain.mul(levelableEffect("st", 101)[0])
         player.du.pointGain = player.du.pointGain.mul(player.db.boosterEffect)
         if (hasMilestone("db", 12)) player.du.pointGain = player.du.pointGain.mul(player.db.milestone2Effect)
+        player.du.pointGain = player.du.pointGain.mul(buyableEffect("wel", 101))
 
         player.du.pointGain = player.du.pointGain.div(player.du.pointSoftcap)
 
-        if (player.du.pointGain.gte(player.du.secondSoftcapStart)) player.du.pointGain = player.du.pointGain.div(player.du.secondSoftcapStart).pow(player.du.pointSoftcap2).mul(player.du.secondSoftcapStart)
         if (player.pet.legPetTimers[0].active) player.du.pointGain = player.du.pointGain.pow(0.7)
+        if (getLevelableTier("pu", 305, true)) player.du.pointGain = player.du.pointGain.pow(levelableEffect("pu", 305)[1])
+
+        if (player.du.pointGain.gte(player.du.secondSoftcapStart)) player.du.pointGain = player.du.pointGain.div(player.du.secondSoftcapStart).pow(player.du.pointSoftcap2).mul(player.du.secondSoftcapStart)
+
         if (player.sma.inStarmetalChallenge) {
             player.du.points = player.du.points.add(player.du.pointGain.mul(delta))
         }
@@ -63,6 +68,10 @@
         if (player.du.points.lte(1e10) && getLevelableTier("pu", 201, true)) player.du.pointSoftcap = player.du.points.pow(0.15).div(10).div(levelableEffect("pu", 201)[1]).add(1).pow(levelableEffect("pu", 201)[0]).pow(levelableEffect("st", 201)[0])
         if (player.du.points.gt(1e10)) player.du.pointSoftcap = player.du.points.pow(0.30).div(15).add(1).pow(levelableEffect("st", 201)[0])
         if (player.du.points.gt(1e10) && getLevelableTier("pu", 201, true)) player.du.pointSoftcap = player.du.points.pow(0.30).div(15).div(levelableEffect("pu", 201)[1]).add(1).pow(levelableEffect("pu", 201)[0]).pow(levelableEffect("st", 201)[0])
+        if (player.pet.legPetTimers[0].active) {
+            player.du.pointSoftcap = player.du.pointSoftcap.log(10).pow(1.5).pow_base(10)
+        }
+        player.du.pointSoftcap = player.du.pointSoftcap.pow(player.dv.cloudEffect)
 
         // SOFTCAP 2
         player.du.pointSoftcap2 = new Decimal(0.1)
@@ -70,9 +79,17 @@
         // PLACE ANY BASE MODIFIERS TO SOFTCAP2 BEFORE SCALING
         player.du.pointSoftcap2 = player.du.pointSoftcap2.div(player.du.pointGain.div(player.du.secondSoftcapStart).add(1).log(player.du.secondSoftcapStart).add(1))
 
+        if (getLevelableTier("pu", 306, true)) player.du.pointSoftcap2 = player.du.pointSoftcap2.pow(levelableEffect("pu", 306)[0])
+
         // SOFTCAP 2 STARTING VARIABLE
         player.du.secondSoftcapStart = new Decimal(1.79e308)
         player.du.secondSoftcapStart = player.du.secondSoftcapStart.pow(player.ds.spaceEnergyEffect)
+        if (getLevelableTier("pu", 306, true)) player.du.secondSoftcapStart = player.du.secondSoftcapStart.mul(levelableEffect("pu", 306)[1])
+
+        //tickspeed
+        player.uni["D1"].tickspeed = new Decimal(1)
+        player.uni["D1"].tickspeed = player.uni["D1"].tickspeed.mul(player.dt.timeCapsuleEffect)
+        if (getLevelableTier("pu", 307, true)) player.uni["D1"].tickspeed = player.uni["D1"].tickspeed.mul(levelableEffect("pu", 307)[0])
     },
     bars: {},
     upgrades: {},

@@ -47,7 +47,8 @@
             }
         }
     },
-    branches: [],
+    //branches: [["wel", "#fff", 40], ["wel", "#402030", 8]],
+    branches: ["wel"],
     clickables: {
         11: {
             title() { return "<h2>Gain starlight, but reset previous content.</h2><br><h3><small>Req: 3.40e38 Light</small></h3>" },

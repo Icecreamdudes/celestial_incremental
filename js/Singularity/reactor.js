@@ -1,4 +1,4 @@
-﻿addLayer("re", {
+﻿addLayer("rea", {
     name: "Reactor",
     symbol: "RE",
     row: 1,
@@ -41,11 +41,11 @@
     tooltip: "Reactor",
     color: "#2d8a0e",
     update(delta) {
-        player.re.plasmaEffect = new Decimal(2).pow(player.re.plasma.add(1).log(10).pow(1.5))
-        if (player.re.plasmaEffect.gte(1e100)) player.re.plasmaEffect = player.re.plasmaEffect.div(1e100).pow(0.5).mul(1e100)
-        else if (player.re.plasmaEffect.gte(1e25)) player.re.plasmaEffect = player.re.plasmaEffect.div(1e25).pow(0.25).mul(1e25)
+        player.rea.plasmaEffect = new Decimal(2).pow(player.rea.plasma.add(1).log(10).pow(1.5))
+        if (player.rea.plasmaEffect.gte(1e100)) player.rea.plasmaEffect = player.rea.plasmaEffect.div(1e100).pow(0.5).mul(1e100)
+        else if (player.rea.plasmaEffect.gte(1e25)) player.rea.plasmaEffect = player.rea.plasmaEffect.div(1e25).pow(0.25).mul(1e25)
 
-        player.re.plasmaToGet = new Decimal(1)
+        player.rea.plasmaToGet = new Decimal(1)
 
         createReactorNode()
     },
@@ -72,8 +72,8 @@
             costBase() { return new Decimal(10) },
             costGrowth() { return new Decimal(1.5) },
             purchaseLimit() { return new Decimal(250) },
-            currency() { return player.re.plasma},
-            pay(amt) { player.re.plasma = this.currency().sub(amt) },
+            currency() { return player.rea.plasma},
+            pay(amt) { player.rea.plasma = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.5).div(2).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -106,8 +106,8 @@
             costBase() { return new Decimal(20) },
             costGrowth() { return new Decimal(1.4) },
             purchaseLimit() { return new Decimal(250) },
-            currency() { return player.re.plasma},
-            pay(amt) { player.re.plasma = this.currency().sub(amt) },
+            currency() { return player.rea.plasma},
+            pay(amt) { player.rea.plasma = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.25).div(2).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -140,8 +140,8 @@
             costBase() { return new Decimal(50) },
             costGrowth() { return new Decimal(1.4) },
             purchaseLimit() { return new Decimal(30) },
-            currency() { return player.re.plasma},
-            pay(amt) { player.re.plasma = this.currency().sub(amt) },
+            currency() { return player.rea.plasma},
+            pay(amt) { player.rea.plasma = this.currency().sub(amt) },
             effect(x) { return new Decimal(1).sub(getBuyableAmount(this.layer, this.id).mul(0.02))},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -174,8 +174,8 @@
             costBase() { return new Decimal(200) },
             costGrowth() { return new Decimal(1.6) },
             purchaseLimit() { return new Decimal(100) },
-            currency() { return player.re.plasma},
-            pay(amt) { player.re.plasma = this.currency().sub(amt) },
+            currency() { return player.rea.plasma},
+            pay(amt) { player.rea.plasma = this.currency().sub(amt) },
             effect(x) { return new Decimal(5).pow(getBuyableAmount(this.layer, this.id))},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -208,8 +208,8 @@
             costBase() { return new Decimal(500) },
             costGrowth() { return new Decimal(1.75) },
             purchaseLimit() { return new Decimal(200) },
-            currency() { return player.re.plasma},
-            pay(amt) { player.re.plasma = this.currency().sub(amt) },
+            currency() { return player.rea.plasma},
+            pay(amt) { player.rea.plasma = this.currency().sub(amt) },
             effect(x) { return new Decimal(3).pow(getBuyableAmount(this.layer, this.id))},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -242,8 +242,8 @@
             costBase() { return new Decimal(1e3) },
             costGrowth() { return new Decimal(2) },
             purchaseLimit() { return new Decimal(300) },
-            currency() { return player.re.plasma},
-            pay(amt) { player.re.plasma = this.currency().sub(amt) },
+            currency() { return player.rea.plasma},
+            pay(amt) { player.rea.plasma = this.currency().sub(amt) },
             effect(x) { return new Decimal(100).pow(getBuyableAmount(this.layer, this.id))},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -287,13 +287,13 @@
                     ["raw-html", () => {return "After " + format(player.ra.radiationSoftcapStart) + " radiation, radiation gain is divided by /" + format(player.ra.radiationSoftcapEffect)},
                         () => {return player.ra.radiation.gte(player.ra.radiationSoftcapStart) ? {color: "red", fontSize: "16px", fontFamily: "monospace"} : {color: "gray", fontSize: "0px", fontFamily: "monospace"}}],
                     ["blank", "10px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.re.plasma) + "</h3> plasma (+" + format(player.re.plasmaToGet) + ")" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", function () { return "You have <h3>" + format(player.rea.plasma) + "</h3> plasma (+" + format(player.rea.plasmaToGet) + ")" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ["row", [
-                        ["raw-html", function () { return "Boosts radiation by x" + format(player.re.plasmaEffect) }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", function () { return "Boosts radiation by x" + format(player.rea.plasmaEffect) }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", () => {
-                            if (player.re.plasmaEffect.lt(1e25)) {
+                            if (player.rea.plasmaEffect.lt(1e25)) {
                                 return ""
-                            } else if (player.re.plasmaEffect.lt(1e100)) {
+                            } else if (player.rea.plasmaEffect.lt(1e100)) {
                                 return "[SOFTCAPPED]"
                             } else {
                                 return "[SOFTCAPPED<sup>2</sup>]"
@@ -321,13 +321,13 @@
                     ["raw-html", () => {return "After " + format(player.ra.radiationSoftcapStart) + " radiation, radiation gain is divided by /" + format(player.ra.radiationSoftcapEffect)},
                         () => {return player.ra.radiation.gte(player.ra.radiationSoftcapStart) ? {color: "red", fontSize: "16px", fontFamily: "monospace"} : {color: "gray", fontSize: "0px", fontFamily: "monospace"}}],
                     ["blank", "10px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.re.plasma) + "</h3> plasma (+" + format(player.re.plasmaToGet) + ")" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", function () { return "You have <h3>" + format(player.rea.plasma) + "</h3> plasma (+" + format(player.rea.plasmaToGet) + ")" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ["row", [
-                        ["raw-html", function () { return "Boosts radiation by x" + format(player.re.plasmaEffect) }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", function () { return "Boosts radiation by x" + format(player.rea.plasmaEffect) }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", () => {
-                            if (player.re.plasmaEffect.lt(1e25)) {
+                            if (player.rea.plasmaEffect.lt(1e25)) {
                                 return ""
-                            } else if (player.re.plasmaEffect.lt(1e100)) {
+                            } else if (player.rea.plasmaEffect.lt(1e100)) {
                                 return "[SOFTCAPPED]"
                             } else {
                                 return "[SOFTCAPPED<sup>2</sup>]"
@@ -406,7 +406,7 @@ function animate() {
             ctx.arc(bullets[i][0], bullets[i][1], 5, 5, 0, 360);
             ctx.fill()
         }
-        ctx.restore()
+        ctx.reastore()
     }
     requestAnimationFrame(animate);
 }
@@ -448,7 +448,7 @@ function createReactorNode() {
 function createReactorBullet(event) {
     if (!canShoot) return
 
-    if (player.tab != 're' || player.subtabs.re.stuff != 'Main') return
+    if (player.tab != 're' || player.subtabs.rea.stuff != 'Main') return
 
     bullets.push([300, 575, Math.atan2(event.pageX, event.pageY)])
 }

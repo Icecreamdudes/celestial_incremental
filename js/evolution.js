@@ -1179,6 +1179,16 @@ addLayer("ev8", {
             style: {width: "135px", color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
 
         },
+        23: {
+            title: "Shard Research XII",
+            unlocked() { return player.ir.iriditeDefeated },
+            description: "Unlocks a new ship.",
+            cost: new Decimal(500),
+            currencyLocation() { return player.cb },
+            currencyDisplayName: "Evolution Shards",
+            currencyInternalName: "evolutionShards",
+            style: {width: "135px", color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
+        },
       /*  23: {
             title: "Shard Research XII",
             unlocked() { return player.au2.au2Unlocked && hasUpgrade("ev8", 19) && hasUpgrade("ev8", 21) && hasUpgrade("ev8", 22)},

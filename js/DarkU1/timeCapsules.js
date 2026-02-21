@@ -3,17 +3,20 @@
     symbol: "T", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    universe: "D1",
     startData() { return {
         unlocked: true,
 
-        timeCapsulePause: new Decimal(0),
+        timeCapsuleResetSafety: true,
 
         timeCapsules: new Decimal(0),
         timeCapsuleEffect: new Decimal(1),
         timeCapsulesToGet: new Decimal(0),
         storedToGet: new Decimal(0),
 
-        // TODO: D1 tickspeed boost from time capsules
+        timeEnergy: new Decimal(0),
+        timeEnergyEffect: new Decimal(1),
+        timeEnergyToGet: new Decimal(0),
     }},
     automate() {},
     nodeStyle() {
@@ -26,34 +29,51 @@
     },
     tooltip: "Time Capsules",
     branches: [["dv", "#309"]],
-    color: "rgba(193, 223, 0)",
+    color: "#29a653",
     update(delta) {
         let onepersec = new Decimal(1)
 
-        player.dt.timeCapsulesToGet = player.du.points.pow(0.02)
+        player.dt.timeCapsulesToGet = player.dv.clouds.div(1e18).pow(0.2)
+        if (getLevelableTier("pu", 113, true)) player.dt.timeCapsulesToGet = player.dt.timeCapsulesToGet.mul(levelableEffect("pu", 113)[0])
+        if (getLevelableTier("pu", 214, true)) player.dt.timeCapsulesToGet = player.dt.timeCapsulesToGet.mul(levelableEffect("pu", 214)[0])
+        player.dt.timeCapsulesToGet = player.dt.timeCapsulesToGet.floor()
 
-        player.dt.timeCapsulePause = player.dt.timeCapsulePause.sub(1)
-        if (player.dt.timeCapsulePause.gte(1)) layers.dt.timeCapsuleReset();
+        player.dt.timeCapsuleEffect = player.dt.timeCapsules.add(1).log(10).add(1).pow(0.5).sub(1).pow_base(10).pow(1.5).sub(1).div(2).add(1)
 
-        player.dt.timeCapsuleEffect = player.dt.timeCapsules.add(1).log(10).pow(2).div(2).add(1)
+        // time energy
+        
+        player.dt.timeEnergyToGet = player.dt.timeCapsules.pow(2)
+        player.dt.timeEnergyToGet = player.dt.timeEnergyToGet.mul(buyableEffect("dt", 11))
+        if (getLevelableTier("pu", 213, true)) player.dt.timeEnergyToGet = player.dt.timeEnergyToGet.mul(levelableEffect("pu", 213)[0])
+
+        player.dt.timeEnergy = player.dt.timeEnergy.add(player.dt.timeEnergyToGet.mul(delta))
+
+        player.dt.timeEnergyEffect = player.dt.timeEnergy.add(1).log(10).pow(1.5).div(50).add(1)
 
         // stored
 
-        player.dt.storedToGet = Decimal.pow(10, player.dt.timeCapsules.add(1).log(10).add(1).pow(0.5).sub(1)).pow(2).div(25)
+        player.dt.storedToGet = player.dt.timeCapsules.div(100).log(10).add(1).pow(0.2).sub(1).pow_base(10).sub(1).mul(5).add(1).floor()
+        player.dt.storedToGet = player.dt.storedToGet.floor()
+        if (player.dt.timeCapsules.lt(100)) player.dt.storedToGet = new Decimal(0);
+        if (getLevelableTier("pu", 213, true)) player.dt.storedToGet = player.dt.storedToGet.add(1);
+
+        // reset cooldown
+        
+        player.dt.timeCapsuleResetSafety = true
     },
     bars: {},
     clickables: {
         11: {
-            title() { return "<h2>Reset previous content for time capsules.<br>(based on clouds)</h2>" },
-            canClick() { return player.dt.timeCapsulesToGet.gte(1) },
+            title() { return "<h3>Reset previous content, but gain time capsules. (based on clouds)</h3><br>Req: 1e18 Clouds" },
+            canClick() { return player.dt.timeCapsulesToGet.gte(1) && player.dt.timeCapsuleResetSafety },
             unlocked() { return true },
             onClick() {
-                player.dt.timeCapsules = player.dt.timeCapsules.add(player.dt.timeCapsulesToGet)
-                player.dt.timeCapsulePause = new Decimal(6)
+                player.dt.timeCapsuleResetSafety = false
+                layers.dt.timeCapsuleReset();
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "400px", minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid #00663c", margin: "1px"}
+                let look = {width: "400px", minHeight: "100px", maxHeight: "100px", borderRadius: "10px", color: "white", border: "2px solid #29a653", padding: "8px"}
                 !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
                 return look
             }
@@ -61,6 +81,8 @@
     },
     timeCapsuleReset()
     {
+        player.dt.timeCapsules = player.dt.timeCapsules.add(player.dt.timeCapsulesToGet)
+
         player.du.points = new Decimal(0)
         player.dr.rank = new Decimal(0)
         player.dr.tier = new Decimal(0)
@@ -86,7 +108,14 @@
             }
         }
 
-        // put vaporizer stuff here
+        player.dv.clouds = new Decimal(0)
+
+        player.dv.buyables[11] = new Decimal(0)
+        player.dv.buyables[12] = new Decimal(0)
+        player.dv.buyables[13] = new Decimal(0)
+        player.dv.buyables[14] = new Decimal(0)
+        player.dv.buyables[15] = new Decimal(0)
+        player.dv.buyables[16] = new Decimal(0)
 
         player.dgr.grass = new Decimal(0)
         for (let i = 1; i < (tmp.dgr.grid.cols + "0" + (tmp.dgr.grid.rows + 1)); ) {
@@ -106,31 +135,157 @@
         player.dgr.buyables[14] = new Decimal(0)
         player.dgr.buyables[15] = new Decimal(0)
         player.dgr.buyables[16] = new Decimal(0)
+
+        player.dv.upgrades = [11, 14]
     },
     upgrades: {},
-    buyables: {},
+    buyables: {
+        11: {
+            costBase() { return new Decimal(10) },
+            costGrowth() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.dt.timeEnergy},
+            pay(amt) { player.dt.timeEnergy = this.currency().sub(amt) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.25).add(1).pow(1.5)
+                return eff
+            },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Speed-Up"
+            },
+            display() {
+                return "which are boosting time energy and cloud gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Time Energy"
+            },
+            buy(mult) {
+                if (mult != true && !hasUpgrade("dn", 12)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (true) this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', color: "black", }
+        },
+        12: {
+            costBase() { return new Decimal(100) },
+            costGrowth() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.dt.timeEnergy},
+            pay(amt) { player.dt.timeEnergy = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).div(20).add(1) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Power-Up"
+            },
+            display() {
+                return "which are boosting the booster effect by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Time Energy"
+            },
+            buy(mult) {
+                if (mult != true && !hasUpgrade("dn", 12)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (true) this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', color: "black", }
+        },
+        13: {
+            costBase() { return new Decimal(1e3) },
+            costGrowth() { return new Decimal(3) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.dt.timeEnergy},
+            pay(amt) { player.dt.timeEnergy = this.currency().sub(amt) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.1).add(1)
+                return eff
+            },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Running Out of Time"
+            },
+            display() {
+                return "which are dividing the eclipse timer tickspeed by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Time Energy"
+            },
+            buy(mult) {
+                if (mult != true && !hasUpgrade("dn", 12)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (true) this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', color: "black", }
+        },
+    },
     milestones: {},
     challenges: {},
     infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
-                buttonStyle() { return { border: "2px solid #00663c", borderRadius: "10px" } },
+                buttonStyle() { return { border: "2px solid #29a653", borderRadius: "10px" } },
                 unlocked() { return true },
                 content: [
                     ["blank", "10px"],
                     ["row", [
-                        ["raw-html", () => { return "You have " + format(player.dt.timeCapsules) + " time capsules"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["raw-html", () => { return "(+" + format(player.dt.timeCapsulesToGet) + ")"}, () => {
+                        ["raw-html", () => { return "You have " + formatWhole(player.dt.timeCapsules) + " time capsules."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return "(+" + formatWhole(player.dt.timeCapsulesToGet) + ")"}, () => {
                             let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
                             player.dt.timeCapsulesToGet.gte(1) ? look.color = "white" : look.color = "gray"
                             return look
                         }],
                     ]],
-                    ["raw-html", () => { return "Boosts D1 tickspeed and eclipse shard xp value by x" + format(player.dt.timeCapsuleEffect) + "."}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                    ["raw-html", () => { return "You will store " + format(player.dt.storedToGet) + " time capsules when you leave D1."}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "Boosts D1 tickspeed by x" + format(player.dt.timeCapsuleEffect) + "."}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "You will store " + formatWhole(player.dt.storedToGet) + " time capsules when you leave D1."}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["clickable", 11]]],
+                    ["blank", "25px"],
+                    ["row", [
+                        ["raw-html", () => { return "You have " + format(player.dt.timeEnergy) + " time energy."}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return "(+" + format(player.dt.timeEnergyToGet) + "/s)"}, () => {
+                            let look = {color: "white", fontSize: "18px", fontFamily: "monospace", marginLeft: "10px"}
+                            player.dt.timeEnergyToGet.gt(0) ? look.display = "" : look.display = "none !important"
+                            return look
+                        }],
+                    ]],
+                    ["raw-html", () => { return "Boosts eclipse shard xp value by x" + format(player.dt.timeEnergyEffect) + "."}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                    ["blank", "25px"],
+                    ["row", [
+                        ["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13], 
+                    ]],
+                    ["blank", "25px"],
                 ]
             },
         },
@@ -142,6 +297,6 @@
         ["raw-html", () => { return player.pet.legPetTimers[0].current.gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legPetTimers[0].current) + "." : ""}, {color: "#FEEF5F", fontSize: "20px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return true /*hasUpgrade("le", 102)*/ },
+    layerShown() { return hasUpgrade("dv", 14) },
     deactivated() { return !player.sma.inStarmetalChallenge},
 })

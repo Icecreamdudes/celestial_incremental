@@ -447,7 +447,7 @@
         107: {
             title: "Light Starmetal Upgrade VII",
             unlocked() { return hasUpgrade("sma", 106)},
-            description: "Produce 1% core scrap per second and singularity doesn't reset anything check back related",
+            description: "Produce 1% core scrap per second",
             cost: new Decimal("500"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",

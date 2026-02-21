@@ -668,6 +668,19 @@
                 return look
             }
         },
+        204: {
+            title() {return player.uni.DS.paused ? "PAUSED<br>▶" : "UNPAUSED<br>⏸"},
+            canClick: true,
+            unlocked() {return uniShown("DS")},
+            onClick() {
+                pauseUniverse("DS")
+            },
+            style() {
+                let look = {width: "200px", minHeight: "50px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0 0 12px 12px"}
+                if (player.uni.UB.paused) {look.backgroundColor = "#666666ff"} else {look.backgroundColor = "rgb(161, 161, 161)"}
+                return look
+            }
+        },
 
         301: {
             title() {return player.uni.A1.paused ? "PAUSED<br>▶" : "UNPAUSED<br>⏸"},
@@ -840,6 +853,12 @@
                             ], {width: "200px", height: "47px", borderBottom: "3px solid white"}],
                             ["clickable", 203],
                         ], () => {return uniShown("UB") ? {width: "200px", height: "100px", background: "#c4b300", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", "Universe ε", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "200px", height: "47px", borderBottom: "3px solid white"}],
+                            ["clickable", 204],
+                        ], () => {return uniShown("DS") ? {width: "200px", height: "100px", background: "#666666ff", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
                     ]],
                 ],
             },

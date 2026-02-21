@@ -24,7 +24,7 @@
 		"Hive/unih.js", "Hive/flower.js", "Hive/pollen.js", "Hive/nectar.js", "Hive/beebread.js",
 		"Hive/honey.js", "Hive/wax.js", "Hive/aleph.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js", "DarkU1/blood.js", "Zar/zar.js", "Zar/coinFlip.js",
- 		"Zar/wheelOfFortune.js", "Check Back/singularityPet.js", "Zar/slotMachine.js", "Zar/checkBackShrine.js",
+ 		"Zar/wheelOfFortune.js", "Check Back/singularityPet.js", "Zar/slotMachine.js", "Zar/checkBackShrine.js", "Zar/cards.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 	],
@@ -128,7 +128,7 @@ function updateStyles() {
 				layerBG = "#001f18"
 			}
 			break;
-	    case "za": case "cf": case "wof": case "sm":
+	    case "za": case "cf": case "wof": case "sm": case "car":
 			layerBG = "linear-gradient(-180deg, #3b3b3bff 0%, #8d8d8dff 100%)"
 			break;
 		case "cbs":
@@ -431,7 +431,7 @@ function updateStyles() {
     	if (eclipse) eclipse.remove();
 	}
 
-	if (player.musuniverse == "DS" && hasUpgrade("za", 16)) {
+	if (player.musuniverse == "DS" && hasUpgrade("za", 16) && false) { //keep false for now
 		if (!document.getElementById("fireworks-bg")) {
 			const fwBg = document.createElement("div");
 			fwBg.id = "fireworks-bg";
@@ -646,7 +646,7 @@ function updateStyles() {
 		case "od": case "mu":
             player.musuniverse = "OD"
 			break;
-		case "za": case "cf": case "wof": case "sm": case "cbs":
+		case "za": case "cf": case "wof": case "sm": case "cbs": case "car":
             player.musuniverse = "DS"
 			break;
 	}
@@ -694,8 +694,10 @@ function updateStyles() {
             			}
 						break;
 					case "D1":
-						if (!player.pet.legPetTimers[0].active) playAndLoopAudio("music/darkUni1.mp3", options.musicVolume/10)
-						if (player.pet.legPetTimers[0].active) playAndLoopAudio("music/eclipse.mp3", options.musicVolume/10)
+						if (!player.pet.legPetTimers[0].active && !player.ir.inBattle) playAndLoopAudio("music/darkUni1.mp3", options.musicVolume/10)
+						if (player.pet.legPetTimers[0].active && !player.ir.inBattle) playAndLoopAudio("music/eclipse.mp3", options.musicVolume/10)
+						if (player.ir.inBattle && !player.bl.noxFightActive) playAndLoopAudio("music/bloodBattle.mp3", options.musicVolume/10);
+			    		if (player.ir.inBattle && player.bl.noxFightActive) playAndLoopAudio("music/nox.mp3", options.musicVolume/10);
 						break;
 					case "CH":
 						if (player.tab == "ch") playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10)
@@ -714,7 +716,8 @@ function updateStyles() {
 						break;
 					case "DS":
 						if (!hasUpgrade("za", 16)) playAndLoopAudio("music/diceSpace.mp3", options.musicVolume/10)
-						if (hasUpgrade("za", 16)) playAndLoopAudio("music/casino.mp3", options.musicVolume/10)
+						if (hasUpgrade("za", 16) && !player.ir.inBattle) playAndLoopAudio("music/casino.mp3", options.musicVolume/10)
+			    		if (player.ir.inBattle) playAndLoopAudio("music/ascensionSpirit.mp3", options.musicVolume/10);
 						break;
 					case "CB":
 						if (player.fi.battleTier.eq(0)) playAndLoopAudio("music/checkback.mp3", options.musicVolume/10)
@@ -757,7 +760,44 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h4>v1.10.6 - Checklist Update Pt.2</h4><br>
+	<h3>v1.11 - The Novasent Update Part II: Blood and Gambling</h3><br>
+		Content:<br>
+			- Added 10 new punchcards, including one legendary punchcard.<br>
+			- Added Vaporizer.<br>
+			- Added Blood.<br>
+			- Added a Secret Bossfight.<br>
+			- Added Dice Space.<br>
+			- Added Zar, the Celestial of Chance.<br>
+			- Added Coin Flip.<br>
+			- Added Wheel of Fortune.<br>
+			- Added Slot Machine.<br>
+			- Added Check Back Shrine.<br>
+			- Added Ascension Shards.<br>
+			- Added a Miniboss.<br>
+			- Added Ancient, Paradox, and Temporal Fragment Pylons.<br>
+			- More stuff I don't remember.<br>
+	    QoL:<br>
+			- Did I add QoL this update? I don't remember.<br><br>
+		Balancing:<br>
+			- Balanced a couple possible inflation zones.<br><br>
+			- A lot of things I don't remember.<br><br>
+		Bugfixes:<br>
+			- A lot of things I don't remember<br><br>
+	<h3>v1.10.7 - Bug Hotfix</h3><br>
+		Bugfixes:<br>
+			- Fixed star gain not working until after first rocket launch<br>
+			- Fixed a ton of CB Fighting bugs/crashes<br>
+			- Fixed Iridite click cooldown bugs<br>
+			- Fixed sell all pets<br>
+			- Fixed typo on hex shadow pet button tooltip<br>
+			- Fixed wrong name on nectar epsilon upgrades<br>
+			- (Maybe) Fixed buy max compressions<br>
+			- Fixed singularity resets not working properly before milestone 6<br>
+			- Fixed being able to softlock yourself by turning on IP auto before having IP Challenge 4 and the big crunch skip milestone<br>
+			- Fixed dice buyable autobuy sometimes spending currency (which ends up crashing the game when at the start of an infinity)<br>
+			- Made planet estimation formula also calculate the chance for the remainder to be successful<br>
+			- Fixed multiple instances of upgrades/milestones saying they keep CB content on singularity<br><br>
+	<h3>v1.10.6 - Checklist Update Pt.2</h3><br>
 		Content:<br>
 			- Added 3 new themes.<br>
 			- Added an unlockable toggle feature for themes. (Vague due to spoilers)<br>

@@ -106,7 +106,7 @@
         player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(buyableEffect("le", 11)).floor()
         player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(levelableEffect("pu", 211)[1])
 
-        if (player.sme.starmetalResetToggle && player.du.points.gte(player.le.starmetalAlloyReq) && !player.pet.activeAbilities[0]) {
+        if (player.sme.starmetalResetToggle && player.du.points.gte(player.le.starmetalAlloyReq) && !player.pet.legPetTimers[0].active) {
             player.le.resetAmount = player.le.resetAmount.add(1)
             if (player.le.highestReset.lt(player.le.resetAmount)) player.le.highestReset = player.le.resetAmount
             player.le.starmetalAlloyPause = new Decimal(10)
@@ -115,7 +115,7 @@
 
             player.le.starmetalAlloyToGet = player.le.starmetalAlloyToGet.add(player.le.starmetalAlloyToGetToGet)
         }
-        if (player.sme.autoLeaveToggle && player.le.starmetalAlloyToGetTrue.gte(player.sme.leaveAmount) && !player.pet.activeAbilities[0]) {
+        if (player.sme.autoLeaveToggle && player.le.starmetalAlloyToGetTrue.gte(player.sme.leaveAmount) && !player.pet.legPetTimers[0].active) {
             player.sb.storedSpaceEnergy = player.sb.storedSpaceEnergy.add(player.ds.storedSpaceEnergyToGet)
 
             player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.le.starmetalAlloyToGetTrue.floor())
@@ -198,6 +198,8 @@
                 pauseUniverse("A1")
                 pauseUniverse("U3")
                 pauseUniverse("CB")
+                pauseUniverse("DS")
+
             },
             style() {
                 let look = {width: "400px", minHeight: "100px", fontSize: "9px", borderRadius: "15px", color: "white", border: "2px solid #384166"}
@@ -262,6 +264,7 @@
                 pauseUniverse("A1")
                 pauseUniverse("U3")
                 pauseUniverse("CB")
+                pauseUniverse("DS")
 
                 player.pet.legendaryPetAbilityCooldowns[0] = player.pet.legendaryPetAbilityCooldownsMax[0]
             },
@@ -822,7 +825,7 @@
         },
         24: {
             title: "Automatic Lawnmower",
-            unlocked() { return player.ir.iriditeDefeated && !player.pet.activeAbilities[0] },
+            unlocked() { return player.ir.iriditeDefeated && !player.pet.legPetTimers[0].active },
             description: "Generate 100% of grass value per second.",
             cost: new Decimal("1e308"),
             currencyLocation() { return player.du },

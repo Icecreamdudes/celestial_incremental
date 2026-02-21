@@ -1,5 +1,5 @@
 ﻿const CANTE_BASES = [
-    [new Decimal(0.2), new Decimal(0.3), new Decimal(0.5), new Decimal(0.02), new Decimal(1.4), new Decimal(2.5), new Decimal(5), new Decimal(12)],
+    [new Decimal(0.2), new Decimal(0.3), new Decimal(0.5), new Decimal(0.02), new Decimal(1.4), new Decimal(2.5), new Decimal(5), new Decimal(12), new Decimal(50)],
     [new Decimal(1.6), new Decimal(3), new Decimal(5.5), new Decimal(9), new Decimal(7), new Decimal(14), new Decimal(30)],
     [new Decimal(10), new Decimal(30), new Decimal(80)]
 ]
@@ -76,6 +76,13 @@ addLayer("cb", {
                 max: new Decimal(86400),
                 base: new Decimal(666),
                 esc: new Decimal(98),
+                average: new Decimal(0.02),
+            },
+            8: {
+                current: new Decimal(0),
+                max: new Decimal(518400),
+                base: new Decimal(3333),
+                esc: new Decimal(500),
                 average: new Decimal(0.02),
             },
         },
@@ -180,6 +187,10 @@ addLayer("cb", {
         if (hasUpgrade("cs", 1203)) player.cb.cbTickspeed = player.cb.cbTickspeed.mul(1.1)
         player.cb.cbTickspeed = player.cb.cbTickspeed.mul(buyableEffect("ev2", 32))
         if (player.ev2.doubleCurrent.gt(0)) player.cb.cbTickspeed = player.cb.cbTickspeed.mul(Decimal.add(2, buyableEffect("ev2", 33)))
+        player.cb.cbTickspeed = player.cb.cbTickspeed.mul(buyableEffect("cbs", 17))
+        player.cb.cbTickspeed = player.cb.cbTickspeed.mul(buyableEffect("cbs", 18))
+        player.cb.cbTickspeed = player.cb.cbTickspeed.mul(buyableEffect("cbs", 19))
+        player.cb.cbTickspeed = player.cb.cbTickspeed.mul(player.cbs.pylonEnergyEffect)
 
         if (player.cb.totalxp == 4.5 && player.cb.level > 1) {
             player.cb.totalxp = layers.cb.levelToXP(player.cb.level).add(player.cb.xp)
@@ -225,6 +236,7 @@ addLayer("cb", {
         player.cb.xpTimers[5].base = new Decimal(80).mul(buyableEffect("ev1", 151))
         player.cb.xpTimers[6].base = new Decimal(220).mul(buyableEffect("ev1", 161))
         player.cb.xpTimers[7].base = new Decimal(666).mul(buyableEffect("ev1", 171))
+        player.cb.xpTimers[8].base = new Decimal(3333).mul(buyableEffect("ev1", 181))
 
         for (let i in player.cb.xpTimers) {
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("gh", 21))
@@ -250,6 +262,10 @@ addLayer("cb", {
             if (hasUpgrade("ir", 13)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(upgradeEffect("ir", 13))
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(player.cof.coreFragmentEffects[6])
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(levelableEffect("pet", 1102)[0])
+            player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("cbs", 11))
+            player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("cbs", 12))
+            player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("cbs", 13))
+            if (hasUpgrade("cbs", 101)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(upgradeEffect("cbs", 101))
 
             // ABNORMAL MODIFIERS
             if (player.po.halter.xp.enabled == 1) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.div(player.po.halter.xp.halt)
@@ -264,6 +280,7 @@ addLayer("cb", {
         player.cb.xpTimers[5].max = new Decimal(3600).div(buyableEffect("ev1", 152))
         player.cb.xpTimers[6].max = new Decimal(14400).div(buyableEffect("ev1", 162))
         player.cb.xpTimers[7].max = new Decimal(86400).div(buyableEffect("ev1", 172))
+        player.cb.xpTimers[8].max = new Decimal(518400).div(buyableEffect("ev1", 182))
 
         for (let i in player.cb.xpTimers) {
             player.cb.xpTimers[i].max = player.cb.xpTimers[i].max.div(buyableEffect("gh", 22))
@@ -293,6 +310,7 @@ addLayer("cb", {
         player.cb.xpTimers[5].esc = new Decimal(20).mul(buyableEffect("ev1", 154))
         player.cb.xpTimers[6].esc = new Decimal(50).mul(buyableEffect("ev1", 164))
         player.cb.xpTimers[7].esc = new Decimal(98).mul(buyableEffect("ev1", 174))
+        player.cb.xpTimers[8].esc = new Decimal(500).mul(buyableEffect("ev1", 184))
 
         let mult = new Decimal(1)
         mult = mult.add(levelableEffect("pet", 1107)[1].sub(1))
@@ -302,6 +320,7 @@ addLayer("cb", {
             player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(mult)
             player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(levelableEffect("pet", 1102)[1])
             player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(levelableEffect("ir", 9)[0])
+            if (hasUpgrade("cbs", 102)) player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(upgradeEffect("cbs", 102))
         }
 
         player.cb.crateTimers[0].base = buyableEffect("ev1", 201).mul(buyableEffect("ev1", 204))
@@ -320,6 +339,7 @@ addLayer("cb", {
             if (hasUpgrade("cs", 1202)) player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(1.2)
             player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(buyableEffect("ma", 34))
             player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(buyableEffect("cof", 32))
+            player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(player.cbs.pylonEnergyEffect3)
         }
 
         player.cb.crateTimers[0].max = new Decimal(900).div(buyableEffect("ev1", 202)).mul(buyableEffect("ev1", 204))
@@ -375,6 +395,9 @@ addLayer("cb", {
             player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(buyableEffect("pl", 13))
             if (player.ma.matosDefeated) player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(1.5)
             player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(levelableEffect("ir", 5)[1])
+            player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(buyableEffect("cbs", 14))
+            player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(buyableEffect("cbs", 15))
+            player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(buyableEffect("cbs", 16))
         }
 
         player.cb.boostTimers[0].max = new Decimal(10800)
@@ -787,12 +810,51 @@ addLayer("cb", {
                 return look
             },
         },
+        19: {
+            title() { return player.cb.xpTimers[8].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.xpTimers[8].current) + "." : "<h3>+" + format(player.cb.xpTimers[8].base.mul(player.cb.xpMult)) + " XP."},
+            canClick() { return player.cb.xpTimers[8].current.lt(0) && this.unlocked() },
+            unlocked() { return hasUpgrade("cbs", 103) },
+            tooltip() { return "Evo Shard Rarity: " + formatSimple(player.cb.xpTimers[8].esc) + "%"},
+            onClick() {
+                player.cb.xp = player.cb.xp.add(player.cb.xpTimers[8].base.mul(player.cb.xpMult))
+                player.cb.totalxp = player.cb.totalxp.add(player.cb.xpTimers[8].base.mul(player.cb.xpMult))
+                player.cb.xpTimers[8].current = player.cb.xpTimers[8].max
+                if (inChallenge("ip", 17)) {
+                    for (let i in player.cb.xpTimers) {
+                        player.cb.xpTimers[i].current = player.cb.xpTimers[i].max
+                    }
+                }
+
+                let guarantee = player.cb.xpTimers[8].esc.div(100).floor()
+                let chance = player.cb.xpTimers[8].esc.sub(guarantee.mul(100))
+                if (chance.gte(Math.random()*100)) {
+                    guarantee = guarantee.add(1)
+                    chance = new Decimal(0)
+                }
+                if (guarantee.gt(0)) {
+                    player.cb.evolutionShards = player.cb.evolutionShards.add(guarantee);
+                    player.cb.pityEvoCurrent = new Decimal(0);
+                    if (inChallenge("ip", 17)) player.cb.IC7shardCount++
+                    doPopup("none", "+" + formatWhole(guarantee) + " Evolution Shard!", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
+                } else {
+                    doPopup("none", "", "How did you even not get an evo shard? The chance is literally over 100%.", 60, "#d487fd", "resources/evoShardDenied.png")
+                }
+                player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(chance);
+                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[0][8].mul(player.ca.canteEnergyMult))
+            },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
+                this.canClick() ? look.backgroundColor = "#094599" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
+        },
 
         99: {
             title() {return "Claim All"},
             canClick() {return tmp.cb.clickables[11].canClick || tmp.cb.clickables[12].canClick || tmp.cb.clickables[13].canClick
                 || tmp.cb.clickables[14].canClick || tmp.cb.clickables[15].canClick || tmp.cb.clickables[16].canClick
-                || tmp.cb.clickables[17].canClick || tmp.cb.clickables[18].canClick},
+                || tmp.cb.clickables[17].canClick || tmp.cb.clickables[18].canClick || tmp.cb.clickables[19].canClick},
             unlocked() {return player.cb.highestLevel.gte(200)},
             onClick() {
                 clickClickable("cb", 11)
@@ -803,6 +865,7 @@ addLayer("cb", {
                 clickClickable("cb", 16)
                 clickClickable("cb", 17)
                 clickClickable("cb", 18)
+                clickClickable("cb", 19)
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
@@ -2208,6 +2271,7 @@ addLayer("cb", {
                     ["column", [
                         ["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14],
                         ["clickable", 15], ["clickable", 16], ["clickable", 17], ["clickable", 18],
+                        ["clickable", 19],
                         ["clickable", 99],
                     ]],
                 ]

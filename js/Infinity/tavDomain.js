@@ -2034,9 +2034,9 @@ addLayer("tad", {
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
-                    let max = Decimal.affordArithmeticSeries(this.currency(), 1, 1, getBuyableAmount(this.layer, this.id))
+                    let max = Decimal.affordArithmeticSeries(this.currency(), new Decimal(1), new Decimal(1), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumArithmeticSeries(max, 1, 1, getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumArithmeticSeries(max, new Decimal(1), new Decimal(1), getBuyableAmount(this.layer, this.id))
                     this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -2071,9 +2071,9 @@ addLayer("tad", {
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
-                    let max = Decimal.affordArithmeticSeries(this.currency(), 1, 1, getBuyableAmount(this.layer, this.id))
+                    let max = Decimal.affordArithmeticSeries(this.currency(), new Decimal(1), new Decimal(1), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumArithmeticSeries(max, 1, 1, getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumArithmeticSeries(max, new Decimal(1), new Decimal(1), getBuyableAmount(this.layer, this.id))
                     this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -2108,9 +2108,9 @@ addLayer("tad", {
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
-                    let max = Decimal.affordArithmeticSeries(this.currency(), 1, 1, getBuyableAmount(this.layer, this.id))
+                    let max = Decimal.affordArithmeticSeries(this.currency(), new Decimal(1), new Decimal(1), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumArithmeticSeries(max, 1, 1, getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumArithmeticSeries(max, new Decimal(1), new Decimal(1), getBuyableAmount(this.layer, this.id))
                     this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -2145,9 +2145,9 @@ addLayer("tad", {
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
-                    let max = Decimal.affordArithmeticSeries(this.currency(), 1, 1, getBuyableAmount(this.layer, this.id))
+                    let max = Decimal.affordArithmeticSeries(this.currency(), new Decimal(1), new Decimal(1), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumArithmeticSeries(max, 1, 1, getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumArithmeticSeries(max, new Decimal(1), new Decimal(1), getBuyableAmount(this.layer, this.id))
                     this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))

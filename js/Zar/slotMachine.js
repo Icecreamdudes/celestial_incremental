@@ -52,6 +52,7 @@
         player.sm.slotImages = ["resources/redChip.png", "resources/blueChip.png", "resources/yellowChip.png", "resources/evoShard.png", "resources/paragonShard.png"]
 
         player.sm.spinLength = new Decimal(30)
+        if (hasUpgrade("cbs", 11)) player.sm.spinLength = player.sm.spinLength.div(3)
         if (player.sm.spinActive)
         {
             player.sm.spinTimer = player.sm.spinTimer.add(delta)
@@ -82,9 +83,15 @@
         }
 
         if (player.sm.spinAmount.lt(5)) player.sm.spinCost = player.sm.spinAmount.pow(2.5).add(1).mul(10000000)
-        if (player.sm.spinAmount.gte(5)) player.sm.spinCost = player.sm.spinAmount.pow(4).add(1).mul(10000000)
+        if (player.sm.spinAmount.gte(5)) player.sm.spinCost = player.sm.spinAmount.pow(6).add(1).mul(10000000)
 
         player.sm.chipsToGet = [new Decimal(1), new Decimal(1), new Decimal(1)]
+
+
+        player.sm.totalChipMult = new Decimal(1)
+        player.sm.totalChipMult = player.sm.totalChipMult.mul(player.sm.spinAmount.pow(0.5).add(1))
+        player.sm.totalChipMult = player.sm.totalChipMult.mul(buyableEffect("sm", 108))
+        if (hasUpgrade("cbs", 15)) player.sm.totalChipMult = player.sm.totalChipMult.mul(upgradeEffect("cbs", 15))
 
         player.sm.chipsToGet[0] = player.sm.chipsToGet[0].mul(buyableEffect("sm", 11))
         player.sm.chipsToGet[0] = player.sm.chipsToGet[0].mul(player.sm.totalChipMult)
@@ -103,9 +110,6 @@
         if (player.sm.spinPause.gte(0)) {
             layers.sm.slotReset();
         }
-
-        player.sm.totalChipMult = new Decimal(1)
-        player.sm.totalChipMult = player.sm.totalChipMult.mul(player.sm.spinAmount.pow(0.5).add(1))
     },
     randomizeSegments() {
         // Weighted pick but ensure result is different from current displayed index
@@ -469,7 +473,7 @@
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.sm.chips[1]},
             pay(amt) { player.sm.chips[1] = this.currency().sub(amt) },
-            effect(x) { return Decimal.div(1, getBuyableAmount(this.layer, this.id).pow(0.45).mul(0.25).add(1)) },
+            effect(x) { return Decimal.div(1, getBuyableAmount(this.layer, this.id).pow(0.55).mul(0.3).add(1)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -602,7 +606,7 @@
             branches: [105],
             display() {
                 return "<h5>which are adding a " + format(tmp[this.layer].buyables[this.id].effect.mul(100)) + "% chance of gaining an evolution shard on wheel spin.\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blue Chips"
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) +  " Yellow Chips"
             },
             buy(mult) {
                 if (mult != true) {
@@ -653,6 +657,102 @@
             },
             style: {width: '140px', height: '140px', color: "black", background: "#ff7070ff", border: "5px solid #460000ff", borderColor: "#460000ff", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
         },
+        108: {
+            costBase() { return new Decimal(8) },
+            costGrowth() { return new Decimal(1.25) },
+            purchaseLimit() { return new Decimal(25) },
+            currency() { return player.sm.chips[1]},
+            pay(amt) { player.sm.chips[1] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.3).add(1) },
+            unlocked() { return player.sm.buyables[106].gte(5) && player.sm.buyables[107].gte(1) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            branches: [106, 107],
+            display() {
+                return "which are boosting all chip gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blue Chips"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '140px', color: "black", background: "#7970ffff", border: "5px solid #09035aff", borderColor: "#09035aff", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
+        109: {
+            costBase() { return new Decimal(6) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(25) },
+            currency() { return player.cb.evolutionShards},
+            pay(amt) { player.cb.evolutionShards = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.6).mul(0.05).add(1) },
+            unlocked() { return player.sm.buyables[108].gte(5) && hasUpgrade("cbs", 17) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            branches: [108,],
+            display() {
+                return "which are extending chance point softcap by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Evolution Shards"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '140px', color: "black", backgroundImage: "linear-gradient(45deg, #5d51ff 0%, #af51ff 100%)", border: "5px solid #cc92ff", borderColor: "#cc92ff", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
+        111: {
+            costBase() { return new Decimal(2) },
+            costGrowth() { return new Decimal(1.4) },
+            purchaseLimit() { return new Decimal(25) },
+            currency() { return player.cb.paragonShards},
+            pay(amt) { player.cb.paragonShards = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.7).mul(0.09).add(1) },
+            unlocked() { return player.sm.buyables[108].gte(5) && hasUpgrade("cbs", 17) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            branches: [108,],
+            display() {
+                return "which are extending heads and tails softcap by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Paragon Shards"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '140px', color: "black", backgroundImage: "linear-gradient(45deg, #1ba861 0%, #89ee30 33%, #e79c44 67%, #cb1816 100%)", border: "5px solid #ebebeb", borderColor: "#ebebeb", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
     },
     milestones: {},
     challenges: {},
@@ -681,6 +781,8 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return "<h5>Mult: " + format(player.sm.totalChipMult) + "x. (also based on amount of slot spins)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "<h5>(Only boosts chip gains)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "<h5>Slots spinned: " + formatWhole(player.sm.spinAmount) + "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ], {width: "625px", height: "700px", background: "rgba(69, 80, 5, 0.5)", border: "0px solid #ccc", borderRight: "0px", borderLeft: "0px", borderRadius: "15px 0px 0px 15px"}],
 
@@ -726,11 +828,24 @@
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
-                    ["blank", "25px"],
+                    ["blank", "12.5px"],
                         ["raw-html", function () { return "You have " + format(player.sm.chips[0]) + " red chips. (+" + format(player.sm.chipsToGet[0]) + ")" }, { "color": "#ff7070ff", "font-size": "20px", "font-family": "monospace" }],
                         ["raw-html", function () { return "You have " + format(player.sm.chips[1]) + " blue chips. (+" + format(player.sm.chipsToGet[1]) + ")" }, { "color": "#7970ffff", "font-size": "20px", "font-family": "monospace" }],
                         ["raw-html", function () { return "You have " + format(player.sm.chips[2]) + " yellow chips. (+" + format(player.sm.chipsToGet[2]) + ")" }, { "color": "#fffd70ff", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "25px"],
+                    ["blank", "12.5px"],
+                                    ["left-row", [
+            ["tooltip-row", [
+                ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                ["raw-html", () => { return formatWhole(player.cb.evolutionShards)}, {width: "93px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
+            ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
+            ["tooltip-row", [
+                ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                ["raw-html", () => { return formatWhole(player.cb.paragonShards)}, {width: "95px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
+            ], {width: "150px", height: "50px"}],
+        ], {width: "300px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
+                    ["blank", "12.5px"],
                     ["always-scroll-column", [
                         ["blank", "10px"],
                         ["row", [
@@ -746,7 +861,14 @@
                             ["ex-buyable", 107],
                             ["ex-buyable", 106],
                         ]],
-                    ], {width: "775px", height: "650px", backgroundColor: "#4a4a4a80", border: "3px solid white", borderRadius: "15px 0 0 15px"}],
+                        ["row", [
+                            ["ex-buyable", 108],
+                        ]],
+                        ["row", [
+                            ["ex-buyable", 109],
+                            ["ex-buyable", 111],
+                        ]],
+                    ], {width: "775px", height: "600px", backgroundColor: "#4a4a4a80", border: "3px solid white", borderRadius: "15px 0 0 15px"}],
                 ]
             },
         },

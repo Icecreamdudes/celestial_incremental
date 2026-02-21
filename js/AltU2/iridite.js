@@ -236,7 +236,7 @@ addLayer("ir", {
         if (player.ir.shipType == 6) player.ir.shipHealthMax = new Decimal(75)
         if (player.ir.shipType == 7) player.ir.shipHealthMax = new Decimal(75)
         if (player.ir.shipType == 8) player.ir.shipHealthMax = new Decimal(100)
-        if (player.ir.shipType == 9) player.ir.shipHealthMax = new Decimal(125)
+        if (player.ir.shipType == 9) player.ir.shipHealthMax = new Decimal(67.5)
 
         if (hasUpgrade("ir", 102)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.25)
         if (player.ir.shipType != 0) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(levelableEffect("ir", player.ir.shipType)[3])
@@ -1342,7 +1342,7 @@ class SpaceArena {
 
         // load wing GIF for Iridite (200x200). keep a loaded flag so draw can choose fallback.
         this.wingImg = new Image();
-        this.wingImg.src = 'resources/flying.gif';
+       // this.wingImg.src = 'resources/flying.gif';
         this.wingImgLoaded = false;
         this.wingImg.onload = () => { this.wingImgLoaded = true; };
 
@@ -1535,7 +1535,7 @@ class SpaceArena {
                 rotationSpeed: 0.06,
                 cooldown: 500,
                 lastShot: 0,
-                damage: 20,
+                damage: 40,
                 collisionDamage: 0.1,
             };
         }
@@ -5236,6 +5236,9 @@ class SpaceArena {
 
         // Draw bullets
         for (let bullet of this.bullets) {
+            // Skip ritual projectiles - RitualArena handles these with custom visuals
+            if (bullet.ritualOrb || bullet.ritualBlade) continue;
+            
             if (bullet.massiveSword) {
                 // Draw a large, spinning metallic sword
                 this.ctx.save();
@@ -5690,6 +5693,7 @@ class SpaceArena {
         if (arena) arena.upgradeEffects = arena.getDefaultUpgradeEffects();
         if (player.tab == "ir") player.subtabs["ir"]['stuff'] = "Lose";
         if (player.tab == "bl") player.subtabs["bl"]['stuff'] = "Lose";
+        if (player.tab == "cbs") player.subtabs["cbs"]['stuff'] = "Lose";
         localStorage.setItem('arenaActive', 'false');
     }
 }

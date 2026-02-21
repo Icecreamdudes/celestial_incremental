@@ -1025,6 +1025,7 @@ addLayer("pet", {
                 pauseUniverse("A1")
                 pauseUniverse("U3")
                 pauseUniverse("CB")
+                pauseUniverse("DS")
             },
             style() {
                 let look = {width: '125px', minHeight: '40px', borderRadius: '0px', fontSize: '8px'}

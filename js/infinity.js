@@ -196,7 +196,7 @@
         if (player.tad.altInfinities.fragmented.milestone.gte(3)) player.in.infinities = player.in.infinities.add(player.in.infinitiesToGet.div(4).mul(delta))
 
 
-        player.in.pylonEnergyMax = Decimal.pow(1e308, player.in.pylonTier)
+        player.in.pylonEnergyMax = Decimal.pow(1e15, player.in.pylonTier)
 
         if (player.in.pylonBuilt)
         {

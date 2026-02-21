@@ -46,7 +46,6 @@
         player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(buyableEffect("ds", 105))
         player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(levelableEffect("ir", 4)[0])
         if (getLevelableTier("pu", 111, true)) player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(levelableEffect("pu", 111)[0])
-        player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.div(player.ds.spaceEnergySoftcap)
         if (getLevelableTier("pu", 209, true)) player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(levelableEffect("pu", 209)[0])
 
         player.ds.spaceEnergyPause = player.ds.spaceEnergyPause.sub(1)

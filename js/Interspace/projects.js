@@ -506,7 +506,7 @@
                 let s = completions
                 
                 if (completions.gte(5)) {
-                    s = s.add(completions.sub(5).pow(2)).mul(2)
+                    s = s.add(completions.sub(5).pow(1.5)).mul(4)
                 }
 
                 return s.floor()
@@ -546,7 +546,7 @@
                 let s = completions.add(1).pow(1.5).mul(3)
                 
                 if (completions.gte(5)) {
-                    s = s.add(completions.sub(5).pow(1.25)).mul(10)
+                    s = s.add(completions.sub(5).pow(1.5)).mul(4)
                 }
 
                 return s.floor()

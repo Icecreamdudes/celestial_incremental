@@ -85,7 +85,7 @@
 
         // MILESTONE EFFECTS
 
-        player.prj.milestone105Effect = player.prj.projectSpeed.pow(0.25).mul(player.prj.projectSpeed.log10()).add(1)
+        player.prj.milestone105Effect = player.prj.projectSpeed.pow(0.25).mul(player.prj.projectSpeed.max(1).log10()).add(1)
     },
     branches: ["wel"],
     clickables: {

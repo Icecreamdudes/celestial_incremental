@@ -91,7 +91,7 @@
         player.ro.activatedFuelToGet = player.ro.activatedFuelToGet.mul(buyableEffect("cof", 19))
         player.ro.activatedFuelEffect = player.ro.activatedFuel.pow(4).add(1)
 
-        player.ro.activatedFuel = player.ro.activatedFuel.add(player.ro.activatedFuelToGet.mul(buyableEffect("st", 204).mul(delta)))
+        if (getBuyableAmount("st", 204).gt(0)) player.ro.activatedFuel = player.ro.activatedFuel.add(player.ro.activatedFuelToGet.mul(buyableEffect("st", 204).mul(delta)))
 
         player.ro.rocketPartsContributions[0] = player.gh.steel.add(1).log(10).pow(0.2)
         if (player.st.buyables[203].lt(1)) player.ro.rocketPartsContributions[1] = player.sma.starmetalAlloy.div(300).pow(0.5)
@@ -106,7 +106,7 @@
         player.ro.rocketPartsToGet = player.ro.rocketPartsToGet.mul(buyableEffect("cof", 19))
         player.ro.rocketPartsEffect = player.ro.rocketParts.mul(2).pow(0.9).add(1)
 
-        player.ro.rocketParts = player.ro.rocketParts.add(player.ro.rocketPartsToGet.mul(buyableEffect("st", 205).mul(delta)))
+        if (getBuyableAmount("st", 205).gt(0)) player.ro.rocketParts = player.ro.rocketParts.add(player.ro.rocketPartsToGet.mul(buyableEffect("st", 205).mul(delta)))
 
         //passenger selection
         if (player.ro.rarityIndex.eq(0)) {
@@ -165,9 +165,12 @@
             layers.ro.starReset();
         }
 
-        player.ro.rocketCooldown = player.ro.rocketCooldown.sub(onepersec.mul(delta))
-
         player.ro.rocketCooldownMax = [new Decimal(300), new Decimal(1200)]
+
+        player.ro.rocketCooldown = player.ro.rocketCooldown.sub(onepersec.mul(delta))
+        for (let i = 0; i < player.ro.rocketCooldownMax.length; i++) {
+            player.ro.rocketCooldownMax[i] = player.ro.rocketCooldownMax[i].div(levelableEffect("pu", 112)[1])
+        }
     },
     starReset() {
         clickClickable("co", 1000)

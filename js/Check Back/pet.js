@@ -698,8 +698,13 @@ addLayer("pet", {
         if (getLevelableTier("pu", 303, true)) player.pet.legPetTimers[0].max = player.pet.legPetTimers[0].max.mul(levelableEffect("pu", 303)[0])
         
         let abilityTimeDecrease = new Decimal(1)
+        abilityTimeDecrease = abilityTimeDecrease.mul(player.dv.timeDrainRate)
+        //abilityTimeDecrease = abilityTimeDecrease.mul(0) // BIG CHUNGUS
         if (getLevelableTier("pu", 303, true)) abilityTimeDecrease = abilityTimeDecrease.div(levelableEffect("pu", 303)[0])
-        player.pet.legPetTimers[0].current = player.pet.legPetTimers[0].current.sub(abilityTimeDecrease.mul(delta).mul(0)) // GOOBER CAT
+        abilityTimeDecrease = abilityTimeDecrease.div(buyableEffect("dt", 13))
+        if (hasMilestone("db", 17)) abilityTimeDecrease = abilityTimeDecrease.div(2)
+        if (hasMilestone("db", 106)) abilityTimeDecrease = abilityTimeDecrease.div(2)
+        player.pet.legPetTimers[0].current = player.pet.legPetTimers[0].current.sub(abilityTimeDecrease.mul(delta))
 
         player.pet.legPetTimers[1].current = player.pet.legPetTimers[1].current.sub(delta)
 
@@ -1007,7 +1012,14 @@ addLayer("pet", {
                 layers.pu.generateSelection();
 
                 player.subtabs.le["stuff"] = "Shards"
-                player.subtabs.pu["stuff"] = "Selection"                
+                player.subtabs.pu["stuff"] = "Selection"            
+                
+                pauseUniverse("U1")
+                pauseUniverse("UA")
+                pauseUniverse("U2")
+                pauseUniverse("A1")
+                pauseUniverse("U3")
+                pauseUniverse("CB")    
             },
             style() {
                 let look = {width: '125px', minHeight: '40px', borderRadius: '0px', fontSize: '8px'}
@@ -3716,9 +3728,9 @@ addLayer("pet", {
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    Decimal.pow(10, player.wel.light.add(1).log(10).add(1).pow(0.5).sub(1)).pow(Decimal.pow(1.5, getLevelableTier(this.layer, this.id))), // Light (Based on Prisms)
+                    Decimal.pow(10, player.pri.prisms.add(1).log(10).add(1).pow(0.5).sub(1)).pow(Decimal.pow(1.5, getLevelableTier(this.layer, this.id))), // Light (Based on Prisms)
                     amt.mul(player.wel.modules[1].completions.add(1).mul(player.wel.modules[2].completions.add(1)).mul(player.wel.modules[3].completions.add(1)).log(10).pow(0.8).add(1)).div(20).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // XPBoost (Based on Starmetal Alloy)
-                    amt.mul(player.sma.starmetalAlloy.add(2).log(2).log(2).add(1)).div(30).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1) // Pet Points (Based on Starmetal Alloy)
+                    amt.mul(player.sma.starmetalAlloy.add(2).log(2).log(2).add(1)).div(100).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1) // Pet Points (Based on Starmetal Alloy)
                 ]
             },
             sellValue() { return new Decimal(500)},

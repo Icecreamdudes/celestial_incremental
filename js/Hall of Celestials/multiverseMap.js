@@ -8,8 +8,6 @@
 
         isInThisTab: false,
         wasInThisTab: false,
-
-        realmBackgroundFlashTimer: 0,
     }},
     automate() {},
     nodeStyle() {
@@ -23,8 +21,6 @@
     tooltip: "Multiverse Map",
     color: "#30bfbf",
     update(delta) {
-        player.mm.realmBackgroundFlashTimer += delta
-        player.mm.realmBackgroundFlashTimer %= 30
 
         player.mm.isInThisTab = player.tab == "mm"
         if (player.mm.isInThisTab && !player.mm.wasInThisTab) {
@@ -202,6 +198,21 @@
             xPos: -900,
             yPos: -200,
         },
+        411: {
+            universeId() { return "DS"},
+            title() { return universes[this.universeId()].symbol},
+            canClick() { return true },
+            unlocked() { return true },
+            tooltip() { return universes[this.universeId()].name()},
+            onClick() {},
+            onHold() {},
+            style() {
+                let look = {position: "relative", top: this.yPos + "px", left: this.xPos + "px", color: universes[this.universeId()].nodeStyle().color, background: universes[this.universeId()].nodeStyle().background, backgroundColor: universes[this.universeId()].nodeStyle().backgroundColor, border: "3px solid " + universes[this.universeId()].nodeStyle().borderColor, width: "100px", minHeight: "100px", fontSize: "32px", borderRadius: "50%"}
+                return look
+            },
+            xPos: -300,
+            yPos: 500,
+        },
     },
     bars: {},
     upgrades: {},
@@ -222,60 +233,16 @@
                     ["centered-draggable-scroll-row", [
                         ["style-row", [
                             ["style-row", [
-                                ["style-row", [], {position: "relative",
-                                    left: () => {return ((layers.mm.clickables[401].xPos + layers.mm.clickables[402].xPos) / 2) + "px"},
-                                    top: () => {return ((layers.mm.clickables[401].yPos + layers.mm.clickables[402].yPos) / 2) + "px"},
-                                    transform: () => {return "rotate(" + Math.atan2(layers.mm.clickables[402].yPos - layers.mm.clickables[401].yPos, layers.mm.clickables[402].xPos - layers.mm.clickables[401].xPos) + "rad)"},
-                                    width: () => {return Math.sqrt(Math.pow(layers.mm.clickables[402].yPos - layers.mm.clickables[401].yPos, 2) + Math.pow(layers.mm.clickables[401].xPos - layers.mm.clickables[402].xPos, 2)) + "px"},
-                                    height: "0px", border: "4px dotted #00ff00", borderBottom: "0", marginLeft: "100px", marginTop: "0px"}],
-                                ["style-row", [], {position: "relative",
-                                    left: () => {return ((layers.mm.clickables[401].xPos + layers.mm.clickables[403].xPos) / 2) + "px"},
-                                    top: () => {return ((layers.mm.clickables[401].yPos + layers.mm.clickables[403].yPos) / 2) + "px"},
-                                    transform: () => {return "rotate(" + Math.atan2(layers.mm.clickables[403].yPos - layers.mm.clickables[401].yPos, layers.mm.clickables[403].xPos - layers.mm.clickables[401].xPos) + "rad)"},
-                                    width: () => {return Math.sqrt(Math.pow(layers.mm.clickables[403].yPos - layers.mm.clickables[401].yPos, 2) + Math.pow(layers.mm.clickables[403].xPos - layers.mm.clickables[401].xPos, 2)) + "px"},
-                                    height: "0px", border: "4px dotted #00ff00", borderBottom: "0", marginLeft: "100px", marginTop: "-4px"}],
-                                ["style-row", [], {position: "relative",
-                                    left: () => {return ((layers.mm.clickables[401].xPos + layers.mm.clickables[404].xPos) / 2) + "px"},
-                                    top: () => {return ((layers.mm.clickables[401].yPos + layers.mm.clickables[404].yPos) / 2) + "px"},
-                                    transform: () => {return "rotate(" + Math.atan2(layers.mm.clickables[404].yPos - layers.mm.clickables[401].yPos, layers.mm.clickables[404].xPos - layers.mm.clickables[401].xPos) + "rad)"},
-                                    width: () => {return Math.sqrt(Math.pow(layers.mm.clickables[404].yPos - layers.mm.clickables[401].yPos, 2) + Math.pow(layers.mm.clickables[404].xPos - layers.mm.clickables[401].xPos, 2)) + "px"},
-                                    height: "0px", border: "4px dotted #00ff00", borderBottom: "0", marginLeft: "100px", marginTop: "-4px"}],
-                                ["style-row", [], {position: "relative",
-                                    left: () => {return ((layers.mm.clickables[402].xPos + layers.mm.clickables[405].xPos) / 2) + "px"},
-                                    top: () => {return ((layers.mm.clickables[402].yPos + layers.mm.clickables[405].yPos) / 2) + "px"},
-                                    transform: () => {return "rotate(" + Math.atan2(layers.mm.clickables[405].yPos - layers.mm.clickables[402].yPos, layers.mm.clickables[405].xPos - layers.mm.clickables[402].xPos) + "rad)"},
-                                    width: () => {return Math.sqrt(Math.pow(layers.mm.clickables[405].yPos - layers.mm.clickables[402].yPos, 2) + Math.pow(layers.mm.clickables[405].xPos - layers.mm.clickables[402].xPos, 2)) + "px"},
-                                    height: "0px", border: "4px dotted #00ff00", borderBottom: "0", marginLeft: "100px", marginTop: "-4px"}],
-                                ["style-row", [], {position: "relative",
-                                    left: () => {return ((layers.mm.clickables[404].xPos + layers.mm.clickables[406].xPos) / 2) + "px"},
-                                    top: () => {return ((layers.mm.clickables[404].yPos + layers.mm.clickables[406].yPos) / 2) + "px"},
-                                    transform: () => {return "rotate(" + Math.atan2(layers.mm.clickables[406].yPos - layers.mm.clickables[404].yPos, layers.mm.clickables[406].xPos - layers.mm.clickables[404].xPos) + "rad)"},
-                                    width: () => {return Math.sqrt(Math.pow(layers.mm.clickables[406].yPos - layers.mm.clickables[404].yPos, 2) + Math.pow(layers.mm.clickables[406].xPos - layers.mm.clickables[404].xPos, 2)) + "px"},
-                                    height: "0px", border: "4px dotted #00ff00", borderBottom: "0", marginLeft: "100px", marginTop: "-4px"}],
-                                ["style-row", [], {position: "relative",
-                                    left: () => {return ((layers.mm.clickables[401].xPos + layers.mm.clickables[407].xPos) / 2) + "px"},
-                                    top: () => {return ((layers.mm.clickables[401].yPos + layers.mm.clickables[407].yPos) / 2) + "px"},
-                                    transform: () => {return "rotate(" + Math.atan2(layers.mm.clickables[407].yPos - layers.mm.clickables[401].yPos, layers.mm.clickables[407].xPos - layers.mm.clickables[401].xPos) + "rad)"},
-                                    width: () => {return Math.sqrt(Math.pow(layers.mm.clickables[407].yPos - layers.mm.clickables[401].yPos, 2) + Math.pow(layers.mm.clickables[407].xPos - layers.mm.clickables[401].xPos, 2)) + "px"},
-                                    height: "0px", border: "4px dotted #00ff00", borderBottom: "0", marginLeft: "100px", marginTop: "-4px"}],
-                                ["style-row", [], {position: "relative",
-                                    left: () => {return ((layers.mm.clickables[402].xPos + layers.mm.clickables[408].xPos) / 2) + "px"},
-                                    top: () => {return ((layers.mm.clickables[402].yPos + layers.mm.clickables[408].yPos) / 2) + "px"},
-                                    transform: () => {return "rotate(" + Math.atan2(layers.mm.clickables[408].yPos - layers.mm.clickables[402].yPos, layers.mm.clickables[408].xPos - layers.mm.clickables[402].xPos) + "rad)"},
-                                    width: () => {return Math.sqrt(Math.pow(layers.mm.clickables[408].yPos - layers.mm.clickables[402].yPos, 2) + Math.pow(layers.mm.clickables[408].xPos - layers.mm.clickables[402].xPos, 2)) + "px"},
-                                    height: "0px", border: "4px dotted #00ff00", borderBottom: "0", marginLeft: "100px", marginTop: "-4px"}],
-                                ["style-row", [], {position: "relative",
-                                    left: () => {return ((layers.mm.clickables[404].xPos + layers.mm.clickables[409].xPos) / 2) + "px"},
-                                    top: () => {return ((layers.mm.clickables[404].yPos + layers.mm.clickables[409].yPos) / 2) + "px"},
-                                    transform: () => {return "rotate(" + Math.atan2(layers.mm.clickables[409].yPos - layers.mm.clickables[404].yPos, layers.mm.clickables[409].xPos - layers.mm.clickables[404].xPos) + "rad)"},
-                                    width: () => {return Math.sqrt(Math.pow(layers.mm.clickables[409].yPos - layers.mm.clickables[404].yPos, 2) + Math.pow(layers.mm.clickables[409].xPos - layers.mm.clickables[404].xPos, 2)) + "px"},
-                                    height: "0px", border: "4px dotted #00ff00", borderBottom: "0", marginLeft: "100px", marginTop: "-4px"}],
-                                ["style-row", [], {position: "relative",
-                                    left: () => {return ((layers.mm.clickables[402].xPos + layers.mm.clickables[410].xPos) / 2) + "px"},
-                                    top: () => {return ((layers.mm.clickables[402].yPos + layers.mm.clickables[410].yPos) / 2) + "px"},
-                                    transform: () => {return "rotate(" + Math.atan2(layers.mm.clickables[410].yPos - layers.mm.clickables[402].yPos, layers.mm.clickables[410].xPos - layers.mm.clickables[402].xPos) + "rad)"},
-                                    width: () => {return Math.sqrt(Math.pow(layers.mm.clickables[410].yPos - layers.mm.clickables[402].yPos, 2) + Math.pow(layers.mm.clickables[410].xPos - layers.mm.clickables[402].xPos, 2)) + "px"},
-                                    height: "0px", border: "4px dotted #00ff00", borderBottom: "0", marginLeft: "100px", marginTop: "-4px"}],
+                                createMultiverseMapConnection(401, 402),
+                                createMultiverseMapConnection(401, 403),
+                                createMultiverseMapConnection(401, 404),
+                                createMultiverseMapConnection(402, 405),
+                                createMultiverseMapConnection(404, 406),
+                                createMultiverseMapConnection(401, 407),
+                                createMultiverseMapConnection(402, 408),
+                                createMultiverseMapConnection(404, 409),
+                                createMultiverseMapConnection(402, 410),
+                                createMultiverseMapConnection(401, 411),
                             ], {width: "0", height: "0"}],
                             ["style-column", [["clickable", 401]], {width: "0", height: "0"}],
                             ["style-column", [["clickable", 402]], {width: "0", height: "0"}],
@@ -287,6 +254,7 @@
                             ["style-column", [["clickable", 408]], {width: "0", height: "0"}],
                             ["style-column", [["clickable", 409]], {width: "0", height: "0"}],
                             ["style-column", [["clickable", 410]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 411]], {width: "0", height: "0"}],
                             ["blank", "", {width: "100px", height: "0"}],
                         ], {backgroundImage: "url(resources/unknown/dimensionalRealmBg.png)", width: "4000px", height: "4000px"}],
                     ], {border: "3px solid #008000", width: "800px", height: "800px", flexFlow: "column"}],
@@ -301,3 +269,14 @@
     ],
     layerShown() { return true }
 })
+
+function createMultiverseMapConnection(id_1, id_2) {
+    return ["style-row", [], {
+        position: "relative",
+            left: () => {return ((layers.mm.clickables[id_1].xPos + layers.mm.clickables[id_2].xPos) / 2) + "px"},
+            top: () => {return ((layers.mm.clickables[id_1].yPos + layers.mm.clickables[id_2].yPos) / 2) + "px"},
+            transform: () => {return "rotate(" + Math.atan2(layers.mm.clickables[id_2].yPos - layers.mm.clickables[id_1].yPos, layers.mm.clickables[id_2].xPos - layers.mm.clickables[id_1].xPos) + "rad)"},
+            width: () => {return Math.sqrt(Math.pow(layers.mm.clickables[id_2].yPos - layers.mm.clickables[id_1].yPos, 2) + Math.pow(layers.mm.clickables[id_2].xPos - layers.mm.clickables[id_1].xPos, 2)) + "px"},
+            height: "0px", border: "4px dotted #00ff00", borderBottom: "0", marginLeft: "100px", marginTop: "-4px"
+        }]
+}

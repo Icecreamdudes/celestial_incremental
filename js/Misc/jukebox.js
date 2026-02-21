@@ -286,6 +286,14 @@ addLayer("jukebox", {
             file: "music/hive.mp3",
             unlocked() {return player.pol.unlockHive >= 2},
         },
+        "interspace": {
+            artist: "Icecreamdude",
+            name: "N/A",
+            description: "Interspace",
+            img: "resources/music/interspace.png",
+            file: "music/interspace.mp3",
+            unlocked() {return player.bi.interspaceUnlocked},
+        },
 
         // CUTSCENE SONGS
         "cutscene-piano": {
@@ -400,6 +408,14 @@ addLayer("jukebox", {
             file: "music/alephCutscene.mp3",
             unlocked() {return player.pol.unlockHive >= 2},
         },
+        "bumpy": {
+            artist: "Icecreamdude",
+            name: "N/A", // The Developer that Time Left Behind
+            description: "Bumpy",
+            img: "resources/music/bumpy.png",
+            file: "music/bumpy.mp3",
+            unlocked() {return player.bi.interspaceUnlocked},
+        },
     },
     microtabs: {
         stuff: {
@@ -414,6 +430,7 @@ addLayer("jukebox", {
                         ["jukebox", "alt-1"], ["jukebox", "universe-3"], ["jukebox", "dark-universe-1"], ["jukebox", "universe-3-B"],
                         ["jukebox", "eclipse"], ["jukebox", "hall-of-celestials"], ["jukebox", "alt-2"], ["jukebox", "cb-fighting-1"],
                         ["jukebox", "cb-fighting-2"], ["jukebox", "space-battle"], ["jukebox", "iridite-fight"], ["jukebox", "hive"],
+                        ["jukebox", "interspace"],
                     ]],
                     ["blank", "2px"],
                 ],
@@ -427,7 +444,7 @@ addLayer("jukebox", {
                         ["jukebox", "none"], ["jukebox", "cutscene-piano"], ["jukebox", "marcel"], ["jukebox", "cutscene-box"],
                         ["jukebox", "tav"], ["jukebox", "tav-box"], ["jukebox", "tav-rip"], ["jukebox", "cante"],
                         ["jukebox", "singularity-waltz"], ["jukebox", "jocus"], ["jukebox", "matos-box"], ["jukebox", "matos"],
-                        ["jukebox", "nova"], ["jukebox", "iridite"], ["jukebox", "aleph"], 
+                        ["jukebox", "nova"], ["jukebox", "iridite"], ["jukebox", "aleph"], ["jukebox", "bumpy"], 
                     ]],
                     ["blank", "2px"],
                 ],

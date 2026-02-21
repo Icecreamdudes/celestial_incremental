@@ -207,9 +207,8 @@
             style: {width: "100px", minHeight: "100px", borderRadius: "0 0 12px 0"},
         },
         11: {
-            title() { return "<h1>Dice" },
             display() {
-                return player.po.dice ? "<h1>The die will decide your fate.<br>On" : "<h1>The die will decide your fate.<br>Off<br><h2>Req: 1e150 points";
+                return player.po.dice ? "ON" : ("OFF<br><h6>Req: 1e150 Celestial Points</h6>");
             },
             canClick() { return player.po.featureSlots.gte(1) && player.points.gte(1e150) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15)) },
             unlocked() { return !inChallenge("ip", 11) && !inChallenge("ip", 13) && !inChallenge("ip", 15) && !inChallenge("ip", 16) },
@@ -218,60 +217,39 @@
                 player.po.dice = true
             },
             style: {
-                width: '200px',
-                "min-height": '200px',
-                background: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)",
+                width: '300px',
+                minHeight: '75px',
+                maxHeight: '75px',
+                backgroundColor: "#fff",
                 "background-origin": "border-box",
-                "border-color": "#0061ff",
-                borderRadius: "20px",
+                border: "3px solid #0000003f",
+                fontSize: '24px',
+                borderRadius: "0px 0px 10px 10px",
             },
         },
         12: {
-            title() { return "<h1>Rocket Fuel" },
             display() {
-                return player.po.rocketFuel ? "<h1>Fly me to the moon.<br>On" : "<h1>Fly me to the moon.<br>Off<br><h2>Req: 1e170 points";
+                return player.po.rocketFuel ? "ON" : ("OFF<br><h6>Req: 1e170 Celestial Points</h6>");
             },
             canClick() { return player.po.featureSlots.gte(1) && player.points.gte(1e170) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15)) },
             unlocked() { return hasMilestone("ip", 1) && !inChallenge("ip", 11) && !inChallenge("ip", 13) && !inChallenge("ip", 15) && !inChallenge("ip", 16)  },
             onClick() {
                 player.po.rocketFuel = true
             },
-            style() {
-                function degreesToRadians(degrees) {
-                    return (degrees * Math.PI) / 180;
-                }
-
-                // Define the base hue value for dark blue (between 0 and 360 degrees)
-                const darkBlueHue = 210;
-
-                // Define the base lightness values for dark blue and light gray (between 0 and 100%)
-                const darkBlueLightness = 20; // Adjust for darker blue
-                const lightGrayLightness = 80; // Adjust for lighter gray
-
-                // Calculate the current lightness value based on time (smoothly oscillating between dark blue and light gray)
-                const currentTime = new Date().getTime();
-                const lightnessOffset = (Math.sin(currentTime / 400) + 1) / 9; // Adjust the divisor to change oscillation speed
-                const lightness1 = darkBlueLightness + (lightnessOffset * (lightGrayLightness - darkBlueLightness));
-                const lightness2 = lightGrayLightness - (lightnessOffset * (lightGrayLightness - darkBlueLightness));
-
-                // Create the gradient string using the HSL colors
-                const gradient = `linear-gradient(to right, hsl(${darkBlueHue}, 80%, ${lightness1}%), hsl(${darkBlueHue}, 80%, ${lightness2}%))`;
-
-                return {
-                    width: '200px',
-                    "min-height": '200px',
-                    background: gradient,
-                    "background-origin": "border-box",
-                    "border-color": "#119B35",
-                    color: "#06366e",
-                    borderRadius: "20px",
-                }
+            style: {
+                width: '300px',
+                minHeight: '75px',
+                maxHeight: '75px',
+                backgroundColor: "#fff",
+                "background-origin": "border-box",
+                border: "3px solid #0000003f",
+                fontSize: '24px',
+                borderRadius: "0px 0px 10px 10px",
             },
         },
         13: {
-            title() { return "<h1>Hex" },
             display() {
-                return player.po.hex ? "<h1>The number 6.<br>On<br><h2>(Progress is kept between infinities)</h2>" : "<h1>The number 6.<br>Off<br><h2>(Progress is kept between infinities)</h2>";
+                return player.po.hex ? "ON" : ("OFF<br><h6>Req: IP Challenge III Complete</h6>");
             },
             canClick() { return player.po.featureSlots.gte(1) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15))},
             unlocked() { return hasChallenge("ip", 13) && !inChallenge("ip", 11) && !inChallenge("ip", 13) && !inChallenge("ip", 15) && !inChallenge("ip", 16) && !hasUpgrade("s", 18)},
@@ -279,18 +257,19 @@
                 player.po.hex = true
             },
             style: {
-                width: '200px',
-                "min-height": '200px',
-                "background": "linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(18,18,18,1) 100%)",
+                width: '300px',
+                minHeight: '75px',
+                maxHeight: '75px',
+                backgroundColor: "#fff",
                 "background-origin": "border-box",
-                "color": "white",
-                borderRadius: "20px",
+                border: "3px solid #0000003f",
+                fontSize: '24px',
+                borderRadius: "0px 0px 10px 10px",
             },
         },
         14: {
-            title() { return "<h1>BREAK INFINITY" },
             display() {
-                return player.po.breakInfinity ? "<h1>Get past limits.<br>On" : "<h1>Get past limits.<br>Off<br><h2>Req: Tav Defeated";
+                return player.po.breakInfinity ? "ON" : ("OFF<br><h6>Req: Tav Defeated</h6>");
             },
             canClick() { return player.po.featureSlots.gte(1)},
             unlocked() { return player.in.unlockedBreak || hasMilestone("s", 11) },
@@ -298,13 +277,14 @@
                 player.po.breakInfinity = true
             },
             style: {
-                width: '200px',
-                "min-height": '200px',
-                "border-color": "white",
-                "background": "linear-gradient(315deg, #7c5423 0%, #b87400 100%)",
+                width: '300px',
+                minHeight: '75px',
+                maxHeight: '75px',
+                backgroundColor: "#fff",
                 "background-origin": "border-box",
-                "color": "white",
-                borderRadius: "20px",
+                border: "3px solid #0000003f",
+                fontSize: '24px',
+                borderRadius: "0px 0px 10px 10px",
             },
         },
 
@@ -730,6 +710,19 @@
                 return look
             }
         },
+        403: {
+            title() {return player.uni.UD.paused ? "PAUSED<br>▶" : "UNPAUSED<br>⏸"},
+            canClick: true,
+            unlocked() {return uniShown("UD")},
+            onClick() {
+                pauseUniverse("UD")
+            },
+            style() {
+                let look = {width: "200px", minHeight: "50px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0 0 12px 12px"}
+                if (player.uni.UD.paused) {look.backgroundColor = "#994d73"} else {look.backgroundColor = "#ff7fbf"}
+                return look
+            }
+        },
     },
     microtabs: {
         halt: {
@@ -840,6 +833,12 @@
                             ], {width: "200px", height: "47px", borderBottom: "3px solid white"}],
                             ["clickable", 203],
                         ], () => {return uniShown("UB") ? {width: "200px", height: "100px", background: "#c4b300", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", "Universe δ", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "200px", height: "47px", borderBottom: "3px solid white"}],
+                            ["clickable", 403],
+                        ], () => {return uniShown("UB") ? {width: "200px", height: "100px", background: "#cc6699", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
                     ]],
                 ],
             },
@@ -855,7 +854,52 @@
                     ["blank", "25px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],
                     ["blank", "25px"],
-                    ["style-row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14]], {maxWidth: "1000px"}],
+                    ["style-row", [
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", "Dice", {color: "black", fontSize: "24px", fontFamily: "monospace"}],
+                            ], {backgroundColor: "white", borderRadius: "10px 10px 0px 0px", width: "300px", height: "50px"}],
+                            ["style-column", [
+                                ["raw-html", "⚅", {color: "black", fontSize: "128px", fontWeight: "100", lineHeight: "1", fontFamily: "monospace"}],
+                                ["raw-html", "The die will decide your fate.", {color: "black", fontSize: "16px", fontFamily: "monospace"}],
+                            ], {background: "linear-gradient(0deg, #0061ff -100%, white 100%)", borderBottom: "3px solid #0061ff", borderTop: "3px solid #0061ff", width: "300px", height: "169px"}],
+                            ["clickable", 11],
+                        ], () => {return layers.po.clickables[11].unlocked() ? {backgroundColor: "#0061ff", border: "3px solid #0061ff", borderRadius: "13px", width: "300px", height: "300px", margin: "4px"} : {display: "none !important"}}],
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", "Rocket Fuel", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ], {backgroundColor: "#2a65a8", borderRadius: "10px 10px 0px 0px", width: "300px", height: "50px"}],
+                            ["style-column", [
+                                ["raw-html", "✦", {color: "white", fontSize: "128px", fontWeight: "100", lineHeight: "1", fontFamily: "monospace"}],
+                                ["raw-html", "Fly me to the moon.", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ], {background: "linear-gradient(0deg, #119B35 -100%, #2a65a8 100%)", borderBottom: "3px solid #119B35", borderTop: "3px solid #119B35", width: "300px", height: "169px"}],
+                            ["clickable", 12],
+                        ], () => {return layers.po.clickables[12].unlocked() ? {backgroundColor: "#119B35", border: "3px solid #119B35", borderRadius: "13px", width: "300px", height: "300px", margin: "4px"} : {display: "none !important"}}],
+                    ]],
+                    ["style-row", [
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", "Hex", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ], {backgroundColor: "black", borderRadius: "10px 10px 0px 0px", width: "300px", height: "50px"}],
+                            ["style-column", [
+                                ["blank", "16px"],
+                                ["raw-html", "目", {color: "white", fontSize: "96px", fontWeight: "400", lineHeight: "1", fontFamily: "monospace"}],
+                                ["blank", "16px"],
+                                ["raw-html", "The number 6.", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ], {background: "linear-gradient(0deg, #0061ff -100%, black 100%)", borderBottom: "3px solid #0061ff", borderTop: "3px solid #0061ff", width: "300px", height: "169px"}],
+                            ["clickable", 13],
+                        ], () => {return layers.po.clickables[13].unlocked() ? {backgroundColor: "#0061ff", border: "3px solid #0061ff", borderRadius: "13px", width: "300px", height: "300px", margin: "4px"} : {display: "none !important"}}],
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", "BREAK INFINITY", {color: "black", fontSize: "24px", fontFamily: "monospace"}],
+                            ], {backgroundColor: "#ffbf00", borderRadius: "10px 10px 0px 0px", width: "300px", height: "50px"}],
+                            ["style-column", [
+                                ["raw-html", "→", {color: "black", fontSize: "128px", fontWeight: "100", lineHeight: "1", fontFamily: "monospace"}],
+                                ["raw-html", "Get past limits.", {color: "black", fontSize: "16px", fontFamily: "monospace"}],
+                            ], {background: "linear-gradient(0deg, #7c5423 -100%, #ffbf00 100%)", borderBottom: "3px solid #7c5423", borderTop: "3px solid #7c5423", width: "300px", height: "169px"}],
+                            ["clickable", 14],
+                        ], () => {return layers.po.clickables[14].unlocked() ? {backgroundColor: "#7c5423", border: "3px solid #7c5423", borderRadius: "13px", width: "300px", height: "300px", margin: "4px"} : {display: "none !important"}}],
+                    ]],
                 ]
             },
             "Halter": {

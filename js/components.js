@@ -489,6 +489,16 @@ function loadVue() {
 		<span v-if="(tmp[layer].milestones[data].toggles)&&(hasMilestone(layer, data))" v-for="toggle in tmp[layer].milestones[data].toggles"><toggle :layer= "layer" :data= "toggle" v-bind:style="tmp[layer].componentStyles.toggle"></toggle>&nbsp;</span></td></tr>
 		`
 	})
+	Vue.component('titleless-milestone', {
+		props: ['layer', 'data'],
+		template: `
+		<td v-if="tmp[layer].milestones && tmp[layer].milestones[data]!== undefined && milestoneShown(layer, data) && tmp[layer].milestones[data].unlocked" v-bind:style="[{'display':'flex','align-items':'center'}, run(layers[layer].milestones[data].style, layers[layer].milestones[data])]" v-bind:class="{milestone: !hasMilestone(layer, data), tooltipBox: true, milestoneDone: hasMilestone(layer, data)}">
+			<span v-html="run(layers[layer].milestones[data].effectDescription, layers[layer].milestones[data])"></span><br>
+			<tooltip v-if="layers[layer].milestones[data].tooltip" :text="run(layers[layer].milestones[data].tooltip, layers[layer].milestones[data])"></tooltip>
+
+		<span v-if="(tmp[layer].milestones[data].toggles)&&(hasMilestone(layer, data))" v-for="toggle in tmp[layer].milestones[data].toggles"><toggle :layer= "layer" :data= "toggle" v-bind:style="tmp[layer].componentStyles.toggle"></toggle>&nbsp;</span></td></tr>
+		`
+	})
 
 	Vue.component('toggle', {
 		props: ['layer', 'data'],
@@ -680,6 +690,55 @@ function loadVue() {
 		},
 	})
 
+	Vue.component('layerColor-dark-buyable', {
+		props: ['layer', 'data'],
+		template: `
+		<div v-if="tmp[layer].buyables && tmp[layer].buyables[data]!== undefined && tmp[layer].buyables[data].unlocked" style="display: grid">
+			<div class="exBuyableHolder" v-bind:style="[{'background-color': tmp[layer].color}, run(layers[layer].buyables[data].style, layers[layer].buyables[data])]">
+				<div class="exBuyableBar">
+					<div class="exBuyableBarText">
+						<span v-html="tmp[layer].buyables[data].purchaseLimit.eq(Infinity) ? formatWhole(player[layer].buyables[data]) : formatWhole(player[layer].buyables[data])+'/'+formatWhole(tmp[layer].buyables[data].purchaseLimit)"></span>
+					</div>
+					<div class="darkBuyableBarProgress" v-bind:style="{'width': tmp[layer].buyables[data].purchaseLimit.eq(Infinity) ? '100%' : toNumber(player[layer].buyables[data].div(tmp[layer].buyables[data].purchaseLimit).mul(100))+'%',
+					'background-color': run(layers[layer].buyables[data].style, layers[layer].buyables[data]).borderColor != undefined ? run(layers[layer].buyables[data].style, layers[layer].buyables[data]).borderColor : run(layers[layer].buyables[data].style, layers[layer].buyables[data]).backgroundColor != undefined ? run(layers[layer].buyables[data].style, layers[layer].buyables[data]).backgroundColor : tmp[layer].color}"></div>
+				</div>
+				<div class="exBuyableInfo">
+					<div class="exBuyableInfo2">
+						<span v-if= "layers[layer].buyables[data].title"><h2 v-html="run(layers[layer].buyables[data].title, layers[layer].buyables[data])"></h2><br></span>
+						<span v-bind:style="{'white-space': 'pre-line'}" v-html="run(layers[layer].buyables[data].display, layers[layer].buyables[data])"></span>
+					</div>
+				</div>
+				<div class="exBuyableRow">
+					<button v-bind:class="{ darkBuyableButton1: true, tooltipBox: true, can: tmp[layer].buyables[data].canBuy, locked: !tmp[layer].buyables[data].canBuy, bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit)}"
+					v-bind:style="player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit) ? {'background-color': '#1a3b0f'} : tmp[layer].buyables[data].canBuy ? {'background-color': tmp[layer].color, 'color': 'black', 'border': '3px solid #0000003f'} : {'background-color': '#361e1e', 'color': 'white', 'border': '3px solid #663737'}"
+					v-on:click="if(!interval) {player.f.mfactorMax=false; buyBuyable(layer, data)}" :id='"buyable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
+					Buy 1</button>
+					<button v-bind:class="{ darkBuyableButton2: true, tooltipBox: true, can: tmp[layer].buyables[data].canBuy, locked: !tmp[layer].buyables[data].canBuy, bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit)}"
+					v-bind:style="player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit) ? {'background-color': '#1a3b0f'} : tmp[layer].buyables[data].canBuy ? {'background-color': tmp[layer].color, 'color': 'black', 'border': '3px solid #0000003f'} : {'background-color': '#361e1e', 'color': 'white', 'border': '3px solid #663737'}"
+					v-on:click="{buyMaxExBuyable(layer, data)}" :id='"buyable-" + layer + "-" + data'>
+					Buy Max</button>
+				</div>
+			</div>
+		</div>
+		`,
+		data() { return { interval: false, time: 0,}},
+		methods: {
+			start() {
+				if (!this.interval) {
+					this.interval = setInterval((function() {
+						if(this.time >= 5)
+							buyBuyable(this.layer, this.data)
+						this.time = this.time+1
+					}).bind(this), 50)}
+			},
+			stop() {
+				clearInterval(this.interval)
+				this.interval = false
+			  	this.time = 0
+			}
+		},
+	})
+
 	Vue.component('jinx-buyable', {
 		props: ['layer', 'data'],
 		template: `
@@ -700,6 +759,41 @@ function loadVue() {
 					<span v-html="tmp[layer].buyables[data].total"></span>
 				</div>
 				<span v-html="run(layers[layer].buyables[data].display, layers[layer].buyables[data])"></span>
+				<node-mark :layer='layer' :data='tmp[layer].buyables[data].marked'></node-mark>
+				<tooltip v-if="layers[layer].buyables[data].tooltip" :text="run(layers[layer].buyables[data].tooltip, layers[layer].buyables[data])"></tooltip>
+
+			</button>
+			<br v-if="(tmp[layer].buyables[data].sellOne !== undefined && !(tmp[layer].buyables[data].canSellOne !== undefined && tmp[layer].buyables[data].canSellOne == false)) || (tmp[layer].buyables[data].sellAll && !(tmp[layer].buyables[data].canSellAll !== undefined && tmp[layer].buyables[data].canSellAll == false))">
+			<sell-one :layer="layer" :data="data" v-bind:style="tmp[layer].componentStyles['sell-one']" v-if="(tmp[layer].buyables[data].sellOne)&& !(tmp[layer].buyables[data].canSellOne !== undefined && tmp[layer].buyables[data].canSellOne == false)"></sell-one>
+			<sell-all :layer="layer" :data="data" v-bind:style="tmp[layer].componentStyles['sell-all']" v-if="(tmp[layer].buyables[data].sellAll)&& !(tmp[layer].buyables[data].canSellAll !== undefined && tmp[layer].buyables[data].canSellAll == false)"></sell-all>
+		</div>
+		`,
+		data() { return { interval: false, time: 0,}},
+		methods: {
+			start() {
+				if (!this.interval) {
+					this.interval = setInterval((function() {
+						if(this.time >= 5)
+							buyBuyable(this.layer, this.data)
+						this.time = this.time+1
+					}).bind(this), 50)}
+			},
+			stop() {
+				clearInterval(this.interval)
+				this.interval = false
+			  	this.time = 0
+			}
+		},
+	})
+	Vue.component('hoverless-buyable', {
+		props: ['layer', 'data'],
+		template: `
+		<div v-if="tmp[layer].buyables && tmp[layer].buyables[data]!== undefined && tmp[layer].buyables[data].unlocked" style="display: grid">
+			<button v-bind:class="{ buyable: true, tooltipBox: true, canHoverless: tmp[layer].buyables[data].canBuy, locked: !tmp[layer].buyables[data].canBuy, bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit)}"
+			v-bind:style="[tmp[layer].buyables[data].canBuy ? {'background-color': tmp[layer].color} : {}, tmp[layer].componentStyles.buyable, run(layers[layer].buyables[data].style, layers[layer].buyables[data])]"
+			v-on:click="if(!interval) buyBuyable(layer, data)" :id='"buyable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
+				<span v-if= "layers[layer].buyables[data].title"><h2 v-html="run(layers[layer].buyables[data].title, layers[layer].buyables[data])"></h2><br></span>
+				<span v-bind:style="{'white-space': 'pre-line'}" v-html="run(layers[layer].buyables[data].display, layers[layer].buyables[data])"></span>
 				<node-mark :layer='layer' :data='tmp[layer].buyables[data].marked'></node-mark>
 				<tooltip v-if="layers[layer].buyables[data].tooltip" :text="run(layers[layer].buyables[data].tooltip, layers[layer].buyables[data])"></tooltip>
 

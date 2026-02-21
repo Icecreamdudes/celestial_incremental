@@ -36,6 +36,7 @@ addLayer("sp", {
 
         let kresAmt = getLevelableAmount("pet", 404).add(getLevelableTier("pet", 404).mul(5).min(40))
         player.sp.kresPointsPerSecond = kresAmt.pow(1.1).div(10).mul(getLevelableTier("pet", 404).add(1))
+        if (hasUpgrade("ev8", 21)) player.sp.kresPointsPerSecond = player.sp.kresPointsPerSecond.mul(1.4)
         player.sp.kresPoints = player.sp.kresPoints.add(player.sp.kresPointsPerSecond.mul(delta))
 
         if (player.sp.kresPoints.gte(player.sp.kresPointsMax)) {
@@ -48,6 +49,7 @@ addLayer("sp", {
 
         let navAmt = getLevelableAmount("pet", 405).add(getLevelableTier("pet", 405).mul(5).min(40))
         player.sp.navPointsPerSecond = navAmt.pow(1.1).div(10).mul(getLevelableTier("pet", 405).add(1))
+        if (hasUpgrade("ev8", 21)) player.sp.navPointsPerSecond = player.sp.navPointsPerSecond.mul(1.4)
         player.sp.navPoints = player.sp.navPoints.add(player.sp.navPointsPerSecond.mul(delta))
 
         if (player.sp.navPoints.gte(player.sp.navPointsMax)) {
@@ -60,6 +62,7 @@ addLayer("sp", {
 
         let selAmt = getLevelableAmount("pet", 406).add(getLevelableTier("pet", 406).mul(5).min(40))
         player.sp.selPointsPerSecond = selAmt.pow(1.1).div(10).mul(getLevelableTier("pet", 406).add(1))
+        if (hasUpgrade("ev8", 21)) player.sp.selPointsPerSecond = player.sp.selPointsPerSecond.mul(1.4)
         player.sp.selPoints = player.sp.selPoints.add(player.sp.selPointsPerSecond.mul(delta))
 
         if (player.sp.selPoints.gte(player.sp.selPointsMax)) {
@@ -302,7 +305,7 @@ addLayer("sp", {
                 return "Nav Synergy"
             },
             display() {
-                return 'which are boosting dragon points by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting gold by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Nav Points'
             },
             buy(mult) {

@@ -172,7 +172,7 @@ addUniverse("A2", {
 addUniverse("U3", {
     name: "Universe 3<br>Domain of Singularity",
     symbol: "3",
-    tree: [["s"], ["co", "cof"], ["ra", "cs", "sd"], ["sma", "sme"], ["smn", "ma"]],
+    tree: [["s"], ["co", "cof"], ["ra", "cs", "sd"], ["sma", "sme"], ["ma"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(140deg, red 0%, black 125%)",
@@ -193,7 +193,7 @@ addUniverse("U3", {
 addUniverse("D1", {
     name: "Dark Universe 1<br>Shadow Overworld",
     symbol: "D1",
-    tree: [["le"], ["dr", "dp"], ["dg", "db", "dgr"], ["dn", "dv", "ds", "dt"]],
+    tree: [["le", "bl"], ["dr", "dp"], ["dg", "db", "dgr"], ["dn", "dv", "ds", "dt"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(145deg, #2e2e2e 0%, #0d0d0d 100%)",
@@ -274,7 +274,7 @@ addUniverse("CH", {
 addUniverse("UD", {
     name: "Universe δ<br>Interspace",
     symbol: "δ",
-    tree: [["wel"], ["pri", "blank", "prj"], ["bum"], ["cer"]],
+    tree: [["wel"], ["pri", "prj"], ["bum"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(135deg, #ff7fbf 0%, #bf7fff 100%)",
@@ -288,5 +288,28 @@ addUniverse("UD", {
         }
         return style
     },
-    uniShown() { return player.startedGame && player.au2.au2Unlocked && !player.sma.inStarmetalChallenge},
+    uniShown() { return player.startedGame && player.bi.interspaceUnlocked && !player.sma.inStarmetalChallenge},
+})
+
+addUniverse("DS", {
+    name() {
+        return "Universe ε<br>Dice Space"
+    },
+    symbol: "ε",
+    tree: [["za",],["cf","wof",], ["sm",]],
+    nodeStyle() {
+        let style = {
+            background: "linear-gradient(45deg, #666666ff 0%, #585858ff 100%)",
+            backgroundOrigin: "border-box",
+            borderColor: "#cececeff",
+        }
+        if (player.universe=="DS") {
+            style.outline = "2px solid white"
+            style.outlineOffset = "-2px"
+            style.borderWidth = "5px"
+        }
+        return style
+    },
+    uniShown() { return player.d.diceSpaceUnlocked && !player.sma.inStarmetalChallenge }, //make it something
+    disabled() {return false}
 })

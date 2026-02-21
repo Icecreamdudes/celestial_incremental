@@ -85,8 +85,10 @@
             }
         }
 
-        if (player.sm.spinAmount.lt(20)) player.wof.spinCost = player.wof.wheelsSpinned.pow(1.5).add(1).mul(10000)
-        if (player.sm.spinAmount.gte(20)) player.wof.spinCost = player.wof.wheelsSpinned.pow(2.25).add(1).mul(10000)
+        if (player.wof.wheelsSpinned.lt(20)) player.wof.spinCost = player.wof.wheelsSpinned.pow(1.5).add(1).mul(10000)
+        if (player.wof.wheelsSpinned.gte(20)) player.wof.spinCost = player.wof.wheelsSpinned.pow(2.25).add(1).mul(10000)
+        if (player.wof.wheelsSpinned.gte(150)) player.wof.spinCost = player.wof.wheelsSpinned.mul(5).pow(5).add(1).mul(10000)
+        if (player.wof.wheelsSpinned.gte(250)) player.wof.spinCost = player.wof.wheelsSpinned.mul(5).pow(10).add(1).mul(10000)
         player.wof.spinCost = player.wof.spinCost.div(buyableEffect("cf", 34))
 
         player.wof.spinPause = player.wof.spinPause.sub(1)
@@ -104,9 +106,10 @@
         player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(buyableEffect("wof", 13))
         player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(buyableEffect("cf", 24))
         player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(player.sm.chipsEffect[2])
+        if (hasUpgrade("cbs", 12)) player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(upgradeEffect("cbs", 12))
 
         if (player.wof.autoSpin) {
-            if (player.za.chancePoints.gte(player.wof.spinCost))
+            if (player.za.chancePoints.gte(player.wof.spinCost) && !player.wof.spinActive)
             {
                 player.wof.spinPause = new Decimal(7)
 
@@ -451,7 +454,7 @@
             purchaseLimit() { return new Decimal(15) },
             currency() { return player.wof.wheelPoints },
             pay(amt) { player.wof.wheelPoints = this.currency().sub(amt) },
-            effect(x) { return Decimal.div(1, getBuyableAmount(this.layer, this.id).pow(0.35).mul(0.15).add(1)) },
+            effect(x) { return Decimal.div(1, getBuyableAmount(this.layer, this.id).pow(0.5).mul(0.15).add(1)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -507,7 +510,8 @@
                     ["row", [["clickable", 16], ["clickable", 17], ["clickable", 18],]],
                     ["blank", "10px"],
                     ["raw-html", function () { return player.sm.buyables[106].gte(1) ? "<h5>ESC: " + format(buyableEffect("sm", 106).mul(100)) + "%" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h5>Mult: " + format(player.wof.wheelPointsMult) + "x. (also based on amount of wheel spins)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "<h6>Mult: " + format(player.wof.wheelPointsMult) + "x. (also based on amount of wheel spins)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "<h6>Wheels spinned: " + formatWhole(player.wof.wheelsSpinned) + "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ], {width: "600px", height: "700px", background: "rgba(5, 80, 28, 0.5)", border: "0px solid #ccc", borderRight: "0px", borderLeft: "0px", borderRadius: "15px 0px 0px 15px"}],
 

@@ -8,6 +8,7 @@
         unlocked: true,
 
         chancePoints: new Decimal(0),
+        bestChancePoints: new Decimal(0),
         chancePointsPerSecond: new Decimal(0),
 
         chancePointsSoftcapStart: new Decimal(100),
@@ -15,6 +16,7 @@
 
         zarUnlocked: false,
         zarReqs: [false, false, false, false, false, false]
+        
     }},
     automate() {},
     nodeStyle() {
@@ -42,25 +44,31 @@
         player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.mul(buyableEffect("cf", 13))
         player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.mul(player.wof.wheelPointsEffect2)
         player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.mul(player.sm.chipsEffect[0])
+        player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.pow(buyableEffect("sm", 109))
 
-        if (player.za.chancePoints.gte(player.za.chancePointsSoftcapStart))
+        if (player.za.chancePoints.add(player.za.chancePointsPerSecond).gte(player.za.chancePointsSoftcapStart))
         {
             player.za.chancePointsSoftcapEffect = player.za.chancePoints.sub(player.za.chancePointsSoftcapStart).pow(0.75).add(1)
             player.za.chancePointsSoftcapEffect = player.za.chancePointsSoftcapEffect.pow(buyableEffect("wof", 15))
             player.za.chancePointsSoftcapEffect = player.za.chancePointsSoftcapEffect.pow(buyableEffect("sm", 102))
+            if (hasUpgrade("cbs", 14)) player.za.chancePointsSoftcapEffect = player.za.chancePointsSoftcapEffect.pow(upgradeEffect("cbs", 14))
         } else
         {
             player.za.chancePointsSoftcapEffect = new Decimal(1)
         }
 
         if (hasUpgrade("za", 11)) player.za.chancePointsPerSecond = new Decimal(1)
-        player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.div(player.za.chancePointsSoftcapEffect)
         player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(player.cf.headsEffect)
         player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(buyableEffect("cf", 12))
         player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(player.wof.wheelPointsEffect)
         player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(player.sm.chipsEffect[0])
+        if (hasUpgrade("cbs", 11)) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(upgradeEffect("cbs", 11))
+        
+        if (player.za.chancePoints.gte(player.za.chancePointsSoftcapStart)) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.div(player.za.chancePointsSoftcapEffect)
 
         player.za.chancePoints = player.za.chancePoints.add(player.za.chancePointsPerSecond.mul(delta))
+
+        if (player.za.bestChancePoints.lt(player.za.chancePoints)) player.za.bestChancePoints = player.za.chancePoints
     },
     clickables: {
         11: {
@@ -226,7 +234,7 @@
             currencyInternalName: "chancePoints",
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '100px', },
             effect() {
-                return player.za.chancePoints.plus(1).log10().pow(0.4).div(4).add(1)
+                return player.za.chancePoints.plus(1).log10().pow(0.2).div(4).add(1)
             },
             effectDisplay() { return "^" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
         },        
@@ -242,13 +250,23 @@
         },
         19: {
             title: "I don't know what this is",
-            unlocked() { return hasUpgrade("za", 17) },
+            unlocked() { return hasUpgrade("za", 18) },
             description: "Unlock the check back shrine.",
-            cost: new Decimal(1e12),
+            cost: new Decimal(1e14),
             currencyLocation() { return player.za },
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(15, 12, 12, 0.5)", borderRadius: "15px", margin: "2px"},
+        },
+        21: {
+            title: "Let's play a game.",
+            unlocked() { return hasUpgrade("za", 19) },
+            description: "Unlock cards.",
+            cost: new Decimal(1e30),
+            currencyLocation() { return player.za },
+            currencyDisplayName: "Chance Points",
+            currencyInternalName: "chancePoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(15, 12, 12, 0.5)", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {},
@@ -283,7 +301,7 @@
                         ["raw-html", function () { return "My amazing upgrades" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ["blank", "5px"],
                         ["row", [ ["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14],["upgrade", 15],["upgrade", 16],]],
-                        ["row", [ ["upgrade", 17],["upgrade", 18],["upgrade", 19],]],
+                        ["row", [ ["upgrade", 17],["upgrade", 18],["upgrade", 19],["upgrade", 21],]],
                         ["blank", "5px"],
                     ], {width: "800px", background: "#313131ff", border: "3px solid #ccc", borderRadius: "15px"}],
                 ]

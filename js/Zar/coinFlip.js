@@ -99,10 +99,12 @@
         player.cf.headsSoftcapStart = player.cf.headsSoftcapStart.mul(buyableEffect("wof", 14))
         player.cf.headsSoftcapStart = player.cf.headsSoftcapStart.mul(buyableEffect("cf", 33))
         player.cf.headsSoftcapStart = player.cf.headsSoftcapStart.mul(player.sm.chipsEffect[1])
+        player.cf.headsSoftcapStart = player.cf.headsSoftcapStart.pow(buyableEffect("sm", 111))
 
         if (player.cf.heads.gte(player.cf.headsSoftcapStart))
         {
             player.cf.headsSoftcapEffect = player.cf.heads.sub(player.cf.headsSoftcapStart).pow(0.35).add(1)
+            if (hasUpgrade("cbs", 16)) player.cf.headsSoftcapEffect = player.cf.headsSoftcapEffect.pow(upgradeEffect("cbs", 16)[0])
         } else
         {
             player.cf.headsSoftcapEffect = new Decimal(1)
@@ -113,10 +115,12 @@
         player.cf.tailsSoftcapStart = player.cf.tailsSoftcapStart.mul(buyableEffect("wof", 14))
         player.cf.tailsSoftcapStart = player.cf.tailsSoftcapStart.mul(buyableEffect("cf", 23))
         player.cf.tailsSoftcapStart = player.cf.tailsSoftcapStart.mul(player.sm.chipsEffect[1])
+        player.cf.tailsSoftcapStart = player.cf.tailsSoftcapStart.pow(buyableEffect("sm", 111))
 
         if (player.cf.tails.gte(player.cf.tailsSoftcapStart))
         {
             player.cf.tailsSoftcapEffect = player.cf.tails.sub(player.cf.tailsSoftcapStart).pow(0.35).add(1)
+            if (hasUpgrade("cbs", 16)) player.cf.tailsSoftcapEffect = player.cf.tailsSoftcapEffect.pow(upgradeEffect("cbs", 16)[1])
         } else
         {
             player.cf.tailsSoftcapEffect = new Decimal(1)
@@ -128,9 +132,10 @@
         player.cf.headsToGet = player.cf.headsToGet.mul(buyableEffect("cf", 21))
         player.cf.headsToGet = player.cf.headsToGet.mul(player.wof.wheelPointsEffect3)
         player.cf.headsToGet = player.cf.headsToGet.mul(buyableEffect("wof", 11))
-        player.cf.headsToGet = player.cf.headsToGet.div(player.cf.headsSoftcapEffect)
         player.cf.headsToGet = player.cf.headsToGet.mul(player.sm.chipsEffect[1])
         player.cf.headsToGet = player.cf.headsToGet.mul(buyableEffect("sm", 101))
+        
+        player.cf.headsToGet = player.cf.headsToGet.div(player.cf.headsSoftcapEffect)
 
         player.cf.headsEffect = player.cf.heads.pow(0.65).add(1).pow(buyableEffect("cf", 14))
         player.cf.headsEffect2 = player.cf.heads.div(10).pow(0.25).add(1).pow(buyableEffect("cf", 14))
@@ -142,9 +147,10 @@
         player.cf.tailsToGet = player.cf.tailsToGet.mul(buyableEffect("cf", 31))
         player.cf.tailsToGet = player.cf.tailsToGet.mul(player.wof.wheelPointsEffect3)
         player.cf.tailsToGet = player.cf.tailsToGet.mul(buyableEffect("wof", 11))
-        player.cf.tailsToGet = player.cf.tailsToGet.div(player.cf.tailsSoftcapEffect)
         player.cf.tailsToGet = player.cf.tailsToGet.mul(player.sm.chipsEffect[1])
         player.cf.tailsToGet = player.cf.tailsToGet.mul(buyableEffect("sm", 101))
+
+        player.cf.tailsToGet = player.cf.tailsToGet.div(player.cf.tailsSoftcapEffect)
 
 
         player.cf.tailsEffect = player.cf.tails.pow(0.5).add(1).pow(buyableEffect("cf", 14))
@@ -155,6 +161,7 @@
         if (player.cf.coinsFlipped.gte(25)) player.cf.flipCost = player.cf.coinsFlipped.pow(2.25).div(3).add(1).mul(10)
         if (player.cf.coinsFlipped.gte(100)) player.cf.flipCost = player.cf.coinsFlipped.pow(2.5).add(1).mul(10)
         if (player.cf.coinsFlipped.gte(500)) player.cf.flipCost = player.cf.coinsFlipped.mul(20).pow(2.75).add(1)
+        if (player.cf.coinsFlipped.gte(1500)) player.cf.flipCost = player.cf.coinsFlipped.mul(20).pow(5).add(1)
         player.cf.flipCost = player.cf.flipCost.div(buyableEffect("cf", 22))
 
         if (player.cf.autoFlip)
@@ -169,8 +176,6 @@
             }
         }
 
-        if (player.cf.headsToGet.gte(player.cf.headsSoftcapStart)) player.cf.headsToGet = player.cf.headsToGet.div(player.cf.heads.sub(player.cf.headsSoftcapStart).pow(0.35).add(1))
-        if (player.cf.tailsToGet.gte(player.cf.tailsSoftcapStart)) player.cf.tailsToGet = player.cf.tailsToGet.div(player.cf.tails.sub(player.cf.tailsSoftcapStart).pow(0.35).add(1))
     },
     clickables: {
         11: {
@@ -202,6 +207,8 @@
         },
     },
     coinFlip() {
+        if (player.cf.flipLength.gt(0.2))
+        {
         // Run a decaying-rate visible toggle until the flip ends, updating player.cf.flipTimer
         try {
             // prevent double-start
@@ -284,6 +291,14 @@
             if (player.cf._flipTimeoutId) {
                 clearTimeout(player.cf._flipTimeoutId)
                 player.cf._flipTimeoutId = null
+            }
+        }
+        } else {
+            let random = getRandomInt(2)
+            if (random == 0) {
+                player.cf.heads = player.cf.heads.add(player.cf.headsToGet)
+            } else {
+                player.cf.tails = player.cf.tails.add(player.cf.tailsToGet)
             }
         }
     },

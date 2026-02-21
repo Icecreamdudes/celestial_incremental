@@ -264,6 +264,16 @@
             currencyInternalName: "singularityPoints",
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
+        29: {
+            title: "Singularity Upgrade XIX",
+            unlocked() { return player.ir.iriditeDefeated},
+            description: "Earn all core fragment types on singularity reset and weakens radiation softcap dramatically.",  
+            cost: new Decimal("1e800"),
+            currencyLocation() { return player.s },
+            currencyDisplayName: "Singularity Points",
+            currencyInternalName: "singularityPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
     },
     buyables: {
         11: {
@@ -390,7 +400,7 @@
         },
         14: {
             requirementDescription: "<h3>4 Singularities",
-            effectDescription: "Keep XPBoost on reset, keep pre-singularity check back content on reset, unlock new marcelacoplao content, keep moonstone buyables on reset, and unlock singularity dimensions.",
+            effectDescription: "Keep XPBoost on reset, unlock new marcelacoplao content, keep moonstone buyables on reset, and unlock singularity dimensions.",
             done() { return player.s.singularities.gte(4) },
             style: {width: "800px", height: "85px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
@@ -492,7 +502,7 @@
                     ["style-row", [
                         ["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14],["upgrade", 15],["upgrade", 16],["upgrade", 17],
                         ["upgrade", 18],["upgrade", 19],["upgrade", 20],["upgrade", 21],["upgrade", 22],["upgrade", 23],
-                        ["upgrade", 24],["upgrade", 25],["upgrade", 26],["upgrade", 27],["upgrade", 28]
+                        ["upgrade", 24],["upgrade", 25],["upgrade", 26],["upgrade", 27],["upgrade", 28],["upgrade", 29]
                     ], {maxWidth: "800px"}],
                 ]
             },

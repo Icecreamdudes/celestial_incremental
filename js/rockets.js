@@ -172,6 +172,10 @@
         for (let i = 0; i < player.ro.rocketCooldownMax.length; i++) {
             player.ro.rocketCooldownMax[i] = player.ro.rocketCooldownMax[i].div(levelableEffect("pu", 112)[1])
         }
+        // TO FIX STAR BUG WHEN AU2 IS NOT UNLOCKED
+        if (player.tab == "ro" && tmp.uni.A2.disabled) {
+            layers.au2.update(delta)
+        }
     },
     starReset() {
         clickClickable("co", 1000)

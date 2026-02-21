@@ -205,6 +205,7 @@
             player.in.pylonEnergyPerSecond = player.in.pylonEnergyPerSecond.pow(buyableEffect("in", 12))
             player.in.pylonEnergyPerSecond = player.in.pylonEnergyPerSecond.pow(buyableEffect("in", 13))
             player.in.pylonEnergyPerSecond = player.in.pylonEnergyPerSecond.pow(levelableEffect("ir", 9)[1])
+            player.in.pylonEnergyPerSecond = player.in.pylonEnergyPerSecond.pow(player.cbs.pylonEnergyEffect4)
 
             player.in.pylonPassiveEffect = player.in.infinityPoints.pow(0.002).add(1).pow(player.in.pylonTierEffect)
         } else

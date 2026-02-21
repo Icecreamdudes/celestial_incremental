@@ -728,6 +728,14 @@ addLayer("pet", {
             player.subtabs.pu["stuff"] = "Collection"
             changeTheme()
 
+            pauseUniverse("U1")
+            pauseUniverse("UA")
+            pauseUniverse("U2")
+            pauseUniverse("A1")
+            pauseUniverse("U3")
+            pauseUniverse("CB")
+            pauseUniverse("DS")
+
             layers.pu.generateSelection();
         }
 

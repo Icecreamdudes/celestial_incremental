@@ -123,8 +123,8 @@
         }
 
         player.cbs.pylonEnergyEffect = player.cbs.pylonEnergy.pow(0.02).div(3).add(1).pow(player.cbs.pylonTierEffect)
-        player.cbs.pylonEnergyEffect2 = player.cbs.pylonEnergy.pow(0.1).add(1).pow(player.cbs.pylonTierEffect)
-        player.cbs.pylonEnergyEffect3 = player.cbs.pylonEnergy.pow(0.05).div(2).add(1).pow(player.cbs.pylonTierEffect)
+        player.cbs.pylonEnergyEffect2 = player.cbs.pylonEnergy.pow(0.1).div(3).add(1).pow(player.cbs.pylonTierEffect)
+        player.cbs.pylonEnergyEffect3 = player.cbs.pylonEnergy.pow(0.05).div(4).add(1).pow(player.cbs.pylonTierEffect)
         player.cbs.pylonEnergyEffect4 = player.cbs.pylonEnergy.pow(0.07).add(1).pow(player.cbs.pylonTierEffect)
 
         player.cbs.pylonTierEffect = player.cbs.pylonTier.sub(1).div(10).add(1)

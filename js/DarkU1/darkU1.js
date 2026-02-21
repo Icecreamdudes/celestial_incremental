@@ -58,7 +58,6 @@
         if (getLevelableTier("pu", 305, true)) player.du.pointGain = player.du.pointGain.pow(levelableEffect("pu", 305)[1])
 
         if (player.du.pointGain.gte(player.du.secondSoftcapStart)) player.du.pointGain = player.du.pointGain.div(player.du.secondSoftcapStart).pow(player.du.pointSoftcap2).mul(player.du.secondSoftcapStart)
-
         if (player.sma.inStarmetalChallenge) {
             player.du.points = player.du.points.add(player.du.pointGain.mul(delta))
         }

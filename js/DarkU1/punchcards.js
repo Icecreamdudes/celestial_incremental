@@ -36,7 +36,7 @@ addLayer("pu", {
     },
     generateSelection() {
         player.pu.selectedPunchcards = [0, 0, 0, 0, 0]
-        let raritySelect = [[], [], [], []]
+        let raritySelect = [[], [], [], [], []]
         for (let prop in player.pu.levelables) {
             if (run(layers.pu.levelables[prop].canSelect, layers.pu.levelables[prop]) && !getLevelableTier("pu", prop, true)) {
                 if (prop >= 100 && prop < 200) raritySelect[0].push(prop) // COMMON
@@ -77,7 +77,7 @@ addLayer("pu", {
         }
         if (player.pu.legendarySelectionActive) {
 
-            if (run(layers.pu.levelables[401].canSelect, layers.pu.levelables[401])) player.pu.selectedPunchcards[4] = 401 //MAKE THEM RANDOMIZED EVENTUALLY
+            if (run(layers.pu.levelables[401].canSelect, layers.pu.levelables[401])) player.pu.selectedPunchcards[3] = 401 //MAKE THEM RANDOMIZED EVENTUALLY
 
         }
     },

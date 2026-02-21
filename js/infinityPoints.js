@@ -586,7 +586,7 @@
         21: {
             requirementDescription: "<h3>75 Infinities",
             effectDescription() { return "Skip the big crunch screen, and automatically reset." },
-            done() { return player.in.infinities.gte(75) && hasChallenge("ip", 14) },
+            done() { return player.in.infinities.gte(75) && (hasChallenge("ip", 14) || player.s.highestSingularityPoints.gt(0)) },
             unlocked() { return hasChallenge("ip", 14) },
             style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },

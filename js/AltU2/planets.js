@@ -74,8 +74,14 @@
                     } else {
                         gain = preExp.pow(0.5).sub(player.pl.planets.add(1)).max(0)
                     }
-                    player.pl.planets = player.pl.planets.add(gain.floor());
+                    let flooredGain = gain.floor();
+                    let remainder = gain.sub(flooredGain).toNumber();
 
+                    if (Math.random() < remainder) {
+                        flooredGain = flooredGain.add(1);
+                    }
+
+                    player.pl.planets = player.pl.planets.add(flooredGain);
                 } else {
                     // Simulate each star individually (random, slow)
                     let gained = new Decimal(0);

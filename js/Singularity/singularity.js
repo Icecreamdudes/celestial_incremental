@@ -361,7 +361,6 @@
             cost: new Decimal("1e900"),
             currencyLocation() { return player.s },
             currencyInternalName: "singularityPoints",
-            //style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
             style() {
                 let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
                 return look
@@ -381,12 +380,77 @@
             cost: new Decimal("1e1111"),
             currencyLocation() { return player.s },
             currencyInternalName: "singularityPoints",
+            style() {
+                let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
+                return look
+            },
+        },
+        28: {
+            title: "Singularity Upgrade XVIII",
+            unlocked() { return player.ir.iriditeDefeated},
+            description: "Unlock universe 1's pylon (in the universe's main layer).",  
+            cost: new Decimal("1e450"),
+            currencyLocation() { return player.s },
+            currencyDisplayName: "Singularity Points",
+            currencyInternalName: "singularityPoints",
+            style() {
+                let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
+                return look
+            },
+        },
+        29: {
+            title: "Singularity Upgrade XIX",
+            unlocked() { return player.ir.iriditeDefeated},
+            description: "Earn all core fragment types on singularity reset and weakens radiation softcap dramatically.",  
+            cost: new Decimal("1e800"),
+            currencyLocation() { return player.s },
+            currencyDisplayName: "Singularity Points",
+            currencyInternalName: "singularityPoints",
+            style() {
+                let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
+                return look
+            },
+        },
+        30: {
+            unlocked() { return player.bi.interspaceUnlocked},
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>Singularity Upgrade XX</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
+                "<br>Unlock the singularity reactor.<br>" + // MIDDLE
+                "<br></div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "1e900 Singularity Points" + // BOTTOM
+                "</div></div>"
+            },
+            cost: new Decimal("1e900"),
+            currencyLocation() { return player.s },
+            currencyInternalName: "singularityPoints",
             //style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
             style() {
                 let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
                 return look
             },
         },
+        31: {
+            unlocked() { return player.bi.interspaceUnlocked},
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>Singularity Upgrade XXI</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
+                "<br>Unlock more core scrap upgrades.<br>" + // MIDDLE
+                "<br></div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "1e1,111 Singularity Points" + // BOTTOM
+                "</div></div>"
+            },
+            cost: new Decimal("1e1111"),
+            currencyLocation() { return player.s },
+            currencyInternalName: "singularityPoints",
+            //style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
+                return look
+            },
+        }
     },
     buyables: {
         11: {
@@ -513,7 +577,7 @@
         },
         14: {
             requirementDescription: "<h3>4 Singularities",
-            effectDescription: "Keep XPBoost on reset, keep pre-singularity check back content on reset, unlock new marcelacoplao content, keep moonstone buyables on reset, and unlock singularity dimensions.",
+            effectDescription: "Keep XPBoost on reset, unlock new marcelacoplao content, keep moonstone buyables on reset, and unlock singularity dimensions.",
             done() { return player.s.singularities.gte(4) },
             style: {width: "800px", height: "85px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
@@ -626,6 +690,9 @@
                     ]],
                     ["style-row", [
                         ["upgrade", 27],["upgrade", 28],["upgrade", 29],["upgrade", 30]
+                    ]],
+                    ["style-row", [
+                        ["upgrade", 31],["upgrade", 32],["upgrade", 33],["upgrade", 34]
                     ]],
                 ]
             },

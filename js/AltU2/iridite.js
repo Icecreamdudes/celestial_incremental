@@ -340,9 +340,6 @@ addLayer("ir", {
         if (player.ir.shipType == 5) player.ir.shipHealthMax = new Decimal(50)
         if (player.ir.shipType == 6) player.ir.shipHealthMax = new Decimal(75)
         if (player.ir.shipType == 7) player.ir.shipHealthMax = new Decimal(75)
-        if (player.ir.shipType == 8) player.ir.shipHealthMax = new Decimal(100)
-        if (player.ir.shipType == 9) player.ir.shipHealthMax = new Decimal(125)
-        if (player.ir.shipType == 10) player.ir.shipHealthMax = new Decimal(100)
 
         if (hasUpgrade("ir", 102)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.25)
         if (player.ir.shipType != 0) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(levelableEffect("ir", player.ir.shipType)[3])
@@ -667,7 +664,7 @@ addLayer("ir", {
             lore() {
                 return "Shoots very fast streams of bullets, but with slow movement speed."
             },
-            levelLimit() { return Decimal.add(50, levelableEffect("ir", 8)[1])},
+            levelLimit() {return Decimal.add(50, levelableEffect("ir", 8)[1])},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).pow(0.5).add(1), //mastery point effects
@@ -726,14 +723,14 @@ addLayer("ir", {
             tooltip() { return  (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || hasUpgrade("fu", 110) ? "" : "Progress through Aleph content." },
             unlocked() { return player.al.show },
             canClick() { return (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || hasUpgrade("fu", 110)},
-            onClick() { 
+            onClick() {
                 player.ir.shipType = this.id
-                return layers[this.layer].levelables.index = this.id 
+                return layers[this.layer].levelables.index = this.id
             },
             // BUY CODE
             pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).pow(1.5).mul(150).add(1000).floor() },  
+            xpReq() { return getLevelableAmount(this.layer, this.id).pow(1.5).mul(150).add(1000).floor() }, 
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
                 this.pay(this.xpReq())
@@ -743,10 +740,10 @@ addLayer("ir", {
             barStyle() { return {backgroundColor: "#37078f"}},
             style() {
                 let look = {width: "100px", minHeight: "125px"}
-                this.canClick() ? look.backgroundColor = "#5e4ee6" : look.backgroundColor = "#222222"
+                this.canClick() ? look.backgroundColor = "#5e4ee6ff" : look.backgroundColor = "#222222"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
                 return look
-            }  
+            }
         },
         8: {
             image() { return this.canClick() ? "resources/ships/astral.png" : "resources/secret.png"},
@@ -846,7 +843,7 @@ addLayer("ir", {
             lore() {
                 return "Slow and bulky, complete with a superphysical energy cannon of unmatched power."
             },
-            levelLimit() { return new Decimal(50)},
+            levelLimit() { return Decimal.add(50, levelableEffect("ir", 8)[1])},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).pow(0.3).mul(0.01).add(1), // dark celestial points
@@ -1558,7 +1555,7 @@ class SpaceArena {
 
         // load wing GIF for Iridite (200x200). keep a loaded flag so draw can choose fallback.
         this.wingImg = new Image();
-        this.wingImg.src = 'resources/flying.gif';
+       // this.wingImg.src = 'resources/flying.gif';
         this.wingImgLoaded = false;
         this.wingImg.onload = () => { this.wingImgLoaded = true; };
 
@@ -1745,14 +1742,14 @@ class SpaceArena {
                 angle: 0,
                 velocity: 0,
                 angularVelocity: 0,
-                maxVelocity: 5,
-                acceleration: 0.3,
-                deceleration: 0.15,
+                maxVelocity: 4,
+                acceleration: 0.25,
+                deceleration: 0.2,
                 rotationSpeed: 0.06,
-                cooldown: 400,
+                cooldown: 500,
                 lastShot: 0,
                 damage: 40,
-                collisionDamage: 2,
+                collisionDamage: 0.1,
             };
         }
         if (player.ir.shipType == 10) {
@@ -1873,6 +1870,7 @@ class SpaceArena {
                     ctx.restore();
                 }
             },
+            
             gammaShip: {
                 name: "Gamma Ship",
                 radius: 28,
@@ -2347,20 +2345,6 @@ class SpaceArena {
             }
             return;
         }
-
-        if (player.ir.shipType == 8 && typeof this.mouseX === "number" && typeof this.mouseY === "number") {
-            // Initiate laser sequence if not already active
-            if (!this.ship._laserActive && (!this.ship._laserTimer || this.ship._laserTimer <= 0)) {
-                this.ship._laserTimer = 180; // 3 seconds
-                this.ship._laserActive = false;
-                this.ship._laserAngle = Math.atan2(this.mouseY - this.ship.y, this.mouseX - this.ship.x);
-                // spin slightly towards mouse direction or just a fixed slow spin?
-                // Let's make it follow mouse slowly for control
-                this.ship._laserHitCooldown = 0;
-            }
-            return;
-        }
-
 
         let speed = 10 + this.upgradeEffects.moveSpeed;
         // evolver shards
@@ -5231,20 +5215,6 @@ class SpaceArena {
             this.ctx.globalCompositeOperation = "source-over";
         }
 
-        if (player.ir.shipType == 0) {
-            this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
-            this.ctx.rotate(this.ship.angle);
-            this.ctx.beginPath();
-            this.ctx.moveTo(15, 0);
-            this.ctx.lineTo(-10, 10);
-            this.ctx.lineTo(-10, -10);
-            this.ctx.closePath();
-            this.ctx.fillStyle = "#eaf6f7";
-            this.ctx.fill();
-            this.ctx.restore();
-        }
-
         // Evolver ship (shipType 9) — triangle shape with blue-purple gradient and dividing line
         if (player.ir.shipType == 9) {
             this.ctx.save();
@@ -5366,19 +5336,6 @@ class SpaceArena {
             else this.ctx.fillStyle = "#800040"
             this.ctx.fill();
 
-            this.ctx.restore();
-        }
-        if (player.ir.shipType == 0) {
-            this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
-            this.ctx.rotate(this.ship.angle);
-            this.ctx.beginPath();
-            this.ctx.moveTo(15, 0);
-            this.ctx.lineTo(-10, 10);
-            this.ctx.lineTo(-10, -10);
-            this.ctx.closePath();
-            this.ctx.fillStyle = "#eaf6f7";
-            this.ctx.fill();
             this.ctx.restore();
         }
 
@@ -5591,59 +5548,9 @@ class SpaceArena {
 
         // Draw bullets
         for (let bullet of this.bullets) {
-            if (bullet.massiveSword) {
-                // Draw a large, spinning metallic sword
-                this.ctx.save();
-                this.ctx.translate(bullet.x, bullet.y);
-                this.ctx.rotate(bullet.rot || 0);
-
-                let r = bullet.radius || 80;
-                let bladeLen = r * 1.5;
-                let bladeW = r * 0.3;
-
-                // Blade
-                let grad = this.ctx.createLinearGradient(-bladeW/2, 0, bladeW/2, 0);
-                grad.addColorStop(0, "#888");
-                grad.addColorStop(0.5, "#eee");
-                grad.addColorStop(1, "#888");
-                this.ctx.fillStyle = grad;
-                this.ctx.beginPath();
-                this.ctx.moveTo(0, -bladeLen); // Tip
-                this.ctx.lineTo(-bladeW/2, -bladeLen * 0.2);
-                this.ctx.lineTo(-bladeW/2, 0);
-                this.ctx.lineTo(bladeW/2, 0);
-                this.ctx.lineTo(bladeW/2, -bladeLen * 0.2);
-                this.ctx.closePath();
-                this.ctx.fill();
-
-                // Blade Edge Highlight
-                this.ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
-                this.ctx.lineWidth = 2;
-                this.ctx.stroke();
-
-                // Crossguard
-                this.ctx.fillStyle = "#553300";
-                this.ctx.fillRect(-bladeW * 1.2, 0, bladeW * 2.4, bladeW * 0.4);
-
-                // Handle
-                this.ctx.fillStyle = "#331100";
-                this.ctx.fillRect(-bladeW * 0.2, bladeW * 0.4, bladeW * 0.4, bladeW * 0.8);
-
-                // Pommel
-                this.ctx.fillStyle = "#553300";
-                this.ctx.beginPath();
-                this.ctx.arc(0, bladeW * 1.3, bladeW * 0.3, 0, Math.PI * 2);
-                this.ctx.fill();
-
-                // Glow
-                this.ctx.shadowColor = "rgba(255, 0, 0, 0.5)";
-                this.ctx.shadowBlur = 20;
-                this.ctx.strokeStyle = "rgba(255, 0, 0, 0.3)";
-                this.ctx.lineWidth = 4;
-                this.ctx.stroke();
-
-                this.ctx.restore();
-            } else if (bullet.star) {
+            // Skip ritual projectiles - RitualArena handles these with custom visuals
+            if (bullet.ritualOrb || bullet.ritualBlade) continue;
+            if (bullet.star) {
                 // draw mini-star glyph for thematic boss/projectiles
                 this.ctx.save();
                 this.ctx.translate(bullet.x, bullet.y);
@@ -6045,6 +5952,7 @@ class SpaceArena {
         if (arena) arena.upgradeEffects = arena.getDefaultUpgradeEffects();
         if (player.tab == "ir") player.subtabs["ir"]['stuff'] = "Lose";
         if (player.tab == "bl") player.subtabs["bl"]['stuff'] = "Lose";
+        if (player.tab == "cbs") player.subtabs["cbs"]['stuff'] = "Lose";
         localStorage.setItem('arenaActive', 'false');
     }
 }
@@ -6116,3 +6024,4 @@ function resumeAsteroidMinigame() {
     if (typeof arena.resumeAsteroidMinigame === 'function') arena.resumeAsteroidMinigame();
 }
 window.resumeAsteroidMinigame = resumeAsteroidMinigame;
+

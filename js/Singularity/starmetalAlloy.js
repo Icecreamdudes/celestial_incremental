@@ -119,6 +119,7 @@
                 pauseUniverse("A1")
                 pauseUniverse("U3")
                 pauseUniverse("CB")
+                pauseUniverse("DS")
             },
             style: {width: "600px", minHeight: "200px", color: "white", backgroundImage: "radial-gradient(circle, black 60%, #13292f 70%, #54265e 80%, #8d3947 90%, #e6eb57 110%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
         },
@@ -140,14 +141,15 @@
                 layers.pu.generateSelection();
 
                 player.subtabs.le["stuff"] = "Shards"
-                player.subtabs.pu["stuff"] = "Selection"  
-
+                player.subtabs.pu["stuff"] = "Selection"   
+                
                 pauseUniverse("U1")
                 pauseUniverse("UA")
                 pauseUniverse("U2")
                 pauseUniverse("A1")
                 pauseUniverse("U3")
-                pauseUniverse("CB")              
+                pauseUniverse("CB")
+                pauseUniverse("DS")
             },
             style() {
                 let look = {width: "600px", minHeight: "200px", color: "#ffe066", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"}
@@ -447,7 +449,7 @@
         107: {
             title: "Light Starmetal Upgrade VII",
             unlocked() { return hasUpgrade("sma", 106)},
-            description: "Produce 1% core scrap per second and singularity doesn't reset anything check back related",
+            description: "Produce 1% core scrap per second",
             cost: new Decimal("500"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",

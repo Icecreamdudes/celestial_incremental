@@ -28,7 +28,7 @@
 		"Singularity/reactor.js",
 		"Check Back/singularityPet.js", "DarkU1/timeCapsules.js", "Check Back/dragon.js",
 		"DarkU1/blood.js", "Zar/zar.js", "Zar/coinFlip.js",
- 		"Zar/wheelOfFortune.js", "Check Back/singularityPet.js", "Zar/slotMachine.js",
+ 		"Zar/wheelOfFortune.js", "Check Back/singularityPet.js", "Zar/slotMachine.js", "Zar/checkBackShrine.js", "Zar/cards.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 
@@ -106,18 +106,12 @@ function updateStyles() {
 			if (player.c.currentCutscene == 33 || player.c.currentCutscene == 34 || (player.c.currentCutscene == 35 && player.c.cutsceneIndex < 24)) layerBG = "linear-gradient(-180deg,rgb(114, 8, 4) 0%, rgb(114, 4, 85) 100%)"
 			break;
 		case "settings": case "jukebox": case "savebank": case "changelog": case "credits":
-			if (!player.sma.inStarmetalChallenge && !options.themeDarken) {
-				layerBG = "linear-gradient(90deg, #57636d, #2e3d49)"
-			} else {
-				layerBG = "linear-gradient(90deg, #1b242b, #12181d)"
-			}
+			if (!player.sma.inStarmetalChallenge) layerBG = "linear-gradient(90deg, #57636d, #2e3d49)"
+			if (player.sma.inStarmetalChallenge) layerBG = "linear-gradient(90deg, #1b242b, #12181d)"
 			break;
 		case "achievements":
-			if (!player.sma.inStarmetalChallenge && !options.themeDarken) {
-				layerBG = "linear-gradient(45deg, #450054, #00307f)"
-			} else {
-				layerBG = "linear-gradient(90deg, #0d0010, #000919)"
-			}
+			if (!player.sma.inStarmetalChallenge) layerBG = "linear-gradient(45deg, #450054, #00307f)"
+			if (player.sma.inStarmetalChallenge) layerBG = "linear-gradient(90deg, #0d0010, #000919)"
 			break;
 		case "po":
 			layerBG = "linear-gradient(45deg, #450054, #00307f)"
@@ -140,8 +134,11 @@ function updateStyles() {
 				layerBG = "linear-gradient(0deg, #001f18)"
 			}
 			break;
-	    case "za": case "cf": case "wof": case "sm":
-			layerBG = hasUpgrade('za', 16) ? "linear-gradient(-180deg, #260a0a 0%, #3b402d 100%)" : "linear-gradient(-180deg, #3b3b3bff 0%, #8d8d8dff 100%)"
+	    case "za": case "cf": case "wof": case "sm": case "car":
+			layerBG = "linear-gradient(-180deg, #3b3b3bff 0%, #8d8d8dff 100%)"
+			break;
+		case "cbs":
+			layerBG = "linear-gradient(-180deg, #31344eff 0%, #54538bff 100%)"
 			break;
 		case "t":
 			layerBG = "linear-gradient(0deg, #02172f)"
@@ -452,7 +449,7 @@ function updateStyles() {
     	if (eclipse) eclipse.remove();
 	}
 
-	if (player.musuniverse == "DS" && hasUpgrade("za", 16)) {
+	if (player.musuniverse == "DS" && hasUpgrade("za", 16) && false) { //keep false for now
 		if (!document.getElementById("fireworks-bg")) {
 			const fwBg = document.createElement("div");
 			fwBg.id = "fireworks-bg";
@@ -649,7 +646,7 @@ function updateStyles() {
             player.musuniverse = "U3"
 			break;
 		case "du": case "le": case "dr": case "dp": case "dg":
-		case "dgr": case "dn": case "ds":
+		case "dgr": case "dn": case "ds": case "dv": case "bl":
             player.musuniverse = "D1"
 			break;
 		case "ch": case "mm":
@@ -676,7 +673,7 @@ function updateStyles() {
 		case "od": case "mu":
             player.musuniverse = "OD"
 			break;
-		case "za": case "cf": case "wof": case "sm":
+		case "za": case "cf": case "wof": case "sm": case "cbs": case "car":
             player.musuniverse = "DS"
 			break;
 	}
@@ -696,7 +693,7 @@ function updateStyles() {
 						break;
 					case "U1":
 						if (player.startedGame && player.ip.activeChallenge == null) playAndLoopAudio("music/universe1.mp3", options.musicVolume/10)
-						if (player.ip.activeChallenge != null) playAndLoopAudio("music/tav.mp3", options.musicVolume/10)
+						if (player.ip.activeChallenge != null) playAndLoopAudio("music/ipChallenge.mp3", options.musicVolume/10)
 						break;
 					case "U2":
 						if (player.tab != "tad") {
@@ -724,8 +721,10 @@ function updateStyles() {
             			}
 						break;
 					case "D1":
-						if (!player.pet.legPetTimers[0].active) playAndLoopAudio("music/darkUni1.mp3", options.musicVolume/10)
-						if (player.pet.legPetTimers[0].active) playAndLoopAudio("music/eclipse.mp3", options.musicVolume/10)
+						if (!player.pet.legPetTimers[0].active && !player.ir.inBattle) playAndLoopAudio("music/darkUni1.mp3", options.musicVolume/10)
+						if (player.pet.legPetTimers[0].active && !player.ir.inBattle) playAndLoopAudio("music/eclipse.mp3", options.musicVolume/10)
+						if (player.ir.inBattle && !player.bl.noxFightActive) playAndLoopAudio("music/bloodBattle.mp3", options.musicVolume/10);
+			    		if (player.ir.inBattle && player.bl.noxFightActive) playAndLoopAudio("music/nox.mp3", options.musicVolume/10);
 						break;
 					case "CH":
 						if (player.tab == "ch") playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10)
@@ -742,12 +741,10 @@ function updateStyles() {
 					case "UB":
 						playAndLoopAudio("music/hive.mp3", options.musicVolume/10)
 						break;
-					case "UD":
-						playAndLoopAudio("music/interspace.mp3", options.musicVolume/10)
-						break;
 					case "DS":
 						if (!hasUpgrade("za", 16)) playAndLoopAudio("music/diceSpace.mp3", options.musicVolume/10)
-						if (hasUpgrade("za", 16)) playAndLoopAudio("music/casino.mp3", options.musicVolume/10)
+						if (hasUpgrade("za", 16) && !player.ir.inBattle) playAndLoopAudio("music/casino.mp3", options.musicVolume/10)
+			    		if (player.ir.inBattle) playAndLoopAudio("music/ascensionSpirit.mp3", options.musicVolume/10);
 						break;
 					case "CB":
 						if (player.fi.battleTier.eq(0)) playAndLoopAudio("music/checkback.mp3", options.musicVolume/10)
@@ -766,9 +763,10 @@ function updateStyles() {
         	    if (cutsceneID == "A1-Funify-Start" && cutsceneIndex >= 7) playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
     	        if (cutsceneID == "A2-Iridite-Battle-End" && cutsceneIndex < 23) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
 	            if (cutsceneID == "A2-Iridite-Battle-End" && cutsceneIndex > 23) playAndLoopAudio("music/novaCutscene.mp3", options.musicVolume/10);
-	            if (cutsceneID == "Interspace-Unlock") playAndLoopAudio("music/bumpy.mp3", options.musicVolume/10);
+				if (cutsceneID == "DS-Zar-Shrine" && cutsceneIndex < 13) playAndLoopAudio("music/zarCutscene.mp3", options.musicVolume/10);
+	            if (cutsceneID == "DS-Zar-Shrine" && cutsceneIndex > 13) playAndLoopAudio("music/mysteryCutscene.mp3", options.musicVolume/10);
 			}
-
+			
 		}
 	} else {
 		stopAudio();
@@ -816,7 +814,44 @@ let changelog = `<h1>Changelog:</h1><br>
 			- ...<br>
 		<br>
 
-	<h4>v1.10.6 - Checklist Update Pt.2</h4><br>
+	<h3>v1.11 - The Novasent Update Part II: Blood and Gambling</h3><br>
+		Content:<br>
+			- Added 10 new punchcards, including one legendary punchcard.<br>
+			- Added Vaporizer.<br>
+			- Added Blood.<br>
+			- Added a Secret Bossfight.<br>
+			- Added Dice Space.<br>
+			- Added Zar, the Celestial of Chance.<br>
+			- Added Coin Flip.<br>
+			- Added Wheel of Fortune.<br>
+			- Added Slot Machine.<br>
+			- Added Check Back Shrine.<br>
+			- Added Ascension Shards.<br>
+			- Added a Miniboss.<br>
+			- Added Ancient, Paradox, and Temporal Fragment Pylons.<br>
+			- More stuff I don't remember.<br>
+	    QoL:<br>
+			- Did I add QoL this update? I don't remember.<br><br>
+		Balancing:<br>
+			- Balanced a couple possible inflation zones.<br><br>
+			- A lot of things I don't remember.<br><br>
+		Bugfixes:<br>
+			- A lot of things I don't remember<br><br>
+	<h3>v1.10.7 - Bug Hotfix</h3><br>
+		Bugfixes:<br>
+			- Fixed star gain not working until after first rocket launch<br>
+			- Fixed a ton of CB Fighting bugs/crashes<br>
+			- Fixed Iridite click cooldown bugs<br>
+			- Fixed sell all pets<br>
+			- Fixed typo on hex shadow pet button tooltip<br>
+			- Fixed wrong name on nectar epsilon upgrades<br>
+			- (Maybe) Fixed buy max compressions<br>
+			- Fixed singularity resets not working properly before milestone 6<br>
+			- Fixed being able to softlock yourself by turning on IP auto before having IP Challenge 4 and the big crunch skip milestone<br>
+			- Fixed dice buyable autobuy sometimes spending currency (which ends up crashing the game when at the start of an infinity)<br>
+			- Made planet estimation formula also calculate the chance for the remainder to be successful<br>
+			- Fixed multiple instances of upgrades/milestones saying they keep CB content on singularity<br><br>
+	<h3>v1.10.6 - Checklist Update Pt.2</h3><br>
 		Content:<br>
 			- Added 3 new themes.<br>
 			- Added an unlockable toggle feature for themes. (Vague due to spoilers)<br>
@@ -1470,10 +1505,10 @@ var doNotCallTheseFunctionsEveryTick = [
 	"generatePhase1Attack", "generatePhase2Attack", "startCutscene35", "startCutscene36", "startCutscene37",
 	"startCutscene38", "startCutscene39", "cookieClick", "generateFlower", "generateMult", "flowerClick",
 	"selectCelestialites", "petDeath", "celestialiteDeath", "petAbility", "celestialiteAbility",
-	"arriveAtStar", "spaceEnergyReset", "createReactorNode", "createReactorBullet",
-	"prismReset", "timeCapsuleReset", "createMultiverseMapConnection", "makeProject", "getTimeReq", "getTimeCapsuleReq", "getTimeSpeed", "lightGain",
-	"coinFlip", "randomizeSegments", "spinWheel", "spinSlots", "evaluateRewards",
-	"slotReset"
+	"arriveAtStar", "spaceEnergyReset","coinFlip", "randomizeSegments", "spinWheel", "spinSlots", "evaluateRewards",
+	"slotReset",
+	"createReactorNode", "createReactorBullet",
+	"prismReset", "timeCapsuleReset", "createMultiverseMapConnection", "makeProject", "getTimeReq", "getTimeCapsuleReq", "getTimeSpeed", "lightGain",,
 ]
 
 function getStartPoints(){

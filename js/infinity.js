@@ -226,7 +226,7 @@
         player.in.pylonEnergyEffect2 = player.in.pylonEnergy.pow(0.25).add(1).pow(player.in.pylonTierEffect)
         player.in.pylonEnergyEffect3 = player.in.pylonEnergy.pow(0.175).add(1).pow(player.in.pylonTierEffect)
 
-        player.in.pylonTierEffect = player.in.pylonTier.sub(1).div(10).add(1)
+        player.in.pylonTierEffect = player.in.pylonTier.sub(1).pow(0.4).div(10).add(1)
 
         //tickspeed
         player.uni["U2"].tickspeed = new Decimal(1)

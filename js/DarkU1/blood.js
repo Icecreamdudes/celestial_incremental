@@ -67,7 +67,7 @@
         player.bl.xpGainPercentage = player.bl.xpGainPercentage.mul(buyableEffect("bl", 11)[0])
         player.bl.xpGainPercentage = player.bl.xpGainPercentage.mul(buyableEffect("bl", 12))
 
-        if (!player.pet.activeAbilities[0])
+        if (!player.pet.legPetTimers[0].active)
         {
             for (let prop in player.pu.levelables) {
                 if (getLevelableTier("pu", prop, true)) {

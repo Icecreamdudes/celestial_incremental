@@ -168,7 +168,7 @@
 
         player.ro.rocketCooldownMax = [new Decimal(300), new Decimal(1200)]
 
-        player.ro.rocketCooldown = player.ro.rocketCooldown.sub(onepersec.mul(delta))
+        player.ro.rocketCooldown = player.ro.rocketCooldown.sub(onepersec.mul(delta.div(player.uni["U2"].tickspeed)))
         for (let i = 0; i < player.ro.rocketCooldownMax.length; i++) {
             player.ro.rocketCooldownMax[i] = player.ro.rocketCooldownMax[i].div(levelableEffect("pu", 112)[1])
         }

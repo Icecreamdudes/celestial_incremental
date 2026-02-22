@@ -25,7 +25,7 @@
 		"Hive/honey.js", "Hive/wax.js", "Hive/aleph.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js", "DarkU1/blood.js", "Zar/zar.js", "Zar/coinFlip.js",
  		"Zar/wheelOfFortune.js", "Check Back/singularityPet.js", "Zar/slotMachine.js", "Zar/checkBackShrine.js", "Zar/cards.js",
-		"Check Back/diamondDust/js",
+		"Check Back/diamondDust.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 	],
@@ -251,6 +251,9 @@ function updateStyles() {
 			break;
 		case "ev8":
 			layerBG = "#252525"
+			break;
+		case "ev13":
+			layerBG = "linear-gradient(-45deg, #206060, #40c0c0)"
 			break;
 		case "ep0": case "ep1": case "ep2": case "sp":
 			layerBG = "#7d3f98"
@@ -1453,7 +1456,8 @@ var doNotCallTheseFunctionsEveryTick = [
 	"startCutscene38", "startCutscene39", "cookieClick", "generateFlower", "generateMult", "flowerClick",
 	"selectCelestialites", "petDeath", "celestialiteDeath", "petAbility", "celestialiteAbility",
 	"arriveAtStar", "spaceEnergyReset", "coinFlip", "randomizeSegments", "spinWheel", "spinSlots", "evaluateRewards",
-	"slotReset"
+	"slotReset",
+	"diamondDustReset"
 ]
 
 function getStartPoints(){

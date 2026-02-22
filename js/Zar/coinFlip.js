@@ -209,7 +209,7 @@
             title() { return "Coin Clipper" },
             canClick() { return true },
             tooltip() { return "<h5>Resets flip count, heads, tails, and heads and tails buyables. Use it when you screw up. (You suck at this game)" },
-            unlocked() { return hasUpgrade("za", 14) },
+            unlocked() { return true },
             onClick() {
         player.za.chancePoints = new Decimal(0)
 

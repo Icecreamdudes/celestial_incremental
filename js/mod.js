@@ -26,7 +26,8 @@
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "DarkU1/blood.js", "Zar/zar.js", "Zar/coinFlip.js",
  		"Zar/wheelOfFortune.js", "Check Back/singularityPet.js", "Zar/slotMachine.js", "Zar/checkBackShrine.js", "Zar/cards.js",
 		"Black Heart/blackHeart.js", "Black Heart/blackHeartFunctions.js", "Black Heart/characters.js", "Black Heart/skills.js", "Black Heart/depth1.js",
-		"Black Heart/depth2.js", "Black Heart/depth3.js", "Black Heart/matosLair.js", "Black Heart/darkTemple.js",, "Black Heart/bulletHell.js",
+		"Black Heart/depth2.js", "Black Heart/depth3.js", "Black Heart/matosLair.js", "Black Heart/darkTemple.js", "Black Heart/bulletHell.js",
+		"Black Heart/stagnantSynestia.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 	],
@@ -212,6 +213,15 @@ function updateStyles() {
 					break;
 				case "matosLair":
 					layerBG = "linear-gradient(-180deg, #96221d 0%, #720804 100%)"
+					break;
+				case "stagnantSynestia":
+					layerBG = "linear-gradient(-90deg, #124, #081122)"
+					break;
+				case "depth4":
+					layerBG = "linear-gradient(-180deg, #980098 0%, #590059 100%)"
+					break;
+				case "alephsChamber":
+					layerBG = "linear-gradient(-180deg, #9D4F7E 0%, #980098 100%)"
 					break;
 				default: 
 					layerBG = "black"

@@ -38,7 +38,11 @@ BHA.general_slap = {
 }
 BHA.general_bandage = {
     name: "Bandage",
-    description() {return "Heal yourself by " + formatWhole(new Decimal(10).add(player.bh.skillData["general_bandage"].level.mul(2))) + " health"},
+    description(char) {
+        let heal = new Decimal(10).add(player.bh.skillData["general_bandage"].level.mul(2))
+        if (player.matosLair.milestone[25] >= 2) heal = heal.mul(char.mending.div(10).add(1))
+        return "Heal yourself by " + formatWhole(heal) + " health"
+    },
     passiveText() {return "+" + formatSimple(player.bh.skillData["general_bandage"].maxLevel) + " HP"},
     char: "general",
     spCost: new Decimal(8),
@@ -52,11 +56,12 @@ BHA.general_bandage = {
     target: "self",
     value() {return new Decimal(10).add(player.bh.skillData["general_bandage"].level.mul(2))},
     cooldown: new Decimal(15),
+    cooldownCap: new Decimal(5),
 }
 BHA.general_scream = {
     name: "Scream",
     description() {return "Taunt damage and buffs towards yourself and give yourself " + formatSimple(new Decimal(0.5).add(player.bh.skillData["general_scream"].level.mul(0.1)), 2) + " regen for 10 seconds"},
-    passiveText() {return "+" + formatSimple(player.bh.skillData["general_scream"].maxLevel.div(20), 2) + " RGN"},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["general_scream"].maxLevel.div(20)) + " RGN"},
     char: "general",
     spCost: new Decimal(12),
     curCostBase: new Decimal(8),
@@ -73,17 +78,38 @@ BHA.general_scream = {
     },
     cooldown: new Decimal(30),
     duration: new Decimal(10),
+    cooldownCap: new Decimal(5),
+}
+BHA.general_recklessAbandon = {
+    name: "Reckless Abandon",
+    description() {return "Convert " + formatWhole(new Decimal(25).add(player.bh.skillData["general_hardened"].level.mul(5))) + "% of your health into damage, at " + formatWhole(new Decimal(20).add(player.bh.skillData["general_hardened"].level.mul(2))) + "% efficiency"},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["general_hardened"].maxLevel) + " HP"},
+    char: "general",
+    spCost: new Decimal(10),
+    curCostBase: new Decimal(15),
+    curCostScale: new Decimal(2),
+    currency: "temporalShard",
+    unlocked() {return hasUpgrade("stagnantSynestia", 4)},
+
+    passive: true,
+    constantType: "effect",
+    constantTarget: "self",
+    effects: {
+        "damageAdd"(char) {return char.health.mul(Decimal.add(0.25, player.bh.skillData["general_hardened"].level.mul(0.05))).mul(Decimal.add(0.2, player.bh.skillData["general_hardened"].level.mul(0.02)))}, // Additive Effect
+        "healthMult"(char) {return Decimal.div(1, Decimal.add(0.25, player.bh.skillData["general_hardened"].level.mul(0.05)))}, // Multiplicative Effect
+    },
+    cooldown: new Decimal(Infinity),
 }
 BHA.general_block = {
     name: "Block",
     description() {return "Shield yourself and increase your defense by " + formatWhole(new Decimal(25).add(player.bh.skillData["general_block"].level.mul(5)))},
-    passiveText() {return "+" + formatSimple(player.bh.skillData["general_block"].maxLevel) + " DEF"},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["general_block"].maxLevel.div(2)) + " DEF"},
     char: "general",
     spCost: new Decimal(10),
     curCostBase: new Decimal(12),
     curCostScale: new Decimal(6),
     currency: "darkEssence",
-    unlocked: false,
+    unlocked() {return false},
 
     instant: true,
     type: "shield",
@@ -97,7 +123,11 @@ BHA.general_block = {
     },
     duration: new Decimal(10),
     cooldown: new Decimal(25),
+    cooldownCap: new Decimal(5),
 }
+
+//Rest: Character is unavailable to perform actions for 20 seconds but regen is boosted by x4
+// Skill that disables regen but increases damage.
 
 // Kres Skills
 BHA.kres_chop = {
@@ -117,6 +147,7 @@ BHA.kres_chop = {
     method: "physical",
     value() {return new Decimal(1).add(player.bh.skillData["kres_chop"].level.mul(0.2))},
     cooldown: new Decimal(8),
+    cooldownCap: new Decimal(2),
 }
 BHA.kres_bigAttack = {
     name: "Big Attack",
@@ -138,6 +169,7 @@ BHA.kres_bigAttack = {
     },
     value() {return new Decimal(2).add(player.bh.skillData["kres_bigAttack"].level.mul(0.4))},
     cooldown: new Decimal(20),
+    cooldownCap: new Decimal(4),
 }
 BHA.kres_battleCry = {
     name: "Battle Cry",
@@ -158,10 +190,11 @@ BHA.kres_battleCry = {
     },
     cooldown: new Decimal(25),
     duration: new Decimal(9),
+    cooldownCap: new Decimal(4.5),
 }
 BHA.kres_decapitate = {
     name: "Decapitate",
-    description() {return "Soft-stuns kres for 5 seconds, then deals " + formatWhole(new Decimal(300).add(player.bh.skillData["kres_decapitate"].level.mul(60))) + "% physical damage, with a 50% chance to deal double damage"},
+    description(char) {return "Soft-stuns kres for 5 seconds, then deals " + formatWhole(new Decimal(300).add(player.bh.skillData["kres_decapitate"].level.mul(60))) + "% physical damage, with a " + formatSimple(Decimal.mul(50, Decimal.div(Decimal.add(100, char.luck), 100))) + "% chance to deal double damage"},
     passiveText() {return "+" + formatSimple(player.bh.skillData["kres_decapitate"].maxLevel.div(2), 2) + " LUCK"},
     char: "kres",
     spCost: new Decimal(10),
@@ -181,6 +214,7 @@ BHA.kres_decapitate = {
     delay: 5000, // In ms
     stun: ["soft", new Decimal(5)],
     cooldown: new Decimal(30),
+    cooldownCap: new Decimal(5),
 }
 BHA.kres_berserker = {
     name: "Berserker",
@@ -188,10 +222,10 @@ BHA.kres_berserker = {
     passiveText() {return "+" + formatSimple(player.bh.skillData["kres_berserker"].maxLevel.div(20), 2) + " RGN"},
     char: "kres",
     spCost: new Decimal(12),
-    curCostBase: new Decimal(40),
-    curCostScale: new Decimal(4),
-    currency: "vividUmbrite",
-    unlocked: false,
+    curCostBase: new Decimal(25),
+    curCostScale: new Decimal(3),
+    currency: "temporalDust",
+    unlocked() {return hasUpgrade("stagnantSynestia", 1)},
 
     passive: true,
     constantType: "effect",
@@ -223,10 +257,15 @@ BHA.nav_magicMissle = {
     method: "magic",
     value() {return new Decimal(1).add(player.bh.skillData["nav_magicMissle"].level.mul(0.2))},
     cooldown: new Decimal(6),
+    cooldownCap: new Decimal(1.5),
 }
 BHA.nav_healSpell = {
     name: "Heal Spell",
-    description() {return "Randomly heal a character by " + formatWhole(new Decimal(10).add(player.bh.skillData["nav_healSpell"].level.mul(2))) + " health"},
+    description(char) {
+        let heal = new Decimal(10).add(player.bh.skillData["nav_healSpell"].level.mul(2))
+        if (player.matosLair.milestone[25] >= 2) heal = heal.mul(char.mending.div(10).add(1))
+        return "Randomly heal a character by " + formatWhole(heal) + " health"
+    },
     passiveText() {return "+" + formatSimple(player.bh.skillData["nav_healSpell"].maxLevel) + " HP"},
     char: "nav",
     spCost: new Decimal(8),
@@ -240,6 +279,7 @@ BHA.nav_healSpell = {
     target: "randomPlayer",
     value() {return new Decimal(10).add(player.bh.skillData["nav_healSpell"].level.mul(2))},
     cooldown: new Decimal(15),
+    cooldownCap: new Decimal(5),
 }
 BHA.nav_reboundingAura = {
     name: "Rebounding Aura",
@@ -260,10 +300,11 @@ BHA.nav_reboundingAura = {
     },
     cooldown: new Decimal(30),
     duration: new Decimal(10),
+    cooldownCap: new Decimal(5),
 }
 BHA.nav_fireball = {
     name: "Fireball",
-    description() {return "Shoot a fireball that does " + formatWhole(new Decimal(150).add(player.bh.skillData["nav_fireball"].level.mul(30))) + "% magic damage, but has a 25% chance to backfire, dealing 50% damage to yourself"},
+    description(char) {return "Shoot a fireball that does " + formatWhole(new Decimal(150).add(player.bh.skillData["nav_fireball"].level.mul(30))) + "% magic damage, but has a " + formatSimple(Decimal.div(25, Decimal.div(Decimal.add(100, char.luck), 100))) + "% chance to backfire, dealing 50% damage to yourself"},
     passiveText() {return "+" + formatSimple(player.bh.skillData["nav_fireball"].maxLevel.div(2)) + " LUCK"},
     char: "nav",
     spCost: new Decimal(10),
@@ -281,6 +322,29 @@ BHA.nav_fireball = {
     },
     value() {return new Decimal(1.5).add(player.bh.skillData["nav_fireball"].level.mul(0.3))},
     cooldown: new Decimal(6),
+    cooldownCap: new Decimal(1.5),
+}
+BHA.nav_soulShred = {
+    name: "Soul Shred",
+    description(char) {return "Gain a " + formatSimple(Decimal.mul(8, Decimal.div(Decimal.add(100, char.luck), 100))) + "% chance to deal " + formatWhole(new Decimal(20).add(player.bh.skillData["nav_soulShred"].level.mul(4))) + "% true damage per second for 10 seconds when Nav does an action"},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["nav_soulShred"].maxLevel.div(2)) + " LUCK"},
+    char: "nav",
+    spCost: new Decimal(12),
+    curCostBase: new Decimal(25),
+    curCostScale: new Decimal(3),
+    currency: "temporalDust",
+    unlocked() {return hasUpgrade("stagnantSynestia", 2)},
+
+    passive: true,
+    active: true,
+    actionChance() {return [player.bh.skillData["nav_soulShred"].selected[1], 0.08]},
+    constantType: "effect",
+    constantTarget: "celestialite",
+    effects: {
+        "regenAdd"(char) {return char.damage.mul(Decimal.sub(-0.2, player.bh.skillData["nav_soulShred"].level.mul(0.04)))}, // Multiplicative Effect
+    },
+    duration: new Decimal(10),
+    cooldown: new Decimal(Infinity),
 }
 // Add chance to heal at end of round passive (Likely through adding to a BH array variable)
 
@@ -302,6 +366,7 @@ BHA.sel_singleShot = {
     method: "ranged",
     value() {return new Decimal(0.75).add(player.bh.skillData["sel_singleShot"].level.mul(0.15))},
     cooldown: new Decimal(4),
+    cooldownCap: new Decimal(1),
 }
 BHA.sel_turret = {
     name: "Turret",
@@ -322,6 +387,7 @@ BHA.sel_turret = {
     interval: new Decimal(0.5),
     duration: new Decimal(12),
     cooldown: new Decimal(30),
+    cooldownCap: new Decimal(6),
 }
 BHA.sel_energyBoost = {
     name: "Energy Boost",
@@ -339,11 +405,11 @@ BHA.sel_energyBoost = {
     target: "randomPlayer",
     value() {return new Decimal(6).add(player.bh.skillData["sel_energyBoost"].level.mul(1.2))},
     cooldown: new Decimal(20),
-    cooldownCap: new Decimal(6),
+    cooldownCap: new Decimal(10),
 }
 BHA.sel_arrowBarrage = {
     name: "Arrow Barrage",
-    description() {return "Shoots 5 arrows that deal " + formatWhole(new Decimal(50).add(player.bh.skillData["sel_arrowBarrage"].level.mul(10))) + "% ranged damage, but have a 50% chance to miss"},
+    description(char) {return "Shoots 5 arrows that deal " + formatWhole(new Decimal(50).add(player.bh.skillData["sel_arrowBarrage"].level.mul(10))) + "% ranged damage, but have a " + formatSimple(Decimal.div(50, Decimal.div(Decimal.add(100, char.luck), 100))) + "% chance to miss"},
     passiveText() {return "+" + formatSimple(player.bh.skillData["sel_arrowBarrage"].maxLevel.div(2)) + " LUCK"},
     char: "sel",
     spCost: new Decimal(10),
@@ -362,16 +428,35 @@ BHA.sel_arrowBarrage = {
     },
     value() {return new Decimal(0.5).add(player.bh.skillData["sel_arrowBarrage"].level.mul(0.1))},
     cooldown: new Decimal(6),
+    cooldownCap: new Decimal(2),
+}
+BHA.sel_scavenger = {
+    name: "Scavenger",
+    description() {return "Gain a +" + formatWhole(new Decimal(10).add(player.bh.skillData["sel_scavenger"].level.mul(2))) + "% chance to double celestialite rewards"},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["sel_scavenger"].maxLevel.div(2)) + " LUCK"},
+    char: "sel",
+    spCost: new Decimal(12),
+    curCostBase: new Decimal(12),
+    curCostScale: new Decimal(2),
+    currency: "temporalShard",
+    unlocked() {return hasUpgrade("stagnantSynestia", 3)},
+
+    passive: true,
+    constantType: "effect",
+    constantTarget: "celestialite",
+    effects: {
+        "curMult"() {return new Decimal(0.1).add(player.bh.skillData["sel_scavenger"].level.mul(0.02))}, // Multiplicative Effect
+    },
+    cooldown: new Decimal(Infinity),
 }
 
-// Add chance to multiply celestialite rewards passive (Likely through adding to a BH array variable)
 // Add a passive version of turret (Likely called mini-turret)
 
 // Eclipse Skills
 BHA.eclipse_drain = {
     name: "Drain",
-    description() {return "Deal +" + formatWhole(new Decimal(10).add(player.bh.skillData["eclipse_drain"].level.mul(2))) + "% true damage per second, that is uneffected by effects"},
-    passiveText() {return "+" + formatSimple(player.bh.skillData["eclipse_drain"].maxLevel.div(5), 2) + " DMG"},
+    description() {return "Deal +" + formatWhole(new Decimal(10).add(player.bh.skillData["eclipse_drain"].level.mul(2))) + "% true damage per second"},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["eclipse_drain"].maxLevel.div(5)) + " DMG"},
     char: "eclipse",
     spCost: new Decimal(6),
     curCostBase: new Decimal(10),
@@ -383,7 +468,7 @@ BHA.eclipse_drain = {
     constantType: "effect",
     constantTarget: "celestialite",
     effects: {
-        "regenAdd"() {return player.bh.characterData["eclipse"].damage.mul(Decimal.sub(-0.1, player.bh.skillData["eclipse_drain"].level.mul(0.02)))}, // Multiplicative Effect
+        "regenAdd"(char) {return char.damage.mul(Decimal.sub(-0.1, player.bh.skillData["eclipse_drain"].level.mul(0.02)))}, // Multiplicative Effect
     },
     cooldown: new Decimal(Infinity),
 }
@@ -480,7 +565,7 @@ BHA.geroa_radioactiveMissile = {
     char: "geroa",
     spCost: new Decimal(8),
     curCostBase: new Decimal(1000),
-    curCostScale: new Decimal(10),
+    curCostScale: new Decimal(1000),
     currency: "spaceRock",
     unlocked() {return getLevelableAmount("pet", 502).gt(0)},
 
@@ -493,15 +578,20 @@ BHA.geroa_radioactiveMissile = {
     },
     value() {return new Decimal(0.3).add(player.bh.skillData["geroa_radioactiveMissile"].level.mul(0.06))},
     cooldown: new Decimal(6),
+    cooldownCap: new Decimal(1.5),
 }
 BHA.geroa_selfRepair = {
     name: "Self Repair",
-    description() {return "If under 25% health, heal yourself for " + formatWhole(new Decimal(25).add(player.bh.skillData["geroa_selfRepair"].level.mul(5))) + " health"},
+    description(char) {
+        let heal = new Decimal(25).add(player.bh.skillData["geroa_selfRepair"].level.mul(5))
+        if (player.matosLair.milestone[25] >= 2) heal = heal.mul(char.mending.div(10).add(1))
+        return "If under 25% health, heal yourself for " + formatWhole(heal) + " health"
+    },
     passiveText() {return "+" + formatSimple(player.bh.skillData["geroa_selfRepair"].maxLevel) + " HP"},
     char: "geroa",
     spCost: new Decimal(10),
     curCostBase: new Decimal(5000),
-    curCostScale: new Decimal(25),
+    curCostScale: new Decimal(2500),
     currency: "spaceRock",
     unlocked() {return hasUpgrade("ir", 201)},
 
@@ -514,6 +604,7 @@ BHA.geroa_selfRepair = {
         return player.bh.characters[index].health.lte(player.bh.characters[index].maxHealth.div(4))
     },
     cooldown: new Decimal(30),
+    cooldownCap: new Decimal(10),
 }
 BHA.geroa_cosmicRay = {
     name: "Cosmic Ray",
@@ -522,7 +613,7 @@ BHA.geroa_cosmicRay = {
     char: "geroa",
     spCost: new Decimal(12),
     curCostBase: new Decimal(20000),
-    curCostScale: new Decimal(50),
+    curCostScale: new Decimal(5000),
     currency: "spaceRock",
     unlocked() {return hasUpgrade("ir", 202)},
 
@@ -530,10 +621,11 @@ BHA.geroa_cosmicRay = {
     constantType: "effect",
     constantTarget: "celestialite",
     effects: {
-        "regenAdd"() {return player.bh.characterData["geroa"].damage.mul(Decimal.sub(-0.4, player.bh.skillData["geroa_cosmicRay"].level.mul(0.08)))}, // Multiplicative Effect
+        "regenAdd"(char) {return char.damage.mul(Decimal.sub(-0.4, player.bh.skillData["geroa_cosmicRay"].level.mul(0.08)))}, // Multiplicative Effect
     },
     duration: new Decimal(5),
     cooldown: new Decimal(20),
+    cooldownCap: new Decimal(5),
 }
 BHA.geroa_orbitalCannon = {
     name: "Orbital Cannon",
@@ -542,7 +634,7 @@ BHA.geroa_orbitalCannon = {
     char: "geroa",
     spCost: new Decimal(14),
     curCostBase: new Decimal(100000),
-    curCostScale: new Decimal(100),
+    curCostScale: new Decimal(10000),
     currency: "spaceRock", // Temp, probably something else
     unlocked() {return hasUpgrade("ir", 203)},
 
@@ -558,4 +650,27 @@ BHA.geroa_orbitalCannon = {
     delay: 10000, // In ms
     stun: ["hard", new Decimal(10)],
     cooldown: new Decimal(60),
+    cooldownCap: new Decimal(10),
+}
+BHA.geroa_defenseSatellites = {
+    name: "Defense Satellites",
+    description() {return "Geroa's satellites shoot 3 lasers every 3 seconds, dealing " + formatWhole(new Decimal(15).add(player.bh.skillData["geroa_defenseSatellites"].level.mul(3))) + "% ranged damage each"},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["geroa_defenseSatellites"].maxLevel.div(5)) + " DMG"},
+    char: "geroa",
+    spCost: new Decimal(16),
+    curCostBase: new Decimal(1e6),
+    curCostScale: new Decimal(1e5),
+    currency: "spaceRock",
+    unlocked() {return hasUpgrade("ir", 204)},
+
+    passive: true,
+    constantType: "damage",
+    target: "celestialite",
+    method: "ranged",
+    properties: {
+        "multi-hit": [3, 100],
+    },
+    value() {return new Decimal(0.15).add(player.bh.skillData["geroa_defenseSatellites"].level.mul(0.03))},
+    interval: new Decimal(3),
+    cooldown: new Decimal(Infinity),
 }

@@ -66,7 +66,7 @@
 
         if (player.ro.rocketIndex.eq(1)) player.au2.starsToGet = player.au2.starsToGet.mul(5)
         player.au2.starsToGet = player.au2.starsToGet.mul(player.se.starsExploreEffect[0][0]).floor()
-        if (hasUpgrade("fi", 23)) player.au2.starsToGet = player.au2.starsToGet.mul(upgradeEffect("fi", 23))
+        player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("stagnantSynestia", 3)).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(levelableEffect("ir", 1)[0]).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("sb", 101)).floor()
     },

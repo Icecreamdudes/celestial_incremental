@@ -135,6 +135,16 @@ addLayer("settings", {
             },
             style: { width: '100px', minHeight: '60px', color: "var(--textColor)", background: "var(--miscButton)", fontSize: "8px", lineHeight: "1", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
         },
+        25: {
+            title() { return "Bullet Hell Keyboard Controls<hr style='border:1px solid #888;margin-top:1px'>" + options.bhKeyboard },
+            canClick: true,
+            unlocked() {return player.depth3.milestone[25] > 0},
+            onClick() {
+                toggleOpt('bhKeyboard')
+            },
+            style: { width: '100px', minHeight: '60px', color: "var(--textColor)", background: "var(--miscButton)", fontSize: "8px", lineHeight: "1", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+        },
+
         27: {
             title() { return "Toggle Hotkeys<hr style='border:1px solid #888;margin-top:1px'>" + options.toggleHotkey },
             canClick: true,
@@ -567,6 +577,7 @@ addLayer("settings", {
                     ["style-row", [
                         ["style-row", [], {width: "3px", height: "60px", background: "var(--regBorder)"}],
                         ["clickable", 24], ["style-row", [], {width: "3px", height: "60px", background: "var(--regBorder)"}],
+                        ["clickable", 25], ["style-row", [], () => {return player.depth3.milestone[25] > 0 ? {width: "3px", height: "60px", background: "var(--regBorder)"} : {display: "none !important"}}],
                     ], {width: "306px", borderBottom: "3px solid var(--regBorder)"}],
                     ["style-row", [
                         ["clickable", 27],

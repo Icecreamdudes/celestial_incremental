@@ -257,7 +257,7 @@ addLayer("cb", {
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("pl", 12))
             if (hasMilestone("db", 101)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(1.25)
             if (player.matosLair.milestone[25] > 0) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(2)
-            if (hasUpgrade("fi", 11)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(upgradeEffect("fi", 11))
+            player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(player.stagnantSynestia.comboEffect)
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(player.se.starsExploreEffect[2][0])
             if (hasUpgrade("ir", 13)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(upgradeEffect("ir", 13))
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(player.cof.coreFragmentEffects[6])
@@ -407,7 +407,7 @@ addLayer("cb", {
             player.cb.boostTimers[i].max = player.cb.boostTimers[i].max.div(levelableEffect("pet", 401)[2])
             player.cb.boostTimers[i].max = player.cb.boostTimers[i].max.div(buyableEffect("sp", 35))
             player.cb.boostTimers[i].max = player.cb.boostTimers[i].max.div(buyableEffect("ev2", 12))
-            if (hasUpgrade("fi", 14)) player.cb.boostTimers[i].max = player.cb.boostTimers[i].max.div(2)
+            player.cb.boostTimers[i].max = player.cb.boostTimers[i].max.div(buyableEffect("stagnantSynestia", 4))
 
             player.cb.boostTimers[i].current = player.cb.boostTimers[i].current.sub(onepersec.mul(delta))
 
@@ -1364,7 +1364,7 @@ addLayer("cb", {
         303: {
             title() { return player.cb.level.lt(1e6) ? "Requires level 1e6" : player.cb.boostTimers[2].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.boostTimers[2].current) + "." : "<h3>+" + format(player.cb.boostTimers[2].base) + " XP Boost."},
             canClick() { return player.cb.boostTimers[2].current.lt(0) && player.cb.level.gte(1e6)},
-            unlocked() { return hasUpgrade("fi", 13)},
+            unlocked() { return hasUpgrade("stagnantSynestia", 5)},
             tooltip() { return player.cb.highestLevel.gte(250) ? "Paragon Shard Rarity: 50%" : ""},
             onClick() {
                 player.cb.XPBoost = player.cb.XPBoost.add(player.cb.boostTimers[2].base)

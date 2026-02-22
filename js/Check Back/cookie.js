@@ -2134,7 +2134,7 @@ addLayer("ep2", {
             img: "resources/checkback/wrath_simple.png",
             unlocked() {return getLevelableAmount("pet", 2003).gte(1)},
             title: "<span style='color:#8C0000cc'>Fury</span>",
-            description: "Reduce black heart combo softcap scaling by -0.1%",
+            description: "Reduce black heart combo softcap scaling by -0.2%",
             cost: new Decimal(6.66e24),
             currencyLocation() { return player.ep2 },
             currencyDisplayName: "Cookies",

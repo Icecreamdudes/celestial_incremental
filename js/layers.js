@@ -183,7 +183,7 @@
         player.i.doomSoftcap = player.i.doomSoftcap.div(player.points.div(player.i.doomSoftcapStart).add(1).log(player.i.doomSoftcapStart).add(1))
 
         // SOFTCAP OF DOOM START
-        player.i.doomSoftcapStart = new Decimal("1e10000000")
+        player.i.doomSoftcapStart = new Decimal("1e2000000")
 
         // APPLY DOOM SOFTCAP
         if (player.gain.gt(player.i.doomSoftcapStart)) player.gain = player.gain.div(player.i.doomSoftcapStart).pow(player.i.doomSoftcap).mul(player.i.doomSoftcapStart)

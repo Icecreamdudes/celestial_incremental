@@ -285,6 +285,7 @@ addLayer("ir", {
         } else {
             resumeAsteroidMinigame()
         }
+
     },
     bars: {
         healthBar: {
@@ -2561,7 +2562,7 @@ class SpaceArena {
         let newAsteroids = [];
         let lootFlashPositions = [];
         let xpOrbsToAdd = [];
-
+        if (player.ir.shipHealth.lt(0)) this.onShipDeath();
         // Helper to handle enemy death logic (drops, flags, etc.)
         const handleEnemyDeath = (enemy) => {
             if (!enemy || !enemy.alive) return;

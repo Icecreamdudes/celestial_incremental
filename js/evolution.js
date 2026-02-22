@@ -654,7 +654,7 @@
                      "<br>"  + formatWhole(getLevelableAmount("pet", 1103)) + "/10 Goldsmith Level" + 
                     "</div>"
                     
-            },
+            }, // placeholder reqs
             canClick() {
                 return (player.cb.evolutionShards.gte(1000) && player.cb.paragonShards.gte(50) && player.cb.ascensionShards.gte(1) && getLevelableTier("pet", 103).gte(2) && getLevelableAmount("pet", 1103).gte(10))
             },

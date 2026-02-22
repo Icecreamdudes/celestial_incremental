@@ -323,7 +323,7 @@ addLayer("stagnantSynestia", {
 BHS.stagnantSynestia = {
     nameCap: "Stagnant Synestia",
     nameLow: "stagnant synestia",
-    music: "music/fighting.mp3",
+    music: "music/stagnant.mp3",
     comboLimit: 100,
     comboScaling: 1.025,
     comboScalingStart: 25,

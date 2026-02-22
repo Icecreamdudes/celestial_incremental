@@ -486,6 +486,7 @@ addLayer("bh", {
             "eclipse_drain": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "eclipse_motivation": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "eclipse_lightBarrier": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "eclipse_solarRetinopathy": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "eclipse_syzygy": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
 
             // GEROA
@@ -739,7 +740,7 @@ addLayer("bh", {
                                 for (let k in properties) {
                                     if (k == "target") continue
                                     for (let t = 0; t < target.length; t++) {
-                                        let val = run(properties[k], properties)
+                                        let val = run(properties[k], properties, player.bh.celestialite)
                                         if (k == "attributes") {
                                             bhTemp[target[t]][k] = Object.assign({}, bhTemp[target[t]][k], val)
                                             continue
@@ -769,7 +770,7 @@ addLayer("bh", {
                         for (let k in variables) {
                             if (k == "target") continue
                             for (let t = 0; t < target.length; t++) {
-                                let val = run(variables[k], variables)
+                                let val = run(variables[k], variables, player.bh.celestialite)
                                 if (k == "attributes") {
                                     bhTemp[target[t]][k] = Object.assign({}, bhTemp[target[t]][k], val)
                                     continue
@@ -862,7 +863,7 @@ addLayer("bh", {
                             for (let k in properties) {
                                 if (k == "target") continue
                                 for (let t = 0; t < target.length; t++) {
-                                    let val = run(properties[k], properties)
+                                    let val = run(properties[k], properties, player.bh.characters[i])
                                     if (k == "attributes") {
                                         bhTemp[target[t]][k] = Object.assign({}, bhTemp[target[t]][k], val)
                                         continue
@@ -891,7 +892,7 @@ addLayer("bh", {
                     for (let k in variables) {
                         if (k == "target") continue
                         for (let t = 0; t < target.length; t++) {
-                            let val = run(variables[k], variables)
+                            let val = run(variables[k], variables, player.bh.characters[i])
                             if (k == "attributes") {
                                 bhTemp[target[t]][k] = Object.assign({}, bhTemp[target[t]][k], val)
                                 continue
@@ -1029,6 +1030,7 @@ addLayer("bh", {
         damageAdd = damageAdd.add(player.bh.skillData["nav_magicMissle"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["eclipse_drain"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["eclipse_motivation"].maxLevel.div(5))
+        damageAdd = damageAdd.add(player.bh.skillData["eclipse_solarRetinopathy"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["geroa_cosmicRay"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["geroa_orbitalCannon"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["geroa_defenseSatellites"].maxLevel.div(5))
@@ -1086,49 +1088,49 @@ addLayer("bh", {
         // =-- STAT CALCULATION --=
         for (let i = 0; i < 3; i++) {
             // HEALTH
-            player.bh.characters[i].maxHealth = BHP[player.bh.characters[i].id].health ?? new Decimal(0)
+            player.bh.characters[i].maxHealth = run(BHP[player.bh.characters[i].id].health, BHP[player.bh.characters[i].id]) ?? new Decimal(0)
             player.bh.characters[i].maxHealth = player.bh.characters[i].maxHealth.mul(healthBase)
             player.bh.characters[i].maxHealth = player.bh.characters[i].maxHealth.add(healthAdd)
             player.bh.characters[i].maxHealth = player.bh.characters[i].maxHealth.add(bhTemp[i].healthAdd)
             player.bh.characters[i].maxHealth = player.bh.characters[i].maxHealth.mul(bhTemp[i].healthMult)
 
             // DAMAGE
-            player.bh.characters[i].damage = BHP[player.bh.characters[i].id].damage ?? new Decimal(0)
+            player.bh.characters[i].damage = run(BHP[player.bh.characters[i].id].damage, BHP[player.bh.characters[i].id]) ?? new Decimal(0)
             player.bh.characters[i].damage = player.bh.characters[i].damage.mul(damageBase)
             player.bh.characters[i].damage = player.bh.characters[i].damage.add(damageAdd)
             player.bh.characters[i].damage = player.bh.characters[i].damage.add(bhTemp[i].damageAdd)
             player.bh.characters[i].damage = player.bh.characters[i].damage.mul(bhTemp[i].damageMult)
 
             // DEFENSE
-            player.bh.characters[i].defense = BHP[player.bh.characters[i].id].defense ?? new Decimal(0)
+            player.bh.characters[i].defense = run(BHP[player.bh.characters[i].id].defense, BHP[player.bh.characters[i].id]) ?? new Decimal(0)
             player.bh.characters[i].defense = player.bh.characters[i].defense.mul(defenseBase)
             player.bh.characters[i].defense = player.bh.characters[i].defense.add(defenseAdd)
             player.bh.characters[i].defense = player.bh.characters[i].defense.add(bhTemp[i].defenseAdd)
             player.bh.characters[i].defense = player.bh.characters[i].defense.mul(bhTemp[i].defenseMult)
 
             // REGEN
-            player.bh.characters[i].regen = BHP[player.bh.characters[i].id].regen ?? new Decimal(0)
+            player.bh.characters[i].regen = run(BHP[player.bh.characters[i].id].regen, BHP[player.bh.characters[i].id]) ?? new Decimal(0)
             player.bh.characters[i].regen = player.bh.characters[i].regen.mul(defenseBase)
             player.bh.characters[i].regen = player.bh.characters[i].regen.add(regenAdd)
             player.bh.characters[i].regen = player.bh.characters[i].regen.add(bhTemp[i].regenAdd)
             player.bh.characters[i].regen = player.bh.characters[i].regen.mul(bhTemp[i].regenMult)
 
             // AGILITY
-            player.bh.characters[i].agility = BHP[player.bh.characters[i].id].agility ?? new Decimal(0)
+            player.bh.characters[i].agility = run(BHP[player.bh.characters[i].id].agility, BHP[player.bh.characters[i].id]) ?? new Decimal(0)
             player.bh.characters[i].agility = player.bh.characters[i].agility.mul(agilityBase)
             player.bh.characters[i].agility = player.bh.characters[i].agility.add(agilityAdd)
             player.bh.characters[i].agility = player.bh.characters[i].agility.add(bhTemp[i].agilityAdd)
             player.bh.characters[i].agility = player.bh.characters[i].agility.mul(bhTemp[i].agilityMult)
 
             // LUCK
-            player.bh.characters[i].luck = BHP[player.bh.characters[i].id].luck ?? new Decimal(0)
+            player.bh.characters[i].luck = run(BHP[player.bh.characters[i].id].luck, BHP[player.bh.characters[i].id]) ?? new Decimal(0)
             player.bh.characters[i].luck = player.bh.characters[i].luck.mul(luckBase)
             player.bh.characters[i].luck = player.bh.characters[i].luck.add(luckAdd)
             player.bh.characters[i].luck = player.bh.characters[i].luck.add(bhTemp[i].luckAdd)
             player.bh.characters[i].luck = player.bh.characters[i].luck.mul(bhTemp[i].luckMult)
 
             // MENDING
-            player.bh.characters[i].mending = BHP[player.bh.characters[i].id].mending ?? new Decimal(0)
+            player.bh.characters[i].mending = run(BHP[player.bh.characters[i].id].mending, BHP[player.bh.characters[i].id]) ?? new Decimal(0)
             player.bh.characters[i].mending = player.bh.characters[i].mending.mul(mendingBase)
             player.bh.characters[i].mending = player.bh.characters[i].mending.add(mendingAdd)
             player.bh.characters[i].mending = player.bh.characters[i].mending.add(bhTemp[i].mendingAdd)
@@ -1155,37 +1157,37 @@ addLayer("bh", {
         // =-- STORED STAT CALCULATIONS --=
         for (let i in player.bh.characterData) {
             // HEALTH
-            player.bh.characterData[i].health = BHP[i].health
+            player.bh.characterData[i].health = run(BHP[i].health, BHP[i])
             player.bh.characterData[i].health = player.bh.characterData[i].health.mul(healthBase)
             player.bh.characterData[i].health = player.bh.characterData[i].health.add(healthAdd)
 
             // DAMAGE
-            player.bh.characterData[i].damage = BHP[i].damage
+            player.bh.characterData[i].damage = run(BHP[i].damage, BHP[i])
             player.bh.characterData[i].damage = player.bh.characterData[i].damage.mul(damageBase)
             player.bh.characterData[i].damage = player.bh.characterData[i].damage.add(damageAdd)
 
             // DEFENSE
-            player.bh.characterData[i].defense = BHP[i].defense
+            player.bh.characterData[i].defense = run(BHP[i].defense, BHP[i])
             player.bh.characterData[i].defense = player.bh.characterData[i].defense.mul(defenseBase)
             player.bh.characterData[i].defense = player.bh.characterData[i].defense.add(defenseAdd)
             
             // REGEN
-            player.bh.characterData[i].regen = BHP[i].regen
+            player.bh.characterData[i].regen = run(BHP[i].regen, BHP[i])
             player.bh.characterData[i].regen = player.bh.characterData[i].regen.mul(regenBase)
             player.bh.characterData[i].regen = player.bh.characterData[i].regen.add(regenAdd)
             
             // AGILITY
-            player.bh.characterData[i].agility = BHP[i].agility
+            player.bh.characterData[i].agility = run(BHP[i].agility, BHP[i])
             player.bh.characterData[i].agility = player.bh.characterData[i].agility.mul(agilityBase)
             player.bh.characterData[i].agility = player.bh.characterData[i].agility.add(agilityAdd)
             
             // LUCK
-            player.bh.characterData[i].luck = BHP[i].luck
+            player.bh.characterData[i].luck = run(BHP[i].luck, BHP[i])
             player.bh.characterData[i].luck = player.bh.characterData[i].luck.mul(luckBase)
             player.bh.characterData[i].luck = player.bh.characterData[i].luck.add(luckAdd)
             
             // MENDING
-            player.bh.characterData[i].mending = BHP[i].mending
+            player.bh.characterData[i].mending = run(BHP[i].mending, BHP[i])
             player.bh.characterData[i].mending = player.bh.characterData[i].mending.mul(mendingBase)
             player.bh.characterData[i].mending = player.bh.characterData[i].mending.add(mendingAdd)
 
@@ -3615,33 +3617,33 @@ addLayer("bh", {
                                         ["row", [
                                             ["tooltip-row", [
                                                 ["raw-html", () => {return "<h3>HP</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characterData[player.bh.characterSelection].health)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                                ["raw-html", () => {return "<div class='bottomTooltip'>Base Health: " + BHP[player.bh.characterSelection].health + "<hr><small>Increases character health</small></div>"}],
+                                                ["raw-html", () => {return "<div class='bottomTooltip'>Base Health: " + formatSimple(run(BHP[player.bh.characterSelection].health, BHP[player.bh.characterSelection])) + "<hr><small>Increases character health</small></div>"}],
                                             ], {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px", marginRight: "4px"}],
                                             ["tooltip-row", [
                                                 ["raw-html", () => {return "<h3>DMG</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characterData[player.bh.characterSelection].damage)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                                ["raw-html", () => {return "<div class='bottomTooltip'>Base Damage: " + BHP[player.bh.characterSelection].damage + "<hr><small>Increases character damage</small></div>"}],
+                                                ["raw-html", () => {return "<div class='bottomTooltip'>Base Damage: " + formatSimple(run(BHP[player.bh.characterSelection].damage, BHP[player.bh.characterSelection])) + "<hr><small>Increases character damage</small></div>"}],
                                             ], {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px"}],
                                         ]],
                                         ["blank", "4px"],
                                         ["row", [
                                             ["tooltip-row", [
                                                 ["raw-html", () => {return "<h3>RGN</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characterData[player.bh.characterSelection].regen, 2)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                                ["raw-html", () => {return "<div class='bottomTooltip'>Base Regen: " + BHP[player.bh.characterSelection].regen + "<hr><small>Increases character<br>health regen</small></div>"}],
+                                                ["raw-html", () => {return "<div class='bottomTooltip'>Base Regen: " + formatSimple(run(BHP[player.bh.characterSelection].regen, BHP[player.bh.characterSelection])) + "<hr><small>Increases character<br>health regen</small></div>"}],
                                             ], {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px", marginRight: "4px"}],
                                             ["tooltip-row", [
                                                 ["raw-html", () => {return "<h3>AGI</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characterData[player.bh.characterSelection].agility)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                                ["raw-html", () => {return "<div class='bottomTooltip'>Base Agility: " + BHP[player.bh.characterSelection].agility + "<hr><small>Decreases skill cooldowns<br>[/] (100+AGI)/100</small></div>"}],
+                                                ["raw-html", () => {return "<div class='bottomTooltip'>Base Agility: " + formatSimple(run(BHP[player.bh.characterSelection].agility, BHP[player.bh.characterSelection])) + "<hr><small>Decreases skill cooldowns<br>[/] (100+AGI)/100</small></div>"}],
                                             ], {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px"}],
                                         ]],
                                         ["blank", "4px"],
                                         ["row", [
                                             ["tooltip-row", [
                                                 ["raw-html", () => {return "<h3>DEF</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characterData[player.bh.characterSelection].defense)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                                ["raw-html", () => {return "<div class='bottomTooltip'>Base Defense: " + BHP[player.bh.characterSelection].defense + "<hr><small>Decreases damage taken<br>[/] (100+DEF)/100</small></div>"}],
+                                                ["raw-html", () => {return "<div class='bottomTooltip'>Base Defense: " + formatSimple(run(BHP[player.bh.characterSelection].defense, BHP[player.bh.characterSelection])) + "<hr><small>Decreases damage taken<br>[/] (100+DEF)/100</small></div>"}],
                                             ], {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px", marginRight: "4px"}],
                                             ["tooltip-row", [
                                                 ["raw-html", () => {return "<h3>LUCK</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characterData[player.bh.characterSelection].luck)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                                ["raw-html", () => {return "<div class='bottomTooltip'>Base Luck: " + BHP[player.bh.characterSelection].luck + "<hr><small>Improves chance skills<br>[* or /] (100+LUCK)/100</small></div>"}],
+                                                ["raw-html", () => {return "<div class='bottomTooltip'>Base Luck: " + formatSimple(run(BHP[player.bh.characterSelection].luck, BHP[player.bh.characterSelection])) + "<hr><small>Improves chance skills<br>[* or /] (100+LUCK)/100</small></div>"}],
                                             ], {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px"}],
                                         ]],
                                     ]],
@@ -3649,7 +3651,7 @@ addLayer("bh", {
                                         ["row", [
                                             ["tooltip-row", [
                                                 ["raw-html", () => {return "<h3>MND</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characterData[player.bh.characterSelection].mending)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                                ["raw-html", () => {return "<div class='bottomTooltip'>Base Mending: " + BHP[player.bh.characterSelection].mending + "<hr><small>Improves healing skills<br>[*] (MND/10)+1</small></div>"}],
+                                                ["raw-html", () => {return "<div class='bottomTooltip'>Base Mending: " + formatSimple(run(BHP[player.bh.characterSelection].mending, BHP[player.bh.characterSelection])) + "<hr><small>Improves healing skills<br>[*] (MND/10)+1</small></div>"}],
                                             ], () => {
                                                 let look = {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px", marginRight: "4px"}
                                                 if (player.matosLair.milestone[25] < 2) {look.filter = "brightness(0%) blur(2px)"; look.userSelect = "none"}
@@ -4096,6 +4098,7 @@ addLayer("bh", {
                                         ["tooltip-row", [["raw-html", () => {return player.bh.characters[0].attributes.berserk ? "✹<div class='bottomTooltip' style='margin-top:0px'>Berserk<hr>Actions always do<br>" + formatSimple(Decimal.mul(player.bh.characters[0].attributes.berserk, 100)) + "% self damage.</div>" : ""}, {color: "#ff6666", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                         ["tooltip-row", [["raw-html", () => {return player.bh.characters[0].attributes.rebound ? "⭟<div class='bottomTooltip' style='margin-top:0px'>Rebound<hr>Reflects " + formatSimple(Decimal.mul(player.bh.characters[0].attributes.rebound, 100)) + "% damage back<br>towards the attacker.</div>" : ""}, {color: "#63697A", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                         ["tooltip-row", [["raw-html", () => {return player.bh.characters[0].attributes.explosive ? "✺<div class='bottomTooltip' style='margin-top:0px'>Explosive<hr>Explodes upon death,<br>dealing " + formatSimple(player.bh.characters[0].attributes.explosive) + " damage to<br>all team members.</div>" : ""}, {color: "#ee8700", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
+                                        ["tooltip-row", [["raw-html", () => {return player.bh.characters[0].attributes.daze ? "꩜<div class='bottomTooltip' style='margin-top:0px'>Dazed<hr>All actions have a<br>" + formatSimple(Decimal.div(player.bh.characters[0].attributes.daze, Decimal.div(Decimal.add(100, player.bh.characters[0].luck), 100)).mul(100)) + "% chance to miss.</div>" : ""}, {color: "#c44c5b", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                     ], {width: "100px", height: "30px", marginTop: "-35px"}],
                                 ], {margin: "5px"}],
                                 ["style-column", [
@@ -4107,6 +4110,7 @@ addLayer("bh", {
                                         ["tooltip-row", [["raw-html", () => {return player.bh.characters[1].attributes.berserk ? "✹<div class='bottomTooltip' style='margin-top:0px'>Berserk<hr>Actions always do<br>" + formatSimple(Decimal.mul(player.bh.characters[1].attributes.berserk, 100)) + "% self damage.</div>" : ""}, {color: "#ff6666", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                         ["tooltip-row", [["raw-html", () => {return player.bh.characters[1].attributes.rebound ? "⭟<div class='bottomTooltip' style='margin-top:0px'>Rebound<hr>Reflects " + formatSimple(Decimal.mul(player.bh.characters[1].attributes.rebound, 100)) + "% damage back<br>towards the attacker.</div>" : ""}, {color: "#63697A", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                         ["tooltip-row", [["raw-html", () => {return player.bh.characters[1].attributes.explosive ? "✺<div class='bottomTooltip' style='margin-top:0px'>Explosive<hr>Explodes upon death,<br>dealing " + formatSimple(player.bh.characters[1].attributes.explosive) + " damage to<br>all team members.</div>" : ""}, {color: "#ee8700", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
+                                        ["tooltip-row", [["raw-html", () => {return player.bh.characters[1].attributes.daze ? "꩜<div class='bottomTooltip' style='margin-top:0px'>Dazed<hr>All actions have a<br>" + formatSimple(Decimal.div(player.bh.characters[1].attributes.daze, Decimal.div(Decimal.add(100, player.bh.characters[1].luck), 100)).mul(100)) + "% chance to miss.</div>" : ""}, {color: "#c44c5b", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                     ], {width: "100px", height: "30px", marginTop: "-35px"}],
                                 ], {margin: "5px"}],
                             ]],
@@ -4119,6 +4123,7 @@ addLayer("bh", {
                                     ["tooltip-row", [["raw-html", () => {return player.bh.characters[2].attributes.berserk ? "✹<div class='bottomTooltip' style='margin-top:0px'>Berserk<hr>Actions always do<br>" + formatSimple(Decimal.mul(player.bh.characters[2].attributes.berserk, 100)) + "% self damage.</div>" : ""}, {color: "#ff6666", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                     ["tooltip-row", [["raw-html", () => {return player.bh.characters[2].attributes.rebound ? "⭟<div class='bottomTooltip' style='margin-top:0px'>Rebound<hr>Reflects " + formatSimple(Decimal.mul(player.bh.characters[2].attributes.rebound, 100)) + "% damage back<br>towards the attacker.</div>" : ""}, {color: "#63697A", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                     ["tooltip-row", [["raw-html", () => {return player.bh.characters[2].attributes.explosive ? "✺<div class='bottomTooltip' style='margin-top:0px'>Explosive<hr>Explodes upon death,<br>dealing " + formatSimple(player.bh.characters[2].attributes.explosive) + " damage to<br>all team members.</div>" : ""}, {color: "#ee8700", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
+                                        ["tooltip-row", [["raw-html", () => {return player.bh.characters[2].attributes.daze ? "꩜<div class='bottomTooltip' style='margin-top:0px'>Dazed<hr>All actions have a<br>" + formatSimple(Decimal.div(player.bh.characters[2].attributes.daze, Decimal.div(Decimal.add(100, player.bh.characters[2].luck), 100)).mul(100)) + "% chance to miss.</div>" : ""}, {color: "#c44c5b", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                 ], {width: "100px", height: "30px", marginTop: "-35px"}],
                             ], {margin: "5px"}],
                         ]],
@@ -4132,6 +4137,7 @@ addLayer("bh", {
                                 ["tooltip-row", [["raw-html", () => {return player.bh.celestialite.attributes.berserk ? "✹<div class='bottomTooltip' style='margin-top:0px'>Berserk<hr>Actions always do<br>" + formatSimple(Decimal.mul(player.bh.celestialite.attributes.berserk, 100)) + "% self damage.</div>" : ""}, {color: "#ff6666", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                 ["tooltip-row", [["raw-html", () => {return player.bh.celestialite.attributes.rebound ? "⭟<div class='bottomTooltip' style='margin-top:0px'>Rebound<hr>Reflects " + formatSimple(Decimal.mul(player.bh.celestialite.attributes.rebound, 100)) + "% damage back<br>towards the attacker.</div>" : ""}, {color: "#63697A", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                 ["tooltip-row", [["raw-html", () => {return player.bh.celestialite.attributes.explosive ? "✺<div class='bottomTooltip' style='margin-top:0px'>Explosive<hr>Explodes upon death,<br>dealing " + formatSimple(player.bh.celestialite.attributes.explosive) + " damage to<br>all team members.</div>" : ""}, {color: "#ee8700", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
+                                        ["tooltip-row", [["raw-html", () => {return player.bh.celestialite.attributes.daze ? "꩜<div class='bottomTooltip' style='margin-top:0px'>Dazed<hr>All actions have a<br>" + formatSimple(Decimal.div(player.bh.celestialite.attributes.daze, Decimal.div(Decimal.add(100, player.bh.celestialite.luck), 100)).mul(100)) + "% chance to miss.</div>" : ""}, {color: "#c44c5b", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                             ], {width: "100px", height: "30px", marginTop: "-35px"}],
                         ], {}],
                     ]],

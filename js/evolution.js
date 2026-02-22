@@ -25,7 +25,9 @@
         10 - Eye
         11 - Blob
         12 - Egg Man
-        13 - Enhance Dust
+        13 - Goldsmith
+        14 - Extreme Demon
+        15 - Enhance Dust
         */
     }},
     nodeStyle() {},
@@ -180,6 +182,17 @@
                 player.ev.evolutionDisplayIndex = new Decimal(12)
             },
             style: { width: "100px", minHeight: "100px", border: "5px solid #2F2F2F", borderRadius: "0px", padding: "0px" },
+        },
+        113: {
+            title() { return "<img src='resources/Pets/diamondsmithEvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>"
+            },
+            canClick() {return true},
+            unlocked() { return tmp.pet.levelables[103].canClick && !player.ev.evolutionsUnlocked[13] && player.ir.iriditeDefeated},
+            tooltip() { return "███████ ██████ coin dust<br>██████████" }, // further boosts coin dust production
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(13)
+            },
+            style: { width: "100px", minHeight: "100px", border: "5px solid #2F2F2F", borderRadius: "0px", padding: "0px" }
         },
 
         201: {

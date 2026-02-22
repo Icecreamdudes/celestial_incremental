@@ -4014,9 +4014,10 @@ addLayer("pet", {
             },
             levelLimit() { return getBuyableAmount("sme", 111).gt(0) ? new Decimal(10).add(buyableEffect("sme", 111)) : new Decimal(10) },
             effect() { 
+                let amt = getLevelableAmount(this.layer, this.id).add(levelableEffect("pet", 2103)[0])
                 return [
-                    getLevelableAmount(this.layer, this.id), // Effective Unsmith Levels
-                    getLevelableAmount(this.layer, this.id).pow(1.15), // Base Coin Dust Gain Per Hour
+                    amt, // Effective Unsmith Levels
+                    amt.pow(1.15), // Base Coin Dust Gain Per Hour
                 ]
             },
             levelTooltip() { return "Costs Evo Shards." },

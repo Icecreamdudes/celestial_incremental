@@ -634,7 +634,7 @@
                 return "<div class='evoContainer'><h3>Costs:</h3>" +
                     "<br>"  + formatWhole(player.cb.evolutionShards) + "/1,000 Evolution Shards" +
                      "<br>"  + formatWhole(player.cb.paragonShards) + "/50 Paragon Shards" +
-                     "<br>"  + formatWhole(player.cb.ascensionShards) + "/1 Ascension Shards" +
+                     "<br>"  + formatWhole(player.cbs.ascensionShards) + "/1 Ascension Shards" +
                     "</div>" +
                     "<div class='evoContainer'><h3>Requires:</h3>" +
                     "<br>"  + formatWhole(getLevelableTier("pet", 103)) + "/2 Unsmith Ascensions" +
@@ -643,14 +643,14 @@
                     
             }, // placeholder reqs
             canClick() {
-                return (player.cb.evolutionShards.gte(1000) && player.cb.paragonShards.gte(50) && player.cb.ascensionShards.gte(1) && getLevelableTier("pet", 103).gte(2) && getLevelableAmount("pet", 1103).gte(10))
+                return (player.cb.evolutionShards.gte(1000) && player.cb.paragonShards.gte(50) && player.cbs.ascensionShards.gte(1) && getLevelableTier("pet", 103).gte(2) && getLevelableAmount("pet", 1103).gte(10))
             },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
 
                 player.cb.evolutionShards = player.cb.evolutionShards.sub(1000)
                 player.cb.paragonShards = player.cb.paragonShards.sub(50)
-                player.cb.ascensionShards = player.cb.ascensionShards.sub(1)
+                player.cbs.ascensionShards = player.cbs.ascensionShards.sub(1)
 
                 player.ev.evolutionsUnlocked[13] = true
                 setLevelableAmount("pet", 2103, new Decimal(1))

@@ -1761,3 +1761,9 @@ button > * {
 	background: #251d0d;
 	border-bottom: 5px solid #3e3117;
 }
+
+.alchtext {
+	color: transparent;
+	background: linear-gradient(to bottom, black 20%, purple 80%);
+	background-clip: text;
+}

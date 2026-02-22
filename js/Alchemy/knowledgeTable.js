@@ -1,0 +1,153 @@
+addLayer("ktb", {
+    name: "The Knowledge Table",
+    symbol: "🕮",
+    row: 1,
+    universe: "UFS",
+    position: 0,
+    startData() {return {
+        unlocked: true,
+
+        alchemicalSymbols: new Decimal (0),
+        alchemicalSymbolsToGet: new Decimal (0),
+    }},
+    nodeStyle: {
+        background: "brown",
+        backgroundOrigin: "border-box",
+        borderColor: "black",
+    },
+    tooltip: "The Knowledge Table",
+    branches: ["btb", "aal"],
+    color: "white",
+    bars: {},
+    upgrades: {
+        // Upgrades that affect the main progression of the Alchemy Universe.
+        11: {
+            title: "Alchemical Symbol Transmutation",
+            unlocked() {return true},
+            description: "You can convert Alchemical Symbols into Altered Alchemical Symbols. You also unlock the Blueprint Table upon purchase.",
+            cost: new Decimal(100),
+            currencyLocation() { return player },
+            currencyDisplayName: "Alchemical Symbols",
+            currencyInternalName: "alsys",
+            style: {color: "rgba(0,0,0,0.8)", border: "30px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
+        12: {
+            title: "Starmetal Attribute Change",
+            unlocked() {return hasUpgrade("ktb", 11)},
+            description: "You can generate Altered Starmetal Alloy and Altered Starmetal Essence using Starmetal Alloy and Core Fragments.",
+            cost: new Decimal(200),
+            currencyLocation() {return player},
+            currencyDisplayName: "Alchemical Symbols",
+            currencyInternalName: "alsys",
+            style: {color: "rgba(0,0,0,0.8)", border: "30px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
+        13: {
+            title: "Voidigenesis -Paradox Fusion-",
+            unlocked() {return hasUpgrade("ktb", 12)},
+            description: "You unlock the blueprint for an Alchemical Node - Particle Accelerator.",
+            cost: new Decimal(300),
+            currencyLocation() {return player},
+            currencyDisplayName: "Alchemical Symbols",
+            currencyInternalName: "alsys",
+            style: {color: "rgba(0,0,0,0.8)", border: "30px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
+        14: {
+            title: "Alkahest Creation -Element Unification-",
+            unlocked() {return hasUpgrade("ktb", 13)},
+            description: "You unlock the ability to unify the four classical elements and the Void Element into Alkahest.",
+            cost: new Decimal(400),
+            currencyLocation() {return player},
+            currencyDisplayName: "Alchemical Symbols",
+            currencyInternalName: "alsys",
+            style: {color: "rgba(0,0,0,0.8)", border: "30px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
+        15: {
+            title: "Aetherogenesis -Astrological Alignment-",
+            unlocked() {return hasUpgrade("ktb", 14)},
+            description: "You unlock the blueprint for an Alchemical Node - Celestial Construct.",
+            cost: new Decimal(500),
+            currencyLocation() {return player},
+            currencyDisplayName: "Alchemical Symbols",
+            currencyInternalName: "alsys",
+            style: {color: "rgba(0,0,0,0.8)", border: "30px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
+        16: {
+            title: "Inferno Element Creation Theory",
+            unlocked() {return hasUpgrade("ktb", 15)},
+            description: "The shadow of the evil Alchemist no longer scares you. You obtain the right to produce the infamous Inferno Element.",
+            cost: new Decimal(600),
+            currencyLocation() {return player},
+            currencyDisplayName: "Alchemical Symbols",
+            currencyInternalName: "alsys",
+            style: {color: "rgba(0,0,0,0.8)", border: "30px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
+
+        // Upgrades that affect the Knowledge Table progression ONLY.
+        101: {
+            title: "Spreading Knowledge I: Doubled Knowledge",
+            unlocked() {return true},
+            description: "Double Alchemical Symbol gain.",
+            cost: new Decimal(500),
+            currencyLocation() {return player},
+            currencyDisplayName: "Alchemical Symbols",
+            currencyInternalName: "alsys",
+            style: {color: "rgba(0,0,0,0.8)", border: "30px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            // please add here the effect, with multiplier x2.
+        },
+        102: {
+            title: "Spreading Knowledge II: Powered Knowledge",
+            unlocked() {return true},
+            description: "Current Power amount boosts Alchemical Symbol gain.",
+            cost: new Decimal(1000),
+            currencyLocation() {return player},
+            currencyDisplayName: "Alchemical Symbols",
+            currencyInternalName: "alsys",
+            style: {color: "rgba(0,0,0,0.8)", border: "30px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            // please add here the effect, with formula Decimal.log(X).div(100).
+        },
+        103: {
+            title: "Spreading Knowledge III: Spatial Knowoledge",
+            unlocked() {return true},
+            description: "Current Space Dust amount boosts Alchemical Symbol gain.",
+            cost: new Decimal(2500),
+            currencyLocation() {return player},
+            currencyDisplayName: "Alchemical Symbols",
+            currencyInternalName: "alsys",
+            style: {color: "rgba(0,0,0,0.8)", border: "30px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            // please add here the effect
+        },
+        104: {
+            title: "Spreading Knowledge IV: Temporal Knowledge",
+            unlocked() {return true},
+            description: "Current Temporal Dust amount boosts Alchemical Symbol gain.",
+            cost: new Decimal(5000),
+            currencyLocation() {return player},
+            currencyDisplayName: "Alchemical Symbols",
+            currencyInternalName: "alsys",
+            style: {color: "rgba(0,0,0,0.8)", border: "30px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            // please add effect here
+        },
+        105: {
+            title: "Spreading Knowledge V: Accumulated Knowledge",
+            unlocked() {return true},
+            description: "Current Alchemical Symbol amount boosts itself.",
+            cost: new Decimal(7500),
+            currencyLocation() {return player},
+            currencyDisplayName: "Alchemical Symbols",
+            currencyInternalName: "alsys",
+            style: {color: "rgba(0,0,0,0.8)", border: "30px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            // please add effect here
+        },
+        106: {
+            title: "Spreading Knowledge VI: Novel Writing",
+            unlocked() {return true},
+            description: "Improves the Alchemical Symbol gain formula and unlocks the Enchanting Table.",
+            cost: new Decimal(10000),
+            currencyLocation() {return player},
+            currencyDisplayName: "Alchemical Symbols",
+            currencyInternalName: "alsys",
+            style: {color: "rgba(0,0,0,0.8)", border: "30px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            // please add effect here
+        }
+    }
+})

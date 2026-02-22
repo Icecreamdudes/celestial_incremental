@@ -20,8 +20,8 @@ addLayer("ktb", {
         }
     },
     tooltip: "The Knowledge Table",
+    branches: ["tl", "btb", "aal"],
     color: "white",
-    branches: ["tl"],
 
     update(delta) {
         let onepersec = new Decimal(1)

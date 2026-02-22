@@ -699,7 +699,7 @@ addLayer("ir", {
             effect() {
                 return [
                     getLevelableAmount(this.layer, this.id).mul(0.03).add(1),
-                    getLevelableAmount(this.layer, this.id).mul(0.04).add(1),
+                    getLevelableAmount(this.layer, this.id).pow(0.4).mul(0.04).add(1),
                     getLevelableAmount(this.layer, this.id).mul(0.02).add(1), //Damage
                     getLevelableAmount(this.layer, this.id).mul(0.03).add(1), //Health
                 ]

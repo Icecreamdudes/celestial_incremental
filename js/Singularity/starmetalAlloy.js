@@ -62,7 +62,18 @@
             player.sma.time = player.sma.time.add(onepersec.mul(delta));
             if (player.sma.time.gte(player.sma.amount)) {
                 player.sma.time = new Decimal(0)
-                player.cof.coreFragments[player.cof.highestScore] = player.cof.coreFragments[player.cof.highestScore].add(player.cof.coreFragmentsToGet[player.cof.highestScore])
+                                if (!hasUpgrade("s", 29))
+                {
+                    player.cof.coreFragments[player.cof.highestScore] = player.cof.coreFragments[player.cof.highestScore].add(player.cof.coreFragmentsToGet[player.cof.highestScore])
+                } else{
+                    player.cof.coreFragments[0] = player.cof.coreFragments[0].add(player.cof.coreFragmentsToGet[0])
+                    player.cof.coreFragments[1] = player.cof.coreFragments[1].add(player.cof.coreFragmentsToGet[1])
+                    player.cof.coreFragments[2] = player.cof.coreFragments[2].add(player.cof.coreFragmentsToGet[2])
+                    player.cof.coreFragments[3] = player.cof.coreFragments[3].add(player.cof.coreFragmentsToGet[3])
+                    player.cof.coreFragments[4] = player.cof.coreFragments[4].add(player.cof.coreFragmentsToGet[4])
+                    player.cof.coreFragments[5] = player.cof.coreFragments[5].add(player.cof.coreFragmentsToGet[5])
+                    player.cof.coreFragments[6] = player.cof.coreFragments[6].add(player.cof.coreFragmentsToGet[6])
+                }
 
                 let val = layers.co.coreXPCalc(player.co.resetIndex, player.s.singularityPointsToGet)
                 if (!player.ma.matosDefeated) {
@@ -119,6 +130,7 @@
                 pauseUniverse("A1")
                 pauseUniverse("U3")
                 pauseUniverse("CB")
+                pauseUniverse("DS")
             },
             style: {width: "600px", minHeight: "200px", color: "white", backgroundImage: "radial-gradient(circle, black 60%, #13292f 70%, #54265e 80%, #8d3947 90%, #e6eb57 110%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
         },
@@ -148,6 +160,7 @@
                 pauseUniverse("A1")
                 pauseUniverse("U3")
                 pauseUniverse("CB")
+                pauseUniverse("DS")
             },
             style() {
                 let look = {width: "600px", minHeight: "200px", color: "#ffe066", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"}

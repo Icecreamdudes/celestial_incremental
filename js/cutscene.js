@@ -3685,6 +3685,26 @@
 
             ],
         },
+        "CB-Goldsmith-Evo": {
+            type: "normal",
+            background: "#094599",
+            portrait: "resources/secret.png",
+            music: "music/marcel.mp3",
+            trigger() {return player.ev.evolutionsUnlocked[13]},
+            dialogue: [
+                { text: "Marcel visits you.", },
+                { text: 'And you did it again.', portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+                { text: 'I can see that you\'ve put the very rare ascension shards to good use.', portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+                { text: 'Unsmith has now turned into a more valuable diamond.', portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+                { text: 'With Diamondsmith\'s superphysical power, you should be able to further boost your coin dust.', portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+                { text: 'However, there\'s a cost.', portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+                { text: 'You\'ll need to reset most of your prior coin dust progress. But it\'s nothing you haven\'t done before.', portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+                { text: 'That does seem a bit harsh, considering that I\'ve been accumulating coin dust for a while...', portrait: "resources/player.png"  },
+                { text: 'But I think I must do the reset to meet Platonic.', portrait: "resources/player.png"  },
+                { text: "Even within the pet worlds, you'll need to reset prior progress.", },
+                { text: "But thinking realistically, almost nothing comes without giving something up.", },
+            ],
+        },
 
         //note: you can also use the original dice space song for cutscenes
     },

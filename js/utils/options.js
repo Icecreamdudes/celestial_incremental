@@ -26,6 +26,7 @@ function getStartOptions() {
 		jukeboxID: "none",
 		instantCutsceneText: false,
 		fullscreen: false,
+		bhKeyboard: false,
 	}
 }
 function updateMusicVolume() {

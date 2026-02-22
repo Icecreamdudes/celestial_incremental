@@ -73,7 +73,7 @@ addLayer("matosLair", {
                     ["blank", "15px"],
                     ["raw-html", "<u>Unlocks</u>", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
                     ["raw-html", "Core Fragments", {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
-                    ["raw-html", "Starmetal Essence", {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", "Temporal Chasm", {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
                     ["blank", "15px"],
                     ["raw-html", "<u>Effects</u>", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "x2 to check back XP gain." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],

@@ -304,6 +304,7 @@ addUniverse("BH", {
     name: "Black Heart",
     symbol: "♥",
     tree: [["darkTemple", "depth1", "depth2"], ["matosLair", "depth3"]],
+    tree2: [["stagnantSynestia"]],
     nodeStyle() {
         let style = {
             background: "black",

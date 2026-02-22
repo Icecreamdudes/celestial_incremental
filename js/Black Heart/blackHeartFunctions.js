@@ -1,11 +1,11 @@
-function bhAction(index, slot, interval = false) {
+function bhAction(index, slot, interval = false, magnitude = 1) {
     let action
     let target
     let attribute
     let delay = 0
     let luckMult = new Decimal(1)
     if (index == 3) {
-        if (!interval) player.bh.celestialite.actions[slot].cooldown = new Decimal(0)
+        if (!interval) player.bh.celestialite.actions[slot].cooldown = player.bh.celestialite.actions[slot].cooldown.sub(BHC[player.bh.celestialite.id].actions[slot].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))).mul(magnitude))
         action = BHC[player.bh.celestialite.id].actions[slot]
         attribute = player.bh.celestialite.attributes
         luckMult = Decimal.div(Decimal.add(100, player.bh.celestialite.luck), 100)
@@ -56,9 +56,9 @@ function bhAction(index, slot, interval = false) {
 
                         // =-- Damage Value --=
                         if (index == 3) {
-                            damage = run(action.value, action).mul(player.bh.celestialite.damage)
+                            damage = run(action.value, action).mul(player.bh.celestialite.damage).mul(magnitude)
                         } else {
-                            damage = run(action.value, action).mul(player.bh.characters[index].damage)
+                            damage = run(action.value, action).mul(player.bh.characters[index].damage).mul(magnitude)
                         }
                         damage = damage.mul(Decimal.add(0.9, Decimal.mul(Math.random(), 0.2)))
 
@@ -126,7 +126,7 @@ function bhAction(index, slot, interval = false) {
                 }
                 for(let i = 0; i < healAmt; i++) {
                     setTimeout(() => {
-                        let heal = Decimal.mul(run(action.value, action), Decimal.add(0.9, Decimal.mul(Math.random(), 0.2)))
+                        let heal = Decimal.mul(run(action.value, action), Decimal.add(0.9, Decimal.mul(Math.random(), 0.2))).mul(magnitude)
                         let str = ""
 
                         // =-- Target Change Modifiers --=
@@ -190,7 +190,7 @@ function bhAction(index, slot, interval = false) {
                 // =-- Variable Effect --=
                 if (!action.properties) return 
                 for (let i in action.properties) {
-                    let val = run(action.properties[i], action.properties)
+                    let val = run(action.properties[i], action.properties, player.bh.characters[index]).mul(magnitude)
                     if (val == "attributes") { // Doesn't give a message currently.
                         if (index == 3) {
                             if (!player.bh.celestialite.actions[slot].variables[i]) player.bh.celestialite.actions[slot].variables[i] = {}
@@ -292,7 +292,7 @@ function bhAction(index, slot, interval = false) {
                 }
                 break;
             case "cooldown":
-                let val = run(action.value, action)
+                let val = run(action.value, action).mul(magnitude)
                 let tar = calcTarget(index, target, "effect")
 
                 // Reduce cooldowns of target
@@ -328,7 +328,7 @@ function bhAction(index, slot, interval = false) {
                 }
                 break;
             case "shield":
-                let num = run(action.value, action)
+                let num = run(action.value, action).mul(magnitude)
                 let targ = calcTarget(index, target, "effect")
                 let str = "time"
                 if (num.neq(1)) str = "times"
@@ -358,7 +358,7 @@ function bhAction(index, slot, interval = false) {
                 }
                 break;
             case "function":
-                action.onTrigger(index, slot, target)
+                action.onTrigger(index, slot, target, magnitude)
                 break;
         }
     }, delay)
@@ -471,7 +471,7 @@ function bhAttack(damage, index, target, str = "", method = "none", attr = false
 function bhHeal(heal, index, target, str = "") {
     if (index == 3) {
         heal = heal.mul(player.bh.celestialite.mending.div(10).add(1))
-    } else {
+    } else if (player.matosLair.milestone[25] >= 2) {
         heal = heal.mul(player.bh.characters[index].mending.div(10).add(1))
     }
     let arr = calcTarget(index, target, "heal")
@@ -500,39 +500,59 @@ function bhHeal(heal, index, target, str = "") {
 }
 
 function celestialiteReward(gain) {
+    let generalChance = Decimal.sub(player.bh.celestialite.curMult, 1)
+    let generalRemain = generalChance.floor()
+    generalChance = generalChance.sub(generalRemain)
+    
+    let generalMult = Decimal.pow(2, generalRemain)
+    console.log(format(generalChance) + " " + format(generalRemain))
+    if (Decimal.gte(generalChance, Math.random())) generalMult = generalMult.mul(2)
+
+    let str = ""
+    if (generalMult.gt(1)) str = "[x" + formatWhole(generalMult) + "] "
     if (gain.gloomingUmbrite) {
-        gain.gloomingUmbrite = gain.gloomingUmbrite.mul(player.depth1.depth1Mult).floor()
+        gain.gloomingUmbrite = gain.gloomingUmbrite.mul(player.depth1.depth1Mult).mul(generalMult).floor()
         player.depth1.gloomingUmbrite = player.depth1.gloomingUmbrite.add(gain.gloomingUmbrite)
-        bhLog("<span style='color: #eed200'>You gained " + formatWhole(gain.gloomingUmbrite) + " glooming umbrite! (You have " + formatWhole(player.depth1.gloomingUmbrite) + ")")
+        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.gloomingUmbrite) + " glooming umbrite! (You have " + formatWhole(player.depth1.gloomingUmbrite) + ")")
     }
     if (gain.dimUmbrite) {
-        gain.dimUmbrite = gain.dimUmbrite.mul(player.depth1.depth1Mult).floor()
+        gain.dimUmbrite = gain.dimUmbrite.mul(player.depth1.depth1Mult).mul(generalMult).floor()
         player.depth1.dimUmbrite = player.depth1.dimUmbrite.add(gain.dimUmbrite)
-        bhLog("<span style='color: #eed200'>You gained " + formatWhole(gain.dimUmbrite) + " dim umbrite! (You have " + formatWhole(player.depth1.dimUmbrite) + ")")
+        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.dimUmbrite) + " dim umbrite! (You have " + formatWhole(player.depth1.dimUmbrite) + ")")
     }
     if (gain.faintUmbrite) {
-        gain.faintUmbrite = gain.faintUmbrite.mul(player.depth2.depth2Mult).floor()
+        gain.faintUmbrite = gain.faintUmbrite.mul(player.depth2.depth2Mult).mul(generalMult).floor()
         player.depth2.faintUmbrite = player.depth2.faintUmbrite.add(gain.faintUmbrite)
-        bhLog("<span style='color: #eed200'>You gained " + formatWhole(gain.faintUmbrite) + " faint umbrite! (You have " + formatWhole(player.depth2.faintUmbrite) + ")")
+        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.faintUmbrite) + " faint umbrite! (You have " + formatWhole(player.depth2.faintUmbrite) + ")")
     }
     if (gain.clearUmbrite) {
-        gain.clearUmbrite = gain.clearUmbrite.mul(player.depth2.depth2Mult).floor()
+        gain.clearUmbrite = gain.clearUmbrite.mul(player.depth2.depth2Mult).mul(generalMult).floor()
         player.depth2.clearUmbrite = player.depth2.clearUmbrite.add(gain.clearUmbrite)
-        bhLog("<span style='color: #eed200'>You gained " + formatWhole(gain.clearUmbrite) + " clear umbrite! (You have " + formatWhole(player.depth2.clearUmbrite) + ")")
+        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.clearUmbrite) + " clear umbrite! (You have " + formatWhole(player.depth2.clearUmbrite) + ")")
     }
     if (gain.vividUmbrite) {
-        gain.vividUmbrite = gain.vividUmbrite.mul(player.depth3.depth3Mult).floor()
+        gain.vividUmbrite = gain.vividUmbrite.mul(player.depth3.depth3Mult).mul(generalMult).floor()
         player.depth3.vividUmbrite = player.depth3.vividUmbrite.add(gain.vividUmbrite)
-        bhLog("<span style='color: #eed200'>You gained " + formatWhole(gain.vividUmbrite) + " vivid umbrite! (You have " + formatWhole(player.depth3.vividUmbrite) + ")")
+        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.vividUmbrite) + " vivid umbrite! (You have " + formatWhole(player.depth3.vividUmbrite) + ")")
     }
     if (gain.lustrousUmbrite) {
-        gain.lustrousUmbrite = gain.lustrousUmbrite.mul(player.depth3.depth3Mult).floor()
+        gain.lustrousUmbrite = gain.lustrousUmbrite.mul(player.depth3.depth3Mult).mul(generalMult).floor()
         player.depth3.lustrousUmbrite = player.depth3.lustrousUmbrite.add(gain.lustrousUmbrite)
-        bhLog("<span style='color: #eed200'>You gained " + formatWhole(gain.lustrousUmbrite) + " lustrous umbrite! (You have " + formatWhole(player.depth3.lustrousUmbrite) + ")")
+        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.lustrousUmbrite) + " lustrous umbrite! (You have " + formatWhole(player.depth3.lustrousUmbrite) + ")")
     }
     if (gain.darkEssence) {
-        player.bh.darkEssence = player.bh.darkEssence.add(gain.darkEssence)
-        bhLog("<span style='color: #eed200'>You gained " + formatWhole(gain.darkEssence) + " dark essence! (You have " + formatWhole(player.bh.darkEssence) + ")")
+        player.bh.darkEssence = player.bh.darkEssence.add(gain.darkEssence).mul(generalMult).floor()
+        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.darkEssence) + " dark essence! (You have " + formatWhole(player.bh.darkEssence) + ")")
+    }
+    if (gain.temporalDust) {
+        gain.temporalDust = gain.temporalDust.mul(player.stagnantSynestia.temporalMult).mul(generalMult).floor()
+        player.stagnantSynestia.temporalDust = player.stagnantSynestia.temporalDust.add(gain.temporalDust)
+        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.temporalDust) + " temporal dust! (You have " + formatWhole(player.stagnantSynestia.temporalDust) + ")")
+    }
+    if (gain.temporalShard) {
+        gain.temporalShard = gain.temporalShard.mul(player.stagnantSynestia.temporalMult).mul(generalMult).floor()
+        player.stagnantSynestia.temporalShard = player.stagnantSynestia.temporalShard.add(gain.temporalShard)
+        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.temporalShard) + " temporal shards! (You have " + formatWhole(player.stagnantSynestia.temporalShard) + ")")
     }
 }
 
@@ -762,4 +782,134 @@ function screenFlash(message, duration) {
             if (overlay.parentNode) overlay.remove();
         }, 200);
     }, duration);
+}
+
+function stagnantUpdate(time) {
+    let delta = time/5
+    for (let z = 0; z < 5; z++) {
+        setTimeout(() => {
+            // Check if in stage
+            if (player.bh.currentStage != "none") {
+                // Only trigger when celestialite id is set
+                if (player.bh.celestialite.id != "none") {
+                    // Celestialite Regen
+                    if (player.bh.celestialite.regen.neq(0)) {
+                        player.bh.celestialite.health = player.bh.celestialite.health.add(player.bh.celestialite.regen.mul(delta)).min(player.bh.celestialite.maxHealth)
+                    }
+
+                    if (player.bh.celestialite.stun[1].gt(0)) {
+                        player.bh.celestialite.stun[1] = player.bh.celestialite.stun[1].sub(delta)
+                    }
+                    // Cycle, increment cooldowns, and trigger celestialite actions
+                    for (let i = 0; i < 4; i++) {
+                        if (BHC[player.bh.celestialite.id].actions[i]) {
+                            if ((player.bh.celestialite.stun[1].gt(0) && player.bh.celestialite.stun[0] == "hard") || player.bh.bulletHell) continue
+                            let curStun = player.bh.celestialite.stun[1].gt(0) && player.bh.celestialite.stun[0] == "soft"
+                            let instant = BHC[player.bh.celestialite.id].actions[i].instant
+                            let active = BHC[player.bh.celestialite.id].actions[i].active
+                            let passive = BHC[player.bh.celestialite.id].actions[i].passive
+                            if (player.bh.celestialite.actions[i].duration.gt(0)) player.bh.celestialite.actions[i].duration = player.bh.celestialite.actions[i].duration.sub(delta)
+                            if (instant || active) {
+                                if (!curStun) player.bh.celestialite.actions[i].cooldown = player.bh.celestialite.actions[i].cooldown.add(delta)
+                                if (instant && z >= 4) {
+                                    if (player.bh.celestialite.actions[i].cooldown.gte(BHC[player.bh.celestialite.id].actions[i].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))) {
+                                        if (!BHC[player.bh.celestialite.id].actions[i].conditional || BHC[player.bh.celestialite.id].actions[i].conditional(3, i)) {
+                                            for (let z = 0; z < player.bh.celestialite.actionChances.length; z++) {
+                                                if (Decimal.mul(player.bh.celestialite.actionChances[z][1], Decimal.div(Decimal.add(100, player.bh.celestialite.luck), 100)).gte(Math.random())) {
+                                                    player.bh.celestialite.actions[player.bh.celestialite.actionChances[z][0]].duration = BHC[player.bh.celestialite.id].actions[player.bh.celestialite.actionChances[z][0]].duration
+                                                }
+                                            }
+                                            let mag = player.bh.celestialite.actions[i].cooldown.div(BHC[player.bh.celestialite.id].actions[i].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility)))).floor().toNumber()
+                                            bhAction(3, i, false, mag)
+                                        }
+                                    }
+                                }
+                                if (active) {
+                                    if (player.bh.celestialite.actions[i].cooldown.gte(BHC[player.bh.celestialite.id].actions[i].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))) {
+                                        if (!BHC[player.bh.celestialite.id].actions[i].conditional || BHC[player.bh.celestialite.id].actions[i].conditional(3, i)) {
+                                            player.bh.celestialite.actions[i].cooldown = new Decimal(0)
+                                            player.bh.celestialite.actions[i].duration = BHC[player.bh.celestialite.id].actions[i].duration
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Calculate Variables (and remove inactive active)
+                            if (passive || (active && player.bh.celestialite.actions[i].duration.gt(0))) {
+                                if (BHC[player.bh.celestialite.id].actions[i].onTrigger) {
+                                    BHC[player.bh.celestialite.id].actions[i].onTrigger(3, i, BHC[player.bh.celestialite.id].actions[i].constantTarget)
+                                } else if (BHC[player.bh.celestialite.id].actions[i].interval) {
+                                    player.bh.celestialite.actions[i].interval = player.bh.celestialite.actions[i].interval.add(delta)
+                                    if (player.bh.celestialite.actions[i].interval.gte(BHC[player.bh.celestialite.id].actions[i].interval)) {
+                                        player.bh.celestialite.actions[i].interval = new Decimal(0)
+                                        if (!BHC[player.bh.celestialite.id].actions[i].conditional || BHC[player.bh.celestialite.id].actions[i].conditional(3, i)) {
+                                            bhAction(3, i, true)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Cycle Characters
+                for (let i = 0; i < 3; i++) {
+                    // Check if character is dead before doing anything
+                    if (player.bh.characters[i].health.lte(0)) continue
+
+                    // Character Regen
+                    if (player.bh.characters[i].regen.neq(0)) {
+                        player.bh.characters[i].health = player.bh.characters[i].health.add(player.bh.characters[i].regen.mul(delta)).min(player.bh.characters[i].maxHealth)
+                    }
+
+                    if (player.bh.characters[i].stun[1].gt(0)) {
+                        player.bh.characters[i].stun[1] = player.bh.characters[i].stun[1].sub(delta)
+                    }
+
+                    // Cycle through character skills
+                    for (let j = 0; j < 4; j++) {
+                        if (player.bh.characters[i].skills[j].id == "none") continue
+                        if ((player.bh.characters[i].stun[1].gt(0) && player.bh.characters[i].stun[0] == "hard") || player.bh.bulletHell) continue
+                        let curStun = player.bh.characters[i].stun[1].gt(0) && player.bh.characters[i].stun[0] == "soft"
+                        let instant = BHA[player.bh.characters[i].skills[j].id].instant
+                        let active = BHA[player.bh.characters[i].skills[j].id].active
+                        let passive = BHA[player.bh.characters[i].skills[j].id].passive
+                        if (player.bh.characters[i].skills[j].duration.gt(0)) player.bh.characters[i].skills[j].duration = player.bh.characters[i].skills[j].duration.sub(delta)
+                        if (instant || active) {
+                            if (!curStun) player.bh.characters[i].skills[j].cooldown = player.bh.characters[i].skills[j].cooldown.add(delta)
+                            if (player.bh.characters[i].skills[j].auto && player.bh.characters[i].skills[j].cooldown.gte(player.bh.characters[i].skills[j].cooldownMax.mul(2))) {
+                                if (!BHA[player.bh.characters[i].skills[j].id].conditional || BHA[player.bh.characters[i].skills[j].id].conditional(i, j)) {
+                                    if (instant) {
+                                        for (let z = 0; z < player.bh.characters[i].actionChances.length; z++) {
+                                            if (Decimal.mul(player.bh.characters[i].actionChances[z][1], Decimal.div(Decimal.add(100, player.bh.characters[i].luck), 100)).gte(Math.random())) {
+                                                player.bh.characters[i].skills[player.bh.characters[i].actionChances[z][0]].duration = BHA[player.bh.characters[i].skills[player.bh.characters[i].actionChances[z][0]].id].duration
+                                            }
+                                        }
+                                        bhAction(i, j)
+                                    }
+                                    if (active) {
+                                        player.bh.characters[i].skills[j].cooldown = new Decimal(0)
+                                        player.bh.characters[i].skills[j].duration = BHA[player.bh.characters[i].skills[j].id].duration
+                                    }
+                                }
+                            }
+                        }
+
+                        // Calculate Variables (and remove inactive active)
+                        if (passive || (active && player.bh.characters[i].skills[j].duration.gt(0))) {
+                            if (BHA[player.bh.characters[i].skills[j].id].interval) {
+                                player.bh.characters[i].skills[j].interval = player.bh.characters[i].skills[j].interval.add(delta)
+                                if (player.bh.characters[i].skills[j].interval.gte(BHA[player.bh.characters[i].skills[j].id].interval)) {
+                                    player.bh.characters[i].skills[j].interval = new Decimal(0)
+                                    if (!BHA[player.bh.characters[i].skills[j].id].conditional || BHA[player.bh.characters[i].skills[j].id].conditional(i, j)) {
+                                        bhAction(i, j, true)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }, 200*z)
+    }
 }

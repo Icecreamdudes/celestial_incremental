@@ -4650,7 +4650,7 @@ addLayer("pet", {
             // diamondsmith stuff
             image() { return this.canClick() ? "resources/Pets/diamondsmithEvoPet.png" : "resources/secret.png"},
             title() { return "Diamondsmith" },
-            lore() { return "With the power of the third major shard, Goldsmith's superphysical energy has been condensed even more, now into an iridescent diamond." },
+            lore() { return "With the immense power of shards of ascension, Goldsmith's superphysical energy has been condensed even more, now into an iridescent diamond." },
             description() {
                 return "Unlock diamond dust.<br>" +
                     "+" + format(this.effect()[0]) + " effective goldsmith levels.<br>" +

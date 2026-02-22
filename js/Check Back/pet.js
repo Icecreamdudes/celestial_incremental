@@ -1,4 +1,4 @@
-const petShopShardName = ["Evolution Shard", "Paragon Shard"]
+const petShopShardName = ["Evolution Shard", "Paragon Shard", "Ascension Shard"]
 const petShopCrateName = ["Common Crate", "Common/Uncommon Crate", "Uncommon Crate", "Antimatter Crate", "Replicanti Crate", "Rare Crate"]
 const petShopBase = {
     common: {
@@ -4528,6 +4528,55 @@ addLayer("pet", {
             style() {
                 let look = {width: "100px", minHeight: "125px"}
                 this.canClick() ? look.backgroundColor = "#16364a" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }
+        },
+        2103: {
+            // diamondsmith stuff
+            image() { return this.canClick() ? "resources/Pets/diamondsmithEvoPet.png" : "resources/secret.png"},
+            title() { return "Diamondsmith" },
+            lore() { return "With the power of the third major shard, Goldsmith's superphysical energy has been condensed even more, now into an iridescent diamond." },
+            description() {
+                return "Unlock diamond dust.<br>" +
+                    "+" + format(this.effect()[0]) + " effective goldsmith levels.<br>" +
+                    "x" + format(this.effect()[1]) + " to coin dust.<br>" +
+                    "x" + format(this.effect()[2]) + " to coin shards."
+            },
+            levelLimit() { return new Decimal(10) },
+            levelTooltip() { return "Costs Asc Shards." },
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id)
+                return [
+                    amt.mul(2), // Effective Goldsmith Levels
+                    amt.mul(2).plus(1), // Coin Dust
+                    amt.plus(2).div(2) // Coin Shards
+                ] 
+            },
+            evoCan() {return true},
+            evoTooltip() {return ""},
+            evoClick() {
+                console.log("hi")
+            },
+            // CLICK CODE
+            unlocked() { return player.ir.iriditeDefeated},
+            canClick() { return getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { player.cb.ascensionShards = player.cb.ascensionShards.sub(amt) },
+            canAfford() { return player.cb.ascensionShards.gte(this.xpReq()) },
+            xpReq() { return getLevelableAmount(this.layer, this.id).pow(0.5).floor() },
+            currency() { return player.cb.ascensionShards },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barShown() { return this.canClick() },
+            barStyle() { return {backgroundColor: "#80ffff"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#00ffff" : look.backgroundColor = "#222222"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
                 return look
             }

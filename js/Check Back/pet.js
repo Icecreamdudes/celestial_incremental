@@ -4669,7 +4669,7 @@ addLayer("pet", {
             evoCan() {return true},
             evoTooltip() {return ""},
             evoClick() {
-                console.log("hi")
+                player.tab = "ev13"
             },
             // CLICK CODE
             unlocked() { return player.ir.iriditeDefeated},

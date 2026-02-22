@@ -205,6 +205,50 @@
                 return { width: '100px', "min-height": '100px', borderRadius: "15px 15px 15px 15px", border: "3px solid #9b5a48ff", backgroundColor: "#744335ff" }
             },
         },
+        13: {
+            title() { return "Coin Clipper" },
+            canClick() { return true },
+            tooltip() { return "<h5>Resets flip count, heads, tails, and heads and tails buyables. Use it when you screw up. (You suck at this game)" },
+            unlocked() { return hasUpgrade("za", 14) },
+            onClick() {
+        player.za.chancePoints = new Decimal(0)
+
+        player.cf.coinsFlipped = new Decimal(0)
+        player.cf.heads = new Decimal(0)
+        player.cf.tails = new Decimal(0)
+
+        try {
+            if (typeof window !== 'undefined' && !window.__cfInitDone) {
+                // clear any leftover timeout id (might be present from a saved object)
+                if (player.cf && player.cf._flipTimeoutId) {
+                    try { clearTimeout(player.cf._flipTimeoutId) } catch (e) {}
+                    player.cf._flipTimeoutId = null
+                }
+
+                // reset runtime flip state so the coin isn't mid-flip on a reload
+                if (player.cf) {
+                    player.cf.flipping = false
+                    player.cf.flipTimer = new Decimal(0)
+                    player.cf.coinHeads = true
+                    player.cf._finalSide = null
+                }
+
+                window.__cfInitDone = true
+            }
+        } catch (e) { console.error("cf update init error:", e) }
+
+        player.cf.buyables[21] = new Decimal(0)
+        player.cf.buyables[22] = new Decimal(0)
+        player.cf.buyables[23] = new Decimal(0)
+        player.cf.buyables[31] = new Decimal(0)
+        player.cf.buyables[32] = new Decimal(0)
+        player.cf.buyables[33] = new Decimal(0)
+        player.cf.buyables[34] = new Decimal(0)
+            },
+            style() { 
+                return { width: '100px', "min-height": '100px', borderRadius: "15px 15px 15px 15px", border: "3px solid #9b5a48ff", backgroundColor: "#744335ff" }
+            },
+        },
     },
     coinFlip() {
         if (player.cf.flipLength.gt(0.2))
@@ -771,7 +815,7 @@
                     ["raw-html", function () { return "Coins flipped: " + formatWhole(player.cf.coinsFlipped) + "." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Cost to flip coin: " + format(player.cf.flipCost) + " Chance Points." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [ ["clickable", 11], ["blank", "25px"], ["clickable", 12],]],
+                    ["row", [ ["clickable", 11], ["blank", "25px"], ["clickable", 12], ["blank", "25px"], ["clickable", 13],]],
                     ], {width: "394px", height: "247px", background: "rgb(156, 93, 74, 0.5)", border: "0px solid #ccc",   borderRadius: "0px"}],
                     ["style-column", [ 
                     ["row", [["ex-buyable", 11],["ex-buyable", 12],]],

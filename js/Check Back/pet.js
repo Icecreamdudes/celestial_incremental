@@ -4676,10 +4676,10 @@ addLayer("pet", {
             canClick() { return getLevelableAmount(this.layer, this.id).gt(0)},
             onClick() { return layers[this.layer].levelables.index = this.id },
             // BUY CODE
-            pay(amt) { player.cb.ascensionShards = player.cb.ascensionShards.sub(amt) },
-            canAfford() { return player.cb.ascensionShards.gte(this.xpReq()) },
+            pay(amt) { player.cbs.ascensionShards = player.cbs.ascensionShards.sub(amt) },
+            canAfford() { return player.cbs.ascensionShards.gte(this.xpReq()) },
             xpReq() { return getLevelableAmount(this.layer, this.id).pow(0.5).floor() },
-            currency() { return player.cb.ascensionShards },
+            currency() { return player.cbs.ascensionShards },
             buy() {
                 this.pay(this.xpReq())
                 setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))

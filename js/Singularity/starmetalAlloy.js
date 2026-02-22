@@ -557,7 +557,7 @@
             title: "Encouragement",
             unlocked: true,
             description: "Unlock Eclipse's \"Motivation\" skill.",
-            cost: new Decimal("15"),
+            cost: new Decimal("20"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Eclipse Shards",
             currencyInternalName: "eclipseShards",
@@ -571,7 +571,7 @@
             title: "Hard Light?",
             unlocked() { return hasUpgrade("sma", 221)},
             description: "Unlock Eclipse's \"Light Barrier\" skill.",
-            cost: new Decimal("30"),
+            cost: new Decimal("50"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Eclipse Shards",
             currencyInternalName: "eclipseShards",
@@ -582,10 +582,38 @@
             }
         },
         223: {
-            title: "Aligned Time",
+            title: "Blinding Rays",
             unlocked() { return hasUpgrade("sma", 222)},
+            description: "Unlock Eclipse's \"Solar Retinopathy\" skill.",
+            cost: new Decimal("200"),
+            currencyLocation() { return player.sma },
+            currencyDisplayName: "Eclipse Shards",
+            currencyInternalName: "eclipseShards",
+            style() {
+                let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "#f5ff68"
+                return look
+            }
+        },
+        224: {
+            title: "Aligned Time",
+            unlocked() { return hasUpgrade("sma", 223)},
             description: "Unlock Eclipse's \"Syzygy\" skill.",
-            cost: new Decimal("60"),
+            cost: new Decimal("1000"),
+            currencyLocation() { return player.sma },
+            currencyDisplayName: "Eclipse Shards",
+            currencyInternalName: "eclipseShards",
+            style() {
+                let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "#f5ff68"
+                return look
+            }
+        },
+        225: {
+            title: "Total Eclipse",
+            unlocked() { return hasUpgrade("sma", 224)},
+            description: "Increase Eclipse's base health by +20 and base defense by +5.",
+            cost: new Decimal("5000"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Eclipse Shards",
             currencyInternalName: "eclipseShards",
@@ -819,7 +847,7 @@
                         ["blank", "5px"],
                         ["style-row", [], {width: "800px", height: "3px", backgroundColor: "#b29c47"}],
                         ["blank", "5px"],
-                        ["row", [["upgrade", 221], ["upgrade", 222], ["upgrade", 223]]],
+                        ["row", [["upgrade", 221], ["upgrade", 222], ["upgrade", 223], ["upgrade", 224], ["upgrade", 225]]],
                         ["blank", "5px"],
                     ], {width: "800px", backgroundColor: "#222", border: "3px solid #b29c47", borderRadius: "20px"}],
                 ]

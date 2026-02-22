@@ -187,7 +187,7 @@
             title() { return "<img src='resources/Pets/diamondsmithEvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>"
             },
             canClick() {return true},
-            unlocked() { return tmp.pet.levelables[103].canClick && !player.ev.evolutionsUnlocked[13] && player.ir.iriditeDefeated},
+            unlocked() { return tmp.pet.levelables[103].canClick && !player.ev.evolutionsUnlocked[13] && player.ir.iriditeDefeated}, // placeholder req
             tooltip() { return "███████ ██████ coin dust<br>██████████" }, // further boosts coin dust production
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(13)
@@ -641,6 +641,34 @@
                 setLevelableAmount("pet", 1102, new Decimal(1))
             }
         },
+        13: {
+            title() { return "Diamondsmith"},
+            description() {
+                return "<div class='evoContainer'><h3>Costs:</h3>" +
+                    "<br>"  + formatWhole(player.cb.evolutionShards) + "/1,000 Evolution Shards" +
+                     "<br>"  + formatWhole(player.cb.paragonShards) + "/50 Paragon Shards" +
+                     "<br>"  + formatWhole(player.cb.ascensionShards) + "/1 Ascension Shards" +
+                    "</div>" +
+                    "<div class='evoContainer'><h3>Requires:</h3>" +
+                    "<br>"  + formatWhole(getLevelableTier("pet", 103)) + "/2 Unsmith Ascensions" +
+                     "<br>"  + formatWhole(getLevelableAmount("pet", 1103)) + "/10 Goldsmith Level" + 
+                    "</div>"
+                    
+            },
+            canClick() {
+                return (player.cb.evolutionShards.gte(1000) && player.cb.paragonShards.gte(50) && player.cb.ascensionShards.gte(1) && getLevelableTier("pet", 103).gte(2) && getLevelableAmount("pet", 1103).gte(10))
+            },
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(-1)
+
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(1000)
+                player.cb.paragonShards = player.cb.paragonShards.sub(50)
+                player.cb.ascensionShards = player.cb.ascensionShards.sub(1)
+
+                player.ev.evolutionsUnlocked[13] = true
+                setLevelableAmount("pet", 2103, new Decimal(1))
+            }
+        },
 
         101: {
             title() { return "Simple Cookie" },
@@ -854,7 +882,7 @@
                     ["row", [
                         ["bt-clickable", 100], ["bt-clickable", 101], ["bt-clickable", 102], ["bt-clickable", 103], ["bt-clickable", 104],
                         ["bt-clickable", 105], ["bt-clickable", 107], ["bt-clickable", 108], ["bt-clickable", 109], ["bt-clickable", 110],
-                        ["bt-clickable", 106], ["bt-clickable", 111], ["bt-clickable", 112],
+                        ["bt-clickable", 106], ["bt-clickable", 111], ["bt-clickable", 112], ["bt-clickable", 113],
 
                         ["bt-clickable", 201], ["bt-clickable", 202], ["bt-clickable", 203], ["bt-clickable", 204],
 

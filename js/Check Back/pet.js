@@ -5032,6 +5032,13 @@ addLayer("pet", {
                             ], () => { return player.cb.highestLevel.gte(250) ? {width: "525px", backgroundColor: "#070a19", padding: "5px"} : {display: "none !important"}}],
 
                             ["style-column", [
+                                ["raw-html", "Ascension Shards", {color: "#80ffff", "text-shadow": "0 0 10px #80ffff", fontSize: "20px", fontFamily: "monospace"}],
+                            ], () => { return player.ir.iriditeDefeated ? {width: "535px", height: "40px", backgroundColor: "#102020", borderTop: "3px solid #80ffff", borderBottom: "3px solid #80ffff", userSelect: "none"} : {display: "none !important"}}],
+                            ["style-column", [
+                                ["row", [["levelable", 2103],]],
+                            ], () => { return player.ir.iriditeDefeated ? {width: "525px", backgroundColor: "#081010", padding: "5px"} : {display: "none !important"}}], // placeholder reqs
+
+                            ["style-column", [
                                 ["raw-html", "Chocolate Shards", {color: "#86562E", fontSize: "20px", fontFamily: "monospace"}],
                             ], () => { return player.ep2.obtainedShards ? {width: "535px", height: "40px", backgroundColor: "#1a1109", borderTop: "3px solid #86562E", borderBottom: "3px solid #86562E", userSelect: "none"} : {display: "none !important"}}],
                             ["style-column", [

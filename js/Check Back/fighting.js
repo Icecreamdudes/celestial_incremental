@@ -562,24 +562,6 @@ addLayer("fi", {
 
     },
     upgrades: {
-        11: {
-            title: "Classic XP Upgrade",
-            unlocked() { return true},
-            description: "Boosts Check Back XP Gain based on unspent temporal dust.",
-            cost: new Decimal("5"),
-            currencyLocation() { return player.fi },
-            currencyDisplayName: "Temporal Dust",
-            currencyInternalName: "temporalDust",
-            effect() {
-                return player.fi.temporalDust.pow(0.65).mul(0.05).add(1)
-            },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style() {
-                let look = {width: "150px", height: "110px", color: "rgba(255, 255, 255, 1)", border: "3px solid rgba(0,0,0,1)", borderRight: "0px solid rgba(0,0,0,1)", transform: "scale(1)", borderRadius: "0px",}
-                hasUpgrade(this.layer, this.id) ? look.background = "#06366e" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #06366e 0%,  #105cb3ff 100%)"
-                return look
-            }
-        },
         12: {
             title: "Starmetal Time Crunch",
             unlocked() { return true},
@@ -588,34 +570,6 @@ addLayer("fi", {
             currencyLocation() { return player.fi },
             currencyDisplayName: "Temporal Dust",
             currencyInternalName: "temporalDust",
-            style() {
-                let look = {width: "150px", height: "110px", color: "rgba(255, 255, 255, 1)", border: "3px solid rgba(0,0,0,1)", borderRight: "0px solid rgba(0,0,0,1)", transform: "scale(1)", borderRadius: "0px",}
-                hasUpgrade(this.layer, this.id) ? look.background = "#06366e" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #06366e 0%,  #105cb3ff 100%)"
-                return look
-            }
-        },
-        13: {
-            title: "Another XPBoost",
-            unlocked() { return true},
-            description: "Unlocks a third XPBoost button.",
-            cost: new Decimal("12"),
-            currencyLocation() { return player.fi },
-            currencyDisplayName: "Temporal Dust",
-            currencyInternalName: "temporalDust",
-            style() {
-                let look = {width: "150px", height: "110px", color: "rgba(255, 255, 255, 1)", border: "3px solid rgba(0,0,0,1)", borderRight: "0px solid rgba(0,0,0,1)", transform: "scale(1)", borderRadius: "0px",}
-                hasUpgrade(this.layer, this.id) ? look.background = "#06366e" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #06366e 0%,  #105cb3ff 100%)"
-                return look
-            }
-        },
-        14: {
-            title: "XPBoost Time Crunch",
-            unlocked() { return true},
-            description: "Divides XPBoost button cooldown by /2.",
-            cost: new Decimal("1"),
-            currencyLocation() { return player.fi },
-            currencyDisplayName: "Temporal Shards",
-            currencyInternalName: "temporalShards",
             style() {
                 let look = {width: "150px", height: "110px", color: "rgba(255, 255, 255, 1)", border: "3px solid rgba(0,0,0,1)", borderRight: "0px solid rgba(0,0,0,1)", transform: "scale(1)", borderRadius: "0px",}
                 hasUpgrade(this.layer, this.id) ? look.background = "#06366e" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #06366e 0%,  #105cb3ff 100%)"
@@ -640,20 +594,6 @@ addLayer("fi", {
 
 
         //tier 2
-        21: {
-            title: "Matossian Reduction",
-            unlocked() { return hasMilestone("fi", 102)},
-            description: "Reduce matos softcap scaling by -0.1%",
-            cost: new Decimal("30"),
-            currencyLocation() { return player.fi },
-            currencyDisplayName: "Temporal Dust",
-            currencyInternalName: "temporalDust",
-            style() {
-                let look = {width: "150px", height: "110px", color: "rgba(255, 255, 255, 1)", border: "3px solid rgba(0,0,0,1)", borderRight: "0px solid rgba(0,0,0,1)", transform: "scale(1)", borderRadius: "0px",}
-                hasUpgrade(this.layer, this.id) ? look.background = "#06366e" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #06366e 0%,  #105cb3ff 100%)"
-                return look
-            }
-        },
         22: {
             title: "Cookie Hunter",
             unlocked() { return hasMilestone("fi", 102)},
@@ -664,24 +604,6 @@ addLayer("fi", {
             currencyInternalName: "temporalShards",
             effect() {
                 return player.fi.tier2BestWave.mul(0.5).add(1)
-            },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style() {
-                let look = {width: "150px", height: "110px", color: "rgba(255, 255, 255, 1)", border: "3px solid rgba(0,0,0,1)", borderRight: "0px solid rgba(0,0,0,1)", transform: "scale(1)", borderRadius: "0px",}
-                hasUpgrade(this.layer, this.id) ? look.background = "#06366e" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #06366e 0%,  #105cb3ff 100%)"
-                return look
-            }
-        },
-        23: {
-            title: "Iridian Boost",
-            unlocked() { return hasMilestone("fi", 102)},
-            description: "Boost star gain based on temporal shards.",
-            cost: new Decimal("80"),
-            currencyLocation() { return player.fi },
-            currencyDisplayName: "Temporal Dust",
-            currencyInternalName: "temporalDust",
-            effect() {
-                return player.fi.temporalShards.pow(1.5).mul(0.4).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style() {
@@ -711,30 +633,10 @@ addLayer("fi", {
     },
     buyables: {},
     milestones: {
-        101: {
-            requirementDescription: "<h3>Tier I Wave 5",
-            effectDescription() {return "Boost Black Heart damage based on best tier 1 wave.<br>Currently: x" + format(player.fi.milestone101Effect) + "."},
-            done() { return player.fi.tier1BestWave.gte(5) && hasUpgrade("fi", 15)},
-            style() {
-                let look = {width: "517px", height: "94px", color: "rgba(255, 255, 255, 1)", border: "3px solid rgba(0,0,0,1)", transform: "scale(1)", borderRadius: "0px",}
-                !hasMilestone(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #06366e 0%,  #105cb3ff 100%)"
-                return look
-            }
-        },
         102: {
             requirementDescription: "<h3>Tier I Wave 10",
             effectDescription() {return "Unlock Battle Tier 2"},
             done() { return player.fi.tier1BestWave.gte(10) && hasUpgrade("fi", 15)},
-            style() {
-                let look = {width: "517px", height: "94px", color: "rgba(255, 255, 255, 1)", border: "3px solid rgba(0,0,0,1)", transform: "scale(1)", borderRadius: "0px",}
-                !hasMilestone(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #06366e 0%,  #105cb3ff 100%)"
-                return look
-            }
-        },
-        103: {
-            requirementDescription: "<h3>Tier I Wave 15",
-            effectDescription() {return "Multiply pet points gain by x1.15."},
-            done() { return player.fi.tier1BestWave.gte(15) && hasUpgrade("fi", 15)},
             style() {
                 let look = {width: "517px", height: "94px", color: "rgba(255, 255, 255, 1)", border: "3px solid rgba(0,0,0,1)", transform: "scale(1)", borderRadius: "0px",}
                 !hasMilestone(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #06366e 0%,  #105cb3ff 100%)"

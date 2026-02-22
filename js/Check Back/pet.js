@@ -539,7 +539,7 @@ addLayer("pet", {
         player.pet.petPointMult = player.pet.petPointMult.mul(player.pet.gemEffects[1])
         player.pet.petPointMult = player.pet.petPointMult.mul(buyableEffect("sp", 24))
         player.pet.petPointMult = player.pet.petPointMult.mul(buyableEffect("pl", 14))
-        if (hasMilestone("db", 101)) player.pet.petPointMult = player.pet.petPointMult.mul(1.15)
+        if (hasUpgrade("stagnantSynestia", 6)) player.pet.petPointMult = player.pet.petPointMult.mul(1.15)
 
         // PET BUTTON COOLDOWN CALC
         for (let i in player.pet.petTimers) {

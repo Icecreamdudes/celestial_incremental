@@ -19,6 +19,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
     info.start = values.start || "center"
     info.cellSize = values.cellSize || false
     info.goalType = values.goal || false
+    info.goalSize = values.goalSize || 50
     info.subArena = values.subArena || false
     info.subWidth = values.subWidth || 400
     info.subHeight = values.subHeight || 300
@@ -68,8 +69,13 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
     if (bhState.active) {
         if (bhState.overlay && bhState.overlay.parentNode) bhState.overlay.remove();
         if (bhState.timer) clearTimeout(bhState.timer);
-        window.removeEventListener("mousemove", bhState.mouseHandler);
-        window.removeEventListener("touchmove", bhState.touchHandler);
+        if (!options.bhKeyboard) {
+            window.removeEventListener("mousemove", bhState.mouseHandler);
+            window.removeEventListener("touchmove", bhState.touchHandler);
+        } else {
+            window.removeEventListener("keydown", bhState.keydownHandler);
+            window.removeEventListener("keyup", bhState.keyupHandler);
+        }
     }
     bhState.active = true;
 
@@ -197,21 +203,31 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
     } else if (info.start == "cell") {
         info.px = info.cellSize / 2
         info.py = info.cellSize / 2;
-    } else if (info.subArena) {
-        info.px = info.subWidth / 2;
-        info.py = info.subHeight / 2;
     } else {
-        info.px = info.width / 2
-        info.py = info.height / 2;
+        let playerX = 0
+        let playerY = 0
+        if (info.subArena) {
+            playerX = info.subWidth / 2
+            playerY = info.subHeight / 2
+        } else {
+            playerX = info.width / 2
+            playerY = info.height / 2
+        }
+        if (info.start == "left") playerX = 50
+        info.px = playerX
+        info.py = playerY
     }
     info.pr = 18;
     info.speed = 5;
     info.pos = {x: 0, y: 0}
-    const keys = { up: false, down: false, left: false, right: false };
+    info.keys = {up: false, down: false, left: false, right: false}
     if (info.goalType) {
         if (info.goalType == "cell") {
-            info.goal = {x: info.cols - 1, y: info.rows - 1}
+            info.goal = {x: info.cols - 1, y: info.rows - 1, d: info.cellSize}
             info.goalRadius = info.cellSize / 2 - 6;
+        } else if (info.goalType == "right") {
+            info.goal = {x: info.width - (info.goalSize*2), y: info.height / 2, d: info.goalSize}
+            info.goalRadius = info.goalSize / 2 - 6;
         }
     }
 
@@ -231,6 +247,13 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         if (touch) e = e.touches[0]
         info.pos.x = e.clientX - info.boxLeft
         info.pos.y = e.clientY - info.boxTop
+    }
+
+    function updateKeys(e, isDown) {
+        if (["ArrowUp", "w", "W"].includes(e.key)) info.keys.up = isDown;
+        if (["ArrowDown", "s", "S"].includes(e.key)) info.keys.down = isDown;
+        if (["ArrowLeft", "a", "A"].includes(e.key)) info.keys.left = isDown;
+        if (["ArrowRight", "d", "D"].includes(e.key)) info.keys.right = isDown;
     }
     
     // Function to spawn a bullet that goes towards the player
@@ -315,8 +338,10 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         let x = bx + Math.cos(angle) * br;
         let y = by + Math.sin(angle) * br;
         if (isKnife) {
+            let bname = "knife"
+            if (info.actions[id].knifeLength >= 100 || info.actions[id].knifeWidth >= 25) bname = "bigKnife"
             info.bullets.push({
-                name: "knife",
+                name: bname,
                 x: x,
                 y: y,
                 r: info.actions[id].knifeLength,
@@ -403,8 +428,10 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
             angle = Math.atan2(dy, dx);
         }
         // Store initial spawn for path line
+        let bname = "knife"
+        if (info.actions[id].knifeLength >= 100 || info.actions[id].knifeWidth >= 25) bname = "bigKnife"
         info.bullets.push({
-            name: "knife",
+            name: bname,
             boxRender: true, // RENDER IN BOX
             x: bx,
             y: by,
@@ -464,8 +491,10 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
             const dy = centerY - spawnY;
             const dist = Math.sqrt(dx * dx + dy * dy);
             const knifeAngle = Math.atan2(dy, dx);
+            let bname = "knife"
+            if (info.actions[id].knifeLength >= 100 || info.actions[id].knifeWidth >= 25) bname = "bigKnife"
             info.bullets.push({
-                name: "knife",
+                name: bname,
                 boxRender: true, // RENDER IN BOX
                 offScreen: true, // Bullets can be off screen
                 x: spawnX,
@@ -518,6 +547,21 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         }
     }
 
+    info.triangleArea = (x1, y1, x2, y2, x3, y3) => {
+        return Math.abs((x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2);
+    }
+
+    info.isPointInTriangle = (px, py, x1, y1, x2, y2, x3, y3) => {
+        const originalArea = info.triangleArea(x1, y1, x2, y2, x3, y3);
+
+        const area1 = info.triangleArea(px, py, x2, y2, x3, y3);
+        const area2 = info.triangleArea(x1, y1, px, py, x3, y3);
+        const area3 = info.triangleArea(x1, y1, x2, y2, px, py);
+
+        return Math.abs(originalArea - (area1 + area2 + area3)) < 10;
+    }
+
+
     // Pixel-perfect wall collision for smooth movement (DON'T USE WITH 'MOVE WITH SUBARENA')
     function canMoveTo(nx, ny) {
         // nx,ny: new player center (float, px)
@@ -561,7 +605,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
 
 
     // Does death is yes? (lmao)
-    function allCharactersDead() {
+    info.allCharactersDead = () => {
         if (!player || !player.bh || !player.bh.characters) return true;
         for (let i = 0; i < 3; i++) {
             if (player.bh.characters[i].id != "none" && Decimal.gt(player.bh.characters[i].health, 0)) return false
@@ -572,16 +616,24 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
     function animate(ts) {
         if (!info.active) return;
         // End early if all characters are dead
-        if (allCharactersDead()) {
-            window.removeEventListener("mousemove", mouseHandler);
-            window.removeEventListener("touchmove", touchHandler);
+        if (info.allCharactersDead()) {
+            if (!options.bhKeyboard) {
+                window.removeEventListener("mousemove", mouseHandler);
+                window.removeEventListener("touchmove", touchHandler);
+            } else {
+                window.removeEventListener("keydown", keydownHandler);
+                window.removeEventListener("keyup", keyupHandler);
+            }
             if (overlay.parentNode) overlay.remove();
             // Do NOT return to battle tab here!
+            pauseUniverseAll(["BH"], "unpause", true)
+            player.universe = "U3"
             bhState.active = false;
             info.active = false;
             options.fullscreen = info.full;
             info.exitAction()
             localStorage.setItem('bhState', JSON.stringify(info));
+            if (bhState.timer) clearTimeout(bhState.timer)
             return;
         }
 
@@ -596,11 +648,19 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         }
 
         // Move Player
-        let dx = info.pos.x - info.px;
-        let dy = info.pos.y - info.py;
-        if (info.subArena && info.moveWithSub) {
-            dx -= info.subx
-            dy -= info.suby
+        let dx = 0; let dy = 0
+        if (!options.bhKeyboard) {
+            dx = info.pos.x - info.px
+            dy = info.pos.y - info.py
+            if (info.subArena && info.moveWithSub) {
+                dx -= info.subx
+                dy -= info.suby
+            }
+        } else {
+            if (info.keys.up) dy -= 5;
+            if (info.keys.down) dy += 5;
+            if (info.keys.left) dx -= 5;
+            if (info.keys.right) dx += 5;
         }
         let angle = Math.atan2(dy, dx);
         if (dx < -3 || dx > 3 || dy < -3 || dy > 3) {
@@ -635,12 +695,23 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         // Check for reaching goal
         if (info.goalType) {
             if (info.goalType == "cell") {
-                info.distToGoal = Math.sqrt((info.px - (info.goal.x * info.cellSize + info.cellSize / 2)) ** 2 + (info.py - (info.goal.y * info.cellSize + info.cellSize / 2)) ** 2);
+                info.distToGoal = Math.sqrt((info.px - (info.goal.x * info.goal.d + info.goal.d / 2)) ** 2 + (info.py - (info.goal.y * info.goal.d + info.goal.d / 2)) ** 2);
+            } else {
+                if (info.subArena) {
+                    info.distToGoal = Math.sqrt((info.px + info.subx - info.goal.x) ** 2 + (info.py + info.suby - info.goal.y) ** 2);
+                } else {
+                    info.distToGoal = Math.sqrt((info.px - info.goal.x) ** 2 + (info.py - info.goal.y) ** 2);
+                }
             }
             if (info.distToGoal < info.goalRadius) {
                 // End attack
-                window.removeEventListener("mousemove", mouseHandler);
-                window.removeEventListener("touchmove", touchHandler);
+                if (!options.bhKeyboard) {
+                    window.removeEventListener("mousemove", mouseHandler);
+                    window.removeEventListener("touchmove", touchHandler);
+                } else {
+                    window.removeEventListener("keydown", keydownHandler);
+                    window.removeEventListener("keyup", keyupHandler);
+                }
                 if (overlay.parentNode) overlay.remove();
                 player.subtabs["bh"]["stuff"] = "battle";
                 pauseUniverseAll(["BH"], "unpause", true)
@@ -650,6 +721,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
                 options.fullscreen = info.full;
                 info.exitAction()
                 localStorage.setItem('bhState', JSON.stringify(info));
+                if (bhState.timer) clearTimeout(bhState.timer)
                 return;
             }
         }
@@ -669,7 +741,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         info.bullets = info.bullets.filter(b => {
             if (b.offScreen) return b.x > -2000 && b.x < info.width + 2000 && b.y > -2000 && b.y < info.height + 2000
             if (b.name && (b.name == "bomb" || b.name == "minibomb") && b.exploded) return false
-            if (b.name && b.name == "knife") {
+            if (b.name && (b.name == "knife" || b.name == "bigKnife")) {
                 return b.x > -b.r && b.x < info.width + b.r && b.y > -b.r && b.y < info.height + b.r
             }
             return b.x > -b.r && b.x < window.innerWidth + b.r && b.y > -b.r && b.y < window.innerHeight + b.r
@@ -691,32 +763,46 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
 
         // Check collision between player and each bullet
         for (let b of info.bullets) {
+            let playerX = info.px
+            let playerY = info.py
+            if (info.subArena) {playerX += info.subx; playerY += info.suby}
             if (b.name && b.name == "knife") {
                 // Knife is a rectangle, check if player is within knife's rectangle (approximate as line segment + width)
                 const cx = b.x + Math.cos(b.angle) * b.r / 2;
                 const cy = b.y + Math.sin(b.angle) * b.r / 2;
                 const dx = Math.cos(b.angle), dy = Math.sin(b.angle);
                 // Project player onto knife axis
-                const t = ((info.px - b.x) * dx + (info.py - b.y) * dy);
+                const t = ((playerX - b.x) * dx + (playerY - b.y) * dy);
                 if (t >= 0 && t <= b.r) {
                     // Perpendicular distance
-                    const perp = Math.abs((info.px - b.x) * dy - (info.py - b.y) * dx);
-                    if (perp < info.pr + b.r / 2) {
+                    const perp = Math.abs((playerX - b.x) * dy - (playerY - b.y) * dx);
+                    if (perp < info.pr + b.width / 2) {
                         playerHit = true;
                         break;
                     }
                 }
+            } else if (b.name && b.name == "bigKnife") {
+                playerHit = info.isPointInTriangle(
+                    playerX,
+                    playerY,
+                    (Math.cos(b.angle) * (-(b.r + info.pr) / 2)) - (Math.sin(b.angle) * (-(b.width + info.pr) / 2)) + b.x,
+                    (Math.sin(b.angle) * (-(b.r + info.pr) / 2)) + (Math.cos(b.angle) * (-(b.width + info.pr) / 2)) + b.y,
+                    (Math.cos(b.angle) * ((b.r + info.pr) / 2)) + b.x,
+                    (Math.sin(b.angle) * ((b.r + info.pr) / 2)) + b.y,
+                    (Math.cos(b.angle) * (-(b.r + info.pr) / 2)) - (Math.sin(b.angle) * ((b.width + info.pr) / 2)) + b.x,
+                    (Math.sin(b.angle) * (-(b.r + info.pr) / 2)) + (Math.cos(b.angle) * ((b.width + info.pr) / 2)) + b.y,
+                )
             } else if (b.boxRender) {
-                const dx = info.px - b.x;
-                const dy = info.py - b.y;
+                const dx = playerX - b.x;
+                const dy = playerY - b.y;
                 const dist = Math.sqrt(dx * dx + dy * dy);
                 if (dist <= (info.pr + b.r)) {
                     playerHit = true;
                     break;
                 }
             } else {
-                const dx = (info.boxLeft + info.px) - b.x;
-                const dy = (info.boxTop + info.py) - b.y;
+                const dx = (info.boxLeft + playerX) - b.x;
+                const dy = (info.boxTop + playerY) - b.y;
                 const dist = Math.sqrt(dx * dx + dy * dy);
                 if (dist <= (info.pr + b.r)) {
                     playerHit = true;
@@ -805,7 +891,16 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
             if (info.goalType == "cell") {
                 info.ctx.save();
                 info.ctx.beginPath();
-                info.ctx.arc(info.goal.x * info.cellSize + info.cellSize / 2, info.goal.y * info.cellSize + info.cellSize / 2, info.goalRadius, 0, 2 * Math.PI);
+                info.ctx.arc(info.goal.x * info.goal.d + info.goal.d / 2, info.goal.y * info.goal.d + info.goal.d / 2, info.goalRadius, 0, 2 * Math.PI);
+                info.ctx.fillStyle = "#2f4";
+                info.ctx.shadowColor = "#2f4";
+                info.ctx.shadowBlur = 16;
+                info.ctx.fill();
+                info.ctx.restore();
+            } else {
+                info.ctx.save();
+                info.ctx.beginPath();
+                info.ctx.arc(info.goal.x, info.goal.y, info.goalRadius, 0, 2 * Math.PI);
                 info.ctx.fillStyle = "#2f4";
                 info.ctx.shadowColor = "#2f4";
                 info.ctx.shadowBlur = 16;
@@ -852,8 +947,21 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         updatePos(e, true);
         e.preventDefault();
     }
-    window.addEventListener("mousemove", mouseHandler);
-    window.addEventListener("touchmove", touchHandler);
+    function keydownHandler(e) {
+        updateKeys(e, true);
+        e.preventDefault();
+    }
+    function keyupHandler(e) {
+        updateKeys(e, false);
+        e.preventDefault();
+    }
+    if (!options.bhKeyboard) {
+        window.addEventListener("mousemove", mouseHandler);
+        window.addEventListener("touchmove", touchHandler);
+    } else {
+        window.addEventListener("keydown", keydownHandler);
+        window.addEventListener("keyup", keyupHandler);
+    }
 
     // Save handlers and overlay for cleanup on reload
     bhState.overlay = overlay;
@@ -863,8 +971,14 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
 
     // End the minigame after duration
     bhState.timer = setTimeout(() => {
-        window.removeEventListener("mousemove", mouseHandler);
-        window.removeEventListener("touchmove", touchHandler);
+        if (!options.bhKeyboard) {
+            window.removeEventListener("mousemove", mouseHandler);
+            window.removeEventListener("touchmove", touchHandler);
+        } else {
+            window.removeEventListener("keydown", keydownHandler);
+            window.removeEventListener("keyup", keyupHandler);
+
+        }
         if (overlay.parentNode) overlay.remove();
         player.subtabs["bh"]["stuff"] = "battle";
         pauseUniverseAll(["BH"], "unpause", true)
@@ -912,7 +1026,7 @@ if (storedInfo && storedInfo != "") {
 }
 
 BHB.diamondAttack = {
-    //bulletHell({"diamondAttack": {diamondAmount: 2}}, {duration: 10})
+    //bulletHell({"diamondAttack": {diamondAmount: 2, intervalDiv: 1}}, {duration: 10})
     codeFunc(info, id) {
         for (let i = 0; i < info.actions[id].diamondAmount; i++) {
             let angleOffset = (2 * Math.PI * i) / info.actions[id].diamondAmount;
@@ -926,7 +1040,7 @@ BHB.diamondAttack = {
                 orbitRadius: 200,
                 orbitAngle: angleOffset,
                 orbitSpeed: 0.015 + 0.003 * i, // slightly different speeds
-                shootInterval: 500 + Math.floor(Math.random() * 600) + i * 150, // each diamond has a different interval
+                shootInterval: (500 + Math.floor(Math.random() * 600) + i * 150) / (info.actions[id].intervalDiv || 1), // each diamond has a different interval
                 lastShotTime: 0,
                 draw(b, bossCtx) {
                     bossCtx.translate(b.x, b.y);
@@ -985,6 +1099,25 @@ BHB.bulletRain = {
             let bx = Math.random() * info.width + info.boxLeft;
             let by = -bulletRadius;
             let bul = {x: bx, y: by, vx: 0, vy: bulletSpeed, r: bulletRadius, draw(b, bossCtx) {bossCtx.beginPath();bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);bossCtx.fillStyle = "#fff";bossCtx.fill()}}
+            info.bullets.push(bul);
+        }
+        if (bulletsToSpawn > 0) info.actions[id].lastTime = ticks;
+        return info
+    },
+}
+
+BHB.inverseRain = {
+    //bulletHell({"inverseRain": {bulletPerSec: 10}}, {duration: 12})
+    moveFunc(info, ticks, id) {
+        // Rain Bullets
+        const bulletRadius = 12;
+        const bulletSpeed = 4;
+        if (!info.actions[id].lastTime) info.actions[id].lastTime = ticks;
+        const bulletsToSpawn = Math.floor(((ticks - info.actions[id].lastTime) / 1000) * info.actions[id].bulletPerSec); // LAST NUMBER IS AMOUNT OF BULLETS PER SECOND
+        for (let i = 0; i < bulletsToSpawn; i++) {
+            let bx = Math.random() * info.width + info.boxLeft;
+            let by = window.innerHeight + bulletRadius;
+            let bul = {x: bx, y: by, vx: 0, vy: -bulletSpeed, r: bulletRadius, draw(b, bossCtx) {bossCtx.beginPath();bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);bossCtx.fillStyle = "#fff";bossCtx.fill()}}
             info.bullets.push(bul);
         }
         if (bulletsToSpawn > 0) info.actions[id].lastTime = ticks;
@@ -1225,7 +1358,7 @@ BHB.centerSpiralAttack = {
         // Spiral fire
         if (!info.actions[id].lastTime) info.actions[id].lastTime = ticks;
         if (ticks - info.actions[id].lastTime > info.actions[id].spiralInterval) {
-            info.spawnSpiralProjectile(info.width / 2, info.height / 2, info.actions[id].radialStart, id)
+            info.spawnSpiralProjectile(info.width / 2 + info.boxLeft, info.height / 2 + info.boxTop, info.actions[id].radialStart, id)
             info.actions[id].spiralAngle += info.actions[id].spiralRate;
             info.actions[id].lastTime = ticks;
         }

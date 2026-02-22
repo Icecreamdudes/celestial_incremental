@@ -1,0 +1,459 @@
+addLayer("stagnantSynestia", {
+    name: "Stagnant Synestia", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "SS", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "BH",
+    row: 1,
+    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    onClick() {player.subtabs["bh"]["stages"] = "stagnantSynestia"},
+    startData() { return {
+        unlocked: true,
+
+        temporalDust: new Decimal(0),
+        temporalShard: new Decimal(0),
+        temporalMult: new Decimal(1),
+
+        highestCombo: new Decimal(0),
+        comboEffect: new Decimal(1),
+        comboStart: 0,
+
+        milestone: {
+            25: 0,
+            50: 0,
+            75: 0,
+            100: 0,
+        },
+        milestoneEffect: new Decimal(0),
+    }},
+    automate() {},
+    nodeStyle() {
+        let str = {
+            background: "radial-gradient(#094394, #052653)",
+            backgroundOrigin: "border-box",
+            borderColor: "#021124",
+            color: "#0091DC",
+            textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
+            marginLeft: "20px !important",
+        }
+        if (player.subtabs["bh"]["stages"] == "stagnantSynestia") str.outline = "3px solid #999"
+        return str
+    },
+    tooltip: "Stagnant Synestia",
+    color: "#0091DC",
+    update(delta) {
+        player.stagnantSynestia.comboEffect = player.stagnantSynestia.highestCombo.div(50).add(1).pow(buyableEffect("stagnantSynestia", 2))
+
+        player.stagnantSynestia.milestoneEffect = new Decimal(1)
+        for (let i = 25; i < 101; i = i+25) {
+            player.stagnantSynestia.milestoneEffect = player.stagnantSynestia.milestoneEffect.add(player.stagnantSynestia.milestone[i]/20)
+        }
+
+        player.stagnantSynestia.temporalMult = new Decimal(1)
+    },
+    clickables: {
+        "enter": {
+            title: "<h2>Enter Stagnant Synestia",
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                BHStageEnter("stagnantSynestia")
+            },
+            style: {width: "200px", minHeight: "75px", color: "white", background: "radial-gradient(#094394, #052653)", border: "3px solid #021124", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"},
+        },
+    },
+    upgrades: {
+        1: {
+            title: "Blinding Rage",
+            unlocked: true,
+            description: "Unlocks Kres' \"Berserker\" skill.",
+            cost: new Decimal(60),
+            currencyLocation() { return player.stagnantSynestia },
+            currencyDisplayName: "Temporal Dust",
+            currencyInternalName: "temporalDust",
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
+        2: {
+            title: "Don't think you need that",
+            unlocked: true,
+            description: "Unlocks Nav's \"Soul Shred\" skill.",
+            cost: new Decimal(80),
+            currencyLocation() { return player.stagnantSynestia },
+            currencyDisplayName: "Temporal Dust",
+            currencyInternalName: "temporalDust",
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
+        3: {
+            title: "Ooo, a penny!",
+            unlocked: true,
+            description: "Unlock Sel's \"Scavenge\" skill.",
+            cost: new Decimal(4),
+            currencyLocation() { return player.stagnantSynestia },
+            currencyDisplayName: "Temporal Shards",
+            currencyInternalName: "temporalShard",
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
+        4: {
+            title: "Don't need that either",
+            unlocked: true,
+            description: "Unlock the general skill \"Reckless Abandon\".",
+            cost: new Decimal(8),
+            currencyLocation() { return player.stagnantSynestia },
+            currencyDisplayName: "Temporal Shards",
+            currencyInternalName: "temporalShard",
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
+        5: {
+            title: "Another XPBoost",
+            unlocked: true,
+            description: "Unlocks a third XPBoost button.",
+            cost: new Decimal(100),
+            currencyLocation() { return player.stagnantSynestia },
+            currencyDisplayName: "Temporal Dust",
+            currencyInternalName: "temporalDust",
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
+        6: {
+            title: "Pet Energizer",
+            unlocked: true,
+            description: "Multiply pet points gain by x1.15.",
+            cost: new Decimal(12),
+            currencyLocation() { return player.stagnantSynestia },
+            currencyDisplayName: "Temporal Shards",
+            currencyInternalName: "temporalShard",
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
+    },
+    buyables: {
+        1: {
+            costBase() { return new Decimal(10) },
+            costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(20) },
+            currency() { return player.stagnantSynestia.temporalDust},
+            pay(amt) { player.stagnantSynestia.temporalDust = this.currency().sub(amt) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(2)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>Temporal Guard</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/20)\n\
+                    Boost character defense\n\
+                    Currently: +" + formatSimple(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Temporal Dust"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "100px", color: "white", border: "2px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#1a3b0f" : !this.canAfford() ? look.background =  "#361e1e" : look.background = "#250121"
+                return look
+            },
+        },
+        2: {
+            costBase() { return new Decimal(3) },
+            costGrowth() { return new Decimal(1.2) },
+            purchaseLimit() { return new Decimal(20) },
+            currency() { return player.stagnantSynestia.temporalShard},
+            pay(amt) { player.stagnantSynestia.temporalShard = this.currency().sub(amt) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(20).add(1)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>Checked Time</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/20)\n\
+                    Boost Stagnant Synestia combo effect\n\
+                    Currently: ^" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Temporal Shards"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "100px", fontSize: "9px", color: "white", border: "2px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#1a3b0f" : !this.canAfford() ? look.background =  "#361e1e" : look.background = "#250121"
+                return look
+            },
+        },
+        3: {
+            costBase() { return new Decimal(25) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(10) },
+            currency() { return player.stagnantSynestia.temporalDust},
+            pay(amt) { player.stagnantSynestia.temporalDust = this.currency().sub(amt) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(2).add(1)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>Iridian Boost</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
+                    Boost star gain\n\
+                    Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Temporal Dust"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "100px", color: "white", border: "2px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#1a3b0f" : !this.canAfford() ? look.background =  "#361e1e" : look.background = "#250121"
+                return look
+            },
+        },
+        4: {
+            costBase() { return new Decimal(10) },
+            costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(10) },
+            currency() { return player.stagnantSynestia.temporalShard},
+            pay(amt) { player.stagnantSynestia.temporalShard = this.currency().sub(amt) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(10).add(1)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>XPBoost Time Crunch</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
+                    Divide XPBoost button cooldown\n\
+                    Currently: /" + formatSimple(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Temporal Shard"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "100px", fontSize: "9px", color: "white", border: "2px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#1a3b0f" : !this.canAfford() ? look.background =  "#361e1e" : look.background = "#250121"
+                return look
+            },
+        },
+    },
+    tabFormat: [
+        ["style-row", [
+            ["style-column", [
+                ["style-column", [
+                    ["raw-html", () => {return "You have " + formatShortWhole(player.stagnantSynestia.temporalDust) + " temporal dust."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "You have " + formatShortWhole(player.stagnantSynestia.temporalShard) + " temporal shards."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                ], {width: "272px", height: "52px", background: "var(--miscButtonHover)", borderBottom: "3px solid var(--regBorder)"}],
+                ["theme-scroll-column", [
+                    ["blank", "2px"],
+                    ["row", [["upgrade", 1], ["upgrade", 2]]],
+                    ["row", [["upgrade", 3], ["upgrade", 4]]],
+                    ["row", [["upgrade", 5], ["upgrade", 6]]],
+                    ["row", [["buyable", 1], ["buyable", 2]]],
+                    ["row", [["buyable", 3], ["buyable", 4]]],
+                    ["blank", "2px"],
+                ], {width: "272px", height: "365px", background: "var(--miscButton)", borderRadius: "0 0 0 27px"}],
+            ], {width: "272px", height: "420px", borderRight: "3px solid var(--regBorder)"}],
+            ["style-column", [
+                ["style-column", [
+                    ["style-column", [
+                        ["raw-html", "Stagnant Synestia", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                    ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "10px"}],
+                    ["clickable", "enter"],
+                ], {width: "250px", height: "147px", background: "var(--miscButtonDisable)", borderBottom: "3px solid var(--regBorder)"}],
+                ["top-column", [
+                    ["blank", "10px"],
+                    ["style-column", [
+                        ["raw-html", "Properties", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
+                    ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "10px"}],
+                    ["raw-html", "<u>Combo Scaling", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", "2.5% starting at 25", {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", "<u>Time Stagnation", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", "You have to force time to move forward", {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                ], {width: "250px", height: "197px", background: "var(--layerBackground)"}],
+                ["style-row", [
+                    ["layer-proxy", ["bh", [
+                        ["row", [["clickable", "Auto-Enter"], ["blank", ["10px", "10px"]], ["clickable", "Auto-Exit"]]],
+                    ]]],
+                ], {width: "250px", height: "70px", background: "var(--miscButtonDisable)", borderTop: "3px solid var(--regBorder)"}],
+            ], {width: "250px", height: "420px"}],
+            ["style-column", [
+                ["top-column", [
+                    ["style-column", [
+                        ["raw-html", () => {return "Highest Combo: " + formatWhole(player.stagnantSynestia.highestCombo) + "/" + BHS["stagnantSynestia"].comboLimit}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                    ], {width: "225px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "2px"}],
+                    ["top-column", [
+                        ["raw-html", () => {return "Boosts check back xp by x" + formatSimple(player.stagnantSynestia.comboEffect, 2)}, {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
+                    ], {width: "272px", height: "25px"}],
+                    ["style-column", [
+                        ["raw-html", () => {return "<p style='line-height:1.2'>Milestones multiply time speed during respawn by x" + formatSimple(player.stagnantSynestia.milestoneEffect, 2)}, {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
+                    ], {width: "272px", height: "47px", background: "var(--layerBackground)", borderTop: "3px solid var(--regBorder)"}],
+                ], {width: "272px", height: "114px", background: "var(--miscButtonHover)", borderBottom: "3px solid var(--regBorder)"}],
+                ["theme-scroll-column", [
+                    ["raw-html", () => {return "<button class='bhMilestoneButton  base' style='width:257px;height:50px' onclick='player.stagnantSynestia.comboStart=0'>Starting combo value: " + player.stagnantSynestia.comboStart + "<br>[Click to set to 0]</button>"}],
+                    ["bh-milestone", [25, "stagnantSynestia", ""]],
+                    ["bh-milestone", [50, "stagnantSynestia", ""]],
+                    ["bh-milestone", [75, "stagnantSynestia", ""]],
+                    ["bh-milestone", [100, "stagnantSynestia", ""]],
+                ], {width: "272px", height: "250px", background: "var(--layerBackground)", borderBottom: "3px solid var(--regBorder)"}],
+                ["style-column", [
+                    ["raw-html", "<p style='line-height:1'>Clicking on a cleared milestone allows you to start at that milestones combo value.", {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                ], {width: "272px", height: "50px", background: "var(--miscButtonHover)", borderRadius: "0 0 27px 0"}],
+            ], {width: "272px", height: "420px", borderLeft: "3px solid var(--regBorder)"}],
+        ], {width: "800px", height: "420px"}],
+    ],
+    layerShown() {return player.startedGame && player.matosLair.milestone[25] >= 1},
+})
+
+BHS.stagnantSynestia = {
+    nameCap: "Stagnant Synestia",
+    nameLow: "stagnant synestia",
+    music: "music/fighting.mp3",
+    comboLimit: 100,
+    comboScaling: 1.025,
+    comboScalingStart: 25,
+    timeStagnation: true,
+    generateCelestialite(combo) {
+        if (typeof combo == "object") combo = combo.toNumber()
+        switch (combo) {
+            case 24:
+                return "staticEnas"
+            case 49:
+                return "staticPente"
+            case 74:
+                return "staticDeka"
+            case 99:
+                return "staticHekaton"
+            default:
+                let random = Math.random()
+                let cel = ["staticAlpha", "staticBeta", "staticGamma"/*, "staticDelta", "staticEpsilon", "staticZeta"*/]
+                if (combo >= 25) cel.push("staticEta")
+                if (combo >= 50) cel.push("staticTheta")
+                if (combo >= 75) cel.push("staticIota")
+                return cel[Math.floor(Math.random()*cel.length)]
+        }
+    },
+}
+
+BHC.staticAlpha = {
+    name: "Celestialite Static Alpha",
+    symbol: "⧖α",
+    style: {
+        background: "linear-gradient(45deg, #094394, #052653)",
+        color: "#0091DC",
+        borderColor: "#021124",
+    },
+    health: new Decimal(450),
+    damage: new Decimal(20),
+    actions: {
+        0: {
+            name: "Confined Rain",
+            instant: true,
+            type: "function",
+            target: "allPlayer",
+            onTrigger(index, slot, target, magnitude) {
+                bulletHell({"bulletRain": {bulletPerSec: 10+(magnitude*2)}}, {width: 800, height: 500, duration: 7+magnitude, subArena: true, subWidth: 300-(magnitude*20), subHeight: 300-(magnitude*20)})
+            },
+            cooldown: new Decimal(4),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.7) {
+            gain.temporalDust = Decimal.add(4, getRandomInt(2))
+        } else {
+            gain.temporalShard = new Decimal(1)
+        }
+        return gain
+    },
+}
+
+BHC.staticBeta = {
+    name: "Celestialite Static Beta",
+    symbol: "⧖β",
+    style: {
+        background: "linear-gradient(45deg, #094394, #052653)",
+        color: "#0091DC",
+        borderColor: "#021124",
+    },
+    health: new Decimal(500),
+    damage: new Decimal(25),
+    actions: {
+        0: {
+            name: "Slow Knifes",
+            instant: true,
+            type: "function",
+            target: "allPlayer",
+            onTrigger(index, slot, target, magnitude) {
+                bulletHell({"knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 2+(magnitude/8), knifePerSec: 2+(magnitude/8)}}, {width: 500, height: 300, duration: 7+magnitude})
+            },
+            cooldown: new Decimal(5),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.7) {
+            gain.temporalDust = Decimal.add(4, getRandomInt(3))
+        } else {
+            gain.temporalShard = new Decimal(1)
+        }
+        return gain
+    },
+}
+
+BHC.staticGamma = {
+    name: "Celestialite Static Gamma",
+    symbol: "⧖γ",
+    style: {
+        background: "linear-gradient(45deg, #094394, #052653)",
+        color: "#0091DC",
+        borderColor: "#021124",
+    },
+    health: new Decimal(600),
+    damage: new Decimal(15),
+    actions: {
+        0: {
+            name: "Close Shot",
+            instant: true,
+            type: "function",
+            target: "allPlayer",
+            onTrigger(index, slot, target, magnitude) {
+                bulletHell({"diamondAttack": {diamondAmount: 1, intervalDiv: 1+(magnitude/10)}}, {width: 100, height: 100, duration: 7+magnitude})
+            },
+            cooldown: new Decimal(3),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.7) {
+            gain.temporalDust = Decimal.add(5, getRandomInt(5))
+        } else {
+            gain.temporalShard = Decimal.add(1, getRandomInt(1))
+        }
+        return gain
+    },
+}
+//bulletHell({"movingCircleRadialBurstAttack": {circleAmount: 3, burstInterval: 1200, bulletsPerBurst: 6, enemySpeed: 3, bulletSpeed: 3}}, {duration: 8})
+//bulletHell({"bombAttack": {bombsPerSecond: 1, bombFallSpeed: 4, miniBombCount: 2, miniBombSpeed: 2, miniBombDelay: 600, bulletCount: 8, bulletSpeed: 2}}, {duration: 8})
+//bulletHell({"bulletRain": {bulletPerSec: 5}, "inverseRain": {bulletPerSec: 5}}, {duration: 8})
+//bulletHell({"centerSpiralAttack": {spiralAngle: 0, spiralRate: 0.65, spiralInterval: 50, radialStart: 0, bulletSpeed: 4, spiralBullets: true}}, {start: "left", height: 700, duration: 8})
+//bulletHell({"bouncingDiamond": {diamondCount: 6, enemySpeed: 3}}, {width: 700, height: 700, duration: 30, timed: true, cellSize: 50, start: "cell", goal: "cell"})
+//bulletHell({"knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 6, knifePerSec: 1}}, {duration: 15, timed: true, start: "left", goal: "right", subArena: true, subWidth: 250, subHeight: 500, subMove: "right", subSpeed: 0.5})

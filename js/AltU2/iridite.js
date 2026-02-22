@@ -1055,6 +1055,20 @@ addLayer("ir", {
                 return look
             },
         },
+        205: {
+            title: "Version 2.0",
+            unlocked() { return getLevelableAmount("pet", 502).gt(0) },
+            description: "Increase Geroa's base stats by 20%",
+            cost: new Decimal(1e7),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                return look
+            },
+        },
     },
     microtabs: {
         stuff: {
@@ -1119,7 +1133,7 @@ addLayer("ir", {
                     ["row", [["upgrade", 101],["upgrade", 102],["upgrade", 103],["upgrade", 104],["upgrade", 105],["upgrade", 106],]],
                     ["blank", "25px"],
                     ["raw-html", () => {return getLevelableAmount("pet", 502).gt(0) ? "Geroa Skills" : ""}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                    ["row", [["upgrade", 201], ["upgrade", 202], ["upgrade", 203], ["upgrade", 204]]],
+                    ["row", [["upgrade", 201], ["upgrade", 202], ["upgrade", 203], ["upgrade", 204], ["upgrade", 205]]],
                 ]
             },
             "Perks": {

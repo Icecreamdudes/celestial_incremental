@@ -1,4 +1,5 @@
 function bhAction(index, slot, interval = false, magnitude = 1) {
+    let char
     let action
     let target
     let attribute
@@ -6,11 +7,13 @@ function bhAction(index, slot, interval = false, magnitude = 1) {
     let luckMult = new Decimal(1)
     if (index == 3) {
         if (!interval) player.bh.celestialite.actions[slot].cooldown = player.bh.celestialite.actions[slot].cooldown.sub(BHC[player.bh.celestialite.id].actions[slot].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))).mul(magnitude))
+        char = player.bh.celestialite
         action = BHC[player.bh.celestialite.id].actions[slot]
         attribute = player.bh.celestialite.attributes
         luckMult = Decimal.div(Decimal.add(100, player.bh.celestialite.luck), 100)
     } else {
         if (!interval) player.bh.characters[index].skills[slot].cooldown = new Decimal(0)
+        char = player.bh.characters[index]
         action = BHA[player.bh.characters[index].skills[slot].id]
         attribute = player.bh.characters[index].attributes
         luckMult = Decimal.div(Decimal.add(100, player.bh.characters[index].luck), 100)
@@ -20,12 +23,12 @@ function bhAction(index, slot, interval = false, magnitude = 1) {
     target = action.target
     if (action.stun) {
         if (index == 3) {
-            player.bh.celestialite.stun = [...run(action.stun, action)]
+            player.bh.celestialite.stun = [...run(action.stun, action, char)]
         } else {
-            player.bh.characters[index].stun = [...run(action.stun, action)]
+            player.bh.characters[index].stun = [...run(action.stun, action, char)]
         }
     }
-    if (action.delay) delay = run(action.delay, action) / player.bh.timeSpeed.toNumber()
+    if (action.delay) delay = run(action.delay, action, char) / player.bh.timeSpeed.toNumber()
     setTimeout(() => {
         // All action attribute effects
         if (attribute["berserk"]) {
@@ -37,6 +40,22 @@ function bhAction(index, slot, interval = false, magnitude = 1) {
             }
             let str = "<span style='color:red'>[BERSERK] </span>"
             bhAttack(damage.mul(attribute["berserk"]), index, "self", str)
+        }
+        if (attribute["daze"]) {
+            let daze = attribute["daze"]
+            if (index == 3) {
+                daze = Decimal.div(daze, Decimal.div(Decimal.add(100, player.bh.celestialite.luck), 100))
+                if (Decimal.gte(daze, Math.random())) {
+                    bhLog("<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " missed.")
+                    return
+                }
+            } else {
+                daze = Decimal.div(daze, Decimal.div(Decimal.add(100, player.bh.characters[index].luck), 100))
+                if (Decimal.gte(daze, Math.random())) {
+                    bhLog("<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " missed.")
+                    return
+                }
+            }
         }
         switch(type) {
             case "damage":
@@ -56,9 +75,9 @@ function bhAction(index, slot, interval = false, magnitude = 1) {
 
                         // =-- Damage Value --=
                         if (index == 3) {
-                            damage = run(action.value, action).mul(player.bh.celestialite.damage).mul(magnitude)
+                            damage = run(action.value, action, char).mul(player.bh.celestialite.damage).mul(magnitude)
                         } else {
-                            damage = run(action.value, action).mul(player.bh.characters[index].damage).mul(magnitude)
+                            damage = run(action.value, action, char).mul(player.bh.characters[index].damage).mul(magnitude)
                         }
                         damage = damage.mul(Decimal.add(0.9, Decimal.mul(Math.random(), 0.2)))
 
@@ -126,7 +145,7 @@ function bhAction(index, slot, interval = false, magnitude = 1) {
                 }
                 for(let i = 0; i < healAmt; i++) {
                     setTimeout(() => {
-                        let heal = Decimal.mul(run(action.value, action), Decimal.add(0.9, Decimal.mul(Math.random(), 0.2))).mul(magnitude)
+                        let heal = Decimal.mul(run(action.value, action, char), Decimal.add(0.9, Decimal.mul(Math.random(), 0.2))).mul(magnitude)
                         let str = ""
 
                         // =-- Target Change Modifiers --=
@@ -190,7 +209,7 @@ function bhAction(index, slot, interval = false, magnitude = 1) {
                 // =-- Variable Effect --=
                 if (!action.properties) return 
                 for (let i in action.properties) {
-                    let val = run(action.properties[i], action.properties, player.bh.characters[index]).mul(magnitude)
+                    let val = run(action.properties[i], action.properties, char).mul(magnitude)
                     if (val == "attributes") { // Doesn't give a message currently.
                         if (index == 3) {
                             if (!player.bh.celestialite.actions[slot].variables[i]) player.bh.celestialite.actions[slot].variables[i] = {}
@@ -292,7 +311,7 @@ function bhAction(index, slot, interval = false, magnitude = 1) {
                 }
                 break;
             case "cooldown":
-                let val = run(action.value, action).mul(magnitude)
+                let val = run(action.value, action, char).mul(magnitude)
                 let tar = calcTarget(index, target, "effect")
 
                 // Reduce cooldowns of target
@@ -328,7 +347,7 @@ function bhAction(index, slot, interval = false, magnitude = 1) {
                 }
                 break;
             case "shield":
-                let num = run(action.value, action).mul(magnitude)
+                let num = run(action.value, action, char).mul(magnitude)
                 let targ = calcTarget(index, target, "effect")
                 let str = "time"
                 if (num.neq(1)) str = "times"

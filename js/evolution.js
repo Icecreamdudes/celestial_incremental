@@ -10,7 +10,7 @@
         evolutionDisplayIndex: new Decimal(-1),
         evolutionsUnlocked: [false, false, false, false, false,
             false, false, false, false, false,
-            false, false, false, false],
+            false, false, false, false, false],
         /*
         0 - Unsmith
         1 - Shark
@@ -26,7 +26,7 @@
         11 - Blob
         12 - Egg Man
         13 - Goldsmith
-        14 - Extreme Demon
+        14 - Insane Face
         15 - Enhance Dust
         */
     }},
@@ -187,10 +187,21 @@
             title() { return "<img src='resources/Pets/diamondsmithEvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>"
             },
             canClick() {return true},
-            unlocked() { return tmp.pet.levelables[103].canClick && !player.ev.evolutionsUnlocked[13] && player.ir.iriditeDefeated}, // placeholder req
+            unlocked() { return tmp.pet.levelables[1103].canClick && !player.ev.evolutionsUnlocked[13] && player.ir.iriditeDefeated}, // placeholder req
             tooltip() { return "███████ ██████ coin dust<br>██████████" }, // further boosts coin dust production
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(13)
+            },
+            style: { width: "100px", minHeight: "100px", border: "5px solid #2F2F2F", borderRadius: "0px", padding: "0px" }
+        },
+        114: {
+            title() { return "<img src='resources/Pets/extremeDemonEvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>"
+            },
+            canClick() {return true},
+            unlocked() { return tmp.pet.levelables[1203].canClick && !player.ev.evolutionsUnlocked[14] && player.ir.iriditeDefeated}, // placeholder req
+            tooltip() { return "██████ ██████████ orbs ███ ████,<br>██████ even more loot" }, // allows exchanging orbs for keys, giving even more loot
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(14)
             },
             style: { width: "100px", minHeight: "100px", border: "5px solid #2F2F2F", borderRadius: "0px", padding: "0px" }
         },
@@ -669,6 +680,49 @@
                 setLevelableAmount("pet", 2103, new Decimal(1))
             }
         },
+        14: {
+            title() {return "Extreme Demon"},
+            description() {
+                return "<div class='evoContainer'><h3>Costs:</h3>" +
+                    "<br>"  + formatWhole(player.cb.evolutionShards) + "/1,250 Evolution Shards" +
+                     "<br>"  + formatWhole(player.cb.paragonShards) + "/75 Paragon Shards" +
+                     "<br>" + formatWhole(player.cbs.ascensionShards) + "/1 Ascension Shards" +
+                     "<br>"  + formatWhole(player.ev2.orbs) + "/25 Orbs" +
+                    "</div>" +
+                    "<div class='evoContainer'><h3>Requires:</h3>" +
+                    "<br>" + formatWhole(getLevelableTier("pet", 203)) + "/2 Normal Face Ascensions" +
+                     "<br>"  + formatWhole(getLevelableTier("pet", 104)) + "/2 Gd Checkpoint Ascensions" +
+                     "<br>"  + formatWhole(getLevelableAmount("pet", 1203)) + "/10 Insane Face Level" +
+                     "<br>"  + formatWhole(getLevelableAmount("pet", 1104)) + "/10 Paragon Checkpoint Level" + 
+                     "<br>"  + formatWhole(player.ev2.day) + "/40 Days of Daily Rewards" +
+                    "</div>"
+            }, // placeholder reqs
+            canClick() {
+                return (
+                    player.cb.evolutionShards.gte(1250) &&
+                    player.cb.paragonShards.gte(75) &&
+                    player.cbs.ascensionShards.gte(1) &&
+                    player.ev2.orbs.gte(25) &&
+
+                    getLevelableTier("pet", 203).gte(2) &&
+                    getLevelableTier("pet", 104).gte(2) &&
+                    getLevelableAmount("pet", 1203).gte(10) &&
+                    getLevelableAmount("pet", 1104).gte(10) &&
+                    player.ev2.day.gte(40)
+                )
+            },
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(-1)
+
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(1250)
+                player.cb.paragonShards = player.cb.paragonShards.sub(75)
+                player.cbs.ascensionShards = player.cbs.ascensionShards.sub(1)
+                player.ev2.orbs = player.ev2.orbs.sub(25)
+
+                player.ev.evolutionsUnlocked[14] = true
+                // setLevelableAmount("pet", 2203, new Decimal(1))
+            }
+        },
 
         101: {
             title() { return "Simple Cookie" },
@@ -882,7 +936,7 @@
                     ["row", [
                         ["bt-clickable", 100], ["bt-clickable", 101], ["bt-clickable", 102], ["bt-clickable", 103], ["bt-clickable", 104],
                         ["bt-clickable", 105], ["bt-clickable", 107], ["bt-clickable", 108], ["bt-clickable", 109], ["bt-clickable", 110],
-                        ["bt-clickable", 106], ["bt-clickable", 111], ["bt-clickable", 112], ["bt-clickable", 113],
+                        ["bt-clickable", 106], ["bt-clickable", 111], ["bt-clickable", 112], ["bt-clickable", 113], ["bt-clickable", 114],
 
                         ["bt-clickable", 201], ["bt-clickable", 202], ["bt-clickable", 203], ["bt-clickable", 204],
 

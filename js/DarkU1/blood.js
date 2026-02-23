@@ -45,7 +45,9 @@
         if (getLevelableTier("pu", 401, true)) player.bl.bloodToGet = player.bl.bloodToGet.mul(levelableEffect("pu", 401)[0])
         player.bl.bloodToGet = player.bl.bloodToGet.mul(buyableEffect("bl", 23))
 
-        player.bl.bloodEffect = player.bl.blood.pow(0.25).div(10).add(1)
+        if (player.bl.bloodToGet.gte(10)) player.bl.bloodToGet = player.bl.bloodToGet.div(10).pow(0.2).mul(10)
+
+        player.bl.bloodEffect = player.bl.blood.pow(0.15).div(15).add(1)
 
         if (player.bl.bloodDrain && player.bl.blood.gte(0))
         {
@@ -63,7 +65,7 @@
         }
         player.bl.blood = player.bl.blood.sub(player.bl.bloodDrainPerSecond.mul(delta))
 
-        player.bl.xpGainPercentage = new Decimal(0.01)
+        player.bl.xpGainPercentage = new Decimal(0.003)
         player.bl.xpGainPercentage = player.bl.xpGainPercentage.mul(buyableEffect("bl", 11)[0])
         player.bl.xpGainPercentage = player.bl.xpGainPercentage.mul(buyableEffect("bl", 12))
 

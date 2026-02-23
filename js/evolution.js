@@ -202,7 +202,7 @@
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(14)
             },
-            style: { width: "100px", minHeight: "100px", border: "5px solid #2F2F2F", borderRadius: "0px", padding: "0px" }
+            style: { width: "100px", minHeight: "100px", border: "5px solid #200000", borderRadius: "0px", padding: "0px" }
         },
 
         201: {

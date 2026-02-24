@@ -106,32 +106,21 @@
     upgrades: {
         11: {
             unlocked() { return true },
-            condition() { return player.in.infinities.gte(1e25) },
             fullDisplay() {
                 let s = "<h2>"
-                if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Unlock light well α.</h2><br><br><h3>Cost: Free!</h3>"
-                } else {
-                    s += "???</h2><br><h3>Req: 1e25 Infinities</h3>"
-                }
+                s += "Unlock light well α.</h2><br><br><h3>Cost: Free!</h3>"
                 return s
             },
             cost: new Decimal(0),
             currencyLocation() { return player.wel },
             currencyDisplayName: "Light",
             currencyInternalName: "light",
-            canAfford() {
-                return this.condition()
-            },
+            canAfford() { return true },
             style() {
                 let look = {width: "200px", borderRadius: "8px 0px 0px 0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px"}
                 if (hasUpgrade(this.layer, this.id)) {
                     look.backgroundColor = "#4d9973"
                     look.border = "3px solid #336659"
-                } else if (!this.condition()) {
-                    look.backgroundColor = "black"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
                 } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
                     look.backgroundColor = "#ffdfdf"
                 } else {

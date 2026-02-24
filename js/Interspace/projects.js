@@ -57,6 +57,7 @@
     tooltip: "Projects",
     color: "#dfffdf",
     update(delta) {
+
         player.prj.totalProjectLevels = player.prj.modules[1].completions
 
         player.prj.projectSpeed = new Decimal(1)
@@ -162,7 +163,7 @@
         },
         102: {
             onComplete() {
-                doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
             effectDescription() { return "<small>Unlock more light buyables.</small>" },
             cycleReq() { return new Decimal(2) },
@@ -183,7 +184,7 @@
         },
         103: {
             onComplete() {
-                doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
             effectDescription() { return "<small>Unlock more punchcards and another punchcard choice slot.</small>" },
             cycleReq() { return new Decimal(3) },
@@ -204,7 +205,7 @@
         },
         104: {
             onComplete() {
-                doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
             effectDescription() { return "<small>Unlock the ability to extend eclipse duration with stored time capsules.</small>" },
             cycleReq() { return new Decimal(4) },
@@ -225,7 +226,7 @@
         },
         105: {
             onComplete() {
-                doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
             effectDescription() { return "<small>Project progress gain boosts light well speed. (x" + format(player.prj.milestone105Effect) + ")</small>" },
             cycleReq() { return new Decimal(5) },
@@ -246,7 +247,7 @@
         },
         106: {
             onComplete() {
-                doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
             effectDescription() { return "<small>Unlock more time energy buyables.</small>" },
             cycleReq() { return new Decimal(6) },
@@ -267,7 +268,7 @@
         },
         107: {
             onComplete() {
-                doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
             effectDescription() { return "<small>Unlock a permanent booster milestone.</small>" },
             cycleReq() { return new Decimal(7) },
@@ -288,7 +289,7 @@
         },
         108: {
             onComplete() {
-                doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
             effectDescription() { return "<small>Unlock extra time capsules.</small>" },
             cycleReq() { return new Decimal(8) },
@@ -309,7 +310,7 @@
         },
         109: {
             onComplete() {
-                doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
             effectDescription() { return "<small>/2 to the eclipse timer tickspeed.</small>" },
             cycleReq() { return new Decimal(9) },
@@ -330,7 +331,7 @@
         },
         110: {
             onComplete() {
-                doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
             effectDescription() { return "<small>Unlock an epic punchcard.</small>" },
             cycleReq() { return new Decimal(10) },

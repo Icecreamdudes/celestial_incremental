@@ -58,7 +58,8 @@
         if (getLevelableTier("pu", 305, true)) player.du.pointGain = player.du.pointGain.pow(levelableEffect("pu", 305)[1])
 
         if (player.du.pointGain.gte(player.du.secondSoftcapStart)) player.du.pointGain = player.du.pointGain.div(player.du.secondSoftcapStart).pow(player.du.pointSoftcap2).mul(player.du.secondSoftcapStart)
-        if (player.sma.inStarmetalChallenge) {
+        
+            if (player.sma.inStarmetalChallenge) {
             player.du.points = player.du.points.add(player.du.pointGain.mul(delta))
         }
 
@@ -68,7 +69,7 @@
         if (player.du.points.gt(1e10)) player.du.pointSoftcap = player.du.points.pow(0.30).div(15).add(1).pow(levelableEffect("st", 201)[0])
         if (player.du.points.gt(1e10) && getLevelableTier("pu", 201, true)) player.du.pointSoftcap = player.du.points.pow(0.30).div(15).div(levelableEffect("pu", 201)[1]).add(1).pow(levelableEffect("pu", 201)[0]).pow(levelableEffect("st", 201)[0])
         if (player.pet.legPetTimers[0].active) {
-            player.du.pointSoftcap = player.du.pointSoftcap.log(10).pow(1.5).pow_base(10)
+            player.du.pointSoftcap = player.du.pointSoftcap.log(10).pow(1.25).pow_base(10)
         }
         player.du.pointSoftcap = player.du.pointSoftcap.pow(player.dv.cloudEffect)
 

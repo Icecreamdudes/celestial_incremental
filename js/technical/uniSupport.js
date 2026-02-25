@@ -172,7 +172,7 @@ addUniverse("A2", {
 addUniverse("U3", {
     name: "Universe 3<br>Domain of Singularity",
     symbol: "3",
-    tree: [["s"], ["co", "cof"], ["ra", "cs", "sd"], ["sma", "sme"], ["ma"]],
+    tree: [["s"], ["co", "cof"], ["ra", "cs", "sd"], ["rea", "sma", "sme"], ["ma"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(140deg, red 0%, black 125%)",

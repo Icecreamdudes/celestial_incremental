@@ -51,12 +51,12 @@
         player.au2.starsToGet = player.au2.starsToGet.mul(levelableEffect("pu", 109)[2]).floor()
 
         //Star Softcap
-        player.au2.starSoftcapStart = new Decimal(1000000)
+        player.au2.starSoftcapStart = new Decimal(1e6)
 
         if (player.au2.starsToGet.gte(player.au2.starSoftcapStart))
         {
-            player.au2.starSoftcapEffect = player.au2.starsToGet.sub(1000000).pow(Decimal.add(0.1, player.au2.starsToGet.plus(1).log10().div(50)))
-            player.au2.starsToGet = player.au2.starsToGet.div(player.au2.starSoftcapEffect).add(700000)
+            player.au2.starSoftcapEffect = player.au2.starsToGet.add(1).log(10).div(6).add(1).pow(0.5).recip()
+            player.au2.starsToGet = player.au2.starsToGet.div(1e6).pow(player.au2.starSoftcapEffect).div(1e6)
             player.au2.starSoftcapActive = true  
         } else
         {

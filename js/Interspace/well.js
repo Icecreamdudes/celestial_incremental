@@ -20,6 +20,8 @@
                 completionsGain: new Decimal(1),
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
+
+                completionsEffect: new Decimal(1),
             },
             2: {
                 time: new Decimal(0),
@@ -28,6 +30,8 @@
                 completionsGain: new Decimal(1),
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
+
+                completionsEffect: new Decimal(1),
             },
             3: {
                 time: new Decimal(0),
@@ -36,6 +40,8 @@
                 completionsGain: new Decimal(1),
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
+                
+                completionsEffect: new Decimal(1),
             },
             4: {
                 time: new Decimal(0),
@@ -44,6 +50,8 @@
                 completionsGain: new Decimal(1),
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
+                
+                completionsEffect: new Decimal(1),
             },
         },
     }},
@@ -66,10 +74,22 @@
         player.wel.lightMult = player.wel.lightMult.mul(buyableEffect("wel", 11))
         player.wel.lightMult = player.wel.lightMult.mul(buyableEffect("wel", 12))
         if (hasUpgrade("wel", 13)) {
-            player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[1].completions.mul(0.02).add(1))
-            player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[2].completions.mul(0.1).add(1))
-            player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[3].completions.mul(0.01).add(1))
-            player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[4].completions.mul(0.001).add(1))
+
+            if (player.wel.modules[1].completions.gte(1e4)) player.wel.modules[1].completionsEffect = player.wel.modules[1].completions.div(1e4).pow(0.25).mul(1e4).mul(0.02).add(1);
+            else player.wel.modules[1].completionsEffect = player.wel.modules[1].completions.mul(0.02).add(1);
+            player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[1].completionsEffect)
+
+            if (player.wel.modules[2].completions.gte(1e4)) player.wel.modules[2].completionsEffect = player.wel.modules[2].completions.div(1e4).pow(0.25).mul(1e4).mul(0.1).add(1);
+            else player.wel.modules[2].completionsEffect = player.wel.modules[2].completions.mul(0.1).add(1);
+            player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[2].completionsEffect)
+
+            if (player.wel.modules[3].completions.gte(1e4)) player.wel.modules[3].completionsEffect = player.wel.modules[3].completions.div(1e4).pow(0.25).mul(1e4).mul(0.01).add(1);
+            else player.wel.modules[3].completionsEffect = player.wel.modules[3].completions.mul(0.01).add(1);
+            player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[3].completionsEffect)
+
+            if (player.wel.modules[4].completions.gte(1e4)) player.wel.modules[4].completionsEffect = player.wel.modules[4].completions.div(1e4).pow(0.25).mul(1e4).div(1e9).add(1);
+            else player.wel.modules[4].completionsEffect = player.wel.modules[4].completions.div(1e9).add(1);
+            player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[4].completionsEffect)
         }
         if (hasUpgrade("wel", 14)) player.wel.lightMult = player.wel.lightMult.mul(2)
         player.wel.lightMult = player.wel.lightMult.mul(levelableEffect("pu", 113)[1])
@@ -522,7 +542,7 @@
             purchaseLimit() { return new Decimal(36) },
             currency() { return player.wel.light},
             pay(amt) { player.wel.light = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).div(4).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(5).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -909,7 +929,7 @@
                         ], {background: "#336659",border: "3px solid #336659", borderRadius: "103px 103px 16px 16px", width: "150px"}],
                     ["blank", "9px"],
                     ["raw-html", formatShortWhole(player.wel.modules[1].completions) + " α ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ["raw-html", "(x" + formatShort(player.wel.modules[1].completions.mul(0.02).add(1)) + " Light)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", "(x" + formatShort(player.wel.modules[1].completionsEffect) + " Light)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
                     ]],
                     ]],
                     ["blank", "25px"],
@@ -942,7 +962,7 @@
                         ], {background: "#336659",border: "3px solid #336659", borderRadius: "103px 103px 16px 16px", width: "150px"}],
                     ["blank", "9px"],
                     ["raw-html", formatShortWhole(player.wel.modules[2].completions) + " β ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ["raw-html", "(x" + formatShort(player.wel.modules[2].completions.mul(0.1).add(1)) + " Light)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", "(x" + formatShort(player.wel.modules[2].completionsEffect) + " Light)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
                     ]],
                     )
                     } else {
@@ -986,7 +1006,7 @@
                         ], {background: "#336659",border: "3px solid #336659", borderRadius: "103px 103px 16px 16px", width: "150px"}],
                     ["blank", "9px"],
                     ["raw-html", formatShortWhole(player.wel.modules[3].completions) + " γ ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ["raw-html", "(x" + formatShort(player.wel.modules[3].completions.mul(0.01).add(1)) + " Light)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", "(x" + formatShort(player.wel.modules[3].completionsEffect) + " Light)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
                     ]],
                     )
                     } else {
@@ -1031,7 +1051,7 @@
                         ], {background: "#336659",border: "3px solid #336659", borderRadius: "103px 103px 16px 16px", width: "150px"}],
                     ["blank", "9px"],
                     ["raw-html", formatShortWhole(player.wel.modules[4].completions) + " δ ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ["raw-html", "(x" + formatShort(player.wel.modules[4].completions.mul(0.001).add(1)) + " Light)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", "(x" + formatShort(player.wel.modules[4].completionsEffect) + " Light)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
                     ]],
                     )
                     } else {

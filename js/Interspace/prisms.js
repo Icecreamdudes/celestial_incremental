@@ -53,28 +53,32 @@
         setBuyableAmount("wel", 13, new Decimal(0))
         setBuyableAmount("wel", 14, new Decimal(0))
     },
-    branches: ["wel"],
+    branches: ["wel", "prj"],
     clickables: {
         1: {
-            title() { return "<h2>Form your light into Prisms.</h2><br>Req: 1e15 Light" },
-            canClick() { return player.wel.light.gte(1e15)},
+            title() { return "<h2>Form your light into Prisms.</h2><br>Req: 1e16 Light" },
+            canClick() { return player.wel.light.gte(1e16)},
             unlocked() { return true },
             onClick() {
                 layers.pri.prismReset(true)
             },
             style() {
-                let look = {width: "400px", minHeight: "100px", color: "#d6ebff", border: "2px solid #d6ebff", borderRadius: "10px", padding: "8px"}
+                let look = {width: "400px", minHeight: "100px", borderRadius: "10px", padding: "8px"}
                 if (this.canClick()) {
-                    look.background = "linear-gradient(45deg, #403030 0%, #204030 33%, #303840 66%, #402040 100%)"
+                    look.background = "linear-gradient(45deg, #ffd6d6 0%, #abffd6 33%, #d6ebff 66%, #ffabff 100%)"
+                    look.border = "2px solid #335966"
+                    look.color = "#335966"
                 } else {
                     look.backgroundColor = "#361e1e"
+                    look.border = "2px solid #d6ebff"
+                    look.color = "#d6ebff"
                 }
                 return look
             },
         },
         101: {
             title() { return "<h3>Reset</h3> →" },
-            canClick() { return player.wel.light.gte(1e15)},
+            canClick() { return player.wel.light.gte(1e16)},
             unlocked() { return true },
             onClick() {
             },
@@ -178,13 +182,10 @@
                 content() {
                     let look = [
                         ["blank", "25px"],
-                        ["clickable", 2],
+                        ["clickable", 1],
                         ["blank", "25px"],
-                        ["style-row", [
-
-                        ]],
                     ]
-                    if (layers.pri.buyables[11].condition()) {
+                    /*if (layers.pri.buyables[11].condition()) {
                         look[3][1].push(
                             //["layerColor-dark-buyable", 11],
                             //["layerColor-dark-buyable", 12],
@@ -200,7 +201,7 @@
                                 ["raw-html", "<h2>Well Speed Boost</h2><br><h3>Req: 1 Prism</h3>", {color: "#ffdfdf", fontSize: "10px"}],
                             ], {background: "#361e1e", border: "3px solid #663737", width: "194px", height: "174px", borderRadius: "0px", lineHeight: "1"}]
                         )
-                    }
+                    }*/
                     return look
                 }
             },
@@ -235,7 +236,8 @@
                     ["blank", "9px"],
                     ["raw-html", "1 α →", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", "(x100 α ↻)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
-                    ["raw-html", "(/50 α ↻ Spd)", {color: "yellow", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", "(/7.07 α ↻ Spd)", {color: "#ffff00", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", "(2√ α ↻ Spd)", {color: "#ff7f00", fontSize: "12px", fontFamily: "monospace"}],
                         ["blank", "25px"],
                     ]
                 }

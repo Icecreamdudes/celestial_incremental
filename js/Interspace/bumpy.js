@@ -37,7 +37,7 @@
     tooltip: "Bumpy",
     color: "#dfffdf",
     update(delta) {
-        player.bum.starlightToGet = player.wel.light.div(3.4e38).pow(0.125)
+        player.bum.starlightToGet = player.wel.light.add(1).div(1e50).log(10).pow_base(1.25)
 
         for (let i = 0; i < Object.keys(player.bum.tasks).length; i++) {
             player.bum.tasks[i+1].time = player.bum.tasks[i+1].time.add(delta)
@@ -48,88 +48,32 @@
         }
     },
     //branches: [["wel", "#fff", 40], ["wel", "#402030", 8]],
-    branches: ["wel"],
+    branches: ["prj"],
     clickables: {
-        11: {
-            title() { return "<h2>Gain starlight, but reset previous content.</h2><br><h3><small>Req: 3.40e38 Light</small></h3>" },
-            canClick() { return player.wel.light.gte(3.4e38)},
+        1: {
+            title() { return "<h2>Focus your light into starlight.</h2><br>Req: 1e50 Light" },
+            canClick() { return player.wel.light.gte(1e50)},
             unlocked() { return true },
             onClick() {
-                player.bum.starlight = player.bum.starlight.add(player.bum.starlightToGet)
-                player.wel.light = new Decimal(0)
-
-                player.wel.tasks[1].time = new Decimal(0)
-                player.wel.tasks[2].time = new Decimal(0)
-                player.wel.tasks[3].time = new Decimal(0)
-            },
-            lightGain() {
-                let gain = player.wel.lightMult
-                return gain
+                layers.pri.prismReset(true)
             },
             style() {
-                let look = {width: "400px", minHeight: "100px", borderRadius: "8px", color: "#dfffdf", borderColor: "#dfffdf"}
+                let look = {width: "400px", minHeight: "100px", borderRadius: "10px", padding: "8px"}
                 if (this.canClick()) {
-                    look.background = "linear-gradient(180deg, #180b18 0%, #dfffdf 400%)"
+                    look.background = "linear-gradient(180deg, #994d86 -25%, #dfffdf 125%)"
+                    look.border = "2px solid #361e1e"
+                    look.color = "#361e1e"
                 } else {
                     look.backgroundColor = "#361e1e"
+                    look.border = "2px solid #dfffdf"
+                    look.color = "#dfffdf"
                 }
                 return look
             },
         },
     },
     bars: {},
-    upgrades: {
-        11: {
-            title: "Starlight I",
-            unlocked() { return true },
-            description() {return "Halve the cooldown of light modules."},
-            cost: new Decimal(1),
-            currencyLocation() { return player.bum },
-            currencyDisplayName: "Starlight",
-            currencyInternalName: "starlight",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
-        },
-        12: {
-            title: "Starlight II",
-            unlocked() { return true },
-            description() {return "Halve the cooldown of light tasks."},
-            cost: new Decimal(1),
-            currencyLocation() { return player.bum },
-            currencyDisplayName: "Starlight",
-            currencyInternalName: "starlight",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
-        },
-        13: {
-            title: "Starlight III",
-            unlocked() { return true },
-            description() {return "Light modules can gain one extra charge."},
-            cost: new Decimal(1),
-            currencyLocation() { return player.bum },
-            currencyDisplayName: "Starlight",
-            currencyInternalName: "starlight",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
-        },
-        14: {
-            title: "Starlight IV",
-            unlocked() { return true },
-            description() {return "Light tasks can gain one extra charge."},
-            cost: new Decimal(1),
-            currencyLocation() { return player.bum },
-            currencyDisplayName: "Starlight",
-            currencyInternalName: "starlight",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
-        },
-        15: {
-            title: "Starlight V",
-            unlocked() { return true },
-            description() {return "Double light."},
-            cost: new Decimal(2),
-            currencyLocation() { return player.bum },
-            currencyDisplayName: "Starlight",
-            currencyInternalName: "starlight",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
-        },
-    },
+    upgrades: {},
     buyables: {},
     milestones: {},
     challenges: {},
@@ -140,51 +84,13 @@
                 buttonStyle() { return { color: "white", borderRadius: "8px"} },
                 unlocked() { return true },
                 content() {
-                    return [
-                        ["blank", "25px"],
-                        ["clickable", 11],
-                        ["blank", "25px"],
-                        ["row", [
-                        ["row", [
-                            ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], 
-                        ]],
-                        ]]
-                    ]
-                }
-            },
-            "Projects": {
-                buttonStyle() { return { color: "white", borderRadius: "8px"} },
-                unlocked() { return true },
-                content() {
                     let look = [
                         ["blank", "25px"],
-                        ["row", [
-                            ["style-column", [
-                            ["style-column", [
-                                ["style-column", [
-                                    ["raw-html", player.bum.tasks[1].time.gte(player.bum.tasks[1].maxTime()) ? "0%" : formatShortestWhole(player.bum.tasks[1].time.div(player.bum.tasks[1].maxTime()).min(1).max(0).mul(100)) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                                ], {background: "#994d86", border: "3px solid #663366", borderRadius: "100px", width: "75px", height:"75px"}]
-                            ], {borderRadius: "50%", width: "150px", height:"150px",
-                                background: player.bum.tasks[1].time.lt(player.bum.tasks[1].maxTime()) ?
-                                "conic-gradient(#dfffdf " + (player.bum.tasks[1].time.div(player.bum.tasks[1].maxTime())).min(1).max(0) * 360 + "deg, #180b18 0deg)" : "#180b18"
-                            }
-                            ],
-                            ["blank", "9px"],
-                            ["raw-html", "Light Generator", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                            ["raw-html", player.bum.tasks[1].time.lt(player.bum.tasks[1].maxTime()) ? formatTime(player.bum.tasks[1].maxTime().sub(player.bum.tasks[1].time)) : formatTime(player.bum.tasks[1].maxTime()) + " CD", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                            ["raw-html", "Level " + formatShortestWhole(player.bum.tasks[1].completions), {color: "#ffa8d3", fontSize: "16px", fontFamily: "monospace"}],
-                            ["blank", "9px"],
-                            ["style-column", [
-                                    ["raw-html", "+1% LMα Gain /s", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ["raw-html", "(+" + formatWhole(player.bum.tasks[1].completions.mul(0.2).add(1)) + "%/s)", {color: "#ffa8d3", fontSize: "16px", fontFamily: "monospace"}],
-                                ], {background: "#994d86", borderRadius: "5px 5px 0px 0px", width: "375px", height:"45px"}],
-                            ["blank", "3px"],
-                            ["clickable", 1]
-                        ], {background: "#663366", border: "3px solid #663366", borderRadius: "103px 103px 8px 8px", width: "375px"}],
-                        ]],
-                    ["blank", "25px"]]
+                        ["clickable", 1],
+                        ["blank", "25px"],
+                    ]
                     return look
-                },
+                }
             },
         }
     },

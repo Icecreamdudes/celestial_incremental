@@ -49,7 +49,7 @@
 
         createReactorNode()
     },
-    branches: ["ra", "sd"],
+    branches: ["ra"],
     clickables: {
         
     },
@@ -82,7 +82,7 @@
                 return "Damage Booster"
             },
             display() {
-                return 'which are boosting reactor damage by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting reactor damage gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Plasma'
             },
             buy(mult) {
@@ -116,7 +116,7 @@
                 return "Plasma Booster"
             },
             display() {
-                return 'which are boosting plasma by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting plasma gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Plasma'
             },
             buy(mult) {
@@ -147,10 +147,10 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Softcap Weakener"
+                return "Metal Booster"
             },
             display() {
-                return 'which are raising the radiation softcap by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting starmetal alloy gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Plasma'
             },
             buy(mult) {
@@ -184,7 +184,7 @@
                 return "Pre-OTF Quintupler"
             },
             display() {
-                return 'which are boosting pre-OTF currencies by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting pre-OTF currencies gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Plasma'
             },
             buy(mult) {
@@ -218,7 +218,7 @@
                 return "Post-OTF Tripler"
             },
             display() {
-                return 'which are boosting post-OTF currencies by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting post-OTF currencies gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Plasma'
             },
             buy(mult) {
@@ -252,7 +252,7 @@
                 return "SP Centupler"
             },
             display() {
-                return 'which are boosting singularity points by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting singularity points gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Plasma'
             },
             buy(mult) {
@@ -289,7 +289,7 @@
                     ["blank", "10px"],
                     ["raw-html", function () { return "You have <h3>" + format(player.rea.plasma) + "</h3> plasma (+" + format(player.rea.plasmaToGet) + ")" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ["row", [
-                        ["raw-html", function () { return "Boosts radiation by x" + format(player.rea.plasmaEffect) }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", function () { return "Boosts radiation gain by x" + format(player.rea.plasmaEffect) }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", () => {
                             if (player.rea.plasmaEffect.lt(1e25)) {
                                 return ""
@@ -323,7 +323,7 @@
                     ["blank", "10px"],
                     ["raw-html", function () { return "You have <h3>" + format(player.rea.plasma) + "</h3> plasma (+" + format(player.rea.plasmaToGet) + ")" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ["row", [
-                        ["raw-html", function () { return "Boosts radiation by x" + format(player.rea.plasmaEffect) }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", function () { return "Boosts radiation gain by x" + format(player.rea.plasmaEffect) }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", () => {
                             if (player.rea.plasmaEffect.lt(1e25)) {
                                 return ""
@@ -358,7 +358,7 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && true}
+    layerShown() { return player.startedGame == true && hasUpgrade("s", 30)}
 })
 
 function animate() {
@@ -406,7 +406,7 @@ function animate() {
             ctx.arc(bullets[i][0], bullets[i][1], 5, 5, 0, 360);
             ctx.fill()
         }
-        ctx.reastore()
+        ctx.restore()
     }
     requestAnimationFrame(animate);
 }

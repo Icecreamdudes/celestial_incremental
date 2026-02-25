@@ -240,15 +240,26 @@ addLayer("ir", {
                 },
                 statDisplay() {return "Space Rock"}
             },
+            9: {
+                max: new Decimal(10),
+                onClick(isRewarded) {
+                    let gain = new Decimal(4)
+                    gain = gain.mul(levelableEffect("pet", 502)[2])
+                    gain = gain.mul(getLevelableAmount("ir", 7).mul(0.1).add(1))
+                    if (isRewarded) player.ir.spaceRock = player.ir.spaceRock.add(gain);
+                    return gain
+                },
+                statDisplay() {return "Space Rock"}
+            },
             10: {
                 max: new Decimal(300),
                 onClick(isRewarded) {
-                    let gain = new Decimal(5)
+                    let gain = new Decimal(4)
                     gain = gain.mul(getLevelableAmount("ir", 10).mul(0.1).add(1))
                     if (isRewarded) player.ir.spaceRock = player.ir.spaceRock.add(gain);
                     return gain
                 },
-                statDisplay() {return "Blood Stone"}
+                statDisplay() {return "Space Rock"}
             },
         },
 
@@ -340,6 +351,9 @@ addLayer("ir", {
         if (player.ir.shipType == 5) player.ir.shipHealthMax = new Decimal(50)
         if (player.ir.shipType == 6) player.ir.shipHealthMax = new Decimal(75)
         if (player.ir.shipType == 7) player.ir.shipHealthMax = new Decimal(75)
+        if (player.ir.shipType == 8) player.ir.shipHealthMax = new Decimal(75)
+        if (player.ir.shipType == 9) player.ir.shipHealthMax = new Decimal(75)
+        if (player.ir.shipType == 10) player.ir.shipHealthMax = new Decimal(125)
 
         if (hasUpgrade("ir", 102)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.25)
         if (player.ir.shipType != 0) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(levelableEffect("ir", player.ir.shipType)[3])
@@ -801,8 +815,8 @@ addLayer("ir", {
             levelLimit() { return Decimal.add(25, levelableEffect("ir", 8)[1])},
             effect() {
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(0.08).add(1),
-                    getLevelableAmount(this.layer, this.id).mul(0.04).add(1),
+                    getLevelableAmount(this.layer, this.id).pow(0.8).mul(0.08).add(1),
+                    getLevelableAmount(this.layer, this.id).pow(0.4).mul(0.05).add(1),
                     getLevelableAmount(this.layer, this.id).mul(0.03).add(1), //Damage
                     getLevelableAmount(this.layer, this.id).mul(0.04).add(1), //Health
                 ]

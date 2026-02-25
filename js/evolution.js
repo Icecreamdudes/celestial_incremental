@@ -596,14 +596,14 @@
                 "<div class='evoContainer'><h3>Requires:</h3>" +
                 "<br>"  + formatWhole(getLevelableTier("pet", 102)) + "/2 Egg Man Ascensions" +
                 "<br>"  + formatSimple(player.cof.coreFragments[6], 1) + "/1,000 Temporal Core Fragments" +
-                "<br>"  + formatSimple(player.fi.temporalDust, 1) + "/100 Temporal Dust" +
-                "<br>"  + formatSimple(player.fi.temporalShards, 1) + "/5 Temporal Shards" +
+                "<br>"  + formatSimple(player.stagnantSynestia.temporalDust, 1) + "/150 Temporal Dust" +
+                "<br>"  + formatSimple(player.stagnantSynestia.temporalShard, 1) + "/15 Temporal Shards" +
                 "</div>"
             },
             canClick() {
                 return (player.cb.evolutionShards.gte(250) && player.cb.paragonShards.gte(25) && player.cb.petPoints.gte(1000000)
-                && getLevelableTier("pet", 102).gte(2) && player.cof.coreFragments[6].gte(1000) && player.fi.temporalDust.gte(100)
-                && player.fi.temporalShards.gte(5))
+                && getLevelableTier("pet", 102).gte(2) && player.cof.coreFragments[6].gte(1000) && player.stagnantSynestia.temporalDust.gte(150)
+                && player.stagnantSynestia.temporalShard.gte(15))
             },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)

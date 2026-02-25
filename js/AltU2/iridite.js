@@ -735,7 +735,7 @@ addLayer("ir", {
     clickables: {
         1: {
             title() { return "<h2>Unlock Iridite, the Astral Celestial" },
-            canClick() { return player.au2.stars.gte(5e10) && player.fi.tier2BestWave.gt(2) },
+            canClick() { return player.au2.stars.gte(5e10) && player.stagnantSynestia.highestCombo.gte(25) },
             unlocked() { return true },
             onClick() {
                 player.ir.iriditeUnlocked = true
@@ -1184,7 +1184,7 @@ addLayer("ir", {
                 content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return formatWhole(player.au2.stars) + "/5e10 stars." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return formatWhole(player.fi.tier2BestWave) + "/8 tier 2 best wave." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return formatWhole(player.stagnantSynestia.highestCombo) + "/25 best stagnantion synestia combo." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Not a lot of requirements... I'm trying to be nice." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],

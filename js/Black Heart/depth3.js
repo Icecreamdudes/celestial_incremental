@@ -360,7 +360,7 @@ addLayer("depth3", {
 BHS.depth3 = {
     nameCap: "Depth 3",
     nameLow: "depth 3",
-    music: "music/fighting.mp3",
+    music: "music/depth3.mp3",
     comboLimit: 250,
     comboScaling: 1.015,
     comboScalingStart: 100,

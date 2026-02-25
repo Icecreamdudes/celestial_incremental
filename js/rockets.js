@@ -368,7 +368,7 @@
         },
         16: {
             title() { return "<h2>Upgrade" },
-            canClick() { return player.cb.evolutionShards.gte('70') && player.cb.paragonShards.gte('15') && player.fi.temporalShards.gte('4') && player.au2.stars.gte('1e9') && player.sma.starmetalAlloy.gte('100000') 
+            canClick() { return player.cb.evolutionShards.gte('70') && player.cb.paragonShards.gte('15') && player.stagnantSynestia.temporalShard.gte(5) && player.au2.stars.gte('1e9') && player.sma.starmetalAlloy.gte('100000') 
                 && player.cof.coreFragments[0].gte('50') && player.cof.coreFragments[1].gte('50') && player.cof.coreFragments[2].gte('50') && player.cof.coreFragments[3].gte('50') && player.cof.coreFragments[4].gte('50')
                 && player.cof.coreFragments[5].gte('50') && player.cof.coreFragments[6].gte('50')
             },
@@ -376,7 +376,7 @@
             onClick() {
                 player.cb.evolutionShards = player.cb.evolutionShards.sub(70)
                 player.cb.paragonShards = player.cb.paragonShards.sub(15)
-                player.fi.temporalShards = player.fi.temporalShards.sub(4)
+                player.stagnantSynestia.temporalShard = player.stagnantSynestia.temporalShard.sub(5)
 
                 player.au2.stars = player.au2.stars.sub(1e9)
                 player.sma.starmetalAlloy = player.sma.starmetalAlloy.sub(100000)
@@ -984,7 +984,7 @@
                     ["style-column", [
                     ["raw-html", function () { return "Evolution Shards: " + formatWhole(player.cb.evolutionShards) + "/70" }, { "color": "#d487fd", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Paragon Shards: " + formatWhole(player.cb.paragonShards) + "/15" }, { "color": "#4b79ff", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Temporal Shards: " + formatWhole(player.fi.temporalShards) + "/4" }, { "color": "#77b0ffff", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Temporal Shards: " + formatWhole(player.stagnantSynestia.temporalShard) + "/5" }, { "color": "#77b0ffff", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Stars: " + format(player.au2.stars) + "/1e9" }, { "color": "#ffffff", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Starmetal Alloy: " + format(player.sma.starmetalAlloy) + "/100,000" }, { "color": "#ffffff", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "50 of every core fragment type." }, { "color": "#ffffff", "font-size": "24px", "font-family": "monospace" }],

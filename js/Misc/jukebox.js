@@ -174,46 +174,6 @@ addLayer("jukebox", {
             file: "music/darkUni1.mp3",
             unlocked() {return hasUpgrade("s", 21)},
         },
-        "black-heart": {
-            artist: "Citrine/Niko/Flushmak",
-            name: "N/A",
-            description: "Black Heart",
-            img: "resources/music/black-heart.png",
-            file: "music/enteringBlackHeart.mp3",
-            unlocked() {return player.bh.unlockConditions.done},
-        },
-        "depth-1": {
-            artist: "Icecreamdude",
-            name: "N/A",
-            description: "Depth 1",
-            img: "resources/music/depth-1.png",
-            file: "music/celestialites.mp3",
-            unlocked() {return player.bh.unlockConditions.done},
-        },
-        "depth-2": {
-            artist: "150percent",
-            name: "N/A",
-            description: "Depth 2",
-            img: "resources/music/depth-2.png",
-            file: "music/blackHeart.mp3",
-            unlocked() {return player.depth2.unlocked},
-        },
-        "depth-3": {
-            artist: "Icecreamdude",
-            name: "N/A",
-            description: "Depth 3",
-            img: "resources/music/depth-3.png",
-            file: "music/matosTheme.mp3",
-            unlocked() {return player.depth3.unlocked},
-        },
-        "matos-fight": {
-            artist: "Icecreamdude",
-            name: "N/A",
-            description: "Matos Fight",
-            img: "resources/music/matos-fight.png",
-            file: "music/matosFight.mp3",
-            unlocked() {return player.matosLair.milestone[25] > 0},
-        },
         "universe-3-B": {
             artist: "Icecreamdude",
             name: "N/A",
@@ -245,22 +205,6 @@ addLayer("jukebox", {
             img: "resources/music/alt-universe-2.png",
             file: "music/space.mp3",
             unlocked() {return player.au2.au2Unlocked},
-        },
-        "cb-fighting-1": {
-            artist: "Icecreamdude",
-            name: "N/A",
-            description: "CB-Fighting T1",
-            img: "resources/music/cb-fighting-t1.png",
-            file: "music/fighting.mp3",
-            unlocked() {return player.matosLair.milestone[25] > 0},
-        },
-        "cb-fighting-2": {
-            artist: "Icecreamdude",
-            name: "N/A",
-            description: "CB-Fighting T2",
-            img: "resources/music/cb-fighting-t2.png",
-            file: "music/tier2.mp3",
-            unlocked() {return hasMilestone("fi", 102)},
         },
         "space-battle": {
             artist: "Icecreamdude",
@@ -326,6 +270,65 @@ addLayer("jukebox", {
             file: "music/ascensionSpirit.mp3",
             unlocked() {return player.cbs.shrineReactivated},
         },
+
+        // BLACK HEART SONGS
+        "black-heart": {
+            artist: "Citrine/Niko/Flushmak",
+            name: "N/A",
+            description: "Black Heart",
+            img: "resources/music/black-heart.png",
+            file: "music/enteringBlackHeart.mp3",
+            unlocked() {return player.bh.unlockConditions.done},
+        },
+        "depth-1": {
+            artist: "Icecreamdude",
+            name: "N/A",
+            description: "Depth 1",
+            img: "resources/music/depth-1.png",
+            file: "music/celestialites.mp3",
+            unlocked() {return player.bh.unlockConditions.done},
+        },
+        "depth-2": {
+            artist: "150percent",
+            name: "N/A",
+            description: "Depth 2",
+            img: "resources/music/depth-2.png",
+            file: "music/blackHeart.mp3",
+            unlocked() {return player.depth2.unlocked},
+        },
+        "depth-3": {
+            artist: "Icecreamdude",
+            name: "N/A",
+            description: "Depth 3",
+            img: "resources/music/depth-3.png",
+            file: "music/depth3.mp3",
+            unlocked() {return player.depth3.unlocked},
+        },
+        "matos-lair": {
+            artist: "Icecreamdude",
+            name: "N/A",
+            description: "Matos Lair",
+            img: "resources/music/matos-lair.png",
+            file: "music/matosTheme.mp3",
+            unlocked() {return player.matosLair.unlocked},
+        },
+        "matos-fight": {
+            artist: "Icecreamdude",
+            name: "N/A",
+            description: "Matos Fight",
+            img: "resources/music/matos-fight.png",
+            file: "music/matosFight.mp3",
+            unlocked() {return player.matosLair.milestone[25] > 0},
+        },
+        "stagnant-synestia": {
+            artist: "Icecreamdude",
+            name: "N/A",
+            description: "Stagnant Synestia",
+            img: "resources/music/stagnant.png",
+            file: "music/stagnant.mp3",
+            unlocked() {return player.stagnantSynestia.unlocked},
+        },
+
         // CUTSCENE SONGS
         "cutscene-piano": {
             artist: "Icecreamdude",
@@ -475,10 +478,9 @@ addLayer("jukebox", {
                         ["jukebox", "none"], ["jukebox", "universe-1"], ["jukebox", "checkback"], ["jukebox", "portal"],
                         ["jukebox", "universe-2"], ["jukebox", "infinity-challenge"], ["jukebox", "hex"], ["jukebox", "tav-domain"],
                         ["jukebox", "alt-1"], ["jukebox", "universe-3"], ["jukebox", "dark-universe-1"], ["jukebox", "universe-3-B"],
-                        ["jukebox", "eclipse"], ["jukebox", "hall-of-celestials"], ["jukebox", "alt-2"], ["jukebox", "cb-fighting-1"],
-                        ["jukebox", "cb-fighting-2"], ["jukebox", "space-battle"], ["jukebox", "iridite-fight"], ["jukebox", "hive"],
-                        ["jukebox", "dice-space"], ["jukebox", "casino"], ["jukebox", "blood-battle"], ["jukebox", "nox"],
-                        ["jukebox", "ascension-spirit"],
+                        ["jukebox", "eclipse"], ["jukebox", "hall-of-celestials"], ["jukebox", "alt-2"], ["jukebox", "space-battle"],
+                        ["jukebox", "iridite-fight"], ["jukebox", "hive"], ["jukebox", "dice-space"], ["jukebox", "casino"], ["jukebox", "blood-battle"],
+                        ["jukebox", "nox"], ["jukebox", "ascension-spirit"],
                     ]],
                     ["blank", "2px"],
                 ],
@@ -505,7 +507,7 @@ addLayer("jukebox", {
                     ["blank", "2px"],
                     ["row", [
                         ["jukebox", "none"], ["jukebox", "black-heart"], ["jukebox", "depth-1"], ["jukebox", "depth-2"],
-                        ["jukebox", "depth-3"], ["jukebox", "matos-fight"], 
+                        ["jukebox", "depth-3"], ["jukebox", "matos-lair"], ["jukebox", "matos-fight"], ["jukebox", "stagnant-synestia"],
                     ]],
                     ["blank", "2px"],
                 ],
@@ -517,7 +519,7 @@ addLayer("jukebox", {
         ["blank", "50px"],
         ["style-column", [
             ["raw-html", "Jukebox", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
-        ], {width: "650px", height: "40px", background: "var(--scroll4)", border: "3px solid var(--menuBackground)", marginBottom: "-3px", borderRadius: "30px 30px 0 0"}],
+        ], {width: "660px", height: "40px", background: "var(--scroll4)", border: "3px solid var(--menuBackground)", marginBottom: "-3px", borderRadius: "30px 30px 0 0"}],
         ["style-row", [
             ["style-column", [
                 ["style-column", [
@@ -540,11 +542,11 @@ addLayer("jukebox", {
             ], {width: "200px", height: "600px", borderRight: "3px solid var(--menuBackground)"}],
             ["theme-scroll-column", [
                 ["buttonless-microtabs", "stuff", { 'border-width': '0px' }],
-            ], {width: "447px", height: "600px", background: "var(--miscButtonDisable)"}],
-        ], {width: "650px", height: "600px", background: "var(--tabTitle)", border: "3px solid var(--menuBackground)"}],
+            ], {width: "457px", height: "600px", background: "var(--miscButtonDisable)"}],
+        ], {width: "660px", height: "600px", background: "var(--tabTitle)", border: "3px solid var(--menuBackground)"}],
         ["style-row", [
             ["raw-html", "Song names have not been decided.", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
-        ], {width: "650px", height: "30px", background: "var(--scroll4)", border: "3px solid var(--menuBackground)", marginTop: "-3px", borderRadius: "0 0 30px 30px"}],
+        ], {width: "660px", height: "30px", background: "var(--scroll4)", border: "3px solid var(--menuBackground)", marginTop: "-3px", borderRadius: "0 0 30px 30px"}],
     ],
     layerShown() { return false }
 })

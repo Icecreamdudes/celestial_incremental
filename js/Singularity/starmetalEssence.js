@@ -56,7 +56,7 @@
             if (player.sme.buyables[i].gte(1)) player.sme.generatorTimers[i] = player.sme.generatorTimers[i].add(onepersec.mul(delta))
 
             player.sme.generatorTimersMax[i] = player.sme.generatorTimersMax[i].mul(player.sme.starmetalEssenceSoftcap)
-            if (hasUpgrade("fi", 12)) player.sme.generatorTimersMax[i] = player.sme.generatorTimersMax[i].div(2)
+            //if (hasUpgrade("fi", 12)) player.sme.generatorTimersMax[i] = player.sme.generatorTimersMax[i].div(2)
             if (hasMilestone("db", 103)) player.sme.generatorTimersMax[i] = player.sme.generatorTimersMax[i].div(1.4)
             player.sme.generatorProduction[i] = player.sme.generatorProduction[i].mul(buyableEffect("sme", i))
             player.sme.generatorProduction[i] = player.sme.generatorProduction[i].mul(levelableEffect("pet", 502)[1])
@@ -72,36 +72,6 @@
         if (player.sme.leaveInput.lt(1)) player.sme.leaveAmount = new Decimal(1)
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "s"
-            },
-            style: { width: '125px', "min-height": '50px', borderRadius: "5px" },
-        },
-        2: {
-            title() { return "Level up binding" },
-            canClick() { return tmp.sme.levelables[layers.sme.levelables.index].canBuy },
-            unlocked() { return layers.sme.levelables.index != 0 },
-            tooltip() {
-                if (tmp.sme.levelables[layers.sme.levelables.index].levelTooltip == undefined) {
-                    return ""
-                } else {
-                    return tmp.sme.levelables[layers.sme.levelables.index].levelTooltip
-                }
-            },
-            onClick() {
-                buyLevelable("sme", layers.sme.levelables.index)
-            },
-            onHold() { clickClickable(this.layer, this.id) },
-            style() {
-                let look = {width: "425px", minHeight: "40px", borderRadius: "0px", fontSize: '12px'}
-                !this.canClick() ? look.backgroundColor = "#bf8f8f" : layers.sme.levelables.index >= 1000 ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#4e7cff"
-                return look
-            },
-        },
         11: {
             title() {return player.sme.starmetalResetToggle ? "Auto Starmetal Resets On" : "Auto Starmetal Resets Off"},
             canClick: true,
@@ -235,363 +205,6 @@
         },
     },
     upgrades: {},
-    levelables: {
-        0: {
-            image() { return "resources/secret.png"},
-            title() { return "No pet selected." },
-            lore() { return "" },
-            description() { return "" },
-            currency() { return player.sme.starmetalEssence },
-            barStyle() { return {background: "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)",}},
-            style() { return { width: '100px', height: '125px', backgroundColor: '#222222'} } 
-        },
-        101: {
-            image() {return this.canClick() ? "resources/Pets/dotknightEpicPet.png" : "resources/secret.png"},
-            title() {return "Dotknight"},
-            description() {
-                return "Max HP: " + format(this.effect()[0]) + "<br>Damage: " + format(this.effect()[1])
-            },
-            levelLimit() { return new Decimal(99) },
-            effect() { 
-                return [
-                    player.fi.petMaxHP[0][0], // Health
-                    player.fi.petDamage[0][0], // Damage
-                    false, //activation
-                    player.fi.petMaxMaxHP[0][0],
-                    player.fi.petMaxDamage[0][0],
-                ]
-            },
-            sacValue() { return new Decimal(0)},
-            // CLICK CODE
-            unlocked() { return true },
-            canClick() {return player.pet.levelables[401][0].gte(1) || player.pet.levelables[401][2].gte(1)},
-            onClick() { 
-                player.fi.rarityIndex = 0
-                player.fi.petIndex = 0
-                return layers[this.layer].levelables.index = this.id 
-            },
-            // BUY CODE
-            pay(amt) { player.sme.starmetalEssence = player.sme.starmetalEssence.sub(amt)},
-            canAfford() { return player.sme.starmetalEssence.gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).add(1).pow(3).mul(100).floor() },
-            currency() { return player.sme.starmetalEssence },
-            buy() {
-                this.pay(this.xpReq())
-                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
-            },
-            // STYLE
-            barStyle() { return {background: "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)",}},
-            style() {
-                let look = {width: "100px", minHeight: "125px"}
-                getLevelableTier("sme", 101, true) ? look.backgroundColor = "#a60000ff" : this.canClick() ? look.backgroundColor = "#6600A6" : look.backgroundColor = "#222222"
-                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
-                return look
-            }  
-        },
-        102: {
-            image() { return this.canClick() ? "resources/Pets/dragonEpicPet.png" : "resources/secret.png"},
-            title() { return "Dragon" },
-            description() {
-                return "Max HP: " + format(this.effect()[0]) + "<br>Damage: " + format(this.effect()[1])
-            },
-            levelLimit() { return new Decimal(99) },
-            effect() { 
-                return [
-                    player.fi.petMaxHP[0][1], // Health
-                    player.fi.petDamage[0][1], // Damage
-                    false, //activation
-                    player.fi.petMaxMaxHP[0][1],
-                    player.fi.petMaxDamage[0][1],
-                ]
-            },
-            sacValue() { return new Decimal(0)},
-            // CLICK CODE
-            unlocked() { return true },
-            canClick() { return player.pet.levelables[402][0].gte(1) || player.pet.levelables[402][2].gte(1)},
-            onClick() { 
-                player.fi.rarityIndex = 0
-                player.fi.petIndex = 1
-                return layers[this.layer].levelables.index = this.id 
-            },
-            // BUY CODE
-            pay(amt) { player.sme.starmetalEssence = player.sme.starmetalEssence.sub(amt)},
-            canAfford() { return player.sme.starmetalEssence.gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).add(1).pow(3).mul(100).floor() },
-            currency() { return player.sme.starmetalEssence },
-            buy() {
-                this.pay(this.xpReq())
-                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
-            },
-            // STYLE
-            barStyle() { return {background: "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)",}},
-            style() {
-                let look = {width: "100px", minHeight: "125px"}
-                getLevelableTier("sme", 102, true) ? look.backgroundColor = "#a60000ff" : this.canClick() ? look.backgroundColor = "#6600A6" : look.backgroundColor = "#222222"
-                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
-                return look
-            }  
-        },
-        103: {
-            image() { return this.canClick() ? "resources/Pets/cookieEpicPet.png" : "resources/secret.png"},
-            title() { return "Cookie" },
-            description() {
-                return "Max HP: " + format(this.effect()[0]) + "<br>Damage: " + format(this.effect()[1])
-            },
-            levelLimit() { return new Decimal(99) },
-            effect() { 
-                return [
-                    player.fi.petMaxHP[0][2], // Health
-                    player.fi.petDamage[0][2], // Damage
-                    false, //activation
-                    player.fi.petMaxMaxHP[0][2],
-                    player.fi.petMaxDamage[0][2],
-                ]
-            },
-            sacValue() { return new Decimal(0)},
-            // CLICK CODE
-            unlocked() { return true },
-            canClick() { return player.pet.levelables[403][0].gte(1) || player.pet.levelables[403][2].gte(1)},
-            onClick() { 
-                player.fi.rarityIndex = 0
-                player.fi.petIndex = 2
-                return layers[this.layer].levelables.index = this.id 
-            },
-            // BUY CODE
-            pay(amt) { player.sme.starmetalEssence = player.sme.starmetalEssence.sub(amt)},
-            canAfford() { return player.sme.starmetalEssence.gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).add(1).pow(3).mul(100).floor() },
-            currency() { return player.sme.starmetalEssence },
-            buy() {
-                this.pay(this.xpReq())
-                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
-            },
-            // STYLE
-            barStyle() { return {background: "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)",}},
-            style() {
-                let look = {width: "100px", minHeight: "125px"}
-                getLevelableTier("sme", 103, true) ? look.backgroundColor = "#a60000ff" : this.canClick() ? look.backgroundColor = "#6600A6" : look.backgroundColor = "#222222"
-                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
-                return look
-            }  
-        },
-        104: {
-            image() { return this.canClick() ? "resources/Pets/kresEpicPet.png" : "resources/secret.png"},
-            title() { return "Kres" },
-            description() {
-                return "Max HP: " + format(this.effect()[0]) + "<br>Damage: " + format(this.effect()[1])
-            },
-            levelLimit() { return new Decimal(99) },
-            effect() { 
-                return [
-                    player.fi.petMaxHP[0][3], // Health
-                    player.fi.petDamage[0][3], // Damage
-                    false, //activation
-                    player.fi.petMaxMaxHP[0][3],
-                    player.fi.petMaxDamage[0][3],
-                ]
-            },
-            sacValue() { return new Decimal(0)},
-            // CLICK CODE
-            unlocked() { return true },
-            canClick() { return player.pet.levelables[404][0].gte(1) || player.pet.levelables[404][2].gte(1)},
-            onClick() { 
-                player.fi.rarityIndex = 0
-                player.fi.petIndex = 3
-                return layers[this.layer].levelables.index = this.id 
-            },
-            // BUY CODE
-            pay(amt) { player.sme.starmetalEssence = player.sme.starmetalEssence.sub(amt)},
-            canAfford() { return player.sme.starmetalEssence.gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).add(1).pow(3).mul(100).floor() },
-            currency() { return player.sme.starmetalEssence },
-            buy() {
-                this.pay(this.xpReq())
-                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
-            },
-            // STYLE
-            barStyle() { return {background: "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)",}},
-            style() {
-                let look = {width: "100px", minHeight: "125px"}
-                getLevelableTier("sme", 104, true) ? look.backgroundColor = "#a60000ff" : this.canClick() ? look.backgroundColor = "#6600A6" : look.backgroundColor = "#222222"
-                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
-                return look
-            }  
-        },
-        105: {
-            image() { return this.canClick() ? "resources/Pets/navEpicPet.png" : "resources/secret.png"},
-            title() { return "Nav" },
-            description() {
-                return "Max HP: " + format(this.effect()[0]) + "<br>Damage: " + format(this.effect()[1])
-            },
-            levelLimit() { return new Decimal(99) },
-            effect() { 
-                return [
-                    player.fi.petMaxHP[0][4], // Health
-                    player.fi.petDamage[0][4], // Damage
-                    false, //activation
-                    player.fi.petMaxMaxHP[0][4],
-                    player.fi.petMaxDamage[0][4],
-                ]
-            },
-            sacValue() { return new Decimal(0)},
-            // CLICK CODE
-            unlocked() { return true },
-            canClick() { return player.pet.levelables[405][0].gte(1) || player.pet.levelables[405][2].gte(1)},
-            onClick() { 
-                player.fi.rarityIndex = 0
-                player.fi.petIndex = 4
-                return layers[this.layer].levelables.index = this.id 
-            },
-            // BUY CODE
-            pay(amt) { player.sme.starmetalEssence = player.sme.starmetalEssence.sub(amt)},
-            canAfford() { return player.sme.starmetalEssence.gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).add(1).pow(3).mul(100).floor() },
-            currency() { return player.sme.starmetalEssence },
-            buy() {
-                this.pay(this.xpReq())
-                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
-            },
-            // STYLE
-            barStyle() { return {background: "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)",}},
-            style() {
-                let look = {width: "100px", minHeight: "125px"}
-                getLevelableTier("sme", 105, true) ? look.backgroundColor = "#a60000ff" : this.canClick() ? look.backgroundColor = "#6600A6" : look.backgroundColor = "#222222"
-                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
-                return look
-            }  
-        },
-        106: {
-            image() { return this.canClick() ? "resources/Pets/selEpicPet.png" : "resources/secret.png"},
-            title() { return "Sel" },
-            description() {
-                return "Max HP: " + format(this.effect()[0]) + "<br>Damage: " + format(this.effect()[1])
-            },
-            levelLimit() { return new Decimal(99) },
-            effect() { 
-                return [
-                    player.fi.petMaxHP[0][5], // Health
-                    player.fi.petDamage[0][5], // Damage
-                    false, //activation
-                    player.fi.petMaxMaxHP[0][5],
-                    player.fi.petMaxDamage[0][5],
-                ]
-            },
-            sacValue() { return new Decimal(0)},
-            // CLICK CODE
-            unlocked() { return true },
-            canClick() { return player.pet.levelables[406][0].gte(1) || player.pet.levelables[406][2].gte(1)},
-            onClick() { 
-                player.fi.rarityIndex = 0
-                player.fi.petIndex = 5
-                return layers[this.layer].levelables.index = this.id 
-            },
-            // BUY CODE
-            pay(amt) { player.sme.starmetalEssence = player.sme.starmetalEssence.sub(amt)},
-            canAfford() { return player.sme.starmetalEssence.gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).add(1).pow(3).mul(100).floor() },
-            currency() { return player.sme.starmetalEssence },
-            buy() {
-                this.pay(this.xpReq())
-                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
-            },
-            // STYLE
-            barStyle() { return {background: "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)",}},
-            style() {
-                let look = {width: "100px", minHeight: "125px"}
-                getLevelableTier("sme", 106, true) ? look.backgroundColor = "#a60000ff" : this.canClick() ? look.backgroundColor = "#6600A6" : look.backgroundColor = "#222222"
-                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
-                return look
-            }  
-        },
-
-        //legs
-        201: {
-            image() { return this.canClick() ? "resources/Pets/eclipseLegendaryPet.png" : "resources/secret.png"},
-            title() { return "Eclipse" },
-            description() {
-                return "Max HP: " + format(this.effect()[0]) + "<br>Damage: " + format(this.effect()[1])
-            },
-            levelLimit() { return new Decimal(99) },
-            effect() { 
-                return [
-                    player.fi.petMaxHP[1][0], // Health
-                    player.fi.petDamage[1][0], // Damage
-                    false, //activation
-                    player.fi.petMaxMaxHP[1][0],
-                    player.fi.petMaxDamage[1][0],
-                ]
-            },
-            sacValue() { return new Decimal(0)},
-            // CLICK CODE
-            unlocked() { return true },
-            canClick() { return player.pet.levelables[501][0].gte(1) || player.pet.levelables[501][2].gte(1)},
-            onClick() { 
-                player.fi.rarityIndex = 1
-                player.fi.petIndex = 0
-                return layers[this.layer].levelables.index = this.id 
-            },
-            // BUY CODE
-            pay(amt) { player.sme.starmetalEssence = player.sme.starmetalEssence.sub(amt) },
-            canAfford() { return player.sme.starmetalEssence.gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).add(1).pow(4).mul(1000).floor() },
-            currency() { return player.sme.starmetalEssence },
-            buy() {
-                this.pay(this.xpReq())
-                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
-            },
-            // STYLE
-            barStyle() { return {background: "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)",}},
-            style() {
-                let look = {width: "100px", minHeight: "125px"}
-                getLevelableTier("sme", 201, true) ? look.backgroundColor = "#a60000ff" : this.canClick() ? look.backgroundColor = "#eed200" : look.backgroundColor = "#222222"
-                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
-                return look
-            }  
-        },
-        202: {
-            image() { return this.canClick() ? "resources/Pets/geroaLegendaryPet.png" : "resources/secret.png"},
-            title() { return "Geroa" },
-            description() {
-                return "Max HP: " + format(this.effect()[0]) + "<br>Damage: " + format(this.effect()[1])
-            },
-            levelLimit() { return new Decimal(99) },
-            effect() { 
-                return [
-                    player.fi.petMaxHP[1][1], // Health
-                    player.fi.petDamage[1][1], // Damage
-                    false, //activation
-                    player.fi.petMaxMaxHP[1][1],
-                    player.fi.petMaxDamage[1][1],
-                ]
-            },
-            sacValue() { return new Decimal(0)},
-            // CLICK CODE
-            unlocked() { return hasUpgrade("ir", 16) },
-            canClick() { return player.pet.levelables[502][0].gte(1) || player.pet.levelables[502][2].gte(1)},
-            onClick() { 
-                player.fi.rarityIndex = 1
-                player.fi.petIndex = 1
-                return layers[this.layer].levelables.index = this.id 
-            },
-            // BUY CODE
-            pay(amt) { player.sme.starmetalEssence = player.sme.starmetalEssence.sub(amt) },
-            canAfford() { return player.sme.starmetalEssence.gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).add(1).pow(4).mul(1000).floor() },
-            currency() { return player.sme.starmetalEssence },
-            buy() {
-                this.pay(this.xpReq())
-                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
-            },
-            // STYLE
-            barStyle() { return {background: "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)",}},
-            style() {
-                let look = {width: "100px", minHeight: "125px"}
-                getLevelableTier("sme", 202, true) ? look.backgroundColor = "#a60000ff" : this.canClick() ? look.backgroundColor = "#eed200" : look.backgroundColor = "#222222"
-                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
-                return look
-            }  
-        },
-    },
     buyables: {
         0: {
             costBase() { return new Decimal(100) },
@@ -867,7 +480,7 @@
             },
             style: { width: '275px', height: '125px', background: "#0e8a22" }
         },
-                13: {
+        13: {
             costBase() { return new Decimal(1e13) },
             costGrowth() { return new Decimal(1.875) },
             purchaseLimit() { return new Decimal(9999) },
@@ -901,7 +514,7 @@
             },
             style: { width: '275px', height: '125px', background: "#0e8a22" }
         },
-                14: {
+        14: {
             costBase() { return new Decimal(1e14) },
             costGrowth() { return new Decimal(2) },
             purchaseLimit() { return new Decimal(9999) },
@@ -977,56 +590,6 @@
                     ], {width: "400px", height: "250px", backgroundColor: "#54265e", border: "3px solid #ccc"}],
                 ]
             },
-            "Starmetal Binding": {
-                buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return true },
-                content: [
-                    ["microtabs", "binding", { 'border-width': '0px' }],
-                ]
-            },
-        },
-        binding: {
-            "Pets": {
-                buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return true },
-                content: [
-                    ["blank", "10px"],
-                    ["raw-html", "Starmetal Binding is used in Check Back's fighting system.<br>(Which is unlocked after Matos)", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                    ["blank", "10px"],
-                    ["style-column", [
-                        ["style-column", [
-                            ["levelable-display", [
-                                ["style-row", [["clickable", 2]], {width: '100px', height: '40px' }],
-                            ]],
-                        ], {width: "550px", height: "175px", backgroundColor: "#29132eff", borderBottom: "3px solid rgb(218, 218, 218)"}],
-                        ["always-scroll-column", [
-                            ["style-column", [
-                                ["raw-html", "Epic", {color: "#cb79ed", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "535px", height: "40px", backgroundColor: "#28182f", borderBottom: "3px solid #cb79ed", userSelect: "none"}],
-                            ["top-column", [
-                                ["row", [["levelable", 101],["levelable", 102],["levelable", 103],["levelable", 104],["levelable", 105],]],
-                                ["row", [["levelable", 106],]],
-                            ], {width: "525px", height: "260px", backgroundColor: "#28182f", padding: "5px"}],
-            
-                            ["style-column", [
-                                ["raw-html", "Legendary", {color: "#eed200", fontSize: "20px", fontFamily: "monospace"}],
-                             ], {width: "535px", height: "40px", backgroundColor: "#2f2a00", borderTop: "3px solid #eed200", borderBottom: "3px solid #eed200", userSelect: "none"}],
-                            ["top-column", [
-                                ["row", [["levelable", 201],["levelable", 202],]],
-                            ], {width: "525px", minHeight: "153px", backgroundColor: "#2f2a00", padding: "5px"}],
-                        ], {width: "550px", height: "522px"}],
-                    ], {width: "550px", height: "700px", backgroundColor: "#161616", border: "3px solid rgb(218, 218, 218)"}],
-                ]
-            },
-            "Punchcards": {
-                buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return true },
-                content:
-                [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "Coming Soon?"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                ]
-            },
         },
     }, 
     tabFormat: [
@@ -1034,6 +597,6 @@
         ["raw-html", function () { return "Your starmetal essence extends generator time requirements by x<h3>" + format(player.sme.starmetalEssenceSoftcap) + "</h3>." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+    ],
     layerShown() { return player.startedGame == true && player.matosLair.milestone[25] > 0  }
 })

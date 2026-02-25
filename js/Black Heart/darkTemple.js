@@ -113,6 +113,44 @@ const RUNE_EFFECTS = {
             luck: 4,
         },
     },
+    4: {
+        1: {
+            hp: 4,
+            dmg: 0.4,
+            ssc: 0.1,
+            agiMult: 0.05,
+        },
+        2: {
+            hp: 5,
+            dmg: 0.5,
+            ssc: 0.15,
+            agiMult: 0.1,
+        },
+        3: {
+            hp: 6,
+            dmg: 0.6,
+            ssc: 0.2,
+            agiMult: 0.15,
+        },
+        4: {
+            hp: 7,
+            dmg: 0.7,
+            ssc: 0.25,
+            rgn: 0.2,
+        },
+        5: {
+            sp: 1,
+            scd: 0.5,
+            hpMult: 0.4,
+            dmgMult: 0.4,
+        },
+        6: {
+            hp: 7,
+            dmg: 0.7,
+            ssc: 0.3,
+            agiMult: 0.2,
+        },
+    },
 }
 addLayer("darkTemple", {
     name: "Temple of Darkness", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -139,6 +177,7 @@ addLayer("darkTemple", {
         dmgMult: new Decimal(0),
 
         agiAdd: new Decimal(0),
+        agiMult: new Decimal(0),
 
         defAdd: new Decimal(0),
 
@@ -149,6 +188,7 @@ addLayer("darkTemple", {
         depth1CurMult: new Decimal(1),
         depth2CurMult: new Decimal(1),
         depth3CurMult: new Decimal(1),
+        stagnantCurMult: new Decimal(1),
     }},
     automate() {},
     nodeStyle() {
@@ -182,12 +222,14 @@ addLayer("darkTemple", {
         if (stats.dmg) player.darkTemple.dmgAdd = new Decimal(stats.dmg)
         if (stats.dmgMult) player.darkTemple.dmgMult = new Decimal(stats.dmgMult)
         if (stats.agi) player.darkTemple.agiAdd = new Decimal(stats.agi)
+        if (stats.agiMult) player.darkTemple.agiMult = new Decimal(stats.agiMult)
         if (stats.def) player.darkTemple.defAdd = new Decimal(stats.def)
         if (stats.rgn) player.darkTemple.rgnAdd = new Decimal(stats.rgn)
         if (stats.luck) player.darkTemple.luckAdd = new Decimal(stats.luck)
         if (stats.d1c) player.darkTemple.depth1CurMult = Decimal.add(1, stats.d1c)
         if (stats.d2c) player.darkTemple.depth2CurMult = Decimal.add(1, stats.d2c)
         if (stats.d3c) player.darkTemple.depth3CurMult = Decimal.add(1, stats.d3c)
+        if (stats.ssc) player.darkTemple.stagnantCurMult = Decimal.add(1, stats.ssc)
     },
     clickables: {
         1: {
@@ -240,7 +282,7 @@ addLayer("darkTemple", {
         },
         4: {
             title: "ᚱ",
-            canClick() {return false},
+            canClick() {return player.stagnantSynestia.unlocked},
             unlocked: true,
             branches: [[6, "#88f", 5]],
             onClick() {
@@ -450,6 +492,31 @@ addLayer("darkTemple", {
                 return look
             },
         },
+        4: {
+            purchaseLimit() { return player.darkTemple.runeCap },
+            pay() {
+                player.stagnantSynestia.temporalDust = player.stagnantSynestia.temporalDust.sub(Decimal.pow(2.5, getBuyableAmount(this.layer, this.id)).mul(12).floor())
+                player.stagnantSynestia.temporalShard = player.stagnantSynestia.temporalShard.sub(Decimal.pow(2.5, getBuyableAmount(this.layer, this.id)).mul(4).floor())
+                player.sme.starmetalEssence = player.sme.starmetalEssence.sub(Decimal.pow(5, getBuyableAmount(this.layer, this.id)).mul(100))
+            },
+            effect(x) {return getBuyableAmount(this.layer, this.id)},
+            unlocked() {return player.darkTemple.selection == 4},
+            canAfford() {
+                return player.stagnantSynestia.temporalDust.gte(Decimal.pow(2.5, getBuyableAmount(this.layer, this.id)).mul(12).floor())
+                && player.stagnantSynestia.temporalShard.gte(Decimal.pow(2.5, getBuyableAmount(this.layer, this.id)).mul(4).floor())
+                && player.sme.starmetalEssence.gte(Decimal.pow(5, getBuyableAmount(this.layer, this.id)).mul(100))
+            },
+            display() {return "<div style='line-height:0.8'>Level Up<br><span style='font-size:10px'>[" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(player.darkTemple.runeCap) + "]</div>"},
+            buy() {
+                this.pay()
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "200px", height: "35px", color: "var(--textColor)", fontSize: "16px", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "0 0 27px 27px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#1a3b0f" : !this.canAfford() ? look.background =  "#361e1e" : look.background = "var(--miscButton)"
+                return look
+            },
+        },
     },
     tabFormat: [
         ["style-row", [
@@ -475,6 +542,8 @@ addLayer("darkTemple", {
                                         return "ᚢ"
                                     case 3:
                                         return "ᚦ"
+                                    case 4:
+                                        return "ᚱ"
                                     default:
                                         return ""
                                 }
@@ -501,12 +570,17 @@ addLayer("darkTemple", {
                                         cost2 = formatSimple(player.depth3.lustrousUmbrite) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 3)).mul(5).floor()) + "<br>Lustrous Umbrite"
                                         cost3 = formatSimple(player.au2.stars) + "/" + formatSimple(Decimal.pow(10, getBuyableAmount("darkTemple", 3)).mul(10)) + "<br>Stars"
                                         break;
+                                    case 4:
+                                        cost1 = formatSimple(player.stagnantSynestia.temporalDust) + "/" + formatSimple(Decimal.pow(2.5, getBuyableAmount("darkTemple", 4)).mul(12).floor()) + "<br>Temporal Dust"
+                                        cost2 = formatSimple(player.stagnantSynestia.temporalShard) + "/" + formatSimple(Decimal.pow(2.5, getBuyableAmount("darkTemple", 4)).mul(4).floor()) + "<br>Temporal Shards"
+                                        cost3 = formatSimple(player.sme.starmetalEssence) + "/" + formatSimple(Decimal.pow(5, getBuyableAmount("darkTemple", 4)).mul(100)) + "<br>Starmetal Essence"
+                                        break;
                                 }
                                 return "<div style='line-height:1.2'>" + cost1 + "<hr style='width:200px;height:3px;margin:2px 0;background:var(--regBorder);border:0'>" + cost2 + "<hr style='width:200px;height:3px;margin:2px 0;background:var(--regBorder);border:0'>" + cost3 + "<div>"
                             }, {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
                         ], {width: "200px", height: "104px", background: "var(--layerBackground)"}],
                         ["style-column", [
-                            ["buyable", 1], ["buyable", 2], ["buyable", 3]
+                            ["buyable", 1], ["buyable", 2], ["buyable", 3], ["buyable", 4]
                         ], {width: "200px", height: "35px", background: "black", borderTop: "3px solid var(--regBorder)", borderRadius: "0 0 27px 27px"}],
                     ], {width: "200px", height: "180px", background: "var(--miscButtonDisable)", border: "3px solid var(--regBorder)", borderRadius: "30px", margin: "28px 18px 28px 18px", boxShadow: "0px 0px 10px #113"}],
                     ["style-column", [
@@ -566,6 +640,11 @@ addLayer("darkTemple", {
                             if (futureEffects.agi) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.agi) + ")</small>"
                             str = str + "<br>"
                         }
+                        if (player.darkTemple.agiMult.gt(0) || futureEffects.agiMult) {
+                            str = str + "+" + formatShortSimple(player.darkTemple.agiMult.mul(100)) + "% <small>Base AGI Mult</small>"
+                            if (futureEffects.agiMult) str = str + " <small style='color:#88f'>(+" + formatShortSimple(Decimal.mul(futureEffects.agiMult, 100)) + "%)</small>"
+                            str = str + "<br>"
+                        }
                         if (player.darkTemple.defAdd.gt(0) || futureEffects.def) {
                             str = str + "+" + formatShortSimple(player.darkTemple.defAdd) + " DEF"
                             if (futureEffects.def) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.def) + ")</small>"
@@ -594,6 +673,11 @@ addLayer("darkTemple", {
                         if (player.darkTemple.depth3CurMult.gt(1) || futureEffects.d3c) {
                             str = str + "x" + formatShortSimple(player.darkTemple.depth3CurMult) + " <small>Depth 3 SPVs</small>"
                             if (futureEffects.d3c) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.d3c) + ")</small>"
+                            str = str + "<br>"
+                        }
+                        if (player.darkTemple.stagnantCurMult.gt(1) || futureEffects.ssc) {
+                            str = str + "x" + formatShortSimple(player.darkTemple.stagnantCurMult) + " <div style='display:inline-block;font-size:10px'>Stagnant<br>Synestia SPVs</div>"
+                            if (futureEffects.ssc) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.ssc) + ")</small>"
                             str = str + "<br>"
                         }
                         return str

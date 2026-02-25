@@ -75,7 +75,6 @@ addLayer("ev2", {
         }
 
         player.ev2.potentialBoost = new Decimal(1)
-        player.ev2.potentialBoost = player.ev2.potentialBoost.mul(levelableEffect("pet", 2203)[1])
         if (player.ev2.evoInput.gt(0)) player.ev2.potentialBoost = player.ev2.potentialBoost.mul(player.ev2.evoInput.add(1).log(Decimal.div(10, buyableEffect("ev2", 14))).add(1))
         if (player.ev2.paraInput.gt(0)) player.ev2.potentialBoost = player.ev2.potentialBoost.mul(player.ev2.paraInput.add(1).log(Decimal.div(3, buyableEffect("ev2", 24))).add(1))
 
@@ -132,11 +131,11 @@ addLayer("ev2", {
             style: {width: '180px', minHeight: '50px', borderRadius: "30px"},
         },
         11: {
-            title() {return player.ev2.timers[0].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev2.timers[0].current) + "." : "<h3>+" + formatSimple(player.ev2.timers[0].base) + " Orb"},
+            title() {return player.ev2.timers[0].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev2.timers[0].current) + "." : "<h3>+" + formatSimple(player.ev2.timers[0].base.mul(levelableEffect("pet", 2203)[1])) + " Orb"},
             canClick() { return player.ev2.timers[0].current.lt(0)},
             unlocked: true,
             onClick() {
-                player.ev2.orbs = player.ev2.orbs.add(player.ev2.timers[0].base)
+                player.ev2.orbs = player.ev2.orbs.add(player.ev2.timers[0].base.mul(levelableEffect("pet", 2203)[1]))
                 player.ev2.timers[0].current = player.ev2.timers[0].max
                 player.ev2.shardBoost = new Decimal(1)
                 player.ev2.day = player.ev2.day.add(1)
@@ -145,11 +144,11 @@ addLayer("ev2", {
             style: {width: '200px', minHeight: '50px', borderRadius: "30px / 15px"},
         },
         12: {
-            title() {return player.ev2.timers[1].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev2.timers[1].current) + "." : "<h3>+" + formatSimple(player.ev2.timers[1].base) + " Orb"},
+            title() {return player.ev2.timers[1].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev2.timers[1].current) + "." : "<h3>+" + formatSimple(player.ev2.timers[1].base.mul(levelableEffect("pet", 2203)[1])) + " Orb"},
             canClick() { return player.ev2.timers[1].current.lt(0)},
             unlocked() {return getLevelableAmount("pet", 1203).gte(3)},
             onClick() {
-                player.ev2.orbs = player.ev2.orbs.add(player.ev2.timers[1].base)
+                player.ev2.orbs = player.ev2.orbs.add(player.ev2.timers[1].base.mul(levelableEffect("pet", 2203)[1]))
                 player.ev2.timers[1].current = player.ev2.timers[1].max
                 player.ev2.shardBoost = new Decimal(1)
                 doPopup("none", "+" + formatSimple(player.ev2.timers[1].base) + " orbs!", "Resource Obtained!", 5, "#96DED1", "resources/orbs.png")
@@ -157,11 +156,11 @@ addLayer("ev2", {
             style: {width: '200px', minHeight: '50px', borderRadius: "30px / 15px"},
         },
         13: {
-            title() {return player.ev2.timers[2].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev2.timers[2].current) + "." : "<h3>+" + formatSimple(player.ev2.timers[2].base) + " Orb"},
+            title() {return player.ev2.timers[2].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev2.timers[2].current) + "." : "<h3>+" + formatSimple(player.ev2.timers[2].base.mul(levelableEffect("pet", 2203)[1])) + " Orb"},
             canClick() { return player.ev2.timers[2].current.lt(0)},
             unlocked() {return getLevelableAmount("pet", 1203).gte(6)},
             onClick() {
-                player.ev2.orbs = player.ev2.orbs.add(player.ev2.timers[2].base)
+                player.ev2.orbs = player.ev2.orbs.add(player.ev2.timers[2].base.mul(levelableEffect("pet", 2203)[1]))
                 player.ev2.timers[2].current = player.ev2.timers[2].max
                 player.ev2.shardBoost = new Decimal(1)
                 doPopup("none", "+" + formatSimple(player.ev2.timers[2].base) + " orbs!", "Resource Obtained!", 5, "#96DED1", "resources/orbs.png")
@@ -169,11 +168,11 @@ addLayer("ev2", {
             style: {width: '200px', minHeight: '50px', borderRadius: "30px / 15px"},
         },
         14: {
-            title() {return player.ev2.timers[3].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev2.timers[3].current) + "." : "<h3>+" + formatSimple(player.ev2.timers[3].base) + " Orb"},
+            title() {return player.ev2.timers[3].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev2.timers[3].current) + "." : "<h3>+" + formatSimple(player.ev2.timers[3].base.mul(levelableEffect("pet", 2203)[1])) + " Orb"},
             canClick() { return player.ev2.timers[3].current.lt(0)},
             unlocked() {return getLevelableAmount("pet", 1203).gte(10)},
             onClick() {
-                player.ev2.orbs = player.ev2.orbs.add(player.ev2.timers[3].base)
+                player.ev2.orbs = player.ev2.orbs.add(player.ev2.timers[3].base.mul(levelableEffect("pet", 2203)[1]))
                 player.ev2.timers[3].current = player.ev2.timers[3].max
                 player.ev2.shardBoost = new Decimal(1)
                 doPopup("none", "+" + formatSimple(player.ev2.timers[3].base) + " orbs!", "Resource Obtained!", 5, "#96DED1", "resources/orbs.png")

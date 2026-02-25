@@ -5204,7 +5204,7 @@ addLayer("pet", {
                                 ["raw-html", "Ascension Shards", {color: "#80ffff", "text-shadow": "0 0 10px #80ffff", fontSize: "20px", fontFamily: "monospace"}],
                             ], () => { return player.ir.iriditeDefeated ? {width: "535px", height: "40px", backgroundColor: "#102020", borderTop: "3px solid #80ffff", borderBottom: "3px solid #80ffff", userSelect: "none"} : {display: "none !important"}}],
                             ["style-column", [
-                                ["row", [["levelable", 2103],]],
+                                ["row", [["levelable", 2103], ["levelable", 2203],]],
                             ], () => { return player.ir.iriditeDefeated ? {width: "525px", backgroundColor: "#081010", padding: "5px"} : {display: "none !important"}}], // placeholder reqs
 
                             ["style-column", [

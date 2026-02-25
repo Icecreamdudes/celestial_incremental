@@ -75,6 +75,7 @@ addLayer("ev2", {
         }
 
         player.ev2.potentialBoost = new Decimal(1)
+        player.ev2.potentialBoost = player.ev2.potentialBoost.mul(levelableEffect("pet", 2203)[1])
         if (player.ev2.evoInput.gt(0)) player.ev2.potentialBoost = player.ev2.potentialBoost.mul(player.ev2.evoInput.add(1).log(Decimal.div(10, buyableEffect("ev2", 14))).add(1))
         if (player.ev2.paraInput.gt(0)) player.ev2.potentialBoost = player.ev2.potentialBoost.mul(player.ev2.paraInput.add(1).log(Decimal.div(3, buyableEffect("ev2", 24))).add(1))
 

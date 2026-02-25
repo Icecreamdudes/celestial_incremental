@@ -593,8 +593,8 @@ h1, h2, h3, b, input {
 }
 
 .jukebox {
-	width: 90px;
-	height: 120px;
+	width: 100px;
+	height: 150px;
 	background: var(--tabTitle);
 	border: 2px solid var(--regBorder);
 	margin: 2.5px;
@@ -1798,8 +1798,8 @@ button > * {
 }
 
 .bhSkill {
-	width: 100px;
-	height: 100px;
+	width: 90px;
+	height: 90px;
 	font-size: 12px;
 	color: white;
 	border: 5px solid rgba(0,0,0,0.5);

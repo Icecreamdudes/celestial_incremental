@@ -1379,10 +1379,16 @@ function loadVue() {
 		props: ['layer', 'data'],
 		template: `
 		<div v-bind:class="{jukebox: true, selected: options.jukeboxID == data, tooltipBox: true, can: true}" v-if="run(layers[layer].songs[data].unlocked, layers[layer].songs[data])" v-on:click="options.jukeboxID = data">
-			<img v-bind:src="layers.jukebox.songs[data].img" style='width:83px;height:83px;border:2px solid var(--regBorder);margin-top:1px'></img>
-			<div style="width:85px;height:25px;background:var(--miscButton);border-radius:15px;margin-top:1px">
-				<span style="font-size:12px;user-select:none" v-html="data != 'none' ? layers[layer].songs[data].name + '<br>' : 'Disable'"></span>
-				<span style="font-size:10px;user-select:none" v-html="layers[layer].songs[data].description"></span>
+			<img v-bind:src="layers.jukebox.songs[data].img" style='width:93px;height:93px;border:2px solid var(--regBorder);margin-top:1px'></img>
+			<div style="display:flex;align-items:center;width:89px;height:24px;background:var(--miscButton);border-radius:15px;margin-top:1px;padding:auto 3px">
+				<div style="line-height:0.9">
+					<span style="font-size:10px;user-select:none" v-html="data != 'none' ? layers[layer].songs[data].name + '<br>' : 'Disable'"></span>
+				</div>
+			</div>
+			<div style="display:flex;align-items:center;width:89px;height:20px;background:var(--miscButton);border-radius:15px;margin-top:3px;padding:auto 3px">
+				<div style="line-height:0.9">
+					<span style="font-size:10px;user-select:none" v-html="layers[layer].songs[data].description"></span>
+				</div>
 			</div>
 		</div>
 		`,

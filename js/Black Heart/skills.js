@@ -211,8 +211,7 @@ BHA.kres_decapitate = {
         "crit": [new Decimal(0.5), new Decimal(2)], // Chance / Mult
     },
     value() {return new Decimal(3).add(player.bh.skillData["kres_decapitate"].level.mul(0.6))},
-    delay: 5000, // In ms
-    stun: ["soft", new Decimal(5)],
+    stun() {return ["soft", new Decimal(5), player.bh.skillData["kres_decapitate"].selected[1]]},
     cooldown: new Decimal(30),
     cooldownCap: new Decimal(5),
 }
@@ -532,8 +531,7 @@ BHA.eclipse_lightBarrier = {
     type: "shield",
     target: "allPlayer",
     value() {return new Decimal(1).add(player.bh.skillData["eclipse_lightBarrier"].level.mul(0.2).floor())},
-    delay() {return 8000-(player.bh.skillData["eclipse_lightBarrier"].level.modulo(5).mul(500).toNumber())}, // In ms
-    stun() {return ["soft", new Decimal(8).sub(player.bh.skillData["eclipse_lightBarrier"].level.modulo(5).div(2))]},
+    stun() {return ["soft", new Decimal(8).sub(player.bh.skillData["eclipse_lightBarrier"].level.modulo(5).div(2)), player.bh.skillData["eclipse_lightBarrier"].selected[1]]},
     cooldown: new Decimal(30),
     cooldownCap: new Decimal(10),
 }
@@ -673,8 +671,7 @@ BHA.geroa_orbitalCannon = {
         "multi-hit": [10, 100], // Amount / Delay
     },
     value() {return new Decimal(1).add(player.bh.skillData["geroa_orbitalCannon"].level.mul(0.2))},
-    delay: 10000, // In ms
-    stun: ["hard", new Decimal(10)],
+    stun() {return ["hard", new Decimal(10), player.bh.skillData["geroa_cosmicRay"].selected[1]]},
     cooldown: new Decimal(60),
     cooldownCap: new Decimal(10),
 }

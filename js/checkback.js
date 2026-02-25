@@ -473,7 +473,6 @@ addLayer("cb", {
         layers.ev1.update(time)
         layers.ev2.update(time)
         layers.ev8.update(time)
-        layers.fi.update(time)
     },
     branches: ["m"],
     clickables: {
@@ -2191,11 +2190,6 @@ addLayer("cb", {
                 buttonStyle() { return {color: "#1500bf", borderColor: "#1500bf", backgroundImage: "linear-gradient(90deg, #d487fd, #4b79ff)", borderRadius: "5px" }},
                 unlocked() { return player.cb.highestLevel.gte(35)  },
                 embedLayer: 'ev'
-            },
-            "Fighting": {
-                buttonStyle() { return {color: "#2e0000ff", borderColor: "#2e0000ff", backgroundImage: "linear-gradient(90deg, #ad0000ff, #920044ff)", borderRadius: "5px" }},
-                unlocked() { return player.matosLair.milestone[25] > 0 },
-                embedLayer: 'fi'
             },
         },
         buttons: {

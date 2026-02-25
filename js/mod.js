@@ -25,7 +25,7 @@
 		"Hive/honey.js", "Hive/wax.js", "Hive/aleph.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js", "DarkU1/blood.js", "Zar/zar.js", "Zar/coinFlip.js",
  		"Zar/wheelOfFortune.js", "Check Back/singularityPet.js", "Zar/slotMachine.js", "Zar/checkBackShrine.js", "Zar/cards.js",
-		"Check Back/diamondDust.js",
+		"Check Back/diamondDust.js", "Check Back/treasureRoom.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 	],
@@ -254,6 +254,9 @@ function updateStyles() {
 			break;
 		case "ev13":
 			layerBG = "linear-gradient(-45deg, #206060, #40c0c0)"
+			break;
+		case "ev14":
+			layerBG = "linear-gradient(0deg, #200020, #400040)"
 			break;
 		case "ep0": case "ep1": case "ep2": case "sp":
 			layerBG = "#7d3f98"

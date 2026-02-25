@@ -206,7 +206,7 @@
             player.in.pylonEnergyPerSecond = player.in.pylonEnergyPerSecond.pow(buyableEffect("in", 13))
             player.in.pylonEnergyPerSecond = player.in.pylonEnergyPerSecond.pow(levelableEffect("ir", 9)[1])
 
-            player.in.pylonPassiveEffect = player.in.infinityPoints.pow(0.002).add(1).pow(player.in.pylonTierEffect)
+            player.in.pylonPassiveEffect = player.in.infinityPoints.add(1).log(10).div(200).pow(0.75).pow_base(10).pow(player.in.pylonTierEffect).add(1)
         } else
         {
             player.in.pylonEnergyPerSecond = new Decimal(0)
@@ -221,9 +221,10 @@
         }
         player.in.pylonEnergy = player.in.pylonEnergy.add(player.in.pylonEnergyPerSecond.mul(delta))
 
-        player.in.pylonEnergyEffect = player.in.pylonEnergy.pow(0.5).add(1).pow(player.in.pylonTierEffect)
-        player.in.pylonEnergyEffect2 = player.in.pylonEnergy.pow(0.25).add(1).pow(player.in.pylonTierEffect)
-        player.in.pylonEnergyEffect3 = player.in.pylonEnergy.pow(0.175).add(1).pow(player.in.pylonTierEffect)
+        player.in.pylonEnergyEffect = player.in.pylonEnergy.add(1).log(10).pow(0.75).pow_base(10).sub(1).pow(player.in.pylonTierEffect).div(10).add(1)
+        player.in.pylonEnergyEffect2 = player.in.pylonEnergy.add(1).log(10).pow(0.5).pow_base(10).sub(1).pow(player.in.pylonTierEffect).div(10).add(1)
+        player.in.pylonEnergyEffect3 = player.in.pylonEnergy.add(1).log(10).pow(0.25).pow_base(10).sub(1).pow(player.in.pylonTierEffect).div(10).pow(2).add(1)
+        
 
         player.in.pylonTierEffect = player.in.pylonTier.sub(1).div(10).add(1)
 

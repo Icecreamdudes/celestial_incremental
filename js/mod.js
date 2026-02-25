@@ -198,7 +198,7 @@ function updateStyles() {
 			layerBG = "linear-gradient(0deg, #204387)"
 			break;
 		case "s": case "co": case "ra": case "sd": case "cs":
-		case "cof": case "re":
+		case "cof": case "rea":
 			if (!player.ma.matosDefeated) layerBG = "linear-gradient(0deg, #260300)"
 			if (player.ma.matosDefeated) layerBG = "linear-gradient(-180deg, #540818 0%, #3a0202 100%)"
 			if (player.tab == "co" && player.ma.matosDefeated) layerBG = "linear-gradient(-180deg,rgb(0, 0, 0) 0%, rgb(15, 15, 15) 100%)"
@@ -745,6 +745,9 @@ function updateStyles() {
 						if (!hasUpgrade("za", 16)) playAndLoopAudio("music/diceSpace.mp3", options.musicVolume/10)
 						if (hasUpgrade("za", 16) && !player.ir.inBattle) playAndLoopAudio("music/casino.mp3", options.musicVolume/10)
 			    		if (player.ir.inBattle) playAndLoopAudio("music/ascensionSpirit.mp3", options.musicVolume/10);
+						break;
+					case "UD":
+						playAndLoopAudio("music/interspace.mp3", options.musicVolume/10)
 						break;
 					case "CB":
 						if (player.fi.battleTier.eq(0)) playAndLoopAudio("music/checkback.mp3", options.musicVolume/10)

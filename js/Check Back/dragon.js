@@ -432,9 +432,9 @@ addLayer("ep1", {
         },
         15: {
             display() { return "<h2>Empower your dragon with the remains of fallen cores.</h2><br>Boosts the gold upgrade base by +0.01.<br>Requires 1e11 Gold and U1 pylon tier 3."},
-            canClick() { return false },
+            canClick() { return player.ep1.gold.gte(1e11) && player.i.pylonTier.gte(3) },
             unlocked() { return player.ep1.dragonEvolutionIndex == 4 },
-            onClick() {},
+            onClick() { player.ep1.dragonEvolutionIndex = 5 },
             onHold() {},
             style() {
                 let look = {background: "linear-gradient(90deg, #20A3C2 0%, #20BBBD 100%)", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", width: '600px', minHeight: '57px'}
@@ -450,7 +450,7 @@ addLayer("ep1", {
             display() { return "<h2>Infuse your dragon with otherworldly powers.</h2><br>Boosts gold gain by ^1.025 and mastery point effects by ^1.25.<br>Requires 5 platinum shards."},
             canClick() { return false },
             unlocked() { return player.ep1.dragonEvolutionIndex == 5 },
-            onClick() {},
+            onClick() { player.ep1.dragonEvolutionIndex = 6 },
             onHold() {},
             style() {
                 let look = {background: "linear-gradient(90deg, #8a00a9 0%, #0061ff 100%)", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", width: '600px', minHeight: '57px'}
@@ -513,7 +513,7 @@ addLayer("ep1", {
             currency() { return player.ep1.gold},
             pay(amt) { player.ep1.gold = this.currency().sub(amt) },
             effect(x) {
-                let eff = player.ep1.goldBuyableBase.pow(getBuyableAmount(this.layer, this.id).mul(5))
+                let eff = player.ep1.goldBuyableBase.pow(getBuyableAmount(this.layer, this.id).mul(3))
                 if (eff.gte(1e6)) eff = eff.div(1e6).pow(0.5).mul(1e6);
                 return eff
             },
@@ -554,7 +554,7 @@ addLayer("ep1", {
         },
         13: {
             costBase() { return new Decimal(1e4) },
-            costGrowth() { return new Decimal(1.5) },
+            costGrowth() { return new Decimal(2.5) },
             purchaseLimit() { return new Decimal(150) },
             currency() { return player.ep1.gold},
             pay(amt) { player.ep1.gold = this.currency().sub(amt) },
@@ -646,7 +646,7 @@ addLayer("ep1", {
         },
         15: {
             costBase() { return new Decimal(1e8) },
-            costGrowth() { return new Decimal(3) },
+            costGrowth() { return new Decimal(12) },
             purchaseLimit() { return new Decimal(150) },
             currency() { return player.ep1.gold},
             pay(amt) { player.ep1.gold = this.currency().sub(amt) },

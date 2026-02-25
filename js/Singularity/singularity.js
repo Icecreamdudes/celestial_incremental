@@ -347,44 +347,6 @@
                 return look
             },
         },
-        29: {
-            unlocked() { return player.bi.interspaceUnlocked},
-            fullDisplay() {
-                return "<div style='height:25px;display:flex;align-items:center'><div>" +
-                "<h3>Singularity Upgrade XIX</h3>" + // TOP
-                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
-                "<br>Unlock the singularity reactor.<br>" + // MIDDLE
-                "<br></div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
-                "1e900 Singularity Points" + // BOTTOM
-                "</div></div>"
-            },
-            cost: new Decimal("1e900"),
-            currencyLocation() { return player.s },
-            currencyInternalName: "singularityPoints",
-            style() {
-                let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
-                return look
-            },
-        },
-        30: {
-            unlocked() { return player.bi.interspaceUnlocked},
-            fullDisplay() {
-                return "<div style='height:25px;display:flex;align-items:center'><div>" +
-                "<h3>Singularity Upgrade XX</h3>" + // TOP
-                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
-                "<br>Unlock more core scrap upgrades.<br>" + // MIDDLE
-                "<br></div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
-                "1e1,111 Singularity Points" + // BOTTOM
-                "</div></div>"
-            },
-            cost: new Decimal("1e1111"),
-            currencyLocation() { return player.s },
-            currencyInternalName: "singularityPoints",
-            style() {
-                let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
-                return look
-            },
-        },
         28: {
             title: "Singularity Upgrade XVIII",
             unlocked() { return player.ir.iriditeDefeated},
@@ -419,10 +381,10 @@
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
                 "<br>Unlock the singularity reactor.<br>" + // MIDDLE
                 "<br></div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
-                "1e900 Singularity Points" + // BOTTOM
+                "1e950 Singularity Points" + // BOTTOM
                 "</div></div>"
             },
-            cost: new Decimal("1e900"),
+            cost: new Decimal("1e950"),
             currencyLocation() { return player.s },
             currencyInternalName: "singularityPoints",
             //style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
@@ -431,26 +393,6 @@
                 return look
             },
         },
-        31: {
-            unlocked() { return player.bi.interspaceUnlocked},
-            fullDisplay() {
-                return "<div style='height:25px;display:flex;align-items:center'><div>" +
-                "<h3>Singularity Upgrade XXI</h3>" + // TOP
-                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
-                "<br>Unlock more core scrap upgrades.<br>" + // MIDDLE
-                "<br></div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
-                "1e1,111 Singularity Points" + // BOTTOM
-                "</div></div>"
-            },
-            cost: new Decimal("1e1111"),
-            currencyLocation() { return player.s },
-            currencyInternalName: "singularityPoints",
-            //style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
-            style() {
-                let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
-                return look
-            },
-        }
     },
     buyables: {
         11: {

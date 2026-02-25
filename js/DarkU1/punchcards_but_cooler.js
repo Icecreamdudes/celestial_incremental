@@ -14,6 +14,9 @@ addLayer("pu", {
         selectionCost: new Decimal(0),
 
         legendarySelectionActive: false,
+
+        collectionRarityTab: 0,
+        collectionTypeTab: 0,
     }},
     nodeStyle() {
         return {
@@ -36,7 +39,7 @@ addLayer("pu", {
     },
     generateSelection() {
         player.pu.selectedPunchcards = [0, 0, 0, 0, 0]
-        let raritySelect = [[], [], [], []]
+        let raritySelect = [[], [], [], [], []]
         for (let prop in player.pu.levelables) {
             if (run(layers.pu.levelables[prop].canSelect, layers.pu.levelables[prop]) && !getLevelableTier("pu", prop, true)) {
                 if (prop >= 100 && prop < 200) raritySelect[0].push(prop) // COMMON
@@ -77,12 +80,145 @@ addLayer("pu", {
         }
         if (player.pu.legendarySelectionActive) {
 
-            if (run(layers.pu.levelables[401].canSelect, layers.pu.levelables[401])) player.pu.selectedPunchcards[4] = 401 //MAKE THEM RANDOMIZED EVENTUALLY
+            if (run(layers.pu.levelables[401].canSelect, layers.pu.levelables[401])) player.pu.selectedPunchcards[3] = 401 //MAKE THEM RANDOMIZED EVENTUALLY
 
         }
     },
     clickables: {
         1: {
+            title() { return  "C" /*"♣"*/ },
+            canClick() {return player.pu.collectionRarityTab != 0},
+            unlocked() {return true},
+            onClick() { player.pu.collectionRarityTab = 0 },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "75px", minHeight: "75px", maxHeight: "75px", borderRadius: "0px 0px 0px 0px", fontSize: "28px", color: "black"}
+                if (this.canClick(this.layer, this.id)) {
+                    look.background = "linear-gradient(0deg, #cacaca 0%, #cacaca 100%)"
+                    look.border = "3px solid #7f7f7f"
+                } else {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #cacaca"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        2: {
+            title() { return "R" /*"♦"*/ },
+            canClick() {return player.pu.collectionRarityTab != 1},
+            unlocked() {return true},
+            onClick() { player.pu.collectionRarityTab = 1 },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "75px", minHeight: "75px", maxHeight: "75px", borderRadius: "0px 0px 0px 0px", fontSize: "28px", color: "black"}
+                if (this.canClick(this.layer, this.id)) {
+                    look.background = "linear-gradient(0deg, #f5c727 0%, #f5f475 100%)"
+                    look.border = "3px solid #aa8000"
+                } else {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #f5f475"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        3: {
+            title() { return "E" /*"♠"*/ },
+            canClick() {return player.pu.collectionRarityTab != 2},
+            unlocked() {return true},
+            onClick() { player.pu.collectionRarityTab = 2 },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "75px", minHeight: "75px", maxHeight: "75px", borderRadius: "0px 0px 0px 0px", fontSize: "28px", color: "black"}
+                if (this.canClick(this.layer, this.id)) {
+                    look.background = "linear-gradient(0deg, #2ec89c 0%, #0268ba 100%)"
+                    look.border = "3px solid #01325b"
+                } else {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #1895a8"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        4: {
+            title() { return "L" /*"♥"*/ },
+            canClick() {return player.pu.collectionRarityTab != 3},
+            unlocked() {return true},
+            onClick() { player.pu.collectionRarityTab = 3 },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "75px", minHeight: "75px", maxHeight: "75px", borderRadius: "0px 0px 0px 0px", fontSize: "28px", color: "black"}
+                if (this.canClick(this.layer, this.id)) {
+                    look.background = "linear-gradient(0deg, #a92163 0%, #ad2027 100%)"
+                    look.border = "3px solid #52022c"
+                } else {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #ab2045"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        11: {
+            title() { return "SMA" },
+            canClick() {return player.pu.collectionTypeTab != 0},
+            unlocked() {return true},
+            onClick() { player.pu.collectionTypeTab = 0 },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "100px", minHeight: "100px", maxHeight: "100px", borderRadius: "0px 0px 0px 0px", fontSize: "28px", color: "#282363"}
+                if (this.canClick(this.layer, this.id)) {
+                    look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
+                    look.border = "3px solid #282363"
+                } else {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #d460eb"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        12: {
+            title() { return "ES" },
+            canClick() {return player.pu.collectionTypeTab != 1},
+            unlocked() {return true},
+            onClick() { player.pu.collectionTypeTab = 1 },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "100px", minHeight: "100px", maxHeight: "100px", borderRadius: "0px 0px 0px 0px", fontSize: "28px", color: "black"}
+                if (this.canClick(this.layer, this.id)) {
+                    look.background = "linear-gradient(120deg, #ff8800 0%, #bdad00 100%)"
+                    look.border = "3px solid #804400"
+                } else {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #f5ff68"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        13: {
+            title() { return "ALL" },
+            canClick() {return player.pu.collectionTypeTab != 2},
+            unlocked() {return true},
+            onClick() { player.pu.collectionTypeTab = 2 },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "100px", minHeight: "100px", maxHeight: "100px", borderRadius: "0px 0px 0px 0px", fontSize: "28px", color: "black"}
+                if (this.canClick(this.layer, this.id)) {
+                    look.background = "linear-gradient(0deg, #cacaca 0%, #cacaca 100%)"
+                    look.border = "3px solid #7f7f7f"
+                } else {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #cacaca"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        /*1: {
             title() {return "Level Up"},
             canClick() {return getLevelableXP("pu", layers.pu.levelables.index).gte(tmp.pu.levelables[layers.pu.levelables.index].xpReq) && layers.pu.levelables.index != 0},
             unlocked() {return true},
@@ -281,7 +417,7 @@ addLayer("pu", {
                 if (player.pu.selectionIndex == 2 && player.pu.storedSelections.gte(1)) {look.borderColor = "white"} else {look.borderColor = "#444"}
                 return look
             },
-        },
+        },*/
     },
     levelables: {
         0: {
@@ -290,7 +426,7 @@ addLayer("pu", {
             description() { return "" },
             canSelect: false,
             currency() { return getLevelableXP(this.layer, this.id) },
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a"}},
             style() { return {width: '80px', height: '152px', backgroundColor: '#222222'} } 
         },
         101: {
@@ -340,9 +476,9 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a"}},
             style() {
-                let look = {width: "80px", height: "152px", borderColor: "black"}
+                let look = {width: "72px", height: "137px", borderColor: "black", margin: "0px"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
                 return look
@@ -394,9 +530,9 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a", marginTop: "0px"}},
             style() {
-                let look = {width: "80px", height: "152px", borderColor: "black"}
+                let look = {width: "72px", height: "137px", borderColor: "black", margin: "0px"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
                 return look
@@ -449,9 +585,9 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a", marginTop: "0px"}},
             style() {
-                let look = {width: "80px", height: "152px", borderColor: "black"}
+                let look = {width: "72px", height: "137px", borderColor: "black", margin: "0px"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
                 return look
@@ -504,9 +640,9 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a", marginTop: "0px"}},
             style() {
-                let look = {width: "80px", height: "152px", borderColor: "black"}
+                let look = {width: "72px", height: "137px", borderColor: "black", margin: "0px"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
                 return look
@@ -559,9 +695,9 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a", marginTop: "0px"}},
             style() {
-                let look = {width: "80px", height: "152px", borderColor: "black"}
+                let look = {width: "72px", height: "137px", borderColor: "black", margin: "0px"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
                 return look
@@ -613,9 +749,9 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a", marginTop: "0px"}},
             style() {
-                let look = {width: "80px", height: "152px", borderColor: "black"}
+                let look = {width: "72px", height: "137px", borderColor: "black", margin: "0px"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
                 return look
@@ -667,9 +803,9 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a", marginTop: "0px"}},
             style() {
-                let look = {width: "80px", height: "152px", borderColor: "black"}
+                let look = {width: "72px", height: "137px", borderColor: "black", margin: "0px"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
                 return look
@@ -722,9 +858,9 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a", marginTop: "0px"}},
             style() {
-                let look = {width: "80px", height: "152px", borderColor: "black"}
+                let look = {width: "72px", height: "137px", borderColor: "black", margin: "0px"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
                 return look
@@ -777,9 +913,9 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a", marginTop: "0px"}},
             style() {
-                let look = {width: "80px", height: "152px", borderColor: "black"}
+                let look = {width: "72px", height: "137px", borderColor: "black", margin: "0px"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
                 return look
@@ -829,9 +965,9 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a", marginTop: "0px"}},
             style() {
-                let look = {width: "80px", height: "152px", borderColor: "black"}
+                let look = {width: "72px", height: "137px", borderColor: "black", margin: "0px"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
                 return look
@@ -881,9 +1017,9 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a", marginTop: "0px"}},
             style() {
-                let look = {width: "80px", height: "152px", borderColor: "black"}
+                let look = {width: "72px", height: "137px", borderColor: "black", margin: "0px"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
                 return look
@@ -933,9 +1069,9 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a", marginTop: "0px"}},
             style() {
-                let look = {width: "80px", height: "152px", borderColor: "black"}
+                let look = {width: "72px", height: "137px", borderColor: "black", margin: "0px"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
                 return look
@@ -985,9 +1121,9 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a", marginTop: "0px"}},
             style() {
-                let look = {width: "80px", height: "152px", borderColor: "black"}
+                let look = {width: "72px", height: "137px", borderColor: "black", margin: "0px"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
                 return look
@@ -1040,7 +1176,7 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f5f00" : look.backgroundColor = "#3f2f00"
@@ -1095,7 +1231,7 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f5f00" : look.backgroundColor = "#3f2f00"
@@ -1150,7 +1286,7 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f5f00" : look.backgroundColor = "#3f2f00"
@@ -1205,7 +1341,7 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f5f00" : look.backgroundColor = "#3f2f00"
@@ -1259,7 +1395,7 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f5f00" : look.backgroundColor = "#3f2f00"
@@ -1313,7 +1449,7 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f5f00" : look.backgroundColor = "#3f2f00"
@@ -1367,7 +1503,7 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f5f00" : look.backgroundColor = "#3f2f00"
@@ -1421,7 +1557,7 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f5f00" : look.backgroundColor = "#3f2f00"
@@ -1475,7 +1611,7 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f5f00" : look.backgroundColor = "#3f2f00"
@@ -1529,7 +1665,7 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f5f00" : look.backgroundColor = "#3f2f00"
@@ -1583,7 +1719,7 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f5f00" : look.backgroundColor = "#3f2f00"
@@ -1636,7 +1772,7 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f5f00" : look.backgroundColor = "#3f2f00"
@@ -1674,8 +1810,8 @@ addLayer("pu", {
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = player.dt.timeEnergy.pow(0.15).div(2).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
-                if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.1).add(1)
-                if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.05).add(1.5)
+                if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.08).add(1)
+                if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.04).add(1.4)
                 return eff
             },
             // CLICK CODE
@@ -1690,7 +1826,7 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f5f00" : look.backgroundColor = "#3f2f00"
@@ -1744,7 +1880,7 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f5f00" : look.backgroundColor = "#3f2f00"
@@ -1799,7 +1935,7 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#003f7f" : look.backgroundColor = "#00254c"
@@ -1852,7 +1988,7 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#003f7f" : look.backgroundColor = "#00254c"
@@ -1905,7 +2041,7 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#003f7f" : look.backgroundColor = "#00254c"
@@ -1958,7 +2094,7 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#003f7f" : look.backgroundColor = "#00254c"
@@ -2013,7 +2149,7 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#003f7f" : look.backgroundColor = "#00254c"
@@ -2067,7 +2203,7 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#003f7f" : look.backgroundColor = "#00254c"
@@ -2120,7 +2256,7 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#003f7f" : look.backgroundColor = "#00254c"
@@ -2175,10 +2311,10 @@ addLayer("pu", {
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
-            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            barStyle() { return {backgroundColor: "#22803a"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
-                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#003f7f" : look.backgroundColor = "#00254c"
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#AB2042" : look.backgroundColor = "#5C173D"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
                 return look
             }
@@ -2186,105 +2322,111 @@ addLayer("pu", {
     },
     microtabs: {
         stuff: {
-            "Selection": {
-                buttonStyle() { return { border: "2px solid #384166", borderRadius: "10px" } },
-                unlocked() { return true },
-                content: [
-                    ["style-column", [
-                        ["style-column", [
-                            ["style-column", [
-                                ["raw-html", () => {
-                                    if (player.pu.storedSelections.lte(0)) return "No Punchcard Selected."
-                                    let str = run(layers.pu.levelables[player.pu.selectedPunchcards[player.pu.selectionIndex]].title, layers.pu.levelables[player.pu.selectedPunchcards[player.pu.selectionIndex]])
-                                    return str.substring(0, str.indexOf("<small style='color:gray'>"))
-                                }, {color: "white", fontSize: "24px !important", fontFamily: "monospace"}],
-                            ], {width: "500px", height: "47px", borderBottom: "3px solid white"}],
-                            ["style-column", [
-                                ["raw-html", () => {
-                                    if (player.pu.storedSelections.lte(0)) return ""
-                                    let str = run(layers.pu.levelables[player.pu.selectedPunchcards[player.pu.selectionIndex]].description, layers.pu.levelables[player.pu.selectedPunchcards[player.pu.selectionIndex]])
-                                    str = str.substring(str.indexOf("<u>Active</u><br>")+17)
-                                    return str.substring(0, str.indexOf("</span>"))
-                                }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                            ], {width: "525px", height: "60px"}],
-                            ["clickable", 10],
-                            ["blank", "10px"],
-                        ], {width: "550px", height: "170px"}],
-                        ["style-column", [
-                            ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14],]],
-                        ], {width: "550px", height: "150px", backgroundColor: "#0e1019"}],
-                        ["style-column", [
-                            ["raw-html", () => {return "Punchcard Selections: " + formatWhole(player.pu.storedSelections)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                            ["raw-html", () => { return "Gain punchcard selections on universe resets."}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                        ], {width: "550px", height: "70px"}],
-                    ], () => {return {returnwidth: "550px", height: "390px", border: "3px solid white", backgroundColor: "#1c2033"}}],
-                                        ["style-column", [
-                    ["style-column", [
-                            ["raw-html", () => { return "Legendary Punchcards<br><small>(Costs 5 Punchcard Selections)"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                        ], {width: "550px", height: "50px"}],
-                        ["style-column", [
-                            ["row", [["clickable", 101],]],
-                        ], {width: "550px", height: "150px", backgroundColor: "#33011bff"}],
-                    ], () => {return player.pu.legendarySelectionActive ? {returnwidth: "550px", height: "200px", border: "3px solid white", backgroundColor: "#330d22ff"} : {display: "none !important"}}],
-                ]
-            },
             "Collection": {
                 buttonStyle() { return { border: "2px solid #384166", borderRadius: "10px" } },
                 unlocked() { return true },
                 content: [
                     ["style-column", [
+                        // TOP ROW
+                        ["style-row", [
+                            ["style-row", [
+                                ["raw-html", () => {return "You have <h3>" + formatWhole(player.sma.starmetalAlloy) + "</h3> starmetal alloy." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ], () => {
+                                let look = {background: "radial-gradient(circle, black 60%, #13292f 70%, #54265e 80%, #8d3947 90%, #e6eb57 110%)", borderRadius: "10px 10px 0px 0px", width: "800px", height: "50px", display: player.pu.collectionTypeTab != 1 ? "" : "none !important"}
+                                return look
+                            }],
+                            ["style-row", [
+                                ["raw-html", () => {return "You have <h3>" + formatWhole(player.sma.eclipseShards) + "</h3> eclipse shards." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ], () => {
+                                let look = {background: "radial-gradient(circle, #222 80%, #664900 95%, #b29c47 110%)", borderRadius: "10px 10px 0px 0px", width: "800px", height: "50px", display: player.pu.collectionTypeTab == 1 ? "" : "none !important"}
+                                return look
+                            }],
+                        ], {border: "3px solid black", borderRadius: "13px 13px 0px 0px", width: "800px", height: "50px"}],
+                        ["blank", "3px"],
+                        // MIDDLE ROW
+                        ["style-row", [
+                            ["style-column", [
+                                ["hoverless-clickable", 1],
+                                ["hoverless-clickable", 2],
+                                ["hoverless-clickable", 3],
+                                ["hoverless-clickable", 4],
+                            ], {width: "75px", height: "300px"}],
+                            ["style-column", [], {background: "black", width: "3px", height: "300px"}],
+                            ["style-column", [
+                                ["style-column", [
+                                    ["raw-html", () => {return "Common" }, {color: "black", fontSize: "18px", fontFamily: "monospace"}],
+                                ], {transform: "rotate(-90deg) translateY(-19px)", position: "relative"}],
+                            ], {background: "#cacaca", width: "22px", height: "300px"}],
+                            ["style-column", [], {background: "black", width: "3px", height: "300px"}],
+                            ["always-scroll-row", [
+                                ["style-column", [
+                                    ["hoverless-levelable", 101],
+                                    ["blank", "2px"],
+                                    ["hoverless-levelable", 102],
+                                ], {marginLeft: "2px"}],
+                                ["style-column", [
+                                    ["hoverless-levelable", 103],
+                                    ["blank", "2px"],
+                                    ["hoverless-levelable", 104],
+                                ], {marginLeft: "2px"}],
+                                ["style-column", [
+                                    ["hoverless-levelable", 105],
+                                    ["blank", "2px"],
+                                    ["hoverless-levelable", 106],
+                                ], {marginLeft: "2px"}],
+                                ["style-column", [
+                                    ["hoverless-levelable", 107],
+                                    ["blank", "2px"],
+                                    ["hoverless-levelable", 108],
+                                ], {marginLeft: "2px"}],
+                                ["style-column", [
+                                    ["hoverless-levelable", 109],
+                                    ["blank", "2px"],
+                                    ["hoverless-levelable", 110],
+                                ], {marginLeft: "2px"}],
+                                ["style-column", [
+                                    ["hoverless-levelable", 111],
+                                    ["blank", "2px"],
+                                    ["hoverless-levelable", 112],
+                                ], {marginLeft: "2px"}],
+                                ["style-column", [
+                                    ["hoverless-levelable", 113],
+                                    ["blank", "2px"],
+                                    ["hoverless-levelable", 101],
+                                ], {marginLeft: "2px"}],
+                                ["style-column", [
+                                    ["hoverless-levelable", 102],
+                                    ["blank", "2px"],
+                                    ["hoverless-levelable", 103],
+                                ], {marginLeft: "2px"}],
+                                ["style-column", [
+                                ], {width: "2px", height: "3px"}],
+                            ], {background: "repeating-linear-gradient(-45deg, #cacaca 0 15px, #bababa 0 30px)", width: "594px", height: "300px"}],
+                            ["style-column", [], {background: "black", width: "3px", height: "300px"}],
+                            ["style-column", [
+                                ["hoverless-clickable", 11],
+                                ["hoverless-clickable", 12],
+                                ["hoverless-clickable", 13],
+                            ], {width: "100px", height: "300px"}],
+                        ], {background: "gray", border: "3px solid black", borderRadius: "0px 0px 0px 0px", width: "800px", height: "300px"}],
+                        ["blank", "3px"],
+                        // BOTTOM ROW
                         ["style-column", [
-                            ["levelable-display", [
-                                ["clickable", 1],
-                            ]],
-                        ], {width: "550px", height: "175px", borderBottom: "3px solid white"}],
-                        ["always-scroll-column", [
-                            ["style-column", [
-                                ["raw-html", () => {return hasUpgrade("sma", 17) ? "Common (65%)" : "Common (75%)"}, {color: "#7f7f7f", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "535px", height: "40px", backgroundColor: "#323232", borderBottom: "3px solid #7f7f7f", userSelect: "none"}],
-                            ["style-row", [
-                                ["levelable", 101], ["levelable", 102], ["levelable", 103], ["levelable", 104],
-                                ["levelable", 105], ["levelable", 106], ["levelable", 107], ["levelable", 108],
-                                ["levelable", 109], ["levelable", 110], ["levelable", 111], ["levelable", 112],
-                                ["levelable", 113],
-                            ], {width: "525px", backgroundColor: "#191919", padding: "5px"}],
 
-                            ["style-column", [
-                                ["raw-html", "Rare (25%)", {color: "#7f5f00", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "535px", height: "40px", backgroundColor: "#322600", borderTop: "3px solid #7f5f00", borderBottom: "3px solid #7f5f00", userSelect: "none"}],
-                            ["style-row", [
-                                ["levelable", 201], ["levelable", 202], ["levelable", 203], ["levelable", 204],
-                                ["levelable", 205], ["levelable", 206], ["levelable", 207], ["levelable", 208],
-                                ["levelable", 209], ["levelable", 210], ["levelable", 211], ["levelable", 212],
-                                ["levelable", 213], ["levelable", 214],
-                            ], () => {return hasUpgrade("sma", 17) ? {width: "525px", backgroundColor: "#191300", padding: "5px"} : {width: "525px", backgroundColor: "#191300", padding: "5px", borderBottom: "3px solid #7f5f00"}}],
-
-                            ["style-column", [
-                                ["raw-html", "Epic (10%)", {color: "#003f7f", fontSize: "20px", fontFamily: "monospace"}],
-                            ], () => {return hasUpgrade("sma", 17) ? {width: "535px", height: "40px", backgroundColor: "#001932", borderTop: "3px solid #003f7f", borderBottom: "3px solid #003f7f", userSelect: "none"} : {display: "none !important"}}],
-                            ["style-row", [
-                                ["levelable", 301], ["levelable", 302], ["levelable", 303], ["levelable", 304],  
-                                ["levelable", 305], ["levelable", 306], ["levelable", 307],
-                            ], () => {return hasUpgrade("sma", 17) ? {width: "525px", backgroundColor: "#000c19", padding: "5px"} : {display: "none !important"}}],
-                            ["style-column", [
-                                ["raw-html", "Legendary (4%) <br><h6>[Takes priority over other card rarities]", {color: "#AB2042", fontSize: "20px", fontFamily: "monospace"}],
-                            ], () => {return hasUpgrade("le", 201) ? {width: "535px", height: "40px", backgroundColor: "#5C173D", borderTop: "3px solid #AB2042", borderBottom: "3px solid #AB2042", userSelect: "none"} : {display: "none !important"}}],
-                            ["style-row", [
-                                ["levelable", 401],
-                            ], () => {return hasUpgrade("le", 201) ? {width: "525px", backgroundColor: "#200815ff", padding: "5px"} : {display: "none !important"}}],
-                        ], {width: "550px", height: "522px"}],
-                    ], {width: "550px", height: "700px", border: "3px solid white", backgroundColor: "#1c2033"}],
+                        ], {background: "#0000007f", border: "3px solid black", borderRadius: "0px 0px 13px 13px", width: "800px", height: "300px"}],
+                    ], {background: "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)", borderRadius: "16px", padding: "3px"}],
                 ]
             },
-        },
+            "Selection": {
+                buttonStyle() { return { border: "2px solid #384166", borderRadius: "10px" } },
+                unlocked() { return true },
+                content: [
+                ]
+            },
+        }
     },
     tabFormat: [
         ["blank", "25px"],
-        ["style-row", [
-            ["hoverless-clickable", 2],
-            ["style-row", [], () => {return player.sma.inStarmetalChallenge ? {width: "3px", height: "40px", backgroundColor: "white"} : {display: "none !important"}}],
-            ["hoverless-clickable", 3],
-        ], {width: "550px", height: "40px", borderTop: "3px solid white", borderLeft: "3px solid white", borderRight: "3px solid white"}],
         ["buttonless-microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],

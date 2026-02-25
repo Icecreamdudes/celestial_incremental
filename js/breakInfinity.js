@@ -271,7 +271,7 @@
         },
         102: {
             title() { return "<h3>" + (player.bi.interspaceConditions[1] ? "<h3>SUFFERED" : "<h3>DEPOSIT SINGULARITIES") },
-            canClick() { return player.s.singularities.gte(1e6) && !player.bi.interspaceConditions[1] },
+            canClick() { return player.s.singularities.gte(2e5) && !player.bi.interspaceConditions[1] },
             unlocked() { return true },
             onClick() {
                 player.bi.interspaceConditions[1] = true
@@ -323,7 +323,7 @@
         },
         104: {
             title() { return "<h3>" + (player.bi.interspaceConditions[3] ? "<h3>TORTURED" : "<h3>DEPOSIT CORE FRAGMENTS") },
-            canClick() { return player.cof.coreFragments[3].gte(50000) && !player.bi.interspaceConditions[3] },
+            canClick() { return player.cof.coreFragments[3].gte(1e6) && !player.bi.interspaceConditions[3] },
             unlocked() { return true },
             onClick() {
                 player.bi.interspaceConditions[3] = true
@@ -867,7 +867,7 @@
                             ["style-column", [
                                 ["raw-html", "δ", {color: "#502080", fontSize: "125px", fontFamily: "monospace"}],
                                 ["style-row", [
-                                    ["raw-html", () => {return format(player.cof.coreFragments[3]) + " / 50,000<br>Paradox Core Fragments"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                    ["raw-html", () => {return format(player.cof.coreFragments[3]) + " / 200,000<br>Paradox Core Fragments"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                 ], {background: "#502080", borderRadius: "10px 10px 0px 0px", width: "250px", height:"50px"}],
                                 ["blank", "3px", {width: "3px"}],
                                 ["clickable", 104],

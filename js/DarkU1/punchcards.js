@@ -1674,8 +1674,8 @@ addLayer("pu", {
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = player.dt.timeEnergy.pow(0.15).div(2).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
-                if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.1).add(1)
-                if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.05).add(1.5)
+                if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.08).add(1)
+                if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.04).add(1.4)
                 return eff
             },
             // CLICK CODE

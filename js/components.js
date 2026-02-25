@@ -847,6 +847,32 @@ function loadVue() {
 		`
 	})
 
+	Vue.component('hoverless-levelable', {
+		props: ['layer', 'data'],
+		template: `
+		<div v-if="tmp[layer].levelables && tmp[layer].levelables[data]!== undefined && tmp[layer].levelables[data].unlocked" style="display: grid">
+			<button v-bind:class="{ levelableHolder: true, tooltipBox: true, canHoverless: tmp[layer].levelables[data].canClick, locked: !tmp[layer].levelables[data].canClick}"
+			v-bind:style="[{'background-color': tmp[layer].color}, run(layers[layer].levelables[data].style, layers[layer].levelables[data])]"
+			v-on:click="clickLevelable(layer, data)" :id='"levelable-" + layer + "-" + data'>
+				<div class="levelableTop">
+					<img v-bind:src="run(layers[layer].levelables[data].image, layers[layer].levelables[data])" class="levelableImg"></img>
+					<div v-bind:class="{levelableText: true, hide: player[layer].levelables[data][0].eq(0)&&player[layer].levelables[data][1].eq(0)&&!(player[layer].levelables[data][2].gt(0) && tmp[layer].levelables[data].levelLimit.neq(Infinity))}">
+						<span v-html="tmp[layer].levelables[data].levelLimit.eq(Infinity) ? 'Lv ' + formatShortestWhole(player[layer].levelables[data][0]) : 'Lv ' + formatShortestWhole(player[layer].levelables[data][0])+'/'+formatShortestWhole(tmp[layer].levelables[data].levelLimit)"></span>
+						<span style='color:#a0b2c6' v-if="tmp[layer].levelables[data].levelLimit.gt(10) && layers[layer].levelableAscend && player[layer].levelables[data][2].gt(0)" v-html="'<br>★ ' + formatShortestWhole(player[layer].levelables[data][2])"></span>
+					</div>
+				</div>
+				<div class="levelableBottom">
+					<div v-bind:class="{levelableBarText: true, hide: !tmp[layer].levelables[data].barShown}">
+						<span v-html="player[layer].levelables[data][0].gte(tmp[layer].levelables[data].levelLimit) ? formatShortestWhole(tmp[layer].levelables[data].currency) : formatShortestWhole(tmp[layer].levelables[data].currency)+'/'+formatShortestWhole(tmp[layer].levelables[data].xpReq)"></span>
+					</div>
+					<div v-bind:class="{levelableBarProgress: true, hide: !tmp[layer].levelables[data].barShown}" v-bind:style="[{'width': player[layer].levelables[data][0].gte(tmp[layer].levelables[data].levelLimit) ? '0%' : toNumber(tmp[layer].levelables[data].currency.div(tmp[layer].levelables[data].xpReq).mul(100))+'%'}, tmp[layer].levelables[data].barStyle]"></div>
+				</div>
+				<tooltip v-if="layers[layer].levelables[data].tooltip" :text="run(layers[layer].levelables[data].tooltip, layers[layer].levelables[data])"></tooltip>
+			</button>
+		</div>
+		`
+	})
+
 	Vue.component('levelable-display', {
 		props: ['layer', 'data'],
 		computed: {

@@ -24,7 +24,6 @@ addLayer("ktb", {
     color: "white",
 
     update(delta) {
-        let onepersec = new Decimal(1)
 
         // Start of Alchemical Symbol Gain
         player.ktb.alchemicalSymbolsGain = player.points.add(1).log10(player.points).div(100000)
@@ -34,7 +33,9 @@ addLayer("ktb", {
 
         // Start of KTB Multiplier Modifiers ?
         if (hasUpgrade("ktb", 201)) player.ktb.alchemicalSymbolsGain = player.ktb.alchemicalSymbolsGain.mul(2)
-        if (hasUpgrade("ktb", 202)) player.ktb.alchemicalSymbolsGain = player.ktb.alchemicalSymbolsGain.mul(upgradeEffect("ktb", 202))
+        if (hasUpgrade("ktb", 202)) player.ktb.alchemicalSymbolsGain = player.ktb.alchemicalSymbolsGain.mul(1)
+        if (hasUpgrade("ktb", 203)) player.ktb.alchemicalSymbolsGain = player.ktb.alchemicalSymbolsGain.mul(1)
+
     },
 
     // Alchemical Symbol Reset mechanism
@@ -161,7 +162,7 @@ addLayer("ktb", {
         201: {
             title: "Doubled Knowledge",
             unlocked() {return true},
-            description: "Double Alchemical Symbol gain.",
+            description: "Double AlSy gain.",
             cost: new Decimal(1),
             currencyLocation() {return player.ktb},
             currencyDisplayName: "Alchemical Symbols",
@@ -172,16 +173,16 @@ addLayer("ktb", {
                 return look
             },
         },
-        202: {
+        202: { // effect not fixed
             title: "Powered Knowledge",
             unlocked() {return true},
-            description: "Current Power boosts Alchemical Symbol gain.",
+            description: "Boosts AlSy gain based on current power.",
             cost: new Decimal(1),
             currencyLocation() {return player.ktb},
             currencyDisplayName: "Alchemical Symbols",
             currencyInternalName: "alchemicalSymbols",
             effect() {
-                return player.ktb.alchemicalSymbolsGain.add(1).log10(player.hpw.power).add(1)
+                return player.ktb.alchemicalSymbolsGain.add(1).mul(Decimal.log10(player.hpw.power)).div(10)
             },
             effectDisplay() {
                 return "x" + formatSimple(upgradeEffect(this.layer, this.id), 2)
@@ -191,16 +192,21 @@ addLayer("ktb", {
                 hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(0deg, #6b4423, #9b541a)"
                 return look
             },
-            // please add here the effect, with formula Decimal.log(X).div(100).
         },
-        203: {
-            title: "Spatial Knowledge",
+        203: { // effect not fixed
+            title: "Planetary Knowledge",
             unlocked() {return true},
-            description: "Current Space Dust boosts Alchemical Symbol gain.",
+            description: "Boosts AlSy gain based on planets.",
             cost: new Decimal(1),
             currencyLocation() {return player.ktb},
             currencyDisplayName: "Alchemical Symbols",
             currencyInternalName: "alchemicalSymbols",
+                        effect() {
+                return player.ktb.alchemicalSymbolsGain.add(1).add(Decimal.log10(player.pl.planets)).div(5)
+            },
+            effectDisplay() {
+                return "x" + formatSimple(upgradeEffect(this.layer, this.id), 2)
+            },
             style() {
                 let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(0deg, #6b4423, #9b541a)"
@@ -209,9 +215,9 @@ addLayer("ktb", {
             // please add here the effect
         },
         204: {
-            title: "Temporal Knowledge",
+            title: "Eternal Knowledge",
             unlocked() {return true},
-            description: "Current Temporal Dust boosts Alchemical Symbol gain.",
+            description: "Boosts AlSy gain based on CB Level.",
             cost: new Decimal(1),
             currencyLocation() {return player.ktb},
             currencyDisplayName: "Alchemical Symbols",
@@ -226,7 +232,7 @@ addLayer("ktb", {
         205: {
             title: "Accumulated Knowledge",
             unlocked() {return true},
-            description: "Current Alchemical Symbol gain boosts itself.",
+            description: "Boosts AlSy gain based on itself.",
             cost: new Decimal(1),
             currencyLocation() {return player.ktb},
             currencyDisplayName: "Alchemical Symbols",
@@ -241,7 +247,7 @@ addLayer("ktb", {
         206: {
             title: "Novel Writing",
             unlocked() {return true},
-            description: "Improves the Alchemical Symbol gain formula and unlocks the Tome Library.",
+            description: "Improves the AlSy gain formula and unlocks the Tome Library.",
             cost: new Decimal(1),
             currencyLocation() {return player.ktb},
             currencyDisplayName: "Alchemical Symbols",

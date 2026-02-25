@@ -261,6 +261,9 @@ function updateStyles() {
 		case "leg":
 			layerBG = "#eed200"
 			break;
+		case "ktb":
+			layerBG = "linear-gradient(0deg, #140d07, #2c1807)"
+			break;
 		default:
 			layerBG = "var(--layerBackground)"
 			break;

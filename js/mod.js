@@ -25,6 +25,7 @@
 		"Hive/honey.js", "Hive/wax.js", "Hive/aleph.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js", "DarkU1/blood.js", "Zar/zar.js", "Zar/coinFlip.js",
  		"Zar/wheelOfFortune.js", "Check Back/singularityPet.js", "Zar/slotMachine.js", "Zar/checkBackShrine.js", "Zar/cards.js", "Cantepocalypse/enhance.js",
+		"Alchemy/knowledgeTable.js", "Alchemy/tomeLibrary.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 	],
@@ -541,9 +542,10 @@ function updateStyles() {
 	    }
 	} else {
 		const grid = document.getElementById("grid-bg");
-    	if (grid) grid.remove();
+    	if (grid) {grid.remove();
+		}
 	}
-
+	
 	// ===------   SIDE BACKGROUND   ------=== //
 	let sideBG = ""
 
@@ -1456,7 +1458,8 @@ var doNotCallTheseFunctionsEveryTick = [
 	"startCutscene38", "startCutscene39", "cookieClick", "generateFlower", "generateMult", "flowerClick",
 	"selectCelestialites", "petDeath", "celestialiteDeath", "petAbility", "celestialiteAbility",
 	"arriveAtStar", "spaceEnergyReset", "coinFlip", "randomizeSegments", "spinWheel", "spinSlots", "evaluateRewards",
-	"slotReset"
+	"slotReset",
+	"alchemicalSymbolsReset",
 ]
 
 function getStartPoints(){

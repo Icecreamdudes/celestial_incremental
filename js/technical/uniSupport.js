@@ -292,10 +292,10 @@ addUniverse("DS", {
     uniShown() { return player.d.diceSpaceUnlocked && !player.sma.inStarmetalChallenge }, //make it something
     disabled() {return false}
 })
-addUniverse("UFS", {
+addUniverse("LU", {
 	name: "Louki's Universe<br>The Alchemical World",
 	symbol: "🝪",
-	tree: [["ktb", "btb"], ["aal"]],
+	tree: [["ktb", "tl"]],
 	nodeStyle() {
 		let style = {
 			background: "linear-gradient(to bottom, #8b609c, magenta, pink)",
@@ -303,7 +303,7 @@ addUniverse("UFS", {
             borderImage: "linear-gradient(to bottom, chartreuse, #00ff9d) 1",
             boxShadow: "0 0 3px 1px black inset",
         }
-		if (player.universe=="UFS") {
+		if (player.universe=="LU") {
 			style.outline = "2px solid white"
 			style.outlineOffset = "-2px"
 			style.borderWidth = "5px"

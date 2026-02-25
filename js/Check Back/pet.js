@@ -4695,6 +4695,53 @@ addLayer("pet", {
                 return look
             }
         },
+        2203: {
+            // extreme demon stuff
+            image() { return this.canClick() ? "resources/Pets/extremeDemonEvoPet.png" : "resources/secret.png"},
+            title() { return "Extreme Demon" },
+            lore() { return "The lobotomy within the already insane face has magnified so much that it has turned into an absolute bloodbath. You should probably stay away from it..." },
+            description() {
+                return "Unlock the treasure room.<br>" +
+                    "+" + format(this.effect()[0]) + " effective insane face levels.<br>" +
+                    "x" + format(this.effect()[1]) + " to orbs.<br>"
+            },
+            levelLimit() { return new Decimal(10) },
+            levelTooltip() { return "Costs Asc Shards." },
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id)
+                return [
+                    amt.mul(2), // Effective Insane Face Levels
+                    amt.div(4).plus(1), // Orbs
+                ] 
+            },
+            evoCan() {return true},
+            evoTooltip() {return ""},
+            evoClick() {
+                // player.tab = "ev14"
+            },
+            // CLICK CODE
+            unlocked() { return player.ir.iriditeDefeated},
+            canClick() { return getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { player.cbs.ascensionShards = player.cbs.ascensionShards.sub(amt) },
+            canAfford() { return player.cbs.ascensionShards.gte(this.xpReq()) },
+            xpReq() { return getLevelableAmount(this.layer, this.id).pow(0.5).floor() },
+            currency() { return player.cbs.ascensionShards },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barShown() { return this.canClick() },
+            barStyle() { return {backgroundColor: "#80ffff"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#200000" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }
+        },
     },
     refreshBanner() {
         player.pet.banners[0].id = 101 + getRandomInt(8)

@@ -720,7 +720,7 @@
                 player.ev2.orbs = player.ev2.orbs.sub(25)
 
                 player.ev.evolutionsUnlocked[14] = true
-                // setLevelableAmount("pet", 2203, new Decimal(1))
+                setLevelableAmount("pet", 2203, new Decimal(1))
             }
         },
 

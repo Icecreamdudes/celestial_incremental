@@ -4127,9 +4127,10 @@ addLayer("pet", {
             },
             levelLimit() { return new Decimal(10) },
             effect() { 
+                let amt = getLevelableAmount(this.layer, this.id).add(levelableEffect("pet", 2203)[0])
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(0.02).add(1), // Pet Point Button Cooldown
-                    getLevelableAmount(this.layer, this.id).mul(0.03).add(1), // XPBoost
+                    amt.mul(0.02).add(1), // Pet Point Button Cooldown
+                    amt.mul(0.03).add(1), // XPBoost
                 ]
             },
             levelTooltip() { return "Costs Evo Shards." },
@@ -4604,7 +4605,7 @@ addLayer("pet", {
             evoCan() {return true},
             evoTooltip() {return ""},
             evoClick() {
-                // player.tab = "ev14"
+                player.tab = "ev14"
             },
             // CLICK CODE
             unlocked() { return player.ir.iriditeDefeated},

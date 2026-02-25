@@ -2,7 +2,7 @@
 BHS.none = {
     nameCap: "None",
     nameLow: "none",
-    music: "music/celestialites.mp3",
+    music: "music/enteringBlackHeart.mp3",
     cooldown: new Decimal(0),
     comboLimit: 25,
     comboScaling: 1.015,
@@ -13,7 +13,7 @@ BHS.none = {
 BHS.template = {
     nameCap: "Stage template",
     nameLow: "stage template",
-    music: "music/celestialites.mp3",
+    music: "music/enteringBlackHeart.mp3",
     cooldown: new Decimal(300),
     comboLimit: 500,
     comboScaling: 1.015,
@@ -497,29 +497,10 @@ addLayer("bh", {
             "geroa_defenseSatellites": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
         },
 
-        //Skip Timers
-        timers: {
-            0: {
-                current: new Decimal(0),
-                max: new Decimal(30),
-                base: new Decimal(5),
-            },
-            1: {
-                current: new Decimal(0),
-                max: new Decimal(90),
-                base: new Decimal(10),
-            },
-            2: {
-                current: new Decimal(0),
-                max: new Decimal(240),
-                base: new Decimal(15),
-            },
-            3: {
-                current: new Decimal(0),
-                max: new Decimal(600),
-                base: new Decimal(20),
-            },
-        },
+        //Stagnant Timer
+        stagnantTimer: new Decimal(0),
+        stagnantTimerMax: new Decimal(30),
+        stagnantAuto: false,
 
         // General Variables
         autoEnter: false,
@@ -687,6 +668,9 @@ addLayer("bh", {
 
                     if (player.bh.celestialite.stun[1].gt(0)) {
                         player.bh.celestialite.stun[1] = player.bh.celestialite.stun[1].sub(delta)
+                        if (player.bh.celestialite.stun.length >= 3 && player.bh.celestialite.stun[1].lte(0)) {
+                            bhAction(3, player.bh.celestialite.stun[2], false, 1, true)
+                        }
                     }
                 }
 
@@ -812,6 +796,9 @@ addLayer("bh", {
 
                     if (player.bh.characters[i].stun[1].gt(0)) {
                         player.bh.characters[i].stun[1] = player.bh.characters[i].stun[1].sub(delta)
+                        if (player.bh.characters[i].stun.length >= 3 && player.bh.characters[i].stun[1].lte(0)) {
+                            bhAction(i, player.bh.characters[i].stun[2], false, 1, true)
+                        }
                     }
                 }
 
@@ -916,7 +903,7 @@ addLayer("bh", {
             }
             
             // Spawn Celestialite
-            if (!player.bh.bhPause || BHS[player.bh.currentStage].timeStagnation) {
+            if (!player.bh.bulletHell && (!player.bh.bhPause || BHS[player.bh.currentStage].timeStagnation)) {
                 if (player.bh.respawnTimer.gt(0)) player.bh.respawnTimer = player.bh.respawnTimer.sub(delta)
                 if (player.bh.celestialite.id == "none" && player.bh.respawnTimer.lte(0)) {
                     celestialiteSpawn()
@@ -1047,6 +1034,7 @@ addLayer("bh", {
         // =-- AGILITY STUFF --= //
         let agilityBase = new Decimal(1)
         agilityBase = agilityBase.add(buyableEffect("depth3", 1))
+        agilityBase = agilityBase.add(player.darkTemple.agiMult)
 
         let agilityAdd = new Decimal(0)
         agilityAdd = agilityAdd.add(player.darkTemple.agiAdd)
@@ -1195,9 +1183,13 @@ addLayer("bh", {
         }
 
         // Stagnant Timers
-        if (player.bh.currentStage != "none") {
-            for (let i in player.bh.timers) {
-                player.bh.timers[i].current = player.bh.timers[i].current.sub(delta)
+        if (player.bh.currentStage != "none" && !player.bh.bulletHell) {
+            player.bh.stagnantTimer = player.bh.stagnantTimer.sub(delta)
+            if (BHS[player.bh.currentStage].timeStagnation && player.bh.stagnantAuto) {
+                if (player.bh.stagnantTimer.gte(Decimal.mul(player.bh.stagnantTimer, 2))) {
+                    stagnantUpdate(5)
+                    player.bh.stagnantTimer = player.bh.stagnantTimerMax
+                }
             }
         }
     },
@@ -1360,6 +1352,38 @@ addLayer("bh", {
                 }
             },
             style: {width: "250px", minHeight: "40px", color: "black", border: "3px solid rgba(0,0,0,0.5)", backgroundColor: "white", borderRadius: "15px"},
+        },
+        "Stagnant-Timer": {
+            title() {return player.bh.stagnantTimer.gt(0) ? "<h3>Check back in <br>" + formatTime(player.bh.stagnantTimer) + "." : "<h3>Skip forward by <br>5 Seconds"},
+            canClick() {return player.bh.stagnantTimer.lte(0)},
+            unlocked() {return BHS[player.bh.currentStage].timeStagnation},
+            onClick() {
+                stagnantUpdate(5)
+                player.bh.stagnantTimer = player.bh.stagnantTimerMax
+            },
+            style() {
+                let look = {width: "196px", minHeight: "46px", fontSize: "9px", borderRadius: "10px", border: "4px solid #021124"}
+                this.canClick() ? look.background = "linear-gradient(to right, #094394, #052653)" : look.background = "#bf8f8f",
+                this.canClick() ? look.color = "#ccd8ff" : look.color = "black"
+                return look
+            },
+        },
+        "Stagnant-Auto": {
+            title: "Auto<br>Skip",
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                if (player.bh.stagnantAuto) {
+                    player.bh.stagnantAuto = false
+                } else {
+                    player.bh.stagnantAuto = true
+                }
+            },
+            style() {
+                let look = {width: "46px", minHeight: "46px", background: "linear-gradient(to right, #094394, #052653)", color: "#ccd8ff", fontSize: "8px", border: "4px solid #021124", borderRadius: "10px", marginLeft: "-4px"}
+                if (!player.bh.stagnantAuto) look.filter = "brightness(50%)"
+                return look
+            },
         },
         "Auto-Enter": {
             title() {return player.bh.autoEnter ? "<div style='margin-bottom:-20px;line-height:1'>Auto Enter<br><small>[" + BHS[player.bh.autoEnter].nameCap + "]<br>[" + formatTime(Decimal.sub(30, player.bh.autoCooldown)) + "]</small></div>" : "Auto Enter<br><small>[Disabled]"},
@@ -2450,66 +2474,66 @@ addLayer("bh", {
             },
         },
         "Char-Kres": {
-            title() {return "<img src='" + BHP["kres"].icon + "'style='width:100px;height:100px;margin-left:-2px;margin-bottom:-4px'></img>"},
+            title() {return "<img src='" + BHP["kres"].icon + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
             canClick: true,
             unlocked: true,
             onClick() {
                 player.bh.characterSelection = "kres"
             },
             style() {
-                let look = {width: "100px", minHeight: "100px", color: "white", background: "transparent", padding: "0", borderRadius: "0", margin: "2px"}
+                let look = {width: "90px", minHeight: "90px", color: "white", background: "transparent", padding: "0", borderRadius: "0", margin: "2px"}
                 if (player.bh.characterData.kres.selected) look.filter = "brightness(50%)"
                 return look
             },
         },
         "Char-Nav": {
-            title() {return "<img src='" + BHP["nav"].icon + "'style='width:100px;height:100px;margin-left:-2px;margin-bottom:-4px'></img>"},
+            title() {return "<img src='" + BHP["nav"].icon + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
             canClick: true,
             unlocked: true,
             onClick() {
                 player.bh.characterSelection = "nav"
             },
             style() {
-                let look = {width: "100px", minHeight: "100px", color: "white", background: "transparent", padding: "0", borderRadius: "0", margin: "2px"}
+                let look = {width: "90px", minHeight: "90px", color: "white", background: "transparent", padding: "0", borderRadius: "0", margin: "2px"}
                 if (player.bh.characterData.nav.selected) look.filter = "brightness(50%)"
                 return look
             },
         },
         "Char-Sel": {
-            title() {return "<img src='" + BHP["sel"].icon + "'style='width:100px;height:100px;margin-left:-2px;margin-bottom:-4px'></img>"},
+            title() {return "<img src='" + BHP["sel"].icon + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
             canClick: true,
             unlocked: true,
             onClick() {
                 player.bh.characterSelection = "sel"
             },
             style() {
-                let look = {width: "100px", minHeight: "100px", color: "white", background: "transparent", padding: "0", borderRadius: "0", margin: "2px"}
+                let look = {width: "90px", minHeight: "90px", color: "white", background: "transparent", padding: "0", borderRadius: "0", margin: "2px"}
                 if (player.bh.characterData.sel.selected) look.filter = "brightness(50%)"
                 return look
             },
         },
         "Char-Eclipse": {
-            title() {return "<img src='" + BHP["eclipse"].icon + "'style='width:100px;height:100px;margin-left:-2px;margin-bottom:-4px'></img>"},
+            title() {return "<img src='" + BHP["eclipse"].icon + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
             canClick: true,
             unlocked() {return getLevelableAmount("pet", 501).gt(0)},
             onClick() {
                 player.bh.characterSelection = "eclipse"
             },
             style() {
-                let look = {width: "100px", minHeight: "100px", color: "white", background: "transparent", padding: "0", borderRadius: "0", margin: "2px"}
+                let look = {width: "90px", minHeight: "90px", color: "white", background: "transparent", padding: "0", borderRadius: "0", margin: "2px"}
                 if (player.bh.characterData.eclipse.selected) look.filter = "brightness(50%)"
                 return look
             },
         },
         "Char-Geroa": {
-            title() {return "<img src='" + BHP["geroa"].icon + "'style='width:100px;height:100px;margin-left:-2px;margin-bottom:-4px'></img>"},
+            title() {return "<img src='" + BHP["geroa"].icon + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
             canClick: true,
             unlocked() {return getLevelableAmount("pet", 502).gt(0)},
             onClick() {
                 player.bh.characterSelection = "geroa"
             },
             style() {
-                let look = {width: "100px", minHeight: "100px", color: "white", background: "transparent", padding: "0", borderRadius: "0", margin: "2px"}
+                let look = {width: "90px", minHeight: "90px", color: "white", background: "transparent", padding: "0", borderRadius: "0", margin: "2px"}
                 if (player.bh.characterData.geroa.selected) look.filter = "brightness(50%)"
                 return look
             },
@@ -2627,66 +2651,6 @@ addLayer("bh", {
             style() {
                 let look = {width: "77px", minHeight: "40px", color: "var(--textColor)", fontSize: "9px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0"}
                 this.canClick() ? look.backgroundColor = "var(--miscButtonHover)" : look.backgroundColor = "var(--miscButtonDisable)"
-                return look
-            },
-        },
-        "Stagnant-Timer-0": {
-            title() {return player.bh.timers[0].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.bh.timers[0].current) + "." : "<h3>Skip forward by <br>" + formatTime(player.bh.timers[0].base)},
-            canClick() {return player.bh.timers[0].current.lte(0)},
-            unlocked: true,
-            onClick() {
-                stagnantUpdate(player.bh.timers[0].base.toNumber())
-                player.bh.timers[0].current = player.bh.timers[0].max
-            },
-            style() {
-                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
-                this.canClick() ? look.backgroundColor = "#003366" : look.backgroundColor = "#bf8f8f",
-                this.canClick() ? look.color = "#ccd8ff" : look.color = "black"
-                return look
-            },
-        },
-        "Stagnant-Timer-1": {
-            title() {return player.bh.timers[1].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.bh.timers[1].current) + "." : "<h3>Skip forward by <br>" + formatTime(player.bh.timers[1].base)},
-            canClick() {return player.bh.timers[1].current.lte(0)},
-            unlocked: true,
-            onClick() {
-                stagnantUpdate(player.bh.timers[1].base.toNumber())
-                player.bh.timers[1].current = player.bh.timers[1].max
-            },
-            style() {
-                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
-                this.canClick() ? look.backgroundColor = "#003366" : look.backgroundColor = "#bf8f8f",
-                this.canClick() ? look.color = "#ccd8ff" : look.color = "black"
-                return look
-            },
-        },
-        "Stagnant-Timer-2": {
-            title() {return player.bh.timers[2].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.bh.timers[2].current) + "." : "<h3>Skip forward by <br>" + formatTime(player.bh.timers[2].base)},
-            canClick() {return player.bh.timers[2].current.lte(0)},
-            unlocked: false,
-            onClick() {
-                stagnantUpdate(player.bh.timers[2].base.toNumber())
-                player.bh.timers[2].current = player.bh.timers[2].max
-            },
-            style() {
-                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
-                this.canClick() ? look.backgroundColor = "#003366" : look.backgroundColor = "#bf8f8f",
-                this.canClick() ? look.color = "#ccd8ff" : look.color = "black"
-                return look
-            },
-        },
-        "Stagnant-Timer-3": {
-            title() {return player.bh.timers[3].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.bh.timers[3].current) + "." : "<h3>Skip forward by <br>" + formatTime(player.bh.timers[3].base)},
-            canClick() {return player.bh.timers[3].current.lte(0)},
-            unlocked: false,
-            onClick() {
-                stagnantUpdate(player.bh.timers[3].base.toNumber())
-                player.bh.timers[3].current = player.bh.timers[3].max
-            },
-            style() {
-                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
-                this.canClick() ? look.backgroundColor = "#003366" : look.backgroundColor = "#bf8f8f",
-                this.canClick() ? look.color = "#ccd8ff" : look.color = "black"
                 return look
             },
         },
@@ -4051,7 +4015,7 @@ addLayer("bh", {
                             ["style-column", [
                                 ["buttonless-microtabs", "party", {borderWidth: "0"}],
                             ], {width: "497px", height: "677px"}],
-                        ], {width: "497px", height: "720px", background: "var(--miscButton)"}],
+                        ], {width: "497px", height: "720px", background: "repeating-linear-gradient(-45deg, var(--layerBackground) 0 15px, var(--menuBackground) 0 30px)"}],
                     ], {width: "800px", height: "720px", border: "3px solid var(--regBorder)", borderRadius: "0 0 0 30px"}],
                 ],
             },
@@ -4127,8 +4091,9 @@ addLayer("bh", {
                                 ], {width: "100px", height: "30px", marginTop: "-35px"}],
                             ], {margin: "5px"}],
                         ]],
-                        ["blank", ["100px", "100px"]],
-                        ["column", [
+                        ["blank", ["50px", "50px"]],
+                        ["style-column", [
+                            ["style-row", [], () => {return BHS[player.bh.currentStage].timeStagnation ? {height: "66px"} : {display: "none !important"}}],
                             ["clickable", "Celestialite-Icon"],
                             ["style-row", [
                                 ["tooltip-row", [["raw-html", () => {return player.bh.celestialite.attributes.air ? "≋<div class='bottomTooltip' style='margin-top:0px'>Air<hr>Has " + formatSimple(Decimal.sub(1, player.bh.celestialite.attributes.air).mul(100)) + "% resistance to<br>melee attacks.</div>" : ""}, {color: "#ccc", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
@@ -4139,7 +4104,14 @@ addLayer("bh", {
                                 ["tooltip-row", [["raw-html", () => {return player.bh.celestialite.attributes.explosive ? "✺<div class='bottomTooltip' style='margin-top:0px'>Explosive<hr>Explodes upon death,<br>dealing " + formatSimple(player.bh.celestialite.attributes.explosive) + " damage to<br>all team members.</div>" : ""}, {color: "#ee8700", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                         ["tooltip-row", [["raw-html", () => {return player.bh.celestialite.attributes.daze ? "꩜<div class='bottomTooltip' style='margin-top:0px'>Dazed<hr>All actions have a<br>" + formatSimple(Decimal.div(player.bh.celestialite.attributes.daze, Decimal.div(Decimal.add(100, player.bh.celestialite.luck), 100)).mul(100)) + "% chance to miss.</div>" : ""}, {color: "#c44c5b", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                             ], {width: "100px", height: "30px", marginTop: "-35px"}],
-                        ], {}],
+                            ["style-column", [
+                                ["blank", "20px"],
+                                ["row", [
+                                    ["clickable", "Stagnant-Timer"],
+                                    ["clickable", "Stagnant-Auto"],
+                                ]],
+                            ], () => {return BHS[player.bh.currentStage].timeStagnation ? {height: "66px"} : {display: "none !important"}}],
+                        ], {width: "250px"}],
                     ]],
                     ["blank", "40px"],
                     ["row", [
@@ -4244,11 +4216,6 @@ addLayer("bh", {
                         ["top-column", [
                             ["raw-html", () => `${player.bh.log.map((x, i) => `<span style="display:block;">${x}</span>`).join("")}`],
                         ], {width: "676px", minHeight: "206px", textAlign: "center", background: "rgba(0,0,0,0.5)", border: "3px solid white", borderRadius: "30px", padding: "8px 12px 0 12px"}],
-                        ["top-column", [
-                            ["blank", "8px"],
-                            ["clickable", "Stagnant-Timer-0"],
-                            ["clickable", "Stagnant-Timer-1"],
-                        ], () => {return BHS[player.bh.currentStage].timeStagnation ? {width: "250px", height: "214px", background: "rgba(0,0,0,0.5)", border: "3px solid white", borderRadius: "30px", marginLeft: "10px"} : {display: "none !important"}}],
                     ], {marginTop: "5px"}],
                 ],
             },

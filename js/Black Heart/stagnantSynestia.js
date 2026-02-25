@@ -48,6 +48,7 @@ addLayer("stagnantSynestia", {
         }
 
         player.stagnantSynestia.temporalMult = new Decimal(1)
+        player.stagnantSynestia.temporalMult = player.stagnantSynestia.temporalMult.mul(player.darkTemple.stagnantCurMult)
     },
     clickables: {
         "enter": {
@@ -341,7 +342,7 @@ BHS.stagnantSynestia = {
                 return "staticHekaton"
             default:
                 let random = Math.random()
-                let cel = ["staticAlpha", "staticBeta", "staticGamma"/*, "staticDelta", "staticEpsilon", "staticZeta"*/]
+                let cel = ["staticAlpha", "staticBeta", "staticGamma", "staticDelta", "staticEpsilon", "staticZeta"]
                 if (combo >= 25) cel.push("staticEta")
                 if (combo >= 50) cel.push("staticTheta")
                 if (combo >= 75) cel.push("staticIota")
@@ -370,6 +371,15 @@ BHC.staticAlpha = {
                 bulletHell({"bulletRain": {bulletPerSec: 10+(magnitude*2)}}, {width: 800, height: 500, duration: 7+magnitude, subArena: true, subWidth: 300-(magnitude*20), subHeight: 300-(magnitude*20)})
             },
             cooldown: new Decimal(4),
+        },
+        1: {
+            name: "Magic Missile",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "magic",
+            value: new Decimal(2),
+            cooldown: new Decimal(10),
         },
     },
     reward() {
@@ -405,6 +415,15 @@ BHC.staticBeta = {
             },
             cooldown: new Decimal(5),
         },
+        1: {
+            name: "Bludgeon",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value: new Decimal(3),
+            cooldown: new Decimal(12),
+        },
     },
     reward() {
         let gain = {}
@@ -430,14 +449,23 @@ BHC.staticGamma = {
     damage: new Decimal(15),
     actions: {
         0: {
-            name: "Close Shot",
+            name: "Quick Shot",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            value: new Decimal(1.5),
+            cooldown: new Decimal(3),
+        },
+        1: {
+            name: "Close Fire",
             instant: true,
             type: "function",
             target: "allPlayer",
             onTrigger(index, slot, target, magnitude) {
                 bulletHell({"diamondAttack": {diamondAmount: 1, intervalDiv: 1+(magnitude/10)}}, {width: 100, height: 100, duration: 7+magnitude})
             },
-            cooldown: new Decimal(3),
+            cooldown: new Decimal(8),
         },
     },
     reward() {
@@ -451,9 +479,261 @@ BHC.staticGamma = {
         return gain
     },
 }
-//bulletHell({"movingCircleRadialBurstAttack": {circleAmount: 3, burstInterval: 1200, bulletsPerBurst: 6, enemySpeed: 3, bulletSpeed: 3}}, {duration: 8})
-//bulletHell({"bombAttack": {bombsPerSecond: 1, bombFallSpeed: 4, miniBombCount: 2, miniBombSpeed: 2, miniBombDelay: 600, bulletCount: 8, bulletSpeed: 2}}, {duration: 8})
-//bulletHell({"bulletRain": {bulletPerSec: 5}, "inverseRain": {bulletPerSec: 5}}, {duration: 8})
-//bulletHell({"centerSpiralAttack": {spiralAngle: 0, spiralRate: 0.65, spiralInterval: 50, radialStart: 0, bulletSpeed: 4, spiralBullets: true}}, {start: "left", height: 700, duration: 8})
-//bulletHell({"bouncingDiamond": {diamondCount: 6, enemySpeed: 3}}, {width: 700, height: 700, duration: 30, timed: true, cellSize: 50, start: "cell", goal: "cell"})
-//bulletHell({"knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 6, knifePerSec: 1}}, {duration: 15, timed: true, start: "left", goal: "right", subArena: true, subWidth: 250, subHeight: 500, subMove: "right", subSpeed: 0.5})
+
+BHC.staticDelta = {
+    name: "Celestialite Static Delta",
+    symbol: "⧖δ",
+    style: {
+        background: "linear-gradient(45deg, #094394, #052653)",
+        color: "#0091DC",
+        borderColor: "#021124",
+    },
+    health: new Decimal(650),
+    damage: new Decimal(20),
+    actions: {
+        0: {
+            name: "Multi Rain",
+            instant: true,
+            type: "function",
+            target: "allPlayer",
+            onTrigger(index, slot, target, magnitude) {
+                bulletHell({"bulletRain": {bulletPerSec: 4+magnitude}, "inverseRain": {bulletPerSec: 4+magnitude}}, {duration: 7+magnitude})
+            },
+            cooldown: new Decimal(3),
+        },
+        1: {
+            name: "Stab",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value: new Decimal(2),
+            cooldown: new Decimal(6),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.7) {
+            gain.temporalDust = Decimal.add(7, getRandomInt(5))
+        } else {
+            gain.temporalShard = Decimal.add(1, getRandomInt(2))
+        }
+        return gain
+    },
+}
+
+BHC.staticEpsilon = {
+    name: "Celestialite Static Epsilon",
+    symbol: "⧖ε",
+    style: {
+        background: "linear-gradient(45deg, #094394, #052653)",
+        color: "#0091DC",
+        borderColor: "#021124",
+    },
+    health: new Decimal(700),
+    damage: new Decimal(30),
+    actions: {
+        0: {
+            name: "Triple Shot",
+            instant: true,
+            type: "damage",
+            target: "allPlayer",
+            method: "ranged",
+            value: new Decimal(0.66),
+            cooldown: new Decimal(4),
+        },
+        1: {
+            name: "Sliding Knife",
+            instant: true,
+            type: "function",
+            target: "allPlayer",
+            onTrigger(index, slot, target, magnitude) {
+                bulletHell({"knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 6, knifePerSec: 1+(magnitude/5)}}, {duration: 10+(magnitude*2), start: "left", subArena: true, subWidth: 250, subHeight: 500, subMove: "right", subSpeed: 0.5})
+            },
+            cooldown: new Decimal(8),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.7) {
+            gain.temporalDust = Decimal.add(8, getRandomInt(6))
+        } else {
+            gain.temporalShard = Decimal.add(1, getRandomInt(2))
+        }
+        return gain
+    },
+}
+
+BHC.staticZeta = {
+    name: "Celestialite Static Zeta",
+    symbol: "⧖ζ",
+    style: {
+        background: "linear-gradient(45deg, #094394, #052653)",
+        color: "#0091DC",
+        borderColor: "#021124",
+    },
+    health: new Decimal(750),
+    damage: new Decimal(25),
+    actions: {
+        0: {
+            name: "Circle Squad",
+            instant: true,
+            type: "function",
+            target: "allPlayer",
+            onTrigger(index, slot, target, magnitude) {
+                bulletHell({"movingCircleRadialBurstAttack": {circleAmount: 3, burstInterval: 1300-(magnitude*100), bulletsPerBurst: 6, enemySpeed: 3, bulletSpeed: 3}}, {duration: 7+magnitude})
+            },
+            cooldown: new Decimal(4),
+        },
+        1: {
+            name: "Earthquake",
+            instant: true,
+            type: "damage",
+            target: "all",
+            method: "physical",
+            value: new Decimal(1),
+            cooldown: new Decimal(10),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.7) {
+            gain.temporalDust = Decimal.add(10, getRandomInt(5))
+        } else {
+            gain.temporalShard = Decimal.add(2, getRandomInt(2))
+        }
+        return gain
+    },
+}
+
+BHC.staticEta = {
+    name: "Celestialite Static Eta",
+    symbol: "⧖η",
+    style: {
+        background: "linear-gradient(45deg, #094394, #052653)",
+        color: "#0091DC",
+        borderColor: "#021124",
+    },
+    health: new Decimal(800),
+    damage: new Decimal(35),
+    actions: {
+        0: {
+            name: "Airial Shot",
+            instant: true,
+            type: "damage",
+            target: "random",
+            method: "ranged",
+            value: new Decimal(2),
+            cooldown: new Decimal(4),
+        },
+        1: {
+            name: "Diamond Maze",
+            instant: true,
+            type: "function",
+            target: "allPlayer",
+            onTrigger(index, slot, target, magnitude) {
+                bulletHell({"bouncingDiamond": {diamondCount: 5+magnitude, enemySpeed: 3}}, {width: 700, height: 700, duration: 31-magnitude, timed: true, cellSize: 50, start: "cell", goal: "cell"})
+            },
+            cooldown: new Decimal(8),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.7) {
+            gain.temporalDust = Decimal.add(12, getRandomInt(5))
+        } else {
+            gain.temporalShard = Decimal.add(2, getRandomInt(3))
+        }
+        return gain
+    },
+}
+
+BHC.staticTheta = {
+    name: "Celestialite Static Theta",
+    symbol: "⧖θ",
+    style: {
+        background: "linear-gradient(45deg, #094394, #052653)",
+        color: "#0091DC",
+        borderColor: "#021124",
+    },
+    health: new Decimal(900),
+    damage: new Decimal(35),
+    actions: {
+        0: {
+            name: "Death Spiral",
+            instant: true,
+            type: "function",
+            target: "allPlayer",
+            onTrigger(index, slot, target, magnitude) {
+                bulletHell({"centerSpiralAttack": {spiralAngle: 0, spiralRate: 0.65, spiralInterval: 55-(magnitude*5), radialStart: 0, bulletSpeed: 4, spiralBullets: true}}, {start: "left", height: 700, duration: 7+magnitude})
+            },
+            cooldown: new Decimal(5),
+        },
+        1: {
+            name: "Brutal Bludgeon",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value: new Decimal(3),
+            cooldown: new Decimal(12),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.7) {
+            gain.temporalDust = Decimal.add(15, getRandomInt(5))
+        } else {
+            gain.temporalShard = Decimal.add(3, getRandomInt(3))
+        }
+        return gain
+    },
+}
+
+BHC.staticIota = {
+    name: "Celestialite Static Iota",
+    symbol: "⧖ι",
+    style: {
+        background: "linear-gradient(45deg, #094394, #052653)",
+        color: "#0091DC",
+        borderColor: "#021124",
+    },
+    health: new Decimal(1000),
+    damage: new Decimal(30),
+    actions: {
+        0: {
+            name: "Magic Missile",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value: new Decimal(2),
+            cooldown: new Decimal(5),
+        },
+        1: {
+            name: "Aerial Bombardment",
+            instant: true,
+            type: "function",
+            target: "allPlayer",
+            onTrigger(index, slot, target, magnitude) {
+                bulletHell({"bombAttack": {bombsPerSecond: 1+(magnitude/8), bombFallSpeed: 4, miniBombCount: 2, miniBombSpeed: 2, miniBombDelay: 600, bulletCount: 8, bulletSpeed: 2}}, {duration: 7+magnitude})
+            },
+            cooldown: new Decimal(10),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.7) {
+            gain.temporalDust = Decimal.add(20, getRandomInt(5))
+        } else {
+            gain.temporalShard = Decimal.add(4, getRandomInt(3))
+        }
+        return gain
+    },
+}

@@ -224,7 +224,6 @@ addLayer("ktb", {
                 return look
             },
             // please add effect here
-        },
         205: {
             title: "Accumulated Knowledge",
             unlocked() {return true},

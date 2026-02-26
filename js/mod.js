@@ -1589,7 +1589,8 @@ var doNotCallTheseFunctionsEveryTick = [
 	"selectCelestialites", "petDeath", "celestialiteDeath", "petAbility", "celestialiteAbility",
 	"arriveAtStar", "spaceEnergyReset", "coinFlip", "randomizeSegments", "spinWheel", "spinSlots", "evaluateRewards",
 	"slotReset", "enhanceReset",
-	"diamondDustReset"
+	"diamondDustReset",
+	"openChest",
 ]
 
 function getStartPoints(){

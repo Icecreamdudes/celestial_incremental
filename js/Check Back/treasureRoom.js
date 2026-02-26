@@ -20,7 +20,7 @@ addLayer("ev14", {
             },
             1: {
                 current: new Decimal(0),
-                max: new Decimal(32400),
+                max: new Decimal(7200),
             },
         },
     }},
@@ -45,6 +45,7 @@ addLayer("ev14", {
         player.ev14.keysToGet = player.ev14.keysToGet.add(player.ev14.orbInput.div(10));
     },
     clickables: {
+        // controls
         "A0": {
             title: "0%",
             canClick() {
@@ -165,6 +166,7 @@ addLayer("ev14", {
                 "background-color": "#cccccc"
             },
         },
+        // convert button
         0: {
             title() {
                 return player.ev14.timers[0].current.gt(0) 
@@ -195,6 +197,7 @@ addLayer("ev14", {
                 return look
             },
         },
+        // chest images
         "C1": {
             title() { return "<img src='resources/chest1.png'style='width:150px;height:120px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
@@ -202,7 +205,7 @@ addLayer("ev14", {
             onClick() {
                 player.ev14.chestNumber = new Decimal(1)
             },
-            style: { width: "160px", minHeight: "120px", backgroundColor: "#808080", border: "5px solid #808080", borderRadius: "10px", padding: "0px" },
+            style: { width: "160px", minHeight: "120px", backgroundColor: "#ffffff", border: "5px solid #ffffff", borderRadius: "10px", padding: "0px" },
         },
         "C2": {
             title() { return "<img src='resources/chest2.png'style='width:150px;height:120px;margin:0px;margin-bottom:-4px'></img>" },
@@ -229,7 +232,7 @@ addLayer("ev14", {
             onClick() {
                 player.ev14.chestNumber = new Decimal(4)
             },
-            style: { width: "160px", minHeight: "120px", backgroundColor: "#00c0c0", border: "5px solid #00c0c0", borderRadius: "10px", padding: "0px" },
+            style: { width: "160px", minHeight: "120px", backgroundColor: "#00ffff", border: "5px solid #00ffff", borderRadius: "10px", padding: "0px" },
         },
         "C5": {
             title() { return "<img src='resources/chest5.png'style='width:150px;height:130px;margin:0px;margin-bottom:-4px'></img>" },
@@ -238,7 +241,7 @@ addLayer("ev14", {
             onClick() {
                 player.ev14.chestNumber = new Decimal(5)
             },
-            style: { width: "160px", minHeight: "120px", backgroundColor: "#408000", border: "5px solid #408000", borderRadius: "10px", padding: "0px" },
+            style: { width: "160px", minHeight: "120px", backgroundColor: "#80ff00", border: "5px solid #80ff00", borderRadius: "10px", padding: "0px" },
         },
         "C6": {
             title() { return "<img src='resources/chest6.png'style='width:150px;height:130px;margin:0px;margin-bottom:-4px'></img>" },
@@ -247,8 +250,90 @@ addLayer("ev14", {
             onClick() {
                 player.ev14.chestNumber = new Decimal(6)
             },
-            style: { width: "160px", minHeight: "120px", backgroundColor: "#800080", border: "5px solid #800080", borderRadius: "10px", padding: "0px" },
+            style: { width: "160px", minHeight: "120px", backgroundColor: "#ff00ff", border: "5px solid #ff00ff", borderRadius: "10px", padding: "0px" },
         },
+        // open chest buttons
+        1: {
+            title() {
+                return player.ev14.timers[1].current.gt(0) 
+                ? "<h1>Check back in <br>" + formatTime(player.ev14.timers[1].current) + "." 
+                : "<h1>Open a Tier I Chest."
+            },
+            canClick() { 
+                return (
+                    player.ev14.keys.gte(1)
+                    && player.ev14.timers[1].current.lt(1)
+                )
+            },
+            unlocked() {return player.ev14.chestNumber == 1},
+            onClick() {
+                player.ev14.keys = player.ev14.keys.sub(1)
+                player.ev14.timers[1].current = player.ev14.timers[1].max
+                layers.ev14.openChest()
+            },
+            style() {
+                let look = {width: "400px", minHeight: "100px", borderRadius: "60px / 30px"}
+                this.canClick() ? look.backgroundColor = "#ffffff" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
+        },
+    },
+    tables: {
+        1: {
+            title() {
+                return "Tier I Chest"
+            },
+            description() {
+                return "<h3>Costs:</h3><br>" +
+                formatWhole(player.ev14.keys) + "/1 Keys<br>" +
+                "<h3>Loot Table:</h3><br>" +
+                "25% - " + formatWhole(player.pet.petPointMult.mul(2500)) + " pet points<br>" + 
+                "25% - " + formatWhole(player.pet.petPointMult.mul(1).floor()) + " of the first 9 common pets<br>" +
+                "25% - " + formatWhole(player.pet.petPointMult.mul(0.5).floor()) + " of the first 9 uncommon pets<br>" +
+                "25% - " + formatSimple(new Decimal(5).mul(levelableEffect("pet", 2203)[1]), 1) + " orbs"
+            },
+        },
+    },
+    openChest() {
+        let random = Math.random();
+        if (player.ev14.chestNumber == 1) {
+            if (random < 0.25) {
+                let gain = player.pet.petPointMult.mul(2500)
+                player.cb.petPoints = player.cb.petPoints.add(gain)
+                doPopup("none", "+" + formatWhole(gain) + " pet points!", "Resource Obtained!", 5, "#A2D800", "resources/petPoint.png")
+            }
+            else if (random < 0.5) {
+                let gain = player.pet.petPointMult.mul(1).floor()
+                player.pet.levelables[101][1] = player.pet.levelables[101][1].add(gain)
+                player.pet.levelables[102][1] = player.pet.levelables[102][1].add(gain)
+                player.pet.levelables[103][1] = player.pet.levelables[103][1].add(gain)
+                player.pet.levelables[104][1] = player.pet.levelables[104][1].add(gain)
+                player.pet.levelables[105][1] = player.pet.levelables[105][1].add(gain)
+                player.pet.levelables[106][1] = player.pet.levelables[106][1].add(gain)
+                player.pet.levelables[107][1] = player.pet.levelables[107][1].add(gain)
+                player.pet.levelables[108][1] = player.pet.levelables[108][1].add(gain)
+                player.pet.levelables[109][1] = player.pet.levelables[109][1].add(gain)
+                doPopup("none", "+" + formatWhole(gain) + " of the first 9 common pets!", "Pet Obtained!", 5, "#9bedff", "resources/Pets/commonbg.png")
+            }
+            else if (random < 0.75) {
+                let gain = player.pet.petPointMult.mul(0.5).floor()
+                player.pet.levelables[201][1] = player.pet.levelables[201][1].add(gain)
+                player.pet.levelables[202][1] = player.pet.levelables[202][1].add(gain)
+                player.pet.levelables[203][1] = player.pet.levelables[203][1].add(gain)
+                player.pet.levelables[204][1] = player.pet.levelables[204][1].add(gain)
+                player.pet.levelables[205][1] = player.pet.levelables[205][1].add(gain)
+                player.pet.levelables[206][1] = player.pet.levelables[206][1].add(gain)
+                player.pet.levelables[207][1] = player.pet.levelables[207][1].add(gain)
+                player.pet.levelables[208][1] = player.pet.levelables[208][1].add(gain)
+                player.pet.levelables[209][1] = player.pet.levelables[209][1].add(gain)
+                doPopup("none", "+" + formatWhole(gain) + " of the first 9 uncommon pets!", "Pet Obtained!", 5, "#88e688", "resources/Pets/uncommonbg.png")
+            }
+            else {
+                let gain = new Decimal(5).mul(levelableEffect("pet", 2203)[1])
+                player.ev2.orbs = player.ev2.orbs.add(gain)
+                doPopup("none", "+" + formatSimple(gain) + " orbs!", "Resource Obtained!", 5, "#96DED1", "resources/orbs.png")
+            }
+        }
     },
     microtabs: {
         stuff: {
@@ -282,6 +367,24 @@ addLayer("ev14", {
                         ["clickable", "C5"],
                         ["clickable", "C6"],
                     ]],
+                    ["blank", "15px"],
+                    ["raw-html", function () {
+                        if (player.ev14.chestNumber == 0) {
+                            return "No Chest Selected"
+                        } else {
+                            return run(layers.ev14.tables[player.ev14.chestNumber].title, layers.ev14.tables[player.ev14.chestNumber])
+                        }
+                    }, {color: "#ffffff", fontSize: "32px", fontFamily: "monospace"}],
+                    ["blank", "5px"],
+                    ["raw-html", function () {
+                        if (player.ev14.chestNumber == 0) {
+                            return ""
+                        } else {
+                            return run(layers.ev14.tables[player.ev14.chestNumber].description, layers.ev14.tables[player.ev14.chestNumber])
+                        }
+                    }, {color: "#ffffff", fontSize: "20px", fontFamily: "monospace"}],
+                    ["blank", "5px"],
+                    ["clickable", 1],
                 ]
             },
             "Shop": {

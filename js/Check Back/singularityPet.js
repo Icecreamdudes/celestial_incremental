@@ -33,9 +33,12 @@ addLayer("sp", {
         // KRES
         player.sp.kresPointsMax = new Decimal(100)
         player.sp.kresPointsMax = player.sp.kresPointsMax.add(buyableEffect("sp", 11))
+        player.sp.kresPointsMax = player.sp.kresPointsMax.mul(buyableEffect("sme", 114))
 
         let kresAmt = getLevelableAmount("pet", 404).add(getLevelableTier("pet", 404).mul(5).min(40))
         player.sp.kresPointsPerSecond = kresAmt.pow(1.1).div(10).mul(getLevelableTier("pet", 404).add(1))
+        player.sp.kresPointsPerSecond = player.sp.kresPointsPerSecond.mul(buyableEffect("pet", 7))
+        player.sp.kresPointsPerSecond = player.sp.kresPointsPerSecond.mul(buyableEffect("sme", 114))
         player.sp.kresPoints = player.sp.kresPoints.add(player.sp.kresPointsPerSecond.mul(delta))
 
         if (player.sp.kresPoints.gte(player.sp.kresPointsMax)) {
@@ -45,9 +48,12 @@ addLayer("sp", {
         // NAV
         player.sp.navPointsMax = new Decimal(100)
         player.sp.navPointsMax = player.sp.navPointsMax.add(buyableEffect("sp", 21))
+        player.sp.navPointsMax = player.sp.navPointsMax.mul(buyableEffect("sme", 114))
 
         let navAmt = getLevelableAmount("pet", 405).add(getLevelableTier("pet", 405).mul(5).min(40))
         player.sp.navPointsPerSecond = navAmt.pow(1.1).div(10).mul(getLevelableTier("pet", 405).add(1))
+        player.sp.navPointsPerSecond = player.sp.navPointsPerSecond.mul(buyableEffect("pet", 7))
+        player.sp.navPointsPerSecond = player.sp.navPointsPerSecond.mul(buyableEffect("sme", 114))
         player.sp.navPoints = player.sp.navPoints.add(player.sp.navPointsPerSecond.mul(delta))
 
         if (player.sp.navPoints.gte(player.sp.navPointsMax)) {
@@ -57,9 +63,12 @@ addLayer("sp", {
         // SEL
         player.sp.selPointsMax = new Decimal(100)
         player.sp.selPointsMax = player.sp.selPointsMax.add(buyableEffect("sp", 31))
+        player.sp.selPointsMax = player.sp.selPointsMax.mul(buyableEffect("sme", 114))
 
         let selAmt = getLevelableAmount("pet", 406).add(getLevelableTier("pet", 406).mul(5).min(40))
         player.sp.selPointsPerSecond = selAmt.pow(1.1).div(10).mul(getLevelableTier("pet", 406).add(1))
+        player.sp.selPointsPerSecond = player.sp.selPointsPerSecond.mul(buyableEffect("pet", 7))
+        player.sp.selPointsPerSecond = player.sp.selPointsPerSecond.mul(buyableEffect("sme", 114))
         player.sp.selPoints = player.sp.selPoints.add(player.sp.selPointsPerSecond.mul(delta))
 
         if (player.sp.selPoints.gte(player.sp.selPointsMax)) {
@@ -94,19 +103,19 @@ addLayer("sp", {
         },
         12: {
             costBase() { return new Decimal(25) },
-            costGrowth() { return new Decimal(1.35) },
-            purchaseLimit() { return new Decimal(50) },
+            costGrowth() { return new Decimal(1.7) },
+            purchaseLimit() { return new Decimal(25) },
             currency() { return player.sp.kresPoints},
             pay(amt) { player.sp.kresPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(100).add(1) },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Kres Health"
+                return "Kres Stats"
             },
             display() {
-                return 'which are boosting black heart health by +' + formatWhole(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting Kres\'s base stats by +' + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + '%.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Kres Points'
             },
             buy(mult) {
@@ -256,19 +265,19 @@ addLayer("sp", {
         },
         22: {
             costBase() { return new Decimal(25) },
-            costGrowth() { return new Decimal(1.35) },
-            purchaseLimit() { return new Decimal(50) },
+            costGrowth() { return new Decimal(1.7) },
+            purchaseLimit() { return new Decimal(25) },
             currency() { return player.sp.navPoints},
             pay(amt) { player.sp.navPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).div(5) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(100).add(1) },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Nav Damage"
+                return "Nav Stats"
             },
             display() {
-                return 'which are boosting black heart damage by +' + formatSimple(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting Nav\'s base stats by +' + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + '%.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Nav Points'
             },
             buy(mult) {
@@ -418,19 +427,19 @@ addLayer("sp", {
         },
         32: {
             costBase() { return new Decimal(25) },
-            costGrowth() { return new Decimal(1.35) },
-            purchaseLimit() { return new Decimal(50) },
+            costGrowth() { return new Decimal(1.7) },
+            purchaseLimit() { return new Decimal(24) },
             currency() { return player.sp.selPoints},
             pay(amt) { player.sp.selPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).div(2) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(100).add(1) },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Sel Agility"
+                return "Sel Stats"
             },
             display() {
-                return 'which are boosting black heart agility by +' + formatSimple(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting Sel\'s base stats by +' + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + '%.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Sel Points'
             },
             buy(mult) {

@@ -3818,7 +3818,7 @@ addLayer("pet", {
                     "x" + format(this.effect()[1]) + " to infinitum.<br>" +
                     "x" + format(this.effect()[2]) + " to all alternate infinities.<br>"
             },
-            levelLimit() { return new Decimal(10) },
+            levelLimit() { return getBuyableAmount("sme", 111).gt(0) ? new Decimal(10).add(buyableEffect("sme", 111)) : new Decimal(10) },
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).div(2).add(1), // Infinities
@@ -3859,7 +3859,7 @@ addLayer("pet", {
                     "x" + format(this.effect()[1]) + " to XP button ESC.<br>" +
                     "x" + format(this.effect()[2]) + " to XP button cooldown." // Yes, it multiplies it
             },
-            levelLimit() { return new Decimal(10) },
+            levelLimit() { return getBuyableAmount("sme", 111).gt(0) ? new Decimal(10).add(buyableEffect("sme", 111)) : new Decimal(10) },
             effect() {
                 return [
                     Decimal.pow(1.4, getLevelableAmount(this.layer, this.id)), // XP Button Gain
@@ -3904,7 +3904,7 @@ addLayer("pet", {
                 return "+" + format(this.effect()[0]) + " effective unsmith levels.<br>" +
                     "+" + format(this.effect()[1]) + " base coin dust gain per hour.<br>"
             },
-            levelLimit() { return new Decimal(10) },
+            levelLimit() { return getBuyableAmount("sme", 111).gt(0) ? new Decimal(10).add(buyableEffect("sme", 111)) : new Decimal(10) },
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id), // Effective Unsmith Levels
@@ -3949,7 +3949,7 @@ addLayer("pet", {
                     "x" + format(this.effect()[1]) + " to singularity point gain.<br>" +
                     "/" + format(this.effect()[2]) + " to crate button timer."
             },
-            levelLimit() { return new Decimal(10) },
+            levelLimit() { return getBuyableAmount("sme", 111).gt(0) ? new Decimal(10).add(buyableEffect("sme", 111)) : new Decimal(10) },
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).pow(0.4).add(1), // Moonstone Value
@@ -4041,7 +4041,7 @@ addLayer("pet", {
                 return "+" + formatWhole(this.effect()[0]) + " to effective blob levels.<br>" +
                     "+" + formatSimple(this.effect()[1].sub(1), 1) + " to XP button ESC multiplier."
             },
-            levelLimit() { return new Decimal(10) },
+            levelLimit() { return getBuyableAmount("sme", 111).gt(0) ? new Decimal(10).add(buyableEffect("sme", 111)) : new Decimal(10) },
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id), // Effective Blob Levels
@@ -4129,7 +4129,7 @@ addLayer("pet", {
                 return "/" + format(this.effect()[0]) + " to pet point button cooldown.<br>" +
                     "x" + format(this.effect()[1]) + " to XPBoost.<br>"
             },
-            levelLimit() { return new Decimal(10) },
+            levelLimit() { return getBuyableAmount("sme", 111).gt(0) ? new Decimal(10).add(buyableEffect("sme", 111)) : new Decimal(10) },
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).mul(0.02).add(1), // Pet Point Button Cooldown
@@ -4173,7 +4173,7 @@ addLayer("pet", {
                 return "+" + format(this.effect()[0]) + " to effective shark levels.<br>" +
                     "x" + format(this.effect()[1]) + " to pet points.<br>"
             },
-            levelLimit() { return new Decimal(10) },
+            levelLimit() { return getBuyableAmount("sme", 111).gt(0) ? new Decimal(10).add(buyableEffect("sme", 111)) : new Decimal(10) },
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id), // Effective Shark Levels
@@ -4263,7 +4263,7 @@ addLayer("pet", {
                 return "x" + format(this.effect()[0]) + " to anonymity.<br>" +
                     "x" + format(this.effect()[1]) + " to oil.<br>"
             },
-            levelLimit() { return new Decimal(10) },
+            levelLimit() { return getBuyableAmount("sme", 111).gt(0) ? new Decimal(10).add(buyableEffect("sme", 111)) : new Decimal(10) },
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).mul(10).pow(2).add(1), // Anonymity

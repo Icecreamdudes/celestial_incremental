@@ -40,6 +40,7 @@ addLayer("al", {
         // START OF HONEYCOMBS
         player.al.honeycombGain = player.bb.beeBread.div(1e10).pow(0.25)
         if (player.al.cocoonLevel >= 1) player.al.honeycombGain = player.al.honeycombGain.mul(1.5)
+        player.al.honeycombGain = player.al.honeycombGain.mul(buyableEffect("sme", 144))
 
         // FLOOR HONEYCOMBS
         player.al.honeycombGain = player.al.honeycombGain.floor()
@@ -47,6 +48,7 @@ addLayer("al", {
         // START OF ROYAL JELLY
         player.al.royalJellyGain = player.ho.honey.div(1e10).pow(0.25)
         if (player.al.cocoonLevel >= 1) player.al.royalJellyGain = player.al.royalJellyGain.mul(1.5)
+        player.al.royalJellyGain = player.al.royalJellyGain.mul(buyableEffect("sme", 144))
 
         // FLOOR HONEYCOMBS
         player.al.royalJellyGain = player.al.royalJellyGain.floor()

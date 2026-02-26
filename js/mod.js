@@ -184,6 +184,7 @@ function updateStyles() {
 			break;
 		case "sma": case "sme":
 			layerBG = "linear-gradient(120deg, #73752b 0%, #5f4d19 25%, #75303b 50%, #6a3075, 75%, #306775 100%)"
+			if (player.tab == "sme" && player.subtabs["sme"]["stuff"] == "Starmetal Studies") layerBG = "linear-gradient(120deg, #393a15 0%, #2f260c 25%, #3a181d 50%, #35183a, 75%, #18333a 100%)"
 			break;
 		case "bh":
 			switch (player.bh.currentStage) {

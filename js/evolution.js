@@ -1050,7 +1050,7 @@ addLayer("ev8", {
             currencyLocation() { return player.cb },
             currencyDisplayName: "Evolution Shards",
             currencyInternalName: "evolutionShards",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
         },
         12: {
             title: "Shard Research II",
@@ -1060,7 +1060,7 @@ addLayer("ev8", {
             currencyLocation() { return player.cb },
             currencyDisplayName: "Evolution Shards",
             currencyInternalName: "evolutionShards",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
         },
         13: {
             title: "Shard Research III",
@@ -1070,7 +1070,7 @@ addLayer("ev8", {
             currencyLocation() { return player.cb },
             currencyDisplayName: "Paragon Shards",
             currencyInternalName: "paragonShards",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
         },
         14: {
             title: "Shard Research IV",
@@ -1080,7 +1080,7 @@ addLayer("ev8", {
             currencyLocation() { return player.cb },
             currencyDisplayName: "Paragon Shards",
             currencyInternalName: "paragonShards",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
         },
         15: {
             title: "Shard Research V",
@@ -1090,7 +1090,7 @@ addLayer("ev8", {
             currencyLocation() { return player.cb },
             currencyDisplayName: "Evolution Shards",
             currencyInternalName: "evolutionShards",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
         },
         16: {
             title: "Shard Research VI",
@@ -1100,7 +1100,7 @@ addLayer("ev8", {
             currencyLocation() { return player.cb },
             currencyDisplayName: "Evolution Shards",
             currencyInternalName: "evolutionShards",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
         },
         17: {
             title: "Shard Research VII",
@@ -1110,7 +1110,7 @@ addLayer("ev8", {
             currencyLocation() { return player.cb },
             currencyDisplayName: "Paragon Shards",
             currencyInternalName: "paragonShards",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
         },
         18: {
             title: "Shard Research VIII",
@@ -1120,7 +1120,7 @@ addLayer("ev8", {
             currencyLocation() { return player.cb },
             currencyDisplayName: "Paragon Shards",
             currencyInternalName: "paragonShards",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
         },
         19: {
             title: "Shard Research IX",
@@ -1134,7 +1134,7 @@ addLayer("ev8", {
                 return player.cb.paragonShards.mul(0.3).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "135px", color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
         },
         21: {
             title: "Shard Research X",
@@ -1144,8 +1144,7 @@ addLayer("ev8", {
             currencyLocation() { return player.cb },
             currencyDisplayName: "Evolution Shards",
             currencyInternalName: "evolutionShards",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
-
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
         },
         22: {
             title: "Shard Research XI",
@@ -1159,8 +1158,7 @@ addLayer("ev8", {
                 return player.cb.evolutionShards.mul(0.02).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "135px", color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
-
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
         },
       /*  23: {
             title: "Shard Research XII",
@@ -1204,7 +1202,7 @@ addLayer("ev8", {
                     ["blank", "25px"],
                     ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14],
                         ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18],
-                        ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], /*["upgrade", 23]*/], {maxWidth: "500px"}],
+                        ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], /*["upgrade", 23]*/], {maxWidth: "600px"}],
                 ]
             },
         },

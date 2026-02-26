@@ -89,6 +89,7 @@
         if (getLevelableTier("pu", 305, true)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(levelableEffect("pu", 305)[0])
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("bl", 22))
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("al", 105))
+        player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(player.prj.modules[1].completionEffect)
 
         player.le.starmetalAlloyValue = new Decimal(1)
         player.le.starmetalAlloyValue = player.le.starmetalAlloyValue.mul(buyableEffect("wel", 102))
@@ -662,6 +663,9 @@
         player.dt.buyables[11] = new Decimal(0)
         player.dt.buyables[12] = new Decimal(0)
         player.dt.buyables[13] = new Decimal(0)
+        player.dt.buyables[14] = new Decimal(0)
+        player.dt.buyables[15] = new Decimal(0)
+        player.dt.buyables[16] = new Decimal(0)
 
         player.bl.blood = new Decimal(0)
         player.bl.bloodStones = new Decimal(0)

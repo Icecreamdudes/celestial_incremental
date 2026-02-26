@@ -775,6 +775,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added Ascension Shards.<br>
 			- Added a Miniboss.<br>
 			- Added Ancient, Paradox, and Temporal Fragment Pylons.<br>
+			- Added 2 ships.<br>
 			- More stuff I don't remember.<br>
 	    QoL:<br>
 			- Did I add QoL this update? I don't remember.<br><br>

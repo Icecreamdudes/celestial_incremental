@@ -155,78 +155,7 @@
     },
     bars: {},
     upgrades: {},
-    buyables: {
-        11: {
-            condition() { return player.pri.bestPrisms.gte(1) },
-            costBase() { return new Decimal(1) },
-            costGrowth() { return new Decimal(4) },
-            purchaseLimit() { return new Decimal(99) },
-            currency() { return player.pri.prisms},
-            pay(amt) { player.pri.prisms = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).add(1).pow(2)},
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return 'Light Cycle Boost'
-            },
-            display() {
-                return 'which are boosting light well cycles by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Prisms'
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '194px', height: '174px', borderRadius: "0px", border: "3px solid #335966", background: "#4d9999", color: "black", margin: "3px"}
-        },
-        12: {
-            condition() { return player.pri.bestPrisms.gte(1) },
-            costBase() { return new Decimal(1) },
-            costGrowth() { return new Decimal(3) },
-            purchaseLimit() { return new Decimal(4) },
-            currency() { return player.pri.prisms},
-            pay(amt) { player.pri.prisms = this.currency().sub(amt) },
-            effect(x) { return player.wel.light.add(1).log(10).pow(2).div(20).pow(getBuyableAmount(this.layer, this.id).pow(0.5))},
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return 'Light Boost'
-            },
-            display() {
-                return 'which are boosting light based on itself by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Prisms'
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '194px', height: '174px', borderRadius: "0px", border: "3px solid #335966", background: "#4d9999", color: "black", margin: "3px"}
-        },
-    },
+    buyables: {},
     milestones: {},
     challenges: {},
     infoboxes: {},

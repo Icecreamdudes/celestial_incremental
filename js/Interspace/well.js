@@ -96,7 +96,7 @@
         if (hasUpgrade("wel", 14)) player.wel.lightMult = player.wel.lightMult.mul(2)
         player.wel.lightMult = player.wel.lightMult.mul(levelableEffect("pu", 113)[1])
         if (hasMilestone("prj", 201)) player.wel.lightMult = player.wel.lightMult.mul(2)
-        player.wel.lightMult = player.wel.lightMult.mul(buyableEffect("pri", 12))
+        //player.wel.lightMult = player.wel.lightMult.mul(player.pri.modules[2].completionEffect)
         
         // WELLS
 
@@ -118,7 +118,7 @@
             player.wel.modules[i].completionsGain = new Decimal(1)
             player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(buyableEffect("wel", 13))
             player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(levelableEffect("pu", 214)[1])
-            player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(buyableEffect("pri", 11))
+            player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(player.pri.modules[1].completionEffect)
         }
 
         if (player.wel.bestLight.lt(player.wel.light)) player.wel.bestLight = player.wel.light;

@@ -8,6 +8,7 @@ addLayer("ktb", {
         unlocked: true,
         alchemicalSymbols: new Decimal (0),
         alchemicalSymbolsGain: new Decimal (0),
+        alchemicalSymnolsMult: new Decimal (1),
     }},
     nodeStyle() {
         return {
@@ -27,14 +28,14 @@ addLayer("ktb", {
 
         // Start of Alchemical Symbol Gain
         player.ktb.alchemicalSymbolsGain = player.points.add(1).log10(player.points).div(100000)
+        player.ktb.alchemicalSymbolsGain = player.alchemicalSymbolsGain.mul(player.ktb.alchemicalSymbolsMult)
 
         // Flooring Alchemical Symbol Gain
         player.ktb.alchemicalSymbolsGain = player.ktb.alchemicalSymbolsGain.floor()
 
         // Start of KTB Multiplier Modifiers ?
         if (hasUpgrade("ktb", 201)) player.ktb.alchemicalSymbolsGain = player.ktb.alchemicalSymbolsGain.mul(2)
-        if (hasUpgrade("ktb", 202)) player.ktb.alchemicalSymbolsGain = player.ktb.alchemicalSymbolsGain.mul(1)
-        if (hasUpgrade("ktb", 203)) player.ktb.alchemicalSymbolsGain = player.ktb.alchemicalSymbolsGain.mul(1)
+        if (hasUpgrade("ktb", 202)) player.ktb.alchemicalSymbolsGain = player.ktb.alchemicalSymbolsMult.mul((upgradeEffect("ktb", 202))
 
     },
 
@@ -182,7 +183,7 @@ addLayer("ktb", {
             currencyDisplayName: "Alchemical Symbols",
             currencyInternalName: "alchemicalSymbols",
             effect() {
-                return player.ktb.alchemicalSymbolsGain.add(1).mul(Decimal.log10(player.hpw.power)).div(10)
+                return player.ktb.alchemicalSymbolsMult.add(1).mul(Decimal.log10(player.hpw.power)).div(10).add(1)
             },
             effectDisplay() {
                 return "x" + formatSimple(upgradeEffect(this.layer, this.id), 2)
@@ -201,11 +202,6 @@ addLayer("ktb", {
             currencyLocation() {return player.ktb},
             currencyDisplayName: "Alchemical Symbols",
             currencyInternalName: "alchemicalSymbols",
-                        effect() {
-                return player.ktb.alchemicalSymbolsGain.add(1).add(Decimal.log10(player.pl.planets)).div(5)
-            },
-            effectDisplay() {
-                return "x" + formatSimple(upgradeEffect(this.layer, this.id), 2)
             },
             style() {
                 let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}

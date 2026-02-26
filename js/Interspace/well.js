@@ -96,7 +96,6 @@
         if (hasUpgrade("wel", 14)) player.wel.lightMult = player.wel.lightMult.mul(2)
         player.wel.lightMult = player.wel.lightMult.mul(levelableEffect("pu", 113)[1])
         if (hasMilestone("prj", 201)) player.wel.lightMult = player.wel.lightMult.mul(2)
-        //player.wel.lightMult = player.wel.lightMult.mul(player.pri.modules[2].completionEffect)
         
         // WELLS
 

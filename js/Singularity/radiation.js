@@ -44,6 +44,7 @@
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(levelableEffect("pet", 309)[0])
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(buyableEffect("cof", 24))
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(levelableEffect("pu", 110)[1])
+        player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(buyableEffect("sme", 131))
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(levelableEffect("ir", 7)[1])
 
         // POWER MODIFIERS

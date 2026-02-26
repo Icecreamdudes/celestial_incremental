@@ -115,6 +115,7 @@
         player.cof.highestScore = maxIndex
 
         for (let i = 0; i < player.cof.coreFragments.length; i++) {
+            player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(buyableEffect("sme", 132))
             player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(buyableEffect("st", 110))
             player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(buyableEffect("sb", 102))
             player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(buyableEffect("fu", 91))

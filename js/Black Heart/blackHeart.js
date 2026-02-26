@@ -1001,7 +1001,7 @@ addLayer("bh", {
         healthAdd = healthAdd.add(player.bh.skillData["kres_bigAttack"].maxLevel)
         healthAdd = healthAdd.add(player.bh.skillData["nav_healSpell"].maxLevel)
         healthAdd = healthAdd.add(player.bh.skillData["geroa_selfRepair"].maxLevel)
-        healthAdd = healthAdd.add(buyableEffect("sp", 12))
+        healthAdd = healthAdd.add(buyableEffect("sme", 121))
 
         // =-- DAMAGE STUFF --= //
         let damageBase = new Decimal(1)
@@ -1021,7 +1021,7 @@ addLayer("bh", {
         damageAdd = damageAdd.add(player.bh.skillData["geroa_cosmicRay"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["geroa_orbitalCannon"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["geroa_defenseSatellites"].maxLevel.div(5))
-        damageAdd = damageAdd.add(buyableEffect("sp", 22))
+        damageAdd = damageAdd.add(buyableEffect("sme", 122))
 
         // =-- REGEN STUFF --= //
         let regenBase = new Decimal(1)
@@ -1030,6 +1030,7 @@ addLayer("bh", {
         regenAdd = regenAdd.add(player.darkTemple.rgnAdd)
         regenAdd = regenAdd.add(player.bh.skillData["general_scream"].maxLevel.div(20))
         regenAdd = regenAdd.add(player.bh.skillData["kres_berserker"].maxLevel.div(20))
+        regenAdd = regenAdd.add(buyableEffect("sme", 124))
 
         // =-- AGILITY STUFF --= //
         let agilityBase = new Decimal(1)
@@ -1043,7 +1044,7 @@ addLayer("bh", {
         agilityAdd = agilityAdd.add(player.bh.skillData["sel_energyBoost"].maxLevel.div(2))
         agilityAdd = agilityAdd.add(player.bh.skillData["eclipse_syzygy"].maxLevel.div(2))
         agilityAdd = agilityAdd.add(player.bh.skillData["geroa_radioactiveMissile"].maxLevel.div(2))
-        agilityAdd = agilityAdd.add(buyableEffect("sp", 32))
+        agilityAdd = agilityAdd.add(buyableEffect("sme", 123))
 
         // =-- DEFENSE STUFF --= //
         let defenseBase = new Decimal(1)

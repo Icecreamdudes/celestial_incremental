@@ -89,6 +89,7 @@
         //tickspeed
         player.uni["D1"].tickspeed = new Decimal(1)
         player.uni["D1"].tickspeed = player.uni["D1"].tickspeed.mul(player.dt.timeCapsuleEffect)
+        player.uni["D1"].tickspeed = player.uni["D1"].tickspeed.mul(buyableEffect("dt", 14))
         if (getLevelableTier("pu", 307, true)) player.uni["D1"].tickspeed = player.uni["D1"].tickspeed.mul(levelableEffect("pu", 307)[0])
     },
     bars: {},

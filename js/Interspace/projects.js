@@ -73,6 +73,7 @@
             module.timeSpeed = project.getTimeSpeed()
             module.timeReq = project.getTimeReq()
             module.timeCapsuleReq = project.getTimeCapsuleReq()
+            module.completionEffect = project.getCompletionEffect()
 
             if (module.focused) {
                 module.time = module.time.add(module.timeSpeed.mul(delta))
@@ -580,7 +581,7 @@
                         ["raw-html", "Boosts project speed by x" + format(player.prj.storedTimeCapsuleEffect), {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "25px"],
                         ["raw-html", "You are gaining <h3>" + format(player.prj.projectSpeed) + "</h3> project progress /s.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "You are focusing on 0/1 projects.", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "You are focusing on 0/1 interspace projects.", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "25px"],
                         ["style-row", [
                             makeProject(1),

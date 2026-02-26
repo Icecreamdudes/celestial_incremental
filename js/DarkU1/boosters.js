@@ -51,9 +51,9 @@
         if (getLevelableTier("pu", 208, true)) player.db.boosterReqDivisor = player.db.boosterReqDivisor.mul(buyableEffect("dp", 16))
         player.db.boosterReqRoot = player.db.boosterReqRoot.div(buyableEffect("dv", 13))
     
-        player.db.boosterBulk = player.du.points.pow(player.db.boosterReqRoot).add(1).div(1e8).div(player.db.boosterReqDivisor).log(4).sub(player.db.boosters).max(0).floor();
-        if (player.db.boosters.add(player.db.boosterBulk).gte(3)) player.db.boosterBulk = player.du.points.pow(player.db.boosterReqRoot).add(1).div(1e10).div(player.db.boosterReqDivisor).log(6).sub(1).root(1.25).add(1).sub(player.db.boosters).max(new Decimal(3).sub(player.db.boosters)).max(0).floor();
-        if (player.db.boosters.add(player.db.boosterBulk).gte(7)) player.db.boosterBulk = player.du.points.pow(player.db.boosterReqRoot).add(1).div(1e10).div(player.db.boosterReqDivisor).log(9).sub(1).root(1.4).add(1).sub(player.db.boosters).max(new Decimal(7).sub(player.db.boosters)).max(0).floor();
+        player.db.boosterBulk = player.du.points.pow(player.db.boosterReqRoot).add(1).div(1e8).mul(player.db.boosterReqDivisor).log(4).sub(player.db.boosters).max(0).floor();
+        if (player.db.boosters.add(player.db.boosterBulk).gte(3)) player.db.boosterBulk = player.du.points.pow(player.db.boosterReqRoot).add(1).div(1e10).mul(player.db.boosterReqDivisor).log(6).sub(1).root(1.25).add(1).sub(player.db.boosters).max(new Decimal(3).sub(player.db.boosters)).max(0).floor();
+        if (player.db.boosters.add(player.db.boosterBulk).gte(7)) player.db.boosterBulk = player.du.points.pow(player.db.boosterReqRoot).add(1).div(1e10).mul(player.db.boosterReqDivisor).log(9).sub(1).root(1.4).add(1).sub(player.db.boosters).max(new Decimal(7).sub(player.db.boosters)).max(0).floor();
         
         player.db.boosterReq = player.db.boosterReq.div(player.db.boosterReqDivisor).root(player.db.boosterReqRoot)
         if (player.db.boosters.gte(100)) { 

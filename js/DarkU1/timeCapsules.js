@@ -39,6 +39,7 @@
         player.dt.timeCapsulesToGet = player.dt.timeCapsulesToGet.floor()
 
         player.dt.timeCapsuleEffect = player.dt.timeCapsules.add(1).log(10).add(1).pow(0.5).sub(1).pow_base(10).pow(1.5).sub(1).div(2).add(1)
+        player.dt.timeCapsuleEffect = player.dt.timeCapsuleEffect.pow(buyableEffect("dt", 15))
 
         // time energy
         
@@ -53,6 +54,7 @@
         // stored
 
         player.dt.storedToGet = player.dt.timeCapsules.div(100).log(10).add(1).pow(0.2).sub(1).pow_base(10).sub(1).mul(5).add(1).floor()
+        player.dt.storedToGet = player.dt.storedToGet.mul(buyableEffect("dt", 16))
         player.dt.storedToGet = player.dt.storedToGet.floor()
         if (player.dt.timeCapsules.lt(100)) player.dt.storedToGet = new Decimal(0);
         if (getLevelableTier("pu", 213, true)) player.dt.storedToGet = player.dt.storedToGet.add(1);
@@ -258,14 +260,14 @@
                 let eff = getBuyableAmount(this.layer, this.id).pow(0.5).pow_base(2)
                 return eff
             },
-            unlocked() { return true },
+            unlocked() { return hasMilestone("prj", 206) || true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "Make Haste"
             },
             display() {
-                return "which are boosting D1 tickspeed based by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are boosting D1 tickspeed by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Time Energy"
             },
             buy(mult) {
@@ -291,8 +293,8 @@
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.dt.timeEnergy},
             pay(amt) { player.dt.timeEnergy = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.75).div(25).add(1) },
-            unlocked() { return true },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).div(10).add(1) },
+            unlocked() { return hasMilestone("prj", 206) || true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -329,11 +331,11 @@
                 let eff = getBuyableAmount(this.layer, this.id).pow(0.85).pow_base(1.25)
                 return eff
             },
-            unlocked() { return true },
+            unlocked() { return hasMilestone("prj", 206) || true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return ""
+                return "All Your Focus"
             },
             display() {
                 return "which are multiplying stored time capsules by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -392,6 +394,9 @@
                     ["blank", "25px"],
                     ["row", [
                         ["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13], 
+                    ]],
+                    ["row", [
+                        ["dark-buyable", 14], ["dark-buyable", 15], ["dark-buyable", 16], 
                     ]],
                     ["blank", "25px"],
                 ]

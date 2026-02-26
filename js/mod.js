@@ -25,7 +25,7 @@
 		"Hive/honey.js", "Hive/wax.js", "Hive/aleph.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js",
 		"Interspace/well.js", "Interspace/bumpy.js", "Interspace/prisms.js", "Interspace/projects.js",
-		"Singularity/reactor.js",
+		//"Singularity/reactor.js",
 		"Check Back/singularityPet.js", "DarkU1/timeCapsules.js", "Check Back/dragon.js",
 		"DarkU1/blood.js", "Zar/zar.js", "Zar/coinFlip.js",
  		"Zar/wheelOfFortune.js", "Check Back/singularityPet.js", "Zar/slotMachine.js", "Zar/checkBackShrine.js", "Zar/cards.js",
@@ -1510,8 +1510,7 @@ var doNotCallTheseFunctionsEveryTick = [
 	"selectCelestialites", "petDeath", "celestialiteDeath", "petAbility", "celestialiteAbility",
 	"arriveAtStar", "spaceEnergyReset","coinFlip", "randomizeSegments", "spinWheel", "spinSlots", "evaluateRewards",
 	"slotReset",
-	"createReactorNode", "createReactorBullet",
-	"prismReset", "timeCapsuleReset", "createMultiverseMapConnection", "makeProject", "getTimeReq", "getTimeCapsuleReq", "getTimeSpeed", "lightGain",,
+	"prismReset", "timeCapsuleReset", "createMultiverseMapConnection", "makeProject", "makePrismFountain", "getTimeReq", "getTimeCapsuleReq", "getTimeSpeed", "lightGain",,
 ]
 
 function getStartPoints(){

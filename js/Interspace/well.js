@@ -9,8 +9,8 @@
         light: new Decimal(0),
         bestLight: new Decimal(0),
         lightMult: new Decimal(1),
-        lightEffect: new Decimal(0),
         lightModuleEffects: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
+        lightWellCycleEffectSoftcap: new Decimal(0.5),
         
         modules: {
             1: {
@@ -70,30 +70,33 @@
 
         // LIGHT
 
+        player.wel.lightWellCycleEffectSoftcap = new Decimal(0.5)
+
         player.wel.lightMult = new Decimal(1)
         player.wel.lightMult = player.wel.lightMult.mul(buyableEffect("wel", 11))
         player.wel.lightMult = player.wel.lightMult.mul(buyableEffect("wel", 12))
         if (hasUpgrade("wel", 13)) {
 
-            if (player.wel.modules[1].completions.gte(1e4)) player.wel.modules[1].completionsEffect = player.wel.modules[1].completions.div(1e4).pow(0.25).mul(1e4).mul(0.02).add(1);
+            if (player.wel.modules[1].completions.gte(1e3)) player.wel.modules[1].completionsEffect = player.wel.modules[1].completions.div(1e3).pow(player.wel.lightWellCycleEffectSoftcap).mul(1e3).mul(0.02).add(1);
             else player.wel.modules[1].completionsEffect = player.wel.modules[1].completions.mul(0.02).add(1);
             player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[1].completionsEffect)
 
-            if (player.wel.modules[2].completions.gte(1e4)) player.wel.modules[2].completionsEffect = player.wel.modules[2].completions.div(1e4).pow(0.25).mul(1e4).mul(0.1).add(1);
+            if (player.wel.modules[2].completions.gte(1e3)) player.wel.modules[2].completionsEffect = player.wel.modules[2].completions.div(1e3).pow(player.wel.lightWellCycleEffectSoftcap).mul(1e3).mul(0.1).add(1);
             else player.wel.modules[2].completionsEffect = player.wel.modules[2].completions.mul(0.1).add(1);
             player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[2].completionsEffect)
 
-            if (player.wel.modules[3].completions.gte(1e4)) player.wel.modules[3].completionsEffect = player.wel.modules[3].completions.div(1e4).pow(0.25).mul(1e4).mul(0.01).add(1);
+            if (player.wel.modules[3].completions.gte(1e3)) player.wel.modules[3].completionsEffect = player.wel.modules[3].completions.div(1e3).pow(player.wel.lightWellCycleEffectSoftcap).mul(1e3).mul(0.01).add(1);
             else player.wel.modules[3].completionsEffect = player.wel.modules[3].completions.mul(0.01).add(1);
             player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[3].completionsEffect)
 
-            if (player.wel.modules[4].completions.gte(1e4)) player.wel.modules[4].completionsEffect = player.wel.modules[4].completions.div(1e4).pow(0.25).mul(1e4).div(1e9).add(1);
+            if (player.wel.modules[4].completions.gte(1e3)) player.wel.modules[4].completionsEffect = player.wel.modules[4].completions.div(1e3).pow(player.wel.lightWellCycleEffectSoftcap).mul(1e3).div(1e9).add(1);
             else player.wel.modules[4].completionsEffect = player.wel.modules[4].completions.div(1e9).add(1);
             player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[4].completionsEffect)
         }
         if (hasUpgrade("wel", 14)) player.wel.lightMult = player.wel.lightMult.mul(2)
         player.wel.lightMult = player.wel.lightMult.mul(levelableEffect("pu", 113)[1])
         if (hasMilestone("prj", 201)) player.wel.lightMult = player.wel.lightMult.mul(2)
+        player.wel.lightMult = player.wel.lightMult.mul(buyableEffect("pri", 12))
         
         // WELLS
 
@@ -115,9 +118,8 @@
             player.wel.modules[i].completionsGain = new Decimal(1)
             player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(buyableEffect("wel", 13))
             player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(levelableEffect("pu", 214)[1])
+            player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(buyableEffect("pri", 11))
         }
-
-        player.wel.lightEffect = player.wel.light.add(1).pow(0.1)
 
         if (player.wel.bestLight.lt(player.wel.light)) player.wel.bestLight = player.wel.light;
     },
@@ -137,7 +139,7 @@
             currencyInternalName: "light",
             canAfford() { return true },
             style() {
-                let look = {width: "200px", borderRadius: "8px 0px 0px 0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px"}
+                let look = {width: "200px", borderRadius: "8px 0px 0px 0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
                 if (hasUpgrade(this.layer, this.id)) {
                     look.backgroundColor = "#4d9973"
                     look.border = "3px solid #336659"
@@ -171,7 +173,7 @@
                 return this.condition()
             },
             style() {
-                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px"}
+                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
                 if (hasUpgrade(this.layer, this.id)) {
                     look.backgroundColor = "#4d9973"
                     look.border = "3px solid #336659"
@@ -209,7 +211,7 @@
                 return this.condition()
             },
             style() {
-                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px"}
+                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
                 if (hasUpgrade(this.layer, this.id)) {
                     look.backgroundColor = "#4d9973"
                     look.border = "3px solid #336659"
@@ -247,7 +249,7 @@
                 return this.condition()
             },
             style() {
-                let look = {width: "200px", borderRadius: "0px 8px 0px 0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px"}
+                let look = {width: "200px", borderRadius: "0px 8px 0px 0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
                 if (hasUpgrade(this.layer, this.id)) {
                     look.backgroundColor = "#4d9973"
                     look.border = "3px solid #336659"
@@ -285,7 +287,7 @@
                 return this.condition()
             },
             style() {
-                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px"}
+                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
                 if (hasUpgrade(this.layer, this.id)) {
                     look.backgroundColor = "#4d9973"
                     look.border = "3px solid #336659"
@@ -323,7 +325,7 @@
                 return this.condition()
             },
             style() {
-                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px"}
+                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
                 if (hasUpgrade(this.layer, this.id)) {
                     look.backgroundColor = "#4d9973"
                     look.border = "3px solid #336659"
@@ -361,7 +363,7 @@
                 return this.condition()
             },
             style() {
-                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px"}
+                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
                 if (hasUpgrade(this.layer, this.id)) {
                     look.backgroundColor = "#4d9973"
                     look.border = "3px solid #336659"
@@ -399,7 +401,7 @@
                 return this.condition()
             },
             style() {
-                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px"}
+                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
                 if (hasUpgrade(this.layer, this.id)) {
                     look.backgroundColor = "#4d9973"
                     look.border = "3px solid #336659"
@@ -452,7 +454,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '194px', height: '174px', borderRadius: "5px 0px 0px 5px", border: "3px solid #336659", background: "#4d9973", color: "#000000df"}
+            style: { width: '194px', height: '174px', borderRadius: "5px 0px 0px 5px", border: "3px solid #336659", background: "#4d9973", color: "#000000df", margin: "1.5px"}
         },
         12: {
             condition() { return player.wel.bestLight.gte(1.5e3) },
@@ -487,7 +489,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '194px', height: '174px', borderRadius: "0px", border: "3px solid #336659", background: "#4d9973", color: "#000000df"}
+            style: { width: '194px', height: '174px', borderRadius: "0px", border: "3px solid #336659", background: "#4d9973", color: "#000000df", margin: "1.5px"}
         },
         13: {
             condition() { return player.wel.bestLight.gte(5e4) },
@@ -522,7 +524,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '194px', height: '174px', borderRadius: "0px", border: "3px solid #336659", background: "#4d9973", color: "#000000df"}
+            style: { width: '194px', height: '174px', borderRadius: "0px", border: "3px solid #336659", background: "#4d9973", color: "#000000df", margin: "1.5px"}
         },
         14: {
             condition() { return player.wel.bestLight.gte(1.5e6) },
@@ -557,7 +559,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '194px', height: '174px', borderRadius: "0px", border: "3px solid #336659", background: "#4d9973", color: "#000000df"}
+            style: { width: '194px', height: '174px', borderRadius: "0px", border: "3px solid #336659", background: "#4d9973", color: "#000000df", margin: "1.5px"}
         },
         101: {
             condition() { return player.wel.bestLight.gte(1e8) },
@@ -592,7 +594,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '194px', height: '174px', borderRadius: "0px", border: "3px solid #336659", background: "#4d9973", color: "#000000df"}
+            style: { width: '194px', height: '174px', borderRadius: "0px", border: "3px solid #336659", background: "#4d9973", color: "#000000df", margin: "1.5px"}
         },
         102: {
             condition() { return player.wel.bestLight.gte(1e11) },
@@ -627,7 +629,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '194px', height: '174px', borderRadius: "0px", border: "3px solid #336659", background: "#4d9973", color: "#000000df"}
+            style: { width: '194px', height: '174px', borderRadius: "0px", border: "3px solid #336659", background: "#4d9973", color: "#000000df", margin: "1.5px"}
         },
         103: {
             condition() { return player.wel.bestLight.gte(1e15) },
@@ -662,7 +664,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '194px', height: '174px', borderRadius: "0px", border: "3px solid #336659", background: "#4d9973", color: "#000000df"}
+            style: { width: '194px', height: '174px', borderRadius: "0px", border: "3px solid #336659", background: "#4d9973", color: "#000000df", margin: "1.5px"}
         },
     },
     milestones: {},
@@ -921,6 +923,8 @@
                     ["raw-html", "(x" + formatShort(player.wel.modules[1].completionsEffect) + " Light)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
                     ]],
                     ]],
+                    ["blank", "10px"],
+                    ["raw-html", "All light well cycle effect scaling is reduced by ^" + format(player.wel.lightWellCycleEffectSoftcap) + " after 1,000!", {color: "#ff7f00", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", []],
                     ["blank", "25px"]]

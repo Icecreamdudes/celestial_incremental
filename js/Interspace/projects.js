@@ -63,6 +63,7 @@
         player.prj.projectSpeed = new Decimal(1)
         player.prj.projectSpeed = player.prj.projectSpeed.mul(levelableEffect("pu", 307)[1])
         player.prj.projectSpeed = player.prj.projectSpeed.mul(player.prj.storedTimeCapsuleEffect)
+        player.prj.projectSpeed = player.prj.projectSpeed.mul(player.pri.modules[2].completionEffect)
 
         player.prj.storedTimeCapsuleEffect = player.prj.storedTimeCapsules.add(1).log(10).add(1).pow(0.5).sub(1).pow_base(10).pow(2).sub(1).div(10).add(1)
 
@@ -87,7 +88,7 @@
 
         // MILESTONE EFFECTS
 
-        player.prj.milestone105Effect = player.prj.projectSpeed.pow(0.25).mul(player.prj.projectSpeed.max(1).log10()).add(1)
+        player.prj.milestone105Effect = player.prj.projectSpeed.pow(0.2).mul(player.prj.projectSpeed.max(1).log10().mul(0.75)).add(1)
     },
     branches: ["wel"],
     clickables: {

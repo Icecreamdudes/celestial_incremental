@@ -15,7 +15,19 @@
         modules: {
             1: {
                 time: new Decimal(0),
-                timeReq: new Decimal(120),
+                timeReq: new Decimal(600),
+                timeSpeed: new Decimal(1),
+                canAddCompletion: false,
+                completions: new Decimal(0),
+                maxCompletions: new Decimal(0),
+
+                focused: false,
+                timeCapsuleReq: new Decimal(1),
+                completionEffect: new Decimal(1),
+            },
+            2: {
+                time: new Decimal(0),
+                timeReq: new Decimal(1200),
                 timeSpeed: new Decimal(1),
                 canAddCompletion: false,
                 completions: new Decimal(0),
@@ -73,14 +85,14 @@
 
         player.wel.light = new Decimal(0)
 
-        player.wel.fountains[1].time = new Decimal(0)
-        player.wel.fountains[1].completions = new Decimal(0)
-        player.wel.fountains[2].time = new Decimal(0)
-        player.wel.fountains[2].completions = new Decimal(0)
-        player.wel.fountains[3].time = new Decimal(0)
-        player.wel.fountains[3].completions = new Decimal(0)
-        player.wel.fountains[4].time = new Decimal(0)
-        player.wel.fountains[4].completions = new Decimal(0)
+        player.wel.modules[1].time = new Decimal(0)
+        player.wel.modules[1].completions = new Decimal(0)
+        player.wel.modules[2].time = new Decimal(0)
+        player.wel.modules[2].completions = new Decimal(0)
+        player.wel.modules[3].time = new Decimal(0)
+        player.wel.modules[3].completions = new Decimal(0)
+        player.wel.modules[4].time = new Decimal(0)
+        player.wel.modules[4].completions = new Decimal(0)
 
         setBuyableAmount("wel", 11, new Decimal(0))
         setBuyableAmount("wel", 12, new Decimal(0))
@@ -90,6 +102,28 @@
     branches: ["wel", "prj"],
     clickables: {
         1: {
+            title() { return "<h3>Focus</h3>" },
+            canClick() { return player.prj.storedTimeCapsules.gte(player.pri.modules[this.id].timeCapsuleReq) && !player.pri.modules[this.id].focused},
+            unlocked() { return true },
+            onClick() {
+                player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.sub(player.pri.modules[this.id].timeCapsuleReq)
+                player.pri.modules[this.id].focused = true
+            },
+            style() {
+                let look = {width: "238px", minHeight: "45px", borderRadius: "0px"}
+                if (this.canClick()) {
+                    look.backgroundColor = "#a8ffff"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        2: {
             title() { return "<h3>Focus</h3>" },
             canClick() { return player.prj.storedTimeCapsules.gte(player.pri.modules[this.id].timeCapsuleReq) && !player.pri.modules[this.id].focused},
             unlocked() { return true },
@@ -201,6 +235,48 @@
                 return s
             },
         },
+        2: {
+            title: "Time Capsule Fountain",
+            completionEffectStat: "Stored Time Capsules",
+            getCompletionEffect() {
+                let completions = player.pri.modules[2].completions
+
+                s = completions.pow(0.75).pow_base(1.25)
+
+                return s
+            },
+            getTimeReq() {
+                let completions = player.pri.modules[2].completions
+                let s = new Decimal(1.2e3)
+
+                s = s.mul(completions.add(1).pow(2))
+                s = s.mul(completions.pow_base(2))
+                if (completions.gte(50)) {
+                    s = s.pow(1.05)
+                }
+
+                return s
+            },
+            getTimeCapsuleReq() {
+                let completions = player.pri.modules[2].completions
+                let s = completions.add(1).pow(1.25)
+                s = s.mul(2)
+                
+                if (completions.gte(50)) {
+                    s = s.mul(completions.sub(50).pow_base(1.125))
+                }
+
+                return s.floor()
+            },
+            getTimeSpeed() {
+                let s = new Decimal(1)
+
+                s = s.mul(player.prj.projectSpeed)
+                s = s.mul(player.pri.fountainSpeed)
+
+                return s
+            },
+        },
     },
     microtabs: {
         stuff: {
@@ -222,8 +298,9 @@
                         ["style-row", [
                             makePrismFountain(1),
                             ["blank", "6px", {width: "6px"}],
-                            //hasUpgrade("wel", 23) ? makePrismFountain(2) : null,
+                            hasUpgrade("wel", 23) ? makePrismFountain(2) : null,
                         ]],
+                        ["blank", "25px"],
                     ]
                     return look
                 }

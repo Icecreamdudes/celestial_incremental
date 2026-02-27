@@ -462,35 +462,35 @@ addLayer("bh", {
             "general_block": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
 
             // KRES
-            "kres_chop": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "kres_chop": {selected: ["kres", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "kres_bigAttack": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "kres_battleCry": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "kres_decapitate": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "kres_berserker": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
 
             // NAV
-            "nav_magicMissle": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "nav_magicMissle": {selected: ["nav", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "nav_healSpell": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "nav_reboundingAura": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "nav_fireball": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "nav_soulShred": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
 
             // SEL
-            "sel_singleShot": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "sel_singleShot": {selected: ["sel", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "sel_turret": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "sel_energyBoost": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "sel_arrowBarrage": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "sel_scavenger": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
 
             // ECLIPSE
-            "eclipse_drain": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "eclipse_drain": {selected: ["eclipse", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "eclipse_motivation": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "eclipse_lightBarrier": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "eclipse_solarRetinopathy": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "eclipse_syzygy": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
 
             // GEROA
-            "geroa_radioactiveMissile": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "geroa_radioactiveMissile": {selected: ["geroa", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "geroa_selfRepair": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "geroa_cosmicRay": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "geroa_orbitalCannon": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},

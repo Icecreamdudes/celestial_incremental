@@ -282,8 +282,8 @@ addLayer("stagnantSynestia", {
                     ["style-column", [
                         ["raw-html", "Properties", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
                     ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "10px"}],
-                    ["raw-html", "<u>Combo Scaling", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", "2.5% starting at 25", {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return Decimal.sub(1.025, player.bh.comboScalingReduction).gt(1) ? "<u>Combo Scaling" : ""}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return Decimal.sub(1.025, player.bh.comboScalingReduction).gt(1) ? formatSimple(Decimal.sub(1.025, player.bh.comboScalingReduction).max(1).sub(1).mul(100)) + "% starting at 25" : ""}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", "<u>Time Stagnation", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
                     ["raw-html", "You have to force time to move forward", {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
                 ], {width: "250px", height: "197px", background: "var(--layerBackground)"}],

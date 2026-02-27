@@ -86,6 +86,8 @@
         boosterDiceStatsPerSecond: new Decimal(0),
 
         boosterDiceAutomation: false,
+
+        diceSpaceUnlocked: false,
     }},
     automate() {
         if (hasUpgrade("d", 11) || player.tad.altInfinities.shattered.milestone.gte(3))
@@ -151,6 +153,7 @@
 
         // POWER MODIFIERS
         player.d.dicePointsMult = player.d.dicePointsMult.pow(player.co.cores.dice.effect[1])
+        if (hasUpgrade("za", 17)) player.d.dicePointsMult = player.d.dicePointsMult.pow(upgradeEffect("za", 17))
 
         // DICE POINT EFFECT
         if (player.d.dicePoints.gte(0)) {
@@ -220,7 +223,7 @@
         ]
 
         // BOOSTER DICE COOLDOWN DECREMENTOR
-        player.d.boosterDiceCooldown = player.d.boosterDiceCooldown.sub(onepersec.mul(delta))
+        player.d.boosterDiceCooldown = player.d.boosterDiceCooldown.sub(onepersec.mul(Decimal.div(delta, player.uni["U1"].tickspeed)))
 
         // DICE COST CODE
         player.d.diceCost = Decimal.pow(player.d.dice.add(1), 8)
@@ -289,6 +292,9 @@
         player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(buyableEffect("d", 24))
         player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(buyableEffect("g", 28))
         player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(player.co.cores.dice.effect[2])
+
+        //POWER
+        if (hasUpgrade("za", 17)) player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.pow(upgradeEffect("za", 17))
 
         // CHALLENGE DICE PER SECOND
         if (hasUpgrade("i", 31)) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet.mul(0.05).mul(delta))
@@ -711,6 +717,17 @@
                 player.d.rigIndex == 18 ? look.border = "3px solid red" : look.border = "3px solid white"
                 return look
             },
+        },
+        201: {
+            title() { return "<h2>Open the rift to Dice Space<br>Req: 1e450 Challenge Dice Points" },
+            canClick() { return player.d.challengeDicePoints.gte("1e450")},
+            unlocked() { return true },
+            onClick() {
+                player.d.diceSpaceUnlocked = true
+                player.tab = "za"
+                player.universe = "ds"
+            },
+            style: {width: "600px", minHeight: "200px", color: "#1b110eff", backgroundImage: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)", border: "3px solid #0061ff", borderRadius: "15px"},
         },
     },
     addDiceEffect() {
@@ -1330,6 +1347,14 @@
                     ["blank", "10px"],
                     ["raw-html", "Tip:", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", "Pets only work after getting<br>1e100 celestial points", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                ]
+            },
+            "The Rift": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                unlocked() { return player.in.pylonBuilt && !player.d.diceSpaceUnlocked },
+                content: [
+                    ["blank", "25px"],
+                    ["row", [["clickable", 201]]],
                 ]
             },
         },

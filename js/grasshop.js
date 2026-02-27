@@ -183,9 +183,6 @@
         player.gh.steelToGet = player.gh.steelToGet.pow(player.se.starsExploreEffect[0][5])
         player.gh.steelToGet = player.gh.steelToGet.pow(player.cof.coreFragmentEffects[2])
 
-        // STEEL PER SECOND
-        if (hasUpgrade("sma", 103)) player.gh.steel = player.gh.steel.add(Decimal.mul(0.1, player.gh.steelToGet.mul(delta)))
-
         // STEEL EFFECT
         player.gh.steelEffect = player.gh.steel.pow(0.75).add(1)
 

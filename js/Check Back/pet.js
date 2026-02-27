@@ -4466,7 +4466,7 @@ addLayer("pet", {
             levelTooltip() { return "Costs Chocolate Shards." },
             evoCan() { return true },
             // CLICK CODE
-            unlocked() { return player.ep2.obtainedShards && player.matosLair.milestone[25] > 0},
+            unlocked() { return player.ep2.obtainedShards && player.bh.unlockConditions.done},
             canClick() { return getLevelableAmount(this.layer, this.id).gt(0)},
             onClick() { return layers[this.layer].levelables.index = this.id },
             // BUY CODE

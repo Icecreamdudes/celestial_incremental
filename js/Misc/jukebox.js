@@ -329,64 +329,6 @@ addLayer("jukebox", {
             unlocked() {return player.stagnantSynestia.unlocked},
         },
 
-        // BLACK HEART SONGS
-        "black-heart": {
-            artist: "Citrine/Niko/Flushmak",
-            name: "N/A",
-            description: "Black Heart",
-            img: "resources/music/black-heart.png",
-            file: "music/enteringBlackHeart.mp3",
-            unlocked() {return player.bh.unlockConditions.done},
-        },
-        "depth-1": {
-            artist: "Icecreamdude",
-            name: "N/A",
-            description: "Depth 1",
-            img: "resources/music/depth-1.png",
-            file: "music/celestialites.mp3",
-            unlocked() {return player.bh.unlockConditions.done},
-        },
-        "depth-2": {
-            artist: "150percent",
-            name: "N/A",
-            description: "Depth 2",
-            img: "resources/music/depth-2.png",
-            file: "music/blackHeart.mp3",
-            unlocked() {return player.depth2.unlocked},
-        },
-        "depth-3": {
-            artist: "Icecreamdude",
-            name: "N/A",
-            description: "Depth 3",
-            img: "resources/music/depth-3.png",
-            file: "music/depth3.mp3",
-            unlocked() {return player.depth3.unlocked},
-        },
-        "matos-lair": {
-            artist: "Icecreamdude",
-            name: "N/A",
-            description: "Matos Lair",
-            img: "resources/music/matos-lair.png",
-            file: "music/matosTheme.mp3",
-            unlocked() {return player.matosLair.unlocked},
-        },
-        "matos-fight": {
-            artist: "Icecreamdude",
-            name: "N/A",
-            description: "Matos Fight",
-            img: "resources/music/matos-fight.png",
-            file: "music/matosFight.mp3",
-            unlocked() {return player.matosLair.milestone[25] > 0},
-        },
-        "stagnant-synestia": {
-            artist: "Icecreamdude",
-            name: "N/A",
-            description: "Stagnant Synestia",
-            img: "resources/music/stagnant.png",
-            file: "music/stagnant.mp3",
-            unlocked() {return player.stagnantSynestia.unlocked},
-        },
-
         // CUTSCENE SONGS
         "cutscene-piano": {
             artist: "Icecreamdude",

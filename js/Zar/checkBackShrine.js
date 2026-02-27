@@ -63,7 +63,7 @@
             player.cbs.ascensionShards = player.cbs.ascensionShards.add(1)
 
             player.ir.inBattle = false
-            player.ma.inBlackHeart = false
+            options.fullscreen = false
             player.subtabs["cbs"]['stuff'] = 'Ritual'
 
             if (arena) {
@@ -80,13 +80,7 @@
             player.cbs.inBattle = false
             player.cbs.ritualSpiritActive = false
 
-            pauseUniverse("U1")
-            pauseUniverse("UA")
-            pauseUniverse("U2")
-            pauseUniverse("A1")
-            pauseUniverse("U3")
-            pauseUniverse("CB")
-            pauseUniverse("UB")
+            pauseUniverseAll(["DS", "A2"], "unpause", true)
 
             flashScreen("Ritual Success.\nYou have earned a Shard of Ascension.", 3000)
         }
@@ -144,7 +138,7 @@
             tooltip() { return "Gives +4 movement speed, +2 HP/sec, and 40% damage reduction." },
             onClick() {
                 player.ir.inBattle = true
-                player.ma.inBlackHeart = true
+                options.fullscreen = true
                 player.subtabs["cbs"]['stuff'] = 'Battle'
 
                 arena = new RitualArena(1200, 600);
@@ -164,13 +158,7 @@
 
                 player.cbs.ritualSpiritCooldown = player.cbs.ritualSpiritCooldownMax
 
-                pauseUniverse("U1")
-                pauseUniverse("UA")
-                pauseUniverse("U2")
-                pauseUniverse("A1")
-                pauseUniverse("U3")
-                pauseUniverse("CB")
-                pauseUniverse("UB")
+                pauseUniverseAll(["DS", "A2"], "pause", true)
             },
             style: { width: '300px', "min-height": '100px', color: "white" },
         },
@@ -180,7 +168,7 @@
             unlocked() { return !player.bl.noxFightActive || player.subtabs["bl"]["stuff"] == "Refresh Page :("|| player.subtabs["bl"]["stuff"] == "Lose"},
             onClick() {
                 player.ir.inBattle = false
-                player.ma.inBlackHeart = false
+                options.fullscreen = false
                 player.subtabs["cbs"]['stuff'] = 'Ritual'
 
                 if (arena) {
@@ -197,13 +185,7 @@
                 player.cbs.inBattle = false
                 player.cbs.ritualSpiritActive = false
 
-                pauseUniverse("U1")
-                pauseUniverse("UA")
-                pauseUniverse("U2")
-                pauseUniverse("A1")
-                pauseUniverse("U3")
-                pauseUniverse("CB")
-                pauseUniverse("UB")
+                pauseUniverseAll(["DS", "A2"], "unpause", true)
             },
             style: { width: '300px', "min-height": '100px', color: "white" },
         },
@@ -2778,7 +2760,7 @@ class RitualArena extends SpaceArena {
                         try { if (typeof this.exitFullscreenBossMode === 'function') this.exitFullscreenBossMode(); } catch (e) {}
                         player.cbs.ascensionShards = player.cbs.ascensionShards.add(1)
                                         player.ir.inBattle = false
-                        player.ma.inBlackHeart = false
+                        options.fullscreen = false
                         player.subtabs["cbs"]['stuff'] = 'Ritual'
 
                         if (arena) {
@@ -2795,13 +2777,7 @@ class RitualArena extends SpaceArena {
                         player.cbs.inBattle = false
                         player.cbs.ritualSpiritActive = false
 
-                        pauseUniverse("U1")
-                        pauseUniverse("UA")
-                        pauseUniverse("U2")
-                        pauseUniverse("A1")
-                        pauseUniverse("U3")
-                        pauseUniverse("CB")
-                        pauseUniverse("UB")
+                        pauseUniverseAll(["DS", "A2"], "unpause", true)
                     }
                 }
             }
@@ -2852,7 +2828,7 @@ class RitualArena extends SpaceArena {
 
 /*
              player.ir.inBattle = true
-                player.ma.inBlackHeart = true
+                options.fullscreen = true
                 player.subtabs["cbs"]['stuff'] = 'Battle'
 
                 arena = new RitualArena(1800, 600);
@@ -2863,13 +2839,7 @@ class RitualArena extends SpaceArena {
                 if (hasUpgrade("ir", 14)) arena.upgradeEffects.hpRegen += 0.5 / 60
 
                 arena.upgradeEffects.attackDamage *= levelableEffect("ir", player.ir.shipType)[2]
-                pauseUniverse("U1")
-                pauseUniverse("UA")
-                pauseUniverse("U2")
-                pauseUniverse("A1")
-                pauseUniverse("U3")
-                pauseUniverse("CB")
-                pauseUniverse("UB")
+                pauseUniverseAll(["DS", "A2"], "pause", true)
 */
 
 //alternatively make the ritual a bullet hell attack
@@ -2895,8 +2865,9 @@ function summonSpirit() {
         try {
             if (player) {
                 player.ir.inBattle = true;
-                player.ma = player.ma || {};
-                player.ma.inBlackHeart = true;
+                if (options) {
+                    options.fullscreen = true;
+                }
                 player.subtabs = player.subtabs || {};
                 player.subtabs["cbs"] = player.subtabs["cbs"] || {};
                 player.subtabs["cbs"]["stuff"] = 'Battle';

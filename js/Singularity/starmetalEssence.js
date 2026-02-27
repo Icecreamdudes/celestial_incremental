@@ -1320,12 +1320,15 @@
                 content: [
                     ["blank", "25px"],
                     ["style-column", [
+                        ["raw-html", "Starmetal Studies", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ], {width: "800px", height: "50px", background: "linear-gradient(to right, #e6eb57 -10%, #8d3947 5%, #54265e 10%, #13292f 15%, black 20%, black 80%, #13292f 85%, #54265e 90%, #8d3947 95%, #e6eb57 110%)", border: "3px solid #d460eb", borderRadius: "30px 30px 0 0", marginBottom: "-3px"}],
+                    ["style-column", [
                         ["buyable", 101], ["buyable", 102], ["buyable", 103], ["buyable", 104], ["buyable", 105],
                         ["buyable", 111], ["buyable", 112], ["buyable", 113], ["buyable", 114],
                         ["buyable", 121], ["buyable", 122], ["buyable", 123], ["buyable", 124],
                         ["buyable", 131], ["buyable", 132], ["buyable", 133], ["buyable", 134],
                         ["buyable", 141], ["buyable", 142], ["buyable", 143], ["buyable", 144],
-                    ], {position: "relative", width: "800px", height: "720px", background: "rgba(0,0,0,0.3)", border: "3px solid #d460eb", borderRadius: "30px"}],
+                    ], {position: "relative", width: "800px", height: "720px", background: "rgba(0,0,0,0.3)", border: "3px solid #d460eb", borderRadius: "0 0 30px 30px"}],
                 ]
             },
             "Starmetal Automation": {

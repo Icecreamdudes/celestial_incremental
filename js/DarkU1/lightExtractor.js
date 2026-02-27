@@ -192,14 +192,7 @@
 
                 layers.pu.generateSelection();
 
-                pauseUniverse("U1")
-                pauseUniverse("UA")
-                pauseUniverse("U2")
-                pauseUniverse("A1")
-                pauseUniverse("U3")
-                pauseUniverse("CB")
-                pauseUniverse("DS")
-
+                pauseUniverseAll(["D1", "A2"], "unpause", true)
             },
             style() {
                 let look = {width: "400px", minHeight: "100px", fontSize: "9px", borderRadius: "15px", color: "white", border: "2px solid #384166"}
@@ -258,13 +251,7 @@
                 player.pet.legPetTimers[0].current = new Decimal(0)
                 layers.pu.generateSelection();
 
-                pauseUniverse("U1")
-                pauseUniverse("UA")
-                pauseUniverse("U2")
-                pauseUniverse("A1")
-                pauseUniverse("U3")
-                pauseUniverse("CB")
-                pauseUniverse("DS")
+                pauseUniverseAll(["D1", "A2"], "unpause", true)
 
                 player.pet.legendaryPetAbilityCooldowns[0] = player.pet.legendaryPetAbilityCooldownsMax[0]
             },

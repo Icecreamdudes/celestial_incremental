@@ -112,6 +112,7 @@
         14: {
             requirementDescription: "<h3>12 Boosters",
             effectDescription() { return "Gain 10% of grass value per second, and boost grass value and capacity based on boosters<br>Currently: x" + format(player.db.milestone4Effect) + "." },
+            unlocked() {return player.ir.iriditeDefeated},
             done() { return player.db.boosters.gte(12) && player.ir.iriditeDefeated },
             style() {
                 let look = {width: "500px", minHeight: "90px", color: "white", border: "3px solid #6e64c4", borderRadius: "10px", margin: "-1.5px"}
@@ -122,6 +123,7 @@
         15: {
             requirementDescription: "<h3>16 Boosters",
             effectDescription() { return "Gain 100% of prestige points per second and autobuy all prestige point buyables." },
+            unlocked() {return player.ir.iriditeDefeated},
             done() { return player.db.boosters.gte(16) && player.ir.iriditeDefeated },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #6e64c4", borderRadius: "10px", margin: "-1.5px"}
@@ -164,8 +166,8 @@
         104: {
             requirementDescription: "<h3>15 Best Boosters",
             effectDescription() { return "Best boosters divides star exploration times.<br>Currently: /" + format(player.db.permaMilestone4Effect) + "." },
-            unlocked() { return player.ma.matosDefeated },
-            done() { return player.db.bestBoosters.gte(15) && player.ma.matosDefeated },
+            unlocked() { return player.matosLair.milestone[25] > 0 },
+            done() { return player.db.bestBoosters.gte(15) && player.matosLair.milestone[25] > 0 },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #6e64c4", borderRadius: "10px", margin: "-1.5px"}
                 if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
@@ -174,7 +176,7 @@
         },
         105: {
             requirementDescription: "<h3>20 Best Boosters",
-            effectDescription() { return "Reduce matos combo softcap scaling by -0.1%.<br>"},
+            effectDescription() { return "Reduce black heart combo softcap scaling by -0.2%.<br>"},
             unlocked() { return player.ir.iriditeDefeated },
             done() { return player.db.bestBoosters.gte(20) && player.ir.iriditeDefeated },
             style() {

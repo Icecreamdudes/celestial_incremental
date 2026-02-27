@@ -540,6 +540,7 @@ addLayer("pet", {
         player.pet.petPointMult = player.pet.petPointMult.mul(buyableEffect("sp", 24))
         player.pet.petPointMult = player.pet.petPointMult.mul(buyableEffect("pl", 14))
         if (hasMilestone("db", 101)) player.pet.petPointMult = player.pet.petPointMult.mul(1.15)
+        player.pet.petPointMult = player.pet.petPointMult.mul(player.cbs.pylonEnergyEffect2)
 
         // PET BUTTON COOLDOWN CALC
         for (let i in player.pet.petTimers) {
@@ -698,6 +699,7 @@ addLayer("pet", {
         if (getLevelableTier("pu", 303, true)) player.pet.legPetTimers[0].max = player.pet.legPetTimers[0].max.mul(levelableEffect("pu", 303)[0])
         
         let abilityTimeDecrease = new Decimal(1)
+        abilityTimeDecrease = abilityTimeDecrease.mul(player.dv.timeDrainRate)
         if (getLevelableTier("pu", 303, true)) abilityTimeDecrease = abilityTimeDecrease.div(levelableEffect("pu", 303)[0])
         player.pet.legPetTimers[0].current = player.pet.legPetTimers[0].current.sub(abilityTimeDecrease.mul(delta))
 
@@ -725,6 +727,14 @@ addLayer("pet", {
             player.tab = "sma"
             player.subtabs.pu["stuff"] = "Collection"
             changeTheme()
+
+            pauseUniverse("U1")
+            pauseUniverse("UA")
+            pauseUniverse("U2")
+            pauseUniverse("A1")
+            pauseUniverse("U3")
+            pauseUniverse("CB")
+            pauseUniverse("DS")
 
             layers.pu.generateSelection();
         }
@@ -1007,7 +1017,15 @@ addLayer("pet", {
                 layers.pu.generateSelection();
 
                 player.subtabs.le["stuff"] = "Shards"
-                player.subtabs.pu["stuff"] = "Selection"                
+                player.subtabs.pu["stuff"] = "Selection"   
+                
+                pauseUniverse("U1")
+                pauseUniverse("UA")
+                pauseUniverse("U2")
+                pauseUniverse("A1")
+                pauseUniverse("U3")
+                pauseUniverse("CB")
+                pauseUniverse("DS")
             },
             style() {
                 let look = {width: '125px', minHeight: '40px', borderRadius: '0px', fontSize: '8px'}
@@ -5361,3 +5379,4 @@ function randomInt(min, max) {
     max = Math.floor(max.toNumber());
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+

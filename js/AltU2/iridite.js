@@ -184,6 +184,14 @@ addLayer("ir", {
                 current: new Decimal(0),
                 max: new Decimal(2100),
             },
+            9: {
+                current: new Decimal(0),
+                max: new Decimal(1800),
+            },
+            10: {
+                current: new Decimal(0),
+                max: new Decimal(1800),
+            },
         },
 
         battleLevel: new Decimal(0),
@@ -197,6 +205,8 @@ addLayer("ir", {
         iriditeFought: false,
         iriditeFightActive: false,
         iriditeDefeated: false,
+        astralShipUnlocked: false,
+        tookDamageInIriditeFight: false,
 
         iriditePhase: new Decimal(0),
     }},
@@ -225,6 +235,8 @@ addLayer("ir", {
         if (player.ir.shipType == 5) player.ir.shipHealthMax = new Decimal(50)
         if (player.ir.shipType == 6) player.ir.shipHealthMax = new Decimal(75)
         if (player.ir.shipType == 7) player.ir.shipHealthMax = new Decimal(75)
+        if (player.ir.shipType == 8) player.ir.shipHealthMax = new Decimal(100)
+        if (player.ir.shipType == 9) player.ir.shipHealthMax = new Decimal(67.5)
 
         if (hasUpgrade("ir", 102)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.25)
         if (player.ir.shipType != 0) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(levelableEffect("ir", player.ir.shipType)[3])
@@ -238,9 +250,13 @@ addLayer("ir", {
         player.ir.timers[5].max = new Decimal(1800)
         player.ir.timers[6].max = new Decimal(1200)
         player.ir.timers[7].max = new Decimal(600)
+        player.ir.timers[8].max = new Decimal(2100)
+        player.ir.timers[9].max = new Decimal(1500)
         for (let i in player.ir.timers) {
             if (hasUpgrade("ir", 18)) player.ir.timers[i].max = player.ir.timers[i].max.div(upgradeEffect("ir", 18))
 
+            if (hasUpgrade("ir", 18)) player.ir.timers[i].max = player.ir.timers[i].max.div(upgradeEffect("ir", 18))
+            player.ir.timers[i].max = player.ir.timers[i].max.div(levelableEffect("pu", 401)[1])
             player.ir.timers[i].current = player.ir.timers[i].current.sub(delta)
         }
 
@@ -254,12 +270,12 @@ addLayer("ir", {
             if (arena) arena.showUpgradeChoice();
         }
 
-        if (player.ir.battleLevel.gte(8) && hasUpgrade("ir", 16) && !player.ir.ufoFought) {
+        if (player.ir.battleLevel.gte(8) && hasUpgrade("ir", 16) && !player.ir.ufoFought && player.tab == "ir") {
             spawnUfoBoss();
             player.ir.ufoFought = true
         }
 
-        if (player.ir.battleLevel.gte(16) && hasUpgrade("ir", 19) && !player.ir.iriditeFought) {
+        if (player.ir.battleLevel.gte(16) && hasUpgrade("ir", 19) && !player.ir.iriditeFought && player.tab == "ir") {
             summonIridite();
             player.ir.iriditeFought = true
         }
@@ -269,6 +285,7 @@ addLayer("ir", {
         } else {
             resumeAsteroidMinigame()
         }
+
     },
     bars: {
         healthBar: {
@@ -321,7 +338,7 @@ addLayer("ir", {
             lore() {
                 return "Fast, slim, and rapid-firing bullets. Pretty average ship ngl."
             },
-            levelLimit() { return new Decimal(50)},
+            levelLimit() { return Decimal.add(50, levelableEffect("ir", 8)[1])},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).pow(0.6).add(1), //Stars
@@ -365,7 +382,7 @@ addLayer("ir", {
             lore() {
                 return "Bigger, slower, but larger and more powerful bullets."
             },
-            levelLimit() { return new Decimal(50)},
+            levelLimit() { return Decimal.add(50, levelableEffect("ir", 8)[1])},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).pow(0.3).mul(0.07).add(1), //points
@@ -409,7 +426,7 @@ addLayer("ir", {
             lore() {
                 return "Don't underestimate the goat."
             },
-            levelLimit() { return new Decimal(50)},
+            levelLimit() { return Decimal.add(50, levelableEffect("ir", 8)[1])},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).pow(0.35).mul(0.06).add(1), //ad
@@ -454,7 +471,7 @@ addLayer("ir", {
             lore() {
                 return "Shoots extremely fast piercing bullets with precision. Automatically aims at cosmic celestialites, might affect movement."
             },
-            levelLimit() { return new Decimal(50)},
+            levelLimit() { return Decimal.add(50, levelableEffect("ir", 8)[1])},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).mul(0.3).add(1), //space energy
@@ -499,7 +516,7 @@ addLayer("ir", {
             lore() {
                 return "Has omnidirectional movement and shoots shotgun-like bursts towards the mouse."
             },
-            levelLimit() { return new Decimal(50)},
+            levelLimit() { return Decimal.add(50, levelableEffect("ir", 8)[1])},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).pow(0.7).mul(0.1).add(1), //xpboost
@@ -544,7 +561,7 @@ addLayer("ir", {
             lore() {
                 return "Shoots very fast streams of bullets, but with slow movement speed."
             },
-            levelLimit() {return new Decimal(50)},
+            levelLimit() {return Decimal.add(50, levelableEffect("ir", 8)[1])},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).pow(0.5).add(1), //mastery point effects
@@ -589,8 +606,8 @@ addLayer("ir", {
             lore() {
                 return "Lacks a gun, but makes up for it with spikes."
             },
-            levelLimit() { return new Decimal(50)},
-            effect() { 
+            levelLimit() { return Decimal.add(50, levelableEffect("ir", 8)[1])},
+            effect() {
                 return [
                     getLevelableAmount(this.layer, this.id).pow(0.3).mul(0.1).add(1), // pollinators
                     getLevelableAmount(this.layer, this.id).pow(1.5).add(1), // radiation
@@ -603,6 +620,95 @@ addLayer("ir", {
             tooltip() { return  (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || hasUpgrade("fu", 110) ? "" : "Progress through Aleph content." },
             unlocked() { return player.al.show },
             canClick() { return (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || hasUpgrade("fu", 110)},
+            onClick() {
+                player.ir.shipType = this.id
+                return layers[this.layer].levelables.index = this.id
+            },
+            // BUY CODE
+            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
+            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
+            xpReq() { return getLevelableAmount(this.layer, this.id).pow(1.5).mul(150).add(1000).floor() },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#37078f"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#5e4ee6ff" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }
+        },
+        8: {
+            image() { return this.canClick() ? "resources/ships/astral.png" : "resources/secret.png"},
+            title() { return "Astral" },
+            description() {
+                return "x" + format(this.effect()[0]) + " to space rocks.<br>+" + formatWhole(this.effect()[1]) + " to max ship level.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
+            },
+            lore() {
+                return "A simulated version of Iridite, the Astral Celestial. Moves omnidirectionally and fires Iridite's lasers."
+            },
+            levelLimit() { return Decimal.add(50, levelableEffect("ir", 8)[1])},
+            effect() {
+                return [
+                    getLevelableAmount(this.layer, this.id).pow(0.2).div(3).add(1), // space rocks
+                    getLevelableAmount(this.layer, this.id).div(5).floor(), // space gems
+                    getLevelableAmount(this.layer, this.id).mul(0.02).add(1), //Damage
+                    getLevelableAmount(this.layer, this.id).mul(0.03).add(1), //Health
+                ]
+            },
+            sacValue() { return new Decimal(1)},
+            // CLICK CODE
+            tooltip() { return  (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || player.ir.astralShipUnlocked ? "" : "Defeat Iridite without taking damage to unlock." },
+            unlocked() { return player.ir.iriditeDefeated },
+            canClick() { return (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || player.ir.astralShipUnlocked },
+            onClick() {
+                player.ir.shipType = this.id
+                return layers[this.layer].levelables.index = this.id
+            },
+            // BUY CODE
+            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
+            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
+            xpReq() { return getLevelableAmount(this.layer, this.id).pow(1.6).mul(200).add(1500).floor() },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#37078f"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#5e4ee6ff" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }
+        },
+        9: {
+            image() { return this.canClick() ? "resources/ships/evolver.png" : "resources/secret.png"},
+            title() { return "Evolver" },
+            description() {
+                return "x" + format(this.effect()[0]) + " to ESC.<br>^" + format(this.effect()[1]) + " to paradox pylon energy.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
+
+            },
+            lore() { return "An experimental vessel that fractures its projectiles into multiple seeking fragments." },
+            levelLimit() { return Decimal.add(25, levelableEffect("ir", 8)[1])},
+            effect() {
+                return [
+                    getLevelableAmount(this.layer, this.id).mul(0.03).add(1),
+                    getLevelableAmount(this.layer, this.id).pow(0.4).mul(0.04).add(1),
+                    getLevelableAmount(this.layer, this.id).mul(0.02).add(1), //Damage
+                    getLevelableAmount(this.layer, this.id).mul(0.03).add(1), //Health
+                ]
+            },
+            sacValue() { return new Decimal(1)},
+            // CLICK CODE
+            tooltip() { return  (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || hasUpgrade("ev8", 23) ? "" : "Purchase a certain shard research." },
+            unlocked() { return true },
+            canClick() { return (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || hasUpgrade("ev8", 23)},
             onClick() { 
                 player.ir.shipType = this.id
                 return layers[this.layer].levelables.index = this.id 
@@ -610,7 +716,7 @@ addLayer("ir", {
             // BUY CODE
             pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).pow(1.5).mul(150).add(1000).floor() },  
+            xpReq() { return getLevelableAmount(this.layer, this.id).pow(1.4).mul(200).add(1000).floor() },  
             currency() { return getLevelableXP(this.layer, this.id) },
             buy() {
                 this.pay(this.xpReq())
@@ -1037,7 +1143,7 @@ addLayer("ir", {
                                 ], {width: "550px", height: "40px", backgroundColor: "#241d66ff", borderBottom: "3px solid #5e4ee6ff",  borderLeft: "3px solid #5e4ee6ff", borderRight: "3px solid #5e4ee6ff", userSelect: "none"}],
                                 ["style-column", [
                                     ["row", [["levelable", 1], ["levelable", 2],["levelable", 3],["levelable", 4],["levelable", 5],]],
-                                    ["row", [["levelable", 6], ["levelable", 7]]],
+                                    ["row", [["levelable", 6], ["levelable", 7], ["levelable", 8], ["levelable", 9]]],
                                 ], {width: "540px", height: "270px", backgroundColor: "#151230", borderLeft: "3px solid #5e4ee6ff", borderRight: "3px solid #5e4ee6ff", borderBottom: "3px solid #5e4ee6ff", padding: "5px"}],
                             ], {width: "556px", height: "320px"}],
                             ["blank", "25px"],
@@ -1237,7 +1343,7 @@ class SpaceArena {
 
         // load wing GIF for Iridite (200x200). keep a loaded flag so draw can choose fallback.
         this.wingImg = new Image();
-        this.wingImg.src = 'resources/flying.gif';
+       // this.wingImg.src = 'resources/flying.gif';
         this.wingImgLoaded = false;
         this.wingImg.onload = () => { this.wingImgLoaded = true; };
 
@@ -1261,6 +1367,8 @@ class SpaceArena {
                 collisionDamage: 5,
             };
         }
+        // hit invulnerability timer in milliseconds (prevents >3 hits/sec)
+        this.shipHitInvuln = 0;
         if (player.ir.shipType == 2) {
             this.ship = {
                 x: width / 2,
@@ -1297,7 +1405,7 @@ class SpaceArena {
             this.bounceCooldown = 2000; // 2 seconds in ms
             this.canvasClickListener = (e) => {
                 let now = Date.now();
-                this.bounceCooldown = 2000 * this.upgradeEffects.attackSpeed
+                this.bounceCooldown = 2000 / this.upgradeEffects.attackSpeed
                 if (now - this.lastBounceClick < this.bounceCooldown) return;
                 this.lastBounceClick = now;
                 let rect = this.canvas.getBoundingClientRect();
@@ -1340,7 +1448,7 @@ class SpaceArena {
                 cooldown: 250,
                 lastShot: 0,
                 damage: 3,
-                collisionDamage: 5,
+                collisionDamage: 0.1,
             };
         }
         if (player.ir.shipType == 6) {
@@ -1383,13 +1491,53 @@ class SpaceArena {
             this.dashCooldown = 2000; // 2 seconds in ms
             this.canvasClickListener = (e) => {
                 let now = Date.now();
-                this.dashCooldown = 2000 * this.upgradeEffects.attackSpeed
+                this.dashCooldown = 2000 / this.upgradeEffects.attackSpeed
                 if (now - this.lastDashClick < this.dashCooldown) return;
                 this.lastDashClick = now;
                 let rect = this.canvas.getBoundingClientRect();
                 let mx = e.clientX - rect.left;
                 let my = e.clientY - rect.top;
                 this.ship.dashTarget = { x: mx, y: my };
+            };
+        }
+        if (player.ir.shipType == 8) {
+            this.ship = {
+                x: width / 2,
+                y: height / 2,
+                angle: 0,
+                velocity: 0,
+                angularVelocity: 0,
+                maxVelocity: 6,
+                acceleration: 0.3,
+                deceleration: 0.15,
+                rotationSpeed: 0.06,
+                cooldown: 300,
+                lastShot: 0,
+                damage: 7,
+                collisionDamage: 5,
+                wingPhase: Math.random() * Math.PI * 2,
+                _laserTimer: 0,
+                _laserActive: false,
+                _laserAngle: 0,
+                _laserSpin: 0.006,
+                _laserHitCooldown: 0,
+            };
+        }
+        if (player.ir.shipType == 9) {
+            this.ship = {
+                x: width / 2,
+                y: height / 2,
+                angle: 0,
+                velocity: 0,
+                angularVelocity: 0,
+                maxVelocity: 4,
+                acceleration: 0.25,
+                deceleration: 0.2,
+                rotationSpeed: 0.06,
+                cooldown: 500,
+                lastShot: 0,
+                damage: 40,
+                collisionDamage: 0.1,
             };
         }
         if (player.ir.shipType == 0) {
@@ -1491,6 +1639,7 @@ class SpaceArena {
                     ctx.restore();
                 }
             },
+            
             gammaShip: {
                 name: "Gamma Ship",
                 radius: 28,
@@ -1966,7 +2115,22 @@ class SpaceArena {
             return;
         }
 
+        if (player.ir.shipType == 8 && typeof this.mouseX === "number" && typeof this.mouseY === "number") {
+            // Initiate laser sequence if not already active
+            if (!this.ship._laserActive && (!this.ship._laserTimer || this.ship._laserTimer <= 0)) {
+                this.ship._laserTimer = 180; // 3 seconds
+                this.ship._laserActive = false;
+                this.ship._laserAngle = Math.atan2(this.mouseY - this.ship.y, this.mouseX - this.ship.x);
+                // spin slightly towards mouse direction or just a fixed slow spin?
+                // Let's make it follow mouse slowly for control
+                this.ship._laserHitCooldown = 0;
+            }
+            return;
+        }
+
         let speed = 10 + this.upgradeEffects.moveSpeed;
+        // evolver shards
+        if (player.ir.shipType == 9) speed = 12 + this.upgradeEffects.moveSpeed;
         if (player.ir.shipType == 4) speed = 25 + this.upgradeEffects.moveSpeed;
         if (player.ir.shipType == 6) speed = 20 + this.upgradeEffects.moveSpeed;
         let pierce = 0;
@@ -1998,22 +2162,40 @@ class SpaceArena {
             }
         }
 
-        this.bullets.push({
-            x: this.ship.x + Math.cos(angle) * 20,
-            y: this.ship.y + Math.sin(angle) * 20,
-            vx: Math.cos(angle) * speed,
-            vy: Math.sin(angle) * speed,
-            life: 120,
-            damage: this.ship.damage * this.upgradeEffects.attackDamage * petMul,
-            pierce: pierce,
-            piercedAsteroids: [],
-            piercedEnemies: [],
-            fromEnemy: false,
-            // homing properties (only used for sniper bullets)
-            homing: player.ir.shipType == null,
-            target: target,
-            homingStrength: 0.18, // radians/frame max turn (tweakable)
-        });
+        // Special evolver primary shard: breaks into 3 mini-shards on impact or on hitting arena edge
+        if (player.ir.shipType == 9) {
+            this.bullets.push({
+                x: this.ship.x + Math.cos(angle) * 20,
+                y: this.ship.y + Math.sin(angle) * 20,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                life: 240,
+                damage: this.ship.damage * this.upgradeEffects.attackDamage * petMul,
+                pierce: 0,
+                piercedAsteroids: [],
+                piercedEnemies: [],
+                fromEnemy: false,
+                evolverShard: true,
+                radius: 10,
+            });
+        } else {
+            this.bullets.push({
+                x: this.ship.x + Math.cos(angle) * 20,
+                y: this.ship.y + Math.sin(angle) * 20,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                life: 120,
+                damage: this.ship.damage * this.upgradeEffects.attackDamage * petMul,
+                pierce: pierce,
+                piercedAsteroids: [],
+                piercedEnemies: [],
+                fromEnemy: false,
+                // homing properties (only used for sniper bullets)
+                homing: player.ir.shipType == null,
+                target: target,
+                homingStrength: 0.18, // radians/frame max turn (tweakable)
+            });
+        }
     }
 
     // Pause asteroid minigame: freeze existing asteroids and prevent new spawns
@@ -2038,6 +2220,55 @@ class SpaceArena {
 
         // Optionally save the spawn timer so it continues where it left off on resume
         this._savedAsteroidSpawnTimer = this.asteroidSpawnTimer;
+
+        // If the Iridite boss exists, save and freeze its state so it cannot move/attack
+        for (let e of this.enemies) {
+            if (!e.alive) continue;
+            if (e.type === "iriditeBoss") {
+                // Save key runtime fields so we can restore them later
+                e._savedBossState = {
+                    vx: e.vx,
+                    vy: e.vy,
+                    phase: e.phase,
+                    state: e.state,
+                    attackTimer: e.attackTimer,
+                    _actionCooldown: e._actionCooldown,
+                    dashing: e.dashing,
+                    dashSeqRemaining: e.dashSeqRemaining,
+                    dashDistance: e.dashDistance,
+                    dashSpeed: e.dashSpeed,
+                    _dashState: e._dashState,
+                    _dashDir: e._dashDir,
+                    _dashTargets: e._dashTargets,
+                    homingShotsRemaining: e.homingShotsRemaining,
+                    radialShotsRemaining: e.radialShotsRemaining,
+                    attackIndex: e.attackIndex,
+                    _lungeTimer: e._lungeTimer,
+                    _rainingTimer: e._rainingTimer,
+                    _rainingInterval: e._rainingInterval,
+                    _daggerPrep: e._daggerPrep,
+                    _daggerCount: e._daggerCount,
+                    _daggerWarnings: Array.isArray(e._daggerWarnings) ? e._daggerWarnings.slice() : null,
+                    _burstShots: e._burstShots,
+                    wingPhase: e.wingPhase,
+                    _laserTimer: e._laserTimer,
+                    _giantPrep: e._giantPrep,
+                    _giantLines: Array.isArray(e._giantLines) ? e._giantLines.slice() : null,
+                    _giantFired: e._giantFired,
+                    _recentlyHit: e._recentlyHit,
+                };
+
+                // Mark as paused so other systems can skip interactions
+                e._pausedBoss = true;
+
+                // Freeze movement and action-related fields
+                e.vx = 0;
+                e.vy = 0;
+                e.dashing = false;
+                e._actionCooldown = 999999;
+                e.attackTimer = 999999;
+            }
+        }
     }
 
     // Resume asteroid minigame: restore velocities and allow spawns again
@@ -2062,6 +2293,47 @@ class SpaceArena {
         if (typeof this._savedAsteroidSpawnTimer !== 'undefined') {
             this.asteroidSpawnTimer = this._savedAsteroidSpawnTimer;
             delete this._savedAsteroidSpawnTimer;
+        }
+
+        // Restore Iridite boss state if we saved it earlier
+        for (let e of this.enemies) {
+            if (!e.alive) continue;
+            if (e.type === "iriditeBoss" && e._savedBossState) {
+                const s = e._savedBossState;
+                e.vx = (typeof s.vx !== 'undefined') ? s.vx : 0;
+                e.vy = (typeof s.vy !== 'undefined') ? s.vy : 0;
+                e.phase = (typeof s.phase !== 'undefined') ? s.phase : e.phase;
+                e.state = (typeof s.state !== 'undefined') ? s.state : e.state;
+                e.attackTimer = (typeof s.attackTimer !== 'undefined') ? s.attackTimer : e.attackTimer;
+                e._actionCooldown = (typeof s._actionCooldown !== 'undefined') ? s._actionCooldown : e._actionCooldown;
+                e.dashing = (typeof s.dashing !== 'undefined') ? s.dashing : e.dashing;
+                e.dashSeqRemaining = (typeof s.dashSeqRemaining !== 'undefined') ? s.dashSeqRemaining : e.dashSeqRemaining;
+                e.dashDistance = (typeof s.dashDistance !== 'undefined') ? s.dashDistance : e.dashDistance;
+                e.dashSpeed = (typeof s.dashSpeed !== 'undefined') ? s.dashSpeed : e.dashSpeed;
+                e._dashState = (typeof s._dashState !== 'undefined') ? s._dashState : e._dashState;
+                e._dashDir = (typeof s._dashDir !== 'undefined') ? s._dashDir : e._dashDir;
+                e._dashTargets = (typeof s._dashTargets !== 'undefined') ? s._dashTargets : e._dashTargets;
+                e.homingShotsRemaining = (typeof s.homingShotsRemaining !== 'undefined') ? s.homingShotsRemaining : e.homingShotsRemaining;
+                e.radialShotsRemaining = (typeof s.radialShotsRemaining !== 'undefined') ? s.radialShotsRemaining : e.radialShotsRemaining;
+                e.attackIndex = (typeof s.attackIndex !== 'undefined') ? s.attackIndex : e.attackIndex;
+                e._lungeTimer = (typeof s._lungeTimer !== 'undefined') ? s._lungeTimer : e._lungeTimer;
+                e._rainingTimer = (typeof s._rainingTimer !== 'undefined') ? s._rainingTimer : e._rainingTimer;
+                e._rainingInterval = (typeof s._rainingInterval !== 'undefined') ? s._rainingInterval : e._rainingInterval;
+                e._daggerPrep = (typeof s._daggerPrep !== 'undefined') ? s._daggerPrep : e._daggerPrep;
+                e._daggerCount = (typeof s._daggerCount !== 'undefined') ? s._daggerCount : e._daggerCount;
+                e._daggerWarnings = (s._daggerWarnings !== null) ? s._daggerWarnings.slice() : e._daggerWarnings;
+                e._burstShots = (typeof s._burstShots !== 'undefined') ? s._burstShots : e._burstShots;
+                e.wingPhase = (typeof s.wingPhase !== 'undefined') ? s.wingPhase : e.wingPhase;
+                e._laserTimer = (typeof s._laserTimer !== 'undefined') ? s._laserTimer : e._laserTimer;
+                e._giantPrep = (typeof s._giantPrep !== 'undefined') ? s._giantPrep : e._giantPrep;
+                e._giantLines = (s._giantLines !== null) ? s._giantLines.slice() : e._giantLines;
+                e._giantFired = (typeof s._giantFired !== 'undefined') ? s._giantFired : e._giantFired;
+                e._recentlyHit = (typeof s._recentlyHit !== 'undefined') ? s._recentlyHit : e._recentlyHit;
+
+                // Remove paused marker and saved state
+                delete e._savedBossState;
+                delete e._pausedBoss;
+            }
         }
     }
 
@@ -2184,6 +2456,8 @@ class SpaceArena {
         // Prevent duplicate bosses
         if (this.enemies.some(e => e.type === "iriditeBoss" && e.alive)) return;
 
+        player.ir.tookDamageInIriditeFight = false;
+
         // Clear arena of regular threats
         for (let e of this.enemies) e.alive = false;
         this.enemies = [];
@@ -2284,6 +2558,60 @@ class SpaceArena {
     }
 
     update() {
+        // Prepare collectors used by multiple death paths
+        let newAsteroids = [];
+        let lootFlashPositions = [];
+        let xpOrbsToAdd = [];
+        if (player.ir.shipHealth.lt(0)) this.onShipDeath();
+        // Helper to handle enemy death logic (drops, flags, etc.)
+        const handleEnemyDeath = (enemy) => {
+            if (!enemy || !enemy.alive) return;
+            enemy.alive = false;
+            let type = this.enemyTypes[enemy.type];
+            // rock drop
+            if (type && type.rockDrop) {
+                let minR = type.rockDrop[0], maxR = type.rockDrop[1];
+                let amt = getRandomInt(maxR - minR + 1) + minR;
+                amt = Math.max(0, Math.floor(amt * this.upgradeEffects.lootGain));
+                amt = Math.max(0, Math.floor(amt * levelableEffect("pet", 502)[1]));
+                amt = Math.max(0, Math.floor(amt * levelableEffect("pu", 212)[1]));
+                player.ir.spaceRock = player.ir.spaceRock.add(amt);
+                lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "rock" });
+            }
+            // xp drop -> spawn xp orb
+            if (type && type.xpDrop) {
+                let minX = type.xpDrop[0], maxX = type.xpDrop[1];
+                let xp = getRandomInt(maxX - minX + 1) + minX;
+                xp = Math.max(0, Math.floor(xp * this.upgradeEffects.xpGain));
+                xpOrbsToAdd.push({ x: enemy.x, y: enemy.y, amount: xp });
+            }
+
+            // guaranteed gem drop for UFO miniboss
+            if (enemy.type === "ufoBoss") {
+                this.bossActive = false;
+                player.ir.ufoDefeated = true;
+                player.ir.spaceGem = player.ir.spaceGem.add(2);
+                lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 2, type: "gem" });
+            }
+
+            // Mark Iridite defeat when boss dies
+            if (enemy.type === "iriditeBoss") {
+                this.bossActive = false;
+                player.ir.iriditeDefeated = true;
+                if (!player.ir.tookDamageInIriditeFight) player.ir.astralShipUnlocked = true;
+                player.ir.iriditeFightActive = false;
+                localStorage.setItem('arenaActive', 'false');
+            }
+
+            // gem chance for hard-mode enemies Delta/Epsilon/Zeta/Eta (3%)
+            if (["deltaShip", "epsilonShip", "zetaShip", "etaShip"].includes(enemy.type)) {
+                if (Math.random() < 0.03) {
+                    player.ir.spaceGem = player.ir.spaceGem.add(1);
+                    lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 1, type: "gem" });
+                }
+            }
+        };
+
         // If we were in fullscreen iridite mode but the boss is gone, restore arena
         if (this._iriditeFullscreen && !this.enemies.some(e => e.type === 'iriditeBoss' && e.alive)) {
             this.exitIriditeFullscreen();
@@ -2292,6 +2620,10 @@ class SpaceArena {
             this.draw();
             return;
         }
+
+        // decrement ship invulnerability timer each tick (approx 60FPS)
+        const _TICK_MS = 1000 / 60;
+        if (this.shipHitInvuln > 0) this.shipHitInvuln = Math.max(0, this.shipHitInvuln - _TICK_MS);
 
         // Hard mode check
         const hardMode = player.ir.battleLevel.gte(8);
@@ -2461,7 +2793,7 @@ class SpaceArena {
             if (this.ship.y < 0) this.ship.y = this.height;
             if (this.ship.y > this.height) this.ship.y = 0;
         }
-            if (player.ir.shipType == 5) {
+            if (player.ir.shipType == 5 || player.ir.shipType == 8) {
                 // Omnidirectional movement: smooth thrust toward desired velocity (rotation is purely visual)
                 if (typeof this.ship.vx !== "number") this.ship.vx = 0;
                 if (typeof this.ship.vy !== "number") this.ship.vy = 0;
@@ -2513,6 +2845,67 @@ class SpaceArena {
                     while (diff < -Math.PI) diff += 2 * Math.PI;
                     // smaller rotation step for smoothness
                     this.ship.angle += Math.sign(diff) * Math.min(Math.abs(diff), Math.max(0.04, this.ship.rotationSpeed || 0.08));
+                }
+
+                if (player.ir.shipType == 8) {
+                    // animate wings
+                    if (typeof this.ship.wingPhase !== "number") this.ship.wingPhase = 0;
+                    this.ship.wingPhase += 0.12;
+
+                    // handle laser firing
+                    if (this.ship._laserTimer > 0) {
+                        if (!this.ship._laserActive && this.ship._laserTimer < 172) {
+                            this.ship._laserActive = true;
+                        }
+                        
+                        // Laser follows mouse direction
+                        if (typeof this.mouseX === "number" && typeof this.mouseY === "number") {
+                            let desired = Math.atan2(this.mouseY - this.ship.y, this.mouseX - this.ship.x);
+                            let diff = desired - (this.ship._laserAngle || 0);
+                            while (diff > Math.PI) diff -= 2 * Math.PI;
+                            while (diff < -Math.PI) diff += 2 * Math.PI;
+                            this.ship._laserAngle = (this.ship._laserAngle || 0) + diff * 0.15;
+                        }
+
+                        if (this.ship._laserHitCooldown > 0) this.ship._laserHitCooldown--;
+
+                        if (this.ship._laserActive && this.ship._laserHitCooldown <= 0) {
+                            let petMul = (player.pet && player.pet.legPetTimers && player.pet.legPetTimers[1] && player.pet.legPetTimers[1].current && typeof player.pet.legPetTimers[1].current.gt === "function" && player.pet.legPetTimers[1].current.gt(0)) ? 1.5 : 1;
+                            let dmg = (this.ship.damage || 7) * this.upgradeEffects.attackDamage * petMul;
+                            let rawDmg = (typeof dmg === 'number') ? dmg : (dmg.toNumber ? dmg.toNumber() : Number(dmg));
+                            let ang = this.ship._laserAngle;
+                            let ux = Math.cos(ang), uy = Math.sin(ang);
+                            let beamLen = Math.max(this.width, this.height) * 1.5;
+                            let thickness = (this.ship.radius || 12) * 0.8;
+
+                            // Check enemies
+                            for (let enemy of this.enemies) {
+                                if (!enemy.alive) continue;
+                                let ex = enemy.x - this.ship.x;
+                                let ey = enemy.y - this.ship.y;
+                                let proj = ex * ux + ey * uy;
+                                let perp = Math.abs(ex * (-uy) + ey * ux);
+                                if (proj > -enemy.radius && proj < beamLen && perp < thickness + enemy.radius) {
+                                    enemy.health -= rawDmg;
+                                    if (enemy.health <= 0) handleEnemyDeath(enemy);
+                                }
+                            }
+                            // Check asteroids
+                            for (let a of this.asteroids) {
+                                let ax = a.x - this.ship.x;
+                                let ay = a.y - this.ship.y;
+                                let proj = ax * ux + ay * uy;
+                                let perp = Math.abs(ax * (-uy) + ay * ux);
+                                if (proj > -a.size && proj < beamLen && perp < thickness + a.size) {
+                                    a.health -= rawDmg;
+                                }
+                            }
+                            this.ship._laserHitCooldown = 6;
+                        }
+                        this.ship._laserTimer--;
+                    } else {
+                        this.ship._laserActive = false;
+                    }
                 }
             } else {
                 if (this.keys['KeyA']) this.ship.angle -= this.ship.rotationSpeed;
@@ -2586,6 +2979,52 @@ class SpaceArena {
                 bullet.vx *= 0.998;
                 bullet.vy *= 0.998;
             }
+
+            // Evolver shard edge collision: primary shard breaks into 3 mini shards when hitting arena edge
+            if (bullet.evolverShard) {
+                if (bullet.x < 0 || bullet.x > this.width || bullet.y < 0 || bullet.y > this.height) {
+                    // spawn 3 mini shards
+                        for (let k = 0; k < 3; k++) {
+                        const ang = Math.random() * Math.PI * 2;
+                        const spd = 6 + Math.random() * 4;
+                        this.bullets.push({
+                            x: Math.max(0, Math.min(this.width, bullet.x)),
+                            y: Math.max(0, Math.min(this.height, bullet.y)),
+                            vx: Math.cos(ang) * spd,
+                            vy: Math.sin(ang) * spd,
+                            life: 120,
+                            damage: (bullet.damage || 1) * 0.2,
+                            pierce: 0,
+                            piercedAsteroids: [],
+                            piercedEnemies: [],
+                            fromEnemy: false,
+                            evolverMini: true,
+                            radius: 4,
+                        });
+                    }
+                    bullet.life = 0;
+                }
+            }
+
+            // Massive sword bouncing logic
+            if (bullet.massiveSword) {
+                bullet.rot = (bullet.rot || 0) + (bullet.rotSpd || 0.15);
+                // bounce on edges without damping for the massive sword
+                if (bullet.x < 0) { bullet.x = 0; bullet.vx = -bullet.vx; }
+                if (bullet.x > this.width) { bullet.x = this.width; bullet.vx = -bullet.vx; }
+                if (bullet.y < 0) { bullet.y = 0; bullet.vy = -bullet.vy; }
+                if (bullet.y > this.height) { bullet.y = this.height; bullet.vy = -bullet.vy; }
+            }
+            // mini evolver shards bounce off edges until they hit an enemy
+            if (bullet.evolverMini) {
+                if (bullet.x < 0) { bullet.x = 0; bullet.vx = -bullet.vx * 0.9; }
+                if (bullet.x > this.width) { bullet.x = this.width; bullet.vx = -bullet.vx * 0.9; }
+                if (bullet.y < 0) { bullet.y = 0; bullet.vy = -bullet.vy * 0.9; }
+                if (bullet.y > this.height) { bullet.y = this.height; bullet.vy = -bullet.vy * 0.9; }
+                // slight damping to avoid infinite bouncing
+                bullet.vx *= 0.998;
+                bullet.vy *= 0.998;
+            }
         }
 
         // Asteroid spawning (disabled in hard mode or while boss active)
@@ -2621,6 +3060,11 @@ class SpaceArena {
             const type = this.enemyTypes[enemy.type];
 
             if (enemy.type === "iriditeBoss") {
+                // If the asteroid minigame is paused, also pause Iridite boss actions
+                if (this._asteroidMinigamePaused) {
+                    // Skip AI updates for the boss while paused (keeps current position/state)
+                    continue;
+                }
                 player.ir.iriditePhase = enemy.phase
 
                 // ensure wingPhase exists and animate it (controls flap)
@@ -2859,8 +3303,7 @@ class SpaceArena {
                             if (!enemy._lungeHit) {
                                 enemy._lungeHit = 18; // few frames cooldown
                                 let impactDmg = (6 + enemy.phase * 3) * this.upgradeEffects.damageReduction;
-                                player.ir.shipHealth = player.ir.shipHealth.sub(impactDmg);
-                                if (player.ir.shipHealth.lte(0)) this.onShipDeath();
+                                this.applyShipDamage(impactDmg);
                             }
                         }
                         if (enemy._lungeHit && enemy._lungeHit > 0) enemy._lungeHit--;
@@ -3144,9 +3587,8 @@ class SpaceArena {
                             if (proj > -enemy.radius && proj < beamLen && perp < thickness + (player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12)) {
                                 // apply damage once per short cooldown
                                 let dmg = (6 + enemy.phase * 1) * this.upgradeEffects.damageReduction;
-                                player.ir.shipHealth = player.ir.shipHealth.sub(dmg);
+                                this.applyShipDamage(dmg);
                                 enemy._laserHitCooldown = 8; // frames between hits
-                                if (player.ir.shipHealth.lte(0)) this.onShipDeath();
                             }
                         }
                         enemy._laserTimer--;
@@ -3252,7 +3694,7 @@ class SpaceArena {
                                 enemy._recentlyHit = 6; // frames of invuln for player from this contact
                                 // reduced dash damage to make attack less violent
                                 let impactDmg = (5) * this.upgradeEffects.damageReduction;
-                                player.ir.shipHealth = player.ir.shipHealth.sub(impactDmg);
+                                this.applyShipDamage(impactDmg);
                                 // reduced knockback
                                 let kn = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
                                 if (player.ir.shipType == 3 || player.ir.shipType == 7) {
@@ -3441,6 +3883,7 @@ class SpaceArena {
                     continue;
             }
             // --- Alpha Ship behavior ---
+            
             if (enemy.type === "alphaShip") {
                 if (!enemy.wanderTimer || enemy.wanderTimer <= 0) {
                     enemy.wanderTimer = getRandomInt(60) + 60;
@@ -3836,10 +4279,13 @@ class SpaceArena {
                 let dist = Math.sqrt(dx * dx + dy * dy);
                 if (dist < trail.radius + shipRadius && trail.timer > 0) {
                     let dmg = trail.damage * this.upgradeEffects.damageReduction;
-                    if (player.ir.shipType == 3 || player.ir.shipType == 7) dmg /= 4;
-                    player.ir.shipHealth = player.ir.shipHealth.sub(dmg);
-                    if (player.ir.shipHealth.lte(0)) {
-                        this.onShipDeath();
+                    
+                    if (!this._asteroidMinigamePaused) {
+                        if (player.ir.shipType == 3 || player.ir.shipType == 7) dmg /= 4;
+                            player.ir.shipHealth = player.ir.shipHealth.sub(dmg);
+                        if (player.ir.shipHealth.lte(0)) {
+                            this.onShipDeath();
+                        }
                     }
                 }
             }
@@ -3867,11 +4313,6 @@ class SpaceArena {
             if (outBottom) asteroid.y = -Math.min(...asteroid.shape.map(p => p.y));
         }
 
-        // Prepare collectors used by multiple death paths
-        let newAsteroids = [];
-        let lootFlashPositions = [];
-        let xpOrbsToAdd = [];
-
         // Bullet-asteroid collision
         for (let bullet of this.bullets) {
             for (let asteroid of this.asteroids) {
@@ -3881,7 +4322,8 @@ class SpaceArena {
                 let dy = bullet.y - asteroid.y;
                 let dist = Math.sqrt(dx * dx + dy * dy);
                 if (dist < asteroid.size) {
-                    asteroid.health -= bullet.damage;
+                    let bDmg = (typeof bullet.damage === 'number') ? bullet.damage : (bullet.damage && bullet.damage.toNumber ? bullet.damage.toNumber() : Number(bullet.damage || 0));
+                    asteroid.health -= bDmg;
                     if (player.ir.shipType == 2 || player.ir.shipType == 4) {
                         bullet.pierce--;
                         bullet.piercedAsteroids.push(asteroid);
@@ -3896,16 +4338,36 @@ class SpaceArena {
 
         // Bullet-enemy collision (player bullets only)
         for (let bullet of this.bullets) {
-            if (bullet.fromEnemy) continue;
+            // allow normal player bullets OR special vampire spear bullets to hit enemies
+            if (bullet.fromEnemy && !bullet.vampireSpear) continue;
             for (let enemy of this.enemies) {
                 if (!enemy.alive) continue;
+                // Skip interactions with paused Iridite boss
+                if (enemy._pausedBoss) continue;
                 // avoid hitting same enemy multiple times per bullet
                 if (bullet.piercedEnemies && bullet.piercedEnemies.includes(enemy)) continue;
                 let dx = bullet.x - enemy.x;
                 let dy = bullet.y - enemy.y;
                 let dist = Math.sqrt(dx * dx + dy * dy);
                 if (dist < enemy.radius) {
-                    enemy.health -= bullet.damage;
+                    let bDmg = (typeof bullet.damage === 'number') ? bullet.damage : (bullet.damage && bullet.damage.toNumber ? bullet.damage.toNumber() : Number(bullet.damage || 0));
+                    enemy.health -= bDmg;
+
+                    // Vampire spear knockback: push enemies away along bullet velocity
+                    if (bullet.vampireSpear) {
+                        try {
+                            let nx = (typeof bullet.vx === 'number') ? bullet.vx : 0;
+                            let ny = (typeof bullet.vy === 'number') ? bullet.vy : 0;
+                            let nlen = Math.sqrt(nx * nx + ny * ny) || 1;
+                            nx /= nlen; ny /= nlen;
+                            // stronger knockback: apply to knockback velocity so physics feels smoother
+                            let kb = (typeof bullet.knockback === 'number') ? bullet.knockback : 18;
+                            enemy._knockbackVx = (enemy._knockbackVx || 0) + nx * kb;
+                            enemy._knockbackVy = (enemy._knockbackVy || 0) + ny * kb;
+                            // longer knockback duration
+                            enemy._knockbackTimer = Math.max(enemy._knockbackTimer || 0, 18);
+                        } catch (err) { /* ignore knockback errors */ }
+                    }
 
                     // Handle piercing bullets: decrement pierce and mark enemy as pierced
                     if (typeof bullet.pierce === "number" && bullet.pierce > 0) {
@@ -3916,55 +4378,32 @@ class SpaceArena {
                         if (bullet.pierce < 0) bullet.life = 0;
                     } else {
                         // non-piercing: destroy bullet on hit
+                        // If this is an evolver primary shard, spawn 3 mini shards on impact
+                        if (bullet.evolverShard) {
+                            for (let k = 0; k < 3; k++) {
+                                const ang = Math.random() * Math.PI * 2;
+                                const spd = 6 + Math.random() * 4;
+                                this.bullets.push({
+                                    x: enemy.x,
+                                    y: enemy.y,
+                                    vx: Math.cos(ang) * spd,
+                                    vy: Math.sin(ang) * spd,
+                                    life: 120,
+                                    damage: (bullet.damage || 1) * 0.2,
+                                    pierce: 0,
+                                    piercedAsteroids: [],
+                                    piercedEnemies: [],
+                                    fromEnemy: false,
+                                    evolverMini: true,
+                                    radius: 4,
+                                });
+                            }
+                        }
                         bullet.life = 0;
                     }
 
                     if (enemy.health <= 0) {
-                        enemy.alive = false;
-                        let type = this.enemyTypes[enemy.type];
-                        // rock drop
-                        if (type && type.rockDrop) {
-                            let minR = type.rockDrop[0], maxR = type.rockDrop[1];
-                            let amt = getRandomInt(maxR - minR + 1) + minR;
-                            amt = Math.max(0, Math.floor(amt * this.upgradeEffects.lootGain));
-                            amt = Math.max(0, Math.floor(amt * levelableEffect("pet", 502)[1]));
-                            player.ir.spaceRock = player.ir.spaceRock.add(amt);
-                            lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "rock" });
-                        }
-                        // xp drop -> spawn xp orb
-                        if (type && type.xpDrop) {
-                            let minX = type.xpDrop[0], maxX = type.xpDrop[1];
-                            let xp = getRandomInt(maxX - minX + 1) + minX;
-                            xp = Math.max(0, Math.floor(xp * this.upgradeEffects.xpGain));
-                            xpOrbsToAdd.push({ x: enemy.x, y: enemy.y, amount: xp });
-                        }
-
-                        // guaranteed gem drop for UFO miniboss
-                        if (enemy.type === "ufoBoss") {
-                            this.bossActive = false;
-                            player.ir.ufoDefeated = true;
-                            player.ir.spaceGem = player.ir.spaceGem.add(2);
-                            lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 2, type: "gem" });
-                        }
-
-                        // Mark Iridite defeat when boss dies
-                        if (enemy.type === "iriditeBoss") {
-                            this.bossActive = false;
-                            player.ir.iriditeDefeated = true;
-                            // clear active fight flag
-                            player.ir.iriditeFightActive = false;
-                            // persist arena state off (keeps behavior consistent with leave/remove)
-                            localStorage.setItem('arenaActive', 'false');
-                            // optional: you may add rewards here if desired
-                        }
-
-                        // gem chance for hard-mode enemies Delta/Epsilon/Zeta/Eta (3%)
-                        if (["deltaShip", "epsilonShip", "zetaShip", "etaShip"].includes(enemy.type)) {
-                            if (Math.random() < 0.03) {
-                                player.ir.spaceGem = player.ir.spaceGem.add(1);
-                                lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 1, type: "gem" });
-                            }
-                        }
+                        handleEnemyDeath(enemy);
                     }
 
                     // stop scanning further enemies only if bullet was destroyed
@@ -3974,9 +4413,9 @@ class SpaceArena {
         }
         
 
-        // Enemy bullets hit player
+        // Enemy bullets hit player (also include vampire spear projectiles)
         for (let bullet of this.bullets) {
-            if (!bullet.fromEnemy) continue;
+            if (!bullet.fromEnemy && !bullet.vampireSpear) continue;
             let dx = bullet.x - this.ship.x;
             let dy = bullet.y - this.ship.y;
             let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
@@ -3994,10 +4433,6 @@ class SpaceArena {
  
                     // remove the projectile immediately so it can't deal damage again
                     bullet.life = 0;
- 
-                    if (player.ir.shipHealth.lte(0)) {
-                        this.onShipDeath();
-                    }                    
                 }
             }
         }
@@ -4009,22 +4444,26 @@ class SpaceArena {
         // Ship-enemy collision
         for (let enemy of this.enemies) {
             if (!enemy.alive) continue;
+            // Skip collisions for a paused Iridite boss
+            if (enemy._pausedBoss) continue;
             let dx = this.ship.x - enemy.x;
             let dy = this.ship.y - enemy.y;
             let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
             let dist = Math.sqrt(dx * dx + dy * dy);
             if (dist < enemy.radius + shipRadius) {
-                let enemyDmg = this.ship.collisionDamage * this.upgradeEffects.attackDamage;
+                let enemyDmgRaw = this.ship.collisionDamage * this.upgradeEffects.attackDamage;
+                let enemyDmg = (typeof enemyDmgRaw === 'number') ? enemyDmgRaw : (enemyDmgRaw.toNumber ? enemyDmgRaw.toNumber() : Number(enemyDmgRaw));
                 if (Number.isNaN(enemyDmg) || !isFinite(enemyDmg) || enemyDmg < 0) enemyDmg = 0;
                 if (player.ir.shipType != 3 && player.ir.shipType != 7) enemy.health -= enemyDmg * 0.05;
                 if (player.ir.shipType == 3) enemy.health -= enemyDmg * 2.5;
                 if (player.ir.shipType == 7) enemy.health -= enemyDmg * 1.5;
 
-                let shipDmg = enemy.damage * this.upgradeEffects.damageReduction * 6;
-                if (Number.isNaN(shipDmg) || !isFinite(shipDmg) || shipDmg < 0) shipDmg = 3 * this.upgradeEffects.damageReduction;
+                let shipDmgRaw = enemy.damage * this.upgradeEffects.damageReduction * 6;
+                let shipDmg = (typeof shipDmgRaw === 'number') ? shipDmgRaw : (shipDmgRaw.toNumber ? shipDmgRaw.toNumber() : Number(shipDmgRaw));
+                if (Number.isNaN(shipDmg) || !isFinite(shipDmg) || shipDmg < 0) shipDmg = 3 * (typeof this.upgradeEffects.damageReduction === 'number' ? this.upgradeEffects.damageReduction : (this.upgradeEffects.damageReduction.toNumber ? this.upgradeEffects.damageReduction.toNumber() : Number(this.upgradeEffects.damageReduction)));
                 if (player.ir.iriditeFightActive) shipDmg /= 12;
                 if (player.ir.shipType == 3 || player.ir.shipType == 7) shipDmg /= 20;
-                player.ir.shipHealth = player.ir.shipHealth.sub(shipDmg);
+                if (!this._asteroidMinigamePaused) this.applyShipDamage(shipDmg);
 
                 if (player.ir.shipType == 3) {
                     let angle = Math.atan2(dy, dx);
@@ -4049,48 +4488,7 @@ class SpaceArena {
                     this.onShipDeath();
                 }
                 if (enemy.health <= 0) {
-                    enemy.alive = false;
-                    let type = this.enemyTypes[enemy.type];
-                    // rock drop
-                    if (type && type.rockDrop) {
-                        let minR = type.rockDrop[0], maxR = type.rockDrop[1];
-                        let amt = getRandomInt(maxR - minR + 1) + minR;
-                        amt = Math.max(0, Math.floor(amt * this.upgradeEffects.lootGain));
-                        amt = Math.max(0, Math.floor(amt * levelableEffect("pet", 502)[1]));
-                        player.ir.spaceRock = player.ir.spaceRock.add(amt);
-                        lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "rock" });
-                    }
-                    // xp drop
-                    if (type && type.xpDrop) {
-                        let minX = type.xpDrop[0], maxX = type.xpDrop[1];
-                        let xp = getRandomInt(maxX - minX + 1) + minX;
-                        xp = Math.max(0, Math.floor(xp * this.upgradeEffects.xpGain));
-                        xpOrbsToAdd.push({ x: enemy.x, y: enemy.y, amount: xp });
-                    }
-
-                    // guaranteed gem drop for UFO miniboss
-                    if (enemy.type === "ufoBoss") {
-                        this.bossActive = false;
-                        player.ir.ufoDefeated = true;
-                        player.ir.spaceGem = player.ir.spaceGem.add(2);
-                        lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 2, type: "gem" });
-                    }
-
-                    // Mark Iridite defeat when boss dies (collision route)
-                    if (enemy.type === "iriditeBoss") {
-                        this.bossActive = false;
-                        player.ir.iriditeDefeated = true;
-                        player.ir.iriditeFightActive = false;
-                        localStorage.setItem('arenaActive', 'false');
-                    }
-
-                    // gem chance for hard-mode enemies
-                    if (["deltaShip", "epsilonShip", "zetaShip", "etaShip"].includes(enemy.type)) {
-                        if (Math.random() < 0.03) {
-                            player.ir.spaceGem = player.ir.spaceGem.add(1);
-                            lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 1, type: "gem" });
-                        }
-                    }
+                    handleEnemyDeath(enemy);
                 }
             }
         }
@@ -4103,10 +4501,12 @@ class SpaceArena {
             let dist = Math.sqrt(dx * dx + dy * dy);
             let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
             if (dist < asteroid.size + shipRadius) {
-                asteroid.health -= this.ship.collisionDamage * this.upgradeEffects.attackDamage;
+                let aDmgRaw = this.ship.collisionDamage * this.upgradeEffects.attackDamage;
+                let aDmg = (typeof aDmgRaw === 'number') ? aDmgRaw : (aDmgRaw.toNumber ? aDmgRaw.toNumber() : Number(aDmgRaw));
+                asteroid.health -= aDmg;
                 let dmg = (asteroid.big ? 3 : 2) * this.upgradeEffects.damageReduction;
                 if (player.ir.shipType == 3 || player.ir.shipType == 7) dmg /= 6;
-                player.ir.shipHealth = player.ir.shipHealth.sub(dmg);
+                if (!this._asteroidMinigamePaused) this.applyShipDamage(dmg);
                 if (player.ir.shipType == 3) {
                     let angle = Math.atan2(dy, dx);
                     let bounceSpeed = Math.max(8, Math.abs(this.ship.vy) * this.ship.bounce);
@@ -4133,6 +4533,7 @@ class SpaceArena {
                 let loot = Math.floor(Math.random() * (asteroid.big ? 4 : 3)) + (asteroid.big ? 3 : 1);
                 loot = Math.floor(loot * this.upgradeEffects.lootGain);
                 loot = Math.max(0, Math.floor(loot * levelableEffect("pet", 502)[1]));
+                loot = Math.max(0, Math.floor(loot * levelableEffect("pu", 212)[1]));
                 player.ir.spaceRock = player.ir.spaceRock.add(loot);
                 player.ir.levelables[player.ir.shipType][1] = player.ir.levelables[player.ir.shipType][1].add(loot)
                 lootFlashPositions.push({ x: asteroid.x, y: asteroid.y, amount: loot, type: "rock" });
@@ -4236,6 +4637,52 @@ class SpaceArena {
         this.xpOrbs = this.xpOrbs.filter(orb => !orb.picked && orb.timer > 0);
 
         this.draw();
+    }
+
+    // Apply damage to player's ship respecting invulnerability frames
+    // Returns true if damage was applied, false if blocked by invuln
+    applyShipDamage(dmg) {
+        // When asteroid minigame is paused, ship should not take damage
+        if (this._asteroidMinigamePaused) return false;
+        // invulnerability duration: ~333ms (max 3 hits per second)
+        const INVULN_MS = 1000 / 3;
+        if (this.shipHitInvuln && this.shipHitInvuln > 0) return false;
+
+        if (this.enemies.some(e => e.type === "iriditeBoss" && e.alive)) {
+            player.ir.tookDamageInIriditeFight = true;
+        }
+
+        // grant invulnerability
+        this.shipHitInvuln = INVULN_MS;
+        try {
+            if (player.ir.shipHealth && typeof player.ir.shipHealth.sub === 'function') {
+                // Decimal-friendly subtraction
+                player.ir.shipHealth = player.ir.shipHealth.sub(dmg);
+            } else if (typeof player.ir.shipHealth === 'number') {
+                const raw = (typeof dmg === 'number') ? dmg : (dmg && dmg.toNumber ? dmg.toNumber() : Number(dmg));
+                player.ir.shipHealth = Math.max(0, player.ir.shipHealth - raw);
+            }
+        } catch (e) {
+            // fallback numeric
+            try {
+                const raw = (typeof dmg === 'number') ? dmg : (dmg && dmg.toNumber ? dmg.toNumber() : Number(dmg));
+                if (typeof player.ir.shipHealth === 'number') player.ir.shipHealth = Math.max(0, player.ir.shipHealth - raw);
+            } catch (e2) {}
+        }
+
+        // clamp/validate health value
+        try {
+            if ((player.ir.shipHealth.isNaN && player.ir.shipHealth.isNaN()) || !player.ir.shipHealth.isFinite || player.ir.shipHealth < 0) player.ir.shipHealth = new Decimal(0);
+        } catch (e) {
+            if (typeof player.ir.shipHealth === 'number' && player.ir.shipHealth < 0) player.ir.shipHealth = 0;
+        }
+
+        // death check
+        try {
+            if (player.ir.shipHealth && player.ir.shipHealth.lte && player.ir.shipHealth.lte(0)) this.onShipDeath();
+            else if (typeof player.ir.shipHealth === 'number' && player.ir.shipHealth <= 0) this.onShipDeath();
+        } catch (e) {}
+        return true;
     }
 
     createSmallAsteroid(x, y) {
@@ -4422,6 +4869,113 @@ class SpaceArena {
 
             this.ctx.restore();
         }
+        if (player.ir.shipType == 8) {
+            this.ctx.save();
+            this.ctx.translate(this.ship.x, this.ship.y);
+            this.ctx.rotate(this.ship.angle);
+
+            // Miniature Iridite visuals
+            const r = this.ship.radius || 12;
+            const phase = (this.ship.wingPhase || 0);
+            let raw = Math.sin(phase);
+            let t = (raw + 1) / 2;
+            let ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+            const spreadBase = 0.9 + ease * 0.6;
+            const tipBend = Math.sin(phase * 1.9) * (0.6 + ease * 0.6);
+
+            this.ctx.shadowColor = "rgba(240,230,255,0.7)";
+            this.ctx.shadowBlur = 15;
+
+            const drawWing = (mirror = false) => {
+                this.ctx.save();
+                if (mirror) this.ctx.scale(-1, 1);
+                this.ctx.translate(r * 0.56, r * 0.02);
+                let baseAngle = -0.22 - tipBend * 0.14;
+                this.ctx.rotate(baseAngle);
+
+                const groups = [
+                    { count: 6, len: r * 1.2, width: r * 0.35, offset: 0.0, light: -8 },
+                    { count: 5, len: r * 0.9, width: r * 0.28, offset: 0.1, light: -2 },
+                    { count: 4, len: r * 0.6, width: r * 0.2, offset: 0.2, light: 6 }
+                ];
+
+                for (let gi = 0; gi < groups.length; gi++) {
+                    const g = groups[gi];
+                    const groupSpread = (0.72 + gi * 0.18) * (0.9 + ease * 0.15);
+                    for (let i = 0; i < g.count; i++) {
+                        let norm = (i / (g.count - 1)) - 0.5;
+                        let bx = r * 0.06 + norm * r * (0.48 - gi * 0.02);
+                        let by = r * 0.02 + Math.abs(norm) * r * 0.06 + g.offset * r;
+                        let featherAngle = norm * groupSpread + tipBend * (0.32 + gi * 0.12);
+                        let len = g.len * (0.86 + (1 - Math.abs(norm)) * 0.22 - gi * 0.07);
+                        let width = g.width * (0.82 - gi * 0.08) * (1 - Math.abs(norm) * 0.5);
+
+                        this.ctx.save();
+                        this.ctx.translate(bx, by);
+                        this.ctx.rotate(featherAngle);
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(0, 0);
+                        this.ctx.quadraticCurveTo(len * 0.35, -width * 0.6, len * 0.92, -width * 0.08);
+                        this.ctx.lineTo(len * 0.86, width * 0.14);
+                        this.ctx.quadraticCurveTo(len * 0.38, width * 0.6, 0, 0);
+                        this.ctx.closePath();
+                        let fg = this.ctx.createLinearGradient(0, -width, len, width);
+                        fg.addColorStop(0, `rgba(${240 + g.light},${236 + g.light},${255 - g.light},0.9)`);
+                        fg.addColorStop(1, `rgba(${210 + g.light},${208 + g.light},${232 - g.light},0.8)`);
+                        this.ctx.fillStyle = fg;
+                        this.ctx.fill();
+                        this.ctx.restore();
+                    }
+                }
+                this.ctx.restore();
+            };
+
+            drawWing(false);
+            drawWing(true);
+
+            this.ctx.save();
+            this.ctx.shadowBlur = 20;
+            const fontSize = Math.max(12, Math.floor(r * 1.5));
+            this.ctx.font = `${fontSize}px monospace`;
+            this.ctx.textAlign = "center";
+            this.ctx.textBaseline = "middle";
+            this.ctx.fillStyle = "#e0ccffff";
+            this.ctx.fillText("✦", 0, 0);
+            this.ctx.restore();
+
+            this.ctx.restore();
+        }
+
+        if (player.ir.shipType == 8 && this.ship._laserTimer && this.ship._laserTimer > 0) {
+            const laserTotal = 180;
+            const elapsed = laserTotal - this.ship._laserTimer;
+            const windup = 8;
+            const progress = Math.max(0, Math.min(1, (elapsed - windup) / (laserTotal - windup)));
+            const angle = this.ship._laserAngle || this.ship.angle || 0;
+            const beamLen = Math.max(this.width, this.height) * 1.5;
+            const r = this.ship.radius || 12;
+            const maxThickness = r * 0.8;
+            const thickness = windup > elapsed ? (maxThickness * (elapsed / windup)) : (maxThickness * (0.6 + 0.4 * progress));
+
+            this.ctx.save();
+            this.ctx.translate(this.ship.x, this.ship.y);
+            this.ctx.rotate(angle);
+            this.ctx.globalCompositeOperation = "lighter";
+            let g = this.ctx.createLinearGradient(0, -thickness * 2, beamLen, thickness * 2);
+            g.addColorStop(0, `rgba(200,120,255,${0.12 + 0.28 * progress})`);
+            g.addColorStop(0.1, `rgba(255,120,180,${0.18 + 0.32 * progress})`);
+            g.addColorStop(0.6, `rgba(180,255,255,${0.06 + 0.18 * progress})`);
+            g.addColorStop(1, `rgba(200,120,255,${0.02 + 0.06 * progress})`);
+            this.ctx.fillStyle = g;
+            this.ctx.beginPath();
+            this.ctx.rect(0, -thickness, beamLen, thickness * 2);
+            this.ctx.fill();
+            this.ctx.fillStyle = `rgba(255,220,160,${0.9 * (0.5 + 0.5 * progress)})`;
+            this.ctx.fillRect(0, -Math.max(1, thickness * 0.12), beamLen * 0.75, Math.max(1, thickness * 0.12) * 2);
+            this.ctx.restore();
+            this.ctx.globalCompositeOperation = "source-over";
+        }
+
         if (player.ir.shipType == 0) {
             this.ctx.save();
             this.ctx.translate(this.ship.x, this.ship.y);
@@ -4433,6 +4987,44 @@ class SpaceArena {
             this.ctx.closePath();
             this.ctx.fillStyle = "#eaf6f7";
             this.ctx.fill();
+            this.ctx.restore();
+        }
+
+        // Evolver ship (shipType 9) — triangle shape with blue-purple gradient and dividing line
+        if (player.ir.shipType == 9) {
+            this.ctx.save();
+            this.ctx.translate(this.ship.x, this.ship.y);
+            this.ctx.rotate(this.ship.angle);
+            let lenShip = Math.max(18, this.ship.radius || 20);
+
+            // blue-purple gradient
+            let triG = this.ctx.createLinearGradient(15, 0, -15, 0);
+            triG.addColorStop(0, '#5fb8ff');
+            triG.addColorStop(0.5, '#7c4dff');
+            triG.addColorStop(1, '#9aa7ff');
+
+            this.ctx.beginPath();
+            this.ctx.moveTo(20, 0);
+            this.ctx.lineTo(-10, 15);
+            this.ctx.lineTo(-15, 0);
+            this.ctx.lineTo(-10, -15);
+            this.ctx.closePath();
+            this.ctx.fillStyle = triG;
+            this.ctx.fill();
+
+            // black outline
+            this.ctx.strokeStyle = '#000';
+            this.ctx.lineWidth = Math.max(2, lenShip * 0.1);
+            this.ctx.stroke();
+
+            // dividing line through the middle
+            this.ctx.beginPath();
+            this.ctx.moveTo(-15, 0);
+            this.ctx.lineTo(20, 0);
+            this.ctx.strokeStyle = '#000';
+            this.ctx.lineWidth = Math.max(1, lenShip * 0.05);
+            this.ctx.stroke();
+
             this.ctx.restore();
         }
 
@@ -4645,7 +5237,62 @@ class SpaceArena {
 
         // Draw bullets
         for (let bullet of this.bullets) {
-            if (bullet.star) {
+            // Skip ritual projectiles - RitualArena handles these with custom visuals
+            if (bullet.ritualOrb || bullet.ritualBlade) continue;
+            
+            if (bullet.massiveSword) {
+                // Draw a large, spinning metallic sword
+                this.ctx.save();
+                this.ctx.translate(bullet.x, bullet.y);
+                this.ctx.rotate(bullet.rot || 0);
+
+                let r = bullet.radius || 80;
+                let bladeLen = r * 1.5;
+                let bladeW = r * 0.3;
+
+                // Blade
+                let grad = this.ctx.createLinearGradient(-bladeW/2, 0, bladeW/2, 0);
+                grad.addColorStop(0, "#888");
+                grad.addColorStop(0.5, "#eee");
+                grad.addColorStop(1, "#888");
+                this.ctx.fillStyle = grad;
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, -bladeLen); // Tip
+                this.ctx.lineTo(-bladeW/2, -bladeLen * 0.2);
+                this.ctx.lineTo(-bladeW/2, 0);
+                this.ctx.lineTo(bladeW/2, 0);
+                this.ctx.lineTo(bladeW/2, -bladeLen * 0.2);
+                this.ctx.closePath();
+                this.ctx.fill();
+
+                // Blade Edge Highlight
+                this.ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
+                this.ctx.lineWidth = 2;
+                this.ctx.stroke();
+
+                // Crossguard
+                this.ctx.fillStyle = "#553300";
+                this.ctx.fillRect(-bladeW * 1.2, 0, bladeW * 2.4, bladeW * 0.4);
+
+                // Handle
+                this.ctx.fillStyle = "#331100";
+                this.ctx.fillRect(-bladeW * 0.2, bladeW * 0.4, bladeW * 0.4, bladeW * 0.8);
+
+                // Pommel
+                this.ctx.fillStyle = "#553300";
+                this.ctx.beginPath();
+                this.ctx.arc(0, bladeW * 1.3, bladeW * 0.3, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                // Glow
+                this.ctx.shadowColor = "rgba(255, 0, 0, 0.5)";
+                this.ctx.shadowBlur = 20;
+                this.ctx.strokeStyle = "rgba(255, 0, 0, 0.3)";
+                this.ctx.lineWidth = 4;
+                this.ctx.stroke();
+
+                this.ctx.restore();
+            } else if (bullet.star) {
                 // draw mini-star glyph for thematic boss/projectiles
                 this.ctx.save();
                 this.ctx.translate(bullet.x, bullet.y);
@@ -4684,6 +5331,115 @@ class SpaceArena {
                 this.ctx.arc(bullet.x, bullet.y, r, 0, 2 * Math.PI);
                 this.ctx.fillStyle = bullet.fromEnemy ? "#ff4444" : "#ffec8b";
                 this.ctx.fill();
+            }
+            // Evolver primary shard rendering (crystal shard with facets)
+            if (bullet.evolverShard) {
+                this.ctx.save();
+                this.ctx.translate(bullet.x, bullet.y);
+                let ang = Math.atan2(bullet.vy, bullet.vx || 0);
+                this.ctx.rotate(ang);
+                let len = Math.min(56, (bullet.radius || 26) * 2);
+
+                // crystal gradients matching ship
+                let mainG = this.ctx.createLinearGradient(len, 0, -len * 0.7, 0);
+                mainG.addColorStop(0, '#5fb8ff');
+                mainG.addColorStop(0.5, '#7c4dff');
+                mainG.addColorStop(1, '#9aa7ff');
+                let facetG = this.ctx.createLinearGradient(0, -len * 0.5, 0, len * 0.5);
+                facetG.addColorStop(0, '#3f51b5');
+                facetG.addColorStop(1, '#00bcd4');
+
+
+                // main crystal body
+                this.ctx.beginPath();
+                this.ctx.moveTo(len, 0);
+                this.ctx.lineTo(len * 0.3, -len * 0.4);
+                this.ctx.lineTo(-len * 0.5, -len * 0.2);
+                this.ctx.lineTo(-len * 0.7, 0);
+                this.ctx.lineTo(-len * 0.5, len * 0.2);
+                this.ctx.lineTo(len * 0.3, len * 0.4);
+                this.ctx.closePath();
+                this.ctx.fillStyle = mainG;
+                this.ctx.fill();
+                this.ctx.strokeStyle = '#000';
+                this.ctx.lineWidth = Math.max(2, len * 0.1);
+                this.ctx.stroke();
+
+                // facet lines
+                this.ctx.beginPath();
+                this.ctx.moveTo(len * 0.3, -len * 0.4);
+                this.ctx.lineTo(-len * 0.5, len * 0.2);
+                this.ctx.strokeStyle = 'rgba(255,255,255,0.6)';
+                this.ctx.lineWidth = Math.max(1, len * 0.05);
+                this.ctx.stroke();
+
+                this.ctx.beginPath();
+                this.ctx.moveTo(len * 0.3, len * 0.4);
+                this.ctx.lineTo(-len * 0.5, -len * 0.2);
+                this.ctx.stroke();
+
+                // side facets
+                this.ctx.beginPath();
+                this.ctx.moveTo(len * 0.3, -len * 0.4);
+                this.ctx.lineTo(0, -len * 0.6);
+                this.ctx.lineTo(-len * 0.5, -len * 0.2);
+                this.ctx.closePath();
+                this.ctx.fillStyle = facetG;
+                this.ctx.fill();
+
+                this.ctx.beginPath();
+                this.ctx.moveTo(len * 0.3, len * 0.4);
+                this.ctx.lineTo(0, len * 0.6);
+                this.ctx.lineTo(-len * 0.5, len * 0.2);
+                this.ctx.closePath();
+                this.ctx.fillStyle = facetG;
+                this.ctx.fill();
+
+                // highlights
+                this.ctx.beginPath();
+                this.ctx.moveTo(len * 0.5, -len * 0.1);
+                this.ctx.lineTo(len * 0.2, 0);
+                this.ctx.lineTo(len * 0.5, len * 0.1);
+                this.ctx.closePath();
+                this.ctx.fillStyle = 'rgba(255,255,255,0.4)';
+                this.ctx.fill();
+
+                this.ctx.restore();
+            }
+            // Evolver mini shard rendering (small blue bullet)
+            if (bullet.evolverMini) {
+                this.ctx.beginPath();
+                let r = bullet.radius || 4;
+                this.ctx.arc(bullet.x, bullet.y, r, 0, 2 * Math.PI);
+                this.ctx.fillStyle = '#5fb8ff';
+                this.ctx.fill();
+                this.ctx.strokeStyle = '#2c3e50';
+                this.ctx.lineWidth = 1;
+                this.ctx.stroke();
+            }
+            // Evolver mini shard rendering (smaller triangle)
+            if (bullet.evolverMini) {
+                this.ctx.save();
+                this.ctx.translate(bullet.x, bullet.y);
+                let ang = Math.atan2(bullet.vy, bullet.vx || 0);
+                this.ctx.rotate(ang);
+                let len = Math.min(8, bullet.radius || 6);
+                // mini shards use the same family as the ship but slightly desaturated
+                let g2 = this.ctx.createLinearGradient(len, 0, -len * 0.6, 0);
+                g2.addColorStop(0, 'rgba(241,182,255,0.95)');
+                g2.addColorStop(0.5, 'rgba(154,167,255,0.95)');
+                g2.addColorStop(1, 'rgba(95,184,255,0.95)');
+                this.ctx.beginPath();
+                this.ctx.moveTo(len, 0);
+                this.ctx.lineTo(-len * 0.6, -len * 0.5);
+                this.ctx.lineTo(-len * 0.6, len * 0.5);
+                this.ctx.closePath();
+                this.ctx.fillStyle = g2;
+                this.ctx.fill();
+                this.ctx.lineWidth = Math.max(1, len * 0.2);
+                this.ctx.strokeStyle = '#0b0b0b';
+                this.ctx.stroke();
+                this.ctx.restore();
             }
         }
 
@@ -4936,7 +5692,9 @@ class SpaceArena {
         player.ir.battleLevel = new Decimal(0);
         player.ir.battleXP = new Decimal(0);
         if (arena) arena.upgradeEffects = arena.getDefaultUpgradeEffects();
-        player.subtabs["ir"]['stuff'] = "Lose";
+        if (player.tab == "ir") player.subtabs["ir"]['stuff'] = "Lose";
+        if (player.tab == "bl") player.subtabs["bl"]['stuff'] = "Lose";
+        if (player.tab == "cbs") player.subtabs["cbs"]['stuff'] = "Lose";
         localStorage.setItem('arenaActive', 'false');
     }
 }
@@ -5008,3 +5766,4 @@ function resumeAsteroidMinigame() {
     if (typeof arena.resumeAsteroidMinigame === 'function') arena.resumeAsteroidMinigame();
 }
 window.resumeAsteroidMinigame = resumeAsteroidMinigame;
+

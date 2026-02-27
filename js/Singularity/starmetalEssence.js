@@ -61,6 +61,7 @@
             player.sme.generatorProduction[i] = player.sme.generatorProduction[i].mul(buyableEffect("sme", i))
             player.sme.generatorProduction[i] = player.sme.generatorProduction[i].mul(levelableEffect("pet", 502)[1])
             player.sme.generatorProduction[i] = player.sme.generatorProduction[i].mul(buyableEffect("al", 205))
+            player.sme.generatorProduction[i] = player.sme.generatorProduction[i].mul(levelableEffect("pu", 305)[2])
             if (player.sme.generatorTimers[i].gte(player.sme.generatorTimersMax[i])) {
                 player.sme.starmetalEssence = player.sme.starmetalEssence.add(player.sme.generatorProduction[i])
                 player.sme.generatorTimers[i] = new Decimal(0)

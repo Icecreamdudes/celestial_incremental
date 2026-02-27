@@ -43,6 +43,7 @@
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(player.cs.scraps.radioactive.effect)
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(levelableEffect("pet", 309)[0])
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(buyableEffect("cof", 24))
+        player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(levelableEffect("pu", 110)[1])
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(levelableEffect("ir", 7)[1])
 
         // POWER MODIFIERS
@@ -62,6 +63,7 @@
             if (hasUpgrade("cs", 1303)) player.ra.radiationSoftcapEffect = player.ra.radiationSoftcapEffect.pow(player.ra.radiation.div(player.ra.radiationSoftcapStart).add(1).pow(0.45).log(player.ra.radiationSoftcapStart).add(1))
             player.ra.radiationSoftcapEffect = player.ra.radiationSoftcapEffect.div(buyableEffect("ra", 12))
             if (hasUpgrade("cs", 1301)) player.ra.radiationSoftcapEffect = player.ra.radiationSoftcapEffect.mul(10)
+            if (hasUpgrade("s", 29)) player.ra.radiationSoftcapEffect = player.ra.radiationSoftcapEffect.pow(0.02)
         }
     },
     clickables: {},

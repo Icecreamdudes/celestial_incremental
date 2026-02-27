@@ -1,18 +1,17 @@
-addLayer("tl", {
-    name: "Tome Library",
+addLayer("aal", {
+    name: "Alchemy Altar",
     symbol: "🝦",
-    row: 2,
+    row: 3,
     universe: "LU",
-    position: 1,
+    position: 0,
     startData() {return {
         unlocked: true,
     }},
     nodeStyle: {
-        background: "#565656",
+        background: "#ffffff",
         borderColor: "white",
     },
-    tooltip: "Tome Library",
+    tooltip: "Alchemy Altar",
     color: "white",
-    branches: ["btb", "aal"],
     bars: {},
 })

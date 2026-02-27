@@ -295,7 +295,7 @@ addUniverse("DS", {
 addUniverse("LU", {
 	name: "Louki's Universe<br>The Alchemical World",
 	symbol: "🝪",
-	tree: [["ktb", "tl"]],
+	tree: [["ktb"], ["btb", "tl"], ["aal"]],
 	nodeStyle() {
 		let style = {
 			background: "linear-gradient(to bottom, #8b609c, magenta, pink)",

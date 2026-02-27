@@ -814,7 +814,7 @@
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/battle/temporalShards.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                 ["raw-html", () => { return formatWhole(player.stagnantSynestia.temporalShard)}, {width: "95px", height: "50px", color: "#0d62c4ff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                ["raw-html", "<div class='bottomTooltip'>Temporal Shards<hr><small>(Gained from check back battles)</small></div>"],
+                ["raw-html", "<div class='bottomTooltip'>Temporal Shards<hr><small>(Gained from stagnant synestia)</small></div>"],
             ], {width: "150px", height: "50px"}],
         ], {width: "450px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
                     ["blank", "25px"],

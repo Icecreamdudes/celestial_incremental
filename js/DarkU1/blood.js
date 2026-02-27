@@ -102,7 +102,7 @@
             tooltip() { return "Blood... The elixir of humanity." },
             onClick() {
                 player.ir.inBattle = true
-                player.ma.inBlackHeart = true
+                options.fullscreen = true
                 player.subtabs["bl"]['stuff'] = 'Battle'
 
                 arena = new BloodArena(1200, 600);
@@ -124,7 +124,7 @@
             unlocked() { return !player.bl.noxFightActive || player.subtabs["bl"]["stuff"] == "Refresh Page :("|| player.subtabs["bl"]["stuff"] == "Lose"},
             onClick() {
                 player.ir.inBattle = false
-                player.ma.inBlackHeart = false
+                options.fullscreen = false
                 player.subtabs["bl"]['stuff'] = 'Blood Battle'
 
                 if (arena) {

@@ -8,7 +8,7 @@ addLayer("ktb", {
         unlocked: true,
         alchemicalSymbols: new Decimal (0),
         alchemicalSymbolsGain: new Decimal (0),
-        alchemicalSymnolsMult: new Decimal (1),
+        alchemicalSymbolsMult: new Decimal (1)
     }},
     nodeStyle() {
         return {
@@ -28,15 +28,16 @@ addLayer("ktb", {
 
         // Start of Alchemical Symbol Gain
         player.ktb.alchemicalSymbolsGain = player.points.add(1).log10(player.points).div(100000)
-        player.ktb.alchemicalSymbolsGain = player.alchemicalSymbolsGain.mul(player.ktb.alchemicalSymbolsMult)
 
         // Flooring Alchemical Symbol Gain
         player.ktb.alchemicalSymbolsGain = player.ktb.alchemicalSymbolsGain.floor()
 
         // Start of KTB Multiplier Modifiers ?
         if (hasUpgrade("ktb", 201)) player.ktb.alchemicalSymbolsGain = player.ktb.alchemicalSymbolsGain.mul(2)
-        if (hasUpgrade("ktb", 202)) player.ktb.alchemicalSymbolsGain = player.ktb.alchemicalSymbolsMult.mul((upgradeEffect("ktb", 202))
-
+        if (hasUpgrade("ktb", 202)) player.ktb.alchemicalSymbolsGain = player.ktb.alchemicalSymbolsGain.mul(upgradeEffect("ktb", 202))
+        if (hasUpgrade("ktb", 203)) player.ktb.alchemicalSymbolsGain = player.ktb.alchemicalSymbolsGain.mul(upgradeEffect("ktb", 203))
+        if (hasUpgrade("ktb", 204)) player.ktb.alchemicalSymbolsGain = player.ktb.alchemicalSymbolsGain.mul(upgradeEffect("ktb", 204))
+        if (hasUpgrade("ktb", 205)) player.ktb.alchemicalSymbolsGain = player.ktb.alchemicalSymbolsGain.mul(upgradeEffect("ktb", 205))
     },
 
     // Alchemical Symbol Reset mechanism
@@ -78,21 +79,21 @@ addLayer("ktb", {
             title: "Symbol Transmutation",
             unlocked() {return true},
             description: "Unlocks Altered Alchemical Symbols and the Blueprint Table.",
-            cost: new Decimal(1),
+            cost: new Decimal(50),
             currencyLocation() {return player.ktb},
             currencyDisplayName: "Alchemical Symbols",
             currencyInternalName: "alchemicalSymbols",
             style() {
                 let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(0deg, magenta, #8b609c)"
+                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#000000" : look.background = "linear-gradient(0deg, magenta, #8b609c)"
                 return look
             },
         },
         102: {
             title: "Starmetal Alteration",
-            unlocked() {return true},
+            unlocked() {return hasUpgrade("ktb", 101)},
             description: "Unlocks Altered Starmetal Alloy and Altered Starmetal Essence.",
-            cost: new Decimal(1),
+            cost: new Decimal(100),
             currencyLocation() {return player.ktb},
             currencyDisplayName: "Alchemical Symbols",
             currencyInternalName: "alchemicalSymbols",
@@ -104,9 +105,9 @@ addLayer("ktb", {
         },
         103: {
             title: "Voidigenesis",
-            unlocked() {return true},
-            description: "Unlocks the blueprint for an Alchemical Node - Particle Accelerator.",
-            cost: new Decimal(1),
+            unlocked() {return hasUpgrade("ktb", 102)},
+            description: "Unlocks the Particle Accelerator blueprint and the Void Element.",
+            cost: new Decimal(500),
             currencyLocation() {return player.ktb},
             currencyDisplayName: "Alchemical Symbols",
             currencyInternalName: "alchemicalSymbols",
@@ -118,9 +119,9 @@ addLayer("ktb", {
         },
         104: {
             title: "Alkahest Creation",
-            unlocked() {return true},
-            description: "Unlocks the ability to make the Alkahest.",
-            cost: new Decimal(1),
+            unlocked() {return hasUpgrade("ktb", 103)},
+            description: "Unlocks the Nexus of Unification blueprint and the Alkahest Element.",
+            cost: new Decimal(1000),
             currencyLocation() {return player.ktb},
             currencyDisplayName: "Alchemical Symbols",
             currencyInternalName: "alchemicalSymbols",
@@ -132,9 +133,9 @@ addLayer("ktb", {
         },
         105: {
             title: "Aetherogenesis",
-            unlocked() {return true},
-            description: "Unlocks the blueprint for an Alchemical Node - Astrological Construct.",
-            cost: new Decimal(1),
+            unlocked() {return hasUpgrade("ktb", 104)},
+            description: "Unlocks the Astrological Construct blueprint and the Aether Element.",
+            cost: new Decimal(2000),
             currencyLocation() {return player.ktb},
             currencyDisplayName: "Alchemical Symbols",
             currencyInternalName: "alchemicalSymbols",
@@ -146,9 +147,65 @@ addLayer("ktb", {
         },
         106: {
             title: "Infernal Theory",
-            unlocked() {return true},
-            description: "Unlocks the ability to make the Inferno Element.",
-            cost: new Decimal(1),
+            unlocked() {return hasUpgrade("ktb", 105)},
+            description: "Unlocks the Plasma Chamber blueprint and the Inferno Element.",
+            cost: new Decimal(4000),
+            currencyLocation() {return player.ktb},
+            currencyDisplayName: "Alchemical Symbols",
+            currencyInternalName: "alchemicalSymbols",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(0deg, magenta, #8b609c)"
+                return look
+            },
+        },
+        107: {
+            title: "Equinox Reverie",
+            unlocked() {return hasUpgrade("ktb", 106)},
+            description: "Unlocks the Illusionary Mirror blueprint and the Light and Darkness Elements.",
+            cost: new Decimal(8000),
+            currencyLocation() {return player.ktb},
+            currencyDisplayName: "Alchemical Symbols",
+            currencyInternalName: "alchemicalSymbols",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(0deg, magenta, #8b609c)"
+                return look
+            },
+        },
+        108: {
+            title: "Applied Calculus",
+            unlocked() {return hasUpgrade("ktb", 107)},
+            description: "Unlocks the Dimension Slicer blueprint and the Space and Time Elements.",
+            cost: new Decimal(16000),
+            currencyLocation() {return player.ktb},
+            currencyDisplayName: "Alchemical Symbols",
+            currencyInternalName: "alchemicalSymbols",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(0deg, magenta, #8b609c)"
+                return look
+            },
+        },
+        109: {
+            title: "Higher Order Elements",
+            unlocked() {return hasUpgrade("ktb", 108)},
+            description: "Unlocks the higher order elements and their machines' blueprints.",
+            cost: new Decimal(32000),
+            currencyLocation() {return player.ktb},
+            currencyDisplayName: "Alchemical Symbols",
+            currencyInternalName: "alchemicalSymbols",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(0deg, magenta, #8b609c)"
+                return look
+            },
+        },
+        110: {
+            title: "Prismatic World",
+            unlocked() {return hasUpgrade("ktb", 210)},
+            description: "Unlocks the Spire of the ██████.",
+            cost: new Decimal(100000000),
             currencyLocation() {return player.ktb},
             currencyDisplayName: "Alchemical Symbols",
             currencyInternalName: "alchemicalSymbols",
@@ -161,10 +218,10 @@ addLayer("ktb", {
 
         // Upgrades that affect the Knowledge Table progression ONLY.
         201: {
-            title: "Doubled Knowledge",
+            title: "Symbolism Apprentice",
             unlocked() {return true},
-            description: "Double AlSy gain.",
-            cost: new Decimal(1),
+            description: "Double base AlSy gain.",
+            cost: new Decimal(250),
             currencyLocation() {return player.ktb},
             currencyDisplayName: "Alchemical Symbols",
             currencyInternalName: "alchemicalSymbols",
@@ -174,16 +231,16 @@ addLayer("ktb", {
                 return look
             },
         },
-        202: { // effect not fixed
-            title: "Powered Knowledge",
+        202: {
+            title: "Symbol of Strength",
             unlocked() {return true},
-            description: "Boosts AlSy gain based on current power.",
-            cost: new Decimal(1),
+            description: "Boosts AlSy gain based on total power.",
+            cost: new Decimal(500),
             currencyLocation() {return player.ktb},
             currencyDisplayName: "Alchemical Symbols",
             currencyInternalName: "alchemicalSymbols",
             effect() {
-                return player.ktb.alchemicalSymbolsMult.add(1).mul(Decimal.log10(player.hpw.power)).div(10).add(1)
+                return player.ktb.alchemicalSymbolsMult.add(Decimal.log10(player.hpw.totalPower)).div(10)
             },
             effectDisplay() {
                 return "x" + formatSimple(upgradeEffect(this.layer, this.id), 2)
@@ -194,56 +251,71 @@ addLayer("ktb", {
                 return look
             },
         },
-        203: { // effect not fixed
-            title: "Planetary Knowledge",
+        203: {
+            title: "Symbol of Courage",
             unlocked() {return true},
-            description: "Boosts AlSy gain based on planets.",
-            cost: new Decimal(1),
+            description: "Boosts AlSy gain based on stars.",
+            cost: new Decimal(1000),
             currencyLocation() {return player.ktb},
             currencyDisplayName: "Alchemical Symbols",
             currencyInternalName: "alchemicalSymbols",
+            effect() {
+                return player.ktb.alchemicalSymbolsMult.add(Decimal.log10(player.au2.stars)).div(10)
+            },
+            effectDisplay() {
+                return "x" + formatSimple(upgradeEffect(this.layer, this.id), 2)
             },
             style() {
                 let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(0deg, #6b4423, #9b541a)"
                 return look
-            },
-            // please add here the effect
+            }
         },
         204: {
-            title: "Eternal Knowledge",
+            title: "Symbol of Wisdom",
             unlocked() {return true},
-            description: "Boosts AlSy gain based on CB Level.",
-            cost: new Decimal(1),
+            description: "Boosts AlSy gain based on highest CB Level.",
+            cost: new Decimal(2500),
             currencyLocation() {return player.ktb},
             currencyDisplayName: "Alchemical Symbols",
             currencyInternalName: "alchemicalSymbols",
+            effect() {
+                return player.ktb.alchemicalSymbolsMult.add(Decimal.log10(player.cb.highestLevel)).div(2)
+            },
+            effectDisplay() {
+                return "x" + formatSimple(upgradeEffect(this.layer, this.id), 2)
+            },
             style() {
                 let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(0deg, #6b4423, #9b541a)"
                 return look
-            },
-            // please add effect here
+            }
+        },
         205: {
-            title: "Accumulated Knowledge",
+            title: "Page Accumulation",
             unlocked() {return true},
             description: "Boosts AlSy gain based on itself.",
-            cost: new Decimal(1),
+            cost: new Decimal(5000),
             currencyLocation() {return player.ktb},
             currencyDisplayName: "Alchemical Symbols",
             currencyInternalName: "alchemicalSymbols",
+            effect() {
+                return player.ktb.alchemicalSymbolsMult.add(Decimal.log10(player.ktb.alchemicalSymbols)).div(4).add(1)
+            },
+            effectDisplay() {
+                return "x" + formatSimple(upgradeEffect(this.layer, this.id), 2)
+            },
             style() {
                 let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(0deg, #6b4423, #9b541a)"
                 return look
-            },
-            // please add effect here
+            }
         },
         206: {
-            title: "Novel Writing",
-            unlocked() {return true},
-            description: "Improves the AlSy gain formula and unlocks the Tome Library.",
-            cost: new Decimal(1),
+            title: "Symbol of Earth",
+            unlocked() {return hasUpgrade("ktb", 109)},
+            description: "Unlocks the Alchemical Symbol Gatherer.",
+            cost: new Decimal(50000),
             currencyLocation() {return player.ktb},
             currencyDisplayName: "Alchemical Symbols",
             currencyInternalName: "alchemicalSymbols",
@@ -252,7 +324,62 @@ addLayer("ktb", {
                 hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(0deg, #6b4423, #9b541a)"
                 return look
             },
-            // please add effect here
+        },
+        207: {
+            title: "Symbol of Water",
+            unlocked() {return hasUpgrade("ktb", 109)},
+            description: "Starmetal Alteration rates are 100% more effective.",
+            cost: new Decimal(100000),
+            currencyLocation() {return player.ktb},
+            currencyDisplayName: "Alchemical Symbols",
+            currencyInternalName: "alchemicalSymbols",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(0deg, #6b4423, #9b541a)"
+                return look
+            },
+        },
+        208: {
+            title: "Symbol of Air",
+            unlocked() {return hasUpgrade("ktb", 109)},
+            description: "Divides the Alchemical Reaction times by 2.",
+            cost: new Decimal(250000),
+            currencyLocation() {return player.ktb},
+            currencyDisplayName: "Alchemical Symbols",
+            currencyInternalName: "alchemicalSymbols",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(0deg, #6b4423, #9b541a)"
+                return look
+            },
+        },
+        209: {
+            title: "Symbol of Fire",
+            unlocked() {return hasUpgrade("ktb", 109)},
+            description: "1st Order Alchemical Reactions are 100% more effective.",
+            cost: new Decimal(500000),
+            currencyLocation() {return player.ktb},
+            currencyDisplayName: "Alchemical Symbols",
+            currencyInternalName: "alchemicalSymbols",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(0deg, #6b4423, #9b541a)"
+                return look
+            },
+        },
+        210: {
+            title: "Novel Writing",
+            unlocked() {return hasUpgrade("ktb", 206) && hasUpgrade("ktb", 207) && hasUpgrade("ktb", 208) && hasUpgrade("ktb", 209)},
+            description: "Improves the AlSy gain formula and unlocks the Tome Library.",
+            cost: new Decimal(1000000),
+            currencyLocation() {return player.ktb},
+            currencyDisplayName: "Alchemical Symbols",
+            currencyInternalName: "alchemicalSymbols",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(0deg, #6b4423, #9b541a)"
+                return look
+            },
         }
     },
 
@@ -280,12 +407,12 @@ addLayer("ktb", {
                                 ["clickable", 1],
                             ], {width: "700px", height: "235px", background: "linear-gradient(0deg, #382413, #523116)", borderTop: "3px solid #b18961", borderLeft: "3px solid #b18961", borderRight: "3px solid #b18961", borderBottom: "3px solid #330033", borderRadius: "15px 15px 0 0", boxShadow: "0 0 5px 5px #b18961a6 inset, 0 0 10px 10px #382413 inset, 0 0 50px 50px #00000050 inset"}],
                             ["style-row", [
-                                ["row", [["upgrade", 101], ["upgrade", 102], ["upgrade", 103]]],
-                                ["row", [["upgrade", 104], ["upgrade", 105], ["upgrade", 106]]],
+                                ["row", [["upgrade", 101], ["upgrade", 102], ["upgrade", 103], ["upgrade", 104], ["upgrade", 105]]],
+                                ["row", [["upgrade", 106], ["upgrade", 107], ["upgrade", 108], ["upgrade", 109], ["upgrade", 110]]],
                             ], {width: "700px", height: "265px", background: "repeating-linear-gradient(-45deg, #772277 10px, #551155 20px)", borderLeft: "3px solid #330333", borderRight: "3px solid #330033", boxShadow: "0 0 5px 5px #330033a6 inset, 0 0 8px 8px #551155 inset, 0 0 20px 20px #00000050 inset"}],
                             ["style-row", [
-                                ["row", [["upgrade", 201], ["upgrade", 202], ["upgrade", 203]]],
-                                ["row", [["upgrade", 204], ["upgrade", 205], ["upgrade", 206]]],
+                                ["row", [["upgrade", 201], ["upgrade", 202], ["upgrade", 203], ["upgrade", 204], ["upgrade", 205]]],
+                                ["row", [["upgrade", 206], ["upgrade", 207], ["upgrade", 208], ["upgrade", 209], ["upgrade", 210]]],
                             ], {width: "700px", height: "265px", background: "linear-gradient(180deg, #382413, #523116)", borderTop: "3px solid #330033", borderLeft: "3px solid #b18961", borderRight: "3px solid #b18961", borderBottom: "3px solid #b18961", borderRadius: "0 0 15px 15px", boxShadow: "0 0 5px 5px #b18961a6 inset, 0 0 10px 10px #382413 inset, 0 0 50px 50px #00000050 inset"}],
                             ]
                         ]]]
@@ -296,5 +423,5 @@ addLayer("ktb", {
         ["raw-html", () => {return "You have <h3>" + formatWhole(player.points) + "</h3> Celestial Points. (+" + formatWhole(player.gain) + "/s)"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
         ["microtabs", "tabs", {'border-width': '0px'}],
         ["blank", "10px"]
-    ]
+    ],
 })

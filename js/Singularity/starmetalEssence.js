@@ -948,7 +948,7 @@
                 player.bh.darkEssence = this.currency()[0].sub(amt)
                 player.sme.starmetalEssence = this.currency()[1].sub(amt2)
             },
-            effect(x) {return getBuyableAmount(this.layer, this.id).div(5)},
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(2)},
             unlocked: true,
             branches: [[122, "#8a0e79"]],
             cost(x) {

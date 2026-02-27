@@ -1894,5 +1894,15 @@ function fixOldSave(oldVersion){
 		player.depth3.buyables[2] = new Decimal(player.ma.buyables[17]).div(5).floor().min(20)
 		player.depth3.buyables[3] = new Decimal(player.ma.buyables[31]).div(2.5).floor()
 		player.depth3.buyables[4] = new Decimal(player.ma.buyables[34])
+
+		// CB Fighting
+		player.stagnantSynestia.temporalDust = new Decimal(player.fi.temporalDust).floor()
+		player.stagnantSynestia.temporalShard = new Decimal(player.fi.temporalShards).floor()
+		player.stagnantSynestia.highestcombo = new Decimal(player.fi.tier1BestWave).min(100)
+		for (let i in player.stagnantSynestia.milestone) {
+			if (player.stagnantSynestia.highestCombo.gte(i)) player.stagnantSynestia.milestone[i] = 1
+		}
+		if (hasUpgrade("fi", 13)) player.stagnantSynestia.upgrades.push(5)
+		if (hasMilestone("fi", 103)) player.stagnantSynestia.upgrades.push(6)
 	}
 }

@@ -1898,7 +1898,7 @@ function fixOldSave(oldVersion){
 		// CB Fighting
 		player.stagnantSynestia.temporalDust = new Decimal(player.fi.temporalDust).floor()
 		player.stagnantSynestia.temporalShard = new Decimal(player.fi.temporalShards).floor()
-		player.stagnantSynestia.highestcombo = new Decimal(player.fi.tier1BestWave).min(100)
+		player.stagnantSynestia.highestCombo = new Decimal(player.fi.tier1BestWave).min(100)
 		for (let i in player.stagnantSynestia.milestone) {
 			if (player.stagnantSynestia.highestCombo.gte(i)) player.stagnantSynestia.milestone[i] = 1
 		}

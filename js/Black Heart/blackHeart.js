@@ -512,6 +512,7 @@ addLayer("bh", {
         combo: new Decimal(0),
         comboScaling: 1.015,
         comboScalingStart: new Decimal(100),
+        comboScalingReduction: 0,
         comboSoftcap: new Decimal(1),
         timeSpeed: new Decimal(1),
         maxSkillPoints: new Decimal(10),
@@ -630,7 +631,11 @@ addLayer("bh", {
         // Stage Code
         player.bh.comboScaling = 1
         if (BHS[player.bh.currentStage].comboScaling) player.bh.comboScaling = BHS[player.bh.currentStage].comboScaling
-        if (hasUpgrade("ep2", 9107)) player.bh.comboScaling = Math.max(player.bh.comboScaling - 0.002, 1)
+
+        player.bh.comboScalingReduction = 0
+        if (hasUpgrade("ep2", 9107)) player.bh.comboScalingReduction = player.bh.comboScalingReduction + 0.002
+
+        player.bh.comboScaling = Math.max(player.bh.comboScaling - player.bh.comboScalingReduction , 1)
 
         player.bh.comboScalingStart = new Decimal(Infinity)
         if (BHS[player.bh.currentStage].comboScalingStart) player.bh.comboScalingStart = BHS[player.bh.currentStage].comboScalingStart

@@ -1169,7 +1169,6 @@ addLayer("ev8", {
             currencyDisplayName: "Evolution Shards",
             currencyInternalName: "evolutionShards",
             style: {width: "135px", color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
-
         },
       /*  23: {
             title: "Shard Research XII",

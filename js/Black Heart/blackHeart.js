@@ -507,7 +507,7 @@ addLayer("bh", {
         autoExit: false,
         autoCooldown: new Decimal(0),
         bhPause: false,
-        respawnTimer: new Decimal(5),
+        respawnTimer: new Decimal(0),
         respawnMax: new Decimal(5),
         combo: new Decimal(0),
         comboScaling: 1.015,

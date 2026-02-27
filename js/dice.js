@@ -725,7 +725,7 @@
             onClick() {
                 player.d.diceSpaceUnlocked = true
                 player.tab = "za"
-                player.universe = "ds"
+                player.universe = "DS"
             },
             style: {width: "600px", minHeight: "200px", color: "#1b110eff", backgroundImage: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)", border: "3px solid #0061ff", borderRadius: "15px"},
         },

@@ -14,4 +14,5 @@ addLayer("aal", {
     tooltip: "Alchemy Altar",
     color: "white",
     bars: {},
+        layerShown() { return player.startedGame == true && hasUpgrade("ktb", 102)}
 })

@@ -522,7 +522,6 @@ function celestialiteReward(gain) {
     generalChance = generalChance.sub(generalRemain)
     
     let generalMult = Decimal.pow(2, generalRemain)
-    console.log(format(generalChance) + " " + format(generalRemain))
     if (Decimal.gte(generalChance, Math.random())) generalMult = generalMult.mul(2)
 
     let str = ""

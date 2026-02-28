@@ -636,6 +636,7 @@
                     ["style-row", [
                         ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18], ["upgrade", 19],
                         ["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28],
+                        ["upgrade", 29],
                     ], {maxWidth: "1000px", padding: "5px 0", backgroundColor: "#332600", border: "3px solid #7f5f00", borderRadius: "20px"}],
                     ["blank", "25px"],
                     ["style-row", [

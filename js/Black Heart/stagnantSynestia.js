@@ -318,7 +318,7 @@ addLayer("stagnantSynestia", {
             ], {width: "272px", height: "420px", borderLeft: "3px solid var(--regBorder)"}],
         ], {width: "800px", height: "420px"}],
     ],
-    layerShown() {return player.startedGame && player.matosLair.milestone[25] >= 1},
+    layerShown() {return player.startedGame && hasUpgrade("ev8", 24)},
 })
 
 BHS.stagnantSynestia = {

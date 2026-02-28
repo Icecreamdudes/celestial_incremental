@@ -268,12 +268,13 @@
             },
         },
         22: {
-            title() { return "Do a wheel reset, but gain no rewards."},
+            title() { return "Do a wheel reset and reset your wheel spins, but gain no rewards."},
             tooltip() { return "<h5>You suck at this game" },
             canClick() { return true },
             unlocked() { return true },
             onClick() {
                 player.wof.spinPause = new Decimal(7)
+                player.wof.wheelsSpinned = new Decimal(0)
             },
             style() { 
                 return { width: '250px', "min-height": '75px', borderRadius: "15px 15px 15px 15px", border: "3px solid #0f221aff", backgroundImage: "linear-gradient(180deg, #144b34ff 0%, #3d8165ff 50%, #144b34ff 100%)"}

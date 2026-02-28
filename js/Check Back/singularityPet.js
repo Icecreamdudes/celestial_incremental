@@ -428,7 +428,7 @@ addLayer("sp", {
         32: {
             costBase() { return new Decimal(25) },
             costGrowth() { return new Decimal(1.7) },
-            purchaseLimit() { return new Decimal(24) },
+            purchaseLimit() { return new Decimal(25) },
             currency() { return player.sp.selPoints},
             pay(amt) { player.sp.selPoints = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).div(100).add(1) },

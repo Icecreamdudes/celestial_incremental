@@ -489,9 +489,9 @@ BHA.eclipse_motivation = {
             }
         }
         if (!eff) {
-            return "Repeating this skill will keep boosting the team's damage by +" + formatWhole(new Decimal(2).add(player.bh.skillData["eclipse_motivation"].level.mul(0.4))) + "%, with total boost square rooted"
+            return "Repeating this skill will keep boosting the team's damage by +" + formatSimple(new Decimal(2).add(player.bh.skillData["eclipse_motivation"].level.mul(0.4))) + "%, with total boost square rooted"
         } else {
-            return "Repeating this skill will keep boosting the team's damage by +" + formatWhole(new Decimal(2).add(player.bh.skillData["eclipse_motivation"].level.mul(0.4))) + "%, with total boost square rooted<br><small>[+" + formatSimple(Decimal.sub(player.bh.characters[index].skills[slot].variables["damageMult"], 1).mul(100)) + "% DMG Total]"
+            return "Repeating this skill will keep boosting the team's damage by +" + formatSimple(new Decimal(2).add(player.bh.skillData["eclipse_motivation"].level.mul(0.4))) + "%, with total boost square rooted<br><small>[+" + formatSimple(Decimal.sub(player.bh.characters[index].skills[slot].variables["damageMult"], 1).mul(100)) + "% DMG Total]"
         }
     },
     passiveText() {return "+" + formatSimple(player.bh.skillData["eclipse_motivation"].maxLevel.div(5), 2) + " DMG"},

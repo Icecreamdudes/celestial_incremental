@@ -140,6 +140,8 @@
             changeTheme()
 
             layers.pu.generateSelection();
+
+            pauseUniverseAll(["D1", "A2"], "unpause", true)
         }
     },
     bars: {},

@@ -706,9 +706,9 @@ addLayer("ir", {
             },
             sacValue() { return new Decimal(1)},
             // CLICK CODE
-            tooltip() { return  (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || hasUpgrade("ev8", 23) ? "" : "Purchase a certain shard research." },
+            tooltip() { return  (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || hasUpgrade("ev8", 25) ? "" : "Purchase a certain shard research." },
             unlocked() { return true },
-            canClick() { return (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || hasUpgrade("ev8", 23)},
+            canClick() { return (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || hasUpgrade("ev8", 25)},
             onClick() { 
                 player.ir.shipType = this.id
                 return layers[this.layer].levelables.index = this.id 

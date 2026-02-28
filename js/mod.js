@@ -1904,5 +1904,6 @@ function fixOldSave(oldVersion){
 		}
 		if (hasUpgrade("fi", 13)) player.stagnantSynestia.upgrades.push(5)
 		if (hasMilestone("fi", 103)) player.stagnantSynestia.upgrades.push(6)
+		if (hasUpgrade("ev8", 23)) player.ev8.upgrades.push(25)
 	}
 }

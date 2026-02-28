@@ -587,6 +587,7 @@ addLayer("pet", {
         player.pet.fragmentMult = player.pet.fragmentMult.mul(buyableEffect("pet", 1))
         player.pet.fragmentMult = player.pet.fragmentMult.mul(buyableEffect("sp", 25))
         player.pet.fragmentMult = player.pet.fragmentMult.mul(levelableEffect("pet", 110)[0])
+        if (hasUpgrade("ev8", 23)) player.pet.fragmentMult = player.pet.fragmentMult.mul(1.2)
 
         if (player.pet.fragShopInput.gte(1)) player.pet.fragShopBulk = player.pet.fragShopInput.floor()
 

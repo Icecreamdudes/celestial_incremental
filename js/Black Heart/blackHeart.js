@@ -2677,7 +2677,7 @@ addLayer("bh", {
         },
         "Stage-Temporal-Chasm": {
             title() {return this.canClick() ? "TC" : "??"},
-            canClick() {return player.matosLair.milestone[25] >= 1},
+            canClick() {return hasUpgrade("ev8", 24)},
             unlocked: true,
             tooltip() {return this.canClick ? "Temporal Chasm" : ""},
             onClick() {

@@ -109,7 +109,7 @@ addLayer("ktb", {
         103: {
             title: "Voidigenesis",
             unlocked() {return hasUpgrade("ktb", 102)},
-            description: "Unlocks the Particle Accelerator blueprint and the Void Element.",
+            description: "Unlocks the Particle Accelerator blueprint.",
             cost: new Decimal(750),
             currencyLocation() {return player.ktb},
             currencyDisplayName: "Alchemical Symbols",
@@ -123,7 +123,7 @@ addLayer("ktb", {
         104: {
             title: "Alkahest Creation",
             unlocked() {return hasUpgrade("ktb", 103)},
-            description: "Unlocks the Nexus of Unification blueprint and the Alkahest Element.",
+            description: "Unlocks the Nexus of Unification blueprint.",
             cost: new Decimal(2000),
             currencyLocation() {return player.ktb},
             currencyDisplayName: "Alchemical Symbols",
@@ -137,7 +137,7 @@ addLayer("ktb", {
         105: {
             title: "Aetherogenesis",
             unlocked() {return hasUpgrade("ktb", 104)},
-            description: "Unlocks the Astrological Construct blueprint and the Aether Element.",
+            description: "Unlocks the Astrological Construct blueprint.",
             cost: new Decimal(4000),
             currencyLocation() {return player.ktb},
             currencyDisplayName: "Alchemical Symbols",
@@ -151,7 +151,7 @@ addLayer("ktb", {
         106: {
             title: "Infernal Theory",
             unlocked() {return hasUpgrade("ktb", 105)},
-            description: "Unlocks the Plasma Chamber blueprint and the Inferno Element.",
+            description: "Unlocks the Plasma Chamber blueprint.",
             cost: new Decimal(8000),
             currencyLocation() {return player.ktb},
             currencyDisplayName: "Alchemical Symbols",
@@ -163,9 +163,9 @@ addLayer("ktb", {
             },
         },
         107: {
-            title: "Equinox Reverie",
+            title: "Photon Manipulation",
             unlocked() {return hasUpgrade("ktb", 106)},
-            description: "Unlocks the Illusionary Mirror blueprint and the Light and Darkness Elements.",
+            description: "Unlocks the Illusionary Mirror blueprint.",
             cost: new Decimal(16000),
             currencyLocation() {return player.ktb},
             currencyDisplayName: "Alchemical Symbols",
@@ -177,9 +177,9 @@ addLayer("ktb", {
             },
         },
         108: {
-            title: "Sakura Revelation",
+            title: "Universal Extraction",
             unlocked() {return hasUpgrade("ktb", 107)},
-            description: "Unlocks the Dimension Slicer blueprint and the Space and Time Elements.",
+            description: "Unlocks the Dimension Slicer blueprint.",
             cost: new Decimal(32000),
             currencyLocation() {return player.ktb},
             currencyDisplayName: "Alchemical Symbols",
@@ -193,7 +193,7 @@ addLayer("ktb", {
         109: {
             title: "Higher Order Elements",
             unlocked() {return hasUpgrade("ktb", 108)},
-            description: "Unlocks the higher order elements and their machines' blueprints.",
+            description: "Unlocks the Higher Order Machines.",
             cost: new Decimal(64000),
             currencyLocation() {return player.ktb},
             currencyDisplayName: "Alchemical Symbols",
@@ -395,53 +395,53 @@ addLayer("ktb", {
     infoboxes: {
     1: {
             title: "Alchemical Symbols",
-            body() { return "The Alchemical Symbols... ahh. What an interesting superphysical value type. They are made up of Celestial Points, the very same starting resource that constitutes the Overworld. Louki has found a way to utilize the Celestial Points to her benefit. By using her weakened alchemical magic, she is able to condense extremely large Celestial Point counts into Alchemical Symbols. With the Alchemical Symbols roaming around her world, she binds them to her empty pages to store information. I did not know that such powerful magic can exist here. Maybe I should talk to Louki often to find out more" },
+            body() { return "The Alchemical Symbols are interesting superphysical values. Unlike the superphysical values made by the Novasent, the Alchemical Symbols are made by a Foresight user, Louki-syhda Sabaetta. The Alchemical Symbols are a way for Louki to gather, spread and read information. She used them during her own controlled experiments to achieve almost unlimited potential.<br><br>They are made up of Celestial Points which constitute the Overworld Universe. However, creating Alchemical Symbols and altering their properties both require an eternity worth of collected Celestial Points and very specific superphysical values.<br><br>Currently, there are almost no Foresight users able to effectively make and control the Alchemical Symbols. The cause of the decreased numbers is due to a threshold problem. Philozoth, the Celestial of Alchemy and the arch-rival of Louki, changed the threshold so he could be the only one to steal, use and sabotage Louki’s knowledge.<br><br>To set a threshold even higher than Tav’s Limit is a disgrace. Thanks to that, learning the art of Alchemy from Louki is extremely hard for new Foresight users. At least I have found her in her weakened state at the right time. Maybe I should talk to her often to find out more about the incident."},
             unlocked() { return true },
     },
     2: {
             title: "Alchemical Nodes",
             body() { return "???" },
-            unlocked() { return true },
+            unlocked() { return false },
     },
     3: {
-            title: "Basic Alchemical Elements",
+            title: "The Basic Alchemical Elements, Classical",
             body() { return "???" },
-            unlocked() { return true },
+            unlocked() { return false },
     },
     4: {
             title: "The Void Element, Elusive",
             body() { return "???" },
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ktb", 103) },
     },
     5: {
             title: "The Alkahest Element, Explosive",
             body() { return "???" },
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ktb", 104) },
     },
     6: {
             title: "The Aether Element, Forgotten",
             body() { return "???" },
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ktb", 105) },
     },
     7: {
             title: "The Inferno Element, Cursed",
             body() { return "???" },
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ktb", 106) },
     },
     8: {
-            title: "The Equinox Reverie Incident",
+            title: "The Light and the Dark Elements, Balanced",
             body() { return "???" },
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ktb", 107) },
     },
     9: {
-            title: "The Sakura Revelation Incident",
+            title: "The Space and the Time Elements, Distorted",
             body() { return "???" },
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ktb", 108) },
     },
     10: {
-            title: "The Crimson Eternity Incident",
+            title: "The Higher Order Elements, Unstable",
             body() { return "???" },
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ktb", 109) },
     },
     },
 
@@ -451,23 +451,23 @@ addLayer("ktb", {
                 buttonStyle() {return {color: "#F8C898", backgroundColor: "#6B4423", backgroundImage: "linear-gradient(0deg, #6B4423, #9b541a)", borderColor: "#F8C898", borderRadius: "1px", boxShadow: "0 0 3px 1px black inset"}},
                 unlocked() {return true},
                 content: [
-                    ["blank", "10px"],
+                    ["blank", "5px"],
                     ["style-row", [
                         ["style-column", [
                             ["top-column", [
-                                ["blank", "15px"],
+                                ["blank", "10px"],
                                 ["raw-html", () => {return "You have " + formatWhole(player.ktb.alchemicalSymbols) + " 🝪 Alchemical Symbols 🝪. (+" + formatWhole(player.ktb.alchemicalSymbolsGain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                ["blank", "15px"],
+                                ["blank", "10px"],
                                 ["clickable", 1],
-                            ], {width: "700px", height: "235px", background: "linear-gradient(0deg, #382413, #523116)", borderTop: "3px solid #b18961", borderLeft: "3px solid #b18961", borderRight: "3px solid #b18961", borderBottom: "3px solid #330033", borderRadius: "15px 15px 0 0", boxShadow: "0 0 5px 5px #b18961a6 inset, 0 0 10px 10px #382413 inset, 0 0 50px 50px #00000050 inset"}],
+                            ], {width: "700px", height: "220px", background: "linear-gradient(0deg, #382413, #523116)", borderTop: "3px solid #b18961", borderLeft: "3px solid #b18961", borderRight: "3px solid #b18961", borderBottom: "3px solid #330033", borderRadius: "15px 15px 0 0", boxShadow: "0 0 5px 5px #b18961a6 inset, 0 0 10px 10px #382413 inset, 0 0 50px 50px #00000050 inset"}],
                             ["style-row", [
                                 ["row", [["upgrade", 101], ["upgrade", 102], ["upgrade", 103], ["upgrade", 104], ["upgrade", 105]]],
                                 ["row", [["upgrade", 106], ["upgrade", 107], ["upgrade", 108], ["upgrade", 109], ["upgrade", 110]]],
-                            ], {width: "700px", height: "265px", background: "repeating-linear-gradient(-45deg, #772277 10px, #551155 20px)", borderLeft: "3px solid #330333", borderRight: "3px solid #330033", boxShadow: "0 0 5px 5px #330033a6 inset, 0 0 8px 8px #551155 inset, 0 0 20px 20px #00000050 inset"}],
+                            ], {width: "700px", height: "290px", background: "repeating-linear-gradient(-45deg, #772277 10px, #551155 20px)", borderLeft: "3px solid #330333", borderRight: "3px solid #330033", boxShadow: "0 0 5px 5px #330033a6 inset, 0 0 8px 8px #551155 inset, 0 0 20px 20px #00000050 inset"}],
                             ["style-row", [
                                 ["row", [["upgrade", 201], ["upgrade", 202], ["upgrade", 203], ["upgrade", 204], ["upgrade", 205]]],
                                 ["row", [["upgrade", 206], ["upgrade", 207], ["upgrade", 208], ["upgrade", 209], ["upgrade", 210]]],
-                            ], {width: "700px", height: "265px", background: "linear-gradient(180deg, #382413, #523116)", borderTop: "3px solid #330033", borderLeft: "3px solid #b18961", borderRight: "3px solid #b18961", borderBottom: "3px solid #b18961", borderRadius: "0 0 15px 15px", boxShadow: "0 0 5px 5px #b18961a6 inset, 0 0 10px 10px #382413 inset, 0 0 50px 50px #00000050 inset"}]]
+                            ], {width: "700px", height: "290px", background: "linear-gradient(180deg, #382413, #523116)", borderTop: "3px solid #330033", borderLeft: "3px solid #b18961", borderRight: "3px solid #b18961", borderBottom: "3px solid #b18961", borderRadius: "0 0 15px 15px", boxShadow: "0 0 5px 5px #b18961a6 inset, 0 0 10px 10px #382413 inset, 0 0 50px 50px #00000050 inset"}]]
                             ]
                         ]
                     ]

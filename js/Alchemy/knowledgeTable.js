@@ -467,7 +467,7 @@ addLayer("ktb", {
                             ["style-row", [
                                 ["row", [["upgrade", 201], ["upgrade", 202], ["upgrade", 203], ["upgrade", 204], ["upgrade", 205]]],
                                 ["row", [["upgrade", 206], ["upgrade", 207], ["upgrade", 208], ["upgrade", 209], ["upgrade", 210]]],
-                            ], {width: "700px", height: "290px", background: "linear-gradient(180deg, #382413, #523116)", borderTop: "3px solid #330033", borderLeft: "3px solid #b18961", borderRight: "3px solid #b18961", borderBottom: "3px solid #b18961", borderRadius: "0 0 15px 15px", boxShadow: "0 0 5px 5px #b18961a6 inset, 0 0 10px 10px #382413 inset, 0 0 50px 50px #00000050 inset"}]]
+                            ], {width: "700px", height: "290px", background: "#382413", backgroundImage: "linear-gradient(180deg, #382413, #523116)", borderTop: "3px solid #330033", borderLeft: "3px solid #b18961", borderRight: "3px solid #b18961", borderBottom: "3px solid #b18961", borderRadius: "0 0 15px 15px", boxShadow: "0 0 5px 5px #b18961a6 inset, 0 0 10px 10px #382413 inset, 0 0 50px 50px #00000050 inset"}]]
                             ]
                         ]
                     ]

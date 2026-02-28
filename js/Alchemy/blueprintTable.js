@@ -49,7 +49,7 @@ addLayer("btb", {
                 player.sma.starmetalAlloy = player.sma.starmetalAlloy.sub(10000)
             },
             style() {
-            let look = {width: '325px', minHeight: '100px', maxHeight: "100px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: '1px'}
+            let look = {width: '325px', minHeight: '100px', maxHeight: "100px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px"}
             if (this.canClick()) {
                 look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
                 look.border = "3px solid #282363"
@@ -74,7 +74,7 @@ addLayer("btb", {
                 player.sme.starmetalEssence = player.sme.starmetalEssence.sub(10000)
             },
             style() {
-            let look = {width: '325px', minHeight: '100px', maxHeight: "100px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: '1px'}
+            let look = {width: '325px', minHeight: '100px', maxHeight: "100px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px"}
             if (this.canClick()) {
                 look.background = "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%, #eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)"
                 look.border = "3px solid #282363"
@@ -99,9 +99,9 @@ addLayer("btb", {
                 player.ir.spaceRock = player.ir.spaceRock.sub(10000)
             },
             style() {
-            let look = {width: '325px', minHeight: '100px', maxHeight: "100px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: '1px'}
+            let look = {width: '325px', minHeight: '100px', maxHeight: "100px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px"}
             if (this.canClick()) {
-                look.background = "linear-gradient(15deg, #5f5f5f 0%, #c5c5c5 50%, #5f5f5f 100%)"
+                look.background = "linear-gradient(15deg, #5f5f5f 0%, #a8a8a8 50%, #5f5f5f 100%)"
                 look.border = "3px solid #464646"
                 look.color = "#eaf6f7"
                 look.boxShadow = "0 0 3px 1px black inset, 0 0 5px white"
@@ -124,9 +124,9 @@ addLayer("btb", {
                 player.ir.spaceGem = player.ir.spaceGem.sub(10)
             },
             style() {
-            let look = {width: '325px', minHeight: '100px', maxHeight: "100px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: '1px'}
+            let look = {width: '325px', minHeight: '100px', maxHeight: "100px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px"}
             if (this.canClick()) {
-                look.background = "radial-gradient(circle, #151230, #000000)"
+                look.background = "radial-gradient(circle, #302970, #000000)"
                 look.border = "3px solid white"
                 look.color = "#eaf6f7"
                 look.boxShadow = "0 0 3px 1px black inset, 0 0 5px white"
@@ -149,7 +149,7 @@ addLayer("btb", {
                 player.pl.spaceDust = player.pl.spaceDust.sub(10)
             },
             style() {
-            let look = {width: '325px', minHeight: '100px', maxHeight: "100px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: '1px'}
+            let look = {width: '325px', minHeight: '100px', maxHeight: "100px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px"}
             if (this.canClick()) {
                 look.background = "linear-gradient(15deg, #34eb86 0%, #279ccf 50%, #411bb3 100%)"
                 look.border = "3px solid #59c2ff"
@@ -173,7 +173,7 @@ addLayer("btb", {
                 player.ktb.alchemicalSymbols = player.ktb.alchemicalSymbols.sub(10000)
             },
             style() {
-            let look = {width: '325px', minHeight: '100px', maxHeight: "100px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: '1px'}
+            let look = {width: '325px', minHeight: '100px', maxHeight: "100px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px"}
             if (this.canClick()) {
                 look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)"
                 look.borderColor = "transparent"
@@ -209,41 +209,41 @@ addLayer("btb", {
                                 ["blank", "10px"],
                                 ["raw-html", () => {return "Alchemical Symbol Conversion Table"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                                 ["blank", "10px"],
-                            ], {width: "900px", height: "40px", background: "linear-gradient(0deg, #000055 50%, #0000ff 100%)", border: "3px solid white", borderRadius: "1px 1px 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}
+                            ], {width: "900px", height: "40px", background: "linear-gradient(0deg, #000055 50%, #0000ff 100%)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}
                             ],
                             ["style-column", [
                                 ["clickable", 1],
                                 ["blank", "10px"],
-                                ["raw-html", () => {return "You have " + formatWhole(player.btb.symbolStarmetalAlloy) + " ⚶ Starmetal Alloy Symbols ⚶."}, {color: "transparent", background: "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%,#eb6077 50%, #d460eb, 75%,  #60cfeb 100%)", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "2px 2px 5px white", backgroundClip: "text", fontFamily: "monospace"}],
-                                ["raw-html", () => {return "You have " + formatWhole(player.sma.starmetalAlloy) + " Starmetal Alloy."}, {color: "transparent", background: "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "2px 2px 5px white", backgroundClip: "text", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + formatWhole(player.btb.symbolStarmetalAlloy) + " ⚶ Starmetal Alloy Symbols ⚶."}, {color: "transparent", background: "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%,#eb6077 50%, #d460eb, 75%,  #60cfeb 100%)", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + formatWhole(player.sma.starmetalAlloy) + " Starmetal Alloy."}, {color: "transparent", background: "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace"}],
                                 ["blank", "30px"],
                                 ["clickable", 2],
                                 ["blank", "10px"],
-                                ["raw-html", () => {return "You have " + formatWhole(player.btb.symbolStarmetalEssence) + " ⛯ Starmetal Essence Symbols ⛯."}, {color: "transparent", background: "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "2px 2px 5px white", backgroundClip: "text", fontFamily: "monospace"}],
-                                ["raw-html", () => {return "You have " + formatWhole(player.sme.starmetalEssence) + " Starmetal Essence."}, {color: "transparent", background: "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%, #eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "2px 2px 5px white", backgroundClip: "text", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + formatWhole(player.btb.symbolStarmetalEssence) + " ⛯ Starmetal Essence Symbols ⛯."}, {color: "transparent", background: "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + formatWhole(player.sme.starmetalEssence) + " Starmetal Essence."}, {color: "transparent", background: "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%, #eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace"}],
                                 ["blank", "30px"],
                                 ["clickable", 3],
                                 ["blank", "10px"],
-                                ["raw-html", () => {return "You have " + formatWhole(player.btb.symbolSpaceRock) + " ⛊ Space Rock Symbols ⛊."}, {color: "transparent", background: "linear-gradient(15deg, #5f5f5f 0%, #c5c5c5 50%, #5f5f5f 100%)", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "2px 2px 5px white", backgroundClip: "text", fontFamily: "monospace"}],
-                                ["raw-html", () => {return "You have " + formatWhole(player.ir.spaceRock) + " Space Rocks."}, {color: "transparent", background: "linear-gradient(15deg, #5f5f5f 0%, #c5c5c5 50%, #5f5f5f 100%)", fontSize: "16px", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "2px 2px 5px white", backgroundClip: "text", fontFamily: "monospace"}],
-                                ], {width: "447px", height: "600px", background: "#000055", backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 20px, white 21px, white 20px), repeating-linear-gradient(90deg, transparent, transparent 20px, #ffffff88 21px, #ffffff88 20px), radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "1px 1px 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset", marginLeft: "0"}
+                                ["raw-html", () => {return "You have " + formatWhole(player.btb.symbolSpaceRock) + " ⛊ Space Rock Symbols ⛊."}, {color: "transparent", background: "linear-gradient(15deg, #5f5f5f 0%, #c5c5c5 50%, #5f5f5f 100%)", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + formatWhole(player.ir.spaceRock) + " Space Rocks."}, {color: "transparent", background: "linear-gradient(15deg, #5f5f5f 0%, #a8a8a8 50%, #5f5f5f 100%)", fontSize: "16px", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace"}],
+                                ], {width: "447px", height: "600px", background: "#000055", backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 20px, white 21px, white 20px), repeating-linear-gradient(90deg, transparent, transparent 20px, #ffffff88 21px, #ffffff88 20px), radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset", marginLeft: "0"}
                             ],
                             ["style-column", [
                                 ["clickable", 4],
                                 ["blank", "10px"],
-                                ["raw-html", () => {return "You have " + formatWhole(player.btb.symbolSpaceGem) + " ◈ Space Gem Symbols ◈."}, {color: "transparent", background: "radial-gradient(circle, #151230, #000000)", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "2px 2px 5px white", backgroundClip: "text", fontFamily: "monospace"}],
-                                ["raw-html", () => {return "You have " + formatWhole(player.ir.spaceGem) + " Space Gems."}, {color: "transparent", background: "radial-gradient(circle, #151230, #000000)", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "2px 2px 5px white", backgroundClip: "text", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + formatWhole(player.btb.symbolSpaceGem) + " ◈ Space Gem Symbols ◈."}, {color: "transparent", background: "radial-gradient(circle, #302970, #000000)", fontSize: "16px", textStroke: "1px #dbd7ff", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + formatWhole(player.ir.spaceGem) + " Space Gems."}, {color: "transparent", background: "radial-gradient(circle, #302970, #000000)", fontSize: "16px", textStroke: "1px #dbd7ff", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace"}],
                                 ["blank", "30px"],
                                 ["clickable", 5],
                                 ["blank", "10px"],
-                                ["raw-html", () => {return "You have " + formatWhole(player.btb.symbolSpaceDust) + " ♄ Space Dust Symbol ♄."}, {color: "transparent", background: "linear-gradient(15deg, #34eb86 0%, #279ccf 50%, #411bb3 100%)", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "2px 2px 5px white", backgroundClip: "text", fontFamily: "monospace"}],
-                                ["raw-html", () => {return "You have " + formatWhole(player.pl.spaceDust) + " Space Dust."}, {color: "transparent", background: "linear-gradient(15deg, #34eb86 0%, #279ccf 50%, #411bb3 100%)", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "2px 2px 5px white", backgroundClip: "text", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + formatWhole(player.btb.symbolSpaceDust) + " ♄ Space Dust Symbol ♄."}, {color: "transparent", background: "linear-gradient(15deg, #34eb86 0%, #279ccf 50%, #411bb3 100%)", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + formatWhole(player.pl.spaceDust) + " Space Dust."}, {color: "transparent", background: "linear-gradient(15deg, #34eb86 0%, #279ccf 50%, #411bb3 100%)", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace"}],
                                 ["blank", "30px"],
                                 ["clickable", 6],
                                 ["blank", "10px"],
-                                ["raw-html", () => {return "You have " + formatWhole(player.btb.symbolArcane) + " Ⰿ Arcane Symbols Ⰿ."}, {color: "transparent", background: "linear-gradient(to bottom, #8b609c, magenta, pink)", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "2px 2px 5px white", backgroundClip: "text", fontFamily: "monospace"}],
-                                ["raw-html", () => {return "You have " + formatWhole(player.ktb.alchemicalSymbols) + " 🝪 Alchemical Symbols 🝪."}, {color: "transparent", background: "linear-gradient(to bottom, #8b609c, magenta, pink)", fontSize: "16px", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "2px 2px 5px white", backgroundClip: "text", fontFamily: "monospace"}],
-                                ], {width: "447px", height: "600px", background: "#000055", backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 20px, white 21px, white 20px), repeating-linear-gradient(90deg, transparent, transparent 20px, #ffffff88 21px, #ffffff88 20px), radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "1px 1px 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset", marginRight: "0", marginTop: "-606px"}
+                                ["raw-html", () => {return "You have " + formatWhole(player.btb.symbolArcane) + " Ⰿ Arcane Symbols Ⰿ."}, {color: "transparent", background: "linear-gradient(to bottom, #8b609c, magenta, pink)", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + formatWhole(player.ktb.alchemicalSymbols) + " 🝪 Alchemical Symbols 🝪."}, {color: "transparent", background: "linear-gradient(to bottom, #8b609c, magenta, pink)", fontSize: "16px", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace"}],
+                                ], {width: "447px", height: "600px", background: "#000055", backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 20px, white 21px, white 20px), repeating-linear-gradient(90deg, transparent, transparent 20px, #ffffff88 21px, #ffffff88 20px), radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset", marginRight: "0", marginTop: "-606px"}
                             ]
                             ]
                         ]
@@ -262,7 +262,7 @@ addLayer("btb", {
                                 ["blank", "10px"],
                                 ["raw-html", () => {return "Crafting Grid"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                                 ["blank", "10px"],
-                            ], {width: "700px", height: "40px", background: "linear-gradient(0deg, #000055 50%, #0000ff 100%)", border: "3px solid white", borderRadius: "1px 1px 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}]]]
+                            ], {width: "700px", height: "40px", background: "linear-gradient(0deg, #000055 50%, #0000ff 100%)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}]]]
                     ]
                     ]
                 ]

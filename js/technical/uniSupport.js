@@ -32,7 +32,7 @@ function pauseUniverse(universe, type = "toggle", temp = false) {
 
 function pauseUniverseAll(exemptions, type = "toggle", temp = false) {
     for (let universe in player.uni) {
-        if (!tmp.uni[universe].uniShown) continue
+        if (tmp.uni[uni].disabled) continue
         let abort = false
         for (let j in exemptions) {
             if (exemptions[j] == universe) abort = true

@@ -1584,6 +1584,15 @@ button > * {
 	margin-bottom: 10px;
 }
 
+.chestContainer {
+	background: rgba(0,0,0,0.5);
+	border-radius: 15px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	margin-bottom: 10px;
+}
+
 .goldenCookie {
 	width: 96px !important;
 	height: 96px !important;

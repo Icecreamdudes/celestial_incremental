@@ -284,13 +284,30 @@ addLayer("ev14", {
                 return "Tier I Chest"
             },
             description() {
-                return "<h3>Costs:</h3><br>" +
-                formatWhole(player.ev14.keys) + "/1 Keys<br>" +
-                "<h3>Loot Table:</h3><br>" +
+                return "<div class='chestContainer'><h3>Costs:</h3><br>" +
+                formatWhole(player.ev14.keys) + "/1 Keys<br></div>" +
+                "<div class='chestContainer'><h3>Loot Table:</h3><br>" +
                 "25% - " + formatWhole(player.pet.petPointMult.mul(2500)) + " pet points<br>" + 
                 "25% - " + formatWhole(player.pet.petPointMult.mul(1).floor()) + " of the first 9 common pets<br>" +
                 "25% - " + formatWhole(player.pet.petPointMult.mul(0.5).floor()) + " of the first 9 uncommon pets<br>" +
-                "25% - " + formatSimple(new Decimal(5).mul(levelableEffect("pet", 2203)[1]), 1) + " orbs"
+                "25% - " + formatSimple(new Decimal(5).mul(levelableEffect("pet", 2203)[1]), 1) + " orbs</div>"
+            },
+        },
+        2: {
+            title() {
+                return "Tier II Chest"
+            },
+            description() {
+                return "<div class='chestContainer'><h3>Costs:</h3><br>" +
+                formatWhole(player.ev14.keys) + "/5 Keys<br>" +
+                formatWhole(player.cb.evolutionShards) + "/10 Evo Shards<br>" +
+                formatWhole(player.cb.paragonShards) + "/2 Para Shards<br></div>" +
+                "<div class='chestContainer'><h3>Loot Table:</h3><br>" +
+                "20% - " + formatWhole(player.pet.petPointMult.mul(10000)) + " pet points<br>" + 
+                "20% - " + formatWhole(player.pet.petPointMult.mul(5).floor()) + " of the first 9 common pets<br>" +
+                "20% - " + formatWhole(player.pet.petPointMult.mul(2.5).floor()) + " of the first 9 uncommon pets<br>" +
+                "20% - " + formatWhole(player.pet.petPointMult.mul(1).floor()) + " of the first 9 rare pets<br>" +
+                "20% - " + formatSimple(new Decimal(15).mul(levelableEffect("pet", 2203)[1]), 1) + " orbs</div>"
             },
         },
     },
@@ -356,35 +373,52 @@ addLayer("ev14", {
             "Chests": {
                 buttonStyle() { return { color: "black", borderColor: "black", backgroundColor: "#ffd700", borderRadius: "5px"} },
                 unlocked() {return true},
-                content: [ 
-                    ["row", [
-                        ["clickable", "C1"],
-                        ["clickable", "C2"],
-                        ["clickable", "C3"],
-                    ]],
-                    ["row", [
-                        ["clickable", "C4"],
-                        ["clickable", "C5"],
-                        ["clickable", "C6"],
-                    ]],
-                    ["blank", "15px"],
-                    ["raw-html", function () {
-                        if (player.ev14.chestNumber == 0) {
-                            return "No Chest Selected"
-                        } else {
-                            return run(layers.ev14.tables[player.ev14.chestNumber].title, layers.ev14.tables[player.ev14.chestNumber])
-                        }
-                    }, {color: "#ffffff", fontSize: "32px", fontFamily: "monospace"}],
-                    ["blank", "5px"],
-                    ["raw-html", function () {
-                        if (player.ev14.chestNumber == 0) {
-                            return ""
-                        } else {
-                            return run(layers.ev14.tables[player.ev14.chestNumber].description, layers.ev14.tables[player.ev14.chestNumber])
-                        }
-                    }, {color: "#ffffff", fontSize: "20px", fontFamily: "monospace"}],
-                    ["blank", "5px"],
-                    ["clickable", 1],
+                content: [
+                    ["style-column", [
+                        ["scroll-column", [
+                            ["blank", "15px"],
+                            ["style-column", [
+                                ["blank", "5px"],
+                                ["raw-html", "Chests", {fontSize: "36px", color: "#cccccc", fontFamily: "monospace"}],
+                                ["blank", "5px"],
+                                ["row", [
+                                    ["clickable", "C1"],
+                                    ["clickable", "C2"],
+                                    ["clickable", "C3"],
+                                ]],
+                                ["row", [
+                                    ["clickable", "C4"],
+                                    ["clickable", "C5"],
+                                    ["clickable", "C6"],
+                                ]],
+                            ], {width: "600px", background: "rgba(0,0,0,0.5)", paddingBottom: "10px", borderRadius: "15px"}],
+                            ["blank", "5px"],
+                            ["raw-html", function() {
+                                if (player.ev14.chestNumber == 0) {
+                                    return "No Chest Selected"
+                                } else {
+                                    return run(layers.ev14.tables[player.ev14.chestNumber].title, layers.ev14.tables[player.ev14.chestNumber])
+                                }
+                            }, {fontSize: "32px", color: "#cccccc", fontFamily: "monospace"}],
+                            ["style-row", [], {width: "500px", height: "4px", background: "#cccccc", marginBottom: "10px"}],
+                            ["raw-html", function() {
+                                if (player.ev14.chestNumber == 0) {
+                                    return ""
+                                } else {
+                                    return run(layers.ev14.tables[player.ev14.chestNumber].description, layers.ev14.tables[player.ev14.chestNumber])
+                                }
+                            }, {fontSize: "20px", color: "#cccccc", fontFamily: "monospace"}],
+                            ["blank", "10px"],
+                        ], {width: "700px", height: "525px", overflowX: "hidden"}],
+                        ["style-column", [
+                            ["raw-html", function() {
+                                if (player.ev14.chestNumber == 0) {
+                                    return "Select a chest, bruv!"
+                                } else {return ""}
+                            }, {fontSize: "30px", color: "#cccccc", fontFamily: "monospace"}],
+                            ["clickable", 1],
+                        ], {width: "700px", height: "125px", backgroundColor: "rgba(0,0,0,0.5)", borderRadius: "0px 0px 10px 10px"}],
+                    ], {width: "700px", height: "650px", border: "2px solid #cccccc", borderRadius: "10px", background: "rgba(0,0,0,0.5)"}],
                 ]
             },
             "Shop": {

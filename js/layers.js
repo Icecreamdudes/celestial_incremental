@@ -191,7 +191,7 @@
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.r.timeReversed) {
             player.gain = player.gain.mul(0)
-            player.points = player.points.div(player.points.add(1).log10().mul(0.1).add(1).mul(delta))
+            if (delta > 0) player.points = player.points.div(player.points.add(1).log10().mul(0.1).add(1).mul(delta))
         }
         if (player.po.halter.points.enabled == 1) player.gain = player.gain.div(player.po.halter.points.halt)
         if (player.po.halter.points.enabled == 2 && player.gain.gt(player.po.halter.points.halt)) player.gain = player.po.halter.points.halt

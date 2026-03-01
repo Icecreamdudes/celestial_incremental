@@ -61,7 +61,7 @@
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.t.treeEffect)
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(buyableEffect("g", 16))
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.r.pentEffect)
-        player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.gh.grasshopperEffects[2])
+        player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(getGrasshopperEffect(2))
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(buyableEffect("m", 14))
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(levelableEffect("pet", 102)[0])
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.d.boosterEffects[2])

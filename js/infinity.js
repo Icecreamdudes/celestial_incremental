@@ -339,7 +339,6 @@
         player.gh.grasshoppers = new Decimal(0)
         player.gh.grasshoppersToGet = new Decimal(0)
         player.gh.fertilizer = new Decimal(0)
-        player.gh.fertilizerPerSecond = new Decimal(0)
 
         if (!hasMilestone("ip", 26)) {
             for (let i = 1; i < 20; i++) {

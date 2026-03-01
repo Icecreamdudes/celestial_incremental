@@ -5,8 +5,8 @@
 function getGrassValueMultiplier() {
     const factors = [
         getGoldenGrassEffect(),
-        player.gh.grasshopperEffects[4],
-        player.gh.fertilizerEffect,
+        getGrasshopperEffect(4),
+        getFertilizerEffect(),
 
         buyableEffect('g', 11),
         buyableEffect('gh', 33),
@@ -30,7 +30,7 @@ function getGrassValueMultiplier() {
         hasUpgrade('ad', 14) ? upgradeEffect('ad', 14) : 1,
         hasUpgrade("cs", 201) ? buyableEffect('f', 104) : 1,
         hasUpgrade("cs", 501) ? "1e450" : 1,
-        hasUpgrade('g', 11) ? mul(player.p.prestigeEffect2) : 1,
+        hasUpgrade('g', 11) ? player.p.prestigeEffect2 : 1,
         player.d.boosterEffects[5],
         player.rf.abilityEffects[2],
         player.r.timeCubeEffects[2],

@@ -88,7 +88,7 @@
         player.t.leavesPerSecond = buyableEffect("t", 11)
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(buyableEffect("t", 12))
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(getGrassEffectOnLeaves());
-        player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.gh.grasshopperEffects[3])
+        player.t.leavesPerSecond = player.t.leavesPerSecond.mul(getGrasshopperEffect(3))
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(buyableEffect("gh", 17))
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(levelableEffect("pet", 202)[1])
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.d.boosterEffects[4])

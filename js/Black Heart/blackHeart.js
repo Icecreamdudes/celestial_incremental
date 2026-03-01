@@ -998,6 +998,7 @@ addLayer("bh", {
         let healthBase = new Decimal(1)
         healthBase = healthBase.add(buyableEffect("depth1", 1))
         healthBase = healthBase.add(player.darkTemple.hpMult)
+        healthBase = healthBase.add(buyableEffect("sme", 131))
         if (hasUpgrade("ep2", 9101)) healthBase = healthBase.add(upgradeEffect("ep2", 9101))
 
         let healthAdd = new Decimal(0)
@@ -1007,12 +1008,12 @@ addLayer("bh", {
         healthAdd = healthAdd.add(player.bh.skillData["kres_bigAttack"].maxLevel)
         healthAdd = healthAdd.add(player.bh.skillData["nav_healSpell"].maxLevel)
         healthAdd = healthAdd.add(player.bh.skillData["geroa_selfRepair"].maxLevel)
-        healthAdd = healthAdd.add(buyableEffect("sme", 121))
 
         // =-- DAMAGE STUFF --= //
         let damageBase = new Decimal(1)
         damageBase = damageBase.add(buyableEffect("depth2", 1))
         damageBase = damageBase.add(player.darkTemple.dmgMult)
+        damageBase = damageBase.add(buyableEffect("sme", 132))
         if (hasUpgrade("ep2", 9103)) damageBase = damageBase.add(upgradeEffect("ep2", 9103))
 
         let damageAdd = new Decimal(0)
@@ -1027,7 +1028,6 @@ addLayer("bh", {
         damageAdd = damageAdd.add(player.bh.skillData["geroa_cosmicRay"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["geroa_orbitalCannon"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["geroa_defenseSatellites"].maxLevel.div(5))
-        damageAdd = damageAdd.add(buyableEffect("sme", 122))
 
         // =-- REGEN STUFF --= //
         let regenBase = new Decimal(1)
@@ -1036,7 +1036,7 @@ addLayer("bh", {
         regenAdd = regenAdd.add(player.darkTemple.rgnAdd)
         regenAdd = regenAdd.add(player.bh.skillData["general_scream"].maxLevel.div(20))
         regenAdd = regenAdd.add(player.bh.skillData["kres_berserker"].maxLevel.div(20))
-        regenAdd = regenAdd.add(buyableEffect("sme", 124))
+        regenAdd = regenAdd.add(buyableEffect("sme", 134))
 
         // =-- AGILITY STUFF --= //
         let agilityBase = new Decimal(1)
@@ -1050,7 +1050,7 @@ addLayer("bh", {
         agilityAdd = agilityAdd.add(player.bh.skillData["sel_energyBoost"].maxLevel.div(2))
         agilityAdd = agilityAdd.add(player.bh.skillData["eclipse_syzygy"].maxLevel.div(2))
         agilityAdd = agilityAdd.add(player.bh.skillData["geroa_radioactiveMissile"].maxLevel.div(2))
-        agilityAdd = agilityAdd.add(buyableEffect("sme", 123))
+        agilityAdd = agilityAdd.add(buyableEffect("sme", 133))
 
         // =-- DEFENSE STUFF --= //
         let defenseBase = new Decimal(1)
@@ -2679,13 +2679,13 @@ addLayer("bh", {
             title() {return this.canClick() ? "TC" : "??"},
             canClick() {return hasUpgrade("ev8", 24)},
             unlocked: true,
-            tooltip() {return this.canClick ? "Temporal Chasm" : ""},
+            tooltip() {return this.canClick() ? "Temporal Chasm" : ""},
             onClick() {
                 player.bh.currentTree = 1
             },
             style() {
                 let look = {width: "100px", minHeight: "97px", fontSize: "30px", background: "radial-gradient(#094394, #052653)", border: "6px solid #021124", color: "#0091DC", borderRadius: "0"}
-                if (!this.canClick) look = {width: "100px", minHeight: "97px", fontSize: "30px", background: "radial-gradient(#222, #000)", border: "6px solid #333", color: "#666", borderRadius: "0"}
+                if (!this.canClick()) look = {width: "100px", minHeight: "97px", fontSize: "30px", background: "radial-gradient(#222, #000)", border: "6px solid #333", color: "#666", borderRadius: "0"}
                 if (player.bh.currentTree == 1) {look.outline = "2px solid #ccc", look.outlineOffset = "-2px"}
                 return look
             },

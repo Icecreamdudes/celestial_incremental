@@ -207,7 +207,7 @@ addLayer("fl", {
         if (hasUpgrade("al", 202)) player.fl.pickingPower = player.fl.pickingPower.mul(2)
 
         player.fl.flowerGain = new Decimal(1)
-        player.fl.flowerGain = player.fl.flowerGain.mul(buyableEffect("sme", 142))
+        player.fl.flowerGain = player.fl.flowerGain.mul(buyableEffect("sme", 172))
         player.fl.flowerGain = player.fl.flowerGain.mul(player.ne.beta.effect)
         if (hasUpgrade("ho", 5)) player.fl.flowerGain = player.fl.flowerGain.mul(upgradeEffect("ho", 5))
         if (hasUpgrade("al", 101)) player.fl.flowerGain = player.fl.flowerGain.mul(2)
@@ -224,7 +224,7 @@ addLayer("fl", {
         if (player.bb.breadMilestone >= 4) player.fl.glossaryBase = player.fl.glossaryBase.add(player.bb.breadEffects[3])
 
         // GLOSSARY MULTIPLIERS
-        player.fl.glossaryBase = player.fl.glossaryBase.mul(buyableEffect("sme", 143))
+        player.fl.glossaryBase = player.fl.glossaryBase.mul(buyableEffect("sme", 173))
         if (hasUpgrade("al", 201)) player.fl.glossaryBase = player.fl.glossaryBase.mul(1.2)
         if (hasUpgrade("al", 210)) player.fl.glossaryBase = player.fl.glossaryBase.mul(1.1)
         player.fl.glossaryBase = player.fl.glossaryBase.mul(buyableEffect("bee", 14))

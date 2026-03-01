@@ -216,7 +216,7 @@ addLayer("tad", {
 
         // MATTER PER SECOND
         if (player.tad.matter.gte(player.tad.domainCap)) player.tad.matterGain = new Decimal(0)
-        if (player.tad.matter.lt(player.tad.domainCap)) player.tad.matter = player.tad.matter.add(player.tad.matterGain.mul(delta)).min(player.tad.domainCap)
+        if (player.tad.matter.lt(player.tad.domainCap)) player.tad.matter = player.tad.matter.add(player.tad.matterGain.mul(Decimal.div(delta, player.uni["U2"].tickspeed))).min(player.tad.domainCap)
 
         // ACCUMULATION COST MODIFIERS
         player.tad.accumulationCost = new Decimal(1)
@@ -389,50 +389,50 @@ addLayer("tad", {
             case "none":
                 break;
             case "broken": case "shattered": case "fragmented":
-                if (player.in.infinities.gte(player.tad.altInfinities[player.tad.altSelection].cost.mul(delta)) && player.tad.infinitum.gte(player.tad.altInfinities[player.tad.altSelection].cost.div(10).mul(delta))) {
-                    player.in.infinities = player.in.infinities.sub(player.tad.altInfinities[player.tad.altSelection].cost.mul(delta)).max(0)
-                    player.tad.infinitum = player.tad.infinitum.sub(player.tad.altInfinities[player.tad.altSelection].cost.div(10).mul(delta)).max(0)
+                if (player.in.infinities.gte(player.tad.altInfinities[player.tad.altSelection].cost.mul(Decimal.div(delta, player.uni["U2"].tickspeed))) && player.tad.infinitum.gte(player.tad.altInfinities[player.tad.altSelection].cost.div(10).mul(Decimal.div(delta, player.uni["U2"].tickspeed)))) {
+                    player.in.infinities = player.in.infinities.sub(player.tad.altInfinities[player.tad.altSelection].cost.mul(Decimal.div(delta, player.uni["U2"].tickspeed))).max(0)
+                    player.tad.infinitum = player.tad.infinitum.sub(player.tad.altInfinities[player.tad.altSelection].cost.div(10).mul(Decimal.div(delta, player.uni["U2"].tickspeed))).max(0)
                     if (player.in.infinities.lt(1)) player.in.infinities = new Decimal(0)
                     if (player.tad.infinitum.lt(0.1)) player.tad.infinitum = new Decimal(0)
-                    player.tad.altInfinities[player.tad.altSelection].amount = player.tad.altInfinities[player.tad.altSelection].amount.add(player.tad.altInfinities[player.tad.altSelection].gain.mul(delta))
+                    player.tad.altInfinities[player.tad.altSelection].amount = player.tad.altInfinities[player.tad.altSelection].amount.add(player.tad.altInfinities[player.tad.altSelection].gain.mul(Decimal.div(delta, player.uni["U2"].tickspeed)))
                 }
                 break;
             case "corrupted":
-                if (player.tad.altInfinities.shattered.amount.gte(player.tad.altInfinities.corrupted.cost.mul(delta)) && player.tad.altInfinities.fragmented.amount.gte(player.tad.altInfinities.corrupted.cost.mul(delta))) {
-                    player.tad.altInfinities.shattered.amount = player.tad.altInfinities.shattered.amount.sub(player.tad.altInfinities.corrupted.cost.mul(delta)).max(0)
-                    player.tad.altInfinities.fragmented.amount = player.tad.altInfinities.fragmented.amount.sub(player.tad.altInfinities.corrupted.cost.mul(delta)).max(0)
+                if (player.tad.altInfinities.shattered.amount.gte(player.tad.altInfinities.corrupted.cost.mul(Decimal.div(delta, player.uni["U2"].tickspeed))) && player.tad.altInfinities.fragmented.amount.gte(player.tad.altInfinities.corrupted.cost.mul(Decimal.div(delta, player.uni["U2"].tickspeed)))) {
+                    player.tad.altInfinities.shattered.amount = player.tad.altInfinities.shattered.amount.sub(player.tad.altInfinities.corrupted.cost.mul(Decimal.div(delta, player.uni["U2"].tickspeed))).max(0)
+                    player.tad.altInfinities.fragmented.amount = player.tad.altInfinities.fragmented.amount.sub(player.tad.altInfinities.corrupted.cost.mul(Decimal.div(delta, player.uni["U2"].tickspeed))).max(0)
                     if (player.tad.altInfinities.shattered.amount.lt(0.5)) player.tad.altInfinities.shattered.amount = new Decimal(0)
                     if (player.tad.altInfinities.fragmented.amount.lt(0.5)) player.tad.altInfinities.fragmented.amount = new Decimal(0)
-                    player.tad.altInfinities.corrupted.amount = player.tad.altInfinities.corrupted.amount.add(player.tad.altInfinities.corrupted.gain.mul(delta))
+                    player.tad.altInfinities.corrupted.amount = player.tad.altInfinities.corrupted.amount.add(player.tad.altInfinities.corrupted.gain.mul(Decimal.div(delta, player.uni["U2"].tickspeed)))
                 }
                 break;
             case "disfigured":
-                if (player.tad.altInfinities.fragmented.amount.gte(player.tad.altInfinities.disfigured.cost.mul(delta)) && player.tad.altInfinities.broken.amount.gte(player.tad.altInfinities.disfigured.cost.mul(delta))) {
-                    player.tad.altInfinities.fragmented.amount = player.tad.altInfinities.fragmented.amount.sub(player.tad.altInfinities.disfigured.cost.mul(delta)).max(0)
-                    player.tad.altInfinities.broken.amount = player.tad.altInfinities.broken.amount.sub(player.tad.altInfinities.disfigured.cost.mul(delta)).max(0)
+                if (player.tad.altInfinities.fragmented.amount.gte(player.tad.altInfinities.disfigured.cost.mul(Decimal.div(delta, player.uni["U2"].tickspeed))) && player.tad.altInfinities.broken.amount.gte(player.tad.altInfinities.disfigured.cost.mul(Decimal.div(delta, player.uni["U2"].tickspeed)))) {
+                    player.tad.altInfinities.fragmented.amount = player.tad.altInfinities.fragmented.amount.sub(player.tad.altInfinities.disfigured.cost.mul(Decimal.div(delta, player.uni["U2"].tickspeed))).max(0)
+                    player.tad.altInfinities.broken.amount = player.tad.altInfinities.broken.amount.sub(player.tad.altInfinities.disfigured.cost.mul(Decimal.div(delta, player.uni["U2"].tickspeed))).max(0)
                     if (player.tad.altInfinities.fragmented.amount.lt(0.5)) player.tad.altInfinities.fragmented.amount = new Decimal(0)
                     if (player.tad.altInfinities.broken.amount.lt(0.5)) player.tad.altInfinities.broken.amount = new Decimal(0)
-                    player.tad.altInfinities.disfigured.amount = player.tad.altInfinities.disfigured.amount.add(player.tad.altInfinities.disfigured.gain.mul(delta))
+                    player.tad.altInfinities.disfigured.amount = player.tad.altInfinities.disfigured.amount.add(player.tad.altInfinities.disfigured.gain.mul(Decimal.div(delta, player.uni["U2"].tickspeed)))
                 }
                 break;
             case "distorted":
-                if (player.tad.altInfinities.broken.amount.gte(player.tad.altInfinities.distorted.cost.mul(delta)) && player.tad.altInfinities.shattered.amount.gte(player.tad.altInfinities.distorted.cost.mul(delta))) {
-                    player.tad.altInfinities.broken.amount = player.tad.altInfinities.broken.amount.sub(player.tad.altInfinities.distorted.cost.mul(delta)).max(0)
-                    player.tad.altInfinities.shattered.amount = player.tad.altInfinities.shattered.amount.sub(player.tad.altInfinities.distorted.cost.mul(delta)).max(0)
+                if (player.tad.altInfinities.broken.amount.gte(player.tad.altInfinities.distorted.cost.mul(Decimal.div(delta, player.uni["U2"].tickspeed))) && player.tad.altInfinities.shattered.amount.gte(player.tad.altInfinities.distorted.cost.mul(Decimal.div(delta, player.uni["U2"].tickspeed)))) {
+                    player.tad.altInfinities.broken.amount = player.tad.altInfinities.broken.amount.sub(player.tad.altInfinities.distorted.cost.mul(Decimal.div(delta, player.uni["U2"].tickspeed))).max(0)
+                    player.tad.altInfinities.shattered.amount = player.tad.altInfinities.shattered.amount.sub(player.tad.altInfinities.distorted.cost.mul(Decimal.div(delta, player.uni["U2"].tickspeed))).max(0)
                     if (player.tad.altInfinities.broken.amount.lt(0.5)) player.tad.altInfinities.broken.amount = new Decimal(0)
                     if (player.tad.altInfinities.shattered.amount.lt(0.5)) player.tad.altInfinities.shattered.amount = new Decimal(0)
-                    player.tad.altInfinities.distorted.amount = player.tad.altInfinities.distorted.amount.add(player.tad.altInfinities.distorted.gain.mul(delta))
+                    player.tad.altInfinities.distorted.amount = player.tad.altInfinities.distorted.amount.add(player.tad.altInfinities.distorted.gain.mul(Decimal.div(delta, player.uni["U2"].tickspeed)))
                 }
                 break;
             case "infected": case "infested":
-                if (player.tad.altInfinities.corrupted.amount.gte(player.tad.altInfinities[player.tad.altSelection].cost.mul(delta)) && player.tad.altInfinities.disfigured.amount.gte(player.tad.altInfinities[player.tad.altSelection].cost.mul(delta)) && player.tad.altInfinities.distorted.amount.gte(player.tad.altInfinities[player.tad.altSelection].cost.mul(delta))) {
-                    player.tad.altInfinities.corrupted.amount = player.tad.altInfinities.corrupted.amount.sub(player.tad.altInfinities[player.tad.altSelection].cost.mul(delta)).max(0)
-                    player.tad.altInfinities.disfigured.amount = player.tad.altInfinities.disfigured.amount.sub(player.tad.altInfinities[player.tad.altSelection].cost.mul(delta)).max(0)
-                    player.tad.altInfinities.distorted.amount = player.tad.altInfinities.distorted.amount.sub(player.tad.altInfinities[player.tad.altSelection].cost.mul(delta)).max(0)
+                if (player.tad.altInfinities.corrupted.amount.gte(player.tad.altInfinities[player.tad.altSelection].cost.mul(Decimal.div(delta, player.uni["U2"].tickspeed))) && player.tad.altInfinities.disfigured.amount.gte(player.tad.altInfinities[player.tad.altSelection].cost.mul(Decimal.div(delta, player.uni["U2"].tickspeed))) && player.tad.altInfinities.distorted.amount.gte(player.tad.altInfinities[player.tad.altSelection].cost.mul(Decimal.div(delta, player.uni["U2"].tickspeed)))) {
+                    player.tad.altInfinities.corrupted.amount = player.tad.altInfinities.corrupted.amount.sub(player.tad.altInfinities[player.tad.altSelection].cost.mul(Decimal.div(delta, player.uni["U2"].tickspeed))).max(0)
+                    player.tad.altInfinities.disfigured.amount = player.tad.altInfinities.disfigured.amount.sub(player.tad.altInfinities[player.tad.altSelection].cost.mul(Decimal.div(delta, player.uni["U2"].tickspeed))).max(0)
+                    player.tad.altInfinities.distorted.amount = player.tad.altInfinities.distorted.amount.sub(player.tad.altInfinities[player.tad.altSelection].cost.mul(Decimal.div(delta, player.uni["U2"].tickspeed))).max(0)
                     if (player.tad.altInfinities.corrupted.amount.lt(1e8)) player.tad.altInfinities.corrupted.amount = new Decimal(0)
                     if (player.tad.altInfinities.disfigured.amount.lt(1e8)) player.tad.altInfinities.disfigured.amount = new Decimal(0)
                     if (player.tad.altInfinities.distorted.amount.lt(1e8)) player.tad.altInfinities.distorted.amount = new Decimal(0)
-                    player.tad.altInfinities[player.tad.altSelection].amount = player.tad.altInfinities[player.tad.altSelection].amount.add(player.tad.altInfinities[player.tad.altSelection].gain.mul(delta))
+                    player.tad.altInfinities[player.tad.altSelection].amount = player.tad.altInfinities[player.tad.altSelection].amount.add(player.tad.altInfinities[player.tad.altSelection].gain.mul(Decimal.div(delta, player.uni["U2"].tickspeed)))
                 }
                 break;
         }

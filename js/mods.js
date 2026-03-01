@@ -139,7 +139,6 @@
         if (hasUpgrade("hpw", 1042)) player.m.modsToGet = player.m.modsToGet.pow(1.1)
         player.m.modsToGet = player.m.modsToGet.pow(player.cs.scraps.code.effect)
         if (hasUpgrade("cs", 703)) player.m.modsToGet = player.m.modsToGet.pow(1.1)
-        player.gh.steelToGet = player.gh.steelToGet.pow(buyableEffect("cof", 17))
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.po.halter.mods.enabled == 1) player.m.modsToGet = player.m.modsToGet.div(player.po.halter.mods.halt)

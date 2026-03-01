@@ -16,7 +16,7 @@ addLayer("ktb", {
             backgroundOrigin: "border-box",
             borderColor: "#F8C898",
             color: "#F8C898",
-            borderRadius: "1px",
+            borderRadius: "0px",
             transform: "translateY(-0px)",
         }
     },
@@ -88,7 +88,7 @@ addLayer("ktb", {
             currencyInternalName: "alchemicalSymbols",
             style() {
                 let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", margin: "4px"}
-                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)", look.borderColor = "transparent", look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1", look.borderRadius = "1px", look.boxShadow = "0 0 3px 1px black inset"
+                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)", look.borderColor = "transparent", look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1", look.borderRadius = "0px", look.boxShadow = "0 0 3px 1px black inset"
                 return look
             },
         },
@@ -102,7 +102,7 @@ addLayer("ktb", {
             currencyInternalName: "alchemicalSymbols",
             style() {
                 let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", margin: "4px"}
-                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)", look.borderColor = "transparent", look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1", look.borderRadius = "1px", look.boxShadow = "0 0 3px 1px black inset"
+                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)", look.borderColor = "transparent", look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1", look.borderRadius = "0px", look.boxShadow = "0 0 3px 1px black inset"
                 return look
             },
         },
@@ -116,7 +116,7 @@ addLayer("ktb", {
             currencyInternalName: "alchemicalSymbols",
             style() {
                 let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", margin: "4px"}
-                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)", look.borderColor = "transparent", look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1", look.borderRadius = "1px", look.boxShadow = "0 0 3px 1px black inset"
+                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)", look.borderColor = "transparent", look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1", look.borderRadius = "0px", look.boxShadow = "0 0 3px 1px black inset"
                 return look
             },
         },
@@ -130,7 +130,7 @@ addLayer("ktb", {
             currencyInternalName: "alchemicalSymbols",
             style() {
                 let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", margin: "4px"}
-                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)", look.borderColor = "transparent", look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1", look.borderRadius = "1px", look.boxShadow = "0 0 3px 1px black inset"
+                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)", look.borderColor = "transparent", look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1", look.borderRadius = "0px", look.boxShadow = "0 0 3px 1px black inset"
                 return look
             },
         },
@@ -144,7 +144,7 @@ addLayer("ktb", {
             currencyInternalName: "alchemicalSymbols",
             style() {
                 let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", margin: "4px"}
-                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)", look.borderColor = "transparent", look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1", look.borderRadius = "1px", look.boxShadow = "0 0 3px 1px black inset"
+                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)", look.borderColor = "transparent", look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1", look.borderRadius = "0px", look.boxShadow = "0 0 3px 1px black inset"
                 return look
             },
         },
@@ -158,7 +158,7 @@ addLayer("ktb", {
             currencyInternalName: "alchemicalSymbols",
             style() {
                 let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", margin: "4px"}
-                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)", look.borderColor = "transparent", look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1", look.borderRadius = "1px", look.boxShadow = "0 0 3px 1px black inset"
+                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)", look.borderColor = "transparent", look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1", look.borderRadius = "0px", look.boxShadow = "0 0 3px 1px black inset"
                 return look
             },
         },
@@ -172,7 +172,7 @@ addLayer("ktb", {
             currencyInternalName: "alchemicalSymbols",
             style() {
                 let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", margin: "4px"}
-                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)", look.borderColor = "transparent", look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1", look.borderRadius = "1px", look.boxShadow = "0 0 3px 1px black inset"
+                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)", look.borderColor = "transparent", look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1", look.borderRadius = "0px", look.boxShadow = "0 0 3px 1px black inset"
                 return look
             },
         },
@@ -186,7 +186,7 @@ addLayer("ktb", {
             currencyInternalName: "alchemicalSymbols",
             style() {
                 let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", margin: "4px"}
-                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)", look.borderColor = "transparent", look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1", look.borderRadius = "1px", look.boxShadow = "0 0 3px 1px black inset"
+                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)", look.borderColor = "transparent", look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1", look.borderRadius = "0px", look.boxShadow = "0 0 3px 1px black inset"
                 return look
             },
         },
@@ -200,7 +200,7 @@ addLayer("ktb", {
             currencyInternalName: "alchemicalSymbols",
             style() {
                 let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", margin: "4px"}
-                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)", look.borderColor = "transparent", look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1", look.borderRadius = "1px", look.boxShadow = "0 0 3px 1px black inset"
+                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)", look.borderColor = "transparent", look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1", look.borderRadius = "0px", look.boxShadow = "0 0 3px 1px black inset"
                 return look
             },
         },
@@ -214,7 +214,7 @@ addLayer("ktb", {
             currencyInternalName: "alchemicalSymbols",
             style() {
                 let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", margin: "4px"}
-                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "conic-gradient( #ff9999, #ffff99, #99ff99, #99ffff, #9999ff, #ff99ff, #ff9999 100%)", look.borderColor = "transparent", look.borderImage = "conic-gradient( #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000 100%) 1", look.borderRadius = "1px", look.boxShadow = "0 0 3px 1px black inset"
+                hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "conic-gradient( #ff9999, #ffff99, #99ff99, #99ffff, #9999ff, #ff99ff, #ff9999 100%)", look.borderColor = "transparent", look.borderImage = "conic-gradient( #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000 100%) 1", look.borderRadius = "0px", look.boxShadow = "0 0 3px 1px black inset"
                 return look
             },
         },
@@ -229,7 +229,7 @@ addLayer("ktb", {
             currencyDisplayName: "Alchemical Symbols",
             currencyInternalName: "alchemicalSymbols",
             style() {
-                let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "1px", margin: "4px"}
+                let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "0px", margin: "4px"}
                 hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(0deg, #6b4423, #9b541a)", look.borderColor = "#F8C898", look.boxShadow = "0 0 3px 1px black inset"
                 return look
             },
@@ -249,7 +249,7 @@ addLayer("ktb", {
                 return "x" + formatSimple(upgradeEffect(this.layer, this.id), 2)
             },
             style() {
-                let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "1px", margin: "4px"}
+                let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "0px", margin: "4px"}
                 hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(0deg, #6b4423, #9b541a)", look.borderColor = "#F8C898", look.boxShadow = "0 0 3px 1px black inset"
                 return look
             },
@@ -269,7 +269,7 @@ addLayer("ktb", {
                 return "x" + formatSimple(upgradeEffect(this.layer, this.id), 2)
             },
             style() {
-                let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "1px", margin: "4px"}
+                let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "0px", margin: "4px"}
                 hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(0deg, #6b4423, #9b541a)", look.borderColor = "#F8C898", look.boxShadow = "0 0 3px 1px black inset"
                 return look
             }
@@ -289,7 +289,7 @@ addLayer("ktb", {
                 return "x" + formatSimple(upgradeEffect(this.layer, this.id), 2)
             },
             style() {
-                let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "1px", margin: "4px"}
+                let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "0px", margin: "4px"}
                 hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(0deg, #6b4423, #9b541a)", look.borderColor = "#F8C898", look.boxShadow = "0 0 3px 1px black inset"
                 return look
             }
@@ -309,7 +309,7 @@ addLayer("ktb", {
                 return "x" + formatSimple(upgradeEffect(this.layer, this.id), 2)
             },
             style() {
-                let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "1px", margin: "4px"}
+                let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "0px", margin: "4px"}
                 hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(0deg, #6b4423, #9b541a)", look.borderColor = "#F8C898", look.boxShadow = "0 0 3px 1px black inset"
                 return look
             }
@@ -323,7 +323,7 @@ addLayer("ktb", {
             currencyDisplayName: "Alchemical Symbols",
             currencyInternalName: "alchemicalSymbols",
             style() {
-                let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "1px", margin: "4px"}
+                let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "0px", margin: "4px"}
                 hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(0deg, #6b4423, #9b541a)", look.borderColor = "#F8C898", look.boxShadow = "0 0 3px 1px black inset"
                 return look
             },
@@ -337,7 +337,7 @@ addLayer("ktb", {
             currencyDisplayName: "Alchemical Symbols",
             currencyInternalName: "alchemicalSymbols",
             style() {
-                let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "1px", margin: "4px"}
+                let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "0px", margin: "4px"}
                 hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(0deg, #6b4423, #9b541a)", look.borderColor = "#F8C898", look.boxShadow = "0 0 3px 1px black inset"
                 return look
             },
@@ -351,7 +351,7 @@ addLayer("ktb", {
             currencyDisplayName: "Alchemical Symbols",
             currencyInternalName: "alchemicalSymbols",
             style() {
-                let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "1px", margin: "4px"}
+                let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "0px", margin: "4px"}
                 hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(0deg, #6b4423, #9b541a)", look.borderColor = "#F8C898", look.boxShadow = "0 0 3px 1px black inset"
                 return look
             },
@@ -365,7 +365,7 @@ addLayer("ktb", {
             currencyDisplayName: "Alchemical Symbols",
             currencyInternalName: "alchemicalSymbols",
             style() {
-                let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "1px", margin: "4px"}
+                let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "0px", margin: "4px"}
                 hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(0deg, #6b4423, #9b541a)", look.borderColor = "#F8C898", look.boxShadow = "0 0 3px 1px black inset"
                 return look
             },
@@ -379,7 +379,7 @@ addLayer("ktb", {
             currencyDisplayName: "Alchemical Symbols",
             currencyInternalName: "alchemicalSymbols",
             style() {
-                let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "1px", margin: "4px"}
+                let look = {color: "rgba(0,0,0,0.8", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "0px", margin: "4px"}
                 hasUpgrade(this.layer, this.id) ? lookBackground = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? lookBackground = "#bf8f8f" : look.background = "linear-gradient(0deg, #6b4423, #9b541a)", look.borderColor = "#F8C898", look.boxShadow = "0 0 3px 1px black inset"
                 return look
             },
@@ -395,12 +395,13 @@ addLayer("ktb", {
     infoboxes: {
     1: {
             title: "Alchemical Symbols",
-            body() { return "The Alchemical Symbols are interesting superphysical values. Unlike the superphysical values made by the Novasent, the Alchemical Symbols are made by a Foresight user, Louki-syhda Sabaetta. The Alchemical Symbols are a way for Louki to gather, spread and read information. She used them during her own controlled experiments to achieve almost unlimited potential.<br><br>They are made up of Celestial Points which constitute the Overworld Universe. However, creating Alchemical Symbols and altering their properties both require an eternity worth of collected Celestial Points and very specific superphysical values.<br><br>Currently, there are almost no Foresight users able to effectively make and control the Alchemical Symbols. The cause of the decreased numbers is due to a threshold problem. Philozoth, the Celestial of Alchemy and the arch-rival of Louki, changed the threshold so he could be the only one to steal, use and sabotage Louki’s knowledge.<br><br>To set a threshold even higher than Tav’s Limit is a disgrace. Thanks to that, learning the art of Alchemy from Louki is extremely hard for new Foresight users. At least I have found her in her weakened state at the right time. Maybe I should talk to her often to find out more about the incident."},
+            body() { return "The Alchemical Symbols are interesting superphysical values. Unlike the superphysical values made by the Novasent, the Alchemical Symbols are made by a new Developer, Louki-syhda Sabaetta. The Alchemical Symbols are a way for Louki to gather, spread and read information. She used them during her own controlled experiments to achieve almost unlimited potential.<br><br>They are made up of Celestial Points which constitute the Overworld Universe. However, creating Alchemical Symbols and altering their properties both require an eternity worth of collected Celestial Points and very specific superphysical values.<br><br>Currently, there are almost no Foresight users able to effectively make and control the Alchemical Symbols. The cause of the decreased numbers is due to a threshold problem. Philozoth, the Celestial of Alchemy and the arch-rival of Louki, changed the threshold so he could be the only one to steal, use and sabotage Louki’s knowledge.<br><br>To set a threshold even higher than Tav’s Limit is a disgrace. Thanks to that, learning the art of Alchemy from Louki is extremely hard for new Foresight users. At least I have found her in her weakened state at the right time. Maybe I should talk to her often to find out more about the incident."},
             unlocked() { return true },
+            style: { "color": "pink", "backgroundColor": "#4f3658", "border": "2px solid #8b609c", "borderRadius": "10px 10px 0 0" }
     },
     2: {
             title: "Alchemical Nodes",
-            body() { return "???" },
+            body() { return "???" }, // Appears when the 1st Alchemical Node part is crafted.
             unlocked() { return false },
     },
     3: {
@@ -448,7 +449,7 @@ addLayer("ktb", {
     microtabs: {
         tabs: {
             "Upgrades": {
-                buttonStyle() {return {color: "#F8C898", backgroundColor: "#6B4423", backgroundImage: "linear-gradient(0deg, #6B4423, #9b541a)", borderColor: "#F8C898", borderRadius: "1px", boxShadow: "0 0 3px 1px black inset"}},
+                buttonStyle() {return {color: "#F8C898", backgroundColor: "#6B4423", backgroundImage: "linear-gradient(0deg, #6B4423, #9b541a)", borderColor: "#F8C898", borderRadius: "0px", boxShadow: "0 0 3px 1px black inset"}},
                 unlocked() {return true},
                 content: [
                     ["blank", "5px"],
@@ -456,7 +457,7 @@ addLayer("ktb", {
                         ["style-column", [
                             ["top-column", [
                                 ["blank", "10px"],
-                                ["raw-html", () => {return "You have " + formatWhole(player.ktb.alchemicalSymbols) + " 🝪 Alchemical Symbols 🝪. (+" + formatWhole(player.ktb.alchemicalSymbolsGain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + formatWhole(player.ktb.alchemicalSymbols) + " 🝪 Alchemical Symbols 🝪. (+" + formatWhole(player.ktb.alchemicalSymbolsGain) + ")"}, {color: "transparent", background: "linear-gradient(to bottom, #8b609c, magenta, pink)", fontSize: "20px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace"}],
                                 ["blank", "10px"],
                                 ["clickable", 1],
                             ], {width: "700px", height: "220px", background: "linear-gradient(0deg, #382413, #523116)", borderTop: "3px solid #b18961", borderLeft: "3px solid #b18961", borderRight: "3px solid #b18961", borderBottom: "3px solid #330033", borderRadius: "15px 15px 0 0", boxShadow: "0 0 5px 5px #b18961a6 inset, 0 0 10px 10px #382413 inset, 0 0 50px 50px #00000050 inset"}],
@@ -474,7 +475,7 @@ addLayer("ktb", {
                 ]
             },
             "Lore": {
-                buttonStyle() {return {color: "black", background: "linear-gradient(to bottom, #8b609c, magenta, pink)", borderColor: "transparent", borderImage: "linear-gradient(to bottom, chartreuse, #00ff9d) 1", borderRadius: "1px", boxShadow: "0 0 3px 1px black inset"}},
+                buttonStyle() {return {color: "black", background: "linear-gradient(to bottom, #8b609c, magenta, pink)", borderColor: "transparent", borderImage: "linear-gradient(to bottom, chartreuse, #00ff9d) 1", borderRadius: "0px", boxShadow: "0 0 3px 1px black inset"}},
                 unlocked() { return true},
                 content: [
                     ["blank", "25px"],

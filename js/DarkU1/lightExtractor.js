@@ -116,6 +116,7 @@
             player.le.starmetalAlloyToGet = player.le.starmetalAlloyToGet.add(player.le.starmetalAlloyToGetToGet)
         }
         if (player.sme.autoLeaveToggle && player.le.starmetalAlloyToGetTrue.gte(player.sme.leaveAmount) && !player.pet.legPetTimers[0].active) {
+            pauseUniverseAll(["D1", "A2"], "unpause", true)
             player.sb.storedSpaceEnergy = player.sb.storedSpaceEnergy.add(player.ds.storedSpaceEnergyToGet)
 
             player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.le.starmetalAlloyToGetTrue.floor())
@@ -140,8 +141,6 @@
             changeTheme()
 
             layers.pu.generateSelection();
-
-            pauseUniverseAll(["D1", "A2"], "unpause", true)
         }
     },
     bars: {},
@@ -170,6 +169,7 @@
             canClick() { return player.le.starmetalAlloyToGet.gte(1) },
             unlocked() { return true },
             onClick() {
+                pauseUniverseAll(["D1", "A2"], "unpause", true)
                 player.sb.storedSpaceEnergy = player.sb.storedSpaceEnergy.add(player.ds.storedSpaceEnergyToGet)
 
                 player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.le.starmetalAlloyToGetTrue.floor())
@@ -193,8 +193,6 @@
                 changeTheme()
 
                 layers.pu.generateSelection();
-
-                pauseUniverseAll(["D1", "A2"], "unpause", true)
             },
             style() {
                 let look = {width: "400px", minHeight: "100px", fontSize: "9px", borderRadius: "15px", color: "white", border: "2px solid #384166"}
@@ -227,7 +225,7 @@
             canClick() { return player.le.eclipseShardsToGet.gte(1) },
             unlocked() { return true },
             onClick() {
-
+                pauseUniverseAll(["D1", "A2"], "unpause", true)
                 player.sma.eclipseShards = player.sma.eclipseShards.add(player.le.eclipseShardsToGetTrue.floor())
                 player.le.starmetalAlloyPauseAgain = new Decimal(10)
                 for (let prop in player.pu.levelables) {
@@ -252,8 +250,6 @@
                 player.pet.legPetTimers[0].active = false
                 player.pet.legPetTimers[0].current = new Decimal(0)
                 layers.pu.generateSelection();
-
-                pauseUniverseAll(["D1", "A2"], "unpause", true)
 
                 player.pet.legendaryPetAbilityCooldowns[0] = player.pet.legendaryPetAbilityCooldownsMax[0]
             },

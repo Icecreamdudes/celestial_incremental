@@ -39,7 +39,6 @@
             buyUpgrade("bi", 26)
             buyUpgrade("bi", 27)
             buyUpgrade("bi", 28)
-            buyUpgrade("bi", 29)
 
             buyUpgrade("bi", 101)
             buyUpgrade("bi", 102)
@@ -58,7 +57,6 @@
             buyUpgrade("bi", 116)
             buyUpgrade("bi", 117)
             buyUpgrade("bi", 117)
-            buyUpgrade("bi", 118)
         }
     },
     nodeStyle() {
@@ -418,21 +416,6 @@
             currencyInternalName: "infinityPoints",
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        29:
-        {
-            title: "BI IP Upgrade XVIII",
-            unlocked() { return player.matosLair.milestone[25] > 0 },
-            description() { return "Boost infinity dimensions based on galaxy dust." },
-            cost: new Decimal("1e4000"),
-            currencyLocation() { return player.in },
-            currencyDisplayName: "Infinity Points",
-            currencyInternalName: "infinityPoints",
-            effect() {
-                return player.ca.galaxyDust.pow(4).add(1)
-            },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '150px', height: '100px', }
-        },
         //Negative Infinity Points
         101: {
             title: "BI NIP Upgrade I",
@@ -606,25 +589,6 @@
             currencyInternalName: "negativeInfinityPoints",
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        118 :{
-            title: "BI NIP Upgrade XVI",
-            unlocked() { return player.matosLair.milestone[25] > 0 },
-            description: "Tickspeed effect boosts antimatter gain.",
-            cost: new Decimal("1e1000"),
-            currencyLocation() { return player.ta },
-            currencyDisplayName: "Negative Infinity Points",
-            currencyInternalName: "negativeInfinityPoints",
-            effect() {
-                let eff = buyableEffect("ad", 1).pow(0.2).add(1)
-                if (eff.gte("1e50000")) eff = eff.div("1e50000").pow(0.1).mul("1e50000")
-                return eff
-            },
-            effectDisplay() {
-                if (upgradeEffect(this.layer, this.id).gte("1e50000")) return format(upgradeEffect(this.layer, this.id))+"x <small style='color:red'>[SOFTCAPPED]</small>"
-                return format(upgradeEffect(this.layer, this.id))+"x"
-            }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px", width: '180px', height: '100px', }
-        },
     },
     microtabs: {
         stuff: {
@@ -636,13 +600,11 @@
                     ["style-row", [
                         ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18], ["upgrade", 19],
                         ["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28],
-                        ["upgrade", 29],
                     ], {maxWidth: "1000px", padding: "5px 0", backgroundColor: "#332600", border: "3px solid #7f5f00", borderRadius: "20px"}],
                     ["blank", "25px"],
                     ["style-row", [
                         ["upgrade", 101], ["upgrade", 102], ["upgrade", 103], ["upgrade", 104], ["upgrade", 105], ["upgrade", 106], ["upgrade", 107], ["upgrade", 108],
                         ["upgrade", 109], ["upgrade", 111], ["upgrade", 112], ["upgrade", 113], ["upgrade", 114], ["upgrade", 115], ["upgrade", 116], ["upgrade", 117],
-                        ["upgrade", 118]
                     ], {maxWidth: "1000px", padding: "5px 0", backgroundColor: "#232b2b", border: "3px solid #596c6c", borderRadius: "20px"}],
                 ]
             },

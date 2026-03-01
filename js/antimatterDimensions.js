@@ -107,7 +107,6 @@
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(levelableEffect("ir", 3)[0])
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(buyableEffect("sb", 105))
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(buyableEffect("cof", 21))
-        if (hasUpgrade("bi", 118)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(upgradeEffect("bi", 118))
 
         // SECOND SOFTCAP
         player.ad.secondSoftcap = new Decimal("1e100000")
@@ -126,6 +125,7 @@
         if (hasUpgrade("bi", 108)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(1.6)
         if (hasUpgrade("bi", 114)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(3)
         if (hasUpgrade("depth1", 5)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(20)
+        player.ad.antimatterEffect = player.ad.antimatterEffect.pow(buyableEffect("sme", 122))
 
         //----------------------------------------
 

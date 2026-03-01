@@ -60,6 +60,15 @@ function pauseUniverseAll(exemptions, type = "toggle", temp = false) {
     }
 }
 
+function cleanseUniverse(universe) {
+    let tree = universes[universe].tree
+    for (let row in tree) {
+        for (thing in tree[row]) {
+            player.thing = getStartLayerData(thing)
+        }
+    }
+}
+
 var UNIS = Object.keys(universes);
 
 function updateUnis() {

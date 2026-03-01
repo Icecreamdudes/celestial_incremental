@@ -39,7 +39,7 @@ addLayer("bee", {
 
         // Bee Calculations
         player.bee.bps = buyableEffect("bee", 11)
-        player.bee.bps = player.bee.bps.add(buyableEffect("sme", 141))
+        player.bee.bps = player.bee.bps.add(buyableEffect("sme", 171))
         player.bee.bps = player.bee.bps.mul(player.fl.glossaryEffects.bee)
         player.bee.bps = player.bee.bps.mul(player.bpl.roles.drone.effect)
         player.bee.bps = player.bee.bps.mul(player.ne.alpha.effect)

@@ -31,6 +31,9 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
+        // BH Safety Check
+        if (player.universe == "U3" && player.uni.BH.paused) player.uni.BH.paused = false
+
         player.s.singularitiesToGet = new Decimal(1)
         if (hasUpgrade("depth3", 5)) player.s.singularitiesToGet = player.s.singularityPointsToGet.add(1).log(1e10).add(1).floor()
 

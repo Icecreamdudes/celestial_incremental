@@ -197,8 +197,9 @@
             canClick() { return player.cp.replicantiPoints.gte(player.gs.grassSkipReq) },
             unlocked() { return true },
             onClick() {
-                player.gs.grassSkip = player.gs.grassSkip.add(player.gs.grassSkipToGet)
+                if (player.gs.grassSkipPause.gt(0)) return;
                 player.gs.grassSkipPause = new Decimal(4)
+                player.gs.grassSkip = player.gs.grassSkip.add(player.gs.grassSkipToGet)
             },
             style: {width: "406px", minHeight: "105.7px", borderRadius: "0px 15px 15px 0px", border: "3px solid #0c1a36", margin: "-3px"},
         },

@@ -157,10 +157,12 @@
             canClick() { return player.rf.rocketFuelToGet.gte(1)},
             unlocked() { return true },
             onClick() {
-                player.rf.rocketFuelPause = new Decimal(3)
-                player.rf.rocketFuel = player.rf.rocketFuel.add(player.rf.rocketFuelToGet)
-                if (!hasAchievement("achievements", 103)) completeAchievement("achievements", 103)
-                if (!hasAchievement("achievements", 119) && player.rf.rocketFuel.gte(1e15)) completeAchievement("achievements", 119)
+                if (player.rf.rocketFuelPause.gt(0)) return;
+                
+                player.rf.rocketFuelPause = new Decimal(3);
+                player.rf.rocketFuel = player.rf.rocketFuel.add(player.rf.rocketFuelToGet);
+                completeAchievement("achievements", 103);
+                if (player.rf.rocketFuel.gte(1e15)) completeAchievement("achievements", 119);
             },
             style() {
                 let look = {width: "225px", minHeight: "150px", borderRadius: "12px 0px 0px 0px"}

@@ -309,6 +309,7 @@
             canClick() { return player.ad.antimatter.gte('1e308') },
             unlocked() { return true },
             onClick() {
+                if (player.ad.revCrunchPause.gt(0)) return;
                 player.ad.revCrunchPause = new Decimal(6)
                 player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
             },
@@ -1882,8 +1883,9 @@ addLayer("revc", {
         },
     },
     reverseCrunch(){
-        player.ta.reachedNegativeInfinity = false
+        if (player.ta.negativeInfinityPause.gt(0)) return;
         player.ta.negativeInfinityPause = new Decimal(5)
+        player.ta.reachedNegativeInfinity = false
     },
     bars: {},
     upgrades: {},

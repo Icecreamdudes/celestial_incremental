@@ -298,6 +298,7 @@
             canClick() { return player.p.crystalsToGet.gte(1)},
             unlocked() { return true },
             onClick() {
+                if (player.p.crystalPause.gt(0)) return;
                 player.p.crystalPause = new Decimal(5)
                 player.p.crystals = player.p.crystals.add(player.p.crystalsToGet)
             },

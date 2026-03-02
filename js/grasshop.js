@@ -403,15 +403,20 @@ addLayer("gh", {
             canClick() { return player.gh.grasshoppersToGet.gte(1) && player.points.gte(1e35) },
             unlocked() { return true },
             onClick() {
-                if (!hasAchievement("achievements", 13)) completeAchievement("achievements", 13)
-                if (!hasAchievement("achievements", 23) && player.gh.grasshoppersToGet.gte(1e25)) completeAchievement("achievements", 23)
+                if (player.gh.grasshopPause.gt(0)) return;
+                
                 player.gh.grasshopPause = new Decimal(3)
                 player.gh.grasshoppers = player.gh.grasshoppers.add(player.gh.grasshoppersToGet)
 
-                if (!hasAchievement("achievements", 108)) {
-                    player.pe.pests = player.pe.pests.mul(0.9)
-                } else {
+                completeAchievement("achievements", 13)
+                if (player.gh.grasshoppersToGet.gte(1e25)) {
+                    completeAchievement("achievements", 23);
+                }
+
+                if (hasAchievement("achievements", 108)) {
                     player.pe.pests = player.pe.pests.mul(0.8)
+                } else {
+                    player.pe.pests = player.pe.pests.mul(0.9)
                 }
             },
             style: { width: '400px', "min-height": '100px', borderRadius: '15px' },
@@ -421,6 +426,7 @@ addLayer("gh", {
             canClick() { return player.gh.steelToGet.gte(1) },
             unlocked() { return true },
             onClick() {
+                if (player.gh.steelPause.gt(0)) return;
                 player.gh.steelPause = new Decimal(5)
                 player.gh.steel = player.gh.steel.add(player.gh.steelToGet)
             },

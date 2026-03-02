@@ -160,7 +160,7 @@ function updateAntimatterEffect() {
 
     const antimatterExponent = player.ad.antimatter.add(1).log10().pow(0.3);
 
-    let effect = player.points.log10().times(3).add(1).pow(antimatterExponent);
+    let effect = player.points.plus(1).log10().times(3).add(1).pow(antimatterExponent);
     effect = effect.pow(getAntimatterEffectPowers());
 
     player.ad.antimatterEffect = effect;
@@ -478,6 +478,7 @@ addLayer("ad", {
             canClick() { return player.ad.antimatter.gte('1e308') },
             unlocked() { return true },
             onClick() {
+                if (player.ad.revCrunchPause.gt(0)) return;
                 player.ad.revCrunchPause = new Decimal(6)
                 player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
             },

@@ -384,6 +384,7 @@
             canClick() { return player.fu.funToGet.gte(1) },
             unlocked() { return true },
             onClick() {
+                if (player.fu.funifyPause.gt(0)) return;
                 player.fu.funifyPause = new Decimal(4)
                 player.fu.fun = player.fu.fun.add(player.fu.funToGet)
             },
@@ -590,6 +591,7 @@
             canClick() { return player.fu.jocusEssenceToGet.gte(1) && inChallenge("fu", 11) },
             unlocked() { return inChallenge("fu", 11) || player.fu.enterFear},
             onClick() {
+                if (player.fu.funifyPause.gt(0)) return;
                 player.fu.funifyPause = new Decimal(12)
                 for (let i = 0; i < player.an.upgrades.length; i++) {
                     if (+player.an.upgrades[i] < 24) {
@@ -620,6 +622,7 @@
             canClick() { return player.fu.apathyToGet.gte(1) && inChallenge("fu", 12) && player.cp.replicantiPoints.gte(1e20)},
             unlocked() { return inChallenge("fu", 12) || player.fu.enterNumb},
             onClick() {
+                if (player.fu.funifyPause.gt(0)) return;
                 player.fu.funifyPause = new Decimal(12)
                 if (!hasUpgrade("fu", 105)) {
                     for (let i = 0; i < player.an.upgrades.length; i++) {
@@ -3103,6 +3106,7 @@
             goalDescription() { return "10 Grass-Skip" },
             rewardDescription: "Kill Jocus, and gain x10 Singularity Points.",
             onEnter() {
+                if (player.fu.funifyPause.gt(0)) return;
                 if (!player.fu.enterFear) player.fu.enterFear = true
                 player.fu.funifyPause = new Decimal(12)
                 for (let i = 0; i < player.an.upgrades.length; i++) {
@@ -3132,6 +3136,7 @@
             goalDescription() { return "1e75 Replicanti Points" },
             rewardDescription: "Expand your hives limits.",
             onEnter() {
+                if (player.fu.funifyPause.gt(0)) return;
                 if (!player.fu.enterNumb) player.fu.enterNumb = true
                 player.fu.funifyPause = new Decimal(12)
                 for (let i = 0; i < player.an.upgrades.length; i++) {

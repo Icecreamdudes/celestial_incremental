@@ -95,8 +95,9 @@
             canClick() { return player.ds.spaceEnergyToGet.gte(1) },
             unlocked() { return true },
             onClick() {
-                player.ds.spaceEnergy = player.ds.spaceEnergy.add(player.ds.spaceEnergyToGet)
+                if (player.ds.spaceEnergyPause.gt(0)) return;
                 player.ds.spaceEnergyPause = new Decimal(6)
+                player.ds.spaceEnergy = player.ds.spaceEnergy.add(player.ds.spaceEnergyToGet)
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {

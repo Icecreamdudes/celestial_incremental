@@ -211,8 +211,9 @@
             canClick() { return player.oi.oilToGet.gte(1) },
             unlocked() { return true },
             onClick() {
-                player.oi.oil = player.oi.oil.add(player.oi.oilToGet)
+                if (player.oi.oilPause.gt(0)) return;
                 player.oi.oilPause = new Decimal(4)
+                player.oi.oil = player.oi.oil.add(player.oi.oilToGet)
             },
             style: { width: '600px', "min-height": '100px', borderRadius: '15px' },
         },
@@ -227,8 +228,9 @@
             canClick() { return player.cp.replicantiPoints.gte(1e60) && player.oi.linkerBought },
             unlocked() { return true },
             onClick() {
-                player.oi.protoMemorySeconds = player.oi.protoMemorySeconds.add(player.oi.protoMemorySecondsToGet)
+                if (player.oi.oilPause.gt(0)) return;
                 player.oi.oilPause = new Decimal(4)
+                player.oi.protoMemorySeconds = player.oi.protoMemorySeconds.add(player.oi.protoMemorySecondsToGet)
 
                 player.oi.linkingPower[0] = new Decimal(0)
                 player.oi.linkingPower[1] = new Decimal(0)

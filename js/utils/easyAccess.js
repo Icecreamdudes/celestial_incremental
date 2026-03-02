@@ -109,6 +109,16 @@ function upgradeEffect(layer, id) {
 	return (tmp[layer].upgrades[id].effect)
 }
 
+function optionalUpgradeEffect(layer, id) {
+	return {
+		value: hasUpgrade(layer, id) ? upgradeEffect(layer, id) : "NOT BOUGHT",
+		orElse(defaultValue) {
+			if (this.value === "NOT BOUGHT") return defaultValue;
+			return this.value;
+		}
+	}
+}
+
 function challengeEffect(layer, id) {
 	return (tmp[layer].challenges[id].rewardEffect)
 }

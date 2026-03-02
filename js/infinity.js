@@ -1,4 +1,332 @@
-﻿addLayer("in", {
+﻿/**
+ * Compute how much IP is gained on reset, based purely on points.
+ * @returns 
+ */
+function getInfinityPointBaseGain() {
+    if (!player.in.breakInfinity) {
+        return new Decimal(1);
+    }
+
+    let amount;
+    if (hasUpgrade("bi", 115)) {
+        amount = player.points.div(1e308).plus(1).log10().pow(1.5);
+    } else if (hasUpgrade("bi", 111)) {
+        amount = player.points.div(1e308).plus(1).log10().div(2).pow(1.25);
+    } else {
+        amount = player.points.div(1e308).plus(1).log10().div(10);
+    }
+
+    const basePower = player.cs.scraps.infinity.effect;
+    return amount.pow(basePower);
+}
+
+/**
+ * Compute the total multiplier to IP gain.
+ * @returns 
+ */
+function getInfinityPointGainMultiplier() {
+    const factors = [
+        buyableEffect("ca", 24),
+        buyableEffect("cb", 12),
+        buyableEffect("fu", 17),
+        buyableEffect("gh", 38),
+        buyableEffect("id", 24),
+        buyableEffect("ip", 11),
+        buyableEffect("ma", 21),
+        buyableEffect("s", 12),
+        buyableEffect("st", 301),
+        buyableEffect("ta", 33),
+
+        levelableEffect("pet", 403)[1], // Cookie
+        levelableEffect("pu", 101)[2],
+
+        player.hbl.boosters[2].effect,
+        player.d.boosterEffects[11],
+        player.rf.abilityEffects[5],
+        player.om.diceMasteryPointsEffect,
+        player.ca.replicantiEffect,
+        player.sd.singularityPowerEffect,
+        player.fu.sadnessEffect2,
+        player.co.cores.infinity.effect[0],
+        player.ma.bestComboDepth1Effect,
+        player.i.pylonPassiveEffect,
+
+        optionalUpgradeEffect("ip", 42).orElse(1),
+        optionalUpgradeEffect("bi", 101).orElse(1),
+        optionalUpgradeEffect("bi", 23).orElse(1),
+        optionalUpgradeEffect("hpw", 1063).orElse(1),
+
+        player.tad.altInfinities.disfigured.milestone.gte(2) ? player.tad.altInfinities.disfigured.effect2 : 1,
+        hasMilestone("fa", 11) ? player.fa.milestoneEffect[0] : 1,
+        hasMilestone("r", 21) ? player.r.pentMilestone11Effect : 1,
+        player.ma.matosDefeated ? "1e600" : 1,
+        player.pol.pollinatorEffects.water.enabled ? player.pol.pollinatorEffects.water.effects[0] : 1,
+    ];
+
+    return factors.reduce(Decimal.multiply, 1);
+}
+
+/**
+ * Compute what power IP gain is raised to.
+ * @returns 
+ */
+function getInfinityPointGainPower() {
+    const powers = [
+
+        player.co.cores.infinity.effect[1],
+        levelableEffect("pet", 404)[0],
+        buyableEffect("sb", 103),
+        levelableEffect("ir", 4)[1],
+        player.cof.coreFragmentEffects[3],
+    ];
+
+    return powers.reduce(Decimal.multiply, 1);
+}
+
+/**
+ * Compute how many IP should be awarded on reset. 
+ * @returns 
+ */
+function getInfinityPointGain() {
+    const gain = getInfinityPointBaseGain()
+            .times(getInfinityPointGainMultiplier())
+            .pow(getInfinityPointGainPower());
+    
+    if (player.po.halter.ip.enabled == 1) return gain.dividedBy(player.po.halter.ip.halt);
+    if (player.po.halter.ip.enabled == 2) return gain.min(player.po.halter.ip.halt);
+    return gain;
+}
+
+/**
+ * Handle updating IP amount to account for passive gain.
+ * @param {*} delta Amount of time that's passed in seconds.
+ * @returns 
+ */
+function updateInfinityPointAmount(delta) {
+    if (!hasUpgrade("s", 24)) return;
+    player.in.infinityPoints = player.in.infinityPoints.plus(getInfinityPointGain().times(delta));
+}
+
+
+/**
+ * Compute the total multiplier to Infinity gain on reset.
+ * @returns 
+ */
+function getInfinityGainMultiplier() {
+    const factors = [
+        
+        buyableEffect("cof", 23),
+        buyableEffect("om", 11),
+        buyableEffect("p", 15),
+        levelableEffect("pet", 1101)[0], // VoidGwa
+        levelableEffect("ir", 2)[1],
+        getParadoxPylonEffect(1),
+        player.co.cores.infinity.effect[2],
+
+        player.tad.altInfinities.shattered.milestone.gte(2) ? player.tad.altInfinities.shattered.effect2 : 1,
+        hasMilestone("ip", 28) ? player.points.add(1).log("1.79e308").pow(0.7).max(1) : 1,
+        hasMilestone("fa", 13) ? player.fa.milestoneEffect[2] : 1,
+        hasUpgrade("ep2", 14) ? upgradeEffect("ep2", 14) : 1,
+        hasUpgrade("tad", 152) ? player.tad.infinitumEffect2 : 1,
+
+        // One for each challenge -- >2x mult before Tav.
+        hasAchievement("achievements", 107) ? 1.1 : 1,
+        hasAchievement("achievements", 109) ? 1.1 : 1,
+        hasAchievement("achievements", 111) ? 1.1 : 1,
+        hasAchievement("achievements", 113) ? 1.1 : 1,
+        hasAchievement("achievements", 116) ? 1.1 : 1,
+        hasAchievement("achievements", 120) ? 1.1 : 1,
+        hasAchievement("achievements", 122) ? 1.1 : 1,
+        hasAchievement("achievements", 124) ? 1.1 : 1,
+    ];
+
+    return factors.reduce(Decimal.multiply, 1);
+}
+
+/**
+ * Compute what power infinity gain should be raised to.
+ * @returns 
+ */
+function getInfinityGainPower() {
+    return player.tad.altInfinities.infected.milestone.gte(2) ? player.tad.altInfinities.infected.effect2 : 1;
+}
+
+/**
+ * Compute how many infinities should be gained on reset. 
+ * @returns 
+ */
+function getInfinityGain() {
+    const gain = getInfinityGainMultiplier().pow(getInfinityGainPower());
+
+    if (player.po.halter.infinities.enabled == 1) return gain.dividedBy(player.po.halter.infinities.halt);
+    if (player.po.halter.infinities.enabled == 2) return gain.min(player.po.halter.infinities.halt);
+    return gain;
+}
+
+/**
+ * Update the amount of infinities to account for passive gain.
+ * @param {*} delta Amount of time that's passed in seconds.
+ * @returns 
+ */
+function updateInfinityAmount(delta) {
+    if (!player.tad.altInfinities.fragmented.milestone.gte(3)) return;
+    player.in.infinities = player.in.infinities.add(getInfinityGain().times(0.25).times(delta))
+}
+
+/**
+ * Deal with old saves.
+ * I'm not sure what this does, but it seems to reset some dated
+ * pre-infinity content. 
+ * @param {*} delta Time since last tick in seconds. Timing is important here.
+ */
+function handleLegacySaveReset(delta) {
+    if (player.in.delay.lte(0)) return;
+
+    player.in.delay = player.in.delay.sub(delta)
+    if (player.in.delay.gt(0) && player.in.delay.lte(1)) {
+        layers.in.bigCrunch()
+        layers.ta.negativeInfinityReset()
+        for (let i = 0; i < player.r.milestones.length; i++) {
+            if (+player.r.milestones[i] > 20) {
+                player.r.milestones.splice(i, 1);
+                i--;
+            }
+        }
+        player.in.delay = new Decimal(0)
+    }
+}
+
+/**
+ * Deal with the player reaching Infinite Points before infinity is broken.
+ * @returns 
+ */
+function handleReachingInfinity() {
+    if (!player.in.reachedInfinity) return;
+    // Only force action if infinity is not broken.
+    if (player.in.breakInfinity) return;
+
+    // Handle Challenges completed by reaching infinity
+    if (inChallenge("ip", 11) && !hasChallenge("ip", 11)) {
+        completeAchievement("achievements", 107)
+        player.ip.challenges[11] = 1
+        completeChallenge("ip", 11)
+    }
+    if (inChallenge("ip", 12) && !hasChallenge("ip", 12)) {
+        completeAchievement("achievements", 109)
+        player.ip.challenges[12] = 1
+        completeChallenge("ip", 12)
+    }
+    if (inChallenge("ip", 14)) {
+        completeAchievement("achievements", 112)
+    }
+    if (inChallenge("ip", 15) && !hasChallenge("ip", 15)) {
+        completeAchievement("achievements", 116)
+        player.ip.challenges[15] = 1
+        completeChallenge("ip", 15)
+    }
+    if (inChallenge("ip", 16) && !hasChallenge("ip", 16)) {
+        completeAchievement("achievements", 120)
+        player.ip.challenges[16] = 1
+        completeChallenge("ip", 16)
+    }
+
+    if (!hasMilestone("ip", 21) && player.s.highestSingularityPoints.lte(0)) {
+        player.tab = "bigc"
+    } else {
+        layers.bigc.crunch()
+    }
+}
+
+/**
+ * Determine how much Energy the Paradox Pylon gains per second.
+ * @returns 
+ */
+function getParadoxPylonEnergyGain() {
+    if (!player.in.pylonBuilt) return new Decimal(0);
+    if (player.in.pylonEnergy.gte(getParadoxPylonEnergyLimit())) return new Decimal(0);
+
+    const powers = [
+        buyableEffect("in", 11),
+        buyableEffect("in", 12),
+        buyableEffect("in", 13),
+        levelableEffect("ir", 9)[1],
+        player.cbs.pylonEnergyEffect4,
+    ];
+
+    const totalPower = powers.reduce(Decimal.multiply, 1);
+
+    return totalPower.pow_base(1.2);
+}
+
+/**
+ * Increase Paradox Pylon Energy based on gain and time.
+ * @param {*} delta Amount of time that's passed in seconds.
+ */
+function updateParadoxPylonEnergy(delta) {
+    player.in.pylonEnergy = player.in.pylonEnergy
+            .add(getParadoxPylonEnergyGain().times(delta))
+            .min(getParadoxPylonEnergyLimit());
+}
+
+/**
+ * Get the passive effect of the Paradox Pylon to Singularity Points.
+ * @returns 
+ */
+function getParadoxPylonPassiveEffect() {
+    if (!player.in.pylonBuilt) return new Decimal(1);
+
+    return player.in.infinityPoints.pow(0.002).add(1).pow(getParadoxPylonTierEffect());
+}
+
+/**
+ * Compute the various Paradox Pylon effects.
+ * @param {*} effectId 
+ *          0 = Tickspeed in Universe 2
+ *          1 = Infinity Gain multiplier
+ *          2 = Ancient Pylon Energy Gain Multiplier
+ * @returns 
+ */
+function getParadoxPylonEffect(effectId) {
+    const tierPower = getParadoxPylonTierEffect();
+    switch (effectId) {
+        case 0: 
+            // Tickspeed in U2
+            return player.in.pylonEnergy.pow(0.5).add(1).pow(tierPower);
+        case 1:
+            // Infinity gain
+            return player.in.pylonEnergy.pow(0.25).add(1).pow(tierPower);
+        case 2: 
+            // Ancient Pylon Energy gain
+            return player.in.pylonEnergy.pow(0.175).add(1).pow(tierPower);
+    }
+}
+
+/**
+ * Get the effect of the Paradox Pylon's tier -- a power to all other effects.
+ * @returns 
+ */
+function getParadoxPylonTierEffect() {
+    return player.in.pylonTier.sub(1).pow(0.4).div(10).add(1);
+}
+
+/**
+ * Get the maximum energy that can be put into the Paradox Pylon at this tier.
+ * @returns 
+ */
+function getParadoxPylonEnergyLimit() {
+    return player.in.pylonTier.pow_base(1e15);
+}
+
+/**
+ * Determine how much faster Universe 2 is running compared to real time.
+ * @returns 
+ */
+function getUniverse2Tickspeed() {
+    return getParadoxPylonEffect(0);
+}
+
+
+addLayer("in", {
     name: "Roots", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "RO", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
@@ -19,17 +347,11 @@
         delay: new Decimal(0),
 
         pylonBuilt: false,
-        pylonEnergyMax: new Decimal(1e308),
         pylonEnergy: new Decimal(0),
-        pylonEnergyEffect: new Decimal(1),
-        pylonEnergyEffect2: new Decimal(1),
-        pylonEnergyEffect3: new Decimal(1),
-        pylonEnergyPerSecond: new Decimal(0),
         
         pylonPassiveEffect: new Decimal(1),
 
         pylonTier: new Decimal(1),
-        pylonTierEffect: new Decimal(1),
     }},
     automate() {},
     nodeStyle() {
@@ -43,194 +365,27 @@
     color: "#1b4",
     branches: ["ad", "ip"],
     update(delta) {
-        let onepersec = new Decimal(1)
 
-        // USED FOR RESETTING OLD FILES
-        if (player.in.delay.gt(0)) {
-            player.in.delay = player.in.delay.sub(delta)
-            if (player.in.delay.gt(0) && player.in.delay.lte(1)) {
-                layers.in.bigCrunch()
-                layers.ta.negativeInfinityReset()
-                for (let i = 0; i < player.r.milestones.length; i++) {
-                    if (+player.r.milestones[i] > 20) {
-                        player.r.milestones.splice(i, 1);
-                        i--;
-                    }
-                }
-                player.in.delay = new Decimal(0)
-            }
-        }
+        handleLegacySaveReset(delta);
+        handleReachingInfinity();
 
-        // UNI 2 UNLOCK VARIABLE
+        // TODO: this should be triggered by a button press elsewhere,
+        //  not something we bother with every tick.
         if (player.in.infinityPoints.gt(0) && !player.in.unlockedInfinity) {
             player.in.unlockedInfinity = true
             player.universe == "U2"
         }
 
-        // REACH INFINITY CODE (1e308 POINTS ROUGHLY)
-        if (player.in.reachedInfinity) {
-            if (!player.in.breakInfinity) {
-                if (inChallenge("ip", 11) && !hasChallenge("ip", 11)) {
-                    if (!hasAchievement("achievements", 107)) completeAchievement("achievements", 107)
-                    player.ip.challenges[11] = 1
-                    completeChallenge("ip", 11)
-                }
-                if (inChallenge("ip", 12) && !hasChallenge("ip", 12)) {
-                    if (!hasAchievement("achievements", 109)) completeAchievement("achievements", 109)
-                    player.ip.challenges[12] = 1
-                    completeChallenge("ip", 12)
-                }
-                if (inChallenge("ip", 14)) {
-                    if (!hasAchievement("achievements", 112)) completeAchievement("achievements", 112)
-                }
-                if (inChallenge("ip", 15) && !hasChallenge("ip", 15)) {
-                    if (!hasAchievement("achievements", 116)) completeAchievement("achievements", 116)
-                    player.ip.challenges[15] = 1
-                    completeChallenge("ip", 15)
-                }
-                if (inChallenge("ip", 16) && !hasChallenge("ip", 16)) {
-                    if (!hasAchievement("achievements", 120)) completeAchievement("achievements", 120)
-                    player.ip.challenges[16] = 1
-                    completeChallenge("ip", 16)
-                }
-                if (!hasMilestone("ip", 21) && ((!player.s.highestSingularityPoints.gt(0)))) {
-                    player.tab = "bigc"
-                } else {
-                    layers.bigc.crunch()
-                }
-            }
-        }
+        player.in.infinityPointsToGet = getInfinityPointGain();
+        updateInfinityPointAmount(delta);
 
-        //----------------------------------------
+        player.in.infinitiesToGet = getInfinityGain();
+        updateInfinityAmount(delta);
 
-        // INFINITY POINT BASE
-        if (!player.in.breakInfinity) player.in.infinityPointsToGet = new Decimal(1)
-        if (player.in.breakInfinity && !hasUpgrade("bi", 111)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().div(10)
-        if (player.in.breakInfinity && hasUpgrade("bi", 111)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().div(2).pow(1.25)
-        if (player.in.breakInfinity && hasUpgrade("bi", 115)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().pow(1.5)
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(player.cs.scraps.infinity.effect)
-
-
-        // START OF INFINITY POINT MODIFIERS
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.hbl.boosters[2].effect)
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ip", 11))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.d.boosterEffects[11])
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.rf.abilityEffects[5])
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("cb", 12))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ta", 33))
-        if (hasUpgrade("ip", 42)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(upgradeEffect("ip", 42))
-        if (hasUpgrade("bi", 101)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(upgradeEffect("bi", 101))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.om.diceMasteryPointsEffect)
-        if (player.tad.altInfinities.disfigured.milestone.gte(2)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.tad.altInfinities.disfigured.effect2)
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("gh", 38))
-        if (hasUpgrade("bi", 23)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(upgradeEffect("bi", 23))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.ca.replicantiEffect)
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("id", 24))
-        if (hasUpgrade("hpw", 1063)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(upgradeEffect("hpw", 1063))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ca", 24))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(levelableEffect("pet", 403)[1])
-        if (hasMilestone("fa", 11)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.fa.milestoneEffect[0])
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.sd.singularityPowerEffect)
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("s", 12))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("fu", 17))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.fu.sadnessEffect2)
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.co.cores.infinity.effect[0])
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(levelableEffect("pu", 101)[2])
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ma", 21))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.ma.bestComboDepth1Effect)
-        if (hasMilestone("r", 21)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.r.pentMilestone11Effect)
-        if (player.pol.pollinatorEffects.water.enabled) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.pol.pollinatorEffects.water.effects[0])
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("st", 301))
-        if (player.ma.matosDefeated) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul("1e600")
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.i.pylonPassiveEffect)
-
-        // POWER MODIFIERS
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(player.co.cores.infinity.effect[1])
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(levelableEffect("pet", 404)[0])
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(buyableEffect("sb", 103))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(levelableEffect("ir", 4)[1]).floor()
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(player.cof.coreFragmentEffects[3])
-
-        // ABNORMAL MODIFIERS
-        if (player.po.halter.ip.enabled == 1) player.in.infinityPointsToGet = player.in.infinityPointsToGet.div(player.po.halter.ip.halt)
-        if (player.po.halter.ip.enabled == 2 && player.in.infinityPointsToGet.gt(player.po.halter.ip.halt)) player.in.infinityPointsToGet = player.po.halter.ip.halt
-
-        // AUTOMATION
-        if (hasUpgrade("s", 24)) player.in.infinityPoints = player.in.infinityPoints.add(player.in.infinityPointsToGet.mul(delta))
-
-        //----------------------------------------
-
-        // START OF INFINITIES MODIFIERS
-        player.in.infinitiesToGet = new Decimal(1)
-        // ADD A BUNCH OF INFINITY BUFF ACHIEVEMENTS (AT LEAST ENOUGH TO REACH x2 BEFORE ALT-INFINITIES)
-        if (hasAchievement("achievements", 107)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(1.1)
-        if (hasAchievement("achievements", 109)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(1.1)
-        if (hasAchievement("achievements", 111)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(1.1)
-        if (hasAchievement("achievements", 113)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(1.1)
-        if (hasAchievement("achievements", 116)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(1.1)
-        if (hasAchievement("achievements", 120)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(1.1)
-        if (hasAchievement("achievements", 122)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(1.1)
-        if (hasAchievement("achievements", 124)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(1.1)
-
-        if (player.tad.altInfinities.shattered.milestone.gte(2)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(player.tad.altInfinities.shattered.effect2)
-        player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("om", 11))
-        player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("p", 15))
-        player.in.infinitiesToGet = player.in.infinitiesToGet.mul(levelableEffect("pet", 1101)[0])
-        if (hasMilestone("ip", 28)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(player.points.add(1).log("1.79e308").pow(0.7).max(1))
-        if (hasUpgrade("ep2", 14)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(upgradeEffect("ep2", 14))
-        player.in.infinitiesToGet = player.in.infinitiesToGet.mul(player.co.cores.infinity.effect[2])
-        if (hasMilestone("fa", 13)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(player.fa.milestoneEffect[2])
-        if (hasUpgrade("tad", 152)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(player.tad.infinitumEffect2)
-        player.in.infinitiesToGet = player.in.infinitiesToGet.mul(levelableEffect("ir", 2)[1])
-        player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("cof", 23))
-        if (hasUpgrade("tad", 152)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(player.in.pylonEnergyEffect2)
-
-        // POWER MODIFIERS
-        if (player.tad.altInfinities.infected.milestone.gte(2)) player.in.infinitiesToGet = player.in.infinitiesToGet.pow(player.tad.altInfinities.infected.effect2)
-
-        // ABNORMAL MODIFIERS
-        if (player.po.halter.infinities.enabled == 1) player.in.infinitiesToGet = player.in.infinitiesToGet.div(player.po.halter.infinities.halt)
-        if (player.po.halter.infinities.enabled == 2 && player.in.infinitiesToGet.gt(player.po.halter.infinities.halt)) player.in.infinitiesToGet = player.po.halter.infinities.halt
-
-        // PASSIVE GAIN
-        if (player.tad.altInfinities.fragmented.milestone.gte(3)) player.in.infinities = player.in.infinities.add(player.in.infinitiesToGet.div(4).mul(delta))
-
-
-        player.in.pylonEnergyMax = Decimal.pow(1e15, player.in.pylonTier)
-
-        if (player.in.pylonBuilt)
-        {
-            player.in.pylonEnergyPerSecond = new Decimal(1.2)
-            player.in.pylonEnergyPerSecond = player.in.pylonEnergyPerSecond.pow(buyableEffect("in", 11))
-            player.in.pylonEnergyPerSecond = player.in.pylonEnergyPerSecond.pow(buyableEffect("in", 12))
-            player.in.pylonEnergyPerSecond = player.in.pylonEnergyPerSecond.pow(buyableEffect("in", 13))
-            player.in.pylonEnergyPerSecond = player.in.pylonEnergyPerSecond.pow(levelableEffect("ir", 9)[1])
-            player.in.pylonEnergyPerSecond = player.in.pylonEnergyPerSecond.pow(player.cbs.pylonEnergyEffect4)
-
-            player.in.pylonPassiveEffect = player.in.infinityPoints.pow(0.002).add(1).pow(player.in.pylonTierEffect)
-        } else
-        {
-            player.in.pylonEnergyPerSecond = new Decimal(0)
-
-            player.in.pylonPassiveEffect = new Decimal(1)
-        }
-
-        if (player.in.pylonEnergy.gte(player.in.pylonEnergyMax))
-        {
-            player.in.pylonEnergy = player.in.pylonEnergyMax
-            player.in.pylonEnergyPerSecond = new Decimal(0)
-        }
-        player.in.pylonEnergy = player.in.pylonEnergy.add(player.in.pylonEnergyPerSecond.mul(delta))
-
-        player.in.pylonEnergyEffect = player.in.pylonEnergy.pow(0.5).add(1).pow(player.in.pylonTierEffect)
-        player.in.pylonEnergyEffect2 = player.in.pylonEnergy.pow(0.25).add(1).pow(player.in.pylonTierEffect)
-        player.in.pylonEnergyEffect3 = player.in.pylonEnergy.pow(0.175).add(1).pow(player.in.pylonTierEffect)
-
-        player.in.pylonTierEffect = player.in.pylonTier.sub(1).pow(0.4).div(10).add(1)
+        updateParadoxPylonEnergy();
 
         //tickspeed
-        player.uni["U2"].tickspeed = new Decimal(1)
-        player.uni["U2"].tickspeed = player.uni["U2"].tickspeed.mul(player.in.pylonEnergyEffect)
+        player.uni["U2"].tickspeed = getUniverse2Tickspeed();
     },
     bigCrunch() {
         if (hasUpgrade("ta", 17)) {
@@ -339,7 +494,6 @@
         player.gh.grasshoppers = new Decimal(0)
         player.gh.grasshoppersToGet = new Decimal(0)
         player.gh.fertilizer = new Decimal(0)
-        player.gh.fertilizerPerSecond = new Decimal(0)
 
         if (!hasMilestone("ip", 26)) {
             for (let i = 1; i < 20; i++) {
@@ -436,12 +590,7 @@
             player.po.featureSlots = player.po.featureSlotsMax
         }
 
-        //     <----     MASTERY POINT STUFF     ---->
-        if (hasUpgrade("bi", 14)) {
-            if (player.po.dice) player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(player.om.diceMasteryPointsToGet)
-            if (player.po.rocketFuel) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
-            if (player.po.hex || hasUpgrade("s", 18)) player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
-        }
+        awardOTFMasteryPoints();
     },
     clickables: {
         11: {
@@ -457,8 +606,8 @@
         },
         12: {
             title() { return "<h2>Tier up the Paradox Pylon" },
-            canClick() { return player.in.pylonEnergy.gte(player.in.pylonEnergyMax) },
-            unlocked() { return player.in.pylonEnergy.gte(player.in.pylonEnergyMax) },
+            canClick() { return player.in.pylonEnergy.gte(getParadoxPylonEnergyLimit()) },
+            unlocked() { return player.in.pylonEnergy.gte(getParadoxPylonEnergyLimit()) },
             onClick() {
                 player.in.pylonEnergy = new Decimal(0)
 
@@ -618,15 +767,15 @@
         ], {width: "148px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
                     ["blank", "25px"],
                     ["clickable", 11],
-                    ["raw-html", () => { return player.in.pylonBuilt ? "You have <h3>" + format(player.in.pylonEnergy) + "/" + format(player.in.pylonEnergyMax) +  "</h3> paradox pylon energy (" + format(player.in.pylonEnergyPerSecond) + "/s)." : "" }, {color: "#000000ff", fontSize: "24px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.in.pylonBuilt ? "Boosts U2 tickspeed by x" + format(player.in.pylonEnergyEffect) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.in.pylonBuilt ? "Boosts infinities by x" + format(player.in.pylonEnergyEffect2) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.in.pylonBuilt ? "Boosts ancient pylon energy by x" + format(player.in.pylonEnergyEffect3) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.in.pylonBuilt ? "Passive effect: Boosts SP gain by x" + format(player.in.pylonPassiveEffect) + " (Based on infinity points)" : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return player.in.pylonBuilt ? "You have <h3>" + format(player.in.pylonEnergy) + "/" + format(getParadoxPylonEnergyLimit()) +  "</h3> paradox pylon energy (" + format(getParadoxPylonEnergyGain()) + "/s)." : "" }, {color: "#000000ff", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.in.pylonBuilt ? "Boosts U2 tickspeed by x" + format(getParadoxPylonEffect(0)) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.in.pylonBuilt ? "Boosts infinities by x" + format(getParadoxPylonEffect(1)) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.in.pylonBuilt ? "Boosts ancient pylon energy by x" + format(getParadoxPylonEffect(2)) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.in.pylonBuilt ? "Passive effect: Boosts SP gain by x" + format(getParadoxPylonPassiveEffect()) + " (Based on infinity points)" : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13],]], 
                     ["blank", "25px"],
-                    ["raw-html", () => {return player.in.pylonBuilt ? "Your ancient pylon is tier " + formatWhole(player.in.pylonTier) + ", which boosts all pylon effects by ^" + format(player.in.pylonTierEffect) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.in.pylonBuilt ? "Your ancient pylon is tier " + formatWhole(player.in.pylonTier) + ", which boosts all pylon effects by ^" + format(getParadoxPylonTierEffect()) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["clickable", 12],
                 ]
@@ -647,7 +796,9 @@
         ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && player.in.unlockedInfinity && !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge}
-})
+});
+
+
 addLayer("bigc", {
     name: "Big Crunch", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "BC", // This appears on the layer's node. Default is the id with the first letter capitalized

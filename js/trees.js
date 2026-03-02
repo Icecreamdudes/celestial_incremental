@@ -53,7 +53,7 @@
         player.t.treesToGet = player.t.treesToGet.mul(levelableEffect("pet", 102)[1])
         player.t.treesToGet = player.t.treesToGet.mul(player.d.boosterEffects[3])
         player.t.treesToGet = player.t.treesToGet.mul(player.rf.abilityEffects[1])
-        if (hasUpgrade("g", 12)) player.t.treesToGet = player.t.treesToGet.mul(player.g.grassEffect2)
+        if (hasUpgrade("g", 12)) player.t.treesToGet = player.t.treesToGet.mul(getGrassEffectOnTrees())
         if (hasMilestone("r", 19)) player.t.treesToGet = player.t.treesToGet.mul(player.r.pentMilestone9Effect[0])
         if (hasUpgrade("ip", 22) && !inChallenge("ip", 14)) player.t.treesToGet = player.t.treesToGet.mul(upgradeEffect("ip", 22))
         if (hasUpgrade("ad", 15) && !inChallenge("ip", 14)) player.t.treesToGet = player.t.treesToGet.mul(upgradeEffect("ad", 15))
@@ -87,8 +87,8 @@
         // START OF LEAVES MODIFIERS
         player.t.leavesPerSecond = buyableEffect("t", 11)
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(buyableEffect("t", 12))
-        player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.g.grassEffect)
-        player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.gh.grasshopperEffects[3])
+        player.t.leavesPerSecond = player.t.leavesPerSecond.mul(getGrassEffectOnLeaves());
+        player.t.leavesPerSecond = player.t.leavesPerSecond.mul(getGrasshopperEffect(3))
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(buyableEffect("gh", 17))
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(levelableEffect("pet", 202)[1])
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.d.boosterEffects[4])

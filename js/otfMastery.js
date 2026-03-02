@@ -1,19 +1,4 @@
-﻿
-function awardOTFMasteryPoints() {
-    if (!hasUpgrade("bi", 14)) return;
-    
-    if (player.po.dice) {
-        player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(player.om.diceMasteryPointsToGet);
-    }
-    if (player.po.rocketFuel) {
-        player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet);
-    }
-    if (player.po.hex || hasUpgrade("s", 18)) {
-        player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet);
-    }
-}
-
-addLayer("om", {
+﻿addLayer("om", {
     name: "Otherworldy Feature Mastery", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "OM", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "U2",

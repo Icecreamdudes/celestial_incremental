@@ -1,242 +1,9 @@
-﻿
-/**
- * Determine how much replicanti will increase by, if successful at replicating. 
- * @returns 
- */
-function getReplicantiMultiplierBeforeSoftcap() {
-    const factors = [
-        1.05, // Base replicanti multiplier
-        buyableEffect("ca", 12),
-        buyableEffect("ca", 15),
-        buyableEffect("ca", 18),
-        buyableEffect("g", 26),
-        levelableEffect("pet", 108)[0], // Replicator
-        optionalUpgradeEffect("ep0", 11).orElse(1),
-
-        hasUpgrade("bi", 117) ? 3 : 1,
-        hasUpgrade("hpw", 1062) ? 3 : 1,
-
-        player.cof.coreFragmentEffects[5],
-    ];
-
-    return factors.reduce(Decimal.multiply, new Decimal(1));
-}
-
-/**
- * Determine how many times per second replicanti will try to divide.
- * @returns 
- */
-function getReplicantiSpeed() {
-    const factors = [
-        buyableEffect("ca", 13),
-        buyableEffect("ca", 16),
-        buyableEffect("ca", 19),
-    ];
-    return factors.reduce((factor1, factor2) => factor1.mul(factor2), new Decimal(1));
-}
-
-/**
- * Determine the odds of replicanti replicating per each attempt. 
- * This is a decimal, where 1.0 means a 100% chance. 
- * @returns 
- */
-function getReplicantiReplicationChance() {
-    const terms = [
-        0.02, // Base replication chance
-        buyableEffect("ca", 11),
-        buyableEffect("ca", 14),
-        buyableEffect("ca", 17),
-    ];
-
-    return terms.reduce(Decimal.add, new Decimal(0))
-}
-/**
- * Perform updates to the current replicanti amount, 
- * based on Replicanti's various factors.
- * @param {*} delta The time since the last tick, in seconds. 
- */
-function updateReplicanti(delta) {
-    if (!player.ca.unlockedCante) return;
-    if (!hasUpgrade("bi", 24)) return;
-
-    const multiplierBeforeSoftcap = getReplicantiMultiplierBeforeSoftcap();
-
-    player.ca.replicantiSoftcap = getReplicantiSoftcap();
-    player.ca.replicantiMult = multiplierBeforeSoftcap.dividedBy(player.ca.replicantiSoftcap);
-    player.ca.replicantiTimerReq = new Decimal(1).dividedBy(getReplicantiSpeed());
-    player.ca.replicateChance = getReplicantiReplicationChance();
-
-    player.ca.replicantiTimer = player.ca.replicantiTimer.plus(delta);
-
-    // TODO: a really small timer requirement could make this take a while.
-    // if necessary, use a binomial dist to raise Replicanti mult to a power.
-    while (player.ca.replicantiTimer.gte(player.ca.replicantiTimerReq)) {
-        player.ca.replicantiTimer = player.ca.replicantiTimer.minus(player.ca.replicantiTimerReq);
-
-        const random = Math.random();
-        if (player.ca.replicateChance.lt(random)) continue; // Failed to replicate
-
-        player.ca.replicanti = player.ca.replicanti.mul(player.ca.replicantiMult);
-        if (player.ca.replicanti.lt(Number.MAX_VALUE)) continue;
-        if (hasUpgrade("ma", 21)) {
-            // Softcap is relevant now; recompute the multiplier.
-            player.ca.replicantiSoftcap = getReplicantiSoftcap();
-            player.ca.replicantiMult = multiplierBeforeSoftcap.dividedBy(player.ca.replicantiSoftcap);
-        } else {
-            player.ca.replicanti = new Decimal(Number.MAX_VALUE);
-        }
-    }
-}
-
-/**
- * Set the three effects of Replicanti. Assumes Replicanti is always at least 1 
- */
-function updateReplicantiEffects() {
-    if (player.ca.replicanti.lt(1)) {
-        // TODO: This is impossible, but probably should be logged or reported
-        //  if it ever does happen. 
-        return;
-    }
-    const logReplicanti = player.ca.replicanti.plus(1).log10();
-
-    player.ca.replicantiEffect  = logReplicanti.pow(1.05).times(10).plus(1);
-    player.ca.replicantiEffect2 = logReplicanti.pow(1.17).times(10).plus(1);
-    player.ca.replicantiEffect3 = player.ca.replicanti.sqrt();
-
-    if (!hasUpgrade("bi", 117)) return;
-
-    player.ca.replicantiEffect  = player.ca.replicantiEffect .pow(logReplicanti.pow(0.40));
-    player.ca.replicantiEffect2 = player.ca.replicantiEffect2.pow(logReplicanti.pow(0.45));
-    player.ca.replicantiEffect3 = player.ca.replicantiEffect3.pow(logReplicanti.pow(0.40));
-}
-
-/**
- * Determine the multiplier to base Cante Energy gain.
- * @returns 
- */
-function getCanteEnergyMultiplier() {
-    const factors = [
-        player.ca.rememberanceCoresEffect,
-        levelableEffect("pet", 403)[0], // Cookie
-    ];
-    return factors.reduce(Decimal.times, new Decimal(1));
-}
-
-/**
- * Update the amount of Cante Cores owned by the player. 
- */
-function updateCanteCoreAmount() {
-    player.ca.canteEnergyReq = player.ca.canteCores.times(10).plus(100);
-    
-    // TODO: Cante Energy appears to only be influenced by Check Back. 
-    //  Determine if this should only trigger in response to CB interactions.
-    while (player.ca.canteEnergy.gte(player.ca.canteEnergyReq)) {
-        player.ca.canteEnergy = player.ca.canteEnergy.minus(player.ca.canteEnergyReq);
-        player.ca.canteCores = player.ca.canteCores.plus(1);
-        player.ca.canteEnergyReq = player.ca.canteCores.times(10).plus(100);
-    }
-}
-
-/**
- * Determine how much Galaxy Dust the player would get if they reset now. 
- * @returns 
- */
-function getGalaxyDustGain() {
-    const baseGain = player.ca.replicanti.plus(1).log10().pow(0.8);
-    const factors = [
-        baseGain,
-        buyableEffect("cof", 28),
-        buyableEffect("fu", 44),
-
-        levelableEffect("pet", 108)[1], // Replicator
-        hasMilestone("fa", 19) ? player.fa.milestoneEffect[8] : 1,
-    ];
-    return factors.reduce(Decimal.multiply, new Decimal(1));
-}
-
-/**
- * Perform updates related to Galaxy Dust. 
- * @param {*} delta The amount of time since the last update in seconds. 
- */
-function updateGalaxyDust(delta) {
-    player.ca.galaxyDustToGet = getGalaxyDustGain();
-
-    if (hasMilestone("s", 13)) {
-        // Automation of Galaxy Dust gain.
-        player.ca.galaxyDust = player.ca.galaxyDust
-            .plus(player.ca.galaxyDustToGet.times(0.01 * delta));
-    }
-
-    player.ca.galaxyDustEffect = getGalaxyDustEffect();
-}
-
-/**
- * Determine the current effect of Galaxy Dust. 
- * @returns 
- */
-function getGalaxyDustEffect() {
-    const baseEffect = player.ca.galaxyDust.plus(1).log10().mul(0.1).add(1);
-    const power = buyableEffect("cof", 27);
-
-    return baseEffect.pow(power);
-}
-
-/**
- * Update the maximum number of Replicanti Galaxies the player can have. 
- */
-function updateReplicantiGalaxyLimit() {
-    player.ca.replicantiGalaxiesCap = buyableEffect("ca", 23)
-    if (hasUpgrade("cs", 1003)) {
-        player.ca.replicantiGalaxies = player.ca.replicantiGalaxiesCap
-    }
-}
-
-/**
- * Determine how much the Replicanti multiplier should be reduced (softcapped)
- * by.
- * @returns 
- */
-function getReplicantiSoftcap() {
-    return player.ca.replicanti
-            .dividedBy(Number.MAX_VALUE)
-            .max(1)
-            .pow(0.01);
-}
-
-/**
- * Update the quantity and cost of Rememberance cores. 
- */
-function updateRememberanceCores() {
-    // TODO: this should only ever update if the number of rememberance cores changes.
-    // Can that actually happen automatically?
-
-    player.ca.rememberanceCoreCost = player.ca.rememberanceCores.plus(1).pow(1.5).times(1000)
-    player.ca.rememberanceCoresEffect = player.ca.rememberanceCores.times(0.05).plus(1)
-}
-
-/**
- * Perform preparations for the player to first enter
- * Universe A1 (Cantepocalypse).
- * @returns 
- */
-function prepareForCantepocalypse() {
-    if (player.ca.canteTrialCount < 4) return;
-
-    player.ca.cantepocalypseUnlock = true;
-
-    if (hasUpgrade("cp", 18) || player.s.highestSingularityPoints.gt(0)) return;
-
-    if (player.tab !== "ca" || player.subtabs["ca"]['stuff'] !== 'Trials') return;
-
-    player.ca.cantepocalypsePrep = true;
-}
-
-addLayer("ca", {
-    name: "Cante, Celestial of Replicanti",
-    symbol() { return "Ξ"} , 
+﻿addLayer("ca", {
+    name: "Cante, Celestial of Replicanti", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol() { return "Ξ"} , // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "U2",
     row: 1,
-    position: 0,
+    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
         unlockedCante: false,
@@ -282,9 +49,20 @@ addLayer("ca", {
         defeatedCante: false,
     }},
     automate() {
-        if (!hasMilestone("s", 16)) return;
-        for (let canteBuyableId = 11; canteBuyableId <= 24; canteBuyableId++) {
-            buyBuyable("ca", canteBuyableId);
+        if (hasMilestone("s", 16)) {
+            buyBuyable("ca", 11)
+            buyBuyable("ca", 12)
+            buyBuyable("ca", 13)
+            buyBuyable("ca", 14)
+            buyBuyable("ca", 15)
+            buyBuyable("ca", 16)
+            buyBuyable("ca", 17)
+            buyBuyable("ca", 18)
+            buyBuyable("ca", 19)
+            buyBuyable("ca", 21)
+            buyBuyable("ca", 22)
+            buyBuyable("ca", 23)
+            buyBuyable("ca", 24)
         }
     },
     nodeStyle() {
@@ -298,22 +76,91 @@ addLayer("ca", {
     color: "white",
     branches: ["bi"],
     update(delta) {
-        updateReplicanti(delta);
+        let onepersec = new Decimal(1)
 
-        updateReplicantiEffects();
-
-        player.ca.canteEnergyMult = getCanteEnergyMultiplier();
-
-        updateCanteCoreAmount();
-
-        updateGalaxyDust(delta);
-
-        updateReplicantiGalaxyLimit();
-
-        updateRememberanceCores();
-
-        prepareForCantepocalypse();
+        player.ca.replicantiMult = new Decimal(1.05)
+        player.ca.replicantiMult = player.ca.replicantiMult.add(buyableEffect("ca", 12))
+        player.ca.replicantiMult = player.ca.replicantiMult.add(buyableEffect("ca", 15))
+        player.ca.replicantiMult = player.ca.replicantiMult.add(buyableEffect("ca", 18))
+        player.ca.replicantiMult = player.ca.replicantiMult.mul(buyableEffect("g", 26))
+        player.ca.replicantiMult = player.ca.replicantiMult.mul(levelableEffect("pet", 108)[0])
+        if (hasUpgrade("ep0", 11)) player.ca.replicantiMult = player.ca.replicantiMult.mul(upgradeEffect("ep0", 11))
+        if (hasUpgrade("bi", 117)) player.ca.replicantiMult = player.ca.replicantiMult.mul(3)
+        if (hasUpgrade("hpw", 1062)) player.ca.replicantiMult = player.ca.replicantiMult.mul(3)
+        player.ca.replicantiMult = player.ca.replicantiMult.mul(player.cof.coreFragmentEffects[5])
         
+        player.ca.replicantiMult = player.ca.replicantiMult.div(player.ca.replicantiSoftcap)
+
+        player.ca.replicantiTimerReq = new Decimal(1)
+        player.ca.replicantiTimerReq = player.ca.replicantiTimerReq.div(buyableEffect("ca", 13))
+        player.ca.replicantiTimerReq = player.ca.replicantiTimerReq.div(buyableEffect("ca", 16))
+        player.ca.replicantiTimerReq = player.ca.replicantiTimerReq.div(buyableEffect("ca", 19))
+
+        player.ca.replicateChance = new Decimal(0.02)
+        player.ca.replicateChance = player.ca.replicateChance.add(buyableEffect("ca", 11))
+        player.ca.replicateChance = player.ca.replicateChance.add(buyableEffect("ca", 14))
+        player.ca.replicateChance = player.ca.replicateChance.add(buyableEffect("ca", 17))
+
+        if (player.ca.unlockedCante && hasUpgrade("bi", 24)) player.ca.replicantiTimer = player.ca.replicantiTimer.add(onepersec.mul(delta))
+
+        if (player.ca.replicantiTimer.gte(player.ca.replicantiTimerReq)) {
+            layers.ca.replicantiMultiply();
+        }
+
+        if (player.ca.replicanti.gt(1)) { player.ca.replicantiEffect = player.ca.replicanti.add(1).log(10).pow(1.05).mul(10).add(1) } else { player.ca.replicantiEffect = new Decimal(1) }
+        if (player.ca.replicanti.gt(1)) { player.ca.replicantiEffect2 = player.ca.replicanti.add(1).log(10).pow(1.17).mul(10).add(1) } else { player.ca.replicantiEffect2 = new Decimal(1) }
+        player.ca.replicantiEffect3 = player.ca.replicanti.pow(0.5)
+        
+        if (hasUpgrade("bi", 117)) {
+            player.ca.replicantiEffect = player.ca.replicantiEffect.pow(player.ca.replicanti.plus(1).log(10).pow(0.4))
+            player.ca.replicantiEffect2 = player.ca.replicantiEffect2.pow(player.ca.replicanti.plus(1).log(10).pow(0.45))
+            player.ca.replicantiEffect3 = player.ca.replicantiEffect3.pow(player.ca.replicanti.plus(1).log(10).pow(0.4))
+        }
+
+        //CANTE
+        player.ca.canteEnergyMult = new Decimal(1)
+        player.ca.canteEnergyMult = player.ca.canteEnergyMult.mul(player.ca.rememberanceCoresEffect)
+        player.ca.canteEnergyMult = player.ca.canteEnergyMult.mul(levelableEffect("pet", 403)[0])
+
+        if (player.ca.canteEnergy.gte(player.ca.canteEnergyReq))
+        {
+            layers.ca.gainCanteCore()
+        }
+
+        player.ca.canteEnergyReq = player.ca.canteCores.mul(10).add(100)
+
+        player.ca.galaxyDustToGet = player.ca.replicanti.plus(1).log10().pow(0.8)
+        player.ca.galaxyDustToGet = player.ca.galaxyDustToGet.mul(levelableEffect("pet", 108)[1])
+        if (hasMilestone("fa", 19)) player.ca.galaxyDustToGet = player.ca.galaxyDustToGet.mul(player.fa.milestoneEffect[8])
+        player.ca.galaxyDustToGet = player.ca.galaxyDustToGet.mul(buyableEffect("fu", 44))
+        player.ca.galaxyDustToGet = player.ca.galaxyDustToGet.mul(buyableEffect("cof", 28))
+
+        if (hasMilestone("s", 13)) player.ca.galaxyDust = player.ca.galaxyDust.add(Decimal.mul(player.ca.galaxyDustToGet.mul(0.01), delta))
+
+        player.ca.galaxyDustEffect = player.ca.galaxyDust.plus(1).log10().mul(0.1).add(1)
+        player.ca.galaxyDustEffect = player.ca.galaxyDustEffect.pow(buyableEffect("cof", 27))
+
+        //rep galax
+        player.ca.replicantiGalaxiesCap = buyableEffect("ca", 23)
+        if (hasUpgrade("cs", 1003)) player.ca.replicantiGalaxies = player.ca.replicantiGalaxiesCap
+
+        //rememberance
+        player.ca.rememberanceCoreCost = player.ca.rememberanceCores.add(1).pow(1.5).mul(1000)
+        player.ca.rememberanceCoresEffect = player.ca.rememberanceCores.mul(0.05).add(1)
+
+        if (player.ca.replicanti.gte("1.8e308")) {
+            player.ca.replicantiSoftcap = Decimal.pow(10, player.ca.replicanti.div(1.79e308).add(1).log(1e100))
+        } else {
+            player.ca.replicantiSoftcap = new Decimal(1)
+        }
+
+        // Cantepocalypse Stuff
+        if (player.ca.canteTrialCount >= 4) {
+            player.ca.cantepocalypseUnlock = true
+            if (player.tab == "ca" && player.subtabs["ca"]['stuff'] == 'Trials' && !hasUpgrade("cp", 18) && player.s.highestSingularityPoints.eq(0)) {
+                player.ca.cantepocalypsePrep = true
+            }
+        }
     },
     gainCanteCore() {
         let leftover = new Decimal(0)
@@ -328,6 +175,16 @@ addLayer("ca", {
         player.ca.rememberanceCores = player.ca.rememberanceCores.add(1)
     },
     replicantiMultiply() {
+        let random = new Decimal(0)
+        random = Math.random()
+        if (random < player.ca.replicateChance) {
+            if (player.ca.replicanti.lt(1.79e308) || hasUpgrade("ma", 21)) {
+                player.ca.replicanti = player.ca.replicanti.mul(player.ca.replicantiMult)
+            } else {
+                player.ca.replicanti = new Decimal(1.79e308)
+            }
+        }
+        player.ca.replicantiTimer = new Decimal(0)
     },
     clickables: {
         2: {

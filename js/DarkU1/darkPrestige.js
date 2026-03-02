@@ -18,6 +18,7 @@
             buyBuyable("dp", 13)
             buyBuyable("dp", 14)
             buyBuyable("dp", 15)
+            buyBuyable("dp", 16)
         }
     },
     nodeStyle() {

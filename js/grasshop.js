@@ -50,6 +50,7 @@ function getGrasshopperGainPower() {
     const powers = [
         buyableEffect("fu", 34),
         buyableEffect("cof", 15),
+        buyableEffect("cof", 17),
         player.se.starsExploreEffect[0][4],
 
         hasUpgrade("hpw", 1041) ? 1.1 : 1,

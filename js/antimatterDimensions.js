@@ -1,357 +1,9 @@
-﻿/**
- * Compute antimatter gain per second, based on multipliers, powers,
- * and softcaps.
- * @returns How much Antimatter the player gains each second, assuming nothing
- *          changes. 
- */
-function getAntimatterPerSecond() {
-    let antimatterGain = player.ad.dimensionAmounts[0];
-    antimatterGain = antimatterGain.times(getAntimatterMultipliersBeforeSoftcap());
-
-    if (antimatterGain.gte(1e300)) {
-        // The "softcap" asymptotically becomes a hardcap at 10^(300 + base). 
-        const hardcapBase = getAntimatterHardcap();
-        let asymptoteExponent = antimatterGain.plus(1).log10().div(hardcapBase).recip().min(0.95);
-
-        antimatterGain = antimatterGain.div(1e300).pow(asymptoteExponent).times(1e300);
-    }
-
-    antimatterGain = antimatterGain.times(getAntimatterMultipliersAfterSoftcap());
-
-    antimatterGain = antimatterGain.pow(getAntimatterPowers());
-
-    // The second softcap halts most meaningful progress past 1e100000. 
-    // Nothing changes/affects it, but that may change. 
-    if (antimatterGain.gt(player.ad.secondSoftcap)) {
-        antimatterGain = antimatterGain.div(player.ad.secondSoftcap).pow(0.1).times(player.ad.secondSoftcap);
-    }
-
-    if (player.po.halter.antimatter.enabled == 1) {
-        antimatterGain = antimatterGain.div(player.po.halter.antimatter.halt);
-    } else if (player.po.halter.antimatter.enabled == 2) {
-        antimatterGain = antimatterGain.min(player.po.halter.antimatter.halt);
-    }
-    
-    return antimatterGain;
-}
-
-/**
- * Compute Antimatter multipliers that apply before any softcaps.
- * @returns 
- */
-function getAntimatterMultipliersBeforeSoftcap() {
-    const factors = [
-        buyableEffect("ad", 1),
-        buyableEffect("ad", 2),
-        buyableEffect("ad", 11),
-        optionalUpgradeEffect("ad", 12).orElse(1),
-        optionalUpgradeEffect("ad", 17).orElse(1),
-
-        buyableEffect("ip", 14),
-        optionalUpgradeEffect("ip", 12).orElse(1),
-
-        buyableEffect("ta", 36),
-
-        levelableEffect("pet", 106)[0], // Spider 
-        levelableEffect("pet", 305)[0], // Antimatter Pet
-
-        
-        buyableEffect("gh", 23),
-        buyableEffect("gh", 24),
-        buyableEffect("gh", 35),
-        buyableEffect("gh", 37),
-        
-        buyableEffect("m", 17),
-        
-        buyableEffect("om", 15),
-        
-        hasAchievement("achievements", 123) ? 2 : 1,
-        
-        player.id.infinityPowerEffect,
-        player.om.hexMasteryPointsEffect,
-        player.ta.dimensionPowerEffects[0],
-    ];
-
-    return factors.reduce((factor1, factor2) => factor1.mul(factor2), new Decimal(1));
-}
-
-/**
- * Compute the Antimatter softcap base. This determines when and how harshly
- * softcapping of Antimatter gain begins. 
- * @returns 
- */
-function getAntimatterHardcap() {
-    const factors = [
-        1000, // Base
-        hasUpgrade("bi", 21) ? 1.1 : 1,
-        player.cs.scraps.antimatter.effect,
-        player.ir.iriditeDefeated ? 2 : 1,
-    ]
-
-    return factors.reduce((factor1, factor2) => factor1.mul(factor2), new Decimal(1));
-}
-
-/**
- * Compute Antimatter multipliers that apply after the first softcap.
- * @returns 
- */
-function getAntimatterMultipliersAfterSoftcap() {
-    const factors = [
-        buyableEffect("ta", 37),
-        optionalUpgradeEffect("ip", 43).orElse(1),
-        hasMilestone("fa", 12) ? player.fa.milestoneEffect[1] : 1,
-        player.co.cores.antimatter.effect[0],
-    ]
-
-    return factors.reduce((factor1, factor2) => factor1.mul(factor2), new Decimal(1));
-}
-
-/**
- * Compute what power Antimatter gain is raised to. 
- * @returns
- */
-function getAntimatterPowers() {
-    const powers = [
-        levelableEffect("ir", 3)[0],
-        buyableEffect("sb", 105),
-        buyableEffect("cof", 21),
-        optionalUpgradeEffect("bi", 118).orElse(1),
-        hasUpgrade("hpw", 1051) ? 1.05 : 1
-    ];
-    return powers.reduce((power1, power2) => power1.mul(power2), new Decimal(1));
-}
-
-
-/**
- * Update Antimatter and Antimatter Per Second. 
- * @param {number} delta The amount of time since the last tick, in seconds.
- */
-function updateAntimatterAmount(delta) {
-
-    // Prevent anything before unlocking ADs. 
-    if (!hasUpgrade("ad", 11)) {
-        player.ad.antimatter = new Decimal(0);
-        player.ad.antimatterPerSecond = new Decimal(0);
-        return;
-    }
-
-    player.ad.antimatterPerSecond = getAntimatterPerSecond();
-    player.ad.antimatter = player.ad.antimatter
-            .plus(player.ad.antimatterPerSecond.times(delta))
-            .max(0);
-    
-    // Hardcap before Infinity Challenge 8
-    if (player.ad.antimatter.gt(1e300) && !hasChallenge("ip", 18)) {
-        player.ad.antimatter = new Decimal(1e300);
-        player.ad.antimatterPerSecond = new Decimal(0);
-    }
-}
-
-
-/**
- * Update the effect of Antimatter to points. 
- * @returns 
- */
-function updateAntimatterEffect() {
-    if (player.ad.antimatter.lte(0)) {
-        player.ad.antimatterEffect = new Decimal(1);
-        return;
-    }
-
-    const antimatterExponent = player.ad.antimatter.add(1).log10().pow(0.3);
-
-    let effect = player.points.log10().times(3).add(1).pow(antimatterExponent);
-    effect = effect.pow(getAntimatterEffectPowers());
-
-    player.ad.antimatterEffect = effect;
-}
-
-/**
- * Determine what power the Antimatter Effect should be raised to.
- * @returns 
- */
-function getAntimatterEffectPowers() {
-    const powers = [
-        hasUpgrade("bi", 22) ?   3.0 : 1, // The old formula changes are equivalent to this.
-        hasUpgrade("bi", 108) ?  1.6 : 1,
-        hasUpgrade("bi", 114) ?  3.0 : 1,
-        hasUpgrade("ma", 19) ?  20.0 : 1
-    ];
-    return powers.reduce((power1, power2) => power1.mul(power2), new Decimal(1));
-}
-
-
-/**
- * Update the amount of each Antimatter Dimension. 
- * @param {number} delta The time since the last tick in seconds.
- */
-function updateAntimatterDimensionAmounts(delta) {
-    const globalMultiplier = getAntimatterDimensionGeneralMultiplier();
-    const softcapExponent = getAntimatterDimensionSoftcapExponent();
-    for (let dimensionId = 0; dimensionId < player.ad.dimensionAmounts.length - 1; dimensionId++) {
-        const baseProduction = player.ad.dimensionAmounts[dimensionId+1];
-        let production = baseProduction
-                .times(globalMultiplier)
-                .times(getAntimatterDimensionSpecificMultiplier(dimensionId));
-
-        if (production.gte(1e300)) {
-            production = production.div(1e300).pow(softcapExponent).times(1e300);
-        }
-
-        player.ad.dimensionsPerSecond[dimensionId] = production;
-    }
-
-    for (let i = player.ad.dimensionAmounts.length-1; i >= 0; i--) {
-        player.ad.dimensionAmounts[i] = player.ad.dimensionAmounts[i].add(player.ad.dimensionsPerSecond[i].mul(delta))
-    }
-}
-
-/**
- * Get the total multiplier that applies to ALL antimatter dimensions. 
- */
-function getAntimatterDimensionGeneralMultiplier() {
-    const factors = [
-        buyableEffect("ad", 1),
-        buyableEffect("ad", 2),
-        buyableEffect("gh", 23),
-        levelableEffect("pet", 305)[0], // Antimatter Pet
-        // player.ta.dimensionPowerEffects[i+1],
-        buyableEffect("ip", 14),
-        buyableEffect("ta", 36),
-        player.om.hexMasteryPointsEffect,
-        buyableEffect("gh", 37),
-        player.id.infinityPowerEffect,
-        buyableEffect("m", 17),
-
-        optionalUpgradeEffect("ad", 17).orElse(1),
-        hasAchievement("achievements", 123) ? 2 : 1,
-    ];
-
-    return factors.reduce((factor1, factor2) => factor1.mul(factor2), new Decimal(1));
-}
-
-function getAntimatterDimensionSpecificMultiplier(dimensionId) {
-    switch (dimensionId) {
-        case 0:
-            return levelableEffect("pet", 206)[0]; // Clock
-        case 1:
-            return levelableEffect("pet", 207)[0]; // Troll
-        case 2:
-            return levelableEffect("pet", 206)[1]; // Clock
-        case 3:
-            return levelableEffect("pet", 207)[1]; // Troll
-        case 4:
-            return levelableEffect("pet", 206)[2]; // Clock
-        case 5:
-            return levelableEffect("pet", 207)[2]; // Troll
-        case 6: 
-            return levelableEffect("pet", 106)[1]
-                .times(optionalUpgradeEffect("ip", 13).orElse(1));
-        default:
-            return new Decimal(1);
-    }
-}
-
-function getAntimatterDimensionSoftcapExponent() {
-    if (!hasChallenge("ip", 18)) return 0;
-    if (!hasUpgrade("bi", 21)) return 0.96;
-    if (!player.ir.defeatedIridite) return 0.975;
-    return 1;
-}
-
-
-function setAntimatterDimensionCostScaling() {
-    player.ad.dimensionBase = [
-        new Decimal(10), 
-        new Decimal(100), 
-        new Decimal(1e4), 
-        new Decimal(1e6), 
-        new Decimal(1e9), 
-        new Decimal(1e13), 
-        new Decimal(1e18), 
-        new Decimal(1e24)
-    ];
-    player.ad.dimensionGrowths = [
-        new Decimal(1e3),
-        new Decimal(1e4),
-        new Decimal(1e5),
-        new Decimal(1e6),
-        new Decimal(1e8),
-        new Decimal(1e10),
-        new Decimal(1e12),
-        new Decimal(1e15),
-    ];
-    if (player.ad.antimatter.lte(1e300)) return;
-
-    // Post-1e300 scaling doesn't retroactively account for the number of 
-    // purchases already made.
-    // So, that's done with this terrible yet literal retcon. 
-    if (hasUpgrade("bi", 21)) {
-        player.ad.dimensionBase = [
-            new Decimal("1e-1200"), 
-            new Decimal("1e-1575"), 
-            new Decimal("1e-1765"), 
-            new Decimal("1e-1905"), 
-            new Decimal("1e-1860"), 
-            new Decimal("1e-1940"), 
-            new Decimal("1e-2000"), 
-            new Decimal(1e24)
-        ];
-        player.ad.dimensionGrowths = [
-            new Decimal(1e15),
-            new Decimal(1e25),
-            new Decimal(1e35),
-            new Decimal(1e45),
-            new Decimal(1e60),
-            new Decimal(1e80),
-            new Decimal(1e100),
-            new Decimal(1e15),
-        ];
-
-    } else {
-        player.ad.dimensionBase = [
-            new Decimal("1e-2175"), 
-            new Decimal("1e-2325"), 
-            new Decimal("1e-2355"), 
-            new Decimal("1e-2640"), 
-            new Decimal("1e-2580"), 
-            new Decimal("1e-2500"), 
-            new Decimal("1e-2460"), 
-            new Decimal(1e24)
-        ];
-        player.ad.dimensionGrowths = [
-            new Decimal(1e25),
-            new Decimal(1e35),
-            new Decimal(1e45),
-            new Decimal(1e60),
-            new Decimal(1e80),
-            new Decimal(1e100),
-            new Decimal(1e120),
-            new Decimal(1e15),
-        ];
-    }
-}
-
-
-function setAntimatterTickspeedMultiplier() {
-    let tickspeed = new Decimal(1.13);
-    tickspeed = tickspeed
-        .plus(buyableEffect("ad", 3))
-        .plus(buyableEffect("ca", 22));
-
-    tickspeed = tickspeed
-        .times(optionalUpgradeEffect("ep1", 12).orElse(1))
-        .times(player.co.cores.antimatter.effect[2]);
-
-    player.ad.tickspeedMult = tickspeed;
-}
-
-addLayer("ad", {
-    name: "Antimatter Dimensions",
-    symbol: "AD",
+﻿addLayer("ad", {
+    name: "Antimatter Dimensions", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "AD", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "U2",
     row: 1,
-    position: 0,
+    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
 
@@ -377,18 +29,18 @@ addLayer("ad", {
     }
     },
     automate() {
-        if (!hasMilestone("s", 17)) return;
-
-        buyUpgrade("ad", 11);
-        buyUpgrade("ad", 12);
-        buyUpgrade("ad", 13);
-        buyUpgrade("ad", 14);
-        buyUpgrade("ad", 15);
-        buyUpgrade("ad", 16);
-        buyUpgrade("ad", 17);
-        buyUpgrade("ad", 18);
-        buyUpgrade("ad", 19);
-        buyUpgrade("ad", 21);
+        if (hasMilestone("s", 17)) {
+            buyUpgrade("ad", 11)
+            buyUpgrade("ad", 12)
+            buyUpgrade("ad", 13)
+            buyUpgrade("ad", 14)
+            buyUpgrade("ad", 15)
+            buyUpgrade("ad", 16)
+            buyUpgrade("ad", 17)
+            buyUpgrade("ad", 18)
+            buyUpgrade("ad", 19)
+            buyUpgrade("ad", 21)
+        }
     },
     nodeStyle() {
         return {
@@ -401,18 +53,163 @@ addLayer("ad", {
     tooltip: "Antimatter Dimensions",
     color: "#1eb516",
     update(delta) {
+        let onepersec = new Decimal(1)
 
-        setAntimatterTickspeedMultiplier();
-        updateAntimatterDimensionAmounts(delta);
-        updateAntimatterAmount(delta);
+        // PREVENT NULL
+        if (player.ad.antimatter.lt(0)) player.ad.antimatter = new Decimal(0)
 
-        updateAntimatterEffect(delta);
+        // START OF ANTIMATTER MODIFIERS
+        player.ad.antimatterPerSecond = player.ad.dimensionAmounts[0].mul(buyableEffect("ad", 11))
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("ad", 1))
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("ad", 2))
+        if (hasUpgrade("ad", 12)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(upgradeEffect("ad", 12))
+        if (hasUpgrade("ip", 12)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(upgradeEffect("ip", 12))
+        if (hasUpgrade("ad", 17)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(upgradeEffect("ad", 17))
+        if (hasAchievement("achievements", 123)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(2)
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(levelableEffect("pet", 305)[0])
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("gh", 23))
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("gh", 24))
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(levelableEffect("pet", 106)[0])
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.ta.dimensionPowerEffects[0])
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("ip", 14))
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("ta", 36))
 
-        setAntimatterDimensionCostScaling();
+        // CHALLENGE MODIFIERS
+        // if (inChallenge("tad", 11)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(0.55)
 
-        // TODO: a domino chain starting here seems to be the result of some 
-        // odd interactions between mechanics. 
-        // Maybe related to microtick structure? 
+        // CONTINUED REGULAR MODIFIERS
+        // player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("tad", 13))
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.om.hexMasteryPointsEffect)
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("om", 15))
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("gh", 35))
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("gh", 37))
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.id.infinityPowerEffect)
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("m", 17))
+
+        // SOFTCAP MODIFIER
+        if (player.ad.antimatterPerSecond.gt(1e300) && !hasChallenge("ip", 18)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(0.1)
+        let base = new Decimal(1000)
+        if (hasUpgrade("bi", 21)) base = base.mul(1.1)
+        base = base.mul(buyableEffect("m", 15))
+        base = base.mul(player.cs.scraps.antimatter.effect)
+        if (player.ir.iriditeDefeated) base = base.mul(2)
+        let max = Decimal.div(1, Decimal.pow(1.05, player.ad.antimatterPerSecond.add(1).log(Decimal.pow(10, base)))).max(0.01)
+        if (player.ad.antimatterPerSecond.gt(1e300) && hasChallenge("ip", 18)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.div(1e300).pow(Decimal.div(base, player.ad.antimatterPerSecond.plus(1).log(10)).min(max)).mul(1e300)
+
+        // SOFTCAP IGNORING MODIFIERS
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("ta", 37))
+        if (hasUpgrade("ip", 43)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(upgradeEffect("ip", 43))
+        if (hasMilestone("fa", 12)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.fa.milestoneEffect[1])
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.co.cores.antimatter.effect[0])
+
+        // POWER MODIFIERS
+        if (hasUpgrade("hpw", 1051)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(1.05)
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(levelableEffect("ir", 3)[0])
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(buyableEffect("sb", 105))
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(buyableEffect("cof", 21))
+        if (hasUpgrade("bi", 118)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(upgradeEffect("bi", 118))
+
+        // SECOND SOFTCAP
+        player.ad.secondSoftcap = new Decimal("1e100000")
+        if (player.ad.antimatterPerSecond.gte(player.ad.secondSoftcap)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.div(player.ad.secondSoftcap).pow(0.1).mul(player.ad.secondSoftcap)
+
+        // ABNORMAL MODIFIERS
+        if (player.po.halter.antimatter.enabled == 1) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.div(player.po.halter.antimatter.halt)
+        if (player.po.halter.antimatter.enabled == 2 && player.ad.antimatterPerSecond.gt(player.po.halter.antimatter.halt)) player.ad.antimatterPerSecond = player.po.halter.antimatter.halt
+
+        // ANTIMATTER PER SECOND
+        player.ad.antimatter = player.ad.antimatter.add(player.ad.antimatterPerSecond.mul(delta))
+
+        // ANTIMATTER EFFECT
+        if (!hasUpgrade("bi", 22) && player.ad.antimatter.gte(0)) player.ad.antimatterEffect = player.points.pow(3).add(1).log10().add(1).pow(player.ad.antimatter.add(1).log10().pow(0.3))
+        if (hasUpgrade("bi", 22) && player.ad.antimatter.gte(0)) player.ad.antimatterEffect = player.points.pow(player.points.add(1).log10().pow(2)).add(1).log10().add(1).pow(player.ad.antimatter.add(1).log10().pow(0.3))
+        if (hasUpgrade("bi", 108)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(1.6)
+        if (hasUpgrade("bi", 114)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(3)
+        if (hasUpgrade("ma", 19)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(20)
+
+        //----------------------------------------
+
+        // CALCULATE DIMENSION AMOUNTS
+        for (let i = 0; i < player.ad.dimensionAmounts.length; i++) {
+            player.ad.dimensionAmounts[i] = player.ad.dimensionAmounts[i].add(player.ad.dimensionsPerSecond[i].mul(delta))
+        }
+
+        // START OF DIMENSIONS PER SECOND MODIFIERS
+        for (let i = 0; i < player.ad.dimensionAmounts.length-1; i++) {
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionAmounts[i+1].mul(buyableEffect("ad", i+12).div(10))
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("ad", 1))
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("ad", 2))
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("gh", 23))
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(levelableEffect("pet", 305)[0])
+            if (hasUpgrade("ad", 17)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(upgradeEffect("ad", 17))
+            if (hasAchievement("achievements", 123)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(2)
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.ta.dimensionPowerEffects[i+1])
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("ip", 14))
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("ta", 36))
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.om.hexMasteryPointsEffect)
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("gh", 37))
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.id.infinityPowerEffect)
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("m", 17))
+
+            // SOFTCAP MODIFIER
+            if (player.ad.dimensionsPerSecond[i].gt(1e300) && !hasChallenge("ip", 18)) player.ad.dimensionsPerSecond[i] = new Decimal(1e300)
+            if (player.ad.dimensionsPerSecond[i].gt(1e300) && hasChallenge("ip", 18) && !hasUpgrade("bi", 21)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].div(1e300).pow(0.96).mul(1e300)
+            if (player.ad.dimensionsPerSecond[i].gt(1e300) && hasChallenge("ip", 18) && hasUpgrade("bi", 21) && !player.ir.defeatedIridite) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].div(1e300).pow(0.975).mul(1e300)
+
+            // CONTINUED REGULAR MODIFIERS
+            if (hasUpgrade("ip", 43)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(upgradeEffect("ip", 43))
+            if (hasMilestone("fa", 12)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.fa.milestoneEffect[1])
+
+            // POWER MODIFIERS
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(player.co.cores.antimatter.effect[1])
+            if (hasUpgrade("hpw", 1051)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(1.05)
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(levelableEffect("ir", 3)[0])
+
+        }
+        
+        // SPECIALIZED MODIFIERS
+        player.ad.dimensionsPerSecond[0] = player.ad.dimensionsPerSecond[0].mul(levelableEffect("pet", 206)[0])
+        player.ad.dimensionsPerSecond[1] = player.ad.dimensionsPerSecond[1].mul(levelableEffect("pet", 207)[0])
+        player.ad.dimensionsPerSecond[2] = player.ad.dimensionsPerSecond[2].mul(levelableEffect("pet", 206)[1])
+        player.ad.dimensionsPerSecond[3] = player.ad.dimensionsPerSecond[3].mul(levelableEffect("pet", 207)[1])
+        player.ad.dimensionsPerSecond[4] = player.ad.dimensionsPerSecond[4].mul(levelableEffect("pet", 206)[2])
+        player.ad.dimensionsPerSecond[5] = player.ad.dimensionsPerSecond[5].mul(levelableEffect("pet", 207)[2])
+        if (hasUpgrade("ip", 13)) player.ad.dimensionsPerSecond[6] = player.ad.dimensionsPerSecond[6].mul(upgradeEffect("ip", 13))
+        player.ad.dimensionsPerSecond[6] = player.ad.dimensionsPerSecond[6].mul(levelableEffect("pet", 106)[1])
+
+        // ANTIMATTER DIMENSION COST SOFTCAP GROWTH
+        player.ad.dimensionGrowths = [new Decimal(1e3),new Decimal(1e4),new Decimal(1e5),new Decimal(1e6),new Decimal(1e8),new Decimal(1e10),new Decimal(1e12),new Decimal(1e15),]
+        if (player.ad.antimatter.gt(1e300) && !hasUpgrade("bi", 21) ) {
+            player.ad.dimensionGrowths = [new Decimal(1e25),new Decimal(1e35),new Decimal(1e45),new Decimal(1e60),new Decimal(1e80),new Decimal(1e100),new Decimal(1e120),new Decimal(1e15),]        
+        }
+        if (player.ad.antimatter.gt(1e300) && hasUpgrade("bi", 21) ) {
+            player.ad.dimensionGrowths = [new Decimal(1e15),new Decimal(1e25),new Decimal(1e35),new Decimal(1e45),new Decimal(1e60),new Decimal(1e80),new Decimal(1e100),new Decimal(1e15),]        
+        }
+
+        // ANTIMATTER DIMENSION COST SOFTCAP BASE
+        player.ad.dimensionBase = [new Decimal(10), new Decimal(100), new Decimal(1e4), new Decimal(1e6), new Decimal(1e9), new Decimal(1e13), new Decimal(1e18), new Decimal(1e24)]
+        if (player.ad.antimatter.gt(1e300) && !hasUpgrade("bi", 21)) {
+            player.ad.dimensionBase = [new Decimal("1e-2175"), new Decimal("1e-2325"), new Decimal("1e-2355"), new Decimal("1e-2640"), new Decimal("1e-2580"), new Decimal("1e-2500"), new Decimal("1e-2460"), new Decimal(1e24)]
+        }
+        if (player.ad.antimatter.gt(1e300) && hasUpgrade("bi", 21)) {
+            player.ad.dimensionBase = [new Decimal("1e-1200"), new Decimal("1e-1575"), new Decimal("1e-1765"), new Decimal("1e-1905"), new Decimal("1e-1860"), new Decimal("1e-1940"), new Decimal("1e-2000"), new Decimal(1e24)]
+        }
+
+        //----------------------------------------
+
+        // START OF TICKSPEED MODIFIERS
+        player.ad.tickspeedMult = new Decimal(1.13)
+        player.ad.tickspeedMult = player.ad.tickspeedMult.add(buyableEffect("ad", 3))
+        player.ad.tickspeedMult = player.ad.tickspeedMult.add(buyableEffect("ca", 22))
+        if (hasUpgrade("ep1", 12)) player.ad.tickspeedMult = player.ad.tickspeedMult.mul(upgradeEffect("ep1", 12))
+        player.ad.tickspeedMult = player.ad.tickspeedMult.mul(player.co.cores.antimatter.effect[2])
+
+        //----------------------------------------
+
+        // PREVENT SOME BUG IDK
+        if (!hasUpgrade("ad", 11)) player.ad.antimatter = new Decimal(0)
+
+        // REVERSE CRUNCH CODE
         player.ad.revCrunchPause = player.ad.revCrunchPause.sub(1)
         if (player.ad.revCrunchPause.gt(0)) {
             layers.revc.reverseCrunch();

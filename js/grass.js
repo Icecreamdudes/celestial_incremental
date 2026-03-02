@@ -1,497 +1,3 @@
-/**
- * Compute the multiplier to grass value. 
- * @returns 
- */
-function getGrassValueMultiplier() {
-    const factors = [
-        getGoldenGrassEffect(),
-        getGrasshopperEffect(4),
-        getFertilizerEffect(),
-
-        buyableEffect('g', 11),
-        buyableEffect('gh', 33),
-        buyableEffect('t', 17),
-        
-        buyableEffect('f', 1),
-        buyableEffect('f', 2),
-        buyableEffect('f', 3),
-        buyableEffect('f', 4),
-        buyableEffect('f', 5),
-        buyableEffect('f', 6),
-        buyableEffect('f', 7),
-        buyableEffect('f', 8),
-        
-        levelableEffect("pet", 104)[0], // GD checkpoint
-
-
-        hasAchievement("achievements", 11) ? 1.25 : 1,
-        hasAchievement("achievements", 14) ? 1.5 : 1,
-
-        hasUpgrade('ad', 14) ? upgradeEffect('ad', 14) : 1,
-        hasUpgrade("cs", 201) ? buyableEffect('f', 104) : 1,
-        hasUpgrade("cs", 501) ? "1e450" : 1,
-        hasUpgrade('g', 11) ? player.p.prestigeEffect2 : 1,
-        player.d.boosterEffects[5],
-        player.rf.abilityEffects[2],
-        player.r.timeCubeEffects[2],
-        player.i.preOTFMult,
-        player.co.cores.grass.effect[0],
-        player.pol.pollinatorEffects.wind.enabled ? player.pol.pollinatorEffects.wind.effects[0] : 1,
-
-        player.pe.pestEffect[4].reciprocate(), // Dividing factor
-
-        // TODO: create hexIsActive() boolean.
-        (inChallenge("ip", 13) || player.po.hex || hasUpgrade("s", 18)) ? player.hre.refinementEffect[3][1] : 1,
-    ];
-
-    return factors.reduce(Decimal.multiply, 1);
-}
-
-/**
- * Compute what power Grass value should be raised to.
- * @returns 
- */
-function getGassValuePower() {
-    const powers = [
-        buyableEffect('st', 101),
-        buyableEffect("cof", 14),
-
-        hasUpgrade("hpw", 1031) ? 1.18 : 1
-    ];
-
-    return powers.reduce(Decimal.multiply, 1);
-}
-
-/**
- * Compute what the value of a single cut grass square should be.
- * @returns 
- */
-function getGrassValue() {
-    // TODO: handle za warldo (time reversal) functionally?
-    if (player.r.timeReversed) return new Decimal(0);
-
-    let value = getGrassValueMultiplier().pow(getGassValuePower());
-
-
-    if (player.po.halter.grass.enabled == 1) return value.div(player.po.halter.grass.halt);
-    if (player.po.halter.grass.enabled == 2) return value.min(player.po.halter.grass.halt);
-    return value;
-}
-
-/**
- * Perform per-tick updates to total grass amount.
- * @param {*} delta Amount of time that's passed in seconds.
- */
-function updateGrassGain(delta) {
-    
-    const valueAddends = [
-        buyableEffect('gh', 11),
-        hasUpgrade('rf', 12) ? 0.2 : 0,
-        hasMilestone('ip', 13) && !inChallenge('ip', 14) ? 0.05 : 0,
-    ]
-    
-    const valueGainPerSecond = valueAddends.reduce(Decimal.add, 0);
-    const grassValue = getGrassValue();
-
-    player.g.grass = player.g.grass.plus(grassValue.times(valueGainPerSecond).times(delta));
-}
-
-/**
- * Compute the effect of grass on leaf gain. 
- * @returns 
- */
-function getGrassEffectOnLeaves() {
-    const effect = player.g.grass.times(0.3).pow(0.7).plus(1);
-
-    const softcapStart = new Decimal("1e25000");
-    const softcapPower = Decimal.add(0.1, player.cs.scraps.grass.effect);
-    if (effect.gte(softcapStart)) return effect.dividedBy(softcapStart).pow(softcapPower).times(softcapStart);
-
-    return effect;
-}
-
-/**
- * Compute the effect of grass on tree gain. 
- * @returns 
- */
-function getGrassEffectOnTrees() {
-    const effect = player.g.grass.times(0.3).dividedBy(7).plus(1);
-
-    const softcapStart = new Decimal("1e10000");
-    const softcapPower = Decimal.add(0.1, player.cs.scraps.grass.effect);
-    if (effect.gte(softcapStart)) return effect.dividedBy(softcapStart).pow(softcapPower).times(softcapStart);
-
-    return effect;
-}
-
-/**
- * Compute the effect, if any, of grass on CelPoints gain.
- * @returns 
- */
-function getGrassEffectOnPoints() {
-    if (!hasMilestone("r", 13)) return new Decimal(1);
-    return getGrassEffectOnTrees();
-}
-
-/**
- * Compute how often a grass grows. 
- * @returns 
- */
-function getGrassInterval() {
-    const timeDivisors = [
-        buyableEffect('g', 12),
-        levelableEffect("pet", 303)[1],
-        hasAchievement("achievements", 9) ? 1.1 : 1,
-    ];
-
-    const totalDivisor = timeDivisors.reduce(Decimal.multiply, 1);
-    const baseSpeed = new Decimal(4);
-    return baseSpeed.div(totalDivisor).max(0.25);
-}
-
-/**
- * Compute the maximum amount of grass that can grow on a single square.
- * @returns 
- */
-function getGrassCellCap() {
-    const addends = [
-        5,
-        buyableEffect('g', 13),
-
-        hasUpgrade('g', 18) ? 5 : 0,
-        hasUpgrade('g', 19) ? upgradeEffect('g', 19) : 0,
-    ];
-
-    const cap = addends.reduce(Decimal.add, 0);
-
-    if (hasUpgrade("cs", 501)) {
-        return cap.div(2).floor();
-    }
-    return cap;
-}
-
-function tickGrassTimer(delta) {
-    if (!hasUpgrade("i", 17)) return;
-    player.g.grassTimer = player.g.grassTimer.minus(delta);
-
-    while (player.g.grassTimer.lt(0)) {
-        player.g.grassTimer = player.g.grassTimer.plus(player.g.grassReq);
-        let row = getRandomInt(5) + 1
-        let column = getRandomInt(8) + 1
-        let val = row + "0" + column;
-        if (getGridData("g", val)[0] == 0) {
-            setGridData("g", val, [1, new Decimal(1), new Decimal(1)])
-        } else if (getGridData("g", val)[0] == 1 && getGridData("g", val)[1].lt(player.g.grassCap)) {
-            setGridData("g", val, [1, getGridData("g", val)[1].add(1), new Decimal(1)])
-        }
-    }
-
-    updateGrassGain(delta);
-}
-
-
-/**
- * Compute all multipliers to golden grass value. 
- * @returns 
- */
-function getGoldenGrassValueMultiplier() {
-    const factors = [
-        buyableEffect('g', 17),
-        buyableEffect('r', 11),
-        buyableEffect('m', 13),
-        buyableEffect('st', 103),
-        buyableEffect('t', 18),
-
-        levelableEffect("pet", 104)[1],
-        levelableEffect("pet", 305)[1],
-
-        levelableEffect("pu", 108)[2],
-
-        getMoonstoneEffect(),
-        player.co.cores.grass.effect[1],
-        player.cof.coreFragmentEffects[1],
-        player.ro.activatedFuelEffect,
-
-        player.ma.matosDefeated ? 1e20 : 1,
-        player.pol.pollinatorEffects.wind.enabled ? player.pol.pollinatorEffects.wind.effects[1] : 1,
-        hasUpgrade('ip', 24) && !inChallenge('ip', 14) ? upgradeEffect('ip', 24) : 1,
-    ];
-
-    return factors.reduce(Decimal.multiply, 1);
-}
-
-/**
- * Compute what power golden grass value is raised to. 
- * @returns 
- */
-function getGoldenGrassValuePower() {
-    return hasUpgrade("hpw", 1032) ? 1.06 : 1;
-}
-
-/**
- * Compute the value of a single cell of golden grass. 
- * @returns 
- */
-function getGoldenGrassValue() {
-    // TODO: handle za warldo (time reversal) functionally?
-    if (player.r.timeReversed) return new Decimal(0);
-
-    let value = getGoldenGrassValueMultiplier().pow(getGoldenGrassValuePower());
-
-    if (player.po.halter.goldenGrass.enabled == 1) return value.div(player.po.halter.goldenGrass.halt);
-    if (player.po.halter.goldenGrass.enabled == 2) return value.min(player.po.halter.goldenGrass.halt);
-    return value;
-}
-
-/**
- * Handle golden grass automatic gain for this tick. 
- * @param {*} delta The amount of time since the last tick in seconds.
- */
-function updateGoldenGrassGain(delta) {
-    const gainPerSecond = buyableEffect('gh', 18);
-    const goldValue = getGoldenGrassValue();
-
-    player.g.goldGrass = player.g.goldGrass.plus(goldValue.times(gainPerSecond).times(delta));
-}
-
-/**
- * Get the effect of golden grass on normal grass value.
- * @returns 
- */
-function getGoldenGrassEffect() {
-    const baseEffect = player.g.goldGrass.pow(1.05).times(0.15).plus(1);
-
-    const powers = [
-        hasUpgrade('g', 22) ? 6 : 1,
-        hasUpgrade("cs", 502) ? 2 : 1,
-    ]
-
-    const totalPower = powers.reduce(Decimal.multiply, 1);
-
-    return baseEffect.pow(totalPower);
-}
-
-/**
- * Compute how often a golden grass tile spawns. 
- * @returns 
- */
-function getGoldenGrassInterval() {
-    const divisors = [
-        buyableEffect('gh', 12),
-        levelableEffect("pet", 303)[1],
-
-        hasAchievement("achievements", 12) ? 1.1 : 1,
-        hasUpgrade('g', 16) ? 1.3 : 1,
-    ];
-
-    const totalDivisor = divisors.reduce(Decimal.multiply, 1);
-
-    const baseTime = new Decimal(20);
-
-    const reducedTime = baseTime.div(totalDivisor);
-
-    return reducedTime.max(0.25);
-}
-
-/**
- * Compute how much golden grass can appear on a single cell. 
- * @returns 
- */
-function getGoldenGrassCellCap() {
-    const addends = [
-        3,
-        buyableEffect('g', 18),
-        hasUpgrade('g', 18) ? 3 : 0,
-    ];
-
-    return addends.reduce(Decimal.add, 0);
-}
-
-/**
- * Tick the golden grass spawn timer, and update grass. 
- * @param {*} delta 
- */
-function tickGoldenGrassTimer(delta) {
-    if (!hasUpgrade("g", 13)) return;
-    player.g.goldGrassTimer = player.g.goldGrassTimer.minus(delta)
-    while (player.g.goldGrassTimer.lt(0)) {
-        player.g.goldGrassTimer = player.g.goldGrassTimer.plus(player.g.goldGrassReq);
-        let row = getRandomInt(5) + 1
-        let column = getRandomInt(8) + 1
-        let val = row + "0" + column
-        if (getGridData("g", val)[0] < 2) {
-            setGridData("g", val, [2, new Decimal(1), new Decimal(1)])
-        } else if (getGridData("g", val)[0] == 2 && getGridData("g", val)[1].lt(player.g.goldGrassCap)) {
-            setGridData("g", val, [2, getGridData("g", val)[1].add(1), new Decimal(1)])
-        }
-    }
-    updateGoldenGrassGain(delta);
-}
-
-
-/**
- * Compute all multipliers to Moonstone gain. 
- * @returns 
- */
-function getMoonstoneValueMultiplier() {
-    const factors = [
-        buyableEffect("al", 204),
-        buyableEffect('g', 21),
-
-        levelableEffect("pet", 1104)[0],
-        levelableEffect("pu", 205)[1],
-
-        getMoonstoneLevelEffect(2),
-        player.co.cores.grass.effect[2],
-        player.ro.rocketPartsEffect,
-
-        optionalUpgradeEffect("ep2", 7).orElse(1),
-        hasUpgrade('ev8', 17) ? 2 : 1,
-        hasMilestone("r", 28) ? player.r.pentMilestone18Effect : 1,
-        player.ma.matosDefeated ? 5 : 1,
-    ];
-
-    return factors.reduce(Decimal.multiply, 1);
-}
-
-/**
- * Compute the value of a single moonstone cell. 
- * @returns 
- */
-function getMoonstoneValue() {
-    // May include power in the future...?
-    return getMoonstoneValueMultiplier();
-}
-
-/**
- * Compute how often a moonstone spawns. 
- * @returns 
- */
-function getMoonstoneInterval() {
-    const divisors = [
-        buyableEffect('g', 24),
-        getMoonstoneLevelEffect(1),
-        levelableEffect("pet", 303)[1],
-    ];
-
-    const totalDivisor = divisors.reduce(Decimal.multiply, 1);
-
-    const initialTime = new Decimal(40);
-    const dividedTime = initialTime.dividedBy(totalDivisor);
-
-    return dividedTime.max(0.25);
-}
-
-/**
- * Compute the effect of moonstone on Golden grass gain. 
- * @returns 
- */
-function getMoonstoneEffect() {
-    return player.g.moonstone.mul(4).pow(1.5).add(1);
-}
-
-/**
- * Compute the maximum level that spawned moonstone can be set to.
- * @returns 
- */
-function getMoonstoneMaxLevel() {
-    return buyableEffect('g', 29);
-}
-
-/**
- * Compute the max health of moonstone.
- * Newly spawned moonstone will have this much health. 
- * It's expected that all moonstone have less than this health.
- * @returns 
- */
-function getMoonstoneMaxHealth() {
-    const factor = getMoonstoneLevelEffect(0);
-    return new Decimal(100).times(factor);
-}
-
-/**
- * Determine the effect of the moonstone level on moonstone mechanics.
- * @param {0|1|2} effectNumber 
- *      0 = Health
- *      1 = Spawn time multiplier (represented as a 1/mult "divisor")
- *      2 = Moonstone value on collect
- * @returns 
- */
-function getMoonstoneLevelEffect(effectNumber) {
-    switch (effectNumber) {
-        case 0:
-            // Health
-            return player.g.moonstoneLevel.pow(1.5);
-        case 1:
-            // Spawn time
-            return player.g.moonstoneLevel.pow(-0.2);
-        case 2:
-            // Value
-            if (hasUpgrade("cs", 503)) {
-                return player.g.moonstoneLevel.minus(1).pow_base(1.2).mul(player.g.moonstoneLevel)
-            } 
-            return player.g.moonstoneLevel.pow(1.2);
-    }
-}
-
-/**
- * Compute the maximum amount of moonstone that can exist on a cell.
- * @returns 
- */
-function getMoonstoneCellCap() {
-    return levelableEffect("pet", 1303)[0];
-}
-
-/**
- * Compute the amount of damage done to a moonstone when interacting with it.
- * @returns 
- */
-function getMoonstoneDamage() {
-    const factors = [
-        20, // Base
-        buyableEffect('g', 22),
-        hasUpgrade('ev8', 18) ? 2 : 1,
-    ];
-
-    return factors.reduce(Decimal.multiply, 1);
-}
-
-/**
- * Perform per-tick updates to total moonstone amount.
- * @param {*} delta Amount of time that's passed in seconds.
- */
-function updateMoonstoneGain(delta) {
-    if (!hasMilestone("r", 29)) return;
-
-    const gainPerSecond = new Decimal(0.01);
-
-
-    player.g.moonstone = player.g.moonstone.plus(player.g.moonstoneVal.times(gainPerSecond).times(delta))
-}
-
-/**
- * Update the moonstone timer.
- * @param {*} delta Amount of time that's passed in seconds.
- */
-function tickMoonstoneTimer(delta) {
-    if (!player.ev.evolutionsUnlocked[7]) return;
-
-    player.g.moonstoneTimer = player.g.moonstoneTimer.sub(delta);
-
-    while (player.g.moonstoneTimer.lt(0)) {
-        player.g.moonstoneTimer = player.g.moonstoneTimer.plus(player.g.moonstoneReq);
-        let row = getRandomInt(5) + 1
-        let column = getRandomInt(8) + 1
-        let val = row + "0" + column
-        if (getGridData("g", val)[0] < 3) {
-            setGridData("g", val, [3, new Decimal(1), getMoonstoneMaxHealth()])
-        } else if (getGridData("g", val)[0] == 3 && getGridData("g", val)[1].lt(getMoonstoneCellCap())) {
-            setGridData("g", val, [3, getGridData("g", val)[1].add(1), getGridData("g", val)[2]])
-        }
-    }
-    updateMoonstoneGain(delta);
-}
-
 addLayer('g', {
     name: 'Grass', // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: 'G', // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -502,18 +8,22 @@ addLayer('g', {
         unlocked: true,
 
         grass: new Decimal(0),
+        grassEffect: new Decimal(1),
+        grassEffect2: new Decimal(1),
         grassCap: new Decimal(100),
         grassVal: new Decimal(1),
         grassReq: new Decimal(4), // Seconds per spawn
         grassTimer: new Decimal(0),
 
         goldGrass: new Decimal(0),
+        goldGrassEffect: new Decimal(1),
         goldGrassCap: new Decimal(15),
         goldGrassVal: new Decimal(1),
         goldGrassReq: new Decimal(40), // Seconds per spawn
         goldGrassTimer: new Decimal(0),
 
         moonstone: new Decimal(0),
+        moonstoneEffect: new Decimal(1),
         moonstoneCap: new Decimal(6),
         moonstoneVal: new Decimal(1),
         moonstoneReq: new Decimal(10), // Seconds per spawn
@@ -522,44 +32,249 @@ addLayer('g', {
         moonstoneMaxHealth: new Decimal(100),
         moonstoneDamage: new Decimal(20),
         moonstoneLevel: new Decimal(1),
+        moonstoneLevelEffects: [
+            new Decimal(1),
+            new Decimal(1),
+            new Decimal(1),
+        ],
+        moonstoneLevelMax: new Decimal(1),
     }},
     automate() {
-        
         if (hasMilestone('r', 13)) {
-            for (let buyableId = 11; buyableId <= 19; buyableId++) {
-                buyBuyable("g", buyableId);
-            }
+            buyBuyable('g', 11)
+            buyBuyable('g', 12)
+            buyBuyable('g', 13)
+            buyBuyable('g', 14)
+            buyBuyable('g', 15)
+            buyBuyable('g', 16)
+            buyBuyable('g', 17)
+            buyBuyable('g', 18)
+            buyBuyable('g', 19)
         }
         if (hasMilestone('r', 15) && player.g.auto == true) {
-            for (let upgradeId = 11; upgradeId <= 21; upgradeId++) {
-                buyUpgrade("g", upgradeId);
-            }
+            buyUpgrade('g', 11)
+            buyUpgrade('g', 12)
+            buyUpgrade('g', 13)
+            buyUpgrade('g', 14)
+            buyUpgrade('g', 15)
+            buyUpgrade('g', 16)
+            buyUpgrade('g', 17)
+            buyUpgrade('g', 18)
+            buyUpgrade('g', 19)
+            buyUpgrade('g', 21)
         }
     },
     tooltip: 'Grass',
     color: '#119B35',
     branches: ['t'],
     update(delta) {
-        // Grass
-        player.g.grassVal = getGrassValue();
-        player.g.grassReq = getGrassInterval();
-        player.g.grassCap = getGrassCellCap();
-        tickGrassTimer(delta);
+        // START OF GRASS MODIFIERS
+        player.g.grassVal = new Decimal(1)
+        player.g.grassVal = player.g.grassVal.mul(buyableEffect('g', 11))
+        if (hasAchievement("achievements", 11)) player.g.grassVal = player.g.grassVal.mul(1.25)
+        if (hasAchievement("achievements", 14)) player.g.grassVal = player.g.grassVal.mul(1.5)
+        player.g.grassVal = player.g.grassVal.mul(player.g.goldGrassEffect)
+        player.g.grassVal = player.g.grassVal.mul(buyableEffect('t', 17))
+        player.g.grassVal = player.g.grassVal.mul(player.gh.grasshopperEffects[4])
+        player.g.grassVal = player.g.grassVal.mul(player.gh.fertilizerEffect)
+        player.g.grassVal = player.g.grassVal.mul(buyableEffect('f', 1))
+        player.g.grassVal = player.g.grassVal.mul(buyableEffect('f', 2))
+        player.g.grassVal = player.g.grassVal.mul(buyableEffect('f', 3))
+        player.g.grassVal = player.g.grassVal.mul(buyableEffect('f', 4))
+        player.g.grassVal = player.g.grassVal.mul(buyableEffect('f', 5))
+        player.g.grassVal = player.g.grassVal.mul(buyableEffect('f', 6))
+        player.g.grassVal = player.g.grassVal.mul(buyableEffect('f', 7))
+        player.g.grassVal = player.g.grassVal.mul(buyableEffect('f', 8))
+        if (hasUpgrade("cs", 201)) player.g.grassVal = player.g.grassVal.mul(buyableEffect('f', 104))
+        player.g.grassVal = player.g.grassVal.mul(levelableEffect("pet", 104)[0])
+        player.g.grassVal = player.g.grassVal.mul(player.d.boosterEffects[5])
+        player.g.grassVal = player.g.grassVal.mul(player.rf.abilityEffects[2])
+        if (hasUpgrade('g', 11)) player.g.grassVal = player.g.grassVal.mul(player.p.prestigeEffect2)
+        if (hasUpgrade('ad', 14)) player.g.grassVal = player.g.grassVal.mul(upgradeEffect('ad', 14))
+        if (inChallenge("ip", 13) || player.po.hex || hasUpgrade("s", 18)) player.g.grassVal = player.g.grassVal.mul(player.hre.refinementEffect[3][1])
 
-        // Golden Grass
-        player.g.goldGrassVal = getGoldenGrassValue();
-        player.g.goldGrassReq = getGoldenGrassInterval();
-        player.g.goldGrassCap = getGoldenGrassCellCap();
-        tickGoldenGrassTimer(delta);
+        // CHALLENGE MODIFIERS
+        player.g.grassVal = player.g.grassVal.div(player.pe.pestEffect[4])
+        if (inChallenge('ip', 13)) player.g.grassVal = player.g.grassVal.pow(0.75)
 
-        // Moonstone
-        player.g.moonstoneVal = getMoonstoneValue();
-        player.g.moonstoneReq = getMoonstoneInterval();
-        player.g.moonstoneCap = getMoonstoneCellCap();
-        
-        player.g.moonstoneMaxHealth = getMoonstoneMaxHealth();
-        player.g.moonstoneDamage = getMoonstoneDamage();
-        tickMoonstoneTimer(delta);
+        // CONTINUED REGULAR MODIFIERS
+        if (player.pol.pollinatorEffects.wind.enabled) player.g.grassVal = player.g.grassVal.mul(player.pol.pollinatorEffects.wind.effects[0])
+        player.g.grassVal = player.g.grassVal.mul(buyableEffect('gh', 33))
+        player.g.grassVal = player.g.grassVal.mul(player.r.timeCubeEffects[2])
+        player.g.grassVal = player.g.grassVal.mul(player.i.preOTFMult)
+        player.g.grassVal = player.g.grassVal.mul(player.co.cores.grass.effect[0])
+        if (hasUpgrade("cs", 501)) player.g.grassVal = player.g.grassVal.mul("1e450")
+
+        // POWER MODIFIERS
+        if (hasUpgrade("hpw", 1031)) player.g.grassVal = player.g.grassVal.pow(1.18)
+        player.g.grassVal = player.g.grassVal.pow(buyableEffect('st', 101))
+        player.g.grassVal = player.g.grassVal.pow(buyableEffect("cof", 14))
+
+        // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
+        if (player.po.halter.grass.enabled == 1) player.g.grassVal = player.g.grassVal.div(player.po.halter.grass.halt)
+        if (player.po.halter.grass.enabled == 2 && player.g.grassVal.gt(player.po.halter.grass.halt)) player.g.grassVal = player.po.halter.grass.halt
+        if (player.r.timeReversed) player.g.grassVal = player.g.grassVal.mul(0)
+
+        // GRASS GAIN
+        player.g.grass = player.g.grass.add(player.g.grassVal.mul(buyableEffect('gh', 11).mul(delta)))
+        if (hasUpgrade('rf', 12)) player.g.grass = player.g.grass.add(player.g.grassVal.mul(Decimal.mul(0.2, delta)))
+        if (hasMilestone('ip', 13) && !inChallenge('ip', 14)) player.g.grass = player.g.grass.add(player.g.grassVal.mul(Decimal.mul(0.05, delta)))
+
+        // GRASS EFFECTS
+        player.g.grassEffect = player.g.grass.mul(0.3).pow(0.7).add(1)
+        if (player.g.grassEffect.gte("1e25000")) player.g.grassEffect = player.g.grassEffect.div("1e25000").pow(Decimal.add(0.1, player.cs.scraps.grass.effect)).mul("1e25000")
+
+        player.g.grassEffect2 = player.g.grass.pow(0.3).div(7).add(1)
+        if (player.g.grassEffect2.gte("1e10000")) player.g.grassEffect2 = player.g.grassEffect2.div("1e10000").pow(Decimal.add(0.1, player.cs.scraps.grass.effect)).mul("1e10000")
+    
+        // GRASS REQUIREMENT
+        player.g.grassReq = new Decimal(4).div(buyableEffect('g', 12))
+        if (hasAchievement("achievements", 9)) player.g.grassReq = player.g.grassReq.div(1.1)
+        player.g.grassReq = player.g.grassReq.div(levelableEffect("pet", 303)[1])
+        player.g.grassReq = player.g.grassReq.max(0.25)
+
+        // GRASS CAP
+        player.g.grassCap = new Decimal(5).add(buyableEffect('g', 13))
+        if (hasUpgrade('g', 18)) player.g.grassCap = player.g.grassCap.add(5)
+        if (hasUpgrade('g', 19)) player.g.grassCap = player.g.grassCap.add(upgradeEffect('g', 19))
+        if (hasUpgrade("cs", 501)) player.g.grassCap = player.g.grassCap.div(2).max(1).floor()
+
+        // GRASS GENERATION
+        if (hasUpgrade("i", 17)) player.g.grassTimer = player.g.grassTimer.sub(delta)
+        if (player.g.grassTimer.lt(0)) {
+            player.g.grassTimer = player.g.grassReq
+            let row = getRandomInt(5) + 1
+            let column = getRandomInt(8) + 1
+            let val = row + "0" + column
+            if (getGridData("g", val)[0] == 0) {
+                setGridData("g", val, [1, new Decimal(1), new Decimal(1)])
+            } else if (getGridData("g", val)[0] == 1 && getGridData("g", val)[1].lt(player.g.grassCap)) {
+                setGridData("g", val, [1, getGridData("g", val)[1].add(1), new Decimal(1)])
+            }
+        }
+
+
+
+        // START OF GOLDEN GRASS MODIFIERS
+        player.g.goldGrassVal = new Decimal(1)
+        player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect('g', 17))
+        player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect('t', 18))
+        player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect('m', 13))
+        player.g.goldGrassVal = player.g.goldGrassVal.mul(levelableEffect("pet", 104)[1])
+        player.g.goldGrassVal = player.g.goldGrassVal.mul(player.g.moonstoneEffect)
+        if (hasUpgrade('ip', 24) && !inChallenge('ip', 14)) player.g.goldGrassVal = player.g.goldGrassVal.mul(upgradeEffect('ip', 24))
+        if (player.pol.pollinatorEffects.wind.enabled) player.g.goldGrassVal = player.g.goldGrassVal.mul(player.pol.pollinatorEffects.wind.effects[1])
+        player.g.goldGrassVal = player.g.goldGrassVal.mul(levelableEffect("pet", 305)[1])
+        player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect('r', 11))
+        player.g.goldGrassVal = player.g.goldGrassVal.mul(player.co.cores.grass.effect[1])
+        player.g.goldGrassVal = player.g.goldGrassVal.mul(levelableEffect("pu", 108)[2])
+        player.g.goldGrassVal = player.g.goldGrassVal.mul(player.ro.activatedFuelEffect)
+        player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect('st', 103))
+        if (player.ma.matosDefeated) player.g.goldGrassVal = player.g.goldGrassVal.mul(1e20)
+        player.g.goldGrassVal = player.g.goldGrassVal.mul(player.cof.coreFragmentEffects[1])
+
+        // POWER MODIFIERS
+        if (hasUpgrade("hpw", 1032)) player.g.goldGrassVal = player.g.goldGrassVal.pow(1.06)
+
+        // ABNORMAL MODIFIERS
+        if (player.po.halter.goldenGrass.enabled == 1) player.g.goldGrassVal = player.g.goldGrassVal.div(player.po.halter.goldenGrass.halt)
+        if (player.po.halter.goldenGrass.enabled == 2 && player.g.goldGrassVal.gt(player.po.halter.goldenGrass.halt)) player.g.goldGrassVal = player.po.halter.goldenGrass.halt
+
+        // GOLDEN GRASS PER SECOND
+        player.g.goldGrass = player.g.goldGrass.add(player.g.goldGrassVal.mul(buyableEffect('gh', 18).mul(delta)))
+
+        // GOLDEN GRASS EFFECT
+        player.g.goldGrassEffect = player.g.goldGrass.pow(1.05).mul(0.15).add(1)
+        if (hasUpgrade('g', 22)) player.g.goldGrassEffect = player.g.goldGrassEffect.pow(6)
+        if (hasUpgrade("cs", 502)) player.g.goldGrassEffect = player.g.goldGrassEffect.pow(2)
+
+        // GOLDEN GRASS REQUIREMENT
+        player.g.goldGrassReq = new Decimal(20)
+        if (hasAchievement("achievements", 12)) player.g.goldGrassReq = player.g.goldGrassReq.div(1.1)
+        if (hasUpgrade('g', 16)) player.g.goldGrassReq = player.g.goldGrassReq.div(1.3)
+        player.g.goldGrassReq = player.g.goldGrassReq.div(buyableEffect('gh', 12))
+        player.g.goldGrassReq = player.g.goldGrassReq.div(levelableEffect("pet", 303)[1])
+        player.g.goldGrassReq = player.g.goldGrassReq.max(0.25)
+
+        // GOLDEN GRASS CAP
+        player.g.goldGrassCap = new Decimal(3).add(buyableEffect('g', 18))
+        if (hasUpgrade('g', 18)) player.g.goldGrassCap = player.g.goldGrassCap.add(3)
+
+        // GOLDEN GRASS GENERATION
+        if (hasUpgrade("g", 13)) player.g.goldGrassTimer = player.g.goldGrassTimer.sub(delta)
+        if (player.g.goldGrassTimer.lt(0)) {
+            player.g.goldGrassTimer = player.g.goldGrassReq
+            let row = getRandomInt(5) + 1
+            let column = getRandomInt(8) + 1
+            let val = row + "0" + column
+            if (getGridData("g", val)[0] < 2) {
+                setGridData("g", val, [2, new Decimal(1), new Decimal(1)])
+            } else if (getGridData("g", val)[0] == 2 && getGridData("g", val)[1].lt(player.g.goldGrassCap)) {
+                setGridData("g", val, [2, getGridData("g", val)[1].add(1), new Decimal(1)])
+            }
+        }
+
+
+
+        // START OF MOONSTONE MODIFIERS
+        player.g.moonstoneVal = new Decimal(1)
+        player.g.moonstoneVal = player.g.moonstoneVal.mul(buyableEffect('g', 21))
+        player.g.moonstoneVal = player.g.moonstoneVal.mul(player.g.moonstoneLevelEffects[2])
+        player.g.moonstoneVal = player.g.moonstoneVal.mul(levelableEffect("pet", 1104)[0])
+        if (hasUpgrade('ev8', 17)) player.g.moonstoneVal = player.g.moonstoneVal.mul(2)
+        player.g.moonstoneVal = player.g.moonstoneVal.mul(player.co.cores.grass.effect[2])
+        player.g.moonstoneVal = player.g.moonstoneVal.mul(levelableEffect("pu", 205)[1])
+        if (hasUpgrade("ep2", 7)) player.g.moonstoneVal = player.g.moonstoneVal.mul(upgradeEffect("ep2", 7))
+        if (hasMilestone("r", 28)) player.g.moonstoneVal = player.g.moonstoneVal.mul(player.r.pentMilestone18Effect)
+        player.g.moonstoneVal = player.g.moonstoneVal.mul(player.ro.rocketPartsEffect)
+        if (player.ma.matosDefeated) player.g.moonstoneVal = player.g.moonstoneVal.mul(5)
+        player.g.moonstoneVal = player.g.moonstoneVal.mul(buyableEffect("al", 204))
+
+        // MOONSTONE AUTOMATION
+        if (hasMilestone("r", 29)) player.g.moonstone = player.g.moonstone.add(player.g.moonstoneVal.mul(Decimal.mul(delta, 0.01)))
+
+        // MOONSTONE REQUIREMENT
+        player.g.moonstoneReq = new Decimal(40)
+        player.g.moonstoneReq = player.g.moonstoneReq.div(buyableEffect('g', 24))
+        player.g.moonstoneReq = player.g.moonstoneReq.mul(player.g.moonstoneLevelEffects[1])
+        player.g.moonstoneReq = player.g.moonstoneReq.div(levelableEffect("pet", 303)[1])
+        player.g.moonstoneReq = player.g.moonstoneReq.max(0.25)
+
+        // MOONSTONE CAP
+        player.g.moonstoneCap = levelableEffect("pet", 1303)[0]
+
+        // MOONSTONE EFFECT
+        player.g.moonstoneEffect = player.g.moonstone.mul(4).pow(1.5).add(1)
+
+        // MAX MOONSTONE LEVEL
+        player.g.moonstoneLevelMax = buyableEffect('g', 29)
+
+        // MOONSTONE LEVEL EFFECTS
+        player.g.moonstoneLevelEffects = [player.g.moonstoneLevel.pow(1.5), player.g.moonstoneLevel.pow(0.2), player.g.moonstoneLevel.pow(1.2)]
+        if (hasUpgrade("cs", 503)) player.g.moonstoneLevelEffects[2] = Decimal.pow(1.2, player.g.moonstoneLevel.sub(1)).mul(player.g.moonstoneLevel)
+
+        // MOONSTONE HEALTH
+        player.g.moonstoneMaxHealth = new Decimal(100)
+        player.g.moonstoneMaxHealth = player.g.moonstoneMaxHealth.mul(player.g.moonstoneLevelEffects[0])
+
+        // MOONSTONE DAMAGE
+        player.g.moonstoneDamage = new Decimal(20)
+        player.g.moonstoneDamage = player.g.moonstoneDamage.mul(buyableEffect('g', 22))
+        if (hasUpgrade('ev8', 18)) player.g.moonstoneDamage = player.g.moonstoneDamage.mul(2)
+
+        // MOONSTONE GENERATION
+        if (player.ev.evolutionsUnlocked[7]) player.g.moonstoneTimer = player.g.moonstoneTimer.sub(delta)
+        if (player.g.moonstoneTimer.lt(0)) {
+            player.g.moonstoneTimer = player.g.moonstoneReq
+            let row = getRandomInt(5) + 1
+            let column = getRandomInt(8) + 1
+            let val = row + "0" + column
+            if (getGridData("g", val)[0] < 3) {
+                setGridData("g", val, [3, new Decimal(1), player.g.moonstoneMaxHealth])
+            } else if (getGridData("g", val)[0] == 3 && getGridData("g", val)[1].lt(player.g.moonstoneCap)) {
+                setGridData("g", val, [3, getGridData("g", val)[1].add(1), getGridData("g", val)[2]])
+            }
+        }
     },
     grid: {
         rows: 5,
@@ -576,7 +291,7 @@ addLayer('g', {
                 case 2:
                     return "x" + formatSimple(getGridData("g", id)[1])
                 case 3:
-                    return "x" + formatSimple(getGridData("g", id)[1]) + "<br><span style='font-size:10px'>HP:<br>" + formatShorterWhole(getGridData("g", id)[2]) + "/<br>" + formatShorterWhole(getMoonstoneMaxHealth())
+                    return "x" + formatSimple(getGridData("g", id)[1]) + "<br><span style='font-size:10px'>HP:<br>" + formatShorterWhole(getGridData("g", id)[2]) + "/<br>" + formatShorterWhole(player.g.moonstoneMaxHealth)
                 default:
                     return ""
             }
@@ -640,7 +355,7 @@ addLayer('g', {
         },
         7: {
             title() { return '<h3>Increase Level' },
-            canClick() { return player.g.moonstoneLevel.lt(getMoonstoneMaxLevel()) },
+            canClick() { return player.g.moonstoneLevel.lt(player.g.moonstoneLevelMax) },
             unlocked() { return true },
             onClick() {
                 player.g.moonstoneLevel = player.g.moonstoneLevel.add(1)
@@ -1499,7 +1214,7 @@ addLayer('g', {
                             return look
                         }],
                         ["style-column", [
-                            ["raw-html", () => {return "Moonstone Mult Cap: " + formatWhole(getMoonstoneCellCap())}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return "Moonstone Mult Cap: " + formatWhole(player.g.moonstoneCap)}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                             ["raw-html", () => {return "Moonstone Damage: " + formatSimple(player.g.moonstoneDamage)}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                         ], () => {
                             if (!player.ev.evolutionsUnlocked[7]) return {display: "none !important"}
@@ -1521,16 +1236,16 @@ addLayer('g', {
                     ['ex-buyable', 29],
                     ['row', [['clickable', 6], ['clickable', 7]]],
                     ['blank', '10px'],
-                    ['raw-html', () => '<h3>Level: ' + formatWhole(player.g.moonstoneLevel) + '/' + formatWhole(getMoonstoneMaxLevel()),
+                    ['raw-html', () => '<h3>Level: ' + formatWhole(player.g.moonstoneLevel) + '/' + formatWhole(player.g.moonstoneLevelMax),
                         { color: 'white', fontSize: '24px', fontFamily: 'monospace' }],
                     ['blank', '10px'],
                     ['raw-html', () => '<h3>Level Effects:',
                         { color: 'white', fontSize: '24px', fontFamily: 'monospace' }],
-                    ['raw-html', () => '<h4>x' + format(getMoonstoneLevelEffect(0)) + ' to moonstone health.',
+                    ['raw-html', () => '<h4>x' + format(player.g.moonstoneLevelEffects[0]) + ' to moonstone health.',
                         { color: 'white', fontSize: '24px', fontFamily: 'monospace' }],
-                    ['raw-html', () => '<h4>x' + format(getMoonstoneLevelEffect(1)) + ' to moonstone spawn time.',
+                    ['raw-html', () => '<h4>x' + format(player.g.moonstoneLevelEffects[1]) + ' to moonstone spawn time.',
                         { color: 'white', fontSize: '24px', fontFamily: 'monospace' }],
-                    ['raw-html', () => '<h4>x' + format(getMoonstoneLevelEffect(2)) + ' to moonstone value.',
+                    ['raw-html', () => '<h4>x' + format(player.g.moonstoneLevelEffects[2]) + ' to moonstone value.',
                         { color: 'white', fontSize: '24px', fontFamily: 'monospace' }],
                 ],
             },
@@ -1562,24 +1277,24 @@ addLayer('g', {
             ["raw-html", () => {return "(+" + format(player.g.grassVal) + " GV)"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["row", [
-            ["raw-html", () => {return "Boosts leaf gain by x" + format(getGrassEffectOnLeaves())}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-            ['raw-html', () => {return getGrassEffectOnLeaves().gte("1e25000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace", marginLeft: "10px"}]
+            ["raw-html", () => {return "Boosts leaf gain by x" + format(player.g.grassEffect)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+            ['raw-html', () => {return player.g.grassEffect.gte("1e25000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace", marginLeft: "10px"}]
         ]],
         ["style-row", [
-            ["raw-html", () => {return hasMilestone("r", 13) ? "Boosts tree and celestial point gain by x" + format(getGrassEffectOnTrees()) : hasUpgrade("g", 12) ? "Boosts tree gain by x" + format(getGrassEffectOnTrees()) : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-            ['raw-html', () => {return getGrassEffectOnTrees().gte("1e10000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return hasMilestone("r", 13) ? "Boosts tree and celestial point gain by x" + format(player.g.grassEffect2) : hasUpgrade("g", 12) ? "Boosts tree gain by x" + format(player.g.grassEffect2) : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+            ['raw-html', () => {return player.g.grassEffect2.gte("1e10000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace", marginLeft: "10px"}],
         ], () => {return hasUpgrade("g", 12) ? {marginBottom: "10px"} : {display: "none !important"}}],
         ["row", [
             ["raw-html", () => {return "You have " + format(player.g.goldGrass) + " golden grass"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
             ["raw-html", () => {return "(+" + format(player.g.goldGrassVal) + " GGV)"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ], () => {return hasUpgrade("g", 13) ? {} : {display: "none !important"}}],
-        ["raw-html", () => {return hasUpgrade('g', 13) ? "Boosts grass value by x" + format(getGoldenGrassEffect()) : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+        ["raw-html", () => {return hasUpgrade('g', 13) ? "Boosts grass value by x" + format(player.g.goldGrassEffect) : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["style-row", [], () => {return hasUpgrade("g", 13) ? {width: "10px", height: "10px"} : {display: "none !important"}}],
         ["row", [
             ["raw-html", () => {return player.ev.evolutionsUnlocked[7] ? "You have " + format(player.g.moonstone) + " moonstone" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace", userSelect: "none"}],
             ["raw-html", () => {return player.ev.evolutionsUnlocked[7] ? "(+" + format(player.g.moonstoneVal) + " MV)" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace", userSelect: "none", marginLeft: "10px"}],
         ], () => {return player.ev.evolutionsUnlocked[7] ? {} : {display: "none !important"}}],
-        ["raw-html", () => {return player.ev.evolutionsUnlocked[7] ? "Boosts golden grass value by x" + format(getMoonstoneEffect()) : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace", userSelect: "none"}],
+        ["raw-html", () => {return player.ev.evolutionsUnlocked[7] ? "Boosts golden grass value by x" + format(player.g.moonstoneEffect) : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace", userSelect: "none"}],
         ["style-row", [], () => {return player.ev.evolutionsUnlocked[7] ? {width: "10px", height: "10px"} : {display: "none !important"}}],
         ['microtabs', 'stuff', { 'border-width': '0px' }],
         ["blank", "25px"],

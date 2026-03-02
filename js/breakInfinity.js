@@ -1,165 +1,4 @@
-﻿/**
- * Reports if infinity automation is enabled. 
- * @returns 
- */
-function infinityAutomationIsEnabled() {
-    return player.bi.IACtoggle;
-}
-
-/**
- * Reports if infinity automation is based on seconds instead of IP. 
- * @returns 
- */
-function infinityAutomationIsTimeBased() {
-    return player.bi.IACtype;
-}
-
-/**
- * Reports if negative infinity automation is enabled. 
- * @returns 
- */
-function negativeInfinityAutomationIsEnabled() {
-    return player.bi.NACtoggle;
-}
-
-/**
- * Reports if negative infinity automation is based on seconds instead of NIP.
- * @returns 
- */
-function negativeInfinityAutomationIsTimeBased() {
-    return player.bi.NACtype;
-}
-
-/**
- * Set the automatic IP / NIP amounts based on user input.
- */
-function setAutoCrunchThresholds() {
-    if (infinityAutomationIsTimeBased()) {
-        player.bi.IACamount = player.bi.IACinput.gte(0) ? player.bi.IACinput : new Decimal(1);
-    } else {
-        player.bi.IACamount = player.bi.IACinput.min(1);
-    }
-
-    if (negativeInfinityAutomationIsTimeBased()) {
-        player.bi.NACamount = player.bi.NACinput.gte(0) ? player.bi.NACinput : new Decimal(1);
-    } else {
-        player.bi.NACamount = player.bi.NACinput.min(1);
-    }
-}
-
-/**
- * Check whether an automatic Infinity Reset should happen; if so, do it.
- * @param {*} delta The amount of time since the last tick.
- */
-function potentiallyAutoPositiveCrunch(delta) {
-    if (infinityAutomationIsTimeBased()) {
-        positiveCrunchBasedOnTime(delta);
-    } else {
-        positiveCrunchBasedOnAmount();
-    }
-}
-
-/**
- * Check whether an automatic Infinity Reset based on IP gain should happen.
- * If so, do it. 
- * @returns 
- */
-function positiveCrunchBasedOnAmount() {
-    if (!infinityAutomationIsEnabled()) return;
-    if (infinityAutomationIsTimeBased()) return;
-    
-    if (!player.in.infinityPointsToGet.gte(player.bi.IACamount)) return;
-    if (player.points.lt(1.797e308)) return;
-
-    // TODO: This code seems like it may be in a lot of different places. 
-    // If so, make it its own function and have other instances call that.
-    awardOTFMasteryPoints();
-
-    if (hasMilestone("ip", 21)) {
-        layers.bigc.crunch();
-    } else {
-        player.tab = "bigc";
-    }
-}
-
-/**
- * Check whether an automatic Infinity Reset based on time since reset should happen.
- * If so, do it. 
- * @returns 
- */
-function positiveCrunchBasedOnTime(delta) {
-    if (!infinityAutomationIsEnabled()) return;
-    if (!infinityAutomationIsTimeBased()) return;
-    
-    player.bi.IACtime = player.bi.IACtime.plus(delta);
-    
-    if (!player.bi.IACtime.gte(player.bi.IACamount)) return;
-    if (player.points.lt(1.797e308)) return;
-
-    player.bi.IACtime = new Decimal(0)
-
-    awardOTFMasteryPoints();
-
-    if (hasMilestone("ip", 21)) {
-        layers.bigc.crunch();
-    } else {
-        player.tab = "bigc";
-    }
-}
-
-
-/**
- * Check whether an automatic Negative Infinity Reset should happen; 
- * if so, do it.
- * @param {*} delta The amount of time since the last tick.
- */
-function potentiallyAutoNegativeCrunch(delta) {
-    if (negativeInfinityAutomationIsTimeBased()) {
-        negativeCrunchBasedOnTime(delta);
-    } else {
-        negativeCrunchBasedOnAmount();
-    }
-}
-
-/**
- * Check whether an automatic Negative Infinity Reset based on NIP gain should happen; 
- * if so, do it.
- */
-function negativeCrunchBasedOnAmount() {
-    if (!negativeInfinityAutomationIsEnabled()) return;
-    if (negativeInfinityAutomationIsTimeBased()) return;
-
-    if (!player.ta.negativeInfinityPointsToGet.gte(player.bi.NACamount)) return;
-    if (player.ad.antimatter.lt(1.797e308)) return;
-
-
-    // TODO: a domino chain starting here seems to be the result of some 
-    // odd interactions between mechanics. 
-    // Maybe related to microtick structure? 
-    // See antimatterDimensions.js for how this triggers a crunch.
-    player.ad.revCrunchPause = new Decimal(6);
-    player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet);
-}
-
-/**
- * Check whether an automatic Negative Infinity Reset based on time should happen; 
- * if so, do it.
- * @param {*} delta The amount of time since the last tick.
- */
-function negativeCrunchBasedOnTime(delta) {
-    if (!negativeInfinityAutomationIsEnabled()) return;
-    if (!negativeInfinityAutomationIsTimeBased()) return;
-
-    player.bi.NACtime = player.bi.NACtime.add(delta);
-
-    if (!player.bi.NACtime.gte(player.bi.NACamount)) return;
-    if (player.ad.antimatter.lt(1.797e308)) return;
-
-    player.ad.revCrunchPause = new Decimal(6);
-    player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet);
-}
-
-addLayer("bi", {
+﻿addLayer("bi", {
     name: "Break Infinity", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "BI", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "U2",
@@ -183,12 +22,43 @@ addLayer("bi", {
         NACtime: new Decimal(0),
     }},
     automate() {
-        if (!hasMilestone("s", 17)) return;
-        for (let infUpgradeId = 11; infUpgradeId <= 29; infUpgradeId++) {
-            buyUpgrade("bi", infUpgradeId);
-        }
-        for (let negInfUpgradeId = 101; negInfUpgradeId <= 118; negInfUpgradeId++) {
-            buyUpgrade("bi", negInfUpgradeId);
+        if (hasMilestone("s", 17)) {
+            buyUpgrade("bi", 11)
+            buyUpgrade("bi", 12)
+            buyUpgrade("bi", 13)
+            buyUpgrade("bi", 14)
+            buyUpgrade("bi", 16)
+            buyUpgrade("bi", 17)
+            buyUpgrade("bi", 18)
+            buyUpgrade("bi", 19)
+            buyUpgrade("bi", 21)
+            buyUpgrade("bi", 22)
+            buyUpgrade("bi", 23)
+            buyUpgrade("bi", 24)
+            buyUpgrade("bi", 25)
+            buyUpgrade("bi", 26)
+            buyUpgrade("bi", 27)
+            buyUpgrade("bi", 28)
+            buyUpgrade("bi", 29)
+
+            buyUpgrade("bi", 101)
+            buyUpgrade("bi", 102)
+            buyUpgrade("bi", 103)
+            buyUpgrade("bi", 104)
+            buyUpgrade("bi", 105)
+            buyUpgrade("bi", 106)
+            buyUpgrade("bi", 107)
+            buyUpgrade("bi", 108)
+            buyUpgrade("bi", 109)
+            buyUpgrade("bi", 111)
+            buyUpgrade("bi", 112)
+            buyUpgrade("bi", 113)
+            buyUpgrade("bi", 114)
+            buyUpgrade("bi", 115)
+            buyUpgrade("bi", 116)
+            buyUpgrade("bi", 117)
+            buyUpgrade("bi", 117)
+            buyUpgrade("bi", 118)
         }
     },
     nodeStyle() {
@@ -202,10 +72,65 @@ addLayer("bi", {
     color: "#2B7F0A",
     branches: ["ta"],
     update(delta) {
-        setAutoCrunchThresholds();
+        let onepersec = new Decimal(1)
 
-        potentiallyAutoPositiveCrunch(delta);
-        potentiallyAutoNegativeCrunch(delta);
+        // Set Autocrunch Values
+        if (player.bi.IACinput.gte(1) && !player.bi.IACtype) player.bi.IACamount = player.bi.IACinput
+        if (player.bi.IACinput.lt(1) && !player.bi.IACtype) player.bi.IACamount = new Decimal(1)
+        if (player.bi.IACinput.gte(0) && player.bi.IACtype) player.bi.IACamount = player.bi.IACinput
+        if (player.bi.IACinput.lt(0) && player.bi.IACtype) player.bi.IACamount = new Decimal(1)
+
+        // Set Negative Autocrunch Values
+        if (player.bi.NACinput.gte(1) && !player.bi.NACtype) player.bi.NACamount = player.bi.NACinput
+        if (player.bi.NACinput.lt(1) && !player.bi.NACtype) player.bi.NACamount = new Decimal(1)
+        if (player.bi.NACinput.gte(0) && player.bi.NACtype) player.bi.NACamount = player.bi.NACinput
+        if (player.bi.NACinput.lt(0) && player.bi.NACtype) player.bi.NACamount = new Decimal(1)
+
+        // Autocrunch Functionality
+        if (player.in.infinityPointsToGet.gte(player.bi.IACamount) && player.bi.IACtoggle && !player.bi.IACtype && player.points.gte(1e308)) {
+            if (hasUpgrade("bi", 14)) {
+                    if (player.po.dice) player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(player.om.diceMasteryPointsToGet)
+                    if (player.po.rocketFuel) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
+                    if (player.po.hex || hasUpgrade("s", 18)) player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
+            }
+            if (!hasMilestone("ip", 21)) {
+                player.tab = "bigc"
+            } else {
+                layers.bigc.crunch()
+            }
+        }
+
+        if (player.bi.IACtoggle && player.bi.IACtype) {
+            player.bi.IACtime = player.bi.IACtime.add(onepersec.mul(delta));
+            if (player.bi.IACtime.gte(player.bi.IACamount) && player.points.gte(1e308)) {
+                player.bi.IACtime = new Decimal(0)
+                if (hasUpgrade("bi", 14)) {
+                        if (player.po.dice) player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(player.om.diceMasteryPointsToGet)
+                        if (player.po.rocketFuel) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
+                        if (player.po.hex || hasUpgrade("s", 18)) player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
+                }
+                if (!hasMilestone("ip", 21)) {
+                    player.tab = "bigc"
+                } else {
+                    layers.bigc.crunch()
+                }
+            }
+        }
+
+        // Negative Autocrunch Functionality
+        if (player.ta.negativeInfinityPointsToGet.gte(player.bi.NACamount) && player.bi.NACtoggle && !player.bi.NACtype && player.ad.antimatter.gte(1e308)) {
+            player.ad.revCrunchPause = new Decimal(6)
+            player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
+        }
+
+        if (player.bi.NACtoggle && player.bi.NACtype) {
+            player.bi.NACtime = player.bi.NACtime.add(onepersec.mul(delta));
+            if (player.bi.NACtime.gte(player.bi.NACamount) && player.ad.antimatter.gte(1e308)) {
+                player.bi.NACtime = new Decimal(0)
+                player.ad.revCrunchPause = new Decimal(6)
+                player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
+            }
+        }
     },
     breakInfinities() {
         player.in.infinities = new Decimal(0)
@@ -461,10 +386,6 @@ addLayer("bi", {
             currencyLocation() { return player.in },
             currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
-            effect() {
-                if (player.po.dice === true) return new Decimal(2);
-                return new Decimal(5);
-            },
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         26: {

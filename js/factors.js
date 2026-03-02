@@ -77,7 +77,7 @@
         if (hasUpgrade("cs", 201)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(buyableEffect("f", 102))
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(buyableEffect("t", 16))
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(buyableEffect("g", 15))
-        player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(getGrasshopperEffect(1))
+        player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.gh.grasshopperEffects[1])
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(buyableEffect("m", 14))
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(levelableEffect("pet", 103)[0])
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.d.boosterEffects[1])

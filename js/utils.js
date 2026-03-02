@@ -102,7 +102,6 @@ function buyMaxBuyable(layer, id) {
 
 function buyBuyable(layer, id) {
 	if (!player[layer].unlocked || tmp[layer].deactivated) return
-	if (!tmp[layer].buyables[id]) return
 	if (!tmp[layer].buyables[id].unlocked) return
 	if (!tmp[layer].buyables[id].canBuy) return
 

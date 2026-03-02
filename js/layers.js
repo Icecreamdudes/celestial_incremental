@@ -130,8 +130,8 @@
         player.gain = player.gain.mul(player.f.factorPowerEffect)
         player.gain = player.gain.mul(buyableEffect("t", 15))
         player.gain = player.gain.mul(buyableEffect("g", 14))
-        player.gain = player.gain.mul(player.gh.grasshopperEffects[0])
-        if (hasMilestone("r", 13)) player.gain = player.gain.mul(player.g.grassEffect2)
+        player.gain = player.gain.mul(getGrasshopperEffect(0))
+        if (hasMilestone("r", 13)) player.gain = player.gain.mul(getGrassEffectOnPoints())
         player.gain = player.gain.mul(buyableEffect("m", 14))
         if (player.cb.effectActivate) player.gain = player.gain.mul(player.cb.levelEffect)
         player.gain = player.gain.mul(levelableEffect("pet", 101)[0])
@@ -209,7 +209,7 @@
             player.i.pylonEnergyPerSecond = player.i.pylonEnergyPerSecond.mul(buyableEffect("i", 11))
             player.i.pylonEnergyPerSecond = player.i.pylonEnergyPerSecond.mul(buyableEffect("i", 12))
             player.i.pylonEnergyPerSecond = player.i.pylonEnergyPerSecond.mul(buyableEffect("i", 13))
-            player.i.pylonEnergyPerSecond = player.i.pylonEnergyPerSecond.mul(player.in.pylonEnergyEffect3)
+            player.i.pylonEnergyPerSecond = player.i.pylonEnergyPerSecond.mul(getParadoxPylonEffect(2))
 
             player.i.pylonPassiveEffect = player.points.pow(0.002).add(1).pow(player.i.pylonTierEffect)
         } else

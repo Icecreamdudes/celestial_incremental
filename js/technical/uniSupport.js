@@ -129,7 +129,7 @@ addUniverse("U2", {
 addUniverse("A1", {
     name: "Alt-Universe 1<br>Cantepocalypse",
     symbol: "A1",
-    tree: [["cp"], ["ar", "pr"], ["an", "rt", "rg"], ["oi", "gs"], ["fu"]],
+    tree: [["cp"], ["ar", "pr", "en"], ["an", "rt", "rg"], ["oi", "gs"], ["fu"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(45deg, #064461 0%, #4a7d94 100%)",

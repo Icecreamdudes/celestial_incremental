@@ -113,6 +113,7 @@
             requirementDescription: "<h3>12 Boosters",
             effectDescription() { return "Gain 10% of grass value per second, and boost grass value and capacity based on boosters<br>Currently: x" + format(player.db.milestone4Effect) + "." },
             done() { return player.db.boosters.gte(12) && player.ir.iriditeDefeated },
+            unlocked() { return player.ir.iriditeDefeated },
             style() {
                 let look = {width: "500px", minHeight: "90px", color: "white", border: "3px solid #6e64c4", borderRadius: "10px", margin: "-1.5px"}
                 if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
@@ -123,6 +124,7 @@
             requirementDescription: "<h3>16 Boosters",
             effectDescription() { return "Gain 100% of prestige points per second and autobuy all prestige point buyables." },
             done() { return player.db.boosters.gte(16) && player.ir.iriditeDefeated },
+            unlocked() { return player.ir.iriditeDefeated },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #6e64c4", borderRadius: "10px", margin: "-1.5px"}
                 if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}

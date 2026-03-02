@@ -24,7 +24,7 @@
 		"Hive/unih.js", "Hive/flower.js", "Hive/pollen.js", "Hive/nectar.js", "Hive/beebread.js",
 		"Hive/honey.js", "Hive/wax.js", "Hive/aleph.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js", "DarkU1/blood.js", "Zar/zar.js", "Zar/coinFlip.js",
- 		"Zar/wheelOfFortune.js", "Check Back/singularityPet.js", "Zar/slotMachine.js", "Zar/checkBackShrine.js", "Zar/cards.js",
+ 		"Zar/wheelOfFortune.js", "Check Back/singularityPet.js", "Zar/slotMachine.js", "Zar/checkBackShrine.js", "Zar/cards.js", "Cantepocalypse/enhance.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 	],
@@ -190,6 +190,9 @@ function updateStyles() {
 		case "cp": case "ar": case "pr": case "an": case "rt":
 		case "rg": case "gs": case "oi": case "fu":
 			layerBG = "#204387"
+			break;
+		case "en":
+			layerBG = "#400c42"
 			break;
 		case "s": case "co": case "ra": case "sd": case "cs":
 		case "cof":
@@ -614,7 +617,7 @@ function updateStyles() {
             player.musuniverse = "U2"
 			break;
 		case "cp": case "ar": case "pr": case "an": case "rt":
-		case "rg": case "gs": case "oi": case "fu":
+		case "rg": case "gs": case "oi": case "fu": case "en":
             player.musuniverse = "A1"
 			break;
 		case "s": case "co": case "ra": case "sd": case "cs":

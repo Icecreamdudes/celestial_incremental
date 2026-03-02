@@ -18,12 +18,13 @@ addLayer("ev13", {
     color: "#206060"
     },
     tooltip: "Diamond Dust",
-    color: "white",
+    color: "#00ffff",
     branches: ["ev0"],
     update(delta) {
         let onepersec = player.cb.cbTickspeed
 
         player.ev13.diamondDustToGet = player.ev0.coinDust.div(1e9).pow(0.75).mul(2)
+        player.ev13.diamondDustToGet = player.ev13.diamondDustToGet.mul(buyableEffect("ev13", 11))
 
         player.ev13.diamondDustEffect = player.ev13.diamondDust.pow(0.625).add(1)
     },
@@ -56,13 +57,100 @@ addLayer("ev13", {
         11: {
             title: "Diamond Dust Upgrade I",
             description: "Simple, but powerful. x500 coin dust gain.",
-            cost: new Decimal(1),
+            cost: new Decimal(2),
             currencyDisplayName: "Diamond Dust",
             currencyInternalName: "diamondDust",
             currencyLayer: "ev13",
             unlocked() { return true },
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
-        }
+        },
+        12: {
+            title: "Diamond Dust Upgrade II",
+            description: "The diamond dust effect also boosts coin dust at the same rate.",
+            cost: new Decimal(6),
+            currencyDisplayName: "Diamond Dust",
+            currencyInternalName: "diamondDust",
+            currencyLayer: "ev13",
+            unlocked() { return true },
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
+        13: {
+            title: "Diamond Dust Upgrade III",
+            description: "Coin fragments no longer cost basic or greater fragments.",
+            cost: new Decimal(18),
+            currencyDisplayName: "Diamond Dust",
+            currencyInternalName: "diamondDust",
+            currencyLayer: "ev13",
+            unlocked() { return true },
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
+        14: {
+            title: "Diamond Dust Upgrade IV",
+            description: "Autobuy the first row of coin dust buyables.",
+            cost: new Decimal(72),
+            currencyDisplayName: "Diamond Dust",
+            currencyInternalName: "diamondDust",
+            currencyLayer: "ev13",
+            unlocked() { return true },
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
+        15: {
+            title: "Diamond Dust Upgrade V",
+            description: "Autobuy the second row of coin dust buyables.",
+            cost: new Decimal(360),
+            currencyDisplayName: "Diamond Dust",
+            currencyInternalName: "diamondDust",
+            currencyLayer: "ev13",
+            unlocked() { return true },
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
+        16: {
+            title: "Diamond Dust Upgrade VI",
+            description: "Unlock coal.",
+            cost: new Decimal(1800),
+            currencyDisplayName: "Diamond Dust",
+            currencyInternalName: "diamondDust",
+            currencyLayer: "ev13",
+            unlocked() { return true },
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
+    },
+    buyables: {
+        11: {
+            costBase() { return new Decimal(3) },
+            costGrowth() { return new Decimal(3) },
+            purchaseLimit() { return new Decimal(25) },
+            currency() { return player.ev13.diamondDust},
+            pay(amt) {player.ev13.diamondDust = this.currency().sub(amt)},
+            effect(x) { return new Decimal(2).pow(getBuyableAmount(this.layer, this.id))},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Diamond Dust Doubler"
+            },
+            display() {
+                return "which are boosting diamond dust gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Diamond Dust"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', backgroundColor: "#40ffff", backgroundImage: 'linear-gradient(90deg, #80ffff, #00ffff)'}
+        },
     },
     microtabs: {
         stuff: {
@@ -79,7 +167,9 @@ addLayer("ev13", {
                 buttonStyle() { return { color: "black", borderColor: "black", backgroundColor: "#80ffff", borderRadius: "5px"} },
                 unlocked() {return true},
                 content: [
-                     ["style-row", [["upgrade", 11]]]
+                     ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
+                     ["blank", "15px"],
+                     ["style-row", [["ex-buyable", 11]]]
                 ]
             },
             "Coal": {
@@ -87,7 +177,7 @@ addLayer("ev13", {
                 unlocked() {return true},
                 content: [
                     ["raw-html", () => {
-                        return "2"
+                        return "Coming soon..."
                     },]
                 ]
             }

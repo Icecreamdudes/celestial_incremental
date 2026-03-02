@@ -594,6 +594,12 @@ addLayer("pet", {
         player.pet.fragShopCost2 = fragShopBase[player.pet.fragShopIndex][1].mul(fragMul).mul(player.pet.fragShopBulk).mul(10).floor().div(10)
         player.pet.fragShopCost3 = fragShopBase[player.pet.fragShopIndex][2].mul(fragMul).mul(player.pet.fragShopBulk).mul(10).floor().div(10)
 
+        // MODIFIERS FOR FRAG FRAGMENTS
+        if (hasUpgrade("ev13", 13) && player.pet.fragShopIndex == 4) {
+            player.pet.fragShopCost2 = new Decimal(0)
+            player.pet.fragShopCost3 = new Decimal(0)
+        }
+
         for (let i in player.pet.fragShop) {
             player.pet.fragShop[i].current = player.pet.fragShop[i].current.sub(onepersec.mul(delta))
         }

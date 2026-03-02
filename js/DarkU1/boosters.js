@@ -63,10 +63,11 @@
             canClick() { return player.du.points.gte(player.db.boosterReq) },
             unlocked() { return true },
             onClick() {
+                if (player.dg.generatorPause.gt(0)) return;
+                player.dg.generatorPause = new Decimal(10)
+
                 player.db.boosters = player.db.boosters.add(1)
                 player.points = player.points.sub(player.db.boosterReq)
-
-                player.dg.generatorPause = new Decimal(10)
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {

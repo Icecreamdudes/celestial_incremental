@@ -108,8 +108,10 @@
             canClick() { return player.dg.generatorsToGet.gte(1) },
             unlocked() { return true },
             onClick() {
-                player.dg.generators = player.dg.generators.add(player.dg.generatorsToGet)
+                if (player.dg.generatorPause.gt(0)) return;
                 player.dg.generatorPause = new Decimal(10)
+                
+                player.dg.generators = player.dg.generators.add(player.dg.generatorsToGet)
             },
             style() {
                 let look = {width: "400px", minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid #0a593c", margin: "1px"}

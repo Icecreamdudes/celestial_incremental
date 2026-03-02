@@ -137,6 +137,8 @@ function negativeCrunchBasedOnAmount() {
     // odd interactions between mechanics. 
     // Maybe related to microtick structure? 
     // See antimatterDimensions.js for how this triggers a crunch.
+    if (player.ad.revCrunchPause.gt(0)) return;
+
     player.ad.revCrunchPause = new Decimal(6);
     player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet);
 }
@@ -154,7 +156,9 @@ function negativeCrunchBasedOnTime(delta) {
 
     if (!player.bi.NACtime.gte(player.bi.NACamount)) return;
     if (player.ad.antimatter.lt(1.797e308)) return;
-
+    
+    if (player.ad.revCrunchPause.gt(0)) return;
+    
     player.ad.revCrunchPause = new Decimal(6);
     player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet);
 }

@@ -182,9 +182,11 @@
             canClick() { return player.m.codeExperienceToGet.gte(1) && player.points.gte(1e65) && player.t.trees.gte(10000000) },
             unlocked() { return true },
             onClick() {
-                if (!hasAchievement("achievements", 17)) completeAchievement("achievements", 17)
+                if (player.m.codeExperiencePause.gt(0)) return;
+                
                 player.m.codeExperiencePause = new Decimal(3)
                 player.m.codeExperience = player.m.codeExperience.add(player.m.codeExperienceToGet)
+                completeAchievement("achievements", 17);
             },
             style: { width: '400px', minHeight: '100px', borderRadius: '15px' },
         },

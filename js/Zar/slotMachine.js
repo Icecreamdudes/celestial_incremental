@@ -290,7 +290,9 @@
             canClick() { return player.za.chancePoints.gte(player.sm.spinCost) && !player.sm.spinActive },
             unlocked() { return true },
             onClick() {
-                player.sm.spinPause = new Decimal(7)
+                if (player.sm.spinPause.gt(0)) return;
+                player.sm.spinPause = new Decimal(7);
+
                 layers.sm.spinSlots();
                 player.sm.spinAmount = player.sm.spinAmount.add(1)
             },
@@ -304,7 +306,8 @@
             canClick() { return true },
             unlocked() { return true },
             onClick() {
-                player.sm.spinPause = new Decimal(7)
+                if (player.sm.spinPause.gt(0)) return;
+                player.sm.spinPause = new Decimal(7);
             },
             style() { 
                 return { width: '125px', "min-height": '75px', borderRadius: "15px 15px 15px 15px", border: "3px solid #0f221aff", backgroundImage: "linear-gradient(180deg, #c1c436ff 0%, #eaebc3ff 50%, #c1c436ff 100%)"}

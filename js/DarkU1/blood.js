@@ -152,9 +152,10 @@
             canClick() { return player.bl.bloodToGet.gte(1) },
             unlocked() { return true },
             onClick() {
-                player.bl.blood = player.bl.blood.add(player.bl.bloodToGet)
-
+                if (player.le.starmetalAlloyPause.gt(0)) return;
                 player.le.starmetalAlloyPause = new Decimal(10)
+
+                player.bl.blood = player.bl.blood.add(player.bl.bloodToGet)
             },
             style() {
                 let look = {width: "400px", minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid #f57171ff", margin: "1px"}

@@ -335,7 +335,11 @@
             canClick() { return player.ro.rocketCooldown.lt(0) && player.ro.rocketParts.gte(player.ro.rocketPartsReq) && player.ro.activatedFuel.gte(player.ro.activatedFuelReq) && player.cb.evolutionShards.gte(player.ro.evoCost) && player.cb.paragonShards.gte(player.ro.paragonCost)},
             unlocked() { return true },
             onClick() {
+                if (player.ro.starPause.gt(0)) return;
+
+                player.ro.starPause = new Decimal(8)
                 player.au2.stars = player.au2.stars.add(player.au2.starsToGet)
+                
                 for (let i = 0; i < player.ro.selectedPassengersCommon.length; i++) {
                     player.st.levelables[Decimal.add(100, Decimal.add(1, player.ro.selectedPassengersCommon[i]))][1] = player.st.levelables[Decimal.add(100, Decimal.add(1, player.ro.selectedPassengersCommon[i]))][1].add(player.ro.commonXPToGet[i])
                 }
@@ -344,7 +348,6 @@
                     player.st.levelables[Decimal.add(200, Decimal.add(1, player.ro.selectedPassengersUncommon[i]))][1] = player.st.levelables[Decimal.add(200, Decimal.add(1, player.ro.selectedPassengersUncommon[i]))][1].add(player.ro.uncommonXPToGet[i])
                 }
 
-                player.ro.starPause = new Decimal(8)
                 player.ro.rocketCooldown = player.ro.rocketCooldownMax[player.ro.rocketIndex]
 
                 player.cb.evolutionShards = player.cb.evolutionShards.sub(player.ro.evoCost)

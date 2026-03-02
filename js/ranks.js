@@ -429,10 +429,12 @@
             canClick() { return player.r.pentToGet.gt(0) && (!hasUpgrade("i", 32) || inChallenge("ip", 14)) },
             unlocked() { return true },
             onClick() {
-                if (!hasAchievement("achievements", 10)) completeAchievement("achievements", 10)
-                if (!hasAchievement("achievements", 24) && player.r.pent.gte(30)) completeAchievement("achievements", 24)
-                player.r.pent = player.r.pent.add(player.r.pentToGet)
-                player.r.pentPause = new Decimal(3)
+                if (player.r.pentPause.gt(0)) return;
+                
+                player.r.pentPause = new Decimal(3);
+                player.r.pent = player.r.pent.add(player.r.pentToGet);
+                completeAchievement("achievements", 10);
+                if (player.r.pent.gte(30)) completeAchievement("achievements", 24);
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {

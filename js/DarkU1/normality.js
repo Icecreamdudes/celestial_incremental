@@ -51,8 +51,10 @@
             canClick() { return player.dn.normalityToGet.gte(1) },
             unlocked() { return true },
             onClick() {
-                player.dn.normality = player.dn.normality.add(player.dn.normalityToGet)
+                if (player.dn.normalityPause.gt(0)) return;
                 player.dn.normalityPause = new Decimal(10)
+                
+                player.dn.normality = player.dn.normality.add(player.dn.normalityToGet)
             },
             style() {
                 let look = {width: "400px", minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid #c1df00", margin: "1px"}

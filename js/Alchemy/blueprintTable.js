@@ -12,7 +12,7 @@ addLayer("btb", {
         symbolSpaceRock: new Decimal(0),
         symbolSpaceGem: new Decimal(0),
         symbolSpaceDust: new Decimal(0),
-        symbolArcane: new Decimal(0)
+        symbolEclipseShard: new Decimal(0)
 
             // advanced building materials, currently nothing as of now! Content will be added later!
 
@@ -35,8 +35,14 @@ addLayer("btb", {
         rows: 5,
         cols: 5,
         getStartData(id) {
-            return [0, new Decimal(1)]
+            return [0] // image ID
         },
+        // getTitle(id) {
+            // switch (getGridData ("btb", id)[0]) {
+                //  case 0:
+                    // return ""
+            // }
+        // },
         getStyle() {
             let look = {width: "50px", height: "50px", background: "#a2a2a2", border: "5px solid #777777", borderRadius: "0", padding: "0", margin: "3px", boxShadow: "0 0 2px 2px white, 0 0 5px 5px black"}
             return look
@@ -95,20 +101,21 @@ addLayer("btb", {
             }
         },
         3: {
-            title() {return "Convert<br>10 🝪 Alchemical Symbols 🝪 and<br>10000 Space Rocks into<br>1 ⛊ Space Rock Symbol ⛊."},
-            canClick() {return player.ir.spaceRock.gte(100000) & player.ktb.alchemicalSymbols.gte(10)},
+            title() {return "Convert<br>10 🝪 Alchemical Symbols 🝪 and <br>10 Eclipse Shards into<br>1 ⏾ Eclipse Shard Symbol ⏾."},
+            canClick() {return player.sma.eclipseShards.gte(10) & player.ktb.alchemicalSymbols.gte(10)},
             unlocked() {return true},
             onClick() { 
-                player.btb.symbolSpaceRock = player.btb.symbolSpaceRock.add(1)
+                player.btb.symbolEclipseShard = player.btb.symbolEclipseShard.add(1)
                 player.ktb.alchemicalSymbols = player.ktb.alchemicalSymbols.sub(10)
-                player.ir.spaceRock = player.ir.spaceRock.sub(10000)
+                player.sma.eclipseShards = player.sma.eclipseShards.sub(10)
             },
             style() {
             let look = {width: '325px', minHeight: '100px', maxHeight: "100px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px"}
             if (this.canClick()) {
-                look.background = "linear-gradient(15deg, #5f5f5f 0%, #a8a8a8 50%, #5f5f5f 100%)"
-                look.border = "3px solid #464646"
-                look.color = "#eaf6f7"
+                look.background = "linear-gradient(135deg, #ffb700, #ffe866)"
+                look.borderColor = "transparent"
+                look.borderImage = "linear-gradient(to bottom, #222, #000) 1"
+                look.color = "black"
                 look.boxShadow = "0 0 3px 1px black inset, 0 0 5px white"
             } else {
                 look.backgroundColor = "#333333"
@@ -170,20 +177,20 @@ addLayer("btb", {
             }
         },
         6: {
-            title() {return "Convert<br>10000 🝪 Alchemical Symbols 🝪 into<br>1 Ⰿ Arcane Symbol Ⰿ."},
-            canClick() {return player.ktb.alchemicalSymbols.gte(10000)},
+            title() {return "Convert<br>10 🝪 Alchemical Symbols 🝪 and<br>10000 Space Rocks into<br>1 ⛊ Space Rock Symbol ⛊."},
+            canClick() {return player.ir.spaceRock.gte(100000) & player.ktb.alchemicalSymbols.gte(10)},
             unlocked() {return true},
             onClick() { 
-                player.btb.symbolArcane = player.btb.symbolArcane.add(1)
-                player.ktb.alchemicalSymbols = player.ktb.alchemicalSymbols.sub(10000)
+                player.btb.symbolSpaceRock = player.btb.symbolSpaceRock.add(1)
+                player.ktb.alchemicalSymbols = player.ktb.alchemicalSymbols.sub(10)
+                player.ir.spaceRock = player.ir.spaceRock.sub(10000)
             },
             style() {
             let look = {width: '325px', minHeight: '100px', maxHeight: "100px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px"}
             if (this.canClick()) {
-                look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)"
-                look.borderColor = "transparent"
-                look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1"
-                look.color = "black"
+                look.background = "linear-gradient(15deg, #5f5f5f 0%, #a8a8a8 50%, #5f5f5f 100%)"
+                look.border = "3px solid #464646"
+                look.color = "#eaf6f7"
                 look.boxShadow = "0 0 3px 1px black inset, 0 0 5px white"
             } else {
                 look.backgroundColor = "#333333"
@@ -203,7 +210,7 @@ addLayer("btb", {
                 // Also unlocks Alchemy Altar.
             },
             style() {
-            let look = {width: '300px', minHeight: '50px', maxHeight: "50px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px", marginTop: "20px"}
+            let look = {width: '300px', minHeight: '50px', maxHeight: "50px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px", marginTop: "10px", marginLeft: "0"}
             if (this.canClick()) {
                 look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)"
                 look.borderColor = "transparent"
@@ -218,7 +225,207 @@ addLayer("btb", {
             }
             return look
             }
-        }
+        },
+        8: {
+            title() {return "Previous"},
+            canClick() {return true}, // function here also
+            unlocked() {return true},
+            onClick() { 
+                // function here
+            },
+            style() {
+            let look = {width: '100px', minHeight: '50px', maxHeight: "50px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px"}
+            if (this.canClick()) {
+                look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)"
+                look.borderColor = "transparent"
+                look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1"
+                look.color = "black"
+                look.boxShadow = "0 0 3px 1px black inset, 0 0 5px white"
+            } else {
+                look.backgroundColor = "#333333"
+                look.border = "3px solid #000000"
+                look.color = "black"
+                look.boxShadow = "0 0 3px 1px black inset"
+            }
+            return look
+            }
+        },
+        9: {
+            title() {return "Next"},
+            canClick() {return true}, // function here also
+            unlocked() {return true},
+            onClick() { 
+                // function here
+            },
+            style() {
+            let look = {width: '100px', minHeight: '50px', maxHeight: "50px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px"}
+            if (this.canClick()) {
+                look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)"
+                look.borderColor = "transparent"
+                look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1"
+                look.color = "black"
+                look.boxShadow = "0 0 3px 1px black inset, 0 0 5px white"
+            } else {
+                look.backgroundColor = "#333333"
+                look.border = "3px solid #000000"
+                look.color = "black"
+                look.boxShadow = "0 0 3px 1px black inset"
+            }
+            return look
+            }
+        },
+
+        // start of crafting clickables
+        11: {
+            title() {return "Grab"},
+            canClick() {return player.btb.symbolStarmetalAlloy.gte(1)},
+            unlocked() {return true},
+            onClick() { 
+                // function here
+                player.btb.symbolStarmetalAlloy = player.btb.symbolStarmetalAlloy.sub(1)
+            },
+            style() {
+            let look = {width: '100px', minHeight: '50px', maxHeight: "50px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px"}
+            if (this.canClick()) {
+                look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)"
+                look.borderColor = "transparent"
+                look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1"
+                look.color = "black"
+                look.boxShadow = "0 0 3px 1px black inset, 0 0 5px white"
+            } else {
+                look.backgroundColor = "#333333"
+                look.border = "3px solid #000000"
+                look.color = "black"
+                look.boxShadow = "0 0 3px 1px black inset"
+            }
+            return look
+            }
+        },
+        12: {
+            title() {return "Grab"},
+            canClick() {return player.btb.symbolStarmetalEssence.gte(1)},
+            unlocked() {return true},
+            onClick() { 
+                // function here
+                player.btb.symbolStarmetalEssence = player.btb.symbolStarmetalEssence.sub(1)
+            },
+            style() {
+            let look = {width: '100px', minHeight: '50px', maxHeight: "50px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px"}
+            if (this.canClick()) {
+                look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)"
+                look.borderColor = "transparent"
+                look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1"
+                look.color = "black"
+                look.boxShadow = "0 0 3px 1px black inset, 0 0 5px white"
+            } else {
+                look.backgroundColor = "#333333"
+                look.border = "3px solid #000000"
+                look.color = "black"
+                look.boxShadow = "0 0 3px 1px black inset"
+            }
+            return look
+            }
+        },
+        13: {
+            title() {return "Grab"},
+            canClick() {return player.btb.symbolEclipseShard.gte(1)},
+            unlocked() {return true},
+            onClick() { 
+                // function here
+                player.btb.symbolEclipseShard = player.btb.symbolEclipseShard.sub(1)
+            },
+            style() {
+            let look = {width: '100px', minHeight: '50px', maxHeight: "50px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px"}
+            if (this.canClick()) {
+                look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)"
+                look.borderColor = "transparent"
+                look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1"
+                look.color = "black"
+                look.boxShadow = "0 0 3px 1px black inset, 0 0 5px white"
+            } else {
+                look.backgroundColor = "#333333"
+                look.border = "3px solid #000000"
+                look.color = "black"
+                look.boxShadow = "0 0 3px 1px black inset"
+            }
+            return look
+            }
+        },
+        14: {
+            title() {return "Grab"},
+            canClick() {return player.btb.symbolSpaceGem.gte(1)},
+            unlocked() {return true},
+            onClick() { 
+                // function here
+                player.btb.symbolSpaceGem = player.btb.symbolSpaceGem.sub(1)
+            },
+            style() {
+            let look = {width: '100px', minHeight: '50px', maxHeight: "50px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px"}
+            if (this.canClick()) {
+                look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)"
+                look.borderColor = "transparent"
+                look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1"
+                look.color = "black"
+                look.boxShadow = "0 0 3px 1px black inset, 0 0 5px white"
+            } else {
+                look.backgroundColor = "#333333"
+                look.border = "3px solid #000000"
+                look.color = "black"
+                look.boxShadow = "0 0 3px 1px black inset"
+            }
+            return look
+            }
+        },
+        15: {
+            title() {return "Grab"},
+            canClick() {return player.btb.symbolSpaceDust.gte(1)},
+            unlocked() {return true},
+            onClick() { 
+                // function here
+                player.btb.symbolSpaceDust = player.btb.symbolSpaceDust.sub(1)
+            },
+            style() {
+            let look = {width: '100px', minHeight: '50px', maxHeight: "50px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px"}
+            if (this.canClick()) {
+                look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)"
+                look.borderColor = "transparent"
+                look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1"
+                look.color = "black"
+                look.boxShadow = "0 0 3px 1px black inset, 0 0 5px white"
+            } else {
+                look.backgroundColor = "#333333"
+                look.border = "3px solid #000000"
+                look.color = "black"
+                look.boxShadow = "0 0 3px 1px black inset"
+            }
+            return look
+            }
+        },
+        16: {
+            title() {return "Grab"},
+            canClick() {return player.btb.symbolSpaceRock.gte(1)},
+            unlocked() {return true},
+            onClick() { 
+                // function here
+                player.btb.symbolSpaceRock = player.btb.symbolSpaceRock.sub(1)
+            },
+            style() {
+            let look = {width: '100px', minHeight: '50px', maxHeight: "50px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px"}
+            if (this.canClick()) {
+                look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)"
+                look.borderColor = "transparent"
+                look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1"
+                look.color = "black"
+                look.boxShadow = "0 0 3px 1px black inset, 0 0 5px white"
+            } else {
+                look.backgroundColor = "#333333"
+                look.border = "3px solid #000000"
+                look.color = "black"
+                look.boxShadow = "0 0 3px 1px black inset"
+            }
+            return look
+            }
+        },
     },
     bars: {},
     upgrades: {},
@@ -234,16 +441,17 @@ addLayer("btb", {
                 content: [
                     ["blank", "10px"],
                     ["style-row",
-                        ["style-column", // title
-                            ["top-column", [
+                        ["style-column",
+                            ["style-column", [
                                 ["blank", "10px"],
                                 ["raw-html", () => {return "Alchemical Symbol Conversion Table"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                                 ["blank", "10px"],
-                            ], {width: "900px", height: "40px", background: "linear-gradient(0deg, #000055 50%, #0000ff 100%)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}]
+                            ], {width: "900px", height: "40px", background: "linear-gradient(0deg, #000055 50%, #0000ff 100%)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}
+                            ]
                         ]
                     ],
                     ["style-row",
-                        [ // tooltips and images region for the 1st set
+                        [
                             ["tooltip-row", [
                                 ["raw-html", "<img src='resources/alchemyworld/symbolStarmetalAlloy.png'style='width:40px;height:40px;margin:5px'></img>"], {width: "50px", height: "50px", display: "block", alignItems: "center"},
                                 ["raw-html", () => {return formatShortWhole(player.btb.symbolStarmetalAlloy)}, {width: "90px", height: "50px", color: "transparent", background: "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)", fontSize: "20px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
@@ -255,9 +463,9 @@ addLayer("btb", {
                                 ["raw-html", () => {return "<div class='bottomTooltip'>Starmetal Essence Symbols</div>"}],
                             ], {width: "145px", height: "50px", background: "#000055", backgroundImage: "radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}],
                             ["tooltip-row", [
-                                ["raw-html", "<img src='resources/alchemyworld/symbolSpaceRock.png'style='width:40px;height:40px;margin:5px'></img>"], {width: "50px", height: "50px", display: "block", alignItems: "center"},
-                                ["raw-html", () => {return formatShortWhole(player.btb.symbolSpaceRock)}, {width: "90px", height: "50px", color: "transparent", background: "linear-gradient(15deg, #5f5f5f 0%, #c5c5c5 50%, #5f5f5f 100%)", fontSize: "20px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace", backgroundClip: "text", fontFamily: "monospace", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                                ["raw-html", () => {return "<div class='bottomTooltip'>Space Rock Symbols</div>"}],
+                                ["raw-html", "<img src='resources/alchemyworld/symbolEclipseShard.png'style='width:40px;height:40px;margin:5px'></img>"], {width: "50px", height: "50px", display: "block", alignItems: "center"},
+                                ["raw-html", () => {return formatShortWhole(player.btb.symbolEclipseShard)}, {width: "90px", height: "50px", color: "transparent", background: "linear-gradient(135deg, #ffb700, #ffe866)", fontSize: "20px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ["raw-html", () => {return "<div class='bottomTooltip'>Eclipse Shard Symbols</div>"}],
                             ], {width: "145px", height: "50px", background: "#000055", backgroundImage: "radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}],
                             ["tooltip-row", [
                                 ["raw-html", "<img src='resources/alchemyworld/symbolSpaceGem.png'style='width:40px;height:40px;margin:5px'></img>"], {width: "50px", height: "50px", display: "block", alignItems: "center"},
@@ -270,41 +478,44 @@ addLayer("btb", {
                                 ["raw-html", () => {return "<div class='bottomTooltip'>Space Dust Symbols</div>"}],
                             ], {width: "145px", height: "50px", background: "#000055", backgroundImage: "radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}],
                             ["tooltip-row", [
-                                ["raw-html", "<img src='resources/alchemyworld/symbolArcane.png'style='width:40px;height:40px;margin:5px'></img>"], {width: "50px", height: "50px", display: "block", alignItems: "center"},
-                                ["raw-html", () => {return formatShortWhole(player.btb.symbolArcane)}, {width: "90px", height: "50px", color: "transparent", background: "linear-gradient(to bottom, #8b609c, magenta, pink)", fontSize: "20px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                                ["raw-html", () => {return "<div class='bottomTooltip'>Arcane Symbols</div>"}],
+                                ["raw-html", "<img src='resources/alchemyworld/symbolSpaceRock.png'style='width:40px;height:40px;margin:5px'></img>"], {width: "50px", height: "50px", display: "block", alignItems: "center"},
+                                ["raw-html", () => {return formatShortWhole(player.btb.symbolSpaceRock)}, {width: "90px", height: "50px", color: "transparent", background: "linear-gradient(15deg, #5f5f5f 0%, #c5c5c5 50%, #5f5f5f 100%)", fontSize: "20px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace", backgroundClip: "text", fontFamily: "monospace", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ["raw-html", () => {return "<div class='bottomTooltip'>Space Rock Symbols</div>"}],
                             ], {width: "145px", height: "50px", background: "#000055", backgroundImage: "radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}],
                         ]
                     ],
-                    ["style-column", 
-                        [ // clickables region for the 1st set
-                            ["clickable", 1],
-                            ["blank", "10px"],
-                            ["raw-html", () => {return "You have " + formatWhole(player.sma.starmetalAlloy) + " Starmetal Alloy."}, {color: "transparent", background: "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace"}],
-                            ["blank", "30px"],
-                            ["clickable", 2],
-                            ["blank", "10px"],
-                            ["raw-html", () => {return "You have " + formatWhole(player.sme.starmetalEssence) + " Starmetal Essence."}, {color: "transparent", background: "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%, #eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace"}],
-                            ["blank", "30px"],
-                            ["clickable", 3],
-                            ["blank", "10px"],
-                            ["raw-html", () => {return "You have " + formatWhole(player.ir.spaceRock) + " Space Rocks."}, {color: "transparent", background: "linear-gradient(15deg, #5f5f5f 0%, #a8a8a8 50%, #5f5f5f 100%)", fontSize: "16px", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace"}],
-                        ], {width: "447px", height: "600px", background: "#000055", backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 20px, white 21px, white 20px), repeating-linear-gradient(90deg, transparent, transparent 20px, #ffffff88 21px, #ffffff88 20px), radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset", marginLeft: "0"}
-                    ],
-                    ["style-column", [
-                            ["clickable", 4],
-                            ["blank", "10px"],
-                            ["raw-html", () => {return "You have " + formatWhole(player.ir.spaceGem) + " Space Gems."}, {color: "transparent", background: "radial-gradient(circle, #564BCC, #000000)", fontSize: "16px", textStroke: "1px #dbd7ff", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace"}],
-                            ["blank", "30px"],
-                            ["clickable", 5],
-                            ["blank", "10px"],
-                            ["raw-html", () => {return "You have " + formatWhole(player.pl.spaceDust) + " Space Dust."}, {color: "transparent", background: "linear-gradient(15deg, #34eb86 0%, #279ccf 50%, #411bb3 100%)", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace"}],
-                            ["blank", "30px"],
-                            ["clickable", 6],
-                            ["blank", "10px"],
-                            ["raw-html", () => {return "You have " + formatWhole(player.ktb.alchemicalSymbols) + " 🝪 Alchemical Symbols 🝪."}, {color: "transparent", background: "linear-gradient(to bottom, #8b609c, magenta, pink)", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace"}],
-                        ], {width: "447px", height: "600px", background: "#000055", backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 20px, white 21px, white 20px), repeating-linear-gradient(90deg, transparent, transparent 20px, #ffffff88 21px, #ffffff88 20px), radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset", marginRight: "0", marginTop: "-606px"}
-                    ]        
+                    ["style-row", [
+                        ["style-column",
+                            [
+                                ["clickable", 1],
+                                ["blank", "10px"],
+                                ["raw-html", () => {return "You have " + formatWhole(player.sma.starmetalAlloy) + " Starmetal Alloy."}, {color: "transparent", background: "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace"}],
+                                ["blank", "30px"],
+                                ["clickable", 2],
+                                ["blank", "10px"],
+                                ["raw-html", () => {return "You have " + formatWhole(player.sme.starmetalEssence) + " Starmetal Essence."}, {color: "transparent", background: "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%, #eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace"}],
+                                ["blank", "30px"],
+                                ["clickable", 3],
+                                ["blank", "10px"],
+                                ["raw-html", () => {return "You have " + formatWhole(player.sma.eclipseShards) + " Eclipse Shards."}, {color: "transparent", background: "linear-gradient(135deg, #ffb700, #ffe866)", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace"}]
+                            ], {width: "447px", height: "500px", background: "#000055", backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 20px, white 21px, white 20px), repeating-linear-gradient(90deg, transparent, transparent 20px, #ffffff88 21px, #ffffff88 20px), radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}
+                        ],
+                        ["style-column",
+                            [
+                                ["clickable", 4],
+                                ["blank", "10px"],
+                                ["raw-html", () => {return "You have " + formatWhole(player.ir.spaceGem) + " Space Gems."}, {color: "transparent", background: "radial-gradient(circle, #564BCC, #000000)", fontSize: "16px", textStroke: "1px #dbd7ff", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace"}],
+                                ["blank", "30px"],
+                                ["clickable", 5],
+                                ["blank", "10px"],
+                                ["raw-html", () => {return "You have " + formatWhole(player.pl.spaceDust) + " Space Dust."}, {color: "transparent", background: "linear-gradient(15deg, #34eb86 0%, #279ccf 50%, #411bb3 100%)", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace"}],
+                                ["blank", "30px"],
+                                ["clickable", 6],
+                                ["blank", "10px"],
+                                ["raw-html", () => {return "You have " + formatWhole(player.ir.spaceRock) + " Space Rocks."}, {color: "transparent", background: "linear-gradient(15deg, #5f5f5f 0%, #a8a8a8 50%, #5f5f5f 100%)", fontSize: "16px", fontSize: "16px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace"}],
+                            ], {width: "447px", height: "500px", background: "#000055", backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 20px, white 21px, white 20px), repeating-linear-gradient(90deg, transparent, transparent 20px, #ffffff88 21px, #ffffff88 20px), radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}]
+                        ]
+                    ]
                 ]
             },
             "Crafting": {
@@ -313,59 +524,79 @@ addLayer("btb", {
                 content: [
                     ["blank", "10px"],
                     ["style-row",
-                        ["style-column", // title
-                            ["top-column", [
+                        ["style-column",
+                            ["style-column", [
                                 ["blank", "10px"],
-                                ["raw-html", () => {return "Crafting"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "Crafting Table"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                                 ["blank", "10px"],
                             ], {width: "900px", height: "40px", background: "linear-gradient(0deg, #000055 50%, #0000ff 100%)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}]
                         ]
                     ],
                     ["style-row",
-                        [ // tooltips and images region for the 1st set
+                        [
                             ["tooltip-row", [
                                 ["raw-html", "<img src='resources/alchemyworld/symbolStarmetalAlloy.png'style='width:40px;height:40px;margin:5px'></img>"], {width: "50px", height: "50px", display: "block", alignItems: "center"},
                                 ["raw-html", () => {return formatShortWhole(player.btb.symbolStarmetalAlloy)}, {width: "90px", height: "50px", color: "transparent", background: "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)", fontSize: "20px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                                 ["raw-html", () => {return "<div class='bottomTooltip'>Starmetal Alloy Symbols</div>"}],
-                            ], {width: "145px", height: "50px", background: "#000055", backgroundImage: "radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}],
+                                ["clickable", 11]
+                            ], {width: "145px", height: "110px", background: "#000055", backgroundImage: "radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}],
                             ["tooltip-row", [
                                 ["raw-html", "<img src='resources/alchemyworld/symbolStarmetalEssence.png'style='width:40px;height:40px;margin:5px'></img>"], {width: "50px", height: "50px", display: "block", alignItems: "center"},
                                 ["raw-html", () => {return formatShortWhole(player.btb.symbolStarmetalEssence)}, {width: "90px", height: "50px", color: "transparent", background: "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)", fontSize: "20px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                                 ["raw-html", () => {return "<div class='bottomTooltip'>Starmetal Essence Symbols</div>"}],
-                            ], {width: "145px", height: "50px", background: "#000055", backgroundImage: "radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}],
+                                ["clickable", 12]
+                            ], {width: "145px", height: "110px", background: "#000055", backgroundImage: "radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}],
                             ["tooltip-row", [
-                                ["raw-html", "<img src='resources/alchemyworld/symbolSpaceRock.png'style='width:40px;height:40px;margin:5px'></img>"], {width: "50px", height: "50px", display: "block", alignItems: "center"},
-                                ["raw-html", () => {return formatShortWhole(player.btb.symbolSpaceRock)}, {width: "90px", height: "50px", color: "transparent", background: "linear-gradient(15deg, #5f5f5f 0%, #c5c5c5 50%, #5f5f5f 100%)", fontSize: "20px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace", backgroundClip: "text", fontFamily: "monospace", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                                ["raw-html", () => {return "<div class='bottomTooltip'>Space Rock Symbols</div>"}],
-                            ], {width: "145px", height: "50px", background: "#000055", backgroundImage: "radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}],
+                                ["raw-html", "<img src='resources/alchemyworld/symbolEclipseShard.png'style='width:40px;height:40px;margin:5px'></img>"], {width: "50px", height: "50px", display: "block", alignItems: "center"},
+                                ["raw-html", () => {return formatShortWhole(player.btb.symbolEclipseShard)}, {width: "90px", height: "50px", color: "transparent", background: "linear-gradient(135deg, #ffb700, #ffe866)", fontSize: "20px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ["raw-html", () => {return "<div class='bottomTooltip'>Eclipse Shard Symbols</div>"}],
+                                ["clickable", 13]
+                            ], {width: "145px", height: "110px", background: "#000055", backgroundImage: "radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}],
                             ["tooltip-row", [
                                 ["raw-html", "<img src='resources/alchemyworld/symbolSpaceGem.png'style='width:40px;height:40px;margin:5px'></img>"], {width: "50px", height: "50px", display: "block", alignItems: "center"},
                                 ["raw-html", () => {return formatShortWhole(player.btb.symbolSpaceGem)}, {width: "90px", height: "50px", color: "transparent", background: "radial-gradient(circle, #564BCC, #000000)", fontSize: "20px", textStroke: "1px #dbd7ff", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                                 ["raw-html", () => {return "<div class='bottomTooltip'>Space Gem Symbols</div>"}],
-                            ], {width: "145px", height: "50px", background: "#000055", backgroundImage: "radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}],
+                                ["clickable", 14]
+                            ], {width: "145px", height: "110px", background: "#000055", backgroundImage: "radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}],
                             ["tooltip-row", [
                                 ["raw-html", "<img src='resources/alchemyworld/symbolSpaceDust.png'style='width:40px;height:40px;margin:5px'></img>"], {width: "50px", height: "50px", display: "block", alignItems: "center"},
                                 ["raw-html", () => {return formatShortWhole(player.btb.symbolSpaceDust)}, {width: "90px", height: "50px", color: "transparent", background: "linear-gradient(15deg, #34eb86 0%, #279ccf 50%, #411bb3 100%)", fontSize: "20px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                                 ["raw-html", () => {return "<div class='bottomTooltip'>Space Dust Symbols</div>"}],
-                            ], {width: "145px", height: "50px", background: "#000055", backgroundImage: "radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}],
+                                ["clickable", 15]
+                            ], {width: "145px", height: "110px", background: "#000055", backgroundImage: "radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}],
                             ["tooltip-row", [
-                                ["raw-html", "<img src='resources/alchemyworld/symbolArcane.png'style='width:40px;height:40px;margin:5px'></img>"], {width: "50px", height: "50px", display: "block", alignItems: "center"},
-                                ["raw-html", () => {return formatShortWhole(player.btb.symbolArcane)}, {width: "90px", height: "50px", color: "transparent", background: "linear-gradient(to bottom, #8b609c, magenta, pink)", fontSize: "20px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                                ["raw-html", () => {return "<div class='bottomTooltip'>Arcane Symbols</div>"}],
-                            ], {width: "145px", height: "50px", background: "#000055", backgroundImage: "radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}],
+                                ["raw-html", "<img src='resources/alchemyworld/symbolSpaceRock.png'style='width:40px;height:40px;margin:5px'></img>"], {width: "50px", height: "50px", display: "block", alignItems: "center"},
+                                ["raw-html", () => {return formatShortWhole(player.btb.symbolSpaceRock)}, {width: "90px", height: "50px", color: "transparent", background: "linear-gradient(15deg, #5f5f5f 0%, #c5c5c5 50%, #5f5f5f 100%)", fontSize: "20px", textStroke: "1px #ffffff88", 'text-shadow': "0 0 5px white", backgroundClip: "text", fontFamily: "monospace", backgroundClip: "text", fontFamily: "monospace", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ["raw-html", () => {return "<div class='bottomTooltip'>Space Rock Symbols</div>"}],
+                                ["clickable", 16]
+                            ], {width: "145px", height: "110px", background: "#000055", backgroundImage: "radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}],
                         ]
                     ],
-                    ["style-column",
+                    ["style-row", [
+                        ["style-column", // will be able to allow the player to change blueprints once blueprint switching is implemented.
+                            [
+                                ["raw-html", () => {
+                                    if (hasUpgrade ("ktb", 101))
+                                        return "<img src='resources/alchemyworld/blueprintAlchemicalNodeConverter.png'></img>"
+                                }], 
+                                ["blank", "5px"],
+                                ["raw-html", () => {return "<h2>Alchemical Node<br>Part Blueprint</h2><br><small>(Used as a guide)</small>"}], // Name will change depending on blueprint image.
+                                ["blank", "20px"],
+                                ["style-row",
+                                    [
+                                        ["clickable", 8],
+                                        ["blank", "20px"],
+                                        ["clickable", 9]
+                                    ]
+                                ], {width: "447px", height: "0", marginLeft: "0"}
+                            ], {width: "447px", height: "500px", background: "#000055", backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 20px, white 21px, white 20px), repeating-linear-gradient(90deg, transparent, transparent 20px, #ffffff88 21px, #ffffff88 20px), radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}
+                        ],
                         ["style-column",
-                            ["raw-html", () => {return "<img src='resources/alchemyworld/blueprintEmpty.png'></img>"}], // will be able to allow the player to change blueprints once blueprint switching is implemented.
-                            ["blank", "20px"],
-                            ["raw-html", () => {return "<h2>Alchemical Node<br>Part Blueprint</h2><br><small>(Used as a guide)</small>"}] // Name will change depending on blueprint image.
-                        ], {width: "447px", height: "450px", background: "#000055", backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 20px, white 21px, white 20px), repeating-linear-gradient(90deg, transparent, transparent 20px, #ffffff88 21px, #ffffff88 20px), radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset", marginLeft: "0"},
-                    ],
-                    ["style-column",
-                        ["grid",
-                        ["clickable", 7]
-                        ], {width: "447px", height: "450px", background: "#000055", backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 20px, white 21px, white 20px), repeating-linear-gradient(90deg, transparent, transparent 20px, #ffffff88 21px, #ffffff88 20px), radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset", marginRight: "0", marginTop: "-456px"}
+                            ["grid",
+                            ["clickable", 7]
+                            ], {width: "447px", height: "500px", background: "#000055", backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 20px, white 21px, white 20px), repeating-linear-gradient(90deg, transparent, transparent 20px, #ffffff88 21px, #ffffff88 20px), radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}
+                        ]
+                        ]
                     ]
                 ]
             }
@@ -376,7 +607,7 @@ addLayer("btb", {
         ["microtabs", "tabs", {'border-width': '0px'}],
         ["blank", "10px"],
     ],
-    layerShown() { return player.startedGame == true && hasUpgrade("ktb", 101) }
-})
 
-
+    layerShown() { return player.startedGame == true && hasUpgrade("ktb", 101)},
+},
+)

@@ -16,11 +16,19 @@ addLayer("ev14", {
         timers: {
             0: {
                 current: new Decimal(0),
-                max: new Decimal(64800),
+                max: new Decimal(43200), // 12 hours
             },
             1: {
                 current: new Decimal(0),
-                max: new Decimal(7200),
+                max: new Decimal(43200), // 12 hours
+            },
+            2: {
+                current: new Decimal(0),
+                max: new Decimal(216000), // 60 hours = 2.5 days
+            },
+            3: {
+                current: new Decimal(0),
+                max: new Decimal(432000), // 120 hours = 5 days
             },
         },
     }},
@@ -277,6 +285,62 @@ addLayer("ev14", {
                 return look
             },
         },
+        2: {
+            title() {
+                return player.ev14.timers[2].current.gt(0) 
+                ? "<h1>Check back in <br>" + formatTime(player.ev14.timers[2].current) + "." 
+                : "<h1>Open a Tier II Chest."
+            },
+            canClick() { 
+                return (
+                    player.ev14.keys.gte(5)
+                    && player.ev14.timers[2].current.lt(1)
+                    && player.cb.evolutionShards.gte(100)
+                    && player.cb.paragonShards.gte(20)
+                )
+            },
+            unlocked() {return player.ev14.chestNumber == 2},
+            onClick() {
+                player.ev14.keys = player.ev14.keys.sub(5)
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(100)
+                player.cb.paragonShards = player.cb.paragonShards.sub(20)
+                player.ev14.timers[2].current = player.ev14.timers[2].max
+                layers.ev14.openChest()
+            },
+            style() {
+                let look = {width: "400px", minHeight: "100px", borderRadius: "60px / 30px"}
+                this.canClick() ? look.backgroundColor = "#ffffff" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
+        },
+        3: {
+            title() {
+                return player.ev14.timers[3].current.gt(0) 
+                ? "<h1>Check back in <br>" + formatTime(player.ev14.timers[3].current) + "." 
+                : "<h1>Open a Tier III Chest."
+            },
+            canClick() { 
+                return (
+                    player.ev14.keys.gte(10)
+                    && player.ev14.timers[3].current.lt(1)
+                    && player.cb.evolutionShards.gte(250)
+                    && player.cb.paragonShards.gte(50)
+                )
+            },
+            unlocked() {return player.ev14.chestNumber == 3},
+            onClick() {
+                player.ev14.keys = player.ev14.keys.sub(10)
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(250)
+                player.cb.paragonShards = player.cb.paragonShards.sub(50)
+                player.ev14.timers[3].current = player.ev14.timers[3].max
+                layers.ev14.openChest()
+            },
+            style() {
+                let look = {width: "400px", minHeight: "100px", borderRadius: "60px / 30px"}
+                this.canClick() ? look.backgroundColor = "#ffffff" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
+        },
     },
     tables: {
         1: {
@@ -287,9 +351,9 @@ addLayer("ev14", {
                 return "<div class='chestContainer'><h3>Costs:</h3><br>" +
                 formatWhole(player.ev14.keys) + "/1 Keys<br></div>" +
                 "<div class='chestContainer'><h3>Loot Table:</h3><br>" +
-                "25% - " + formatWhole(player.pet.petPointMult.mul(2500)) + " pet points<br>" + 
-                "25% - " + formatWhole(player.pet.petPointMult.mul(1).floor()) + " of the first 9 common pets<br>" +
-                "25% - " + formatWhole(player.pet.petPointMult.mul(0.5).floor()) + " of the first 9 uncommon pets<br>" +
+                "25% - " + formatWhole(player.pet.petPointMult.mul(10000)) + " pet points<br>" + 
+                "25% - " + formatWhole(player.pet.petPointMult.mul(4).floor()) + " of the first 9 common pets<br>" +
+                "25% - " + formatWhole(player.pet.petPointMult.mul(2).floor()) + " of the first 9 uncommon pets<br>" +
                 "25% - " + formatSimple(new Decimal(5).mul(levelableEffect("pet", 2203)[1]), 1) + " orbs</div>"
             },
         },
@@ -300,14 +364,33 @@ addLayer("ev14", {
             description() {
                 return "<div class='chestContainer'><h3>Costs:</h3><br>" +
                 formatWhole(player.ev14.keys) + "/5 Keys<br>" +
-                formatWhole(player.cb.evolutionShards) + "/10 Evo Shards<br>" +
-                formatWhole(player.cb.paragonShards) + "/2 Para Shards<br></div>" +
+                formatWhole(player.cb.evolutionShards) + "/100 Evo Shards<br>" +
+                formatWhole(player.cb.paragonShards) + "/20 Para Shards<br></div>" +
                 "<div class='chestContainer'><h3>Loot Table:</h3><br>" +
-                "20% - " + formatWhole(player.pet.petPointMult.mul(10000)) + " pet points<br>" + 
-                "20% - " + formatWhole(player.pet.petPointMult.mul(5).floor()) + " of the first 9 common pets<br>" +
-                "20% - " + formatWhole(player.pet.petPointMult.mul(2.5).floor()) + " of the first 9 uncommon pets<br>" +
-                "20% - " + formatWhole(player.pet.petPointMult.mul(1).floor()) + " of the first 9 rare pets<br>" +
+                "20% - " + formatWhole(player.pet.petPointMult.mul(50000)) + " pet points<br>" + 
+                "20% - " + formatWhole(player.pet.petPointMult.mul(20).floor()) + " of the first 9 common pets<br>" +
+                "20% - " + formatWhole(player.pet.petPointMult.mul(10).floor()) + " of the first 9 uncommon pets<br>" +
+                "20% - " + formatWhole(player.pet.petPointMult.mul(5).floor()) + " of the first 9 rare pets<br>" +
                 "20% - " + formatSimple(new Decimal(15).mul(levelableEffect("pet", 2203)[1]), 1) + " orbs</div>"
+            },
+        },
+        3: {
+            title() {
+                return "Tier III Chest"
+            },
+            description() {
+                return "<div class='chestContainer'><h3>Costs:</h3><br>" +
+                formatWhole(player.ev14.keys) + "/10 Keys<br>" +
+                formatWhole(player.cb.evolutionShards) + "/250 Evo Shards<br>" +
+                formatWhole(player.cb.paragonShards) + "/50 Para Shards<br></div>" +
+                "<div class='chestContainer'><h3>Loot Table:</h3><br>" +
+                "15% - " + formatWhole(player.pet.petPointMult.mul(100000)) + " pet points<br>" + 
+                "15% - " + formatSimple(new Decimal(50000).mul(player.pet.fragmentMult).floor().div(10)) + " of every fragmentation fragment<br>" + 
+                "15% - " + formatWhole(player.pet.petPointMult.mul(40).floor()) + " of the first 9 common pets<br>" +
+                "15% - " + formatWhole(player.pet.petPointMult.mul(20).floor()) + " of the first 9 uncommon pets<br>" +
+                "15% - " + formatWhole(player.pet.petPointMult.mul(10).floor()) + " of the first 9 rare pets<br>" +
+                "15% - " + formatSimple(new Decimal(30).mul(levelableEffect("pet", 2203)[1]), 1) + " orbs<br>" +
+                "10% - " + formatWhole(player.pet.petPointMult.mul(5).floor()) + " of the first 6 epic pets</div>"
             },
         },
     },
@@ -315,12 +398,12 @@ addLayer("ev14", {
         let random = Math.random();
         if (player.ev14.chestNumber == 1) {
             if (random < 0.25) {
-                let gain = player.pet.petPointMult.mul(2500)
+                let gain = player.pet.petPointMult.mul(10000)
                 player.cb.petPoints = player.cb.petPoints.add(gain)
                 doPopup("none", "+" + formatWhole(gain) + " pet points!", "Resource Obtained!", 5, "#A2D800", "resources/petPoint.png")
             }
             else if (random < 0.5) {
-                let gain = player.pet.petPointMult.mul(1).floor()
+                let gain = player.pet.petPointMult.mul(4).floor()
                 player.pet.levelables[101][1] = player.pet.levelables[101][1].add(gain)
                 player.pet.levelables[102][1] = player.pet.levelables[102][1].add(gain)
                 player.pet.levelables[103][1] = player.pet.levelables[103][1].add(gain)
@@ -333,7 +416,7 @@ addLayer("ev14", {
                 doPopup("none", "+" + formatWhole(gain) + " of the first 9 common pets!", "Pet Obtained!", 5, "#9bedff", "resources/Pets/commonbg.png")
             }
             else if (random < 0.75) {
-                let gain = player.pet.petPointMult.mul(0.5).floor()
+                let gain = player.pet.petPointMult.mul(2).floor()
                 player.pet.levelables[201][1] = player.pet.levelables[201][1].add(gain)
                 player.pet.levelables[202][1] = player.pet.levelables[202][1].add(gain)
                 player.pet.levelables[203][1] = player.pet.levelables[203][1].add(gain)
@@ -349,6 +432,125 @@ addLayer("ev14", {
                 let gain = new Decimal(5).mul(levelableEffect("pet", 2203)[1])
                 player.ev2.orbs = player.ev2.orbs.add(gain)
                 doPopup("none", "+" + formatSimple(gain) + " orbs!", "Resource Obtained!", 5, "#96DED1", "resources/orbs.png")
+            }
+        }
+        else if (player.ev14.chestNumber == 2) {
+            if (random < 0.2) {
+                let gain = player.pet.petPointMult.mul(50000)
+                player.cb.petPoints = player.cb.petPoints.add(gain)
+                doPopup("none", "+" + formatWhole(gain) + " pet points!", "Resource Obtained!", 5, "#A2D800", "resources/petPoint.png")
+            }
+            else if (random < 0.4) {
+                let gain = player.pet.petPointMult.mul(20).floor()
+                player.pet.levelables[101][1] = player.pet.levelables[101][1].add(gain)
+                player.pet.levelables[102][1] = player.pet.levelables[102][1].add(gain)
+                player.pet.levelables[103][1] = player.pet.levelables[103][1].add(gain)
+                player.pet.levelables[104][1] = player.pet.levelables[104][1].add(gain)
+                player.pet.levelables[105][1] = player.pet.levelables[105][1].add(gain)
+                player.pet.levelables[106][1] = player.pet.levelables[106][1].add(gain)
+                player.pet.levelables[107][1] = player.pet.levelables[107][1].add(gain)
+                player.pet.levelables[108][1] = player.pet.levelables[108][1].add(gain)
+                player.pet.levelables[109][1] = player.pet.levelables[109][1].add(gain)
+                doPopup("none", "+" + formatWhole(gain) + " of the first 9 common pets!", "Pet Obtained!", 5, "#9bedff", "resources/Pets/commonbg.png")
+            }
+            else if (random < 0.6) {
+                let gain = player.pet.petPointMult.mul(10).floor()
+                player.pet.levelables[201][1] = player.pet.levelables[201][1].add(gain)
+                player.pet.levelables[202][1] = player.pet.levelables[202][1].add(gain)
+                player.pet.levelables[203][1] = player.pet.levelables[203][1].add(gain)
+                player.pet.levelables[204][1] = player.pet.levelables[204][1].add(gain)
+                player.pet.levelables[205][1] = player.pet.levelables[205][1].add(gain)
+                player.pet.levelables[206][1] = player.pet.levelables[206][1].add(gain)
+                player.pet.levelables[207][1] = player.pet.levelables[207][1].add(gain)
+                player.pet.levelables[208][1] = player.pet.levelables[208][1].add(gain)
+                player.pet.levelables[209][1] = player.pet.levelables[209][1].add(gain)
+                doPopup("none", "+" + formatWhole(gain) + " of the first 9 uncommon pets!", "Pet Obtained!", 5, "#88e688", "resources/Pets/uncommonbg.png")
+            }
+            else if (random < 0.8) {
+                let gain = player.pet.petPointMult.mul(5).floor()
+                player.pet.levelables[301][1] = player.pet.levelables[301][1].add(gain)
+                player.pet.levelables[302][1] = player.pet.levelables[302][1].add(gain)
+                player.pet.levelables[303][1] = player.pet.levelables[303][1].add(gain)
+                player.pet.levelables[304][1] = player.pet.levelables[304][1].add(gain)
+                player.pet.levelables[305][1] = player.pet.levelables[305][1].add(gain)
+                player.pet.levelables[306][1] = player.pet.levelables[306][1].add(gain)
+                player.pet.levelables[307][1] = player.pet.levelables[307][1].add(gain)
+                player.pet.levelables[308][1] = player.pet.levelables[308][1].add(gain)
+                player.pet.levelables[309][1] = player.pet.levelables[309][1].add(gain)
+                doPopup("none", "+" + formatWhole(gain) + " of the first 9 rare pets!", "Pet Obtained!", 5, "#4e7cff", "resources/Pets/rarebg.png")
+            }
+            else {
+                let gain = new Decimal(15).mul(levelableEffect("pet", 2203)[1])
+                player.ev2.orbs = player.ev2.orbs.add(gain)
+                doPopup("none", "+" + formatSimple(gain) + " orbs!", "Resource Obtained!", 5, "#96DED1", "resources/orbs.png")
+            }
+        }
+        else if (player.ev14.chestNumber == 3) {
+            if (random < 0.15) {
+                let gain = player.pet.petPointMult.mul(100000)
+                player.cb.petPoints = player.cb.petPoints.add(gain)
+                doPopup("none", "+" + formatWhole(gain) + " pet points!", "Resource Obtained!", 5, "#A2D800", "resources/petPoint.png")
+            }
+            else if (random < 0.3) {
+                let gain = new Decimal(50000).mul(player.pet.fragmentMult).floor().div(10)
+                player.pet.lesserFragments = player.pet.lesserFragments.add(gain)
+                player.pet.basicFragments = player.pet.basicFragments.add(gain)
+                player.pet.greaterFragments = player.pet.greaterFragments.add(gain)
+                doPopup("none", "+" + formatWhole(gain) + " of every fragmentation fragment!", "Resource Obtained!", 5, "#cb79ed", "resources/Pets/epicbg.png")
+            }
+            else if (random < 0.45) {
+                let gain = player.pet.petPointMult.mul(40).floor()
+                player.pet.levelables[101][1] = player.pet.levelables[101][1].add(gain)
+                player.pet.levelables[102][1] = player.pet.levelables[102][1].add(gain)
+                player.pet.levelables[103][1] = player.pet.levelables[103][1].add(gain)
+                player.pet.levelables[104][1] = player.pet.levelables[104][1].add(gain)
+                player.pet.levelables[105][1] = player.pet.levelables[105][1].add(gain)
+                player.pet.levelables[106][1] = player.pet.levelables[106][1].add(gain)
+                player.pet.levelables[107][1] = player.pet.levelables[107][1].add(gain)
+                player.pet.levelables[108][1] = player.pet.levelables[108][1].add(gain)
+                player.pet.levelables[109][1] = player.pet.levelables[109][1].add(gain)
+                doPopup("none", "+" + formatWhole(gain) + " of the first 9 common pets!", "Pet Obtained!", 5, "#9bedff", "resources/Pets/commonbg.png")
+            }
+            else if (random < 0.6) {
+                let gain = player.pet.petPointMult.mul(20).floor()
+                player.pet.levelables[201][1] = player.pet.levelables[201][1].add(gain)
+                player.pet.levelables[202][1] = player.pet.levelables[202][1].add(gain)
+                player.pet.levelables[203][1] = player.pet.levelables[203][1].add(gain)
+                player.pet.levelables[204][1] = player.pet.levelables[204][1].add(gain)
+                player.pet.levelables[205][1] = player.pet.levelables[205][1].add(gain)
+                player.pet.levelables[206][1] = player.pet.levelables[206][1].add(gain)
+                player.pet.levelables[207][1] = player.pet.levelables[207][1].add(gain)
+                player.pet.levelables[208][1] = player.pet.levelables[208][1].add(gain)
+                player.pet.levelables[209][1] = player.pet.levelables[209][1].add(gain)
+                doPopup("none", "+" + formatWhole(gain) + " of the first 9 uncommon pets!", "Pet Obtained!", 5, "#88e688", "resources/Pets/uncommonbg.png")
+            }
+            else if (random < 0.75) {
+                let gain = player.pet.petPointMult.mul(10).floor()
+                player.pet.levelables[301][1] = player.pet.levelables[301][1].add(gain)
+                player.pet.levelables[302][1] = player.pet.levelables[302][1].add(gain)
+                player.pet.levelables[303][1] = player.pet.levelables[303][1].add(gain)
+                player.pet.levelables[304][1] = player.pet.levelables[304][1].add(gain)
+                player.pet.levelables[305][1] = player.pet.levelables[305][1].add(gain)
+                player.pet.levelables[306][1] = player.pet.levelables[306][1].add(gain)
+                player.pet.levelables[307][1] = player.pet.levelables[307][1].add(gain)
+                player.pet.levelables[308][1] = player.pet.levelables[308][1].add(gain)
+                player.pet.levelables[309][1] = player.pet.levelables[309][1].add(gain)
+                doPopup("none", "+" + formatWhole(gain) + " of the first 9 rare pets!", "Pet Obtained!", 5, "#4e7cff", "resources/Pets/rarebg.png")
+            }
+            else if (random < 0.9) {
+                let gain = new Decimal(30).mul(levelableEffect("pet", 2203)[1])
+                player.ev2.orbs = player.ev2.orbs.add(gain)
+                doPopup("none", "+" + formatSimple(gain) + " orbs!", "Resource Obtained!", 5, "#96DED1", "resources/orbs.png")
+            }
+            else {
+                let gain = player.pet.petPointMult.mul(5).floor()
+                player.pet.levelables[401][1] = player.pet.levelables[401][1].add(gain)
+                player.pet.levelables[402][1] = player.pet.levelables[402][1].add(gain)
+                player.pet.levelables[403][1] = player.pet.levelables[403][1].add(gain)
+                player.pet.levelables[404][1] = player.pet.levelables[404][1].add(gain)
+                player.pet.levelables[405][1] = player.pet.levelables[405][1].add(gain)
+                player.pet.levelables[406][1] = player.pet.levelables[406][1].add(gain)
+                doPopup("none", "+" + formatWhole(gain) + " of the first 6 epic pets!", "Pet Obtained!", 5, "#cb79ed", "resources/Pets/epicbg.png")
             }
         }
     },
@@ -417,6 +619,8 @@ addLayer("ev14", {
                                 } else {return ""}
                             }, {fontSize: "30px", color: "#cccccc", fontFamily: "monospace"}],
                             ["clickable", 1],
+                            ["clickable", 2],
+                            ["clickable", 3],
                         ], {width: "700px", height: "125px", backgroundColor: "rgba(0,0,0,0.5)", borderRadius: "0px 0px 10px 10px"}],
                     ], {width: "700px", height: "650px", border: "2px solid #cccccc", borderRadius: "10px", background: "rgba(0,0,0,0.5)"}],
                 ]

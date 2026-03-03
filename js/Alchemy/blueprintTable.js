@@ -1,7 +1,6 @@
 
 // Add grid variables here
 const symbolName =  [
-                    "symbolNone",
                     "symbolStarmetalAlloy", "symbolStarmetalEssence", "symbolEclipseShard",
                     "symbolSpaceGem", "symbolSpaceDust", "symbolSpaceRock",
                     ]
@@ -61,7 +60,7 @@ addLayer("btb", {
         },
         getDisplay() {
             let str = ""
-            if (data != 0 & data != -1) str = "<img src='resources/alchemyworld/" + symbolName[data] + ".png' style='width:40px;height:40px'></img>"
+            if (data != 0 & data != -1) str = "<img src='resources/alchemyworld/symbolNone.png' style='width:40px;height:40px'></img>"
             return str
         },
         getStyle() {

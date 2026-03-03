@@ -12,7 +12,7 @@
 
         fountainSpeed: new Decimal(0),
 
-        modules: {
+        fountains: {
             1: {
                 time: new Decimal(0),
                 timeReq: new Decimal(600),
@@ -27,6 +27,30 @@
             },
             2: {
                 time: new Decimal(0),
+                timeReq: new Decimal(1.2e3),
+                timeSpeed: new Decimal(1),
+                canAddCompletion: false,
+                completions: new Decimal(0),
+                maxCompletions: new Decimal(0),
+
+                focused: false,
+                timeCapsuleReq: new Decimal(1),
+                completionEffect: new Decimal(1),
+            },
+            3: {
+                time: new Decimal(0),
+                timeReq: new Decimal(1.5e4),
+                timeSpeed: new Decimal(1),
+                canAddCompletion: false,
+                completions: new Decimal(0),
+                maxCompletions: new Decimal(0),
+
+                focused: false,
+                timeCapsuleReq: new Decimal(1),
+                completionEffect: new Decimal(1),
+            },
+            4: {
+                time: new Decimal(1e8),
                 timeReq: new Decimal(1200),
                 timeSpeed: new Decimal(1),
                 canAddCompletion: false,
@@ -53,15 +77,17 @@
     tooltip: "Prismatic",
     color: "#d6ebff",
     update(delta) {
-        player.pri.prismsToGet = player.wel.light.add(1).log(10).sub(15).pow_base(1.5).floor()
+        player.pri.prismsToGet = player.wel.light.add(1).log(10).sub(15).pow_base(1.41421356237).floor()
+
+        if (hasMilestone("pri", 203)) player.pri.prismsToGet = player.pri.prismsToGet.mul(2);
 
         if (player.pri.bestPrisms.lt(player.pri.prisms)) player.pri.bestPrisms = player.pri.prisms;
         
-        player.pri.fountainSpeed = player.pri.prisms.pow(2)
+        player.pri.fountainSpeed = player.pri.prisms.pow(2.5)
 
         // FOUNTAIN PROGRESS
         Object.keys(layers.pri.fountains).forEach(i => {
-            let module = player.pri.modules[i]
+            let module = player.pri.fountains[i]
             let fountain = layers.pri.fountains[i]
             module.timeSpeed = fountain.getTimeSpeed()
             module.timeReq = fountain.getTimeReq()
@@ -74,6 +100,7 @@
                     module.focused = false
                     module.completions = module.completions.add(1)
                     module.time = new Decimal(0)
+                    player.prj.focused = player.prj.focused.sub(1)
                 }
             }
         });
@@ -103,11 +130,12 @@
     clickables: {
         1: {
             title() { return "<h3>Focus</h3>" },
-            canClick() { return player.prj.storedTimeCapsules.gte(player.pri.modules[this.id].timeCapsuleReq) && !player.pri.modules[this.id].focused},
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.prj.storedTimeCapsules.gte(player.pri.fountains[this.id].timeCapsuleReq) && !player.pri.fountains[this.id].focused},
             unlocked() { return true },
             onClick() {
-                player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.sub(player.pri.modules[this.id].timeCapsuleReq)
-                player.pri.modules[this.id].focused = true
+                player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.sub(player.pri.fountains[this.id].timeCapsuleReq)
+                player.prj.focused = player.prj.focused.add(1)
+                player.pri.fountains[this.id].focused = true
             },
             style() {
                 let look = {width: "238px", minHeight: "45px", borderRadius: "0px"}
@@ -125,11 +153,58 @@
         },
         2: {
             title() { return "<h3>Focus</h3>" },
-            canClick() { return player.prj.storedTimeCapsules.gte(player.pri.modules[this.id].timeCapsuleReq) && !player.pri.modules[this.id].focused},
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id].focused},
             unlocked() { return true },
             onClick() {
-                player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.sub(player.pri.modules[this.id].timeCapsuleReq)
-                player.pri.modules[this.id].focused = true
+                player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.sub(player.pri.fountains[this.id].timeCapsuleReq)
+                player.prj.focused = player.prj.focused.add(1)
+                player.pri.fountains[this.id].focused = true
+            },
+            style() {
+                let look = {width: "238px", minHeight: "45px", borderRadius: "0px"}
+                if (this.canClick()) {
+                    look.backgroundColor = "#a8ffff"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        3: {
+            title() { return "<h3>Focus</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id].focused},
+            unlocked() { return true },
+            onClick() {
+                player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.sub(player.pri.fountains[this.id].timeCapsuleReq)
+                player.prj.focused = player.prj.focused.add(1)
+                player.pri.fountains[this.id].focused = true
+            },
+            style() {
+                let look = {width: "238px", minHeight: "45px", borderRadius: "0px"}
+                if (this.canClick()) {
+                    look.backgroundColor = "#a8ffff"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        4: {
+            title() { return "<h3>Focus</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id].focused},
+            unlocked() { return true },
+            onClick() {
+                player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.sub(player.pri.fountains[this.id].timeCapsuleReq)
+                player.prj.focused = player.prj.focused.add(1)
+                player.pri.fountains[this.id].focused = true
             },
             style() {
                 let look = {width: "238px", minHeight: "45px", borderRadius: "0px"}
@@ -198,18 +273,18 @@
             title: "Light Cycle Fountain",
             completionEffectStat: "Light Well Cycles",
             getCompletionEffect() {
-                let completions = player.pri.modules[1].completions
+                let completions = player.pri.fountains[1].completions
 
-                s = completions.pow(0.75).pow_base(2)
+                s = completions.pow(0.666).pow_base(2.5)
 
                 return s
             },
             getTimeReq() {
-                let completions = player.pri.modules[1].completions
+                let completions = player.pri.fountains[1].completions
                 let s = new Decimal(600)
 
-                s = s.mul(completions.add(1).pow(2))
-                s = s.mul(completions.pow_base(1.5))
+                s = s.mul(completions.add(1))
+                s = s.mul(completions.pow_base(2.5))
                 if (completions.gte(50)) {
                     s = s.pow(1.05)
                 }
@@ -217,11 +292,11 @@
                 return s
             },
             getTimeCapsuleReq() {
-                let completions = player.pri.modules[1].completions
-                let s = completions.floor().add(1).pow(1.25)
+                let completions = player.pri.fountains[1].completions
+                let s = completions.div(4).add(1).pow(1.25)
                 
-                if (completions.gte(50)) {
-                    s = s.mul(completions.sub(50).pow_base(1.1))
+                if (completions.gte(20)) {
+                    s = s.mul(completions.sub(20).pow_base(1.1))
                 }
 
                 return s.floor()
@@ -236,20 +311,20 @@
             },
         },
         2: {
-            title: "Time Capsule Fountain",
-            completionEffectStat: "Stored Time Capsules",
+            title: "Light² Fountain",
+            completionEffectStat: "Light, based on Light",
             getCompletionEffect() {
-                let completions = player.pri.modules[2].completions
+                let completions = player.pri.fountains[2].completions
 
-                s = completions.pow(0.75).pow_base(1.25)
+                s = player.wel.light.add(1).log10().div(10).add(1).pow(completions.pow(0.666).mul(0.8))
 
                 return s
             },
             getTimeReq() {
-                let completions = player.pri.modules[2].completions
+                let completions = player.pri.fountains[2].completions
                 let s = new Decimal(1.2e3)
 
-                s = s.mul(completions.add(1).pow(2))
+                s = s.mul(completions.add(1).pow(1.25))
                 s = s.mul(completions.pow_base(2))
                 if (completions.gte(50)) {
                     s = s.pow(1.05)
@@ -258,12 +333,96 @@
                 return s
             },
             getTimeCapsuleReq() {
-                let completions = player.pri.modules[2].completions
-                let s = completions.add(1).pow(1.25)
+                let completions = player.pri.fountains[2].completions
+                let s = completions.div(4).add(1).pow(1.25)
+                s = s.mul(1.5)
+                
+                if (completions.gte(20)) {
+                    s = s.mul(completions.sub(20).pow_base(1.1))
+                }
+
+                return s.floor()
+            },
+            getTimeSpeed() {
+                let s = new Decimal(1)
+
+                s = s.mul(player.prj.projectSpeed)
+                s = s.mul(player.pri.fountainSpeed)
+
+                return s
+            },
+        },
+        3: {
+            title: "Time Capsule Fountain",
+            completionEffectStat: "Stored Time Capsules",
+            getCompletionEffect() {
+                let completions = player.pri.fountains[3].completions
+
+                s = completions.pow(0.666).pow_base(1.5)
+
+                return s
+            },
+            getTimeReq() {
+                let completions = player.pri.fountains[3].completions
+                let s = new Decimal(1.5e4)
+
+                s = s.mul(completions.add(1).pow(1.5))
+                s = s.mul(completions.pow_base(2.5))
+                if (completions.gte(50)) {
+                    s = s.pow(1.05)
+                }
+
+                return s
+            },
+            getTimeCapsuleReq() {
+                let completions = player.pri.fountains[3].completions
+                let s = completions.add(1).pow(1.5)
+                s = s.mul(3)
+                
+                if (completions.gte(20)) {
+                    s = s.mul(completions.sub(20).pow_base(1.15))
+                }
+
+                return s.floor()
+            },
+            getTimeSpeed() {
+                let s = new Decimal(1)
+
+                s = s.mul(player.prj.projectSpeed)
+                s = s.mul(player.pri.fountainSpeed)
+
+                return s
+            },
+        },
+        4: {
+            title: "Light Speed Fountain",
+            completionEffectStat: "Light Well Speed",
+            getCompletionEffect() {
+                let completions = player.pri.fountains[4].completions
+
+                s = completions.pow(0.666).pow_base(2).sub(1).div(4).add(1)
+
+                return s
+            },
+            getTimeReq() {
+                let completions = player.pri.fountains[4].completions
+                let s = new Decimal(1e8)
+
+                s = s.mul(completions.add(1).pow(1.5))
+                s = s.mul(completions.pow_base(2.5))
+                if (completions.gte(50)) {
+                    s = s.pow(1.05)
+                }
+
+                return s
+            },
+            getTimeCapsuleReq() {
+                let completions = player.pri.fountains[4].completions
+                let s = completions.div(2).add(1).pow(1.25)
                 s = s.mul(2)
                 
-                if (completions.gte(50)) {
-                    s = s.mul(completions.sub(50).pow_base(1.125))
+                if (completions.gte(20)) {
+                    s = s.mul(completions.sub(20).pow_base(1.125))
                 }
 
                 return s.floor()
@@ -291,14 +450,19 @@
                         ["raw-html", "You have <h3>" + formatWhole(player.prj.storedTimeCapsules) + "</h3> stored time capsules. (From Dark Universe Eclipse)", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", "Boosts project speed by x" + format(player.prj.storedTimeCapsuleEffect), {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "25px"],
-                        ["raw-html", "You are gaining <h3>" + format(player.prj.projectSpeed) + "</h3> fountain progress /s.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "You are gaining <h3>" + format(player.pri.fountainSpeed.mul(player.prj.projectSpeed)) + "</h3> fountain progress /s.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", "<small>Prisms boost fountain progress gain by x" + format(player.pri.fountainSpeed) + "</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "You are focusing on 0/1 interspace projects.", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "You are focusing on " + formatWhole(player.prj.focused) + "/1 interspace projects.", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "25px"],
                         ["style-row", [
                             makePrismFountain(1),
                             ["blank", "6px", {width: "6px"}],
-                            hasUpgrade("wel", 23) ? makePrismFountain(2) : null,
+                            makePrismFountain(2),
+                        ]],
+                        ["style-row", [
+                            hasMilestone("prj", 203) ? makePrismFountain(3) : null,
+                            ["blank", "6px", {width: "6px"}],
+                            hasUpgrade("wel", 206) ? makePrismFountain(4) : null,
                         ]],
                         ["blank", "25px"],
                     ]
@@ -314,18 +478,18 @@
                         ["style-column", [
                             ["style-column", [
                                 ["raw-html", 
-                                    "<small>When a well's timer gets below 0.2s, you can do a blueshift. Blueshifting resets everything prismatic does, as well as all well cycles. Each blueshift done divides cycle speed and increases cycle gain for its respective well. You also gain multipliers from total blueshifts done.</small>"
+                                    "<small>When a fountain's timer gets below 0.2s, you can do a blueshift. Blueshifting resets everything prismatic does, as fountain as all fountain cycles. Each blueshift done divides cycle speed and increases cycle gain for its respective fountain. You also gain multipliers from total blueshifts done.</small>"
                                 , {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                             ], {background: "#4d9999", borderRadius: "10px", width: "610px", height: "100px", padding: "3px"}],                   
                         ], {background: "#335966", borderRadius: "13px", padding: "3px"}],
                         ["blank", "25px"],
                         ["raw-html", "You have blueshifted 1 times.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "<small>Boosts light well cycle gain by x1.5.</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "<small>Boosts light fountain cycle gain by x1.5.</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "10px"],
                         ["style-row", [
                             ["style-column", [
                                 ["blank", "9px"],
-                                ["raw-html", "Light Well α", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", "Light fountain α", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                 ["raw-html", "<small>(0.67/0.2s)</small>", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                 ["blank", "9px"],
                                 ["style-column", [
@@ -367,11 +531,11 @@ const makePrismFountain = function (id) {
                 ["style-column", [
                     ["blank", "10px"],
                     ["raw-html", layers.pri.fountains[id].title, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ["raw-html", player.pri.modules[id].timeSpeed.lte(0) ? "<span style='color:#ff7f7f'>Can't Complete w/o Prisms!</span>" : (player.pri.modules[id].focused ? formatTime(player.pri.modules[id].timeReq.sub(player.pri.modules[id].time).div(player.pri.modules[id].timeSpeed)) : formatTime(player.pri.modules[id].timeReq.div(player.pri.modules[id].timeSpeed))) + " CD", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ["raw-html", "<small>(" + format(player.pri.modules[id].time, 1) + "/" + format(player.pri.modules[id].timeReq, 1) + ")</small>", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", player.pri.fountains[id].timeSpeed.lte(0) ? "<span style='color:#ff7f7f'>Can't Complete w/o Prisms!</span>" : (player.pri.fountains[id].focused ? formatTime(player.pri.fountains[id].timeReq.sub(player.pri.fountains[id].time).div(player.pri.fountains[id].timeSpeed)) : formatTime(player.pri.fountains[id].timeReq.div(player.pri.fountains[id].timeSpeed))) + " CD", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", "<small>(" + format(player.pri.fountains[id].time, 1) + "/" + format(player.pri.fountains[id].timeReq, 1) + ")</small>", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "10px"],
                     ["style-column", [
-                        ["raw-html", player.pri.modules[id].timeCapsuleReq.eq(0) ? "Your first cycle is free!" : "-" + formatWhole(player.pri.modules[id].timeCapsuleReq) + " Time Capsules", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", player.pri.fountains[id].timeCapsuleReq.eq(0) ? "Your first cycle is free!" : "-" + formatWhole(player.pri.fountains[id].timeCapsuleReq) + " Time Capsules", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ], {background: "#4d9999", borderRadius: "10px 10px 0px 0px", width: "238px", height:"25px"}],
                     ["blank", "3px"],
                     ["clickable", id],
@@ -380,25 +544,21 @@ const makePrismFountain = function (id) {
                     ["style-column", [
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", player.pri.modules[id].time.gte(player.pri.modules[id].timeReq) ? "0%" : formatShortestWhole(player.pri.modules[id].time.div(player.pri.modules[id].timeReq).min(1).max(0).mul(100)) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                ["raw-html", player.pri.fountains[id].time.gte(player.pri.fountains[id].timeReq) ? "0%" : formatShortestWhole(player.pri.fountains[id].time.div(player.pri.fountains[id].timeReq).min(1).max(0).mul(100)) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ], {background: "#4d9999", border: "3px solid #335966", borderRadius: "100px", width: "75px", height:"75px"}]
                         ], {borderRadius: "50%", width: "125px", height:"125px", border: "3px solid #335966", margin: "-3px", marginTop: "75px",
-                            background: player.pri.modules[id].time.lt(player.pri.modules[id].timeReq) ?
-                            "conic-gradient(#d6ebff " + (player.pri.modules[id].time.div(player.pri.modules[id].timeReq)).min(1).max(0) * 360 + "deg, #000d1a 0deg)" : "#000d1a"
+                            background: player.pri.fountains[id].time.lt(player.pri.fountains[id].timeReq) ?
+                            "conic-gradient(#d6ebff " + (player.pri.fountains[id].time.div(player.pri.fountains[id].timeReq)).min(1).max(0) * 360 + "deg, #000d1a 0deg)" : "#000d1a"
                         }],
                     ], {background: "#335966", borderRadius: "0px 81px 0px 0px", width: "153px", height: "78px"}],
                     ["style-column", [], {background: "#4d9999", height: "78px"}],
                 ], {border: "3px solid #335966", borderBottom: "0px", borderLeft: "0px", borderRadius: "0px 81px 0px 0px", padding: "-3px", width: "153px", height: "153px"}],
             ], {verticalAlign: "bottom"}],
-            ["style-row", [
-                ["style-column", [
-                    ["raw-html", formatWhole(player.pri.modules[id].completions) + " ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                ], {width: "75px"}],
-                ["style-column", [], {width: "3px", height: "46px"}],
-                ["style-column", [
-                    ["raw-html", "<small>(x" + formatShort(layers.pri.fountains[id].getCompletionEffect()) + " " + layers.pri.fountains[id].completionEffectStat + ")</small>", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                ], {width: "292px", marginRight: "14px"}],
-            ], {background: "#4d9999", border: "3px solid #335966", borderRadius: "0px 0px 10px 10px", borderTop: "0px", height: "25px"}],
+            ["style-column", [
+                    ["style-column", [
+                    ["raw-html", formatWhole(player.pri.fountains[id].completions) + " ↻<br><small>(x" + formatShort(layers.pri.fountains[id].getCompletionEffect()) + " " + layers.pri.fountains[id].completionEffectStat + ")</small>", {color: "white", fontSize: "16px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
+                ], {background: "#335966", border: "3px solid #4d9999", borderRadius: "0px 0px 7px 7px", width: "388px", height: "44px"}],
+            ], {background: "#4d9999", border: "3px solid #335966", borderRadius: "0px 0px 10px 10px", borderTop: "0px", height: "50px"}],
         ], {width: "400px"}]
     return thisFountain
 }

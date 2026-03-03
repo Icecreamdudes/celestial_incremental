@@ -36,6 +36,8 @@
         player.dt.timeCapsulesToGet = player.dv.clouds.div(1e18).pow(0.2)
         if (getLevelableTier("pu", 113, true)) player.dt.timeCapsulesToGet = player.dt.timeCapsulesToGet.mul(levelableEffect("pu", 113)[0])
         if (getLevelableTier("pu", 214, true)) player.dt.timeCapsulesToGet = player.dt.timeCapsulesToGet.mul(levelableEffect("pu", 214)[0])
+        player.dt.timeCapsulesToGet = player.dt.timeCapsulesToGet.mul(buyableEffect("wel", 103))
+
         player.dt.timeCapsulesToGet = player.dt.timeCapsulesToGet.floor()
 
         player.dt.timeCapsuleEffect = player.dt.timeCapsules.add(1).log(10).add(1).pow(0.5).sub(1).pow_base(10).pow(1.5).sub(1).div(2).add(1)
@@ -53,9 +55,12 @@
 
         // stored
 
-        player.dt.storedToGet = player.dt.timeCapsules.div(100).log(10).add(1).pow(0.2).sub(1).pow_base(10).sub(1).mul(5).add(1).floor()
+        player.dt.storedToGet = player.dt.timeCapsules.div(100).log(10).add(1).pow(0.2).sub(1).pow_base(10).sub(1).mul(5).add(1)
         player.dt.storedToGet = player.dt.storedToGet.mul(buyableEffect("dt", 16))
+        player.dt.storedToGet = player.dt.storedToGet.mul(player.pri.fountains[3].completionEffect)
+        if (hasUpgrade("wel", 24)) player.dt.storedToGet = player.dt.storedToGet.mul(3);
         player.dt.storedToGet = player.dt.storedToGet.floor()
+
         if (player.dt.timeCapsules.lt(100)) player.dt.storedToGet = new Decimal(0);
         if (getLevelableTier("pu", 213, true)) player.dt.storedToGet = player.dt.storedToGet.add(1);
 

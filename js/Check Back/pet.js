@@ -1953,15 +1953,6 @@ addLayer("pet", {
             },
             style: {width: "100px", minHeight: "100px", border: "5px solid #0031BF", borderRadius: "0px", padding: "0px"},
         },
-        1307: {
-            title() { return "<img src='resources/Pets/grassSquareRarePet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.pet.shopIndex = 307
-            },
-            style: {width: "100px", minHeight: "100px", border: "5px solid #0031BF", borderRadius: "0px", padding: "0px"},
-        },
         1308: {
             title() { return "<img src='resources/Pets/impossibleTriangleRarePet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true },
@@ -5084,6 +5075,12 @@ addLayer("pet", {
                             ["style-column", [
                                 ["row", [["levelable", 1202], ["levelable", 1302], ["levelable", 1303], ["levelable", 1205], ["levelable", 1106], ["levelable", 1209]]],
                             ], () => { return player.cb.highestLevel.gte(250) ? {width: "635px", background: "repeating-linear-gradient(-45deg, #263280 0 15px, #303F9F 0 30px)", padding: "2px"} : {display: "none !important"}}],
+                            ["style-column", [
+                                ["raw-html", "Ascension Shards", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], () => { return player.cbs.shrineReactivated ? {width: "631px", height: "40px", backgroundColor: "#c6f7ff", border: "2px solid #0000007f", userSelect: "none"} : {display: "none !important"}}],
+                            ["style-column", [
+                                ["row", []],
+                            ], () => { return player.cbs.shrineReactivated ? {width: "635px", background: "repeating-linear-gradient(-45deg, #637c80 0 15px, #7a999e 0 30px)", padding: "2px"} : {display: "none !important"}}],
                             ["style-column", [
                                 ["raw-html", "Chocolate Shards", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
                             ], () => { return player.ep2.obtainedShards ? {width: "631px", height: "40px", backgroundColor: "#86562E", border: "2px solid #0000007f", userSelect: "none"} : {display: "none !important"}}],

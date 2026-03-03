@@ -92,9 +92,9 @@ addLayer("pu", {
             onClick() { player.pu.collectionRarityTab = 0 },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "75px", minHeight: "75px", maxHeight: "75px", borderRadius: "0px 0px 0px 0px", fontSize: "28px", color: "black"}
+                let look = {width: "78.75px", minHeight: "78.75px", maxHeight: "78.75px", borderRadius: "0px 0px 0px 0px", fontSize: "28px", color: "black"}
                 if (this.canClick(this.layer, this.id)) {
-                    look.background = "linear-gradient(0deg, #cacaca 0%, #cacaca 100%)"
+                    look.background = "linear-gradient(0deg, #9f9f9f 0%, #dfdfdf 100%)"
                     look.border = "3px solid #7f7f7f"
                 } else {
                     look.backgroundColor = "black"
@@ -111,7 +111,7 @@ addLayer("pu", {
             onClick() { player.pu.collectionRarityTab = 1 },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "75px", minHeight: "75px", maxHeight: "75px", borderRadius: "0px 0px 0px 0px", fontSize: "28px", color: "black"}
+                let look = {width: "78.75px", minHeight: "78.75px", maxHeight: "78.75px", borderRadius: "0px 0px 0px 0px", fontSize: "28px", color: "black"}
                 if (this.canClick(this.layer, this.id)) {
                     look.background = "linear-gradient(0deg, #f5c727 0%, #f5f475 100%)"
                     look.border = "3px solid #aa8000"
@@ -130,7 +130,7 @@ addLayer("pu", {
             onClick() { player.pu.collectionRarityTab = 2 },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "75px", minHeight: "75px", maxHeight: "75px", borderRadius: "0px 0px 0px 0px", fontSize: "28px", color: "black"}
+                let look = {width: "78.75px", minHeight: "78.75px", maxHeight: "78.75px", borderRadius: "0px 0px 0px 0px", fontSize: "28px", color: "black"}
                 if (this.canClick(this.layer, this.id)) {
                     look.background = "linear-gradient(0deg, #2ec89c 0%, #0268ba 100%)"
                     look.border = "3px solid #01325b"
@@ -149,7 +149,7 @@ addLayer("pu", {
             onClick() { player.pu.collectionRarityTab = 3 },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "75px", minHeight: "75px", maxHeight: "75px", borderRadius: "0px 0px 0px 0px", fontSize: "28px", color: "black"}
+                let look = {width: "78.75px", minHeight: "78.75px", maxHeight: "78.75px", borderRadius: "0px 0px 0px 0px", fontSize: "28px", color: "black"}
                 if (this.canClick(this.layer, this.id)) {
                     look.background = "linear-gradient(0deg, #a92163 0%, #ad2027 100%)"
                     look.border = "3px solid #52022c"
@@ -168,7 +168,7 @@ addLayer("pu", {
             onClick() { player.pu.collectionTypeTab = 0 },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "100px", minHeight: "100px", maxHeight: "100px", borderRadius: "0px 0px 0px 0px", fontSize: "28px", color: "#282363"}
+                let look = {width: "105px", minHeight: "105px", maxHeight: "105px", borderRadius: "0px 0px 0px 0px", fontSize: "28px", color: "#282363"}
                 if (this.canClick(this.layer, this.id)) {
                     look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
                     look.border = "3px solid #282363"
@@ -187,7 +187,7 @@ addLayer("pu", {
             onClick() { player.pu.collectionTypeTab = 1 },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "100px", minHeight: "100px", maxHeight: "100px", borderRadius: "0px 0px 0px 0px", fontSize: "28px", color: "black"}
+                let look = {width: "105px", minHeight: "105px", maxHeight: "105px", borderRadius: "0px 0px 0px 0px", fontSize: "28px", color: "black"}
                 if (this.canClick(this.layer, this.id)) {
                     look.background = "linear-gradient(120deg, #ff8800 0%, #bdad00 100%)"
                     look.border = "3px solid #804400"
@@ -206,7 +206,7 @@ addLayer("pu", {
             onClick() { player.pu.collectionTypeTab = 2 },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "100px", minHeight: "100px", maxHeight: "100px", borderRadius: "0px 0px 0px 0px", fontSize: "28px", color: "black"}
+                let look = {width: "105px", minHeight: "105px", maxHeight: "105px", borderRadius: "0px 0px 0px 0px", fontSize: "28px", color: "black"}
                 if (this.canClick(this.layer, this.id)) {
                     look.background = "linear-gradient(0deg, #cacaca 0%, #cacaca 100%)"
                     look.border = "3px solid #7f7f7f"
@@ -217,6 +217,60 @@ addLayer("pu", {
                 }
                 return look
             },
+        },
+        101: {
+            title() { return "" },
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.cof.fragmentIndex = 3
+            },
+            style: { backgroundImage: "url(resources/Punchcards/punchcard_common_1.png)", border: "3px solid #7f7f7f", backgroundSize: "88px 138px", width: '94px', minHeight: '144px', borderRadius: '0', margin: "3px"},
+        },
+        102: {
+            title() { return "" },
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.cof.fragmentIndex = 3
+            },
+            style: { backgroundImage: "url(resources/Punchcards/punchcard_common_2.png)", border: "3px solid #7f7f7f", backgroundSize: "88px 138px", width: '94px', minHeight: '144px', borderRadius: '0', margin: "3px"},
+        },
+        103: {
+            title() { return "" },
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.cof.fragmentIndex = 3
+            },
+            style: { backgroundImage: "url(resources/Punchcards/punchcard_common_3.png)", border: "3px solid #7f7f7f", backgroundSize: "88px 138px", width: '94px', minHeight: '144px', borderRadius: '0', margin: "3px"},
+        },
+        104: {
+            title() { return "" },
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.cof.fragmentIndex = 3
+            },
+            style: { backgroundImage: "url(resources/Punchcards/punchcard_common_4.png)", border: "3px solid #7f7f7f", backgroundSize: "88px 138px", width: '94px', minHeight: '144px', borderRadius: '0', margin: "3px"},
+        },
+        105: {
+            title() { return "" },
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.cof.fragmentIndex = 3
+            },
+            style: { backgroundImage: "url(resources/Punchcards/punchcard_common_5.png)", border: "3px solid #7f7f7f", backgroundSize: "88px 138px", width: '94px', minHeight: '144px', borderRadius: '0', margin: "3px"},
+        },
+        106: {
+            title() { return "" },
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.cof.fragmentIndex = 3
+            },
+            style: { backgroundImage: "url(resources/Punchcards/punchcard_common_6.png)", border: "3px solid #7f7f7f", backgroundSize: "88px 138px", width: '94px', minHeight: '144px', borderRadius: '0', margin: "3px"},
         },
         /*1: {
             title() {return "Level Up"},
@@ -2332,16 +2386,16 @@ addLayer("pu", {
                             ["style-row", [
                                 ["raw-html", () => {return "You have <h3>" + formatWhole(player.sma.starmetalAlloy) + "</h3> starmetal alloy." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ], () => {
-                                let look = {background: "radial-gradient(circle, black 60%, #13292f 70%, #54265e 80%, #8d3947 90%, #e6eb57 110%)", borderRadius: "10px 10px 0px 0px", width: "800px", height: "50px", display: player.pu.collectionTypeTab != 1 ? "" : "none !important"}
+                                let look = {background: "radial-gradient(circle, black 60%, #13292f 70%, #54265e 80%, #8d3947 90%, #e6eb57 110%)", borderRadius: "10px 10px 0px 0px", width: "814.75px", height: "50px", display: player.pu.collectionTypeTab != 1 ? "" : "none !important"}
                                 return look
                             }],
                             ["style-row", [
                                 ["raw-html", () => {return "You have <h3>" + formatWhole(player.sma.eclipseShards) + "</h3> eclipse shards." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ], () => {
-                                let look = {background: "radial-gradient(circle, #222 80%, #664900 95%, #b29c47 110%)", borderRadius: "10px 10px 0px 0px", width: "800px", height: "50px", display: player.pu.collectionTypeTab == 1 ? "" : "none !important"}
+                                let look = {background: "radial-gradient(circle, #222 80%, #664900 95%, #b29c47 110%)", borderRadius: "10px 10px 0px 0px", width: "814.75px", height: "50px", display: player.pu.collectionTypeTab == 1 ? "" : "none !important"}
                                 return look
                             }],
-                        ], {border: "3px solid black", borderRadius: "13px 13px 0px 0px", width: "800px", height: "50px"}],
+                        ], {border: "3px solid black", borderRadius: "13px 13px 0px 0px", width: "814.75px", height: "50px"}],
                         ["blank", "3px"],
                         // MIDDLE ROW
                         ["style-row", [
@@ -2350,71 +2404,145 @@ addLayer("pu", {
                                 ["hoverless-clickable", 2],
                                 ["hoverless-clickable", 3],
                                 ["hoverless-clickable", 4],
-                            ], {width: "75px", height: "300px"}],
-                            ["style-column", [], {background: "black", width: "3px", height: "300px"}],
-                            ["style-column", [
+                            ], {height: "315px"}],
+                            ["style-column", [], {background: "black", width: "3px", height: "315px"}],
+
+                            // COMMON
+                            ["style-row", [
                                 ["style-column", [
-                                    ["raw-html", () => {return "Common" }, {color: "black", fontSize: "18px", fontFamily: "monospace"}],
-                                ], {transform: "rotate(-90deg) translateY(-19px)", position: "relative"}],
-                            ], {background: "#cacaca", width: "22px", height: "300px"}],
-                            ["style-column", [], {background: "black", width: "3px", height: "300px"}],
-                            ["always-scroll-row", [
+                                    ["style-column", [
+                                        ["raw-html", () => {return "Common" }, {color: "black", fontSize: "18px", fontFamily: "monospace"}],
+                                    ], {transform: "rotate(-90deg) translateY(-20px)", position: "relative"}],
+                                ], {background: "#cacaca", width: "22px", height: "315px"}],
+                                ["style-column", [], {background: "black", width: "3px", height: "315px"}],
+                                ["always-scroll-row", [
+                                    ["style-column", [
+                                        ["hoverless-clickable", 101],
+                                        ["hoverless-clickable", 102],
+                                    ], {}],
+                                    ["style-column", [
+                                        ["hoverless-clickable", 103],
+                                        ["hoverless-clickable", 104],
+                                    ], {}],
+                                    ["style-column", [
+                                        ["hoverless-clickable", 105],
+                                        ["hoverless-clickable", 106],
+                                    ], {}],
+                                    ["style-column", [], {width: "2px", height: "3px"}],
+                                ], {background: "repeating-linear-gradient(-45deg, #0f0f0f 0 15px, black 0 30px)", width: "600px", height: "315px"}],
+                            ], () => {
+                                return {display: player.pu.collectionRarityTab == 0 ? "" : "none !important"}
+                            }],
+                            //
+
+                            // RARE
+                            ["style-row", [
                                 ["style-column", [
-                                    ["hoverless-levelable", 101],
-                                    ["blank", "2px"],
-                                    ["hoverless-levelable", 102],
-                                ], {marginLeft: "2px"}],
+                                    ["style-column", [
+                                        ["raw-html", () => {return "Rare" }, {color: "black", fontSize: "18px", fontFamily: "monospace"}],
+                                    ], {transform: "rotate(-90deg) translateY(-10px)", position: "relative"}],
+                                ], {background: "linear-gradient(0deg, #f5c727 0%, #f5f475 100%)", width: "22px", height: "315px"}],
+                                ["style-column", [], {background: "black", width: "3px", height: "315px"}],
+                                ["always-scroll-row", [
+                                    ["style-column", [
+                                        ["hoverless-clickable", 201],
+                                        ["hoverless-clickable", 202],
+                                    ], {}],
+                                    ["style-column", [
+                                        ["hoverless-clickable", 203],
+                                        ["hoverless-clickable", 204],
+                                    ], {}],
+                                    ["style-column", [
+                                        ["hoverless-clickable", 205],
+                                        ["hoverless-clickable", 206],
+                                    ], {}],
+                                    ["style-column", [], {width: "2px", height: "3px"}],
+                                ], {background: "repeating-linear-gradient(-45deg, #0f0d02 0 15px, black 0 30px)", width: "600px", height: "315px"}],
+                            ], () => {
+                                return {display: player.pu.collectionRarityTab == 1 ? "" : "none !important"}
+                            }],
+                            //
+
+                            // EPIC
+                            ["style-row", [
                                 ["style-column", [
-                                    ["hoverless-levelable", 103],
-                                    ["blank", "2px"],
-                                    ["hoverless-levelable", 104],
-                                ], {marginLeft: "2px"}],
+                                    ["style-column", [
+                                        ["raw-html", () => {return "Epic" }, {color: "black", fontSize: "18px", fontFamily: "monospace"}],
+                                    ], {transform: "rotate(-90deg) translateY(-10px)", position: "relative"}],
+                                ], {background: "linear-gradient(0deg, #2ec89c 0%, #0268ba 100%)", width: "22px", height: "315px"}],
+                                ["style-column", [], {background: "black", width: "3px", height: "315px"}],
+                                ["always-scroll-row", [
+                                    ["style-column", [
+                                        ["hoverless-clickable", 301],
+                                        ["hoverless-clickable", 302],
+                                    ], {}],
+                                    ["style-column", [
+                                        ["hoverless-clickable", 303],
+                                        ["hoverless-clickable", 304],
+                                    ], {}],
+                                    ["style-column", [
+                                        ["hoverless-clickable", 305],
+                                        ["hoverless-clickable", 306],
+                                    ], {}],
+                                    ["style-column", [], {width: "2px", height: "3px"}],
+                                ], {background: "repeating-linear-gradient(-45deg, #00080f 0 15px, black 0 30px)", width: "600px", height: "315px"}],
+                            ], () => {
+                                return {display: player.pu.collectionRarityTab == 2 ? "" : "none !important"}
+                            }],
+                            //
+
+                            // LEGENDARY
+                            ["style-row", [
                                 ["style-column", [
-                                    ["hoverless-levelable", 105],
-                                    ["blank", "2px"],
-                                    ["hoverless-levelable", 106],
-                                ], {marginLeft: "2px"}],
-                                ["style-column", [
-                                    ["hoverless-levelable", 107],
-                                    ["blank", "2px"],
-                                    ["hoverless-levelable", 108],
-                                ], {marginLeft: "2px"}],
-                                ["style-column", [
-                                    ["hoverless-levelable", 109],
-                                    ["blank", "2px"],
-                                    ["hoverless-levelable", 110],
-                                ], {marginLeft: "2px"}],
-                                ["style-column", [
-                                    ["hoverless-levelable", 111],
-                                    ["blank", "2px"],
-                                    ["hoverless-levelable", 112],
-                                ], {marginLeft: "2px"}],
-                                ["style-column", [
-                                    ["hoverless-levelable", 113],
-                                    ["blank", "2px"],
-                                    ["hoverless-levelable", 101],
-                                ], {marginLeft: "2px"}],
-                                ["style-column", [
-                                    ["hoverless-levelable", 102],
-                                    ["blank", "2px"],
-                                    ["hoverless-levelable", 103],
-                                ], {marginLeft: "2px"}],
-                                ["style-column", [
-                                ], {width: "2px", height: "3px"}],
-                            ], {background: "repeating-linear-gradient(-45deg, #cacaca 0 15px, #bababa 0 30px)", width: "594px", height: "300px"}],
-                            ["style-column", [], {background: "black", width: "3px", height: "300px"}],
+                                    ["style-column", [
+                                        ["raw-html", () => {return "Legendary" }, {color: "black", fontSize: "18px", fontFamily: "monospace"}],
+                                    ], {transform: "rotate(-90deg) translateY(-35px)", position: "relative"}],
+                                ], {background: "linear-gradient(0deg, #a92163 0%, #ad2027 100%)", width: "22px", height: "315px"}],
+                                ["style-column", [], {background: "black", width: "3px", height: "315px"}],
+                                ["always-scroll-row", [
+                                    ["style-column", [
+                                        ["hoverless-clickable", 401],
+                                        ["hoverless-clickable", 402],
+                                    ], {}],
+                                    ["style-column", [], {width: "2px", height: "3px"}],
+                                ], {background: "repeating-linear-gradient(-45deg, #0f0303 0 15px, black 0 30px)", width: "600px", height: "315px"}],
+                            ], () => {
+                                return {display: player.pu.collectionRarityTab == 3 ? "" : "none !important"}
+                            }],
+                            //
+
+                            ["style-column", [], {background: "black", width: "3px", height: "315px"}],
                             ["style-column", [
                                 ["hoverless-clickable", 11],
                                 ["hoverless-clickable", 12],
                                 ["hoverless-clickable", 13],
-                            ], {width: "100px", height: "300px"}],
-                        ], {background: "gray", border: "3px solid black", borderRadius: "0px 0px 0px 0px", width: "800px", height: "300px"}],
+                            ], {height: "315px"}],
+                        ], {background: "gray", border: "3px solid black", borderRadius: "0px 0px 0px 0px"}],
                         ["blank", "3px"],
                         // BOTTOM ROW
-                        ["style-column", [
+                        ["style-row", [
+                            ["style-column", [
+                                ["style-column", [
+                                    ["style-row", [
+                                        ["style-row", [
+                                            ["raw-html", () => {return "<img src='resources/punchcards/punchcard_common_1.png' style='width:60.75px;height:60.75px;margin-top:5px'></img>" }, {color: "black", fontSize: "18px", fontFamily: "monospace"}],
+                                        ], {border: "3px solid #7f7f7f", width: "60.75px", height: "60.75px"}],
+                                        ["style-column", [], {width: "3px", height: "3px"}],
+                                        ["style-row", [
+                                            ["raw-html", "Points", {color: "black", fontSize: "18px", fontFamily: "monospace"}],
+                                        ], {border: "3px solid #7f7f7f", width: "315.75px", height: "60.75px"}],
+                                    ], {width: "396.875px"}],
+                                    ["style-column", [], {width: "3px", height: "3px"}],
+                                    ["style-row", [
+                                    ], {border: "3px solid #7f7f7f", borderRadius: "0px 0px 0px 7px", width: "384.75px", height: "213px"}],
+                                ], {background: "linear-gradient(0deg, #9f9f9f 0%, #dfdfdf 100%)", border: "3px solid #7f7f7f", borderRadius: "0px 0px 0px 10px", width: "396.875px", height: "294px"}],
+                            ], {border: "3px solid black", borderRadius: "0px 0px 0px 13px", width: "402.875px", height: "300px"}],
+                            ["style-column", [], {width: "3px", height: "3px"}],
+                            ["style-column", [
 
-                        ], {background: "#0000007f", border: "3px solid black", borderRadius: "0px 0px 13px 13px", width: "800px", height: "300px"}],
-                    ], {background: "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)", borderRadius: "16px", padding: "3px"}],
+                            ], {background: "#0000007f", borderRadius: "0px 0px 13px 0px", width: "408.875px", height: "306px"}],
+                        ], {borderRadius: "0px 0px 13px 13px", width: "820.75px", height: "306px"}],
+                    ], {background: () => {return getStarmetalGradient(1e4)}, borderRadius: "16px", padding: "3px"}],
                 ]
             },
             "Selection": {
@@ -2433,3 +2561,10 @@ addLayer("pu", {
     deactivated() {return player.pu.paused},
     layerShown() { return player.startedGame == true },
 })
+const getStarmetalGradient = function (loopTimer) {
+    let t = Date.now()
+    t = t % loopTimer
+    t *= 1.25
+    return "linear-gradient(120deg, #e6eb57 " + (((1-t)/loopTimer) * 100) + "%, #bf9a32 " + ((((1-t)/loopTimer) + 0.25) * 100) + "%, #eb6077 " + ((((1-t)/loopTimer) + 0.5) * 100) + "%, #d460eb " + ((((1-t)/loopTimer) + 0.75) * 100) + "%, #60cfeb " + ((((1-t)/loopTimer) + 1) * 100) + "%, #e6eb57 " + ((((1-t)/loopTimer) + 1.25) * 100) + "%, #bf9a32 " + ((((1-t)/loopTimer) + 1.5) * 100) + "%, #eb6077 " + ((((1-t)/loopTimer) + 1.75) * 100) + "%, #d460eb " + ((((1-t)/loopTimer) + 2) * 100) + "%, #60cfeb " + ((((1-t)/loopTimer) + 2.25) * 100) + "%, #e6eb57 " + ((((1-t)/loopTimer) + 2.5) * 100) + "%)"
+}
+// "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"

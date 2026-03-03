@@ -63,7 +63,6 @@
         player.prj.projectSpeed = new Decimal(1)
         player.prj.projectSpeed = player.prj.projectSpeed.mul(levelableEffect("pu", 307)[1])
         player.prj.projectSpeed = player.prj.projectSpeed.mul(player.prj.storedTimeCapsuleEffect)
-        player.prj.projectSpeed = player.prj.projectSpeed.mul(player.pri.modules[2].completionEffect)
 
         player.prj.storedTimeCapsuleEffect = player.prj.storedTimeCapsules.add(1).log(10).add(1).pow(0.5).sub(1).pow_base(10).pow(2).sub(1).div(10).add(1)
 
@@ -82,6 +81,7 @@
                     module.focused = false
                     module.completions = module.completions.add(1)
                     module.time = new Decimal(0)
+                    player.prj.focused = player.prj.focused.sub(1)
                 }
             }
         });
@@ -94,9 +94,10 @@
     clickables: {
         1: {
             title() { return "<h3>Focus</h3>" },
-            canClick() { return player.prj.storedTimeCapsules.gte(player.prj.modules[this.id].timeCapsuleReq) && !player.prj.modules[this.id].focused},
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.prj.storedTimeCapsules.gte(player.prj.modules[this.id].timeCapsuleReq) && !player.prj.modules[this.id].focused},
             unlocked() { return true },
             onClick() {
+                player.prj.focused = player.prj.focused.add(1)
                 player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.sub(player.prj.modules[this.id].timeCapsuleReq)
                 player.prj.modules[this.id].focused = true
             },
@@ -116,14 +117,42 @@
         },
         2: {
             title() { return "<h3>Focus</h3>" },
-            canClick() { return player.prj.storedTimeCapsules.gte(player.prj.modules[this.id].timeCapsuleReq) && !player.prj.modules[this.id].focused},
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.prj.storedTimeCapsules.gte(player.prj.modules[this.id].timeCapsuleReq) && !player.prj.modules[this.id].focused},
             unlocked() { return true },
             onClick() {
+                player.prj.focused = player.prj.focused.add(1)
                 player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.sub(player.prj.modules[this.id].timeCapsuleReq)
                 player.prj.modules[this.id].focused = true
             },
             style() {
                 let look = {width: "238px", minHeight: "45px", borderRadius: "0px"}
+                if (this.canClick()) {
+                    look.backgroundColor = "#ffa8d3"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        101: {
+            title() { return "<h3>Respec Interspace Focus</h3><br><small>(you won't get your stored time capsules back!)</small>" },
+            canClick() { return player.prj.focused.gt(0)},
+            unlocked() { return true },
+            onClick() {
+                player.prj.focused = new Decimal(0)
+                Object.keys(layers.prj.projects).forEach(i => {
+                    player.prj.modules[i].focused = false
+                });
+                Object.keys(layers.pri.fountains).forEach(i => {
+                    player.pri.modules[i].focused = false
+                });
+            },
+            style() {
+                let look = {width: "400px", minHeight: "75px", maxHeight: "75px", borderRadius: "10px"}
                 if (this.canClick()) {
                     look.backgroundColor = "#ffa8d3"
                     look.border = "3px solid #0000003f"
@@ -378,7 +407,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>???</small>" },
+            effectDescription() { return "<small>Unlock the third prismatic well.</small>" },
             cycleReq() { return new Decimal(2) },
             projectId() { return 2 },
             unlocked() { return true },
@@ -399,7 +428,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>???</small>" },
+            effectDescription() { return "<small>Double prism gain.</small>" },
             cycleReq() { return new Decimal(3) },
             projectId() { return 2 },
             unlocked() { return true },
@@ -420,7 +449,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>???</small>" },
+            effectDescription() { return "<small>Unlock the fourth prismatic well.</small>" },
             cycleReq() { return new Decimal(4) },
             projectId() { return 2 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) },
@@ -441,7 +470,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock the third row of light upgrades.</small>" },
+            effectDescription() { return "<small>+1 interspace project focus cap and double stored time capsules.</small>" },
             cycleReq() { return new Decimal(5) },
             projectId() { return 2 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) },
@@ -499,7 +528,7 @@
 
                 s = s.mul(completions.add(1).pow(2))
                 if (completions.gte(5)) {
-                    s = s.mul(4)
+                    s = s.mul(6)
                 }
 
                 return s
@@ -509,7 +538,7 @@
                 let s = completions
                 
                 if (completions.gte(5)) {
-                    s = s.add(completions.sub(5).pow(1.5)).mul(4)
+                    s = s.add(completions.sub(5).pow(1.5)).mul(10)
                 }
 
                 return s.floor()
@@ -546,10 +575,10 @@
             },
             getTimeCapsuleReq() {
                 let completions = player.prj.modules[2].completions
-                let s = completions.add(1).pow(1.5).mul(3)
+                let s = completions.add(1).pow(2).mul(5)
                 
                 if (completions.gte(5)) {
-                    s = s.add(completions.sub(5).pow(1.5)).mul(4)
+                    s = s.add(completions.sub(5).pow(1.5)).mul(10)
                 }
 
                 return s.floor()
@@ -582,14 +611,17 @@
                         ["raw-html", "Boosts project speed by x" + format(player.prj.storedTimeCapsuleEffect), {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "25px"],
                         ["raw-html", "You are gaining <h3>" + format(player.prj.projectSpeed) + "</h3> project progress /s.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "You are focusing on 0/1 interspace projects.", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "You are focusing on " + formatWhole(player.prj.focused) + "/1 interspace projects.", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "25px"],
                         ["style-row", [
                             makeProject(1),
                             ["blank", "6px", {width: "6px"}],
                             hasUpgrade("wel", 23) ? makeProject(2) : null,
                         ]],
-                    ["blank", "25px"]]
+                        ["blank", "6px"],
+                        ["clickable", 101],
+                        ["blank", "25px"],
+                    ]
                     return look
                 },
             },
@@ -632,15 +664,11 @@ const makeProject = function (id) {
                     ["style-column", [], {background: "#994d86", height: "78px"}],
                 ], {border: "3px solid #663366", borderBottom: "0px", borderLeft: "0px", borderRadius: "0px 81px 0px 0px", padding: "-3px", width: "153px", height: "153px"}],
             ], {verticalAlign: "bottom"}],
-            ["style-row", [
-                ["style-column", [
-                    ["raw-html", formatWhole(player.prj.modules[id].completions) + " ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                ], {width: "75px"}],
-                ["style-column", [], {width: "3px", height: "46px"}],
-                ["style-column", [
-                    ["raw-html", "<small>(x" + format(layers.prj.projects[id].getCompletionEffect()) + " " + layers.prj.projects[id].completionEffectStat + ")</small>", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                ], {width: "292px", marginRight: "14px"}],
-            ], {background: "#994d86", border: "3px solid #663366", borderTop: "0px", height: "25px"}],
+            ["style-column", [
+                    ["style-column", [
+                    ["raw-html", formatWhole(player.prj.modules[id].completions) + " ↻<br><small>(x" + formatShort(layers.prj.projects[id].getCompletionEffect()) + " " + layers.prj.projects[id].completionEffectStat + ")</small>", {color: "white", fontSize: "16px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
+                ], {background: "#663366", border: "3px solid #994d86", borderRadius: "0px", width: "388px", height: "44px"}],
+            ], {background: "#994d86", border: "3px solid #663366", borderRadius: "0px", borderTop: "0px", height: "50px"}],
             ["style-column", [
                 ["always-scroll-column", [
                     ["style-row", [], {backgroundColor: "#485e48", width: "379px", height: "3px"}]

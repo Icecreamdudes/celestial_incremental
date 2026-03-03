@@ -93,9 +93,10 @@
             else player.wel.modules[4].completionsEffect = player.wel.modules[4].completions.div(1e9).add(1);
             player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[4].completionsEffect)
         }
-        if (hasUpgrade("wel", 14)) player.wel.lightMult = player.wel.lightMult.mul(2)
+        if (hasUpgrade("wel", 14)) player.wel.lightMult = player.wel.lightMult.mul(2);
         player.wel.lightMult = player.wel.lightMult.mul(levelableEffect("pu", 113)[1])
-        if (hasMilestone("prj", 201)) player.wel.lightMult = player.wel.lightMult.mul(2)
+        if (hasMilestone("prj", 201)) player.wel.lightMult = player.wel.lightMult.mul(2);
+        player.wel.lightMult = player.wel.lightMult.mul(player.pri.fountains[2].completionEffect)
         
         // WELLS
 
@@ -117,7 +118,7 @@
             player.wel.modules[i].completionsGain = new Decimal(1)
             player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(buyableEffect("wel", 13))
             player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(levelableEffect("pu", 214)[1])
-            player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(player.pri.modules[1].completionEffect)
+            player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(player.pri.fountains[1].completionEffect)
         }
 
         if (player.wel.bestLight.lt(player.wel.light)) player.wel.bestLight = player.wel.light;
@@ -382,6 +383,44 @@
         },
         24: {
             unlocked() { return hasUpgrade("wel", 21) },
+            condition() { return player.pri.prisms.gte(12) },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "Triple stored time capsules and light gained.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><br><h3>Req: 12 prisms</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(1e18),
+            currencyLocation() { return player.wel },
+            currencyDisplayName: "Light",
+            currencyInternalName: "light",
+            canAfford() {
+                return this.condition()
+            },
+            style() {
+                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#4d9973"
+                    look.border = "3px solid #336659"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#ffdfdf"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        31: {
+            unlocked() { return hasUpgrade("wel", 24) },
             condition() { return player.wel.modules[1].maxTime.div(player.wel.modules[1].timeSpeed).lte(0.2) },
             fullDisplay() {
                 let s = "<h2>"
@@ -392,7 +431,7 @@
                 }
                 return s
             },
-            cost: new Decimal(1e6),
+            cost: new Decimal(1e24),
             currencyLocation() { return player.wel },
             currencyDisplayName: "Light",
             currencyInternalName: "light",
@@ -401,6 +440,272 @@
             },
             style() {
                 let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#4d9973"
+                    look.border = "3px solid #336659"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#ffdfdf"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        32: {
+            unlocked() { return hasUpgrade("wel", 31) },
+            condition() { return player.pri.blueshifts.gte(4) },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "Unlock even more light buyables.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><br><h3>Req: 4 Blueshifts</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(1e30),
+            currencyLocation() { return player.wel },
+            currencyDisplayName: "Light",
+            currencyInternalName: "light",
+            canAfford() {
+                return this.condition()
+            },
+            style() {
+                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#4d9973"
+                    look.border = "3px solid #336659"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#ffdfdf"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        33: {
+            unlocked() { return hasUpgrade("wel", 31) },
+            condition() { return player.pri.blueshifts.gte(4) },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "Prism fountain speed slightly boosts project speed.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><br><h3>Req: 60 total Prism Fountain cycles</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(1e38),
+            currencyLocation() { return player.wel },
+            currencyDisplayName: "Light",
+            currencyInternalName: "light",
+            canAfford() {
+                return this.condition()
+            },
+            style() {
+                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#4d9973"
+                    look.border = "3px solid #336659"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#ffdfdf"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        34: {
+            unlocked() { return hasUpgrade("wel", 31) },
+            condition() { return false },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "Unlock the fourth project and double light well speed.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><br><h3>Req: 2 δ Blueshifts</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(1e50),
+            currencyLocation() { return player.wel },
+            currencyDisplayName: "Light",
+            currencyInternalName: "light",
+            canAfford() {
+                return this.condition()
+            },
+            style() {
+                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#4d9973"
+                    look.border = "3px solid #336659"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#ffdfdf"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        41: {
+            unlocked() { return hasUpgrade("wel", 34) },
+            condition() { return player.bum.starlight.gte(67) },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "x67 light lmao.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><br><h3>Req: 67 Starlight</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(6.7e67),
+            currencyLocation() { return player.wel },
+            currencyDisplayName: "Light",
+            currencyInternalName: "light",
+            canAfford() {
+                return this.condition()
+            },
+            style() {
+                let look = {width: "200px", borderRadius: "0px 0px 0px 10px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#4d9973"
+                    look.border = "3px solid #336659"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#ffdfdf"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        42: {
+            unlocked() { return hasUpgrade("wel", 34) },
+            condition() { return player.wel.modules[3].completions.gte(1e9) },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "Unlock more starlight buyables.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><br><h3>Req: Time Capsule Project level 15</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(1e99),
+            currencyLocation() { return player.wel },
+            currencyDisplayName: "Light",
+            currencyInternalName: "light",
+            canAfford() {
+                return this.condition()
+            },
+            style() {
+                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#4d9973"
+                    look.border = "3px solid #336659"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#ffdfdf"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        43: {
+            unlocked() { return hasUpgrade("wel", 34) },
+            condition() { return false },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "Triple ALL well speeds.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><br><h3>Req: Prism Well γ unlocked</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(1e128),
+            currencyLocation() { return player.wel },
+            currencyDisplayName: "Light",
+            currencyInternalName: "light",
+            canAfford() {
+                return this.condition()
+            },
+            style() {
+                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#4d9973"
+                    look.border = "3px solid #336659"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#ffdfdf"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        44: {
+            unlocked() { return hasUpgrade("wel", 34) },
+            condition() { return false },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "(COMING SOON)</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><br><h3>Req: 60 total Project levels</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(1e150),
+            currencyLocation() { return player.wel },
+            currencyDisplayName: "Light",
+            currencyInternalName: "light",
+            canAfford() {
+                return this.condition()
+            },
+            style() {
+                let look = {width: "200px", borderRadius: "0px 0px 10px 0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
                 if (hasUpgrade(this.layer, this.id)) {
                     look.backgroundColor = "#4d9973"
                     look.border = "3px solid #336659"
@@ -427,7 +732,7 @@
             purchaseLimit() { return new Decimal(1e3) },
             currency() { return player.wel.light},
             pay(amt) { player.wel.light = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).add(1).pow(getBuyableAmount(this.layer, this.id).mul(0.01).add(1))},
+            effect(x) { return getBuyableAmount(this.layer, this.id).add(1).pow(getBuyableAmount(this.layer, this.id).mul(0.0125).add(1))},
             unlocked() { return hasUpgrade("wel", 12) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -453,7 +758,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '194px', height: '174px', borderRadius: "5px 0px 0px 5px", border: "3px solid #336659", background: "#4d9973", color: "#000000df", margin: "1.5px"}
+            style: { width: '194px', height: '174px', borderRadius: "5px 0px 0px 5px", border: "3px solid #336659", background: "#4d9973", color: "black", margin: "1.5px"}
         },
         12: {
             condition() { return player.wel.bestLight.gte(1.5e3) },
@@ -462,7 +767,7 @@
             purchaseLimit() { return new Decimal(1e3) },
             currency() { return player.wel.light},
             pay(amt) { player.wel.light = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.5).add(1).pow(getBuyableAmount(this.layer, this.id).mul(0.0075).add(1))},
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.5).add(1).pow(getBuyableAmount(this.layer, this.id).mul(0.01).add(1))},
             unlocked() { return layers.wel.buyables[11].condition() || getBuyableAmount("wel", 11).gte(1) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -494,7 +799,7 @@
             condition() { return player.wel.bestLight.gte(5e4) },
             costBase() { return new Decimal(5e4) },
             costGrowth() { return new Decimal(6) },
-            purchaseLimit() { return new Decimal(99) },
+            purchaseLimit() { return new Decimal(1e3) },
             currency() { return player.wel.light},
             pay(amt) { player.wel.light = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).add(1)},
@@ -529,7 +834,7 @@
             condition() { return player.wel.bestLight.gte(1.5e6) },
             costBase() { return new Decimal(1.5e6) },
             costGrowth() { return new Decimal(4) },
-            purchaseLimit() { return new Decimal(36) },
+            purchaseLimit() { return new Decimal(1e3) },
             currency() { return player.wel.light},
             pay(amt) { player.wel.light = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).div(5).add(1)},

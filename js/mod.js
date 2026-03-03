@@ -320,6 +320,38 @@ function updateStyles() {
 	    }
 	}
 
+	if (player.tab === "wel") {
+    	let t = Date.now()
+    	t = ((t % 1000) / 1000) * 32
+		// Add the dotted background if it doesn't already exist
+    	if (!document.getElementById("dotted-background")) {
+	        const dottedBackground = document.createElement("div");
+        	dottedBackground.id = "dotted-background";
+        	dottedBackground.className = "instant";
+    	    dottedBackground.style.position = "fixed";
+	        dottedBackground.style.top = "0";
+        	dottedBackground.style.left = "0";
+    	    dottedBackground.style.width = "100%";
+	        dottedBackground.style.height = "100%";
+        	dottedBackground.style.overflow = "hidden";
+    	    dottedBackground.style.zIndex = "-2003"; // Ensure it stays in the background
+        	document.body.appendChild(dottedBackground);
+    	    
+        	dottedBackground.style.overflow = "hidden";
+			dottedBackground.style.backgroundImage = "url(resources/ui/dotted_background.png)";
+			dottedBackground.style.backgroundSize = "32px 32px";
+			dottedBackground.style.backgroundPosition = `${t}px ${t}px`;
+	    }
+		const el = document.getElementById("dotted-background");
+		el.style.backgroundPosition = `${t}px ${t}px`;
+	} else {
+	    // Remove the galaxy background if the tab is not in the well
+	    const dottedBackground = document.getElementById("dotted-background");
+	    if (dottedBackground) {
+	        dottedBackground.remove();
+	    }
+	}
+
 
 
 	if ((player.tab == "ma" && player.ma.currentDepth && player.ma.currentDepth.eq && player.ma.currentDepth.eq(3) && (player.subtabs["ma"]["stuff"] == "Fight"))) {
@@ -1510,7 +1542,7 @@ var doNotCallTheseFunctionsEveryTick = [
 	"selectCelestialites", "petDeath", "celestialiteDeath", "petAbility", "celestialiteAbility",
 	"arriveAtStar", "spaceEnergyReset","coinFlip", "randomizeSegments", "spinWheel", "spinSlots", "evaluateRewards",
 	"slotReset",
-	"prismReset", "timeCapsuleReset", "createMultiverseMapConnection", "makeProject", "makePrismFountain", "getTimeReq", "getTimeCapsuleReq", "getTimeSpeed", "lightGain",,
+	"prismReset", "timeCapsuleReset", "createMultiverseMapConnection", "makeProject", "makeLightWell","makePrismFountain", "getTimeReq", "getTimeCapsuleReq", "getTimeSpeed", "lightGain",,
 ]
 
 function getStartPoints(){

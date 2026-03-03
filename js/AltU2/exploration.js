@@ -88,6 +88,7 @@ addLayer("se", {
                     if (hasUpgrade("ep2", 18)) player.se.starExploreTimes[i][j] = player.se.starExploreTimes[i][j].div(upgradeEffect("ep2", 18))
                     if (hasMilestone("db", 104)) player.se.starExploreTimes[i][j] = player.se.starExploreTimes[i][j].div(player.db.permaMilestone4Effect)
                     player.se.starExploreTimes[i][j] = player.se.starExploreTimes[i][j].div(levelableEffect("pu", 111)[1])
+                    player.se.starExploreTimes[i][j] = player.se.starExploreTimes[i][j].div(buyableEffect("sme", 154))
                 }
             }
         }
@@ -112,9 +113,10 @@ addLayer("se", {
             ]
         ]
     },
-    arriveAtStar(x, y)
-    {
-        player.se.starsExploreCount[x][y] = player.se.starsExploreCount[x][y].add(1)
+    arriveAtStar(x, y) {
+        let visitGain = 1
+        if (buyableEffect("sme", 153).sub(1).gte(Math.random())) visitGain += 1
+        player.se.starsExploreCount[x][y] = player.se.starsExploreCount[x][y].add(visitGain)
         player.se.currentPosition = player.se.currentStar
         player.se.currentlyTravelling = false
     },

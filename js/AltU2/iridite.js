@@ -1239,16 +1239,23 @@ addLayer("ir", {
                     ["blank", "25px"],
                     ["style-column", [
                         ["raw-html", "Perks for defeating Iridite", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                    ], {width: "1000px", border: "3px solid rgb(27, 0, 36)", backgroundImage: "linear-gradient(120deg, #480e8aff 0%, rgba(20, 7, 24, 1) 100%)", borderBottom: "5px", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}],
+                    ], {width: "800px", border: "3px solid rgb(27, 0, 36)", backgroundImage: "linear-gradient(120deg, #480e8aff 0%, rgba(20, 7, 24, 1) 100%)", borderBottom: "5px", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}],
                     ["style-column", [
-                        ["raw-html", () => { return player.pol.unlockHive == 2 ? "Unlocks: The Hive" : "Unlocks: Larva (In Pollinators)" }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["blank", "15px"],
-                        ["raw-html", () => { return "Greatly weakened antimatter softcap." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "<u>Unlocks</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return player.pol.unlockHive == 2 ? "The Hive" : "Larva (In Pollinators)" }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "New Punchcards", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "New D1 Upgrades", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "New Singularity Upgrades", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "New Starmetal Studies", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["blank", "10px"],
+                    ["raw-html", "<u>Effects</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", "Greatly weakened antimatter softcap.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", "Weakened 3rd replicanti point softcap.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", () => { return "x50 dice sides." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", () => { return "x1e12 post-OTF currencies." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", () => { return "Keep hex progress on singularity reset." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                    ], {width: "1000px", border: "3px solid rgb(27, 0, 36)", backgroundImage: "linear-gradient(120deg, #480e8aff 0%, rgba(20, 7, 24, 1) 100%)", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px"}]
+                        ["raw-html", "Keep hex progress on singularity reset.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "x50 dice sides.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "x1e12 post-OTF currencies.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "/1.5 starmetal essence generator cooldowns", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                    ], {width: "800px", border: "3px solid rgb(27, 0, 36)", backgroundImage: "linear-gradient(120deg, #480e8aff 0%, rgba(20, 7, 24, 1) 100%)", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px"}]
                 ]
             },
             "Battle": {

@@ -45,12 +45,14 @@ addLayer("st", {
         let onepersec = new Decimal(1)
 
         player.st.dimensionsGain = [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),]
+        player.st.dimensionsTimerMax = [new Decimal(5),new Decimal(8),new Decimal(12),new Decimal(18),new Decimal(25),new Decimal(36),new Decimal(50),new Decimal(75)]
         for (let i = 0; i < 8; i++) {
             if (player.st.buyables[i + 11].gt(0)) player.st.dimensionsTimer[i] = player.st.dimensionsTimer[i].add(delta)
             if (i < 7) {
                 player.st.dimensionsGain[i] = player.st.dimensionsGain[i].mul(player.st.dimensionPowerEffects[i + 1])
                 player.st.dimensionsGain[i] = player.st.dimensionsGain[i].mul(buyableEffect("st", i + 11))
             }
+            player.st.dimensionsTimerMax[i] = player.st.dimensionsTimerMax[i].div(buyableEffect("sme", 152))
             if (player.st.dimensionsTimer[i].gte(player.st.dimensionsTimerMax[i])) {
                 player.st.dimensionsTimer[i] = new Decimal(0)
                 player.st.dimensionAmounts[i] = player.st.dimensionAmounts[i].add(player.st.dimensionsGain[i])

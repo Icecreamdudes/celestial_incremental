@@ -205,8 +205,11 @@ addLayer("pet", {
         paraIncUsed: false,
 
         lesserFragments: new Decimal(0),
+        lesserFragmentsPS: new Decimal(0),
         basicFragments: new Decimal(0),
+        basicFragmentsPS: new Decimal(0),
         greaterFragments: new Decimal(0),
+        greaterFragmentsPS: new Decimal(0),
         fragmentMult: new Decimal(1),
 
         fragShopIndex: 0,
@@ -589,6 +592,17 @@ addLayer("pet", {
         player.pet.fragmentMult = player.pet.fragmentMult.mul(levelableEffect("pet", 110)[0])
         if (hasUpgrade("ev8", 23)) player.pet.fragmentMult = player.pet.fragmentMult.mul(1.2)
 
+        if (getBuyableAmount("sme", 118).gt(0)) {
+            let fragGain = Decimal.add(1, buyableEffect("pet", 4)).pow(0.5).mul(player.pet.fragmentMult).mul(buyableEffect("pet", 2).div(20).add(2).add(2)).mul(buyableEffect("sme", 118).sub(1)).mul(2)
+            player.pet.lesserFragmentsPS = fragGain.div(player.pet.banners[0].max)
+            player.pet.basicFragmentsPS = fragGain.div(player.pet.banners[2].max)
+            player.pet.greaterFragmentsPS = fragGain.div(player.pet.banners[4].max)
+
+            player.pet.lesserFragments = player.pet.lesserFragments.add(Decimal.mul(player.pet.lesserFragmentsPS, onepersec.mul(delta)))
+            player.pet.basicFragments = player.pet.basicFragments.add(Decimal.mul(player.pet.basicFragmentsPS, onepersec.mul(delta)))
+            player.pet.greaterFragments = player.pet.greaterFragments.add(Decimal.mul(player.pet.greaterFragmentsPS, onepersec.mul(delta)))
+        }
+
         if (player.pet.fragShopInput.gte(1)) player.pet.fragShopBulk = player.pet.fragShopInput.floor()
 
         let fragMul = player.pet.fragShopBulk.mul(Decimal.sub(0.05, buyableEffect("pet", 3))).add(Decimal.add(0.95, buyableEffect("pet", 3)))
@@ -695,8 +709,10 @@ addLayer("pet", {
         //legendary pets
         player.pet.legPetTimers[0].max = new Decimal(600)
         player.pet.legPetTimers[0].max = player.pet.legPetTimers[0].max.mul(levelableEffect("pu", 303)[1])
+        player.pet.legPetTimers[0].max = player.pet.legPetTimers[0].max.mul(buyableEffect("sme", 164))
 
         player.pet.legPetTimers[1].max = new Decimal(300)
+        player.pet.legPetTimers[1].max = player.pet.legPetTimers[1].max.mul(levelableEffect("pet", 502)[3])
 
         if (getLevelableTier("pu", 303, true)) player.pet.legPetTimers[0].max = player.pet.legPetTimers[0].max.mul(levelableEffect("pu", 303)[0])
         
@@ -1027,7 +1043,7 @@ addLayer("pet", {
         },
         32: {
             title() { return player.pet.legPetTimers[1].cooldown.lte(0) ? "<h3>Activate Skill</h3>" : player.pet.legPetTimers[1].current.gte(0) ? "Active: " + formatTime(player.pet.legPetTimers[1].current) + "." : "Check Back in " + formatTime(player.pet.legPetTimers[1].cooldown) + "."},
-            tooltip() { return "Boosts your damage in space battles by x1.5 for the next 5 minutes. Also unlocks a new ship."},
+            tooltip() { return "Boosts your damage in space battles by x1.5 for the next " + formatSimple(player.pet.legPetTimers[1].max.div(60)) + " minutes. Also unlocks a new ship."},
             canClick() { return player.pet.legPetTimers[1].cooldown.lte(0) },
             unlocked() { return layers.pet.levelables.index == 502 },
             onClick () {
@@ -3724,7 +3740,7 @@ addLayer("pet", {
                     player.au2.stars.pow(0.04).add(1).pow(amt.pow(0.15)).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // stars (Based on Stars)
                     player.au2.stars.pow(0.15).div(2).add(1).pow(amt.pow(0.15)).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // fuel (Based on Stars)
                     player.au2.stars.pow(0.1).div(2).add(1).pow(amt.pow(0.15)).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // rocket parts (Based on Stars)
-                    amt.div(2).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1) // Eclipse Cooldown
+                    amt.sub(1).div(2).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))) // Eclipse Cooldown
                 ]
             },
             sellValue() { return new Decimal(10000)},
@@ -3760,7 +3776,8 @@ addLayer("pet", {
             description() {
                 return "/" + format(this.effect()[0]) + " to star exploration time.<br>" +
                     "x" + format(this.effect()[1]) + " to starmetal essence <small>(based on starmetal alloy)</small>.<br>" +
-                    "x" + format(this.effect()[2]) + " to space rocks."
+                    "x" + format(this.effect()[2]) + " to space rocks.<br>" +
+                    "x" + format(this.effect()[3]) + " to geroa ability duration."
             },
             levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
             effect() {
@@ -3769,6 +3786,7 @@ addLayer("pet", {
                     amt.pow(0.75).mul(0.1).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // star exploration time
                     amt.mul(player.sma.starmetalAlloy.add(2).log(2).log(2).div(5).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // starmetal essence (Based on starmetal alloy)
                     amt.pow(0.75).mul(0.5).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // space rocks
+                    amt.sub(1).div(2).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Geroa ability duration
                 ]
             },
             sellValue() { return new Decimal(10000)},
@@ -3984,7 +4002,7 @@ addLayer("pet", {
                     "x" + format(this.effect()[1]) + " to hex power.<br>" +
                     "x" + format(this.effect()[2]) + " to realm essence."
             },
-            levelLimit() { return new Decimal(10) },
+            levelLimit() { return getBuyableAmount("sme", 115).gt(0) ? new Decimal(10).add(buyableEffect("sme", 115)) : new Decimal(10) },
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).mul(6).max(1), // Pre-Power Resources
@@ -4074,7 +4092,7 @@ addLayer("pet", {
                 return "+" + format(this.effect()[0]) + " to effective star levels.<br>" +
                     "x" + format(this.effect()[1]) + " to rocket fuel.<br>"
             },
-            levelLimit() { return new Decimal(10) },
+            levelLimit() { return getBuyableAmount("sme", 115).gt(0) ? new Decimal(10).add(buyableEffect("sme", 115)) : new Decimal(10) },
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id), // Effective Star Levels
@@ -4207,7 +4225,7 @@ addLayer("pet", {
                     "x" + format(this.effect()[1]) + " to fun.<br>" +
                     "x" + format(this.effect()[2]) + " to crate roll chance."
             },
-            levelLimit() { return new Decimal(10) },
+            levelLimit() { return getBuyableAmount("sme", 115).gt(0) ? new Decimal(10).add(buyableEffect("sme", 115)) : new Decimal(10) },
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).pow(0.5).add(1), // Radiation
@@ -4296,7 +4314,7 @@ addLayer("pet", {
                 return "+" + format(this.effect()[0]) + " to effective dice levels.<br>" +
                     "x" + format(this.effect()[1]) + " to challenge dice points.<br>"
             },
-            levelLimit() { return new Decimal(10) },
+            levelLimit() { return getBuyableAmount("sme", 115).gt(0) ? new Decimal(10).add(buyableEffect("sme", 115)) : new Decimal(10) },
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id), // Effective Dice Levels
@@ -4341,7 +4359,7 @@ addLayer("pet", {
                 return "+" + format(this.effect()[0]) + " moonstone mult capacity.<br>" +
                     "x" + format(this.effect()[1]) + " to golden grass.<br>"
             },
-            levelLimit() { return new Decimal(10) },
+            levelLimit() { return getBuyableAmount("sme", 115).gt(0) ? new Decimal(10).add(buyableEffect("sme", 115)) : new Decimal(10) },
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id), // Moonstone Mult Capacity
@@ -5028,17 +5046,17 @@ addLayer("pet", {
                         ["left-row", [
                             ["tooltip-row", [
                                 ["raw-html", "<img src='resources/checkback/lesser_fragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                                ["raw-html", () => { return formatShortSimple(player.pet.lesserFragments)}, {width: "126px", height: "50px", color: "#9bedff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ["raw-html", () => { return player.pet.lesserFragmentsPS.gt(0) ? formatShortSimple(player.pet.lesserFragments) + "<br>+" + formatShortSimple(player.pet.lesserFragmentsPS.mul(3600), 2) + "/h" : formatShortSimple(player.pet.lesserFragments)}, {width: "126px", height: "50px", color: "#9bedff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                                 ["raw-html", () => { return "<div class='bottomTooltip'>Lesser Fragments</div>"}],
                             ], {width: "181px", height: "50px", borderRight: "3px solid white"}],
                             ["tooltip-row", [
                                 ["raw-html", "<img src='resources/checkback/basic_fragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                                ["raw-html", () => { return formatShortSimple(player.pet.basicFragments)}, {width: "127px", height: "50px", color: "#88e688", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ["raw-html", () => { return player.pet.basicFragmentsPS.gt(0) ? formatShortSimple(player.pet.basicFragments) + "<br>+" + formatShortSimple(player.pet.basicFragmentsPS.mul(3600), 2) + "/h" : formatShortSimple(player.pet.basicFragments)}, {width: "127px", height: "50px", color: "#88e688", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                                 ["raw-html", () => { return "<div class='bottomTooltip'>Basic Fragments</div>"}],
                             ], {width: "182px", height: "50px", borderRight: "3px solid white"}],
                             ["tooltip-row", [
                                 ["raw-html", "<img src='resources/checkback/greater_fragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                                ["raw-html", () => { return formatShortSimple(player.pet.greaterFragments)}, {width: "126px", height: "50px", color: "#4e7cff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ["raw-html", () => { return player.pet.greaterFragmentsPS.gt(0) ? formatShortSimple(player.pet.greaterFragments) + "<br>+" + formatShortSimple(player.pet.greaterFragmentsPS.mul(3600), 2) + "/h" : formatShortSimple(player.pet.greaterFragments)}, {width: "126px", height: "50px", color: "#4e7cff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                                 ["raw-html", () => { return "<div class='bottomTooltip'>Greater Fragments</div>"}],
                             ], {width: "181px", height: "50px"}],
                         ], {width: "550px", height: "50px", backgroundColor: "black", borderBottom: "3px solid white", userSelect: "none"}],

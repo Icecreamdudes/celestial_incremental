@@ -477,21 +477,6 @@
                 return look
             }
         },
-        109:
-        {
-            title: "Secondary Starmetal Upgrade IX",
-            unlocked() { return hasUpgrade("sma", 108) && player.matosLair.milestone[25] > 0},
-            description: "Unlocks auto starmetal (in starmetal essence).",
-            cost: new Decimal("8888"),
-            currencyLocation() { return player.sma },
-            currencyDisplayName: "Starmetal Alloy",
-            currencyInternalName: "starmetalAlloy",
-            style() {
-                let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%, #60cfeb 100%)"
-                return look
-            }
-        },
         //eclipse shards
         201: {
             title: "Eclipse Shard Upgrade I",
@@ -808,7 +793,7 @@
                     ["style-column", [
                         ["blank", "5px"],
                         ["style-row", [["upgrade", 101], ["upgrade", 102], ["upgrade", 103], ["upgrade", 104], ["upgrade", 105],
-                            ["upgrade", 106], ["upgrade", 107], ["upgrade", 108], ["upgrade", 109]], {maxWidth: "800px"}],
+                            ["upgrade", 106], ["upgrade", 107], ["upgrade", 108]], {maxWidth: "800px"}],
                         ["blank", "5px"],
                     ], {width: "800px", background: "linear-gradient(120deg, #b8bc45 0%, #987b28 25%, #bc4c5f 50%, #a94cbc, 75%, #4ca5bc 100%)", border: "3px solid #222", borderRadius: "15px"}],
                     ["blank", "25px"],
@@ -850,7 +835,7 @@
                 ]
             },
             "Eclipse Shop": {
-                buttonStyle() {return {color: "white", borderColor: "rgb(245, 255, 104)", borderRadius: "10px"}},
+                buttonStyle() {return {color: "white", borderColor: "#f5ff68", borderRadius: "10px"}},
                 unlocked() { return player.pet.levelables[501][0].gte(1) },
                 content: [
                     ["blank", "25px"],

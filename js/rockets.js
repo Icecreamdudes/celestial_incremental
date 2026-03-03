@@ -89,6 +89,7 @@
         player.ro.activatedFuelToGet = player.ro.activatedFuelContributions[0].mul(player.ro.activatedFuelContributions[1]).mul(player.ro.activatedFuelContributions[2]).mul(player.ro.activatedFuelContributions[3])
         player.ro.activatedFuelToGet = player.ro.activatedFuelToGet.mul(levelableEffect("pet", 501)[2])
         player.ro.activatedFuelToGet = player.ro.activatedFuelToGet.mul(buyableEffect("cof", 19))
+        player.ro.activatedFuelToGet = player.ro.activatedFuelToGet.mul(buyableEffect("sme", 151))
         player.ro.activatedFuelEffect = player.ro.activatedFuel.pow(4).add(1)
 
         if (getBuyableAmount("st", 204).gt(0)) player.ro.activatedFuel = player.ro.activatedFuel.add(player.ro.activatedFuelToGet.mul(buyableEffect("st", 204).mul(delta)))
@@ -103,6 +104,7 @@
         player.ro.rocketPartsToGet = player.ro.rocketPartsContributions[0].mul(player.ro.rocketPartsContributions[1]).mul(player.ro.rocketPartsContributions[2]).mul(player.ro.rocketPartsContributions[3]).floor()
         player.ro.rocketPartsToGet = player.ro.rocketPartsToGet.mul(levelableEffect("pet", 501)[1]).floor()
         player.ro.rocketPartsToGet = player.ro.rocketPartsToGet.mul(buyableEffect("cof", 19))
+        player.ro.rocketPartsToGet = player.ro.rocketPartsToGet.mul(buyableEffect("sme", 151))
         player.ro.rocketPartsEffect = player.ro.rocketParts.mul(2).pow(0.9).add(1)
 
         if (getBuyableAmount("st", 205).gt(0)) player.ro.rocketParts = player.ro.rocketParts.add(player.ro.rocketPartsToGet.mul(buyableEffect("st", 205).mul(delta)))
@@ -122,6 +124,7 @@
         player.ro.spacePetXPToGet = player.ro.petLevel.mul(Decimal.pow(2, player.ro.petAscension)).pow(Decimal.mul(1.2, Decimal.pow(1.1, player.ro.petAscension))).floor()
         if (hasUpgrade("sma", 203)) player.ro.spacePetXPToGet = player.ro.spacePetXPToGet.mul(1.2).floor()
         player.ro.spacePetXPToGet = player.ro.spacePetXPToGet.mul(levelableEffect("pu", 306)[2]).floor()
+        player.ro.spacePetXPToGet = player.ro.spacePetXPToGet.mul(buyableEffect("sme", 163)).floor()
 
         player.ro.evoCost = Decimal.mul(player.ro.selectedPassengersCommon.length, Decimal.add(7, player.ro.selectedPassengersCommon.length)).add(player.ro.evoShardsReq)
         player.ro.paragonCost = Decimal.mul(player.ro.selectedPassengersUncommon.length, Decimal.add(2, player.ro.selectedPassengersUncommon.length)).add(player.ro.paragonShardsReq)

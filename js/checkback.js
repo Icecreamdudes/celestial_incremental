@@ -422,7 +422,7 @@ addLayer("cb", {
         if (player.cb.XPBoost.lte(1000)) {
         player.cb.XPBoostEffect = player.cb.XPBoost
         } else if (player.cb.XPBoost.gte(1000)) {
-            player.cb.XPBoostEffect = Decimal.add(1000, player.cb.XPBoost.sub(1000).pow(0.5).mul(10))
+            player.cb.XPBoostEffect = Decimal.add(1000, player.cb.XPBoost.sub(1000).pow(Decimal.add(0.5, buyableEffect("sme", 116).sub(1))).mul(10))
         }
 
         // PITY

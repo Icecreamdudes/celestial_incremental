@@ -242,10 +242,10 @@ function updateStyles() {
 			layerBG = "linear-gradient(0deg, #303440 0%, #17191f 100%)"
 			break;
 		case "prj":
-			layerBG = "linear-gradient(0deg, #2e152e)"
+			layerBG = "linear-gradient(0deg, #2e152e 0%, #1f0e1f 100%)"
 			break;
 		case "bum":
-			layerBG = "linear-gradient(0deg, #180b18)"
+			layerBG = "linear-gradient(0deg, #dfffdf -700%, #180b18 100%)"
 			break;
 		case "cb":
 			layerBG = "linear-gradient(0deg, #021924)"
@@ -320,7 +320,7 @@ function updateStyles() {
 	    }
 	}
 
-	if (player.tab === "wel") {
+	if (player.tab === "wel" || player.tab === "prj" || player.tab === "pri" || player.tab === "bum") {
     	let t = Date.now()
     	t = ((t % 1000) / 1000) * 32
 		// Add the dotted background if it doesn't already exist
@@ -338,11 +338,15 @@ function updateStyles() {
         	document.body.appendChild(dottedBackground);
     	    
         	dottedBackground.style.overflow = "hidden";
-			dottedBackground.style.backgroundImage = "url(resources/ui/dotted_background.png)";
 			dottedBackground.style.backgroundSize = "32px 32px";
 			dottedBackground.style.backgroundPosition = `${t}px ${t}px`;
 	    }
 		const el = document.getElementById("dotted-background");
+		if (player.tab === "bum") {
+			el.style.backgroundImage = "url(resources/ui/dotted_background_light.png)";
+		} else {
+			el.style.backgroundImage = "url(resources/ui/dotted_background.png)";
+		}
 		el.style.backgroundPosition = `${t}px ${t}px`;
 	} else {
 	    // Remove the galaxy background if the tab is not in the well

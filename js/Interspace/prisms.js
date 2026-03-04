@@ -364,7 +364,7 @@
             },
             getTimeReq() {
                 let completions = player.pri.fountains[3].completions
-                let s = new Decimal(1.5e4)
+                let s = new Decimal(1e6)
 
                 s = s.mul(completions.add(1).pow(1.5))
                 s = s.mul(completions.pow_base(2.5))
@@ -459,6 +459,7 @@
                             ["blank", "6px", {width: "6px"}],
                             makePrismFountain(2),
                         ]],
+                        ["blank", "6px", {width: "6px"}],
                         ["style-row", [
                             hasMilestone("prj", 203) ? makePrismFountain(3) : null,
                             ["blank", "6px", {width: "6px"}],

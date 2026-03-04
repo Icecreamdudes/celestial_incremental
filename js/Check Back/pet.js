@@ -4714,7 +4714,7 @@ addLayer("pet", {
         },
         3: {
             costBase() { return new Decimal(4) },
-            costGrowth() { return new Decimal(4) },
+            costGrowth() { return new Decimal(2) },
             purchaseLimit() { return new Decimal(20) },
             currency() { return player.pet.greaterFragments},
             pay(amt) { player.pet.greaterFragments = this.currency().sub(amt) },

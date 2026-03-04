@@ -64,7 +64,7 @@ addLayer("depth2", {
     update(delta) {
         player.depth2.unlocked = player.depth1.milestone[25] > 0
 
-        player.depth2.comboEffect = player.depth2.highestCombo.add(1).pow(5).pow(buyableEffect("depth2", 2))
+        player.depth2.comboEffect = player.depth2.highestCombo.add(1).pow(2).pow(buyableEffect("depth2", 2))
 
         player.depth2.milestoneEffect = new Decimal(0)
         for (let i = 25; i < 251; i = i+25) {

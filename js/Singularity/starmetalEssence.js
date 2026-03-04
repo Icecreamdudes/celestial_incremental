@@ -858,7 +858,7 @@
             },
             display() {
                 return "<h3>SME-B4</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
-                    Increase singularity pet point cap by x1.2\n\
+                    Buff singularity pet point cap/gain by x1.2\n\
                     Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
                     Cost:<br>" + formatShortWhole(player.cb.petPoints) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[0]) + " Pet Points\n\
                     " + formatShortWhole(player.sme.starmetalEssence) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[1]) + " SME"

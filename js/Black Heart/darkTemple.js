@@ -210,7 +210,7 @@ addLayer("darkTemple", {
         if (player.matosLair.milestone[25] >= 3) player.darkTemple.runeCap = player.darkTemple.runeCap.add(1)
 
         let stats = {}
-        for (let j = 1; j < 4; j++) {
+        for (let j = 1; j < 5; j++) {
             for (let i = 1; i < getBuyableAmount("darkTemple", j).add(1); i++) {
                 stats = addObject(stats, RUNE_EFFECTS[j][i])
             }

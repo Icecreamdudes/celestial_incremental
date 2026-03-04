@@ -325,7 +325,7 @@ BHA.nav_fireball = {
 }
 BHA.nav_soulShred = {
     name: "Soul Shred",
-    description(char) {return "Gain a " + formatSimple(Decimal.mul(8, Decimal.div(Decimal.add(100, char.luck), 100))) + "% chance to deal " + formatWhole(new Decimal(20).add(player.bh.skillData["nav_soulShred"].level.mul(4))) + "% true damage per second for 10 seconds when Nav does an action"},
+    description(char) {return "Gain a " + formatSimple(Decimal.mul(8, Decimal.div(Decimal.add(100, char.luck), 100))) + "% chance to deal " + formatWhole(new Decimal(20).add(player.bh.skillData["nav_soulShred"].level.mul(4))) + "% spirit damage per second for 10 seconds when Nav does an action"},
     passiveText() {return "+" + formatSimple(player.bh.skillData["nav_soulShred"].maxLevel.div(2)) + " LUCK"},
     char: "nav",
     spCost: new Decimal(12),
@@ -340,7 +340,11 @@ BHA.nav_soulShred = {
     constantType: "effect",
     constantTarget: "celestialite",
     effects: {
-        "regenAdd"(char) {return char.damage.mul(Decimal.sub(-0.2, player.bh.skillData["nav_soulShred"].level.mul(0.04)))}, // Multiplicative Effect
+        "regenAdd"(char) {
+            let damage = char.damage.mul(Decimal.sub(-0.2, player.bh.skillData["nav_soulShred"].level.mul(0.04)))
+            damage = damage.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.defense)))
+            return damage
+        }, // Multiplicative Effect
     },
     duration: new Decimal(10),
     cooldown: new Decimal(Infinity),
@@ -454,7 +458,7 @@ BHA.sel_scavenger = {
 // Eclipse Skills
 BHA.eclipse_drain = {
     name: "Drain",
-    description() {return "Deal +" + formatWhole(new Decimal(10).add(player.bh.skillData["eclipse_drain"].level.mul(2))) + "% true damage per second"},
+    description() {return "Deal " + formatWhole(new Decimal(10).add(player.bh.skillData["eclipse_drain"].level.mul(2))) + "% spirit damage per second"},
     passiveText() {return "+" + formatSimple(player.bh.skillData["eclipse_drain"].maxLevel.div(5)) + " DMG"},
     char: "eclipse",
     spCost: new Decimal(6),
@@ -467,7 +471,11 @@ BHA.eclipse_drain = {
     constantType: "effect",
     constantTarget: "celestialite",
     effects: {
-        "regenAdd"(char) {return char.damage.mul(Decimal.sub(-0.1, player.bh.skillData["eclipse_drain"].level.mul(0.02)))}, // Multiplicative Effect
+        "regenAdd"(char) {
+            let damage = char.damage.mul(Decimal.sub(-0.1, player.bh.skillData["eclipse_drain"].level.mul(0.02)))
+            damage = damage.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.defense)))
+            return damage
+        }, // Multiplicative Effect
     },
     cooldown: new Decimal(Infinity),
 }
@@ -537,7 +545,7 @@ BHA.eclipse_lightBarrier = {
 }
 BHA.eclipse_solarRetinopathy = {
     name: "Solar Retinopathy",
-    description() {return "Shoot a solar ray that deals " + formatWhole(new Decimal(75).add(player.bh.skillData["eclipse_solarRetinopathy"].level.mul(15))) + "% true damage and dazes the celestial for 3 seconds."},
+    description() {return "Shoot a solar ray that deals " + formatWhole(new Decimal(75).add(player.bh.skillData["eclipse_solarRetinopathy"].level.mul(15))) + "% spirit damage and dazes the celestial for 3 seconds."},
     passiveText() {return "+" + formatSimple(player.bh.skillData["eclipse_solarRetinopathy"].maxLevel.div(5)) + " DMG"},
     char: "eclipse",
     spCost: new Decimal(12),
@@ -632,7 +640,7 @@ BHA.geroa_selfRepair = {
 }
 BHA.geroa_cosmicRay = {
     name: "Cosmic Ray",
-    description() {return "Deal " + formatWhole(new Decimal(40).add(player.bh.skillData["geroa_cosmicRay"].level.mul(8))) + "% true damage per second for 5 seconds"},
+    description() {return "Deal " + formatWhole(new Decimal(40).add(player.bh.skillData["geroa_cosmicRay"].level.mul(8))) + "% spirit damage per second for 5 seconds"},
     passiveText() {return "+" + formatSimple(player.bh.skillData["geroa_cosmicRay"].maxLevel.div(5)) + " DMG"},
     char: "geroa",
     spCost: new Decimal(12),
@@ -645,7 +653,11 @@ BHA.geroa_cosmicRay = {
     constantType: "effect",
     constantTarget: "celestialite",
     effects: {
-        "regenAdd"(char) {return char.damage.mul(Decimal.sub(-0.4, player.bh.skillData["geroa_cosmicRay"].level.mul(0.08)))}, // Multiplicative Effect
+        "regenAdd"(char) {
+            let damage = char.damage.mul(Decimal.sub(-0.4, player.bh.skillData["geroa_cosmicRay"].level.mul(0.08)))
+            damage = damage.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.defense)))
+            return damage
+        }, // Multiplicative Effect
     },
     duration: new Decimal(5),
     cooldown: new Decimal(20),

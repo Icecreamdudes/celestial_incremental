@@ -361,6 +361,7 @@ BHC.staticAlpha = {
     },
     health: new Decimal(450),
     damage: new Decimal(20),
+    agility: new Decimal(25),
     actions: {
         0: {
             name: "Confined Rain",
@@ -370,7 +371,7 @@ BHC.staticAlpha = {
             onTrigger(index, slot, target, magnitude) {
                 bulletHell({"bulletRain": {bulletPerSec: 10+(magnitude*2)}}, {width: 800, height: 500, duration: 7+magnitude, subArena: true, subWidth: 300-(magnitude*20), subHeight: 300-(magnitude*20)})
             },
-            cooldown: new Decimal(4),
+            cooldown: new Decimal(5),
         },
         1: {
             name: "Magic Missile",
@@ -379,7 +380,7 @@ BHC.staticAlpha = {
             target: "randomPlayer",
             method: "magic",
             value: new Decimal(2),
-            cooldown: new Decimal(10),
+            cooldown: new Decimal(12.5),
         },
     },
     reward() {
@@ -404,6 +405,7 @@ BHC.staticBeta = {
     },
     health: new Decimal(500),
     damage: new Decimal(25),
+    agility: new Decimal(20),
     actions: {
         0: {
             name: "Slow Knifes",
@@ -413,7 +415,7 @@ BHC.staticBeta = {
             onTrigger(index, slot, target, magnitude) {
                 bulletHell({"knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 2+(magnitude/8), knifePerSec: 2+(magnitude/8)}}, {width: 500, height: 300, duration: 7+magnitude})
             },
-            cooldown: new Decimal(5),
+            cooldown: new Decimal(6),
         },
         1: {
             name: "Bludgeon",
@@ -422,7 +424,7 @@ BHC.staticBeta = {
             target: "randomPlayer",
             method: "physical",
             value: new Decimal(3),
-            cooldown: new Decimal(12),
+            cooldown: new Decimal(15),
         },
     },
     reward() {
@@ -447,6 +449,7 @@ BHC.staticGamma = {
     },
     health: new Decimal(600),
     damage: new Decimal(15),
+    agility: new Decimal(15),
     actions: {
         0: {
             name: "Quick Shot",
@@ -455,7 +458,7 @@ BHC.staticGamma = {
             target: "randomPlayer",
             method: "ranged",
             value: new Decimal(1.5),
-            cooldown: new Decimal(3),
+            cooldown: new Decimal(3.5),
         },
         1: {
             name: "Close Fire",
@@ -465,7 +468,7 @@ BHC.staticGamma = {
             onTrigger(index, slot, target, magnitude) {
                 bulletHell({"diamondAttack": {diamondAmount: 1, intervalDiv: 1+(magnitude/10)}}, {width: 100, height: 100, duration: 7+magnitude})
             },
-            cooldown: new Decimal(8),
+            cooldown: new Decimal(9),
         },
     },
     reward() {
@@ -490,6 +493,7 @@ BHC.staticDelta = {
     },
     health: new Decimal(650),
     damage: new Decimal(20),
+    agility: new Decimal(15),
     actions: {
         0: {
             name: "Multi Rain",
@@ -499,7 +503,7 @@ BHC.staticDelta = {
             onTrigger(index, slot, target, magnitude) {
                 bulletHell({"bulletRain": {bulletPerSec: 4+magnitude}, "inverseRain": {bulletPerSec: 4+magnitude}}, {duration: 7+magnitude})
             },
-            cooldown: new Decimal(3),
+            cooldown: new Decimal(3.5),
         },
         1: {
             name: "Stab",
@@ -508,7 +512,7 @@ BHC.staticDelta = {
             target: "randomPlayer",
             method: "physical",
             value: new Decimal(2),
-            cooldown: new Decimal(6),
+            cooldown: new Decimal(7),
         },
     },
     reward() {
@@ -533,6 +537,7 @@ BHC.staticEpsilon = {
     },
     health: new Decimal(700),
     damage: new Decimal(30),
+    agility: new Decimal(25),
     actions: {
         0: {
             name: "Triple Shot",
@@ -541,7 +546,7 @@ BHC.staticEpsilon = {
             target: "allPlayer",
             method: "ranged",
             value: new Decimal(0.66),
-            cooldown: new Decimal(4),
+            cooldown: new Decimal(5),
         },
         1: {
             name: "Sliding Knife",
@@ -551,7 +556,7 @@ BHC.staticEpsilon = {
             onTrigger(index, slot, target, magnitude) {
                 bulletHell({"knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 6, knifePerSec: 1+(magnitude/5)}}, {duration: 10+(magnitude*2), start: "left", subArena: true, subWidth: 250, subHeight: 500, subMove: "right", subSpeed: 0.5})
             },
-            cooldown: new Decimal(8),
+            cooldown: new Decimal(10),
         },
     },
     reward() {
@@ -576,6 +581,7 @@ BHC.staticZeta = {
     },
     health: new Decimal(750),
     damage: new Decimal(25),
+    agility: new Decimal(25),
     actions: {
         0: {
             name: "Circle Squad",
@@ -585,7 +591,7 @@ BHC.staticZeta = {
             onTrigger(index, slot, target, magnitude) {
                 bulletHell({"movingCircleRadialBurstAttack": {circleAmount: 3, burstInterval: 1300-(magnitude*100), bulletsPerBurst: 6, enemySpeed: 3, bulletSpeed: 3}}, {duration: 7+magnitude})
             },
-            cooldown: new Decimal(4),
+            cooldown: new Decimal(5),
         },
         1: {
             name: "Earthquake",
@@ -594,7 +600,7 @@ BHC.staticZeta = {
             target: "all",
             method: "physical",
             value: new Decimal(1),
-            cooldown: new Decimal(10),
+            cooldown: new Decimal(12),
         },
     },
     reward() {
@@ -619,6 +625,7 @@ BHC.staticEta = {
     },
     health: new Decimal(800),
     damage: new Decimal(35),
+    agility: new Decimal(25),
     actions: {
         0: {
             name: "Airial Shot",
@@ -627,7 +634,7 @@ BHC.staticEta = {
             target: "random",
             method: "ranged",
             value: new Decimal(2),
-            cooldown: new Decimal(4),
+            cooldown: new Decimal(5),
         },
         1: {
             name: "Diamond Maze",
@@ -637,7 +644,7 @@ BHC.staticEta = {
             onTrigger(index, slot, target, magnitude) {
                 bulletHell({"bouncingDiamond": {diamondCount: 5+magnitude, enemySpeed: 3}}, {width: 700, height: 700, duration: 31-magnitude, timed: true, cellSize: 50, start: "cell", goal: "cell"})
             },
-            cooldown: new Decimal(8),
+            cooldown: new Decimal(10),
         },
     },
     reward() {
@@ -662,6 +669,7 @@ BHC.staticTheta = {
     },
     health: new Decimal(900),
     damage: new Decimal(35),
+    agility: new Decimal(20),
     actions: {
         0: {
             name: "Death Spiral",
@@ -671,7 +679,7 @@ BHC.staticTheta = {
             onTrigger(index, slot, target, magnitude) {
                 bulletHell({"centerSpiralAttack": {spiralAngle: 0, spiralRate: 0.65, spiralInterval: 55-(magnitude*5), radialStart: 0, bulletSpeed: 4, spiralBullets: true}}, {start: "left", height: 700, duration: 7+magnitude})
             },
-            cooldown: new Decimal(5),
+            cooldown: new Decimal(6),
         },
         1: {
             name: "Brutal Bludgeon",
@@ -680,7 +688,7 @@ BHC.staticTheta = {
             target: "randomPlayer",
             method: "physical",
             value: new Decimal(3),
-            cooldown: new Decimal(12),
+            cooldown: new Decimal(15),
         },
     },
     reward() {
@@ -705,6 +713,7 @@ BHC.staticIota = {
     },
     health: new Decimal(1000),
     damage: new Decimal(30),
+    agility: new Decimal(20),
     actions: {
         0: {
             name: "Magic Missile",
@@ -713,7 +722,7 @@ BHC.staticIota = {
             target: "randomPlayer",
             method: "physical",
             value: new Decimal(2),
-            cooldown: new Decimal(5),
+            cooldown: new Decimal(6),
         },
         1: {
             name: "Aerial Bombardment",
@@ -723,7 +732,7 @@ BHC.staticIota = {
             onTrigger(index, slot, target, magnitude) {
                 bulletHell({"bombAttack": {bombsPerSecond: 1+(magnitude/8), bombFallSpeed: 4, miniBombCount: 2, miniBombSpeed: 2, miniBombDelay: 600, bulletCount: 8, bulletSpeed: 2}}, {duration: 7+magnitude})
             },
-            cooldown: new Decimal(10),
+            cooldown: new Decimal(12),
         },
     },
     reward() {
@@ -734,6 +743,61 @@ BHC.staticIota = {
         } else {
             gain.temporalShard = Decimal.add(4, getRandomInt(3))
         }
+        return gain
+    },
+}
+
+BHC.staticEnas = {
+    name: "Celestialite Static Enas",
+    symbol: "⧖Ι",
+    style: {
+        background: "linear-gradient(45deg, #094394, #052653)",
+        color: "#0091DC",
+        borderColor: "#021124",
+    },
+    health: new Decimal(5000),
+    damage: new Decimal(50),
+    actions: {
+        0: {
+            name: "Tears of Fury",
+            instant: true,
+            type: "function",
+            target: "allPlayer",
+            onTrigger(index, slot, target, magnitude) {
+                let random = Math.random()
+                if (random < 0.33) {
+                    bulletHell({"bulletRain": {bulletPerSec: 4+magnitude}, "inverseRain": {bulletPerSec: 4+magnitude}}, {duration: 7+magnitude})
+                } else if (random < 0.66) {
+                    bulletHell({"inverseRain": {bulletPerSec: 4+magnitude}, "bouncingDiamond": {diamondCount: 5+magnitude, enemySpeed: 3}}, {duration: 7+magnitude})
+                } else {
+                    bulletHell({"bulletRain": {bulletPerSec: 4+magnitude}, "knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 6, knifePerSec: 1.2+(magnitude/8)}}, {duration: 7+magnitude})
+                }
+            },
+            cooldown: new Decimal(5),
+        },
+        1: {
+            name: "Eye Drops",
+            instant: true,
+            type: "heal",
+            target: "celestialite",
+            value: new Decimal(10),
+            cooldown: new Decimal(10),
+        },
+        2: {
+            name: "Capsaicin",
+            instant: true,
+            type: "effect",
+            target: "celestialite",
+            properties: {
+                "agilityAdd": new Decimal(50), // Additive Effect
+            },
+            cooldown: new Decimal(20),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.temporalDust = new Decimal(50)
+        gain.temporalShard = new Decimal(15)
         return gain
     },
 }

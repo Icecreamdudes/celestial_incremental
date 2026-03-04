@@ -968,6 +968,12 @@ addLayer("bh", {
         player.bh.celestialite.regen = player.bh.celestialite.regen.mul(bhTemp[3].regenMult)
         player.bh.celestialite.regen = player.bh.celestialite.regen.mul(scale)
 
+        player.bh.celestialite.agility = BHC[player.bh.celestialite.id].agility ?? new Decimal(0)
+        player.bh.celestialite.agility = player.bh.celestialite.agility.mul(player.bh.celestialite.randomMult)
+        player.bh.celestialite.agility = player.bh.celestialite.agility.add(bhTemp[3].agilityAdd)
+        player.bh.celestialite.agility = player.bh.celestialite.agility.mul(bhTemp[3].agilityMult)
+        player.bh.celestialite.agility = player.bh.celestialite.agility.mul(scale)
+
         player.bh.celestialite.curMult = BHC[player.bh.celestialite.id].curMult ?? new Decimal(1)
         player.bh.celestialite.curMult = player.bh.celestialite.curMult.add(bhTemp[3].curMult)
 
@@ -4222,7 +4228,7 @@ addLayer("bh", {
                     ["style-row", [
                         ["top-column", [
                             ["raw-html", () => `${player.bh.log.map((x, i) => `<span style="display:block;">${x}</span>`).join("")}`],
-                        ], {width: "676px", minHeight: "206px", textAlign: "center", background: "rgba(0,0,0,0.5)", border: "3px solid white", borderRadius: "30px", padding: "8px 12px 0 12px"}],
+                        ], {width: "676px", minHeight: "206px", textAlign: "center", background: "rgba(0,0,0,0.5)", border: "3px solid white", borderRadius: "30px", padding: "12px 8px"}],
                     ], {marginTop: "5px"}],
                 ],
             },
@@ -4271,7 +4277,7 @@ addLayer("bh", {
                     ["blank", "25px"],
                     ["top-column", [
                         ["raw-html", () => `${player.bh.log.map((x, i) => `<span style="display:block;">${x}</span>`).join("")}`],
-                    ], {width: "700px", minHeight: "206px", textAlign: "center", background: "#1b0218", border: "3px solid #8a0e79", borderRadius: "30px", padding: "12px 0"}],
+                    ], {width: "700px", minHeight: "206px", textAlign: "center", background: "#1b0218", border: "3px solid #8a0e79", borderRadius: "30px", padding: "12px 8px"}],
                     ["blank", "25px"],
                     ["clickable", "Leave"],
                     ["blank", "25px"],

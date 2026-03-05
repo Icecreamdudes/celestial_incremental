@@ -126,6 +126,8 @@ BH_CURRENCY = {
     "spaceRock": ["Space Rocks", "ir"],
     "temporalDust": ["Temporal Dust", "stagnantSynestia"],
     "temporalShard": ["Temporal Shards", "stagnantSynestia"],
+    "gloomingNocturnium": ["Glooming Nocturnium", "gloomingNocturnium"],
+    "dimNocturnium": ["Dim Nocturnium", "dimNocturnium"],
 }
 
 // Celestialite who has there explosion value equal to their max health, and an action that constantly reduces their max health called defuse (FOR LAB)
@@ -134,7 +136,7 @@ addLayer("bh", {
     name: "Black Heart", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "BH", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "BH",
-    innerNodes: [["darkTemple", "depth1", "depth2"], ["matosLair", "depth3"], ["stagnantSynestia"]],
+    innerNodes: [["darkTemple", "depth1", "depth2"], ["matosLair", "depth3"], ["depth4"], ["stagnantSynestia"]],
     innerLayer() {return player.subtabs["bh"]["stages"]},
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
@@ -460,6 +462,7 @@ addLayer("bh", {
             "general_scream": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "general_recklessAbandon": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "general_block": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "general_poisonNeedle": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
 
             // KRES
             "kres_chop": {selected: ["kres", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
@@ -635,6 +638,7 @@ addLayer("bh", {
         player.bh.comboScalingReduction = 0
         if (hasUpgrade("ep2", 9107)) player.bh.comboScalingReduction = player.bh.comboScalingReduction + 0.002
         if (hasMilestone("db", 105)) player.bh.comboScalingReduction = player.bh.comboScalingReduction + 0.002
+        if (hasUpgrade("depth4", 3)) player.bh.comboScalingReduction = player.bh.comboScalingReduction + 0.002
 
         player.bh.comboScaling = Math.max(player.bh.comboScaling - player.bh.comboScalingReduction , 1)
 
@@ -991,6 +995,7 @@ addLayer("bh", {
         player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(player.depth1.milestoneEffect)
         player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(player.depth2.milestoneEffect)
         player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(player.depth3.milestoneEffect)
+        player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(player.depth4.milestoneEffect)
 
         player.bh.skillCostDiv = new Decimal(1)
         player.bh.skillCostDiv = player.bh.skillCostDiv.mul(player.darkTemple.skillCost)
@@ -1043,6 +1048,7 @@ addLayer("bh", {
         regenAdd = regenAdd.add(player.bh.skillData["general_scream"].maxLevel.div(20))
         regenAdd = regenAdd.add(player.bh.skillData["kres_berserker"].maxLevel.div(20))
         regenAdd = regenAdd.add(buyableEffect("sme", 134))
+        regenAdd = regenAdd.add(buyableEffect("depth4", 1).sub(1))
 
         // =-- AGILITY STUFF --= //
         let agilityBase = new Decimal(1)
@@ -1051,6 +1057,7 @@ addLayer("bh", {
 
         let agilityAdd = new Decimal(0)
         agilityAdd = agilityAdd.add(player.darkTemple.agiAdd)
+        agilityAdd = agilityAdd.add(player.bh.skillData["general_poisonNeedle"].maxLevel.div(2))
         agilityAdd = agilityAdd.add(player.bh.skillData["sel_singleShot"].maxLevel.div(2))
         agilityAdd = agilityAdd.add(player.bh.skillData["sel_turret"].maxLevel.div(2))
         agilityAdd = agilityAdd.add(player.bh.skillData["sel_energyBoost"].maxLevel.div(2))
@@ -1085,6 +1092,7 @@ addLayer("bh", {
         let mendingBase = new Decimal(1)
 
         let mendingAdd = new Decimal(0)
+        mendingAdd = mendingAdd.add(player.darkTemple.mndAdd)
 
         // =-- STAT CALCULATION --=
         for (let i = 0; i < 3; i++) {
@@ -1115,6 +1123,7 @@ addLayer("bh", {
             player.bh.characters[i].regen = player.bh.characters[i].regen.add(regenAdd)
             player.bh.characters[i].regen = player.bh.characters[i].regen.add(bhTemp[i].regenAdd)
             player.bh.characters[i].regen = player.bh.characters[i].regen.mul(bhTemp[i].regenMult)
+            if (BHS[player.bh.currentStage].healthDrain) player.bh.characters[i].regen = player.bh.characters[i].regen.sub(BHS[player.bh.currentStage].healthDrain)
 
             // AGILITY
             player.bh.characters[i].agility = run(BHP[player.bh.characters[i].id].agility, BHP[player.bh.characters[i].id]) ?? new Decimal(0)
@@ -3570,6 +3579,10 @@ addLayer("bh", {
             "stagnantSynestia": {
                 unlocked: true,
                 embedLayer: 'stagnantSynestia',
+            },
+            "depth4": {
+                unlocked: true,
+                embedLayer: "depth4",
             },
             "darkTemple": {
                 unlocked: true,

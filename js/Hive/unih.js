@@ -36,6 +36,7 @@ addLayer("bee", {
         if (player.al.cocoonLevel >= 12) player.bee.preAlephMult = player.bee.preAlephMult.mul(3)
         if (hasUpgrade("al", 125)) player.bee.preAlephMult = player.bee.preAlephMult.mul(2)
         if (hasUpgrade("al", 225)) player.bee.preAlephMult = player.bee.preAlephMult.mul(2)
+        player.bee.preAlephMult = player.bee.preAlephMult.mul(levelableEffect("pet", 503)[0])
 
         // Bee Calculations
         player.bee.bps = buyableEffect("bee", 11)

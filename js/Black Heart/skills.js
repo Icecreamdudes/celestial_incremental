@@ -106,10 +106,10 @@ BHA.general_block = {
     passiveText() {return "+" + formatSimple(player.bh.skillData["general_block"].maxLevel.div(2)) + " DEF"},
     char: "general",
     spCost: new Decimal(10),
-    curCostBase: new Decimal(12),
-    curCostScale: new Decimal(6),
-    currency: "darkEssence",
-    unlocked() {return false},
+    curCostBase: new Decimal(50),
+    curCostScale: new Decimal(4),
+    currency: "gloomingNocturnium",
+    unlocked() {return hasUpgrade("depth4", 1)},
 
     instant: true,
     type: "shield",
@@ -124,6 +124,37 @@ BHA.general_block = {
     duration: new Decimal(10),
     cooldown: new Decimal(25),
     cooldownCap: new Decimal(5),
+}
+BHA.general_poisonNeedle = {
+    name: "Poison Needle",
+    description() {return "Shoot a poison needle that does " + formatWhole(new Decimal(75).add(player.bh.skillData["general_poisonNeedle"].level.mul(15))) + " ranged damage, then " + formatWhole(new Decimal(10).add(player.bh.skillData["general_poisonNeedle"].level.mul(2))) + " spirit damage per second for 5 seconds"},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["general_poisonNeedle"].maxLevel.div(2)) + " AGI"},
+    char: "general",
+    spCost: new Decimal(14),
+    curCostBase: new Decimal(25),
+    curCostScale: new Decimal(3),
+    currency: "dimNocturnium",
+    unlocked() {return hasUpgrade("depth4", 2)},
+
+    instant: true,
+    type: "damage",
+    target: "celestialite",
+    method: "ranged",
+    value() {return new Decimal(0.75).add(player.bh.skillData["general_poisonNeedle"].level.mul(0.15))},
+
+    active: true,
+    constantType: "effect",
+    constantTarget: "celestialite",
+    effects: {
+        "regenAdd"() {
+            let damage = char.damage.mul(Decimal.sub(-0.1, player.bh.skillData["general_poisonNeedle"].level.mul(0.02)))
+            damage = damage.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.defense)))
+            return damage
+        },
+    },
+    duration: new Decimal(5),
+    cooldown: new Decimal(10),
+    cooldownCap: new Decimal(2),
 }
 
 //Rest: Character is unavailable to perform actions for 20 seconds but regen is boosted by x4

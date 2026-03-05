@@ -219,7 +219,7 @@
         },
         6: {
             title: "Aleph, the Celestial of Swarms",
-            body() { return "From everything that I have heard, Aleph has always been a very strange celestial. She has always lived solely for the sake of furthering the existance of her swarm, even if it might be at the cost of her own well-being. It seems the only thing that matters to her is a prosperous swarm." },
+            body() { return "" },
             unlocked() { return player.ch.celestialIndex.eq(5) },      
         },
     },

@@ -557,7 +557,7 @@ function celestialiteReward(gain) {
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.lustrousUmbrite) + " lustrous umbrite! (You have " + formatWhole(player.depth3.lustrousUmbrite) + ")")
     }
     if (gain.darkEssence) {
-        player.bh.darkEssence = player.bh.darkEssence.add(gain.darkEssence).mul(generalMult).floor()
+        player.bh.darkEssence = player.bh.darkEssence.add(gain.darkEssence).mul(buyableEffect("sme", 135)).mul(generalMult).floor()
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.darkEssence) + " dark essence! (You have " + formatWhole(player.bh.darkEssence) + ")")
     }
     if (gain.temporalDust) {
@@ -569,6 +569,16 @@ function celestialiteReward(gain) {
         gain.temporalShard = gain.temporalShard.mul(player.stagnantSynestia.temporalMult).mul(generalMult).floor()
         player.stagnantSynestia.temporalShard = player.stagnantSynestia.temporalShard.add(gain.temporalShard)
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.temporalShard) + " temporal shards! (You have " + formatWhole(player.stagnantSynestia.temporalShard) + ")")
+    }
+    if (gain.gloomingNocturnium) {
+        gain.gloomingNocturnium = gain.gloomingNocturnium.mul(player.depth4.depth4Mult).mul(generalMult).floor()
+        player.depth4.gloomingNocturnium = player.depth4.gloomingNocturnium.add(gain.gloomingNocturnium)
+        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.gloomingNocturnium) + " glooming nocturnium! (You have " + formatWhole(player.depth4.gloomingNocturnium) + ")")
+    }
+    if (gain.dimNocturnium) {
+        gain.dimNocturnium = gain.dimNocturnium.mul(player.depth4.depth4Mult).mul(generalMult).floor()
+        player.depth4.dimNocturnium = player.depth4.dimNocturnium.add(gain.dimNocturnium)
+        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.dimNocturnium) + " dim nocturnium! (You have " + formatWhole(player.depth4.dimNocturnium) + ")")
     }
 }
 

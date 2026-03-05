@@ -112,7 +112,7 @@
         14: {
             requirementDescription: "<h3>12 Boosters",
             effectDescription() { return "Gain 10% of grass value per second, and boost grass value and capacity based on boosters<br>Currently: x" + format(player.db.milestone4Effect) + "." },
-            unlocked() {return player.ir.iriditeDefeated},
+            unlocked() {return player.ir.iriditeDefeated && getBuyableAmount("sme", 161).gte(1)},
             done() { return player.db.boosters.gte(12) && getBuyableAmount("sme", 161).gte(1) },
             style() {
                 let look = {width: "500px", minHeight: "90px", color: "white", border: "3px solid #6e64c4", borderRadius: "10px", margin: "-1.5px"}
@@ -123,7 +123,7 @@
         15: {
             requirementDescription: "<h3>16 Boosters",
             effectDescription() { return "Gain 100% of prestige points per second and autobuy all prestige point buyables." },
-            unlocked() {return player.ir.iriditeDefeated},
+            unlocked() {return player.ir.iriditeDefeated && getBuyableAmount("sme", 161).gte(2)},
             done() { return player.db.boosters.gte(16) && getBuyableAmount("sme", 161).gte(2) },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #6e64c4", borderRadius: "10px", margin: "-1.5px"}
@@ -154,7 +154,7 @@
         },
         103: {
             requirementDescription: "<h3>10 Best Boosters",
-            effectDescription() {return player.matosLair.milestone[25] > 0 ? "[BUFFED FEATURE NOT UNLOCKED]" : "/1.4 to starmetal essence generator time."},
+            effectDescription() {return player.matosLair.milestone[25] == 0 ? "[BUFFED FEATURE NOT UNLOCKED]" : "/1.4 to starmetal essence generator time."},
             done() { return player.db.bestBoosters.gte(10)},
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #6e64c4", borderRadius: "10px", margin: "-1.5px"}
@@ -164,7 +164,7 @@
         },
         104: {
             requirementDescription: "<h3>15 Best Boosters",
-            effectDescription() {return player.matosLair.milestone[25] > 0 ? "[BUFFED FEATURE NOT UNLOCKED]" : "Best boosters divides star exploration times.<br>Currently: /" + format(player.db.permaMilestone4Effect) + "." },
+            effectDescription() {return player.matosLair.milestone[25] == 0 ? "[BUFFED FEATURE NOT UNLOCKED]" : "Best boosters divides star exploration times.<br>Currently: /" + format(player.db.permaMilestone4Effect) + "." },
             done() { return player.db.bestBoosters.gte(15)},
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #6e64c4", borderRadius: "10px", margin: "-1.5px"}
@@ -206,7 +206,7 @@
                 content: [
                     ['blank', '25px'],
                     ["row", [
-                        ["column", [
+                        ["top-column", [
                             ["raw-html", "<h3>Milestones", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ["row", [["milestone", 11]]],
                             ["row", [["milestone", 12]]],
@@ -215,7 +215,7 @@
                             ["row", [["milestone", 15]]],
                         ]],
                         ['blank', '25px'],
-                        ["column", [
+                        ["top-column", [
                             ["raw-html", "<h3>Permanent Milestones", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ["row", [["milestone", 101]]],
                             ["row", [["milestone", 102]]],

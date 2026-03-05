@@ -94,7 +94,7 @@ addLayer("ktb", {
         },
         102: {
             title: "Starmetal Alteration",
-            unlocked() {return hasUpgrade("ktb", 101)},
+            unlocked() {return hasUpgrade("ktb", 101) && player.btb.alcNodePartConverter.gte(4)},
             description: "Unlocks Altered Starmetal Alloy and Altered Starmetal Essence.",
             cost: new Decimal(300),
             currencyLocation() {return player.ktb},
@@ -402,7 +402,7 @@ addLayer("ktb", {
     2: {
             title: "Alchemical Nodes",
             body() { return "???" }, // Appears when the 1st Alchemical Node part is crafted.
-            unlocked() { return false },
+            unlocked() { return player.btb.alcNodePartConverter.gte(1) },
     },
     3: {
             title: "The Basic Alchemical Elements, Classical",

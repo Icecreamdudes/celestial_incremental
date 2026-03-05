@@ -145,10 +145,48 @@ const RUNE_EFFECTS = {
             dmgMult: 0.4,
         },
         6: {
-            hp: 7,
-            dmg: 0.7,
+            hp: 8,
+            dmg: 0.8,
             ssc: 0.3,
             agiMult: 0.2,
+        },
+    },
+    5: {
+        1: {
+            hp: 5,
+            dmg: 0.5,
+            d4c: 0.1,
+            mnd: 0.5,
+        },
+        2: {
+            hp: 6,
+            dmg: 0.6,
+            d4c: 0.15,
+            mnd: 1,
+        },
+        3: {
+            hp: 7,
+            dmg: 0.7,
+            d4c: 0.2,
+            mnd: 1.5,
+        },
+        4: {
+            hp: 8,
+            dmg: 0.8,
+            d4c: 0.25,
+            rgn: 0.25,
+        },
+        5: {
+            sp: 1,
+            scd: 0.5,
+            hpMult: 0.5,
+            dmgMult: 0.5,
+        },
+        6: {
+            hp: 9,
+            dmg: 0.9,
+            d4c: 0.3,
+            mnd: 2,
         },
     },
 }
@@ -185,9 +223,12 @@ addLayer("darkTemple", {
 
         luckAdd: new Decimal(0),
 
+        mndAdd: new Decimal(0),
+
         depth1CurMult: new Decimal(1),
         depth2CurMult: new Decimal(1),
         depth3CurMult: new Decimal(1),
+        depth4CurMult: new Decimal(1),
         stagnantCurMult: new Decimal(1),
     }},
     automate() {},
@@ -226,10 +267,12 @@ addLayer("darkTemple", {
         if (stats.def) player.darkTemple.defAdd = new Decimal(stats.def)
         if (stats.rgn) player.darkTemple.rgnAdd = new Decimal(stats.rgn)
         if (stats.luck) player.darkTemple.luckAdd = new Decimal(stats.luck)
+        if (stats.mnd) player.darkTemple.mndAdd = new Decimal(stats.mnd)
         if (stats.d1c) player.darkTemple.depth1CurMult = Decimal.add(1, stats.d1c)
         if (stats.d2c) player.darkTemple.depth2CurMult = Decimal.add(1, stats.d2c)
         if (stats.d3c) player.darkTemple.depth3CurMult = Decimal.add(1, stats.d3c)
         if (stats.ssc) player.darkTemple.stagnantCurMult = Decimal.add(1, stats.ssc)
+        if (stats.d4c) player.darkTemple.depth4CurMult = Decimal.add(1, stats.d4c)
     },
     clickables: {
         1: {
@@ -297,7 +340,7 @@ addLayer("darkTemple", {
         },
         5: {
             title: "ᚴ",
-            canClick() {return false},
+            canClick() {return player.depth4.unlocked},
             unlocked: true,
             branches: [[7, "#88f", 5]],
             onClick() {
@@ -446,7 +489,7 @@ addLayer("darkTemple", {
             purchaseLimit() { return player.darkTemple.runeCap },
             pay() {
                 player.depth2.faintUmbrite = player.depth2.faintUmbrite.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(12).floor())
-                player.depth2.clearUmbrite = player.depth2.clearUmbrite.sub(Decimal.pow(2.5, getBuyableAmount(this.layer, this.id)).mul(4).floor())
+                player.depth2.clearUmbrite = player.depth2.clearUmbrite.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(4).floor())
                 player.s.singularityPoints = player.s.singularityPoints.sub(Decimal.pow(1e10, getBuyableAmount(this.layer, this.id)).mul(1e100))
             },
             effect(x) {return getBuyableAmount(this.layer, this.id)},
@@ -517,6 +560,31 @@ addLayer("darkTemple", {
                 return look
             },
         },
+        5: {
+            purchaseLimit() { return player.darkTemple.runeCap },
+            pay() {
+                player.depth4.gloomingNocturnium = player.depth4.gloomingNocturnium.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(18).floor())
+                player.depth4.dimNocturnium = player.depth4.dimNocturnium.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(6).floor())
+                player.pol.pollinators = player.pol.pollinators.sub(Decimal.pow("1e200", getBuyableAmount(this.layer, this.id)).mul("1e2000"))
+            },
+            effect(x) {return getBuyableAmount(this.layer, this.id)},
+            unlocked() {return player.darkTemple.selection == 5},
+            canAfford() {
+                return player.depth4.gloomingNocturnium.gte(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(18).floor())
+                && player.depth4.dimNocturnium.gte(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(6).floor())
+                && player.pol.pollinators.gte(Decimal.pow("1e200", getBuyableAmount(this.layer, this.id)).mul("1e2000"))
+            },
+            display() {return "<div style='line-height:0.8'>Level Up<br><span style='font-size:10px'>[" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(player.darkTemple.runeCap) + "]</div>"},
+            buy() {
+                this.pay()
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "200px", height: "35px", color: "var(--textColor)", fontSize: "16px", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "0 0 27px 27px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#1a3b0f" : !this.canAfford() ? look.background =  "#361e1e" : look.background = "var(--miscButton)"
+                return look
+            },
+        },
     },
     tabFormat: [
         ["style-row", [
@@ -544,6 +612,8 @@ addLayer("darkTemple", {
                                         return "ᚦ"
                                     case 4:
                                         return "ᚱ"
+                                    case 5:
+                                        return "ᚴ"
                                     default:
                                         return ""
                                 }
@@ -575,12 +645,17 @@ addLayer("darkTemple", {
                                         cost2 = formatSimple(player.stagnantSynestia.temporalShard) + "/" + formatSimple(Decimal.pow(2.5, getBuyableAmount("darkTemple", 4)).mul(4).floor()) + "<br>Temporal Shards"
                                         cost3 = formatSimple(player.sme.starmetalEssence) + "/" + formatSimple(Decimal.pow(5, getBuyableAmount("darkTemple", 4)).mul(100)) + "<br>Starmetal Essence"
                                         break;
+                                    case 5:
+                                        cost1 = formatSimple(player.stagnantSynestia.gloomingNocturnium) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 5)).mul(18).floor()) + "<br>Glooming Nocturnium"
+                                        cost2 = formatSimple(player.stagnantSynestia.dimNocturnium) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 5)).mul(6).floor()) + "<br>Dim Nocturnium"
+                                        cost3 = formatSimple(player.pol.pollinators) + "/" + formatSimple(Decimal.pow("1e200", getBuyableAmount("darkTemple", 5)).mul("1e2000")) + "<br>Pollinators"
+                                        break;
                                 }
                                 return "<div style='line-height:1.2'>" + cost1 + "<hr style='width:200px;height:3px;margin:2px 0;background:var(--regBorder);border:0'>" + cost2 + "<hr style='width:200px;height:3px;margin:2px 0;background:var(--regBorder);border:0'>" + cost3 + "<div>"
                             }, {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
                         ], {width: "200px", height: "104px", background: "var(--layerBackground)"}],
                         ["style-column", [
-                            ["buyable", 1], ["buyable", 2], ["buyable", 3], ["buyable", 4]
+                            ["buyable", 1], ["buyable", 2], ["buyable", 3], ["buyable", 4], ["buyable", 5]
                         ], {width: "200px", height: "35px", background: "black", borderTop: "3px solid var(--regBorder)", borderRadius: "0 0 27px 27px"}],
                     ], {width: "200px", height: "180px", background: "var(--miscButtonDisable)", border: "3px solid var(--regBorder)", borderRadius: "30px", margin: "28px 18px 28px 18px", boxShadow: "0px 0px 10px #113"}],
                     ["style-column", [
@@ -660,6 +735,11 @@ addLayer("darkTemple", {
                             if (futureEffects.luck) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.luck) + ")</small>"
                             str = str + "<br>"
                         }
+                        if (player.darkTemple.mndAdd.gt(0) || futureEffects.mnd) {
+                            str = str + "+" + formatShortSimple(player.darkTemple.mndAdd) + " MND"
+                            if (futureEffects.mnd) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.mnd) + ")</small>"
+                            str = str + "<br>"
+                        }
                         if (player.darkTemple.depth1CurMult.gt(1) || futureEffects.d1c) {
                             str = str + "x" + formatShortSimple(player.darkTemple.depth1CurMult) + " <small>Depth 1 SPVs</small>"
                             if (futureEffects.d1c) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.d1c) + ")</small>"
@@ -673,6 +753,11 @@ addLayer("darkTemple", {
                         if (player.darkTemple.depth3CurMult.gt(1) || futureEffects.d3c) {
                             str = str + "x" + formatShortSimple(player.darkTemple.depth3CurMult) + " <small>Depth 3 SPVs</small>"
                             if (futureEffects.d3c) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.d3c) + ")</small>"
+                            str = str + "<br>"
+                        }
+                        if (player.darkTemple.depth4CurMult.gt(1) || futureEffects.d4c) {
+                            str = str + "x" + formatShortSimple(player.darkTemple.depth4CurMult) + " <small>Depth 4 SPVs</small>"
+                            if (futureEffects.d4c) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.d4c) + ")</small>"
                             str = str + "<br>"
                         }
                         if (player.darkTemple.stagnantCurMult.gt(1) || futureEffects.ssc) {

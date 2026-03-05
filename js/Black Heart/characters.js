@@ -31,7 +31,7 @@ BHP.kres = {
     health() {return new Decimal(80).mul(buyableEffect("sp", 12))},
     damage() {return new Decimal(6).mul(buyableEffect("sp", 12))},
     defense: new Decimal(0),
-    regen: new Decimal(0),
+    regen() {return hasUpgrade("sp", 11) ? new Decimal(0.25).mul(buyableEffect("sp", 12)) : new Decimal(0)},
     agility() {return new Decimal(5).mul(buyableEffect("sp", 12))},
     luck: new Decimal(0),
     mending: new Decimal(0),
@@ -42,7 +42,7 @@ BHP.nav = {
     icon: "resources/nav.png",
     health() {return new Decimal(50).mul(buyableEffect("sp", 22))},
     damage() {return new Decimal(8).mul(buyableEffect("sp", 22))},
-    defense: new Decimal(0),
+    defense() {return hasUpgrade("sp", 21) ? new Decimal(10).mul(buyableEffect("sp", 22)) : new Decimal(0)},
     regen: new Decimal(0),
     agility() {return new Decimal(5).mul(buyableEffect("sp", 22))},
     luck: new Decimal(0),
@@ -57,7 +57,7 @@ BHP.sel = {
     defense: new Decimal(0),
     regen: new Decimal(0),
     agility() {return new Decimal(8).mul(buyableEffect("sp", 32))},
-    luck: new Decimal(0),
+    luck() {return hasUpgrade("sp", 31) ? new Decimal(10).mul(buyableEffect("sp", 32)) : new Decimal(0)},
     mending: new Decimal(0),
 }
 BHP.eclipse = {
@@ -65,10 +65,10 @@ BHP.eclipse = {
     color: "#b68c18",
     icon: "resources/eclipse.png",
     health() {return hasUpgrade("sma", 225) ? new Decimal(100) : new Decimal(80)},
-    damage: new Decimal(10),
+    damage() {return hasUpgrade("sma", 226) ? new Decimal(12) : new Decimal(10)},
     defense() {return hasUpgrade("sma", 225) ? new Decimal(10) : new Decimal(5)},
     regen: new Decimal(0),
-    agility: new Decimal(0),
+    agility() {return hasUpgrade("sma", 226) ? new Decimal(5) : new Decimal(0)},
     luck: new Decimal(0),
     mending: new Decimal(5),
 }
@@ -77,7 +77,12 @@ BHP.geroa = {
     color: "#536bdb",
     icon: "resources/geroa.png",
     health() {return hasUpgrade("ir", 205) ? new Decimal(60) : new Decimal(50)},
-    damage() {return hasUpgrade("ir", 205) ? new Decimal(6) : new Decimal(5)},
+    damage() {
+        let dmg = new Decimal(5)
+        if (hasUpgrade("ir", 205)) dmg = dmg.mul(1.2)
+        if (hasUpgrade("ir", 206)) dmg = dmg.mul(1.5)
+        return dmg
+    },
     defense() {return hasUpgrade("ir", 205) ? new Decimal(6) : new Decimal(5)},
     regen() {return hasUpgrade("ir", 205) ? new Decimal(0.6) : new Decimal(0.5)},
     agility() {return hasUpgrade("ir", 205) ? new Decimal(12) : new Decimal(10)},

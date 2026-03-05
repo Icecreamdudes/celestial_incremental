@@ -610,9 +610,23 @@
             }
         },
         225: {
-            title: "Total Eclipse",
+            title: "Partial Eclipse",
             unlocked() { return hasUpgrade("sma", 224)},
             description: "Increase Eclipse's base health by +20 and base defense by +5.",
+            cost: new Decimal("2500"),
+            currencyLocation() { return player.sma },
+            currencyDisplayName: "Eclipse Shards",
+            currencyInternalName: "eclipseShards",
+            style() {
+                let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "#f5ff68"
+                return look
+            }
+        },
+        226: {
+            title: "Total Eclipse",
+            unlocked() { return hasUpgrade("sma", 225) && hasUpgrade("depth4", 4)},
+            description: "Increase Eclipse's base damage by +2 and base agility by +5.",
             cost: new Decimal("5000"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Eclipse Shards",
@@ -847,7 +861,7 @@
                         ["blank", "5px"],
                         ["style-row", [], {width: "800px", height: "3px", backgroundColor: "#b29c47"}],
                         ["blank", "5px"],
-                        ["row", [["upgrade", 221], ["upgrade", 222], ["upgrade", 223], ["upgrade", 224], ["upgrade", 225]]],
+                        ["row", [["upgrade", 221], ["upgrade", 222], ["upgrade", 223], ["upgrade", 224], ["upgrade", 225], ["upgrade", 226]]],
                         ["blank", "5px"],
                     ], {width: "800px", backgroundColor: "#222", border: "3px solid #b29c47", borderRadius: "20px"}],
                 ]

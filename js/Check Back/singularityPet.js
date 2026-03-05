@@ -75,6 +75,50 @@ addLayer("sp", {
             player.sp.selPoints = player.sp.selPointsMax
         }
     },
+    upgrades: {
+        11: {
+            title: "Regenerative Anger",
+            unlocked() { return hasUpgrade("depth4", 4) },
+            description: "Increases Kres' base regen by +0.25",
+            cost: new Decimal(5000),
+            currencyLocation() { return player.sp },
+            currencyDisplayName: "Kres Points",
+            currencyInternalName: "kresPoints",
+            style() {
+                let look = {borderRadius: "15px", color: "black", border: "3px solid #480513", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#910a27"
+                return look
+            },
+        },
+        21: {
+            title: "Aura Shield",
+            unlocked() { return hasUpgrade("depth4", 4) },
+            description: "Increases Nav's base defense by +10",
+            cost: new Decimal(5000),
+            currencyLocation() { return player.sp },
+            currencyDisplayName: "Nav Points",
+            currencyInternalName: "navPoints",
+            style() {
+                let look = {borderRadius: "15px", color: "black", border: "3px solid #480513", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#710a91"
+                return look
+            },
+        },
+        31: {
+            title: "Lucky Intuition",
+            unlocked() { return hasUpgrade("depth4", 4) },
+            description: "Increases Sel's base luck by +10",
+            cost: new Decimal(5000),
+            currencyLocation() { return player.sp },
+            currencyDisplayName: "Sel Points",
+            currencyInternalName: "selPoints",
+            style() {
+                let look = {borderRadius: "15px", color: "black", border: "3px solid #480513", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#065c19"
+                return look
+            },
+        },
+    },
     buyables: {
         11: {
             purchaseLimit() { return new Decimal(990) },
@@ -571,13 +615,16 @@ addLayer("sp", {
                 content: [
                     ["blank", "10px"],
                     ["style-column", [
+                        ["blank", "20px"],
                         ["raw-html", () => {return "You have <h3>" + formatSimple(player.sp.kresPoints, 2) + "/" + formatWhole(player.sp.kresPointsMax) + "</h3> kres points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ["raw-html", () => {return "You are gaining <h3>" + format(player.sp.kresPointsPerSecond) + "</h3> kres points per second. (based on level/ascension)"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                         ["blank", "20px"],
                         ["buyable", 11],
                         ["blank", "20px"],
                         ["row", [["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14], ["ex-buyable", 15]], {maxWidth: "600px"}],
-                    ], {width: "700px", height: "550px", background: "#2b030b", border: "3px solid white", borderRadius: "20px"}],
+                        ["blank", "20px"],
+                        ["style-row", [["upgrade", 11]], () => {return hasUpgrade("sp", 11) ? {marginBottom: "20px"} : {}}],
+                    ], {width: "700px", background: "#2b030b", border: "3px solid white", borderRadius: "20px"}],
                 ],
             },
             "Nav": {
@@ -587,13 +634,16 @@ addLayer("sp", {
                 content: [
                     ["blank", "10px"],
                     ["style-column", [
+                        ["blank", "20px"],
                         ["raw-html", () => {return "You have <h3>" + formatSimple(player.sp.navPoints, 2) + "/" + formatWhole(player.sp.navPointsMax) + "</h3> nav points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ["raw-html", () => {return "You are gaining <h3>" + format(player.sp.navPointsPerSecond) + "</h3> nav points per second. (based on level/ascension)"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                         ["blank", "20px"],
                         ["buyable", 21],
                         ["blank", "20px"],
                         ["row", [["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24], ["ex-buyable", 25]], {maxWidth: "600px"}],
-                    ], {width: "700px", height: "550px", background: "#21032b", border: "3px solid white", borderRadius: "20px"}],
+                        ["blank", "20px"],
+                        ["style-row", [["upgrade", 21]], () => {return false ? {marginBottom: "20px"} : {}}],
+                    ], {width: "700px", background: "#21032b", border: "3px solid white", borderRadius: "20px"}],
                 ],
             },
             "Sel": {
@@ -603,13 +653,16 @@ addLayer("sp", {
                 content: [
                     ["blank", "10px"],
                     ["style-column", [
+                        ["blank", "20px"],
                         ["raw-html", () => {return "You have <h3>" + formatSimple(player.sp.selPoints, 2) + "/" + formatWhole(player.sp.selPointsMax) + "</h3> sel points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ["raw-html", () => {return "You are gaining <h3>" + format(player.sp.selPointsPerSecond) + "</h3> sel points per second. (based on level/ascension)"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                         ["blank", "20px"],
                         ["buyable", 31],
                         ["blank", "20px"],
                         ["row", [["ex-buyable", 32], ["ex-buyable", 33], ["ex-buyable", 34], ["ex-buyable", 35]], {maxWidth: "600px"}],
-                    ], {width: "700px", height: "550px", background: "#011b07", border: "3px solid white", borderRadius: "20px"}],
+                        ["blank", "20px"],
+                        ["style-row", [["upgrade", 31]], () => {return false ? {marginBottom: "20px"} : {}}],
+                    ], {width: "700px", background: "#011b07", border: "3px solid white", borderRadius: "20px"}],
                 ],
             },
         },

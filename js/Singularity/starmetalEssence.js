@@ -66,6 +66,7 @@
             player.sme.generatorProduction[i] = player.sme.generatorProduction[i].mul(levelableEffect("pet", 502)[1])
             player.sme.generatorProduction[i] = player.sme.generatorProduction[i].mul(buyableEffect("al", 205))
             player.sme.generatorProduction[i] = player.sme.generatorProduction[i].mul(levelableEffect("pu", 305)[2])
+            player.sme.generatorProduction[i] = player.sme.generatorProduction[i].mul(buyableEffect("depth4", 4))
             if (player.sme.generatorTimers[i].gte(player.sme.generatorTimersMax[i])) {
                 player.sme.starmetalEssence = player.sme.starmetalEssence.add(player.sme.generatorProduction[i])
                 player.sme.generatorTimers[i] = new Decimal(0)
@@ -1370,8 +1371,8 @@
             },
         },
         143: {
-            costBase() { return [new Decimal("1e1000000"), new Decimal(400000)] },
-            costGrowth() { return [new Decimal("1e1000000"), new Decimal(2.5)] },
+            costBase() { return [new Decimal("1e2000000"), new Decimal(400000)] },
+            costGrowth() { return [new Decimal("1e100000"), new Decimal(2.5)] },
             purchaseLimit() { return new Decimal(5) },
             currency() { return [player.points, player.sme.starmetalEssence]},
             pay(amt, amt2) {

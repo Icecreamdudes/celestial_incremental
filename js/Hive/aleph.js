@@ -41,6 +41,7 @@ addLayer("al", {
         player.al.honeycombGain = player.bb.beeBread.div(1e10).pow(0.25)
         if (player.al.cocoonLevel >= 1) player.al.honeycombGain = player.al.honeycombGain.mul(1.5)
         player.al.honeycombGain = player.al.honeycombGain.mul(buyableEffect("sme", 174))
+        player.al.honeycombGain = player.al.honeycombGain.mul(levelableEffect("pet", 503)[1])
 
         // FLOOR HONEYCOMBS
         player.al.honeycombGain = player.al.honeycombGain.floor()
@@ -49,6 +50,7 @@ addLayer("al", {
         player.al.royalJellyGain = player.ho.honey.div(1e10).pow(0.25)
         if (player.al.cocoonLevel >= 1) player.al.royalJellyGain = player.al.royalJellyGain.mul(1.5)
         player.al.royalJellyGain = player.al.royalJellyGain.mul(buyableEffect("sme", 174))
+        player.al.royalJellyGain = player.al.royalJellyGain.mul(levelableEffect("pet", 503)[1])
 
         // FLOOR HONEYCOMBS
         player.al.royalJellyGain = player.al.royalJellyGain.floor()
@@ -1599,7 +1601,7 @@ addLayer("al", {
                                         ["color-text", [() => {return "1e25"}, true, "white", () => {return player.al.cocoonLevel >= 16}, "gray"]],
                                     ], {width: "115px", height: "35px", borderRight: "2px solid #a900a9"}],
                                     ["style-row", [
-                                        ["color-text", [() => {return "COMING SOON"}, true, "white", () => {return player.al.cocoonLevel >= 16}, "gray"]],
+                                        ["color-text", [() => {return player.al.cocoonLevel >= 16 ? "Unlock depth 4" : "Enhance a celestial power"}, true, "white", () => {return player.al.cocoonLevel >= 16}, "gray"]],
                                     ], {width: "281px", height: "35px"}],
                                 ], () => {return player.al.cocoonLevel >= 15 ? {width: "398px", height: "35px", background: "#190019", borderRadius: "0 0 17px 0"} : {display: "none !important"}}],
                             ], {width: "398px", height: "652px"}],

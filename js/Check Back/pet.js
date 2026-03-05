@@ -1494,6 +1494,20 @@ addLayer("pet", {
                 return look
             },
         },
+        303: {
+            title() { return "<img src='resources/Pets/legendarybg.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" },
+            canClick() { return true },
+            unlocked() { return hasUpgrade("depth4", 6) },
+            onClick() {
+                player.pet.summonIndex = new Decimal(2)
+            },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "100px", minHeight: "100px"}
+                player.pet.summonIndex.eq(2) ? look.backgroundColor = "#fe2600ff" : look.backgroundColor = "#fe9400"
+                return look
+            },
+        },
 
         // PET SHOP
         1002: {
@@ -3815,6 +3829,52 @@ addLayer("pet", {
                 return look
             } 
         },
+        503: {
+            image() { return this.canClick() ? "resources/Pets/legendarybg.png" : "resources/secret.png"},
+            title() { return "Vespasian" },
+            lore() { return "<h6>Originally a secret weapon of Matos, it has now been further modified and combined with a wasp to create a fierce killing machine. Fortunately, Aleph accidentally gave it free will, so it isn't particularly interested in her goals." }, 
+            description() {
+                return "x" + format(this.effect()[0]) + " to pre aleph resources.<br>" +
+                    "x" + format(this.effect()[1]) + " to aleph resources.<br>" +
+                    "^" + format(this.effect()[2]) + " to pollinators.<br>" +
+                    "x" + format(this.effect()[3]) + " to laboratory timer."
+            },
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
+                return [
+                    amt.pow(0.75).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Pre-Aleph Resources
+                    amt.pow(0.75).mul(0.4).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Aleph Resources
+                    amt.pow(0.75).div(10).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Pollinators
+                    amt.sub(1).div(2).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Laboratory Timer
+                ]
+            },
+            sellValue() { return new Decimal(10000)},
+            // CLICK CODE
+            unlocked() { return hasUpgrade("depth4", 6) },
+            canClick() { return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
+            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.add(1).pow(1.4).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#0B6623"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#eed200" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            } 
+        },
         // START OF EVOLVED PETS
         1101: {
             image() { return this.canClick() ? "resources/Pets/voidGwaEvoPet.png" : "resources/secret.png"},
@@ -4571,6 +4631,10 @@ addLayer("pet", {
                 player.pet.levelables[502][1] = player.pet.levelables[502][1].add(1)
                 doPopup("none", "Geroa gets enhancements", "Pet Obtained!", 5, "#eed200", "resources/Pets/geroaLegendaryPet.png")
             }
+            if (player.pet.summonIndex.eq(2)) {
+                player.pet.levelables[503][1] = player.pet.levelables[503][1].add(1)
+                doPopup("none", "Vespasian mutates further", "Pet Obtained!", 5, "#eed200", "resources/Pets/legendarybg.png")
+            }
             player.pet.eclipsePity = 0
             return
         }
@@ -4636,6 +4700,10 @@ addLayer("pet", {
             if (player.pet.summonIndex.eq(1)) {
                 player.pet.levelables[502][1] = player.pet.levelables[502][1].add(1)
                 doPopup("none", "Geroa gets enhancements", "Pet Obtained!", 5, "#eed200", "resources/Pets/geroaLegendaryPet.png")
+            }
+            if (player.pet.summonIndex.eq(2)) {
+                player.pet.levelables[503][1] = player.pet.levelables[503][1].add(1)
+                doPopup("none", "Vespasian mutates further", "Pet Obtained!", 5, "#eed200", "resources/Pets/legendarybg.png")
             }
             player.pet.eclipsePity = 0
         }
@@ -4954,7 +5022,7 @@ addLayer("pet", {
                                 ["raw-html", "Legendary", {color: "#eed200", fontSize: "20px", fontFamily: "monospace"}],
                             ], () => { return player.cb.highestLevel.gte(100000) ? {width: "535px", height: "40px", backgroundColor: "#2f2a00", borderTop: "3px solid #eed200", borderBottom: "3px solid #eed200", userSelect: "none"} : {display: "none !important"}}],
                             ["style-column", [
-                                ["row", [["levelable", 501], ["levelable", 502]]],
+                                ["row", [["levelable", 501], ["levelable", 502], ["levelable", 503]]],
                             ], () => { return player.cb.highestLevel.gte(100000) ? {width: "525px", backgroundColor: "#171500", padding: "5px"} : {display: "none !important"}}],
 
                         ], {width: "550px", height: "522px"}],
@@ -5176,7 +5244,7 @@ addLayer("pet", {
                             ["bar", "summonPity"],
                             ["blank", "10px"],
                             ["raw-html", "Select Pet to Summon", {color: "black", fontSize: "24px", fontFamily: "monospace"}],
-                            ["row", [["clickable", 301], ["clickable", 302]]],
+                            ["row", [["clickable", 301], ["clickable", 302], ["clickable", 303]]],
                         ], () => {return player.cb.highestLevel.gte(100000) ? {width: "500px", border: "3px solid rgb(27, 0, 36)", backgroundColor: "#f5b942", paddingTop: "5px", paddingBottom: "10px", borderRadius: "15px"} : {display: "none !important"}}],
                     ], {width: "550px", height: "700px", backgroundColor: "#eed200"}],
                 ],

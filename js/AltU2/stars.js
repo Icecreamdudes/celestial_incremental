@@ -1685,7 +1685,7 @@ addLayer("st", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             display() {
-                return "which are boosting all fragment scores by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are boosting core fragment scores by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
             },
             branches: [109],

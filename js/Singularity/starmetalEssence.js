@@ -1355,7 +1355,7 @@
             },
             display() {
                 return "<h3>SME-E2</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
-                    Increase core fragment gain by 5%\n\
+                    Boost core fragment scores by 5%\n\
                     Currently: +" + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + "%\n\ \n\
                     Cost:<br>" + formatShortWhole(player.s.singularityPoints) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[0]) + " SP\n\
                     " + formatShortWhole(player.sme.starmetalEssence) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[1]) + " SME"

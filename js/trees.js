@@ -116,6 +116,7 @@
 
         // POWER MODIFIERS
         player.t.leavesPerSecond = player.t.leavesPerSecond.pow(player.co.cores.tree.effect[2])
+        if (hasUpgrade("cs", 404)) player.t.leavesPerSecond = player.t.leavesPerSecond.pow(3)
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.r.timeReversed) player.t.leavesPerSecond = player.t.leavesPerSecond.mul(0)
@@ -127,7 +128,8 @@
         player.t.treeReq = player.t.trees.pow(1.35).add(10)
         player.t.treeReq = player.t.treeReq.div(buyableEffect("t", 14))
         player.t.treeReq = player.t.treeReq.div(levelableEffect("pet", 203)[0])
-        if (hasUpgrade("cs", 401)) player.t.treeReq = player.t.treeReq.pow(1.6)
+        if (hasUpgrade("cs", 401)) player.t.treeReq = player.t.treeReq.pow(1.5)
+        if (hasUpgrade("cs", 404)) player.t.treeReq = player.t.treeReq.pow(0.5)
 
         if (player.t.leaves.gte(player.t.treeReq)) {
             player.t.trees = player.t.trees.add(player.t.treesToGet)

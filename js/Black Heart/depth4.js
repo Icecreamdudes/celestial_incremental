@@ -118,10 +118,10 @@ addLayer("depth4", {
             title: "Calm down with the scaling",
             unlocked: true,
             description: "Reduce black heart combo softcap scaling by -0.2%",
-            cost: new Decimal(400),
-            currencyLocation() { return player.depth4 },
-            currencyDisplayName: "Glooming Nocturnium",
-            currencyInternalName: "gloomingNocturnium",
+            cost: new Decimal(50),
+            currencyLocation() { return player.bh },
+            currencyDisplayName: "Dark Essence",
+            currencyInternalName: "darkEssence",
             style() {
                 let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
@@ -133,9 +133,9 @@ addLayer("depth4", {
             unlocked: true,
             description: "Unlock a new upgrade for each character",
             cost: new Decimal(100),
-            currencyLocation() { return player.depth4 },
-            currencyDisplayName: "Dim Nocturnium",
-            currencyInternalName: "dimNocturnium",
+            currencyLocation() { return player.bh },
+            currencyDisplayName: "Dark Essence",
+            currencyInternalName: "darkEssence",
             style() {
                 let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
@@ -230,14 +230,14 @@ addLayer("depth4", {
             purchaseLimit() { return new Decimal(10) },
             currency() { return player.depth4.gloomingNocturnium},
             pay(amt) { player.depth4.gloomingNocturnium = this.currency().sub(amt) },
-            effect(x) {return getBuyableAmount(this.layer, this.id).div(50).add(1) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(10).add(1) },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {return this.currency().gte(this.cost())},
             display() {
-                return "<h3>Pollenizers</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
-                    Boost pollinator gain\n\
-                    Currently: ^" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\ \n\
+                return "<h3>Score!</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
+                    Boost core fragment scores\n\
+                    Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\ \n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Glooming Nocturnium"
             },
             buy() {
@@ -389,3 +389,10 @@ BHS.depth4 = {
         }
     },
 }
+
+// Poison via negative regen active skill
+// Multi-hit attacks
+// Heals
+// Blocks
+// Attacks that either stun or daze you
+// 

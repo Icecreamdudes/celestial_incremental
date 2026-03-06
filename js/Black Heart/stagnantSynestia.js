@@ -108,7 +108,7 @@ addLayer("stagnantSynestia", {
             title: "Don't need that either",
             unlocked: true,
             description: "Unlock the general skill \"Reckless Abandon\".",
-            cost: new Decimal(8),
+            cost: new Decimal(6),
             currencyLocation() { return player.stagnantSynestia },
             currencyDisplayName: "Temporal Shards",
             currencyInternalName: "temporalShard",
@@ -136,7 +136,7 @@ addLayer("stagnantSynestia", {
             title: "Pet Energizer",
             unlocked: true,
             description: "Multiply pet points gain by x1.15.",
-            cost: new Decimal(12),
+            cost: new Decimal(8),
             currencyLocation() { return player.stagnantSynestia },
             currencyDisplayName: "Temporal Shards",
             currencyInternalName: "temporalShard",
@@ -227,7 +227,7 @@ addLayer("stagnantSynestia", {
             },
         },
         4: {
-            costBase() { return new Decimal(10) },
+            costBase() { return new Decimal(8) },
             costGrowth() { return new Decimal(1.3) },
             purchaseLimit() { return new Decimal(10) },
             currency() { return player.stagnantSynestia.temporalShard},
@@ -798,7 +798,7 @@ BHC.staticEnas = {
     reward() {
         let gain = {}
         gain.temporalDust = new Decimal(50)
-        gain.temporalShard = new Decimal(15)
+        gain.temporalShard = new Decimal(12)
         return gain
     },
 }

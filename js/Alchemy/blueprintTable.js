@@ -1,5 +1,5 @@
 
-// Add grid variables here
+// Add constants here
 const symbolName = [
                     "symbolNone",
                     "symbolStarmetalAlloy",
@@ -11,12 +11,11 @@ const symbolName = [
                     ];
 
 const symbolBlueprint = [
-                    "blueprintNone",
+                    "blueprintEmpty",
                     "blueprintAlchemicalNodeConverter",
                     "blueprintAlchemicalNodeCondenser",
                     "blueprintAlchemicalNodeGuider"
                     ];
-
 
 addLayer("btb", {
     name: "The Blueprint Table",
@@ -24,12 +23,15 @@ addLayer("btb", {
     row: 2,
     universe: "LU",
     position: 0,
+
     startData() {return {
         unlocked: true,
 
+        // Select Indexes
         selectedSymbolIndex: 0, // symbol select index
         selectedBlueprintIndex: 0, // blueprint select index
         
+        // Altered Alchemical Symbol Selection Boolean
         selectedSymbolSMA: false,
         selectedSymbolSME: false,
         selectedSymbolECS: false,
@@ -37,20 +39,28 @@ addLayer("btb", {
         selectedSymbolSPD: false,
         selectedSymbolSPR: false,
 
+        // Crafting Content
+        // Alchemical Node -Converter-
         craftedAlcNodePartConverter: false,
         alcNodePartConverter: new Decimal(0),
 
+        // Alchemical Node -Condenser-
+        craftedAlcNodePartCondenser: false,
+        alcNodePartCondenser: new Decimal(0),
+
+        // Alchemical Node -Guider-
+        craftedAlcNodePartGuider: false,
+        alcNodePartGuider: new Decimal(0),
+
+        // Blueprint Table Basic Resources
         symbolStarmetalAlloy: new Decimal(0),
         symbolStarmetalEssence: new Decimal(0),
         symbolSpaceRock: new Decimal(0),
         symbolSpaceGem: new Decimal(0),
         symbolSpaceDust: new Decimal(0),
-        symbolEclipseShard: new Decimal(0)
-
-
-            // advanced building materials, currently nothing as of now! Content will be added later!
-
+        symbolEclipseShard: new Decimal(0),
     }},
+
     nodeStyle() {
         return {
             background: "linear-gradient(0deg, #000055 50%, #0000ff 100%)",
@@ -80,13 +90,6 @@ addLayer("btb", {
             if (data != -1) {
                 if (player.btb.selectedSymbolSMA == true || player.btb.selectedSymbolSME == true || player.btb.selectedSymbolECS == true || player.btb.selectedSymbolSPG == true || player.btb.selectedSymbolSPD == true || player.btb.selectedSymbolSPR == true) {
                     setGridData("btb", id, player.btb.selectedSymbolIndex)
-                    player.btb.selectedSymbolIndex = 0;
-                    player.btb.selectedSymbolSMA = false;
-                    player.btb.selectedSymbolSME = false;
-                    player.btb.selectedSymbolECS = false;
-                    player.btb.selectedSymbolSPG = false;
-                    player.btb.selectedSymbolSPD = false;
-                    player.btb.selectedSymbolSPR = false
                 } else {
                     player.btb.selectedSymbolIndex = 0;
                     setGridData("btb", id, 0)
@@ -251,8 +254,10 @@ addLayer("btb", {
             return look
             }
         },
+
+        // VERY HUGE WALL INCOMING /!\
         7: {
-            title() {return "Craft Alchemical Node Part"},
+            title() {return "Craft Alchemical Node Part <br>-Converter-"},
             canClick() { // if the layout aligns with the blueprint, then canClick will return 'true'. Otherwise, return 'false'.
                 if (
                        getGridData("btb", 101) == 6 && getGridData("btb", 102) == 5 && getGridData("btb", 103) == 1 && getGridData("btb", 104) == 5 && getGridData("btb", 105) == 6
@@ -265,12 +270,12 @@ addLayer("btb", {
                     && player.btb.symbolSpaceGem.gte(1)
                     && player.btb.symbolSpaceDust.gte(8)
                     && player.btb.symbolSpaceRock.gte(4)
-                ) {
+                    ) { // Trigger the Alchemical Node -Converter- crafting prompt
                     craftedAlcNodePartConverter = true;
-                    return true 
-                } else {
-                    return false
-                }
+                    craftedAlcNodePartCondenser = false;
+                    craftedAlcNodePartGuider = false
+                    return true
+                    }
             }, 
             unlocked() {return true},
             onClick() { 
@@ -281,25 +286,19 @@ addLayer("btb", {
                         player.btb.symbolSpaceGem = player.btb.symbolSpaceGem.sub(1);
                         player.btb.symbolSpaceDust = player.btb.symbolSpaceDust.sub(8);
                         player.btb.symbolSpaceRock = player.btb.symbolSpaceRock.sub(4);
-                        player.btb.alcNodePartConverter = player.btb.alcNodePartConverter.add(1)}
+                        player.btb.alcNodePartConverter = player.btb.alcNodePartConverter.add(1);
+                        craftedAlcNodePartConverter = false
+                        };
 
                 if (getGridData("btb", id) != 1) {
                 for (let i = 1; i < 506; ) {
                     if (getGridData("btb", i) != -1) {
-                        if (craftedAlcNodePartConverter = true) {
-                        setGridData("btb", i, 0);
-                        craftedAlcNodePartConverter = false
-                        }
-                    };
+                            setGridData("btb", i, 0)
+                        };
 
                     // Increase i value
-                    if (i % 5 == 0) {
-                        i = i+96
-                    } else {
-                        i++
+                    if (i % 5 == 0) {i = i+96} else {i++}
                     }
-                    }
-                
                 }
             },
             style() {
@@ -319,15 +318,55 @@ addLayer("btb", {
             return look
             }
         },
+        
         8: {
-            title() {return "Previous"},
-            canClick() {return true}, // function here also
+            title() {return "Craft Alchemical Node Part <br>-Condenser-"},
+            canClick() { // if the layout aligns with the blueprint, then canClick will return 'true'. Otherwise, return 'false'.
+                if (
+                       getGridData("btb", 101) == 6 && getGridData("btb", 102) == 5 && getGridData("btb", 103) == 1 && getGridData("btb", 104) == 5 && getGridData("btb", 105) == 6
+                    && getGridData("btb", 201) == 5 && getGridData("btb", 202) == 0 && getGridData("btb", 203) == 2 && getGridData("btb", 204) == 0 && getGridData("btb", 205) == 5
+                    && getGridData("btb", 301) == 1 && getGridData("btb", 302) == 2 && getGridData("btb", 303) == 3 && getGridData("btb", 304) == 2 && getGridData("btb", 305) == 1
+                    && getGridData("btb", 401) == 5 && getGridData("btb", 402) == 0 && getGridData("btb", 403) == 2 && getGridData("btb", 404) == 0 && getGridData("btb", 405) == 5
+                    && getGridData("btb", 501) == 6 && getGridData("btb", 502) == 5 && getGridData("btb", 503) == 1 && getGridData("btb", 504) == 5 && getGridData("btb", 505) == 6
+                    && player.btb.symbolStarmetalAlloy.gte(4)
+                    && player.btb.symbolStarmetalEssence.gte(4)
+                    && player.btb.symbolEclipseShard.gte(1)
+                    && player.btb.symbolSpaceDust.gte(8)
+                    && player.btb.symbolSpaceRock.gte(4)
+                    ) { // Trigger the Alchemical Node -Condenser- crafting prompt
+                    craftedAlcNodePartConverter = false;
+                    craftedAlcNodePartCondenser = true;
+		            craftedAlcNodePartGuider = false
+                    return true
+                    }
+
+            }, 
             unlocked() {return player.btb.alcNodePartConverter.gte(4)},
             onClick() { 
-                player.btb.selectedBlueprintIndex = player.btb.selectedBlueprintIndex.sub(1)
+                if (craftedAlcNodePartCondenser = true)
+                        {
+                        player.btb.symbolStarmetalAlloy = player.btb.symbolStarmetalAlloy.sub(4);
+                        player.btb.symbolStarmetalEssence = player.btb.symbolStarmetalEssence.sub(4);
+                        player.btb.symbolEclipse = player.btb.symbolEclipseShard.sub(1);
+                        player.btb.symbolSpaceDust = player.btb.symbolSpaceDust.sub(8);
+                        player.btb.symbolSpaceRock = player.btb.symbolSpaceRock.sub(4);
+                        player.btb.alcNodePartCondenser = player.btb.alcNodePartCondenser.add(1);
+                        craftedAlcNodePartCondenser = false
+                        };
+
+                if (getGridData("btb", id) != 1) {
+                for (let i = 1; i < 506; ) {
+                    if (getGridData("btb", i) != -1) {
+                            setGridData("btb", i, 0)
+                        };
+
+                    // Increase i value
+                    if (i % 5 == 0) {i = i+96} else {i++}
+                    }
+                }
             },
             style() {
-            let look = {width: '100px', minHeight: '50px', maxHeight: "50px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px"}
+            let look = {width: '300px', minHeight: '50px', maxHeight: "50px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px", marginTop: "10px", marginLeft: "0"}
             if (this.canClick()) {
                 look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)";
                 look.borderColor = "transparent";
@@ -344,14 +383,49 @@ addLayer("btb", {
             }
         },
         9: {
-            title() {return "Next"},
-            canClick() {return true}, // function here also
-            unlocked() {return player.btb.alcNodePartConverter.gte(4)},
+            title() {return "Craft Alchemical Node Part <br>-Guider-"},
+            canClick() { // if the layout aligns with the blueprint, then canClick will return 'true'. Otherwise, return 'false'.
+                if (
+                       getGridData("btb", 101) == 0 && getGridData("btb", 102) == 0 && getGridData("btb", 103) == 0 && getGridData("btb", 104) == 0 && getGridData("btb", 105) == 0
+                    && getGridData("btb", 201) == 6 && getGridData("btb", 202) == 5 && getGridData("btb", 203) == 6 && getGridData("btb", 204) == 5 && getGridData("btb", 205) == 6
+                    && getGridData("btb", 301) == 2 && getGridData("btb", 302) == 2 && getGridData("btb", 303) == 2 && getGridData("btb", 304) == 2 && getGridData("btb", 305) == 2
+                    && getGridData("btb", 401) == 6 && getGridData("btb", 402) == 5 && getGridData("btb", 403) == 6 && getGridData("btb", 404) == 5 && getGridData("btb", 405) == 6
+                    && getGridData("btb", 501) == 0 && getGridData("btb", 502) == 0 && getGridData("btb", 503) == 0 && getGridData("btb", 504) == 0 && getGridData("btb", 505) == 0
+                    && player.btb.symbolStarmetalEssence.gte(5)
+                    && player.btb.symbolSpaceDust.gte(4)
+                    && player.btb.symbolSpaceRock.gte(6)
+                    ) { // Trigger the Alchemical Node -Guider- crafting prompt
+                    craftedAlcNodePartConverter = false;
+                    craftedAlcNodePartCondenser = false;
+		            craftedAlcNodePartGuider = true
+                    return true
+                    }
+
+            }, 
+            unlocked() {return player.btb.alcNodePartCondenser.gte(4)},
             onClick() { 
-                player.btb.selectedBlueprintIndex = player.btb.selectedBlueprintIndex.add(1)
+                if (craftedAlcNodePartGuider = true)
+                        {
+                        player.btb.symbolStarmetalEssence = player.btb.symbolStarmetalEssence.sub(5);
+                        player.btb.symbolSpaceDust = player.btb.symbolSpaceDust.sub(4);
+                        player.btb.symbolSpaceRock = player.btb.symbolSpaceRock.sub(6);
+                        player.btb.alcNodePartGuider = player.btb.alcNodePartGuider.add(1);
+                        craftedAlcNodePartGuider = false
+                        };
+
+                if (getGridData("btb", id) != 1) {
+                for (let i = 1; i < 506; ) {
+                    if (getGridData("btb", i) != -1) {
+                            setGridData("btb", i, 0)
+                        };
+
+                    // Increase i value
+                    if (i % 5 == 0) {i = i+96} else {i++}
+                    }
+                }
             },
             style() {
-            let look = {width: '100px', minHeight: '50px', maxHeight: "50px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px"}
+            let look = {width: '300px', minHeight: '50px', maxHeight: "50px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px", marginTop: "10px", marginLeft: "0"}
             if (this.canClick()) {
                 look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)";
                 look.borderColor = "transparent";
@@ -367,24 +441,14 @@ addLayer("btb", {
             return look
             }
         },
+
+        // Clear Grid
         10: {
             title() {return "Clear Grid"},
             canClick() {return true},
             unlocked() {return true},
             onClick() { 
-               
-            if (getGridData("btb", id) != 1) {
-                for (let i = 1; i < 506; ) {
-                    if (getGridData("btb", i) != -1) {
-                        setGridData("btb", i, 0)
-                    } 
-                    // Increase i value
-                    if (i % 5 == 0) {
-                        i = i+96
-                    } else {
-                        i++
-                    }
-                }
+            
                 if (player.btb.selectedSymbolSMA == true || player.btb.selectedSymbolSME == true || player.btb.selectedSymbolECS == true || player.btb.selectedSymbolSPG == true || player.btb.selectedSymbolSPD == true || player.btb.selectedSymbolSPR == true) {
                     player.btb.selectedSymbolSMA = false;
                     player.btb.selectedSymbolSME = false;
@@ -393,10 +457,21 @@ addLayer("btb", {
                     player.btb.selectedSymbolSPD = false;
                     player.btb.selectedSymbolSPR = false;
                     player.btb.selectedSymbolIndex = 0;
-                    setgridData("btb", id, 0)
                 }
 
-            }      
+                if (getGridData("btb", id) != 1) {
+                    for (let i = 1; i < 506; ) {
+                        if (getGridData("btb", i) != -1) {
+                            setGridData("btb", i, 0)
+                        } 
+                        // Increase i value
+                        if (i % 5 == 0) {
+                         i = i+96
+                        } else {
+                         i++
+                        }
+                    }
+                }      
             },
             style() {
             let look = {width: '300px', minHeight: '50px', maxHeight: "50px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px", marginBottom: "10px"}
@@ -760,13 +835,139 @@ addLayer("btb", {
             return look
             }
         },
+
+        // Start of Blueprint Buttons
+        1000: {
+            title() {return "Empty"},
+            canClick() {return player.btb.selectedBlueprintIndex != 0},
+            unlocked() {return true},
+            onClick() { 
+                player.btb.selectedBlueprintIndex = 0
+            },
+            style() {
+            let look = {width: '100px', minHeight: '50px', maxHeight: "50px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px"}
+            if (this.canClick()) {
+                look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)";
+                look.borderColor = "transparent";
+                look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1";
+                look.color = "black";
+                look.boxShadow = "0 0 3px 1px black inset, 0 0 5px white"
+            } else {
+                look.backgroundColor = "#333333";
+                look.border = "3px solid #000000";
+                look.color = "black";
+                look.boxShadow = "0 0 3px 1px black inset"
+            }
+            return look
+            }
+        },
+        1001: {
+            title() {return "Converter"},
+            canClick() {return player.btb.selectedBlueprintIndex != 1},
+            unlocked() {return true},
+            onClick() { 
+                player.btb.selectedBlueprintIndex = 1
+            },
+            style() {
+            let look = {width: '100px', minHeight: '50px', maxHeight: "50px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px"}
+            if (this.canClick()) {
+                look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)";
+                look.borderColor = "transparent";
+                look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1";
+                look.color = "black";
+                look.boxShadow = "0 0 3px 1px black inset, 0 0 5px white"
+            } else {
+                look.backgroundColor = "#333333";
+                look.border = "3px solid #000000";
+                look.color = "black";
+                look.boxShadow = "0 0 3px 1px black inset"
+            }
+            return look
+            }
+        },
+        1002: {
+            title() {return "Condenser"},
+            canClick() {return player.btb.selectedBlueprintIndex != 2},
+            unlocked() {return player.btb.alcNodePartConverter.gte(4)},
+            onClick() { 
+                player.btb.selectedBlueprintIndex = 2
+            },
+            style() {
+            let look = {width: '100px', minHeight: '50px', maxHeight: "50px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px"}
+            if (this.canClick()) {
+                look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)";
+                look.borderColor = "transparent";
+                look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1";
+                look.color = "black";
+                look.boxShadow = "0 0 3px 1px black inset, 0 0 5px white"
+            } else {
+                look.backgroundColor = "#333333";
+                look.border = "3px solid #000000";
+                look.color = "black";
+                look.boxShadow = "0 0 3px 1px black inset"
+            }
+            return look
+            }
+        },
+        1003: {
+            title() {return "Guider"},
+            canClick() {return player.btb.selectedBlueprintIndex != 3},
+            unlocked() {return player.btb.alcNodePartCondenser.gte(4)},
+            onClick() { 
+                player.btb.selectedBlueprintIndex = 3
+            },
+            style() {
+            let look = {width: '100px', minHeight: '50px', maxHeight: "50px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px"}
+            if (this.canClick()) {
+                look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)";
+                look.borderColor = "transparent";
+                look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1";
+                look.color = "black";
+                look.boxShadow = "0 0 3px 1px black inset, 0 0 5px white"
+            } else {
+                look.backgroundColor = "#333333";
+                look.border = "3px solid #000000";
+                look.color = "black";
+                look.boxShadow = "0 0 3px 1px black inset"
+            }
+            return look
+            }
+        },
+
+        // OPENS THE RIFT TO THE ALCHEMY ALTAR
+        1004: {
+            title() {return "???"},
+            canClick() {return player.btb.alcNodePartConverter.gte(4) && player.btb.alcNodePartCondenser.gte(4) && player.btb.alcNodePartGuider.gte(4)},
+            unlocked() {return player.btb.alcNodePartConverter.gte(4) && player.btb.alcNodePartCondenser.gte(4) && player.btb.alcNodePartGuider.gte(4)},
+            onClick() { 
+                // ???
+            },
+            style() {
+            let look = {width: '100px', minHeight: '50px', maxHeight: "50px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px"}
+            if (this.canClick()) {
+                look.background = "linear-gradient(to bottom, #8b609c, magenta, pink)";
+                look.borderColor = "transparent";
+                look.borderImage = "linear-gradient(to bottom, chartreuse, #00ff9d) 1";
+                look.color = "black";
+                look.boxShadow = "0 0 3px 1px black inset, 0 0 5px white"
+            } else {
+                look.backgroundColor = "#333333";
+                look.border = "3px solid #000000";
+                look.color = "black";
+                look.boxShadow = "0 0 3px 1px black inset"
+            }
+            return look
+            }
+        },
     },
+
     bars: {},
     upgrades: {},
     buyables: {},
     milestones: {},
     challenges: {},
     infoboxes: {},
+
     microtabs: {
         tabs: {
             "Conversion I": {
@@ -852,7 +1053,7 @@ addLayer("btb", {
                     ]
                 ]
             },
-            "Crafting": {
+            "Node Crafting": {
                 buttonStyle() { return {background: "linear-gradient(0deg, #000055 50%, #0000ff 100%)", border: "3px solid white", borderRadius: "1px 1px 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}},
                 unlocked() { return true },
                 content: [
@@ -916,27 +1117,35 @@ addLayer("btb", {
                         ["style-column", // will be able to allow the player to change blueprints once blueprint switching is implemented.
                             [
                                 // come back to this later
-                                ["raw-html", () => {return "<img src='resources/alchemyworld/" + symbolBlueprint[1] + ".png'></img>"}], 
-
-
+                                ["raw-html", () => {return "<img src='resources/alchemyworld/" + symbolBlueprint[player.btb.selectedBlueprintIndex] + ".png'></img>"}],
                                 ["blank", "5px"],
                                 ["raw-html", () => {return "<h2>Alchemical Node<br>Part Blueprint</h2><br><small>(Used as a guide)</small>"}], // Name will change depending on blueprint image.
                                 ["blank", "20px"],
                                 ["style-row",
                                     [
-                                        ["clickable", 8],
-                                        ["blank", "20px"],
-                                        ["clickable", 9]
+                                        ["clickable", 1000],
                                     ]
-                                ], {width: "447px", height: "0", marginLeft: "0"}
-                            ], {width: "447px", height: "500px", background: "#000055", backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 20px, white 21px, white 20px), repeating-linear-gradient(90deg, transparent, transparent 20px, #ffffff88 21px, #ffffff88 20px), radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}
+                                ],
+                                ["blank", "8px"],
+                                ["style-row",
+                                    [
+                                        ["clickable", 1001],
+                                        ["clickable", 1002],
+                                        ["clickable", 1003],
+                                    ]
+                                ]
+                            ], {width: "447px", height: "600px", background: "#000055", backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 20px, white 21px, white 20px), repeating-linear-gradient(90deg, transparent, transparent 20px, #ffffff88 21px, #ffffff88 20px), radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}
                         ],
                         ["style-column",
                             [
-                                ["clickable", 10],
+                                ["clickable", 7],
+                                ["clickable", 8],
+                                ["clickable", 9],
+                                ["blank", "20px"],
                                 "grid",
-                                ["clickable", 7]
-                            ], {width: "447px", height: "500px", background: "#000055", backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 20px, white 21px, white 20px), repeating-linear-gradient(90deg, transparent, transparent 20px, #ffffff88 21px, #ffffff88 20px), radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}
+                                ["blank", "20px"],
+                                ["clickable", 10]
+                            ], {width: "447px", height: "600px", background: "#000055", backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 20px, white 21px, white 20px), repeating-linear-gradient(90deg, transparent, transparent 20px, #ffffff88 21px, #ffffff88 20px), radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}
                         ]
                         ]
                     ]
@@ -959,7 +1168,11 @@ addLayer("btb", {
                     ["style-row", [
                         ["style-column",
                             [
-                                ["raw-html", () => {return "You have " + formatWhole(player.btb.alcNodePartConverter) + " Alchemical Node Converters."}, {color: "transparent", background: "white", fontSize: "20px", textStroke: "1px #cccccc", 'text-shadow': "0 0 5px black", backgroundClip: "text", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + formatWhole(player.btb.alcNodePartConverter) + " Alchemical Node -Converters-."}, {color: "transparent", background: "white", fontSize: "30px", textStroke: "1px #cccccc", 'text-shadow': "0 0 5px black", backgroundClip: "text", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + formatWhole(player.btb.alcNodePartCondenser) + " Alchemical Node -Condensers-."}, {color: "transparent", background: "white", fontSize: "30px", textStroke: "1px #cccccc", 'text-shadow': "0 0 5px black", backgroundClip: "text", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + formatWhole(player.btb.alcNodePartGuider) + " Alchemical Node -Guiders-."}, {color: "transparent", background: "white", fontSize: "30px", textStroke: "1px #cccccc", 'text-shadow': "0 0 5px black", backgroundClip: "text", fontFamily: "monospace"}],
+                                ["blank", "30px"],
+                                ["raw-html", () => {return "Check out the Knowledge Table Upgrades Tab if you have at least 4 of each Alchemical Node Part!<br><small>Something special is about to unfold when you unlock it! :D</small>"}, {color: "transparent", background: "white", fontSize: "20px", textStroke: "1px #cccccc", 'text-shadow': "0 0 5px black", backgroundClip: "text", fontFamily: "monospace"}]
                             ], {width: "900px", height: "500px", background: "#000055", backgroundImage: "radial-gradient(circle, transparent, #00000088)", border: "3px solid white", borderRadius: "0 0 0 0", boxShadow: "0 0 5px 5px #aaaaff inset, 0 0 10px 10px #0000aa inset, 0 0 10px 10px #ffffff50 inset"}
                         ],
                         ]

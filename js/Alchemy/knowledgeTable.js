@@ -94,7 +94,7 @@ addLayer("ktb", {
         },
         102: {
             title: "Starmetal Alteration",
-            unlocked() {return hasUpgrade("ktb", 101) && player.btb.alcNodePartConverter.gte(4)},
+            unlocked() {return hasUpgrade("ktb", 101) && player.btb.alcNodePartConverter.gte(4) && player.btb.alcNodePartCondenser.gte(4) && player.btb.alcNodePartGuider.gte(4)},
             description: "Unlocks Altered Starmetal Alloy and Altered Starmetal Essence.",
             cost: new Decimal(300),
             currencyLocation() {return player.ktb},
@@ -108,7 +108,7 @@ addLayer("ktb", {
         },
         103: {
             title: "Voidigenesis",
-            unlocked() {return hasUpgrade("ktb", 102)},
+            unlocked() {return false}, // hasUpgrade("ktb", 102)
             description: "Unlocks the Particle Accelerator blueprint.",
             cost: new Decimal(750),
             currencyLocation() {return player.ktb},
@@ -401,8 +401,9 @@ addLayer("ktb", {
     },
     2: {
             title: "Alchemical Nodes",
-            body() { return "???" }, // Appears when the 1st Alchemical Node part is crafted.
+            body() { return "The Alchemical Nodes are machines capable of transforming irregular Starmetal Alloys and their Essences into their altered versions by forcibly combining Core Fragments, Pylon Energy and Radiation.<br><br>They are built using Space Rocks and Space Dust as framing, Eclipse Shards and Space Gems as conductors, and Starmetal Alloys and Starmetal Essence as catalysts. Why Starmetal and why not other components?<br><br>Turns out that photons stored inside Starmetal are capable of travelling at the speed of light, which can be used like a pressure washer to combine superphysical values. But be careful, concentrating too much energy into an individual can be catastrophic.<br><br>No wonder why this dangerous knowledge was locked away by Philozoth. The capability to harm life using this technology has to be a factor for setting the limits too high."},
             unlocked() { return player.btb.alcNodePartConverter.gte(1) },
+            style: { "color": "pink", "backgroundColor": "#4f3658", "border": "2px solid #8b609c", "borderRadius": "10px 10px 0 0" }
     },
     3: {
             title: "The Basic Alchemical Elements, Classical",

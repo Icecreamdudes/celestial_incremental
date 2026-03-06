@@ -1,5 +1,5 @@
 addLayer("aal", {
-    name: "Alchemy Altar",
+    name: "The Alchemy Altar",
     symbol: "🝦",
     row: 3,
     universe: "LU",
@@ -11,7 +11,7 @@ addLayer("aal", {
         background: "#ffffff",
         borderColor: "white",
     },
-    tooltip: "Alchemy Altar",
+    tooltip: "The Alchemy Altar",
     color: "white",
     bars: {},
         layerShown() { return player.startedGame == true && hasUpgrade("ktb", 102)}

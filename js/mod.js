@@ -548,33 +548,9 @@ function updateStyles() {
 	    }
 	} else {
 		const grid = document.getElementById("grid-bg");
-    	if (grid) {grid.remove();
-		}
+    	if (grid) grid.remove();
 	}
 	
-// 	// Alchemical Symbol Animations! (Get a fix later!)
-// 	if (player.tab = "ktb") {
-// 		// Adds the Knowledge Table background if it does not already exist!
-// 		if (!document.getElementById("ktb-bg")) {
-// 			const knowledgeTableBackground = document.createElement("div");
-// 			knowledgeTableBackground.id = "ktb-bg";
-// 			knowledgeTableBackground.style.position = "fixed";
-// 			knowledgeTableBackground.style.top = "0";
-// 			knowledgeTableBackground.style.left = "0";
-// 			knowledgeTableBackground.style.width = "100%";
-// 			knowledgeTableBackground.style.height = "100%";
-// 			knowledgeTableBackground.style.overflow = "hidden";
-// 			knowledgeTableBackground.style.zIndex = "-2001"; // ensures that it stays in the background
-// 			knowledgeTableBackground.style.background = "linear-gradient(0deg, #140d07, #2c1807)";
-// 			document.body.appendChild(knowledgeTableBackground);
-
-// }
-// 	} else {
-// 		// Removes the background when outside of Knowledge Table!
-// 		const knowledgeTableBackground = document.getElementById("ktb-bg");
-// 		if (knowledgeTableBackground) {knowledgeTableBackground.remove()};
-// 	}
-
 	// ===------   SIDE BACKGROUND   ------=== //
 	let sideBG = ""
 

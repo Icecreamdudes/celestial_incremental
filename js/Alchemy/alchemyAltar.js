@@ -1,3 +1,6 @@
+
+// plan out how will we structure nodes here
+
 addLayer("aal", {
     name: "The Alchemy Altar",
     symbol: "🝦",

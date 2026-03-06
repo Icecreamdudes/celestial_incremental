@@ -550,7 +550,7 @@ function updateStyles() {
 		const grid = document.getElementById("grid-bg");
     	if (grid) grid.remove();
 	}
-	
+
 	// ===------   SIDE BACKGROUND   ------=== //
 	let sideBG = ""
 

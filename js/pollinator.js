@@ -187,7 +187,6 @@ addLayer("pol", {
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.pow(buyableEffect("cof", 16))
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.pow(levelableEffect("ir", 7)[0])
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.pow(player.cbs.pylonPassiveEffect)
-            player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.pow(buyableEffect("depth4", 3))
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.pow(levelableEffect("pet", 503)[2])
 
             // GAIN FUNCTIONS

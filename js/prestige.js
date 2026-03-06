@@ -113,6 +113,7 @@
 
         // START OF CRYSTAL MODIFIERS
         player.p.crystalsToGet = player.r.tier.pow(0.002).mul(4)
+        if (hasUpgrade("cs", 304)) player.p.crystalsToGet = player.p.crystalsToGet.pow(1.5)
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("id", 22))
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("r", 12))
         if (hasUpgrade("hpw", 1023)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("hpw", 1023))

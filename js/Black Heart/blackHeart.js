@@ -1045,8 +1045,8 @@ addLayer("bh", {
 
         let regenAdd = new Decimal(0)
         regenAdd = regenAdd.add(player.darkTemple.rgnAdd)
-        regenAdd = regenAdd.add(player.bh.skillData["general_scream"].maxLevel.div(20))
-        regenAdd = regenAdd.add(player.bh.skillData["kres_berserker"].maxLevel.div(20))
+        regenAdd = regenAdd.add(player.bh.skillData["general_scream"].maxLevel.div(40))
+        regenAdd = regenAdd.add(player.bh.skillData["kres_berserker"].maxLevel.div(40))
         regenAdd = regenAdd.add(buyableEffect("sme", 134))
         regenAdd = regenAdd.add(buyableEffect("depth4", 1).sub(1))
 

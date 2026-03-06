@@ -162,6 +162,7 @@
         // START OF STEEL MODIFIERS
         if (player.m.codeExperience.pow(0.08).lt("1e500")) player.gh.steelToGet = player.m.codeExperience.pow(0.08)
         if (player.m.codeExperience.pow(0.08).gte("1e500")) player.gh.steelToGet = Decimal.mul("1e500", player.m.codeExperience.plus(10).log10().pow(10))
+        if (hasUpgrade("cs", 604)) player.gh.steelToGet = player.gh.steelToGet.pow(2)
         if (hasUpgrade("bi", 107)) player.gh.steelToGet = player.gh.steelToGet.mul(upgradeEffect("bi", 107))
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("p", 14))
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("id", 21))
@@ -184,7 +185,7 @@
         player.gh.steelToGet = player.gh.steelToGet.pow(player.cof.coreFragmentEffects[2])
 
         // STEEL PER SECOND
-        if (hasUpgrade("sma", 103)) player.gh.steel = player.gh.steel.add(Decimal.mul(player.uni["U1"].tickspeed.mul(0.1), player.gh.steelToGet.mul(delta)))
+        if (hasUpgrade("sma", 103)) player.gh.steel = player.gh.steel.add(Decimal.mul(player.uni["U1"].tickspeed.div(10), player.gh.steelToGet.mul(delta)))
 
         // STEEL EFFECT
         player.gh.steelEffect = player.gh.steel.pow(0.75).add(1)

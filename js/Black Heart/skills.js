@@ -61,7 +61,7 @@ BHA.general_bandage = {
 BHA.general_scream = {
     name: "Scream",
     description() {return "Taunt damage and buffs towards yourself and give yourself " + formatSimple(new Decimal(0.5).add(player.bh.skillData["general_scream"].level.mul(0.1)), 2) + " regen for 10 seconds"},
-    passiveText() {return "+" + formatSimple(player.bh.skillData["general_scream"].maxLevel.div(20)) + " RGN"},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["general_scream"].maxLevel.div(40), 2) + " RGN"},
     char: "general",
     spCost: new Decimal(12),
     curCostBase: new Decimal(8),
@@ -249,7 +249,7 @@ BHA.kres_decapitate = {
 BHA.kres_berserker = {
     name: "Berserker",
     description() {return "Increases Kres' damage, agility, and regen by +" + formatWhole(new Decimal(50).add(player.bh.skillData["kres_berserker"].level.mul(10))) + "%, but gain the Berserk<small>[20%]</small> attribute"},
-    passiveText() {return "+" + formatSimple(player.bh.skillData["kres_berserker"].maxLevel.div(20), 2) + " RGN"},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["kres_berserker"].maxLevel.div(40), 2) + " RGN"},
     char: "kres",
     spCost: new Decimal(12),
     curCostBase: new Decimal(25),

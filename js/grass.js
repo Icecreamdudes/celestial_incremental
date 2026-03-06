@@ -1153,8 +1153,8 @@ addLayer('g', {
         },
         29: {
             costBase() { return new Decimal(100) },
-            costGrowth() { return new Decimal(10) },
-            purchaseLimit() { return new Decimal(24) },
+            costGrowth() { return hasUpgrade("cs", 504) ? new Decimal(100) : new Decimal(10) },
+            purchaseLimit() { return hasUpgrade("cs", 504) ? new Decimal(199) : new Decimal(24) },
             currency() { return player.g.moonstone},
             pay(amt) { player.g.moonstone = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).add(1) },

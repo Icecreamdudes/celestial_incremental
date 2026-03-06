@@ -539,14 +539,14 @@ addLayer("darkTemple", {
             purchaseLimit() { return player.darkTemple.runeCap },
             pay() {
                 player.stagnantSynestia.temporalDust = player.stagnantSynestia.temporalDust.sub(Decimal.pow(2.5, getBuyableAmount(this.layer, this.id)).mul(12).floor())
-                player.stagnantSynestia.temporalShard = player.stagnantSynestia.temporalShard.sub(Decimal.pow(2.5, getBuyableAmount(this.layer, this.id)).mul(4).floor())
+                player.stagnantSynestia.temporalShard = player.stagnantSynestia.temporalShard.sub(Decimal.pow(2, getBuyableAmount(this.layer, this.id)).mul(2).floor())
                 player.sme.starmetalEssence = player.sme.starmetalEssence.sub(Decimal.pow(5, getBuyableAmount(this.layer, this.id)).mul(100))
             },
             effect(x) {return getBuyableAmount(this.layer, this.id)},
             unlocked() {return player.darkTemple.selection == 4},
             canAfford() {
                 return player.stagnantSynestia.temporalDust.gte(Decimal.pow(2.5, getBuyableAmount(this.layer, this.id)).mul(12).floor())
-                && player.stagnantSynestia.temporalShard.gte(Decimal.pow(2.5, getBuyableAmount(this.layer, this.id)).mul(4).floor())
+                && player.stagnantSynestia.temporalShard.gte(Decimal.pow(2, getBuyableAmount(this.layer, this.id)).mul(2).floor())
                 && player.sme.starmetalEssence.gte(Decimal.pow(5, getBuyableAmount(this.layer, this.id)).mul(100))
             },
             display() {return "<div style='line-height:0.8'>Level Up<br><span style='font-size:10px'>[" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(player.darkTemple.runeCap) + "]</div>"},
@@ -642,7 +642,7 @@ addLayer("darkTemple", {
                                         break;
                                     case 4:
                                         cost1 = formatSimple(player.stagnantSynestia.temporalDust) + "/" + formatSimple(Decimal.pow(2.5, getBuyableAmount("darkTemple", 4)).mul(12).floor()) + "<br>Temporal Dust"
-                                        cost2 = formatSimple(player.stagnantSynestia.temporalShard) + "/" + formatSimple(Decimal.pow(2.5, getBuyableAmount("darkTemple", 4)).mul(4).floor()) + "<br>Temporal Shards"
+                                        cost2 = formatSimple(player.stagnantSynestia.temporalShard) + "/" + formatSimple(Decimal.pow(2, getBuyableAmount("darkTemple", 4)).mul(2).floor()) + "<br>Temporal Shards"
                                         cost3 = formatSimple(player.sme.starmetalEssence) + "/" + formatSimple(Decimal.pow(5, getBuyableAmount("darkTemple", 4)).mul(100)) + "<br>Starmetal Essence"
                                         break;
                                     case 5:

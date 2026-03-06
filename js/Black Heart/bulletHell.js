@@ -46,10 +46,12 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
 
     // Check if tabbed in, if not just deal a bunch of damage
     if (player && player.tab && player.tab != "bh") {
-        for (let i = 0; i < 3; i++) {
-            player.bh.characters[i].stun = ["hard", new Decimal(info.duration)]
+        if (!BHS[player.bh.currentStage].timeStagnation) {
+            for (let i = 0; i < 3; i++) {
+                player.bh.characters[i].stun = ["hard", new Decimal(info.duration)]
+            }
+            player.bh.celestialite.stun = ["hard", new Decimal(info.duration)]
         }
-        player.bh.celestialite.stun = ["hard", new Decimal(info.duration)]
         bhAttack(Decimal.mul(player.bh.celestialite.damage, info.duration/3), 3, "allPlayer")
         return
     }
@@ -1022,6 +1024,20 @@ if (storedInfo && storedInfo != "") {
                 localStorage.setItem('bhState', JSON.stringify(storedInfo));
             }, 500)
         }
+    } else {
+        setTimeout(() => {
+            if (player && player.subtabs && player.subtabs["bh"]["stuff"] == "bullet") {
+                player.subtabs["bh"]["stuff"] = "battle";
+                pauseUniverseAll(["BH"], "unpause", true)
+                player.universe = "U3"
+                bhState.active = false;
+                options.fullscreen = bhState.full;
+                if (storedInfo.exitAction) storedInfo.exitAction()
+                if (bhState.timed) bhAttack(Decimal.mul(player.bh.celestialite.damage, 3), 3, "allPlayer")
+                storedInfo.active = false
+                localStorage.setItem('bhState', JSON.stringify(storedInfo));
+            }
+        }, 1000)
     }
 }
 

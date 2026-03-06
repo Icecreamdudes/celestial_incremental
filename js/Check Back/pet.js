@@ -100,15 +100,15 @@ const fragShopBase = {
     },
     7: {
         name: "Eclipse",
-        0: new Decimal(2500),
-        1: new Decimal(2500),
-        2: new Decimal(2500),
+        0: new Decimal(4000),
+        1: new Decimal(2000),
+        2: new Decimal(1000),
     },
     8: {
         name: "Geroa",
-        0: new Decimal(2500),
-        1: new Decimal(2500),
-        2: new Decimal(2500),
+        0: new Decimal(4000),
+        1: new Decimal(2000),
+        2: new Decimal(1000),
     },
 }
 addLayer("pet", {

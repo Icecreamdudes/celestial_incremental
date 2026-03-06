@@ -1340,7 +1340,7 @@
         101: {
             costBase() { return new Decimal("1e10000") },
             costGrowth() { return new Decimal("1e10000") },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return hasUpgrade("depth4", 5) ? new Decimal(250) : new Decimal(100) },
             currency() { return player.points},
             pay(amt) { player.points = this.currency().sub(amt) },
             effect(x) { return Decimal.pow(player.f.factorBase.add(1).pow(4), getBuyableAmount(this.layer, this.id)).mul(1e40) },
@@ -1374,7 +1374,7 @@
         102: {
             costBase() { return new Decimal("1e10000") },
             costGrowth() { return new Decimal("1e10000") },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return hasUpgrade("depth4", 5) ? new Decimal(250) : new Decimal(100) },
             currency() { return player.p.prestigePoints},
             pay(amt) { player.p.prestigePoints = this.currency().sub(amt) },
             effect(x) { return Decimal.pow(player.f.factorBase.add(1).pow(4), getBuyableAmount(this.layer, this.id)).mul(1e20) },
@@ -1408,7 +1408,7 @@
         103: {
             costBase() { return new Decimal("1e1000") },
             costGrowth() { return new Decimal("1e1000") },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return hasUpgrade("depth4", 5) ? new Decimal(250) : new Decimal(100) },
             currency() { return player.g.grass},
             pay(amt) { player.g.grass = this.currency().sub(amt) },
             effect(x) { return Decimal.pow(player.f.factorBase.add(1).pow(2), getBuyableAmount(this.layer, this.id)).mul(1e15) },
@@ -1442,7 +1442,7 @@
         104: {
             costBase() { return new Decimal("1e1000") },
             costGrowth() { return new Decimal("1e1000") },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return hasUpgrade("depth4", 5) ? new Decimal(250) : new Decimal(100) },
             currency() { return player.gh.fertilizer},
             pay(amt) { player.gh.fertilizer = this.currency().sub(amt) },
             effect(x) { return Decimal.pow(player.f.factorBase.add(1).pow(2), getBuyableAmount(this.layer, this.id)).mul(1e15) },

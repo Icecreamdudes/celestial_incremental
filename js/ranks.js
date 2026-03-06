@@ -256,6 +256,7 @@
 
         for (let i = 0; i < 4; i++) {
             player.r.timeCubeEffects[i] = player.r.timeCubeEffects[i].pow(player.cs.scraps.point.effect)
+            if (hasUpgrade("cs", 104)) player.r.timeCubeEffects[i] = player.r.timeCubeEffects[i].pow(2)
         }
     },
     getRankReq(divider = new Decimal(1)) {

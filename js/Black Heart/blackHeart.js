@@ -1167,37 +1167,37 @@ addLayer("bh", {
         // =-- STORED STAT CALCULATIONS --=
         for (let i in player.bh.characterData) {
             // HEALTH
-            player.bh.characterData[i].health = run(BHP[i].health, BHP[i])
+            player.bh.characterData[i].health = run(BHP[i].health, BHP[i]) ?? new Decimal(0)
             player.bh.characterData[i].health = player.bh.characterData[i].health.mul(healthBase)
             player.bh.characterData[i].health = player.bh.characterData[i].health.add(healthAdd)
 
             // DAMAGE
-            player.bh.characterData[i].damage = run(BHP[i].damage, BHP[i])
+            player.bh.characterData[i].damage = run(BHP[i].damage, BHP[i]) ?? new Decimal(0)
             player.bh.characterData[i].damage = player.bh.characterData[i].damage.mul(damageBase)
             player.bh.characterData[i].damage = player.bh.characterData[i].damage.add(damageAdd)
 
             // DEFENSE
-            player.bh.characterData[i].defense = run(BHP[i].defense, BHP[i])
+            player.bh.characterData[i].defense = run(BHP[i].defense, BHP[i]) ?? new Decimal(0)
             player.bh.characterData[i].defense = player.bh.characterData[i].defense.mul(defenseBase)
             player.bh.characterData[i].defense = player.bh.characterData[i].defense.add(defenseAdd)
             
             // REGEN
-            player.bh.characterData[i].regen = run(BHP[i].regen, BHP[i])
+            player.bh.characterData[i].regen = run(BHP[i].regen, BHP[i]) ?? new Decimal(0)
             player.bh.characterData[i].regen = player.bh.characterData[i].regen.mul(regenBase)
             player.bh.characterData[i].regen = player.bh.characterData[i].regen.add(regenAdd)
             
             // AGILITY
-            player.bh.characterData[i].agility = run(BHP[i].agility, BHP[i])
+            player.bh.characterData[i].agility = run(BHP[i].agility, BHP[i]) ?? new Decimal(0)
             player.bh.characterData[i].agility = player.bh.characterData[i].agility.mul(agilityBase)
             player.bh.characterData[i].agility = player.bh.characterData[i].agility.add(agilityAdd)
             
             // LUCK
-            player.bh.characterData[i].luck = run(BHP[i].luck, BHP[i])
+            player.bh.characterData[i].luck = run(BHP[i].luck, BHP[i]) ?? new Decimal(0)
             player.bh.characterData[i].luck = player.bh.characterData[i].luck.mul(luckBase)
             player.bh.characterData[i].luck = player.bh.characterData[i].luck.add(luckAdd)
             
             // MENDING
-            player.bh.characterData[i].mending = run(BHP[i].mending, BHP[i])
+            player.bh.characterData[i].mending = run(BHP[i].mending, BHP[i]) ?? new Decimal(0)
             player.bh.characterData[i].mending = player.bh.characterData[i].mending.mul(mendingBase)
             player.bh.characterData[i].mending = player.bh.characterData[i].mending.add(mendingAdd)
 

@@ -113,7 +113,21 @@ Stage information is stored in both its relevant layer, and a static stage objec
 
 ### Stage Layer
 
+I'd recommend you to copy one of the other layers, and replace what you need to replace. Even so, I will explain some important aspects used in the stage layers:
 
+startData Variables:
+
+- highestCombo: If added to startData, it will automatically update whenever you reach a combo value higher then the current value in highestCombo while in that stage.
+
+- comboStart: If added to startData, you will start at that combo value when entering your stage.
+
+- milestone: An object holding combo milestones. The id is the combo value that the milestone triggers at, and the variable is the tier of the milestone. (tiers are decided by how many characters you currently have when you reach that milestone)
+
+Other stuff:
+
+- BHStageEnter(id): This function puts you into your stage. The id is the same as the layer id of the stage.
+
+- bh-milestone: A custom layer component that simplifies adding the fancy milestones. First value is the combo milestone value, second is the stage id, and third is additional text you might want to add to the milestone.
 
 ### Stage Layer Connections
 
@@ -122,10 +136,6 @@ The stage layer needs to be connected to multiple places in order to function.
 2. Second is embedding the layer into black heart layers stage microtabs. (Just copy one of the other ones and replace the id)
 3. Third is adding the layer id to one of black heart universes tree arrays in `js/technical/uniSupport.js`.
 4. Last is adding the file location of the file holding the layer to `mod.js`'s modFiles array.
-
-### Black Heart Currencies
-
-
 
 ### Stage Static Object
 
@@ -180,3 +190,13 @@ Features:
 - timeStagnantion: *optional* Decides if the stage property "Time Stagnation" is active. Stored as a boolean.
 
 - generateCelestialite(combo): Function that is called to decide what celestialite will be generated while in this stage. Should return a string of the celestialites id.
+
+### Black Heart Currencies
+
+In order to add a black heart currency as a celestialite reward, you need add code to handle giving it as a reward from a celestial. This is done in `js/Black Heart/blackHeartFunctions.js` at the `celestialReward()` function. Below is an example of what would be added to that function.
+```js
+if (gain.darkEssence) {
+    player.bh.darkEssence = player.bh.darkEssence.add(gain.darkEssence).mul(generalMult).floor()
+    bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.darkEssence) + " dark essence! (You have " + formatWhole(player.bh.darkEssence) + ")")
+}
+```

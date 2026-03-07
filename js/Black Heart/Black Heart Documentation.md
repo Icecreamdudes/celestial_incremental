@@ -55,11 +55,11 @@ Stats past this point are unlocked later into the game:
 
 - mending: Base character mending
 
-### Character characterData Object
+### characterData Object
 
-The character characterData object (Stored in `js/Black Heart/blackHeart.js`, under the startData function and characterData object), stores whether the character is selected, the characters currently selected skills, how many skill points the character has consumed to equip skills, and temp stat values. The objects name should be the characters id in string format. You generally want to already have their initial skill equipped in the start data to prevent confusion.
+The characterData object (Stored in `js/Black Heart/blackHeart.js`, under the startData function and characterData object), stores whether the character is selected, the characters currently selected skills, how many skill points the character has consumed to equip skills, and temp stat values. The objects name should be the characters id in string format. You generally want to already have their initial skill equipped in the start data to prevent confusion.
 
-Character characterData objects should be formatted like this:
+characterData objects should be formatted like this:
 
 ```js
 "general": {
@@ -194,9 +194,78 @@ Features:
 ### Black Heart Currencies
 
 In order to add a black heart currency as a celestialite reward, you need add code to handle giving it as a reward from a celestial. This is done in `js/Black Heart/blackHeartFunctions.js` at the `celestialReward()` function. Below is an example of what would be added to that function.
+
 ```js
 if (gain.darkEssence) {
     player.bh.darkEssence = player.bh.darkEssence.add(gain.darkEssence).mul(generalMult).floor()
     bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.darkEssence) + " dark essence! (You have " + formatWhole(player.bh.darkEssence) + ")")
 }
 ```
+
+
+
+## Skills
+
+Skills are split into two parts. First is the skill static object, which holds the majority of information relating to the skill. Second is the skillData object, which holds saved data for the skill. The skill static object also holds an action that is triggered, which the functions behind that will be in its own category, as both skills and celestialite attacks use the same code.
+
+### skillData Object
+
+The skillData object (Stored in `js/Black Heart/blackHeart.js`, under the startData function and skillData object), is an object that stores if a skill has been selected (and where it was selected), its current level, and its max level. They are all exactly the same except for their ids, which are the same as the skill id. Below is an example of a skillData object:
+
+```js
+"general_slap": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+```
+
+If you make a skill be equipped at the start for a character, you will need to change the `"none"` in selected to the relevant character id.
+
+### Skill Static Object
+
+The skill static object (usually stored in `js/Black Heart/skills.js`), stores the majority of the information that makes your skills work. The objects name will be the skills id. All skills are put into the main object BHA to allow for easy access across files.
+
+Skill static objects should be formatted like this:
+
+```js
+BHA.general_slap = {
+    name: "Slap",
+    description() {return "Deals " + formatWhole(new Decimal(75).add(player.bh.skillData["general_slap"].level.mul(15))) + "% physical damage and soft-stuns the celestialite for a second."},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["general_slap"].maxLevel.div(5)) + " DMG"},
+    char: "general",
+    spCost: new Decimal(6),
+    curCostBase: new Decimal(3),
+    curCostScale: new Decimal(3),
+    currency: "darkEssence",
+    unlocked() {return hasUpgrade("depth1", 4)},
+
+    // PUT ACTION CODE HERE
+}
+```
+
+Features:
+
+- name: Name of the skill, in string format.
+
+- description: The description of what the skill does. Used in tooltips and on the skills page. Usually a function.
+
+- passiveText: The text that describes the passive effect of the skill. Usually a function.
+
+- char: The character id for the skill. If the skill is able to be used by all characters, the id should be set to `"general"`
+
+- spCost: The base skill point cost of the skill, in Decimal format.
+
+- curCostBase: The base cost of increasing the max level of the skill, in Decimal format.
+
+- curCostScale: The amount the cost is multiplied by per level when increasing the max level of the skill, in Decimal format.
+
+- currency: The currency used for increasing the max level of the skill. Calls an id that is in the `BH_CURRENCY` object in `js/Black Heart/blackHeart.js`
+
+- unlocked: Decides whether the skill is currently unlocked or not (Works the same as components)
+
+After this is putting in an action for the skill to do. Action code is described in a seperate section, as it is used for both skills and celestialite attacks.
+
+### Skill Level Up Currency Array
+
+In `js/Black Heart/blackHeart.js`, there is an object named `BH_CURRENCY`. That object defines the currencies that you can use for increasing the max level of skills. Within the object are keys holding arrays that are named after the variable of that currency. Within those arrays are two properties. The first property holds the display text for the currency. The second holds the layer id for where the currency is.
+
+
+
+## Celestialites

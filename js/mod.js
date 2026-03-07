@@ -1847,13 +1847,13 @@ function fixOldSave(oldVersion){
 			player.bh.unlockConditions.replicanti = player.ma.matosUnlockConditions[2]
 			player.bh.unlockConditions.points = player.ma.matosUnlockConditions[3]
 		}
-		player.depth1.gloomingUmbrite = Decimal.pow(player.ma.commonMatosFragments, 0.7)
-		player.depth1.dimUmbrite = Decimal.pow(player.ma.commonMatosFragments, 0.5)
-		player.depth2.faintUmbrite = Decimal.pow(player.ma.rareMatosFragments, 0.9)
-		player.depth2.clearUmbrite = Decimal.pow(player.ma.rareMatosFragments, 0.7)
-		player.depth3.vividUmbrite = new Decimal(player.ma.epicMatosFragments)
-		player.depth3.lustrousUmbrite = Decimal.pow(player.ma.epicMatosFragments, 0.8)
-		player.bh.darkEssence = new Decimal(player.ma.legendaryMatosFragments)
+		player.depth1.gloomingUmbrite = new Decimal(player.ma.commonMatosFragments).floor()
+		player.depth1.dimUmbrite = Decimal.pow(player.ma.commonMatosFragments, 0.7).floor()
+		player.depth2.faintUmbrite = new Decimal(player.ma.rareMatosFragments).floor()
+		player.depth2.clearUmbrite = Decimal.pow(player.ma.rareMatosFragments, 0.7).floor()
+		player.depth3.vividUmbrite = new Decimal(player.ma.epicMatosFragments).floor()
+		player.depth3.lustrousUmbrite = Decimal.pow(player.ma.epicMatosFragments, 0.7).floor()
+		player.bh.darkEssence = Decimal.pow(player.ma.legendaryMatosFragments, 1.5).floor()
 		// Depth 1
 		player.depth1.highestCombo = new Decimal(player.ma.bestComboDepth1).min(250)
 		for (let i in player.depth1.milestone) {

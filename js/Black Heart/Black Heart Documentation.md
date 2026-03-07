@@ -1,12 +1,12 @@
 # Black Heart
 
-Welcome to the documentation for black heart. I have tried to make it as easy to understand/handle as possible, but I am just one person, so ... yeah. I have split this into the different categories, from smallest to biggest.
+Welcome to the documentation for Black Heart. I have tried to make it as easy to understand/handle as possible, but I am just one person, so ... yeah. I have split this into the different categories, from smallest to biggest.
 
 
 
 ## Characters
 
-Character information is stored in two locations. First is the static object, which has information that is **not stored**. Second is the characterData object that stores general character data.
+Character information is stored in two locations. First is the static object, which has information that is **not saved**. Second is the characterData object that stores general saved character data.
 
 ### Character Static Object
 

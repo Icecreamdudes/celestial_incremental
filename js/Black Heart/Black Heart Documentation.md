@@ -29,9 +29,9 @@ Features:
 
 - name: Stores the characters name in string format.
 
-- color: Stores the color used for the characters skills and action messages.
+- color: Stores the color used for the characters skills and action messages in string format.
 
-- icon: Stores the file location of the characters image.
+- icon: Stores the file location of the characters image in string format.
 
 All base stats can be either a function, or a Decimal object. They also can all be optional, and will be set to 0 if not set.
 
@@ -41,7 +41,7 @@ All base stats can be either a function, or a Decimal object. They also can all 
 
 - defense: Base character defense
 
-- regen: Base character regen (in amount per second)
+- regen: Base character regen (in health per second)
 
 - agility: Base character agility
 

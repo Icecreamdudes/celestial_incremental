@@ -109,9 +109,29 @@ After this point are just variables to store temporary stat values.
 
 ## Stages
 
-Stage objects (Usually stored in corresponding layer files in `js/Black Heart/`), store the stages name, music location, properties, and celestialite choice code. The objects name will be the same as the `player.bh.currentStage` id for the stage. All stage objects are put into the main object BHS to allow for easy access across files.
+Stage information is stored in both its relevant layer, and a static stage object. On top of that, the layer has to be connected to multiple parts in order for it to show up. I also made a section explaining how to add currencies.
 
-Stages should be formatted like this:
+### Stage Layer
+
+
+
+### Stage Layer Connections
+
+The stage layer needs to be connected to multiple places in order to function.
+1. First is adding the layer id to the innerNodes array at the top of the black heart layer in `js/Black Heart/blackHeart.js`.
+2. Second is embedding the layer into black heart layers stage microtabs. (Just copy one of the other ones and replace the id)
+3. Third is adding the layer id to one of black heart universes tree arrays in `js/technical/uniSupport.js`.
+4. Last is adding the file location of the file holding the layer to `mod.js`'s modFiles array.
+
+### Black Heart Currencies
+
+
+
+### Stage Static Object
+
+The stage static object (Usually stored in corresponding layer files in `js/Black Heart/`), store the stages name, music location, properties, and celestialite choice code. The objects name will be the same as the stage layer id. All stage objects are put into the main object BHS to allow for easy access across files.
+
+Stage static objects should be formatted like this:
 
 ```js
 BHS.template = {

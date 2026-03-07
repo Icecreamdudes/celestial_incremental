@@ -14,22 +14,22 @@ BHS.template = {
     nameCap: "Stage template",
     nameLow: "stage template",
     music: "music/enteringBlackHeart.mp3",
-    cooldown: new Decimal(300),
     comboLimit: 500,
     comboScaling: 1.015,
     comboScalingStart: 100,
     healthDrain: new Decimal(1),
     timer: new Decimal(300),
     generateCelestialite(combo) {
-        let random = Math.random()
-
-        // Check for miniboss round
-        if (combo%25 == 24) {
-            return "template"
+        if (typeof combo == "object") combo = combo.toNumber()
+        switch (combo) {
+            case 24:
+                return "template"
+            default:
+                let random = Math.random()
+                let cel = ["template", "template", "template"]
+                if (combo >= 25) cel.push("template")
+                return cel[Math.floor(Math.random()*cel.length)]
         }
-
-        // Regular Rounds
-        return "template"
     },
 }
 

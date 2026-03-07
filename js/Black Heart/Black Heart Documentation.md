@@ -6,7 +6,7 @@ Welcome to the documentation for black heart. I have tried to make it as easy to
 
 ## Characters
 
-Character objects (Usually stored in `characters.js`), store the name, color, icon, and base stats of a character. The objects name will be the id generally used for that character. All character objects are put into the main object BHP to allow for easy access across files.
+Character objects (Usually stored in `js/Black Heart/characters.js`), store the name, color, icon, and base stats of a character. The objects name will be the id generally used for that character. All character objects are put into the main object BHP to allow for easy access across files.
 
 Characters should be formatted like this:
 
@@ -37,21 +37,21 @@ All base stats can be either a function, or a Decimal object. They also can all 
 
 Stats:
 
-- health: base character max health
+- health: Base character max health
 
-- damage: base character damage
+- damage: Base character damage
 
-- defense: base character defense
+- defense: Base character defense
 
-- regen: base character regen (in amount per second)
+- regen: Base character regen (in amount per second)
 
-- agility: base character agility
+- agility: Base character agility
 
-- luck: base character luck
+- luck: Base character luck
 
 Stats past this point are unlocked later into the game:
 
-- mending: base character mending
+- mending: Base character mending
 
 
 

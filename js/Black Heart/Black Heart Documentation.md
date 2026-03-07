@@ -6,9 +6,13 @@ Welcome to the documentation for black heart. I have tried to make it as easy to
 
 ## Characters
 
-Character objects (Usually stored in `js/Black Heart/characters.js`), store the name, color, icon, and base stats of a character. The objects name will be the id generally used for that character. All character objects are put into the main object BHP to allow for easy access across files.
+Character information is stored in two locations. First is the static object, which has information that is **not stored**. Second is the characterData object that stores general character data.
 
-Characters should be formatted like this:
+### Character Static Object
+
+The character static object (Usually stored in `js/Black Heart/characters.js`), stores the name, color, icon, and base stats of a character. The objects name will be the id generally used for that character. All character static objects are put into the main object BHP to allow for easy access across files.
+
+Character static objects should be formatted like this:
 
 ```js
 BHP.general = {
@@ -50,6 +54,56 @@ All base stats can be either a function, or a Decimal object. They also can all 
 Stats past this point are unlocked later into the game:
 
 - mending: Base character mending
+
+### Character characterData Object
+
+The character characterData object (Stored in `js/Black Heart/blackHeart.js`, under the startData function and characterData object), stores whether the character is selected, the characters currently selected skills, how many skill points the character has consumed to equip skills, and temp stat values. The objects name should be the characters id in string format. You generally want to already have their initial skill equipped in the start data to prevent confusion.
+
+Character characterData objects should be formatted like this:
+
+```js
+"general": {
+    selected: false,
+    skills: {
+        0: "general_slap",
+        1: "none",
+        2: "none",
+        3: "none",
+    },
+    usedSP: new Decimal(6),
+    health: new Decimal(100),
+    damage: new Decimal(10),
+    defense: new Decimal(10),
+    regen: new Decimal(1),
+    agility: new Decimal(10),
+    luck: new Decimal(10),
+    mending: new Decimal(0),
+},
+```
+
+Features:
+
+- selected: Decides whether the character is currently selected or not. Stored in boolean format.
+
+- skills: Object that decides what skills are in each slot. Stored as a string. If no skill is equipped, the value should be "none".
+
+- usedSP: Variable used to store how many skill points have been consumed by equipping skills. Stored in Decimal format.
+
+After this point are just variables to store temporary stat values.
+
+- health: Stores temporary health value
+
+- damage: Stores temporary damage value
+
+- defense: Stores temporary defense value
+
+- regen: Stores temporary regen value
+
+- agility: Stores temporary agility value
+
+- luck: Stores temporary luck value
+
+- mending: Stores temporary mending value
 
 
 

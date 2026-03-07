@@ -35,8 +35,6 @@ Features:
 
 All base stats can be either a function, or a Decimal object. They also can all be optional, and will be set to 0 if not set.
 
-Stats:
-
 - health: Base character max health
 
 - damage: Base character damage

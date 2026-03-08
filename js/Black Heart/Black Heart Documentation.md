@@ -334,3 +334,24 @@ Features:
 
 ## Attributes
 
+Attributes are used to give a character/celestialite a non-action specific effect. They can either start with an attribute, or have it be given via an action. Attributes have a value that allow you to modify the effects of the attribute. Below is a list of the attributes:
+
+- Air ≋ - Multiplies incoming melee damage by the attribute value.
+
+- Warded ⬢ - Multiplies incoming magic damage by the attribute value.
+
+- Stealthy ☉ - Multiplies incoming ranged damage by the attribute value.
+
+- Berserk ✹ - Actions always give self damage equal to the attribute value.
+
+- Rebound ⭟ - When attacked, the damage multiplied by the attribute value is also dealt to the attacker.
+
+- Explosive ✺ - Explodes upon death, dealing the attribute value worth of damage to all characters.
+
+- Taunt ✛ - Directs some actions towards themselves. (Value does nothing)
+
+- Daze ꩜ - All actions have a chance to miss, decided by the attribute value and the character/celestialites luck.
+
+
+
+## Actions

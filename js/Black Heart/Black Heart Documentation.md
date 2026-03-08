@@ -269,3 +269,68 @@ In `js/Black Heart/blackHeart.js`, there is an object named `BH_CURRENCY`. That 
 
 
 ## Celestialites
+
+Celestialites are all one simple object. The objects name is used as the celestialites id, and is put into the BHC object for easy access across files. Action and attribute code is seperated into its own categories due to it being used in multiple places. Below is an example of a celestialite object:
+
+```js
+BHC.lesserAlpha = {
+    name: "Celestialite Lesser Alpha",
+    symbol: "⇓α",
+    style: {
+        background: "linear-gradient(90deg, #830000, #DE0000)",
+        color: "black",
+        borderColor: "#430001",
+    },
+    health: new Decimal(70),
+    damage: new Decimal(6),
+    attributes: {
+        // ATTRIBUTE CODE HERE
+    },
+    actions: {
+        0: {
+            // ACTION CODE HERE
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.7) {
+            gain.gloomingUmbrite = Decimal.add(8, getRandomInt(5))
+        } else {
+            gain.dimUmbrite = Decimal.add(1, getRandomInt(1))
+        }
+        return gain
+    },
+}
+```
+
+Features:
+
+- name: The display name of the celestialite, in string format.
+
+- symbol: The symbol used on the celestialites icon, in string format. (Replaced if icon parameter is used)
+
+- icon: Overrides the symbol parameter to instead display an image for the celestialites icon. Stored as the file path in string format.
+
+- style: Changes the CSS style of the celestialite icon. (Using the usual object format)
+
+- noRandomStats: A boolean that prevents the slight randomization of celestialite stats.
+
+- immortal: A boolean that prevents death via the celestialite reaching zero health. Generally used to prevent the celestialite from dying before doing a "final attack".
+
+- Most stats can be applied to the celestialite, not going to list all the stats.
+
+- attributes: *optional* An object that holds attributes for the celestialite to start with. Attributes are listed in a seperate section.
+
+- actions: An object that holds actions for the celestial to use. You can give a celestialite up to 4 actions, with each action object being named 0-3.
+
+- reward(): A function that decides what rewards the celestialite will give. Needs to return an object with keys using the id's of black heart currencies (Described as a category under stages)
+
+- onSpawn(): *optional* A function that triggers on the spawn of the celestialite.
+
+- onDeath(): *optional* A function that triggers on the death of the celestialite.
+
+
+
+## Attributes
+

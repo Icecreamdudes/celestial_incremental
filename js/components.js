@@ -425,6 +425,25 @@ function loadVue() {
 	})
 
 	// data = id
+	Vue.component('hoverless-upgrade', {
+		props: ['layer', 'data'],
+		template: `
+		<button v-if="tmp[layer].upgrades && tmp[layer].upgrades[data]!== undefined && tmp[layer].upgrades[data].unlocked" :id='"upgrade-" + layer + "-" + data' v-on:click="buyUpg(layer, data)" v-bind:class="{ [layer]: true, tooltipBox: true, upg: true, bought: hasUpgrade(layer, data), locked: (!(canAffordUpgrade(layer, data))&&!hasUpgrade(layer, data)), canHoverless: (canAffordUpgrade(layer, data)&&!hasUpgrade(layer, data))}"
+			v-bind:style="[((!hasUpgrade(layer, data) && canAffordUpgrade(layer, data)) ? {'background-color': tmp[layer].color} : {}), run(layers[layer].upgrades[data].style, layers[layer].upgrades[data])]">
+			<span v-if="layers[layer].upgrades[data].fullDisplay" v-html="run(layers[layer].upgrades[data].fullDisplay, layers[layer].upgrades[data])"></span>
+			<span v-else>
+				<span v-if= "layers[layer].upgrades[data].title"><h3 v-html="run(layers[layer].upgrades[data].title, layers[layer].upgrades[data])"></h3><br></span>
+				<span v-html="run(layers[layer].upgrades[data].description, layers[layer].upgrades[data])"></span>
+				<span v-if="layers[layer].upgrades[data].effectDisplay"><br>Currently: <span v-html="run(layers[layer].upgrades[data].effectDisplay, layers[layer].upgrades[data])"></span></span>
+				<br><br>Cost: {{ formatWhole(tmp[layer].upgrades[data].cost) }} {{(tmp[layer].upgrades[data].currencyDisplayName ? tmp[layer].upgrades[data].currencyDisplayName : tmp[layer].resource)}}
+			</span>
+			<tooltip v-if="layers[layer].upgrades[data].tooltip" :text="run(layers[layer].upgrades[data].tooltip, layers[layer].upgrades[data])"></tooltip>
+
+			</button>
+		`
+	})
+
+	// data = id
 	Vue.component('bt-upgrade', {
 		props: ['layer', 'data'],
 		template: `

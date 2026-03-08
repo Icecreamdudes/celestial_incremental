@@ -53,19 +53,19 @@ addLayer("ep1", {
                 current: new Decimal(0),
                 max: new Decimal(60),
                 base: new Decimal(30),
-                platinumSC: new Decimal(0.1),
+                platinumSC: new Decimal(0.01),
             },
             1: {
                 current: new Decimal(0),
                 max: new Decimal(720),
                 base: new Decimal(270),
-                platinumSC: new Decimal(0.1),
+                platinumSC: new Decimal(0.05),
             },
             2: {
                 current: new Decimal(0),
                 max: new Decimal(8640),
                 base: new Decimal(2430),
-                platinumSC: new Decimal(0.1),
+                platinumSC: new Decimal(0.25),
             },
         },
 
@@ -75,9 +75,29 @@ addLayer("ep1", {
         fireEffect: new Decimal(0),
 
         platinumShards: new Decimal(0),
-        platinumShardPity: 0,
+        platinumShardPity: new Decimal(0),
+
+        platinumTimers: {
+            0: {
+                current: new Decimal(0),
+                max: new Decimal(21600),
+                base: new Decimal(1),
+            },
+            1: {
+                current: new Decimal(0),
+                max: new Decimal(54000),
+                base: new Decimal(2),
+            },
+            2: {
+                current: new Decimal(0),
+                max: new Decimal(108000),
+                base: new Decimal(3),
+            },
+        },
 
         goldBuyableBase: new Decimal(1.01),
+
+        upgrade201Effect: new Decimal(1),
 
         isInThisTab: false,
         wasInThisTab: false,
@@ -103,7 +123,11 @@ addLayer("ep1", {
         player.ep1.goldToGet = player.ep1.goldToGet.mul(upgradeEffect("ep2", 10))
         player.ep1.goldToGet = player.ep1.goldToGet.mul(buyableEffect("sp", 23))
         player.ep1.goldToGet = player.ep1.goldToGet.mul(buyableEffect("pet", 5))
+        player.ep1.goldToGet = player.ep1.goldToGet.mul(buyableEffect("ep1", 201))
+        player.ep1.goldToGet = player.ep1.goldToGet.mul(buyableEffect("ep1", 204))
+        player.ep1.goldToGet = player.ep1.goldToGet.mul(buyableEffect("ep1", 206))
         if (hasUpgrade("ev8", 21)) player.ep1.goldToGet = player.ep1.goldToGet.mul(1.4)
+
         player.ep1.gold = player.ep1.gold.add(player.ep1.goldToGet.mul(delta))
 
         // GOLD BUTTONS
@@ -111,19 +135,35 @@ addLayer("ep1", {
         player.ep1.goldTimers[0].base = new Decimal(30)
         player.ep1.goldTimers[1].base = new Decimal(270)
         player.ep1.goldTimers[2].base = new Decimal(2430)
+        player.ep1.platinumTimers[0].base = new Decimal(1)
+        player.ep1.platinumTimers[1].base = new Decimal(2)
+        player.ep1.platinumTimers[2].base = new Decimal(3)
 
         player.ep1.goldTimers[0].max = new Decimal(60)
         player.ep1.goldTimers[1].max = new Decimal(720)
         player.ep1.goldTimers[2].max = new Decimal(8640)
+        player.ep1.platinumTimers[0].max = new Decimal(21600)
+        player.ep1.platinumTimers[1].max = new Decimal(54000)
+        player.ep1.platinumTimers[2].max = new Decimal(86400)
 
-        player.ep1.goldTimers[0].platinumSC = new Decimal(0.1)
-        player.ep1.goldTimers[1].platinumSC = new Decimal(1)
-        player.ep1.goldTimers[2].platinumSC = new Decimal(10)
+        player.ep1.goldTimers[0].platinumSC = new Decimal(0.01)
+        player.ep1.goldTimers[1].platinumSC = new Decimal(0.05)
+        player.ep1.goldTimers[2].platinumSC = new Decimal(0.25)
         
         for (let i in player.ep1.goldTimers) {
             player.ep1.goldTimers[i].max = player.ep1.goldTimers[i].max.div(buyableEffect("pet", 6))
+            player.ep1.goldTimers[i].max = player.ep1.goldTimers[i].max.div(player.ep1.upgrade201Effect)
 
             player.ep1.goldTimers[i].current = player.ep1.goldTimers[i].current.sub(onepersec.mul(delta))
+        }
+        for (let i in player.ep1.platinumTimers) {
+            player.ep1.platinumTimers[i].max = player.ep1.platinumTimers[i].max.div(buyableEffect("pet", 6))
+
+            player.ep1.platinumTimers[i].current = player.ep1.platinumTimers[i].current.sub(onepersec.mul(delta))
+        }
+        if (player.ep1.platinumShardPity.gte(100)) {
+            player.ep1.platinumShards = player.ep1.platinumShards.add(player.ep1.platinumShardPity.div(100).floor())
+            player.ep1.platinumShardPity = new Decimal(0)
         }
 
         // GOLD BUYABLES
@@ -137,12 +177,18 @@ addLayer("ep1", {
         player.ep1.fireToGet = player.ep1.baseFireToGet
         player.ep1.fireToGet = player.ep1.fireToGet.mul(buyableEffect("ep1", 101))
         player.ep1.fireToGet = player.ep1.fireToGet.mul(buyableEffect("ep1", 14))
+        player.ep1.fireToGet = player.ep1.fireToGet.mul(buyableEffect("ep1", 202))
+        player.ep1.fireToGet = player.ep1.fireToGet.mul(buyableEffect("ep1", 205))
         if (player.ep1.dragonEvolutionIndex >= 2) player.ep1.fire = player.ep1.fire.add(player.ep1.fireToGet.mul(delta));
 
         // FIRE EFFECT
 
-        player.ep1.fireEffect = Decimal.pow(10, player.ep1.fire.add(1).log(10).pow(0.75)).pow(0.25)
+        player.ep1.fireEffect = Decimal.pow(10, player.ep1.fire.add(1).log(10).pow(0.75)).pow(0.2)
         player.ep1.fireEffect = player.ep1.fireEffect.pow(buyableEffect("ep1", 103))
+
+        // OTHER EFFECTS
+
+        player.ep1.upgrade201Effect = player.sma.starmetalAlloy.add(1).log10().pow(1.25).div(10).add(1)
 
         // SCROLLING CONTAINER
         player.ep1.isInThisTab = player.tab == "ep1"
@@ -185,6 +231,13 @@ addLayer("ep1", {
                 player.ep1.goldTimers[0].current = player.ep1.goldTimers[0].max
 
                 player.ep1.gold = player.ep1.gold.add(player.ep1.goldToGet.mul(player.ep1.goldTimers[0].base))
+
+                if (Math.random() < player.ep1.goldTimers[0].platinumSC) {
+                    player.ep1.platinumShards = player.ep1.platinumShards.add(1)
+                    player.ep1.platinumShardPity = new Decimal(0)
+                } else {
+                    player.ep1.platinumShardPity = player.ep1.platinumShardPity.add(player.ep1.goldTimers[0].platinumSC.mul(100))
+                }
             },
             onHold() {},
             style() {
@@ -212,6 +265,13 @@ addLayer("ep1", {
                 player.ep1.goldTimers[1].current = player.ep1.goldTimers[1].max
 
                 player.ep1.gold = player.ep1.gold.add(player.ep1.goldToGet.mul(player.ep1.goldTimers[1].base))
+
+                if (Math.random() < player.ep1.goldTimers[1].platinumSC) {
+                    player.ep1.platinumShards = player.ep1.platinumShards.add(1)
+                    player.ep1.platinumShardPity = new Decimal(0)
+                } else {
+                    player.ep1.platinumShardPity = player.ep1.platinumShardPity.add(player.ep1.goldTimers[1].platinumSC.mul(100))
+                }
             },
             onHold() {},
             style() {
@@ -239,6 +299,13 @@ addLayer("ep1", {
                 player.ep1.goldTimers[2].current = player.ep1.goldTimers[2].max
 
                 player.ep1.gold = player.ep1.gold.add(player.ep1.goldToGet.mul(player.ep1.goldTimers[2].base))
+
+                if (Math.random() < player.ep1.goldTimers[2].platinumSC) {
+                    player.ep1.platinumShards = player.ep1.platinumShards.add(1)
+                    player.ep1.platinumShardPity = new Decimal(0)
+                } else {
+                    player.ep1.platinumShardPity = player.ep1.platinumShardPity.add(player.ep1.goldTimers[2].platinumSC.mul(100))
+                }
             },
             onHold() {},
             style() {
@@ -256,13 +323,15 @@ addLayer("ep1", {
                 if (this.canClick()) {
                     return "<h2>+1 Platinum Shard.</h2>"
                 } else {
-                    return "<h2>Check back in " + formatTime(player.ep1.goldTimers[0].current) + ".</h2>"
+                    return "<h2>Check back in " + formatTime(player.ep1.platinumTimers[0].current) + ".</h2>"
                 }
             },
-            canClick() { return player.ep1.goldTimers[0].current.lte(0) },
+            canClick() { return player.ep1.platinumTimers[0].current.lte(0) },
             unlocked() { return getLevelableTier("pet", 402).gte(1) },
             onClick() {
-                player.ep1.goldTimers[0].current = player.ep1.goldTimers[0].max
+                player.ep1.platinumTimers[0].current = player.ep1.platinumTimers[0].max
+
+                player.ep1.platinumShards = player.ep1.platinumShards.add(player.ep1.platinumTimers[0].base)
             },
             onHold() {},
             style() {
@@ -280,13 +349,15 @@ addLayer("ep1", {
                 if (this.canClick()) {
                     return "<h2>+2 Platinum Shards.</h2>"
                 } else {
-                    return "<h2>Check back in " + formatTime(player.ep1.goldTimers[0].current) + ".</h2>"
+                    return "<h2>Check back in " + formatTime(player.ep1.platinumTimers[1].current) + ".</h2>"
                 }
             },
-            canClick() { return player.ep1.goldTimers[0].current.lte(0) },
+            canClick() { return player.ep1.platinumTimers[1].current.lte(0) },
             unlocked() { return (getLevelableTier("pet", 402).gte(1) && getLevelableAmount("pet", 402).gte(4)) || getLevelableTier("pet", 402).gte(2) },
             onClick() {
-                player.ep1.goldTimers[0].current = player.ep1.goldTimers[0].max
+                player.ep1.platinumTimers[1].current = player.ep1.platinumTimers[1].max
+
+                player.ep1.platinumShards = player.ep1.platinumShards.add(player.ep1.platinumTimers[1].base)
             },
             onHold() {},
             style() {
@@ -304,13 +375,15 @@ addLayer("ep1", {
                 if (this.canClick()) {
                     return "<h2>+4 Platinum Shards.</h2>"
                 } else {
-                    return "<h2>Check back in " + formatTime(player.ep1.goldTimers[0].current) + ".</h2>"
+                    return "<h2>Check back in " + formatTime(player.ep1.platinumTimers[2].current) + ".</h2>"
                 }
             },
-            canClick() { return player.ep1.goldTimers[0].current.lte(0) },
+            canClick() { return player.ep1.platinumTimers[2].current.lte(0) },
             unlocked() { return (getLevelableTier("pet", 402).gte(1) && getLevelableAmount("pet", 402).gte(9)) || getLevelableTier("pet", 402).gte(2) },
             onClick() {
-                player.ep1.goldTimers[0].current = player.ep1.goldTimers[0].max
+                player.ep1.platinumTimers[2].current = player.ep1.platinumTimers[2].max
+                
+                player.ep1.platinumShards = player.ep1.platinumShards.add(player.ep1.platinumTimers[2].base)
             },
             onHold() {},
             style() {
@@ -447,7 +520,7 @@ addLayer("ep1", {
             }
         },
         16: {
-            display() { return "<h2>Infuse your dragon with otherworldly powers.</h2><br>Boosts gold gain by ^1.025 and mastery point effects by ^1.25.<br>Requires 5 platinum shards."},
+            display() { return "<h2>Infuse your dragon with otherworldly powers.</h2><br>Boosts gold gain by ^1.025 and mastery point effects by ^1.15.<br>Requires 25 platinum shards and ."},
             canClick() { return false },
             unlocked() { return player.ep1.dragonEvolutionIndex == 5 },
             onClick() { player.ep1.dragonEvolutionIndex = 6 },
@@ -466,7 +539,7 @@ addLayer("ep1", {
     buyables: { // setBuyableAmount('ep1', 11, new Decimal(0))
         11: {
             costBase() { return new Decimal(10) },
-            costGrowth() { return new Decimal(1.075) },
+            costGrowth() { return new Decimal(1.1) },
             purchaseLimit() { return new Decimal(1e3) },
             currency() { return player.ep1.gold},
             pay(amt) { player.ep1.gold = this.currency().sub(amt) },
@@ -962,6 +1035,386 @@ addLayer("ep1", {
                 return look
             }
         },
+        201: {
+            costBase() { return new Decimal(1) },
+            costGrowth() { return new Decimal(1) },
+            purchaseLimit() { return new Decimal(40) },
+            currency() { return player.ep1.platinumShards},
+            pay(amt) { player.ep1.platinumShards = this.currency().sub(amt) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.2).add(1)
+                return eff
+            },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Gold Transformation (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
+            },
+            display() {
+                return 'Boosts gold gain by x' + format(tmp[this.layer].buyables[this.id].effect, 1) + '.' +'\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Platinum Shards'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style() {
+                let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '293px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
+                if (this.canAfford()) {
+                    look.color = "#1f1f1f"
+                } else {
+                    look.color = "#6f6f6f"
+                }
+                return look
+            }
+        },
+        202: {
+            costBase() { return new Decimal(2) },
+            costGrowth() { return new Decimal(1) },
+            purchaseLimit() { return new Decimal(40) },
+            currency() { return player.ep1.platinumShards},
+            pay(amt) { player.ep1.platinumShards = this.currency().sub(amt) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.2).add(1)
+                return eff
+            },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Fire Transformation (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
+            },
+            display() {
+                return 'Boosts fire gain by x' + format(tmp[this.layer].buyables[this.id].effect, 1) + '.' +'\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Platinum Shards'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style() {
+                let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '293px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
+                if (this.canAfford()) {
+                    look.color = "#1f1f1f"
+                } else {
+                    look.color = "#6f6f6f"
+                }
+                return look
+            }
+        },
+        203: {
+            costBase() { return new Decimal(4) },
+            costGrowth() { return new Decimal(1) },
+            purchaseLimit() { return new Decimal(20) },
+            currency() { return player.ep1.platinumShards},
+            pay(amt) { player.ep1.platinumShards = this.currency().sub(amt) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.05).add(1)
+                return eff
+            },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Platinum Transformation (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
+            },
+            display() {
+                return 'Boosts platinum shard chance by x' + format(tmp[this.layer].buyables[this.id].effect, 2) + '.' +'\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Platinum Shards'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style() {
+                let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '293px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
+                if (this.canAfford()) {
+                    look.color = "#1f1f1f"
+                } else {
+                    look.color = "#6f6f6f"
+                }
+                return look
+            }
+        },
+        204: {
+            costBase() { return new Decimal(6) },
+            costGrowth() { return new Decimal(1) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.ep1.platinumShards},
+            pay(amt) { player.ep1.platinumShards = this.currency().sub(amt) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.1).add(1)
+                return eff
+            },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Gold Transformation II (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
+            },
+            display() {
+                return 'Boosts gold gain by x' + format(tmp[this.layer].buyables[this.id].effect, 1) + '.' +'\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Platinum Shards'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style() {
+                let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '293px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
+                if (this.canAfford()) {
+                    look.color = "#1f1f1f"
+                } else {
+                    look.color = "#6f6f6f"
+                }
+                return look
+            }
+        },
+        205: {
+            costBase() { return new Decimal(12) },
+            costGrowth() { return new Decimal(1) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.ep1.platinumShards},
+            pay(amt) { player.ep1.platinumShards = this.currency().sub(amt) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.1).add(1)
+                return eff
+            },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Fire Transformation II (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
+            },
+            display() {
+                return 'Boosts fire gain by x' + format(tmp[this.layer].buyables[this.id].effect, 1) + '.' +'\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Platinum Shards'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style() {
+                let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '293px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
+                if (this.canAfford()) {
+                    look.color = "#1f1f1f"
+                } else {
+                    look.color = "#6f6f6f"
+                }
+                return look
+            }
+        },
+        206: {
+            costBase() { return new Decimal(15) },
+            costGrowth() { return new Decimal(1) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.ep1.platinumShards},
+            pay(amt) { player.ep1.platinumShards = this.currency().sub(amt) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.02).add(1)
+                return eff
+            },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Epic Transformation (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
+            },
+            display() {
+                return 'Boosts the first 6 epic pet currencies by x' + format(tmp[this.layer].buyables[this.id].effect, 2) + '.' +'\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Platinum Shards'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style() {
+                let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '293px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
+                if (this.canAfford()) {
+                    look.color = "#1f1f1f"
+                } else {
+                    look.color = "#6f6f6f"
+                }
+                return look
+            }
+        },
+    },
+    upgrades: {
+        201: {
+            title() {
+                return "Heavy Metals"
+            },
+            description() {
+                return "Reduces gold button cooldown by /" + format(player.ep1.upgrade201Effect) + ", based on starmetal alloy."
+            },
+            unlocked() { return true },
+            cost: new Decimal(4),
+            currencyLocation() { return player.ep1 },
+            currencyDisplayName: "Platinum Shards",
+            currencyInternalName: "platinumShards",
+            fullDisplay() {
+                return "<span style='font-size:16px;line-height:1'>" + this.title() + "</span><br><span style='font-size:10px'>"
+                + this.description()
+                + "<br>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>"
+            },
+            style() {
+                let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '292px', maxHeight: '85.5px', minHeight: '85.5px', paddingLeft: "8px", paddingRight: "8px"}
+                if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.color = "#1f1f1f"
+                } else {
+                    look.color = "#6f6f6f"
+                }
+                return look
+            }
+        },
+        202: {
+            title() {
+                return "White Gold"
+            },
+            description() {
+                return "Double platinum shard chance from gold buttons."
+            },
+            unlocked() { return true },
+            cost: new Decimal(12),
+            currencyLocation() { return player.ep1 },
+            currencyDisplayName: "Platinum Shards",
+            currencyInternalName: "platinumShards",
+            fullDisplay() {
+                return "<span style='font-size:16px;line-height:1'>" + this.title() + "</span><br><span style='font-size:10px'>"
+                + this.description()
+                + "<br>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>"
+            },
+            style() {
+                let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '292px', maxHeight: '85.5px', minHeight: '85.5px', paddingLeft: "8px", paddingRight: "8px"}
+                if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.color = "#1f1f1f"
+                } else {
+                    look.color = "#6f6f6f"
+                }
+                return look
+            }
+        },
+        203: {
+            title() {
+                return "Buyable Squared"
+            },
+            description() {
+                return "Boost gold gain by x1.02, based on platinum buyable levels."
+            },
+            unlocked() { return true },
+            cost: new Decimal(32),
+            currencyLocation() { return player.ep1 },
+            currencyDisplayName: "Platinum Shards",
+            currencyInternalName: "platinumShards",
+            fullDisplay() {
+                return "<span style='font-size:16px;line-height:1'>" + this.title() + "</span><br><span style='font-size:10px'>"
+                + this.description()
+                + "<br>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>"
+            },
+            style() {
+                let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '292px', maxHeight: '85.5px', minHeight: '85.5px', paddingLeft: "8px", paddingRight: "8px"}
+                if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.color = "#1f1f1f"
+                } else {
+                    look.color = "#6f6f6f"
+                }
+                return look
+            }
+        },
+        204: {
+            title() {
+                return "A Little Bit of Everything"
+            },
+            description() {
+                return "+0.005 to the gold buyable base."
+            },
+            unlocked() { return true },
+            cost: new Decimal(100),
+            currencyLocation() { return player.ep1 },
+            currencyDisplayName: "Platinum Shards",
+            currencyInternalName: "platinumShards",
+            fullDisplay() {
+                return "<span style='font-size:16px;line-height:1'>" + this.title() + "</span><br><span style='font-size:10px'>"
+                + this.description()
+                + "<br>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>"
+            },
+            style() {
+                let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '292px', maxHeight: '85.5px', minHeight: '85.5px', paddingLeft: "8px", paddingRight: "8px"}
+                if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.color = "#1f1f1f"
+                } else {
+                    look.color = "#6f6f6f"
+                }
+                return look
+            }
+        },
     },
     microtabs: {
         stuff: {
@@ -1119,22 +1572,28 @@ addLayer("ep1", {
                                                 return "<div class='bottomTooltip'><small>Obtained from gold buttons<br>Pity: " + format(player.ep1.platinumShardPity) + "/100</small></div>"
                                             }],
                                         ]]
-                                    ]],
+                                    ], {height: "25px"}],
                                     ["blank", "4px"],
                                     ["style-row", [
-                                        ["scroll-column", [
-                                            ["raw-html", () => {return "<h6>Gold gives a base of +" + format(player.ep1.baseFireToGet) + " fire /s.</h6>"}, {color: "black"}],
-                                            ["raw-html", () => {return "<h6>Fire boosts gold by x" + format(player.ep1.fireEffect) + ".</h6>"}, {color: "black"}],
-                                        ], {background: "", width: "298px", height: "342px"}],
-                                        ["blank", "3px", {width: "4px"}],
+                                        //["style-column", [ ], {width: "600px", height: "171px"}],
                                         ["always-scroll-column", [
-                                            ["hoverless-buyable", 101],
-                                            ["hoverless-buyable", 102],
-                                            ["hoverless-buyable", 103],
-                                            ["hoverless-buyable", 104],
-                                            ["hoverless-buyable", 105],
-                                            ["hoverless-buyable", 106],
-                                        ], {background: "#3f3f3f", width: "298px", height: "342px"}],
+                                            ["style-row", [
+                                                ["top-column", [
+                                                    ["hoverless-upgrade", 201],
+                                                    ["hoverless-upgrade", 202],
+                                                    ["hoverless-upgrade", 203],
+                                                    ["hoverless-upgrade", 204],
+                                                ], {height: "342px"}],
+                                                ["top-column", [
+                                                    ["hoverless-buyable", 201],
+                                                    ["hoverless-buyable", 202],
+                                                    ["hoverless-buyable", 203],
+                                                    ["hoverless-buyable", 204],
+                                                    ["hoverless-buyable", 205],
+                                                    ["hoverless-buyable", 206],
+                                                ], {height: "342px"}],
+                                            ]],
+                                        ], {background: "#3f3f3f", width: "600px", height: "342px"}],
                                     ]],
                                 ], () => {
                                     let look = {backgroundColor: "#c3d1de", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", width: "600px", height: "400px", padding: "3px"}

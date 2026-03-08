@@ -664,6 +664,8 @@ function celestialiteSpawn() {
     player.bh.celestialite.defense = BHC[celestialiteId].defense ?? new Decimal(0)
     player.bh.celestialite.regen = BHC[celestialiteId].regen ?? new Decimal(0)
     player.bh.celestialite.agility = BHC[celestialiteId].agility ?? new Decimal(0)
+    player.bh.celestialite.luck = BHC[celestialiteId].luck ?? new Decimal(0)
+    player.bh.celestialite.mending = BHC[celestialiteId].mending ?? new Decimal(0)
 
     player.bh.celestialite.health = player.bh.celestialite.health.mul(player.bh.celestialite.randomMult)
     player.bh.celestialite.health = player.bh.celestialite.health.mul(scale)
@@ -677,6 +679,10 @@ function celestialiteSpawn() {
     player.bh.celestialite.regen = player.bh.celestialite.regen.mul(scale)
     player.bh.celestialite.agility = player.bh.celestialite.agility.mul(player.bh.celestialite.randomMult)
     player.bh.celestialite.agility = player.bh.celestialite.agility.mul(scale)
+    player.bh.celestialite.luck = player.bh.celestialite.luck.mul(player.bh.celestialite.randomMult)
+    player.bh.celestialite.luck = player.bh.celestialite.luck.mul(scale)
+    player.bh.celestialite.mending = player.bh.celestialite.mending.mul(player.bh.celestialite.randomMult)
+    player.bh.celestialite.mending = player.bh.celestialite.mending.mul(scale)
     for (let i = 0; i < 4; i++) {
         if (BHC[player.bh.celestialite.id].actions[i]) {
             if (BHC[player.bh.celestialite.id].actions[i].variables) {

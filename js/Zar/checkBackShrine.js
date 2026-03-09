@@ -1,4 +1,16 @@
-﻿addLayer("cbs", {
+﻿
+const createClickableConnection = function(id_1, id_2, color) {
+    return ["style-row", [], {
+        position: "relative",
+            left: () => {return ((layers.cbs.clickables[id_1].xPos + layers.cbs.clickables[id_2].xPos) / 2) - 50 + "px"},
+            top: () => {return ((layers.cbs.clickables[id_1].yPos + layers.cbs.clickables[id_2].yPos) / 2) + "px"},
+            transform: () => {return "rotate(" + Math.atan2(layers.cbs.clickables[id_2].yPos - layers.cbs.clickables[id_1].yPos, layers.cbs.clickables[id_2].xPos - layers.cbs.clickables[id_1].xPos) + "rad)"},
+            width: () => {return Math.sqrt(Math.pow(layers.cbs.clickables[id_2].yPos - layers.cbs.clickables[id_1].yPos, 2) + Math.pow(layers.cbs.clickables[id_2].xPos - layers.cbs.clickables[id_1].xPos, 2)) + "px"},
+            height: "0px", border: "2px solid " + color, borderBottom: "0", marginLeft: "100px", marginTop: "-2px"
+        }]
+}
+
+addLayer("cbs", {
     name: "Check Back Shrine", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "<h4>CBS", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "DS",
@@ -18,6 +30,10 @@
         ritualCosts: [new Decimal(20), new Decimal(6)],
         
         shrineReactivated: false,
+        shrineTab: 0,
+        blessing1Selection: 0,
+        blessing2Selection: 0,
+        factorSelection: 0,
 
         pylonBuilt: false,
         pylonEnergyMax: new Decimal(1),
@@ -34,6 +50,7 @@
 
         energyTimerMax: new Decimal(86400),
         energyTimer: new Decimal(0),
+        
     }},
     nodeStyle() {
         return {
@@ -122,10 +139,11 @@
             player.cbs.pylonEnergyToGet = new Decimal(0)
         }
 
-        player.cbs.pylonEnergyEffect = player.cbs.pylonEnergy.pow(0.02).div(3).add(1).pow(player.cbs.pylonTierEffect)
-        player.cbs.pylonEnergyEffect2 = player.cbs.pylonEnergy.pow(0.1).div(3).add(1).pow(player.cbs.pylonTierEffect)
-        player.cbs.pylonEnergyEffect3 = player.cbs.pylonEnergy.pow(0.05).div(4).add(1).pow(player.cbs.pylonTierEffect)
-        player.cbs.pylonEnergyEffect4 = player.cbs.pylonEnergy.pow(0.07).add(1).pow(player.cbs.pylonTierEffect)
+        let effectivePylonEnergy = player.cbs.pylonEnergy.pow(player.cbs.pylonTierEffect)
+        player.cbs.pylonEnergyEffect = effectivePylonEnergy.pow(0.02).div(3).add(1)
+        player.cbs.pylonEnergyEffect2 = effectivePylonEnergy.pow(0.1).div(3).add(1)
+        player.cbs.pylonEnergyEffect3 = effectivePylonEnergy.pow(0.05).div(4).add(1)
+        player.cbs.pylonEnergyEffect4 = effectivePylonEnergy.pow(0.07).div(50)
 
         player.cbs.pylonTierEffect = player.cbs.pylonTier.sub(1).div(10).add(1)
 
@@ -233,7 +251,7 @@
             style: {width: "600px", minHeight: "200px", color: "#1b110eff", backgroundImage: "linear-gradient(180deg, #094599 0%, #062a5eff 50%, #094599 100%)", border: "3px solid rgba(0,0,0,0.5)", color: "#c6f7ff", borderRadius: "15px"},
         },
         15: {
-            title() { return "<h2>Tier up the Temporal Pylon" },
+            title() { return "Tier up the Temporal Pylon" },
             canClick() { return player.cbs.pylonEnergy.gte(player.cbs.pylonEnergyMax) },
             unlocked() { return player.cbs.pylonEnergy.gte(player.cbs.pylonEnergyMax) },
             onClick() {
@@ -241,141 +259,876 @@
 
                 player.cbs.pylonTier = player.cbs.pylonTier.add(1)
             },
-            style: {width: "600px", minHeight: "200px", color: "#c6f7ff", backgroundImage: "linear-gradient(180deg, #094599 0%, #062a5eff 50%, #094599 100%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
+            style: {width: "738px", minHeight: "50px", color: "#c6f7ff", backgroundImage: "linear-gradient(180deg, #094599 0%, #062a5eff 50%, #094599 100%)", border: "2px solid rgba(0,0,0,0.5)", borderRadius: "10px"},
+        },
+        21: {
+            title() { return "<h2>Blessings" },
+            canClick() { return player.cbs.shrineTab != 0 },
+            unlocked() { return true },
+            onClick() { player.cbs.shrineTab = 0 },
+            style() {
+                let look = {width: "203px", minHeight: "50px", color: "#c6f7ff", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "0px"}
+                if (this.canClick()) {
+                    look.background = "linear-gradient(180deg, #094599 0%, #062a5eff 50%, #094599 100%)"
+                } else {
+                    look.color = "#c6f7ff"
+                    look.backgroundColor = "black"
+                }
+                return look
+            },
+        },
+        22: {
+            title() { return "<h2>Blessings II" },
+            canClick() { return player.cbs.shrineTab != 1 },
+            unlocked() { return true },
+            onClick() { player.cbs.shrineTab = 1 },
+            style() {
+                let look = {width: "203px", minHeight: "50px", color: "#fff", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "0px"}
+                if (this.canClick()) {
+                    look.background = "linear-gradient(180deg, #3466ac 0%, #203f6b 50%, #3466ac 100%)"
+                } else {
+                    look.color = "#c6f7ff"
+                    look.backgroundColor = "black"
+                }
+                return look
+            },
+        },
+        23: {
+            title() { return "<h2>Factors" },
+            canClick() { return player.cbs.shrineTab != 2 },
+            unlocked() { return true },
+            onClick() { player.cbs.shrineTab = 2 },
+            style() {
+                let look = {width: "203px", minHeight: "50px", color: "white", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "0px"}
+                if (this.canClick()) {
+                    look.background = "linear-gradient(90deg, #474747ff 0%, #8d8d8dff 100%)"
+                    look.border = "3px solid #242424"
+                } else {
+                    look.color = "#c6f7ff"
+                    look.backgroundColor = "black"
+                }
+                return look
+            },
+        },
+        24: {
+            title() { return "<h2>Pylon" },
+            canClick() { return player.cbs.shrineTab != 3 },
+            unlocked() { return true },
+            onClick() { player.cbs.shrineTab = 3 },
+            style() {
+                let look = {width: "203px", minHeight: "50px", color: "#c6f7ff", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "0px"}
+                if (this.canClick()) {
+                    look.background = "linear-gradient(90deg, #2a6378 0%, #09366e 100%)"
+                } else {
+                    look.color = "#c6f7ff"
+                    look.backgroundColor = "black"
+                }
+                return look
+            },
+        },
+        101: {
+            title() { return "<h2>1</h2>" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() { player.cbs.blessing1Selection = 1 },
+            xPos: 75,
+            yPos: -129.903810568,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "#c6f7ff", border: "3px solid #c6f7ff", borderRadius: "25px", position: "relative"}
+                if (hasUpgrade(this.layer, this.id - 90)) {
+                    look.background = "#c6f7ff"
+                    look.color = "#062a5e"
+                } else if (this.canClick()) {
+                    look.backgroundImage = "radial-gradient(circle, #094599 0%, #062a5e 70%)"
+                } else {
+                    look.background = "black"
+                    look.color = "#637c80"
+                    look.border = "3px solid #637c80"
+                }
+                return look
+            },
+        },
+        102: {
+            title() { return "<h2>2</h2>" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() { player.cbs.blessing1Selection = 2 },
+            xPos: 129.903810568,
+            yPos: -75,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "#c6f7ff", border: "3px solid #c6f7ff", borderRadius: "25px", position: "relative"}
+                if (hasUpgrade(this.layer, this.id - 90)) {
+                    look.background = "#c6f7ff"
+                    look.color = "#062a5e"
+                } else if (this.canClick()) {
+                    look.backgroundImage = "radial-gradient(circle, #094599 0%, #062a5e 70%)"
+                } else {
+                    look.background = "black"
+                    look.color = "#637c80"
+                    look.border = "3px solid #637c80"
+                }
+                return look
+            },
+        },
+        103: {
+            title() { return "<h2>3</h2>" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() { player.cbs.blessing1Selection = 3 },
+            xPos: 150,
+            yPos: 0,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "#c6f7ff", border: "3px solid #c6f7ff", borderRadius: "25px", position: "relative"}
+                if (hasUpgrade(this.layer, this.id - 90)) {
+                    look.background = "#c6f7ff"
+                    look.color = "#062a5e"
+                } else if (this.canClick()) {
+                    look.backgroundImage = "radial-gradient(circle, #094599 0%, #062a5e 70%)"
+                } else {
+                    look.background = "black"
+                    look.color = "#637c80"
+                    look.border = "3px solid #637c80"
+                }
+                return look
+            },
+        },
+        104: {
+            title() { return "<h2>4</h2>" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() { player.cbs.blessing1Selection = 4 },
+            xPos: 129.903810568,
+            yPos: 75,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "#c6f7ff", border: "3px solid #c6f7ff", borderRadius: "25px", position: "relative"}
+                if (hasUpgrade(this.layer, this.id - 90)) {
+                    look.background = "#c6f7ff"
+                    look.color = "#062a5e"
+                } else if (this.canClick()) {
+                    look.backgroundImage = "radial-gradient(circle, #094599 0%, #062a5e 70%)"
+                } else {
+                    look.background = "black"
+                    look.color = "#637c80"
+                    look.border = "3px solid #637c80"
+                }
+                return look
+            },
+        },
+        105: {
+            title() { return "<h2>5</h2>" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() { player.cbs.blessing1Selection = 5 },
+            xPos: 75,
+            yPos: 129.903810568,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "#c6f7ff", border: "3px solid #c6f7ff", borderRadius: "25px", position: "relative"}
+                if (hasUpgrade(this.layer, this.id - 90)) {
+                    look.background = "#c6f7ff"
+                    look.color = "#062a5e"
+                } else if (this.canClick()) {
+                    look.backgroundImage = "radial-gradient(circle, #094599 0%, #062a5e 70%)"
+                } else {
+                    look.background = "black"
+                    look.color = "#637c80"
+                    look.border = "3px solid #637c80"
+                }
+                return look
+            },
+        },
+        106: {
+            title() { return "<h2>6</h2>" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() { player.cbs.blessing1Selection = 6 },
+            xPos: 0,
+            yPos: 150,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "#c6f7ff", border: "3px solid #c6f7ff", borderRadius: "25px", position: "relative"}
+                if (hasUpgrade(this.layer, this.id - 90)) {
+                    look.background = "#c6f7ff"
+                    look.color = "#062a5e"
+                } else if (this.canClick()) {
+                    look.backgroundImage = "radial-gradient(circle, #094599 0%, #062a5e 70%)"
+                } else {
+                    look.background = "black"
+                    look.color = "#637c80"
+                    look.border = "3px solid #637c80"
+                }
+                return look
+            },
+        },
+        107: {
+            title() { return "<h2>7</h2>" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() { player.cbs.blessing1Selection = 7 },
+            xPos: -75,
+            yPos: 129.903810568,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "#c6f7ff", border: "3px solid #c6f7ff", borderRadius: "25px", position: "relative"}
+                if (hasUpgrade(this.layer, this.id - 90)) {
+                    look.background = "#c6f7ff"
+                    look.color = "#062a5e"
+                } else if (this.canClick()) {
+                    look.backgroundImage = "radial-gradient(circle, #094599 0%, #062a5e 70%)"
+                } else {
+                    look.background = "black"
+                    look.color = "#637c80"
+                    look.border = "3px solid #637c80"
+                }
+                return look
+            },
+        },
+        108: {
+            title() { return "<h2>8</h2>" },
+            canClick() { return false },
+            unlocked() { return true },
+            onClick() { player.cbs.blessing1Selection = 8 },
+            xPos: -129.903810568,
+            yPos: 75,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "#c6f7ff", border: "3px solid #c6f7ff", borderRadius: "25px", position: "relative"}
+                if (hasUpgrade(this.layer, this.id - 90)) {
+                    look.background = "#c6f7ff"
+                    look.color = "#062a5e"
+                } else if (this.canClick()) {
+                    look.backgroundImage = "radial-gradient(circle, #094599 0%, #062a5e 70%)"
+                } else {
+                    look.background = "black"
+                    look.color = "#637c80"
+                    look.border = "3px solid #637c80"
+                }
+                return look
+            },
+        },
+        109: {
+            title() { return "<h2>9</h2>" },
+            canClick() { return false },
+            unlocked() { return true },
+            onClick() { player.cbs.blessing1Selection = 9 },
+            xPos: -150,
+            yPos: 0,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "#c6f7ff", border: "3px solid #c6f7ff", borderRadius: "25px", position: "relative"}
+                if (hasUpgrade(this.layer, this.id - 90)) {
+                    look.background = "#c6f7ff"
+                    look.color = "#062a5e"
+                } else if (this.canClick()) {
+                    look.backgroundImage = "radial-gradient(circle, #094599 0%, #062a5e 70%)"
+                } else {
+                    look.background = "black"
+                    look.color = "#637c80"
+                    look.border = "3px solid #637c80"
+                }
+                return look
+            },
+        },
+        110: {
+            title() { return "<h2>10</h2>" },
+            canClick() { return false },
+            unlocked() { return true },
+            onClick() { player.cbs.blessing1Selection = 10 },
+            xPos: -129.903810568,
+            yPos: -75,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "#c6f7ff", border: "3px solid #c6f7ff", borderRadius: "25px", position: "relative"}
+                if (hasUpgrade(this.layer, this.id - 90)) {
+                    look.background = "#c6f7ff"
+                    look.color = "#062a5e"
+                } else if (this.canClick()) {
+                    look.backgroundImage = "radial-gradient(circle, #094599 0%, #062a5e 70%)"
+                } else {
+                    look.background = "black"
+                    look.color = "#637c80"
+                    look.border = "3px solid #637c80"
+                }
+                return look
+            },
+        },
+        111: {
+            title() { return "<h2>11</h2>" },
+            canClick() { return false },
+            unlocked() { return true },
+            onClick() { player.cbs.blessing1Selection = 11 },
+            xPos: -75,
+            yPos: -129.903810568,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "#c6f7ff", border: "3px solid #c6f7ff", borderRadius: "25px", position: "relative"}
+                if (hasUpgrade(this.layer, this.id - 90)) {
+                    look.background = "#c6f7ff"
+                    look.color = "#062a5e"
+                } else if (this.canClick()) {
+                    look.backgroundImage = "radial-gradient(circle, #094599 0%, #062a5e 70%)"
+                } else {
+                    look.background = "black"
+                    look.color = "#637c80"
+                    look.border = "3px solid #637c80"
+                }
+                return look
+            },
+        },
+        112: {
+            title() { return "<h2>12</h2>" },
+            canClick() { return false },
+            unlocked() { return true },
+            onClick() { player.cbs.blessing1Selection = 12 },
+            xPos: 0,
+            yPos: -150,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "#c6f7ff", border: "3px solid #c6f7ff", borderRadius: "25px", position: "relative"}
+                if (hasUpgrade(this.layer, this.id - 90)) {
+                    look.background = "#c6f7ff"
+                    look.color = "#062a5e"
+                } else if (this.canClick()) {
+                    look.backgroundImage = "radial-gradient(circle, #094599 0%, #062a5e 70%)"
+                } else {
+                    look.background = "black"
+                    look.color = "#637c80"
+                    look.border = "3px solid #637c80"
+                }
+                return look
+            },
+        },
+        113: {
+            title() { return "<h2>13</h2>" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                
+            },
+            xPos: 75,
+            yPos: -129.903810568,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "white", border: "3px solid white", borderRadius: "25px", position: "relative"}
+                if (this.canClick()) {
+                    look.backgroundImage = "radial-gradient(circle, #3466ac 0%, #203f6b 70%)"
+                } else {
+                    look.background = "black"
+                    look.color = "#637c80"
+                    look.border = "3px solid #637c80"
+                }
+                return look
+            },
+        },
+        114: {
+            title() { return "<h2>14</h2>" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                
+            },
+            xPos: 129.903810568,
+            yPos: -75,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "white", border: "3px solid white", borderRadius: "25px", position: "relative"}
+                if (this.canClick()) {
+                    look.backgroundImage = "radial-gradient(circle, #3466ac 0%, #203f6b 70%)"
+                } else {
+                    look.background = "black"
+                    look.color = "#637c80"
+                    look.border = "3px solid #637c80"
+                }
+                return look
+            },
+        },
+        115: {
+            title() { return "<h2>15</h2>" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                
+            },
+            xPos: 150,
+            yPos: 0,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "white", border: "3px solid white", borderRadius: "25px", position: "relative"}
+                if (this.canClick()) {
+                    look.backgroundImage = "radial-gradient(circle, #3466ac 0%, #203f6b 70%)"
+                } else {
+                    look.background = "black"
+                    look.color = "#637c80"
+                    look.border = "3px solid #637c80"
+                }
+                return look
+            },
+        },
+        116: {
+            title() { return "<h2>16</h2>" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                
+            },
+            xPos: 129.903810568,
+            yPos: 75,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "white", border: "3px solid white", borderRadius: "25px", position: "relative"}
+                if (this.canClick()) {
+                    look.backgroundImage = "radial-gradient(circle, #3466ac 0%, #203f6b 70%)"
+                } else {
+                    look.background = "black"
+                    look.color = "#637c80"
+                    look.border = "3px solid #637c80"
+                }
+                return look
+            },
+        },
+        117: {
+            title() { return "<h2>17</h2>" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                
+            },
+            xPos: 75,
+            yPos: 129.903810568,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "white", border: "3px solid white", borderRadius: "25px", position: "relative"}
+                if (this.canClick()) {
+                    look.backgroundImage = "radial-gradient(circle, #3466ac 0%, #203f6b 70%)"
+                } else {
+                    look.background = "black"
+                    look.color = "#637c80"
+                    look.border = "3px solid #637c80"
+                }
+                return look
+            },
+        },
+        118: {
+            title() { return "<h2>18</h2>" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                
+            },
+            xPos: 0,
+            yPos: 150,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "white", border: "3px solid white", borderRadius: "25px", position: "relative"}
+                if (this.canClick()) {
+                    look.backgroundImage = "radial-gradient(circle, #3466ac 0%, #203f6b 70%)"
+                } else {
+                    look.background = "black"
+                    look.color = "#637c80"
+                    look.border = "3px solid #637c80"
+                }
+                return look
+            },
+        },
+        119: {
+            title() { return "<h2>19</h2>" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                
+            },
+            xPos: -75,
+            yPos: 129.903810568,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "white", border: "3px solid white", borderRadius: "25px", position: "relative"}
+                if (this.canClick()) {
+                    look.backgroundImage = "radial-gradient(circle, #3466ac 0%, #203f6b 70%)"
+                } else {
+                    look.background = "black"
+                    look.color = "#637c80"
+                    look.border = "3px solid #637c80"
+                }
+                return look
+            },
+        },
+        120: {
+            title() { return "<h2>20</h2>" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                
+            },
+            xPos: -129.903810568,
+            yPos: 75,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "white", border: "3px solid white", borderRadius: "25px", position: "relative"}
+                if (this.canClick()) {
+                    look.backgroundImage = "radial-gradient(circle, #3466ac 0%, #203f6b 70%)"
+                } else {
+                    look.background = "black"
+                    look.color = "#637c80"
+                    look.border = "3px solid #637c80"
+                }
+                return look
+            },
+        },
+        121: {
+            title() { return "<h2>21</h2>" },
+            canClick() { return false },
+            unlocked() { return true },
+            onClick() {
+                
+            },
+            xPos: -150,
+            yPos: 0,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "white", border: "3px solid white", borderRadius: "25px", position: "relative"}
+                if (this.canClick()) {
+                    look.backgroundImage = "radial-gradient(circle, #3466ac 0%, #203f6b 70%)"
+                } else {
+                    look.background = "black"
+                    look.color = "#637c80"
+                    look.border = "3px solid #637c80"
+                }
+                return look
+            },
+        },
+        122: {
+            title() { return "<h2>22</h2>" },
+            canClick() { return false },
+            unlocked() { return true },
+            onClick() {
+                
+            },
+            xPos: -129.903810568,
+            yPos: -75,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "white", border: "3px solid white", borderRadius: "25px", position: "relative"}
+                if (this.canClick()) {
+                    look.backgroundImage = "radial-gradient(circle, #3466ac 0%, #203f6b 70%)"
+                } else {
+                    look.background = "black"
+                    look.color = "#637c80"
+                    look.border = "3px solid #637c80"
+                }
+                return look
+            },
+        },
+        123: {
+            title() { return "<h2>23</h2>" },
+            canClick() { return false },
+            unlocked() { return true },
+            onClick() {
+                
+            },
+            xPos: -75,
+            yPos: -129.903810568,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "white", border: "3px solid white", borderRadius: "25px", position: "relative"}
+                if (this.canClick()) {
+                    look.backgroundImage = "radial-gradient(circle, #3466ac 0%, #203f6b 70%)"
+                } else {
+                    look.background = "black"
+                    look.color = "#637c80"
+                    look.border = "3px solid #637c80"
+                }
+                return look
+            },
+        },
+        124: {
+            title() { return "<h2>24</h2>" },
+            canClick() { return false },
+            unlocked() { return true },
+            onClick() {
+                
+            },
+            xPos: 0,
+            yPos: -150,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "white", border: "3px solid white", borderRadius: "25px", position: "relative"}
+                if (this.canClick()) {
+                    look.backgroundImage = "radial-gradient(circle, #3466ac 0%, #203f6b 70%)"
+                } else {
+                    look.background = "black"
+                    look.color = "#637c80"
+                    look.border = "3px solid #637c80"
+                }
+                return look
+            },
         },
     },
     bars: {
     },
     upgrades: {
         11: {
-            title: "Dice Space Blessing I",
-            unlocked() { return player.cbs.shrineReactivated },
-            description: "Boosts chance points based on check back level.",
+            fullDisplay() {return hasUpgrade(this.layer, this.id) ? "BOUGHT!" : "BUY"},
+            unlocked() { return true },
+            description() {{return "Boosts chance points based on check back level. (x" + format(this.effect()) + ")"}},
             cost: new Decimal(5e14),
             currencyLocation() { return player.za },
-            currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '125px', },
+            style() {
+                let look = {borderRadius: "10px", color: "white", fontSize: "20px", width: "300px", minHeight: "50px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#c6f7ff"
+                    look.border =  "3px solid #c6f7ff"
+                    look.color =  "#062a5e"
+                } else if (!canAffordUpgrade(this.layer, this.id)) {
+                    look.backgroundColor =  "#361e1e"
+                    look.border =  "3px solid #663737"
+                    look.color =  "#c6f7ff"
+                } else {
+                    look.backgroundColor = "#3466ac"
+                    look.border =  "3px solid #c6f7ff"
+                    look.color =  "#c6f7ff"
+                }
+                return look
+            },
             effect() {
                 return player.cb.level.pow(0.2).div(4).add(1)
             },
-            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
         },    
         12: {
-            title: "Dice Space Blessing II",
+            fullDisplay() {return hasUpgrade(this.layer, this.id) ? "BOUGHT!" : "BUY"},
             unlocked() { return player.cbs.shrineReactivated },
-            description: "Boosts wheel points based on best chance points.",
+            description() {{return "Boosts wheel points based on best chance points. (x" + format(this.effect()) + ")"}},
             cost: new Decimal(2e16),
             currencyLocation() { return player.za },
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '125px', },
+            style() {
+                let look = {borderRadius: "10px", color: "white", fontSize: "20px", width: "300px", minHeight: "50px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#c6f7ff"
+                    look.border =  "3px solid #c6f7ff"
+                    look.color =  "#062a5e"
+                } else if (!canAffordUpgrade(this.layer, this.id)) {
+                    look.backgroundColor =  "#361e1e"
+                    look.border =  "3px solid #663737"
+                    look.color =  "#c6f7ff"
+                } else {
+                    look.backgroundColor = "#3466ac"
+                    look.border =  "3px solid #c6f7ff"
+                    look.color =  "#c6f7ff"
+                }
+                return look
+            },
             effect() {
                 return player.za.bestChancePoints.div(1e12).pow(0.15).div(10).add(1)
             },
-            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
         },    
         13: {
-            title: "Dice Space Blessing III",
+            fullDisplay() {return hasUpgrade(this.layer, this.id) ? "BOUGHT!" : "BUY"},
             unlocked() { return player.cbs.shrineReactivated },
-            description: "Divides slot machine spin time by /3.",
+            description() {{return "Reduce slot machine spin time by /3."}},
             cost: new Decimal(3e17),
             currencyLocation() { return player.za },
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '125px', },
+            style() {
+                let look = {borderRadius: "10px", color: "white", fontSize: "20px", width: "300px", minHeight: "50px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#c6f7ff"
+                    look.border =  "3px solid #c6f7ff"
+                    look.color =  "#062a5e"
+                } else if (!canAffordUpgrade(this.layer, this.id)) {
+                    look.backgroundColor =  "#361e1e"
+                    look.border =  "3px solid #663737"
+                    look.color =  "#c6f7ff"
+                } else {
+                    look.backgroundColor = "#3466ac"
+                    look.border =  "3px solid #c6f7ff"
+                    look.color =  "#c6f7ff"
+                }
+                return look
+            },
         },  
         14: {
-            title: "Dice Space Blessing IV",
+            fullDisplay() {return hasUpgrade(this.layer, this.id) ? "BOUGHT!" : "BUY"},
             unlocked() { return player.cbs.shrineReactivated },
-            description: "Chance point softcap start weakens chance point softcap.",
+            description() {{return "Chance point softcap start weakens chance point softcap. (^" + format(this.effect()) + ")"}},
             cost: new Decimal(5e18),
             currencyLocation() { return player.za },
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '125px', },
+            style() {
+                let look = {borderRadius: "10px", color: "white", fontSize: "20px", width: "300px", minHeight: "50px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#c6f7ff"
+                    look.border =  "3px solid #c6f7ff"
+                    look.color =  "#062a5e"
+                } else if (!canAffordUpgrade(this.layer, this.id)) {
+                    look.backgroundColor =  "#361e1e"
+                    look.border =  "3px solid #663737"
+                    look.color =  "#c6f7ff"
+                } else {
+                    look.backgroundColor = "#3466ac"
+                    look.border =  "3px solid #c6f7ff"
+                    look.color =  "#c6f7ff"
+                }
+                return look
+            },
             effect() {
                 return Decimal.div(1, player.za.chancePointsSoftcapStart.plus(1).log10().div(55).add(1))
             },
-            effectDisplay() { return "^" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
         }, 
         15: {
-            title: "Dice Space Blessing V",
+            fullDisplay() {return hasUpgrade(this.layer, this.id) ? "BOUGHT!" : "BUY"},
             unlocked() { return player.cbs.shrineReactivated },
-            description: "Best chance points boost total chip gain.",
+            description() {{return "Best chance points boost total chip gain. (x" + format(this.effect()) + ")"}},
             cost: new Decimal(4e21),
             currencyLocation() { return player.za },
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '125px', },
+            style() {
+                let look = {borderRadius: "10px", color: "white", fontSize: "20px", width: "300px", minHeight: "50px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#c6f7ff"
+                    look.border =  "3px solid #c6f7ff"
+                    look.color =  "#062a5e"
+                } else if (!canAffordUpgrade(this.layer, this.id)) {
+                    look.backgroundColor =  "#361e1e"
+                    look.border =  "3px solid #663737"
+                    look.color =  "#c6f7ff"
+                } else {
+                    look.backgroundColor = "#3466ac"
+                    look.border =  "3px solid #c6f7ff"
+                    look.color =  "#c6f7ff"
+                }
+                return look
+            },
             effect() {
                 return player.za.bestChancePoints.div(1e16).pow(0.08).div(10).add(1)
             },
-            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
         }, 
         16: {
-            title: "Dice Space Blessing VI",
+            fullDisplay() {return hasUpgrade(this.layer, this.id) ? "BOUGHT!" : "BUY"},
             unlocked() { return player.cbs.shrineReactivated },
-            description: "Heads and and tails softcap start weaken heads and tails softcap.",
+            description() {{return "Heads and and tails softcap start weaken heads and tails softcap. (^" + format(this.effect()[0]) + ", ^" + format(this.effect()[1]) + ")"}},
             cost: new Decimal(1e24),
             currencyLocation() { return player.za },
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '175px', "min-height": '125px', },
+            style() {
+                let look = {borderRadius: "10px", color: "white", fontSize: "20px", width: "300px", minHeight: "50px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#c6f7ff"
+                    look.border =  "3px solid #c6f7ff"
+                    look.color =  "#062a5e"
+                } else if (!canAffordUpgrade(this.layer, this.id)) {
+                    look.backgroundColor =  "#361e1e"
+                    look.border =  "3px solid #663737"
+                    look.color =  "#c6f7ff"
+                } else {
+                    look.backgroundColor = "#3466ac"
+                    look.border =  "3px solid #c6f7ff"
+                    look.color =  "#c6f7ff"
+                }
+                return look
+            },
             effect() {
                 return [Decimal.div(1, player.cf.headsSoftcapStart.plus(1).log10().div(40).add(1)), Decimal.div(1, player.cf.tailsSoftcapStart.plus(1).log10().div(40).add(1))]
             },
-            effectDisplay() { return "^" + format(upgradeEffect(this.layer, this.id)[0]) + ", ^" + format(upgradeEffect(this.layer, this.id)[1])}, // Add formatting to the effect
         }, 
         17: {
-            title: "Dice Space Blessing VII",
+            fullDisplay() {return hasUpgrade(this.layer, this.id) ? "BOUGHT!" : "BUY"},
             unlocked() { return player.cbs.shrineReactivated },
-            description: "Unlock some rather unique slot machine researches.",
+            description() {{return "Unlock some rather unique slot machine researches."}},
             cost: new Decimal(1e28),
             currencyLocation() { return player.za },
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '125px', },
+            style() {
+                let look = {borderRadius: "10px", color: "white", fontSize: "20px", width: "300px", minHeight: "50px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#c6f7ff"
+                    look.border =  "3px solid #c6f7ff"
+                    look.color =  "#062a5e"
+                } else if (!canAffordUpgrade(this.layer, this.id)) {
+                    look.backgroundColor =  "#361e1e"
+                    look.border =  "3px solid #663737"
+                    look.color =  "#c6f7ff"
+                } else {
+                    look.backgroundColor = "#3466ac"
+                    look.border =  "3px solid #c6f7ff"
+                    look.color =  "#c6f7ff"
+                }
+                return look
+            },
         }, 
 
         //check back blessings
         101: {
-            title: "Check Back Blessing I",
+            fullDisplay() {return hasUpgrade(this.layer, this.id) ? "BOUGHT!" : "BUY"},
             unlocked() { return player.cbs.shrineReactivated },
             description: "Check back level boosts check back XP gain.",
             cost: new Decimal(1e24),
             currencyLocation() { return player.za },
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '125px', },
+            style() {
+                let look = {borderRadius: "10px", color: "white", fontSize: "20px", width: "300px", minHeight: "50px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#c6f7ff"
+                    look.border =  "3px solid #c6f7ff"
+                    look.color =  "#062a5e"
+                } else if (!canAffordUpgrade(this.layer, this.id)) {
+                    look.backgroundColor =  "#361e1e"
+                    look.border =  "3px solid #663737"
+                    look.color =  "#c6f7ff"
+                } else {
+                    look.backgroundColor = "#3466ac"
+                    look.border =  "3px solid #c6f7ff"
+                    look.color =  "#c6f7ff"
+                }
+                return look
+            },
             effect() {
                 return player.cb.level.pow(0.2).div(8).add(1)
             },
             effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
         }, 
         102: {
-            title: "Check Back Blessing II",
+            fullDisplay() {return hasUpgrade(this.layer, this.id) ? "BOUGHT!" : "BUY"},
             unlocked() { return player.cbs.shrineReactivated },
             description: "Ascension Shards boost Evolution Shard Chance.",
             cost: new Decimal(1e30),
             currencyLocation() { return player.za },
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '125px', },
+            style() {
+                let look = {borderRadius: "10px", color: "white", fontSize: "20px", width: "300px", minHeight: "50px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#c6f7ff"
+                    look.border =  "3px solid #c6f7ff"
+                    look.color =  "#062a5e"
+                } else if (!canAffordUpgrade(this.layer, this.id)) {
+                    look.backgroundColor =  "#361e1e"
+                    look.border =  "3px solid #663737"
+                    look.color =  "#c6f7ff"
+                } else {
+                    look.backgroundColor = "#3466ac"
+                    look.border =  "3px solid #c6f7ff"
+                    look.color =  "#c6f7ff"
+                }
+                return look
+            },
             effect() {
                 return player.cbs.ascensionShards.pow(0.3).div(2).add(1)
             },
             effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
         }, 
         103: {
-            title: "Check Back Blessing III",
+            fullDisplay() {return hasUpgrade(this.layer, this.id) ? "BOUGHT!" : "BUY"},
             unlocked() { return player.cbs.shrineReactivated },
             description: "Unlocks another XP button.",
             cost: new Decimal(1e38),
             currencyLocation() { return player.za },
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '125px', },
+            style() {
+                let look = {borderRadius: "10px", color: "white", fontSize: "20px", width: "300px", minHeight: "50px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#c6f7ff"
+                    look.border =  "3px solid #c6f7ff"
+                    look.color =  "#062a5e"
+                } else if (!canAffordUpgrade(this.layer, this.id)) {
+                    look.backgroundColor =  "#361e1e"
+                    look.border =  "3px solid #663737"
+                    look.color =  "#c6f7ff"
+                } else {
+                    look.backgroundColor = "#3466ac"
+                    look.border =  "3px solid #c6f7ff"
+                    look.color =  "#c6f7ff"
+                }
+                return look
+            },
         }, 
     },
     buyables: {
@@ -717,7 +1470,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #2a6378 0%, #09366e 100%)" }
+            style: { width: '240px', height: '150px', color: "white", border: "2px solid #000000bf", backgroundImage: "linear-gradient(120deg, #2a6378 0%, #09366e 100%)" }
         },
         22: {
             costBase() { return new Decimal(1500) },
@@ -751,7 +1504,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #2a6378 0%, #09366e 100%)" }
+            style: { width: '240px', height: '150px', color: "white", border: "2px solid #000000bf", backgroundImage: "linear-gradient(120deg, #2a6378 0%, #09366e 100%)" }
         },
         23: {
             costBase() { return new Decimal(5000) },
@@ -785,7 +1538,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #2a6378 0%, #09366e 100%)" }
+            style: { width: '240px', height: '150px', color: "white", border: "2px solid #000000bf", backgroundImage: "linear-gradient(120deg, #2a6378 0%, #09366e 100%)" }
         },
     },
     milestones: {},
@@ -865,86 +1618,212 @@
                 unlocked() { return !player.ir.inBattle },
                 content: [
                     ["blank", "25px"],
-                                                                    ["left-row", [
-                    ["blank", "25px"],
-                                ["tooltip-row", [
-                ["raw-html", "<img src='resources/ascensionShard.png'style='width:75px;height:75px;margin:12.5px'></img>", {width: "100px", height: "100px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cbs.ascensionShards)}, {width: "95px", height: "100px", color: "#c6f7ff", display: "inline-flex", alignItems: "center", paddingLeft: "5px", fontSize: "24px"}],
-                ["raw-html", "<div class='bottomTooltip'>Shards of Ascension<hr><small>(Gained from ascension rituals)</small></div>"],
-            ], {width: "700px", height: "100px"}],
-        ], {width: "700px", height: "100px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px 10px 0px 0px", userSelect: "none"}],
-                                                ["left-row", [
-                    ["blank", "25px"],
-                ["tooltip-row", [
-                ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cb.evolutionShards)}, {width: "93px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
-            ], {width: "348px", height: "50px", borderRight: "2px solid white"}],
-            ["tooltip-row", [
-                ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cb.paragonShards)}, {width: "95px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
-            ], {width: "350px", height: "50px", borderRight: "0px solid white"}],
-                           
-        ], {width: "700px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "0px 0px 10px 10px", borderTop: "0px",  userSelect: "none"}],
-                    ["blank", "25px"],
-         ["clickable", 13],
-         ["raw-html", function () { return player.cbs.shrineReactivated ? "Dice Space Blessings" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14],["upgrade", 15],["upgrade", 16],]],
-                    ["row", [["upgrade", 17],]],
-                    ["blank", "25px"],
-         ["raw-html", function () { return player.cbs.shrineReactivated ? "Check Back Blessings" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["upgrade", 101],["upgrade", 102],["upgrade", 103],]],
-                ]
-            },
-            "Pylon": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return !player.ir.inBattle && player.cbs.shrineReactivated },
-                content: [
-                    ["blank", "25px"],
-                            ["left-row", [
-                    ["blank", "25px"],
-            ["tooltip-row", [
-                ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cb.evolutionShards)}, {width: "143px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
-            ], {width: "198px", height: "50px", borderRight: "2px solid white"}],
-            ["tooltip-row", [
-                ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cb.paragonShards)}, {width: "145px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
-            ], {width: "200px", height: "50px", borderRight: "2px solid white"}],
-            ["tooltip-row", [
-               ["raw-html", "<img src='resources/ascensionShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cbs.ascensionShards)}, {width: "145px", height: "50px", color: "#c6f7ff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                ["raw-html", "<div class='bottomTooltip'>Shards of Ascension<hr><small>(Gained from ascension rituals)</small></div>"],
-            ], {width: "200px", height: "50px", borderRight: "2px solid white"}],
-            ["tooltip-row", [
-                ["raw-html", "<img src='resources/fragments/temporalFragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cof.coreFragments[6])}, {width: "145px", height: "50px", color: "rgb(97, 139, 187)", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                ["raw-html", "<div class='bottomTooltip'>Temporal Core Fragments<hr>"],
-            ], {width: "200px", height: "50px"}],
-        ], {width: "800px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
+
+                    ["left-row", [
+                        ["blank", "25px"],
+                        ["tooltip-row", [
+                            ["raw-html", "<img src='resources/ascensionShard.png'style='width:75px;height:75px;margin:12.5px'></img>", {width: "100px", height: "100px", display: "block"}],
+                            ["raw-html", () => { return formatWhole(player.cbs.ascensionShards)}, {width: "95px", height: "100px", color: "#c6f7ff", display: "inline-flex", alignItems: "center", paddingLeft: "5px", fontSize: "24px"}],
+                            ["raw-html", "<div class='bottomTooltip'>Shards of Ascension<hr><small>(Gained from ascension rituals)</small></div>"],
+                        ], {width: "700px", height: "100px"}],
+                    ], {width: "700px", height: "100px", backgroundColor: "black", border: "2px solid #041d40", borderRadius: "10px 10px 0px 0px", userSelect: "none"}],
+                    ["left-row", [
+                        ["blank", "25px"],
+                        ["tooltip-row", [
+                            ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                            ["raw-html", () => { return formatWhole(player.cb.evolutionShards)}, {width: "93px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                            ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
+                        ], {width: "348px", height: "50px", borderRight: "2px solid #041d40"}],
+                        ["tooltip-row", [
+                            ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                            ["raw-html", () => { return formatWhole(player.cb.paragonShards)}, {width: "95px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                            ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
+                        ], {width: "350px", height: "50px", borderRight: "0px solid white"}],
+                    ], {width: "700px", height: "50px", backgroundColor: "black", border: "2px solid #041d40", borderRadius: "0px 0px 10px 10px", borderTop: "0px",  userSelect: "none"}],
                     ["blank", "25px"],
                     
-                    ["clickable", 14],
-                    ["raw-html", () => { return player.cbs.pylonBuilt ? "You have <h3>" + format(player.cbs.pylonEnergy) + "/" + format(player.cbs.pylonEnergyMax) +  "</h3> temporal pylon energy (+" + format(player.cbs.pylonEnergyToGet) + ")." : "" }, {color: "#000000ff", fontSize: "24px", fontFamily: "monospace"}],
-                    ["raw-html", () => { return player.cbs.pylonBuilt ? "You will earn pylon energy in " + formatTime(player.cbs.energyTimerMax.sub(player.cbs.energyTimer)) + "." : "" }, {color: "#000000ff", fontSize: "24px", fontFamily: "monospace"}],
-                    ["blank", "25px"],
-                    ["raw-html", () => {return player.cbs.pylonBuilt ? "Boosts CB tickspeed by x" + format(player.cbs.pylonEnergyEffect) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.cbs.pylonBuilt ? "Boosts pet points by x" + format(player.cbs.pylonEnergyEffect2) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.cbs.pylonBuilt ? "Boosts crate roll chance by x" + format(player.cbs.pylonEnergyEffect3) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.cbs.pylonBuilt ? "Boosts paradox pylon energy by ^" + format(player.cbs.pylonEnergyEffect4) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.cbs.pylonBuilt ? "Passive effect: Boosts pollinator gain by ^" + format(player.cbs.pylonPassiveEffect) + " (Based on pollinators)" : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["blank", "25px"],
-                    ["row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23],]], 
-                    ["blank", "25px"],
-                    ["raw-html", () => {return player.cbs.pylonBuilt ? "Your ancient pylon is tier " + formatWhole(player.cbs.pylonTier) + ", which boosts all pylon effects by ^" + format(player.cbs.pylonTierEffect) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["blank", "25px"],
-                    ["clickable", 15],
+                    // REACTIVATE
+                    ["clickable", 13],
+                    
+                    // SHARDS
+                    ["style-row", [
+                    ], {background: "#041d40", border: "3px solid #094599", borderRadius: "13px 13px 0px 0px", width: "821px", height: "50px"}],
+                    
+                    // TAB SELECTION
+                    ["style-row", [
+                        ["hoverless-clickable", 21],
+                        ["style-row", [], {backgroundColor: "#094599", width: "3px", height: "50px"}],
+                        ["hoverless-clickable", 22],
+                        ["style-row", [], {backgroundColor: "#094599", width: "3px", height: "50px"}],
+                        ["hoverless-clickable", 23], 
+                        ["style-row", [], {backgroundColor: "#094599", width: "3px", height: "50px"}],
+                        ["hoverless-clickable", 24], 
+                    ], {background: "#041d40", border: "3px solid #094599", borderTop: "0px", borderRadius: "0px", width: "821px", height: "50px"}],
+                    
+                    // BLESSINGS I
+                    ["style-row", [
+                        ["style-row", [
+                            ["style-row", [
+                                createClickableConnection(101, 105, "#094599"),
+                                createClickableConnection(102, 106, "#094599"),
+                                createClickableConnection(103, 107, "#094599"),
+                                createClickableConnection(104, 108, "#094599"),
+                                createClickableConnection(105, 109, "#094599"),
+                                createClickableConnection(106, 110, "#094599"),
+                                createClickableConnection(107, 111, "#094599"),
+                                createClickableConnection(108, 112, "#094599"),
+                                createClickableConnection(109, 101, "#094599"),
+                                createClickableConnection(110, 102, "#094599"),
+                                createClickableConnection(111, 103, "#094599"),
+                                createClickableConnection(112, 104, "#094599"),
+                                ["style-row", [], {
+                                    position: "relative",
+                                    left: () => {return ((Math.cos(Date.now() / 6000 % 1000 * 2 * Math.PI)) * 50) + "px"},
+                                    top: () => {return (Math.sin(Date.now() / 6000 % 1000 * 2 * Math.PI) * 50) + "px"},
+                                    transform: () => {return "rotate(" + ((Date.now() / 6000 % 1000 * 2 * Math.PI)) + "rad"},
+                                    width: "100px",
+                                    height: "0px", background: "#c6f7ff", border: "1px solid #c6f7ff", margin: "-1px"
+                                }],
+                                ["style-row", [], {
+                                    position: "relative",
+                                    left: () => {return ((Math.cos(Date.now() / 72000 % 1000 * 2 * Math.PI)) * 25) + "px"},
+                                    top: () => {return (Math.sin(Date.now() / 72000 % 1000 * 2 * Math.PI) * 25) + "px"},
+                                    transform: () => {return "rotate(" + ((Date.now() / 72000 % 1000 * 2 * Math.PI)) + "rad"},
+                                    width: "50px",
+                                    height: "0px", background: "#094599", border: "2px solid #094599", margin: "-2px"
+                                }],
+                                ["style-row", [], {
+                                    position: "relative",
+                                    left: "0px",
+                                    top: "0px",
+                                    width: "0px",
+                                    height: "0px", background: "#c6f7ff", border: "8px solid #c6f7ff", margin: "-8px", borderRadius: "8px"
+                                }],
+                            ], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 101]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 102]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 103]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 104]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 105]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 106]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 107]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 108]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 109]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 110]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 111]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 112]], {width: "0", height: "0"}],
+                        ], {background: "radial-gradient(circle, #094599 -50%, #00000000 70%)", borderRadius: "200px", width: "360px", height: "360px", margin: "20px"}],
+                        ["blank", "3px", {width: "3px"}],
+                        ["style-row", [
+                            ["style-column", [
+                                ["blank", "6px"],
+                                ["raw-html", () => {return "~ Blessing " + player.cbs.blessing1Selection + " ~"}, {color: "#c6f7ff", fontSize: "20px", fontFamily: "monospace"}],
+                                ["blank", "6px"],
+                                ["style-row", [], {backgroundColor: "#094599", width: "360px", height: "3px"}],
+                                ["blank", "6px"],
+                                ["style-column", [
+                                    ["raw-html", () => {return layers.cbs.upgrades[10 + player.cbs.blessing1Selection].description()}, {color: "#c6f7ff", fontSize: "16px", fontFamily: "monospace"}],
+                                ], {width: "348px"}],
+                                ["blank", "6px"],
+                                ["style-row", [], {backgroundColor: "#094599", width: "360px", height: "3px"}],
+                                ["blank", "15px"],
+                                ["style-column", [
+                                    ["raw-html", () => {return "Costs " + format(layers.cbs.upgrades[10 + player.cbs.blessing1Selection].cost) + " Chance Points"}, {color: "#c6f7ff", fontSize: "16px", fontFamily: "monospace"}],
+                                ], {width: "348px"}],
+                                ["blank", "6px"],
+                                ["upgrade", () => {return 10 + player.cbs.blessing1Selection}],
+                            ]]
+                        ], {background: "radial-gradient(circle, #094599 0%, #062a5e 100%)", border: "3px solid #094599", borderRadius: "10px", width: "360px", height: "360px", margin: "20px"}],
+                    ], () => {
+                        return {background: "#041d40", border: "3px solid #094599", borderTop: "0px", borderRadius: "0px 0px 13px 13px", width: "821px", height: "412px", display: player.cbs.shrineTab == 0 ? "" : "none !important"}
+                    }],
 
+                    // BLESSINGS II
+                    ["style-row", [
+                        ["style-row", [
+                            ["style-row", [
+                                createClickableConnection(113, 117, "#3466ac"),
+                                createClickableConnection(114, 118, "#3466ac"),
+                                createClickableConnection(115, 119, "#3466ac"),
+                                createClickableConnection(116, 120, "#3466ac"),
+                                createClickableConnection(117, 121, "#3466ac"),
+                                createClickableConnection(118, 122, "#3466ac"),
+                                createClickableConnection(119, 123, "#3466ac"),
+                                createClickableConnection(120, 124, "#3466ac"),
+                                createClickableConnection(121, 113, "#3466ac"),
+                                createClickableConnection(122, 114, "#3466ac"),
+                                createClickableConnection(123, 115, "#3466ac"),
+                                createClickableConnection(124, 116, "#3466ac"),
+                                ["style-row", [], {
+                                    position: "relative",
+                                    left: () => {return ((Math.cos(Date.now() / 6000 % 1000 * 2 * Math.PI)) * 50) + "px"},
+                                    top: () => {return (Math.sin(Date.now() / 6000 % 1000 * 2 * Math.PI) * 50) + "px"},
+                                    transform: () => {return "rotate(" + ((Date.now() / 6000 % 1000 * 2 * Math.PI)) + "rad"},
+                                    width: "100px",
+                                    height: "0px", background: "#3466ac", border: "1px solid #3466ac", margin: "-1px"
+                                }],
+                                ["style-row", [], {
+                                    position: "relative",
+                                    left: () => {return ((Math.cos(Date.now() / 72000 % 1000 * 2 * Math.PI)) * 25) + "px"},
+                                    top: () => {return (Math.sin(Date.now() / 72000 % 1000 * 2 * Math.PI) * 25) + "px"},
+                                    transform: () => {return "rotate(" + ((Date.now() / 72000 % 1000 * 2 * Math.PI)) + "rad"},
+                                    width: "50px",
+                                    height: "0px", background: "#c6f7ff", border: "2px solid #c6f7ff", margin: "-2px"
+                                }],
+                                ["style-row", [], {
+                                    position: "relative",
+                                    left: "0px",
+                                    top: "0px",
+                                    width: "0px",
+                                    height: "0px", background: "#c6f7ff", border: "8px solid #c6f7ff", margin: "-8px", borderRadius: "8px"
+                                }],
+                            ], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 113]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 114]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 115]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 116]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 117]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 118]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 119]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 120]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 121]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 122]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 123]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 124]], {width: "0", height: "0"}],
+                        ], {background: "radial-gradient(circle, #3466ac -50%, #00000000 70%)", borderRadius: "200px", width: "360px", height: "360px", margin: "20px"}],
+                        ["blank", "3px", {width: "3px"}],
+                        ["style-row", [
+
+                        ], {background: "radial-gradient(circle, #3466ac 0%, #203f6b 100%)", border: "3px solid #3466ac", borderRadius: "10px", width: "360px", height: "360px", margin: "20px"}],
+                    ], () => {
+                        return {background: "#102036", border: "3px solid #3466ac", borderTop: "0px", borderRadius: "0px 0px 13px 13px", width: "821px", height: "412px", display: player.cbs.shrineTab == 1 ? "" : "none !important"}
+                    }],
+
+                    // PYLON
+                    ["style-column", [
+                        
+                        ["clickable", 14],
+                        ["raw-html", () => { return player.cbs.pylonBuilt ? "You will earn pylon energy in " + formatTime(player.cbs.energyTimerMax.sub(player.cbs.energyTimer)) + "." : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+
+                        ["raw-html", () => { return player.cbs.pylonBuilt ? "You have <h3>" + format(player.cbs.pylonEnergy) + "/" + format(player.cbs.pylonEnergyMax) +  "</h3> temporal pylon energy (+" + format(player.cbs.pylonEnergyToGet) + ")." : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ["blank", "10px"],
+                        ["raw-html", () => {return player.cbs.pylonBuilt ? "Boosts CB tickspeed by x" + format(player.cbs.pylonEnergyEffect) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return player.cbs.pylonBuilt ? "Boosts pet point gain by x" + format(player.cbs.pylonEnergyEffect2) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return player.cbs.pylonBuilt ? "Boosts crate roll chance by x" + format(player.cbs.pylonEnergyEffect3) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return player.cbs.pylonBuilt ? "Boosts base paradox pylon energy gain by +" + format(player.cbs.pylonEnergyEffect4, 3) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return player.cbs.pylonBuilt ? "Passive effect: Boosts pollinator gain by ^" + format(player.cbs.pylonPassiveEffect) + " (Based on pollinators)" : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return player.cbs.pylonBuilt ? "Your temporal pylon is tier " + formatWhole(player.cbs.pylonTier) + ", which boosts effective pylon energy and the passive effect by ^" + format(player.cbs.pylonTierEffect) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                        ["blank", "10px"],
+                        ["row", [["ex-buyable", 21], ["blank", "3px", {width: "3px"}], ["ex-buyable", 22], ["blank", "3px", {width: "3px"}], ["ex-buyable", 23],]], 
+                        ["blank", "10px"],
+                        ["clickable", 15],
+
+                    ], () => {
+                        return {background: "linear-gradient(90deg, #2a6378 0%, #09366e 100%)", border: "3px solid #3b8ba8", borderTop: "0px", borderRadius: "0px 0px 13px 13px", width: "821px", height: "412px", display: player.cbs.shrineTab == 3 ? "" : "none !important"}
+                    }],
+
+                    //
+                    ["blank", "25px"],
                 ]
             },
             "Battle": {

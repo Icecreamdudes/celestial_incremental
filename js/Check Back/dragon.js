@@ -373,7 +373,7 @@ addLayer("ep1", {
         6: {
             display() {
                 if (this.canClick()) {
-                    return "<h2>+4 Platinum Shards.</h2>"
+                    return "<h2>+3 Platinum Shards.</h2>"
                 } else {
                     return "<h2>Check back in " + formatTime(player.ep1.platinumTimers[2].current) + ".</h2>"
                 }

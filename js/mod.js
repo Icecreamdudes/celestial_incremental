@@ -1546,7 +1546,7 @@ var doNotCallTheseFunctionsEveryTick = [
 	"selectCelestialites", "petDeath", "celestialiteDeath", "petAbility", "celestialiteAbility",
 	"arriveAtStar", "spaceEnergyReset","coinFlip", "randomizeSegments", "spinWheel", "spinSlots", "evaluateRewards",
 	"slotReset",
-	"prismReset", "timeCapsuleReset", "createMultiverseMapConnection", "makeProject", "makeLightWell","makePrismFountain", "getTimeReq", "getTimeCapsuleReq", "getTimeSpeed", "lightGain",,
+	"prismReset", "timeCapsuleReset", "createMultiverseMapConnection", "createClickableConnection", "makeProject", "makeLightWell","makePrismFountain", "getTimeReq", "getTimeCapsuleReq", "getTimeSpeed", "lightGain",,
 ]
 
 function getStartPoints(){

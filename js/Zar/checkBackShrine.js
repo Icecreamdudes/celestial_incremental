@@ -31,8 +31,8 @@ addLayer("cbs", {
         
         shrineReactivated: false,
         shrineTab: 0,
-        blessing1Selection: 0,
-        blessing2Selection: 0,
+        blessing1Selection: 1,
+        blessing2Selection: 1,
         factorSelection: 0,
 
         pylonBuilt: false,
@@ -143,7 +143,7 @@ addLayer("cbs", {
         player.cbs.pylonEnergyEffect = effectivePylonEnergy.pow(0.02).div(3).add(1)
         player.cbs.pylonEnergyEffect2 = effectivePylonEnergy.pow(0.1).div(3).add(1)
         player.cbs.pylonEnergyEffect3 = effectivePylonEnergy.pow(0.05).div(4).add(1)
-        player.cbs.pylonEnergyEffect4 = effectivePylonEnergy.pow(0.07).div(50)
+        player.cbs.pylonEnergyEffect4 = effectivePylonEnergy.pow(0.05).div(50)
 
         player.cbs.pylonTierEffect = player.cbs.pylonTier.sub(1).div(10).add(1)
 

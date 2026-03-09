@@ -830,61 +830,6 @@
                     ], {background: "linear-gradient(105deg, #80613fff 0%, #9c5d4aff 74%)", border: "3px solid #f5b678ff",  borderRadius: "13px"}],
 
                 ]
-                /*
-                content: [
-                    //make any of the columns scrollable when needed
-
-                    ["blank", "25px"],
-                    ["style-row", [
-                    ["style-column", [ //heads
-                    ["style-column", [ 
-                    ["raw-html", function () { return "You have <h3>" + format(player.cf.heads) + "</h3> heads. (+" + format(player.cf.headsToGet) + ")" }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
-                    ["raw-html", () => { return player.cf.heads.gte(player.cf.headsSoftcapStart) ? "After " + format(player.cf.headsSoftcapStart) + " heads, gain is divided by /" + format(player.cf.headsSoftcapEffect) + "." : "" }, {color: "red", fontSize: "14px", fontFamily: "monospace"}],
-                    ["raw-html", function () { return "Boosts chance points by x" + format(player.cf.headsEffect) + "." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Boosts tails gain by x" + format(player.cf.headsEffect2) + "." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ], {width: "400px", height: "97px", background: "rgb(129, 112, 93, 0.5)", border: "3px solid #ccc", borderBottom: "0px", borderTop: "0px", borderLeft: "0px", borderRadius: "15px 0px 0px 0px"}],   
-                    ["style-column", [ 
-                    ["row", [["ex-buyable", 21],["ex-buyable", 22],]],
-                    ["row", [["ex-buyable", 23],["ex-buyable", 24],]],
-                    ], {width: "400px", height: "600px", background: "rgb(129, 112, 93, 0.5)", border: "3px solid #ccc", borderRight: "0px", borderLeft: "0px", borderRadius: "0px 0px 0px 15px"}],  
-                    ], {width: "400px", height: "700px", background: "rgb(129, 112, 93, 0.5)", border: "0px solid #ccc", borderRight: "0px", borderLeft: "0px", borderRadius: "15px 0px 0px 15px"}],
-                    
-                    
-                    ["style-column", [ //coin
-                    ["style-column", [ 
-                    ["row", [ ["bar", "coinFlip"],]],
-                    ["blank", "5px"],
-                    ["raw-html", function () { return player.cf.coinHeads ? "Coin is currently heads." : "Coin is currently tails." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Coins flipped: " + formatWhole(player.cf.coinsFlipped) + "." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Cost to flip coin: " + format(player.cf.flipCost) + " Chance Points." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [ ["clickable", 11], ["blank", "25px"], ["clickable", 12],]],
-                    ], {width: "394px", height: "247px", background: "rgb(156, 93, 74, 0.5)", border: "0px solid #ccc",   borderRadius: "0px"}],
-                    ["style-column", [ 
-                    ["row", [["ex-buyable", 11],["ex-buyable", 12],]],
-                    ["row", [["ex-buyable", 13],["ex-buyable", 14],]],
-    
-                    ], {width: "394px", height: "450px", background: "rgb(156, 93, 74, 0.5)", border: "3px solid #ccc", borderBottom: "0px", borderRight: "0px", borderLeft: "0px", borderRadius: "0px"}],
-                    ], {width: "394px", height: "700px", background: "rgb(156, 93, 74, 0.5)", border: "3px solid #ccc",  borderRadius: "0px"}],
-
-
-                    ["style-column", [ //tails
-                    ["style-column", [ 
-                    ["raw-html", function () { return "You have <h3>" + format(player.cf.tails) + "</h3> tails. (+" + format(player.cf.tailsToGet) + ")" }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
-                    ["raw-html", () => { return player.cf.tails.gte(player.cf.tailsSoftcapStart) ? "After " + format(player.cf.tailsSoftcapStart) + " tails, gain is divided by /" + format(player.cf.tailsSoftcapEffect) + "." : "" }, {color: "red", fontSize: "14px", fontFamily: "monospace"}],
-                    ["raw-html", function () { return "Extends chance point softcap by x" + format(player.cf.tailsEffect) + "." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Boosts heads gain by x" + format(player.cf.tailsEffect2) + "." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ], {width: "400px", height: "97px", background: "rgb(128, 87, 54, 0.5)", border: "3px solid #ccc",  borderBottom: "0px", borderTop: "0px", borderLeft: "0px", borderRadius: "15px 15px 0px 15px"}],
-                    ["style-column", [ 
-                    ["row", [["ex-buyable", 31],["ex-buyable", 32],]],
-                    ["row", [["ex-buyable", 33],["ex-buyable", 34],]],
-
-
-
-                    ], {width: "400px", height: "600px", background: "rgb(128, 87, 54, 0.5)", border: "3px solid #ccc", borderRight: "0px", borderLeft: "0px", borderRadius: "0px 0px 15px 0px"}],
-                    ], {width: "400px", height: "700px", background: "rgb(128, 87, 54, 0.5)", border: "0px solid #ccc", borderRight: "0px", borderLeft: "0px", borderRadius: "0px 15px 15px 0px"}],
-                    ], {width: "1200px", height: "700px", background: "rgb(129, 112, 93, 0.5)", border: "3px solid #ccc", borderRadius: "15px"}],
-                ]*/
             },
         },
     },

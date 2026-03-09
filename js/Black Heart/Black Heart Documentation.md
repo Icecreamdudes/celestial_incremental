@@ -371,20 +371,66 @@ Actions are the lifeblood of black heart. They are what make skills and celestia
 Instant action example:
 
 ```js
-
+instant: true,
+type: "damage",
+target: "celestialite",
+method: "physical",
+properties: {
+    "stun": [new Decimal(1), "soft", new Decimal(1)], // Chance / Stun-Type / Stun-Time
+},
+value() {return new Decimal(0.75).add(player.bh.skillData["general_slap"].level.mul(0.15))},
+cooldown: new Decimal(10),
+cooldownCap: new Decimal(4),
 ```
 
-Active action example:
+Traditional active action example:
 
 ```js
+active: true,
+constantType: "effect",
+constantTarget: "allPlayer",
+effects: {
+    "attributes"() {return {"rebound": new Decimal(0.5).add(player.bh.skillData["nav_reboundingAura"].level.mul(0.1))}},
+},
+cooldown: new Decimal(30),
+duration: new Decimal(10),
+cooldownCap: new Decimal(5),
+```
 
+Interval active action example:
+
+```js
+active: true,
+constantType: "damage",
+target: "celestialite",
+method: "ranged",
+value() {return new Decimal(0.2).add(player.bh.skillData["sel_turret"].level.mul(0.04))},
+interval: new Decimal(0.5),
+duration: new Decimal(12),
+cooldown: new Decimal(30),
+cooldownCap: new Decimal(6),
 ```
 
 Passive action example:
 
 ```js
-
+passive: true,
+constantType: "effect",
+constantTarget: "celestialite",
+effects: {
+    "regenAdd"(char) {
+        let damage = char.damage.mul(Decimal.sub(-0.1, player.bh.skillData["eclipse_drain"].level.mul(0.02)))
+        damage = damage.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.defense)))
+        return damage
+    }, // Multiplicative Effect
+},
+cooldown: new Decimal(Infinity),
 ```
 
 Features:
 
+instant: Declares that the action activates an instant action. Formatted as a boolean.
+
+active: Declares that the action activates an active action. Formatted as a boolean. (aka, an action with a duration)
+
+passive: Declares that the action activates a passive action. Formatted as a boolean.

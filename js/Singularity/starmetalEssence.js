@@ -953,7 +953,7 @@
                 player.ev2.orbs = this.currency()[0].sub(amt)
                 player.sme.starmetalEssence = this.currency()[1].sub(amt2)
             },
-            effect(x) {return getBuyableAmount(this.layer, this.id).div(10).add(1)},
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(20).add(1)},
             unlocked() {return player.ir.iriditeDefeated},
             branches: [[116, "#094599"]],
             cost(x) {
@@ -1866,6 +1866,42 @@
                 return look
             },
         },
+        181: {
+            costBase() { return [new Decimal(20), new Decimal(2e7)] },
+            costGrowth() { return [new Decimal(1.5), new Decimal(1.2)] },
+            purchaseLimit() { return new Decimal(10) },
+            currency() { return [player.cb.legendaryPetGems, player.sme.starmetalEssence]},
+            pay(amt, amt2) {
+                player.cb.legendaryPetGems = [this.currency()[0][0].sub(amt), this.currency()[0][1].sub(amt), this.currency()[0][2].sub(amt)]
+                player.sme.starmetalEssence = this.currency()[1].sub(amt2)
+            },
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(5).add(1)},
+            unlocked() {return player.za.zarUnlocked},
+            branches: [[105, "#888"]],
+            cost(x) {
+                return [this.costGrowth()[0].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[0]).floor(), this.costGrowth()[1].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[1]).floor()]
+            },
+            canAfford() {
+                return this.currency()[0][0].gte(this.cost()[0]) && this.currency()[0][1].gte(this.cost()[0]) && this.currency()[0][2].gte(this.cost()[0])
+                && this.currency()[1].gte(this.cost()[1]) && getBuyableAmount("sme", 105).gt(0)
+            },
+            display() {
+                return "<h3>SME-I1</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
+                    Increase chance point gain by +20%.\n\
+                    Currently: +" + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + "%\n\ \n\
+                    Cost:<br>[" + formatShortWhole(player.cb.legendaryPetGems[0]) + "-" + formatShortWhole(player.cb.legendaryPetGems[1]) + "-" + formatShortWhole(player.cb.legendaryPetGems[2]) + "]/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[0]) + "<br>Of All Leg-Gems\n\
+                    " + formatShortWhole(player.sme.starmetalEssence) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[1]) + " SME"
+            },
+            buy() {
+                this.pay(this.cost()[0], this.cost()[1])
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {position: "absolute", left: "180px", top: "1140px", width: "140px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid #282363", borderRadius: "15px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)"
+                return look
+            },
+        },
     },
     milestones: {},
     challenges: {},
@@ -1904,6 +1940,7 @@
                         ["buyable", 151], ["buyable", 152], ["buyable", 153], ["buyable", 154],
                         ["buyable", 161], ["buyable", 162], ["buyable", 163], ["buyable", 164],
                         ["buyable", 171], ["buyable", 172], ["buyable", 173], ["buyable", 174],
+                        ["buyable", 181],
                     ], () => {
                         let look = {position: "relative", width: "800px", height: "780px", background: "rgba(0,0,0,0.3)", border: "3px solid #d460eb", borderRadius: "0 0 30px 30px"}
                         if (player.ir.iriditeDefeated) look.height = "1340px"

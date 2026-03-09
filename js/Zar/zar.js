@@ -62,6 +62,7 @@
         player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(player.wof.wheelPointsEffect)
         player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(player.sm.chipsEffect[0])
         if (hasUpgrade("cbs", 11)) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(upgradeEffect("cbs", 11))
+        player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(buyableEffect("sme", 181))
         
         if (player.za.chancePoints.gte(player.za.chancePointsSoftcapStart)) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.div(player.za.chancePointsSoftcapEffect)
 

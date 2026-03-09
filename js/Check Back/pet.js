@@ -4730,13 +4730,13 @@ addLayer("pet", {
     buyables: {
         1: {
             costBase() { return new Decimal(2) },
-            costGrowth() { return new Decimal(2) },
+            costGrowth() { return new Decimal(1.75) },
             purchaseLimit() { return new Decimal(50) },
             currency() { return player.pet.lesserFragments},
             pay(amt) { player.pet.lesserFragments = this.currency().sub(amt) },
             effect(x) {return getBuyableAmount(this.layer, this.id).div(20).add(1)},
             unlocked: true,
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {return this.currency().gte(this.cost())},
             display() {
                 return "<h3>FB-1</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/50)\n\
@@ -4756,13 +4756,13 @@ addLayer("pet", {
         },
         2: {
             costBase() { return new Decimal(2) },
-            costGrowth() { return new Decimal(2) },
+            costGrowth() { return new Decimal(1.75) },
             purchaseLimit() { return new Decimal(50) },
             currency() { return player.pet.basicFragments},
             pay(amt) { player.pet.basicFragments = this.currency().sub(amt) },
             effect(x) {return getBuyableAmount(this.layer, this.id)},
             unlocked: true,
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {return this.currency().gte(this.cost())},
             display() {
                 return "<h3>FB-2</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/50)\n\
@@ -4788,7 +4788,7 @@ addLayer("pet", {
             pay(amt) { player.pet.greaterFragments = this.currency().sub(amt) },
             effect(x) {return getBuyableAmount(this.layer, this.id).div(500)},
             unlocked: true,
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {return this.currency().gte(this.cost())},
             display() {
                 return "<h3>FB-3</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/20)\n\
@@ -4808,7 +4808,7 @@ addLayer("pet", {
         },
         4: {
             costBase() { return new Decimal(10) },
-            costGrowth() { return new Decimal(10) },
+            costGrowth() { return new Decimal(5) },
             purchaseLimit() { return new Decimal(24) },
             pay(amt) {
                 player.pet.lesserFragments = player.pet.lesserFragments.sub(amt)
@@ -4817,7 +4817,7 @@ addLayer("pet", {
             },
             effect(x) {return getBuyableAmount(this.layer, this.id)},
             unlocked: true,
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {
                 return player.pet.lesserFragments.gte(this.cost()) && player.pet.basicFragments.gte(this.cost()) && player.pet.greaterFragments.gte(this.cost())
             },
@@ -4843,7 +4843,7 @@ addLayer("pet", {
         },
         5: {
             costBase() { return new Decimal(2) },
-            costGrowth() { return new Decimal(2) },
+            costGrowth() { return new Decimal(1.75) },
             purchaseLimit() { return new Decimal(50) },
             pay(amt) {
                 player.pet.lesserFragments = player.pet.lesserFragments.sub(amt)
@@ -4852,7 +4852,7 @@ addLayer("pet", {
             },
             effect(x) {return getBuyableAmount(this.layer, this.id).div(10).add(1)},
             unlocked: true,
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {
                 return player.pet.lesserFragments.gte(this.cost()) && player.pet.basicFragments.gte(this.cost()) && player.pet.greaterFragments.gte(this.cost())
             },
@@ -4874,7 +4874,7 @@ addLayer("pet", {
         },
         6: {
             costBase() { return new Decimal(3) },
-            costGrowth() { return new Decimal(3) },
+            costGrowth() { return new Decimal(2) },
             purchaseLimit() { return new Decimal(40) },
             pay(amt) {
                 player.pet.lesserFragments = player.pet.lesserFragments.sub(amt)
@@ -4883,7 +4883,7 @@ addLayer("pet", {
             },
             effect(x) {return getBuyableAmount(this.layer, this.id).div(20).add(1)},
             unlocked: true,
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {
                 return player.pet.lesserFragments.gte(this.cost()) && player.pet.basicFragments.gte(this.cost()) && player.pet.greaterFragments.gte(this.cost())
             },
@@ -4904,8 +4904,8 @@ addLayer("pet", {
             },
         },
         7: {
-            costBase() { return new Decimal(5) },
-            costGrowth() { return new Decimal(5) },
+            costBase() { return new Decimal(4) },
+            costGrowth() { return new Decimal(2.5) },
             purchaseLimit() { return new Decimal(25) },
             pay(amt) {
                 player.pet.lesserFragments = player.pet.lesserFragments.sub(amt)
@@ -4914,7 +4914,7 @@ addLayer("pet", {
             },
             effect(x) {return getBuyableAmount(this.layer, this.id).div(20).add(1)},
             unlocked() {return player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23)},
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {
                 return player.pet.lesserFragments.gte(this.cost()) && player.pet.basicFragments.gte(this.cost()) && player.pet.greaterFragments.gte(this.cost())
             },
@@ -4936,7 +4936,7 @@ addLayer("pet", {
         },
         8: {
             costBase() { return new Decimal(5) },
-            costGrowth() { return new Decimal(5) },
+            costGrowth() { return new Decimal(3) },
             purchaseLimit() { return new Decimal(25) },
             pay(amt) {
                 player.pet.lesserFragments = player.pet.lesserFragments.sub(amt)
@@ -4945,7 +4945,7 @@ addLayer("pet", {
             },
             effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.15).add(1)},
             unlocked() {return player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23)},
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {
                 return player.pet.lesserFragments.gte(this.cost()) && player.pet.basicFragments.gte(this.cost()) && player.pet.greaterFragments.gte(this.cost())
             },

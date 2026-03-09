@@ -109,7 +109,7 @@ function bhAction(index, slot, interval = false, magnitude = 1, delay = false) {
                     bhHeal(heal, index, target, healStr)
                     break;
                 case "effect":
-                    const DONT_SKIP = ["attributes", "health", "damage", "defense", "regen", "agility", "luck", "mending", "time"]
+                    const DONT_SKIP = ["attributes", "health", "damage", "defense", "regen", "agility", "luck", "mending", "time", "cur"]
                     if (!action.properties) return
 
                     // =-- Target Change Modifiers --=

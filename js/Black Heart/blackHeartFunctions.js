@@ -417,7 +417,7 @@ function bhProperties(index, action, luckMult, target, val) {
         } else {
             newTarget = "celestialite"
         }
-        bhHeal(val.mul(action.properties["placebo"][1]), index, newTarget, bfStr)
+        bhHeal(action.properties["placebo"][1], index, newTarget, bfStr)
     }
 
     return [val, str, false]

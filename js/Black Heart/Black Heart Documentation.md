@@ -453,7 +453,7 @@ Features:
 
     6. shield: Handles instant shield actions.
 
-    7. function: Handles instant custom function actions.
+    7. function: Handles custom function actions.
 
 - target: Declares the target of the instant action. Formatted as a string.
 - constantTarget: Declares the target of the active/passive action. Formatted as a string.
@@ -499,8 +499,26 @@ stun() {return ["soft", new Decimal(8).sub(player.bh.skillData["eclipse_lightBar
 
 - properties: Object that describes the properties of an instant action. Below are the potential properties:
 
-    1. 
+    1. *Effect type only* Stats (health/damage/etc.)/time/cur + Add/Mult/Diminish: Buffs that stat for as long as the character is alive. Formatted as a Decimal object. curMult gives a chance to multiply celestialite rewards.
+
+    2. attributes: Grants an attribute as long as the character is alive. Look in the attributes section for more details.
+
+    3. multi-hit: Makes an action trigger multiple times. Formatted like this: `[hitAmt, hitDelay (in ms)]`
+
+    4. miss: Gives the action a chance to miss. Formatted as a Decimal object.
+
+    5. crit: Makes an action that uses value be able to crit. Formatted like this: `[critChance, critMult]`
+
+    6. stun: Makes an action be able to stun. Formatted like this: `[stunChance, stunType (soft or hard), stunDuration]`
+
+    7. vampiric: Makes an action be able to heal yourself. Formatted like this: `[vampiricChance, healAmt]`
+
+    8. backfire: Makes an action be able to backfire. Formatted like this: `[backfireChance, backfireMult]`
+
+    9. placebo: Makes an action be able to heal the enemy. Formatted like this: `[placeboChance, healAmt]`
 
 - effects: Object that describes the effects of an active/passive skill with the typing of "effect". Below are the potential effects:
 
-    1. 
+    1. Stats (health/damage/etc.)/time/cur + Add/Mult: Temporarily buffs that stat as long as the skill is active. Formatted as a Decimal object. curMult gives a chance to multiply celestialite rewards.
+
+    2. attributes: Temporarily grants an attribute as long as the skill is active. Look in the attributes section for more details.

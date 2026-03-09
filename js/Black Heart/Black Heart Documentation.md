@@ -397,7 +397,7 @@ duration: new Decimal(10),
 cooldownCap: new Decimal(5),
 ```
 
-Interval active action example:
+Interval active action example: (Interval actions are active actions that trigger an instant action on an interval)
 
 ```js
 active: true,
@@ -427,10 +427,84 @@ effects: {
 cooldown: new Decimal(Infinity),
 ```
 
-Features:
+Celestialite exclusive features:
 
-instant: Declares that the action activates an instant action. Formatted as a boolean.
+- 
 
-active: Declares that the action activates an active action. Formatted as a boolean. (aka, an action with a duration)
+Regular features:
 
-passive: Declares that the action activates a passive action. Formatted as a boolean.
+- name: *Celestialite Exclusive* Declares the name of the action. Formatted as a string.
+
+- instant: Declares that the action activates an instant action. Formatted as a boolean.
+
+- active: Declares that the action activates an active action. Formatted as a boolean. (aka, an action with a duration)
+
+- passive: Declares that the action activates a passive action. Formatted as a boolean.
+
+- type: Declares the type of the instant action that will be done. Formatted as a string.
+- constantType: Declares the type of the active/passive action that will be done. Formatted as a string.
+Below is the potential types:
+
+1. damage: Handles instant damage actions.
+
+2. heal: Handles instant heal actions.
+
+3. effect: Handles giving/taking attributes and stats for all action variants. (Most active/passive skills will be effect)
+
+4. reset: Handles the instant action of resetting all skill cooldowns for a target
+
+5. cooldown: Handles the instant action of giving time to all skill cooldowns for a target.
+
+6. shield: Handles instant shield actions.
+
+7. function: Handles instant custom function actions.
+
+- target: Declares the target of the instant action. Formatted as a string.
+- constantTarget: Declares the target of the active/passive action. Formatted as a string.
+Below is the potential targets:
+
+1. randomPlayer: Picks a random character, excluding the celestialite.
+
+2. random: Picks randomly between both the characters and the celestialite.
+
+3. self: Picks the one doing the action.
+
+4. celestialite: Picks the celestialite.
+
+5. allPlayer: Picks all players.
+
+6. all: Picks all players and the celestialite.
+
+- method: Used when the type is damage to decide what type of damage the action will deal. The potential types are "physical", "ranged", "magic", and "spirit".
+
+- value: Used to decide damage/heal/cooldown/shield values. Formatted as a Decimal object. Can be a function.
+
+- cooldown: Used to decide the base cooldown for the action. Formatted as a Decimal object. (Put as Infinity if passive)
+
+- cooldownMax: Used to decide the lowest possible cooldown for the action. Formatted as a Decimal object.
+
+- duration: Used to decide how long an active skill will last after being activated. Formatted as a Decimal object.
+
+- interval: Used to decide how often an interval active skill will trigger (in seconds). Formatted as a Decimal object.
+
+- stun: Used to stun and delay the activation of a skill. Formatted as shown below:
+`[type ("soft" or "hard"), time (Decimal object in seconds), current skill slot (regular number)]`
+
+Since it is confusing, here is an example:
+```js
+stun() {return ["soft", new Decimal(8).sub(player.bh.skillData["eclipse_lightBarrier"].level.modulo(5).div(2)), player.bh.skillData["eclipse_lightBarrier"].selected[1]]},
+```
+
+- actionChance: Gives a chance for a passive to trigger an active effect when an action is used. Formatted as a Decimal object.
+
+- condtional: Prevents an instant/active action from being triggered until the condition returns true. Formatted as a function with the parameters index and slot.
+
+- onTrigger: Function that is triggered when type is function. Formatted as a function with the parameters index, slot, and target. (The parameter magnitude is added if the time stagnation stage property is active)
+
+- properties: Object that describes the properties of an instant action. Below are the potential properties:
+
+1. 
+
+- effects: Object that describes the effects of an active/passive skill with the typing of "effect". Below are the potential effects:
+
+1. 

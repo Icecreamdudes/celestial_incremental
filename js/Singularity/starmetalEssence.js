@@ -1195,14 +1195,14 @@
         },
         134: {
             costBase() { return [new Decimal(100), new Decimal(100000)] },
-            costGrowth() { return [new Decimal(5), new Decimal(10)] },
-            purchaseLimit() { return new Decimal(5) },
+            costGrowth() { return [new Decimal(2.5), new Decimal(10)] },
+            purchaseLimit() { return new Decimal(10) },
             currency() { return [player.bh.darkEssence, player.sme.starmetalEssence]},
             pay(amt, amt2) {
                 player.bh.darkEssence = this.currency()[0].sub(amt)
                 player.sme.starmetalEssence = this.currency()[1].sub(amt2)
             },
-            effect(x) {return getBuyableAmount(this.layer, this.id).div(20)},
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(40)},
             unlocked: true,
             branches: [[133, "#8a0e79"]],
             cost(x) {
@@ -1212,7 +1212,7 @@
                 return this.currency()[0].gte(this.cost()[0]) && this.currency()[1].gte(this.cost()[1]) && getBuyableAmount("sme", 133).gt(0)
             },
             display() {
-                return "<h3>SME-D4</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/5)\n\
+                return "<h3>SME-D4</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
                     Increase black heart regen\n\
                     Currently: +" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\ \n\
                     Cost:<br>" + formatShortWhole(player.bh.darkEssence) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[0]) + " Dark Essence\n\
@@ -1867,8 +1867,8 @@
             },
         },
         181: {
-            costBase() { return [new Decimal(20), new Decimal(2e7)] },
-            costGrowth() { return [new Decimal(1.5), new Decimal(1.2)] },
+            costBase() { return [new Decimal(10), new Decimal(2e7)] },
+            costGrowth() { return [new Decimal(1.2), new Decimal(1.2)] },
             purchaseLimit() { return new Decimal(10) },
             currency() { return [player.cb.legendaryPetGems, player.sme.starmetalEssence]},
             pay(amt, amt2) {

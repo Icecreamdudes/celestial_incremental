@@ -47,7 +47,7 @@ BHA.general_bandage = {
     char: "general",
     spCost: new Decimal(8),
     curCostBase: new Decimal(5),
-    curCostScale: new Decimal(4),
+    curCostScale: new Decimal(5),
     currency: "darkEssence",
     unlocked() {return hasUpgrade("depth2", 4)},
 
@@ -65,7 +65,7 @@ BHA.general_scream = {
     char: "general",
     spCost: new Decimal(12),
     curCostBase: new Decimal(8),
-    curCostScale: new Decimal(5),
+    curCostScale: new Decimal(8),
     currency: "darkEssence",
     unlocked() {return hasUpgrade("depth3", 4)},
 

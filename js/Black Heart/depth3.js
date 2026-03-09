@@ -1101,7 +1101,7 @@ BHC.greaterHekaton = {
     },
 }
 
-BHC.greaterKhiloi = {
+BHC.greaterKhilioi = {
     name: "Celestialite Greater Khilioi",
     symbol: "⬆Χ",
     style: {

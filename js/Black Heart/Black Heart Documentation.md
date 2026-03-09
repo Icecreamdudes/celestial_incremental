@@ -352,6 +352,39 @@ Attributes are used to give a character/celestialite a non-action specific effec
 
 - Daze ꩜ - All actions have a chance to miss, decided by the attribute value and the character/celestialites luck.
 
+Below is an example of an object that gives attributes:
+
+```js
+attributes: {
+    "air": new Decimal(0.2),
+    "warded": new Decimal(0.2),
+    "stealthy": new Decimal(0.2),
+}
+```
+
 
 
 ## Actions
+
+Actions are the lifeblood of black heart. They are what make skills and celestialite attacks work. They aren't insanely complex, as long as you follow the existing features.
+
+Instant action example:
+
+```js
+
+```
+
+Active action example:
+
+```js
+
+```
+
+Passive action example:
+
+```js
+
+```
+
+Features:
+

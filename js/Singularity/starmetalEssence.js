@@ -1090,7 +1090,7 @@
         // BH STUFF
         131: {
             costBase() { return [new Decimal(5), new Decimal(2000)] },
-            costGrowth() { return [new Decimal(1.1), new Decimal(1.1)] },
+            costGrowth() { return [new Decimal(1.3), new Decimal(1.2)] },
             purchaseLimit() { return new Decimal(25) },
             currency() { return [player.bh.darkEssence, player.sme.starmetalEssence]},
             pay(amt, amt2) {
@@ -1125,7 +1125,7 @@
         },
         132: {
             costBase() { return [new Decimal(10), new Decimal(4000)] },
-            costGrowth() { return [new Decimal(1.15), new Decimal(1.2)] },
+            costGrowth() { return [new Decimal(1.5), new Decimal(1.2)] },
             purchaseLimit() { return new Decimal(25) },
             currency() { return [player.bh.darkEssence, player.sme.starmetalEssence]},
             pay(amt, amt2) {
@@ -1159,8 +1159,8 @@
             },
         },
         133: {
-            costBase() { return [new Decimal(20), new Decimal(8000)] },
-            costGrowth() { return [new Decimal(1.2), new Decimal(1.3)] },
+            costBase() { return [new Decimal(25), new Decimal(10000)] },
+            costGrowth() { return [new Decimal(2), new Decimal(1.2)] },
             purchaseLimit() { return new Decimal(20) },
             currency() { return [player.bh.darkEssence, player.sme.starmetalEssence]},
             pay(amt, amt2) {
@@ -1194,8 +1194,8 @@
             },
         },
         134: {
-            costBase() { return [new Decimal(50), new Decimal(25000)] },
-            costGrowth() { return [new Decimal(3), new Decimal(10)] },
+            costBase() { return [new Decimal(100), new Decimal(100000)] },
+            costGrowth() { return [new Decimal(5), new Decimal(10)] },
             purchaseLimit() { return new Decimal(5) },
             currency() { return [player.bh.darkEssence, player.sme.starmetalEssence]},
             pay(amt, amt2) {
@@ -1229,8 +1229,8 @@
             },
         },
         135: {
-            costBase() { return [new Decimal(25), new Decimal(10000)] },
-            costGrowth() { return [new Decimal(1.5), new Decimal(5)] },
+            costBase() { return [new Decimal(250), new Decimal(250000)] },
+            costGrowth() { return [new Decimal(3), new Decimal(5)] },
             purchaseLimit() { return new Decimal(10) },
             currency() { return [player.bh.darkEssence, player.sme.starmetalEssence]},
             pay(amt, amt2) {
@@ -1264,8 +1264,8 @@
             },
         },
         136: {
-            costBase() { return [new Decimal(100), new Decimal(100000)] },
-            costGrowth() { return [new Decimal(5), new Decimal(10)] },
+            costBase() { return [new Decimal(1000), new Decimal(10000000)] },
+            costGrowth() { return [new Decimal(10), new Decimal(10)] },
             purchaseLimit() { return new Decimal(5) },
             currency() { return [player.bh.darkEssence, player.sme.starmetalEssence]},
             pay(amt, amt2) {

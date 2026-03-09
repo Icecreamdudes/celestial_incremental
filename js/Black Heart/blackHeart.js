@@ -502,7 +502,7 @@ addLayer("bh", {
 
         //Stagnant Timer
         stagnantTimer: new Decimal(0),
-        stagnantTimerMax: new Decimal(30),
+        stagnantTimerMax: new Decimal(20),
         stagnantAuto: false,
 
         // General Variables

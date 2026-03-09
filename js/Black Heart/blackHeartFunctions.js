@@ -765,6 +765,7 @@ function calcTarget(index, target, action = "none") {
             let rndA = rndTarget[Math.floor(Math.random()*rndTarget.length)]
             return [rndA]
         case "self": // Use when start is player
+            if (index == 3) return [3]
             return [index]
         case "celestialite":
             return [3]
@@ -814,6 +815,7 @@ function BHStageEnter(stage) {
     } else {
         player.bh.combo = new Decimal(0)
     }
+    player.bh.respawnTimer = new Decimal(-1)
     celestialiteSpawn()
 }
 

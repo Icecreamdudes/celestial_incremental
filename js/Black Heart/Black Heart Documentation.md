@@ -427,11 +427,7 @@ effects: {
 cooldown: new Decimal(Infinity),
 ```
 
-Celestialite exclusive features:
-
-- 
-
-Regular features:
+Features:
 
 - name: *Celestialite Exclusive* Declares the name of the action. Formatted as a string.
 
@@ -445,35 +441,35 @@ Regular features:
 - constantType: Declares the type of the active/passive action that will be done. Formatted as a string.
 Below is the potential types:
 
-1. damage: Handles instant damage actions.
+ 1. damage: Handles instant damage actions.
 
-2. heal: Handles instant heal actions.
+ 2. heal: Handles instant heal actions.
 
-3. effect: Handles giving/taking attributes and stats for all action variants. (Most active/passive skills will be effect)
+ 3. effect: Handles giving/taking attributes and stats for all action variants. (Most active/passive skills will be effect)
 
-4. reset: Handles the instant action of resetting all skill cooldowns for a target
+ 4. reset: Handles the instant action of resetting all skill cooldowns for a target
 
-5. cooldown: Handles the instant action of giving time to all skill cooldowns for a target.
+ 5. cooldown: Handles the instant action of giving time to all skill cooldowns for a target.
 
-6. shield: Handles instant shield actions.
+ 6. shield: Handles instant shield actions.
 
-7. function: Handles instant custom function actions.
+ 7. function: Handles instant custom function actions.
 
 - target: Declares the target of the instant action. Formatted as a string.
 - constantTarget: Declares the target of the active/passive action. Formatted as a string.
 Below is the potential targets:
 
-1. randomPlayer: Picks a random character, excluding the celestialite.
+ 1. randomPlayer: Picks a random character, excluding the celestialite.
 
-2. random: Picks randomly between both the characters and the celestialite.
+ 2. random: Picks randomly between both the characters and the celestialite.
 
-3. self: Picks the one doing the action.
+ 3. self: Picks the one doing the action.
 
-4. celestialite: Picks the celestialite.
+ 4. celestialite: Picks the celestialite.
 
-5. allPlayer: Picks all players.
+ 5. allPlayer: Picks all players.
 
-6. all: Picks all players and the celestialite.
+ 6. all: Picks all players and the celestialite.
 
 - method: Used when the type is damage to decide what type of damage the action will deal. The potential types are "physical", "ranged", "magic", and "spirit".
 
@@ -503,8 +499,8 @@ stun() {return ["soft", new Decimal(8).sub(player.bh.skillData["eclipse_lightBar
 
 - properties: Object that describes the properties of an instant action. Below are the potential properties:
 
-1. 
+ 1. 
 
 - effects: Object that describes the effects of an active/passive skill with the typing of "effect". Below are the potential effects:
 
-1. 
+ 1. 

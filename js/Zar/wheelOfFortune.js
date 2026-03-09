@@ -14,6 +14,7 @@
         spinTimer: new Decimal(0),
         trueTimer: new Decimal(0),
         spinPause: new Decimal(0),
+        reductionCooldown: new Decimal(0),
 
         //idea: just make it a single currency gain
 
@@ -41,7 +42,7 @@
         }
     },
     tooltip: "Wheel of Fortune",
-    color: "#3d8165ff",
+    color: "#a6dec7",
     branches: ["cf",],
     update(delta) {
         player.wof.spinLength = new Decimal(10)
@@ -117,6 +118,8 @@
                 player.wof.wheelsSpinned = player.wof.wheelsSpinned.add(1)
             }
         }
+
+        player.wof.reductionCooldown = player.wof.reductionCooldown.sub(delta)
     },
     randomizeSegments() {
         for (let i = 0; i < 8; i++) {
@@ -172,6 +175,38 @@
     },
     clickables: {
         11: {
+            title() { return player.wof.autoSpin ? "Autospin: ON" : "Autospin: OFF" },
+            canClick() { return true },
+            unlocked() { return player.sm.buyables[107].gte(1) },
+            onClick() {
+                player.wof.autoSpin = !player.wof.autoSpin
+            },
+            style: {width: '300px', minHeight: '45px', color: "black", border: "2px solid #000000bf", borderRadius: "10px", backgroundImage: "linear-gradient(120deg, #1f7350 0%, #5abf95 100%)" }
+        },
+        12: {
+            title() { return player.wof.reductionCooldown.gt(0) ? "On cooldown...<br><small>" + formatTime(player.wof.reductionCooldown) + "</small>" : "Reduce wheels spun by /1.2<br><small>You suck at this game.</small>"},
+            canClick() { return player.wof.reductionCooldown.lte(0) },
+            unlocked() { return true },
+            onClick() {
+                player.wof.wheelsSpinned = player.wof.wheelsSpinned.div(1.2).floor()
+                player.wof.reductionCooldown = new Decimal(2700)
+            },
+            style() {
+                let look = {width: '300px', minHeight: '60px', border: "2px solid #000000bf", borderRadius: "10px" }
+                if (this.canClick()) {
+                    look.backgroundImage = "linear-gradient(120deg, #1f7350 0%, #5abf95 100%)"
+                    look.border = "2px solid black"
+                    look.color = "black"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "2px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            }
+        },
+        
+        101: {
             title() { return "+" + format(player.wof.segmentGains[0]) + " Wheel Points"},
             display() { return "" },
             canClick() { return false },
@@ -181,7 +216,7 @@
                 
             },
         },
-        12: {
+        102: {
             title() { return "+" + format(player.wof.segmentGains[1]) + " Wheel Points"},
             display() { return "" },
             canClick() { return false },
@@ -191,7 +226,7 @@
                 
             },
         },
-        13: {
+        103: {
             title() { return "+" + format(player.wof.segmentGains[2]) + " Wheel Points"},
             display() { return "" },
             canClick() { return false },
@@ -201,7 +236,7 @@
                 
             },
         },
-        14: {
+        104: {
             title() { return "+" + format(player.wof.segmentGains[3]) + " Wheel Points"},
             display() { return "" },
             canClick() { return false },
@@ -211,7 +246,7 @@
                 
             },
         },
-        15: {
+        105: {
             title() { return "+" + format(player.wof.segmentGains[4]) + " Wheel Points"},
             display() { return "" },
             canClick() { return false },
@@ -221,7 +256,7 @@
                 
             },
         },
-        16: {
+        106: {
             title() { return "+" + format(player.wof.segmentGains[5]) + " Wheel Points"},
             display() { return "" },
             canClick() { return false },
@@ -231,7 +266,7 @@
                 
             },
         },
-        17: {
+        107: {
             title() { return "+" + format(player.wof.segmentGains[6]) + " Wheel Points"},
             display() { return "" },
             canClick() { return false },
@@ -241,7 +276,7 @@
                 
             },
         },
-        18: {
+        108: {
             title() { return "+" + format(player.wof.segmentGains[7]) + " Wheel Points"},
             display() { return "" },
             canClick() { return false },
@@ -251,8 +286,7 @@
                 
             },
         },
-
-        21: {
+        201: {
             title() { return "SPIN!"},
             tooltip() { return "<h5>Spin Length: " + format(player.wof.spinLength) + ". <h6>(I don't know what unit of measurement this is in, but it's probably seconds.)" },
             canClick() { return player.za.chancePoints.gte(player.wof.spinCost) },
@@ -267,42 +301,18 @@
                 return { width: '125px', "min-height": '125px', borderRadius: "0px 0px 0px 0px", border: "3px solid #0f221aff", backgroundColor: "3d8165ff" }
             },
         },
-        22: {
-            title() { return "Do a wheel reset, but gain no rewards."},
-            tooltip() { return "<h5>You suck at this game" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.wof.spinPause = new Decimal(7)
-            },
-            style() { 
-                return { width: '250px', "min-height": '75px', borderRadius: "15px 15px 15px 15px", border: "3px solid #0f221aff", backgroundImage: "linear-gradient(180deg, #144b34ff 0%, #3d8165ff 50%, #144b34ff 100%)"}
-            },
-        },
-        23: {
-            title() { return player.wof.autoSpin ? "Autospin: ON" : "Autospin: OFF" },
-            canClick() { return true },
-            unlocked() { return player.sm.buyables[107].gte(1) },
-            onClick() {
-                if (!player.wof.autoSpin) player.wof.autoSpin = true
-                else player.wof.autoSpin = false
-            },
-            style() { 
-                return { width: '250px', "min-height": '75px', borderRadius: "15px 15px 15px 15px", border: "3px solid #0f221aff", backgroundImage: "linear-gradient(180deg, #144b34ff 0%, #3d8165ff 50%, #144b34ff 100%)"}
-            },
-        },
     },
     bars: {
         wheel: {
             unlocked: true,
             direction: RIGHT,
-            width: 300,
-            height: 50,
+            width: 240,
+            height: 30,
             progress() {
                 return player.wof.trueTimer.div(player.wof.spinLength)
             },
             baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
-            fillStyle: {backgroundColor: "#3d8165ff"},
+            fillStyle: {backgroundColor: "#3d8165"},
             textStyle: {fontSize: "14px"},
             display() {
                 return player.wof.spinActive ? "Wheel is being spun..." : "Spin the wheel!";
@@ -344,7 +354,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '194px', height: '225px', color: "black", backgroundImage: "linear-gradient(120deg, #144b34ff 0%, #3d8165ff 100%)" }
+            style: { width: '180px', height: '180px', color: "black", border: "2px solid #000000bf", background: "linear-gradient(120deg, #1f7350 0%, #5abf95 100%)" }
         },
         12: {
             costBase() { return new Decimal(3) },
@@ -378,7 +388,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '194px', height: '225px', color: "black", backgroundImage: "linear-gradient(120deg, #144b34ff 0%, #3d8165ff 100%)" }
+            style: { width: '180px', height: '180px', color: "black", border: "2px solid #000000bf", background: "linear-gradient(120deg, #1f7350 0%, #5abf95 100%)" }
         },
         13: {
             costBase() { return new Decimal(7) },
@@ -412,7 +422,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '194px', height: '225px', color: "black", backgroundImage: "linear-gradient(120deg, #144b34ff 0%, #3d8165ff 100%)" }
+            style: { width: '180px', height: '180px', color: "black", border: "2px solid #000000bf", background: "linear-gradient(120deg, #1f7350 0%, #5abf95 100%)" }
         },
         14: {
             costBase() { return new Decimal(15) },
@@ -446,7 +456,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '194px', height: '225px', color: "black", backgroundImage: "linear-gradient(120deg, #144b34ff 0%, #3d8165ff 100%)" }
+            style: { width: '180px', height: '180px', color: "black", border: "2px solid #000000bf", background: "linear-gradient(120deg, #1f7350 0%, #5abf95 100%)" }
         },
         15: {
             costBase() { return new Decimal(25) },
@@ -480,7 +490,41 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '194px', height: '225px', color: "black", backgroundImage: "linear-gradient(120deg, #144b34ff 0%, #3d8165ff 100%)" }
+            style: { width: '180px', height: '180px', color: "black", border: "2px solid #000000bf", background: "linear-gradient(120deg, #1f7350 0%, #5abf95 100%)" }
+        },
+        16: {
+            costBase() { return new Decimal(50) },
+            costGrowth() { return new Decimal(1.75) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.wof.wheelPoints },
+            pay(amt) { player.wof.wheelPoints = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).mul(0.5).add(1)},
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "You won't need that, right?"
+            },
+            display() {
+                return 'which are reducing the coin flip divider cooldown by /' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Wheel Points'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '180px', height: '180px', color: "black", border: "2px solid #000000bf", background: "linear-gradient(120deg, #1f7350 0%, #5abf95 100%)" }
         },
     },
     milestones: {},
@@ -493,8 +537,58 @@
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
-                    ["blank", "25px"],
+                    ["blank", "10px"],
+                    ["style-column", [
+                        ["style-row", [ //wheel
+                            ["style-column", [
+                                ["row", [["clickable", 101], ["clickable", 102], ["clickable", 103],]],
+                                ["row", [["clickable", 104], ["clickable", 201], ["clickable", 105],]],
+                                ["row", [["clickable", 106], ["clickable", 107], ["clickable", 108],]],
+                            ], {width: "400px", height: "250px", borderRadius: "0px"}],
+                            ["style-column", [
+                                ["blank", "3px"],
+                                ["row", [ ["bar", "wheel"],]],
+                                ["blank", "6px"],
+                                ["style-row", [
+                                    ["raw-html", function () { return "Spinning the wheel resets previous dice space content." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                ], {padding: "6px"}],
+                                ["raw-html", function () { return "Requires " + format(player.wof.spinCost) + " chance points." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                ["raw-html", function () { return "Wheels spun: " + formatWhole(player.wof.wheelsSpinned) + "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                ["blank", "6px"],
+                                ["clickable", 11],
+                                ["blank", "3px"],
+                                ["clickable", 12],
+                            ], {width: "400px", height: "250px", borderRadius: "0px"}],
+                        ], {width: "800px", height: "400px", background: "#00000000", borderRadius: "10px 10px 0px 0px"}],
+                        ["style-row", [], {backgroundColor: "#5fc79cff", width: "100%", height: "3px"}],
+                        ["style-row", [
+                            ["top-column", [ //upgrades
+                                ["blank", "6px"],
+                                ["raw-html", function () { return "You have <h3>" + format(player.wof.wheelPoints) + "</h3> wheel points. (+" + format(player.wof.wheelPointsMult) + " base)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                ["raw-html", function () { return "<small>Boosts chance point gain by x" + format(player.wof.wheelPointsEffect) + ".</small>" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                ["raw-html", function () { return "<small>Extends chance point softcap by x" + format(player.wof.wheelPointsEffect2) + ".</small>" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                ["raw-html", function () { return "<small>Boosts heads and tails gain by x" + format(player.wof.wheelPointsEffect3) + ".</small>" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                ["blank", "6px"],
+                                ["row", [
+                                    ["layerColor-dark-buyable", 11],
+                                    ["blank", "3px", {width: "3px"}],
+                                    ["layerColor-dark-buyable", 12],
+                                    ["blank", "3px", {width: "3px"}],
+                                    ["layerColor-dark-buyable", 13],
+                                    ["blank", "3px", {width: "3px"}],
+                                    ["layerColor-dark-buyable", 14],
+                                ]],
+                                    ["blank", "3px", {width: "3px"}],
+                                ["row", [
+                                    ["layerColor-dark-buyable", 15],
+                                    ["blank", "3px", {width: "3px"}],
+                                    ["layerColor-dark-buyable", 16],
+                                ]],
+                            ], {width: "800px", height: "475px", background: "#0000005f", borderRadius: "0px 0px 10px 10px"}],
+                        ]]
+                    ], {background: "linear-gradient(105deg, #144b34ff 0%, #3d8165ff 50%, #144b34ff 100%)", border: "3px solid #5fc79cff",  borderRadius: "13px"}],
 
+                    /*
                     ["style-row", [
                     ["style-column", [ //wheel 
                     ["blank", "10px"],
@@ -532,6 +626,7 @@
                     ], {width: "600px", height: "600px", background: "rgba(34, 124, 61, 0.5)", border: "3px solid #ccc", borderRight: "0px", borderRadius: "0px 0px 15px 0px"}],
                     ], {width: "600px", height: "700px", background: "rgba(34, 124, 61, 0.5)", border: "0px solid #ccc", borderRight: "0px", borderLeft: "0px", borderRadius: "0px 15px 15px 0px"}],
                     ], {width: "1200px", height: "700px", background: "rgba(34, 124, 61, 0)", border: "3px solid #ccc", borderRadius: "15px"}],
+                    */
                 ]
             },
         },

@@ -729,11 +729,11 @@ function loadVue() {
 				</div>
 				<div class="exBuyableRow">
 					<button v-bind:class="{ darkBuyableButton1: true, tooltipBox: true, can: tmp[layer].buyables[data].canBuy, locked: !tmp[layer].buyables[data].canBuy, bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit)}"
-					v-bind:style="player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit) ? {'background-color': '#1a3b0f'} : tmp[layer].buyables[data].canBuy ? {'background-color': tmp[layer].color, 'color': 'black', 'border': '3px solid #0000003f'} : {'background-color': '#361e1e', 'color': 'white', 'border': '3px solid #663737'}"
+					v-bind:style="player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit) ? {'background-color': '#1a3b0f', 'border': '3px solid #33751d'} : tmp[layer].buyables[data].canBuy ? {'background-color': tmp[layer].color, 'color': 'black', 'border': '3px solid #0000003f'} : {'background-color': '#361e1e', 'color': 'white', 'border': '3px solid #663737'}"
 					v-on:click="if(!interval) {player.f.mfactorMax=false; buyBuyable(layer, data)}" :id='"buyable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
 					Buy 1</button>
 					<button v-bind:class="{ darkBuyableButton2: true, tooltipBox: true, can: tmp[layer].buyables[data].canBuy, locked: !tmp[layer].buyables[data].canBuy, bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit)}"
-					v-bind:style="player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit) ? {'background-color': '#1a3b0f'} : tmp[layer].buyables[data].canBuy ? {'background-color': tmp[layer].color, 'color': 'black', 'border': '3px solid #0000003f'} : {'background-color': '#361e1e', 'color': 'white', 'border': '3px solid #663737'}"
+					v-bind:style="player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit) ? {'background-color': '#1a3b0f', 'border': '3px solid #33751d'} : tmp[layer].buyables[data].canBuy ? {'background-color': tmp[layer].color, 'color': 'black', 'border': '3px solid #0000003f'} : {'background-color': '#361e1e', 'color': 'white', 'border': '3px solid #663737'}"
 					v-on:click="{buyMaxExBuyable(layer, data)}" :id='"buyable-" + layer + "-" + data'>
 					Buy Max</button>
 				</div>

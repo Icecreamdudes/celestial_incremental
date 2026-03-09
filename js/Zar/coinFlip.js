@@ -96,7 +96,6 @@
         player.cf.flipLength = new Decimal(5)
         player.cf.flipLength = player.cf.flipLength.div(buyableEffect("cf", 32))
         player.cf.flipLength = player.cf.flipLength.div(buyableEffect("wof", 12))
-        player.cf.flipLength = player.cf.flipLength.div(0.2)
 
         player.cf.headsSoftcapStart = new Decimal(10000)
         player.cf.headsSoftcapStart = player.cf.headsSoftcapStart.mul(buyableEffect("wof", 14))

@@ -201,6 +201,7 @@
         if (player.in.pylonBuilt)
         {
             player.in.pylonEnergyPerSecond = new Decimal(1.1)
+            player.in.pylonEnergyPerSecond = player.in.pylonEnergyPerSecond.add(player.cbs.pylonEnergyEffect4)
             player.in.pylonEnergyPerSecond = player.in.pylonEnergyPerSecond.pow(buyableEffect("in", 11))
             player.in.pylonEnergyPerSecond = player.in.pylonEnergyPerSecond.pow(buyableEffect("in", 12))
             player.in.pylonEnergyPerSecond = player.in.pylonEnergyPerSecond.pow(buyableEffect("in", 13))

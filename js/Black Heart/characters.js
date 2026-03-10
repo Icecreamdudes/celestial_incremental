@@ -49,9 +49,9 @@ BHP.nav = {
     mending() {return new Decimal(10).mul(buyableEffect("sp", 22))},
 }
 BHP.sel = {
-    name: "Sel",
+    name() {return player.ir.iriditeDefeated ? "Sel's Husk" : "Sel"},
     color: "#065c19",
-    icon: "resources/sel.png",
+    icon() {return player.ir.iriditeDefeated ? "resources/sel_husk.png" : "resources/sel.png"},
     health() {return new Decimal(65).mul(buyableEffect("sp", 32))},
     damage() {return new Decimal(4).mul(buyableEffect("sp", 32))},
     defense: new Decimal(0),

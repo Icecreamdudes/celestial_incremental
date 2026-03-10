@@ -1440,7 +1440,7 @@ addLayer("bh", {
                 if (player.bh.characters[0].health.lte(0) && player.bh.characters[0].id != "none") {
                     return "<img src='resources/dead.png'style='width:149px;height:149px;margin-left:-1.5px;margin-bottom:-6px'></img>"
                 } else {
-                    return "<img src='" + BHP[player.bh.characters[0].id].icon + "'style='width:149px;height:149px;margin-left:-1.5px;margin-bottom:-6px'></img>"
+                    return "<img src='" + run(BHP[player.bh.characters[0].id].icon, BHP[player.bh.characters[0].id]) + "'style='width:149px;height:149px;margin-left:-1.5px;margin-bottom:-6px'></img>"
                 }
             },
             canClick: false,
@@ -1613,7 +1613,7 @@ addLayer("bh", {
                 if (player.bh.characters[1].health.lte(0) && player.bh.characters[1].id != "none") {
                     return "<img src='resources/dead.png'style='width:149px;height:149px;margin-left:-1.5px;margin-bottom:-6px'></img>"
                 } else {
-                    return "<img src='" + BHP[player.bh.characters[1].id].icon + "'style='width:149px;height:149px;margin-left:-1.5px;margin-bottom:-6px'></img>"
+                    return "<img src='" + run(BHP[player.bh.characters[1].id].icon, BHP[player.bh.characters[1].id]) + "'style='width:149px;height:149px;margin-left:-1.5px;margin-bottom:-6px'></img>"
                 }
             },
             canClick: false,
@@ -1786,7 +1786,7 @@ addLayer("bh", {
                 if (player.bh.characters[2].health.lte(0) && player.bh.characters[2].id != "none") {
                     return "<img src='resources/dead.png'style='width:149px;height:149px;margin-left:-1.5px;margin-bottom:-6px'></img>"
                 } else {
-                    return "<img src='" + BHP[player.bh.characters[2].id].icon + "'style='width:149px;height:149px;margin-left:-1.5px;margin-bottom:-6px'></img>"
+                    return "<img src='" + run(BHP[player.bh.characters[2].id].icon, BHP[player.bh.characters[2].id]) + "'style='width:149px;height:149px;margin-left:-1.5px;margin-bottom:-6px'></img>"
                 }
             },
             canClick: false,
@@ -2190,7 +2190,7 @@ addLayer("bh", {
         },
         "Char-C0-Icon": {
             title() {
-                return "<img src='" + BHP[player.bh.characters[0].id].icon + "'style='width:100px;height:100px;margin-left:-2px;margin-bottom:-4px'></img>"
+                return "<img src='" + run(BHP[player.bh.characters[0].id].icon, BHP[player.bh.characters[0].id]) + "'style='width:100px;height:100px;margin-left:-2px;margin-bottom:-4px'></img>"
             },
             canClick() {return player.subtabs["bh"]["party"] == "characters"},
             unlocked: true,
@@ -2282,7 +2282,7 @@ addLayer("bh", {
         },
         "Char-C1-Icon": {
             title() {
-                return "<img src='" + BHP[player.bh.characters[1].id].icon + "'style='width:100px;height:100px;margin-left:-2px;margin-bottom:-4px'></img>"
+                return "<img src='" + run(BHP[player.bh.characters[1].id].icon, BHP[player.bh.characters[1].id]) + "'style='width:100px;height:100px;margin-left:-2px;margin-bottom:-4px'></img>"
             },
             canClick() {return player.subtabs["bh"]["party"] == "characters"},
             unlocked: true,
@@ -2374,7 +2374,7 @@ addLayer("bh", {
         },
         "Char-C2-Icon": {
             title() {
-                return "<img src='" + BHP[player.bh.characters[2].id].icon + "'style='width:100px;height:100px;margin-left:-2px;margin-bottom:-4px'></img>"
+                return "<img src='" + run(BHP[player.bh.characters[2].id].icon, BHP[player.bh.characters[2].id]) + "'style='width:100px;height:100px;margin-left:-2px;margin-bottom:-4px'></img>"
             },
             canClick() {return player.subtabs["bh"]["party"] == "characters"},
             unlocked: true,
@@ -2496,7 +2496,7 @@ addLayer("bh", {
             },
         },
         "Char-Kres": {
-            title() {return "<img src='" + BHP["kres"].icon + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
+            title() {return "<img src='" + run(BHP["kres"].icon, BHP["kres"]) + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -2509,7 +2509,7 @@ addLayer("bh", {
             },
         },
         "Char-Nav": {
-            title() {return "<img src='" + BHP["nav"].icon + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
+            title() {return "<img src='" + run(BHP["nav"].icon, BHP["nav"]) + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -2522,7 +2522,7 @@ addLayer("bh", {
             },
         },
         "Char-Sel": {
-            title() {return "<img src='" + BHP["sel"].icon + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
+            title() {return "<img src='" + run(BHP["sel"].icon, BHP["sel"]) + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -2535,7 +2535,7 @@ addLayer("bh", {
             },
         },
         "Char-Eclipse": {
-            title() {return "<img src='" + BHP["eclipse"].icon + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
+            title() {return "<img src='" + run(BHP["eclipse"].icon, BHP["eclipse"]) + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
             canClick: true,
             unlocked() {return getLevelableAmount("pet", 501).gt(0)},
             onClick() {
@@ -2548,7 +2548,7 @@ addLayer("bh", {
             },
         },
         "Char-Geroa": {
-            title() {return "<img src='" + BHP["geroa"].icon + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
+            title() {return "<img src='" + run(BHP["geroa"].icon, BHP["geroa"]) + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
             canClick: true,
             unlocked() {return getLevelableAmount("pet", 502).gt(0)},
             onClick() {
@@ -2964,7 +2964,7 @@ addLayer("bh", {
             textStyle: {userSelect: "none", lineHeight: "1"},
             display() {
                 if (player.bh.characters[0].id == "none") return ""
-                if (player.bh.characters[0].health.lte(0)) return BHP[player.bh.characters[0].id].name + " is dead"
+                if (player.bh.characters[0].health.lte(0)) return run(BHP[player.bh.characters[0].id].name, BHP[player.bh.characters[0].id]) + " is dead"
                 let str = "<h5>" + formatSimple(player.bh.characters[0].health) + "/" + formatSimple(player.bh.characters[0].maxHealth) + " HP"
                 if (player.bh.characters[0].shield.gt(0)) str = str + " [⛊" + formatWhole(player.bh.characters[0].shield) + "]"
                 if (player.bh.characters[0].stun[1].gt(0)) str = str + "<br>[Stunned for " + formatTime(player.bh.characters[0].stun[1]) + "]"
@@ -3168,7 +3168,7 @@ addLayer("bh", {
             textStyle: {userSelect: "none", lineHeight: "1"},
             display() {
                 if (player.bh.characters[1].id == "none") return ""
-                if (player.bh.characters[1].health.lte(0)) return BHP[player.bh.characters[1].id].name + " is dead"
+                if (player.bh.characters[1].health.lte(0)) return run(BHP[player.bh.characters[1].id].name, BHP[player.bh.characters[1].id]) + " is dead"
                 let str = "<h5>" + formatSimple(player.bh.characters[1].health) + "/" + formatSimple(player.bh.characters[1].maxHealth) + " HP"
                 if (player.bh.characters[1].shield.gt(0)) str = str + " [⛊" + formatWhole(player.bh.characters[1].shield) + "]"
                 if (player.bh.characters[1].stun[1].gt(0)) str = str + "<br>[Stunned for " + formatTime(player.bh.characters[1].stun[1]) + "]"
@@ -3372,7 +3372,7 @@ addLayer("bh", {
             textStyle: {userSelect: "none", lineHeight: "1"},
             display() {
                 if (player.bh.characters[2].id == "none") return ""
-                if (player.bh.characters[2].health.lte(0)) return BHP[player.bh.characters[2].id].name + " is dead"
+                if (player.bh.characters[2].health.lte(0)) return run(BHP[player.bh.characters[2].id].name, BHP[player.bh.characters[2].id]) + " is dead"
                 let str = "<h5>" + formatSimple(player.bh.characters[2].health) + "/" + formatSimple(player.bh.characters[2].maxHealth) + " HP"
                 if (player.bh.characters[2].shield.gt(0)) str = str + " [⛊" + formatWhole(player.bh.characters[2].shield) + "]"
                 if (player.bh.characters[2].stun[1].gt(0)) str = str + "<br>[Stunned for " + formatTime(player.bh.characters[2].stun[1]) + "]"
@@ -3596,10 +3596,10 @@ addLayer("bh", {
                         ["style-row", [
                             ["style-column", [
                                 ["style-column", [
-                                    ["raw-html", () => {return BHP[player.bh.characterSelection].name}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                                    ["raw-html", () => {return run(BHP[player.bh.characterSelection].name, BHP[player.bh.characterSelection])}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
                                 ], {width: "145px", height: "30px", background: "var(--miscButtonDisable)", borderRadius: "10px"}],
                                 ["blank", "6px"],
-                                ["raw-html", () => {return "<img src='" + BHP[player.bh.characterSelection].icon + "'style='width:140px;height:140px;margin-bottom:-3px;border:3px solid black'></img>"}],
+                                ["raw-html", () => {return "<img src='" + run(BHP[player.bh.characterSelection].icon, BHP[player.bh.characterSelection]) + "'style='width:140px;height:140px;margin-bottom:-3px;border:3px solid black'></img>"}],
                             ], {width: "154px", height: "195px", background: "black", borderRight: "3px solid var(--regBorder)"}],
                             ["style-column", [
                                 ["row", [
@@ -3711,10 +3711,10 @@ addLayer("bh", {
                         ["style-row", [
                             ["style-column", [
                                 ["style-column", [
-                                    ["raw-html", () => {return "Selecting:<br><small>" + BHP[player.bh.characters[Math.floor(player.bh.inputSkillSelection/4)].id].name + " S" + (player.bh.inputSkillSelection%4+1)}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                                    ["raw-html", () => {return "Selecting:<br><small>" + run(BHP[player.bh.characters[Math.floor(player.bh.inputSkillSelection/4)].id].name, BHP[player.bh.characters[Math.floor(player.bh.inputSkillSelection/4)].id]) + " S" + (player.bh.inputSkillSelection%4+1)}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
                                 ], {width: "100px", height: "40px", background: "var(--layerBackground)", borderRadius: "10px"}],
                                 ["blank", "5px"],
-                                ["raw-html", () => {return "<img src='" + BHP[player.bh.characters[Math.floor(player.bh.inputSkillSelection/4)].id].icon + "'style='width:85px;height:85px;margin-bottom:-3px;border:3px solid black'></img>"}],
+                                ["raw-html", () => {return "<img src='" + run(BHP[player.bh.characters[Math.floor(player.bh.inputSkillSelection/4)].id].icon, BHP[player.bh.characters[Math.floor(player.bh.inputSkillSelection/4)].id]) + "'style='width:85px;height:85px;margin-bottom:-3px;border:3px solid black'></img>"}],
                                 ["blank", "5px"],
                                 ["style-column", [
                                     ["raw-html", () => {
@@ -3856,7 +3856,7 @@ addLayer("bh", {
                                 ], {width: "106px", height: "218px", marginRight: "10px"}],
                                 ["style-column", [
                                     ["style-column", [
-                                        ["raw-html", () => {return BHP[player.bh.characters[0].id].name}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                                        ["raw-html", () => {return run(BHP[player.bh.characters[0].id].name, BHP[player.bh.characters[0].id])}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
                                     ], {width: "148px", height: "26px", background: "var(--miscButton)", borderRadius: "10px"}],
                                     ["blank", "4px"],
                                     ["row", [
@@ -3925,7 +3925,7 @@ addLayer("bh", {
                                 ], {width: "106px", height: "218px", marginRight: "10px"}],
                                 ["style-column", [
                                     ["style-column", [
-                                        ["raw-html", () => {return BHP[player.bh.characters[1].id].name}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                                        ["raw-html", () => {return run(BHP[player.bh.characters[1].id].name, BHP[player.bh.characters[1].id])}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
                                     ], {width: "148px", height: "26px", background: "var(--miscButton)", borderRadius: "10px"}],
                                     ["blank", "4px"],
                                     ["row", [
@@ -3994,7 +3994,7 @@ addLayer("bh", {
                                 ], {width: "106px", height: "218px", marginRight: "10px"}],
                                 ["style-column", [
                                     ["style-column", [
-                                        ["raw-html", () => {return BHP[player.bh.characters[2].id].name}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                                        ["raw-html", () => {return run(BHP[player.bh.characters[2].id].name, BHP[player.bh.characters[2].id])}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
                                     ], {width: "148px", height: "26px", background: "var(--miscButton)", borderRadius: "10px"}],
                                     ["blank", "4px"],
                                     ["row", [
@@ -4147,7 +4147,7 @@ addLayer("bh", {
                     ["row", [
                         ["style-column", [
                             ["blank", "5px"],
-                            ["raw-html", () => {return BHP[player.bh.characters[0].id].name}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return run(BHP[player.bh.characters[0].id].name, BHP[player.bh.characters[0].id])}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ["blank", "5px"],
                             ["bar", "C0-Health"],
                             ["row", [
@@ -4168,7 +4168,7 @@ addLayer("bh", {
                         ], () => {return player.bh.characters[0].id != "none" && player.bh.characters[0].health.gt(0) ? {width: "225px", height: "320px", background: "rgba(0,0,0,0.2)", border: "3px solid white", borderRadius: "30px", margin: "5px",} : {display: "none !important"}}],
                         ["style-column", [
                             ["blank", "5px"],
-                            ["raw-html", () => {return BHP[player.bh.characters[1].id].name}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return run(BHP[player.bh.characters[1].id].name, BHP[player.bh.characters[1].id])}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ["blank", "5px"],
                             ["bar", "C1-Health"],
                             ["row", [
@@ -4189,7 +4189,7 @@ addLayer("bh", {
                         ], () => {return player.bh.characters[1].id != "none" && player.bh.characters[1].health.gt(0) ? {width: "225px", height: "320px", background: "rgba(0,0,0,0.2)", border: "3px solid white", borderRadius: "30px", margin: "5px",} : {display: "none !important"}}],
                         ["style-column", [
                             ["blank", "5px"],
-                            ["raw-html", () => {return BHP[player.bh.characters[2].id].name}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return run(BHP[player.bh.characters[2].id].name, BHP[player.bh.characters[2].id])}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ["blank", "5px"],
                             ["bar", "C2-Health"],
                             ["row", [
@@ -4254,19 +4254,19 @@ addLayer("bh", {
                     ["blank", "10px"],
                     ["row", [
                         ["style-column", [
-                            ["raw-html", () => {return BHP[player.bh.characters[0].id].name}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return run(BHP[player.bh.characters[0].id].name, BHP[player.bh.characters[0].id])}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ["blank", "5px"],
                             ["bar", "C0-Health"],
                         ], () => {return player.bh.characters[0].id != "none" ? {background: "rgba(0,0,0,0.3)", border: "2px solid white", padding: "-2px", borderRadius: "15px"} : {display: "none !important"}}],
                         ["blank", ["10px", "10px"]],
                         ["style-column", [
-                            ["raw-html", () => {return BHP[player.bh.characters[1].id].name}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return run(BHP[player.bh.characters[1].id].name, BHP[player.bh.characters[1].id])}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ["blank", "5px"],
                             ["bar", "C1-Health"],
                         ], () => {return player.bh.characters[1].id != "none" ? {background: "rgba(0,0,0,0.3)", border: "2px solid white", padding: "-2px", borderRadius: "15px"} : {display: "none !important"}}],
                         ["blank", ["10px", "10px"]],
                         ["style-column", [
-                            ["raw-html", () => {return BHP[player.bh.characters[2].id].name}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return run(BHP[player.bh.characters[2].id].name, BHP[player.bh.characters[2].id])}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ["blank", "5px"],
                             ["bar", "C2-Health"],
                         ], () => {return player.bh.characters[2].id != "none" ? {background: "rgba(0,0,0,0.3)", border: "2px solid white", padding: "-2px", borderRadius: "15px"} : {display: "none !important"}}],

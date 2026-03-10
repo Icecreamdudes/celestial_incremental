@@ -740,16 +740,16 @@ BHC.matos = {
                 if (player.bh.celestialite.health.lt(50) && player.bh.celestialite.actions[1].variables.attacks == 14) {
                     screenFlash("BUT I CAN'T LET YOU GUYS CONTINUE", 3000)
                     setTimeout(() => {
-                        bulletHell({"bulletRain": {bulletPerSec: 18}, "knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 8, knifePerSec: 1.5}}, {width: window.innerWidth, height: window.innerHeight, duration: 15, transparent: true}, () => {player.bh.celestialite.actions[1].variables.attacks += 1})
+                        bulletHell({"bulletRain": {bulletPerSec: 18}, "knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 8, knifePerSec: 1.5}}, {width: window.innerWidth, height: window.innerHeight, duration: 15, transparent: true}, () => {player.bh.celestialite.actions[1].variables.attacks = 15})
                     }, 3000)
                 }
                 if (player.bh.celestialite.actions[1].variables.attacks == 15) {
-                    bulletHell({"centerSpiralAttack": {spiralAngle: 0, spiralRate: 0.325, spiralInterval: 30, radialStart: 64, bulletSpeed: 7, spiralKnives: true, knifeLength: 64, knifeWidth: 16}, "bouncingDiamond": {diamondCount: 3, enemySpeed: 4}, "centerSpreadAttack": {bulletSpeed: 6, spreadInterval: 1000, spreadCount: 7, spreadAngle: Math.PI/3}, "centerIcon": {radius: 64, fillColor: "#fff", strokeColor: "#e22", symbol: "⊘"}}, {width: window.innerWidth, height: window.innerHeight, duration: 15, transparent: true, saveContent: true}, () => {player.bh.celestialite.actions[1].variables.attacks += 1})
+                    bulletHell({"centerSpiralAttack": {spiralAngle: 0, spiralRate: 0.325, spiralInterval: 30, radialStart: 64, bulletSpeed: 7, spiralKnives: true, knifeLength: 64, knifeWidth: 16}, "bouncingDiamond": {diamondCount: 3, enemySpeed: 4}, "centerSpreadAttack": {bulletSpeed: 6, spreadInterval: 1000, spreadCount: 7, spreadAngle: Math.PI/3}, "centerIcon": {radius: 64, fillColor: "#fff", strokeColor: "#e22", symbol: "⊘"}}, {width: window.innerWidth, height: window.innerHeight, duration: 15, transparent: true, saveContent: true}, () => {player.bh.celestialite.actions[1].variables.attacks = 16})
                 }
                 if (player.bh.celestialite.actions[1].variables.attacks == 16) {
-                    bulletHell({"finalMatosAttack": {radius: 64, fillColor: "#fff", strokeColor: "#e22", symbol: "⊘", burstBullets: 8, burstViolence: 0.5, lungeTimer: 0, lungeCooldown: 0, explosionBurstTimer: 0, explosionBurstCount: 0, lastTick: false}, "bulletRain": {bulletPerSec: 12, duration: 15}, "knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 8, knifePerSec: 1.2, duration: 15}}, {width: window.innerWidth, height: window.innerHeight, duration: 19, transparent: true, saveContent: true}, () => {player.bh.celestialite.actions[1].variables.attacks += 1})
+                    bulletHell({"finalMatosAttack": {radius: 64, fillColor: "#fff", strokeColor: "#e22", symbol: "⊘", burstBullets: 8, burstViolence: 0.5, lungeTimer: 0, lungeCooldown: 0, explosionBurstTimer: 0, explosionBurstCount: 0, lastTick: false}, "bulletRain": {bulletPerSec: 12, duration: 15}, "knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 8, knifePerSec: 1.2, duration: 15}}, {width: window.innerWidth, height: window.innerHeight, duration: 19, transparent: true, saveContent: true}, () => {player.bh.celestialite.actions[1].variables.attacks = 17})
                 }
-                if (player.bh.celestialite.actions[1].variables.attacks == 17) {
+                if (player.bh.celestialite.actions[1].variables.attacks >= 17) {
                     celestialiteDeath()
                 }
             },

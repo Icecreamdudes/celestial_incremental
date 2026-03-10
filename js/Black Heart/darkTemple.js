@@ -678,7 +678,7 @@ addLayer("darkTemple", {
                     ["blank", "5px"],
                     ["raw-html", () => {
                         let futureEffects = RUNE_EFFECTS[player.darkTemple.selection][getBuyableAmount("darkTemple", player.darkTemple.selection).add(1)]
-                        if (getBuyableAmount("darkTemple", player.darkTemple.selection).gte(5)) futureEffects = {}
+                        if (getBuyableAmount("darkTemple", player.darkTemple.selection).gte(player.darkTemple.runeCap)) futureEffects = {}
                         let str = ""
                         if (player.darkTemple.spAdd.gt(0) || futureEffects.sp) {
                             str = str + "+" + formatShortSimple(player.darkTemple.spAdd) + " SP"

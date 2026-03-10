@@ -636,7 +636,7 @@ function celestialiteDeath() {
         if (BHC[player.bh.celestialite.id].attributes["explosive"]) {
             for (let i = 0; i < 3; i++) {
                 // If dead, go to next character
-                if (player.bh.characters[i].health.lte(0)) continue
+                if (player.bh.characters[i].health.lte(0) || player.bh.characters[i].id == "none") continue
                 // If has shield, block damage
                 if (player.bh.characters[i].shield.gt(0)) {
                     player.bh.characters[i].shield = player.bh.characters[i].shield.sub(1)

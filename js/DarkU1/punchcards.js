@@ -784,7 +784,7 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.dn.normality.pow(0.3).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = player.dn.normality.pow(0.2).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
                 eff[1] = getLevelableAmount(this.layer, this.id).pow(1.3).add(1)
                 return eff
             },

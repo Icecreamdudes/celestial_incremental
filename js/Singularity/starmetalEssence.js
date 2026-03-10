@@ -1902,6 +1902,41 @@
                 return look
             },
         },
+        182: {
+            costBase() { return [new Decimal(1000), new Decimal(5e7)] },
+            costGrowth() { return [new Decimal(10), new Decimal(1.2)] },
+            purchaseLimit() { return new Decimal(10) },
+            currency() { return [player.za.chancePoints, player.sme.starmetalEssence]},
+            pay(amt, amt2) {
+                player.za.chancePoints = this.currency()[0].sub(amt)
+                player.sme.starmetalEssence = this.currency()[1].sub(amt2)
+            },
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(5).add(1)},
+            unlocked() {return player.za.zarUnlocked},
+            branches: [[181, "#888"]],
+            cost(x) {
+                return [this.costGrowth()[0].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[0]).floor(), this.costGrowth()[1].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[1]).floor()]
+            },
+            canAfford() {
+                return this.currency()[0].gte(this.cost()[0]) && this.currency()[1].gte(this.cost()[1]) && getBuyableAmount("sme", 181).gt(0)
+            },
+            display() {
+                return "<h3>SME-I2</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
+                    Increase chance point softcap by +20%.\n\
+                    Currently: +" + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + "%\n\ \n\
+                    Cost:<br>" + formatShortWhole(player.za.chancePoints) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[0]) + " Chance Points\n\
+                    " + formatShortWhole(player.sme.starmetalEssence) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[1]) + " SME"
+            },
+            buy() {
+                this.pay(this.cost()[0], this.cost()[1])
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {position: "absolute", left: "20px", top: "1140px", width: "140px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid #282363", borderRadius: "15px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)"
+                return look
+            },
+        },
     },
     milestones: {},
     challenges: {},
@@ -1940,7 +1975,7 @@
                         ["buyable", 151], ["buyable", 152], ["buyable", 153], ["buyable", 154],
                         ["buyable", 161], ["buyable", 162], ["buyable", 163], ["buyable", 164],
                         ["buyable", 171], ["buyable", 172], ["buyable", 173], ["buyable", 174],
-                        ["buyable", 181],
+                        ["buyable", 181], ["buyable", 182],
                     ], () => {
                         let look = {position: "relative", width: "800px", height: "780px", background: "rgba(0,0,0,0.3)", border: "3px solid #d460eb", borderRadius: "0 0 30px 30px"}
                         if (player.ir.iriditeDefeated) look.height = "1340px"

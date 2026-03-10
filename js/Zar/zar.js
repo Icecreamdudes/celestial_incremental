@@ -43,6 +43,7 @@
         player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.mul(buyableEffect("cf", 13))
         player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.mul(player.wof.wheelPointsEffect2)
         player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.mul(player.sm.chipsEffect[0])
+        player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.mul(buyableEffect("sme", 182))
         player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.pow(buyableEffect("sm", 109))
 
         if (player.za.chancePoints.add(player.za.chancePointsPerSecond).gte(player.za.chancePointsSoftcapStart))

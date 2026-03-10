@@ -51,7 +51,7 @@ function bhAction(index, slot, interval = false, magnitude = 1, delay = false) {
         } else {
             daze = Decimal.div(daze, Decimal.div(Decimal.add(100, player.bh.characters[index].luck), 100))
             if (Decimal.gte(daze, Math.random())) {
-                bhLog("<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " missed.")
+                bhLog("<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + run(BHP[player.bh.characters[index].id].name, BHP[player.bh.characters[index].id]) + " missed.")
                 return
             }
         }
@@ -234,15 +234,15 @@ function bhAction(index, slot, interval = false, magnitude = 1, delay = false) {
                             if (receive == 3) {
                                 bhLog(resetStr + "<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " reset its skills.")
                             } else {
-                                bhLog(resetStr + "<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " reset " + BHP[player.bh.characters[receive].id].name + "'s skills.")
+                                bhLog(resetStr + "<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " reset " + run(BHP[player.bh.characters[receive].id].name, BHP[player.bh.characters[receive].id]) + "'s skills.")
                             }
                         } else {
                             if (index == receive) {
-                                bhLog(resetStr + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " reset their skills.")
+                                bhLog(resetStr + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + run(BHP[player.bh.characters[index].id].name, BHP[player.bh.characters[index].id]) + " reset their skills.")
                             } else if (receive != 3) {
-                                bhLog(resetStr + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " reset " + BHP[player.bh.characters[receive].id].name + "'s skills.")
+                                bhLog(resetStr + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + run(BHP[player.bh.characters[index].id].name, BHP[player.bh.characters[index].id]) + " reset " + run(BHP[player.bh.characters[receive].id].name, BHP[player.bh.characters[receive].id]) + "'s skills.")
                             } else {
-                                bhLog(resetStr + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " reset " + BHC[player.bh.celestialite.id].name + "'s skills.")
+                                bhLog(resetStr + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + run(BHP[player.bh.characters[index].id].name, BHP[player.bh.characters[index].id]) + " reset " + BHC[player.bh.celestialite.id].name + "'s skills.")
                             }
                         }
                     }
@@ -279,15 +279,15 @@ function bhAction(index, slot, interval = false, magnitude = 1, delay = false) {
                             if (receive == 3) {
                                 bhLog(coolStr + "<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " reduced its cooldowns by " + formatTime(val) + ".")
                             } else {
-                                bhLog(coolStr + "<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " reduced " + BHP[player.bh.characters[receive].id].name + "'s cooldowns by " + formatTime(val) + ".")
+                                bhLog(coolStr + "<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " reduced " + run(BHP[player.bh.characters[receive].id].name, BHP[player.bh.characters[receive].id]) + "'s cooldowns by " + formatTime(val) + ".")
                             }
                         } else {
                             if (index == receive) {
-                                bhLog(coolStr + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " reduced their cooldowns by " + formatTime(val) + ".")
+                                bhLog(coolStr + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + run(BHP[player.bh.characters[index].id].name, BHP[player.bh.characters[index].id]) + " reduced their cooldowns by " + formatTime(val) + ".")
                             } else if (receive != 3) {
-                                bhLog(coolStr + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " reduced " + BHP[player.bh.characters[receive].id].name + "'s cooldowns by " + formatTime(val) + ".")
+                                bhLog(coolStr + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + run(BHP[player.bh.characters[index].id].name, BHP[player.bh.characters[index].id]) + " reduced " + run(BHP[player.bh.characters[receive].id].name, BHP[player.bh.characters[receive].id]) + "'s cooldowns by " + formatTime(val) + ".")
                             } else {
-                                bhLog(coolStr + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " reduced " + BHC[player.bh.celestialite.id].name + "'s cooldowns by " + formatTime(val) + ".")
+                                bhLog(coolStr + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + run(BHP[player.bh.characters[index].id].name, BHP[player.bh.characters[index].id]) + " reduced " + BHC[player.bh.celestialite.id].name + "'s cooldowns by " + formatTime(val) + ".")
                             }
                         }
                     }
@@ -319,15 +319,15 @@ function bhAction(index, slot, interval = false, magnitude = 1, delay = false) {
                             if (receive == 3) {
                                 bhLog(shieldStr + "<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " shielded itself " + formatWhole(num) + " " + str + ".")
                             } else {
-                                bhLog(shieldStr + "<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " shielded " + BHP[player.bh.characters[receive].id].name + " " + formatWhole(num) + " " + str + ".")
+                                bhLog(shieldStr + "<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " shielded " + run(BHP[player.bh.characters[receive].id].name, BHP[player.bh.characters[receive].id]) + " " + formatWhole(num) + " " + str + ".")
                             }
                         } else {
                             if (index == receive) {
-                                bhLog(shieldStr + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " shielded themself " + formatWhole(num) + " " + str + ".")
+                                bhLog(shieldStr + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + run(BHP[player.bh.characters[index].id].name, BHP[player.bh.characters[index].id]) + " shielded themself " + formatWhole(num) + " " + str + ".")
                             } else if (receive != 3) {
-                                bhLog(shieldStr + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " shielded " + BHP[player.bh.characters[receive].id].name + " " + formatWhole(num) + " " + str + ".")
+                                bhLog(shieldStr + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + run(BHP[player.bh.characters[index].id].name, BHP[player.bh.characters[index].id]) + " shielded " + run(BHP[player.bh.characters[receive].id].name, BHP[player.bh.characters[index].id]) + " " + formatWhole(num) + " " + str + ".")
                             } else {
-                                bhLog(shieldStr + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " shielded " + BHC[player.bh.celestialite.id].name + " " + formatWhole(num) + " " + str + ".")
+                                bhLog(shieldStr + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + run(BHP[player.bh.characters[index].id].name, BHP[player.bh.characters[index].id]) + " shielded " + BHC[player.bh.celestialite.id].name + " " + formatWhole(num) + " " + str + ".")
                             }
                         }
                     }
@@ -353,7 +353,7 @@ function bhProperties(index, action, luckMult, target, val) {
         if (index == 3) {
             bhLog("<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " missed.")
         } else {
-            bhLog("<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " missed.")
+            bhLog("<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + run(BHP[player.bh.characters[index].id].name, BHP[player.bh.characters[index].id]) + " missed.")
         }
         return [val, str, true]
     }
@@ -442,15 +442,15 @@ function bhEffectText(type, val, index, target, percentage = 0, str) {
             if (receive == 3) {
                 bhLog(str + "<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " " + sign[0] + " its " + type + " by " + sign[1] + num)
             } else {
-                bhLog(str + "<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " " + sign[0] + " " + BHP[player.bh.characters[receive].id].name + "'s " + type + " by " + sign[1] + num)
+                bhLog(str + "<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " " + sign[0] + " " + run(BHP[player.bh.characters[receive].id].name, BHP[player.bh.characters[receive].id]) + "'s " + type + " by " + sign[1] + num)
             }
         } else {
             if (index == receive) {
-                bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " " + sign[0] + " its " + type + " by " + sign[1] + num)
+                bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + run(BHP[player.bh.characters[index].id].name, BHP[player.bh.characters[index].id]) + " " + sign[0] + " its " + type + " by " + sign[1] + num)
             } else if (receive != 3) {
-                bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " " + sign[0] + " " + BHP[player.bh.characters[receive].id].name + "'s " + type + " by " + sign[1] + num)
+                bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + run(BHP[player.bh.characters[index].id].name, BHP[player.bh.characters[index].id]) + " " + sign[0] + " " + run(BHP[player.bh.characters[receive].id].name, BHP[player.bh.characters[receive].id]) + "'s " + type + " by " + sign[1] + num)
             } else {
-                bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " " + sign[0] + " " + BHC[player.bh.celestialite.id].name + "'s " + type + " by " + sign[1] + num)
+                bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + run(BHP[player.bh.characters[index].id].name, BHP[player.bh.characters[index].id]) + " " + sign[0] + " " + BHC[player.bh.celestialite.id].name + "'s " + type + " by " + sign[1] + num)
             }
         }
     }
@@ -488,7 +488,7 @@ function bhAttack(damage, index, target, str = "", method = "none", attr = false
             // Shield Calc
             if (player.bh.characters[receive].shield.gt(0)) {
                 player.bh.characters[receive].shield = player.bh.characters[receive].shield.sub(1)
-                bhLog("<span style='color: " + BHP[player.bh.characters[receive].id].color + "'>Shield blocked damage towards " + BHP[player.bh.characters[receive].id].name + ".")
+                bhLog("<span style='color: " + BHP[player.bh.characters[receive].id].color + "'>Shield blocked damage towards " + run(BHP[player.bh.characters[receive].id].name, BHP[player.bh.characters[receive].id]) + ".")
                 return
             }
             // Defense Calc
@@ -509,21 +509,21 @@ function bhAttack(damage, index, target, str = "", method = "none", attr = false
                 bhLog(str + "<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " attacks itself for " +format(damage) + " damage.")
             } else {
                 player.bh.characters[receive].health = player.bh.characters[receive].health.sub(damage)
-                bhLog(str + "<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " attacks " + BHP[player.bh.characters[receive].id].name + " for " +format(damage) + " damage.")
+                bhLog(str + "<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " attacks " + run(BHP[player.bh.characters[receive].id].name, BHP[player.bh.characters[receive].id]) + " for " +format(damage) + " damage.")
             }
         } else {
             if (index == receive) {
                 player.bh.characters[receive].health = player.bh.characters[receive].health.sub(damage)
-                bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " attacks themself for " +format(damage) + " damage.")
+                bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + run(BHP[player.bh.characters[index].id].name, BHP[player.bh.characters[index].id]) + " attacks themself for " +format(damage) + " damage.")
             } else if (receive != 3) {
                 player.bh.characters[receive].health = player.bh.characters[receive].health.sub(damage)
-                bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " attacks " + BHP[player.bh.characters[receive].id].name + " for " +format(damage) + " damage.")
+                bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + run(BHP[player.bh.characters[index].id].name, BHP[player.bh.characters[index].id]) + " attacks " + run(BHP[player.bh.characters[receive].id].name, BHP[player.bh.characters[receive].id]) + " for " +format(damage) + " damage.")
             } else {
                 player.bh.celestialite.health = player.bh.celestialite.health.sub(damage)
-                bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " attacks " + BHC[player.bh.celestialite.id].name + " for " +format(damage) + " damage.")
+                bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + run(BHP[player.bh.characters[index].id].name, BHP[player.bh.characters[index].id]) + " attacks " + BHC[player.bh.celestialite.id].name + " for " +format(damage) + " damage.")
             }
         }
-        if (receive != 3 && player.bh.characters[receive].health.lte(0)) bhLog("<span style='color: " + BHP[player.bh.characters[receive].id].color + "'>" + BHP[player.bh.characters[receive].id].name + " fainted!")
+        if (receive != 3 && player.bh.characters[receive].health.lte(0)) bhLog("<span style='color: " + BHP[player.bh.characters[receive].id].color + "'>" + run(BHP[player.bh.characters[receive].id].name, BHP[player.bh.characters[receive].id]) + " fainted!")
     }
 }
 
@@ -541,18 +541,18 @@ function bhHeal(heal, index, target, str = "") {
                 bhLog(str + "<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " healed itself for " +format(heal) + " health.")
             } else {
                 player.bh.characters[receive].health = player.bh.characters[receive].health.add(heal).min(player.bh.characters[receive].maxHealth)
-                bhLog(str + "<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " healed " + BHP[player.bh.characters[receive].id].name + " for " +format(heal) + " health.")
+                bhLog(str + "<span style='color: #8b0e7a'>" + BHC[player.bh.celestialite.id].name + " healed " + run(BHP[player.bh.characters[receive].id].name, BHP[player.bh.characters[receive].id]) + " for " +format(heal) + " health.")
             }
         } else {
             if (index == receive) {
                 player.bh.characters[receive].health = player.bh.characters[receive].health.add(heal).min(player.bh.characters[receive].maxHealth)
-                bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " healed themself for " +format(heal) + " health.")
+                bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + run(BHP[player.bh.characters[index].id].name, BHP[player.bh.characters[index].id]) + " healed themself for " +format(heal) + " health.")
             } else if (receive != 3) {
                 player.bh.characters[receive].health = player.bh.characters[receive].health.add(heal).min(player.bh.characters[receive].maxHealth)
-                bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " healed " + BHP[player.bh.characters[receive].id].name + " for " +format(heal) + " health.")
+                bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + run(BHP[player.bh.characters[index].id].name, BHP[player.bh.characters[index].id]) + " healed " + run(BHP[player.bh.characters[receive].id].name, BHP[player.bh.characters[receive].id]) + " for " +format(heal) + " health.")
             } else {
                 player.bh.celestialite.health = player.bh.celestialite.health.add(heal).min(player.bh.celestialite.maxHealth)
-                bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + BHP[player.bh.characters[index].id].name + " healed " + BHC[player.bh.celestialite.id].name + " for " +format(heal) + " health.")
+                bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + run(BHP[player.bh.characters[index].id].name, BHP[player.bh.characters[index].id]) + " healed " + BHC[player.bh.celestialite.id].name + " for " +format(heal) + " health.")
             }
         }
     }
@@ -640,7 +640,7 @@ function celestialiteDeath() {
                 // If has shield, block damage
                 if (player.bh.characters[i].shield.gt(0)) {
                     player.bh.characters[i].shield = player.bh.characters[i].shield.sub(1)
-                    bhLog("<span style='color: #ee8700;'>Shield blocked explosive damage towards " + BHP[player.bh.characters[i].id].name + ".</span>")
+                    bhLog("<span style='color: #ee8700;'>Shield blocked explosive damage towards " + run(BHP[player.bh.characters[i].id].name, BHP[player.bh.characters[i].id]) + ".</span>")
                     continue
                 }
                 // Damage Calc
@@ -649,7 +649,7 @@ function celestialiteDeath() {
 
                 // Damage Application
                 player.bh.characters[i].health = player.bh.characters[i].health.sub(damage)
-                bhLog("<span style='color: #ee8700;'>[EXPLOSION] " + BHP[player.bh.characters[i].id].name + " takes " + format(damage) + " damage.</span>")
+                bhLog("<span style='color: #ee8700;'>[EXPLOSION] " + run(BHP[player.bh.characters[i].id].name, BHP[player.bh.characters[i].id]) + " takes " + format(damage) + " damage.</span>")
             }
         }
     }

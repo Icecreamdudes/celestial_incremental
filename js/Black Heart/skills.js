@@ -82,8 +82,8 @@ BHA.general_scream = {
 }
 BHA.general_recklessAbandon = {
     name: "Reckless Abandon",
-    description() {return "Convert " + formatWhole(new Decimal(25).add(player.bh.skillData["general_hardened"].level.mul(5))) + "% of your health into damage, at " + formatWhole(new Decimal(20).add(player.bh.skillData["general_hardened"].level.mul(2))) + "% efficiency"},
-    passiveText() {return "+" + formatSimple(player.bh.skillData["general_hardened"].maxLevel) + " HP"},
+    description() {return "Convert " + formatWhole(new Decimal(25).add(player.bh.skillData["general_recklessAbandon"].level.mul(5))) + "% of your health into damage, at " + formatWhole(new Decimal(20).add(player.bh.skillData["general_recklessAbandon"].level.mul(2))) + "% efficiency"},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["general_recklessAbandon"].maxLevel) + " HP"},
     char: "general",
     spCost: new Decimal(10),
     curCostBase: new Decimal(15),
@@ -95,8 +95,8 @@ BHA.general_recklessAbandon = {
     constantType: "effect",
     constantTarget: "self",
     effects: {
-        "damageAdd"(char) {return char.health.mul(Decimal.add(0.25, player.bh.skillData["general_hardened"].level.mul(0.05))).mul(Decimal.add(0.2, player.bh.skillData["general_hardened"].level.mul(0.02)))}, // Additive Effect
-        "healthMult"(char) {return Decimal.div(1, Decimal.add(0.25, player.bh.skillData["general_hardened"].level.mul(0.05)))}, // Multiplicative Effect
+        "damageAdd"(char) {return char.health.mul(Decimal.add(0.25, player.bh.skillData["general_recklessAbandon"].level.mul(0.05))).mul(Decimal.add(0.2, player.bh.skillData["general_recklessAbandon"].level.mul(0.02)))}, // Additive Effect
+        "healthMult"(char) {return Decimal.div(1, Decimal.add(0.25, player.bh.skillData["general_recklessAbandon"].level.mul(0.05)))}, // Multiplicative Effect
     },
     cooldown: new Decimal(Infinity),
 }

@@ -802,3 +802,9 @@ BHC.staticEnas = {
         return gain
     },
 }
+
+// Confinement based attacks (aka smaller arena in the arena) Uses agility nerfs on you
+
+// Burst based attacks (tack shooter go brrr) Bullet count is based on luck, and is increased with a seperate action
+
+// The celestialite directly attacks (similar to matos with him charging and shooting) Passive that increases agility based on health lost

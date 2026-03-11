@@ -379,20 +379,40 @@ BHS.depth4 = {
                 return "majorMyrioi"
             default:
                 let random = Math.random()
-                let cel = ["majorAlpha", "majorBeta", "majorGamma", "majorDelta", "majorEpsilon", "majorZeta", "majorEta", "majorTheta", "majorIota"]
-                if (combo >= 25) cel.push("majorKappa")
-                if (combo >= 50) cel.push("majorLambda")
-                if (combo >= 100) cel.push("majorMu")
-                if (combo >= 150) cel.push("majorNu")
-                if (combo >= 200) cel.push("majorXi") //ξ
+                let cel = ["majorAlpha", "majorBeta", "majorGamma", "majorDelta", "majorEpsilon", "majorZeta", "majorEta", "majorTheta"]
+                if (combo >= 25) cel.push("majorIota")
+                if (combo >= 50) cel.push("majorKappa")
+                if (combo >= 100) cel.push("majorLambda")
+                if (combo >= 150) cel.push("majorMu")
+                if (combo >= 200) cel.push("majorNu")
                 return cel[Math.floor(Math.random()*cel.length)]
         }
     },
 }
 
+// ==--- MAIN GIMMICKS
+
 // Poison via negative regen active skill
 // Multi-hit attacks
+// Crit attacks (one that has a luck increase with it would be cool)
+// Daze Attribute
+
+// ==--- SIDE ACTIONS
+
 // Heals
 // Blocks
-// Attacks that either stun or daze you
-// 
+// Stat buffs
+
+// MINIBOSS IDEAS
+
+// Dazed, has a crit attack, and a multi-hit attack, but also an action that increases luck
+
+// Has an attack that deals poison, and the damage from the poison increases from a seperate skill. Also a heal for funsies. (Probably done by basing the poison damage from a seperate stat and increasing that stat)
+
+// Boss who has a multi-hit attack, and a skill that increases the amount of multi-hits it does (likely by tying it to a stat and increasing that stat)
+
+// Boss that has an action with a really low chance to crit, and an action that massively increases agility
+
+// Boss with a smaller amount of health, but 2 block skills and a multi-hit crit attack.
+
+// Boss who has a missable poison attack, a critable multi-hit attack, a missable heal, and a missable poison multi-hit critable attack. (silly)

@@ -879,7 +879,11 @@ function stagnantUpdate(time) {
 
                     if (player.bh.celestialite.stun[1].gt(0)) {
                         player.bh.celestialite.stun[1] = player.bh.celestialite.stun[1].sub(delta)
+                        if (player.bh.celestialite.stun.length >= 3 && player.bh.celestialite.stun[1].lte(0)) {
+                            bhAction(3, player.bh.celestialite.stun[2], false, 1, true)
+                        }
                     }
+                    
                     // Cycle, increment cooldowns, and trigger celestialite actions
                     for (let i = 0; i < 4; i++) {
                         if (BHC[player.bh.celestialite.id].actions[i]) {
@@ -944,6 +948,9 @@ function stagnantUpdate(time) {
 
                     if (player.bh.characters[i].stun[1].gt(0)) {
                         player.bh.characters[i].stun[1] = player.bh.characters[i].stun[1].sub(delta)
+                        if (player.bh.characters[i].stun.length >= 3 && player.bh.characters[i].stun[1].lte(0)) {
+                            bhAction(i, player.bh.characters[i].stun[2], false, 1, true)
+                        }
                     }
 
                     // Cycle through character skills

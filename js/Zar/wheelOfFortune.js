@@ -64,7 +64,7 @@
             }
             if (player.wof.trueTimer.gte(player.wof.spinLength))
             {
-                player.wof.wheelPoints = player.wof.wheelPoints.add(player.wof.segmentGains[player.wof.currentlySelectedSegment])
+                player.wof.wheelPoints = player.wof.wheelPoints.add(player.wof.segmentGains[player.wof.currentlySelectedSegment].mul(player.wof.wheelPointsMult))
                 player.wof.spinActive = false
 
                     let guarantee = buyableEffect("sm", 106).div(100).floor()
@@ -126,10 +126,10 @@
             let random = Math.random()
             if (random < 0.9)
             {
-                player.wof.segmentGains[i] = Decimal.mul(Decimal.add(1, Decimal.mul(Math.random(), 2)), player.wof.wheelPointsMult)   
+                player.wof.segmentGains[i] = Decimal.add(1, Decimal.mul(Math.random(), 2))
             } else
             {
-                player.wof.segmentGains[i] = Decimal.mul(Decimal.add(5, Decimal.mul(Math.random(), 10)), player.wof.wheelPointsMult)      
+                player.wof.segmentGains[i] = Decimal.add(5, Decimal.mul(Math.random(), 10))  
             }
         }
     },
@@ -207,87 +207,127 @@
         },
         
         101: {
-            title() { return "+" + format(player.wof.segmentGains[0]) + " Wheel Points"},
+            title() { return "<h2>x" + format(player.wof.segmentGains[0]) + "</h2>"},
             display() { return "" },
             canClick() { return false },
             unlocked() { return true },
             style() { 
-                return player.wof.currentlySelectedSegment == 0 ? {width: '125px', "min-height": '125px', borderRadius: "15px 0px 0px 0px", backgroundImage: "linear-gradient(180deg, #454b14ff 0%, #7c813dff 50%, #454b14ff 100%)"} : {width: '125px', "min-height": '125px', borderRadius: "15px 0px 0px 0px", backgroundImage: "linear-gradient(180deg, #144b34ff 0%, #3d8165ff 50%, #144b34ff 100%)"}
-                
+                let look = {width: '125px', "min-height": '125px', borderRadius: "15px 0px 0px 0px", borderTop: "3px solid black", borderLeft: "3px solid black"}
+                if (player.wof.currentlySelectedSegment == 0) {
+                    look.background = "linear-gradient(180deg, #709948 0%, #bbff78 50%, #709948 100%)"
+                } else {
+                    look.background = "linear-gradient(180deg, #1f7350 0%, #5abf95 50%, #1f7350 100%)"
+                }
+                return look                
             },
         },
         102: {
-            title() { return "+" + format(player.wof.segmentGains[1]) + " Wheel Points"},
+            title() { return "<h2>x" + format(player.wof.segmentGains[1]) + "</h2>"},
             display() { return "" },
             canClick() { return false },
             unlocked() { return true },
             style() { 
-                return player.wof.currentlySelectedSegment == 1 ? {width: '125px', "min-height": '125px', borderRadius: "0px", backgroundImage: "linear-gradient(180deg, #454b14ff 0%, #7c813dff 50%, #454b14ff 100%)"} : {width: '125px', "min-height": '125px', borderRadius: "0px", backgroundImage: "linear-gradient(180deg, #144b34ff 0%, #3d8165ff 50%, #144b34ff 100%)"}
-                
+                let look = {width: '125px', "min-height": '125px', borderRadius: "0px 0px 0px 0px", borderTop: "3px solid black"}
+                if (player.wof.currentlySelectedSegment == 1) {
+                    look.background = "linear-gradient(180deg, #709948 0%, #bbff78 50%, #709948 100%)"
+                } else {
+                    look.background = "linear-gradient(180deg, #1f7350 0%, #5abf95 50%, #1f7350 100%)"
+                }
+                return look                
             },
         },
         103: {
-            title() { return "+" + format(player.wof.segmentGains[2]) + " Wheel Points"},
+            title() { return "<h2>x" + format(player.wof.segmentGains[2]) + "</h2>"},
             display() { return "" },
             canClick() { return false },
             unlocked() { return true },
             style() { 
-                return player.wof.currentlySelectedSegment == 2 ? {width: '125px', "min-height": '125px', borderRadius: "0px 15px 0px 0px", backgroundImage: "linear-gradient(180deg, #454b14ff 0%, #7c813dff 50%, #454b14ff 100%)"} : {width: '125px', "min-height": '125px', borderRadius: "0px 15px 0px 0px", backgroundImage: "linear-gradient(180deg, #144b34ff 0%, #3d8165ff 50%, #144b34ff 100%)"}
-                
+                let look = {width: '125px', "min-height": '125px', borderRadius: "0px 15px 0px 0px", borderTop: "3px solid black", borderRight: "3px solid black"}
+                if (player.wof.currentlySelectedSegment == 2) {
+                    look.background = "linear-gradient(180deg, #709948 0%, #bbff78 50%, #709948 100%)"
+                } else {
+                    look.background = "linear-gradient(180deg, #1f7350 0%, #5abf95 50%, #1f7350 100%)"
+                }
+                return look                
             },
         },
         104: {
-            title() { return "+" + format(player.wof.segmentGains[3]) + " Wheel Points"},
+            title() { return "<h2>x" + format(player.wof.segmentGains[3]) + "</h2>"},
             display() { return "" },
             canClick() { return false },
             unlocked() { return true },
             style() { 
-                return player.wof.currentlySelectedSegment == 3 ? {width: '125px', "min-height": '125px', borderRadius: "0px", backgroundImage: "linear-gradient(180deg, #454b14ff 0%, #7c813dff 50%, #454b14ff 100%)"} : {width: '125px', "min-height": '125px', borderRadius: "0px", backgroundImage: "linear-gradient(180deg, #144b34ff 0%, #3d8165ff 50%, #144b34ff 100%)"}
-                
+                let look = {width: '125px', "min-height": '125px', borderRadius: "0px 0px 0px 0px", borderLeft: "3px solid black"}
+                if (player.wof.currentlySelectedSegment == 3) {
+                    look.background = "linear-gradient(180deg, #709948 0%, #bbff78 50%, #709948 100%)"
+                } else {
+                    look.background = "linear-gradient(180deg, #1f7350 0%, #5abf95 50%, #1f7350 100%)"
+                }
+                return look                
             },
         },
         105: {
-            title() { return "+" + format(player.wof.segmentGains[4]) + " Wheel Points"},
+            title() { return "<h2>x" + format(player.wof.segmentGains[4]) + "</h2>"},
             display() { return "" },
             canClick() { return false },
             unlocked() { return true },
             style() { 
-                return player.wof.currentlySelectedSegment == 4 ? {width: '125px', "min-height": '125px', borderRadius: "0px", backgroundImage: "linear-gradient(180deg, #454b14ff 0%, #7c813dff 50%, #454b14ff 100%)"} : {width: '125px', "min-height": '125px', borderRadius: "0px", backgroundImage: "linear-gradient(180deg, #144b34ff 0%, #3d8165ff 50%, #144b34ff 100%)"}
-                
+                let look = {width: '125px', "min-height": '125px', borderRadius: "0px 0px 0px 0px", borderRight: "3px solid black"}
+                if (player.wof.currentlySelectedSegment == 4) {
+                    look.background = "linear-gradient(180deg, #709948 0%, #bbff78 50%, #709948 100%)"
+                } else {
+                    look.background = "linear-gradient(180deg, #1f7350 0%, #5abf95 50%, #1f7350 100%)"
+                }
+                return look                
             },
         },
         106: {
-            title() { return "+" + format(player.wof.segmentGains[5]) + " Wheel Points"},
+            title() { return "<h2>x" + format(player.wof.segmentGains[5]) + "</h2>"},
             display() { return "" },
             canClick() { return false },
             unlocked() { return true },
             style() { 
-                return player.wof.currentlySelectedSegment == 5 ? {width: '125px', "min-height": '125px', borderRadius: "0px 0px 0px 15px", backgroundImage: "linear-gradient(180deg, #454b14ff 0%, #7c813dff 50%, #454b14ff 100%)"} : {width: '125px', "min-height": '125px', borderRadius: "0px 0px 0px 15px", backgroundImage: "linear-gradient(180deg, #144b34ff 0%, #3d8165ff 50%, #144b34ff 100%)"}
-                
+                let look = {width: '125px', "min-height": '125px', borderRadius: "0px 0px 0px 15px", borderBottom: "3px solid black", borderLeft: "3px solid black"}
+                if (player.wof.currentlySelectedSegment == 5) {
+                    look.background = "linear-gradient(180deg, #709948 0%, #bbff78 50%, #709948 100%)"
+                } else {
+                    look.background = "linear-gradient(180deg, #1f7350 0%, #5abf95 50%, #1f7350 100%)"
+                }
+                return look                
             },
         },
         107: {
-            title() { return "+" + format(player.wof.segmentGains[6]) + " Wheel Points"},
+            title() { return "<h2>x" + format(player.wof.segmentGains[6]) + "</h2>"},
             display() { return "" },
             canClick() { return false },
             unlocked() { return true },
             style() { 
-                return player.wof.currentlySelectedSegment == 6 ? {width: '125px', "min-height": '125px', borderRadius: "0px", backgroundImage: "linear-gradient(180deg, #454b14ff 0%, #7c813dff 50%, #454b14ff 100%)"} : {width: '125px', "min-height": '125px', borderRadius: "0px", backgroundImage: "linear-gradient(180deg, #144b34ff 0%, #3d8165ff 50%, #144b34ff 100%)"}
-                
+                let look = {width: '125px', "min-height": '125px', borderRadius: "0px 0px 0px 0px", borderBottom: "3px solid black"}
+                if (player.wof.currentlySelectedSegment == 6) {
+                    look.background = "linear-gradient(180deg, #709948 0%, #bbff78 50%, #709948 100%)"
+                } else {
+                    look.background = "linear-gradient(180deg, #1f7350 0%, #5abf95 50%, #1f7350 100%)"
+                }
+                return look                
             },
         },
         108: {
-            title() { return "+" + format(player.wof.segmentGains[7]) + " Wheel Points"},
+            title() { return "<h2>x" + format(player.wof.segmentGains[7]) + "</h2>"},
             display() { return "" },
             canClick() { return false },
             unlocked() { return true },
             style() { 
-                return player.wof.currentlySelectedSegment == 7 ? {width: '125px', "min-height": '125px', borderRadius: "0px 0px 15px 0px", backgroundImage: "linear-gradient(180deg, #454b14ff 0%, #7c813dff 50%, #454b14ff 100%)"} : {width: '125px', "min-height": '125px', borderRadius: "0px 0px 15px 0px", backgroundImage: "linear-gradient(180deg, #144b34ff 0%, #3d8165ff 50%, #144b34ff 100%)"}
-                
+                let look = {width: '125px', "min-height": '125px', borderRadius: "0px 0px 15px 0px", borderBottom: "3px solid black", borderRight: "3px solid black"}
+                if (player.wof.currentlySelectedSegment == 7) {
+                    look.background = "linear-gradient(180deg, #709948 0%, #bbff78 50%, #709948 100%)"
+                } else {
+                    look.background = "linear-gradient(180deg, #1f7350 0%, #5abf95 50%, #1f7350 100%)"
+                }
+                return look                
             },
         },
         201: {
-            title() { return "SPIN!"},
+            title() { return "<h2>SPIN!!!</h2>"},
             tooltip() { return "<h5>Spin Length: " + format(player.wof.spinLength) + ". <h6>(I don't know what unit of measurement this is in, but it's probably seconds.)" },
             canClick() { return player.za.chancePoints.gte(player.wof.spinCost) },
             unlocked() { return true },
@@ -297,9 +337,19 @@
                 player.wof.spinActive = true
                 player.wof.wheelsSpinned = player.wof.wheelsSpinned.add(1)
             },
-            style() { 
-                return { width: '125px', "min-height": '125px', borderRadius: "0px 0px 0px 0px", border: "3px solid #0f221aff", backgroundColor: "3d8165ff" }
-            },
+            style() {
+                let look = {width: '125px', minHeight: '125px', border: "2px solid black", borderRadius: "0px" }
+                if (this.canClick()) {
+                    look.backgroundColor = "#a6dec7"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            }
         },
     },
     bars: {
@@ -548,13 +598,15 @@
                             ["style-column", [
                                 ["blank", "3px"],
                                 ["row", [ ["bar", "wheel"],]],
-                                ["blank", "6px"],
+                                ["blank", "10px"],
                                 ["style-row", [
                                     ["raw-html", function () { return "Spinning the wheel resets previous dice space content." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                                 ], {padding: "6px"}],
                                 ["raw-html", function () { return "Requires " + format(player.wof.spinCost) + " chance points." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                ["blank", "10px"],
                                 ["raw-html", function () { return "Wheels spun: " + formatWhole(player.wof.wheelsSpinned) + "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                                ["blank", "6px"],
+                                ["raw-html", function () { return "<small>Boosts wheel point gain by x" + format(player.wof.wheelsSpinned.pow(buyableEffect("sm", 104)).pow(0.65).add(1)) + ".<br>(based on amount of wheel spins)</small>" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                ["blank", "10px"],
                                 ["clickable", 11],
                                 ["blank", "3px"],
                                 ["clickable", 12],

@@ -599,7 +599,8 @@ function celestialiteReward(gain) {
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.lustrousUmbrite) + " lustrous umbrite! (You have " + formatWhole(player.depth3.lustrousUmbrite) + ")")
     }
     if (gain.darkEssence) {
-        player.bh.darkEssence = player.bh.darkEssence.add(gain.darkEssence).mul(buyableEffect("sme", 135)).mul(generalMult).floor()
+        gain.darkEssence = gain.darkEssence.mul(buyableEffect("sme", 135)).mul(generalMult).floor()
+        player.bh.darkEssence = player.bh.darkEssence.add(gain.darkEssence)
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.darkEssence) + " dark essence! (You have " + formatWhole(player.bh.darkEssence) + ")")
     }
     if (gain.temporalDust) {

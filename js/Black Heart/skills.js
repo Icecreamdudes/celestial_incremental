@@ -95,8 +95,8 @@ BHA.general_recklessAbandon = {
     constantType: "effect",
     constantTarget: "self",
     effects: {
-        "damageAdd"(char) {return char.health.mul(Decimal.add(0.25, player.bh.skillData["general_recklessAbandon"].level.mul(0.05))).mul(Decimal.add(0.2, player.bh.skillData["general_recklessAbandon"].level.mul(0.02)))}, // Additive Effect
-        "healthMult"(char) {return Decimal.div(1, Decimal.add(0.25, player.bh.skillData["general_recklessAbandon"].level.mul(0.05)))}, // Multiplicative Effect
+        "damageAdd"(char) {return char.health.mul(Decimal.add(0.25, player.bh.skillData["general_recklessAbandon"].level.mul(0.05)).mul(Decimal.add(0.2, player.bh.skillData["general_recklessAbandon"].level.mul(0.02))))}, // Additive Effect
+        "healthMult"(char) {return Decimal.sub(1, Decimal.add(0.25, player.bh.skillData["general_recklessAbandon"].level.mul(0.05)))}, // Multiplicative Effect
     },
     cooldown: new Decimal(Infinity),
 }

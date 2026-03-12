@@ -52,7 +52,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
             }
             player.bh.celestialite.stun = ["hard", new Decimal(info.duration)]
         }
-        bhAttack(Decimal.mul(player.bh.celestialite.damage, info.duration/3), 3, "allPlayer")
+        bhAttack(Decimal.mul(player.bh.celestialite.damage, info.duration/3), 3, 0, "allPlayer")
         return
     }
 
@@ -820,7 +820,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
             if (typeof window.lastDamageTime !== "number") window.lastDamageTime = 0;
             if (now - window.lastDamageTime > 400) {
                 window.lastDamageTime = now;
-                bhAttack(player.bh.celestialite.damage, 3, "randomPlayer")
+                bhAttack(player.bh.celestialite.damage, 3, 0, "randomPlayer")
             }
         }
 
@@ -989,7 +989,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         info.active = false;
         options.fullscreen = info.full;
         info.exitAction()
-        if (info.timed) bhAttack(Decimal.mul(player.bh.celestialite.damage, 3), 3, "allPlayer")
+        if (info.timed) bhAttack(Decimal.mul(player.bh.celestialite.damage, 3), 3, 0, "allPlayer")
         localStorage.setItem('bhState', JSON.stringify(info));
     }, info.duration * 1000);
 }
@@ -1019,7 +1019,7 @@ if (storedInfo && storedInfo != "") {
                 bhState.active = false;
                 options.fullscreen = bhState.full;
                 if (storedInfo.exitAction) storedInfo.exitAction()
-                if (bhState.timed) bhAttack(Decimal.mul(player.bh.celestialite.damage, 3), 3, "allPlayer")
+                if (bhState.timed) bhAttack(Decimal.mul(player.bh.celestialite.damage, 3), 3, 0, "allPlayer")
                 storedInfo.active = false
                 localStorage.setItem('bhState', JSON.stringify(storedInfo));
             }, 500)
@@ -1033,7 +1033,7 @@ if (storedInfo && storedInfo != "") {
                 bhState.active = false;
                 options.fullscreen = bhState.full;
                 if (storedInfo.exitAction) storedInfo.exitAction()
-                if (bhState.timed) bhAttack(Decimal.mul(player.bh.celestialite.damage, 3), 3, "allPlayer")
+                if (bhState.timed) bhAttack(Decimal.mul(player.bh.celestialite.damage, 3), 3, 0, "allPlayer")
                 storedInfo.active = false
                 localStorage.setItem('bhState', JSON.stringify(storedInfo));
             }

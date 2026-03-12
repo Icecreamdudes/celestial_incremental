@@ -471,6 +471,8 @@ Features:
 
     6. all: Picks all players and the celestialite.
 
+    7. storedTarget: Uses the target stored from the action property storeTarget
+
 - method: Used when the type is damage to decide what type of damage the action will deal. The potential types are "physical", "ranged", "magic", and "spirit".
 
 - value: Used to decide damage/heal/cooldown/shield values. Formatted as a Decimal object. Can be a function.
@@ -516,6 +518,8 @@ stun() {return ["soft", new Decimal(8).sub(player.bh.skillData["eclipse_lightBar
     8. backfire: Makes an action be able to backfire. Formatted like this: `[backfireChance, backfireMult]`
 
     9. placebo: Makes an action be able to heal the enemy. Formatted like this: `[placeboChance, healAmt]`
+
+    10. storeTarget: Stores a target into the action variables to be used later as a storedTarget target. Set to true.
 
 - effects: Object that describes the effects of an active/passive skill with the typing of "effect". Below are the potential effects:
 

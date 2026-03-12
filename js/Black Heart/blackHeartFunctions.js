@@ -38,7 +38,7 @@ function bhAction(index, slot, interval = false, magnitude = 1, delay = false) {
             damage = player.bh.characters[index].damage
         }
         let str = "<span style='color:red'>[BERSERK] </span>"
-        bhAttack(damage.mul(attribute["berserk"]), index, "self", str)
+        bhAttack(damage.mul(attribute["berserk"]), index, slot, "self", str)
     }
     if (attribute["daze"]) {
         let daze = attribute["daze"]
@@ -82,14 +82,14 @@ function bhAction(index, slot, interval = false, magnitude = 1, delay = false) {
 
                     // =-- Properties --=
                     if (action.properties) {
-                        let prop = bhProperties(index, action, luckMult, target, damage)
+                        let prop = bhProperties(index, slot, action, luckMult, target, damage)
                         damage = prop[0]
                         dmgStr = prop[1]
                         if (prop[2]) return
                     }
 
                     // =-- Apply Damage --=
-                    bhAttack(damage, index, target, dmgStr, action.method)
+                    bhAttack(damage, index, slot, target, dmgStr, action.method)
                     break;
                 case "heal":
                     let heal = Decimal.mul(run(action.value, action, char), Decimal.add(0.9, Decimal.mul(Math.random(), 0.2))).mul(magnitude)
@@ -99,14 +99,14 @@ function bhAction(index, slot, interval = false, magnitude = 1, delay = false) {
 
                     // =-- Properties --=
                     if (action.properties) {
-                        let prop = bhProperties(index, action, luckMult, target, heal)
+                        let prop = bhProperties(index, slot, action, luckMult, target, heal)
                         heal = prop[0]
                         healStr = prop[1]
                         if (prop[2]) return
                     }
 
                     // =-- Heal Application --=
-                    bhHeal(heal, index, target, healStr)
+                    bhHeal(heal, index, slot, target, healStr)
                     break;
                 case "effect":
                     const DONT_SKIP = ["attributes", "health", "damage", "defense", "regen", "agility", "luck", "mending", "time", "cur"]
@@ -124,7 +124,7 @@ function bhAction(index, slot, interval = false, magnitude = 1, delay = false) {
                         if (action.properties[i] == "attributes") { // Doesn't give a message currently.
                             // =-- Properties --=
                             if (action.properties) {
-                                let prop = bhProperties(index, action, luckMult, target, new Decimal(0))
+                                let prop = bhProperties(index, slot, action, luckMult, target, new Decimal(0))
                                 str = prop[1]
                                 if (prop[2]) return
                             }
@@ -146,7 +146,7 @@ function bhAction(index, slot, interval = false, magnitude = 1, delay = false) {
 
                         // =-- Properties --=
                         if (action.properties) {
-                            let prop = bhProperties(index, action, luckMult, target, val)
+                            let prop = bhProperties(index, slot, action, luckMult, target, val)
                             val = prop[0]
                             str = prop[1]
                             if (prop[2]) return
@@ -201,16 +201,16 @@ function bhAction(index, slot, interval = false, magnitude = 1, delay = false) {
                         } else {
                             player.bh.characters[index].skills[slot].variables.target = target
                         }
-                        bhEffectText(name, val, index, target, perc, str)
+                        bhEffectText(name, val, index, slot, target, perc, str)
                     }
                     break;
                 case "reset":
-                    let arr = calcTarget(index, target, "effect")
+                    let arr = calcTarget(index, slot, target, "effect")
                     let resetStr = ""
 
                     // =-- Properties --=
                     if (action.properties) {
-                        let prop = bhProperties(index, action, luckMult, target, new Decimal(0))
+                        let prop = bhProperties(index, slot, action, luckMult, target, new Decimal(0))
                         resetStr = prop[1]
                         if (prop[2]) return
                     }
@@ -249,12 +249,12 @@ function bhAction(index, slot, interval = false, magnitude = 1, delay = false) {
                     break;
                 case "cooldown":
                     let val = run(action.value, action, char).mul(magnitude)
-                    let tar = calcTarget(index, target, "effect")
+                    let tar = calcTarget(index, slot, target, "effect")
                     let coolStr = ""
 
                     // =-- Properties --=
                     if (action.properties) {
-                        let prop = bhProperties(index, action, luckMult, target, val)
+                        let prop = bhProperties(index, slot, action, luckMult, target, val)
                         val = prop[0]
                         coolStr = prop[1]
                         if (prop[2]) return
@@ -294,13 +294,13 @@ function bhAction(index, slot, interval = false, magnitude = 1, delay = false) {
                     break;
                 case "shield":
                     let num = run(action.value, action, char).mul(magnitude)
-                    let targ = calcTarget(index, target, "effect")
+                    let targ = calcTarget(index, slot, target, "effect")
                     let str = "time"
                     let shieldStr = ""
 
                     // =-- Properties --=
                     if (action.properties) {
-                        let prop = bhProperties(index, action, luckMult, target, num)
+                        let prop = bhProperties(index, slot, action, luckMult, target, num)
                         num = prop[0]
                         shieldStr = prop[1]
                         if (prop[2]) return
@@ -335,7 +335,7 @@ function bhAction(index, slot, interval = false, magnitude = 1, delay = false) {
                 case "function":
                     // =-- Properties --=
                     if (action.properties) {
-                        let prop = bhProperties(index, action, luckMult, target, new Decimal(0))
+                        let prop = bhProperties(index, slot, action, luckMult, target, new Decimal(0))
                         if (prop[2]) return
                     }
 
@@ -346,7 +346,7 @@ function bhAction(index, slot, interval = false, magnitude = 1, delay = false) {
     }
 }
 
-function bhProperties(index, action, luckMult, target, val) {
+function bhProperties(index, slot, action, luckMult, target, val) {
     let str = ""
     // Miss
     if (action.properties["miss"] && Decimal.gte(Decimal.div(action.properties["miss"], luckMult), Math.random())) {
@@ -366,7 +366,7 @@ function bhProperties(index, action, luckMult, target, val) {
 
     // Stun
     if (action.properties["stun"] && Decimal.gte(Decimal.mul(action.properties["stun"][0], luckMult), Math.random())) {
-        let arr = calcTarget(index, target, "effect")
+        let arr = calcTarget(index, slot, target, "effect")
         for (let receive of arr) {
             if (receive == 3) {
                 player.bh.celestialite.stun = [action.properties["stun"][1], action.properties["stun"][2]]
@@ -391,7 +391,7 @@ function bhProperties(index, action, luckMult, target, val) {
         } else {
             if (target == "self") newTarget = "celestialite"
         }
-        bhHeal(action.properties["vampiric"][1], index, newTarget, bfStr, action.method)
+        bhHeal(action.properties["vampiric"][1], index, slot, newTarget, bfStr, action.method)
     }
 
     // (Keep at end of properties)
@@ -399,13 +399,16 @@ function bhProperties(index, action, luckMult, target, val) {
     if (action.properties["backfire"] && Decimal.gte(Decimal.div(action.properties["backfire"][0], luckMult), Math.random())) {
         let bfStr = str + "<span style='color:red'>[BACKFIRE] </span>"
         let newTarget = "self"
+        let baseDmg = new Decimal(0)
         if (index == 3) {
             newTarget = "celestialite"
             if (target == "self") newTarget = "randomPlayer"
+            baseDmg = player.bh.celestialite.damage
         } else {
             if (target == "self") newTarget = "celestialite"
+            baseDmg = player.bh.characters[index].damage
         }
-        bhAttack(damage.mul(action.properties["backfire"][1]), index, newTarget, bfStr, action.method)
+        bhAttack(baseDmg.mul(action.properties["backfire"][1]), index, slot, newTarget, bfStr, action.method)
     }
 
     // Placebo
@@ -417,13 +420,13 @@ function bhProperties(index, action, luckMult, target, val) {
         } else {
             newTarget = "celestialite"
         }
-        bhHeal(action.properties["placebo"][1], index, newTarget, bfStr)
+        bhHeal(action.properties["placebo"][1], index, slot, newTarget, bfStr)
     }
 
     return [val, str, false]
 }
 
-function bhEffectText(type, val, index, target, percentage = 0, str) {
+function bhEffectText(type, val, index, slot, target, percentage = 0, str) {
     let sign
     let num = ""
     if (percentage == 0) {
@@ -436,7 +439,7 @@ function bhEffectText(type, val, index, target, percentage = 0, str) {
         sign = Decimal.gte(val, 0) ? ["buffed", "+"] : ["nerfed", "-"]
         num = format(Decimal.mul(val, 100)) + "%."
     }
-    let arr = calcTarget(index, target, "effect")
+    let arr = calcTarget(index, slot, target, "effect")
     for (let receive of arr) {
         if (index == 3) {
             if (receive == 3) {
@@ -456,8 +459,8 @@ function bhEffectText(type, val, index, target, percentage = 0, str) {
     }
 }
 
-function bhAttack(damage, index, target, str = "", method = "none", attr = false) {
-    let arr = calcTarget(index, target, "damage")
+function bhAttack(damage, index, slot, target, str = "", method = "none", attr = false) {
+    let arr = calcTarget(index, slot, target, "damage")
     if (typeof target == "number") arr = [target]
     for (let receive of arr) {
         if (receive == 3 && player.bh.celestialite.id == "none") continue
@@ -472,7 +475,7 @@ function bhAttack(damage, index, target, str = "", method = "none", attr = false
 
         if (attribute["rebound"] && !attr && target != "self") {
             let attStr = "<span style='color:cyan'>[REBOUND] </span>"
-            bhAttack(damage.mul(attribute["rebound"]), receive, index, attStr, "none", true)
+            bhAttack(damage.mul(attribute["rebound"]), index, slot, receive, attStr, "none", true)
         }
 
         let resist = false
@@ -527,13 +530,13 @@ function bhAttack(damage, index, target, str = "", method = "none", attr = false
     }
 }
 
-function bhHeal(heal, index, target, str = "") {
+function bhHeal(heal, index, slot, target, str = "") {
     if (index == 3) {
         heal = heal.mul(player.bh.celestialite.mending.div(10).add(1))
     } else if (player.matosLair.milestone[25] >= 2) {
         heal = heal.mul(player.bh.characters[index].mending.div(10).add(1))
     }
-    let arr = calcTarget(index, target, "heal")
+    let arr = calcTarget(index, slot, target, "heal")
     for (let receive of arr) {
         if (index == 3) {
             if (receive == 3) {
@@ -737,14 +740,30 @@ function celestialiteSpawn() {
     if (BHC[player.bh.celestialite.id].onSpawn) BHC[player.bh.celestialite.id].onSpawn()
 }
 
-function calcTarget(index, target, action = "none") {
+function calcTarget(index, slot, target, action = "none") {
     let playerTaunt = -1
     let celestialiteTaunt = false
+    stored = false
     for (let i = 0; i < 3; i++) {
         if (player.bh.characters[i].attributes["taunt"]) playerTaunt = i
     }
     if (player.bh.celestialite.attributes["taunt"]) celestialiteTaunt = true
+    let result = []
     switch (target) {
+        case "storedTarget":
+            stored = true
+            if (index == 3) {
+                if (player.bh.celestialite.actions[slot].variables["specTarget"]) {
+                    result = player.bh.celestialite.actions[slot].variables["specTarget"]
+                    break;
+                }
+            } else {
+                if (player.bh.characters[index].skills[slot].variables["specTarget"]) {
+                    result = player.bh.characters[index].skills[slot].variables["specTarget"]
+                    break;
+                }
+            }
+            result = []
         case "randomPlayer":
             if (celestialiteTaunt && (action == "heal" || action == "effect")) return [3]
             if (playerTaunt >= 0) return [playerTaunt]
@@ -753,7 +772,8 @@ function calcTarget(index, target, action = "none") {
                 if (player.bh.characters[i].health.gt(0) && player.bh.characters[i].id != "none") potTarget.push(i)
             }
             let rndP = potTarget[Math.floor(Math.random()*potTarget.length)]
-            return [rndP]
+            result = [rndP]
+            break;
         case "random":
             let rndTarget = [3]
             if (playerTaunt >= 0) {
@@ -764,12 +784,15 @@ function calcTarget(index, target, action = "none") {
                 }
             }
             let rndA = rndTarget[Math.floor(Math.random()*rndTarget.length)]
-            return [rndA]
+            result = [rndA]
+            break;
         case "self": // Use when start is player
             if (index == 3) return [3]
-            return [index]
+            result = [index]
+            break;
         case "celestialite":
-            return [3]
+            result = [3]
+            break;
         case "allPlayer":
             let plays = []
             for (let i = 0; i < 3; i++) {
@@ -778,7 +801,8 @@ function calcTarget(index, target, action = "none") {
             if (playerTaunt >= 0) {
                 for (let i = 0; i < plays.length; i++) {plays[i] = playerTaunt}
             }
-            return plays
+            result = plays
+            break;
         case "all":
             let play = []
             for (let i = 0; i < 3; i++) {
@@ -788,8 +812,18 @@ function calcTarget(index, target, action = "none") {
                 for (let i = 0; i < play.length; i++) {play[i] = playerTaunt}
             }
             play.push(3)
-            return play
+            result = play
+            break;
     }
+    if (index == 3) {
+        if (BHC[player.bh.celestialite.id].actions[slot].properties && BHC[player.bh.celestialite.id].actions[slot].properties["storeTarget"] && action != "effect" && !stored) {
+            console.log(index + " " + slot + " " + result + " " + action)
+            player.bh.celestialite.actions[slot].variables["specTarget"] = result
+        }
+    } else {
+        if (BHA[player.bh.characters[index].skills[slot].id].properties && BHA[player.bh.characters[index].skills[slot].id].properties["storeTarget"] && action != "effect" && !stored) player.bh.characters[index].skills[slot].variables["specTarget"] = result
+    }
+    return result
 }
 
 function bhLog(line) {

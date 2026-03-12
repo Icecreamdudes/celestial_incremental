@@ -379,23 +379,347 @@ BHS.depth4 = {
                 return "majorMyrioi"
             default:
                 let random = Math.random()
-                let cel = ["majorAlpha", "majorBeta", "majorGamma", "majorDelta", "majorEpsilon", "majorZeta", "majorEta", "majorTheta"]
-                if (combo >= 25) cel.push("majorIota")
-                if (combo >= 50) cel.push("majorKappa")
-                if (combo >= 100) cel.push("majorLambda")
-                if (combo >= 150) cel.push("majorMu")
-                if (combo >= 200) cel.push("majorNu")
+                let cel = ["majorAlpha", "majorBeta", "majorGamma", "majorDelta", "majorEpsilon", "majorZeta", /*"majorEta", "majorTheta", "majorIota"*/]
+                if (combo >= 25) cel.push("majorKappa")
+                if (combo >= 50) cel.push("majorLambda")
+                if (combo >= 100) cel.push("majorMu")
+                if (combo >= 150) cel.push("majorNu")
+                if (combo >= 200) cel.push("majorXi")
                 return cel[Math.floor(Math.random()*cel.length)]
         }
     },
 }
 
+BHC.majorAlpha = {
+    name: "Celestialite Major Alpha",
+    symbol: "⇑α",
+    style: {
+        background: "linear-gradient(45deg, #5943A3, #8749BD)",
+        color: "black",
+        borderColor: "#321374",
+    },
+    health: new Decimal(400),
+    damage: new Decimal(25),
+    attributes: {
+        "air": new Decimal(0.2), // Resistance DMG Mult
+        "warded": new Decimal(0.2), // Resistance DMG Mult
+        "stealthy": new Decimal(0.2), // Resistance DMG Mult
+    },
+    actions: {
+        0: {
+            name: "Magic Missile",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "magic",
+            value: new Decimal(1),
+            cooldown: new Decimal(5),
+        },
+        1: {
+            name: "Magic Stimulant",
+            active: true,
+            constantType: "effect",
+            constantTarget: "celestialite",
+            effects: {
+                "damageMult": new Decimal(2),
+            },
+            duration: new Decimal(10),
+            cooldown: new Decimal(20),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.gloomingNocturnium = Decimal.add(10, getRandomInt(5))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.dimNocturnium = Decimal.add(2, getRandomInt(2))
+        } else {
+            gain.darkEssence = Decimal.add(2, getRandomInt(1))
+        }
+        return gain
+    },
+}
+
+BHC.majorBeta = {
+    name: "Celestialite Major Beta",
+    symbol: "⇑β",
+    style: {
+        background: "linear-gradient(45deg, #5943A3, #8749BD)",
+        color: "black",
+        borderColor: "#321374",
+    },
+    health: new Decimal(550),
+    damage: new Decimal(10),
+    regen: new Decimal(1),
+    attributes: {
+        "daze": new Decimal(0.5),
+    },
+    actions: {
+        0: {
+            name: "Pummel",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value: new Decimal(0.5),
+            cooldown: new Decimal(1),
+        },
+        1: {
+            name: "Bludgeon",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value: new Decimal(5),
+            cooldown: new Decimal(10),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.gloomingNocturnium = Decimal.add(12, getRandomInt(6))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.dimNocturnium = Decimal.add(3, getRandomInt(2))
+        } else {
+            gain.darkEssence = Decimal.add(2, getRandomInt(1))
+        }
+        return gain
+    },
+}
+
+BHC.majorGamma = {
+    name: "Celestialite Major Gamma",
+    symbol: "⇑γ",
+    style: {
+        background: "linear-gradient(45deg, #5943A3, #8749BD)",
+        color: "black",
+        borderColor: "#321374",
+    },
+    health: new Decimal(500),
+    damage: new Decimal(20),
+    attributes: {
+        "daze": new Decimal(0.5),
+    },
+    actions: {
+        0: {
+            name: "Basic Shot",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            value: new Decimal(1),
+            cooldown: new Decimal(4),
+        },
+        1: {
+            name: "Bandage",
+            instant: true,
+            type: "heal",
+            target: "celestialite",
+            value: new Decimal(50),
+            cooldown: new Decimal(18),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.gloomingNocturnium = Decimal.add(15, getRandomInt(5))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.dimNocturnium = Decimal.add(4, getRandomInt(3))
+        } else {
+            gain.darkEssence = Decimal.add(2, getRandomInt(2))
+        }
+        return gain
+    },
+}
+
+BHC.majorDelta = {
+    name: "Celestialite Major Delta",
+    symbol: "⇑δ",
+    style: {
+        background: "linear-gradient(45deg, #5943A3, #8749BD)",
+        color: "black",
+        borderColor: "#321374",
+    },
+    health: new Decimal(600),
+    damage: new Decimal(10),
+    actions: {
+        0: {
+            name: "Triple Missile",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "magic",
+            properties: {
+                "multi-hit": [3, 300],
+            },
+            value: new Decimal(1),
+            cooldown: new Decimal(6),
+        },
+        1: {
+            name: "Block",
+            instant: true,
+            type: "shield",
+            target: "celestialite",
+            value: new Decimal(1),
+            cooldown: new Decimal(10),
+
+            active: true,
+            constantType: "effect",
+            constantTarget: "celestialite",
+            effects: {
+                "defenseAdd": new Decimal(25),
+            },
+            duration: new Decimal(3),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.gloomingNocturnium = Decimal.add(18, getRandomInt(5))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.dimNocturnium = Decimal.add(4, getRandomInt(4))
+        } else {
+            gain.darkEssence = Decimal.add(2, getRandomInt(2))
+        }
+        return gain
+    },
+}
+
+BHC.majorEpsilon = {
+    name: "Celestialite Major Epsilon",
+    symbol: "⇑ε",
+    style: {
+        background: "linear-gradient(45deg, #5943A3, #8749BD)",
+        color: "black",
+        borderColor: "#321374",
+    },
+    health: new Decimal(450),
+    damage: new Decimal(5),
+    regen: new Decimal(2),
+    actions: {
+        0: {
+            name: "Pummel Flurry",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            properties: {
+                "multi-hit": [5, 200],
+            },
+            value: new Decimal(1),
+            cooldown: new Decimal(5),
+        },
+        1: {
+            name: "Adrenaline",
+            active: true,
+            constantType: "effect",
+            constantTarget: "celestialite",
+            effects: {
+                "agilityAdd": new Decimal(100),
+            },
+            duration: new Decimal(5),
+            cooldown: new Decimal(12),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.gloomingNocturnium = Decimal.add(20, getRandomInt(5))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.dimNocturnium = Decimal.add(5, getRandomInt(4))
+        } else {
+            gain.darkEssence = Decimal.add(3, getRandomInt(2))
+        }
+        return gain
+    },
+}
+
+BHC.majorZeta = {
+    name: "Celestialite Major Zeta",
+    symbol: "⇑ζ",
+    style: {
+        background: "linear-gradient(45deg, #5943A3, #8749BD)",
+        color: "black",
+        borderColor: "#321374",
+    },
+    health: new Decimal(550),
+    damage: new Decimal(15),
+    actions: {
+        0: {
+            name: "Poison Needle",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            properties: {
+                "storeTarget": true,
+            },
+            value: new Decimal(1),
+            cooldown: new Decimal(6),
+
+            active: true,
+            constantType: "effect",
+            constantTarget: "storedTarget",
+            effects: {
+                "regenAdd": new Decimal(-5)
+            },
+            duration: new Decimal(3),
+        },
+        1: {
+            name: "Block",
+            instant: true,
+            type: "shield",
+            target: "celestialite",
+            value: new Decimal(1),
+            cooldown: new Decimal(10),
+
+            active: true,
+            constantType: "effect",
+            constantTarget: "celestialite",
+            effects: {
+                "defenseAdd": new Decimal(25),
+            },
+            duration: new Decimal(3),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.gloomingNocturnium = Decimal.add(20, getRandomInt(8))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.dimNocturnium = Decimal.add(5, getRandomInt(5))
+        } else {
+            gain.darkEssence = Decimal.add(3, getRandomInt(2))
+        }
+        return gain
+    },
+}
 // ==--- MAIN GIMMICKS
 
 // Poison via negative regen active skill
+// Active Poison attack / Block
+// Active Poison attack / Strong Regular Attack
+// Passive Poison that hits all (including celestialite) / Block
+
 // Multi-hit attacks
+// Multi-hit attack / Block
+// Multi-hit attack / AGI buff
+
 // Crit attacks (one that has a luck increase with it would be cool)
+// Crit attack / Heal
+// Crit attack / DMG buff
+// Crit attack / LUCK buff
+
 // Daze Attribute
+// Daze / 2 Attacks (One fast and weak, the other slow and strong)
+// Daze / Attack & Heal
+// Daze / Multi-hit Attack / LUCK buff
 
 // ==--- SIDE ACTIONS
 

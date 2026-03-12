@@ -666,6 +666,29 @@ addLayer("bh", {
 
         if (player.bh.autoExit && (player.subtabs["bh"]["stuff"] == "dead" || player.subtabs["bh"]["stuff"] == "win")) clickClickable("bh", "Leave")
 
+        // Death Code
+        if (player.bh.currentStage != "none") {
+            if ((player.bh.characters[0].health.lte(0) || player.bh.characters[0].id == "none") && (player.bh.characters[1].health.lte(0) || player.bh.characters[1].id == "none") && (player.bh.characters[2].health.lte(0) || player.bh.characters[2].id == "none")) {
+                for (let i = 0; i < 3; i++) {
+                    player.bh.characters[i].health = player.bh.characters[i].maxHealth
+                    player.bh.characters[i].shield = new Decimal(0)
+                    for (let j = 0; j < 4; j++) {
+                        player.bh.characters[i].skills[j].variables = {}
+                    }
+                }
+
+                for (let i = 0; i < 3; i++) {
+                    player.bh.celestialite.actions[i].cooldown = new Decimal(0)
+                }
+
+                player.bh.currentStage = "none"
+                player.bh.combo = new Decimal(0)
+                player.bh.celestialite.id = "none"
+
+                player.subtabs["bh"]["stuff"] = "dead"
+            }
+        }
+
         // Check if in stage
         if (player.bh.currentStage != "none") {
             // Only trigger when celestialite id is set
@@ -730,7 +753,7 @@ addLayer("bh", {
                             } else {
                                 let properties = BHC[player.bh.celestialite.id].actions[i].effects
                                 if (Object.keys(properties).length === 0) continue
-                                let target = calcTarget(i, BHC[player.bh.celestialite.id].actions[i].constantTarget, "effect")
+                                let target = calcTarget(3, i, BHC[player.bh.celestialite.id].actions[i].constantTarget, "effect")
                                 for (let k in properties) {
                                     if (k == "target") continue
                                     for (let t = 0; t < target.length; t++) {
@@ -760,9 +783,9 @@ addLayer("bh", {
                         let variables = {...player.bh.celestialite.actions[i].variables}
                         if (Object.hasOwn(variables, "attacks")) delete variables.attacks
                         if (Object.keys(variables).length === 0) continue
-                        let target = calcTarget(i, variables.target, "effect")
+                        let target = calcTarget(3, i, variables.target, "effect")
                         for (let k in variables) {
-                            if (k == "target") continue
+                            if (k == "target" || k == "specTarget") continue
                             for (let t = 0; t < target.length; t++) {
                                 let val = run(variables[k], variables, player.bh.celestialite)
                                 if (k == "attributes") {
@@ -856,7 +879,7 @@ addLayer("bh", {
                         } else {
                             let properties = BHA[player.bh.characters[i].skills[j].id].effects
                             if (Object.keys(properties).length === 0) continue
-                            let target = calcTarget(i, BHA[player.bh.characters[i].skills[j].id].constantTarget, "effect")
+                            let target = calcTarget(i, j, BHA[player.bh.characters[i].skills[j].id].constantTarget, "effect")
                             for (let k in properties) {
                                 if (k == "target") continue
                                 for (let t = 0; t < target.length; t++) {
@@ -885,7 +908,7 @@ addLayer("bh", {
 
                     let variables = player.bh.characters[i].skills[j].variables
                     if (Object.keys(variables).length === 0) continue
-                    let target = calcTarget(i, variables.target, "effect")
+                    let target = calcTarget(i, j, variables.target, "effect")
                     for (let k in variables) {
                         if (k == "target") continue
                         for (let t = 0; t < target.length; t++) {
@@ -918,29 +941,6 @@ addLayer("bh", {
                 if (player.bh.celestialite.id == "none" && player.bh.respawnTimer.lte(0)) {
                     celestialiteSpawn()
                 }
-            }
-        }
-
-        // Death Code
-        if (player.bh.currentStage != "none") {
-            if ((player.bh.characters[0].health.lte(0) || player.bh.characters[0].id == "none") && (player.bh.characters[1].health.lte(0) || player.bh.characters[1].id == "none") && (player.bh.characters[2].health.lte(0) || player.bh.characters[2].id == "none")) {
-                for (let i = 0; i < 3; i++) {
-                    player.bh.characters[i].health = player.bh.characters[i].maxHealth
-                    player.bh.characters[i].shield = new Decimal(0)
-                    for (let j = 0; j < 4; j++) {
-                        player.bh.characters[i].skills[j].variables = {}
-                    }
-                }
-
-                for (let i = 0; i < 3; i++) {
-                    player.bh.celestialite.actions[i].cooldown = new Decimal(0)
-                }
-
-                player.bh.currentStage = "none"
-                player.bh.combo = new Decimal(0)
-                player.bh.celestialite.id = "none"
-
-                player.subtabs["bh"]["stuff"] = "dead"
             }
         }
 
@@ -4090,7 +4090,7 @@ addLayer("bh", {
                                         ["tooltip-row", [["raw-html", () => {return player.bh.characters[0].attributes.explosive ? "✺<div class='bottomTooltip' style='margin-top:0px'>Explosive<hr>Explodes upon death,<br>dealing " + formatSimple(player.bh.characters[0].attributes.explosive) + " damage to<br>all team members.</div>" : ""}, {color: "#ee8700", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                         ["tooltip-row", [["raw-html", () => {return player.bh.characters[0].attributes.taunt ? "✛<div class='bottomTooltip' style='margin-top:0px'>Taunt<hr>Directs some actions<br>towards themselves.</div>" : ""}, {color: "#aa2222", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                         ["tooltip-row", [["raw-html", () => {return player.bh.characters[0].attributes.daze ? "꩜<div class='bottomTooltip' style='margin-top:0px'>Dazed<hr>All actions have a<br>" + formatSimple(Decimal.div(player.bh.characters[0].attributes.daze, Decimal.div(Decimal.add(100, player.bh.characters[0].luck), 100)).mul(100)) + "% chance to miss.</div>" : ""}, {color: "#c44c5b", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
-                                    ], {width: "100px", height: "30px", marginTop: "-35px"}],
+                                    ], {width: "150px", height: "30px", marginTop: "-35px"}],
                                 ], {margin: "5px"}],
                                 ["style-column", [
                                     ["clickable", "C1-Icon"],
@@ -4103,7 +4103,7 @@ addLayer("bh", {
                                         ["tooltip-row", [["raw-html", () => {return player.bh.characters[1].attributes.explosive ? "✺<div class='bottomTooltip' style='margin-top:0px'>Explosive<hr>Explodes upon death,<br>dealing " + formatSimple(player.bh.characters[1].attributes.explosive) + " damage to<br>all team members.</div>" : ""}, {color: "#ee8700", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                         ["tooltip-row", [["raw-html", () => {return player.bh.characters[1].attributes.taunt ? "✛<div class='bottomTooltip' style='margin-top:0px'>Taunt<hr>Directs some actions<br>towards themselves.</div>" : ""}, {color: "#aa2222", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                         ["tooltip-row", [["raw-html", () => {return player.bh.characters[1].attributes.daze ? "꩜<div class='bottomTooltip' style='margin-top:0px'>Dazed<hr>All actions have a<br>" + formatSimple(Decimal.div(player.bh.characters[1].attributes.daze, Decimal.div(Decimal.add(100, player.bh.characters[1].luck), 100)).mul(100)) + "% chance to miss.</div>" : ""}, {color: "#c44c5b", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
-                                    ], {width: "100px", height: "30px", marginTop: "-35px"}],
+                                    ], {width: "150px", height: "30px", marginTop: "-35px"}],
                                 ], {margin: "5px"}],
                             ]],
                             ["style-column", [
@@ -4117,7 +4117,7 @@ addLayer("bh", {
                                     ["tooltip-row", [["raw-html", () => {return player.bh.characters[2].attributes.explosive ? "✺<div class='bottomTooltip' style='margin-top:0px'>Explosive<hr>Explodes upon death,<br>dealing " + formatSimple(player.bh.characters[2].attributes.explosive) + " damage to<br>all team members.</div>" : ""}, {color: "#ee8700", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                     ["tooltip-row", [["raw-html", () => {return player.bh.characters[2].attributes.taunt ? "✛<div class='bottomTooltip' style='margin-top:0px'>Taunt<hr>Directs some actions<br>towards themselves.</div>" : ""}, {color: "#aa2222", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                     ["tooltip-row", [["raw-html", () => {return player.bh.characters[2].attributes.daze ? "꩜<div class='bottomTooltip' style='margin-top:0px'>Dazed<hr>All actions have a<br>" + formatSimple(Decimal.div(player.bh.characters[2].attributes.daze, Decimal.div(Decimal.add(100, player.bh.characters[2].luck), 100)).mul(100)) + "% chance to miss.</div>" : ""}, {color: "#c44c5b", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
-                                ], {width: "100px", height: "30px", marginTop: "-35px"}],
+                                ], {width: "150px", height: "30px", marginTop: "-35px"}],
                             ], {margin: "5px"}],
                         ]],
                         ["blank", ["50px", "50px"]],
@@ -4133,7 +4133,7 @@ addLayer("bh", {
                                 ["tooltip-row", [["raw-html", () => {return player.bh.celestialite.attributes.explosive ? "✺<div class='bottomTooltip' style='margin-top:0px'>Explosive<hr>Explodes upon death,<br>dealing " + formatSimple(player.bh.celestialite.attributes.explosive) + " damage to<br>all team members.</div>" : ""}, {color: "#ee8700", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                 ["tooltip-row", [["raw-html", () => {return player.bh.celestialite.attributes.taunt ? "✛<div class='bottomTooltip' style='margin-top:0px'>Taunt<hr>Directs some actions<br>towards themselves.</div>" : ""}, {color: "#aa2222", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                 ["tooltip-row", [["raw-html", () => {return player.bh.celestialite.attributes.daze ? "꩜<div class='bottomTooltip' style='margin-top:0px'>Dazed<hr>All actions have a<br>" + formatSimple(Decimal.div(player.bh.celestialite.attributes.daze, Decimal.div(Decimal.add(100, player.bh.celestialite.luck), 100)).mul(100)) + "% chance to miss.</div>" : ""}, {color: "#c44c5b", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
-                            ], {width: "100px", height: "30px", marginTop: "-35px"}],
+                            ], {width: "150px", height: "30px", marginTop: "-35px"}],
                             ["style-column", [
                                 ["blank", "20px"],
                                 ["row", [

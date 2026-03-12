@@ -127,7 +127,7 @@ BHA.general_block = {
 }
 BHA.general_poisonNeedle = {
     name: "Poison Needle",
-    description() {return "Shoot a poison needle that does " + formatWhole(new Decimal(75).add(player.bh.skillData["general_poisonNeedle"].level.mul(15))) + " ranged damage, then " + formatWhole(new Decimal(10).add(player.bh.skillData["general_poisonNeedle"].level.mul(2))) + " spirit damage per second for 5 seconds"},
+    description() {return "Shoot a poison needle that does " + formatWhole(new Decimal(75).add(player.bh.skillData["general_poisonNeedle"].level.mul(15))) + "% ranged damage, then " + formatWhole(new Decimal(10).add(player.bh.skillData["general_poisonNeedle"].level.mul(2))) + "% spirit damage per second for 5 seconds"},
     passiveText() {return "+" + formatSimple(player.bh.skillData["general_poisonNeedle"].maxLevel.div(2)) + " AGI"},
     char: "general",
     spCost: new Decimal(14),

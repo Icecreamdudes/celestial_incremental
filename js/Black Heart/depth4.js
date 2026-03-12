@@ -379,7 +379,7 @@ BHS.depth4 = {
                 return "majorMyrioi"
             default:
                 let random = Math.random()
-                let cel = ["majorAlpha", "majorBeta", "majorGamma", "majorDelta", "majorEpsilon", "majorZeta", /*"majorEta", "majorTheta", "majorIota"*/]
+                let cel = ["majorAlpha", "majorBeta", "majorGamma", "majorDelta", "majorEpsilon", "majorZeta", "majorEta", "majorTheta", "majorIota"]
                 if (combo >= 25) cel.push("majorKappa")
                 if (combo >= 50) cel.push("majorLambda")
                 if (combo >= 100) cel.push("majorMu")
@@ -449,7 +449,7 @@ BHC.majorBeta = {
         color: "black",
         borderColor: "#321374",
     },
-    health: new Decimal(550),
+    health: new Decimal(700),
     damage: new Decimal(10),
     regen: new Decimal(1),
     attributes: {
@@ -497,7 +497,7 @@ BHC.majorGamma = {
         color: "black",
         borderColor: "#321374",
     },
-    health: new Decimal(500),
+    health: new Decimal(650),
     damage: new Decimal(20),
     attributes: {
         "daze": new Decimal(0.5),
@@ -543,7 +543,7 @@ BHC.majorDelta = {
         color: "black",
         borderColor: "#321374",
     },
-    health: new Decimal(600),
+    health: new Decimal(750),
     damage: new Decimal(10),
     actions: {
         0: {
@@ -597,7 +597,7 @@ BHC.majorEpsilon = {
         color: "black",
         borderColor: "#321374",
     },
-    health: new Decimal(450),
+    health: new Decimal(600),
     damage: new Decimal(5),
     regen: new Decimal(2),
     actions: {
@@ -647,7 +647,7 @@ BHC.majorZeta = {
         color: "black",
         borderColor: "#321374",
     },
-    health: new Decimal(550),
+    health: new Decimal(650),
     damage: new Decimal(15),
     actions: {
         0: {
@@ -700,11 +700,160 @@ BHC.majorZeta = {
         return gain
     },
 }
+
+BHC.majorEta = {
+    name: "Celestialite Major Eta",
+    symbol: "⇑η",
+    style: {
+        background: "linear-gradient(45deg, #5943A3, #8749BD)",
+        color: "black",
+        borderColor: "#321374",
+    },
+    health: new Decimal(650),
+    damage: new Decimal(10),
+    regen: new Decimal(2),
+    actions: {
+        0: {
+            name: "Quick Shot",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            value: new Decimal(0.5),
+            cooldown: new Decimal(1),
+        },
+        1: {
+            name: "Poison Slash",
+            instant: true,
+            type: "damage",
+            target: "allPlayer",
+            method: "physical",
+            value: new Decimal(1),
+            cooldown: new Decimal(10),
+
+            active: true,
+            constantType: "effect",
+            constantTarget: "allPlayer",
+            effects: {
+                "regenAdd": new Decimal(-5)
+            },
+            duration: new Decimal(3),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.gloomingNocturnium = Decimal.add(20, getRandomInt(10))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.dimNocturnium = Decimal.add(6, getRandomInt(5))
+        } else {
+            gain.darkEssence = Decimal.add(3, getRandomInt(3))
+        }
+        return gain
+    },
+}
+
+BHC.majorTheta = {
+    name: "Celestialite Major Theta",
+    symbol: "⇑θ",
+    style: {
+        background: "linear-gradient(45deg, #5943A3, #8749BD)",
+        color: "black",
+        borderColor: "#321374",
+    },
+    health: new Decimal(750),
+    damage: new Decimal(20),
+    actions: {
+        0: {
+            name: "Critical Stab",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value: new Decimal(1),
+            properties: {
+                "crit": [0.5, 2]
+            },
+            cooldown: new Decimal(4),
+        },
+        1: {
+            name: "Bandage",
+            instant: true,
+            type: "heal",
+            target: "celestialite",
+            value: new Decimal(10),
+            cooldown: new Decimal(6),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.gloomingNocturnium = Decimal.add(22, getRandomInt(10))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.dimNocturnium = Decimal.add(6, getRandomInt(6))
+        } else {
+            gain.darkEssence = Decimal.add(3, getRandomInt(3))
+        }
+        return gain
+    },
+}
+
+BHC.majorIota = {
+    name: "Celestialite Major Iota",
+    symbol: "⇑ι",
+    style: {
+        background: "linear-gradient(45deg, #5943A3, #8749BD)",
+        color: "black",
+        borderColor: "#321374",
+    },
+    health: new Decimal(700),
+    damage: new Decimal(2),
+    regen: new Decimal(1),
+    actions: {
+        0: {
+            name: "Critical Pummel",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value: new Decimal(1),
+            properties: {
+                "crit": [0.5, 2]
+            },
+            cooldown: new Decimal(1),
+        },
+        1: {
+            name: "Fury",
+            active: true,
+            constantType: "effect",
+            constantTarget: "celestialite",
+            effects: {
+                "damageAdd": new Decimal(3),
+            },
+            duration: new Decimal(2),
+            cooldown: new Decimal(6),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.gloomingNocturnium = Decimal.add(25, getRandomInt(10))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.dimNocturnium = Decimal.add(7, getRandomInt(6))
+        } else {
+            gain.darkEssence = Decimal.add(4, getRandomInt(3))
+        }
+        return gain
+    },
+}
 // ==--- MAIN GIMMICKS
 
 // Poison via negative regen active skill
 // Active Poison attack / Block
-// Active Poison attack / Strong Regular Attack
+// Quick regular attack / Active Poison slash attack (all players)
 // Passive Poison that hits all (including celestialite) / Block
 
 // Multi-hit attacks

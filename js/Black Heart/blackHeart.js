@@ -126,8 +126,8 @@ BH_CURRENCY = {
     "spaceRock": ["Space Rocks", "ir"],
     "temporalDust": ["Temporal Dust", "stagnantSynestia"],
     "temporalShard": ["Temporal Shards", "stagnantSynestia"],
-    "gloomingNocturnium": ["Glooming Nocturnium", "gloomingNocturnium"],
-    "dimNocturnium": ["Dim Nocturnium", "dimNocturnium"],
+    "gloomingNocturnium": ["Glooming Nocturnium", "depth4"],
+    "dimNocturnium": ["Dim Nocturnium", "depth4"],
 }
 
 // Celestialite who has there explosion value equal to their max health, and an action that constantly reduces their max health called defuse (FOR LAB)

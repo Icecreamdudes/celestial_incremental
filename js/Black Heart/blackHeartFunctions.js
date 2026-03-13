@@ -202,7 +202,7 @@ function bhAction(index, slot, interval = false, magnitude = 1, delay = false) {
                         } else {
                             player.bh.characters[index].skills[slot].variables.target = target
                         }
-                        bhEffectText(name, val, index, slot, target, perc, str)
+                        if (!action.noMessage) bhEffectText(name, val, index, slot, target, perc, str)
                     }
                     break;
                 case "reset":

@@ -858,7 +858,7 @@ BHC.majorEnas = {
         color: "black",
         borderColor: "#321374",
     },
-    health: new Decimal(2000),
+    health: new Decimal(2500),
     damage: new Decimal(5),
     regen: new Decimal(2),
     luck: new Decimal(3),
@@ -880,6 +880,7 @@ BHC.majorEnas = {
             instant: true,
             type: "effect",
             target: "celestialite",
+            noMessage: true,
             properties: {
                 "luckAdd": new Decimal(1),
             },

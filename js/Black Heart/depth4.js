@@ -1174,7 +1174,6 @@ BHC.majorPente = {
             instant: true,
             type: "effect",
             target: "celestialite",
-            noMessage: true,
             properties: {
                 "agilityAdd": new Decimal(10),
             },
@@ -1190,12 +1189,259 @@ BHC.majorPente = {
     },
 }
 
-// MINIBOSS IDEAS
+BHC.majorDeka = {
+    name: "Celestialite Major Deka",
+    symbol: "⇑Δ",
+    style: {
+        background: "linear-gradient(45deg, #5943A3, #8749BD)",
+        color: "black",
+        borderColor: "#321374",
+    },
+    health: new Decimal(5000),
+    damage: new Decimal(6),
+    luck: new Decimal(3),
+    actions: {
+        0: {
+            name: "Poison Slash",
+            instant: true,
+            type: "damage",
+            target: "allPlayer",
+            method: "physical",
+            value: new Decimal(1),
+            cooldown: new Decimal(6),
 
-// Dazed, has a crit attack, and a multi-hit attack, but also an action that increases luck
+            active: true,
+            constantType: "effect",
+            constantTarget: "allPlayer",
+            effects: {
+                "regenAdd"() {return Decimal.mul(-1, player.bh.celestialite.luck)}
+            },
+            duration: new Decimal(3),
+        },
+        1: {
+            name: "Increased Toxicity",
+            instant: true,
+            type: "effect",
+            target: "celestialite",
+            noMessage: true,
+            properties: {
+                "luckAdd": new Decimal(1),
+            },
+            cooldown: new Decimal(12),
+        },
+        2: {
+            name: "Bandage",
+            instant: true,
+            type: "heal",
+            target: "celestialite",
+            value: new Decimal(50),
+            cooldown: new Decimal(8),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.gloomingNocturnium = new Decimal(180)
+        gain.dimNocturnium = new Decimal(75)
+        gain.darkEssence = new Decimal(30)
+        return gain
+    },
+}
 
-// Has an attack that deals poison, and the damage from the poison increases from a seperate skill. Also a heal for funsies. (Probably done by basing the poison damage from a seperate stat and increasing that stat)
+BHC.majorHekaton = {
+    name: "Celestialite Major Hekaton",
+    symbol: "⇑Η",
+    style: {
+        background: "linear-gradient(45deg, #5943A3, #8749BD)",
+        color: "black",
+        borderColor: "#321374",
+    },
+    health: new Decimal(4000),
+    damage: new Decimal(5),
+    regen: new Decimal(2),
+    actions: {
+        0: {
+            name: "Arrow Flurry",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            properties: {
+                "multi-hit": [5, 200],
+                "crit": [0.5, 2],
+            },
+            value: new Decimal(1),
+            cooldown: new Decimal(4),
+        },
+        1: {
+            name: "Block",
+            instant: true,
+            type: "shield",
+            target: "celestialite",
+            value: new Decimal(1),
+            cooldown: new Decimal(6),
 
-// Boss with a smaller amount of health, but 2 block skills and a multi-hit crit attack.
+            active: true,
+            constantType: "effect",
+            constantTarget: "celestialite",
+            effects: {
+                "defenseAdd": new Decimal(25),
+            },
+            duration: new Decimal(3),
+        },
+        2: {
+            name: "Block",
+            instant: true,
+            type: "shield",
+            target: "celestialite",
+            value: new Decimal(1),
+            cooldown: new Decimal(10),
 
-// Boss who has a missable poison attack, a critable multi-hit attack, a missable heal, and a missable poison multi-hit critable attack. (silly)
+            active: true,
+            constantType: "effect",
+            constantTarget: "celestialite",
+            effects: {
+                "defenseAdd": new Decimal(25),
+            },
+            duration: new Decimal(3),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.gloomingNocturnium = new Decimal(300)
+        gain.dimNocturnium = new Decimal(125)
+        gain.darkEssence = new Decimal(50)
+        return gain
+    },
+}
+
+BHC.majorKhilioi = {
+    name: "Celestialite Major Khilioi",
+    symbol: "⇑Χ",
+    style: {
+        background: "linear-gradient(45deg, #5943A3, #8749BD)",
+        color: "black",
+        borderColor: "#321374",
+    },
+    health: new Decimal(7500),
+    damage: new Decimal(5),
+    attributes: {
+        "daze": new Decimal(0.5),
+    },
+    actions: {
+        0: {
+            name: "Piercing Flurry",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            properties: {
+                "multi-hit": [5, 200],
+            },
+            value: new Decimal(1),
+            cooldown: new Decimal(4),
+        },
+        1: {
+            name: "Precise Stab",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            properties: {
+                "crit": [0.5, 2],
+            },
+            value: new Decimal(10),
+            cooldown: new Decimal(10),
+        },
+        2: {
+            name: "Lucky Clover",
+            instant: true,
+            type: "effect",
+            target: "celestialite",
+            noMessage: true,
+            properties: {
+                "luckAdd": new Decimal(20),
+            },
+            cooldown: new Decimal(8),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.gloomingNocturnium = new Decimal(500)
+        gain.dimNocturnium = new Decimal(200)
+        gain.darkEssence = new Decimal(80)
+        return gain
+    },
+}
+
+BHC.majorMyrioi = {
+    name: "Celestialite Major Myrioi",
+    symbol: "⇑Χ",
+    style: {
+        background: "linear-gradient(45deg, #5943A3, #8749BD)",
+        color: "black",
+        borderColor: "#321374",
+    },
+    health: new Decimal(10000),
+    damage: new Decimal(10),
+    attributes: {
+        "daze": new Decimal(0.5),
+    },
+    actions: {
+        0: {
+            name: "Poison Slash",
+            instant: true,
+            type: "damage",
+            target: "allPlayer",
+            method: "physical",
+            value: new Decimal(0.6),
+            cooldown: new Decimal(6),
+
+            active: true,
+            constantType: "effect",
+            constantTarget: "allPlayer",
+            effects: {
+                "regenAdd": new Decimal(-3)
+            },
+            duration: new Decimal(3),
+        },
+        1: {
+            name: "Arrow Flurry",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            properties: {
+                "crit": [0.5, 2],
+                "multi-hit": [5, 200],
+            },
+            value: new Decimal(1),
+            cooldown: new Decimal(8),
+        },
+        2: {
+            name: "Bandage",
+            instant: true,
+            type: "heal",
+            target: "celestialite",
+            value: new Decimal(50),
+            cooldown: new Decimal(10),
+        },
+        3: {
+            name: "Lucky Clover",
+            instant: true,
+            type: "effect",
+            target: "celestialite",
+            noMessage: true,
+            properties: {
+                "luckAdd": new Decimal(40),
+            },
+            cooldown: new Decimal(12),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.gloomingNocturnium = new Decimal(1000)
+        gain.dimNocturnium = new Decimal(400)
+        gain.darkEssence = new Decimal(160)
+        return gain
+    },
+}

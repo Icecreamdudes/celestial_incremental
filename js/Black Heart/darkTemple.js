@@ -156,19 +156,19 @@ const RUNE_EFFECTS = {
             hp: 5,
             dmg: 0.5,
             d4c: 0.1,
-            mnd: 0.5,
+            mnd: 1,
         },
         2: {
             hp: 6,
             dmg: 0.6,
             d4c: 0.15,
-            mnd: 1,
+            mnd: 2,
         },
         3: {
             hp: 7,
             dmg: 0.7,
             d4c: 0.2,
-            mnd: 1.5,
+            mnd: 3,
         },
         4: {
             hp: 8,
@@ -186,7 +186,7 @@ const RUNE_EFFECTS = {
             hp: 9,
             dmg: 0.9,
             d4c: 0.3,
-            mnd: 2,
+            mnd: 4,
         },
     },
 }
@@ -251,7 +251,7 @@ addLayer("darkTemple", {
         if (player.matosLair.milestone[25] >= 3) player.darkTemple.runeCap = player.darkTemple.runeCap.add(1)
 
         let stats = {}
-        for (let j = 1; j < 5; j++) {
+        for (let j = 1; j < 6; j++) {
             for (let i = 1; i < getBuyableAmount("darkTemple", j).add(1); i++) {
                 stats = addObject(stats, RUNE_EFFECTS[j][i])
             }
@@ -563,15 +563,15 @@ addLayer("darkTemple", {
         5: {
             purchaseLimit() { return player.darkTemple.runeCap },
             pay() {
-                player.depth4.gloomingNocturnium = player.depth4.gloomingNocturnium.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(18).floor())
-                player.depth4.dimNocturnium = player.depth4.dimNocturnium.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(6).floor())
+                player.depth4.gloomingNocturnium = player.depth4.gloomingNocturnium.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(30).floor())
+                player.depth4.dimNocturnium = player.depth4.dimNocturnium.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(10).floor())
                 player.pol.pollinators = player.pol.pollinators.sub(Decimal.pow("1e200", getBuyableAmount(this.layer, this.id)).mul("1e2000"))
             },
             effect(x) {return getBuyableAmount(this.layer, this.id)},
             unlocked() {return player.darkTemple.selection == 5},
             canAfford() {
-                return player.depth4.gloomingNocturnium.gte(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(18).floor())
-                && player.depth4.dimNocturnium.gte(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(6).floor())
+                return player.depth4.gloomingNocturnium.gte(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(30).floor())
+                && player.depth4.dimNocturnium.gte(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(10).floor())
                 && player.pol.pollinators.gte(Decimal.pow("1e200", getBuyableAmount(this.layer, this.id)).mul("1e2000"))
             },
             display() {return "<div style='line-height:0.8'>Level Up<br><span style='font-size:10px'>[" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(player.darkTemple.runeCap) + "]</div>"},
@@ -646,8 +646,8 @@ addLayer("darkTemple", {
                                         cost3 = formatSimple(player.sme.starmetalEssence) + "/" + formatSimple(Decimal.pow(5, getBuyableAmount("darkTemple", 4)).mul(100)) + "<br>Starmetal Essence"
                                         break;
                                     case 5:
-                                        cost1 = formatSimple(player.stagnantSynestia.gloomingNocturnium) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 5)).mul(18).floor()) + "<br>Glooming Nocturnium"
-                                        cost2 = formatSimple(player.stagnantSynestia.dimNocturnium) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 5)).mul(6).floor()) + "<br>Dim Nocturnium"
+                                        cost1 = formatSimple(player.depth4.gloomingNocturnium) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 5)).mul(30).floor()) + "<br>Glooming Nocturnium"
+                                        cost2 = formatSimple(player.depth4.dimNocturnium) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 5)).mul(10).floor()) + "<br>Dim Nocturnium"
                                         cost3 = formatSimple(player.pol.pollinators) + "/" + formatSimple(Decimal.pow("1e200", getBuyableAmount("darkTemple", 5)).mul("1e2000")) + "<br>Pollinators"
                                         break;
                                 }

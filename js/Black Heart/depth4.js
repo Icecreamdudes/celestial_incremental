@@ -899,6 +899,207 @@ BHC.majorKappa = {
     },
 }
 
+BHC.majorLambda = {
+    name: "Celestialite Major Lambda",
+    symbol: "⇑λ",
+    style: {
+        background: "linear-gradient(45deg, #5943A3, #8749BD)",
+        color: "black",
+        borderColor: "#321374",
+    },
+    health: new Decimal(800),
+    damage: new Decimal(5),
+    attributes: {
+        "daze": new Decimal(0.5),
+    },
+    actions: {
+        0: {
+            name: "Lucky Strike",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value: new Decimal(1),
+            properties: {
+                "crit": [0.1, 10]
+            },
+            cooldown: new Decimal(0.5),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.gloomingNocturnium = Decimal.add(30, getRandomInt(15))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.dimNocturnium = Decimal.add(8, getRandomInt(7))
+        } else {
+            gain.darkEssence = Decimal.add(4, getRandomInt(4))
+        }
+        return gain
+    },
+}
+
+BHC.majorMu = {
+    name: "Celestialite Major Mu",
+    symbol: "⇑μ",
+    style: {
+        background: "linear-gradient(45deg, #5943A3, #8749BD)",
+        color: "black",
+        borderColor: "#321374",
+    },
+    health: new Decimal(850),
+    damage: new Decimal(4),
+    actions: {
+        0: {
+            name: "Poison Mist",
+            passive: true,
+            constantType: "effect",
+            constantTarget: "all",
+            effects: {
+                "regenAdd"() {return player.bh.celestialite.damage}
+            },
+            cooldown: new Decimal(Infinity),
+        },
+        1: {
+            name: "Block",
+            instant: true,
+            type: "shield",
+            target: "celestialite",
+            value: new Decimal(1),
+            cooldown: new Decimal(10),
+
+            active: true,
+            constantType: "effect",
+            constantTarget: "celestialite",
+            effects: {
+                "defenseAdd": new Decimal(25),
+            },
+            duration: new Decimal(3),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.gloomingNocturnium = Decimal.add(30, getRandomInt(20))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.dimNocturnium = Decimal.add(8, getRandomInt(8))
+        } else {
+            gain.darkEssence = Decimal.add(4, getRandomInt(4))
+        }
+        return gain
+    },
+}
+
+BHC.majorNu = {
+    name: "Celestialite Major Nu",
+    symbol: "⇑ν",
+    style: {
+        background: "linear-gradient(45deg, #5943A3, #8749BD)",
+        color: "black",
+        borderColor: "#321374",
+    },
+    health: new Decimal(900),
+    damage: new Decimal(3),
+    actions: {
+        0: {
+            name: "Poison Flurry",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            properties: {
+                "storeTarget": true,
+                "multi-hit": [5, 200],
+            },
+            value: new Decimal(1),
+            cooldown: new Decimal(6),
+
+            active: true,
+            constantType: "effect",
+            constantTarget: "storedTarget",
+            effects: {
+                "regenAdd": new Decimal(-5)
+            },
+            duration: new Decimal(3),
+        },
+        1: {
+            name: "Bandage",
+            instant: true,
+            type: "heal",
+            target: "celestialite",
+            value: new Decimal(10),
+            cooldown: new Decimal(6),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.gloomingNocturnium = Decimal.add(35, getRandomInt(20))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.dimNocturnium = Decimal.add(9, getRandomInt(8))
+        } else {
+            gain.darkEssence = Decimal.add(5, getRandomInt(4))
+        }
+        return gain
+    },
+}
+
+BHC.majorXi = {
+    name: "Celestialite Major Xi",
+    symbol: "⇑ξ",
+    style: {
+        background: "linear-gradient(45deg, #5943A3, #8749BD)",
+        color: "black",
+        borderColor: "#321374",
+    },
+    health: new Decimal(950),
+    damage: new Decimal(6),
+    attributes: {
+        "daze": new Decimal(0.5),
+    },
+    actions: {
+        0: {
+            name: "Missile Flurry",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            properties: {
+                "multi-hit": [5, 200],
+            },
+            value: new Decimal(1),
+            cooldown: new Decimal(3),
+        },
+        1: {
+            name: "Lucky Clover",
+            instant: true,
+            type: "effect",
+            target: "celestialite",
+            noMessage: true,
+            properties: {
+                "luckAdd": new Decimal(25),
+            },
+            cooldown: new Decimal(6),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.gloomingNocturnium = Decimal.add(35, getRandomInt(25))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.dimNocturnium = Decimal.add(9, getRandomInt(9))
+        } else {
+            gain.darkEssence = Decimal.add(5, getRandomInt(5))
+        }
+        return gain
+    },
+}
+
+// MINIBOSSES START
 BHC.majorEnas = {
     name: "Celestialite Major Enas",
     symbol: "⇑Ι",
@@ -988,17 +1189,6 @@ BHC.majorPente = {
         return gain
     },
 }
-// ==--- CELESTIALITE IDEAS
-
-// Multi-hit poison attack / Heal T4
-
-// Passive Poison that hits all (including celestialite) / Block T3
-
-// Crit attack / LUCK buff T1
-
-// Daze / Multi-hit Attack / LUCK buff T5
-
-// Daze / Low-chance very fast crit attack (gambling supreme) T2
 
 // MINIBOSS IDEAS
 

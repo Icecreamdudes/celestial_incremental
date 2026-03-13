@@ -850,6 +850,55 @@ BHC.majorIota = {
     },
 }
 
+BHC.majorKappa = {
+    name: "Celestialite Major Kappa",
+    symbol: "⇑κ",
+    style: {
+        background: "linear-gradient(45deg, #5943A3, #8749BD)",
+        color: "black",
+        borderColor: "#321374",
+    },
+    health: new Decimal(750),
+    damage: new Decimal(10),
+    actions: {
+        0: {
+            name: "Critical Shot",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            value: new Decimal(1),
+            properties: {
+                "crit": [0.33, 3]
+            },
+            cooldown: new Decimal(3),
+        },
+        1: {
+            name: "Lucky Clover",
+            instant: true,
+            type: "effect",
+            target: "celestialite",
+            noMessage: true,
+            properties: {
+                "luckAdd": new Decimal(25),
+            },
+            cooldown: new Decimal(8),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.gloomingNocturnium = Decimal.add(25, getRandomInt(15))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.dimNocturnium = Decimal.add(7, getRandomInt(7))
+        } else {
+            gain.darkEssence = Decimal.add(4, getRandomInt(3))
+        }
+        return gain
+    },
+}
+
 BHC.majorEnas = {
     name: "Celestialite Major Enas",
     symbol: "⇑Ι",
@@ -895,27 +944,67 @@ BHC.majorEnas = {
         return gain
     },
 }
-// ==--- MAIN GIMMICKS
 
-// Passive Poison that hits all (including celestialite) / Block
+BHC.majorPente = {
+    name: "Celestialite Major Pente",
+    symbol: "⇑Π",
+    style: {
+        background: "linear-gradient(45deg, #5943A3, #8749BD)",
+        color: "black",
+        borderColor: "#321374",
+    },
+    health: new Decimal(3750),
+    damage: new Decimal(5),
+    actions: {
+        0: {
+            name: "Sweet-Spot Missile",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "magic",
+            value: new Decimal(1),
+            properties: {
+                "crit": [0.1, 5]
+            },
+            cooldown: new Decimal(5),
+        },
+        1: {
+            name: "Doping",
+            instant: true,
+            type: "effect",
+            target: "celestialite",
+            noMessage: true,
+            properties: {
+                "agilityAdd": new Decimal(10),
+            },
+            cooldown: new Decimal(10),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.gloomingNocturnium = new Decimal(120)
+        gain.dimNocturnium = new Decimal(50)
+        gain.darkEssence = new Decimal(20)
+        return gain
+    },
+}
+// ==--- CELESTIALITE IDEAS
 
-// Crit attack / LUCK buff
+// Multi-hit poison attack / Heal T4
 
-// Daze / Multi-hit Attack / LUCK buff
+// Passive Poison that hits all (including celestialite) / Block T3
 
-// ==--- SIDE ACTIONS
+// Crit attack / LUCK buff T1
 
-// Heals
-// Blocks
-// Stat buffs
+// Daze / Multi-hit Attack / LUCK buff T5
+
+// Daze / Low-chance very fast crit attack (gambling supreme) T2
 
 // MINIBOSS IDEAS
 
 // Dazed, has a crit attack, and a multi-hit attack, but also an action that increases luck
 
 // Has an attack that deals poison, and the damage from the poison increases from a seperate skill. Also a heal for funsies. (Probably done by basing the poison damage from a seperate stat and increasing that stat)
-
-// Boss that has an action with a really low chance to crit, and an action that massively increases agility
 
 // Boss with a smaller amount of health, but 2 block skills and a multi-hit crit attack.
 

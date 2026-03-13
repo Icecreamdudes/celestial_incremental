@@ -178,7 +178,7 @@ addLayer("depth4", {
             purchaseLimit() { return new Decimal(20) },
             currency() { return player.depth4.gloomingNocturnium},
             pay(amt) { player.depth4.gloomingNocturnium = this.currency().sub(amt) },
-            effect(x) {return getBuyableAmount(this.layer, this.id).div(20).add(1)},
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(40).add(1)},
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {return this.currency().gte(this.cost())},
@@ -849,25 +849,57 @@ BHC.majorIota = {
         return gain
     },
 }
+
+BHC.majorEnas = {
+    name: "Celestialite Major Enas",
+    symbol: "⇑Ι",
+    style: {
+        background: "linear-gradient(45deg, #5943A3, #8749BD)",
+        color: "black",
+        borderColor: "#321374",
+    },
+    health: new Decimal(2000),
+    damage: new Decimal(5),
+    regen: new Decimal(2),
+    luck: new Decimal(3),
+    actions: {
+        0: {
+            name: "Multi-shot Bow",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            value: new Decimal(1),
+            properties: {
+                "multi-hit"() {return [player.bh.celestialite.luck.toNumber(), 200]}
+            },
+            cooldown: new Decimal(4),
+        },
+        1: {
+            name: "Arrow Resupply",
+            instant: true,
+            type: "effect",
+            target: "celestialite",
+            properties: {
+                "luckAdd": new Decimal(1),
+            },
+            cooldown: new Decimal(10),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.gloomingNocturnium = new Decimal(60)
+        gain.dimNocturnium = new Decimal(20)
+        gain.darkEssence = new Decimal(8)
+        return gain
+    },
+}
 // ==--- MAIN GIMMICKS
 
-// Poison via negative regen active skill
-// Active Poison attack / Block
-// Quick regular attack / Active Poison slash attack (all players)
 // Passive Poison that hits all (including celestialite) / Block
 
-// Multi-hit attacks
-// Multi-hit attack / Block
-// Multi-hit attack / AGI buff
-
-// Crit attacks (one that has a luck increase with it would be cool)
-// Crit attack / Heal
-// Crit attack / DMG buff
 // Crit attack / LUCK buff
 
-// Daze Attribute
-// Daze / 2 Attacks (One fast and weak, the other slow and strong)
-// Daze / Attack & Heal
 // Daze / Multi-hit Attack / LUCK buff
 
 // ==--- SIDE ACTIONS
@@ -881,8 +913,6 @@ BHC.majorIota = {
 // Dazed, has a crit attack, and a multi-hit attack, but also an action that increases luck
 
 // Has an attack that deals poison, and the damage from the poison increases from a seperate skill. Also a heal for funsies. (Probably done by basing the poison damage from a seperate stat and increasing that stat)
-
-// Boss who has a multi-hit attack, and a skill that increases the amount of multi-hits it does (likely by tying it to a stat and increasing that stat)
 
 // Boss that has an action with a really low chance to crit, and an action that massively increases agility
 

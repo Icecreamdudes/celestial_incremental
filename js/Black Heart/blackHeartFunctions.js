@@ -60,8 +60,9 @@ function bhAction(index, slot, interval = false, magnitude = 1, delay = false) {
     let hitAmt = 1
     let hitDelay = 200
     if (action.properties && action.properties["multi-hit"]) {
-        hitAmt = action.properties["multi-hit"][0]
-        hitDelay = action.properties["multi-hit"][1]
+        let arr = run(action.properties["multi-hit"])
+        hitAmt = arr[0]
+        hitDelay = arr[1]
     }
     for (let i = 0; i < hitAmt; i++) {
         setTimeout(() => {
@@ -817,7 +818,6 @@ function calcTarget(index, slot, target, action = "none") {
     }
     if (index == 3) {
         if (BHC[player.bh.celestialite.id].actions[slot].properties && BHC[player.bh.celestialite.id].actions[slot].properties["storeTarget"] && action != "effect" && !stored) {
-            console.log(index + " " + slot + " " + result + " " + action)
             player.bh.celestialite.actions[slot].variables["specTarget"] = result
         }
     } else {

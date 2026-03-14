@@ -878,9 +878,8 @@ BHC.majorKappa = {
             instant: true,
             type: "effect",
             target: "celestialite",
-            noMessage: true,
             properties: {
-                "luckAdd": new Decimal(25),
+                "luckAdd": new Decimal(20),
             },
             cooldown: new Decimal(8),
         },
@@ -1078,9 +1077,8 @@ BHC.majorXi = {
             instant: true,
             type: "effect",
             target: "celestialite",
-            noMessage: true,
             properties: {
-                "luckAdd": new Decimal(25),
+                "luckAdd": new Decimal(20),
             },
             cooldown: new Decimal(6),
         },
@@ -1357,7 +1355,6 @@ BHC.majorKhilioi = {
             instant: true,
             type: "effect",
             target: "celestialite",
-            noMessage: true,
             properties: {
                 "luckAdd": new Decimal(20),
             },
@@ -1430,9 +1427,8 @@ BHC.majorMyrioi = {
             instant: true,
             type: "effect",
             target: "celestialite",
-            noMessage: true,
             properties: {
-                "luckAdd": new Decimal(40),
+                "luckAdd": new Decimal(25),
             },
             cooldown: new Decimal(12),
         },

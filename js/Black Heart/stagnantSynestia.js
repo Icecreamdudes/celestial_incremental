@@ -492,7 +492,7 @@ BHC.staticDelta = {
         color: "#0091DC",
         borderColor: "#021124",
     },
-    health: new Decimal(650),
+    health: new Decimal(550),
     damage: new Decimal(20),
     agility: new Decimal(15),
     actions: {
@@ -536,7 +536,7 @@ BHC.staticEpsilon = {
         color: "#0091DC",
         borderColor: "#021124",
     },
-    health: new Decimal(700),
+    health: new Decimal(600),
     damage: new Decimal(30),
     agility: new Decimal(25),
     actions: {
@@ -580,7 +580,7 @@ BHC.staticZeta = {
         color: "#0091DC",
         borderColor: "#021124",
     },
-    health: new Decimal(750),
+    health: new Decimal(550),
     damage: new Decimal(25),
     agility: new Decimal(25),
     actions: {
@@ -624,7 +624,7 @@ BHC.staticEta = {
         color: "#0091DC",
         borderColor: "#021124",
     },
-    health: new Decimal(800),
+    health: new Decimal(650),
     damage: new Decimal(35),
     agility: new Decimal(25),
     actions: {
@@ -668,7 +668,7 @@ BHC.staticTheta = {
         color: "#0091DC",
         borderColor: "#021124",
     },
-    health: new Decimal(900),
+    health: new Decimal(700),
     damage: new Decimal(35),
     agility: new Decimal(20),
     actions: {
@@ -712,7 +712,7 @@ BHC.staticIota = {
         color: "#0091DC",
         borderColor: "#021124",
     },
-    health: new Decimal(1000),
+    health: new Decimal(750),
     damage: new Decimal(30),
     agility: new Decimal(20),
     actions: {
@@ -748,6 +748,7 @@ BHC.staticIota = {
     },
 }
 
+// MINIBOSSES START
 BHC.staticEnas = {
     name: "Celestialite Static Enas",
     symbol: "⧖Ι",
@@ -756,7 +757,7 @@ BHC.staticEnas = {
         color: "#0091DC",
         borderColor: "#021124",
     },
-    health: new Decimal(5000),
+    health: new Decimal(3000),
     damage: new Decimal(50),
     actions: {
         0: {
@@ -798,13 +799,185 @@ BHC.staticEnas = {
     reward() {
         let gain = {}
         gain.temporalDust = new Decimal(50)
-        gain.temporalShard = new Decimal(12)
+        gain.temporalShard = new Decimal(10)
         return gain
     },
 }
 
-// Confinement based attacks (aka smaller arena in the arena) Uses agility nerfs on you
+BHC.staticPente = {
+    name: "Celestialite Static Pente",
+    symbol: "⧖Π",
+    style: {
+        background: "linear-gradient(45deg, #094394, #052653)",
+        color: "#0091DC",
+        borderColor: "#021124",
+    },
+    health: new Decimal(4000),
+    damage: new Decimal(50),
+    actions: {
+        0: {
+            name: "Caged Hatred",
+            instant: true,
+            type: "function",
+            target: "allPlayer",
+            onTrigger(index, slot, target, magnitude) {
+                let random = Math.random()
+                if (random < 0.33) {
+                    bulletHell({"knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 6, knifePerSec: 1+(magnitude/5)}}, {duration: 10+(magnitude*2), start: "left", subArena: true, subWidth: 250, subHeight: 500, subMove: "right", subSpeed: 0.5})
+                } else if (random < 0.66) {
+                    bulletHell({"bouncingDiamond": {diamondCount: 5+magnitude, enemySpeed: 3}}, {width: 800, height: 500, duration: 10+(magnitude*2), subArena: true, subWidth: 300})
+                } else {
+                    bulletHell({"radialKnifeBurstAttack": {knifeLength: 40, knifeWidth: 10, burstInterval: 1500, bulletsPerBurst: 4+magnitude, enemySpeed: 6}}, {duration: 10+(magnitude*2), subArena: true, subWidth: 300})
+                }
+            },
+            cooldown: new Decimal(4),
+        },
+        1: {
+            name: "Binding Chains",
+            active: true,
+            constantType: "effect",
+            constantTarget: "allPlayers",
+            effects: {
+                "agilityAdd": new Decimal(-50),
+            },
+            duration: new Decimal(5),
+            cooldown: new Decimal(15),
+        },
+        2: {
+            name: "Shielding Walls",
+            instant: true,
+            type: "shield",
+            target: "celestialite",
+            value: new Decimal(3),
+            cooldown: new Decimal(20),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.temporalDust = new Decimal(100)
+        gain.temporalShard = new Decimal(20)
+        return gain
+    },
+}
 
-// Burst based attacks (tack shooter go brrr) Bullet count is based on luck, and is increased with a seperate action
+BHC.staticDeka = {
+    name: "Celestialite Static Deka",
+    symbol: "⧖Δ",
+    style: {
+        background: "linear-gradient(45deg, #094394, #052653)",
+        color: "#0091DC",
+        borderColor: "#021124",
+    },
+    health: new Decimal(5000),
+    damage: new Decimal(50),
+    luck: new Decimal(4),
+    actions: {
+        0: {
+            name: "Turret Terror",
+            instant: true,
+            type: "function",
+            target: "allPlayer",
+            onTrigger(index, slot, target, magnitude) {
+                let random = Math.random()
+                if (random < 0.33) {
+                    bulletHell({"movingCircleRadialBurstAttack": {circleAmount: 3, burstInterval: 1300-(magnitude*100), bulletsPerBurst: player.bh.celestialte.luck, enemySpeed: 3, bulletSpeed: 3}}, {duration: 7+magnitude})
+                } else if (random < 0.66) {
+                    bulletHell({"rotatingCircleRadialBurst": {locX: 250, locY: 250, circleAmount: 4, burstInterval: 1300-(magnitude*100), orbitSpeed: 0.015, orbitRadius: 400, bulletsPerBurst: player.bh.celestialte.luck, enemySpeed: 6, bulletSpeed: 5}}, {width: 500, duration: 10+(magnitude*2)})
+                } else {
+                    bulletHell({"rotatingCircleRadialBurst": {locX: 500, locY: 125, circleAmount: 8, burstInterval: 1300-(magnitude*100), orbitSpeed: 0.02, orbitRadius: 200, bulletsPerBurst: player.bh.celestialte.luck, enemySpeed: 6, bulletSpeed: 5}}, {width: 250, height: 250, duration: 10+(magnitude*2)})
+                }
+            },
+            cooldown: new Decimal(6),
+        },
+        1: {
+            name: "More Bullets",
+            instant: true,
+            type: "effect",
+            target: "celestialite",
+            noMessage: true,
+            properties: {
+                "luckAdd": new Decimal(1),
+            },
+            cooldown: new Decimal(12),
+        },
+        2: {
+            name: "Higher Caliber",
+            instant: true,
+            type: "effect",
+            target: "celestialite",
+            properties: {
+                "damageAdd": new Decimal(5),
+            },
+            cooldown: new Decimal(15),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.temporalDust = new Decimal(175)
+        gain.temporalShard = new Decimal(35)
+        return gain
+    },
+}
 
-// The celestialite directly attacks (similar to matos with him charging and shooting) Passive that increases agility based on health lost
+BHC.staticHekaton = {
+    name: "Celestialite Static Hekaton",
+    symbol: "⧖Η",
+    style: {
+        background: "linear-gradient(45deg, #094394, #052653)",
+        color: "#0091DC",
+        borderColor: "#021124",
+    },
+    health: new Decimal(6000),
+    damage: new Decimal(50),
+    actions: {
+        0: {
+            name: "Personal Peril",
+            instant: true,
+            type: "function",
+            target: "allPlayer",
+            onTrigger(index, slot, target, magnitude) {
+                let random = Math.random()
+                if (random < 0.33) {
+                    bulletHell({"centerIcon": {locX: 600, locY: 250, radius: 64, fillColor: "#0091DC", strokeColor: "#094394", symbol: "⧖"}, "centerSpiralAttack": {locX: 600, locY: 250, spiralAngle: 0, spiralRate: 0.65, spiralInterval: 26-(magnitude*2), radialStart: 64, bulletSpeed: 6, spiralBullets: true}}, {duration: 10+(magnitude*2)})
+                } else if (random < 0.66) {
+                    bulletHell({"chargingIcon": {locX: 600, locY: 250, radius: 64, fillColor: "#0091DC", strokeColor: "#094394", symbol: "⧖", enemySpeed: 5, burstBullets: 3, burstViolence: 0.5, lungeTimer: 0, lungeCooldown: 0, lastTick: false}}, {duration: 10+(magnitude*2)})
+                } else {
+                    bulletHell({"bouncingIcon": {locX: 600, locY: 250, radius: 64, fillColor: "#0091DC", strokeColor: "#094394", symbol: "⧖", enemySpeed: 6, shootInterval: 400-(magnitude*20)}, "bulletRain": {bulletPerSec: 2+(magnitude/2)}}, {duration: 10+(magnitude*2)})
+                }
+            },
+            cooldown: new Decimal(6),
+        },
+        1: {
+            name: "Bound Bandage",
+            instant: true,
+            type: "heal",
+            target: "celestialite",
+            value: new Decimal(30),
+            cooldown: new Decimal(12),
+
+            active: true,
+            constantType: "effect",
+            constantTarget: "celestialite",
+            effects: {
+                "regenAdd": new Decimal(10)
+            },
+            duration: new Decimal(3),
+        },
+        2: {
+            name: "Blood Buzz",
+            passive: true,
+            constantType: "effect",
+            target: "celestialite",
+            properties: {
+                "agilityAdd"() {return Decimal.sub(1, player.bh.celestialite.health.div(player.bh.celestialite.maxHealth)).mul(150)},
+            },
+            cooldown: new Decimal(Infinity),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.temporalDust = new Decimal(250)
+        gain.temporalShard = new Decimal(50)
+        return gain
+    },
+}

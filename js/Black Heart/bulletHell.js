@@ -1103,6 +1103,59 @@ BHB.diamondAttack = {
     },
 }
 
+BHB.rotatingCircleRadialBurst = {
+    //bulletHell({"rotatingCircleRadialBurst": {locX: 250, locY: 250, circleAmount: 4, burstInterval: 1200, orbitSpeed: 0.015, orbitRadius: 400, bulletsPerBurst: 6, enemySpeed: 6, bulletSpeed: 5}}, {width: 500, duration: 12})
+    codeFunc(info, id) {
+        for (let i = 0; i < info.actions[id].circleAmount; i++) {
+            let angleOffset = (2 * Math.PI * i) / info.actions[id].circleAmount;
+            info.bullets.push({
+                name: "circle",
+                x: info.boxLeft + info.actions[id].locX + 200 * Math.cos(angleOffset),
+                y: info.boxTop + info.actions[id].locY + 200 * Math.sin(angleOffset),
+                vx: 0,
+                vy: 0,
+                r: 40,
+                orbitRadius: info.actions[id].orbitRadius,
+                orbitAngle: angleOffset,
+                orbitSpeed: info.actions[id].orbitSpeed, // slightly different speeds
+                lastBurstTime: 0,
+                draw(b, ctx) {
+                    ctx.beginPath();
+                    ctx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);
+                    ctx.fillStyle = "#eee";
+                    ctx.shadowColor = "#fff";
+                    ctx.shadowBlur = 12;
+                    ctx.fill()
+                }
+            });
+        }
+        return info
+    },
+    moveFunc(info, ticks, id) {
+        for (let b of info.bullets) {
+            if (b.name && b.name == "circle") {
+                b.orbitAngle += b.orbitSpeed;
+                const playerGlobalX = info.boxLeft + info.actions[id].locX;
+                const playerGlobalY = info.boxTop + info.actions[id].locY;
+                const targetBx = playerGlobalX + b.orbitRadius * Math.cos(b.orbitAngle);
+                const targetBy = playerGlobalY + b.orbitRadius * Math.sin(b.orbitAngle);
+                // Smoothly move boss towards target position (lerp)
+                const lerpFactor = 0.05;
+                b.x += (targetBx - b.x) * lerpFactor;
+                b.y += (targetBy - b.y) * lerpFactor;
+
+                // Burst
+                if (!b.lastBurstTime) b.lastBurstTime = Date.now()
+                if (Date.now() - b.lastBurstTime > info.actions[id].burstInterval) {
+                    info.fireRadialBurst(b.x, b.y, id)
+                    b.lastBurstTime = Date.now()
+                }
+            }
+        }
+        return info
+    },
+}
+
 BHB.bulletRain = {
     //bulletHell({"bulletRain": {bulletPerSec: 10}}, {duration: 12})
     moveFunc(info, ticks, id) {
@@ -1374,7 +1427,11 @@ BHB.centerSpiralAttack = {
         // Spiral fire
         if (!info.actions[id].lastTime) info.actions[id].lastTime = ticks;
         if (ticks - info.actions[id].lastTime > info.actions[id].spiralInterval) {
-            info.spawnSpiralProjectile(info.width / 2 + info.boxLeft, info.height / 2 + info.boxTop, info.actions[id].radialStart, id)
+            let spiX = info.width / 2 + info.boxLeft
+            let spiY = info.height / 2 + info.boxTop
+            if (info.actions[id].locX) spiX = info.actions[id].locX + info.boxLeft
+            if (info.actions[id].locY) spiY = info.actions[id].locY + info.boxTop
+            info.spawnSpiralProjectile(spiX, spiY, info.actions[id].radialStart, id)
             info.actions[id].spiralAngle += info.actions[id].spiralRate;
             info.actions[id].lastTime = ticks;
         }
@@ -1399,6 +1456,10 @@ BHB.centerSpreadAttack = {
 BHB.centerIcon = {
     //bulletHell({"centerIcon": {radius: 64, fillColor: "#fff", strokeColor: "#e22", symbol: "⊘"}}, {width: window.innerWidth, height: window.innerHeight, duration: 15})
     codeFunc(info, id) {
+        let curX = info.width / 2 + info.boxLeft
+        let curY = info.height / 2 + info.boxTop
+        if (info.actions[id].locX) curX = info.actions[id].locX
+        if (info.actions[id].locY) curY = info.actions[id].locY
         info.bullets.push({
             name: "symbol",
             boxRender: true,
@@ -1406,8 +1467,8 @@ BHB.centerIcon = {
             fill: info.actions[id].fillColor,
             stroke: info.actions[id].strokeColor,
             angle: 0,
-            x: info.width / 2,
-            y: info.height / 2,
+            x: curX,
+            y: curY,
             vx: 0,
             vy: 0,
             r: info.actions[id].radius,
@@ -1429,6 +1490,7 @@ BHB.centerIcon = {
                 bossCtx.strokeStyle = b.stroke;
                 bossCtx.strokeText(b.symbol, 0, 0);
                 bossCtx.restore();
+                /*
                 // Draw a spiral pattern inside
                 bossCtx.save();
                 bossCtx.translate(b.x, b.y - 5);
@@ -1441,6 +1503,7 @@ BHB.centerIcon = {
                     bossCtx.stroke();
                 }
                 bossCtx.restore();
+                */
             },
         })
 
@@ -1586,6 +1649,173 @@ BHB.finalMatosAttack = {
             }
         }
 
+        return info
+    },
+}
+
+BHB.chargingIcon = {
+    //bulletHell({"chargingIcon": {locX: 600, locY: 250, radius: 64, fillColor: "#0091DC", strokeColor: "#094394", symbol: "⧖", enemySpeed: 5, burstBullets: 3, burstViolence: 0.5, lungeTimer: 0, lungeCooldown: 0, lastTick: false}}, {duration: 12})
+    codeFunc(info, id) {
+        let curX = info.width / 2 + info.boxLeft
+        let curY = info.height / 2 + info.boxTop
+        if (info.actions[id].locX) curX = info.actions[id].locX
+        if (info.actions[id].locY) curY = info.actions[id].locY
+        info.bullets.push({
+            name: "symbol",
+            boxRender: true,
+            symbol: info.actions[id].symbol,
+            fill: info.actions[id].fillColor,
+            stroke: info.actions[id].strokeColor,
+            x: curX,
+            y: curY,
+            r: info.actions[id].radius,
+            vx: 0,
+            vy: 0,
+            pulse: 0,
+            pulsingRed: false,
+            draw(b, bossCtx) {
+                // Draw big symbol (⊘)
+                bossCtx.save();
+                bossCtx.translate(b.x, b.y);
+                let pulseScale = 1 + 0.18 * Math.sin(b.pulse * 2);
+                bossCtx.scale(pulseScale, pulseScale);
+                bossCtx.font = 'bold ' + b.r*2 + 'px serif';
+                bossCtx.textAlign = 'center';
+                bossCtx.textBaseline = 'middle';
+                bossCtx.globalAlpha = 0.92;
+                bossCtx.shadowColor = b.pulsingRed ? '#e22' : '#fff';
+                bossCtx.shadowBlur = 32;
+                bossCtx.fillStyle = b.pulsingRed ? '#e22' : b.fill;
+                bossCtx.fillText(b.symbol, 0, 0);
+                bossCtx.globalAlpha = 1;
+                bossCtx.shadowBlur = 0;
+                bossCtx.lineWidth = 6;
+                bossCtx.strokeStyle = b.pulsingRed ? '#fff' : b.stroke;
+                bossCtx.strokeText(b.symbol, 0, 0);
+                bossCtx.restore();
+            },
+        })
+
+        return info
+    },
+    moveFunc(info, ticks, id) {
+        let dt = ticks - (info.actions[id].lastTick || ticks);
+        info.actions[id].lastTick = ticks;
+        for (let b of info.bullets) {
+            if (b.name && b.name == "symbol") {
+                // Lunge logic
+                if (!b.pulsingRed && info.actions[id].lungeCooldown <= 0) {
+                    info.actions[id].lungeTimer = 1200;
+                    let dx = info.px - b.x;
+                    let dy = info.py - b.y;
+                    let dist = Math.hypot(dx, dy);
+                    b.vx = (dx / dist) * info.actions[id].enemySpeed;
+                    b.vy = (dy / dist) * info.actions[id].enemySpeed;
+                    b.pulsingRed = true;
+                } else if (!b.pulsingRed) {
+                    info.actions[id].lungeCooldown -= dt;
+                }
+                if (b.pulsingRed) {
+                    info.actions[id].lungeTimer -= dt;
+                    if (info.actions[id].lungeTimer <= 0) {
+                        b.vx = 0;
+                        b.vy = 0;
+                        b.pulsingRed = false;
+                        info.actions[id].lungeCooldown = 1200 + Math.random() * 800;
+                    }
+                }
+
+                // Pulse
+                b.pulse += dt * 0.008
+
+                // Shoot burst at player
+                if (!info.actions[id].lastTime) info.actions[id].lastTime = ticks;
+                if (ticks - info.actions[id].lastTime > 650) {
+                    let dx = info.px - b.x;
+                    let dy = info.py - b.y;
+                    let baseAngle = Math.atan2(dy, dx);
+                    for (let i = 0; i < info.actions[id].burstBullets; i++) {
+                        let spread = (i - (info.actions[id].burstBullets - 1) / 2) * info.actions[id].burstViolence;
+                        let angle = baseAngle + spread + (Math.random() - 0.5) * 0.18;
+                        let vx = Math.cos(angle) * 8 * (0.9 + Math.random() * 0.3);
+                        let vy = Math.sin(angle) * 8 * (0.9 + Math.random() * 0.3);
+                        info.bullets.push({x: b.x + info.boxLeft, y: b.y + info.boxTop, r: 12, vx, vy, draw(b, bossCtx) {bossCtx.beginPath();bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);bossCtx.fillStyle = "#fff";bossCtx.fill()}});
+                    }
+                    // Randomize next burst
+                    info.actions[id].burstViolence = 0.25 + Math.random() * 0.5;
+
+                    info.actions[id].lastTime = ticks;
+                }
+            }
+        }
+        return info
+    },
+}
+
+BHB.bouncingIcon = {
+    //bulletHell({"bouncingIcon": {locX: 600, locY: 250, radius: 64, fillColor: "#0091DC", strokeColor: "#094394", symbol: "⧖", enemySpeed: 6, shootInterval: 400}}, {duration: 12})
+    codeFunc(info, id) {
+        let curX = info.width / 2 + info.boxLeft
+        let curY = info.height / 2 + info.boxTop
+        if (info.actions[id].locX) curX = info.actions[id].locX
+        if (info.actions[id].locY) curY = info.actions[id].locY
+        // Random velocity
+        let theta = Math.random() * 2 * Math.PI;
+        let vx = Math.cos(theta) * info.actions[id].enemySpeed;
+        let vy = Math.sin(theta) * info.actions[id].enemySpeed;
+        info.bullets.push({
+            name: "symbol",
+            boxRender: true,
+            symbol: info.actions[id].symbol,
+            fill: info.actions[id].fillColor,
+            stroke: info.actions[id].strokeColor,
+            x: curX,
+            y: curY,
+            r: info.actions[id].radius,
+            vx: vx,
+            vy: vy,
+            shootInterval: info.actions[id].shootInterval,
+            lastShotTime: 0,
+            draw(b, bossCtx) {
+                // Draw big symbol (⊘)
+                bossCtx.save();
+                bossCtx.translate(b.x, b.y);
+                bossCtx.font = 'bold ' + b.r*2 + 'px serif';
+                bossCtx.textAlign = 'center';
+                bossCtx.textBaseline = 'middle';
+                bossCtx.globalAlpha = 0.92;
+                bossCtx.shadowColor = '#fff';
+                bossCtx.shadowBlur = 32;
+                bossCtx.fillStyle = b.fill;
+                bossCtx.fillText(b.symbol, 0, 0);
+                bossCtx.globalAlpha = 1;
+                bossCtx.shadowBlur = 0;
+                bossCtx.lineWidth = 6;
+                bossCtx.strokeStyle = b.stroke;
+                bossCtx.strokeText(b.symbol, 0, 0);
+                bossCtx.restore();
+            },
+        })
+
+        return info
+    },
+    moveFunc(info, ticks, id) {
+        for (let b of info.bullets) {
+            if (b.name && b.name == "symbol") {
+                // Bounce off walls
+                if (b.x < b.r) {b.x = b.r; b.vx *= -1}
+                if (b.x > info.width - b.r) {b.x = info.width - b.r; b.vx *= -1}
+                if (b.y < b.r) {b.y = b.r; b.vy *= -1}
+                if (b.y > info.height - b.r) {b.y = info.height - b.r; b.vy *= -1}
+
+                // Shoot at player
+                if (!b.lastShotTime) b.lastShotTime = ticks;
+                if (ticks - b.lastShotTime > b.shootInterval) {
+                    info.shootAtPlayer(b.x + info.boxLeft, b.y + info.boxTop, id);
+                    b.lastShotTime = ticks;
+                }
+            }
+        }
         return info
     },
 }

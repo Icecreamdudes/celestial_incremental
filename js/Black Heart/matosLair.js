@@ -690,7 +690,7 @@ BHC.matos = {
                 if (player.bh.celestialite.health.lt(2000) && player.bh.celestialite.actions[1].variables.attacks == 10) {
                     screenFlash("NOVA WILL BRING US GREATNESS.", 3000)
                     setTimeout(() => {
-                        bulletHell({"knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 6, knifePerSec: 2}}, {width: 1000, height: 500, duration: 15, subArena: true, subWidth: 300})
+                        bulletHell({"knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 6, knifePerSec: 2}}, {width: 800, height: 500, duration: 15, subArena: true, subWidth: 300})
                     }, 3000)
                     player.bh.celestialite.actions[1].variables.attacks += 1
                 }
@@ -712,7 +712,7 @@ BHC.matos = {
                         } else if (random > 0.4 && random < 0.6) {
                             bulletHell({}, {width: 750, duration: 20, timed: true, cellSize: 50, start: "cell", goal: "cell"})
                         } else if (random > 0.6 && random < 0.7) {
-                            bulletHell({"knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 6, knifePerSec: 2}}, {width: 1000, height: 500, duration: 15, subArena: true, subWidth: 300})
+                            bulletHell({"knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 6, knifePerSec: 2}}, {width: 800, height: 500, duration: 15, subArena: true, subWidth: 300})
                         } else  {
                             bulletHell({"bombAttack": {bombsPerSecond: 1, bombFallSpeed: 4, miniBombCount: 3, miniBombSpeed: 5, miniBombDelay: 600, bulletCount: 5, bulletSpeed: 3}}, {duration: 15})
                         }
@@ -730,7 +730,7 @@ BHC.matos = {
                         } else if (random > 0.4 && random < 0.6) {
                             bulletHell({}, {width: 750, duration: 20, timed: true, cellSize: 50, start: "cell", goal: "cell"})
                         } else if (random > 0.6 && random < 0.7) {
-                            bulletHell({"knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 6, knifePerSec: 2}}, {width: 1000, height: 500, duration: 15, subArena: true, subWidth: 300})
+                            bulletHell({"knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 6, knifePerSec: 2}}, {width: 800, height: 500, duration: 15, subArena: true, subWidth: 300})
                         } else  {
                             bulletHell({"bombAttack": {bombsPerSecond: 1, bombFallSpeed: 4, miniBombCount: 3, miniBombSpeed: 5, miniBombDelay: 600, bulletCount: 5, bulletSpeed: 3}}, {duration: 15})
                         }

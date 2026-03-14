@@ -312,7 +312,7 @@ addUniverse("UB", {
 addUniverse("BH", {
     name: "Black Heart",
     symbol: "♥",
-    tree: [["darkTemple", "depth1", "depth2"], ["matosLair", "depth3"], ["depth4"]],
+    tree: [["darkTemple", "depth1", "depth2"], ["matosLair", "depth3"], ["laboratory", "depth4", "alephsChamber"]],
     tree2: [["stagnantSynestia"]],
     nodeStyle() {
         let style = {

@@ -42,7 +42,7 @@ addLayer("depth4", {
                 borderColor: "#150015",
                 color: "#390039",
                 textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
-                marginLeft: "10px !important",
+                marginLeft: "20px !important",
             }
         } else {
             str = {
@@ -51,7 +51,7 @@ addLayer("depth4", {
                 borderColor: "#470047",
                 color: "#c000c0",
                 textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
-                marginLeft: "10px !important",
+                marginLeft: "20px !important",
             }
         }
         if (player.subtabs["bh"]["stages"] == "depth4") str.outline = "3px solid #999"

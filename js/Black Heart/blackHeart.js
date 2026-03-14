@@ -136,7 +136,7 @@ addLayer("bh", {
     name: "Black Heart", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "BH", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "BH",
-    innerNodes: [["darkTemple", "depth1", "depth2"], ["matosLair", "depth3"], ["depth4"], ["stagnantSynestia"]],
+    innerNodes: [["darkTemple", "depth1", "depth2"], ["matosLair", "depth3"], ["laboratory", "depth4", "alephsChamber"], ["stagnantSynestia"]],
     innerLayer() {return player.subtabs["bh"]["stages"]},
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
@@ -3583,6 +3583,14 @@ addLayer("bh", {
             "depth4": {
                 unlocked: true,
                 embedLayer: "depth4",
+            },
+            "alephsChamber": {
+                unlocked: true,
+                embedLayer: "alephsChamber",
+            },
+            "laboratory": {
+                unlocked: true,
+                embedLayer: "laboratory",
             },
             "darkTemple": {
                 unlocked: true,

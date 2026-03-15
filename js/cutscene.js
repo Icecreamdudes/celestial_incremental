@@ -3467,7 +3467,7 @@
             portrait: "resources/secret.png",
             music: "music/novasentFlashback.mp3",
             background: "#5c4b4b",
-            trigger() {return player.sm.slotsSpinned.gte(1) },
+            trigger() {return player.sm.spinAmount.gte(1) },
             dialogue: [
                 { text: "Upon spinning the slots, your field of vision flashes again, and you enter a new flashback."  },
                 { text: "This time, you appear back on the ship, and see Zar and the other Novasent's human forms talking to each other."  },

@@ -7,7 +7,6 @@
     startData() { return {
         unlocked: true,
 
-        slotsSpinned: new Decimal(0),
         spinCost: new Decimal(1e7),
 
         spinLength: new Decimal(30),
@@ -17,6 +16,7 @@
         spinAmount: new Decimal(0),
         spinActive: false,
         slotSpinning: 0,
+        reductionCooldown: new Decimal(0),
 
         slotIndexes: [0, 0, 0],
         /*
@@ -46,7 +46,7 @@
         }
     },
     tooltip: "Slot Machine",
-    color: "#c1c436ff",
+    color: "#eaebc3ff",
     branches: ["wof",],
     update(delta) {
         player.sm.slotImages = ["resources/redChip.png", "resources/blueChip.png", "resources/yellowChip.png", "resources/evoShard.png", "resources/paragonShard.png"]
@@ -110,6 +110,8 @@
         if (player.sm.spinPause.gte(0)) {
             layers.sm.slotReset();
         }
+
+        player.sm.reductionCooldown = player.sm.reductionCooldown.sub(delta)
     },
     randomizeSegments() {
         // Weighted pick but ensure result is different from current displayed index
@@ -253,37 +255,28 @@
         player.wof.buyables[15] = new Decimal(0)
     },
     clickables: {
-        11: {
-            title() { return "<img src='" + player.sm.slotImages[player.sm.slotIndexes[0]] + "'style='width:calc(100%);height:calc(100%);margin:-0%'></img>"},
-            display() { return "" },
-            canClick() { return false },
-            unlocked() { return true },
-            style() { 
-                return { width: '200px', "min-height": '200px', borderRadius: "0px", backgroundImage: "linear-gradient(180deg, #424242ff 0%, #818181ff 50%, #424242ff 100%)" }
-                
-            },
-        },
         12: {
-            title() { return "<img src='" + player.sm.slotImages[player.sm.slotIndexes[1]] + "'style='width:calc(100%);height:calc(100%);margin:-0%'></img>"},
-            display() { return "" },
-            canClick() { return false },
+            title() { return player.sm.reductionCooldown.gt(0) ? "On cooldown...<br><small>" + formatTime(player.sm.reductionCooldown) + "</small>" : "Reduce slots spun by /1.2<br><small>You REALLY suck at this game!</small>"},
+            canClick() { return player.sm.reductionCooldown.lte(0) },
             unlocked() { return true },
-            style() { 
-                return { width: '200px', "min-height": '200px', borderRadius: "0px", backgroundImage: "linear-gradient(180deg, #424242ff 0%, #818181ff 50%, #424242ff 100%)" }
-                
+            onClick() {
+                player.sm.spinAmount = player.sm.spinAmount.div(1.2).floor()
+                player.sm.reductionCooldown = new Decimal(3600)
             },
+            style() {
+                let look = {width: '300px', minHeight: '60px', border: "2px solid #000000bf", borderRadius: "10px" }
+                if (this.canClick()) {
+                    look.backgroundImage = "linear-gradient(45deg, #eaebc3ff 0%, #fff 50%, #eaebc3ff 100%)"
+                    look.border = "2px solid black"
+                    look.color = "black"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "2px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            }
         },
-        13: {
-            title() { return "<img src='" + player.sm.slotImages[player.sm.slotIndexes[2]] + "'style='width:calc(100%);height:calc(100%);margin:-0%'></img>"},
-            display() { return "" },
-            canClick() { return false },
-            unlocked() { return true },
-            style() { 
-                return { width: '200px', "min-height": '200px', borderRadius: "0px", backgroundImage: "linear-gradient(180deg, #424242ff 0%, #818181ff 50%, #424242ff 100%)" }
-                
-            },
-        },
-
         21: {
             title() { return "<h2>SPIN!"},
             tooltip() { return "<h5>Spin Length: " + format(player.sm.spinLength) + ". <h6>(I don't know what unit of measurement this is in, but it's probably seconds.)" },
@@ -294,9 +287,19 @@
                 layers.sm.spinSlots();
                 player.sm.spinAmount = player.sm.spinAmount.add(1)
             },
-            style() { 
-                return { width: '250px', "min-height": '75px', borderRadius: "15px 15px 15px 15px", border: "3px solid #0f221aff", backgroundImage: "linear-gradient(180deg, #c1c436ff 0%, #eaebc3ff 50%, #c1c436ff 100%)"}
-            },
+            style() {
+                let look = {width: '521px', minHeight: '50px', border: "2px solid #000000bf", borderRadius: "10px" }
+                if (this.canClick()) {
+                    look.backgroundImage = "linear-gradient(45deg, #eaebc3ff 0%, #fff 50%, #eaebc3ff 100%)"
+                    look.border = "2px solid black"
+                    look.color = "black"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "2px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            }
         },
         22: {
             title() { return "<h6>Do a slots reset, but gain no rewards."},
@@ -310,21 +313,53 @@
                 return { width: '125px', "min-height": '75px', borderRadius: "15px 15px 15px 15px", border: "3px solid #0f221aff", backgroundImage: "linear-gradient(180deg, #c1c436ff 0%, #eaebc3ff 50%, #c1c436ff 100%)"}
             },
         },
+
+        101: {
+            title() { return "<img src='" + player.sm.slotImages[player.sm.slotIndexes[0]] + "'style='width:calc(100%);height:calc(100%);margin:-0%'></img>"},
+            display() { return "" },
+            canClick() { return false },
+            unlocked() { return true },
+            style() { 
+                return { width: '175px', "min-height": '175px', border: "3px solid #0000007f", borderRadius: "0px", backgroundImage: "linear-gradient(180deg, #635400 0%, #998200 50%, #635400 100%)" }
+                
+            },
+        },
+        102: {
+            title() { return "<img src='" + player.sm.slotImages[player.sm.slotIndexes[1]] + "'style='width:calc(100%);height:calc(100%);margin:-0%'></img>"},
+            display() { return "" },
+            canClick() { return false },
+            unlocked() { return true },
+            style() { 
+                return { width: '175px', "min-height": '175px', border: "3px solid #0000007f", borderRadius: "0px", backgroundImage: "linear-gradient(180deg, #635400 0%, #998200 50%, #635400 100%)" }
+                
+            },
+        },
+        103: {
+            title() { return "<img src='" + player.sm.slotImages[player.sm.slotIndexes[2]] + "'style='width:calc(100%);height:calc(100%);margin:-0%'></img>"},
+            display() { return "" },
+            canClick() { return false },
+            unlocked() { return true },
+            style() { 
+                return { width: '175px', "min-height": '175px', border: "3px solid #0000007f", borderRadius: "0px", backgroundImage: "linear-gradient(180deg, #635400 0%, #998200 50%, #635400 100%)" }
+                
+            },
+        },
     },
     bars: {
         slots: {
             unlocked: true,
             direction: RIGHT,
-            width: 600,
-            height: 50,
+            width: 523,
+            height: 30,
             progress() {
                 return player.sm.trueTimer.div(player.sm.spinLength)
             },
-            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
-            fillStyle: {backgroundColor: "rgb(129, 112, 93, 0.5)"},
+            baseStyle: {backgroundColor: "black"},
+            fillStyle: {backgroundColor: "#635400"},
             textStyle: {fontSize: "14px"},
+            borderStyle: {borderRadius: "0px"},
             display() {
-                return player.sm.spinActive ? "Slots are spinning..." : "Spin the slots!";
+                return player.sm.spinActive ? "Slots are being spun..." : "Spin the slots!";
             },
         },
     },
@@ -363,7 +398,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '194px', height: '225px', color: "black", backgroundImage: "linear-gradient(45deg, #5d51ff 0%, #af51ff 100%)" }
+            style: { width: '180px', height: '180px', color: "black", border: "2px solid #000000bf", background: "linear-gradient(45deg, #5d51ff 0%, #af51ff 100%)" },
         },
         12: {
             costBase() { return new Decimal(6) },
@@ -397,7 +432,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '194px', height: '225px', color: "black", backgroundImage: "linear-gradient(45deg, #1ba861 0%, #89ee30 33%, #e79c44 67%, #cb1816 100%)" }
+            style: { width: '180px', height: '180px', color: "black", border: "2px solid #000000bf", background: "linear-gradient(45deg, #1ba861 0%, #89ee30 33%, #e79c44 67%, #cb1816 100%)" },
         },
         13: {
             costBase() { return new Decimal(1) },
@@ -431,7 +466,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '194px', height: '225px', color: "black", backgroundImage: "linear-gradient(0deg, #2d667b 0%, #0a3870 100%)" }
+            style: { width: '180px', height: '180px', color: "black", border: "2px solid #000000bf", background: "linear-gradient(0deg, #2d667b 0%, #0a3870 100%)" },
         },
 
         //research
@@ -761,6 +796,87 @@
     microtabs: {
         stuff: {
             "Main": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                unlocked() { return true },
+                content: [
+                    ["blank", "10px"],
+                    ["style-column", [
+                    ["style-column", [
+                        ["style-column", [ //slots
+                            ["style-column", [
+                                ["row", [ ["bar", "slots"],]],
+                                ["row", [["clickable", 101], ["clickable", 102], ["clickable", 103],]],
+                                ["blank", "10px"],
+                                ["row", [["clickable", 21],]],
+                                ["blank", "10px"],
+                                ["style-row", [
+                                    ["raw-html", function () { return "Spinning slots resets previous dice space content." }, { "color": "black", "font-size": "16px", "font-family": "monospace" }],
+                                ], {padding: "6px"}],
+                                ["raw-html", function () { return "Requires " + format(player.sm.spinCost) + " chance points." }, { "color": "black", "font-size": "16px", "font-family": "monospace" }],
+                                ["blank", "10px"],
+                                ["raw-html", function () { return "Slots spun: " + formatWhole(player.sm.spinAmount) + "" }, { "color": "black", "font-size": "16px", "font-family": "monospace" }],
+                                ["raw-html", function () { return "<small>Boosts all chip gain by x" + format(player.sm.spinAmount.pow(0.5).add(1)) + ".<br>(based on amount of slot spins)</small>" }, { "color": "black", "font-size": "16px", "font-family": "monospace" }],
+                                ["blank", "10px"],
+                                ["clickable", 11],
+                                ["blank", "3px"],
+                                ["clickable", 12],
+                            ], {height: "250px", borderRadius: "0px"}],
+                        ], {width: "594px", height: "501px", background: "#00000000", borderRadius: "0px"}],
+                        ["style-row", [], {backgroundColor: "#635400", width: "100%", height: "3px"}],
+                        ["style-row", [
+                            ["top-column", [ //upgrades
+                                ["blank", "6px"],
+                                ["raw-html", function () { return "You have <h3>" + format(player.sm.chips[0]) + "</h3> red chips. (+" + format(player.sm.chipsToGet[0]) + " base)" }, { "color": "#800000", "font-size": "16px", "font-family": "monospace" }],
+                                ["raw-html", function () { return "<small>Boosts chance point gain and extends softcap by x" + format(player.sm.chipsEffect[0]) + ".</small>" }, { "color": "#800000", "font-size": "16px", "font-family": "monospace" }],
+                                ["raw-html", function () { return "You have <h3>" + format(player.sm.chips[1]) + "</h3> blue chips. (+" + format(player.sm.chipsToGet[1]) + " base)" }, { "color": "#000080", "font-size": "16px", "font-family": "monospace" }],
+                                ["raw-html", function () { return "<small>Boosts heads and tails gain and extends softcap by x" + format(player.sm.chipsEffect[1]) + ".</small>" }, { "color": "#000080", "font-size": "16px", "font-family": "monospace" }],
+                                ["raw-html", function () { return "You have <h3>" + format(player.sm.chips[2]) + "</h3> yellow chips. (+" + format(player.sm.chipsToGet[0]) + " base)" }, { "color": "#404000", "font-size": "16px", "font-family": "monospace" }],
+                                ["raw-html", function () { return "<small>Boosts wheel point gain by x" + format(player.sm.chipsEffect[2]) + ".</small>" }, { "color": "#404000", "font-size": "16px", "font-family": "monospace" }],
+                                ["blank", "6px"],
+                                ["left-row", [
+                                    ["blank", "25px"],
+                                    ["tooltip-row", [
+                                        ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                                        ["raw-html", () => { return formatWhole(player.cb.evolutionShards)}, {width: "93px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                        ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
+                                    ], {width: "150px", height: "50px", borderRight: "2px solid #635400ff"}],
+                                    ["tooltip-row", [
+                                        ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                                        ["raw-html", () => { return formatWhole(player.cb.paragonShards)}, {width: "95px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                        ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
+                                    ], {width: "150px", height: "50px", borderRight: "2px solid #635400ff"}],
+                                    ["tooltip-row", [
+                                        ["raw-html", "<img src='resources/battle/temporalShards.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                                        ["raw-html", () => { return formatWhole(player.fi.temporalShards)}, {width: "95px", height: "50px", color: "#0d62c4ff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                        ["raw-html", "<div class='bottomTooltip'>Temporal Shards<hr><small>(Gained from check back battles)</small></div>"],
+                                    ], {width: "150px", height: "50px"}],
+                                ], {height: "50px", backgroundColor: "black", border: "2px solid #635400ff", borderRadius: "10px", userSelect: "none"}],
+                                ["blank", "6px"],
+                                ["row", [
+                                    ["layerColor-dark-buyable", 11],
+                                    ["blank", "3px", {width: "3px"}],
+                                    ["layerColor-dark-buyable", 12],
+                                    ["blank", "3px", {width: "3px"}],
+                                    ["layerColor-dark-buyable", 13],
+                                    ["blank", "3px", {width: "3px"}],
+                                    ["layerColor-dark-buyable", 14],
+                                ]],
+                                    ["blank", "3px", {width: "3px"}],
+                                ["row", [
+                                    ["layerColor-dark-buyable", 15],
+                                    ["blank", "3px", {width: "3px"}],
+                                    ["layerColor-dark-buyable", 16],
+                                ]],
+                            ], {width: "594px", height: "390px", background: "#6354005f", borderRadius: "0px"}],
+                        ]]
+                    ], {background: "linear-gradient(45deg, #c1c436ff 0%, #eaebc3ff 50%, #c1c436ff 100%)", border: "3px solid #635400",  borderRadius: "0px"}],
+                    ], () => {
+                        return {backgroundImage: "url(resources/ui/slot_machine_background_1.png)", backgroundPosition: (Date.now() / 1000 % 1 < 0.5) ? "25px 0px" : "", border: "3px solid #635400",  borderRadius: "13px", padding: "25px"}
+                    }],
+                    ["blank", "25px"],
+                ]
+            },
+            "temp": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [

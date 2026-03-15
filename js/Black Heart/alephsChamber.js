@@ -627,3 +627,135 @@ BHC.ma3 = {
         return gain
     },
 }
+
+BHC.aleph = {
+    name: "Aleph",
+    icon: "resources/aleph.png",
+    health: new Decimal(25000),
+    damage: new Decimal(20),
+    noRandomStats: true,
+    timer: new Decimal(250),
+    actions: {
+        0: {
+            name() {
+                if (player.bh.celestialite.actions[0].variables.attacks) {
+                    if (player.bh.celestialite.actions[0].variables.attacks == 0) {
+                        return "Slash"
+                    }
+                    if (player.bh.celestialite.actions[0].variables.attacks == 1) {
+                        return "Piercing Shot"
+                    }
+                    if (player.bh.celestialite.actions[0].variables.attacks == 2) {
+                        return "Stinging Flurry"
+                    }
+                }
+                return "Slash"
+            },
+            instant: true,
+            constantType: "function",
+            constantTarget: "randomPlayer",
+            onTrigger(index, slot, target) {
+                if (!player.bh.celestialite.actions[0].variables.attacks) player.bh.celestialite.actions[0].variables.attacks = 0
+                switch (player.bh.celestialite.actions[0].variables.attacks) {
+                    case 0:
+                        bhAttack(new Decimal(15), 3, 0, "allPlayer")
+                        player.bh.celestialite.actions[0].variables.attacks = 1
+                        break;
+                    case 1:
+                        let dmg1 = new Decimal(25)
+                        let str1 = ""
+                        if (Decimal.gte(0.5, Math.random())) {
+                            dmg1 = dmg1.mul(2)
+                            str1 = str1 + "<span style='color:#faa'>[CRIT] </span>"
+                        }
+                        bhAttack(dmg1, 3, 0, "randomPlayer", str1)
+                        player.bh.celestialite.actions[0].variables.attacks = 2
+                        break;
+                    case 2:
+                        for (let i = 0; i < 5; i++) {
+                            setTimeout(() => {
+                                bhAttack(new Decimal(10), 3, 0, "randomPlayer")
+                            }, 200*i)
+                        }
+                        player.bh.celestialite.actions[0].variables.attacks = 0
+                        break;
+                    default:
+                        console.log("This isn't supposed to be triggered")
+                        player.bh.celestialite.actions[0].variables.attacks = 0
+                        break;
+                }
+            },
+            cooldown: new Decimal(4),
+        },
+        1: {
+            name: "Buzzing Barrier",
+            instant: true,
+            type: "shield",
+            target: "celestialite",
+            value: new Decimal(3),
+            cooldown: new Decimal(12),
+            stun: ["soft", new Decimal(1), 1],
+
+            active: true,
+            constantType: "effect",
+            constantTarget: "celestialite",
+            effects: {
+                "defenseAdd": new Decimal(25),
+            },
+            duration: new Decimal(3),
+        },
+        2: {
+            name: "Binding Bandage",
+            instant: true,
+            type: "heal",
+            target: "celestialite",
+            value: new Decimal(50),
+            cooldown: new Decimal(20),
+
+            active: true,
+            constantType: "effect",
+            constantTarget: "celestialite",
+            effects: {
+                "regenAdd": new Decimal(10),
+            },
+            duration: new Decimal(5),
+        },
+        3: {
+            name: "???",
+            passive: true,
+            constantType: "function",
+            constantTarget: "randomPlayer",
+            onTrigger(index, slot, target) {
+                if (!player.bh.celestialite.actions[3].variables.attacks) player.bh.celestialite.actions[3].variables.attacks = 0
+                if (player.bh.celestialite.health.lt(18750) && player.bh.celestialite.actions[3].variables.attacks == 0) {
+                    screenFlash("TEMP TEXT 1", 3000)
+                    setTimeout(() => {
+                        // PUT ATTACK HERE
+                    }, 3000)
+                    player.bh.celestialite.actions[3].variables.attacks += 1
+                }
+                if (player.bh.celestialite.health.lt(12500) && player.bh.celestialite.actions[3].variables.attacks == 1) {
+                    screenFlash("TEMP TEXT 2", 3000)
+                    setTimeout(() => {
+                        // PUT ATTACK HERE
+                    }, 3000)
+                    player.bh.celestialite.actions[3].variables.attacks += 1
+                }
+                if (player.bh.celestialite.health.lt(6250) && player.bh.celestialite.actions[3].variables.attacks == 2) {
+                    screenFlash("TEMP TEXT 3", 3000)
+                    setTimeout(() => {
+                        // PUT ATTACK HERE
+                    }, 3000)
+                    player.bh.celestialite.actions[3].variables.attacks += 1
+                }
+            },
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.gloomingNocturnium = new Decimal(250)
+        gain.dimNocturnium = new Decimal(150)
+        gain.darkEssence = new Decimal(50)
+        return gain
+    },
+}

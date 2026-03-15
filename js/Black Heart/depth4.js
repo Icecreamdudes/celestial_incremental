@@ -1065,7 +1065,7 @@ BHC.majorXi = {
             instant: true,
             type: "damage",
             target: "randomPlayer",
-            method: "physical",
+            method: "magic",
             properties: {
                 "multi-hit": [5, 200],
             },

@@ -103,25 +103,14 @@ BHS.laboratory = {
     nameLow: "the laboratory",
     music: "music/depth4.mp3",
     comboLimit: Infinity,
+    comboScaling: 2,
+    comboScalingStart: 1,
+    respawnTime: new Decimal(0),
+    timer() {return new Decimal(120).mul(levelableEffect("pet", 503)[3])},
     generateCelestialite(combo) {
         if (typeof combo == "object") combo = combo.toNumber()
-        switch (combo) {
-            case 4:
-                return "m10"
-            case 8:
-                return "m11"
-            case 12:
-                return "m12"
-            case 16:
-                return "m13"
-            case 20:
-                return "m14"
-            case 24:
-                return "matos"
-            default:
-                let random = Math.random()
-                let cel = ["m01", "m02", "m03", "m04", "m05", "m06"]
-                return cel[Math.floor(Math.random()*cel.length)]
-        }
+        let random = Math.random()
+        let cel = ["m01", "m02", "m03", "m04", "m05", "m06"]
+        return cel[Math.floor(Math.random()*cel.length)]
     },
 }

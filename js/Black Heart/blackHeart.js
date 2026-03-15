@@ -502,7 +502,6 @@ addLayer("bh", {
 
         //Stagnant Timer
         stagnantTimer: new Decimal(0),
-        stagnantTimerMax: new Decimal(20),
         stagnantAuto: false,
 
         // General Variables
@@ -632,6 +631,9 @@ addLayer("bh", {
         }
 
         // Stage Code
+        player.bh.respawnMax = new Decimal(5)
+        if (BHS[player.bh.currentStage].respawnTime) player.bh.respawnMax = BHS[player.bh.currentStage].respawnTime
+
         player.bh.comboScaling = 1
         if (BHS[player.bh.currentStage].comboScaling) player.bh.comboScaling = BHS[player.bh.currentStage].comboScaling
 
@@ -999,6 +1001,7 @@ addLayer("bh", {
 
         player.bh.skillCostDiv = new Decimal(1)
         player.bh.skillCostDiv = player.bh.skillCostDiv.mul(player.darkTemple.skillCost)
+        player.bh.skillCostDiv = player.bh.skillCostDiv.mul(buyableEffect("sme", 136))
 
         player.bh.timeSpeed = new Decimal(1)
         player.bh.timeSpeed = player.bh.timeSpeed.add(bhTemp.timeAdd)
@@ -1210,7 +1213,7 @@ addLayer("bh", {
             if (BHS[player.bh.currentStage].timeStagnation && player.bh.stagnantAuto) {
                 if (player.bh.stagnantTimer.gte(Decimal.mul(player.bh.stagnantTimer, 2))) {
                     stagnantUpdate(5)
-                    player.bh.stagnantTimer = player.bh.stagnantTimerMax
+                    player.bh.stagnantTimer = new Decimal(10)
                 }
             }
         }
@@ -1381,7 +1384,7 @@ addLayer("bh", {
             unlocked() {return BHS[player.bh.currentStage].timeStagnation},
             onClick() {
                 stagnantUpdate(5)
-                player.bh.stagnantTimer = player.bh.stagnantTimerMax
+                player.bh.stagnantTimer = new Decimal(10)
             },
             style() {
                 let look = {width: "196px", minHeight: "46px", fontSize: "9px", borderRadius: "10px", border: "4px solid #021124"}

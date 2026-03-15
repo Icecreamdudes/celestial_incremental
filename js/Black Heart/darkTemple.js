@@ -36,6 +36,12 @@ const RUNE_EFFECTS = {
             d1c: 0.3,
             agi: 4,
         },
+        7: {
+            hp: 6,
+            dmg: 0.6,
+            d1c: 0.35,
+            agi: 5,
+        },
     },
     2: {
         1: {
@@ -73,6 +79,12 @@ const RUNE_EFFECTS = {
             dmg: 0.6,
             d2c: 0.3,
             def: 4,
+        },
+        7: {
+            hp: 7,
+            dmg: 0.7,
+            d2c: 0.35,
+            def: 5,
         },
     },
     3: {
@@ -112,6 +124,12 @@ const RUNE_EFFECTS = {
             d3c: 0.3,
             luck: 4,
         },
+        7: {
+            hp: 8,
+            dmg: 0.8,
+            d3c: 0.35,
+            luck: 5,
+        },
     },
     4: {
         1: {
@@ -150,6 +168,12 @@ const RUNE_EFFECTS = {
             ssc: 0.3,
             agiMult: 0.2,
         },
+        7: {
+            hp: 9,
+            dmg: 0.9,
+            ssc: 0.35,
+            agiMult: 0.25,
+        },
     },
     5: {
         1: {
@@ -187,6 +211,12 @@ const RUNE_EFFECTS = {
             dmg: 0.9,
             d4c: 0.3,
             mnd: 4,
+        },
+        7: {
+            hp: 10,
+            dmg: 1,
+            d4c: 0.35,
+            mnd: 5,
         },
     },
 }
@@ -249,6 +279,7 @@ addLayer("darkTemple", {
     update(delta) {
         player.darkTemple.runeCap = new Decimal(5)
         if (player.matosLair.milestone[25] >= 3) player.darkTemple.runeCap = player.darkTemple.runeCap.add(1)
+        if (player.alephsChamber.milestone[25] >= 3) player.darkTemple.runeCap = player.darkTemple.runeCap.add(1)
 
         let stats = {}
         for (let j = 1; j < 6; j++) {
@@ -669,12 +700,12 @@ addLayer("darkTemple", {
                     ["style-row", [["clickable", 7]], {marginTop: "18px"}],
                     ["style-row", [["clickable", 6]], {marginBottom: "18px", marginLeft: "30px"}],
                 ]],
-            ], {width: "600px", height: "420px", background: "radial-gradient(#00000055, #22226655)", borderRight: "3px solid var(--regBorder)", borderRadius: "0 0 0 27px"}],
+            ], {width: "550px", height: "420px", background: "radial-gradient(#00000055, #22226655)", borderRight: "3px solid var(--regBorder)", borderRadius: "0 0 0 27px"}],
             ["style-column", [
                 ["style-column", [
                     ["raw-html", "Effects", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
-                ], {width: "197px", height: "40px", borderBottom: "3px solid var(--regBorder)"}],
-                ["top-column", [
+                ], {width: "247px", height: "40px", borderBottom: "3px solid var(--regBorder)"}],
+                ["theme-scroll-column", [
                     ["blank", "5px"],
                     ["raw-html", () => {
                         let futureEffects = RUNE_EFFECTS[player.darkTemple.selection][getBuyableAmount("darkTemple", player.darkTemple.selection).add(1)]
@@ -767,8 +798,11 @@ addLayer("darkTemple", {
                         }
                         return str
                     }, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                ], {width: "197px", height: "377px", background: "var(--miscButtonDisable)", borderRadius: "0 0 27px 0"}],
-            ], {width: "197px", height: "420px", background: "var(--miscButtonHover)", borderRadius: "0 0 27px 0"}],
+                ], {width: "247px", height: "334px", background: "var(--miscButtonDisable)"}],
+                ["style-column", [
+
+                ], {width: "247px", height: "40px", background: "var(--miscButton)", borderTop: "3px solid var(--regBorder)", borderRadius: "0 0 27px 0"}]
+            ], {width: "247px", height: "420px", background: "var(--miscButtonHover)", borderRadius: "0 0 27px 0"}],
         ], {width: "800px", height: "420px"}],
     ],
     layerShown() {return player.startedGame && tmp.pu.levelables[302].canClick},

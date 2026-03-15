@@ -231,7 +231,7 @@ function updateStyles() {
 					layerBG = "linear-gradient(-180deg, #980098 0%, #590059 100%)"
 					break;
 				case "alephsChamber":
-					layerBG = "linear-gradient(-180deg, #9D4F7E 0%, #980098 100%)"
+					layerBG = "linear-gradient(-180deg, #8C4670 0%, #7F007F 100%)"
 					break;
 				case "laboratory":
 					layerBG = "linear-gradient(-180deg, #758c4a 0%, #2e4625 100%)"

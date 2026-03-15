@@ -128,22 +128,331 @@ BHS.alephsChamber = {
     generateCelestialite(combo) {
         if (typeof combo == "object") combo = combo.toNumber()
         switch (combo) {
-            case 4:
-                return "m10"
-            case 8:
-                return "m11"
+            case 6:
+                return "ma1"
             case 12:
-                return "m12"
-            case 16:
-                return "m13"
-            case 20:
-                return "m14"
+                return "ma2"
+            case 18:
+                return "ma3"
             case 24:
-                return "matos"
+                return "aleph"
             default:
                 let random = Math.random()
-                let cel = ["m01", "m02", "m03", "m04", "m05", "m06"]
+                let cel = ["m21", "m22", "m23", "m24", "m25", "m26"]
                 return cel[Math.floor(Math.random()*cel.length)]
         }
+    },
+}
+
+BHC.m21 = {
+    name: "Celestialite M-21",
+    symbol: "21",
+    style: {
+        background: "linear-gradient(to right, #BD3728, #921758)",
+        color: "black",
+        borderColor: "#2F2F2F",
+        fontSize: "60px",
+    },
+    health: new Decimal(800),
+    damage: new Decimal(20),
+    actions: {
+        0: {
+            name: "Slash",
+            instant: true,
+            type: "damage",
+            target: "allPlayer",
+            method: "physical",
+            value: new Decimal(1),
+            cooldown: new Decimal(5),
+        },
+        1: {
+            name: "Bandage",
+            instant: true,
+            type: "heal",
+            target: "celestialite",
+            value: new Decimal(50),
+            cooldown: new Decimal(12),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.gloomingUmbrite = Decimal.add(50, getRandomInt(25))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.dimUmbrite = Decimal.add(25, getRandomInt(15))
+        } else {
+            gain.darkEssence = Decimal.add(10, getRandomInt(5))
+        }
+        return gain
+    },
+}
+
+BHC.m22 = {
+    name: "Celestialite M-22",
+    symbol: "22",
+    style: {
+        background: "linear-gradient(to right, #BD3728, #921758)",
+        color: "black",
+        borderColor: "#2F2F2F",
+        fontSize: "60px",
+    },
+    health: new Decimal(850),
+    damage: new Decimal(10),
+    regen: new Decimal(5),
+    actions: {
+        0: {
+            name: "Pummel",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value: new Decimal(0.5),
+            cooldown: new Decimal(1),
+        },
+        1: {
+            name: "Pummel",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value: new Decimal(1),
+            cooldown: new Decimal(2),
+        },
+        2: {
+            name: "Pummel",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value: new Decimal(1.5),
+            cooldown: new Decimal(3),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.faintUmbrite = Decimal.add(50, getRandomInt(25))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.clearUmbrite = Decimal.add(25, getRandomInt(15))
+        } else {
+            gain.darkEssence = Decimal.add(10, getRandomInt(5))
+        }
+        return gain
+    },
+}
+
+BHC.m23 = {
+    name: "Celestialite M-23",
+    symbol: "23",
+    style: {
+        background: "linear-gradient(to right, #BD3728, #921758)",
+        color: "black",
+        borderColor: "#2F2F2F",
+        fontSize: "60px",
+    },
+    health: new Decimal(500),
+    damage: new Decimal(20),
+    attributes: {
+        "air": new Decimal(0.2), // Resistance DMG Mult
+        "warded": new Decimal(0.2), // Resistance DMG Mult
+        "stealthy": new Decimal(0.2), // Resistance DMG Mult
+    },
+    actions: {
+        0: {
+            name: "Quick Shot",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            value: new Decimal(1),
+            cooldown: new Decimal(3),
+        },
+        1: {
+            name: "Turret",
+            active: true,
+            constantType: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            value: new Decimal(0.5),
+            interval: new Decimal(0.5),
+            duration: new Decimal(5),
+            cooldown: new Decimal(12),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.vividUmbrite = Decimal.add(50, getRandomInt(25))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.lustrousUmbrite = Decimal.add(25, getRandomInt(15))
+        } else {
+            gain.darkEssence = Decimal.add(10, getRandomInt(5))
+        }
+        return gain
+    },
+}
+
+BHC.m24 = {
+    name: "Celestialite M-24",
+    symbol: "24",
+    style: {
+        background: "linear-gradient(to right, #BD3728, #921758)",
+        color: "black",
+        borderColor: "#2F2F2F",
+        fontSize: "60px",
+    },
+    health: new Decimal(900),
+    damage: new Decimal(20),
+    attributes: {
+        "daze": new Decimal(0.5),
+    },
+    actions: {
+        0: {
+            name: "Earthquake",
+            instant: true,
+            type: "damage",
+            target: "all",
+            method: "physical",
+            value: new Decimal(1),
+            cooldown: new Decimal(5),
+        },
+        1: {
+            name: "Block",
+            instant: true,
+            type: "shield",
+            target: "celestialite",
+            value: new Decimal(1),
+            cooldown: new Decimal(10),
+
+            active: true,
+            constantType: "effect",
+            constantTarget: "celestialite",
+            effects: {
+                "defenseAdd": new Decimal(25),
+            },
+            duration: new Decimal(3),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.gloomingNocturnium = Decimal.add(50, getRandomInt(25))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.dimNocturnium = Decimal.add(25, getRandomInt(15))
+        } else {
+            gain.darkEssence = Decimal.add(10, getRandomInt(5))
+        }
+        return gain
+    },
+}
+
+BHC.m25 = {
+    name: "Celestialite M-25",
+    symbol: "25",
+    style: {
+        background: "linear-gradient(to right, #BD3728, #921758)",
+        color: "black",
+        borderColor: "#2F2F2F",
+        fontSize: "60px",
+    },
+    health: new Decimal(950),
+    damage: new Decimal(20),
+    actions: {
+        0: {
+            name: "Poison Needle",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            properties: {
+                "storeTarget": true,
+            },
+            value: new Decimal(1),
+            cooldown: new Decimal(5),
+
+            active: true,
+            constantType: "effect",
+            constantTarget: "storedTarget",
+            effects: {
+                "regenAdd": new Decimal(-10)
+            },
+            duration: new Decimal(3),
+        },
+        1: {
+            name: "Bandage",
+            instant: true,
+            type: "heal",
+            target: "celestialite",
+            value: new Decimal(50),
+            cooldown: new Decimal(12),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.gloomingNocturnium = Decimal.add(55, getRandomInt(20))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.dimNocturnium = Decimal.add(30, getRandomInt(10))
+        } else {
+            gain.darkEssence = Decimal.add(10, getRandomInt(5))
+        }
+        return gain
+    },
+}
+
+BHC.m26 = {
+    name: "Celestialite M-26",
+    symbol: "26",
+    style: {
+        background: "linear-gradient(to right, #BD3728, #921758)",
+        color: "black",
+        borderColor: "#2F2F2F",
+        fontSize: "60px",
+    },
+    health: new Decimal(1000),
+    damage: new Decimal(6),
+    luck: new Decimal(3),
+    actions: {
+        0: {
+            name: "Arrow Flurry",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            properties: {
+                "multi-hit"() {return [player.bh.celestialite.luck.toNumber(), 200]},
+                "crit": [0.5, 2],
+            },
+            value: new Decimal(1),
+            cooldown: new Decimal(4),
+        },
+        1: {
+            name: "Arrow Resupply",
+            instant: true,
+            type: "effect",
+            target: "celestialite",
+            noMessage: true,
+            properties: {
+                "luckAdd": new Decimal(1),
+            },
+            cooldown: new Decimal(10),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.5) {
+            gain.gloomingNocturnium = Decimal.add(60, getRandomInt(15))
+        } else if (random > 0.5 && random < 0.85) {
+            gain.dimNocturnium = Decimal.add(35, getRandomInt(5))
+        } else {
+            gain.darkEssence = Decimal.add(10, getRandomInt(5))
+        }
+        return gain
     },
 }

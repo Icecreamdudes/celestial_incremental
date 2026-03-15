@@ -185,6 +185,8 @@ Features:
 
 - healthDrain: *optional* Decides how much character health is drained by per second. Stored in Decimal format.
 
+- respawnTime: *optional* Decides how long the respawn cooldown is. Stored in Decimal format. Defaults to 5 seconds.
+
 - timer: *optional* *unadded* Decides how long until the stage automatically kills you.
 
 - timeStagnantion: *optional* Decides if the stage property "Time Stagnation" is active. Stored as a boolean.

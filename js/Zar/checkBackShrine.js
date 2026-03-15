@@ -33,7 +33,8 @@ addLayer("cbs", {
         shrineTab: 0,
         blessing1Selection: 1,
         blessing2Selection: 1,
-        factorSelection: 0,
+        factorSelection: 1,
+        pylonSelection: 1,
 
         pylonBuilt: false,
         pylonEnergyMax: new Decimal(1),
@@ -121,9 +122,9 @@ addLayer("cbs", {
         if (player.cbs.pylonBuilt)
         {
             player.cbs.pylonEnergyToGet = new Decimal(1)
-            player.cbs.pylonEnergyToGet = player.cbs.pylonEnergyToGet.mul(buyableEffect("cbs", 21))
-            player.cbs.pylonEnergyToGet = player.cbs.pylonEnergyToGet.mul(buyableEffect("cbs", 22))
-            player.cbs.pylonEnergyToGet = player.cbs.pylonEnergyToGet.mul(buyableEffect("cbs", 23))
+            player.cbs.pylonEnergyToGet = player.cbs.pylonEnergyToGet.mul(buyableEffect("cbs", 101))
+            player.cbs.pylonEnergyToGet = player.cbs.pylonEnergyToGet.mul(buyableEffect("cbs", 102))
+            player.cbs.pylonEnergyToGet = player.cbs.pylonEnergyToGet.mul(buyableEffect("cbs", 103))
 
             player.cbs.pylonPassiveEffect = player.pol.pollinators.plus(1).log10().pow(0.002).div(5).add(1).pow(player.cbs.pylonTierEffect)
         } else
@@ -842,6 +843,283 @@ addLayer("cbs", {
                 return look
             },
         },
+
+        201: {
+            title() { return "I" },
+            canClick() { return hasUpgrade(this.layer, this.id - 190) },
+            unlocked() { return true },
+            onClick() { player.cbs.factorSelection = 1 },
+            xPos: 75,
+            yPos: -129.903810568,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", border: "3px solid white", borderRadius: "25px", position: "relative"}
+                if (hasUpgrade(this.layer, this.id - 90)) {
+                    look.background = "white"
+                    look.color = "#5e5e5e"
+                } else if (this.canClick()) {
+                    look.backgroundImage = "radial-gradient(circle, #808080 0%, #5e5e5e 70%)"
+                    look.border = "3px solid black"
+                } else {
+                    look.background = "black"
+                    look.color = "#808080"
+                    look.border = "3px solid #808080"
+                }
+                return look
+            },
+        },
+        202: {
+            title() { return "II" },
+            canClick() { return hasUpgrade(this.layer, this.id - 190) },
+            unlocked() { return true },
+            onClick() { player.cbs.factorSelection = 2 },
+            xPos: 129.903810568,
+            yPos: -75,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", border: "3px solid white", borderRadius: "25px", position: "relative"}
+                if (hasUpgrade(this.layer, this.id - 90)) {
+                    look.background = "white"
+                    look.color = "#5e5e5e"
+                } else if (this.canClick()) {
+                    look.backgroundImage = "linear-gradient(105deg, #bf905e 0%, #d17c62 74%)"
+                    look.border = "3px solid black"
+                } else {
+                    look.background = "black"
+                    look.color = "#808080"
+                    look.border = "3px solid #808080"
+                }
+                return look
+            },
+        },
+        203: {
+            title() { return "III" },
+            canClick() { return hasUpgrade(this.layer, this.id - 190) },
+            unlocked() { return true },
+            onClick() { player.cbs.factorSelection = 3 },
+            xPos: 150,
+            yPos: 0,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", border: "3px solid white", borderRadius: "25px", position: "relative"}
+                if (hasUpgrade(this.layer, this.id - 90)) {
+                    look.background = "white"
+                    look.color = "#5e5e5e"
+                } else if (this.canClick()) {
+                    look.background = "#ff7070"
+                    look.border = "3px solid black"
+                } else {
+                    look.background = "black"
+                    look.color = "#808080"
+                    look.border = "3px solid #808080"
+                }
+                return look
+            },
+        },
+        204: {
+            title() { return "IV" },
+            canClick() { return hasUpgrade(this.layer, this.id - 190) },
+            unlocked() { return true },
+            onClick() { player.cbs.factorSelection = 4 },
+            xPos: 129.903810568,
+            yPos: 75,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", border: "3px solid white", borderRadius: "25px", position: "relative"}
+                if (hasUpgrade(this.layer, this.id - 90)) {
+                    look.background = "white"
+                    look.color = "#5e5e5e"
+                } else if (this.canClick()) {
+                    look.backgroundImage = "linear-gradient(45deg, #5d51ff 0%, #af51ff 100%)"
+                    look.border = "3px solid black"
+                } else {
+                    look.background = "black"
+                    look.color = "#808080"
+                    look.border = "3px solid #808080"
+                }
+                return look
+            },
+        },
+        205: {
+            title() { return "V" },
+            canClick() { return hasUpgrade(this.layer, this.id - 190) },
+            unlocked() { return true },
+            onClick() { player.cbs.factorSelection = 5 },
+            xPos: 75,
+            yPos: 129.903810568,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", border: "3px solid white", borderRadius: "25px", position: "relative"}
+                if (hasUpgrade(this.layer, this.id - 90)) {
+                    look.background = "white"
+                    look.color = "#5e5e5e"
+                } else if (this.canClick()) {
+                    look.backgroundImage = "radial-gradient(circle, #808080 0%, #5e5e5e 70%)"
+                    look.border = "3px solid black"
+                } else {
+                    look.background = "black"
+                    look.color = "#808080"
+                    look.border = "3px solid #808080"
+                }
+                return look
+            },
+        },
+        206: {
+            title() { return "VI" },
+            canClick() { return hasUpgrade(this.layer, this.id - 190) },
+            unlocked() { return true },
+            onClick() { player.cbs.factorSelection = 6 },
+            xPos: 0,
+            yPos: 150,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", border: "3px solid white", borderRadius: "25px", position: "relative"}
+                if (hasUpgrade(this.layer, this.id - 90)) {
+                    look.background = "white"
+                    look.color = "#5e5e5e"
+                } else if (this.canClick()) {
+                    look.backgroundImage = "linear-gradient(105deg, #bf905e 0%, #d17c62 74%)"
+                    look.border = "3px solid black"
+                } else {
+                    look.background = "black"
+                    look.color = "#808080"
+                    look.border = "3px solid #808080"
+                }
+                return look
+            },
+        },
+        207: {
+            title() { return "VII" },
+            canClick() { return hasUpgrade(this.layer, this.id - 190) },
+            unlocked() { return true },
+            onClick() { player.cbs.factorSelection = 7 },
+            xPos: -75,
+            yPos: 129.903810568,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", border: "3px solid white", borderRadius: "25px", position: "relative"}
+                if (hasUpgrade(this.layer, this.id - 90)) {
+                    look.background = "white"
+                    look.color = "#5e5e5e"
+                } else if (this.canClick()) {
+                    look.background = "#7970ff"
+                    look.border = "3px solid black"
+                } else {
+                    look.background = "black"
+                    look.color = "#808080"
+                    look.border = "3px solid #808080"
+                }
+                return look
+            },
+        },
+        208: {
+            title() { return "VIII" },
+            canClick() { return hasUpgrade(this.layer, this.id - 190) },
+            unlocked() { return true },
+            onClick() { player.cbs.factorSelection = 8 },
+            xPos: -129.903810568,
+            yPos: 75,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", border: "3px solid white", borderRadius: "25px", position: "relative"}
+                if (hasUpgrade(this.layer, this.id - 90)) {
+                    look.background = "white"
+                    look.color = "#5e5e5e"
+                } else if (this.canClick()) {
+                    look.backgroundImage = "linear-gradient(45deg, #1ba861 0%, #89ee30 33%, #e79c44 67%, #cb1816 100%)"
+                    look.border = "3px solid black"
+                } else {
+                    look.background = "black"
+                    look.color = "#808080"
+                    look.border = "3px solid #808080"
+                }
+                return look
+            },
+        },
+        209: {
+            title() { return "IX" },
+            canClick() { return hasUpgrade(this.layer, this.id - 190) },
+            unlocked() { return true },
+            onClick() { player.cbs.factorSelection = 9 },
+            xPos: -150,
+            yPos: 0,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", border: "3px solid white", borderRadius: "25px", position: "relative"}
+                if (hasUpgrade(this.layer, this.id - 90)) {
+                    look.background = "white"
+                    look.color = "#5e5e5e"
+                } else if (this.canClick()) {
+                    look.backgroundImage = "radial-gradient(circle, #808080 0%, #5e5e5e 70%)"
+                    look.border = "3px solid black"
+                } else {
+                    look.background = "black"
+                    look.color = "#808080"
+                    look.border = "3px solid #808080"
+                }
+                return look
+            },
+        },
+        210: {
+            title() { return "X" },
+            canClick() { return hasUpgrade(this.layer, this.id - 190) },
+            unlocked() { return true },
+            onClick() { player.cbs.factorSelection = 10 },
+            xPos: -129.903810568,
+            yPos: -75,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", border: "3px solid white", borderRadius: "25px", position: "relative"}
+                if (hasUpgrade(this.layer, this.id - 90)) {
+                    look.background = "white"
+                    look.color = "#5e5e5e"
+                } else if (this.canClick()) {
+                    look.backgroundImage = "linear-gradient(120deg, #1f7350 0%, #5abf95 100%)"
+                    look.border = "3px solid black"
+                } else {
+                    look.background = "black"
+                    look.color = "#808080"
+                    look.border = "3px solid #808080"
+                }
+                return look
+            },
+        },
+        211: {
+            title() { return "XI" },
+            canClick() { return hasUpgrade(this.layer, this.id - 190) },
+            unlocked() { return true },
+            onClick() { player.cbs.factorSelection = 11 },
+            xPos: -75,
+            yPos: -129.903810568,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", border: "3px solid white", borderRadius: "25px", position: "relative"}
+                if (hasUpgrade(this.layer, this.id - 90)) {
+                    look.background = "white"
+                    look.color = "#5e5e5e"
+                } else if (this.canClick()) {
+                    look.background = "#fffd70"
+                    look.border = "3px solid black"
+                } else {
+                    look.background = "black"
+                    look.color = "#808080"
+                    look.border = "3px solid #808080"
+                }
+                return look
+            },
+        },
+        212: {
+            title() { return "XII" },
+            canClick() { return hasUpgrade(this.layer, this.id - 190) },
+            unlocked() { return true },
+            onClick() { player.cbs.factorSelection = 12 },
+            xPos: 0,
+            yPos: -150,
+            style() {
+                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", border: "3px solid white", borderRadius: "25px", position: "relative"}
+                if (hasUpgrade(this.layer, this.id - 90)) {
+                    look.background = "white"
+                    look.color = "#5e5e5e"
+                } else if (this.canClick()) {
+                    look.backgroundImage = "linear-gradient(45deg, #c6f7ff 0%, #d5abff 100%)"
+                    look.border = "3px solid black"
+                } else {
+                    look.background = "black"
+                    look.color = "#808080"
+                    look.border = "3px solid #808080"
+                }
+                return look
+            },
+        },
     },
     bars: {
     },
@@ -1438,7 +1716,7 @@ addLayer("cbs", {
             },
             style: { width: '275px', height: '150px', color: "black", backgroundColor: "#fffd70ff" }
         },
-        21: {
+        101: {
             costBase() { return new Decimal(500) },
             costGrowth() { return new Decimal(1.25) },
             purchaseLimit() { return new Decimal(500) },
@@ -1472,7 +1750,7 @@ addLayer("cbs", {
             },
             style: { width: '240px', height: '150px', color: "white", border: "2px solid #000000bf", backgroundImage: "linear-gradient(120deg, #2a6378 0%, #09366e 100%)" }
         },
-        22: {
+        102: {
             costBase() { return new Decimal(1500) },
             costGrowth() { return new Decimal(1.3) },
             purchaseLimit() { return new Decimal(500) },
@@ -1506,7 +1784,7 @@ addLayer("cbs", {
             },
             style: { width: '240px', height: '150px', color: "white", border: "2px solid #000000bf", backgroundImage: "linear-gradient(120deg, #2a6378 0%, #09366e 100%)" }
         },
-        23: {
+        103: {
             costBase() { return new Decimal(5000) },
             costGrowth() { return new Decimal(1.35) },
             purchaseLimit() { return new Decimal(500) },
@@ -1618,36 +1896,37 @@ addLayer("cbs", {
                 unlocked() { return !player.ir.inBattle },
                 content: [
                     ["blank", "25px"],
-
-                    ["left-row", [
-                        ["blank", "25px"],
-                        ["tooltip-row", [
-                            ["raw-html", "<img src='resources/ascensionShard.png'style='width:75px;height:75px;margin:12.5px'></img>", {width: "100px", height: "100px", display: "block"}],
-                            ["raw-html", () => { return formatWhole(player.cbs.ascensionShards)}, {width: "95px", height: "100px", color: "#c6f7ff", display: "inline-flex", alignItems: "center", paddingLeft: "5px", fontSize: "24px"}],
-                            ["raw-html", "<div class='bottomTooltip'>Shards of Ascension<hr><small>(Gained from ascension rituals)</small></div>"],
-                        ], {width: "700px", height: "100px"}],
-                    ], {width: "700px", height: "100px", backgroundColor: "black", border: "2px solid #041d40", borderRadius: "10px 10px 0px 0px", userSelect: "none"}],
-                    ["left-row", [
-                        ["blank", "25px"],
-                        ["tooltip-row", [
-                            ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                            ["raw-html", () => { return formatWhole(player.cb.evolutionShards)}, {width: "93px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                            ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
-                        ], {width: "348px", height: "50px", borderRight: "2px solid #041d40"}],
-                        ["tooltip-row", [
-                            ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                            ["raw-html", () => { return formatWhole(player.cb.paragonShards)}, {width: "95px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                            ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
-                        ], {width: "350px", height: "50px", borderRight: "0px solid white"}],
-                    ], {width: "700px", height: "50px", backgroundColor: "black", border: "2px solid #041d40", borderRadius: "0px 0px 10px 10px", borderTop: "0px",  userSelect: "none"}],
-                    ["blank", "25px"],
                     
                     // REACTIVATE
                     ["clickable", 13],
                     
                     // SHARDS
                     ["style-row", [
-                    ], {background: "#041d40", border: "3px solid #094599", borderRadius: "13px 13px 0px 0px", width: "821px", height: "50px"}],
+                        ["left-row", [
+                            ["tooltip-row", [
+                                ["raw-html", "<img src='resources/evoShard.png'style='width:44px;height:44px;margin:0px;margin-top:3px'></img>", {width: "50px", height: "50px", display: "block"}],
+                                ["raw-html", () => { return formatWhole(player.cb.evolutionShards)}, {width: "147px", height: "100px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px", fontSize: "16px"}],
+                                ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
+                            ], {width: "203px", height: "50px"}],
+                            ["style-row", [], {background: "#094599", width: "3px", height: "50px"}],
+                            ["tooltip-row", [
+                                ["raw-html", "<img src='resources/paragonShard.png'style='width:44px;height:44px;margin:0px;margin-top:3px'></img>", {width: "50px", height: "50px", display: "block"}],
+                                ["raw-html", () => { return formatWhole(player.cb.paragonShards)}, {width: "147px", height: "100px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px", fontSize: "16px"}],
+                                ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
+                            ], {width: "203px", height: "50px"}],
+                            ["style-row", [], {background: "#094599", width: "3px", height: "50px"}],
+                            ["tooltip-row", [
+                                ["raw-html", "<img src='resources/ascensionShard.png'style='width:44px;height:44px;margin:0px;margin-top:3px'></img>", {width: "50px", height: "50px", display: "block"}],
+                                ["raw-html", () => { return formatWhole(player.cbs.ascensionShards)}, {width: "147px", height: "100px", color: "#c6f7ff", display: "inline-flex", alignItems: "center", paddingLeft: "5px", fontSize: "16px"}],
+                                ["raw-html", "<div class='bottomTooltip'>Shards of Ascension<hr><small>(Gained from ascension rituals)</small></div>"],
+                            ], {width: "203px", height: "50px"}],
+                            ["style-row", [], {background: "#094599", width: "3px", height: "50px"}],
+                            ["row", [
+                                ["raw-html", "<img src='resources/fragments/temporalFragment.png'style='width:44px;height:44px;margin:0px;margin-top:3px'></img>", {width: "50px", height: "50px", display: "block"}],
+                                ["raw-html", () => { return formatWhole(player.cof.coreFragments[6])}, {width: "147px", height: "100px", color: "#6ba9bf", display: "inline-flex", alignItems: "center", paddingLeft: "5px", fontSize: "16px"}],
+                            ], {width: "203px", height: "50px"}],
+                        ], {width: "821px", height: "50px", backgroundColor: "black", borderRadius: "0px 0px 0px 0px", userSelect: "none"}],
+                    ], {background: "#041d40", border: "3px solid #094599", borderRadius: "0px 0px 0px 0px", width: "821px", height: "50px"}],
                     
                     // TAB SELECTION
                     ["style-row", [
@@ -1676,6 +1955,19 @@ addLayer("cbs", {
                                 createClickableConnection(110, 102, "#094599"),
                                 createClickableConnection(111, 103, "#094599"),
                                 createClickableConnection(112, 104, "#094599"),
+
+                                createClickableConnection(101, 104, "#094599"),
+                                createClickableConnection(102, 105, "#094599"),
+                                createClickableConnection(103, 106, "#094599"),
+                                createClickableConnection(104, 107, "#094599"),
+                                createClickableConnection(105, 108, "#094599"),
+                                createClickableConnection(106, 109, "#094599"),
+                                createClickableConnection(107, 110, "#094599"),
+                                createClickableConnection(108, 111, "#094599"),
+                                createClickableConnection(109, 112, "#094599"),
+                                createClickableConnection(110, 101, "#094599"),
+                                createClickableConnection(111, 102, "#094599"),
+                                createClickableConnection(112, 103, "#094599"),
                                 ["style-row", [], {
                                     position: "relative",
                                     left: () => {return ((Math.cos(Date.now() / 6000 % 1000 * 2 * Math.PI)) * 50) + "px"},
@@ -1754,6 +2046,19 @@ addLayer("cbs", {
                                 createClickableConnection(122, 114, "#3466ac"),
                                 createClickableConnection(123, 115, "#3466ac"),
                                 createClickableConnection(124, 116, "#3466ac"),
+
+                                createClickableConnection(101, 104, "#3466ac"),
+                                createClickableConnection(102, 105, "#3466ac"),
+                                createClickableConnection(103, 106, "#3466ac"),
+                                createClickableConnection(104, 107, "#3466ac"),
+                                createClickableConnection(105, 108, "#3466ac"),
+                                createClickableConnection(106, 109, "#3466ac"),
+                                createClickableConnection(107, 110, "#3466ac"),
+                                createClickableConnection(108, 111, "#3466ac"),
+                                createClickableConnection(109, 112, "#3466ac"),
+                                createClickableConnection(110, 101, "#3466ac"),
+                                createClickableConnection(111, 102, "#3466ac"),
+                                createClickableConnection(112, 103, "#3466ac"),
                                 ["style-row", [], {
                                     position: "relative",
                                     left: () => {return ((Math.cos(Date.now() / 6000 % 1000 * 2 * Math.PI)) * 50) + "px"},
@@ -1799,6 +2104,106 @@ addLayer("cbs", {
                         return {background: "#102036", border: "3px solid #3466ac", borderTop: "0px", borderRadius: "0px 0px 13px 13px", width: "821px", height: "412px", display: player.cbs.shrineTab == 1 ? "" : "none !important"}
                     }],
 
+                    // FACTORS
+                    ["style-row", [
+                        ["style-row", [
+                            ["style-row", [
+                                createClickableConnection(201, 205, "white"),
+                                createClickableConnection(202, 206, "white"),
+                                createClickableConnection(203, 207, "white"),
+                                createClickableConnection(204, 208, "white"),
+                                createClickableConnection(205, 209, "white"),
+                                createClickableConnection(206, 210, "white"),
+                                createClickableConnection(207, 211, "white"),
+                                createClickableConnection(208, 212, "white"),
+                                createClickableConnection(209, 201, "white"),
+                                createClickableConnection(210, 202, "white"),
+                                createClickableConnection(211, 203, "white"),
+                                createClickableConnection(212, 204, "white"),
+
+                                createClickableConnection(201, 204, "#536580"),
+                                createClickableConnection(202, 205, "#536580"),
+                                createClickableConnection(203, 206, "#536580"),
+                                createClickableConnection(204, 207, "#536580"),
+                                createClickableConnection(205, 208, "#536580"),
+                                createClickableConnection(206, 209, "#536580"),
+                                createClickableConnection(207, 210, "#536580"),
+                                createClickableConnection(208, 211, "#536580"),
+                                createClickableConnection(209, 212, "#536580"),
+                                createClickableConnection(210, 201, "#536580"),
+                                createClickableConnection(211, 202, "#536580"),
+                                createClickableConnection(212, 203, "#536580"),
+                                ["style-row", [], {
+                                    position: "relative",
+                                    left: () => {return ((Math.cos(Date.now() / 6000 % 1000 * 2 * Math.PI)) * 50) + "px"},
+                                    top: () => {return (Math.sin(Date.now() / 6000 % 1000 * 2 * Math.PI) * 50) + "px"},
+                                    transform: () => {return "rotate(" + ((Date.now() / 6000 % 1000 * 2 * Math.PI)) + "rad"},
+                                    width: "100px",
+                                    height: "0px", background: "#536580", border: "1px solid #536580", margin: "-1px"
+                                }],
+                                ["style-row", [], {
+                                    position: "relative",
+                                    left: () => {return ((Math.cos(Date.now() / 72000 % 1000 * 2 * Math.PI)) * 25) + "px"},
+                                    top: () => {return (Math.sin(Date.now() / 72000 % 1000 * 2 * Math.PI) * 25) + "px"},
+                                    transform: () => {return "rotate(" + ((Date.now() / 72000 % 1000 * 2 * Math.PI)) + "rad"},
+                                    width: "50px",
+                                    height: "0px", background: "#536580", border: "2px solid #536580", margin: "-2px"
+                                }],
+                                ["style-row", [], {
+                                    position: "relative",
+                                    left: "0px",
+                                    top: "0px",
+                                    width: "0px",
+                                    height: "0px", background: "#536580", border: "8px solid #536580", margin: "-8px", borderRadius: "8px"
+                                }],
+                            ], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 201]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 202]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 203]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 204]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 205]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 206]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 207]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 208]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 209]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 210]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 211]], {width: "0", height: "0"}],
+                            ["style-column", [["clickable", 212]], {width: "0", height: "0"}],
+                        ], {background: "radial-gradient(circle, #536580 -50%, #00000000 70%)", borderRadius: "200px", width: "360px", height: "360px", margin: "20px"}],
+                        ["blank", "3px", {width: "3px"}],
+                        ["style-row", [
+                            ["style-column", [
+                                ["blank", "6px"],
+                                ["raw-html", () => {return "~ Factor " + layers.cbs.clickables[player.cbs.factorSelection + 200].title() + " ~"}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                                ["blank", "6px"],
+                                ["style-row", [], {backgroundColor: "black", width: "360px", height: "3px"}],
+                                ["blank", "6px"],
+                                ["style-row", [], {backgroundColor: "black", width: "360px", height: "3px"}],
+                                ["blank", "6px"],
+                            ]]
+                        ], () => {
+                            let look = {border: "3px solid black", borderRadius: "10px", width: "360px", height: "360px", margin: "20px"}
+                            switch (player.cbs.factorSelection) {
+                                case 1: look.background = "radial-gradient(circle, #808080 0%, #5e5e5e 70%)"; break;
+                                case 2: look.background = "linear-gradient(105deg, #bf905e 0%, #d17c62 74%)"; break;
+                                case 3: look.background = "#ff7070"; break;
+                                case 4: look.background = "linear-gradient(45deg, #5d51ff 0%, #af51ff 100%)"; break;
+                                case 5: look.background = "radial-gradient(circle, #808080 0%, #5e5e5e 70%)"; break;
+                                case 6: look.background = "linear-gradient(105deg, #bf905e 0%, #d17c62 74%)"; break;
+                                case 7: look.background = "#7970ff"; break;
+                                case 8: look.background = "linear-gradient(45deg, #1ba861 0%, #89ee30 33%, #e79c44 67%, #cb1816 100%)"; break;
+                                case 9: look.background = "radial-gradient(circle, #808080 0%, #5e5e5e 70%)"; break;
+                                case 10: look.background = "linear-gradient(120deg, #1f7350 0%, #5abf95 100%)"; break;
+                                case 11: look.background = "fffd70"; break;
+                                case 12: look.background = "linear-gradient(45deg, #c6f7ff 0%, #d5abff 100%)"; break;
+                                default: look.background = "radial-gradient(circle, #536580 0%, #333f4f 100%)"; break;
+                            }
+                            return look
+                        }],
+                    ], () => {
+                        return {background: "#1b2029", border: "3px solid #536580", borderTop: "0px", borderRadius: "0px 0px 13px 13px", width: "821px", height: "412px", display: player.cbs.shrineTab == 2 ? "" : "none !important"}
+                    }],
+
                     // PYLON
                     ["style-column", [
                         
@@ -1814,7 +2219,7 @@ addLayer("cbs", {
                         ["raw-html", () => {return player.cbs.pylonBuilt ? "Passive effect: Boosts pollinator gain by ^" + format(player.cbs.pylonPassiveEffect) + " (Based on pollinators)" : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
                         ["raw-html", () => {return player.cbs.pylonBuilt ? "Your temporal pylon is tier " + formatWhole(player.cbs.pylonTier) + ", which boosts effective pylon energy and the passive effect by ^" + format(player.cbs.pylonTierEffect) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
                         ["blank", "10px"],
-                        ["row", [["ex-buyable", 21], ["blank", "3px", {width: "3px"}], ["ex-buyable", 22], ["blank", "3px", {width: "3px"}], ["ex-buyable", 23],]], 
+                        ["row", [["ex-buyable", 101], ["blank", "3px", {width: "3px"}], ["ex-buyable", 102], ["blank", "3px", {width: "3px"}], ["ex-buyable", 103],]], 
                         ["blank", "10px"],
                         ["clickable", 15],
 

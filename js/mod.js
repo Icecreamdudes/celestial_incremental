@@ -831,12 +831,11 @@ let changelog = `<h1>Changelog:</h1><br>
 		Content:<br>
 			- Added universe δ.<br>
 			- Revamped the dragon pet.<br>
-			- Added two pet evolutions.<span style="color:yellow"> [WIP, one is NYI - will add when I merge the black heart revamp]</span><br>
-			- Matos content can now be progressed through without ever entering special attacks via a pet evolution.<span style="color:yellow"> [WIP]</span><br>
-			- Iridite content can now be progressed through without ever entering space battles via a pet evolution.<span style="color:yellow"> [WIP]</span><br>
+			- Added a pet evolution that allows progressing through Iridite content without space battles. (big for mobile players!)<span style="color:yellow"> [WIP]</span><br>
+			- Revamped the check back shrine.<br>
 			- Added an epic pet.<span style="color:yellow"> [WIP]</span><br>
 			- Added a ship.<br>
-			- Added more punchcards.<br>
+			- Added five punchcards.<br>
 			- Added two themes unlocked in the new universe.<span style="color:yellow"> [WIP]</span><br>
 		<br>QoL:<br>
 			- Modernized a lot of check back UI.<br>
@@ -846,11 +845,15 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Moved evo and para shard pity to below the checkback XP bar.<br>
 			- Redesigned the otherworldly features UI.<br>
 			- Added space exploration completion popups.<br>
+			- Redesigned coin flip, wheel of fortune, and slot machine UI.<br>
+			- Removed the coin clipper and rewardless dice space reset buttons in favor of buttons that reduce total flips/spins on a cooldown.<br>
 		<br>Balancing:<br>
 			- Added an additional pet point button effect for the evolution fragment pet.<br>
 			- Reduced the scaling of several effects in D1 eclipse.<br>
+			- Changed the scaling and costs of check back factors.<br>
+			- Check back factors are now unlocked one-by-one with each blessing.<br>
 		<br>Bugfixes:<br>
-			- ...<br>
+			- Cutscene "DS-Zar-Slot-Spin" now correctly triggers after spinning the slots.<br>
 		<br>
 
 	<h3>v1.11 - The Novasent Update Part II: Blood and Gambling</h3><br>

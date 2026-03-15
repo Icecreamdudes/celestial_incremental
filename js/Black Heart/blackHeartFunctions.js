@@ -634,6 +634,7 @@ function celestialiteDeath() {
     celestialiteReward(BHC[player.bh.celestialite.id].reward())
     if (BHC[player.bh.celestialite.id].onDeath) BHC[player.bh.celestialite.id].onDeath()
     player.bh.respawnTimer = player.bh.respawnMax
+    if (!BHS[player.bh.currentStage].timer) player.bh.timer = new Decimal(0)
     player.bh.combo = player.bh.combo.add(1)
 
     if (BHC[player.bh.celestialite.id].attributes) {
@@ -851,6 +852,7 @@ function BHStageEnter(stage) {
         player.bh.combo = new Decimal(0)
     }
     player.bh.respawnTimer = new Decimal(-1)
+    player.bh.timer = new Decimal(0)
     celestialiteSpawn()
 }
 

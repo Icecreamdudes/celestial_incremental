@@ -516,6 +516,7 @@ addLayer("bh", {
         comboScalingStart: new Decimal(100),
         comboScalingReduction: 0,
         comboSoftcap: new Decimal(1),
+        timer: new Decimal(0),
         timeSpeed: new Decimal(1),
         maxSkillPoints: new Decimal(10),
         skillCostDiv: new Decimal(1),
@@ -633,6 +634,22 @@ addLayer("bh", {
         // Stage Code
         player.bh.respawnMax = new Decimal(5)
         if (BHS[player.bh.currentStage].respawnTime) player.bh.respawnMax = BHS[player.bh.currentStage].respawnTime
+
+        if (BHS[player.bh.currentStage].timer || BHC[player.bh.celestialite.id].timer) {
+            player.bh.timer = player.bh.timer.add(normTime)
+            if (BHS[player.bh.currentStage].timer && player.bh.timer.gte(BHS[player.bh.currentStage].timer)) {
+                for (let i = 0; i < 3; i++) {
+                    player.bh.characters[i].health = new Decimal(-Infinity)
+                }
+                player.bh.timer = new Decimal(0)
+            }
+            if (BHC[player.bh.celestialite.id].timer && player.bh.timer.gte(BHC[player.bh.celestialite.id].timer)) {
+                for (let i = 0; i < 3; i++) {
+                    player.bh.characters[i].health = new Decimal(-Infinity)
+                }
+                player.bh.timer = new Decimal(0)
+            }
+        }
 
         player.bh.comboScaling = 1
         if (BHS[player.bh.currentStage].comboScaling) player.bh.comboScaling = BHS[player.bh.currentStage].comboScaling
@@ -2723,6 +2740,26 @@ addLayer("bh", {
         },
     },
     bars: {
+        "timer": {
+            unlocked() {
+                return BHS[player.bh.currentStage].timer || BHC[player.bh.celestialite.id].timer
+            },
+            direction: RIGHT,
+            width: 500,
+            height: 50,
+            progress() {
+                if (BHS[player.bh.currentStage].timer) player.bh.timer.div(BHS[player.bh.currentStage].timer)
+                if (BHC[player.bh.celestialite.id].timer) player.bh.timer.div(BHC[player.bh.celestialite.id].timer)
+            },
+            borderStyle: {border: "2px solid white", borderRadius: "15px", marginBottom: "10px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle: {background: "#8a0e79"},
+            textStyle: {userSelect: "none", lineHeight: "1"},
+            display() {
+                if (BHS[player.bh.currentStage].timer) formatTime(player.bh.timer) + " / " + formatTime(BHS[player.bh.currentStage].timer)
+                if (BHC[player.bh.celestialite.id].timer) formatTime(player.bh.timer) + " / " + formatTime(BHC[player.bh.celestialite.id].timer)
+            },
+        },
         "celestialite-Health": {
             unlocked: true,
             direction: RIGHT,
@@ -2769,9 +2806,9 @@ addLayer("bh", {
             textStyle() {return player.bh.celestialite.actions[0].duration.gt(0) ? {userSelect: "none", lineHeight: "1", fontSize: "12px"} : {userSelect: "none", lineHeight: "1"}},
             display() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[0]) return ""
-                let str = "<h5>" + BHC[player.bh.celestialite.id].actions[0].name + "<br>" + formatTime(player.bh.celestialite.actions[0].cooldown) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[0].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))
-                if (player.bh.celestialite.actions[0].cooldown.gt(BHC[player.bh.celestialite.id].actions[0].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))) str = "<h5>" + BHC[player.bh.celestialite.id].actions[0].name + "<br>[x" + formatWhole(player.bh.celestialite.actions[0].cooldown.div(BHC[player.bh.celestialite.id].actions[0].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility)))).floor()) + "]"
-                if (BHC[player.bh.celestialite.id].actions[0].passive) str = "<h5>" + BHC[player.bh.celestialite.id].actions[0].name + "<br>[PASSIVE]"
+                let str = "<h5>" + run(BHC[player.bh.celestialite.id].actions[0].name, BHC[player.bh.celestialite.id].actions[0]) + "<br>" + formatTime(player.bh.celestialite.actions[0].cooldown) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[0].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))
+                if (player.bh.celestialite.actions[0].cooldown.gt(BHC[player.bh.celestialite.id].actions[0].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))) str = "<h5>" + run(BHC[player.bh.celestialite.id].actions[0].name, BHC[player.bh.celestialite.id].actions[0]) + "<br>[x" + formatWhole(player.bh.celestialite.actions[0].cooldown.div(BHC[player.bh.celestialite.id].actions[0].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility)))).floor()) + "]"
+                if (BHC[player.bh.celestialite.id].actions[0].passive) str = "<h5>" + run(BHC[player.bh.celestialite.id].actions[0].name, BHC[player.bh.celestialite.id].actions[0]) + "<br>[PASSIVE]"
                 if ((!BHC[player.bh.celestialite.id].actions[0].passive || player.bh.celestialite.stun[0] == "hard") && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
                 return str
             },
@@ -2818,9 +2855,9 @@ addLayer("bh", {
             textStyle() {return player.bh.celestialite.actions[1].duration.gt(0) ? {userSelect: "none", lineHeight: "1", fontSize: "12px"} : {userSelect: "none", lineHeight: "1"}},
             display() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[1]) return ""
-                let str = "<h5>" + BHC[player.bh.celestialite.id].actions[1].name + "<br>" + formatTime(player.bh.celestialite.actions[1].cooldown) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[1].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))
-                if (player.bh.celestialite.actions[1].cooldown.gt(BHC[player.bh.celestialite.id].actions[1].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))) str = "<h5>" + BHC[player.bh.celestialite.id].actions[1].name + "<br>[x" + formatWhole(player.bh.celestialite.actions[1].cooldown.div(BHC[player.bh.celestialite.id].actions[1].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility)))).floor()) + "]"
-                if (BHC[player.bh.celestialite.id].actions[1].passive) str = "<h5>" + BHC[player.bh.celestialite.id].actions[1].name + "<br>[PASSIVE]"
+                let str = "<h5>" + run(BHC[player.bh.celestialite.id].actions[1].name, BHC[player.bh.celestialite.id].actions[1]) + "<br>" + formatTime(player.bh.celestialite.actions[1].cooldown) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[1].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))
+                if (player.bh.celestialite.actions[1].cooldown.gt(BHC[player.bh.celestialite.id].actions[1].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))) str = "<h5>" + run(BHC[player.bh.celestialite.id].actions[1].name, BHC[player.bh.celestialite.id].actions[1]) + "<br>[x" + formatWhole(player.bh.celestialite.actions[1].cooldown.div(BHC[player.bh.celestialite.id].actions[1].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility)))).floor()) + "]"
+                if (BHC[player.bh.celestialite.id].actions[1].passive) str = "<h5>" + run(BHC[player.bh.celestialite.id].actions[1].name, BHC[player.bh.celestialite.id].actions[1]) + "<br>[PASSIVE]"
                 if ((!BHC[player.bh.celestialite.id].actions[1].passive || player.bh.celestialite.stun[0] == "hard") && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
                 return str
             },
@@ -2867,9 +2904,9 @@ addLayer("bh", {
             textStyle() {return player.bh.celestialite.actions[2].duration.gt(0) ? {userSelect: "none", lineHeight: "1", fontSize: "12px"} : {userSelect: "none", lineHeight: "1"}},
             display() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[2]) return ""
-                let str = "<h5>" + BHC[player.bh.celestialite.id].actions[2].name + "<br>" + formatTime(player.bh.celestialite.actions[2].cooldown) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[2].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))
-                if (player.bh.celestialite.actions[2].cooldown.gt(BHC[player.bh.celestialite.id].actions[2].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))) str = "<h5>" + BHC[player.bh.celestialite.id].actions[2].name + "<br>[x" + formatWhole(player.bh.celestialite.actions[2].cooldown.div(BHC[player.bh.celestialite.id].actions[2].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility)))).floor()) + "]"
-                if (BHC[player.bh.celestialite.id].actions[2].passive) str = "<h5>" + BHC[player.bh.celestialite.id].actions[2].name + "<br>[PASSIVE]"
+                let str = "<h5>" + run(BHC[player.bh.celestialite.id].actions[2].name, BHC[player.bh.celestialite.id].actions[2]) + "<br>" + formatTime(player.bh.celestialite.actions[2].cooldown) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[2].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))
+                if (player.bh.celestialite.actions[2].cooldown.gt(BHC[player.bh.celestialite.id].actions[2].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))) str = "<h5>" + run(BHC[player.bh.celestialite.id].actions[2].name, BHC[player.bh.celestialite.id].actions[2]) + "<br>[x" + formatWhole(player.bh.celestialite.actions[2].cooldown.div(BHC[player.bh.celestialite.id].actions[2].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility)))).floor()) + "]"
+                if (BHC[player.bh.celestialite.id].actions[2].passive) str = "<h5>" + run(BHC[player.bh.celestialite.id].actions[2].name, BHC[player.bh.celestialite.id].actions[2]) + "<br>[PASSIVE]"
                 if ((!BHC[player.bh.celestialite.id].actions[2].passive || player.bh.celestialite.stun[0] == "hard") && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
                 return str
             },
@@ -2916,9 +2953,9 @@ addLayer("bh", {
             textStyle() {return player.bh.celestialite.actions[3].duration.gt(0) ? {userSelect: "none", lineHeight: "1", fontSize: "12px"} : {userSelect: "none", lineHeight: "1"}},
             display() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[3]) return ""
-                let str = "<h5>" + BHC[player.bh.celestialite.id].actions[3].name + "<br>" + formatTime(player.bh.celestialite.actions[3].cooldown) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[3].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))
-                if (player.bh.celestialite.actions[3].cooldown.gt(BHC[player.bh.celestialite.id].actions[3].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))) str = "<h5>" + BHC[player.bh.celestialite.id].actions[3].name + "<br>[x" + formatWhole(player.bh.celestialite.actions[3].cooldown.div(BHC[player.bh.celestialite.id].actions[3].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility)))).floor()) + "]"
-                if (BHC[player.bh.celestialite.id].actions[3].passive) str = "<h5>" + BHC[player.bh.celestialite.id].actions[3].name + "<br>[PASSIVE]"
+                let str = "<h5>" + run(BHC[player.bh.celestialite.id].actions[3].name, BHC[player.bh.celestialite.id].actions[3]) + "<br>" + formatTime(player.bh.celestialite.actions[3].cooldown) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[3].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))
+                if (player.bh.celestialite.actions[3].cooldown.gt(BHC[player.bh.celestialite.id].actions[3].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))) str = "<h5>" + run(BHC[player.bh.celestialite.id].actions[3].name, BHC[player.bh.celestialite.id].actions[3]) + "<br>[x" + formatWhole(player.bh.celestialite.actions[3].cooldown.div(BHC[player.bh.celestialite.id].actions[3].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility)))).floor()) + "]"
+                if (BHC[player.bh.celestialite.id].actions[3].passive) str = "<h5>" + run(BHC[player.bh.celestialite.id].actions[3].name, BHC[player.bh.celestialite.id].actions[3]) + "<br>[PASSIVE]"
                 if ((!BHC[player.bh.celestialite.id].actions[3].passive || player.bh.celestialite.stun[0] == "hard") && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
                 return str
             },
@@ -4087,6 +4124,7 @@ addLayer("bh", {
             },
             "battle": {
                 content: [
+                    ["bar", "timer"],
                     ["row", [
                         ["column", [
                             ["row", [
@@ -4262,6 +4300,7 @@ addLayer("bh", {
             },
             "bullet": {
                 content: [
+                    ["bar", "timer"],
                     ["blank", "10px"],
                     ["row", [
                         ["style-column", [

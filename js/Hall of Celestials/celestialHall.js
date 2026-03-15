@@ -92,9 +92,10 @@
             branches() {return player.ir.iriditeDefeated ? [14] : []},
         },
         16: {
-            title() { return false ? "<h1>ℵ" : "<h1>?" },
-            canClick() { return false },
+            title() { return player.alephsChamber.milestone[25] > 0 ? "<h1>ℵ" : "<h1>?" },
+            canClick() { return player.alephsChamber.milestone[25] > 0 },
             unlocked() { return true },
+            tooltip() { return player.alephsChamber.milestone[25] > 0 ? "Aleph, the Celestial of Swarms" : ""},
             onClick() {
                 player.ch.celestialIndex = new Decimal(5)
             },

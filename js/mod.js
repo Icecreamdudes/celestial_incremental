@@ -713,6 +713,10 @@ function updateStyles() {
 								playAndLoopAudio("music/matosFight.mp3", options.musicVolume/10)
 								break;
 							}
+							if (player.bh.currentStage == "alephsChamber" && player.bh.combo.eq(24)) {
+								playAndLoopAudio("music/alephBattle.mp3", options.musicVolume/10)
+								break;
+							}
 							// Default Behavior
 							if (BHS[player.bh.currentStage] && BHS[player.bh.currentStage].music) {
 								playAndLoopAudio(BHS[player.bh.currentStage].music, options.musicVolume/10);

@@ -146,7 +146,7 @@ BHA.general_poisonNeedle = {
     constantType: "effect",
     constantTarget: "celestialite",
     effects: {
-        "regenAdd"() {
+        "regenAdd"(char) {
             let damage = char.damage.mul(Decimal.sub(-0.1, player.bh.skillData["general_poisonNeedle"].level.mul(0.02)))
             damage = damage.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.defense)))
             return damage

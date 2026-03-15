@@ -456,3 +456,174 @@ BHC.m26 = {
         return gain
     },
 }
+
+BHC.ma1 = {
+    name: "Celestialite M-A1",
+    symbol: "A1",
+    style: {
+        background: "linear-gradient(to right, #BD3728, #921758)",
+        color: "black",
+        borderColor: "#2F2F2F",
+        fontSize: "60px",
+    },
+    health: new Decimal(2000),
+    damage: new Decimal(10),
+    actions: {
+        0: {
+            name: "Earthquake",
+            instant: true,
+            type: "damage",
+            target: "all",
+            method: "physical",
+            value: new Decimal(1),
+            cooldown: new Decimal(4),
+        },
+        0: {
+            name: "Earthshake",
+            instant: true,
+            type: "damage",
+            target: "all",
+            method: "physical",
+            value: new Decimal(1),
+            cooldown: new Decimal(10),
+        },
+        0: {
+            name: "Earthbreak",
+            instant: true,
+            type: "damage",
+            target: "all",
+            method: "physical",
+            value: new Decimal(1),
+            cooldown: new Decimal(18),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.gloomingNocturnium = new Decimal(60)
+        gain.dimNocturnium = new Decimal(25)
+        gain.darkEssence = new Decimal(8)
+        return gain
+    },
+}
+
+BHC.ma2 = {
+    name: "Celestialite M-A2",
+    symbol: "A2",
+    style: {
+        background: "linear-gradient(to right, #BD3728, #921758)",
+        color: "black",
+        borderColor: "#2F2F2F",
+        fontSize: "60px",
+    },
+    health: new Decimal(2500),
+    damage: new Decimal(20),
+    luck: new Decimal(6),
+    actions: {
+        0: {
+            name: "Poison Needle",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            value: new Decimal(1),
+            properties: {
+                "storeTarget": true,
+            },
+            cooldown: new Decimal(6),
+
+            active: true,
+            constantType: "effect",
+            constantTarget: "storedTarget",
+            effects: {
+                "regenAdd"() {return Decimal.mul(-1, player.bh.celestialite.luck)}
+            },
+            duration: new Decimal(3),
+        },
+        1: {
+            name: "Increased Toxicity",
+            instant: true,
+            type: "effect",
+            target: "celestialite",
+            noMessage: true,
+            properties: {
+                "luckAdd": new Decimal(3),
+            },
+            cooldown: new Decimal(12),
+        },
+        2: {
+            name: "Block",
+            instant: true,
+            type: "shield",
+            target: "celestialite",
+            value: new Decimal(1),
+            cooldown: new Decimal(8),
+
+            active: true,
+            constantType: "effect",
+            constantTarget: "celestialite",
+            effects: {
+                "defenseAdd": new Decimal(25),
+            },
+            duration: new Decimal(3),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.gloomingNocturnium = new Decimal(70)
+        gain.dimNocturnium = new Decimal(30)
+        gain.darkEssence = new Decimal(12)
+        return gain
+    },
+}
+
+BHC.ma3 = {
+    name: "Celestialite M-A3",
+    symbol: "A3",
+    style: {
+        background: "linear-gradient(to right, #BD3728, #921758)",
+        color: "black",
+        borderColor: "#2F2F2F",
+        fontSize: "60px",
+    },
+    health: new Decimal(3000),
+    damage: new Decimal(5),
+    actions: {
+        0: {
+            name: "Missile Flurry",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "magic",
+            properties: {
+                "multi-hit": [5, 200],
+            },
+            value: new Decimal(1),
+            cooldown: new Decimal(5),
+        },
+        1: {
+            name: "Doping",
+            instant: true,
+            type: "effect",
+            target: "celestialite",
+            properties: {
+                "agilityAdd": new Decimal(10),
+            },
+            cooldown: new Decimal(10),
+        },
+        2: {
+            name: "Bandage",
+            instant: true,
+            type: "heal",
+            target: "celestialite",
+            value: new Decimal(50),
+            cooldown: new Decimal(15),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.gloomingNocturnium = new Decimal(80)
+        gain.dimNocturnium = new Decimal(35)
+        gain.darkEssence = new Decimal(16)
+        return gain
+    },
+}

@@ -108,3 +108,24 @@
     ],
     layerShown() { return player.startedGame == true && false}
 })
+
+/* REECE STATS
+
+BHP.reece = {
+    name() {return "Reece"},
+    color: "#397363",
+    icon() {return "resources/reece.png"},
+    health() {return new Decimal(75)},
+    damage() {return new Decimal(15)},
+    defense() {return new Decimal(10)},
+    regen() {return new Decimal(0)},
+    agility() {return new Decimal(30)},
+    luck() {return new Decimal(30)},
+    mending: new Decimal(5),
+}
+
+*/
+
+/* REECE SKILLS
+
+*/

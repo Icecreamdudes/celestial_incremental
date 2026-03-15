@@ -53,10 +53,6 @@
             player.wof.spinTimer = player.wof.spinTimer.add(delta) 
             player.wof.trueTimer = player.wof.trueTimer.add(delta) 
 
-            if (player.wof.trueTimer.lt(0.1))
-            {
-                layers.wof.randomizeSegments()
-            }
             if (player.wof.spinTimer.gte(0.2))
             {
                 player.wof.currentlySelectedSegment = getRandomInt(8)
@@ -332,6 +328,7 @@
             canClick() { return player.za.chancePoints.gte(player.wof.spinCost) },
             unlocked() { return true },
             onClick() {
+                layers.wof.randomizeSegments()
                 player.wof.spinPause = new Decimal(7)
 
                 player.wof.spinActive = true
@@ -639,46 +636,6 @@
                             ], {width: "800px", height: "475px", background: "#0000005f", borderRadius: "0px 0px 10px 10px"}],
                         ]]
                     ], {background: "linear-gradient(105deg, #144b34ff 0%, #3d8165ff 50%, #144b34ff 100%)", border: "3px solid #5fc79cff",  borderRadius: "13px"}],
-
-                    /*
-                    ["style-row", [
-                    ["style-column", [ //wheel 
-                    ["blank", "10px"],
-                    ["row", [["clickable", 22],]],
-                    ["blank", "10px"],
-                    ["bar", "wheel"],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "Requires " + format(player.wof.spinCost) + " chance points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Spinning the wheel resets previous dice space content." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13],]],
-                    ["row", [["clickable", 14], ["clickable", 21], ["clickable", 15],]],
-                    ["row", [["clickable", 16], ["clickable", 17], ["clickable", 18],]],
-                    ["blank", "10px"],
-                    ["raw-html", function () { return player.sm.buyables[106].gte(1) ? "<h5>ESC: " + format(buyableEffect("sm", 106).mul(100)) + "%" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h6>Mult: " + format(player.wof.wheelPointsMult) + "x. (also based on amount of wheel spins)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h6>Wheels spinned: " + formatWhole(player.wof.wheelsSpinned) + "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ], {width: "600px", height: "700px", background: "rgba(5, 80, 28, 0.5)", border: "0px solid #ccc", borderRight: "0px", borderLeft: "0px", borderRadius: "15px 0px 0px 15px"}],
-
-                    
-                    ["style-column", [ 
-                    ["style-column", [ 
-                    ["raw-html", function () { return "You have <h3>" + format(player.wof.wheelPoints) + "</h3> wheel points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Boosts chance point gain by x" + format(player.wof.wheelPointsEffect) + "." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Extends chance point softcap by x" + format(player.wof.wheelPointsEffect2) + "." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Boosts heads and tails gain by x" + format(player.wof.wheelPointsEffect3) + "." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ], {width: "597px", height: "100px", background: "rgba(34, 124, 61, 0.5)", border: "3px solid #ccc",  borderBottom: "0px", borderTop: "0px", borderRadius: "0px 15px 0px 0px"}],
-                    ["style-column", [ 
-                    ["blank", "12.5px"],
-                    ["row", [["clickable", 23],]],
-                    ["blank", "12.5px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13],]],
-                    ["row", [["ex-buyable", 14], ["ex-buyable", 15],]],
-                    ], {width: "600px", height: "600px", background: "rgba(34, 124, 61, 0.5)", border: "3px solid #ccc", borderRight: "0px", borderRadius: "0px 0px 15px 0px"}],
-                    ], {width: "600px", height: "700px", background: "rgba(34, 124, 61, 0.5)", border: "0px solid #ccc", borderRight: "0px", borderLeft: "0px", borderRadius: "0px 15px 15px 0px"}],
-                    ], {width: "1200px", height: "700px", background: "rgba(34, 124, 61, 0)", border: "3px solid #ccc", borderRadius: "15px"}],
-                    */
                 ]
             },
         },

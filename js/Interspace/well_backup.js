@@ -54,58 +54,6 @@
                 completionsEffect: new Decimal(1),
             },
         },
-
-        fountains: {
-            1: {
-                time: new Decimal(0),
-                timeReq: new Decimal(60),
-                timeSpeed: new Decimal(1),
-                lightReq: new Decimal(5),
-                canAddCompletion: false,
-                completions: new Decimal(0),
-                maxCompletions: new Decimal(0),
-
-                focused: false,
-                completionEffect: new Decimal(1),
-            },
-            2: {
-                time: new Decimal(0),
-                timeReq: new Decimal(2.7e4),
-                timeSpeed: new Decimal(1),
-                lightReq: new Decimal(1.5e3),
-                canAddCompletion: false,
-                completions: new Decimal(0),
-                maxCompletions: new Decimal(0),
-
-                focused: false,
-                completionEffect: new Decimal(1),
-            },
-            3: {
-                time: new Decimal(0),
-                timeReq: new Decimal(6e6),
-                timeSpeed: new Decimal(1),
-                lightReq: new Decimal(5e4),
-                canAddCompletion: false,
-                completions: new Decimal(0),
-                maxCompletions: new Decimal(0),
-
-                focused: false,
-                completionEffect: new Decimal(1),
-            },
-            4: {
-                time: new Decimal(0),
-                timeReq: new Decimal(5e8),
-                timeSpeed: new Decimal(1),
-                lightReq: new Decimal(1.5e6),
-                canAddCompletion: false,
-                completions: new Decimal(0),
-                maxCompletions: new Decimal(0),
-
-                focused: false,
-                completionEffect: new Decimal(1),
-            },
-            
-        },
     }},
     automate() {},
     nodeStyle() {
@@ -125,15 +73,15 @@
         player.wel.lightWellCycleEffectSoftcap = new Decimal(0.5)
 
         player.wel.lightMult = new Decimal(1)
-        player.wel.lightMult = player.wel.lightMult.mul(player.wel.fountains[1].completionEffect)
-        player.wel.lightMult = player.wel.lightMult.mul(player.wel.fountains[2].completionEffect)
+        player.wel.lightMult = player.wel.lightMult.mul(buyableEffect("wel", 11))
+        player.wel.lightMult = player.wel.lightMult.mul(buyableEffect("wel", 12))
         if (hasUpgrade("wel", 13)) {
 
-            if (player.wel.modules[1].completions.gte(1e3)) player.wel.modules[1].completionsEffect = player.wel.modules[1].completions.div(1e3).pow(player.wel.lightWellCycleEffectSoftcap).mul(1e3).mul(0.01).add(1);
+            if (player.wel.modules[1].completions.gte(1e3)) player.wel.modules[1].completionsEffect = player.wel.modules[1].completions.div(1e3).pow(player.wel.lightWellCycleEffectSoftcap).mul(1e3).mul(0.02).add(1);
             else player.wel.modules[1].completionsEffect = player.wel.modules[1].completions.mul(0.02).add(1);
             player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[1].completionsEffect)
 
-            if (player.wel.modules[2].completions.gte(1e3)) player.wel.modules[2].completionsEffect = player.wel.modules[2].completions.div(1e3).pow(player.wel.lightWellCycleEffectSoftcap).mul(1e3).mul(0.05).add(1);
+            if (player.wel.modules[2].completions.gte(1e3)) player.wel.modules[2].completionsEffect = player.wel.modules[2].completions.div(1e3).pow(player.wel.lightWellCycleEffectSoftcap).mul(1e3).mul(0.1).add(1);
             else player.wel.modules[2].completionsEffect = player.wel.modules[2].completions.mul(0.1).add(1);
             player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[2].completionsEffect)
 
@@ -162,36 +110,16 @@
 
             // CYCLE SPEED
             player.wel.modules[i].timeSpeed = new Decimal(1)
-            player.wel.modules[i].timeSpeed = player.wel.modules[i].timeSpeed.mul(player.wel.fountains[4].completionEffect)
+            player.wel.modules[i].timeSpeed = player.wel.modules[i].timeSpeed.mul(buyableEffect("wel", 14))
             player.wel.modules[i].timeSpeed = player.wel.modules[i].timeSpeed.mul(levelableEffect("pu", 213)[1])
             if (hasMilestone("prj", 105)) player.wel.modules[i].timeSpeed = player.wel.modules[i].timeSpeed.mul(player.prj.milestone105Effect)
 
             // CYCLE GAIN
             player.wel.modules[i].completionsGain = new Decimal(1)
-            player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(player.wel.fountains[3].completionEffect)
+            player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(buyableEffect("wel", 13))
             player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(levelableEffect("pu", 214)[1])
             player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(player.pri.fountains[1].completionEffect)
         }
-        
-        // FOUNTAIN PROGRESS
-        Object.keys(layers.wel.fountains).forEach(i => {
-            let module = player.wel.fountains[i]
-            let fountain = layers.wel.fountains[i]
-            module.timeSpeed = fountain.getTimeSpeed()
-            module.timeReq = fountain.getTimeReq()
-            module.lightReq = fountain.getLightReq()
-            module.completionEffect = fountain.getCompletionEffect()
-
-            if (module.focused) {
-                module.time = module.time.add(module.timeSpeed.mul(delta))
-                if (module.time.gte(module.timeReq)) {
-                    module.focused = false
-                    module.completions = module.completions.add(1)
-                    module.time = new Decimal(0)
-                    player.prj.focused = player.prj.focused.sub(1)
-                }
-            }
-        });
 
         if (player.wel.bestLight.lt(player.wel.light)) player.wel.bestLight = player.wel.light;
     },
@@ -231,7 +159,7 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Unlock the first light fountain.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Unlock light buyables.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><h3>Req: 5 Light</h3>"
                 }
@@ -265,17 +193,17 @@
         },
         13: {
             unlocked() { return hasUpgrade("wel", 11) },
-            condition() { return player.wel.fountains[1].completions.gte(8) },
+            condition() { return getBuyableAmount("wel", 11).gte(8) },
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
                     s += "Well cycles boost well yield.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
-                    s += "???</h2><br><h3>Req: 8 Light Fountain Cycles</h3>"
+                    s += "???</h2><br><h3>Req: 8 Light Boost levels</h3>"
                 }
                 return s
             },
-            cost: new Decimal(250),
+            cost: new Decimal(100),
             currencyLocation() { return player.wel },
             currencyDisplayName: "Light",
             currencyInternalName: "light",
@@ -303,13 +231,13 @@
         },
         14: {
             unlocked() { return hasUpgrade("wel", 11) },
-            condition() { return player.wel.fountains[2].completions.gte(4) },
+            condition() { return getBuyableAmount("wel", 12).gte(4) },
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
                     s += "Double light gain.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
-                    s += "???</h2><br><h3>Req: 4 Light Fountain II Cycles</h3>"
+                    s += "???</h2><br><h3>Req: 4 Light Boost II levels</h3>"
                 }
                 return s
             },
@@ -1158,272 +1086,6 @@
                 return look
             },
         },
-        1001: {
-            title() { return "<h3>Focus</h3>" },
-            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.wel.light.gte(player.wel.fountains[this.id - 1000].lightReq) && !player.wel.fountains[this.id - 1000].focused},
-            unlocked() { return true },
-            onClick() {
-                player.wel.light = player.wel.light.sub(player.wel.fountains[this.id - 1000].lightReq)
-                player.prj.focused = player.prj.focused.add(1)
-                player.wel.fountains[this.id - 1000].focused = true
-            },
-            style() {
-                let look = {width: "238px", minHeight: "45px", borderRadius: "0px"}
-                if (this.canClick()) {
-                    look.backgroundColor = "#a8ffd3"
-                    look.border = "3px solid #0000003f"
-                    look.color = "black"
-                } else {
-                    look.background = "#361e1e"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                }
-                return look
-            },
-        },
-        1002: {
-            title() { return "<h3>Focus</h3>" },
-            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.wel.light.gte(player.wel.fountains[this.id - 1000].lightReq) && !player.wel.fountains[this.id - 1000].focused},
-            unlocked() { return true },
-            onClick() {
-                player.wel.light = player.wel.light.sub(player.wel.fountains[this.id - 1000].lightReq)
-                player.prj.focused = player.prj.focused.add(1)
-                player.wel.fountains[this.id - 1000].focused = true
-            },
-            style() {
-                let look = {width: "238px", minHeight: "45px", borderRadius: "0px"}
-                if (this.canClick()) {
-                    look.backgroundColor = "#a8ffd3"
-                    look.border = "3px solid #0000003f"
-                    look.color = "black"
-                } else {
-                    look.background = "#361e1e"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                }
-                return look
-            },
-        },
-        1003: {
-            title() { return "<h3>Focus</h3>" },
-            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.wel.light.gte(player.wel.fountains[this.id - 1000].lightReq) && !player.wel.fountains[this.id - 1000].focused},
-            unlocked() { return true },
-            onClick() {
-                player.wel.light = player.wel.light.sub(player.wel.fountains[this.id - 1000].lightReq)
-                player.prj.focused = player.prj.focused.add(1)
-                player.wel.fountains[this.id - 1000].focused = true
-            },
-            style() {
-                let look = {width: "238px", minHeight: "45px", borderRadius: "0px"}
-                if (this.canClick()) {
-                    look.backgroundColor = "#a8ffd3"
-                    look.border = "3px solid #0000003f"
-                    look.color = "black"
-                } else {
-                    look.background = "#361e1e"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                }
-                return look
-            },
-        },
-        1004: {
-            title() { return "<h3>Focus</h3>" },
-            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.wel.light.gte(player.wel.fountains[this.id - 1000].lightReq) && !player.wel.fountains[this.id - 1000].focused},
-            unlocked() { return true },
-            onClick() {
-                player.wel.light = player.wel.light.sub(player.wel.fountains[this.id - 1000].lightReq)
-                player.prj.focused = player.prj.focused.add(1)
-                player.wel.fountains[this.id - 1000].focused = true
-            },
-            style() {
-                let look = {width: "238px", minHeight: "45px", borderRadius: "0px"}
-                if (this.canClick()) {
-                    look.backgroundColor = "#a8ffd3"
-                    look.border = "3px solid #0000003f"
-                    look.color = "black"
-                } else {
-                    look.background = "#361e1e"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                }
-                return look
-            },
-        },
-    },
-    fountains: {
-        1: {
-            title: "Light Fountain",
-            completionEffectStat: "Light",
-            getCompletionEffect() {
-                let completions = player.wel.fountains[1].completions.pow(0.95)
-
-                let s = completions.add(1).mul(completions.pow_base(1.06))
-
-                return s
-            },
-            getTimeReq() {
-                let completions = player.wel.fountains[1].completions
-                let s = new Decimal(60)
-
-                s = s.mul(completions.add(1))
-                s = s.mul(completions.pow_base(Math.pow(1.5, 1.15)))
-                if (completions.gte(1e3)) {
-                    s = s.pow(1.05)
-                }
-
-                return s
-            },
-            getLightReq() {
-                let completions = player.wel.fountains[1].completions
-                let s = new Decimal(5)
-
-                s = s.mul(completions.mul(0.25).add(1))
-                s = s.mul(completions.pow_base(1.5))
-                if (completions.gte(1e3)) {
-                    s = s.pow(1.05)
-                }
-
-                return s.floor()
-            },
-            getTimeSpeed() {
-                let s = new Decimal(1)
-
-                s = s.mul(player.wel.light)
-                s = s.mul(player.prj.projectSpeed)
-
-                return s
-            },
-        },
-        2: {
-            title: "Light Fountain II",
-            completionEffectStat: "Light",
-            getCompletionEffect() {
-                let completions = player.wel.fountains[2].completions.pow(0.95)
-
-                let s = completions.add(1).mul(completions.pow_base(1.04))
-
-                return s
-            },
-            getTimeReq() {
-                let completions = player.wel.fountains[2].completions
-                let s = new Decimal(2.7e4)
-
-                s = s.mul(completions.add(1))
-                s = s.mul(completions.pow_base(Math.pow(1.75, 1.15)))
-                if (completions.gte(1e3)) {
-                    s = s.pow(1.05)
-                }
-
-                return s
-            },
-            getLightReq() {
-                let completions = player.wel.fountains[2].completions
-                let s = new Decimal(1.5e3)
-
-                s = s.mul(completions.mul(0.25).add(1))
-                s = s.mul(completions.pow_base(1.75))
-                if (completions.gte(1e3)) {
-                    s = s.pow(1.05)
-                }
-
-                return s.floor()
-            },
-            getTimeSpeed() {
-                let s = new Decimal(1)
-
-                s = s.mul(player.wel.light)
-                s = s.mul(player.prj.projectSpeed)
-
-                return s
-            },
-        },
-        3: {
-            title: "Light Cycle Fountain",
-            completionEffectStat: "Light Well Cycles",
-            getCompletionEffect() {
-                let completions = player.wel.fountains[3].completions.pow(0.95)
-
-                let s = completions.add(1).mul(completions.pow_base(1.02))
-
-                return s
-            },
-            getTimeReq() {
-                let completions = player.wel.fountains[3].completions
-                let s = new Decimal(6e6)
-
-                s = s.mul(completions.add(1))
-                s = s.mul(completions.pow_base(Math.pow(5, 1.15)))
-                if (completions.gte(1e3)) {
-                    s = s.pow(1.05)
-                }
-
-                return s
-            },
-            getLightReq() {
-                let completions = player.wel.fountains[3].completions
-                let s = new Decimal(5e4)
-
-                s = s.mul(completions.mul(0.25).add(1))
-                s = s.mul(completions.pow_base(5))
-                if (completions.gte(1e3)) {
-                    s = s.pow(1.05)
-                }
-
-                return s.floor()
-            },
-            getTimeSpeed() {
-                let s = new Decimal(1)
-
-                s = s.mul(player.wel.light)
-                s = s.mul(player.prj.projectSpeed)
-
-                return s
-            },
-        },
-        4: {
-            title: "Light Speed Fountain",
-            completionEffectStat: "Light Well Speed",
-            getCompletionEffect() {
-                let completions = player.wel.fountains[4].completions.pow(0.95)
-
-                let s = completions.mul(0.15).mul(completions.pow_base(1.02)).add(1)
-
-                return s
-            },
-            getTimeReq() {
-                let completions = player.wel.fountains[4].completions
-                let s = new Decimal(2e8)
-
-                s = s.mul(completions.add(1))
-                s = s.mul(completions.pow_base(Math.pow(4, 1.15)))
-                if (completions.gte(1e3)) {
-                    s = s.pow(1.05)
-                }
-
-                return s
-            },
-            getLightReq() {
-                let completions = player.wel.fountains[4].completions
-                let s = new Decimal(1.5e6)
-
-                s = s.mul(completions.mul(0.25).add(1))
-                s = s.mul(completions.pow_base(4))
-                if (completions.gte(1e3)) {
-                    s = s.pow(1.05)
-                }
-
-                return s.floor()
-            },
-            getTimeSpeed() {
-                let s = new Decimal(1)
-
-                s = s.mul(player.wel.light)
-                s = s.mul(player.prj.projectSpeed)
-
-                return s
-            },
-        },
     },
     microtabs: {
         stuff: {
@@ -1450,13 +1112,90 @@
 
                         ]],
                         ["blank", "25px"],
+                        ["style-row", [
+
+                        ]],
+                        ["blank", "25px"],
                     ]
+                    if (hasUpgrade("wel", 12)) {
+                        look[6][1].push(
+                            ["layerColor-dark-buyable", 11],
+                        )
+                        if (layers.wel.buyables[12].condition()) {
+                            look[6][1].push(
+                                ["layerColor-dark-buyable", 12],
+                            )
+                        } else {
+                            look[6][1].push(
+                                ["style-column", [
+                                    ["raw-html", "<h2>Light Boost II</h2><br><h3>Req: 1,500 Light</h3>", {color: "white", fontSize: "10px"}],
+                                ], {background: "black", border: "3px solid #663737", width: "194px", height: "174px", borderRadius: "0px", lineHeight: "1"}]
+                            )
+                        }
+                        if (layers.wel.buyables[12].condition()) {
+                            if (layers.wel.buyables[13].condition()) {
+                                look[6][1].push(
+                                    ["layerColor-dark-buyable", 13],
+                                )
+                            } else {
+                                look[6][1].push(
+                                    ["style-column", [
+                                        ["raw-html", "<h2>Light Cycle Boost</h2><br><h3>Req: 50,000 Light</h3>", {color: "white", fontSize: "10px"}],
+                                    ], {background: "black", border: "3px solid #663737", width: "194px", height: "174px", borderRadius: "0px", lineHeight: "1"}]
+                                )
+                            }
+                        }
+                        if (layers.wel.buyables[13].condition()) {
+                            if (layers.wel.buyables[14].condition()) {
+                                look[6][1].push(
+                                    ["layerColor-dark-buyable", 14],
+                                )
+                            } else {
+                                look[6][1].push(
+                                    ["style-column", [
+                                        ["raw-html", "<h2>Light Speed Boost</h2><br><h3>Req: 1,500,000 Light</h3>", {color: "white", fontSize: "10px"}],
+                                    ], {background: "black", border: "3px solid #663737", width: "194px", height: "174px", borderRadius: "0px", lineHeight: "1"}]
+                                )
+                            }
+                        }
+                        if (true) {
+                            look[8][1].push(
+                                ["layerColor-dark-buyable", 101],
+                            )
+                        }
+                        if (layers.wel.buyables[101].condition()) {
+                            if (layers.wel.buyables[102].condition()) {
+                                look[8][1].push(
+                                    ["layerColor-dark-buyable", 102],
+                                )
+                            } else {
+                                look[8][1].push(
+                                    ["style-column", [
+                                        ["raw-html", "<h2>Starmetal XP Boost</h2><br><h3>Req: 1.00e11 Light</h3>", {color: "white", fontSize: "10px"}],
+                                    ], {background: "black", border: "3px solid #663737", width: "194px", height: "174px", borderRadius: "0px", lineHeight: "1"}]
+                                )
+                            }
+                        }
+                        if (layers.wel.buyables[102].condition()) {
+                            if (layers.wel.buyables[103].condition()) {
+                                look[8][1].push(
+                                    ["layerColor-dark-buyable", 103],
+                                )
+                            } else {
+                                look[8][1].push(
+                                    ["style-column", [
+                                        ["raw-html", "<h2>Space and Time Boost</h2><br><h3>Req: 1.00e15 Light</h3>", {color: "white", fontSize: "10px"}],
+                                    ], {background: "black", border: "3px solid #663737", width: "194px", height: "174px", borderRadius: "0px", lineHeight: "1"}]
+                                )
+                            }
+                        }
+                    }
                     return look
                 },
             },
             "Wells": {
                 buttonStyle() { return { color: "white", borderRadius: "8px"} },
-                unlocked() { return hasUpgrade("wel", 11) },
+                unlocked() { return true },
                 content() {
                     let look = [
                         ["blank", "25px"],
@@ -1466,7 +1205,7 @@
                             ["style-column", [
                             ["style-column", [
                                 ["style-column", [
-                                    ["raw-html", formatShortestWhole(player.wel.modules[1].time.div(player.wel.modules[1].maxTime).min(1).max(0).mul(100).floor()) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                    ["raw-html", formatShortestWhole(player.wel.modules[1].time.div(player.wel.modules[1].maxTime).min(1).max(0).mul(100)) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                                 ], {background: "#4d9973", border: "3px solid #336659", borderRadius: "100px", width: "75px", height:"75px"}],
                             ], {borderRadius: "50%", width: "150px", height:"150px",
                                 background: player.wel.modules[1].time.lt(player.wel.modules[1].maxTime) ?
@@ -1483,13 +1222,9 @@
                             ["blank", "3px"],
                             ["clickable", 1],
                         ], {background: "#336659",border: "3px solid #336659", borderRadius: "103px 103px 16px 16px", width: "150px"}],
-                        ["blank", "9px"],
-                        ["raw-html", formatShortWhole(player.wel.modules[1].completions) + " α ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                        (
-                            hasUpgrade("wel", 13) ? 
-                            ["raw-html", "(x" + formatShort(player.wel.modules[1].completionsEffect) + " Light)", {color: "white", fontSize: "12px", fontFamily: "monospace"}] :
-                            ["blank", "21px"]
-                        )                    
+                    ["blank", "9px"],
+                    ["raw-html", formatShortWhole(player.wel.modules[1].completions) + " α ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", "(x" + formatShort(player.wel.modules[1].completionsEffect) + " Light)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
                     ]],
                     ]],
                     ["blank", "10px"],
@@ -1505,7 +1240,7 @@
                             ["style-column", [
                             ["style-column", [
                                 ["style-column", [
-                                    ["raw-html", formatShortestWhole(player.wel.modules[2].time.div(player.wel.modules[2].maxTime).min(1).max(0).mul(100).floor()) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                    ["raw-html", formatShortestWhole(player.wel.modules[2].time.div(player.wel.modules[2].maxTime).min(1).max(0).mul(100)) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                                 ], {background: "#4d9973", border: "3px solid #336659", borderRadius: "100px", width: "75px", height:"75px"}],
                             ], {borderRadius: "50%", width: "150px", height:"150px",
                                 background: player.wel.modules[2].time.lt(player.wel.modules[2].maxTime) ?
@@ -1522,13 +1257,9 @@
                             ["blank", "3px"],
                             ["clickable", 2],
                         ], {background: "#336659",border: "3px solid #336659", borderRadius: "103px 103px 16px 16px", width: "150px"}],
-                        ["blank", "9px"],
-                        ["raw-html", formatShortWhole(player.wel.modules[2].completions) + " β ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                        (
-                            hasUpgrade("wel", 13) ? 
-                            ["raw-html", "(x" + formatShort(player.wel.modules[2].completionsEffect) + " Light)", {color: "white", fontSize: "12px", fontFamily: "monospace"}] :
-                            ["blank", "21px"]
-                        )
+                    ["blank", "9px"],
+                    ["raw-html", formatShortWhole(player.wel.modules[2].completions) + " β ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", "(x" + formatShort(player.wel.modules[2].completionsEffect) + " Light)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
                     ]],
                     )
                     } else {
@@ -1553,7 +1284,7 @@
                             ["style-column", [
                             ["style-column", [
                                 ["style-column", [
-                                    ["raw-html", formatShortestWhole(player.wel.modules[3].time.div(player.wel.modules[3].maxTime).min(1).max(0).mul(100).floor()) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                    ["raw-html", formatShortestWhole(player.wel.modules[3].time.div(player.wel.modules[3].maxTime).min(1).max(0).mul(100)) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                                 ], {background: "#4d9973", border: "3px solid #336659", borderRadius: "100px", width: "75px", height:"75px"}],
                             ], {borderRadius: "50%", width: "150px", height:"150px",
                                 background: player.wel.modules[3].time.lt(player.wel.modules[3].maxTime) ?
@@ -1570,13 +1301,9 @@
                             ["blank", "3px"],
                             ["clickable", 3],
                         ], {background: "#336659",border: "3px solid #336659", borderRadius: "103px 103px 16px 16px", width: "150px"}],
-                        ["blank", "9px"],
-                        ["raw-html", formatShortWhole(player.wel.modules[3].completions) + " γ ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                        (
-                            hasUpgrade("wel", 13) ? 
-                            ["raw-html", "(x" + formatShort(player.wel.modules[3].completionsEffect) + " Light)", {color: "white", fontSize: "12px", fontFamily: "monospace"}] :
-                            ["blank", "21px"]
-                        )                
+                    ["blank", "9px"],
+                    ["raw-html", formatShortWhole(player.wel.modules[3].completions) + " γ ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", "(x" + formatShort(player.wel.modules[3].completionsEffect) + " Light)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
                     ]],
                     )
                     } else {
@@ -1602,7 +1329,7 @@
                             ["style-column", [
                             ["style-column", [
                                 ["style-column", [
-                                    ["raw-html", formatShortestWhole(player.wel.modules[4].time.div(player.wel.modules[4].maxTime).min(1).max(0).mul(100).floor()) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                    ["raw-html", formatShortestWhole(player.wel.modules[4].time.div(player.wel.modules[4].maxTime).min(1).max(0).mul(100)) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                                 ], {background: "#4d9973", border: "3px solid #336659", borderRadius: "100px", width: "75px", height:"75px"}],
                             ], {borderRadius: "50%", width: "150px", height:"150px",
                                 background: player.wel.modules[4].time.lt(player.wel.modules[4].maxTime) ?
@@ -1619,13 +1346,9 @@
                             ["blank", "3px"],
                             ["clickable", 4],
                         ], {background: "#336659",border: "3px solid #336659", borderRadius: "103px 103px 16px 16px", width: "150px"}],
-                        ["blank", "9px"],
-                        ["raw-html", formatShortWhole(player.wel.modules[4].completions) + " δ ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                        (
-                            hasUpgrade("wel", 13) ? 
-                            ["raw-html", "(x" + formatShort(player.wel.modules[4].completionsEffect) + " Light)", {color: "white", fontSize: "12px", fontFamily: "monospace"}] :
-                            ["blank", "21px"]
-                        )
+                    ["blank", "9px"],
+                    ["raw-html", formatShortWhole(player.wel.modules[4].completions) + " δ ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", "(x" + formatShort(player.wel.modules[4].completionsEffect) + " Light)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
                     ]],
                     )
                     } else {
@@ -1645,114 +1368,6 @@
                     return look
                 },
             },
-            "Fountains": {
-                buttonStyle() { return { color: "white", borderRadius: "8px"} },
-                unlocked() { return hasUpgrade("wel", 12) },
-                content() {
-                    let look = [
-                        ["style-column", [
-                            ["blank", "25px"],
-                            ["raw-html", "You are gaining <h3>" + format(player.wel.light.mul(player.prj.projectSpeed)) + "</h3> fountain progress /s.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                            ["raw-html", "<small>Light gives a base progress rate of " + format(player.wel.light) + ".</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                            ["raw-html", "You are focusing on " + formatWhole(player.prj.focused) + "/1 interspace tasks.", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
-                            ["blank", "25px"],
-                        ]],
-                        ["style-row", [
-
-                        ]],
-                        ["blank", "6px"],
-                        ["style-row", [
-
-                        ]],
-                        ["blank", "25px"],
-                        ["style-row", [
-
-                        ]],
-                        ["blank", "25px"],
-                    ]
-                    if (hasUpgrade("wel", 12)) {
-                        look[1][1].push(
-                            makeWellFountain(1)
-                        )
-                        if (layers.wel.buyables[12].condition()) {
-                            look[1][1].push(
-                                ["blank", "6px", {width: "6px"}],
-                                makeWellFountain(2)
-                            )
-                        } else {
-                            look[1][1].push(
-                                    ["blank", "6px", {width: "6px"}],
-                                ["style-column", [
-                                    ["raw-html", "<h2>Light Fountain II</h2><br><h3>Req: 1,500 Light</h3>", {color: "white", fontSize: "10px"}],
-                                ], {background: "black", border: "3px solid #663737", width: "394px", height: "204px", borderRadius: "10px 81px 10px 10px", lineHeight: "1"}]
-                            )
-                        }
-                        if (layers.wel.buyables[12].condition()) {
-                            if (layers.wel.buyables[13].condition()) {
-                                look[3][1].push(
-                                    makeWellFountain(3)
-                                )
-                            } else {
-                                look[3][1].push(
-                                    ["blank", "6px", {width: "6px"}],
-                                    ["style-column", [
-                                        ["raw-html", "<h2>Light Cycle Fountain</h2><br><h3>Req: 50,000 Light</h3>", {color: "white", fontSize: "10px"}],
-                                ], {background: "black", border: "3px solid #663737", width: "394px", height: "204px", borderRadius: "10px 81px 10px 10px", lineHeight: "1"}]
-                                )
-                            }
-                        }
-                        if (layers.wel.buyables[13].condition()) {
-                            if (layers.wel.buyables[14].condition()) {
-                                look[3][1].push(
-                                    ["blank", "6px", {width: "6px"}],
-                                    makeWellFountain(4)
-                                )
-                            } else {
-                                look[3][1].push(
-                                    ["blank", "6px", {width: "6px"}],
-                                    ["style-column", [
-                                        ["raw-html", "<h2>Light Speed Fountain</h2><br><h3>Req: 1,500,000 Light</h3>", {color: "white", fontSize: "10px"}],
-                                ], {background: "black", border: "3px solid #663737", width: "394px", height: "204px", borderRadius: "10px 81px 10px 10px", lineHeight: "1"}]
-                                )
-                            }
-                        }
-                        if (true) {
-                            look[5][1].push(
-                                ["layerColor-dark-buyable", 101],
-                            )
-                        }
-                        if (layers.wel.buyables[101].condition()) {
-                            if (layers.wel.buyables[102].condition()) {
-                                look[5][1].push(
-                                    ["layerColor-dark-buyable", 102],
-                                )
-                            } else {
-                                look[5][1].push(
-                                    ["blank", "6px", {width: "6px"}],
-                                    ["style-column", [
-                                        ["raw-html", "<h2>Starmetal XP Boost</h2><br><h3>Req: 1.00e11 Light</h3>", {color: "white", fontSize: "10px"}],
-                                ], {background: "black", border: "3px solid #663737", width: "394px", height: "204px", borderRadius: "10px 81px 10px 10px", lineHeight: "1"}]
-                                )
-                            }
-                        }
-                        if (layers.wel.buyables[102].condition()) {
-                            if (layers.wel.buyables[103].condition()) {
-                                look[5][1].push(
-                                    ["layerColor-dark-buyable", 103],
-                                )
-                            } else {
-                                look[5][1].push(
-                                    ["blank", "6px", {width: "6px"}],
-                                    ["style-column", [
-                                        ["raw-html", "<h2>Space and Time Boost</h2><br><h3>Req: 1.00e15 Light</h3>", {color: "white", fontSize: "10px"}],
-                                ], {background: "black", border: "3px solid #663737", width: "394px", height: "204px", borderRadius: "10px 81px 10px 10px", lineHeight: "1"}]
-                                )
-                            }
-                        }
-                    }
-                    return look
-                }
-            }
         },
     },
     tabFormat() {
@@ -1764,42 +1379,3 @@
     },
     playerhown() { return player.startedGame == true}
 })
-
-const makeWellFountain = function (id) {
-    let thisFountain =
-        ["style-column", [
-            ["style-row", [
-                ["style-column", [
-                    ["blank", "10px"],
-                    ["raw-html", layers.wel.fountains[id].title, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ["raw-html", player.wel.fountains[id].timeSpeed.lte(0) ? "<span style='color:#ff7f7f'>Can't Complete w/o Light!</span>" : (player.wel.fountains[id].focused ? formatTime(player.wel.fountains[id].timeReq.sub(player.wel.fountains[id].time).div(player.wel.fountains[id].timeSpeed)) : formatTime(player.wel.fountains[id].timeReq.div(player.wel.fountains[id].timeSpeed))) + " CD", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ["raw-html", "<small>(" + format(player.wel.fountains[id].time) + "/" + format(player.wel.fountains[id].timeReq) + ")</small>", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ["blank", "10px"],
-                    ["style-column", [
-                        ["raw-html", player.wel.fountains[id].lightReq.eq(0) ? "Your first cycle is free!" : "-" + formatWhole(player.wel.fountains[id].lightReq) + " Light", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ], {background: "#4d9973", borderRadius: "10px 10px 0px 0px", width: "238px", height:"25px"}],
-                    ["blank", "3px"],
-                    ["clickable", id + 1000],
-                ], {background: "#336659", border: "3px solid #336659", borderRadius: "16px 0px 0px 0px", width: "238px", height: "150px"}],
-                ["style-column", [
-                    ["style-column", [
-                        ["style-column", [
-                            ["style-column", [
-                                ["raw-html", player.wel.fountains[id].time.gte(player.wel.fountains[id].timeReq) ? "0%" : formatShortestWhole(player.wel.fountains[id].time.div(player.wel.fountains[id].timeReq).min(1).max(0).mul(100).floor()) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                            ], {background: "#4d9973", border: "3px solid #336659", borderRadius: "100px", width: "75px", height:"75px"}]
-                        ], {borderRadius: "50%", width: "125px", height:"125px", border: "3px solid #336659", margin: "-3px", marginTop: "75px",
-                            background: player.wel.fountains[id].time.lt(player.wel.fountains[id].timeReq) ?
-                            "conic-gradient(#ffdfdf " + (player.wel.fountains[id].time.div(player.wel.fountains[id].timeReq)).min(1).max(0) * 360 + "deg, #0b1711 0deg)" : "#0b1711"
-                        }],
-                    ], {background: "#336659", borderRadius: "0px 81px 0px 0px", width: "153px", height: "78px"}],
-                    ["style-column", [], {background: "#4d9973", height: "78px"}],
-                ], {border: "3px solid #336659", borderBottom: "0px", borderLeft: "0px", borderRadius: "0px 81px 0px 0px", padding: "-3px", width: "153px", height: "153px"}],
-            ], {verticalAlign: "bottom"}],
-            ["style-column", [
-                    ["style-column", [
-                    ["raw-html", formatWhole(player.wel.fountains[id].completions) + " ↻<br><small>(x" + formatShort(layers.wel.fountains[id].getCompletionEffect()) + " " + layers.wel.fountains[id].completionEffectStat + ")</small>", {color: "white", fontSize: "16px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
-                ], {background: "#336659", border: "3px solid #4d9973", borderRadius: "0px 0px 7px 7px", width: "388px", height: "44px"}],
-            ], {background: "#4d9973", border: "3px solid #336659", borderRadius: "0px 0px 10px 10px", borderTop: "0px", height: "50px"}],
-        ], {width: "400px"}]
-    return thisFountain
-}

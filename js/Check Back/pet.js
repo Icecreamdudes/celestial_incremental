@@ -110,6 +110,12 @@ const fragShopBase = {
         1: new Decimal(2500),
         2: new Decimal(2500),
     },
+    10: {
+        name: "Reece",
+        0: new Decimal(5000),
+        1: new Decimal(5000),
+        2: new Decimal(5000),
+    },
 }
 addLayer("pet", {
     name: "Pets", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -250,6 +256,10 @@ addLayer("pet", {
                 max: new Decimal(21600),
             },
             8: {
+                current: new Decimal(0),
+                max: new Decimal(21600),
+            },
+            10: {
                 current: new Decimal(0),
                 max: new Decimal(21600),
             },
@@ -1311,6 +1321,10 @@ addLayer("pet", {
                         addLevelableXP("pet", 502, new Decimal(1))
                         doPopup("none", "Geroa gets enhancements", "Pet Obtained!", 5, "#eed200", "resources/Pets/geroaLegendaryPet.png")
                         break;
+                    case 10:
+                        addLevelableXP("pet", 504, new Decimal(1))
+                        doPopup("none", "Reece is enlightened", "Pet Obtained!", 5, "#eed200", "resources/Pets/reeceLegendaryPet.png")
+                        break;
                 }
             },
             style() {
@@ -1397,6 +1411,15 @@ addLayer("pet", {
             unlocked() { return getLevelableAmount("pet", 502).gt(0) },
             onClick() {
                 player.pet.fragShopIndex = 8
+            },
+            style: {width: "75px", minHeight: "75px", background: "#eed200", border: "5px solid #776900", borderRadius: "0px", padding: "0px"},
+        },
+        141: {
+            title() { return "<img src='resources/Pets/reeceLegendaryPet.png'style='width:65px;height:65px;margin:0px;margin-bottom:-4px'></img>" },
+            canClick: true,
+            unlocked() { return getLevelableAmount("pet", 504).gt(0) },
+            onClick() {
+                player.pet.fragShopIndex = 10
             },
             style: {width: "75px", minHeight: "75px", background: "#eed200", border: "5px solid #776900", borderRadius: "0px", padding: "0px"},
         },
@@ -1487,6 +1510,20 @@ addLayer("pet", {
             style() {
                 let look = {width: "100px", minHeight: "100px", maxHeight: "100px", border: "2px solid #0000003f", borderRadius: "0px", padding: "0px"}
                 player.pet.summonIndex.eq(1) ? look.backgroundColor = "#fe2600ff" : look.backgroundColor = "#f78400"
+                return look
+            },
+        },
+        304: {
+            title() { return "<img src='resources/Pets/reeceLegendaryPet.png' style='width:88px;height:88px;margin-top:2px;border:2px solid #0000003f'></img>" },
+            canClick() { return true },
+            unlocked() { return player.bi.interspaceUnlocked },
+            onClick() {
+                player.pet.summonIndex = new Decimal(3)
+            },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "100px", minHeight: "100px", maxHeight: "100px", border: "2px solid #0000003f", borderRadius: "0px", padding: "0px"}
+                player.pet.summonIndex.eq(3) ? look.backgroundColor = "#fe2600ff" : look.backgroundColor = "#f78400"
                 return look
             },
         },
@@ -3853,6 +3890,50 @@ addLayer("pet", {
                 return look
             } 
         },
+        504: {
+            image() { return this.canClick() ? "resources/Pets/reeceLegendaryPet.png" : "resources/secret.png"},
+            title() { return "Reece" },
+            lore() { return "<h5>The Harbinger of Light remains worshipped in a few universes scattered throughout the Dimensional and Dream Realms." }, 
+            description() {
+                return "x" + format(this.effect()[0]) + " to punchcard XP.<br>" +
+                    "x" + format(this.effect()[1]) + " to stored space energy and time capsules <small>(based on starlight)</small>.<br>" +
+                    "[COMING SOON]"
+            },
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
+                return [
+                    amt.pow(1.25).mul(0.5).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // punchcard XP
+                    amt.mul(player.bum.starlight.pow(amt.mul(0.25).add(1)).add(1).log(10).div(10).pow(0.4).pow_base(10)).pow(0.4).pow(Decimal.pow(1.25, getLevelableTier(this.layer, this.id))).add(1), // stored space energy and time capsules (Based on starlight)
+                    amt.pow(0.75).mul(0.25).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // helixes
+                ]
+            },
+            sellValue() { return new Decimal(10000)},
+            // CLICK CODE
+            unlocked() { return hasUpgrade("ir", 16) },
+            canClick() { return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
+            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.add(1).pow(1.4).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#0B6623"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#eed200" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            } 
+        },
         // START OF EVOLVED PETS
         1101: {
             image() { return this.canClick() ? "resources/Pets/voidGwaEvoPet.png" : "resources/secret.png"},
@@ -4653,6 +4734,10 @@ addLayer("pet", {
                 player.pet.levelables[502][1] = player.pet.levelables[502][1].add(1)
                 doPopup("none", "Geroa gets enhancements", "Pet Obtained!", 5, "#eed200", "resources/Pets/geroaLegendaryPet.png")
             }
+            if (player.pet.summonIndex.eq(3)) {
+                player.pet.levelables[504][1] = player.pet.levelables[504][1].add(1)
+                doPopup("none", "Reece is enlightened", "Pet Obtained!", 5, "#eed200", "resources/Pets/reeceLegendaryPet.png")
+            }
             player.pet.eclipsePity = 0
             return
         }
@@ -4718,6 +4803,10 @@ addLayer("pet", {
             if (player.pet.summonIndex.eq(1)) {
                 player.pet.levelables[502][1] = player.pet.levelables[502][1].add(1)
                 doPopup("none", "Geroa gets enhancements", "Pet Obtained!", 5, "#eed200", "resources/Pets/geroaLegendaryPet.png")
+            }
+            if (player.pet.summonIndex.eq(3)) {
+                player.pet.levelables[504][1] = player.pet.levelables[504][1].add(1)
+                doPopup("none", "Reece is enlightened", "Pet Obtained!", 5, "#eed200", "resources/Pets/reeceLegendaryPet.png")
             }
             player.pet.eclipsePity = 0
         }
@@ -5036,7 +5125,7 @@ addLayer("pet", {
                                 ["raw-html", "Legendary", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
                             ], () => { return player.cb.highestLevel.gte(100000) ? {width: "629px", height: "40px", backgroundColor: "#eed200", border: "2px solid #0000007f", userSelect: "none"} : {display: "none !important"}}],
                             ["style-column", [
-                                ["row", [["levelable", 501], ["levelable", 502]]],
+                                ["row", [["levelable", 501], ["levelable", 502], ["levelable", 503], ["levelable", 504]]],
                             ], () => { return player.cb.highestLevel.gte(100000) ? {width: "630px", background: "repeating-linear-gradient(-45deg, #776900 0 15px, #958300 0 30px)", padding: "2px"} : {display: "none !important"}}],
 
                         ], {width: "650px", height: "522px"}],
@@ -5300,7 +5389,7 @@ addLayer("pet", {
                             ["blank", "10px"],
                             ["raw-html", "Select a pet to summon:", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ["blank", "5px"],
-                            ["row", [["clickable", 301], ["clickable", 302]]],
+                            ["row", [["clickable", 301], ["clickable", 302], ["clickable", 303], ["clickable", 304]]],
                         ], () => {return player.cb.highestLevel.gte(100000) ? {width: "600px", border: "3px solid #bf3000", background: "linear-gradient(0deg, #1a060000 -100%, #1a0600 100%)", padding: "10px", borderRadius: "15px"} : {display: "none !important"}}],
                         ["blank", "20px"],
                     ], {width: "650px", height: "700px", background: "repeating-linear-gradient(-45deg, #eed200 0 15px, #edbe00 0 30px)"}],
@@ -5434,6 +5523,8 @@ addLayer("pet", {
                                             return "(" + player.pet.levelables[501][1] + "/" + tmp.pet.levelables[501].xpReq + ")"
                                         case 8:
                                             return "(" + player.pet.levelables[502][1] + "/" + tmp.pet.levelables[502].xpReq + ")"
+                                        case 10:
+                                            return "(" + player.pet.levelables[504][1] + "/" + tmp.pet.levelables[504].xpReq + ")"
                                         default:
                                             return ""
                                     }
@@ -5467,8 +5558,8 @@ addLayer("pet", {
                         ], {height: "75px", borderBottom: "2px solid #190c1e"}],
                         ["style-row", [
                             ["style-row", [["hoverless-clickable", 138]], {width: "75px", height: "75px", borderLeft: "1px solid #190c1e", borderRight: "1px solid #190c1e"}],
-                            ["style-row", [["hoverless-clickable", 139]], {width: "75px", height: "75px", borderRight: "1px solid #190c1e"}],
-                            ["style-row", [], {width: "75px", height: "75px", borderRight: "1px solid #190c1e"}],
+                            ["style-row", [["hoverless-clickable", 139]], {width: "75px", height: "75px", borderLeft: "1px solid #190c1e", borderRight: "1px solid #190c1e"}],
+                            ["style-row", [["hoverless-clickable", 141]], {width: "75px", height: "75px", borderRight: "1px solid #190c1e"}],
                             ["style-row", [], {width: "75px", height: "75px", borderRight: "1px solid #190c1e"}],
                             ["style-row", [], {width: "75px", height: "75px", borderRight: "1px solid #190c1e"}],
                             ["style-row", [], {width: "75px", height: "75px", borderRight: "1px solid #190c1e"}],

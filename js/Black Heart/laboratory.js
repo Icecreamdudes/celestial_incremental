@@ -13,6 +13,7 @@ addLayer("laboratory", {
         matosDust: new Decimal(0),
         matosShard: new Decimal(0),
         matosFragment: new Decimal(0),
+        // Essence?
     }},
     automate() {},
     nodeStyle() {
@@ -64,8 +65,8 @@ addLayer("laboratory", {
             ["style-column", [
                 ["style-column", [
                     ["raw-html", () => {return "You have " + formatShortWhole(player.laboratory.matosDust) + " Matos Dust."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return "You have " + formatShortWhole(player.laboratory.matosShard) + " Matos Shard."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return "You have " + formatShortWhole(player.laboratory.matosFragment) + " Matos Fragment."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "You have " + formatShortWhole(player.laboratory.matosShard) + " Matos Shards."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "You have " + formatShortWhole(player.laboratory.matosFragment) + " Matos Fragments."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
                 ], {width: "547px", height: "72px", background: "var(--miscButtonHover)", borderBottom: "3px solid var(--regBorder)"}],
                 ["theme-scroll-column", [
                     ["blank", "2px"],
@@ -85,7 +86,15 @@ addLayer("laboratory", {
                     ["clickable", "enter"],
                 ], {width: "250px", height: "147px", background: "var(--miscButtonDisable)", borderBottom: "3px solid var(--regBorder)"}],
                 ["top-column", [
-
+                    ["blank", "10px"],
+                    ["style-column", [
+                        ["raw-html", "Properties", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
+                    ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "10px"}],
+                    ["raw-html", () => {return Decimal.sub(2, player.bh.comboScalingReduction).gt(1) ? "<u>Combo Scaling" : ""}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return Decimal.sub(2, player.bh.comboScalingReduction).gt(1) ? formatSimple(Decimal.sub(2, player.bh.comboScalingReduction).max(1).sub(1).mul(100)) + "%" : ""}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                    ["blank", "5px"],
+                    ["raw-html", "<u>Timed", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return formatTime(BHS.laboratory.timer())}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
                 ], {width: "250px", height: "197px", background: "var(--layerBackground)"}],
                 ["style-row", [
                     ["layer-proxy", ["bh", [
@@ -104,7 +113,7 @@ BHS.laboratory = {
     music: "music/depth4.mp3",
     comboLimit: Infinity,
     comboScaling: 2,
-    comboScalingStart: 1,
+    comboScalingStart: 0,
     respawnTime: new Decimal(0),
     timer() {return new Decimal(120).mul(levelableEffect("pet", 503)[3])},
     generateCelestialite(combo) {

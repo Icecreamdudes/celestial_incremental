@@ -3832,7 +3832,7 @@ addLayer("pet", {
         503: {
             image() { return this.canClick() ? "resources/Pets/legendarybg.png" : "resources/secret.png"},
             title() { return "Vespasian" },
-            lore() { return "<h6>Originally a secret weapon of Matos, it has now been further modified and combined with a wasp to create a fierce killing machine. Fortunately, Aleph accidentally gave it free will, so it isn't particularly interested in her goals." }, 
+            lore() { return "<h5>Originally a secret weapon of Matos, it has now been further modified and combined with a wasp to create a fierce killing machine. Fortunately, Aleph accidentally gave it free will, so it isn't particularly interested in her goals." }, 
             description() {
                 return "x" + format(this.effect()[0]) + " to pre aleph resources.<br>" +
                     "x" + format(this.effect()[1]) + " to aleph resources.<br>" +

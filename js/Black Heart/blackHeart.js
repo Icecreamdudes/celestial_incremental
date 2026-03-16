@@ -636,14 +636,14 @@ addLayer("bh", {
         if (BHS[player.bh.currentStage].respawnTime) player.bh.respawnMax = BHS[player.bh.currentStage].respawnTime
 
         if (BHS[player.bh.currentStage].timer || BHC[player.bh.celestialite.id].timer) {
-            player.bh.timer = player.bh.timer.add(normTime)
-            if (BHS[player.bh.currentStage].timer && player.bh.timer.gte(BHS[player.bh.currentStage].timer)) {
+            if (unpaused && !BHS[player.bh.currentStage].timeStagnation) player.bh.timer = player.bh.timer.add(normTime)
+            if (BHS[player.bh.currentStage].timer && player.bh.timer.gte(run(BHS[player.bh.currentStage].timer, BHS[player.bh.currentStage]))) {
                 for (let i = 0; i < 3; i++) {
                     player.bh.characters[i].health = new Decimal(-Infinity)
                 }
                 player.bh.timer = new Decimal(0)
             }
-            if (BHC[player.bh.celestialite.id].timer && player.bh.timer.gte(BHC[player.bh.celestialite.id].timer)) {
+            if (BHC[player.bh.celestialite.id].timer && player.bh.timer.gte(run(BHC[player.bh.celestialite.id].timer, BHC[player.bh.celestialite.id]))) {
                 for (let i = 0; i < 3; i++) {
                     player.bh.characters[i].health = new Decimal(-Infinity)
                 }
@@ -662,7 +662,7 @@ addLayer("bh", {
         player.bh.comboScaling = Math.max(player.bh.comboScaling - player.bh.comboScalingReduction , 1)
 
         player.bh.comboScalingStart = new Decimal(Infinity)
-        if (BHS[player.bh.currentStage].comboScalingStart) player.bh.comboScalingStart = BHS[player.bh.currentStage].comboScalingStart
+        if ("comboScalingStart" in BHS[player.bh.currentStage]) player.bh.comboScalingStart = BHS[player.bh.currentStage].comboScalingStart
 
         player.bh.comboSoftcap = new Decimal(1)
         if (player.bh.combo.gte(player.bh.comboScalingStart)) player.bh.comboSoftcap = Decimal.pow(player.bh.comboScaling, player.bh.combo.sub(player.bh.comboScalingStart))
@@ -2745,19 +2745,19 @@ addLayer("bh", {
                 return BHS[player.bh.currentStage].timer || BHC[player.bh.celestialite.id].timer
             },
             direction: RIGHT,
-            width: 500,
-            height: 50,
+            width: 600,
+            height: 40,
             progress() {
-                if (BHS[player.bh.currentStage].timer) player.bh.timer.div(BHS[player.bh.currentStage].timer)
-                if (BHC[player.bh.celestialite.id].timer) player.bh.timer.div(BHC[player.bh.celestialite.id].timer)
+                if (BHS[player.bh.currentStage].timer) return player.bh.timer.div(run(BHS[player.bh.currentStage].timer, BHS[player.bh.currentStage]))
+                if (BHC[player.bh.celestialite.id].timer) return player.bh.timer.div(run(BHC[player.bh.celestialite.id].timer, BHC[player.bh.celestialite.id]))
             },
-            borderStyle: {border: "2px solid white", borderRadius: "15px", marginBottom: "10px"},
+            borderStyle: {border: "2px solid white", borderRadius: "15px"},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle: {background: "#8a0e79"},
             textStyle: {userSelect: "none", lineHeight: "1"},
             display() {
-                if (BHS[player.bh.currentStage].timer) formatTime(player.bh.timer) + " / " + formatTime(BHS[player.bh.currentStage].timer)
-                if (BHC[player.bh.celestialite.id].timer) formatTime(player.bh.timer) + " / " + formatTime(BHC[player.bh.celestialite.id].timer)
+                if (BHS[player.bh.currentStage].timer) return formatTime(player.bh.timer) + " / " + formatTime(run(BHS[player.bh.currentStage].timer, BHS[player.bh.currentStage]))
+                if (BHC[player.bh.celestialite.id].timer) return formatTime(player.bh.timer) + " / " + formatTime(run(BHC[player.bh.celestialite.id].timer, BHC[player.bh.celestialite.id]))
             },
         },
         "celestialite-Health": {
@@ -4262,7 +4262,7 @@ addLayer("bh", {
                             ["style-column", [
                                 ["raw-html", () => {return BHC[player.bh.celestialite.id].name}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                                 ["raw-html", () => {
-                                    if (player.bh.currentStage == "none") {
+                                    if (player.bh.currentStage == "none" || BHS[player.bh.currentStage].comboLimit >= Infinity) {
                                         return "Kill Combo: " + formatShortestWhole(player.bh.combo)
                                     } else if (player.bh.combo.gte(player[player.bh.currentStage].highestCombo)) {
                                         return "Kill Combo: " + formatShortestWhole(player.bh.combo) + "/" + BHS[player.bh.currentStage].comboLimit

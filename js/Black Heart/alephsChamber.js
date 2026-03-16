@@ -652,8 +652,8 @@ BHC.aleph = {
                 return "Slash"
             },
             instant: true,
-            constantType: "function",
-            constantTarget: "randomPlayer",
+            type: "function",
+            target: "randomPlayer",
             onTrigger(index, slot, target) {
                 if (!player.bh.celestialite.actions[0].variables.attacks) player.bh.celestialite.actions[0].variables.attacks = 0
                 switch (player.bh.celestialite.actions[0].variables.attacks) {
@@ -694,7 +694,7 @@ BHC.aleph = {
             target: "celestialite",
             value: new Decimal(3),
             cooldown: new Decimal(12),
-            stun: ["soft", new Decimal(1), 1],
+            stun: ["soft", new Decimal(1), 3],
 
             active: true,
             constantType: "effect",
@@ -749,6 +749,7 @@ BHC.aleph = {
                     player.bh.celestialite.actions[3].variables.attacks += 1
                 }
             },
+            cooldown: new Decimal(Infinity),
         },
     },
     reward() {

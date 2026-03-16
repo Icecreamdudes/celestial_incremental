@@ -86,6 +86,7 @@
         player.cp.replicantiPointsTimerReq = player.cp.replicantiPointsTimerReq.div(buyableEffect("pr", 12))
         if (hasUpgrade("fu", 103)) player.cp.replicantiPointsTimerReq = player.cp.replicantiPointsTimerReq.div(upgradeEffect("fu", 103))
         if (hasUpgrade("fu", 111)) player.cp.replicantiPointsTimerReq = player.cp.replicantiPointsTimerReq.div(2)
+        player.cp.replicantiPointsTimerReq = player.cp.replicantiPointsTimerReq.div(player.en.enhancePointsEffect)
 
         player.cp.replicantiSoftcapStart = new Decimal(1000)
         player.cp.replicantiSoftcapStart = player.cp.replicantiSoftcapStart.mul(buyableEffect("pr", 15))
@@ -107,6 +108,7 @@
             player.cp.replicantiSoftcapEffect = player.cp.replicantiSoftcapEffect.div(buyableEffect("fu", 22))
             player.cp.replicantiSoftcapEffect = player.cp.replicantiSoftcapEffect.div(buyableEffect("fu", 66))
             if (inChallenge("fu", 11)) player.cp.replicantiSoftcapEffect = player.cp.replicantiSoftcapEffect.pow(2)
+            if (hasUpgrade("en", 13)) player.cp.replicantiSoftcapEffect = player.cp.replicantiSoftcapEffect.pow(0.01)
         } else {
             player.cp.replicantiSoftcapEffect = player.cp.replicantiSoftcapEffect.max(1)
         }
@@ -163,6 +165,8 @@
 
         if (inChallenge("fu", 12) && multAdd.gte(1)) multAdd = multAdd.pow(Decimal.mul(0.2, buyableEffect("fu", 88)))
 
+        multAdd = multAdd.mul(player.en.enhancersEffect[0])
+
         player.cp.replicantiPointsMult = multAdd.add(1)
 
         if (player.ca.cantepocalypseUnlock) player.cp.replicantiPointsTimer = player.cp.replicantiPointsTimer.add(onepersec.mul(delta))
@@ -174,6 +178,7 @@
         //cap
         player.cp.replicantiPointCap = new Decimal(1.79e308)
         if (!inChallenge("fu", 12)) player.cp.replicantiPointCap = player.cp.replicantiPointCap.pow(buyableEffect("cof", 11))
+        player.cp.replicantiPointCap = player.cp.replicantiPointCap.pow(player.en.enhancersEffect[1])
     },
     replicantiPointMultiply() {
         if (player.cp.replicantiPoints.gte(player.cp.replicantiPointCap)) {

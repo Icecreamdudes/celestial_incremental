@@ -10,7 +10,7 @@
         evolutionDisplayIndex: new Decimal(-1),
         evolutionsUnlocked: [false, false, false, false, false,
             false, false, false, false, false,
-            false, false, false],
+            false, false, false, false],
         /*
         0 - Unsmith
         1 - Shark
@@ -25,6 +25,7 @@
         10 - Eye
         11 - Blob
         12 - Egg Man
+        13 - Enhance Dust
         */
     }},
     nodeStyle() {},
@@ -218,6 +219,17 @@
             tooltip() { return "██████ more ███ █████████,<br>███ ████ passive ██████" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(104)
+            },
+            style: { width: "100px", minHeight: "100px", border: "5px solid #16364a", borderRadius: "0px", padding: "0px" },
+        },
+
+        301: {
+            title() { return "<img src='resources/Pets/enhanceDustEvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
+            canClick() { return true},
+            unlocked() { return tmp.pet.levelables[109].canClick && player.d.diceSpaceUnlocked && false},
+            tooltip() { return "███████ ███████ ██████ in Alt-Universe 1." },
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(201)
             },
             style: { width: "100px", minHeight: "100px", border: "5px solid #16364a", borderRadius: "0px", padding: "0px" },
         },
@@ -731,6 +743,36 @@
                 setLevelableAmount("pet", 2004, new Decimal(1))
             }
         },
+
+        201: {
+            title() { return "Enhance Dust" },
+            description() {
+                return "<div class='evoContainer'><h3>Costs:</h3>" +
+                "<br>"  + formatWhole(player.cb.evolutionShards) + "/2,500 Evolution Shards" +
+                "<br>"  + formatWhole(player.cb.paragonShards) + "/250 Paragon Shards" +
+                "<br>"  + formatWhole(player.cbs.ascensionShards) + "/3 Shards of Ascension" +
+                "</div>" +
+                "<div class='evoContainer'><h3>Requires:</h3>" +
+                "<br>"  + formatWhole(getLevelableTier("pet", 109)) + "/3 Smoke Ascensions" +
+                "<br>"  + formatWhole(player.pu.levelables[401][0]) + "/10 Blood Punchcard Levels" +
+                "<br>"  + formatWhole(player.al.royalJelly) + "/1e25 Royal Jelly" +
+                "<br>"  + formatWhole(player.al.honeycomb) + "/1e25 Honeycombs" +
+                "</div>"
+            },
+            canClick() {
+                return (player.cb.evolutionShards.gte(2500) && player.cb.paragonShards.gte(250) && player.cbs.ascensionShards.gte(3) && player.al.royalJelly.gte(1e25) && player.al.honeycomb.gte(1e25) && getLevelableTier("pet", 109).gte(3) && player.pu.levelables[401][0].gte(10))
+            },
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(-1)
+
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(2500)
+                player.cb.paragonShards = player.cb.paragonShards.sub(250)
+                player.cbs.ascensionShards = player.cbs.ascensionShards.sub(3)
+
+                player.ev.evolutionsUnlocked[12] = true
+                setLevelableAmount("pet", 1102, new Decimal(1))
+            }
+        },
     },
     bars: {
         pityEvoBar: {
@@ -801,7 +843,9 @@
                         ["bt-clickable", 105], ["bt-clickable", 107], ["bt-clickable", 108], ["bt-clickable", 109], ["bt-clickable", 110],
                         ["bt-clickable", 106], ["bt-clickable", 111], ["bt-clickable", 112],
 
-                        ["bt-clickable", 201], ["bt-clickable", 202], ["bt-clickable", 203], ["bt-clickable", 204]
+                        ["bt-clickable", 201], ["bt-clickable", 202], ["bt-clickable", 203], ["bt-clickable", 204],
+
+                        ["bt-clickable", 301]
                     ]],
                 ], {width: "620px", background: "rgba(0,0,0,0.4)", paddingBottom: "10px", borderRadius: "15px"}],
                 ["blank", "5px"],

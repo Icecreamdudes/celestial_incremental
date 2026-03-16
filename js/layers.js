@@ -25,7 +25,8 @@
 
         pylonTier: new Decimal(1),
         pylonTierEffect: new Decimal(1),
-        doomSoftcapStart: new Decimal("1e1000000"),
+        
+        doomSoftcapStart: new Decimal("1e2000000"),
     }
     },
     automate() {
@@ -180,13 +181,19 @@
         player.i.doomSoftcap = new Decimal(0.5)
 
         // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
-        player.i.doomSoftcap = player.i.doomSoftcap.div(player.points.div(player.i.doomSoftcapStart).add(1).log(player.i.doomSoftcapStart).add(1))
+        let amt = player.points
+        if (player.gain.gte(player.points)) amt = player.gain
+        player.i.doomSoftcap = player.i.doomSoftcap.div(amt.div(player.i.doomSoftcapStart).add(1).log(player.i.doomSoftcapStart).add(1))
 
         // SOFTCAP OF DOOM START
         player.i.doomSoftcapStart = new Decimal("1e2000000")
 
         // APPLY DOOM SOFTCAP
-        if (player.gain.gt(player.i.doomSoftcapStart)) player.gain = player.gain.div(player.i.doomSoftcapStart).pow(player.i.doomSoftcap).mul(player.i.doomSoftcapStart)
+        if (player.gain.gt(player.i.doomSoftcapStart)) 
+        {
+            player.gain = player.gain.div(player.i.doomSoftcapStart).pow(player.i.doomSoftcap).mul(player.i.doomSoftcapStart)
+            player.points = player.gain //random solution that will change
+        }
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.r.timeReversed) {

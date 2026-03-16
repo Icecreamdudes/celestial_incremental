@@ -605,5 +605,5 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true } //ascension pet requirement
+    layerShown() { return player.startedGame == true && false} //ascension pet requirement
 })

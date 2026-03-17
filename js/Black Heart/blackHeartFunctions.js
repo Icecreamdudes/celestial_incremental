@@ -627,6 +627,26 @@ function celestialiteReward(gain) {
         player.depth4.dimNocturnium = player.depth4.dimNocturnium.add(gain.dimNocturnium)
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.dimNocturnium) + " dim nocturnium! (You have " + formatWhole(player.depth4.dimNocturnium) + ")")
     }
+    if (gain.matosDust) {
+        gain.matosDust = gain.matosDust.mul(player.laboratory.matosMult).mul(generalMult).floor()
+        player.laboratory.matosDust = player.laboratory.matosDust.add(gain.matosDust)
+        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.matosDust) + " matos dust! (You have " + formatWhole(player.laboratory.matosDust) + ")")
+    }
+    if (gain.matosShard) {
+        gain.matosDust = gain.matosShard.mul(player.laboratory.matosMult).mul(generalMult).floor()
+        player.laboratory.matosShard = player.laboratory.matosShard.add(gain.matosShard)
+        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.matosShard) + " matos shards! (You have " + formatWhole(player.laboratory.matosShard) + ")")
+    }
+    if (gain.matosFragment) {
+        gain.matosFragment = gain.matosFragment.mul(player.laboratory.matosMult).mul(generalMult).floor()
+        player.laboratory.matosFragment = player.laboratory.matosFragment.add(gain.matosFragment)
+        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.matosFragment) + " matos dust! (You have " + formatWhole(player.laboratory.matosFragment) + ")")
+    }
+    if (gain.matosEssence) {
+        gain.matosEssence = gain.matosEssence.mul(player.laboratory.matosMult).mul(generalMult).floor()
+        player.laboratory.matosEssence = player.laboratory.matosEssence.add(gain.matosEssence)
+        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.matosEssence) + " matos dust! (You have " + formatWhole(player.laboratory.matosEssence) + ")")
+    }
 }
 
 function celestialiteDeath() {

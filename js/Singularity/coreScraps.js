@@ -827,9 +827,9 @@
             currencyDisplayName: "Code Core Scraps",
             currencyInternalName: "amount",
             effect() {
-                return Decimal.div(1, player.m.linesOfCode.add(1).log(1e100000).div(10).add(1))
+                return Decimal.div(1, player.m.linesOfCode.add(1).log("1e100000").div(10).add(1))
             },
-            effectDisplay() { return "^"+formatSimple(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            effectDisplay() { return "^"+format(upgradeEffect(this.layer, this.id), 4) }, // Add formatting to the effect
             style() {
                 let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}

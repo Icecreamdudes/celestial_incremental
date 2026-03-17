@@ -582,6 +582,7 @@ addLayer("pet", {
         for (let thing in player.pet.banners) {
             player.pet.banners[thing].max = player.pet.banners[thing].max.div(buyableEffect("sp", 15))
             player.pet.banners[thing].max = player.pet.banners[thing].max.div(levelableEffect("pet", 210)[0])
+            if (hasUpgrade("cs", 1204)) player.pet.banners[thing].max = player.pet.banners[thing].max.div(1.2)
 
             player.pet.banners[thing].current = player.pet.banners[thing].current.sub(onepersec.mul(delta))
         }

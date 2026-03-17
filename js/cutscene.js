@@ -2347,12 +2347,12 @@
                 { text: "Another celestial has been defeated, and many more are waiting." },
             ],
         },
-        "CB-Fighting-Intro": {
+        "BH-Stagnant-Synestia-Intro": {
             type: "normal",
             background: "#260300",
             portrait: "resources/secret.png",
             music: "music/marcel.mp3",
-            trigger() {return player.sme.starmetalEssence.gte(1) && player.matosLair.milestone[25] > 0},
+            trigger() {return hasUpgrade("ev8", 24)},
             dialogue: [
                 { text: "Marcel visits you." },
                 { text: "Looks like you've defeated Matos. I'm pretty sure you want to refine your skills with superphysical combat.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
@@ -2360,9 +2360,9 @@
                 { text: "Before we engage on a 1v1 training match, you should master your skills at using superphysical values to control others.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
                 { text: "I have simulated a way for you to fight temporal celestialites. Once you get good enough, I'll teach you how to use your own strength to fight.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
                 { text: "So how would I fight these temporal celestialites?", portrait: "resources/player.png"  },
-                { text: "Through the pets, of course.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
-                { text: "You can use the power of starmetal essence to train the pets into superphysical fighters.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
-                { text: "After that, only time will make them stronger.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+                { text: "I have opened up a rift in the black heart to the temporal chasm. In there you will be able to practice defending yourself.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+                { text: "The first location there is called the stagnant synestia, an area where time hasn't moved in centuries.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+                { text: "It should allow you to thoroughly think about battle strategies.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
             ],
         },
         "A2-1st-Rocket-Upgrade": {

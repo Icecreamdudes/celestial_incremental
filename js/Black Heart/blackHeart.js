@@ -969,33 +969,33 @@ addLayer("bh", {
             
         player.bh.celestialite.maxHealth = BHC[player.bh.celestialite.id].health ?? new Decimal(0)
         player.bh.celestialite.maxHealth = player.bh.celestialite.maxHealth.mul(player.bh.celestialite.randomMult)
+        player.bh.celestialite.maxHealth = player.bh.celestialite.maxHealth.mul(scale)
         player.bh.celestialite.maxHealth = player.bh.celestialite.maxHealth.add(bhTemp[3].healthAdd)
         player.bh.celestialite.maxHealth = player.bh.celestialite.maxHealth.mul(bhTemp[3].healthMult)
-        player.bh.celestialite.maxHealth = player.bh.celestialite.maxHealth.mul(scale)
 
         player.bh.celestialite.damage = BHC[player.bh.celestialite.id].damage ?? new Decimal(0)
         player.bh.celestialite.damage = player.bh.celestialite.damage.mul(player.bh.celestialite.randomMult)
+        player.bh.celestialite.damage = player.bh.celestialite.damage.mul(scale)
         player.bh.celestialite.damage = player.bh.celestialite.damage.add(bhTemp[3].damageAdd)
         player.bh.celestialite.damage = player.bh.celestialite.damage.mul(bhTemp[3].damageMult)
-        player.bh.celestialite.damage = player.bh.celestialite.damage.mul(scale)
 
         player.bh.celestialite.defense = BHC[player.bh.celestialite.id].defense ?? new Decimal(0)
         player.bh.celestialite.defense = player.bh.celestialite.defense.mul(player.bh.celestialite.randomMult)
+        player.bh.celestialite.defense = player.bh.celestialite.defense.mul(scale)
         player.bh.celestialite.defense = player.bh.celestialite.defense.add(bhTemp[3].defenseAdd)
         player.bh.celestialite.defense = player.bh.celestialite.defense.mul(bhTemp[3].defenseMult)
-        player.bh.celestialite.defense = player.bh.celestialite.defense.mul(scale)
 
         player.bh.celestialite.regen = BHC[player.bh.celestialite.id].regen ?? new Decimal(0)
         player.bh.celestialite.regen = player.bh.celestialite.regen.mul(player.bh.celestialite.randomMult)
+        player.bh.celestialite.regen = player.bh.celestialite.regen.mul(scale)
         player.bh.celestialite.regen = player.bh.celestialite.regen.add(bhTemp[3].regenAdd)
         player.bh.celestialite.regen = player.bh.celestialite.regen.mul(bhTemp[3].regenMult)
-        player.bh.celestialite.regen = player.bh.celestialite.regen.mul(scale)
 
         player.bh.celestialite.agility = BHC[player.bh.celestialite.id].agility ?? new Decimal(0)
         player.bh.celestialite.agility = player.bh.celestialite.agility.mul(player.bh.celestialite.randomMult)
+        player.bh.celestialite.agility = player.bh.celestialite.agility.mul(scale)
         player.bh.celestialite.agility = player.bh.celestialite.agility.add(bhTemp[3].agilityAdd)
         player.bh.celestialite.agility = player.bh.celestialite.agility.mul(bhTemp[3].agilityMult)
-        player.bh.celestialite.agility = player.bh.celestialite.agility.mul(scale)
 
         player.bh.celestialite.curMult = BHC[player.bh.celestialite.id].curMult ?? new Decimal(1)
         player.bh.celestialite.curMult = player.bh.celestialite.curMult.add(bhTemp[3].curMult)

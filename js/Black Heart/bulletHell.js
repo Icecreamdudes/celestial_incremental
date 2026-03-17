@@ -1819,3 +1819,9 @@ BHB.bouncingIcon = {
         return info
     },
 }
+
+// Zig-zag movement attack
+
+// Bees spawn randomly outside of the arena and fire towards the player
+
+// A wave of bees on the top and bottom of the screen, requiring you to move up and down

@@ -375,7 +375,7 @@ BHA.nav_soulShred = {
             let damage = char.damage.mul(Decimal.sub(-0.2, player.bh.skillData["nav_soulShred"].level.mul(0.04)))
             damage = damage.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.defense)))
             return damage
-        }, // Multiplicative Effect
+        },
     },
     duration: new Decimal(10),
     cooldown: new Decimal(Infinity),
@@ -740,3 +740,9 @@ BHA.geroa_defenseSatellites = {
     interval: new Decimal(3),
     cooldown: new Decimal(Infinity),
 }
+
+// Vespasian Skills
+
+// A Poison multi-hit skill
+
+// A skill that increases the teams regen stat (like motivation, the total is square rooted)

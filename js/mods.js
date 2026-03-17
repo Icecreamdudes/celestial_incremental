@@ -152,6 +152,7 @@
         player.m.modsReq = player.m.mods.pow(1.45).add(100)
         player.m.modsReq = player.m.modsReq.div(levelableEffect("pet", 203)[1])
         if (hasUpgrade("cs", 702)) player.m.modsReq = player.m.modsReq.pow(5)
+        if (hasUpgrade("cs", 704)) player.m.modsReq = player.m.modsReq.pow(upgradeEffect("cs", 704))
 
         // MOD GAIN CODE
         if (player.m.linesOfCode.gte(player.m.modsReq)) {

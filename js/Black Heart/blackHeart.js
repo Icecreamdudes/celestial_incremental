@@ -128,6 +128,10 @@ BH_CURRENCY = {
     "temporalShard": ["Temporal Shards", "stagnantSynestia"],
     "gloomingNocturnium": ["Glooming Nocturnium", "depth4"],
     "dimNocturnium": ["Dim Nocturnium", "depth4"],
+    "matosDust": ["Matos Dust", "laboratory"],
+    "matosShard": ["Matos Shards", "laboratory"],
+    "matosFragment": ["Matos Fragments", "laboratory"],
+    "matosEssence": ["Matos Essence", "laboratory"],
 }
 
 // Celestialite who has there explosion value equal to their max health, and an action that constantly reduces their max health called defuse (FOR LAB)
@@ -452,6 +456,23 @@ addLayer("bh", {
                 luck: new Decimal(0),
                 mending: new Decimal(0),
             },
+            "vespasian": {
+                selected: false,
+                skills: {
+                    0: "vespasian_poisonStinger",
+                    1: "none",
+                    2: "none",
+                    3: "none",
+                },
+                usedSP: new Decimal(0),
+                health: new Decimal(100),
+                damage: new Decimal(6),
+                defense: new Decimal(10),
+                regen: new Decimal(0.25),
+                agility: new Decimal(5),
+                luck: new Decimal(0),
+                mending: new Decimal(5),
+            },
         },
 
         // Saved Skill Stats
@@ -498,6 +519,9 @@ addLayer("bh", {
             "geroa_cosmicRay": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "geroa_orbitalCannon": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "geroa_defenseSatellites": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+
+            // VESPASIAN
+            "vespasian_poisonStinger": {selected: ["vespasian", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
         },
 
         //Stagnant Timer
@@ -1083,6 +1107,7 @@ addLayer("bh", {
         agilityAdd = agilityAdd.add(player.bh.skillData["sel_energyBoost"].maxLevel.div(2))
         agilityAdd = agilityAdd.add(player.bh.skillData["eclipse_syzygy"].maxLevel.div(2))
         agilityAdd = agilityAdd.add(player.bh.skillData["geroa_radioactiveMissile"].maxLevel.div(2))
+        agilityAdd = agilityAdd.add(player.bh.skillData["vespasian_poisonStinger"].maxLevel.div(2))
         agilityAdd = agilityAdd.add(buyableEffect("sme", 133))
 
         // =-- DEFENSE STUFF --= //
@@ -2192,19 +2217,19 @@ addLayer("bh", {
         },
         "Celestialite-Icon": {
             title() {
-                if (BHC[player.bh.celestialite.id].icon) {
-                    return "<img src='" + BHC[player.bh.celestialite.id].icon + "'style='width:149px;height:149px;margin-left:-1.5px;margin-bottom:-6px'></img>"
+                if (run(BHC[player.bh.celestialite.id].icon, BHC[player.bh.celestialite.id])) {
+                    return "<img src='" + run(BHC[player.bh.celestialite.id].icon, BHC[player.bh.celestialite.id]) + "'style='width:149px;height:149px;margin-left:-1.5px;margin-bottom:-6px'></img>"
                 } else {
-                    return BHC[player.bh.celestialite.id].symbol
+                    return run(BHC[player.bh.celestialite.id].symbol, BHC[player.bh.celestialite.id])
                 }
             },
             canClick: false,
             unlocked: true,
             onClick() {},
             style() {
-                if (BHC[player.bh.celestialite.id].icon) return {width: "150px", minHeight: "150px", color: "white", backgroundColor: "transparent", margin: "10px", padding: "0", cursor: "default", userSelect: "none"}
+                if (run(BHC[player.bh.celestialite.id].icon, BHC[player.bh.celestialite.id])) return {width: "150px", minHeight: "150px", color: "white", backgroundColor: "transparent", margin: "10px", padding: "0", cursor: "default", userSelect: "none"}
                 let look = {width: "150px", minHeight: "150px", color: "white", fontSize: "75px", backgroundColor: "transparent", border: "6px solid", padding: "0", borderRadius: "0", cursor: "default", userSelect: "none"}
-                if (BHC[player.bh.celestialite.id].style) look = Object.assign({}, look, BHC[player.bh.celestialite.id].style)
+                if (run(BHC[player.bh.celestialite.id].style, BHC[player.bh.celestialite.id])) look = Object.assign({}, look, run(BHC[player.bh.celestialite.id].style, BHC[player.bh.celestialite.id]))
                 return look
             },
         },
@@ -2577,6 +2602,19 @@ addLayer("bh", {
             style() {
                 let look = {width: "90px", minHeight: "90px", color: "white", background: "transparent", padding: "0", borderRadius: "0", margin: "2px"}
                 if (player.bh.characterData.geroa.selected) look.filter = "brightness(50%)"
+                return look
+            },
+        },
+        "Char-Vespasian": {
+            title() {return "<img src='" + run(BHP["vespasian"].icon, BHP["vespasian"]) + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
+            canClick: true,
+            unlocked() {return getLevelableAmount("pet", 503).gt(0)},
+            onClick() {
+                player.bh.characterSelection = "vespasian"
+            },
+            style() {
+                let look = {width: "90px", minHeight: "90px", color: "white", background: "transparent", padding: "0", borderRadius: "0", margin: "2px"}
+                if (player.bh.characterData.vespasian.selected) look.filter = "brightness(50%)"
                 return look
             },
         },
@@ -3747,7 +3785,7 @@ addLayer("bh", {
                         ["theme-scroll-column", [
                             ["blank", "2px"],
                             ["row", [
-                                ["clickable", "Char-Kres"], ["clickable", "Char-Nav"], ["clickable", "Char-Sel"], ["clickable", "Char-Eclipse"], ["clickable", "Char-Geroa"],
+                                ["clickable", "Char-Kres"], ["clickable", "Char-Nav"], ["clickable", "Char-Sel"], ["clickable", "Char-Eclipse"], ["clickable", "Char-Geroa"], ["clickable", "Char-Vespasian"]
                             ]],
                         ], {width: "497px", height: "480px"}],
                     ], {width: "497px", height: "677px"}],
@@ -4260,7 +4298,7 @@ addLayer("bh", {
                         ["blank", ["50px", "50px"]],
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", () => {return BHC[player.bh.celestialite.id].name}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return run(BHC[player.bh.celestialite.id].name, BHC[player.bh.celestialite.id])}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                                 ["raw-html", () => {
                                     if (player.bh.currentStage == "none" || BHS[player.bh.currentStage].comboLimit >= Infinity) {
                                         return "Kill Combo: " + formatShortestWhole(player.bh.combo)

@@ -478,7 +478,7 @@
             style: { width: '400px', height: '50px', borderRadius: '10px 0px 0px 10px'}
         },
         2: {
-            purchaseLimit() { return !hasChallenge("ip", 18) ? new Decimal(6) : new Decimal(160) },
+            purchaseLimit() { return !hasChallenge("ip", 18) ? new Decimal(6) : !hasUpgrade("cs", 1004) ? new Decimal(160) : new Decimal(1280) },
             currency() {
                 if (getBuyableAmount(this.layer, this.id).eq(0)) {
                     return player.ad.dimensionAmounts[3]

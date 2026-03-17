@@ -1150,6 +1150,37 @@ addLayer("hpw", {
             },
             style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "10px"},
         },
+        7: {
+            costBase() { return new Decimal(1e36) },
+            costGrowth() { return new Decimal(1e6) },
+            purchaseLimit() { return new Decimal(1) },
+            currency() { return player.hpw.power},
+            effect(x) { return getBuyableAmount(this.layer, this.id) },
+            unlocked() { return hasUpgrade("bi", 27) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) && getBuyableAmount("hpw", 6).gte(1) && false},
+            branches: [6],
+            display() {
+                return "<h3>Might 目</h3>\n\
+                    Release the seal.\n\
+                    (This is unreversable)\n\ \n\
+                    Req: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Power\n\
+                    [COMING SOON]"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "10px"},
+        },
     },
     milestones: {
         1: {
@@ -1323,7 +1354,7 @@ addLayer("hpw", {
                     ]],
                     ["row", [
                         ["style-row", [["buyable", 5]], {width: "140px", height: "140px"}],
-                        ["style-row", [], {width: "140px", height: "140px"}],
+                        ["style-row", [["buyable", 7]], {width: "140px", height: "140px"}],
                         ["style-row", [["buyable", 2]], {width: "140px", height: "140px"}],
                     ]],
                     ["row", [

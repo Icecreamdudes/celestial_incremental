@@ -76,11 +76,16 @@ addLayer("laboratory", {
     upgrades: {
         // 6 upgrades that effect Vespasian
         // 3 upgrades that buff external things based on matos currencies
+
+        // As examples: charge, 
+
         // 3 upgrades that increase the timer
         // 3 upgrades that decrease the cooldown
     },
     buyables: {
         // a buyable that increases currency mult chance
+        // a buyable that decreases combo scaling
+        
     },
     tabFormat: [
         ["style-row", [
@@ -168,9 +173,11 @@ BHS.laboratory = {
                 return "f08"
             case 9:
                 return "f09"
+            case 10:
+                return "f10"
             default:
                 let random = Math.random()
-                let cel = ["f00", "f01", "f02", "f03", "f04", "f05", "f06", "f07", "f08", "f09"]
+                let cel = ["f00", "f01", "f02", "f03", "f04", "f05", "f06", "f07", "f08", "f09", "f10"]
                 return cel[Math.floor(Math.random()*cel.length)]
         }
     },
@@ -582,8 +589,9 @@ BHC.f09 = {
 }
 
 BHC.f10 = {
-    name: "Celestialite F-10",
+    name() {return player.bh.celestialite.actions[0].variables.attacks ? "Gwa" : "Celestialite F-10"},
     symbol: "10",
+    icon() {return player.bh.celestialite.actions[0].variables.attacks ? "resources/gwa.png" : false},
     style: {
         background: "linear-gradient(135deg, #A8C86A, #426535)",
         color: "black",
@@ -594,14 +602,36 @@ BHC.f10 = {
     damage: new Decimal(5),
     actions: {
         0: {
-            name: "Expanded Vitality",
-            instant: true,
-            type: "effect",
-            target: "celestialite",
-            properties: {
-                "healthAdd"() {return Decimal.pow(2, player.bh.combo).mul(10)},
+            name() {
+                if (player.bh.celestialite.actions[0].variables.attacks) {
+                    if (player.bh.celestialite.actions[0].variables.attacks == 0) {
+                        return "???"
+                    }
+                    if (player.bh.celestialite.actions[0].variables.attacks == 1) {
+                        return "Gwa"
+                    }
+                }
+                return "???"
             },
-            cooldown: new Decimal(10),
+            instant: true,
+            type: "function",
+            target: "randomPlayer",
+            onTrigger(index, slot, target) {
+                if (!player.bh.celestialite.actions[0].variables.attacks) player.bh.celestialite.actions[0].variables.attacks = 0
+                switch (player.bh.celestialite.actions[0].variables.attacks) {
+                    case 0:
+                        player.bh.celestialite.actions[0].variables.attacks = 1
+                        break;
+                    case 1:
+                        bhLog("<span style='color: #fff'>Gwa")
+                        break;
+                    default:
+                        console.log("This isn't supposed to be triggered")
+                        player.bh.celestialite.actions[0].variables.attacks = 0
+                        break;
+                }
+            },
+            cooldown: new Decimal(5),
         },
     },
     reward() {

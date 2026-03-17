@@ -120,8 +120,10 @@
     },
     randomizeSegments() {
         for (let i = 0; i < 8; i++) {
+            let luckChance = 0.9
+            if (hasUpgrade("cs", 804)) luckChance = 0.8
             let random = Math.random()
-            if (random < 0.9)
+            if (random < luckChance)
             {
                 player.wof.segmentGains[i] = Decimal.mul(Decimal.add(1, Decimal.mul(Math.random(), 2)), player.wof.wheelPointsMult)   
             } else

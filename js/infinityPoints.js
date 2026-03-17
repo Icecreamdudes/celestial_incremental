@@ -261,11 +261,13 @@
             effect() {
                 if (player.in.infinityPoints.lt(1e200)) return player.in.infinityPoints.mul(0.5).pow(0.7).add(1)
                 if (player.in.infinityPoints.lt("1e2000")) return player.in.infinityPoints.div(1e200).pow(0.075).mul(1e140)
+                if (hasUpgrade("cs", 1104)) return Decimal.pow(1e25, player.in.infinityPoints.add(1).log("1e1000")).mul(1e225)
                 return new Decimal(1e275)
             },
             effectDisplay() {
                 if (player.in.infinityPoints.lt(1e200)) return format(upgradeEffect(this.layer, this.id))+"x"
                 if (player.in.infinityPoints.lt("1e2000")) return format(upgradeEffect(this.layer, this.id))+"x<br><small style='color:red'>[SOFTCAPPED]</small>"
+                if (hasUpgrade("cs", 1104)) return format(upgradeEffect(this.layer, this.id))+"x<br><small style='color:red'>[SOFTCAPPED<sup>2</sup>]</small>"
                 return format(upgradeEffect(this.layer, this.id))+"x<br><small style='color:red'>[HARDCAPPED]</small>"
             }, // Add formatting to the effect
             style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
@@ -281,11 +283,13 @@
             effect() {
                 if (player.in.infinityPoints.lt(1e200)) return player.in.infinityPoints.mul(0.65).pow(0.65).add(1)
                 if (player.in.infinityPoints.lt("1e2000")) return player.in.infinityPoints.div(1e200).pow(0.05).mul(1e130)
+                if (hasUpgrade("cs", 1104)) return Decimal.pow(1e20, player.in.infinityPoints.add(1).log("1e1000")).mul(1e180)
                 return new Decimal(1e220)
             },
             effectDisplay() {
                 if (player.in.infinityPoints.lt(1e200)) return format(upgradeEffect(this.layer, this.id))+"x"
                 if (player.in.infinityPoints.lt("1e2000")) return format(upgradeEffect(this.layer, this.id))+"x<br><small style='color:red'>[SOFTCAPPED]</small>"
+                if (hasUpgrade("cs", 1104)) return format(upgradeEffect(this.layer, this.id))+"x<br><small style='color:red'>[SOFTCAPPED<sup>2</sup>]</small>"
                 return format(upgradeEffect(this.layer, this.id))+"x<br><small style='color:red'>[HARDCAPPED]</small>"
             }, // Add formatting to the effect
             style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
@@ -301,11 +305,13 @@
             effect() {
                 if (player.in.infinityPoints.lt(1e200)) return player.in.infinityPoints.mul(0.3).pow(0.5).add(1)
                 if (player.in.infinityPoints.lt("1e2000")) return player.in.infinityPoints.div(1e200).pow(0.04).mul(1e100)
+                if (hasUpgrade("cs", 1104)) return Decimal.pow(1e16, player.in.infinityPoints.add(1).log("1e1000")).mul(1e140)
                 return new Decimal(1e172)
             },
             effectDisplay() {
                 if (player.in.infinityPoints.lt(1e200)) return format(upgradeEffect(this.layer, this.id))+"x"
                 if (player.in.infinityPoints.lt("1e2000")) return format(upgradeEffect(this.layer, this.id))+"x<br><small style='color:red'>[SOFTCAPPED]</small>"
+                if (hasUpgrade("cs", 1104)) return format(upgradeEffect(this.layer, this.id))+"x<br><small style='color:red'>[SOFTCAPPED<sup>2</sup>]</small>"
                 return format(upgradeEffect(this.layer, this.id))+"x<br><small style='color:red'>[HARDCAPPED]</small>"
             }, // Add formatting to the effect
             style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},

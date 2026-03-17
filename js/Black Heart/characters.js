@@ -89,3 +89,15 @@ BHP.geroa = {
     luck: new Decimal(0),
     mending() {return hasUpgrade("ir", 205) ? new Decimal(6) : new Decimal(5)},
 }
+BHP.vespasian = {
+    name: "Vespasian",
+    color: "#7f6b4e",
+    icon: "resources/feddy.gif",
+    health: new Decimal(100),
+    damage: new Decimal(6),
+    defense: new Decimal(10),
+    regen: new Decimal(0.25),
+    agility: new Decimal(5),
+    luck: new Decimal(0),
+    mending: new Decimal(5),
+}

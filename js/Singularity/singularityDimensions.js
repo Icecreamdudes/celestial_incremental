@@ -58,6 +58,7 @@
 
             // Singularity Power Softcap
             let base = new Decimal(300)
+            if (hasUpgrade("cs", 1304)) base = base + 150
             if (player.sd.singularityPowerPerSecond.gt(1e300)) player.sd.singularityPowerPerSecond = player.sd.singularityPowerPerSecond.div(1e300).pow(Decimal.div(base, player.sd.singularityPowerPerSecond.plus(1).log(10))).mul(1e300)
             
             // Singularity Power Per Second Calc
@@ -95,6 +96,7 @@
             .mul(3)
             .pow(0.5)
         if (hasUpgrade("cs", 1302)) player.sd.radiationUsage = player.sd.radiationUsage.div(5)
+        if (hasUpgrade("cs", 1304)) player.sd.radiationUsage = player.sd.radiationUsage.pow(2)
 
 
         if (player.ra.storedRadiation.gt(player.sd.radiationUsage.mul(0.1))) {

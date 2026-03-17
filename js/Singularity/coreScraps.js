@@ -817,6 +817,27 @@
                 return look
             },
         },
+        704: {
+            title: "CS Degree",
+            unlocked() {return hasUpgrade("depth4", 5)},
+            canAfford() {return hasUpgrade("depth4", 5)},
+            description: "Lines of code raise mod requirement.",
+            cost: new Decimal(1e21),
+            currencyLocation() { return player.cs.scraps.code },
+            currencyDisplayName: "Code Core Scraps",
+            currencyInternalName: "amount",
+            effect() {
+                return Decimal.div(1, player.m.linesOfCode.add(1).log(1e100000).div(10).add(1))
+            },
+            effectDisplay() { return "^"+formatSimple(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.code.color}
+                return look
+            },
+        },
         801: {
             title: "Boosted Boosters",
             unlocked: true,
@@ -854,6 +875,23 @@
             unlocked: true,
             description: "Gain a challenge dice effect that boosts dice score.",
             cost: new Decimal(1e9),
+            currencyLocation() { return player.cs.scraps.dice },
+            currencyDisplayName: "Dice Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.dice.color}
+                return look
+            },
+        },
+        804: {
+            title: "Weighted Wheel",
+            unlocked() {return hasUpgrade("depth4", 5)},
+            canAfford() {return hasUpgrade("depth4", 5)},
+            description: "Double the chance for a wheel of fortune lucky segment.",
+            cost: new Decimal(1e22),
             currencyLocation() { return player.cs.scraps.dice },
             currencyDisplayName: "Dice Core Scraps",
             currencyInternalName: "amount",
@@ -913,6 +951,23 @@
                 return look
             },
         },
+        904: {
+            title: "Unidentified Timely Object",
+            unlocked() {return hasUpgrade("depth4", 5)},
+            canAfford() {return hasUpgrade("depth4", 5)},
+            description: "XP Button ability is x100 effective, but has a x100 longer cooldown.",
+            cost: new Decimal(1e23),
+            currencyLocation() { return player.cs.scraps.rocket },
+            currencyDisplayName: "Rocket Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.rocket.color}
+                return look
+            },
+        },
         1001: {
             title: "Developed Dimensions",
             unlocked: true,
@@ -950,6 +1005,23 @@
             unlocked: true,
             description: "Automate Replicanti Galaxy gain.",
             cost: new Decimal(1e9),
+            currencyLocation() { return player.cs.scraps.antimatter },
+            currencyDisplayName: "Antimatter Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.antimatter.color}
+                return look
+            },
+        },
+        1004: {
+            title: "Boost^2",
+            unlocked() {return hasUpgrade("depth4", 5)},
+            canAfford() {return hasUpgrade("depth4", 5)},
+            description: "Multiply dimension boost cap by x8.",
+            cost: new Decimal(1e24),
             currencyLocation() { return player.cs.scraps.antimatter },
             currencyDisplayName: "Antimatter Core Scraps",
             currencyInternalName: "amount",
@@ -1009,6 +1081,23 @@
                 return look
             },
         },
+        1104: {
+            title: "Infinite Again",
+            unlocked() {return hasUpgrade("depth4", 5)},
+            canAfford() {return hasUpgrade("depth4", 5)},
+            description: "Turn IP Upgrade Row 3 hardcaps into softcaps.",
+            cost: new Decimal(1e25),
+            currencyLocation() { return player.cs.scraps.infinity },
+            currencyDisplayName: "Infinity Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.infinity.color}
+                return look
+            },
+        },
         1201: {
             title: "Gilded Dust",
             unlocked: true,
@@ -1057,6 +1146,23 @@
                 return look
             },
         },
+        1204: {
+            title: "Fragmented Time",
+            unlocked() {return hasUpgrade("depth4", 5)},
+            canAfford() {return hasUpgrade("depth4", 5)},
+            description: "Divide fragmentation cooldowns by /1.2.",
+            cost: new Decimal(1e26),
+            currencyLocation() { return player.cs.scraps.checkback },
+            currencyDisplayName: "Check Back Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.checkback.color}
+                return look
+            },
+        },
         1301: {
             title: "Reduced Exposure",
             unlocked: true,
@@ -1094,6 +1200,23 @@
             unlocked: true,
             description: "Slightly reduce the radiation softcap.",
             cost: new Decimal(1e9),
+            currencyLocation() { return player.cs.scraps.radioactive },
+            currencyDisplayName: "Radioactive Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.radioactive.color}
+                return look
+            },
+        },
+        1304: {
+            title: "Conductive Radiation",
+            unlocked() {return hasUpgrade("depth4", 5)},
+            canAfford() {return hasUpgrade("depth4", 5)},
+            description: "Reduce singularity power softcap, but square the radiation usage.",
+            cost: new Decimal(1e27),
             currencyLocation() { return player.cs.scraps.radioactive },
             currencyDisplayName: "Radioactive Core Scraps",
             currencyInternalName: "amount",
@@ -1255,7 +1378,7 @@
                         ]],
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
-                        ["upgrade", 701], ["upgrade", 702], ["upgrade", 703],
+                        ["upgrade", 701], ["upgrade", 702], ["upgrade", 703], ["upgrade", 704],
                     ], () => {return player.matosLair.milestone[25] == 0 ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
@@ -1276,7 +1399,7 @@
                         ]],
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
-                        ["upgrade", 801], ["upgrade", 802], ["upgrade", 803],
+                        ["upgrade", 801], ["upgrade", 802], ["upgrade", 803], ["upgrade", 804],
                     ], () => {return player.matosLair.milestone[25] == 0 ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
@@ -1297,7 +1420,7 @@
                         ]],
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
-                        ["upgrade", 901], ["upgrade", 902], ["upgrade", 903],
+                        ["upgrade", 901], ["upgrade", 902], ["upgrade", 903], ["upgrade", 904],
                     ], () => {return player.matosLair.milestone[25] == 0 ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
@@ -1318,7 +1441,7 @@
                         ]],
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
-                        ["upgrade", 1001], ["upgrade", 1002], ["upgrade", 1003],
+                        ["upgrade", 1001], ["upgrade", 1002], ["upgrade", 1003], ["upgrade", 1004],
                     ], () => {return player.matosLair.milestone[25] == 0 ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
@@ -1339,7 +1462,7 @@
                         ]],
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
-                        ["upgrade", 1101], ["upgrade", 1102], ["upgrade", 1103],
+                        ["upgrade", 1101], ["upgrade", 1102], ["upgrade", 1103], ["upgrade", 1104],
                     ], () => {return player.matosLair.milestone[25] == 0 ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
@@ -1360,7 +1483,7 @@
                         ]],
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
-                        ["upgrade", 1201], ["upgrade", 1202], ["upgrade", 1203],
+                        ["upgrade", 1201], ["upgrade", 1202], ["upgrade", 1203], ["upgrade", 1204],
                     ], () => {return player.matosLair.milestone[25] == 0 ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
@@ -1381,7 +1504,7 @@
                         ]],
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
-                        ["upgrade", 1301], ["upgrade", 1302], ["upgrade", 1303],
+                        ["upgrade", 1301], ["upgrade", 1302], ["upgrade", 1303], ["upgrade", 1304],
                     ], () => {return player.matosLair.milestone[25] == 0 ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },

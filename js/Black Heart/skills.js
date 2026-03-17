@@ -742,7 +742,51 @@ BHA.geroa_defenseSatellites = {
 }
 
 // Vespasian Skills
+BHA.vespasian_poisonStinger = {
+    name: "Poison Stinger",
+    description() {return "Shoots 3 poison stingers that do " + formatWhole(new Decimal(25).add(player.bh.skillData["vespasian_poisonStinger"].level.mul(5))) + "% ranged damage, then " + formatWhole(new Decimal(10).add(player.bh.skillData["vespasian_poisonStinger"].level.mul(2))) + "% spirit damage per second for 5 seconds"},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["vespasian_poisonStinger"].maxLevel.div(2)) + " AGI"},
+    char: "vespasian",
+    spCost: new Decimal(10),
+    curCostBase: new Decimal(64),
+    curCostScale: new Decimal(4),
+    currency: "matosDust",
+    unlocked: true,
 
-// A Poison multi-hit skill
+    instant: true,
+    type: "damage",
+    target: "celestialite",
+    method: "ranged",
+    value() {return new Decimal(0.25).add(player.bh.skillData["vespasian_poisonStinger"].level.mul(0.05))},
+    properties: {
+        "multi-hit": [3, 250],
+    },
+
+    active: true,
+    constantType: "effect",
+    constantTarget: "celestialite",
+    effects: {
+        "regenAdd"(char) {
+            let damage = char.damage.mul(Decimal.sub(-0.1, player.bh.skillData["vespasian_poisonStinger"].level.mul(0.02)))
+            damage = damage.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.defense)))
+            return damage
+        },
+    },
+    duration: new Decimal(5),
+    cooldown: new Decimal(10),
+    cooldownCap: new Decimal(2),
+}
+
+// A skill that does a lot of damage, can crit, but can also backfire
+
+// A skill that passively buffs damage based on current health (double at max health)
+
+// NON-VESPASIAN SKILL IDEAS
+
+// A skill that temporarily increases team agility and decreases celestialite agility
 
 // A skill that increases the teams regen stat (like motivation, the total is square rooted)
+
+// A passive skill that gives the chance for an action to trigger a team buff that doubles damage
+
+// A skill that passively gives you one of the three resistance attributes. Has an instant part of it that cycles the attribute

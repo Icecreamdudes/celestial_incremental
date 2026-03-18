@@ -311,7 +311,7 @@ addLayer("depth4", {
                     ["raw-html", () => {return Decimal.sub(1.025, player.bh.comboScalingReduction).gt(1) ? formatSimple(Decimal.sub(1.025, player.bh.comboScalingReduction).max(1).sub(1).mul(100)) + "% starting at 100" : ""}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "5px"],
                     ["raw-html", "<u>Health Drain", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", "1.5 HP/s", {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", "1 HP/s", {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
                 ], {width: "250px", height: "197px", background: "var(--layerBackground)"}],
                 ["style-row", [
                     ["layer-proxy", ["bh", [
@@ -361,7 +361,7 @@ BHS.depth4 = {
     comboLimit: 250,
     comboScaling: 1.025,
     comboScalingStart: 100,
-    healthDrain: new Decimal(1.5),
+    healthDrain: new Decimal(1),
     generateCelestialite(combo) {
         if (typeof combo == "object") combo = combo.toNumber()
         switch (combo) {

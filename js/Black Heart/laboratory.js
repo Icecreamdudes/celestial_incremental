@@ -92,13 +92,13 @@ addLayer("laboratory", {
             ["style-column", [
                 ["style-row", [
                     ["style-column", [
-                        ["raw-html", () => {return "You have " + formatShortWhole(player.laboratory.matosDust) + " Matos Dust."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return "You have " + formatShortWhole(player.laboratory.matosShard) + " Matos Shards."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "You have " + formatShortWhole(player.laboratory.matosDust) + " Matos Dust."}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "You have " + formatShortWhole(player.laboratory.matosShard) + " Matos Shards."}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
                     ], {width: "270px", height: "72px"}],
                     ["style-column", [
-                        ["raw-html", () => {return "You have " + formatShortWhole(player.laboratory.matosFragment) + " Matos Fragments."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return "You have " + formatShortWhole(player.laboratory.matosEssence) + " Matos Essence."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
-                    ], {width: "270px", height: "72px"}],
+                        ["raw-html", () => {return "You have " + formatShortWhole(player.laboratory.matosFragment) + " Matos Fragments."}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "You have " + formatShortWhole(player.laboratory.matosEssence) + " Matos Essence."}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                    ], () => {return false ? {width: "270px", height: "72px"}: {display: "none !important"}}],
                 ], {width: "547px", height: "72px", background: "var(--miscButtonHover)", borderBottom: "3px solid var(--regBorder)"}],
                 ["theme-scroll-column", [
                     ["blank", "2px"],

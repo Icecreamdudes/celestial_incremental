@@ -176,6 +176,7 @@
         player.fu.happinessPerSecond = player.fu.happinessPerSecond.mul(buyableEffect("fu", 62))
         player.fu.happinessPerSecond = player.fu.happinessPerSecond.mul(buyableEffect("ep1", 12))
         if (hasUpgrade("fu", 115)) player.fu.happinessPerSecond = player.fu.happinessPerSecond.mul(upgradeEffect("fu", 115))
+        if (player.alephsChamber.milestone[25] > 0) player.fu.happinessPerSecond = player.fu.happinessPerSecond.mul(10)
         
         player.fu.happinessEffect = player.fu.happiness.pow(0.35).add(1).div(player.fu.numbEffect)
         player.fu.happinessEffect2 = player.fu.happiness.pow(2.2).add(1).pow(buyableEffect("fu", 92))
@@ -189,6 +190,7 @@
         player.fu.sadnessPerSecond = player.fu.sadnessPerSecond.mul(buyableEffect("fu", 63))
         player.fu.sadnessPerSecond = player.fu.sadnessPerSecond.mul(buyableEffect("ep1", 12))
         if (hasUpgrade("fu", 115)) player.fu.sadnessPerSecond = player.fu.sadnessPerSecond.mul(upgradeEffect("fu", 115))
+        if (player.alephsChamber.milestone[25] > 0) player.fu.sadnessPerSecond = player.fu.sadnessPerSecond.mul(10)
 
         player.fu.sadnessEffect = player.fu.sadness.pow(0.35).add(1).div(player.fu.numbEffect)
         player.fu.sadnessEffect2 = player.fu.sadness.pow(1.2).add(1).pow(buyableEffect("fu", 92))
@@ -202,6 +204,7 @@
         player.fu.angerPerSecond = player.fu.angerPerSecond.mul(buyableEffect("fu", 64))
         player.fu.angerPerSecond = player.fu.angerPerSecond.mul(buyableEffect("ep1", 12))
         if (hasUpgrade("fu", 115)) player.fu.angerPerSecond = player.fu.angerPerSecond.mul(upgradeEffect("fu", 115))
+        if (player.alephsChamber.milestone[25] > 0) player.fu.angerPerSecond = player.fu.angerPerSecond.mul(10)
 
         player.fu.angerEffect = player.fu.anger.pow(0.35).add(1).div(player.fu.numbEffect)
         player.fu.angerEffect2 = player.fu.anger.pow(0.25).div(15).add(1).pow(buyableEffect("fu", 92))
@@ -212,6 +215,7 @@
         player.fu.fearPerSecond = player.fu.fearPerSecond.mul(buyableEffect("ep1", 12))
         player.fu.fearPerSecond = player.fu.fearPerSecond.div(player.fu.fearEffect)
         if (hasUpgrade("fu", 115)) player.fu.fearPerSecond = player.fu.fearPerSecond.mul(upgradeEffect("fu", 115))
+        if (player.alephsChamber.milestone[25] > 0) player.fu.fearPerSecond = player.fu.fearPerSecond.mul(10)
         
         player.fu.fearEffect = player.fu.fear.pow(0.35).add(1).div(player.fu.numbEffect)
         player.fu.fearEffect2 = player.fu.fear.pow(0.5).add(1)
@@ -230,6 +234,7 @@
         player.fu.numbPerSecond = player.fu.apathyEffect
         player.fu.numbPerSecond = player.fu.numbPerSecond.mul(buyableEffect("fu", 81))
         if (hasUpgrade("fu", 114)) player.fu.numbPerSecond = player.fu.numbPerSecond.mul(2)
+        if (player.alephsChamber.milestone[25] > 0) player.fu.numbPerSecond = player.fu.numbPerSecond.mul(10)
 
         player.fu.numbEffect = player.fu.numb.pow(0.3).add(1)
         if (hasUpgrade("fu", 113)) player.fu.numbEffect = player.fu.numb.pow(0.35).add(1)

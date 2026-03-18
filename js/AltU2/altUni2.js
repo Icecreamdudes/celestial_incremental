@@ -53,9 +53,11 @@
         //Star Softcap
         player.au2.starSoftcapStart = new Decimal(1000000)
 
-        if (player.au2.starsToGet.gte(player.au2.starSoftcapStart))
-        {
-            player.au2.starSoftcapEffect = new Decimal(0.25).div(Decimal.div(player.au2.starsToGet.add(1).log(10).add(100), 100))
+        let softcapBase = new Decimal(0.25)
+        if (player.alephsChamber.milestone[25] > 0) softcapBase = softcapBase.add(0.05)
+
+        if (player.au2.starsToGet.gte(player.au2.starSoftcapStart)) {
+            player.au2.starSoftcapEffect = softcapBase.div(Decimal.div(player.au2.starsToGet.add(1).log(10).add(100), 100))
             player.au2.starsToGet = player.au2.starsToGet.sub(player.au2.starSoftcapStart).pow(player.au2.starSoftcapEffect).add(player.au2.starSoftcapStart)
             player.au2.starSoftcapActive = true  
         } else

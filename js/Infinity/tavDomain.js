@@ -299,6 +299,7 @@ addLayer("tad", {
         player.tad.infinitumGain = player.tad.infinitumGain.mul(buyableEffect("p", 18))
         player.tad.infinitumGain = player.tad.infinitumGain.mul(levelableEffect("pet", 1101)[1])
         player.tad.infinitumGain = player.tad.infinitumGain.mul(buyableEffect("tad", 212))
+        if (player.alephsChamber.milestone[25] > 0) player.tad.infinitumGain = player.tad.infinitumGain.mul(100)
 
         // FLOOR INFINTUM GAIN
         player.tad.infinitumGain = player.tad.infinitumGain.floor()

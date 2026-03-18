@@ -69,7 +69,13 @@ addLayer("alephsChamber", {
                     ["raw-html", "Grass Jump (in Eclipse)", {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
                     ["blank", "10px"],
                     ["raw-html", "<u>Effects</u>", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => { return "TEMP." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "Weakened Star Softcap." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "x36 Hex Power." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "x100 Infinitum." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "x10 Emotions." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "+10 Mending." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+
+                    // ALEPH PUNCHCARD -> BUFFS FIRST THREE GRASS-JUMP MILESTONES. ALSO UNLOCKS GRASS-JUMPERS, A SUBTAB WITH SOME SORT OF MECHANIC ... IDK RESEARCH GCI I GUESS 
                 ], () => {
                     let look = {width: "547px", height: "420px", background: "linear-gradient(120deg, #3e003e 0%, #6a006a 100%)", borderRadius: "0 0 0 27px"}
                     if (player.alephsChamber.milestone[25] == 0) {look.filter = "brightness(25%) blur(10px)"; look.userSelect = "none"}

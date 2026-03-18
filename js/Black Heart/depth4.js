@@ -311,7 +311,7 @@ addLayer("depth4", {
                     ["raw-html", () => {return Decimal.sub(1.025, player.bh.comboScalingReduction).gt(1) ? formatSimple(Decimal.sub(1.025, player.bh.comboScalingReduction).max(1).sub(1).mul(100)) + "% starting at 100" : ""}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "5px"],
                     ["raw-html", "<u>Health Drain", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", "1 HP/s", {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", "1.5 HP/s", {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
                 ], {width: "250px", height: "197px", background: "var(--layerBackground)"}],
                 ["style-row", [
                     ["layer-proxy", ["bh", [
@@ -361,7 +361,7 @@ BHS.depth4 = {
     comboLimit: 250,
     comboScaling: 1.025,
     comboScalingStart: 100,
-    healthDrain: new Decimal(1),
+    healthDrain: new Decimal(1.5),
     generateCelestialite(combo) {
         if (typeof combo == "object") combo = combo.toNumber()
         switch (combo) {
@@ -399,7 +399,7 @@ BHC.majorAlpha = {
         borderColor: "#321374",
     },
     health: new Decimal(400),
-    damage: new Decimal(25),
+    damage: new Decimal(40),
     attributes: {
         "air": new Decimal(0.2), // Resistance DMG Mult
         "warded": new Decimal(0.2), // Resistance DMG Mult
@@ -449,8 +449,8 @@ BHC.majorBeta = {
         color: "black",
         borderColor: "#321374",
     },
-    health: new Decimal(700),
-    damage: new Decimal(10),
+    health: new Decimal(800),
+    damage: new Decimal(15),
     regen: new Decimal(1),
     attributes: {
         "daze": new Decimal(0.5),
@@ -497,8 +497,8 @@ BHC.majorGamma = {
         color: "black",
         borderColor: "#321374",
     },
-    health: new Decimal(650),
-    damage: new Decimal(20),
+    health: new Decimal(750),
+    damage: new Decimal(30),
     attributes: {
         "daze": new Decimal(0.5),
     },
@@ -543,8 +543,8 @@ BHC.majorDelta = {
         color: "black",
         borderColor: "#321374",
     },
-    health: new Decimal(750),
-    damage: new Decimal(10),
+    health: new Decimal(850),
+    damage: new Decimal(15),
     actions: {
         0: {
             name: "Triple Missile",
@@ -597,8 +597,8 @@ BHC.majorEpsilon = {
         color: "black",
         borderColor: "#321374",
     },
-    health: new Decimal(600),
-    damage: new Decimal(5),
+    health: new Decimal(700),
+    damage: new Decimal(8),
     regen: new Decimal(2),
     actions: {
         0: {
@@ -647,8 +647,8 @@ BHC.majorZeta = {
         color: "black",
         borderColor: "#321374",
     },
-    health: new Decimal(650),
-    damage: new Decimal(15),
+    health: new Decimal(750),
+    damage: new Decimal(20),
     actions: {
         0: {
             name: "Poison Needle",
@@ -666,7 +666,7 @@ BHC.majorZeta = {
             constantType: "effect",
             constantTarget: "storedTarget",
             effects: {
-                "regenAdd": new Decimal(-5)
+                "regenAdd"() {return Decimal.mul(-0.3, player.bh.celestialite.damage)}
             },
             duration: new Decimal(3),
         },
@@ -709,8 +709,8 @@ BHC.majorEta = {
         color: "black",
         borderColor: "#321374",
     },
-    health: new Decimal(650),
-    damage: new Decimal(10),
+    health: new Decimal(750),
+    damage: new Decimal(15),
     regen: new Decimal(2),
     actions: {
         0: {
@@ -735,7 +735,7 @@ BHC.majorEta = {
             constantType: "effect",
             constantTarget: "allPlayer",
             effects: {
-                "regenAdd": new Decimal(-5)
+                "regenAdd"() {return Decimal.mul(-0.4, player.bh.celestialite.damage)}
             },
             duration: new Decimal(3),
         },
@@ -762,8 +762,8 @@ BHC.majorTheta = {
         color: "black",
         borderColor: "#321374",
     },
-    health: new Decimal(750),
-    damage: new Decimal(20),
+    health: new Decimal(850),
+    damage: new Decimal(30),
     actions: {
         0: {
             name: "Critical Stab",
@@ -808,8 +808,8 @@ BHC.majorIota = {
         color: "black",
         borderColor: "#321374",
     },
-    health: new Decimal(700),
-    damage: new Decimal(2),
+    health: new Decimal(800),
+    damage: new Decimal(5),
     regen: new Decimal(1),
     actions: {
         0: {
@@ -830,7 +830,7 @@ BHC.majorIota = {
             constantType: "effect",
             constantTarget: "celestialite",
             effects: {
-                "damageAdd": new Decimal(3),
+                "damageAdd": new Decimal(5),
             },
             duration: new Decimal(2),
             cooldown: new Decimal(6),
@@ -858,8 +858,8 @@ BHC.majorKappa = {
         color: "black",
         borderColor: "#321374",
     },
-    health: new Decimal(750),
-    damage: new Decimal(10),
+    health: new Decimal(850),
+    damage: new Decimal(15),
     actions: {
         0: {
             name: "Critical Shot",
@@ -906,8 +906,8 @@ BHC.majorLambda = {
         color: "black",
         borderColor: "#321374",
     },
-    health: new Decimal(800),
-    damage: new Decimal(5),
+    health: new Decimal(900),
+    damage: new Decimal(10),
     attributes: {
         "daze": new Decimal(0.5),
     },
@@ -947,8 +947,8 @@ BHC.majorMu = {
         color: "black",
         borderColor: "#321374",
     },
-    health: new Decimal(850),
-    damage: new Decimal(4),
+    health: new Decimal(900),
+    damage: new Decimal(6),
     actions: {
         0: {
             name: "Poison Mist",
@@ -956,7 +956,7 @@ BHC.majorMu = {
             constantType: "effect",
             constantTarget: "all",
             effects: {
-                "regenAdd"() {return player.bh.celestialite.damage}
+                "regenAdd"() {return Decimal.mul(player.bh.celestialite.damage, -1)}
             },
             cooldown: new Decimal(Infinity),
         },
@@ -999,8 +999,8 @@ BHC.majorNu = {
         color: "black",
         borderColor: "#321374",
     },
-    health: new Decimal(900),
-    damage: new Decimal(3),
+    health: new Decimal(950),
+    damage: new Decimal(5),
     actions: {
         0: {
             name: "Poison Flurry",
@@ -1019,7 +1019,7 @@ BHC.majorNu = {
             constantType: "effect",
             constantTarget: "storedTarget",
             effects: {
-                "regenAdd": new Decimal(-5)
+                "regenAdd"() {return Decimal.mul(player.bh.celestialite.damage, -1)}
             },
             duration: new Decimal(3),
         },
@@ -1054,8 +1054,8 @@ BHC.majorXi = {
         color: "black",
         borderColor: "#321374",
     },
-    health: new Decimal(950),
-    damage: new Decimal(6),
+    health: new Decimal(1000),
+    damage: new Decimal(10),
     attributes: {
         "daze": new Decimal(0.5),
     },
@@ -1107,7 +1107,7 @@ BHC.majorEnas = {
         borderColor: "#321374",
     },
     health: new Decimal(2500),
-    damage: new Decimal(5),
+    damage: new Decimal(8),
     regen: new Decimal(2),
     luck: new Decimal(3),
     actions: {
@@ -1196,7 +1196,7 @@ BHC.majorDeka = {
         borderColor: "#321374",
     },
     health: new Decimal(5000),
-    damage: new Decimal(6),
+    damage: new Decimal(10),
     luck: new Decimal(3),
     actions: {
         0: {
@@ -1254,7 +1254,7 @@ BHC.majorHekaton = {
         borderColor: "#321374",
     },
     health: new Decimal(4000),
-    damage: new Decimal(5),
+    damage: new Decimal(8),
     regen: new Decimal(2),
     actions: {
         0: {
@@ -1321,7 +1321,7 @@ BHC.majorKhilioi = {
         borderColor: "#321374",
     },
     health: new Decimal(7500),
-    damage: new Decimal(5),
+    damage: new Decimal(6),
     attributes: {
         "daze": new Decimal(0.5),
     },
@@ -1379,7 +1379,7 @@ BHC.majorMyrioi = {
         borderColor: "#321374",
     },
     health: new Decimal(10000),
-    damage: new Decimal(10),
+    damage: new Decimal(12),
     attributes: {
         "daze": new Decimal(0.5),
     },
@@ -1397,7 +1397,7 @@ BHC.majorMyrioi = {
             constantType: "effect",
             constantTarget: "allPlayer",
             effects: {
-                "regenAdd": new Decimal(-3)
+                "regenAdd"() {return Decimal.mul(-0.5, player.bh.celestialite.damage)}
             },
             duration: new Decimal(3),
         },

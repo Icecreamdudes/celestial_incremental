@@ -1820,8 +1820,475 @@ BHB.bouncingIcon = {
     },
 }
 
-// Zig-zag movement attack
+BHB.chargingBee = {
+    //bulletHell({"chargingBee": {beeAmount: 5, radius: 20, enemySpeed: 5, lastTick: false}}, {width: 300, height: 300, duration: 10})
+    codeFunc(info, id) {
+        for (let i = 0; i < info.actions[id].beeAmount; i++) {
+            info.bullets.push({
+                name: "chargeBee",
+                boxRender: true,
+                offScreen: true, // Bullets can be off screen
+                angle: 0,
+                x: Math.random() * info.width,
+                y: -50,
+                r: info.actions[id].radius,
+                vx: 0,
+                vy: 0,
+                pulsingRed: false,
+                lungeTimer: 0,
+                lungeCooldown: 0,
+                draw(b, bossCtx) {
+                    bossCtx.translate(b.x, b.y);
+                    bossCtx.rotate(b.angle);
+                    bossCtx.strokeStyle = "#000";
+                    bossCtx.lineWidth = 2;
+                    bossCtx.shadowColor = b.pulsingRed ? '#e22' : "#fff";
+                    bossCtx.shadowBlur = 4;
+                    // Wings
+                    bossCtx.beginPath()
+                    bossCtx.arcTo(0, 0, -b.r/2, b.r/2, b.r/4)
+                    bossCtx.arcTo(-b.r/2, b.r/2, -b.r, 0, b.r/4)
+                    bossCtx.arcTo(-b.r, 0, -b.r/2, -b.r/2, b.r/4)
+                    bossCtx.arcTo(-b.r/2, -b.r/2, 0, 0, b.r/4)
+                    bossCtx.arcTo(0, 0, b.r/2, b.r/2, b.r/4)
+                    bossCtx.arcTo(b.r/2, b.r/2, b.r, 0, b.r/4)
+                    bossCtx.arcTo(b.r, 0, b.r/2, -b.r/2, b.r/4)
+                    bossCtx.arcTo(b.r/2, -b.r/2, 0, 0, b.r/4)
+                    bossCtx.closePath()
+                    bossCtx.fillStyle = b.pulsingRed ? '#e22' : "#aaf";
+                    bossCtx.fill();
+                    bossCtx.stroke()
+                    // Butt
+                    bossCtx.beginPath()
+                    bossCtx.arcTo(0, 0, b.r/4, b.r/4, b.r/4)
+                    bossCtx.arcTo(b.r/4, b.r/4, b.r/2, (b.r*3)/4, b.r/4)
+                    bossCtx.arcTo(b.r/2, (b.r*3)/4, 0, b.r+(b.r/2), b.r/3)
+                    bossCtx.arcTo(0, b.r+(b.r/2), -b.r/2, (b.r*3)/4, b.r/3)
+                    bossCtx.arcTo(-b.r/2, (b.r*3)/4, -b.r/4, b.r/4, b.r/3)
+                    bossCtx.arcTo(-b.r/4, b.r/4, 0, 0, b.r/4)
+                    bossCtx.closePath()
+                    bossCtx.fillStyle = "#E9AB17";
+                    bossCtx.fill();
+                    bossCtx.stroke()
+                    // Stripes
+                    bossCtx.beginPath()
+                    bossCtx.moveTo(b.r/4, b.r/4)
+                    bossCtx.quadraticCurveTo(b.r/4, b.r/2, 0, b.r/2)
+                    bossCtx.moveTo(-b.r/4, b.r/4)
+                    bossCtx.quadraticCurveTo(-b.r/4, b.r/2, 0, b.r/2)
+                    bossCtx.moveTo(b.r/2-1, (b.r*3)/4)
+                    bossCtx.quadraticCurveTo(b.r/3-1, b.r, 0, b.r)
+                    bossCtx.moveTo(-b.r/2+1, (b.r*3)/4)
+                    bossCtx.quadraticCurveTo(-b.r/3+1, b.r, 0, b.r)
+                    bossCtx.stroke()
 
-// Bees spawn randomly outside of the arena and fire towards the player
+                    // Head
+                    bossCtx.beginPath()
+                    bossCtx.arcTo(0, 0, b.r/2, -b.r/2, b.r/3)
+                    bossCtx.arcTo(b.r/2, -b.r/2, 0, -b.r, b.r/3)
+                    bossCtx.arcTo(0, -b.r, -b.r/2, -b.r/2, b.r/3)
+                    bossCtx.arcTo(-b.r/2, -b.r/2, 0, 0, b.r/3)
+                    bossCtx.closePath()
+                    bossCtx.fillStyle = "#E9AB17";
+                    bossCtx.fill();
+                    bossCtx.stroke()
+                    // Antenna
+                    bossCtx.beginPath()
+                    bossCtx.moveTo(-b.r/4, -(b.r*3)/4)
+                    bossCtx.quadraticCurveTo(-b.r/8, -(b.r+(b.r/4)), (-b.r*3)/8, -(b.r+(b.r/8)))
+                    bossCtx.stroke()
+                    bossCtx.beginPath()
+                    bossCtx.moveTo(b.r/4, -(b.r*3)/4)
+                    bossCtx.quadraticCurveTo(b.r/8, -(b.r+(b.r/4)), (b.r*3)/8, -(b.r+(b.r/8)))
+                    bossCtx.stroke()
+
+                    bossCtx.resetTransform()
+                },
+            })
+        }
+
+        return info
+    },
+    moveFunc(info, ticks, id) {
+        let dt = ticks - (info.actions[id].lastTick || ticks);
+        info.actions[id].lastTick = ticks;
+        for (let b of info.bullets) {
+            if (b.name && b.name == "chargeBee") {
+                // Lunge logic
+                if (!b.pulsingRed && b.lungeCooldown <= 0) {
+                    b.lungeTimer = 750;
+                    let dx = info.px - b.x - 50 + (Math.random()*100);
+                    let dy = info.py - b.y - 50 + (Math.random()*100);
+                    let dist = Math.hypot(dx, dy);
+                    b.vx = (dx / dist) * info.actions[id].enemySpeed;
+                    b.vy = (dy / dist) * info.actions[id].enemySpeed;
+                    b.angle = Math.atan2(dy, dx) + Math.PI/2
+                    b.pulsingRed = true;
+                } else if (!b.pulsingRed) {
+                    b.lungeCooldown -= dt;
+                }
+                if (b.pulsingRed) {
+                    b.lungeTimer -= dt;
+                    if (b.lungeTimer <= 0) {
+                        b.vx = 0;
+                        b.vy = 0;
+                        b.pulsingRed = false;
+                        b.lungeCooldown = 1200 + (Math.random() * 800);
+                    }
+                }
+            }
+        }
+        return info
+    },
+}
+
+BHB.shootBee = {
+    //bulletHell({"shootBee": {beesPerSec: 2, radius: 20, enemySpeed: 5}}, {width: 400, height: 400, duration: 10})
+    moveFunc(info, ticks, id) {
+        // Spawn knives
+        if (!info.actions[id].lastTime) info.actions[id].lastTime = ticks;
+        const beesToSpawn = Math.floor(((ticks - info.actions[id].lastTime) / 1000) * info.actions[id].beesPerSec);
+        for (let i = 0; i < beesToSpawn; i++) {
+            // Pick a random edge and a random point on that edge
+            const edge = Math.floor(Math.random() * 4); // 0=top, 1=right, 2=bottom, 3=left
+            let bx, by, angle;
+            if (edge === 0) { // top
+                bx = Math.random() * info.width;
+                by = -info.actions[id].radius;
+            } else if (edge === 1) { // right
+                bx = info.width + info.actions[id].radius;
+                by = Math.random() * info.height;
+            } else if (edge === 2) { // bottom
+                bx = Math.random() * info.width;
+                by = info.height + info.actions[id].radius;
+            } else { // left
+                bx = -info.actions[id].radius;
+                by = Math.random() * info.height;
+            }
+            // Angle toward player
+            let dx = info.px - bx;
+            let dy = info.py - by;
+            if (info.subArena && info.moveWithSub) {
+                dx += info.subx
+                dy += info.suby
+            }
+            angle = Math.atan2(dy, dx);
+            // Store initial spawn for path line
+            info.bullets.push({
+                name: "Bee",
+                boxRender: true, // RENDER IN BOX
+                x: bx,
+                y: by,
+                angle: angle + Math.PI/2,
+                r: info.actions[id].radius,
+                vx: Math.cos(angle) * info.actions[id].enemySpeed,
+                vy: Math.sin(angle) * info.actions[id].enemySpeed,
+                draw(b, bossCtx) {
+                    bossCtx.translate(b.x, b.y);
+                    bossCtx.rotate(b.angle);
+                    bossCtx.strokeStyle = "#000";
+                    bossCtx.lineWidth = 2;
+                    bossCtx.shadowColor = "#fff";
+                    bossCtx.shadowBlur = 4;
+                    // Wings
+                    bossCtx.beginPath()
+                    bossCtx.arcTo(0, 0, -b.r/2, b.r/2, b.r/4)
+                    bossCtx.arcTo(-b.r/2, b.r/2, -b.r, 0, b.r/4)
+                    bossCtx.arcTo(-b.r, 0, -b.r/2, -b.r/2, b.r/4)
+                    bossCtx.arcTo(-b.r/2, -b.r/2, 0, 0, b.r/4)
+                    bossCtx.arcTo(0, 0, b.r/2, b.r/2, b.r/4)
+                    bossCtx.arcTo(b.r/2, b.r/2, b.r, 0, b.r/4)
+                    bossCtx.arcTo(b.r, 0, b.r/2, -b.r/2, b.r/4)
+                    bossCtx.arcTo(b.r/2, -b.r/2, 0, 0, b.r/4)
+                    bossCtx.closePath()
+                    bossCtx.fillStyle = "#aaf";
+                    bossCtx.fill();
+                    bossCtx.stroke()
+                    // Butt
+                    bossCtx.beginPath()
+                    bossCtx.arcTo(0, 0, b.r/4, b.r/4, b.r/4)
+                    bossCtx.arcTo(b.r/4, b.r/4, b.r/2, (b.r*3)/4, b.r/4)
+                    bossCtx.arcTo(b.r/2, (b.r*3)/4, 0, b.r+(b.r/2), b.r/3)
+                    bossCtx.arcTo(0, b.r+(b.r/2), -b.r/2, (b.r*3)/4, b.r/3)
+                    bossCtx.arcTo(-b.r/2, (b.r*3)/4, -b.r/4, b.r/4, b.r/3)
+                    bossCtx.arcTo(-b.r/4, b.r/4, 0, 0, b.r/4)
+                    bossCtx.closePath()
+                    bossCtx.fillStyle = "#E9AB17";
+                    bossCtx.fill();
+                    bossCtx.stroke()
+                    // Stripes
+                    bossCtx.beginPath()
+                    bossCtx.moveTo(b.r/4, b.r/4)
+                    bossCtx.quadraticCurveTo(b.r/4, b.r/2, 0, b.r/2)
+                    bossCtx.moveTo(-b.r/4, b.r/4)
+                    bossCtx.quadraticCurveTo(-b.r/4, b.r/2, 0, b.r/2)
+                    bossCtx.moveTo(b.r/2-1, (b.r*3)/4)
+                    bossCtx.quadraticCurveTo(b.r/3-1, b.r, 0, b.r)
+                    bossCtx.moveTo(-b.r/2+1, (b.r*3)/4)
+                    bossCtx.quadraticCurveTo(-b.r/3+1, b.r, 0, b.r)
+                    bossCtx.stroke()
+
+                    // Head
+                    bossCtx.beginPath()
+                    bossCtx.arcTo(0, 0, b.r/2, -b.r/2, b.r/3)
+                    bossCtx.arcTo(b.r/2, -b.r/2, 0, -b.r, b.r/3)
+                    bossCtx.arcTo(0, -b.r, -b.r/2, -b.r/2, b.r/3)
+                    bossCtx.arcTo(-b.r/2, -b.r/2, 0, 0, b.r/3)
+                    bossCtx.closePath()
+                    bossCtx.fillStyle = "#E9AB17";
+                    bossCtx.fill();
+                    bossCtx.stroke()
+                    // Antenna
+                    bossCtx.beginPath()
+                    bossCtx.moveTo(-b.r/4, -(b.r*3)/4)
+                    bossCtx.quadraticCurveTo(-b.r/8, -(b.r+(b.r/4)), (-b.r*3)/8, -(b.r+(b.r/8)))
+                    bossCtx.stroke()
+                    bossCtx.beginPath()
+                    bossCtx.moveTo(b.r/4, -(b.r*3)/4)
+                    bossCtx.quadraticCurveTo(b.r/8, -(b.r+(b.r/4)), (b.r*3)/8, -(b.r+(b.r/8)))
+                    bossCtx.stroke()
+
+                    bossCtx.resetTransform()
+                }
+            })
+        }
+        if (beesToSpawn > 0) info.actions[id].lastTime = ticks;
+
+        return info
+    },
+}
+
+BHB.bouncingBees = {
+    //bulletHell({"bouncingBees": {beeAmount: 10, radius: 20, enemySpeed: 3, chargeMult: 1.5, lastTick: false}}, {duration: 10})
+    codeFunc(info, id) {
+        for (let i = 0; i < info.actions[id].beeAmount; i++) {
+            // Random position, not too close to player
+            let angle = Math.random() * 2 * Math.PI;
+            let dist = Math.random() * (info.width / 2 - info.actions[id].radius - info.pr) + info.actions[id].radius + info.pr + 10;
+            let bx = info.width / 2 + Math.cos(angle) * dist + info.boxLeft;
+            let by = info.height / 2 + Math.sin(angle) * dist + info.boxTop;
+            // Random velocity
+            let theta = Math.random() * 2 * Math.PI;
+            let vx = Math.cos(theta) * info.actions[id].enemySpeed;
+            let vy = Math.sin(theta) * info.actions[id].enemySpeed;
+            info.bullets.push({
+                name: "bounceBee",
+                x: bx,
+                y: by,
+                vx: vx,
+                vy: vy,
+                angle: theta,
+                r: info.actions[id].radius,
+                pulsingRed: false,
+                lungeTimer: 0,
+                lungeCooldown: 1000,
+                draw(b, bossCtx) {
+                    bossCtx.translate(b.x, b.y);
+                    bossCtx.rotate(b.angle + Math.PI/2);
+                    bossCtx.strokeStyle = "#000";
+                    bossCtx.lineWidth = 2;
+                    bossCtx.shadowColor = b.pulsingRed ? '#e22' : "#fff";
+                    bossCtx.shadowBlur = 4;
+                    // Wings
+                    bossCtx.beginPath()
+                    bossCtx.arcTo(0, 0, -b.r/2, b.r/2, b.r/4)
+                    bossCtx.arcTo(-b.r/2, b.r/2, -b.r, 0, b.r/4)
+                    bossCtx.arcTo(-b.r, 0, -b.r/2, -b.r/2, b.r/4)
+                    bossCtx.arcTo(-b.r/2, -b.r/2, 0, 0, b.r/4)
+                    bossCtx.arcTo(0, 0, b.r/2, b.r/2, b.r/4)
+                    bossCtx.arcTo(b.r/2, b.r/2, b.r, 0, b.r/4)
+                    bossCtx.arcTo(b.r, 0, b.r/2, -b.r/2, b.r/4)
+                    bossCtx.arcTo(b.r/2, -b.r/2, 0, 0, b.r/4)
+                    bossCtx.closePath()
+                    bossCtx.fillStyle = b.pulsingRed ? '#e22' : "#aaf";
+                    bossCtx.fill();
+                    bossCtx.stroke()
+                    // Butt
+                    bossCtx.beginPath()
+                    bossCtx.arcTo(0, 0, b.r/4, b.r/4, b.r/4)
+                    bossCtx.arcTo(b.r/4, b.r/4, b.r/2, (b.r*3)/4, b.r/4)
+                    bossCtx.arcTo(b.r/2, (b.r*3)/4, 0, b.r+(b.r/2), b.r/3)
+                    bossCtx.arcTo(0, b.r+(b.r/2), -b.r/2, (b.r*3)/4, b.r/3)
+                    bossCtx.arcTo(-b.r/2, (b.r*3)/4, -b.r/4, b.r/4, b.r/3)
+                    bossCtx.arcTo(-b.r/4, b.r/4, 0, 0, b.r/4)
+                    bossCtx.closePath()
+                    bossCtx.fillStyle = "#E9AB17";
+                    bossCtx.fill();
+                    bossCtx.stroke()
+                    // Stripes
+                    bossCtx.beginPath()
+                    bossCtx.moveTo(b.r/4, b.r/4)
+                    bossCtx.quadraticCurveTo(b.r/4, b.r/2, 0, b.r/2)
+                    bossCtx.moveTo(-b.r/4, b.r/4)
+                    bossCtx.quadraticCurveTo(-b.r/4, b.r/2, 0, b.r/2)
+                    bossCtx.moveTo(b.r/2-1, (b.r*3)/4)
+                    bossCtx.quadraticCurveTo(b.r/3-1, b.r, 0, b.r)
+                    bossCtx.moveTo(-b.r/2+1, (b.r*3)/4)
+                    bossCtx.quadraticCurveTo(-b.r/3+1, b.r, 0, b.r)
+                    bossCtx.stroke()
+
+                    // Head
+                    bossCtx.beginPath()
+                    bossCtx.arcTo(0, 0, b.r/2, -b.r/2, b.r/3)
+                    bossCtx.arcTo(b.r/2, -b.r/2, 0, -b.r, b.r/3)
+                    bossCtx.arcTo(0, -b.r, -b.r/2, -b.r/2, b.r/3)
+                    bossCtx.arcTo(-b.r/2, -b.r/2, 0, 0, b.r/3)
+                    bossCtx.closePath()
+                    bossCtx.fillStyle = "#E9AB17";
+                    bossCtx.fill();
+                    bossCtx.stroke()
+                    // Antenna
+                    bossCtx.beginPath()
+                    bossCtx.moveTo(-b.r/4, -(b.r*3)/4)
+                    bossCtx.quadraticCurveTo(-b.r/8, -(b.r+(b.r/4)), (-b.r*3)/8, -(b.r+(b.r/8)))
+                    bossCtx.stroke()
+                    bossCtx.beginPath()
+                    bossCtx.moveTo(b.r/4, -(b.r*3)/4)
+                    bossCtx.quadraticCurveTo(b.r/8, -(b.r+(b.r/4)), (b.r*3)/8, -(b.r+(b.r/8)))
+                    bossCtx.stroke()
+
+                    bossCtx.resetTransform()
+                },
+            });
+        }
+
+        return info
+    },
+    moveFunc(info, ticks, id) {
+        let dt = ticks - (info.actions[id].lastTick || ticks);
+        info.actions[id].lastTick = ticks;
+        for (let b of info.bullets) {
+            if (b.name && b.name == "bounceBee") {
+                // Bounce off walls
+                if (b.x < b.r + info.boxLeft) {b.x = b.r + info.boxLeft; b.vx *= -1; b.angle = Math.PI-b.angle}
+                if (b.x > info.width - b.r + info.boxLeft) {b.x = info.width - b.r + info.boxLeft; b.vx *= -1; b.angle = Math.PI-b.angle}
+                if (b.y < b.r + info.boxTop) {b.y = b.r + info.boxTop; b.vy *= -1; b.angle = -b.angle}
+                if (b.y > info.height - b.r + info.boxTop) {b.y = info.height - b.r + info.boxTop; b.vy *= -1; b.angle = -b.angle}
+
+                // Lunge logic
+                if (!b.pulsingRed && b.lungeCooldown <= 0) {
+                    b.lungeTimer = 1000;
+                    b.vx = b.vx * info.actions[id].chargeMult;
+                    b.vy = b.vy * info.actions[id].chargeMult;
+                    b.pulsingRed = true;
+                } else if (!b.pulsingRed) {
+                    b.lungeCooldown -= dt;
+                }
+                if (b.pulsingRed) {
+                    b.lungeTimer -= dt;
+                    if (b.lungeTimer <= 0) {
+                        b.vx = b.vx / info.actions[id].chargeMult;
+                        b.vy = b.vy / info.actions[id].chargeMult;
+                        b.pulsingRed = false;
+                        b.lungeCooldown = 1200 + (Math.random() * 800);
+                    }
+                }
+            }
+        }
+
+        return info
+    }
+}
+
+BHB.waveBees = {
+    //bulletHell({"waveBees": {beeRate: 5, radius: 20, gapStart: 0, gap: 200, enemySpeed: 6, waveSpeed: 4}}, {duration: 10})
+    moveFunc(info, ticks, id) {
+        // Spawn bees
+        let speedMod = 1.3 - (Math.abs(info.actions[id].gapStart - ((info.height-info.actions[id].gap)/2))/((info.height-info.actions[id].gap)/2))
+        info.actions[id].gapStart = info.actions[id].gapStart + (info.actions[id].waveSpeed*speedMod)
+        if (info.actions[id].gapStart > info.height-info.actions[id].gap) {
+            info.actions[id].gapStart = info.height-info.actions[id].gap
+            info.actions[id].waveSpeed = info.actions[id].waveSpeed * -1
+        }
+        if (info.actions[id].gapStart < 0) {
+            info.actions[id].gapStart = 0
+            info.actions[id].waveSpeed = info.actions[id].waveSpeed * -1
+        }
+        if (!info.actions[id].lastTime) info.actions[id].lastTime = ticks;
+        const beesToSpawn = Math.floor(((ticks - info.actions[id].lastTime) / 1000) * info.actions[id].beeRate)*2;
+        for (let i = 0; i < beesToSpawn; i++) {
+            info.bullets.push({
+                name: "Bee",
+                boxRender: true, // RENDER IN BOX
+                x: -info.actions[id].radius,
+                y: i%2 ? info.actions[id].gapStart+info.actions[id].gap : info.actions[id].gapStart,
+                angle: Math.PI/2,
+                r: info.actions[id].radius,
+                vx: info.actions[id].enemySpeed,
+                vy: 0,
+                draw(b, bossCtx) {
+                    bossCtx.translate(b.x, b.y);
+                    bossCtx.rotate(b.angle);
+                    bossCtx.strokeStyle = "#000";
+                    bossCtx.lineWidth = 2;
+                    bossCtx.shadowColor = "#fff";
+                    bossCtx.shadowBlur = 4;
+                    // Wings
+                    bossCtx.beginPath()
+                    bossCtx.arcTo(0, 0, -b.r/2, b.r/2, b.r/4)
+                    bossCtx.arcTo(-b.r/2, b.r/2, -b.r, 0, b.r/4)
+                    bossCtx.arcTo(-b.r, 0, -b.r/2, -b.r/2, b.r/4)
+                    bossCtx.arcTo(-b.r/2, -b.r/2, 0, 0, b.r/4)
+                    bossCtx.arcTo(0, 0, b.r/2, b.r/2, b.r/4)
+                    bossCtx.arcTo(b.r/2, b.r/2, b.r, 0, b.r/4)
+                    bossCtx.arcTo(b.r, 0, b.r/2, -b.r/2, b.r/4)
+                    bossCtx.arcTo(b.r/2, -b.r/2, 0, 0, b.r/4)
+                    bossCtx.closePath()
+                    bossCtx.fillStyle = "#aaf";
+                    bossCtx.fill();
+                    bossCtx.stroke()
+                    // Butt
+                    bossCtx.beginPath()
+                    bossCtx.arcTo(0, 0, b.r/4, b.r/4, b.r/4)
+                    bossCtx.arcTo(b.r/4, b.r/4, b.r/2, (b.r*3)/4, b.r/4)
+                    bossCtx.arcTo(b.r/2, (b.r*3)/4, 0, b.r+(b.r/2), b.r/3)
+                    bossCtx.arcTo(0, b.r+(b.r/2), -b.r/2, (b.r*3)/4, b.r/3)
+                    bossCtx.arcTo(-b.r/2, (b.r*3)/4, -b.r/4, b.r/4, b.r/3)
+                    bossCtx.arcTo(-b.r/4, b.r/4, 0, 0, b.r/4)
+                    bossCtx.closePath()
+                    bossCtx.fillStyle = "#E9AB17";
+                    bossCtx.fill();
+                    bossCtx.stroke()
+                    // Stripes
+                    bossCtx.beginPath()
+                    bossCtx.moveTo(b.r/4, b.r/4)
+                    bossCtx.quadraticCurveTo(b.r/4, b.r/2, 0, b.r/2)
+                    bossCtx.moveTo(-b.r/4, b.r/4)
+                    bossCtx.quadraticCurveTo(-b.r/4, b.r/2, 0, b.r/2)
+                    bossCtx.moveTo(b.r/2-1, (b.r*3)/4)
+                    bossCtx.quadraticCurveTo(b.r/3-1, b.r, 0, b.r)
+                    bossCtx.moveTo(-b.r/2+1, (b.r*3)/4)
+                    bossCtx.quadraticCurveTo(-b.r/3+1, b.r, 0, b.r)
+                    bossCtx.stroke()
+
+                    // Head
+                    bossCtx.beginPath()
+                    bossCtx.arcTo(0, 0, b.r/2, -b.r/2, b.r/3)
+                    bossCtx.arcTo(b.r/2, -b.r/2, 0, -b.r, b.r/3)
+                    bossCtx.arcTo(0, -b.r, -b.r/2, -b.r/2, b.r/3)
+                    bossCtx.arcTo(-b.r/2, -b.r/2, 0, 0, b.r/3)
+                    bossCtx.closePath()
+                    bossCtx.fillStyle = "#E9AB17";
+                    bossCtx.fill();
+                    bossCtx.stroke()
+                    // Antenna
+                    bossCtx.beginPath()
+                    bossCtx.moveTo(-b.r/4, -(b.r*3)/4)
+                    bossCtx.quadraticCurveTo(-b.r/8, -(b.r+(b.r/4)), (-b.r*3)/8, -(b.r+(b.r/8)))
+                    bossCtx.stroke()
+                    bossCtx.beginPath()
+                    bossCtx.moveTo(b.r/4, -(b.r*3)/4)
+                    bossCtx.quadraticCurveTo(b.r/8, -(b.r+(b.r/4)), (b.r*3)/8, -(b.r+(b.r/8)))
+                    bossCtx.stroke()
+
+                    bossCtx.resetTransform()
+                }
+            })
+        }
+        if (beesToSpawn > 0) info.actions[id].lastTime = ticks;
+
+        return info
+    }
+}
 
 // A wave of bees on the top and bottom of the screen, requiring you to move up and down

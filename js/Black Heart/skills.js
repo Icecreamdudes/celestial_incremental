@@ -60,7 +60,11 @@ BHA.general_bandage = {
 }
 BHA.general_scream = {
     name: "Scream",
-    description() {return "Taunt damage and buffs towards yourself and give yourself " + formatSimple(new Decimal(0.5).add(player.bh.skillData["general_scream"].level.mul(0.1)), 2) + " regen for 10 seconds"},
+    description(char) {
+        let effect = new Decimal(0.5).add(player.bh.skillData["general_scream"].level.mul(0.1))
+        if (player.alephsChamber.milestone[25] >= 2) effect = effect.mul(Decimal.div(char.potency.add(100), 100))
+        return "Taunt damage and buffs towards yourself and give yourself " + formatSimple(effect, 2) + " regen for 10 seconds"
+    },
     passiveText() {return "+" + formatSimple(player.bh.skillData["general_scream"].maxLevel.div(40), 2) + " RGN"},
     char: "general",
     spCost: new Decimal(12),
@@ -82,7 +86,11 @@ BHA.general_scream = {
 }
 BHA.general_recklessAbandon = {
     name: "Reckless Abandon",
-    description() {return "Convert " + formatWhole(new Decimal(25).add(player.bh.skillData["general_recklessAbandon"].level.mul(5))) + "% of your health into damage, at " + formatWhole(new Decimal(20).add(player.bh.skillData["general_recklessAbandon"].level.mul(2))) + "% efficiency"},
+    description(char) {
+        let effect = new Decimal(20).add(player.bh.skillData["general_recklessAbandon"].level.mul(2))
+        if (player.alephsChamber.milestone[25] >= 2) effect = effect.mul(Decimal.div(char.potency.add(100), 100))
+        return "Convert " + formatWhole(new Decimal(25).add(player.bh.skillData["general_recklessAbandon"].level.mul(5))) + "% of your health into damage, at " + formatSimple(effect) + "% efficiency"
+    },
     passiveText() {return "+" + formatSimple(player.bh.skillData["general_recklessAbandon"].maxLevel) + " HP"},
     char: "general",
     spCost: new Decimal(10),
@@ -102,7 +110,11 @@ BHA.general_recklessAbandon = {
 }
 BHA.general_block = {
     name: "Block",
-    description() {return "Shield yourself and increase your defense by " + formatWhole(new Decimal(25).add(player.bh.skillData["general_block"].level.mul(5)))},
+    description(char) {
+        let effect = new Decimal(25).add(player.bh.skillData["general_block"].level.mul(5))
+        if (player.alephsChamber.milestone[25] >= 2) effect = effect.mul(Decimal.div(char.potency.add(100), 100))
+        return "Shield yourself and increase your defense by " + formatSimple(effect)
+    },
     passiveText() {return "+" + formatSimple(player.bh.skillData["general_block"].maxLevel.div(2)) + " DEF"},
     char: "general",
     spCost: new Decimal(10),
@@ -204,7 +216,11 @@ BHA.kres_bigAttack = {
 }
 BHA.kres_battleCry = {
     name: "Battle Cry",
-    description() {return "Boosts the entire team's damage by +" + formatWhole(new Decimal(50).add(player.bh.skillData["kres_battleCry"].level.mul(10))) + "% for 9s"},
+    description(char) {
+        let effect = new Decimal(50).add(player.bh.skillData["kres_battleCry"].level.mul(10))
+        if (player.alephsChamber.milestone[25] >= 2) effect = effect.mul(Decimal.div(char.potency.add(100), 100))
+        return "Boosts the entire team's damage by +" + formatSimple(effect) + "% for 9s"
+    },
     passiveText() {return "+" + formatSimple(player.bh.skillData["kres_battleCry"].maxLevel.div(5)) + " DMG"},
     char: "kres",
     spCost: new Decimal(8),
@@ -248,7 +264,11 @@ BHA.kres_decapitate = {
 }
 BHA.kres_berserker = {
     name: "Berserker",
-    description() {return "Increases Kres' damage, agility, and regen by +" + formatWhole(new Decimal(50).add(player.bh.skillData["kres_berserker"].level.mul(10))) + "%, but gain the Berserk<small>[20%]</small> attribute"},
+    description(char) {
+        let effect = new Decimal(50).add(player.bh.skillData["kres_berserker"].level.mul(10))
+        if (player.alephsChamber.milestone[25] >= 2) effect = effect.mul(Decimal.div(char.potency.add(100), 100))
+        return "Increases Kres' damage, agility, and regen by +" + formatSimple(effect) + "%, but gain the Berserk<small>[20%]</small> attribute"
+    },
     passiveText() {return "+" + formatSimple(player.bh.skillData["kres_berserker"].maxLevel.div(40), 2) + " RGN"},
     char: "kres",
     spCost: new Decimal(12),
@@ -466,7 +486,11 @@ BHA.sel_arrowBarrage = {
 }
 BHA.sel_scavenger = {
     name: "Scavenger",
-    description() {return "Gain a +" + formatWhole(new Decimal(10).add(player.bh.skillData["sel_scavenger"].level.mul(2))) + "% chance to double celestialite rewards"},
+    description(char) {
+        let effect = new Decimal(10).add(player.bh.skillData["sel_scavenger"].level.mul(2))
+        if (player.alephsChamber.milestone[25] >= 2) effect = effect.mul(Decimal.div(char.potency.add(100), 100))
+        return "Gain a +" + formatSimple(effect) + "% chance to double celestialite rewards"
+    },
     passiveText() {return "+" + formatSimple(player.bh.skillData["sel_scavenger"].maxLevel.div(2)) + " LUCK"},
     char: "sel",
     spCost: new Decimal(12),
@@ -479,7 +503,7 @@ BHA.sel_scavenger = {
     constantType: "effect",
     constantTarget: "celestialite",
     effects: {
-        "curMult"() {return new Decimal(0.1).add(player.bh.skillData["sel_scavenger"].level.mul(0.02))}, // Multiplicative Effect
+        "curAdd"() {return new Decimal(0.1).add(player.bh.skillData["sel_scavenger"].level.mul(0.02))}, // Multiplicative Effect
     },
     cooldown: new Decimal(Infinity),
 }
@@ -512,7 +536,7 @@ BHA.eclipse_drain = {
 }
 BHA.eclipse_motivation = {
     name: "Motivation",
-    description() {
+    description(char) {
         let eff = false
         let index
         let slot
@@ -527,10 +551,12 @@ BHA.eclipse_motivation = {
                 }
             }
         }
+        let effect = new Decimal(2).add(player.bh.skillData["eclipse_motivation"].level.mul(0.4))
+        if (player.alephsChamber.milestone[25] >= 2) effect = effect.mul(Decimal.div(char.potency.add(100), 100))
         if (!eff) {
-            return "Repeating this skill will keep boosting the team's damage by +" + formatSimple(new Decimal(2).add(player.bh.skillData["eclipse_motivation"].level.mul(0.4))) + "%, with total boost square rooted"
+            return "Repeating this skill will keep boosting the team's damage by +" + formatSimple(effect) + "%, with total boost square rooted"
         } else {
-            return "Repeating this skill will keep boosting the team's damage by +" + formatSimple(new Decimal(2).add(player.bh.skillData["eclipse_motivation"].level.mul(0.4))) + "%, with total boost square rooted<br><small>[+" + formatSimple(Decimal.sub(player.bh.characters[index].skills[slot].variables["damageMult"], 1).mul(100)) + "% DMG Total]"
+            return "Repeating this skill will keep boosting the team's damage by +" + formatSimple(effect) + "%, with total boost square rooted<br><small>[+" + formatSimple(Decimal.sub(player.bh.characters[index].skills[slot].variables["damageMult"], 1).mul(100)) + "% DMG Total]"
         }
     },
     passiveText() {return "+" + formatSimple(player.bh.skillData["eclipse_motivation"].maxLevel.div(5), 2) + " DMG"},
@@ -602,7 +628,11 @@ BHA.eclipse_solarRetinopathy = {
 }
 BHA.eclipse_syzygy = {
     name: "Syzygy",
-    description() {return "Speed up time by +" + formatWhole(new Decimal(25).add(player.bh.skillData["eclipse_syzygy"].level.mul(5))) + "%"},
+    description(char) {
+        let effect = new Decimal(25).add(player.bh.skillData["eclipse_syzygy"].level.mul(5))
+        if (player.alephsChamber.milestone[25] >= 2) effect = effect.mul(Decimal.div(char.potency.add(100), 100))
+        return "Speed up time by +" + formatSimple(effect) + "%"
+    },
     passiveText() {return "+" + formatSimple(player.bh.skillData["eclipse_syzygy"].maxLevel.div(2)) + " AGI"},
     char: "eclipse",
     spCost: new Decimal(14),

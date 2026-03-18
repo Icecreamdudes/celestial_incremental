@@ -110,7 +110,7 @@ function bhAction(index, slot, interval = false, magnitude = 1, delay = false) {
                     bhHeal(heal, index, slot, target, healStr)
                     break;
                 case "effect":
-                    const DONT_SKIP = ["attributes", "health", "damage", "defense", "regen", "agility", "luck", "mending", "time", "cur"]
+                    const DONT_SKIP = ["attributes", "health", "damage", "defense", "regen", "agility", "luck", "mending", "potency", "time", "cur"]
                     if (!action.properties) return
 
                     // =-- Target Change Modifiers --=
@@ -161,9 +161,17 @@ function bhAction(index, slot, interval = false, magnitude = 1, delay = false) {
                             case 0:
                                 name = i.slice(0, i.indexOf("A"))
                                 if (index == 3) {
+                                    // POTENCY CALC
+                                    if (player.alephsChamber.milestone[25] >= 2 && Decimal.gt(val, 0)) {
+                                        val = val.mul(Decimal.div(player.bh.celestialite.potency.add(100), 100))
+                                    }
                                     if (!player.bh.celestialite.actions[slot].variables[i]) player.bh.celestialite.actions[slot].variables[i] = new Decimal(0)
                                     player.bh.celestialite.actions[slot].variables[i] = Decimal.add(player.bh.celestialite.actions[slot].variables[i], val)
                                 } else {
+                                    // POTENCY CALC
+                                    if (player.alephsChamber.milestone[25] >= 2 && Decimal.gt(val, 0)) {
+                                        val = val.mul(Decimal.div(player.bh.characters[index].potency.add(100), 100))
+                                    }
                                     if (!player.bh.characters[index].skills[slot].variables[i]) player.bh.characters[index].skills[slot].variables[i] = new Decimal(0)
                                     player.bh.characters[index].skills[slot].variables[i] = Decimal.add(player.bh.characters[index].skills[slot].variables[i], val)
                                 }
@@ -171,9 +179,17 @@ function bhAction(index, slot, interval = false, magnitude = 1, delay = false) {
                             case 1:
                                 name = i.slice(0, i.indexOf("M"))
                                 if (index == 3) {
+                                    // POTENCY CALC
+                                    if (player.alephsChamber.milestone[25] >= 2 && Decimal.gt(val, 1)) {
+                                        val = val.sub(1).mul(Decimal.div(player.bh.celestialite.potency.add(100), 100)).add(1)
+                                    }
                                     if (!player.bh.celestialite.actions[slot].variables[i]) player.bh.celestialite.actions[slot].variables[i] = new Decimal(1)
                                     player.bh.celestialite.actions[slot].variables[i] = Decimal.mul(player.bh.celestialite.actions[slot].variables[i], val)
                                 } else {
+                                    // POTENCY CALC
+                                    if (player.alephsChamber.milestone[25] >= 2 && Decimal.gt(val, 1)) {
+                                        val = val.sub(1).mul(Decimal.div(player.bh.characters[index].potency.add(100), 100)).add(1)
+                                    }
                                     if (!player.bh.characters[index].skills[slot].variables[i]) player.bh.characters[index].skills[slot].variables[i] = new Decimal(1)
                                     player.bh.characters[index].skills[slot].variables[i] = Decimal.mul(player.bh.characters[index].skills[slot].variables[i], val)
                                 }
@@ -185,11 +201,19 @@ function bhAction(index, slot, interval = false, magnitude = 1, delay = false) {
 
                                 //1-1/50^2+1
                                 if (index == 3) {
+                                    // POTENCY CALC
+                                    if (player.alephsChamber.milestone[25] >= 2 && Decimal.gt(val, 0)) {
+                                        val = val.mul(Decimal.div(player.bh.celestialite.potency.add(100), 100))
+                                    }
                                     if (!player.bh.celestialite.actions[slot].variables[i]) player.bh.celestialite.actions[slot].variables[i] = new Decimal(1)
                                     pre = player.bh.celestialite.actions[slot].variables[i]
                                     player.bh.celestialite.actions[slot].variables[i] = Decimal.sub(player.bh.celestialite.actions[slot].variables[i], 1).div(val).pow(2).add(1).pow(0.5).mul(val).add(1)
                                     val = Decimal.sub(player.bh.celestialite.actions[slot].variables[i], pre)
                                 } else {
+                                    // POTENCY CALC
+                                    if (player.alephsChamber.milestone[25] >= 2 && Decimal.gt(val, 0)) {
+                                        val = val.mul(Decimal.div(player.bh.characters[index].potency.add(100), 100))
+                                    }
                                     if (!player.bh.characters[index].skills[slot].variables[i]) player.bh.characters[index].skills[slot].variables[i] = new Decimal(1)
                                     pre = player.bh.characters[index].skills[slot].variables[i]
                                     player.bh.characters[index].skills[slot].variables[i] = Decimal.sub(player.bh.characters[index].skills[slot].variables[i], 1).div(val).pow(2).add(1).pow(0.5).mul(val).add(1)
@@ -563,7 +587,7 @@ function bhHeal(heal, index, slot, target, str = "") {
 }
 
 function celestialiteReward(gain) {
-    let generalChance = Decimal.sub(player.bh.celestialite.curMult, 1)
+    let generalChance = Decimal.sub(player.bh.celestialite.curAdd, 1)
     let generalRemain = generalChance.floor()
     generalChance = generalChance.sub(generalRemain)
     
@@ -734,6 +758,7 @@ function celestialiteSpawn() {
     player.bh.celestialite.agility = BHC[celestialiteId].agility ?? new Decimal(0)
     player.bh.celestialite.luck = BHC[celestialiteId].luck ?? new Decimal(0)
     player.bh.celestialite.mending = BHC[celestialiteId].mending ?? new Decimal(0)
+    player.bh.celestialite.potency = BHC[celestialiteId].potency ?? new Decimal(0)
 
     player.bh.celestialite.health = player.bh.celestialite.health.mul(player.bh.celestialite.randomMult)
     player.bh.celestialite.health = player.bh.celestialite.health.mul(scale)
@@ -751,6 +776,8 @@ function celestialiteSpawn() {
     player.bh.celestialite.luck = player.bh.celestialite.luck.mul(scale)
     player.bh.celestialite.mending = player.bh.celestialite.mending.mul(player.bh.celestialite.randomMult)
     player.bh.celestialite.mending = player.bh.celestialite.mending.mul(scale)
+    player.bh.celestialite.potency = player.bh.celestialite.potency.mul(player.bh.celestialite.randomMult)
+    player.bh.celestialite.potency = player.bh.celestialite.potency.mul(scale)
     for (let i = 0; i < 4; i++) {
         if (BHC[player.bh.celestialite.id].actions[i]) {
             if (BHC[player.bh.celestialite.id].actions[i].variables) {

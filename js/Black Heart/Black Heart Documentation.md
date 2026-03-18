@@ -26,6 +26,7 @@ BHP.general = {
     agility: new Decimal(10),
     luck: new Decimal(10),
     mending: new Decimal(0),
+    potency: new Decimal(0),
 }
 ```
 
@@ -55,6 +56,8 @@ Stats past this point are unlocked later into the game:
 
 - mending: Base character mending
 
+- potency: Base character potency
+
 ### characterData Object
 
 The characterData object (Stored in `js/Black Heart/blackHeart.js`, under the startData function and characterData object), stores whether the character is selected, the characters currently selected skills, how many skill points the character has consumed to equip skills, and temp stat values. The objects name should be the characters id in string format. You generally want to already have their initial skill equipped in the start data to prevent confusion.
@@ -78,6 +81,7 @@ characterData objects should be formatted like this:
     agility: new Decimal(10),
     luck: new Decimal(10),
     mending: new Decimal(0),
+    potency: new Decimal(0),
 },
 ```
 
@@ -104,6 +108,8 @@ After this point are just variables to store temporary stat values.
 - luck: Stores temporary luck value
 
 - mending: Stores temporary mending value
+
+- potency: Stores temporary potency value
 
 
 

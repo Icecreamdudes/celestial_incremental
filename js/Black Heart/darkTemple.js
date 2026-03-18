@@ -255,6 +255,8 @@ addLayer("darkTemple", {
 
         mndAdd: new Decimal(0),
 
+        potAdd: new Decimal(0),
+
         depth1CurMult: new Decimal(1),
         depth2CurMult: new Decimal(1),
         depth3CurMult: new Decimal(1),
@@ -299,6 +301,7 @@ addLayer("darkTemple", {
         if (stats.rgn) player.darkTemple.rgnAdd = new Decimal(stats.rgn)
         if (stats.luck) player.darkTemple.luckAdd = new Decimal(stats.luck)
         if (stats.mnd) player.darkTemple.mndAdd = new Decimal(stats.mnd)
+        if (stats.pot) player.darkTemple.potAdd = new Decimal(stats.pot)
         if (stats.d1c) player.darkTemple.depth1CurMult = Decimal.add(1, stats.d1c)
         if (stats.d2c) player.darkTemple.depth2CurMult = Decimal.add(1, stats.d2c)
         if (stats.d3c) player.darkTemple.depth3CurMult = Decimal.add(1, stats.d3c)

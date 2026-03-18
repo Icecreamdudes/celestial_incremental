@@ -169,10 +169,11 @@ addLayer("bh", {
             agility: new Decimal(0),
             luck: new Decimal(0),
             mending: new Decimal(0),
+            potency: new Decimal(0),
             shield: new Decimal(0), // Not same as previous, is a prevent damage stack
             stun: ["none", new Decimal(0)],
             randomMult: new Decimal(1),
-            curMult: new Decimal(1),
+            curAdd: new Decimal(1),
             attributes: {},
             actionChances: [],
             actions: {
@@ -216,6 +217,7 @@ addLayer("bh", {
                 agility: new Decimal(0),
                 luck: new Decimal(0),
                 mending: new Decimal(0),
+                potency: new Decimal(0),
                 shield: new Decimal(0),
                 stun: ["none", new Decimal(0)],
                 attributes: {},
@@ -270,6 +272,7 @@ addLayer("bh", {
                 agility: new Decimal(0),
                 luck: new Decimal(0),
                 mending: new Decimal(0),
+                potency: new Decimal(0),
                 shield: new Decimal(0),
                 stun: ["none", new Decimal(0)],
                 attributes: {},
@@ -324,6 +327,7 @@ addLayer("bh", {
                 agility: new Decimal(0),
                 luck: new Decimal(0),
                 mending: new Decimal(0),
+                potency: new Decimal(0),
                 shield: new Decimal(0),
                 stun: ["none", new Decimal(0)],
                 attributes: {},
@@ -387,6 +391,7 @@ addLayer("bh", {
                 agility: new Decimal(5),
                 luck: new Decimal(0),
                 mending: new Decimal(0),
+                potency: new Decimal(10),
             },
             "nav": {
                 selected: true,
@@ -404,6 +409,7 @@ addLayer("bh", {
                 agility: new Decimal(5),
                 luck: new Decimal(0),
                 mending: new Decimal(0),
+                potency: new Decimal(0),
             },
             "sel": {
                 selected: true,
@@ -421,6 +427,7 @@ addLayer("bh", {
                 agility: new Decimal(8),
                 luck: new Decimal(0),
                 mending: new Decimal(0),
+                potency: new Decimal(5),
             },
             "eclipse": {
                 selected: false,
@@ -438,6 +445,7 @@ addLayer("bh", {
                 agility: new Decimal(0),
                 luck: new Decimal(0),
                 mending: new Decimal(0),
+                potency: new Decimal(10),
             },
             "geroa": {
                 selected: false,
@@ -455,6 +463,7 @@ addLayer("bh", {
                 agility: new Decimal(10),
                 luck: new Decimal(0),
                 mending: new Decimal(0),
+                potency: new Decimal(0),
             },
             "vespasian": {
                 selected: false,
@@ -472,6 +481,7 @@ addLayer("bh", {
                 agility: new Decimal(5),
                 luck: new Decimal(0),
                 mending: new Decimal(5),
+                potency: new Decimal(5),
             },
         },
 
@@ -590,6 +600,8 @@ addLayer("bh", {
                 luckAdd: new Decimal(0),
                 mendingMult: new Decimal(1),
                 mendingAdd: new Decimal(0),
+                potencyMult: new Decimal(1),
+                potencyAdd: new Decimal(0),
                 attributes: [],
             },
             1: {
@@ -607,6 +619,8 @@ addLayer("bh", {
                 luckAdd: new Decimal(0),
                 mendingMult: new Decimal(1),
                 mendingAdd: new Decimal(0),
+                potencyMult: new Decimal(1),
+                potencyAdd: new Decimal(0),
                 attributes: [],
             },
             2: {
@@ -624,10 +638,12 @@ addLayer("bh", {
                 luckAdd: new Decimal(0),
                 mendingMult: new Decimal(1),
                 mendingAdd: new Decimal(0),
+                potencyMult: new Decimal(1),
+                potencyAdd: new Decimal(0),
                 attributes: [],
             },
             3: {
-                curMult: new Decimal(0),
+                curAdd: new Decimal(1),
                 healthMult: new Decimal(1),
                 healthAdd: new Decimal(0),
                 damageMult: new Decimal(1),
@@ -642,6 +658,8 @@ addLayer("bh", {
                 luckAdd: new Decimal(0),
                 mendingMult: new Decimal(1),
                 mendingAdd: new Decimal(0),
+                potencyMult: new Decimal(1),
+                potencyAdd: new Decimal(0),
                 attributes: [],
             },
             timeAdd: new Decimal(0),
@@ -807,15 +825,19 @@ addLayer("bh", {
                                         }
                                         if (k.includes("time")) {
                                             if (k == "timeAdd") {
+                                                val = val.mul(Decimal.div(player.bh.celestialite.potency.add(100), 100))
                                                 bhTemp[k] = bhTemp[k].add(val)
                                             } else {
+                                                val = val.sub(1).mul(Decimal.div(player.bh.celestialite.potency.add(100), 100)).add(1)
                                                 bhTemp[k] = bhTemp[k].mul(val)
                                             }
                                             continue
                                         }
                                         if (k.includes("Add")) {
+                                            val = val.mul(Decimal.div(player.bh.celestialite.potency.add(100), 100))
                                             bhTemp[target[t]][k] = bhTemp[target[t]][k].add(val)
                                         } else {
+                                            val = val.sub(1).mul(Decimal.div(player.bh.celestialite.potency.add(100), 100)).add(1)
                                             bhTemp[target[t]][k] = bhTemp[target[t]][k].mul(val)
                                         }
                                     }
@@ -933,15 +955,32 @@ addLayer("bh", {
                                     }
                                     if (k.includes("time")) {
                                         if (k == "timeAdd") {
+                                            // POTENCY CALC
+                                            if (player.alephsChamber.milestone[25] >= 2 && Decimal.gt(val, 0)) {
+                                                val = val.mul(Decimal.div(player.bh.characters[i].potency.add(100), 100))
+                                            }
                                             bhTemp[k] = bhTemp[k].add(val)
                                         } else {
+                                            // POTENCY CALC
+                                            if (player.alephsChamber.milestone[25] >= 2 && Decimal.gt(val, 1)) {
+                                                val = val.sub(1).mul(Decimal.div(player.bh.characters[i].potency.add(100), 100)).add(1)
+                                            }
                                             bhTemp[k] = bhTemp[k].mul(val)
                                         }
                                         continue
                                     }
+
                                     if (k.includes("Add")) {
+                                        // POTENCY CALC
+                                        if (player.alephsChamber.milestone[25] >= 2 && Decimal.gt(val, 0)) {
+                                            val = val.mul(Decimal.div(player.bh.characters[i].potency.add(100), 100))
+                                        }
                                         bhTemp[target[t]][k] = bhTemp[target[t]][k].add(val)
                                     } else {
+                                        // POTENCY CALC
+                                        if (player.alephsChamber.milestone[25] >= 2 && Decimal.gt(val, 1)) {
+                                            val = val.sub(1).mul(Decimal.div(player.bh.characters[i].potency.add(100), 100)).add(1)
+                                        }
                                         bhTemp[target[t]][k] = bhTemp[target[t]][k].mul(val)
                                     }
                                 }
@@ -1021,8 +1060,8 @@ addLayer("bh", {
         player.bh.celestialite.agility = player.bh.celestialite.agility.add(bhTemp[3].agilityAdd)
         player.bh.celestialite.agility = player.bh.celestialite.agility.mul(bhTemp[3].agilityMult)
 
-        player.bh.celestialite.curMult = BHC[player.bh.celestialite.id].curMult ?? new Decimal(1)
-        player.bh.celestialite.curMult = player.bh.celestialite.curMult.add(bhTemp[3].curMult)
+        player.bh.celestialite.curAdd = BHC[player.bh.celestialite.id].curAdd ?? new Decimal(1)
+        player.bh.celestialite.curAdd = player.bh.celestialite.curAdd.mul(bhTemp[3].curAdd)
 
         player.bh.celestialite.attributes = BHC[player.bh.celestialite.id].attributes ?? {}
         player.bh.celestialite.attributes = Object.assign({}, player.bh.celestialite.attributes, bhTemp[3].attributes)
@@ -1139,6 +1178,12 @@ addLayer("bh", {
         let mendingAdd = new Decimal(0)
         mendingAdd = mendingAdd.add(player.darkTemple.mndAdd)
 
+        // =-- POTENCY STUFF --= //
+        let potencyBase = new Decimal(1)
+
+        let potencyAdd = new Decimal(0)
+        mendingAdd = mendingAdd.add(player.darkTemple.potAdd)
+
         // =-- STAT CALCULATION --=
         for (let i = 0; i < 3; i++) {
             // HEALTH
@@ -1192,6 +1237,16 @@ addLayer("bh", {
             player.bh.characters[i].mending = player.bh.characters[i].mending.mul(bhTemp[i].mendingMult)
 
             if (player.matosLair.milestone[25] < 2) player.bh.characters[i].mending = new Decimal(0)
+
+            // POTENCY
+            player.bh.characters[i].potency = run(BHP[player.bh.characters[i].id].potency, BHP[player.bh.characters[i].id]) ?? new Decimal(0)
+            player.bh.characters[i].potency = player.bh.characters[i].potency.mul(potencyBase)
+            player.bh.characters[i].potency = player.bh.characters[i].potency.add(potencyAdd)
+            player.bh.characters[i].potency = player.bh.characters[i].potency.add(bhTemp[i].potencyAdd)
+            player.bh.characters[i].potency = player.bh.characters[i].potency.mul(bhTemp[i].potencyMult)
+
+            if (player.alephsChamber.milestone[25] < 2) player.bh.characters[i].potency = new Decimal(0)
+
 
             // ATTRIBUTES
             player.bh.characters[i].attributes = BHP[player.bh.characters[i].id].attributes ?? {}
@@ -1247,6 +1302,13 @@ addLayer("bh", {
             player.bh.characterData[i].mending = player.bh.characterData[i].mending.add(mendingAdd)
 
             if (player.matosLair.milestone[25] < 2) player.bh.characterData[i].mending = new Decimal(0)
+            
+            // POTENCY
+            player.bh.characterData[i].potency = run(BHP[i].potency, BHP[i]) ?? new Decimal(0)
+            player.bh.characterData[i].potency = player.bh.characterData[i].potency.mul(potencyBase)
+            player.bh.characterData[i].potency = player.bh.characterData[i].potency.add(potencyAdd)
+
+            if (player.alephsChamber.milestone[25] < 2) player.bh.characterData[i].potency = new Decimal(0)
         }
 
         // Stagnant Timers
@@ -3727,17 +3789,18 @@ addLayer("bh", {
                                         ["row", [
                                             ["tooltip-row", [
                                                 ["raw-html", () => {return "<h3>MND</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characterData[player.bh.characterSelection].mending)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                                ["raw-html", () => {return "<div class='bottomTooltip'>Base Mending: " + formatSimple(run(BHP[player.bh.characterSelection].mending, BHP[player.bh.characterSelection])) + "<hr><small>Improves healing skills<br>[*] (MND/10)+1</small></div>"}],
+                                                ["raw-html", () => {return player.matosLair.milestone[25] >= 2 ? "<div class='bottomTooltip'>Base Mending: " + formatSimple(run(BHP[player.bh.characterSelection].mending, BHP[player.bh.characterSelection])) + "<hr><small>Improves healing skills<br>[*] (MND/10)+1</small></div>" : ""}],
                                             ], () => {
                                                 let look = {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px", marginRight: "4px"}
                                                 if (player.matosLair.milestone[25] < 2) {look.filter = "brightness(0%) blur(2px)"; look.userSelect = "none"}
                                                 return look
                                             }],
                                             ["tooltip-row", [
-                                                ["raw-html", () => {return "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                                ["raw-html", () => {return "<h3>POT</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characterData[player.bh.characterSelection].potency)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                                ["raw-html", () => {return player.alephsChamber.milestone[25] >= 2 ? "<div class='bottomTooltip'>Base Potency: " + formatSimple(run(BHP[player.bh.characterSelection].potency, BHP[player.bh.characterSelection])) + "<hr><small>Improves buff skills<br>[*] (100+POT)/100</small></div>" : ""}],
                                             ], () => {
                                                 let look = {width: "80px", height: "45px", background: "var(--layerBackground)", borderRadius: "10px"}
-                                                if (true) {look.filter = "brightness(0%) blur(2px)"; look.userSelect = "none"}
+                                                if (player.alephsChamber.milestone[25] < 2) {look.filter = "brightness(0%) blur(2px)"; look.userSelect = "none"}
                                                 return look
                                             }],
                                         ]],

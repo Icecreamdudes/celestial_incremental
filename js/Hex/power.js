@@ -1163,7 +1163,7 @@ addLayer("hpw", {
             display() {
                 return "<h3>Might 目</h3>\n\
                     Release the seal.\n\
-                    (This is unreversable)\n\ \n\
+                    (This is irreversable)\n\ \n\
                     Req: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Power\n\
                     [COMING SOON]"
             },

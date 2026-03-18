@@ -10,6 +10,7 @@ BHP.none = {
     agility: new Decimal(0),
     luck: new Decimal(0),
     mending: new Decimal(0),
+    potency: new Decimal(0),
 }
 BHP.general = {
     name: "Player",
@@ -22,6 +23,7 @@ BHP.general = {
     agility: new Decimal(10),
     luck: new Decimal(10),
     mending: new Decimal(0),
+    potency: new Decimal(0),
 }
 // Start of characters
 BHP.kres = {
@@ -35,6 +37,7 @@ BHP.kres = {
     agility() {return new Decimal(5).mul(buyableEffect("sp", 12))},
     luck: new Decimal(0),
     mending: new Decimal(0),
+    potency() {return new Decimal(10).mul(buyableEffect("sp", 12))},
 }
 BHP.nav = {
     name: "Nav",
@@ -47,6 +50,7 @@ BHP.nav = {
     agility() {return new Decimal(5).mul(buyableEffect("sp", 22))},
     luck: new Decimal(0),
     mending() {return new Decimal(10).mul(buyableEffect("sp", 22))},
+    potency: new Decimal(0),
 }
 BHP.sel = {
     name() {return player.ir.iriditeDefeated ? "Sel's Husk" : "Sel"},
@@ -59,6 +63,7 @@ BHP.sel = {
     agility() {return new Decimal(8).mul(buyableEffect("sp", 32))},
     luck() {return hasUpgrade("sp", 31) ? new Decimal(10).mul(buyableEffect("sp", 32)) : new Decimal(0)},
     mending: new Decimal(0),
+    potency() {return new Decimal(5).mul(buyableEffect("sp", 32))},
 }
 BHP.eclipse = {
     name: "Eclipse",
@@ -71,6 +76,7 @@ BHP.eclipse = {
     agility() {return hasUpgrade("sma", 226) ? new Decimal(5) : new Decimal(0)},
     luck: new Decimal(0),
     mending: new Decimal(5),
+    potency: new Decimal(10),
 }
 BHP.geroa = {
     name: "Geroa",
@@ -88,6 +94,7 @@ BHP.geroa = {
     agility() {return hasUpgrade("ir", 205) ? new Decimal(12) : new Decimal(10)},
     luck: new Decimal(0),
     mending() {return hasUpgrade("ir", 205) ? new Decimal(6) : new Decimal(5)},
+    potency: new Decimal(0),
 }
 BHP.vespasian = {
     name: "Vespasian",
@@ -100,4 +107,5 @@ BHP.vespasian = {
     agility: new Decimal(5),
     luck: new Decimal(0),
     mending: new Decimal(5),
+    potency: new Decimal(5),
 }

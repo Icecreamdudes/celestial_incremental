@@ -159,8 +159,8 @@ BHC.m21 = {
         borderColor: "#2F2F2F",
         fontSize: "60px",
     },
-    health: new Decimal(800),
-    damage: new Decimal(20),
+    health: new Decimal(1000),
+    damage: new Decimal(30),
     actions: {
         0: {
             name: "Slash",
@@ -203,8 +203,8 @@ BHC.m22 = {
         borderColor: "#2F2F2F",
         fontSize: "60px",
     },
-    health: new Decimal(850),
-    damage: new Decimal(10),
+    health: new Decimal(1100),
+    damage: new Decimal(15),
     regen: new Decimal(5),
     actions: {
         0: {
@@ -259,7 +259,7 @@ BHC.m23 = {
         fontSize: "60px",
     },
     health: new Decimal(500),
-    damage: new Decimal(20),
+    damage: new Decimal(30),
     attributes: {
         "air": new Decimal(0.2), // Resistance DMG Mult
         "warded": new Decimal(0.2), // Resistance DMG Mult
@@ -310,8 +310,8 @@ BHC.m24 = {
         borderColor: "#2F2F2F",
         fontSize: "60px",
     },
-    health: new Decimal(900),
-    damage: new Decimal(20),
+    health: new Decimal(1200),
+    damage: new Decimal(30),
     attributes: {
         "daze": new Decimal(0.5),
     },
@@ -365,8 +365,8 @@ BHC.m25 = {
         borderColor: "#2F2F2F",
         fontSize: "60px",
     },
-    health: new Decimal(950),
-    damage: new Decimal(20),
+    health: new Decimal(1300),
+    damage: new Decimal(30),
     actions: {
         0: {
             name: "Poison Needle",
@@ -384,7 +384,7 @@ BHC.m25 = {
             constantType: "effect",
             constantTarget: "storedTarget",
             effects: {
-                "regenAdd": new Decimal(-10)
+                "regenAdd"() {return Decimal.mul(-0.5, player.bh.celestialite.damage)}
             },
             duration: new Decimal(3),
         },
@@ -420,7 +420,7 @@ BHC.m26 = {
         borderColor: "#2F2F2F",
         fontSize: "60px",
     },
-    health: new Decimal(1000),
+    health: new Decimal(1400),
     damage: new Decimal(6),
     luck: new Decimal(3),
     actions: {
@@ -446,7 +446,7 @@ BHC.m26 = {
             properties: {
                 "luckAdd": new Decimal(1),
             },
-            cooldown: new Decimal(10),
+            cooldown: new Decimal(6),
         },
     },
     reward() {
@@ -472,8 +472,8 @@ BHC.ma1 = {
         borderColor: "#2F2F2F",
         fontSize: "60px",
     },
-    health: new Decimal(2000),
-    damage: new Decimal(10),
+    health: new Decimal(3000),
+    damage: new Decimal(15),
     actions: {
         0: {
             name: "Earthquake",
@@ -521,8 +521,8 @@ BHC.ma2 = {
         borderColor: "#2F2F2F",
         fontSize: "60px",
     },
-    health: new Decimal(2500),
-    damage: new Decimal(20),
+    health: new Decimal(4000),
+    damage: new Decimal(30),
     luck: new Decimal(6),
     actions: {
         0: {
@@ -591,8 +591,8 @@ BHC.ma3 = {
         borderColor: "#2F2F2F",
         fontSize: "60px",
     },
-    health: new Decimal(3000),
-    damage: new Decimal(5),
+    health: new Decimal(5000),
+    damage: new Decimal(6),
     actions: {
         0: {
             name: "Missile Flurry",
@@ -637,8 +637,8 @@ BHC.ma3 = {
 BHC.aleph = {
     name: "Aleph",
     icon: "resources/aleph.png",
-    health: new Decimal(25000),
-    damage: new Decimal(20),
+    health: new Decimal(20000),
+    damage: new Decimal(30),
     noRandomStats: true,
     timer: new Decimal(250),
     actions: {
@@ -664,11 +664,11 @@ BHC.aleph = {
                 if (!player.bh.celestialite.actions[0].variables.attacks) player.bh.celestialite.actions[0].variables.attacks = 0
                 switch (player.bh.celestialite.actions[0].variables.attacks) {
                     case 0:
-                        bhAttack(new Decimal(15), 3, 0, "allPlayer")
+                        bhAttack(new Decimal(20), 3, 0, "allPlayer")
                         player.bh.celestialite.actions[0].variables.attacks = 1
                         break;
                     case 1:
-                        let dmg1 = new Decimal(25)
+                        let dmg1 = new Decimal(30)
                         let str1 = ""
                         if (Decimal.gte(0.5, Math.random())) {
                             dmg1 = dmg1.mul(2)

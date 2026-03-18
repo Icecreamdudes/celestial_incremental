@@ -2376,8 +2376,8 @@ addLayer("bh", {
             },
         },
         "Char-C0-Page": {
-            title: "???",
-            canClick: false,
+            title() {return "Page " + (player.bh.characters[0].page+1)},
+            canClick: true,
             unlocked: true,
             onClick() {
                 if (player.bh.characters[0].page == 0) {
@@ -2468,8 +2468,8 @@ addLayer("bh", {
             },
         },
         "Char-C1-Page": {
-            title: "???",
-            canClick: false,
+            title() {return "Page " + (player.bh.characters[1].page+1)},
+            canClick: true,
             unlocked: true,
             onClick() {
                 if (player.bh.characters[1].page == 0) {
@@ -2560,8 +2560,8 @@ addLayer("bh", {
             },
         },
         "Char-C2-Page": {
-            title: "???",
-            canClick: false,
+            title() {return "Page " + (player.bh.characters[2].page+1)},
+            canClick: true,
             unlocked: true,
             onClick() {
                 if (player.bh.characters[2].page == 0) {
@@ -4012,28 +4012,46 @@ addLayer("bh", {
                                     ["row", [
                                         ["style-column", [
                                             ["raw-html", () => {return "<h3>HP</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[0].maxHealth)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"}],
+                                        ], () => {return player.bh.characters[0].page == 0 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"} : {display: "none !important"}}],
                                         ["style-column", [
                                             ["raw-html", () => {return "<h3>DMG</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[0].damage)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"}],
+                                        ], () => {return player.bh.characters[0].page == 0 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"} : {display: "none !important"}}],
+                                        ["style-column", [
+                                            ["raw-html", () => {return player.matosLair.milestone[25] >= 2 ? "<h3>MND</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[0].mending) : "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], () => {return player.bh.characters[0].page == 1 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"} : {display: "none !important"}}],
+                                        ["style-column", [
+                                            ["raw-html", () => {return player.alephsChamber.milestone[25] >= 2 ? "<h3>POT</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[0].potency) : "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], () => {return player.bh.characters[0].page == 1 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"} : {display: "none !important"}}],
                                     ]],
                                     ["blank", "4px"],
                                     ["row", [
                                         ["style-column", [
                                             ["raw-html", () => {return "<h3>RGN</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[0].regen, 2)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"}],
+                                        ], () => {return player.bh.characters[0].page == 0 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"} : {display: "none !important"}}],
                                         ["style-column", [
                                             ["raw-html", () => {return "<h3>AGI</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[0].agility)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"}],
+                                        ], () => {return player.bh.characters[0].page == 0 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"} : {display: "none !important"}}],
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], () => {return player.bh.characters[0].page == 1 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"} : {display: "none !important"}}],
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], () => {return player.bh.characters[0].page == 1 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"} : {display: "none !important"}}],
                                     ]],
                                     ["blank", "4px"],
                                     ["row", [
                                         ["style-column", [
                                             ["raw-html", () => {return "<h3>DEF</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[0].defense)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"}],
+                                        ], () => {return player.bh.characters[0].page == 0 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"} : {display: "none !important"}}],
                                         ["style-column", [
                                             ["raw-html", () => {return "<h3>LUCK</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[0].luck)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"}],
+                                        ], () => {return player.bh.characters[0].page == 0 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"} : {display: "none !important"}}],
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], () => {return player.bh.characters[0].page == 1 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"} : {display: "none !important"}}],
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], () => {return player.bh.characters[0].page == 1 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"} : {display: "none !important"}}],
                                     ]],
                                     ["blank", "4px"],
                                     ["clickable", "Char-C0-Page"],
@@ -4081,28 +4099,46 @@ addLayer("bh", {
                                     ["row", [
                                         ["style-column", [
                                             ["raw-html", () => {return "<h3>HP</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[1].maxHealth)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"}],
+                                        ], () => {return player.bh.characters[1].page == 0 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"} : {display: "none !important"}}],
                                         ["style-column", [
                                             ["raw-html", () => {return "<h3>DMG</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[1].damage)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"}],
+                                        ], () => {return player.bh.characters[1].page == 0 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"} : {display: "none !important"}}],
+                                        ["style-column", [
+                                            ["raw-html", () => {return player.matosLair.milestone[25] >= 2 ? "<h3>MND</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[1].mending) : "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], () => {return player.bh.characters[1].page == 1 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"} : {display: "none !important"}}],
+                                        ["style-column", [
+                                            ["raw-html", () => {return player.alephsChamber.milestone[25] >= 2 ? "<h3>POT</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[1].potency) : "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], () => {return player.bh.characters[1].page == 1 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"} : {display: "none !important"}}],
                                     ]],
                                     ["blank", "4px"],
                                     ["row", [
                                         ["style-column", [
                                             ["raw-html", () => {return "<h3>RGN</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[1].regen, 2)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"}],
+                                        ], () => {return player.bh.characters[1].page == 0 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"} : {display: "none !important"}}],
                                         ["style-column", [
                                             ["raw-html", () => {return "<h3>AGI</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[1].agility)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"}],
+                                        ], () => {return player.bh.characters[1].page == 0 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"} : {display: "none !important"}}],
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], () => {return player.bh.characters[1].page == 1 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"} : {display: "none !important"}}],
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], () => {return player.bh.characters[1].page == 1 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"} : {display: "none !important"}}],
                                     ]],
                                     ["blank", "4px"],
                                     ["row", [
                                         ["style-column", [
                                             ["raw-html", () => {return "<h3>DEF</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[1].defense)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"}],
+                                        ], () => {return player.bh.characters[1].page == 0 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"} : {display: "none !important"}}],
                                         ["style-column", [
                                             ["raw-html", () => {return "<h3>LUCK</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[1].luck)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"}],
+                                        ], () => {return player.bh.characters[1].page == 0 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"} : {display: "none !important"}}],
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], () => {return player.bh.characters[1].page == 1 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"} : {display: "none !important"}}],
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], () => {return player.bh.characters[1].page == 1 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"} : {display: "none !important"}}],
                                     ]],
                                     ["blank", "4px"],
                                     ["clickable", "Char-C1-Page"],
@@ -4150,28 +4186,46 @@ addLayer("bh", {
                                     ["row", [
                                         ["style-column", [
                                             ["raw-html", () => {return "<h3>HP</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[2].maxHealth)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"}],
+                                        ], () => {return player.bh.characters[2].page == 0 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"} : {display: "none !important"}}],
                                         ["style-column", [
                                             ["raw-html", () => {return "<h3>DMG</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[2].damage)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"}],
+                                        ], () => {return player.bh.characters[2].page == 0 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"} : {display: "none !important"}}],
+                                        ["style-column", [
+                                            ["raw-html", () => {return player.matosLair.milestone[25] >= 2 ? "<h3>MND</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[2].mending) : "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], () => {return player.bh.characters[2].page == 1 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"} : {display: "none !important"}}],
+                                        ["style-column", [
+                                            ["raw-html", () => {return player.alephsChamber.milestone[25] >= 2 ? "<h3>POT</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[2].potency) : "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], () => {return player.bh.characters[2].page == 1 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"} : {display: "none !important"}}],
                                     ]],
                                     ["blank", "4px"],
                                     ["row", [
                                         ["style-column", [
                                             ["raw-html", () => {return "<h3>RGN</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[2].regen, 2)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"}],
+                                        ], () => {return player.bh.characters[2].page == 0 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"} : {display: "none !important"}}],
                                         ["style-column", [
                                             ["raw-html", () => {return "<h3>AGI</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[2].agility)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"}],
+                                        ], () => {return player.bh.characters[2].page == 0 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"} : {display: "none !important"}}],
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], () => {return player.bh.characters[2].page == 1 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"} : {display: "none !important"}}],
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], () => {return player.bh.characters[2].page == 1 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"} : {display: "none !important"}}],
                                     ]],
                                     ["blank", "4px"],
                                     ["row", [
                                         ["style-column", [
                                             ["raw-html", () => {return "<h3>DEF</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[2].defense)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"}],
+                                        ], () => {return player.bh.characters[2].page == 0 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"} : {display: "none !important"}}],
                                         ["style-column", [
                                             ["raw-html", () => {return "<h3>LUCK</h3><hr style='width:60px'>" + formatShortSimple(player.bh.characters[2].luck)}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                                        ], {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"}],
+                                        ], () => {return player.bh.characters[2].page == 0 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"} : {display: "none !important"}}],
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], () => {return player.bh.characters[2].page == 1 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px", marginRight: "4px"} : {display: "none !important"}}],
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<h3>???</h3><hr style='width:60px'>0"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                        ], () => {return player.bh.characters[2].page == 1 ? {width: "72px", height: "45px", background: "var(--miscButton)", borderRadius: "10px"} : {display: "none !important"}}],
                                     ]],
                                     ["blank", "4px"],
                                     ["clickable", "Char-C2-Page"],

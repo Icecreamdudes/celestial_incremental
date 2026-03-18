@@ -1177,6 +1177,7 @@ addLayer("bh", {
 
         let mendingAdd = new Decimal(0)
         mendingAdd = mendingAdd.add(player.darkTemple.mndAdd)
+        if (player.alephsChamber.milestone[25] > 0) mendingAdd = mendingAdd.add(10)
 
         // =-- POTENCY STUFF --= //
         let potencyBase = new Decimal(1)

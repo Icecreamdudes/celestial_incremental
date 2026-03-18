@@ -100,7 +100,7 @@
                 player.ch.celestialIndex = new Decimal(5)
             },
             style: { width: '50px', "min-height": '50px' }, // Aleph
-            branches() {return false ? [15] : []},
+            branches() {return player.alephsChamber.milestone[25] > 0 ? [15] : []},
         },
         17: {
             title() { return "<h1>?" },
@@ -242,7 +242,7 @@
                 unlocked() { return player.depth2.unlocked },
                 content: [
                     ["blank", "25px"],
-                    ["row", [["raw-html", function () { return "Celestial Constellation ??? - ????????????" }, { "color": "red", "font-size": "24px", "font-family": "monospace" }],]],
+                    ["row", [["raw-html", function () { return "Celestial ??? - ????????????" }, { "color": "red", "font-size": "24px", "font-family": "monospace" }],]],
                     ["blank", "50px"],
                     ["row", [["clickable", 101],]],
                     ["blank", "25px"],
@@ -263,7 +263,7 @@
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
-                    ["row", [["raw-html", () => { return "<small>Celestial Constellation #" + formatWhole(player.ch.celestialIndex.add(1)) + "</small><br>" + player.ch.celestialTexts[player.ch.celestialIndex] }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],]],
+                    ["row", [["raw-html", () => { return "<small>Celestial #" + formatWhole(player.ch.celestialIndex.add(1)) + "</small><br>" + player.ch.celestialTexts[player.ch.celestialIndex] }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],]],
                     ["blank", "25px"],
                     ["row", [["clickable", 12], ["blank", ["50px", "25px"]], ["clickable", 13]]],
                     ["blank", "12.5px"],

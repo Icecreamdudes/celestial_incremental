@@ -28,6 +28,7 @@ addLayer("hpw", {
         player.hpw.powerGain = player.hpw.powerGain.mul(levelableEffect("pu", 210)[1])
         player.hpw.powerGain = player.hpw.powerGain.mul(buyableEffect("sme", 144))
         player.hpw.powerGain = player.hpw.powerGain.mul(buyableEffect("al", 206))
+        if (player.alephsChamber.milestone[25] > 0) player.hpw.powerGain = player.hpw.powerGain.mul(36)
 
         player.hpw.powerGain = player.hpw.powerGain.floor() // To keep power to whole numbers
 

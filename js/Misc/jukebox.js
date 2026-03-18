@@ -328,6 +328,22 @@ addLayer("jukebox", {
             file: "music/stagnant.mp3",
             unlocked() {return player.stagnantSynestia.unlocked},
         },
+        "depth-4": {
+            artist: "Icecreamdude",
+            name: "N/A",
+            description: "Depth 4",
+            img: "resources/music/template.png",
+            file: "music/depth4.mp3",
+            unlocked() {return player.depth4.unlocked},
+        },
+        "aleph-fight": {
+            artist: "Icecreamdude",
+            name: "N/A",
+            description: "Aleph Fight",
+            img: "resources/music/template.png",
+            file: "music/alephBattle.mp3",
+            unlocked() {return player.alephsChamber.milestone[25] > 0},
+        },
 
         // CUTSCENE SONGS
         "cutscene-piano": {
@@ -508,6 +524,7 @@ addLayer("jukebox", {
                     ["row", [
                         ["jukebox", "none"], ["jukebox", "black-heart"], ["jukebox", "depth-1"], ["jukebox", "depth-2"],
                         ["jukebox", "depth-3"], ["jukebox", "matos-lair"], ["jukebox", "matos-fight"], ["jukebox", "stagnant-synestia"],
+                        ["jukebox", "depth-4"], ["jukebox", "aleph-fight"],
                     ]],
                     ["blank", "2px"],
                 ],

@@ -1163,8 +1163,8 @@ BHC.greaterMyrioi = {
         color: "black",
         borderColor: "#520040",
     },
-    health: new Decimal(2500),
-    damage: new Decimal(20),
+    health: new Decimal(1500),
+    damage: new Decimal(10),
     regen: new Decimal(2),
     attributes: {
         "air": new Decimal(0.5), // Resistance DMG Mult

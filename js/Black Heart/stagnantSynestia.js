@@ -809,7 +809,7 @@ BHC.staticEnas = {
     reward() {
         let gain = {}
         gain.temporalDust = new Decimal(50)
-        gain.temporalShard = new Decimal(10)
+        gain.temporalShard = new Decimal(8)
         return gain
     },
 }
@@ -838,7 +838,7 @@ BHC.staticPente = {
                 } else if (random < 0.66) {
                     bulletHell({"bouncingDiamond": {diamondCount: 5+magnitude, enemySpeed: 3}}, {width: 800, height: 500, duration: 10+(magnitude*2), subArena: true, subWidth: 300})
                 } else {
-                    bulletHell({"radialKnifeBurstAttack": {knifeLength: 40, knifeWidth: 10, burstInterval: 1500, bulletsPerBurst: 4+magnitude, enemySpeed: 6}}, {duration: 10+(magnitude*2), subArena: true, subWidth: 300})
+                    bulletHell({"radialKnifeBurstAttack": {knifeLength: 40, knifeWidth: 10, burstInterval: 1500, bulletsPerBurst: 4+magnitude, enemySpeed: 5}}, {duration: 10+(magnitude*2), subArena: true, subWidth: 300})
                 }
             },
             cooldown: new Decimal(4),
@@ -866,7 +866,7 @@ BHC.staticPente = {
     reward() {
         let gain = {}
         gain.temporalDust = new Decimal(100)
-        gain.temporalShard = new Decimal(20)
+        gain.temporalShard = new Decimal(15)
         return gain
     },
 }
@@ -926,7 +926,7 @@ BHC.staticDeka = {
     reward() {
         let gain = {}
         gain.temporalDust = new Decimal(175)
-        gain.temporalShard = new Decimal(35)
+        gain.temporalShard = new Decimal(25)
         return gain
     },
 }
@@ -990,7 +990,7 @@ BHC.staticHekaton = {
     reward() {
         let gain = {}
         gain.temporalDust = new Decimal(250)
-        gain.temporalShard = new Decimal(50)
+        gain.temporalShard = new Decimal(40)
         return gain
     },
 }

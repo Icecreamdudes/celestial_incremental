@@ -2861,16 +2861,16 @@ addLayer("bh", {
             width: 600,
             height: 40,
             progress() {
-                if (BHS[player.bh.currentStage].timer) return player.bh.timer.div(run(BHS[player.bh.currentStage].timer, BHS[player.bh.currentStage]))
-                if (BHC[player.bh.celestialite.id].timer) return player.bh.timer.div(run(BHC[player.bh.celestialite.id].timer, BHC[player.bh.celestialite.id]))
+                if (BHS[player.bh.currentStage].timer) return run(BHS[player.bh.currentStage].timer, BHS[player.bh.currentStage]).sub(player.bh.timer).div(run(BHS[player.bh.currentStage].timer, BHS[player.bh.currentStage]))
+                if (BHC[player.bh.celestialite.id].timer) return run(BHC[player.bh.celestialite.id].timer, BHC[player.bh.celestialite.id]).sub(player.bh.timer).div(run(BHC[player.bh.celestialite.id].timer, BHC[player.bh.celestialite.id]))
             },
             borderStyle: {border: "2px solid white", borderRadius: "15px"},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle: {background: "#8a0e79"},
             textStyle: {userSelect: "none", lineHeight: "1"},
             display() {
-                if (BHS[player.bh.currentStage].timer) return formatTime(player.bh.timer) + " / " + formatTime(run(BHS[player.bh.currentStage].timer, BHS[player.bh.currentStage]))
-                if (BHC[player.bh.celestialite.id].timer) return formatTime(player.bh.timer) + " / " + formatTime(run(BHC[player.bh.celestialite.id].timer, BHC[player.bh.celestialite.id]))
+                if (BHS[player.bh.currentStage].timer) return formatTime(run(BHS[player.bh.currentStage].timer, BHS[player.bh.currentStage]).sub(player.bh.timer)) + " / " + formatTime(run(BHS[player.bh.currentStage].timer, BHS[player.bh.currentStage]))
+                if (BHC[player.bh.celestialite.id].timer) return formatTime(run(BHC[player.bh.celestialite.id].timer, BHC[player.bh.celestialite.id]).sub(player.bh.timer)) + " / " + formatTime(run(BHC[player.bh.celestialite.id].timer, BHC[player.bh.celestialite.id]))
             },
         },
         "celestialite-Health": {

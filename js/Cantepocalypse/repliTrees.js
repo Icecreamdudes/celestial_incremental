@@ -63,6 +63,7 @@
         // REPLI-LEAVES NERFS
         if (inChallenge("fu", 11)) preLeavesMult = preLeavesMult.pow(Decimal.pow(0.2, buyableEffect("fu", 88)))
         player.rt.repliTreeSoftcapEffect = player.rt.repliTrees.sub(player.rt.repliTreeSoftcapStart).pow(1.25).div(10).add(1)
+        if (hasUpgrade("en", 12)) player.rt.repliTreeSoftcapEffect = player.rt.repliTreeSoftcapEffect.pow(upgradeEffect("en", 12))
         if (player.rt.repliTrees.gte(player.rt.repliTreeSoftcapStart)) {
             preLeavesMult = preLeavesMult.div(player.rt.repliTreeSoftcapEffect)
         }

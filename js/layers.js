@@ -25,7 +25,8 @@
 
         pylonTier: new Decimal(1),
         pylonTierEffect: new Decimal(1),
-        doomSoftcapStart: new Decimal("1e1000000"),
+        
+        doomSoftcapStart: new Decimal("1e2000000"),
     }
     },
     automate() {

@@ -139,7 +139,7 @@ addLayer("laboratory", {
         5: {
             title: "MD-05",
             unlocked: true,
-            description: "TEMP EXTERNAL BUFF.",
+            description: "Decuple ID softcap base and raise IDs effects by ^10.",
             cost: new Decimal(256),
             currencyLocation() { return player.laboratory },
             currencyDisplayName: "Matos Dust",
@@ -153,7 +153,7 @@ addLayer("laboratory", {
         6: {
             title: "MD-06",
             unlocked: true,
-            description: "TEMP EXTERNAL BUFF.",
+            description: "Boost base core scrap gain based on core fragments.",
             cost: new Decimal(4096),
             currencyLocation() { return player.laboratory },
             currencyDisplayName: "Matos Dust",
@@ -168,7 +168,7 @@ addLayer("laboratory", {
         11: {
             title: "MD-11",
             unlocked() {return player.laboratory.highestCombo.gt(5)},
-            description: "Unlocks Vespasians \"TEMP\" skill.",
+            description: "Unlocks Vespasians \"Impale\" skill.",
             cost: new Decimal(4),
             currencyLocation() { return player.laboratory },
             currencyDisplayName: "Matos Shards",
@@ -182,7 +182,7 @@ addLayer("laboratory", {
         12: {
             title: "MD-12",
             unlocked() {return player.laboratory.highestCombo.gt(5)},
-            description: "Unlocks Vespasians \"TEMP\" skill.",
+            description: "Unlocks Vespasians \"Peak Performance\" skill.",
             cost: new Decimal(64),
             currencyLocation() { return player.laboratory },
             currencyDisplayName: "Matos Shards",
@@ -228,7 +228,7 @@ addLayer("laboratory", {
         15: {
             title: "MD-15",
             unlocked() {return player.laboratory.highestCombo.gt(5)},
-            description: "TEMP EXTERNAL BUFF.",
+            description: "Improve stored space energy formula.",
             cost: new Decimal(16),
             currencyLocation() { return player.laboratory },
             currencyDisplayName: "Matos Shards",
@@ -242,7 +242,7 @@ addLayer("laboratory", {
         16: {
             title: "MD-16",
             unlocked() {return player.laboratory.highestCombo.gt(5)},
-            description: "TEMP EXTERNAL BUFF.",
+            description: "Unlock a 6th starmetal essence generator.",
             cost: new Decimal(256),
             currencyLocation() { return player.laboratory },
             currencyDisplayName: "Matos Dust",
@@ -268,7 +268,7 @@ addLayer("laboratory", {
             display() {
                 return "<h3>MD-07</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/25)\n\
                     Reduce combo scaling\n\
-                    Currently: -" + formatSimple(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100), 2) + "%\n\ \n\
+                    Currently: -" + formatShortSimple(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100), 2) + "%\n\ \n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Matos Dust"
             },
             buy() {
@@ -287,14 +287,14 @@ addLayer("laboratory", {
             purchaseLimit() { return new Decimal(50) },
             currency() { return player.laboratory.matosDust},
             pay(amt) { player.laboratory.matosDust = this.currency().sub(amt) },
-            effect(x) {return getBuyableAmount(this.layer, this.id).add(1)},
+            effect(x) {return Decimal.pow(100, getBuyableAmount(this.layer, this.id))},
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {return this.currency().gte(this.cost())},
             display() {
                 return "<h3>MD-08</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/50)\n\
-                    TEMP EXTERNAL BUYABLE\n\
-                    Currently: +" + formatSimple(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
+                    Boost charge gain\n\
+                    Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Matos Dust"
             },
             buy() {
@@ -314,14 +314,14 @@ addLayer("laboratory", {
             purchaseLimit() { return new Decimal(25) },
             currency() { return player.laboratory.matosShard},
             pay(amt) { player.laboratory.matosShard = this.currency().sub(amt) },
-            effect(x) {return getBuyableAmount(this.layer, this.id).div(200).add(1)},
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(100).add(1)},
             unlocked() {return player.laboratory.highestCombo.gt(5)},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {return this.currency().gte(this.cost())},
             display() {
                 return "<h3>MD-17</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/25)\n\
                     Increase chance to double celestialite rewards\n\
-                    Currently: +" + formatSimple(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100), 2) + "%\n\ \n\
+                    Currently: +" + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + "%\n\ \n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Matos Shards"
             },
             buy() {
@@ -340,14 +340,14 @@ addLayer("laboratory", {
             purchaseLimit() { return new Decimal(50) },
             currency() { return player.laboratory.matosShard},
             pay(amt) { player.laboratory.matosShard = this.currency().sub(amt) },
-            effect(x) {return getBuyableAmount(this.layer, this.id).add(1)},
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(100).add(1)},
             unlocked() {return player.laboratory.highestCombo.gt(5)},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {return this.currency().gte(this.cost())},
             display() {
                 return "<h3>MD-18</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/50)\n\
-                    TEMP EXTERNAL BUYABLE\n\
-                    Currently: +" + formatSimple(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
+                    Raise steel gain\n\
+                    Currently: ^" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\ \n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Matos Shards"
             },
             buy() {
@@ -365,14 +365,14 @@ addLayer("laboratory", {
         ["style-row", [
             ["theme-scroll-column", [
                 ["style-row", [
-                    ["raw-html", () => {return "You have " + formatShortWhole(player.laboratory.matosDust) + " Matos Dust."}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "You have " + formatWhole(player.laboratory.matosDust) + " Matos Dust."}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
                 ], {width: "547px", height: "35px", background: "var(--miscButtonHover)", borderBottom: "3px solid var(--regBorder)"}],
                 ["blank", "4px"],
                 ["row", [["upgrade", 1], ["upgrade", 2], ["upgrade", 3], ["upgrade", 4]]],
                 ["row", [["upgrade", 5], ["upgrade", 6], ["buyable", 1], ["buyable", 2]]],
                 ["blank", "4px"],
                 ["style-row", [
-                    ["raw-html", () => {return "You have " + formatShortWhole(player.laboratory.matosShard) + " Matos Shards."}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "You have " + formatWhole(player.laboratory.matosShard) + " Matos Shards."}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
                 ], () => {return player.laboratory.highestCombo.gt(5) ? {width: "547px", height: "35px", background: "var(--miscButtonHover)", borderTop: "3px solid var(--regBorder)", borderBottom: "3px solid var(--regBorder)"} : {display: "none !important"}}],
                 ["blank", "4px"],
                 ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14]]],

@@ -533,6 +533,9 @@ addLayer("bh", {
             // VESPASIAN
             "vespasian_poisonStinger": {selected: ["vespasian", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "vespasian_paralyticBite": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "vespasian_overdrive": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "vespasian_impale": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "vespasian_peakPerformance": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
         },
 
         //Stagnant Timer
@@ -1062,7 +1065,7 @@ addLayer("bh", {
         player.bh.celestialite.agility = player.bh.celestialite.agility.add(bhTemp[3].agilityAdd)
         player.bh.celestialite.agility = player.bh.celestialite.agility.mul(bhTemp[3].agilityMult)
 
-        player.bh.celestialite.curAdd = BHC[player.bh.celestialite.id].curAdd ?? new Decimal(1)
+        player.bh.celestialite.curAdd = BHC[player.bh.celestialite.id].curAdd ?? new Decimal(0)
         player.bh.celestialite.curAdd = player.bh.celestialite.curAdd.add(bhTemp[3].curAdd.sub(1))
         player.bh.celestialite.curAdd = player.bh.celestialite.curAdd.add(buyableEffect("laboratory", 11))
 
@@ -1105,6 +1108,7 @@ addLayer("bh", {
         healthAdd = healthAdd.add(player.bh.skillData["kres_bigAttack"].maxLevel)
         healthAdd = healthAdd.add(player.bh.skillData["nav_healSpell"].maxLevel)
         healthAdd = healthAdd.add(player.bh.skillData["geroa_selfRepair"].maxLevel)
+        healthAdd = healthAdd.add(player.bh.skillData["vespasian_peakPerformance"].maxLevel)
 
         // =-- DAMAGE STUFF --= //
         let damageBase = new Decimal(1)
@@ -1161,6 +1165,7 @@ addLayer("bh", {
         defenseAdd = defenseAdd.add(player.bh.skillData["general_block"].maxLevel.div(2))
         defenseAdd = defenseAdd.add(player.bh.skillData["nav_reboundingAura"].maxLevel.div(2))
         defenseAdd = defenseAdd.add(player.bh.skillData["eclipse_lightBarrier"].maxLevel.div(2))
+        defenseAdd = defenseAdd.add(player.bh.skillData["vespasian_overdrive"].maxLevel.div(2))
         defenseAdd = defenseAdd.add(levelableEffect("pet", 310)[1])
         defenseAdd = defenseAdd.add(buyableEffect("stagnantSynestia", 1))
 
@@ -1174,6 +1179,7 @@ addLayer("bh", {
         luckAdd = luckAdd.add(player.bh.skillData["sel_arrowBarrage"].maxLevel.div(2))
         luckAdd = luckAdd.add(player.bh.skillData["sel_scavenger"].maxLevel.div(2))
         luckAdd = luckAdd.add(player.bh.skillData["nav_soulShred"].maxLevel.div(2))
+        luckAdd = luckAdd.add(player.bh.skillData["vespasian_impale"].maxLevel.div(2))
         if (hasUpgrade("ep2", 9105)) luckAdd = luckAdd.add(upgradeEffect("ep2", 9105))
 
         // =-- MENDING STUFF --= //

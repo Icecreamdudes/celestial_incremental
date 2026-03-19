@@ -87,6 +87,7 @@
 
         //stored
         player.ds.storedSpaceEnergyToGet = player.ds.spaceEnergy.mul(0.05).pow(0.6)
+        if (hasUpgrade("laboratory", 15)) player.ds.storedSpaceEnergyToGet = player.ds.spaceEnergy.div(5).pow(0.8)
     },
     bars: {},
     clickables: {

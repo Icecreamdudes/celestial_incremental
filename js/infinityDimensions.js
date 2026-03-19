@@ -54,6 +54,8 @@
         // INFINITY POWER EFFECTS
         player.id.infinityPowerEffect = player.id.infinityPower.pow(0.9).add(1)
         player.id.infinityPowerEffect2 = player.id.infinityPower.mul(3).pow(1.6).add(1)
+        if (hasUpgrade("laboratory", 5)) player.id.infinityPowerEffect = player.id.infinityPowerEffect.pow(10)
+        if (hasUpgrade("laboratory", 5)) player.id.infinityPowerEffect2 = player.id.infinityPowerEffect2.pow(10)
 
         // START OF INFINITY POWER GAIN
 
@@ -70,6 +72,7 @@
         let base = new Decimal(300)
         if (hasUpgrade("cs", 1102)) base = base.mul(2)
         base = base.mul(buyableEffect("sme", 121))
+        if (hasUpgrade("laboratory", 5)) base = base.mul(10)
         let max = Decimal.div(1, Decimal.pow(1.05, player.id.infinityPowerPerSecond.add(1).log(Decimal.pow(10, base)))).max(0.01)
         if (player.id.infinityPowerPerSecond.gt(1e300)) player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.div(1e300).pow(Decimal.div(base, player.id.infinityPowerPerSecond.plus(1).log(10)).min(max)).mul(1e300)
 

@@ -36,6 +36,7 @@
 
         player.s.singularitiesToGet = new Decimal(1)
         if (hasUpgrade("depth3", 5)) player.s.singularitiesToGet = player.s.singularityPointsToGet.add(1).log(1e10).add(1).floor()
+        if (player.alephsChamber.milestone[25] > 0) player.s.singularitiesToGet = Decimal.pow(2, player.s.singularityPointsToGet.add(1).log(1e100))
 
         if (player.in.infinityPoints.lt(2.5e193)) {
             player.s.singularityPointsToGet = player.in.infinityPoints.pow(0.125).div(15000)

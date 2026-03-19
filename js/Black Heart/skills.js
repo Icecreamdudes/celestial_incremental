@@ -211,7 +211,7 @@ BHA.kres_bigAttack = {
         "backfire": [new Decimal(1), new Decimal(0.5)], // Backfire Chance / Backfire Damage (multiple of end damage)
     },
     value() {return new Decimal(2).add(player.bh.skillData["kres_bigAttack"].level.mul(0.4))},
-    cooldown: new Decimal(20),
+    cooldown: new Decimal(15),
     cooldownCap: new Decimal(4),
 }
 BHA.kres_battleCry = {
@@ -809,7 +809,7 @@ BHA.vespasian_poisonStinger = {
 
 BHA.vespasian_paralyticBite = {
     name: "Paralytic Bite",
-    description() {return "Bite the enemy for " + formatSimple(new Decimal(75).add(player.bh.skillData["vespasian_paralyticBite"].level.mul(15))) + "% physical damage, then reduce the celestialites agility and defense by " + formatSimple(new Decimal(20).add(player.bh.skillData["vespasian_paralyticBite"].level.mul(4))) + " for 5 seconds"},
+    description() {return "Bite the enemy for " + formatSimple(new Decimal(75).add(player.bh.skillData["vespasian_paralyticBite"].level.mul(15))) + "% physical damage, then reduce the celestialites agility and defense by " + formatSimple(new Decimal(15).add(player.bh.skillData["vespasian_paralyticBite"].level.mul(3))) + " for 5 seconds"},
     passiveText() {return "+" + formatSimple(player.bh.skillData["vespasian_paralyticBite"].maxLevel.div(2)) + " AGI"},
     char: "vespasian",
     spCost: new Decimal(12),
@@ -828,8 +828,8 @@ BHA.vespasian_paralyticBite = {
     constantType: "effect",
     constantTarget: "celestialite",
     effects: {
-        "defenseAdd"() {return new Decimal(-20).sub(player.bh.skillData["vespasian_paralyticBite"].level.mul(4))},
-        "agilityAdd"() {return new Decimal(-20).sub(player.bh.skillData["vespasian_paralyticBite"].level.mul(4))},
+        "defenseAdd"() {return new Decimal(-15).sub(player.bh.skillData["vespasian_paralyticBite"].level.mul(3))},
+        "agilityAdd"() {return new Decimal(-15).sub(player.bh.skillData["vespasian_paralyticBite"].level.mul(3))},
     },
     duration: new Decimal(5),
     cooldown: new Decimal(12),
@@ -843,7 +843,7 @@ BHA.vespasian_overdrive = {
         if (player.alephsChamber.milestone[25] >= 2) effect = effect.mul(Decimal.div(char.potency.add(100), 100))
         return "Buff Vespasians damage and agility by " + formatSimple(effect) + "%, reduce defense by " + formatSimple(new Decimal(25).add(player.bh.skillData["vespasian_overdrive"].level.mul(5))) + ", and nullify regen for 8 seconds"
     },
-    passiveText() {return "+" + formatSimple(player.bh.skillData["vespasian_overdrive"].maxLevel.div(5)) + " DMG"},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["vespasian_overdrive"].maxLevel.div(2)) + " DEF"},
     char: "vespasian",
     spCost: new Decimal(14),
     curCostBase: new Decimal(4096),
@@ -865,9 +865,76 @@ BHA.vespasian_overdrive = {
     cooldownCap: new Decimal(4),
 }
 
-// A skill that does a lot of damage, can crit, but can also backfire
+BHA.vespasian_impale = {
+    name: "Impale",
+    description() {return "Deals " + formatSimple(new Decimal(new Decimal(150).add(player.bh.skillData["vespasian_impale"].level.mul(30)))) + "% physical damage with a " + formatSimple(Decimal.mul(50, Decimal.div(Decimal.add(100, char.luck), 100))) + "% chance to deal double damage, at the cost of taking 50% self damage"},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["vespasian_impale"].maxLevel.div(2)) + " LUCK"},
+    char: "vespasian",
+    spCost: new Decimal(16),
+    curCostBase: new Decimal(16),
+    curCostScale: new Decimal(4),
+    currency: "matosShard",
+    unlocked() {return hasUpgrade("laboratory", 11)},
 
-// A skill that passively buffs damage based on current health (double at max health)
+    instant: true,
+    type: "damage",
+    target: "celestialite",
+    properties: {
+        "crit": [new Decimal(0.3), new Decimal(2)],
+        "backfire": [new Decimal(1), new Decimal(0.5)],
+    },
+    value() {return new Decimal(1.5).add(player.bh.skillData["vespasian_impale"].level.mul(0.3))},
+    cooldown: new Decimal(15),
+    cooldownCap: new Decimal(3),
+}
+
+BHA.vespasian_peakPerformance = {
+    name: "Peak Performance",
+    description() {
+        let eff = false
+        let index
+        let slot
+        for (let i = 0; i < 3; i++) {
+            if (player.bh.characters[i].id == "vespasian") {
+                index = i
+                for (let j = 0; j < 4; j++) {
+                    if (player.bh.characters[i].skills[j].id == "vespasian_peakPerformance") {
+                        slot = j
+                        if (player.bh.characters[i].skills[j].variables["damageMult"]) eff = true
+                    }
+                }
+            }
+        }
+        let effect = new Decimal(new Decimal(100).add(player.bh.skillData["vespasian_peakPerformance"].level.mul(20)))
+        if (player.alephsChamber.milestone[25] >= 2) effect = effect.mul(Decimal.div(char.potency.add(100), 100))
+        if (!eff) {
+            return "Buff damage by up to " + formatSimple(effect) + "% based on your current health"
+        } else {
+            return "Buff damage by up to " + formatSimple(effect) + "% based on your current health<br><small>[Currently: +" + formatSimple(Decimal.sub(Decimal.sub(player.bh.characters[index].skills[slot].variables["damageMult"], 1).mul(100))) + "% DMG]"
+        }
+    },
+    passiveText() {return "+" + formatSimple(player.bh.skillData["vespasian_peakPerformance"].maxLevel) + " HP"},
+    char: "vespasian",
+    spCost: new Decimal(18),
+    curCostBase: new Decimal(18),
+    curCostScale: new Decimal(6),
+    currency: "matosShard",
+    unlocked() {return hasUpgrade("laboratory", 12)},
+
+    passive: true,
+    constantType: "effect",
+    constantTarget: "self",
+    effects: {
+        "damageMult"(char) {
+            if (char.maxHealth) {
+                return char.health.div(char.maxHealth).mul(new Decimal(new Decimal(1).add(player.bh.skillData["vespasian_peakPerformance"].level.div(5)))).add(1)
+            } else {
+                return new Decimal(new Decimal(2).add(player.bh.skillData["vespasian_peakPerformance"].level.div(5)))
+            }
+        },
+    },
+    cooldown: new Decimal(Infinity)
+}
 
 // NON-VESPASIAN SKILL IDEAS
 

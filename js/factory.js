@@ -68,6 +68,7 @@
         if (hasMilestone("fa", 21)) player.fa.chargeRate = player.fa.chargeRate.mul(player.fa.milestoneEffect[9])
         player.fa.chargeRate = player.fa.chargeRate.mul(levelableEffect("pu", 105)[2])
         player.fa.chargeRate = player.fa.chargeRate.mul(buyableEffect("st", 105))
+        player.fa.chargeRate = player.fa.chargeRate.mul(buyableEffect("laboratory", 2))
         player.fa.chargeRate = player.fa.chargeRate.mul(player.i.postOTFMult)
 
         // AUTOMATION

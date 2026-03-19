@@ -3844,8 +3844,8 @@ addLayer("pet", {
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    amt.pow(0.75).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Pre-Aleph Resources
-                    amt.pow(0.75).mul(0.4).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Aleph Resources
+                    amt.add(1).pow(1.5).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Pre-Aleph Resources
+                    amt.add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Aleph Resources
                     amt.pow(0.75).div(10).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Pollinators
                     amt.sub(1).div(2).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Laboratory Timer
                 ]

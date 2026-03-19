@@ -9,6 +9,7 @@ addLayer("laboratory", {
     },
     startData() { return {
         unlocked: true,
+        highestCombo: new Decimal(0),
 
         matosDust: new Decimal(0),
         matosShard: new Decimal(0),
@@ -56,6 +57,7 @@ addLayer("laboratory", {
         player.laboratory.cooldown = player.laboratory.cooldown.sub(delta)
 
         player.laboratory.cooldownMax = new Decimal(1800)
+        if (hasUpgrade("laboratory", 14)) player.laboratory.cooldownMax = player.laboratory.cooldownMax.div(upgradeEffect("laboratory", 14))
     },
     clickables: {
         "enter": {
@@ -74,42 +76,309 @@ addLayer("laboratory", {
         },
     },
     upgrades: {
-        // 6 upgrades that effect Vespasian
-        // 3 upgrades that buff external things based on matos currencies
+        1: {
+            title: "MD-01",
+            unlocked: true,
+            description: "Unlocks Vespasians \"Paralytic Bite\" skill.",
+            cost: new Decimal(64),
+            currencyLocation() { return player.laboratory },
+            currencyDisplayName: "Matos Dust",
+            currencyInternalName: "matosDust",
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
+        2: {
+            title: "MD-02",
+            unlocked: true,
+            description: "Unlocks Vespasians \"Overdrive\" skill.",
+            cost: new Decimal(1024),
+            currencyLocation() { return player.laboratory },
+            currencyDisplayName: "Matos Dust",
+            currencyInternalName: "matosDust",
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
+        3: {
+            title: "MD-03",
+            unlocked: true,
+            description: "Increases Vespasians base agility by +10.",
+            cost: new Decimal(16384),
+            currencyLocation() { return player.laboratory },
+            currencyDisplayName: "Matos Dust",
+            currencyInternalName: "matosDust",
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
+        4: {
+            title: "MD-04",
+            unlocked: true,
+            description: "Increase laboratory timer based on matos dust.",
+            cost: new Decimal(131072),
+            currencyLocation() { return player.laboratory },
+            currencyDisplayName: "Matos Dust",
+            currencyInternalName: "matosDust",
+            effect() {
+                return player.laboratory.matosDust.add(1).log(10).div(10).add(1)
+            },
+            effectDisplay() { return "x" + formatSimple(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
+        5: {
+            title: "MD-05",
+            unlocked: true,
+            description: "TEMP EXTERNAL BUFF.",
+            cost: new Decimal(256),
+            currencyLocation() { return player.laboratory },
+            currencyDisplayName: "Matos Dust",
+            currencyInternalName: "matosDust",
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
+        6: {
+            title: "MD-06",
+            unlocked: true,
+            description: "TEMP EXTERNAL BUFF.",
+            cost: new Decimal(4096),
+            currencyLocation() { return player.laboratory },
+            currencyDisplayName: "Matos Dust",
+            currencyInternalName: "matosDust",
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
 
-        // As examples: charge, 
-
-        // 3 upgrades that increase the timer
-        // 3 upgrades that decrease the cooldown
+        11: {
+            title: "MD-11",
+            unlocked() {return player.laboratory.highestCombo.gt(5)},
+            description: "Unlocks Vespasians \"TEMP\" skill.",
+            cost: new Decimal(4),
+            currencyLocation() { return player.laboratory },
+            currencyDisplayName: "Matos Shards",
+            currencyInternalName: "matosShard",
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
+        12: {
+            title: "MD-12",
+            unlocked() {return player.laboratory.highestCombo.gt(5)},
+            description: "Unlocks Vespasians \"TEMP\" skill.",
+            cost: new Decimal(64),
+            currencyLocation() { return player.laboratory },
+            currencyDisplayName: "Matos Shards",
+            currencyInternalName: "matosShard",
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
+        13: {
+            title: "MD-13",
+            unlocked() {return player.laboratory.highestCombo.gt(5)},
+            description: "Increases Vespasians base damage by +4.",
+            cost: new Decimal(1024),
+            currencyLocation() { return player.laboratory },
+            currencyDisplayName: "Matos Shards",
+            currencyInternalName: "matosShard",
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
+        14: {
+            title: "MD-14",
+            unlocked() {return player.laboratory.highestCombo.gt(5)},
+            description: "Reduce laboratory cooldown based on matos shards.",
+            cost: new Decimal(16384),
+            currencyLocation() { return player.laboratory },
+            currencyDisplayName: "Matos Shards",
+            currencyInternalName: "matosShard",
+            effect() {
+                return player.laboratory.matosShard.add(1).log(10).div(10).add(1)
+            },
+            effectDisplay() { return "/" + formatSimple(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
+        15: {
+            title: "MD-15",
+            unlocked() {return player.laboratory.highestCombo.gt(5)},
+            description: "TEMP EXTERNAL BUFF.",
+            cost: new Decimal(16),
+            currencyLocation() { return player.laboratory },
+            currencyDisplayName: "Matos Shards",
+            currencyInternalName: "matosShard",
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
+        16: {
+            title: "MD-16",
+            unlocked() {return player.laboratory.highestCombo.gt(5)},
+            description: "TEMP EXTERNAL BUFF.",
+            cost: new Decimal(256),
+            currencyLocation() { return player.laboratory },
+            currencyDisplayName: "Matos Dust",
+            currencyInternalName: "matosShard",
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
     },
     buyables: {
-        // a buyable that increases currency mult chance
-        // a buyable that decreases combo scaling
-        
+        1: {
+            costBase() { return new Decimal(16) },
+            costGrowth() { return new Decimal(4) },
+            purchaseLimit() { return new Decimal(25) },
+            currency() { return player.laboratory.matosDust},
+            pay(amt) { player.laboratory.matosDust = this.currency().sub(amt) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(1000).add(1)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>MD-07</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/25)\n\
+                    Reduce combo scaling\n\
+                    Currently: -" + formatSimple(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100), 2) + "%\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Matos Dust"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "100px", color: "white", border: "2px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#1a3b0f" : !this.canAfford() ? look.background =  "#361e1e" : look.background = "#250121"
+                return look
+            },
+        },
+        2: {
+            costBase() { return new Decimal(32) },
+            costGrowth() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.laboratory.matosDust},
+            pay(amt) { player.laboratory.matosDust = this.currency().sub(amt) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).add(1)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>MD-08</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/50)\n\
+                    TEMP EXTERNAL BUYABLE\n\
+                    Currently: +" + formatSimple(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Matos Dust"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "100px", color: "white", border: "2px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#1a3b0f" : !this.canAfford() ? look.background =  "#361e1e" : look.background = "#250121"
+                return look
+            },
+        },
+
+        11: {
+            costBase() { return new Decimal(1) },
+            costGrowth() { return new Decimal(4) },
+            purchaseLimit() { return new Decimal(25) },
+            currency() { return player.laboratory.matosShard},
+            pay(amt) { player.laboratory.matosShard = this.currency().sub(amt) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(200).add(1)},
+            unlocked() {return player.laboratory.highestCombo.gt(5)},
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>MD-17</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/25)\n\
+                    Increase chance to double celestialite rewards\n\
+                    Currently: +" + formatSimple(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100), 2) + "%\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Matos Shards"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "100px", color: "white", border: "2px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#1a3b0f" : !this.canAfford() ? look.background =  "#361e1e" : look.background = "#250121"
+                return look
+            },
+        },
+        12: {
+            costBase() { return new Decimal(2) },
+            costGrowth() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.laboratory.matosShard},
+            pay(amt) { player.laboratory.matosShard = this.currency().sub(amt) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).add(1)},
+            unlocked() {return player.laboratory.highestCombo.gt(5)},
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>MD-18</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/50)\n\
+                    TEMP EXTERNAL BUYABLE\n\
+                    Currently: +" + formatSimple(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Matos Shards"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "100px", color: "white", border: "2px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#1a3b0f" : !this.canAfford() ? look.background =  "#361e1e" : look.background = "#250121"
+                return look
+            },
+        },
     },
     tabFormat: [
         ["style-row", [
-            ["style-column", [
+            ["theme-scroll-column", [
                 ["style-row", [
-                    ["style-column", [
-                        ["raw-html", () => {return "You have " + formatShortWhole(player.laboratory.matosDust) + " Matos Dust."}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return "You have " + formatShortWhole(player.laboratory.matosShard) + " Matos Shards."}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                    ], {width: "270px", height: "72px"}],
-                    ["style-column", [
-                        ["raw-html", () => {return "You have " + formatShortWhole(player.laboratory.matosFragment) + " Matos Fragments."}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return "You have " + formatShortWhole(player.laboratory.matosEssence) + " Matos Essence."}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                    ], () => {return false ? {width: "270px", height: "72px"}: {display: "none !important"}}],
-                ], {width: "547px", height: "72px", background: "var(--miscButtonHover)", borderBottom: "3px solid var(--regBorder)"}],
-                ["theme-scroll-column", [
-                    ["blank", "2px"],
-                    ["row", [["upgrade", 1], ["upgrade", 2]]],
-                    ["row", [["upgrade", 3], ["upgrade", 4]]],
-                    ["row", [["upgrade", 5], ["upgrade", 6]]],
-                    ["row", [["buyable", 1], ["buyable", 2]]],
-                    ["row", [["buyable", 3], ["buyable", 4]]],
-                    ["blank", "2px"],
-                ], {width: "547px", height: "345px", background: "var(--miscButton)", borderRadius: "0 0 0 27px"}],
-            ], {width: "547px", height: "420px", borderRadius: "0 0 0 27px"}],
+                    ["raw-html", () => {return "You have " + formatShortWhole(player.laboratory.matosDust) + " Matos Dust."}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                ], {width: "547px", height: "35px", background: "var(--miscButtonHover)", borderBottom: "3px solid var(--regBorder)"}],
+                ["blank", "4px"],
+                ["row", [["upgrade", 1], ["upgrade", 2], ["upgrade", 3], ["upgrade", 4]]],
+                ["row", [["upgrade", 5], ["upgrade", 6], ["buyable", 1], ["buyable", 2]]],
+                ["blank", "4px"],
+                ["style-row", [
+                    ["raw-html", () => {return "You have " + formatShortWhole(player.laboratory.matosShard) + " Matos Shards."}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                ], () => {return player.laboratory.highestCombo.gt(5) ? {width: "547px", height: "35px", background: "var(--miscButtonHover)", borderTop: "3px solid var(--regBorder)", borderBottom: "3px solid var(--regBorder)"} : {display: "none !important"}}],
+                ["blank", "4px"],
+                ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14]]],
+                ["row", [["upgrade", 15], ["upgrade", 16], ["buyable", 11], ["buyable", 12]]],
+                ["blank", "4px"],
+            ], {width: "547px", height: "420px", background: "var(--miscButton)", borderRadius: "0 0 0 27px"}],
             ["style-column", [
                 ["style-column", [
                     ["style-column", [
@@ -149,7 +418,12 @@ BHS.laboratory = {
     comboScaling: 2,
     comboScalingStart: 0,
     respawnTime: new Decimal(0),
-    timer() {return new Decimal(120).mul(levelableEffect("pet", 503)[3])},
+    timer() {
+        let time = new Decimal(120)
+        time = time.mul(levelableEffect("pet", 503)[3])
+        if (hasUpgrade("laboratory", 4)) time = time.mul(upgradeEffect("laboratory", 4))
+        return time
+    },
     generateCelestialite(combo) {
         if (typeof combo == "object") combo = combo.toNumber()
         switch (combo) {

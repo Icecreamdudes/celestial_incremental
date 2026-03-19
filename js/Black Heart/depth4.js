@@ -307,8 +307,8 @@ addLayer("depth4", {
                     ["style-column", [
                         ["raw-html", "Properties", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
                     ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "10px"}],
-                    ["raw-html", () => {return Decimal.sub(1.025, player.bh.comboScalingReduction).gt(1) ? "<u>Combo Scaling" : ""}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return Decimal.sub(1.025, player.bh.comboScalingReduction).gt(1) ? formatSimple(Decimal.sub(1.025, player.bh.comboScalingReduction).max(1).sub(1).mul(100)) + "% starting at 100" : ""}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return Decimal.sub(1.03, player.bh.comboScalingReduction).gt(1) ? "<u>Combo Scaling" : ""}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return Decimal.sub(1.03, player.bh.comboScalingReduction).gt(1) ? formatSimple(Decimal.sub(1.03, player.bh.comboScalingReduction).max(1).sub(1).mul(100)) + "% starting at 100" : ""}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "5px"],
                     ["raw-html", "<u>Health Drain", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
                     ["raw-html", "1 HP/s", {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
@@ -359,7 +359,7 @@ BHS.depth4 = {
     nameLow: "depth 4",
     music: "music/depth4.mp3",
     comboLimit: 250,
-    comboScaling: 1.025,
+    comboScaling: 1.03,
     comboScalingStart: 100,
     healthDrain: new Decimal(1),
     generateCelestialite(combo) {

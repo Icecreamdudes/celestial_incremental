@@ -473,7 +473,7 @@ addLayer("bh", {
                     2: "none",
                     3: "none",
                 },
-                usedSP: new Decimal(0),
+                usedSP: new Decimal(10),
                 health: new Decimal(100),
                 damage: new Decimal(6),
                 defense: new Decimal(10),
@@ -532,6 +532,7 @@ addLayer("bh", {
 
             // VESPASIAN
             "vespasian_poisonStinger": {selected: ["vespasian", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "vespasian_paralyticBite": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
         },
 
         //Stagnant Timer
@@ -700,6 +701,7 @@ addLayer("bh", {
         if (hasUpgrade("ep2", 9107)) player.bh.comboScalingReduction = player.bh.comboScalingReduction + 0.002
         if (hasMilestone("db", 105)) player.bh.comboScalingReduction = player.bh.comboScalingReduction + 0.002
         if (hasUpgrade("depth4", 3)) player.bh.comboScalingReduction = player.bh.comboScalingReduction + 0.002
+        player.bh.comboScalingReduction = player.bh.comboScalingReduction + (buyableEffect("laboratory", 1).sub(1).toNumber())
 
         player.bh.comboScaling = Math.max(player.bh.comboScaling - player.bh.comboScalingReduction , 1)
 
@@ -1061,7 +1063,8 @@ addLayer("bh", {
         player.bh.celestialite.agility = player.bh.celestialite.agility.mul(bhTemp[3].agilityMult)
 
         player.bh.celestialite.curAdd = BHC[player.bh.celestialite.id].curAdd ?? new Decimal(1)
-        player.bh.celestialite.curAdd = player.bh.celestialite.curAdd.mul(bhTemp[3].curAdd)
+        player.bh.celestialite.curAdd = player.bh.celestialite.curAdd.add(bhTemp[3].curAdd.sub(1))
+        player.bh.celestialite.curAdd = player.bh.celestialite.curAdd.add(buyableEffect("laboratory", 11))
 
         player.bh.celestialite.attributes = BHC[player.bh.celestialite.id].attributes ?? {}
         player.bh.celestialite.attributes = Object.assign({}, player.bh.celestialite.attributes, bhTemp[3].attributes)
@@ -1147,6 +1150,7 @@ addLayer("bh", {
         agilityAdd = agilityAdd.add(player.bh.skillData["eclipse_syzygy"].maxLevel.div(2))
         agilityAdd = agilityAdd.add(player.bh.skillData["geroa_radioactiveMissile"].maxLevel.div(2))
         agilityAdd = agilityAdd.add(player.bh.skillData["vespasian_poisonStinger"].maxLevel.div(2))
+        agilityAdd = agilityAdd.add(player.bh.skillData["vespasian_paralyticBite"].maxLevel.div(2))
         agilityAdd = agilityAdd.add(buyableEffect("sme", 133))
 
         // =-- DEFENSE STUFF --= //

@@ -759,7 +759,7 @@ BHC.aleph = {
                 if (player.bh.celestialite.health.lt(3000) && player.bh.celestialite.actions[3].variables.attacks == 3) {
                     screenFlash("Good, at this rate you should be strong enough to protect the hive.", 3000)
                     setTimeout(() => {
-                        bulletHell({"waveBees": {beeRate: 5, radius: 20, gapStart: 0, gap: 200, enemySpeed: 6, waveSpeed: 4}}, {duration: 10})
+                        bulletHell({"waveBees": {beeRate: 5, radius: 20, gapStart: 0, gap: 200, enemySpeed: 6, waveSpeed: 4}, "shootBee": {beesPerSec: 0.5, radius: 20, enemySpeed: 4}}, {duration: 10})
                     }, 3000)
                     player.bh.celestialite.actions[3].variables.attacks += 1
                 }

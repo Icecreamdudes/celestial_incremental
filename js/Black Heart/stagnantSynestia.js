@@ -363,6 +363,7 @@ BHC.staticAlpha = {
     health: new Decimal(450),
     damage: new Decimal(20),
     agility: new Decimal(25),
+    noRandomStats: true,
     actions: {
         0: {
             name: "Confined Rain",
@@ -407,6 +408,7 @@ BHC.staticBeta = {
     health: new Decimal(500),
     damage: new Decimal(25),
     agility: new Decimal(20),
+    noRandomStats: true,
     actions: {
         0: {
             name: "Slow Knifes",
@@ -451,6 +453,7 @@ BHC.staticGamma = {
     health: new Decimal(600),
     damage: new Decimal(15),
     agility: new Decimal(15),
+    noRandomStats: true,
     actions: {
         0: {
             name: "Quick Shot",
@@ -495,6 +498,7 @@ BHC.staticDelta = {
     health: new Decimal(550),
     damage: new Decimal(20),
     agility: new Decimal(15),
+    noRandomStats: true,
     actions: {
         0: {
             name: "Multi Rain",
@@ -539,6 +543,7 @@ BHC.staticEpsilon = {
     health: new Decimal(600),
     damage: new Decimal(30),
     agility: new Decimal(25),
+    noRandomStats: true,
     actions: {
         0: {
             name: "Triple Shot",
@@ -583,6 +588,7 @@ BHC.staticZeta = {
     health: new Decimal(550),
     damage: new Decimal(25),
     agility: new Decimal(25),
+    noRandomStats: true,
     actions: {
         0: {
             name: "Circle Squad",
@@ -627,6 +633,7 @@ BHC.staticEta = {
     health: new Decimal(650),
     damage: new Decimal(35),
     agility: new Decimal(25),
+    noRandomStats: true,
     actions: {
         0: {
             name: "Airial Shot",
@@ -671,6 +678,7 @@ BHC.staticTheta = {
     health: new Decimal(700),
     damage: new Decimal(35),
     agility: new Decimal(20),
+    noRandomStats: true,
     actions: {
         0: {
             name: "Death Spiral",
@@ -715,6 +723,7 @@ BHC.staticIota = {
     health: new Decimal(750),
     damage: new Decimal(30),
     agility: new Decimal(20),
+    noRandomStats: true,
     actions: {
         0: {
             name: "Magic Missile",
@@ -759,6 +768,7 @@ BHC.staticEnas = {
     },
     health: new Decimal(3000),
     damage: new Decimal(50),
+    noRandomStats: true,
     actions: {
         0: {
             name: "Tears of Fury",
@@ -814,6 +824,7 @@ BHC.staticPente = {
     },
     health: new Decimal(4000),
     damage: new Decimal(50),
+    noRandomStats: true,
     actions: {
         0: {
             name: "Caged Hatred",
@@ -871,6 +882,7 @@ BHC.staticDeka = {
     health: new Decimal(5000),
     damage: new Decimal(50),
     luck: new Decimal(4),
+    noRandomStats: true,
     actions: {
         0: {
             name: "Turret Terror",
@@ -929,6 +941,7 @@ BHC.staticHekaton = {
     },
     health: new Decimal(6000),
     damage: new Decimal(50),
+    noRandomStats: true,
     actions: {
         0: {
             name: "Personal Peril",

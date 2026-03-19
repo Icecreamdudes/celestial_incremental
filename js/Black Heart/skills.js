@@ -807,6 +807,64 @@ BHA.vespasian_poisonStinger = {
     cooldownCap: new Decimal(2),
 }
 
+BHA.vespasian_paralyticBite = {
+    name: "Paralytic Bite",
+    description() {return "Bite the enemy for " + formatSimple(new Decimal(75).add(player.bh.skillData["vespasian_paralyticBite"].level.mul(15))) + "% physical damage, then reduce the celestialites agility and defense by " + formatSimple(new Decimal(20).add(player.bh.skillData["vespasian_paralyticBite"].level.mul(4))) + " for 5 seconds"},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["vespasian_paralyticBite"].maxLevel.div(2)) + " AGI"},
+    char: "vespasian",
+    spCost: new Decimal(12),
+    curCostBase: new Decimal(256),
+    curCostScale: new Decimal(6),
+    currency: "matosDust",
+    unlocked() {return hasUpgrade("laboratory", 1)},
+
+    instant: true,
+    type: "damage",
+    target: "celestialite",
+    method: "physical",
+    value() {return new Decimal(0.75).add(player.bh.skillData["vespasian_paralyticBite"].level.mul(0.05))},
+
+    active: true,
+    constantType: "effect",
+    constantTarget: "celestialite",
+    effects: {
+        "defenseAdd"() {return new Decimal(-20).sub(player.bh.skillData["vespasian_paralyticBite"].level.mul(4))},
+        "agilityAdd"() {return new Decimal(-20).sub(player.bh.skillData["vespasian_paralyticBite"].level.mul(4))},
+    },
+    duration: new Decimal(5),
+    cooldown: new Decimal(12),
+    cooldownCap: new Decimal(2),
+}
+
+BHA.vespasian_overdrive = {
+    name: "Overdrive",
+    description() {
+        let effect = new Decimal(new Decimal(50).add(player.bh.skillData["vespasian_overdrive"].level.mul(10)))
+        if (player.alephsChamber.milestone[25] >= 2) effect = effect.mul(Decimal.div(char.potency.add(100), 100))
+        return "Buff Vespasians damage and agility by " + formatSimple(effect) + "%, reduce defense by " + formatSimple(new Decimal(25).add(player.bh.skillData["vespasian_overdrive"].level.mul(5))) + ", and nullify regen for 8 seconds"
+    },
+    passiveText() {return "+" + formatSimple(player.bh.skillData["vespasian_overdrive"].maxLevel.div(5)) + " DMG"},
+    char: "vespasian",
+    spCost: new Decimal(14),
+    curCostBase: new Decimal(4096),
+    curCostScale: new Decimal(8),
+    currency: "matosDust",
+    unlocked() {return hasUpgrade("laboratory", 2)},
+
+    active: true,
+    constantType: "effect",
+    constantTarget: "self",
+    effects: {
+        "damageMult"() {return new Decimal(1.5).add(player.bh.skillData["vespasian_overdrive"].level.div(10))},
+        "agilityMult"() {return new Decimal(1.5).add(player.bh.skillData["vespasian_overdrive"].level.div(10))},
+        "defenseAdd"() {return new Decimal(-25).sub(player.bh.skillData["vespasian_overdrive"].level.mul(5))},
+        "regenMult"() {return new Decimal(0)},
+    },
+    duration: new Decimal(8),
+    cooldown: new Decimal(20),
+    cooldownCap: new Decimal(4),
+}
+
 // A skill that does a lot of damage, can crit, but can also backfire
 
 // A skill that passively buffs damage based on current health (double at max health)

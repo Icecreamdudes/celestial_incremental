@@ -1,3 +1,4 @@
+// IDEA FOR NEXT TEMPORAL CHASM STAGE: TIME IS PAUSED, BUT AUTOMATICALLY TICKS FORWARD ONCE A SECOND (AKA, NON-SMOOTH TIME)
 addLayer("stagnantSynestia", {
     name: "Stagnant Synestia", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "SS", // This appears on the layer's node. Default is the id with the first letter capitalized

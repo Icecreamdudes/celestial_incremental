@@ -136,13 +136,27 @@ addLayer("settings", {
             style: { width: '100px', minHeight: '60px', color: "var(--textColor)", background: "var(--miscButton)", fontSize: "8px", lineHeight: "1", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
         },
         25: {
-            title() { return "Bullet Hell Keyboard Controls<hr style='border:1px solid #888;margin-top:1px'>" + options.bhKeyboard },
+            title() { return "Canvas Performance Mode<hr style='border:1px solid #888;margin-top:1px'>" + options.performanceMode },
             canClick: true,
-            unlocked() {return player.depth3.milestone[25] > 0},
+            unlocked: true,
+            tooltip: "Disables fancy backgrounds and removes shadows from canvas elements.",
+            onClick() {
+                toggleOpt('performanceMode')
+            },
+            style: { width: '100px', minHeight: '60px', color: "var(--textColor)", background: "var(--miscButton)", fontSize: "8px", lineHeight: "1", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+        },
+        26: {
+            title() { return player.depth3.milestone[25] == 0 ? "[FEATURE NOT UNLOCKED]" : "Bullet Hell Keyboard Controls<hr style='border:1px solid #888;margin-top:1px'>" + options.bhKeyboard },
+            canClick() {return player.depth3.milestone[25] > 0},
+            unlocked: true,
             onClick() {
                 toggleOpt('bhKeyboard')
             },
-            style: { width: '100px', minHeight: '60px', color: "var(--textColor)", background: "var(--miscButton)", fontSize: "8px", lineHeight: "1", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+            style() {
+                let look = {width: '100px', minHeight: '60px', color: "var(--textColor)", background: "var(--miscButton)", fontSize: "8px", lineHeight: "1", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"}
+                if (!this.canClick()) {look.background = "var(--miscButtonDisable)";look.borderColor = "var(--layerBackground)"}
+                return look
+            },
         },
 
         27: {
@@ -575,9 +589,9 @@ addLayer("settings", {
                         ["clickable", 23],
                     ], {width: "306px", borderBottom: "3px solid var(--regBorder)"}],
                     ["style-row", [
-                        ["style-row", [], {width: "3px", height: "60px", background: "var(--regBorder)"}],
                         ["clickable", 24], ["style-row", [], {width: "3px", height: "60px", background: "var(--regBorder)"}],
-                        ["clickable", 25], ["style-row", [], () => {return player.depth3.milestone[25] > 0 ? {width: "3px", height: "60px", background: "var(--regBorder)"} : {display: "none !important"}}],
+                        ["clickable", 25], ["style-row", [], {width: "3px", height: "60px", background: "var(--regBorder)"}],
+                        ["clickable", 26],
                     ], {width: "306px", borderBottom: "3px solid var(--regBorder)"}],
                     ["style-row", [
                         ["clickable", 27],

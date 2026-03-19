@@ -27,6 +27,7 @@ function getStartOptions() {
 		instantCutsceneText: false,
 		fullscreen: false,
 		bhKeyboard: false,
+		performanceMode: false,
 	}
 }
 function updateMusicVolume() {

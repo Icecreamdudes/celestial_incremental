@@ -128,7 +128,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         gameCanvas.style.border = "2px solid #fff";
         gameCanvas.style.borderRadius = "16px";
     }
-    gameCanvas.style.boxShadow = "0 0 32px #000";
+    if (!options.performanceMode) gameCanvas.style.boxShadow = "0 0 32px #000";
     gameCanvas.style.position = "absolute";
     gameCanvas.style.left = `calc(50vw - ${info.width / 2}px)`;
     gameCanvas.style.top = `calc(50vh - ${info.height / 2}px)`;
@@ -374,8 +374,8 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
                     bossCtx.lineTo(-b.r / 2, b.width / 2);
                     bossCtx.closePath();
                     bossCtx.fillStyle = '#ccc';
-                    bossCtx.shadowColor = '#fff';
-                    bossCtx.shadowBlur = 6;
+                    if (!options.performanceMode) bossCtx.shadowColor = '#fff';
+                    if (!options.performanceMode) bossCtx.shadowBlur = 6;
                     bossCtx.fill();
                     bossCtx.restore();
                 },
@@ -465,8 +465,8 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
                 bossCtx.lineTo(-b.r / 2, b.width / 2);
                 bossCtx.closePath();
                 bossCtx.fillStyle = '#ccc';
-                bossCtx.shadowColor = '#fff';
-                bossCtx.shadowBlur = 6;
+                if (!options.performanceMode) bossCtx.shadowColor = '#fff';
+                if (!options.performanceMode) bossCtx.shadowBlur = 6;
                 bossCtx.fill();
                 bossCtx.restore();
             }
@@ -540,8 +540,8 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
                     bossCtx.lineTo(-b.r / 2, b.width / 2);
                     bossCtx.closePath();
                     bossCtx.fillStyle = '#ccc';
-                    bossCtx.shadowColor = '#fff';
-                    bossCtx.shadowBlur = 6;
+                    if (!options.performanceMode) bossCtx.shadowColor = '#fff';
+                    if (!options.performanceMode) bossCtx.shadowBlur = 6;
                     bossCtx.fill();
                     bossCtx.restore();
                 }
@@ -619,6 +619,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         if (!info.active) return;
         // End early if all characters are dead
         if (info.allCharactersDead()) {
+            info.exitAction()
             if (!options.bhKeyboard) {
                 window.removeEventListener("mousemove", mouseHandler);
                 window.removeEventListener("touchmove", touchHandler);
@@ -633,7 +634,6 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
             bhState.active = false;
             info.active = false;
             options.fullscreen = info.full;
-            info.exitAction()
             localStorage.setItem('bhState', JSON.stringify(info));
             if (bhState.timer) clearTimeout(bhState.timer)
             return;
@@ -706,6 +706,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
                 }
             }
             if (info.distToGoal < info.goalRadius) {
+                info.exitAction()
                 // End attack
                 if (!options.bhKeyboard) {
                     window.removeEventListener("mousemove", mouseHandler);
@@ -721,7 +722,6 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
                 bhState.active = false;
                 info.active = false;
                 options.fullscreen = info.full;
-                info.exitAction()
                 localStorage.setItem('bhState', JSON.stringify(info));
                 if (bhState.timer) clearTimeout(bhState.timer)
                 return;
@@ -752,8 +752,8 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         // Draw bullets (white circles) on bossCanvas
         info.bossCtx.clearRect(0, 0, bossCanvas.width, bossCanvas.height);
         info.bossCtx.save();
-        info.bossCtx.shadowColor = "#fff";
-        info.bossCtx.shadowBlur = 8;
+        if (!options.performanceMode) info.bossCtx.shadowColor = "#fff";
+        if (!options.performanceMode) info.bossCtx.shadowBlur = 8;
         for (let b of info.bullets) {
             if (b.boxRender) continue
             b.draw(b, info.bossCtx)
@@ -832,8 +832,8 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
             info.ctx.save();
             info.ctx.strokeStyle = '#fff';
             info.ctx.lineWidth = 4;
-            info.ctx.shadowColor = '#fff';
-            info.ctx.shadowBlur = 12;
+            if (!options.performanceMode) info.ctx.shadowColor = '#fff';
+            if (!options.performanceMode) info.ctx.shadowBlur = 12;
             info.ctx.setLineDash([16, 12]);
             info.ctx.strokeRect(0, 0, info.width, info.height);
             info.ctx.setLineDash([]);
@@ -843,8 +843,8 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
             info.ctx.save();
             info.ctx.strokeStyle = '#0ff';
             info.ctx.lineWidth = 4;
-            info.ctx.shadowColor = '#0ff';
-            info.ctx.shadowBlur = 16;
+            if (!options.performanceMode) info.ctx.shadowColor = '#0ff';
+            if (!options.performanceMode) info.ctx.shadowBlur = 16;
             info.ctx.strokeRect(info.subx, info.suby, info.subWidth, info.subHeight);
             info.ctx.restore();
         }
@@ -882,8 +882,8 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
             info.ctx.textAlign = 'center';
             info.ctx.textBaseline = 'top';
             info.ctx.fillStyle = timeLeft <= 3 ? '#f44' : '#fff';
-            info.ctx.shadowColor = '#000';
-            info.ctx.shadowBlur = 6;
+            if (!options.performanceMode) info.ctx.shadowColor = '#000';
+            if (!options.performanceMode) info.ctx.shadowBlur = 6;
             info.ctx.fillText(`Time Left: ${timeLeft}s`, info.width / 2, 10);
             info.ctx.restore();
             info.ctx.restore();
@@ -895,8 +895,8 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
                 info.ctx.beginPath();
                 info.ctx.arc(info.goal.x * info.goal.d + info.goal.d / 2, info.goal.y * info.goal.d + info.goal.d / 2, info.goalRadius, 0, 2 * Math.PI);
                 info.ctx.fillStyle = "#2f4";
-                info.ctx.shadowColor = "#2f4";
-                info.ctx.shadowBlur = 16;
+                if (!options.performanceMode) info.ctx.shadowColor = "#2f4";
+                if (!options.performanceMode) info.ctx.shadowBlur = 16;
                 info.ctx.fill();
                 info.ctx.restore();
             } else {
@@ -904,8 +904,8 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
                 info.ctx.beginPath();
                 info.ctx.arc(info.goal.x, info.goal.y, info.goalRadius, 0, 2 * Math.PI);
                 info.ctx.fillStyle = "#2f4";
-                info.ctx.shadowColor = "#2f4";
-                info.ctx.shadowBlur = 16;
+                if (!options.performanceMode) info.ctx.shadowColor = "#2f4";
+                if (!options.performanceMode) info.ctx.shadowBlur = 16;
                 info.ctx.fill();
                 info.ctx.restore();
             }
@@ -932,8 +932,8 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         info.ctx.lineTo(-info.pr, 0);
         info.ctx.closePath();
         info.ctx.fillStyle = "#e22";
-        info.ctx.shadowColor = "#e22";
-        info.ctx.shadowBlur = 8;
+        if (!options.performanceMode) info.ctx.shadowColor = "#e22";
+        if (!options.performanceMode) info.ctx.shadowBlur = 8;
         info.ctx.fill();
         info.ctx.restore();
 
@@ -973,6 +973,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
 
     // End the minigame after duration
     bhState.timer = setTimeout(() => {
+        info.exitAction()
         if (!options.bhKeyboard) {
             window.removeEventListener("mousemove", mouseHandler);
             window.removeEventListener("touchmove", touchHandler);
@@ -988,7 +989,6 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         bhState.active = false;
         info.active = false;
         options.fullscreen = info.full;
-        info.exitAction()
         if (info.timed) bhAttack(Decimal.mul(player.bh.celestialite.damage, 3), 3, 0, "allPlayer")
         localStorage.setItem('bhState', JSON.stringify(info));
     }, info.duration * 1000);
@@ -1013,12 +1013,12 @@ if (storedInfo && storedInfo != "") {
         } else {
             // If time is up, clean up state            
             setTimeout(() => {
+                if (storedInfo.exitAction) storedInfo.exitAction()
                 player.subtabs["bh"]["stuff"] = "battle";
                 pauseUniverseAll(["BH"], "unpause", true)
                 player.universe = "U3"
                 bhState.active = false;
                 options.fullscreen = bhState.full;
-                if (storedInfo.exitAction) storedInfo.exitAction()
                 if (bhState.timed) bhAttack(Decimal.mul(player.bh.celestialite.damage, 3), 3, 0, "allPlayer")
                 storedInfo.active = false
                 localStorage.setItem('bhState', JSON.stringify(storedInfo));
@@ -1027,12 +1027,12 @@ if (storedInfo && storedInfo != "") {
     } else {
         setTimeout(() => {
             if (player && player.subtabs && player.subtabs["bh"]["stuff"] == "bullet") {
+                if (storedInfo.exitAction) storedInfo.exitAction()
                 player.subtabs["bh"]["stuff"] = "battle";
                 pauseUniverseAll(["BH"], "unpause", true)
                 player.universe = "U3"
                 bhState.active = false;
                 options.fullscreen = bhState.full;
-                if (storedInfo.exitAction) storedInfo.exitAction()
                 if (bhState.timed) bhAttack(Decimal.mul(player.bh.celestialite.damage, 3), 3, 0, "allPlayer")
                 storedInfo.active = false
                 localStorage.setItem('bhState', JSON.stringify(storedInfo));
@@ -1068,8 +1068,8 @@ BHB.diamondAttack = {
                     bossCtx.lineTo(-b.r, 0);
                     bossCtx.closePath();
                     bossCtx.fillStyle = "#fff";
-                    bossCtx.shadowColor = "#fff";
-                    bossCtx.shadowBlur = 16;
+                    if (!options.performanceMode) bossCtx.shadowColor = "#fff";
+                    if (!options.performanceMode) bossCtx.shadowBlur = 16;
                     bossCtx.fill();
                     bossCtx.resetTransform()
                 }
@@ -1123,8 +1123,8 @@ BHB.rotatingCircleRadialBurst = {
                     ctx.beginPath();
                     ctx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);
                     ctx.fillStyle = "#eee";
-                    ctx.shadowColor = "#fff";
-                    ctx.shadowBlur = 12;
+                    if (!options.performanceMode) ctx.shadowColor = "#fff";
+                    if (!options.performanceMode) ctx.shadowBlur = 12;
                     ctx.fill()
                 }
             });
@@ -1210,8 +1210,8 @@ BHB.movingCircleRadialBurstAttack = {
                     ctx.beginPath();
                     ctx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);
                     ctx.fillStyle = "#eee";
-                    ctx.shadowColor = "#fff";
-                    ctx.shadowBlur = 12;
+                    if (!options.performanceMode) ctx.shadowColor = "#fff";
+                    if (!options.performanceMode) ctx.shadowBlur = 12;
                     ctx.fill()
                 }
             });
@@ -1285,8 +1285,8 @@ BHB.bouncingDiamond = {
                     bossCtx.lineTo(-b.r, 0);
                     bossCtx.closePath();
                     bossCtx.fillStyle = "#fff";
-                    bossCtx.shadowColor = "#fff";
-                    bossCtx.shadowBlur = 16;
+                    if (!options.performanceMode) bossCtx.shadowColor = "#fff";
+                    if (!options.performanceMode) bossCtx.shadowBlur = 16;
                     bossCtx.fill();
                     bossCtx.resetTransform()
                 },
@@ -1353,8 +1353,8 @@ BHB.bombAttack = {
                     bossCtx.beginPath();
                     bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);
                     bossCtx.fillStyle = '#fff';
-                    bossCtx.shadowColor = '#fff';
-                    bossCtx.shadowBlur = 12;
+                    if (!options.performanceMode) bossCtx.shadowColor = '#fff';
+                    if (!options.performanceMode) bossCtx.shadowBlur = 12;
                     bossCtx.fill();
                 },
             });
@@ -1383,8 +1383,8 @@ BHB.bombAttack = {
                             bossCtx.beginPath();
                             bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);
                             bossCtx.fillStyle = '#fff';
-                            bossCtx.shadowColor = '#fff';
-                            bossCtx.shadowBlur = 8;
+                            if (!options.performanceMode) bossCtx.shadowColor = '#fff';
+                            if (!options.performanceMode) bossCtx.shadowBlur = 8;
                             bossCtx.fill();
                         },
                     })
@@ -1406,8 +1406,8 @@ BHB.bombAttack = {
                             bossCtx.beginPath();
                             bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);
                             bossCtx.fillStyle = '#fff';
-                            bossCtx.shadowColor = '#fff';
-                            bossCtx.shadowBlur = 4;
+                            if (!options.performanceMode) bossCtx.shadowColor = '#fff';
+                            if (!options.performanceMode) bossCtx.shadowBlur = 4;
                             bossCtx.fill();
                         },
                     });
@@ -1480,12 +1480,12 @@ BHB.centerIcon = {
                 bossCtx.textAlign = 'center';
                 bossCtx.textBaseline = 'middle';
                 bossCtx.globalAlpha = 0.92;
-                bossCtx.shadowColor = '#fff';
-                bossCtx.shadowBlur = 32;
+                if (!options.performanceMode) bossCtx.shadowColor = '#fff';
+                if (!options.performanceMode) bossCtx.shadowBlur = 32;
                 bossCtx.fillStyle = b.fill;
                 bossCtx.fillText(b.symbol, 0, 0);
                 bossCtx.globalAlpha = 1;
-                bossCtx.shadowBlur = 0;
+                if (!options.performanceMode) bossCtx.shadowBlur = 0;
                 bossCtx.lineWidth = 6;
                 bossCtx.strokeStyle = b.stroke;
                 bossCtx.strokeText(b.symbol, 0, 0);
@@ -1555,12 +1555,12 @@ BHB.finalMatosAttack = {
                     bossCtx.textAlign = 'center';
                     bossCtx.textBaseline = 'middle';
                     bossCtx.globalAlpha = 0.92;
-                    bossCtx.shadowColor = b.pulsingRed ? '#e22' : '#fff';
-                    bossCtx.shadowBlur = 32;
+                    if (!options.performanceMode) bossCtx.shadowColor = b.pulsingRed ? '#e22' : '#fff';
+                    if (!options.performanceMode) bossCtx.shadowBlur = 32;
                     bossCtx.fillStyle = b.pulsingRed ? '#e22' : b.fill;
                     bossCtx.fillText(b.symbol, 0, 0);
                     bossCtx.globalAlpha = 1;
-                    bossCtx.shadowBlur = 0;
+                    if (!options.performanceMode) bossCtx.shadowBlur = 0;
                     bossCtx.lineWidth = 6;
                     bossCtx.strokeStyle = b.pulsingRed ? '#fff' : b.stroke;
                     bossCtx.strokeText(b.symbol, 0, 0);
@@ -1683,12 +1683,12 @@ BHB.chargingIcon = {
                 bossCtx.textAlign = 'center';
                 bossCtx.textBaseline = 'middle';
                 bossCtx.globalAlpha = 0.92;
-                bossCtx.shadowColor = b.pulsingRed ? '#e22' : '#fff';
-                bossCtx.shadowBlur = 32;
+                if (!options.performanceMode) bossCtx.shadowColor = b.pulsingRed ? '#e22' : '#fff';
+                if (!options.performanceMode) bossCtx.shadowBlur = 32;
                 bossCtx.fillStyle = b.pulsingRed ? '#e22' : b.fill;
                 bossCtx.fillText(b.symbol, 0, 0);
                 bossCtx.globalAlpha = 1;
-                bossCtx.shadowBlur = 0;
+                if (!options.performanceMode) bossCtx.shadowBlur = 0;
                 bossCtx.lineWidth = 6;
                 bossCtx.strokeStyle = b.pulsingRed ? '#fff' : b.stroke;
                 bossCtx.strokeText(b.symbol, 0, 0);
@@ -1784,12 +1784,12 @@ BHB.bouncingIcon = {
                 bossCtx.textAlign = 'center';
                 bossCtx.textBaseline = 'middle';
                 bossCtx.globalAlpha = 0.92;
-                bossCtx.shadowColor = '#fff';
-                bossCtx.shadowBlur = 32;
+                if (!options.performanceMode) bossCtx.shadowColor = '#fff';
+                if (!options.performanceMode) bossCtx.shadowBlur = 32;
                 bossCtx.fillStyle = b.fill;
                 bossCtx.fillText(b.symbol, 0, 0);
                 bossCtx.globalAlpha = 1;
-                bossCtx.shadowBlur = 0;
+                if (!options.performanceMode) bossCtx.shadowBlur = 0;
                 bossCtx.lineWidth = 6;
                 bossCtx.strokeStyle = b.stroke;
                 bossCtx.strokeText(b.symbol, 0, 0);
@@ -1842,8 +1842,8 @@ BHB.chargingBee = {
                     bossCtx.rotate(b.angle);
                     bossCtx.strokeStyle = "#000";
                     bossCtx.lineWidth = 2;
-                    bossCtx.shadowColor = b.pulsingRed ? '#e22' : "#fff";
-                    bossCtx.shadowBlur = 4;
+                    if (!options.performanceMode) bossCtx.shadowColor = b.pulsingRed ? '#e22' : "#fff";
+                    if (!options.performanceMode) bossCtx.shadowBlur = 4;
                     // Wings
                     bossCtx.beginPath()
                     bossCtx.arcTo(0, 0, -b.r/2, b.r/2, b.r/4)
@@ -1988,8 +1988,8 @@ BHB.shootBee = {
                     bossCtx.rotate(b.angle);
                     bossCtx.strokeStyle = "#000";
                     bossCtx.lineWidth = 2;
-                    bossCtx.shadowColor = "#fff";
-                    bossCtx.shadowBlur = 4;
+                    if (!options.performanceMode) bossCtx.shadowColor = "#fff";
+                    if (!options.performanceMode) bossCtx.shadowBlur = 4;
                     // Wings
                     bossCtx.beginPath()
                     bossCtx.arcTo(0, 0, -b.r/2, b.r/2, b.r/4)
@@ -2087,8 +2087,8 @@ BHB.bouncingBees = {
                     bossCtx.rotate(b.angle + Math.PI/2);
                     bossCtx.strokeStyle = "#000";
                     bossCtx.lineWidth = 2;
-                    bossCtx.shadowColor = b.pulsingRed ? '#e22' : "#fff";
-                    bossCtx.shadowBlur = 4;
+                    if (!options.performanceMode) bossCtx.shadowColor = b.pulsingRed ? '#e22' : "#fff";
+                    if (!options.performanceMode) bossCtx.shadowBlur = 4;
                     // Wings
                     bossCtx.beginPath()
                     bossCtx.arcTo(0, 0, -b.r/2, b.r/2, b.r/4)
@@ -2221,8 +2221,8 @@ BHB.waveBees = {
                     bossCtx.rotate(b.angle);
                     bossCtx.strokeStyle = "#000";
                     bossCtx.lineWidth = 2;
-                    bossCtx.shadowColor = "#fff";
-                    bossCtx.shadowBlur = 4;
+                    if (!options.performanceMode) bossCtx.shadowColor = "#fff";
+                    if (!options.performanceMode) bossCtx.shadowBlur = 4;
                     // Wings
                     bossCtx.beginPath()
                     bossCtx.arcTo(0, 0, -b.r/2, b.r/2, b.r/4)

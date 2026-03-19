@@ -907,8 +907,10 @@ addLayer("bh", {
 
                 // Cycle through character skills
                 for (let j = 0; j < 4; j++) {
+                    let except = false
                     if (player.bh.characters[i].skills[j].id == "none") continue
-                    if ((player.bh.characters[i].stun[1].gt(0) && player.bh.characters[i].stun[0] == "hard") || player.bh.bulletHell) continue
+                    if (BHA[player.bh.characters[i].skills[j].id].effects && (BHA[player.bh.characters[i].skills[j].id].effects.healthMult || BHA[player.bh.characters[i].skills[j].id].effects.healthAdd)) except = true
+                    if (!except && ((player.bh.characters[i].stun[1].gt(0) && player.bh.characters[i].stun[0] == "hard") || player.bh.bulletHell)) continue
                     let curStun = player.bh.characters[i].stun[1].gt(0) && player.bh.characters[i].stun[0] == "soft"
                     let instant = BHA[player.bh.characters[i].skills[j].id].instant
                     let active = BHA[player.bh.characters[i].skills[j].id].active

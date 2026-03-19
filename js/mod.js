@@ -329,8 +329,7 @@ function updateStyles() {
 	        galaxyBackground.remove();
 	    }
 	}
-
-	if (player.tab == "bh" && (player.bh.currentStage == "depth3" || player.bh.currentStage == "matosLair") && (player.subtabs["bh"]["stuff"] == "battle" || player.subtabs["bh"]["stuff"] == "bullet")) {
+	if (!options.performanceMode && player.tab == "bh" && (player.bh.currentStage == "depth3" || player.bh.currentStage == "matosLair") && (player.subtabs["bh"]["stuff"] == "battle" || player.subtabs["bh"]["stuff"] == "bullet")) {
 	    if (!document.getElementById("embers-background")) {
     	    // Create embers background container
 	        const embersBg = document.createElement("div");
@@ -383,7 +382,7 @@ function updateStyles() {
 	}
 
 	// Solar Eclipse Effect (moving sun/moon)
-	if (player.sma.inStarmetalChallenge && player.pet.legPetTimers[0].active) {
+	if (!options.performanceMode && player.sma.inStarmetalChallenge && player.pet.legPetTimers[0].active) {
 	    if (!document.getElementById("solar-eclipse-bg")) {
     	    // Create the eclipse overlay
 	        const eclipse = document.createElement("div");

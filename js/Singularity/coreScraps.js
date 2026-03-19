@@ -112,6 +112,15 @@
             player.cs.scraps[prop].gain = Decimal.pow(1.15, player.co.cores[prop].level).sub(1)
             if (player.cs.scraps[prop].gain.gte(1000)) player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.div(1000).pow(0.1).mul(1000) // BASE SOFTCAP
             if (player.matosLair.milestone[25] > 0) player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.add(1000)
+            if (hasUpgrade("laboratory", 6)) {
+                if (prop == "point" || prop == "factor" || prop == "prestige") player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.add(player.cof.coreFragments[0])
+                if (prop == "tree" || prop == "grass" || prop == "grasshopper") player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.add(player.cof.coreFragments[1])
+                if (prop == "code" || prop == "rocket") player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.add(player.cof.coreFragments[2])
+                if (prop == "infinity") player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.add(player.cof.coreFragments[3])
+                if (prop == "radioactive") player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.add(player.cof.coreFragments[4])
+                if (prop == "antimatter") player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.add(player.cof.coreFragments[5])
+                if (prop == "checkback" || prop == "dice") player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.add(player.cof.coreFragments[6])
+            }
 
             if (hasUpgrade("fu", 19)) player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(player.s.singularitiesEffect)
             player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(levelableEffect("pu", 204)[2])

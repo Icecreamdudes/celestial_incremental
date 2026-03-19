@@ -9,9 +9,9 @@
         starmetalEssence: new Decimal(0),
         starmetalEssenceSoftcap: new Decimal(1),
 
-        generatorTimers: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
-        generatorTimersMax: [new Decimal(10),new Decimal(40),new Decimal(90),new Decimal(160),new Decimal(250),],
-        generatorProduction: [new Decimal(1),new Decimal(5),new Decimal(12),new Decimal(20),new Decimal(35),],
+        generatorTimers: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0)],
+        generatorTimersMax: [new Decimal(10),new Decimal(40),new Decimal(90),new Decimal(160),new Decimal(250),new Decimal(360)],
+        generatorProduction: [new Decimal(1),new Decimal(7),new Decimal(16),new Decimal(30),new Decimal(60),new Decimal(150)],
 
         starmetalResetToggle: false,
         autoLeaveToggle: false,
@@ -38,18 +38,19 @@
         let onepersec = new Decimal(1)
 
         player.sme.generatorTimersMax = [
-            new Decimal(10),new Decimal(40),new Decimal(90),new Decimal(160),new Decimal(250),
+            new Decimal(10),new Decimal(40),new Decimal(90),new Decimal(160),new Decimal(250), new Decimal(360)
         ]
         player.sme.generatorTimersMax[0] = player.sme.generatorTimersMax[0].div(buyableEffect("sme", 10))
         player.sme.generatorTimersMax[1] = player.sme.generatorTimersMax[1].div(buyableEffect("sme", 11))
         player.sme.generatorTimersMax[2] = player.sme.generatorTimersMax[2].div(buyableEffect("sme", 12))
         player.sme.generatorTimersMax[3] = player.sme.generatorTimersMax[3].div(buyableEffect("sme", 13))
         player.sme.generatorTimersMax[4] = player.sme.generatorTimersMax[4].div(buyableEffect("sme", 14))
+        player.sme.generatorTimersMax[5] = player.sme.generatorTimersMax[5].div(buyableEffect("sme", 15))
 
         player.sme.starmetalEssenceSoftcap = player.sme.starmetalEssence.pow(0.5).div(15).add(1).pow(buyableEffect("sme", 103))
         
         player.sme.generatorProduction = [
-            new Decimal(1),new Decimal(7),new Decimal(16),new Decimal(30),new Decimal(60),
+            new Decimal(1),new Decimal(7),new Decimal(16),new Decimal(30),new Decimal(60), new Decimal(150)
         ]
 
         for (let i = 0; i < player.sme.generatorTimers.length; i++) {
@@ -206,7 +207,21 @@
             display() {
                 return "<h5>" + format(player.sme.generatorTimers[4]) + "/" + format(player.sme.generatorTimersMax[4]) + "<h5> seconds to produce " + format(player.sme.generatorProduction[4]) + " starmetal essence.</h5>";
             },
-
+        },
+        5: {
+            unlocked() { return player.sme.buyables[5].gte(1) },
+            direction: RIGHT,
+            width: 350,
+            height: 128,
+            progress() {
+                return player.sme.generatorTimers[5].div(player.sme.generatorTimersMax[5])
+            },
+            borderStyle: {borderLeft: "3px solid white", borderRight: "3px solid white", borderTop: "0px solid white", borderBottom: "0px solid white", borderRadius: "0"},
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
+            fillStyle: {backgroundColor: "#d460eb"},
+            display() {
+                return "<h5>" + format(player.sme.generatorTimers[5]) + "/" + format(player.sme.generatorTimersMax[5]) + "<h5> seconds to produce " + format(player.sme.generatorProduction[5]) + " starmetal essence.</h5>";
+            },
         },
     },
     upgrades: {},
@@ -381,6 +396,40 @@
             },
             style: { width: '275px', height: '125px', }
         },
+        5: {
+            costBase() { return new Decimal(1e9) },
+            costGrowth() { return new Decimal(1.5).div(buyableEffect("sme", 104)) },
+            purchaseLimit() { return new Decimal(9999) },
+            currency() { return player.sma.starmetalAlloy },
+            pay(amt) { player.sma.starmetalAlloy = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id)},
+            unlocked() { return hasUpgrade("laboratory", 16) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Essence Generator VI"
+            },
+            display() {
+                return 'which are boosting starmetal essence generator VI production by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' SMA'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '125px', }
+        },
 
         //radiation
         10: {
@@ -534,6 +583,40 @@
             },
             display() {
                 return 'which are dividing starmetal essence generator V time requirement by /' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Radiation'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '125px', background: "#0e8a22" }
+        },
+        15: {
+            costBase() { return new Decimal(1e30) },
+            costGrowth() { return new Decimal(2.125).div(buyableEffect("sme", 104)) },
+            purchaseLimit() { return new Decimal(9999) },
+            currency() { return player.ra.radiation },
+            pay(amt) { player.ra.radiation = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(5).add(1)},
+            unlocked() { return player.sme.buyables[5].gte(1) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Essence Hastener VI"
+            },
+            display() {
+                return 'which are dividing starmetal essence generator VI time requirement by /' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Radiation'
             },
             buy(mult) {
@@ -1956,6 +2039,7 @@
                     ["style-row", [["ex-buyable", 2], ["bar", 2], ["ex-buyable", 12]], {border: "3px solid white", marginTop: "-3px"}],
                     ["style-row", [["ex-buyable", 3], ["bar", 3], ["ex-buyable", 13]], {border: "3px solid white", marginTop: "-3px"}],
                     ["style-row", [["ex-buyable", 4], ["bar", 4], ["ex-buyable", 14]], {border: "3px solid white", marginTop: "-3px"}],
+                    ["style-row", [["ex-buyable", 5], ["bar", 5], ["ex-buyable", 15]], () => {return hasUpgrade("laboratory", 16) ? {border: "3px solid white", marginTop: "-3px"} : {display: "none !important"}}],
                 ]
             },
             "Starmetal Studies": {

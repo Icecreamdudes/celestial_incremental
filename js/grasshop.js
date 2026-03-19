@@ -183,6 +183,7 @@
         // POWER MODIFIERS
         player.gh.steelToGet = player.gh.steelToGet.pow(player.se.starsExploreEffect[0][5])
         player.gh.steelToGet = player.gh.steelToGet.pow(player.cof.coreFragmentEffects[2])
+        player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("laboratory", 12))
 
         // STEEL PER SECOND
         if (hasUpgrade("sma", 103)) player.gh.steel = player.gh.steel.add(Decimal.mul(player.uni["U1"].tickspeed.div(10), player.gh.steelToGet.mul(delta)))

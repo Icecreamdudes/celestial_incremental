@@ -1059,6 +1059,21 @@ addLayer("pet", {
                 return look
             },
         },
+        33: {
+            title() { return player.laboratory.cooldown.lte(0) ? "<h3>Activate Skill</h3>" : "Check Back in " + formatTime(player.laboratory.cooldown) + "."},
+            tooltip() { return "Enter the laboratory for " + formatSimple(BHS["laboratory"].timer().div(60)) + " minutes."},
+            canClick() { return player.laboratory.cooldown.lte(0) },
+            unlocked() { return layers.pet.levelables.index == 503 },
+            onClick () {
+                BHStageEnter("laboratory")
+                player.laboratory.cooldown = player.laboratory.cooldownMax
+            },
+            style() {
+                let look = {width: '125px', minHeight: '40px', borderRadius: '0px', fontSize: '8px'}
+                this.canClick() ? look.backgroundColor = "#eed200" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
+        },
 
         // START OF FRAGMENTATION CLICKABLES
         100: {
@@ -3612,7 +3627,7 @@ addLayer("pet", {
             shopLayer() { return "sp" },
             // CLICK CODE
             unlocked() { return player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23) },
-            canClick() { return player.pet.singularityFragments.gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
+            canClick() { return player.pet.singularityFragments.gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id).gt(0)},
             onClick() { return layers[this.layer].levelables.index = this.id },
             // BUY CODE
             pay(amt) { player.pet.singularityFragments = player.pet.singularityFragments.sub(amt) },
@@ -3661,7 +3676,7 @@ addLayer("pet", {
             shopLayer() { return "sp" },
             // CLICK CODE
             unlocked() { return player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23) },
-            canClick() { return player.pet.singularityFragments.gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
+            canClick() { return player.pet.singularityFragments.gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id).gt(0)},
             onClick() { return layers[this.layer].levelables.index = this.id },
             // BUY CODE
             pay(amt) { player.pet.singularityFragments = player.pet.singularityFragments.sub(amt) },
@@ -3710,7 +3725,7 @@ addLayer("pet", {
             shopLayer() { return "sp" },
             // CLICK CODE
             unlocked() { return player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23) },
-            canClick() { return player.pet.singularityFragments.gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
+            canClick() { return player.pet.singularityFragments.gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id).gt(0)},
             onClick() { return layers[this.layer].levelables.index = this.id },
             // BUY CODE
             pay(amt) { player.pet.singularityFragments = player.pet.singularityFragments.sub(amt) },
@@ -4977,7 +4992,7 @@ addLayer("pet", {
                         ["style-column", [
                             ["levelable-display", [
                                 ["style-row", [["clickable", 2]], {width: '100px', height: '40px'}],
-                                ["style-row", [["clickable", 5], ["clickable", 6], ["clickable", 31], ["clickable", 32], ["clickable", 8], ["clickable", 21]], {width: '125px', height: '40px'}],
+                                ["style-row", [["clickable", 5], ["clickable", 6], ["clickable", 31], ["clickable", 32], ["clickable", 33], ["clickable", 8], ["clickable", 21]], {width: '125px', height: '40px'}],
                                 ["style-row", [["clickable", 7]], {width: '100px', height: '40px'}],
                                 ["style-row", [["clickable", 3], ["clickable", 4]], {width: '100px', height: '40px'}],
                             ]],
@@ -5038,7 +5053,7 @@ addLayer("pet", {
                         ["style-column", [
                             ["levelable-display", [
                                 ["style-row", [["clickable", 2]], {width: '100px', height: '40px'}],
-                                ["style-row", [["clickable", 5], ["clickable", 6], ["clickable", 31], ["clickable", 8], ["clickable", 21]], {width: '125px', height: '40px'}],
+                                ["style-row", [["clickable", 5], ["clickable", 6], ["clickable", 31], ["clickable", 32], ["clickable", 33], ["clickable", 8], ["clickable", 21]], {width: '125px', height: '40px'}],
                                 ["style-row", [["clickable", 7]], {width: '100px', height: '40px'}],
                                 ["style-row", [["clickable", 3], ["clickable", 4]], {width: '100px', height: '40px'}],
                             ]],

@@ -70,6 +70,7 @@ addLayer("alephsChamber", {
                     ["blank", "10px"],
                     ["raw-html", "<u>Effects</u>", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Weakened Star Softcap." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "Improved SP's effect on singularity gain." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "x36 Hex Power." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "x100 Infinitum." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "x10 Emotions." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],

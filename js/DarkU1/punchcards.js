@@ -1806,7 +1806,7 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.le.resetAmount.pow(1.5).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = player.le.resetAmount.pow(1.25).div(2).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
                 eff[1] = Decimal.div(1, player.le.resetAmount.pow(0.7).mul(0.2).add(1))
                 if (getLevelableAmount(this.layer, this.id).lt(10)) eff[2] = getLevelableAmount(this.layer, this.id).mul(0.2).add(1)
                 if (getLevelableAmount(this.layer, this.id).gte(10)) eff[2] = getLevelableAmount(this.layer, this.id).mul(0.1).add(2)

@@ -12,7 +12,7 @@
     }
     },
     automate() {
-        if (hasMilestone("s", 17) && !inChallenge("fu", 11) && !inChallenge("fu", 12))
+        if (hasMilestone("s", 17) && (!inChallenge("fu", 11)) && !inChallenge("fu", 12))
         {
             buyUpgrade("an", 11)
             buyUpgrade("an", 12)

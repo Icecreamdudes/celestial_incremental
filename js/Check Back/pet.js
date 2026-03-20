@@ -110,6 +110,12 @@ const fragShopBase = {
         1: new Decimal(2000),
         2: new Decimal(1000),
     },
+    9: {
+        name: "Vespasian",
+        0: new Decimal(4000),
+        1: new Decimal(2000),
+        2: new Decimal(1000),
+    },
 }
 addLayer("pet", {
     name: "Pets", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -253,6 +259,10 @@ addLayer("pet", {
                 max: new Decimal(21600),
             },
             8: {
+                current: new Decimal(0),
+                max: new Decimal(21600),
+            },
+            9: {
                 current: new Decimal(0),
                 max: new Decimal(21600),
             },
@@ -1332,6 +1342,10 @@ addLayer("pet", {
                         addLevelableXP("pet", 502, new Decimal(1))
                         doPopup("none", "Geroa gets enhancements", "Pet Obtained!", 5, "#eed200", "resources/Pets/geroaLegendaryPet.png")
                         break;
+                    case 9:
+                        addLevelableXP("pet", 503, new Decimal(1))
+                        doPopup("none", "Vespasian mutates further", "Pet Obtained!", 5, "#eed200", "resources/Pets/vespasianLegendaryPet.png")
+                        break;
                 }
             },
             style() {
@@ -1418,6 +1432,15 @@ addLayer("pet", {
             unlocked() { return getLevelableAmount("pet", 502).gt(0) },
             onClick() {
                 player.pet.fragShopIndex = 8
+            },
+            style: {width: "75px", minHeight: "75px", background: "#eed200", border: "5px solid #776900", borderRadius: "0px", padding: "0px"},
+        },
+        140: {
+            title() { return "<img src='resources/Pets/vespasianLegendaryPet.png'style='width:65px;height:65px;margin:0px;margin-bottom:-4px'></img>" },
+            canClick: true,
+            unlocked() { return getLevelableAmount("pet", 503).gt(0) },
+            onClick() {
+                player.pet.fragShopIndex = 9
             },
             style: {width: "75px", minHeight: "75px", background: "#eed200", border: "5px solid #776900", borderRadius: "0px", padding: "0px"},
         },
@@ -1511,7 +1534,7 @@ addLayer("pet", {
             },
         },
         303: {
-            title() { return "<img src='resources/Pets/legendarybg.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" },
+            title() { return "<img src='resources/Pets/vespasianLegendaryPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" },
             canClick() { return true },
             unlocked() { return hasUpgrade("depth4", 6) },
             onClick() {
@@ -3846,7 +3869,7 @@ addLayer("pet", {
             } 
         },
         503: {
-            image() { return this.canClick() ? "resources/Pets/legendarybg.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/vespasianLegendaryPet.png" : "resources/secret.png"},
             title() { return "Vespasian" },
             lore() { return "<h5>Originally a secret weapon of Matos, it has now been further modified and combined with a wasp to create a fierce killing machine. Fortunately, Aleph accidentally gave it free will, so it isn't particularly interested in her goals." }, 
             description() {
@@ -4649,7 +4672,7 @@ addLayer("pet", {
             }
             if (player.pet.summonIndex.eq(2)) {
                 player.pet.levelables[503][1] = player.pet.levelables[503][1].add(1)
-                doPopup("none", "Vespasian mutates further", "Pet Obtained!", 5, "#eed200", "resources/Pets/legendarybg.png")
+                doPopup("none", "Vespasian mutates further", "Pet Obtained!", 5, "#eed200", "resources/Pets/vespasianLegendaryPet.png")
             }
             player.pet.eclipsePity = 0
             return
@@ -4719,7 +4742,7 @@ addLayer("pet", {
             }
             if (player.pet.summonIndex.eq(2)) {
                 player.pet.levelables[503][1] = player.pet.levelables[503][1].add(1)
-                doPopup("none", "Vespasian mutates further", "Pet Obtained!", 5, "#eed200", "resources/Pets/legendarybg.png")
+                doPopup("none", "Vespasian mutates further", "Pet Obtained!", 5, "#eed200", "resources/Pets/vespasianLegendaryPet.png")
             }
             player.pet.eclipsePity = 0
         }
@@ -5427,7 +5450,7 @@ addLayer("pet", {
                         ["style-row", [
                             ["style-row", [["hoverless-clickable", 138]], {width: "75px", height: "75px", borderLeft: "1px solid white", borderRight: "1px solid white"}],
                             ["style-row", [["hoverless-clickable", 139]], {width: "75px", height: "75px", borderRight: "1px solid white"}],
-                            ["style-row", [], {width: "75px", height: "75px", borderRight: "1px solid white"}],
+                            ["style-row", [["hoverless-clickable", 140]], {width: "75px", height: "75px", borderRight: "1px solid white"}],
                             ["style-row", [], {width: "75px", height: "75px", borderRight: "1px solid white"}],
                             ["style-row", [], {width: "75px", height: "75px", borderRight: "1px solid white"}],
                             ["style-row", [], {width: "75px", height: "75px", borderRight: "1px solid white"}],

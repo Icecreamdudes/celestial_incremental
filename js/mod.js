@@ -234,7 +234,7 @@ function updateStyles() {
 					layerBG = "linear-gradient(-180deg, #8C4670 0%, #7F007F 100%)"
 					break;
 				case "laboratory":
-					layerBG = "linear-gradient(-180deg, #758c4a 0%, #2e4625 100%)"
+					layerBG = "linear-gradient(-180deg, #3a4625 0%, #172312 100%)"
 					break;
 				default: 
 					layerBG = "black"
@@ -379,6 +379,13 @@ function updateStyles() {
     	// Remove embers background if not in depth 3
     	const embersBg = document.getElementById("embers-background");
     	if (embersBg) embersBg.remove();
+	}
+	if (player.tab == "bh" && player.bh.currentStage == "laboratory" && player.subtabs["bh"]["stuff"] == "battle") {
+		let layer = document.getElementById("layerHolder");
+		layer.style.filter = "brightness(90%)"
+	} else {
+		let layer = document.getElementById("layerHolder");
+		layer.style.filter = ""
 	}
 
 	// Solar Eclipse Effect (moving sun/moon)

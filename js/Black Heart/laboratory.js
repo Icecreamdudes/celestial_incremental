@@ -34,10 +34,10 @@ addLayer("laboratory", {
             }
         } else {
             str = {
-                background: "linear-gradient(135deg, #426535 0%, #A8C86A 100%)",
+                background: "linear-gradient(135deg, #21331b 0%, #84a83e 100%)",
                 backgroundOrigin: "border-box",
-                borderColor: "#185A00",
-                color: "#2BA200",
+                borderColor: "#0a2700",
+                color: "#1d6f00",
                 textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
                 margin: "0 0 20px 10px !important",
             }
@@ -69,7 +69,7 @@ addLayer("laboratory", {
                 player.laboratory.cooldown = player.laboratory.cooldownMax
             },
             style() {
-                let look = {width: "200px", minHeight: "75px", color: "white", background: "linear-gradient(135deg, #426535 0%, #A8C86A 100%)", border: "3px solid #000", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"}
+                let look = {width: "200px", minHeight: "75px", color: "white", background: "linear-gradient(135deg, #21331b 0%, #84a83e 100%)", border: "3px solid #000", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"}
                 if (player.laboratory.cooldown.gt(0)) look.background = "#bf8f8f"
                 return look
             },
@@ -413,7 +413,7 @@ addLayer("laboratory", {
 BHS.laboratory = {
     nameCap: "The Laboratory",
     nameLow: "the laboratory",
-    music: "music/depth4.mp3",
+    music: "music/matosSomber.mp3",
     comboLimit: Infinity,
     comboScaling: 2,
     comboScalingStart: 0,
@@ -461,16 +461,16 @@ BHC.f00 = {
     name: "Celestialite F-00",
     symbol: "00",
     style: {
-        background: "linear-gradient(135deg, #A8C86A, #426535)",
+        background: "linear-gradient(135deg, #84a83e, #21331b)",
         color: "black",
-        borderColor: "#185A00",
+        borderColor: "#0a2700",
         fontSize: "60px",
     },
     health: new Decimal(100),
     damage: new Decimal(5),
     actions: {
         0: {
-            name: "Quick Shot?",
+            name: "Flagellation",
             instant: true,
             type: "damage",
             target: "celestialite",
@@ -497,9 +497,9 @@ BHC.f01 = {
     name: "Celestialite F-01",
     symbol: "01",
     style: {
-        background: "linear-gradient(135deg, #A8C86A, #426535)",
+        background: "linear-gradient(135deg, #84a83e, #21331b)",
         color: "black",
-        borderColor: "#185A00",
+        borderColor: "#0a2700",
         fontSize: "60px",
     },
     health: new Decimal(100),
@@ -507,7 +507,7 @@ BHC.f01 = {
     mending: new Decimal(10),
     actions: {
         0: {
-            name: "Bandage<br><small>(That's it?)</small>",
+            name: "Clean Wounds",
             instant: true,
             type: "heal",
             target: "celestialite",
@@ -535,16 +535,16 @@ BHC.f02 = {
     name: "Celestialite F-02",
     symbol: "02",
     style: {
-        background: "linear-gradient(135deg, #A8C86A, #426535)",
+        background: "linear-gradient(135deg, #84a83e, #21331b)",
         color: "black",
-        borderColor: "#185A00",
+        borderColor: "#0a2700",
         fontSize: "60px",
     },
     health: new Decimal(100),
     damage: new Decimal(5),
     actions: {
         0: {
-            name: "Slippery Knife",
+            name: "Mangled Fist",
             instant: true,
             type: "damage",
             target: "randomPlayer",
@@ -576,9 +576,9 @@ BHC.f03 = {
     name: "Celestialite F-03",
     symbol: "03",
     style: {
-        background: "linear-gradient(135deg, #A8C86A, #426535)",
+        background: "linear-gradient(135deg, #84a83e, #21331b)",
         color: "black",
-        borderColor: "#185A00",
+        borderColor: "#0a2700",
         fontSize: "60px",
     },
     health: new Decimal(100),
@@ -615,16 +615,16 @@ BHC.f04 = {
     name: "Celestialite F-04",
     symbol: "04",
     style: {
-        background: "linear-gradient(135deg, #A8C86A, #426535)",
+        background: "linear-gradient(135deg, #84a83e, #21331b)",
         color: "black",
-        borderColor: "#185A00",
+        borderColor: "#0a2700",
         fontSize: "60px",
     },
     health: new Decimal(100),
     damage: new Decimal(5),
     actions: {
         0: {
-            name: "Spin",
+            name: "Shaking",
             active: true,
             constantType: "effect",
             constantTarget: "celestialite",
@@ -655,51 +655,57 @@ BHC.f05 = {
     name: "Celestialite F-05",
     symbol: "05",
     style: {
-        background: "linear-gradient(135deg, #A8C86A, #426535)",
+        background: "linear-gradient(135deg, #84a83e, #21331b)",
         color: "black",
-        borderColor: "#185A00",
+        borderColor: "#0a2700",
         fontSize: "60px",
     },
     health: new Decimal(100),
     damage: new Decimal(5),
     actions: {
         0: {
-            name: "Fun Fact",
+            name: "Ramble",
             instant: true,
             type: "function",
             target: "allPlayer",
             onTrigger(index, slot, target) {
-                let random = Math.floor(Math.random()*10)
+                let random = Math.floor(Math.random()*12)
                 switch (random) {
                     case 0:
-                        bhLog("<span style='color: #fff'>Fun Fact: Grasshoppers have their ears located on their abdomens.")
+                        bhLog("<span style='color: #fff'>...")
                         break;
                     case 1:
-                        bhLog("<span style='color: #fff'>Fun Fact: Gravity is slightly weaker in Antimatter World.")
+                        bhLog("<span style='color: #fff'>What type of things did Matos do to you?")
                         break;
                     case 2:
-                        bhLog("<span style='color: #fff'>Fun Fact: Dice rigging was made by Zar himself due to him getting frustrated at waiting too much.")
+                        bhLog("<span style='color: #fff'>Is there still an outside world?")
                         break;
                     case 3:
-                        bhLog("<span style='color: #fff'>Fun Fact: It's still always watching!")
+                        bhLog("<span style='color: #fff'>It's still watching.")
                         break;
                     case 4:
-                        bhLog("<span style='color: #fff'>Fun Fact: Your steel is made of grasshoppers ... somehow.")
+                        bhLog("<span style='color: #fff'>It's strange that a place like this can even be made. Using dark essence at this purity usually destroys matter itself.")
                         break;
                     case 5:
-                        bhLog("<span style='color: #fff'>Fun Fact: Matos didn't make the black heart, he's just a squatter.")
+                        bhLog("<span style='color: #fff'>I heard from some of the stronger experiments that Matos didn't even make this place, though I doubt their words.")
                         break;
                     case 6:
-                        bhLog("<span style='color: #fff'>Fun Fact: Matos wasn't very good at making celestialites.")
+                        bhLog("<span style='color: #fff'>I heard that Matos sometimes frees us from here ... but I haven't seen it before.")
                         break;
                     case 7:
-                        bhLog("<span style='color: #fff'>Fun Fact: Aleph has no clue where her spirit came from, and has never found another one since.")
+                        bhLog("<span style='color: #fff'>Matos brought up something about a spirit. What is a spirit?")
                         break;
                     case 8:
-                        bhLog("<span style='color: #fff'>Fun Fact: One of the older experiments tried to escape, but got disintegrated by the dark essence surrounding this lab. I miss them.")
+                        bhLog("<span style='color: #fff'>One of the older experiments tried to escape, but got disintegrated by the dark essence surrounding this lab. I miss them.")
                         break;
                     case 9:
-                        bhLog("<span style='color: #fff'>Fun Fact: If you hold the coin clipper button for 20 seconds you can perform a super coin clip!")
+                        bhLog("<span style='color: #fff'>I heard from Matos that if you hold a coin clipper for a very long time, something would happen. Do you know what a coin clipper is?")
+                        break;
+                    case 10:
+                        bhLog("<span style='color: #fff'>Will we ever be free again?")
+                        break;
+                    case 11:
+                        bhLog("<span style='color: #fff'>Could we ever be whole again?")
                         break;
                 }
             },
@@ -726,16 +732,16 @@ BHC.f06 = {
     name: "Celestialite F-06",
     symbol: "06",
     style: {
-        background: "linear-gradient(135deg, #A8C86A, #426535)",
+        background: "linear-gradient(135deg, #84a83e, #21331b)",
         color: "black",
-        borderColor: "#185A00",
+        borderColor: "#0a2700",
         fontSize: "60px",
     },
     health: new Decimal(100),
     damage: new Decimal(5),
     actions: {
         0: {
-            name: "Spoon",
+            name: "Malformed Punch",
             instant: true,
             type: "damage",
             target: "randomPlayer",
@@ -764,19 +770,22 @@ BHC.f07 = {
     name: "Celestialite F-07",
     symbol: "07",
     style: {
-        background: "linear-gradient(135deg, #A8C86A, #426535)",
+        background: "linear-gradient(135deg, #84a83e, #21331b)",
         color: "black",
-        borderColor: "#185A00",
+        borderColor: "#0a2700",
         fontSize: "60px",
     },
     health: new Decimal(100),
     damage: new Decimal(5),
     actions: {
         0: {
-            name: "Skill Refresh",
+            name: "Time Distortion",
             instant: true,
             type: "reset",
             target: "random",
+            properties: {
+                "backfire": [1, 0.1],
+            },
             cooldown: new Decimal(6),
         },
     },
@@ -800,9 +809,9 @@ BHC.f08 = {
     name: "Celestialite F-08",
     symbol: "08",
     style: {
-        background: "linear-gradient(135deg, #A8C86A, #426535)",
+        background: "linear-gradient(135deg, #84a83e, #21331b)",
         color: "black",
-        borderColor: "#185A00",
+        borderColor: "#0a2700",
         fontSize: "60px",
     },
     health: new Decimal(100),
@@ -838,16 +847,16 @@ BHC.f09 = {
     name: "Celestialite F-09",
     symbol: "09",
     style: {
-        background: "linear-gradient(135deg, #A8C86A, #426535)",
+        background: "linear-gradient(135deg, #84a83e, #21331b)",
         color: "black",
-        borderColor: "#185A00",
+        borderColor: "#0a2700",
         fontSize: "60px",
     },
     health: new Decimal(100),
     damage: new Decimal(5),
     actions: {
         0: {
-            name: "Expanded Vitality",
+            name: "Mutation",
             instant: true,
             type: "effect",
             target: "celestialite",
@@ -878,9 +887,9 @@ BHC.f10 = {
     symbol: "10",
     icon() {return player.bh.celestialite.actions[0].variables.attacks ? "resources/gwa.png" : false},
     style: {
-        background: "linear-gradient(135deg, #A8C86A, #426535)",
+        background: "linear-gradient(135deg, #84a83e, #21331b)",
         color: "black",
-        borderColor: "#185A00",
+        borderColor: "#0a2700",
         fontSize: "60px",
     },
     health: new Decimal(100),

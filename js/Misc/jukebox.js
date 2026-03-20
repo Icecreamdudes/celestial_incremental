@@ -336,6 +336,14 @@ addLayer("jukebox", {
             file: "music/depth4.mp3",
             unlocked() {return player.depth4.unlocked},
         },
+        "laboratory": {
+            artist: "Icecreamdude",
+            name: "N/A",
+            description: "Laboratory",
+            img: "resources/music/template.png",
+            file: "music/matosSomber.mp3",
+            unlocked() {return player.laboratory.unlocked},
+        },
         "aleph-fight": {
             artist: "Icecreamdude",
             name: "N/A",
@@ -524,7 +532,7 @@ addLayer("jukebox", {
                     ["row", [
                         ["jukebox", "none"], ["jukebox", "black-heart"], ["jukebox", "depth-1"], ["jukebox", "depth-2"],
                         ["jukebox", "depth-3"], ["jukebox", "matos-lair"], ["jukebox", "matos-fight"], ["jukebox", "stagnant-synestia"],
-                        ["jukebox", "depth-4"], ["jukebox", "aleph-fight"],
+                        ["jukebox", "depth-4"], ["jukebox", "laboratory"], ["jukebox", "aleph-fight"],
                     ]],
                     ["blank", "2px"],
                 ],

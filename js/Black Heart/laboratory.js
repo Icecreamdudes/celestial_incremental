@@ -623,6 +623,17 @@ BHC.f04 = {
     health: new Decimal(100),
     damage: new Decimal(5),
     actions: {
+        0: {
+            name: "Spin",
+            active: true,
+            constantType: "effect",
+            constantTarget: "celestialite",
+            effects: {
+                "attributes"() {return {"daze": new Decimal(0.5)}},
+            },
+            duration: new Decimal(5),
+            cooldown: new Decimal(10),
+        },
     },
     reward() {
         let gain = {}
@@ -930,13 +941,9 @@ BHC.f10 = {
 
 // Dazes itself
 
-// Changes icon and name to gwa =-10TH COMBO-=
-
 // Passive that constantly stuns the celestialite
 
 // 1d100 (99% chance to miss)
-
-// Multiplies maximum health ... but not current health
 
 // Increase size of celestialite icon
 

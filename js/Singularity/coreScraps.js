@@ -1224,13 +1224,13 @@
             title: "Conductive Radiation",
             unlocked() {return hasUpgrade("depth4", 5)},
             canAfford() {return hasUpgrade("depth4", 5)},
-            description: "Reduce singularity power softcap, but square the radiation usage.",
+            description: "Reduce singularity power softcap, but increase radiation usage.",
             cost: new Decimal(1e27),
             currencyLocation() { return player.cs.scraps.radioactive },
             currencyDisplayName: "Radioactive Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", fontSize: "9px", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.radioactive.color}

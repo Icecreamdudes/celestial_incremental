@@ -48,7 +48,7 @@
     tooltip: "Check Back Shrine",
     color: "#3466acff",
     branches: ["sm",],
-    update(delta) {
+    update(delta, afk = false) {
         if (arena == null && player.subtabs["cbs"]['stuff'] == 'Battle') {
             player.subtabs["cbs"]['stuff'] = "Refresh Page :(";
         }
@@ -95,23 +95,20 @@
         //pylon
         player.cbs.pylonEnergyMax = Decimal.pow(100, player.cbs.pylonTier.pow(0.5))
 
-        if (player.cbs.pylonBuilt)
-        {
+        if (player.cbs.pylonBuilt) {
             player.cbs.pylonEnergyToGet = new Decimal(1)
             player.cbs.pylonEnergyToGet = player.cbs.pylonEnergyToGet.mul(buyableEffect("cbs", 21))
             player.cbs.pylonEnergyToGet = player.cbs.pylonEnergyToGet.mul(buyableEffect("cbs", 22))
             player.cbs.pylonEnergyToGet = player.cbs.pylonEnergyToGet.mul(buyableEffect("cbs", 23))
 
             player.cbs.pylonPassiveEffect = player.pol.pollinators.plus(1).log10().pow(0.002).div(5).add(1).pow(player.cbs.pylonTierEffect)
-        } else
-        {
+        } else {
             player.cbs.pylonEnergyToGet = new Decimal(0)
 
             player.cbs.pylonPassiveEffect = new Decimal(1)
         }
 
-        if (player.cbs.pylonEnergy.gte(player.cbs.pylonEnergyMax))
-        {
+        if (player.cbs.pylonEnergy.gte(player.cbs.pylonEnergyMax)) {
             player.cbs.pylonEnergy = player.cbs.pylonEnergyMax
             player.cbs.pylonEnergyToGet = new Decimal(0)
         }
@@ -124,7 +121,7 @@
         player.cbs.pylonTierEffect = player.cbs.pylonTier.sub(1).div(10).add(1)
 
         player.cbs.energyTimerMax = new Decimal(86400)
-        player.cbs.energyTimer = player.cbs.energyTimer.add(delta)
+        if (!afk) player.cbs.energyTimer = player.cbs.energyTimer.add(delta)
         if (player.cbs.energyTimer.gte(player.cbs.energyTimerMax)) {
             player.cbs.energyTimer = new Decimal(0)
             player.cbs.pylonEnergy = player.cbs.pylonEnergy.add(player.cbs.pylonEnergyToGet)

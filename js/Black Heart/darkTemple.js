@@ -309,6 +309,15 @@ addLayer("darkTemple", {
         if (stats.d4c) player.darkTemple.depth4CurMult = Decimal.add(1, stats.d4c)
     },
     clickables: {
+        "unleash": {
+            title: "???",
+            canClick: false,
+            unlocked: true,
+            onClick() {
+
+            },
+            style: {width: "247px", minHeight: "40px", fontSize: "14px", color: "var(--textColor)", background: "var(--layerBackground)", border: "3px solid var(--miscButtonDisable)", borderRadius: "0 0 27px 0"},
+        },
         1: {
             title: "ᚠ",
             canClick() {return player.depth1.unlocked},
@@ -801,10 +810,8 @@ addLayer("darkTemple", {
                         }
                         return str
                     }, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                ], {width: "247px", height: "334px", background: "var(--miscButtonDisable)"}],
-                ["style-column", [
-
-                ], {width: "247px", height: "40px", background: "var(--miscButton)", borderTop: "3px solid var(--regBorder)", borderRadius: "0 0 27px 0"}]
+                ], {width: "247px", height: "331px", background: "var(--miscButtonDisable)", borderBottom: "3px solid var(--regBorder)"}],
+                ["clickable", "unleash"],
             ], {width: "247px", height: "420px", background: "var(--miscButtonHover)", borderRadius: "0 0 27px 0"}],
         ], {width: "800px", height: "420px"}],
     ],

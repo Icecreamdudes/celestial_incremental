@@ -690,7 +690,7 @@ BHC.f05 = {
                         bhLog("<span style='color: #fff'>I heard from some of the stronger experiments that Matos didn't even make this place, though I doubt their words.")
                         break;
                     case 6:
-                        bhLog("<span style='color: #fff'>I heard that Matos sometimes frees us from here ... but I haven't seen it before.")
+                        bhLog("<span style='color: #fff'>I heard that Matos sometimes frees us from here ... but I have never seen a missing face.")
                         break;
                     case 7:
                         bhLog("<span style='color: #fff'>Matos brought up something about a spirit. What is a spirit?")

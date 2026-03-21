@@ -113,7 +113,6 @@
 
         // START OF CRYSTAL MODIFIERS
         player.p.crystalsToGet = player.r.tier.pow(0.002).mul(4)
-        if (hasUpgrade("cs", 304)) player.p.crystalsToGet = player.p.crystalsToGet.pow(1.5)
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("id", 22))
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("r", 12))
         if (hasUpgrade("hpw", 1023)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("hpw", 1023))
@@ -132,7 +131,12 @@
         // CRYSTAL EFFECT
         player.p.crystalEffect = player.p.crystals.plus(1).log(10).pow(0.265).mul(0.045).add(1)
         if (hasUpgrade("cs", 303)) player.p.crystalEffect = player.p.crystals.plus(1).log(10).pow(0.3).mul(0.05).add(1)
-        player.p.crystalEffect = player.p.crystalEffect.min(1.5)
+        if (!hasUpgrade("cs", 304)) {
+            player.p.crystalEffect = player.p.crystalEffect.min(1.5)
+        } else {
+            if (player.p.crystalEffect.gte(1.5)) player.p.crystalEffect = player.p.crystals.plus(1).log("1e100").pow(0.7).mul(0.01).add(1.41)
+            player.p.crystalEffect = player.p.crystalEffect.min(2)
+        }
     },
     prestigeReset()
     {
@@ -748,7 +752,7 @@
                     ["raw-html", "(Gain based on Tetr)", { color: "#b6658c", fontSize: "16px", fontFamily: "monospace" }],
                     ["row", [
                         ["raw-html", () => {return "Boosts ranks, tiers, tetr, and pent effect by <h3>^" + format(player.p.crystalEffect, 5) + "</h3>."}, {color: "#b6658c", fontSize: "16px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return player.p.crystalEffect.gte(1.5) ? "<small style='margin-left:8px'>[HARDCAPPED]</small>" : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return (!hasUpgrade("cs", 304) && player.p.crystalEffect.gte(1.5)) || player.p.crystalEffect.gte(2) ? "<small style='margin-left:8px'>[HARDCAPPED]</small>" : hasUpgrade("cs", 304) && player.p.crystalEffect.gte(1.5) ? "<small style='margin-left:8px'>[SOFTCAPPED]</small>" : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
                     ]],
                     ["blank", "25px"],
                     ["row", [["clickable", 12]]],

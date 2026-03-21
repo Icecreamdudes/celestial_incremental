@@ -571,7 +571,7 @@
             title: "Copious Crystals",
             unlocked() {return hasUpgrade("depth4", 5)},
             canAfford() {return hasUpgrade("depth4", 5)},
-            description: "Raise base crystal gain by ^1.5.",
+            description: "Change crystal effects hardcap to a softcap.",
             cost: new Decimal(1e17),
             currencyLocation() { return player.cs.scraps.prestige },
             currencyDisplayName: "Prestige Core Scraps",

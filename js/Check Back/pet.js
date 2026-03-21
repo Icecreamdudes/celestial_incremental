@@ -3877,7 +3877,7 @@ addLayer("pet", {
                 return "x" + format(this.effect()[0]) + " to pre aleph resources.<br>" +
                     "x" + format(this.effect()[1]) + " to aleph resources.<br>" +
                     "^" + format(this.effect()[2]) + " to pollinators.<br>" +
-                    "x" + format(this.effect()[3]) + " to laboratory timer."
+                    "/" + format(this.effect()[3]) + " to laboratory celestialite stats."
             },
             levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
             effect() {
@@ -3886,7 +3886,7 @@ addLayer("pet", {
                     amt.add(1).mul(1.5).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Pre-Aleph Resources
                     amt.add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Aleph Resources
                     amt.pow(0.5).div(10).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Pollinators
-                    amt.sub(1).div(2).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Laboratory Timer
+                    amt.sub(1).div(2).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Laboratory celestialite stats
                 ]
             },
             sellValue() { return new Decimal(10000)},

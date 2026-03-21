@@ -189,6 +189,8 @@ Features:
 
 - comboScalingStart: *optional* Decides what combo value combo scaling starts. Stored in number format.
 
+- celestialiteNerf *optional* Function that can be called to divide the celestialite scaling value, which basically nerfs all celestialite stats.
+
 - healthDrain: *optional* Decides how much character health is drained by per second. Stored in Decimal format.
 
 - respawnTime: *optional* Decides how long the respawn cooldown is. Stored in Decimal format. Defaults to 5 seconds.

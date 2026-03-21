@@ -747,6 +747,7 @@ function celestialiteSpawn() {
 
     let scale = new Decimal(1)
     if (player.bh.combo.gte(player.bh.comboScalingStart)) scale = Decimal.pow(player.bh.comboScaling, player.bh.combo.sub(player.bh.comboScalingStart))
+    if (BHS[player.bh.currentStage].celestialiteNerf) scale = scale.div(BHS[player.bh.currentStage].celestialiteNerf())
     player.bh.celestialite.id = celestialiteId
     player.bh.celestialite.randomMult = Decimal.add(0.85, Decimal.mul(Math.random(), 0.3))
     if (BHC[player.bh.celestialite.id].noRandomStats) player.bh.celestialite.randomMult = new Decimal(1)

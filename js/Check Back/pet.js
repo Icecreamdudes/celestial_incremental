@@ -721,6 +721,7 @@ addLayer("pet", {
         player.pet.legPetTimers[0].max = new Decimal(600)
         player.pet.legPetTimers[0].max = player.pet.legPetTimers[0].max.mul(levelableEffect("pu", 303)[1])
         player.pet.legPetTimers[0].max = player.pet.legPetTimers[0].max.mul(buyableEffect("sme", 164))
+        if (hasMilestone("dgj", 16)) player.pet.legPetTimers[0].max = player.pet.legPetTimers[0].max.mul(player.dgj.milestone3Effect)
 
         player.pet.legPetTimers[1].max = new Decimal(300)
         player.pet.legPetTimers[1].max = player.pet.legPetTimers[1].max.mul(levelableEffect("pet", 502)[3])

@@ -1468,7 +1468,6 @@ addLayer("pu", {
                     !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
                     "x" + format(this.effect()[0]) + " to grass value and capacity <small>(Based on clouds)</small><br>",
-                    "Unlock a new vaporizer buyable<br>",
                     !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to eclipse shard xp value",
@@ -1545,7 +1544,7 @@ addLayer("pu", {
             },
             // CLICK CODE
             unlocked() {return (player.ir.iriditeDefeated && player.le.highestReset.gte(7)) || this.canClick()},
-            canSelect() {return player.ir.iriditeDefeated && player.le.resetAmount.gte(7)},
+            canSelect() {return player.ir.iriditeDefeated && player.le.resetAmount.gte(7) && !player.pet.legPetTimers[0].active},
             canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE

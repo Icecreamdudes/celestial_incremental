@@ -7,13 +7,14 @@ addLayer("dgj", {
         unlocked: true,
 
         grassJump: new Decimal(0),
-        grassJumpReq: new Decimal(1e100),
+        grassJumpReq: new Decimal(1e30),
         grassJumpGain: new Decimal(0),
 
         milestone1Effect: new Decimal(1),
         milestone2Effect: new Decimal(1),
         milestone3Effect: new Decimal(1),
         milestone4Effect: new Decimal(1),
+        milestone6Effect: new Decimal(1),
     }},
     automate() {},
     nodeStyle() {
@@ -32,13 +33,14 @@ addLayer("dgj", {
 
         let grassJumpDiv = new Decimal(1)
         
-        player.dgj.grassJumpReq = Decimal.pow(1e20, player.dgj.grassJump).mul(1e100).div(grassJumpDiv)
-        player.dgj.grassJumpGain = player.dgr.grass.mul(grassJumpDiv).div(1e100).add(1).ln().div(Decimal.ln(1e20))
+        player.dgj.grassJumpReq = Decimal.pow(1e10, player.dgj.grassJump).mul(1e30).div(grassJumpDiv)
+        player.dgj.grassJumpGain = player.dgr.grass.mul(grassJumpDiv).div(1e30).add(1).ln().div(Decimal.ln(1e10))
 
         player.dgj.milestone1Effect = Decimal.pow(1.5, player.dgj.grassJump)
         player.dgj.milestone2Effect = Decimal.pow(2, player.dgj.grassJump)
-        player.dgj.milestone3Effect = Decimal.pow(1.01, player.dgj.grassJump)
+        player.dgj.milestone3Effect = Decimal.pow(1.05, player.dgj.grassJump)
         player.dgj.milestone4Effect = buyableEffect("dgr", 13).mul(levelableEffect("st", 206)[0]).mul(buyableEffect("st", 102))
+        player.dgj.milestone6Effect = Decimal.pow(1.01, player.dgj.grassJump.sub(12).max(1))
     },
     bars: {},
     clickables: {
@@ -85,7 +87,7 @@ addLayer("dgj", {
             },
         },
         13: {
-            effectDescription() { return "Replace the formulas for the dark grass buyables and scale the dark grass buyables by 1% per grass jump<br>Currently: x" + format(player.dgj.milestone3Effect) + "." },
+            effectDescription() { return "Increase eclipse timer duration by 5% per grass jump<br>Currently: x" + format(player.dgj.milestone3Effect) + "." },
             done() { return player.dgj.grassJump.gte(4) },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #00488F", borderTop: "0px", borderRadius: "0px"}
@@ -105,6 +107,15 @@ addLayer("dgj", {
         15: {
             effectDescription() { return "Unlock new Aleph upgrades in the hive." },
             done() { return player.dgj.grassJump.gte(8) },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #00488F", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("dgj", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
+                return look
+            },
+        },
+        16: {
+            effectDescription() { return "Replace the formulas for the dark grass buyables and scale the dark grass buyables by 1% per grass jump<br>Currently: x" + format(player.dgj.milestone6Effect) + "." },
+            done() { return player.dgj.grassJump.gte(12) },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #00488F", borderTop: "0px", borderRadius: "0px"}
                 if (hasMilestone("dgj", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
@@ -155,6 +166,12 @@ addLayer("dgj", {
                             ["raw-html", "8", {color: "white", fontSize: "32px", fontFamily: "monospace"}],
                         ], {backgroundColor: "#002e5c", border: "3px solid #00488F", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
                         ["titleless-milestone", 15],
+                    ]],
+                    ["style-row", [
+                        ["style-column", [
+                            ["raw-html", "12", {color: "white", fontSize: "32px", fontFamily: "monospace"}],
+                        ], {backgroundColor: "#002e5c", border: "3px solid #00488F", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                        ["titleless-milestone", 16],
                     ]],
                     ["style-row", [
                     ], {backgroundColor: "#002e5c", border: "3px solid #00488F", borderTop: "0px", borderRadius: "0px 0px 13px 13px", width: "588px", height: "15px"}],

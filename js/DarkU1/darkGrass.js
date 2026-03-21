@@ -61,6 +61,7 @@
         if (hasMilestone("db", 14)) player.dgr.maxGrass = player.dgr.maxGrass.mul(player.db.milestone4Effect)
         if (getLevelableTier("pu", 211, true)) player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("pu", 211)[0])
         player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("st", 109)[0])
+        if (hasMilestone("dgj", 11)) player.dgr.maxGrass = player.dgr.maxGrass.mul(player.dgj.milestone1Effect)
         
         // MAX GRASS SOFTCAP
         if (player.dgr.maxGrass.gte(1e100)) player.dgr.maxGrass = player.dgr.maxGrass.div(1e100).pow(0.2).mul(1e100)
@@ -80,6 +81,7 @@
         if (hasMilestone("db", 14)) player.dgr.grassValue = player.dgr.grassValue.mul(player.db.milestone4Effect)
         if (getLevelableTier("pu", 211, true)) player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("pu", 211)[0])
         player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("st", 108)[0])
+        if (hasMilestone("dgj", 11)) player.dgr.grassValue = player.dgr.grassValue.mul(player.dgj.milestone1Effect)
 
         // GRASS VALUE SOFTCAP
         if (player.dgr.grassValue.gte(1e100)) player.dgr.grassValue = player.dgr.grassValue.div(1e100).pow(0.2).mul(1e100)
@@ -87,8 +89,11 @@
         //post softcap
         player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("ds", 103))
 
-        if (hasUpgrade("le", 24)) player.dgr.grass = player.dgr.grass.add(player.dgr.grassValue.mul(delta))
-        if (hasMilestone("db", 14)) player.dgr.grass = player.dgr.grass.add(player.dgr.grassValue.mul(Decimal.mul(delta, 0.1)))
+        let autoMult = new Decimal(1)
+        if (hasMilestone("dgj", 14)) autoMult = autoMult.mul(player.dgj.milestone4Effect)
+
+        if (hasUpgrade("le", 24)) player.dgr.grass = player.dgr.grass.add(player.dgr.grassValue.mul(delta).mul(autoMult))
+        if (hasMilestone("db", 14)) player.dgr.grass = player.dgr.grass.add(player.dgr.grassValue.mul(Decimal.mul(delta, 0.1)).mul(autoMult))
 
         if (hasUpgrade("le", 22)) player.dgr.grassTimer = player.dgr.grassTimer.add(onepersec.mul(delta))
         player.dgr.grassTimerReq = new Decimal(5)
@@ -174,13 +179,20 @@
     upgrades: {},
     buyables: {
         11: {
-            costBase() { return new Decimal(2) },
-            costGrowth() { return new Decimal(1.3) },
+            costBase() {
+                if (hasMilestone("dgj", 13)) return new Decimal(5).pow(player.dgj.milestone3Effect)
+                return new Decimal(2)
+            },
+            costGrowth() {
+                if (hasMilestone("dgj", 13)) return new Decimal(5).mul(player.dgj.milestone3Effect)
+                return new Decimal(1.3)
+            },
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.dgr.grass},
             pay(amt) { player.dgr.grass = this.currency().sub(amt) },
             effect(x) {
                 let eff = getBuyableAmount(this.layer, this.id).mul(2).add(1).pow(1.3)
+                if (hasMilestone("dgj", 13)) eff = Decimal.pow(Decimal.mul(1.3, player.dgj.milestone3Effect), getBuyableAmount(this.layer, this.id)).mul(getBuyableAmount(this.layer, this.id).add(1))
                 if (getLevelableTier("pu", 108, true)) eff = eff.pow(levelableEffect("pu", 108)[0])
                 return eff
             },
@@ -212,13 +224,20 @@
             style: { width: '275px', height: '150px', color: "white", backgroundColor: "#003522", borderColor: "#006a44" }
         },
         12: {
-            costBase() { return new Decimal(4) },
-            costGrowth() { return new Decimal(1.3) },
+            costBase() {
+                if (hasMilestone("dgj", 13)) return new Decimal(10).pow(player.dgj.milestone3Effect)
+                return new Decimal(4)
+            },
+            costGrowth() {
+                if (hasMilestone("dgj", 13)) return new Decimal(5).mul(player.dgj.milestone3Effect)
+                return new Decimal(1.3)
+            },
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.dgr.grass},
             pay(amt) { player.dgr.grass = this.currency().sub(amt) },
             effect(x) {
                 let eff = getBuyableAmount(this.layer, this.id).add(1).pow(1.25)
+                if (hasMilestone("dgj", 13)) eff = Decimal.pow(Decimal.mul(1.25, player.dgj.milestone3Effect), getBuyableAmount(this.layer, this.id)).mul(getBuyableAmount(this.layer, this.id).add(1))
                 if (getLevelableTier("pu", 108, true)) eff = eff.pow(levelableEffect("pu", 108)[0])
                 return eff
             },
@@ -250,12 +269,21 @@
             style: { width: '275px', height: '150px', color: "white", backgroundColor: "#003522", borderColor: "#006a44" }
         },
         13: {
-            costBase() { return new Decimal(10) },
-            costGrowth() { return new Decimal(10) },
+            costBase() {
+                if (hasMilestone("dgj", 13)) return new Decimal(100).pow(player.dgj.milestone3Effect)
+                return new Decimal(10)
+            },
+            costGrowth() {
+                if (hasMilestone("dgj", 13)) return new Decimal(100).mul(player.dgj.milestone3Effect)
+                return new Decimal(10)
+            },
             purchaseLimit() { return new Decimal(50) },
             currency() { return player.dgr.grass},
             pay(amt) { player.dgr.grass = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).add(1) },
+            effect(x) {
+                if (hasMilestone("dgj", 13)) return Decimal.pow(Decimal.mul(1.2, player.dgj.milestone3Effect), getBuyableAmount(this.layer, this.id))
+                return getBuyableAmount(this.layer, this.id).mul(0.2).add(1)
+            },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -284,12 +312,21 @@
             style: { width: '275px', height: '150px', color: "white", backgroundColor: "#003522", borderColor: "#006a44" }
         },
         14: {
-            costBase() { return new Decimal(10) },
-            costGrowth() { return new Decimal(1.4) },
+            costBase() {
+                if (hasMilestone("dgj", 13)) return new Decimal(100).pow(player.dgj.milestone3Effect)
+                return new Decimal(10)
+            },
+            costGrowth() {
+                if (hasMilestone("dgj", 13)) return new Decimal(10).mul(player.dgj.milestone3Effect)
+                return new Decimal(1.4)
+            },
             purchaseLimit() { return new Decimal(500) },
             currency() { return player.dgr.grass},
             pay(amt) { player.dgr.grass = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.5).add(1).pow(1.2) },
+            effect(x) {
+                if (hasMilestone("dgj", 13)) return Decimal.pow(Decimal.mul(1.2, player.dgj.milestone3Effect), getBuyableAmount(this.layer, this.id)).mul(getBuyableAmount(this.layer, this.id).add(1))
+                return getBuyableAmount(this.layer, this.id).mul(0.5).add(1).pow(1.2)
+            },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -318,12 +355,21 @@
             style: { width: '275px', height: '150px', color: "white", backgroundColor: "#003522", borderColor: "#006a44" }
         },
         15: {
-            costBase() { return new Decimal(25) },
-            costGrowth() { return new Decimal(1.5) },
+            costBase() {
+                if (hasMilestone("dgj", 13)) return new Decimal(225).pow(player.dgj.milestone3Effect)
+                return new Decimal(25)
+            },
+            costGrowth() {
+                if (hasMilestone("dgj", 13)) return new Decimal(15).mul(player.dgj.milestone3Effect)
+                return new Decimal(1.5)
+            },
             purchaseLimit() { return new Decimal(500) },
             currency() { return player.dgr.grass},
             pay(amt) { player.dgr.grass = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.5).add(1).pow(1.25) },
+            effect(x) {
+                if (hasMilestone("dgj", 13)) return Decimal.pow(Decimal.mul(1.25, player.dgj.milestone3Effect), getBuyableAmount(this.layer, this.id)).mul(getBuyableAmount(this.layer, this.id).add(1))
+                return getBuyableAmount(this.layer, this.id).mul(0.5).add(1).pow(1.25)
+            },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -352,12 +398,21 @@
             style: { width: '275px', height: '150px', color: "white", backgroundColor: "#003522", borderColor: "#006a44" }
         },
         16: {
-            costBase() { return new Decimal(50) },
-            costGrowth() { return new Decimal(1.6) },
+            costBase() {
+                if (hasMilestone("dgj", 13)) return new Decimal(400).pow(player.dgj.milestone3Effect)
+                return new Decimal(50)
+            },
+            costGrowth() {
+                if (hasMilestone("dgj", 13)) return new Decimal(20).mul(player.dgj.milestone3Effect)
+                return new Decimal(1.6)
+            },
             purchaseLimit() { return new Decimal(500) },
             currency() { return player.dgr.grass},
             pay(amt) { player.dgr.grass = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.5).add(1).pow(1.3) },
+            effect(x) {
+                if (hasMilestone("dgj", 13)) return Decimal.pow(Decimal.mul(1.3, player.dgj.milestone3Effect), getBuyableAmount(this.layer, this.id)).mul(getBuyableAmount(this.layer, this.id).add(1))
+                return getBuyableAmount(this.layer, this.id).mul(0.5).add(1).pow(1.3)
+            },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },

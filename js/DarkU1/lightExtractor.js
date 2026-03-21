@@ -869,6 +869,20 @@
                 return look
             }
         },
+        202: {
+            title: "Grass Jump [PERMANENT]",
+            unlocked() { return player.alephsChamber.milestone[25] > 0 && (player.pet.legPetTimers[0].active || hasUpgrade("le", 202)) },
+            description: "Unlocks Grass Jump.",
+            cost: new Decimal(1e80),
+            currencyLocation() { return player.du },
+            currencyDisplayName: "Dark Celestial Points",
+            currencyInternalName: "points",
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "2px solid #384166", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "rgb(51, 54, 0)" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
+            },
+        },
 
     },
     buyables: {
@@ -1075,7 +1089,7 @@
                         ["blank", "5px"],
                         ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],
                             ["upgrade", 17], ["upgrade", 101], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 102], 
-                            ["upgrade", 24],  ["upgrade", 201], ], {maxWidth: "755px"}],
+                            ["upgrade", 202], ["upgrade", 24], ["upgrade", 201]], {maxWidth: "755px"}],
                         ["blank", "5px"],
                     ], {width: "755px", backgroundColor: "#0e1019", border: "2px solid #384166", borderRadius: "15px"}],
                     ["blank", "25px"],

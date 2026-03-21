@@ -174,7 +174,8 @@ addLayer("dgj", {
                         ["titleless-milestone", 16],
                     ]],
                     ["style-row", [
-                    ], {backgroundColor: "#002e5c", border: "3px solid #00488F", borderTop: "0px", borderRadius: "0px 0px 13px 13px", width: "588px", height: "15px"}],
+                        ["raw-html", "Grass Jumps are not reset when leaving the dark universe.", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ], {backgroundColor: "#002e5c", border: "3px solid #00488F", borderTop: "0px", borderRadius: "0px 0px 13px 13px", width: "588px", height: "40px"}],
                 ]
             },
             "Grassjumpers": {

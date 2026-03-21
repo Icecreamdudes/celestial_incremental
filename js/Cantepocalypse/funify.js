@@ -880,7 +880,7 @@
         106: {
             title: "Apathy VI",
             unlocked() {return player.fu.enterNumb},
-            description: "Weaken replicanti softcaps in numbness challenge based on apathy.",
+            description: "Unlock a second apathy effect that weakens replicanti softcaps in numbness challenge.",
             cost: new Decimal(10),
             currencyLocation() {return player.fu},
             currencyDisplayName: "Apathy",
@@ -888,10 +888,6 @@
             effect() {
                 return Decimal.div(1, player.fu.apathy.add(1).log(10).div(10).add(1)).max(0.5)
             },
-            effectDisplay() {
-                if (upgradeEffect(this.layer, this.id).lte(0.5)) return "^" + formatSimple(upgradeEffect(this.layer, this.id), 3) + "<small style='color:red'>[HARDCAPPED]</small>"
-                return "^" + formatSimple(upgradeEffect(this.layer, this.id), 3)
-            }, // Add formatting to the effect
             style() {
                 let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "white"
@@ -3282,11 +3278,17 @@
                             return look
                         }],
                     ]],
-                    ["raw-html", () => { return inChallenge("fu", 12) ? "Produces +" + formatSimple(player.fu.apathyEffect) + " numbness per second" : player.fu.enterNumb ? "Effect only active in Numbness Challenge" : "" }, () => {
+                    ["raw-html", () => { return inChallenge("fu", 12) ? "Produces +" + formatSimple(player.fu.apathyEffect) + " numbness per second" : hasUpgrade("fu", 106) ? "Effects only active in Numbness Challenge" : player.fu.enterNumb ? "Effect only active in Numbness Challenge" : "" }, () => {
                         let look = {fontSize: "20px", fontFamily: "monospace"}
                         if (inChallenge("fu", 12)) {look.color = "white"} else {look.color = "gray"}
                         return look
                     }],
+                    ["raw-html", () => {
+                        if (!inChallenge("fu", 12)) return ""
+                        let str = "^" + formatSimple(upgradeEffect("fu", 106), 3) + " to replicanti softcaps"
+                        if (upgradeEffect("fu", 106).lte(0.5)) str = str + "<small style='color:red'>[HARDCAPPED]</small>"
+                        return str
+                    }, {fontSize: "20px", color: "white", fontFamily: "monospace"}],                    
                     ["blank", "10px"],
                     ["clickable", 32],
                     ["blank", "10px"],

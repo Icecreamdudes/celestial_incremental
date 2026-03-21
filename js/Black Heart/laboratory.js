@@ -127,7 +127,7 @@ addLayer("laboratory", {
             currencyDisplayName: "Matos Dust",
             currencyInternalName: "matosDust",
             effect() {
-                return player.laboratory.matosDust.add(1).log(10).div(10).add(1)
+                return player.laboratory.matosDust.add(1).log(10).div(20).add(1)
             },
             effectDisplay() { return "x" + formatSimple(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style() {
@@ -154,6 +154,7 @@ addLayer("laboratory", {
             title: "MD-06",
             unlocked: true,
             description: "Boost base core scrap gain based on core fragments.",
+            tooltip: "Boost is based on the core fragment most similar to each scrap.",
             cost: new Decimal(4096),
             currencyLocation() { return player.laboratory },
             currencyDisplayName: "Matos Dust",
@@ -166,7 +167,7 @@ addLayer("laboratory", {
         },
 
         11: {
-            title: "MD-11",
+            title: "MS-01",
             unlocked() {return player.laboratory.highestCombo.gt(5)},
             description: "Unlocks Vespasians \"Impale\" skill.",
             cost: new Decimal(4),
@@ -180,7 +181,7 @@ addLayer("laboratory", {
             },
         },
         12: {
-            title: "MD-12",
+            title: "MS-02",
             unlocked() {return player.laboratory.highestCombo.gt(5)},
             description: "Unlocks Vespasians \"Peak Performance\" skill.",
             cost: new Decimal(64),
@@ -194,7 +195,7 @@ addLayer("laboratory", {
             },
         },
         13: {
-            title: "MD-13",
+            title: "MS-03",
             unlocked() {return player.laboratory.highestCombo.gt(5)},
             description: "Increases Vespasians base damage by +4.",
             cost: new Decimal(1024),
@@ -208,7 +209,7 @@ addLayer("laboratory", {
             },
         },
         14: {
-            title: "MD-14",
+            title: "MS-04",
             unlocked() {return player.laboratory.highestCombo.gt(5)},
             description: "Reduce laboratory cooldown based on matos shards.",
             cost: new Decimal(16384),
@@ -216,7 +217,7 @@ addLayer("laboratory", {
             currencyDisplayName: "Matos Shards",
             currencyInternalName: "matosShard",
             effect() {
-                return player.laboratory.matosShard.add(1).log(10).div(10).add(1)
+                return player.laboratory.matosShard.add(1).log(10).div(20).add(1)
             },
             effectDisplay() { return "/" + formatSimple(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style() {
@@ -226,7 +227,7 @@ addLayer("laboratory", {
             },
         },
         15: {
-            title: "MD-15",
+            title: "MS-05",
             unlocked() {return player.laboratory.highestCombo.gt(5)},
             description: "Improve stored space energy formula.",
             cost: new Decimal(16),
@@ -240,7 +241,7 @@ addLayer("laboratory", {
             },
         },
         16: {
-            title: "MD-16",
+            title: "MS-06",
             unlocked() {return player.laboratory.highestCombo.gt(5)},
             description: "Unlock a 6th starmetal essence generator.",
             cost: new Decimal(256),
@@ -319,7 +320,7 @@ addLayer("laboratory", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {return this.currency().gte(this.cost())},
             display() {
-                return "<h3>MD-17</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/25)\n\
+                return "<h3>MS-07</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/25)\n\
                     Increase chance to double celestialite rewards\n\
                     Currently: +" + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + "%\n\ \n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Matos Shards"
@@ -345,7 +346,7 @@ addLayer("laboratory", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {return this.currency().gte(this.cost())},
             display() {
-                return "<h3>MD-18</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/50)\n\
+                return "<h3>MS-08</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/50)\n\
                     Raise steel gain\n\
                     Currently: ^" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\ \n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Matos Shards"
@@ -418,9 +419,9 @@ BHS.laboratory = {
     comboScaling: 2,
     comboScalingStart: 0,
     respawnTime: new Decimal(0),
+    celestialiteNerf() {return levelableEffect("pet", 503)[3]},
     timer() {
         let time = new Decimal(120)
-        time = time.mul(levelableEffect("pet", 503)[3])
         if (hasUpgrade("laboratory", 4)) time = time.mul(upgradeEffect("laboratory", 4))
         return time
     },

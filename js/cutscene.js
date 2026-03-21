@@ -3614,7 +3614,7 @@
             trigger() {return player.cbs.shrineReactivated },
             dialogue: [
                 { text: "The dice man lodges the shard of ascension into the shrine."  },
-                { text: "The shrine begins to glow wtih a bright blue light, and you begin to feel a strong superphysical pulse."  },
+                { text: "The shrine begins to glow with a bright blue light, and you begin to feel a strong superphysical pulse."  },
                 { text: "It is almost as if the link between this universe and the others are being strengthened."  },
                 { text: "The shrine is now fully reactivated. What do we do now?", portrait: "resources/nav.png"  },
                 { text: "This shrine's power will allow you to cultivate this universe's SPV's at unprecedented rates.", portrait: "resources/diceFive.png"  },

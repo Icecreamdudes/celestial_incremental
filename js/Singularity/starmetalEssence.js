@@ -1865,7 +1865,7 @@
             display() {
                 return "<h3>SME-H2</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/5)\n\
                     Increase flower gain by 20%\n\
-                    Currently: +" + formatSimple(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + "%\n\ \n\
+                    Currently: +" + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + "%\n\ \n\
                     Cost:<br>" + formatShortWhole(player.al.honeycomb) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[0]) + " HC\n\
                     " + formatShortWhole(player.sme.starmetalEssence) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[1]) + " SME"
             },
@@ -1900,7 +1900,7 @@
             display() {
                 return "<h3>SME-H3</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/5)\n\
                     Increase GEB by 1%\n\
-                    Currently: +" + formatSimple(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + "%\n\ \n\
+                    Currently: +" + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + "%\n\ \n\
                     Cost:<br>" + formatShortWhole(player.al.royalJelly) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[0]) + " RJ\n\
                     " + formatShortWhole(player.sme.starmetalEssence) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[1]) + " SME"
             },
@@ -1935,7 +1935,7 @@
             display() {
                 return "<h3>SME-H4</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/5)\n\
                     Increase Aleph Resources by 10%\n\
-                    Currently: +" + formatSimple(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + "%\n\ \n\
+                    Currently: +" + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + "%\n\ \n\
                     Cost:<br>" + formatShortWhole(player.bee.bees) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[0]) + " Bees\n\
                     " + formatShortWhole(player.sme.starmetalEssence) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[1]) + " SME"
             },

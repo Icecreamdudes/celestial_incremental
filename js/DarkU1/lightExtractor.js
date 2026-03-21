@@ -873,7 +873,7 @@
             title: "Grass Jump [PERMANENT]",
             unlocked() { return player.alephsChamber.milestone[25] > 0 && (player.pet.legPetTimers[0].active || hasUpgrade("le", 202)) },
             description: "Unlocks Grass Jump.",
-            cost: new Decimal(1e150),
+            cost: new Decimal(1e200),
             currencyLocation() { return player.du },
             currencyDisplayName: "Dark Celestial Points",
             currencyInternalName: "points",

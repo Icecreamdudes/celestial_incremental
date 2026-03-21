@@ -7,7 +7,7 @@ addLayer("dgj", {
         unlocked: true,
 
         grassJump: new Decimal(0),
-        grassJumpReq: new Decimal(1e30),
+        grassJumpReq: new Decimal(1e20),
         grassJumpGain: new Decimal(0),
 
         milestone1Effect: new Decimal(1),
@@ -33,8 +33,8 @@ addLayer("dgj", {
 
         let grassJumpDiv = new Decimal(1)
         
-        player.dgj.grassJumpReq = Decimal.pow(1e10, player.dgj.grassJump).mul(1e30).div(grassJumpDiv)
-        player.dgj.grassJumpGain = player.dgr.grass.mul(grassJumpDiv).div(1e30).add(1).ln().div(Decimal.ln(1e10))
+        player.dgj.grassJumpReq = Decimal.pow(1e5, player.dgj.grassJump).mul(1e20).div(grassJumpDiv)
+        player.dgj.grassJumpGain = player.dgr.grass.mul(grassJumpDiv).div(1e20).add(1).ln().div(Decimal.ln(1e5))
 
         player.dgj.milestone1Effect = Decimal.pow(1.5, player.dgj.grassJump)
         player.dgj.milestone2Effect = Decimal.pow(2, player.dgj.grassJump)

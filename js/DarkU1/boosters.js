@@ -41,6 +41,7 @@
         if (getLevelableTier("pu", 109, true)) player.db.boosterReq = player.db.boosterReq.div(levelableEffect("pu", 109)[1])
         if (getLevelableTier("pu", 208, true)) player.db.boosterReq = player.db.boosterReq.div(levelableEffect("pu", 208)[0])
         if (getLevelableTier("pu", 208, true)) player.db.boosterReq = player.db.boosterReq.div(buyableEffect("dp", 16))
+        player.db.boosterReq = player.db.boosterReq.div(buyableEffect("dgj", 13))
 
         player.db.boosterReq = player.db.boosterReq.pow(buyableEffect("dv", 13))
 

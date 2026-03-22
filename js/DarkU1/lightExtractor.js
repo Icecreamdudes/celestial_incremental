@@ -628,6 +628,15 @@
         player.dv.buyables[15] = new Decimal(0)
         player.dv.buyables[16] = new Decimal(0)
 
+        player.dgj.grassJumpers = new Decimal(0)
+        player.dgj.grassJumpersGain = new Decimal(0)
+        player.dgj.buyables[11] = new Decimal(0)
+        player.dgj.buyables[12] = new Decimal(0)
+        player.dgj.buyables[13] = new Decimal(0)
+        player.dgj.buyables[14] = new Decimal(0)
+        player.dgj.buyables[15] = new Decimal(0)
+        player.dgj.buyables[16] = new Decimal(0)
+
         player.bl.blood = new Decimal(0)
         player.bl.bloodStones = new Decimal(0)
 

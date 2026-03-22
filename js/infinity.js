@@ -625,7 +625,7 @@
                     ["blank", "25px"],
                     ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13],]], 
                     ["blank", "25px"],
-                    ["raw-html", () => {return player.in.pylonBuilt ? "Your ancient pylon is tier " + formatWhole(player.in.pylonTier) + ", which boosts all pylon effects by ^" + format(player.in.pylonTierEffect) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.in.pylonBuilt ? "Your paradox pylon is tier " + formatWhole(player.in.pylonTier) + ", which boosts all pylon effects by ^" + format(player.in.pylonTierEffect) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["clickable", 12],
                 ]

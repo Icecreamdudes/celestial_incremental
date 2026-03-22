@@ -1195,7 +1195,7 @@ addLayer("bh", {
         let potencyBase = new Decimal(1)
 
         let potencyAdd = new Decimal(0)
-        mendingAdd = mendingAdd.add(player.darkTemple.potAdd)
+        potencyAdd = potencyAdd.add(player.darkTemple.potAdd)
 
         // =-- STAT CALCULATION --=
         for (let i = 0; i < 3; i++) {

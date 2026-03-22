@@ -62,6 +62,7 @@
         if (getLevelableTier("pu", 211, true)) player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("pu", 211)[0])
         player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("st", 109)[0])
         if (hasMilestone("dgj", 11)) player.dgr.maxGrass = player.dgr.maxGrass.mul(player.dgj.milestone1Effect)
+        player.dgr.maxGrass = player.dgr.maxGrass.mul(buyableEffect("dgj", 14))
         
         // MAX GRASS SOFTCAP
         if (player.dgr.maxGrass.gte(1e100)) player.dgr.maxGrass = player.dgr.maxGrass.div(1e100).pow(0.2).mul(1e100)
@@ -82,6 +83,7 @@
         if (getLevelableTier("pu", 211, true)) player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("pu", 211)[0])
         player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("st", 108)[0])
         if (hasMilestone("dgj", 11)) player.dgr.grassValue = player.dgr.grassValue.mul(player.dgj.milestone1Effect)
+        player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("dgj", 14))
 
         // GRASS VALUE SOFTCAP
         if (player.dgr.grassValue.gte(1e100)) player.dgr.grassValue = player.dgr.grassValue.div(1e100).pow(0.2).mul(1e100)

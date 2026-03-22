@@ -924,6 +924,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         } else {
             info.ctx.translate(info.px, info.py);
         }
+        if (Date.now() - window.lastDamageTime <= 200) info.ctx.scale(0.9, 0.9);
         info.ctx.rotate(Math.PI / 2);
         info.ctx.beginPath();
         info.ctx.moveTo(0, -info.pr);
@@ -931,8 +932,8 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         info.ctx.lineTo(0, info.pr);
         info.ctx.lineTo(-info.pr, 0);
         info.ctx.closePath();
-        info.ctx.fillStyle = "#e22";
-        if (!options.performanceMode) info.ctx.shadowColor = "#e22";
+        info.ctx.fillStyle = Date.now() - window.lastDamageTime > 200 ? "#e22" : "#811";
+        if (!options.performanceMode) info.ctx.shadowColor = Date.now() - window.lastDamageTime > 200 ? "#e22" : "#811";
         if (!options.performanceMode) info.ctx.shadowBlur = 8;
         info.ctx.fill();
         info.ctx.restore();

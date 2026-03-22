@@ -721,7 +721,6 @@ addLayer("pet", {
         player.pet.legPetTimers[0].max = new Decimal(600)
         player.pet.legPetTimers[0].max = player.pet.legPetTimers[0].max.mul(levelableEffect("pu", 303)[1])
         player.pet.legPetTimers[0].max = player.pet.legPetTimers[0].max.mul(buyableEffect("sme", 164))
-        if (hasMilestone("dgj", 16)) player.pet.legPetTimers[0].max = player.pet.legPetTimers[0].max.mul(player.dgj.milestone3Effect)
 
         player.pet.legPetTimers[1].max = new Decimal(300)
         player.pet.legPetTimers[1].max = player.pet.legPetTimers[1].max.mul(levelableEffect("pet", 502)[3])
@@ -731,7 +730,7 @@ addLayer("pet", {
         let abilityTimeDecrease = new Decimal(1)
         abilityTimeDecrease = abilityTimeDecrease.mul(player.dv.timeDrainRate)
         if (getLevelableTier("pu", 303, true)) abilityTimeDecrease = abilityTimeDecrease.div(levelableEffect("pu", 303)[0])
-        abilityTimeDecrease = abilityTimeDecrease.div(buyableEffect("dgj", 16))
+        if (hasMilestone("dgj", 16)) abilityTimeDecrease = abilityTimeDecrease.mul(player.dgj.milestone3Effect)
         player.pet.legPetTimers[0].current = player.pet.legPetTimers[0].current.sub(abilityTimeDecrease.mul(delta))
 
         player.pet.legPetTimers[1].current = player.pet.legPetTimers[1].current.sub(delta)

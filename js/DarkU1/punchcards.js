@@ -1914,7 +1914,7 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.dgr.grass.pow(0.1).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = player.dgr.grass.pow(0.05).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
                 eff[1] = getLevelableAmount(this.layer, this.id).mul(0.05).add(1)
                 return eff
             },
@@ -1925,8 +1925,8 @@ addLayer("pu", {
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                if (getLevelableAmount(this.layer, this.id).lt(10)) return getLevelableAmount(this.layer, this.id).add(1).pow(1.7).mul(75).floor()
-                if (getLevelableAmount(this.layer, this.id).gte(10)) return Decimal.pow(2.5, getLevelableAmount(this.layer, this.id).sub(9)).mul(4420.07).floor()
+                if (getLevelableAmount(this.layer, this.id).lt(10)) return getLevelableAmount(this.layer, this.id).add(1).pow(1.7).mul(1000).floor()
+                if (getLevelableAmount(this.layer, this.id).gte(10)) return Decimal.pow(2.5, getLevelableAmount(this.layer, this.id).sub(9)).mul(58934).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE

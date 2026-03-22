@@ -47,6 +47,8 @@ addLayer("dgj", {
 
         player.dgj.grassJumpersGain = player.dgj.grassJump.div(10).mul(Decimal.pow(1.2, player.dgj.grassJump))
         if (getLevelableTier("pu", 307, true)) player.dgj.grassJumpersGain = player.dgj.grassJumpersGain.mul(levelableEffect("pu", 307)[0])
+
+        if (getLevelableTier("pu", 307, true)) player.dgj.grassJumpers = player.dgj.grassJumpers.add(player.dgj.grassJumpersGain.mul(delta))
     },
     bars: {},
     clickables: {

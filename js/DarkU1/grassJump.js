@@ -284,8 +284,8 @@ addLayer("dgj", {
                 return "Twitching Time"
             },
             display() {
-                return "Divides eclipse timer tickspeed by +5% per level\n\
-                Eclipse timer tickspeed is divided by /1.5 every 25 levels\n\
+                return "Boosts eclipse shard gain by +5% per level\n\
+                Eclipse shard gain is multiplied by x1.5 every 25 levels\n\
                 Currently: x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                 Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grassjumpers"
             },
@@ -327,7 +327,7 @@ addLayer("dgj", {
             },
         },
         13: {
-            effectDescription() { return "Increase eclipse timer duration by 5% per grass jump<br>Currently: x" + format(player.dgj.milestone3Effect) + "." },
+            effectDescription() { return "Decreases eclipse timer tickspeed by 5% per grass jump<br>Currently: x" + format(player.dgj.milestone3Effect) + "." },
             done() { return player.dgj.grassJump.gte(4) },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #00488F", borderTop: "0px", borderRadius: "0px"}

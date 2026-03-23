@@ -26,10 +26,10 @@
         modMax: false,
 
         doomSoftcap: new Decimal(0.5),
-        doomSoftcapStart: new Decimal("1e3000000"),
+        doomSoftcapStart: new Decimal("1e2000000"),
 
         doomSoftcap2: new Decimal(0.5),
-        doomSoftcap2Start: new Decimal("1e3000000"),
+        doomSoftcap2Start: new Decimal("1e2000000"),
     }},
     automate() {
         if (hasMilestone("ip", 17)) {
@@ -71,7 +71,7 @@
 
         // SOFTCAP OF DOOM
         player.m.doomSoftcap = new Decimal(0.5)
-        player.m.doomSoftcapStart = new Decimal("1e3000000")
+        player.m.doomSoftcapStart = new Decimal("1e2000000")
 
         // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
         let amt = player.m.codeExperience
@@ -161,7 +161,7 @@
 
         // SOFTCAP OF DOOM
         player.m.doomSoftcap2 = new Decimal(0.5)
-        player.m.doomSoftcap2Start = new Decimal("1e3000000")
+        player.m.doomSoftcap2Start = new Decimal("1e2000000")
 
         // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
         let amt2 = player.m.mods

@@ -1948,7 +1948,7 @@ addLayer("pu", {
                 let str = [
                     !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
-                    "x" + formatShort(this.effect()[0]) + " to points and <small>rank/prestige/[/]booster/grass</small><br>/vaporizer layer currencies <small>(Based on eclipse shards)</small><br>",
+                    "x" + formatShort(this.effect()[0]) + " to <small>points and rank/prestige/[/]booster/grass<br>/vaporizer layer currencies (Based on eclipse shards)</small><br>",
                     !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to post-otf currencies",

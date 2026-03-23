@@ -24,6 +24,12 @@
 
         studyMax: false,
         steelMax: false,
+
+        doomSoftcap: new Decimal(0.5),
+        doomSoftcapStart: new Decimal("1e3000000"),
+
+        doomSoftcap2: new Decimal(0.5),
+        doomSoftcap2Start: new Decimal("1e10000000"),
     }},
     automate() {
         if (hasMilestone("ip", 17)) {
@@ -89,6 +95,18 @@
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(buyableEffect("cof", 15))
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(player.se.starsExploreEffect[0][4])
 
+        // SOFTCAP OF DOOM
+        player.gh.doomSoftcap = new Decimal(0.5)
+        player.gh.doomSoftcapStart = new Decimal("1e3000000")
+
+        // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
+        let amt = player.gh.grasshoppers
+        if (player.gh.grasshoppersToGet.gte(player.gh.grasshoppers)) amt = player.gh.grasshoppersToGet
+        player.gh.doomSoftcap = player.gh.doomSoftcap.div(amt.div(player.gh.doomSoftcapStart).add(1).log(player.gh.doomSoftcapStart).add(1))
+
+        // APPLY DOOM SOFTCAP
+        if (player.gh.grasshoppersToGet.gt(player.gh.doomSoftcapStart)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.div(player.gh.doomSoftcapStart).pow(player.gh.doomSoftcap).mul(player.gh.doomSoftcapStart)
+
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.po.halter.grasshoppers.enabled == 1) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.div(player.po.halter.grasshoppers.halt)
         if (player.po.halter.grasshoppers.enabled == 2 && player.gh.grasshoppersToGet.gt(player.po.halter.grasshoppers.halt)) player.gh.grasshoppersToGet = player.po.halter.grasshoppers.halt
@@ -146,6 +164,18 @@
 
         // POWER MODIFIERS
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.pow(levelableEffect("pet", 301)[0])
+
+        // SOFTCAP OF DOOM
+        player.gh.doomSoftcap2 = new Decimal(0.5)
+        player.gh.doomSoftcap2Start = new Decimal("1e10000000")
+
+        // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
+        let amt2 = player.gh.fertilizer
+        if (player.gh.fertilizerPerSecond.gte(player.gh.fertilizer)) amt2 = player.gh.fertilizerPerSecond
+        player.gh.doomSoftcap2 = player.gh.doomSoftcap2.div(amt2.div(player.gh.doomSoftcap2Start).add(1).log(player.gh.doomSoftcap2Start).add(1))
+
+        // APPLY DOOM SOFTCAP
+        if (player.gh.fertilizerPerSecond.gt(player.gh.doomSoftcap2Start)) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.div(player.gh.doomSoftcap2Start).pow(player.gh.doomSoftcap2).mul(player.gh.doomSoftcap2Start)
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.r.timeReversed) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(0)
@@ -1295,6 +1325,7 @@
                         ["raw-html", () => { return "(+" + format(player.gh.fertilizerPerSecond) + "/s)"}, {color: "#EFD4B9", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
                         ["raw-html", () => {return player.gh.fertilizerEffect.gte("1e15000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
                     ]],
+                    ["raw-html", () => {return player.gh.fertilizerPerSecond.gt(player.gh.doomSoftcap2Start) ? "SOFTCAP OF DOOM: Gain past " + format(player.gh.doomSoftcap2Start) + " is raised by ^" + format(player.gh.doomSoftcap2, 3) + "." : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", function () { return "Boosts grass value by x" + format(player.gh.fertilizerEffect) + "." }, {color: "#EFD4B9", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "10px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],
@@ -1369,6 +1400,7 @@
                 return look
             }],
         ]],
+        ["raw-html", () => {return player.gh.grasshoppersToGet.gt(player.gh.doomSoftcapStart) ? "SOFTCAP OF DOOM: Gain past " + format(player.gh.doomSoftcapStart) + " is raised by ^" + format(player.gh.doomSoftcap, 3) + "." : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
         ],

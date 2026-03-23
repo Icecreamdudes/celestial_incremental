@@ -16,6 +16,9 @@
         crystalsToGet: new Decimal(0),
         crystalPause: new Decimal(0),
         crystalMax: false,
+
+        doomSoftcap: new Decimal(0.5),
+        doomSoftcapStart: new Decimal("1e5000000"),
     }
     },
     automate() {
@@ -85,6 +88,18 @@
         if (hasUpgrade("hpw", 1021)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(1.36)
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(buyableEffect("fu", 33))
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(player.co.cores.prestige.effect[1])
+
+        // SOFTCAP OF DOOM
+        player.p.doomSoftcap = new Decimal(0.5)
+        player.p.doomSoftcapStart = new Decimal("1e5000000")
+
+        // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
+        let amt = player.p.prestigePoints
+        if (player.p.prestigePointsToGet.gte(player.p.prestigePoints)) amt = player.p.prestigePointsToGet
+        player.p.doomSoftcap = player.p.doomSoftcap.div(amt.div(player.p.doomSoftcapStart).add(1).log(player.p.doomSoftcapStart).add(1))
+
+        // APPLY DOOM SOFTCAP
+        if (player.p.prestigePointsToGet.gt(player.p.doomSoftcapStart)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.div(player.p.doomSoftcapStart).pow(player.p.doomSoftcap).mul(player.p.doomSoftcapStart)
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.po.halter.prestige.enabled == 1) player.p.prestigePointsToGet = player.p.prestigePointsToGet.div(player.po.halter.prestige.halt)
@@ -775,6 +790,7 @@
                 return look
             }],
         ]],
+        ["raw-html", () => {return player.p.prestigePointsToGet.gt(player.p.doomSoftcapStart) ? "SOFTCAP OF DOOM: Gain past " + format(player.p.doomSoftcapStart) + " is raised by ^" + format(player.p.doomSoftcap, 3) + "." : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
         ["row", [
             ["raw-html", () => {return hasUpgrade("p", 12) ? "Boosts celesial points by x" + format(player.p.prestigeEffect) : ""}, {color: "#31aeb0", fontSize: "20px", fontFamily: "monospace"}],
             ["raw-html", () => {return hasUpgrade("p", 12) && player.p.prestigePoints.gte("1e100000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],

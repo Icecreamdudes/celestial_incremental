@@ -2117,6 +2117,7 @@ addLayer("pu", {
                                 ["levelable", 201], ["levelable", 202], ["levelable", 203], ["levelable", 204],
                                 ["levelable", 205], ["levelable", 206], ["levelable", 207], ["levelable", 208],
                                 ["levelable", 209], ["levelable", 210], ["levelable", 211], ["levelable", 212],
+                                ["levelable", 213],
                             ], () => {return hasUpgrade("sma", 17) ? {width: "525px", backgroundColor: "#191300", padding: "5px"} : {width: "525px", backgroundColor: "#191300", padding: "5px", borderBottom: "3px solid #7f5f00"}}],
 
                             ["style-column", [

@@ -1738,7 +1738,7 @@
             },
         },
         163: {
-            costBase() { return [new Decimal(100), new Decimal(5e6)] },
+            costBase() { return [new Decimal(200), new Decimal(5e6)] },
             costGrowth() { return [new Decimal(1.2), new Decimal(1.2)] },
             purchaseLimit() { return new Decimal(10) },
             currency() { return [player.sma.eclipseShards, player.sme.starmetalEssence]},
@@ -1773,8 +1773,8 @@
             },
         },
         164: {
-            costBase() { return [new Decimal(250), new Decimal(1e7)] },
-            costGrowth() { return [new Decimal(1.5), new Decimal(1.5)] },
+            costBase() { return [new Decimal(1000), new Decimal(1e7)] },
+            costGrowth() { return [new Decimal(2), new Decimal(1.5)] },
             purchaseLimit() { return new Decimal(5) },
             currency() { return [player.sma.eclipseShards, player.sme.starmetalEssence]},
             pay(amt, amt2) {

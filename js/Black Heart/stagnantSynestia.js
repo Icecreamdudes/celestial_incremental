@@ -893,11 +893,11 @@ BHC.staticDeka = {
             onTrigger(index, slot, target, magnitude) {
                 let random = Math.random()
                 if (random < 0.33) {
-                    bulletHell({"movingCircleRadialBurstAttack": {circleAmount: 3, burstInterval: 1300-(magnitude*100), bulletsPerBurst: player.bh.celestialte.luck, enemySpeed: 3, bulletSpeed: 3}}, {duration: 7+magnitude})
+                    bulletHell({"movingCircleRadialBurstAttack": {circleAmount: 3, burstInterval: 1300-(magnitude*100), bulletsPerBurst: player.bh.celestialite.luck, enemySpeed: 3, bulletSpeed: 3}}, {duration: 7+magnitude})
                 } else if (random < 0.66) {
-                    bulletHell({"rotatingCircleRadialBurst": {locX: 250, locY: 250, circleAmount: 4, burstInterval: 1300-(magnitude*100), orbitSpeed: 0.015, orbitRadius: 400, bulletsPerBurst: player.bh.celestialte.luck, enemySpeed: 6, bulletSpeed: 5}}, {width: 500, duration: 10+(magnitude*2)})
+                    bulletHell({"rotatingCircleRadialBurst": {locX: 250, locY: 250, circleAmount: 4, burstInterval: 1300-(magnitude*100), orbitSpeed: 0.015, orbitRadius: 400, bulletsPerBurst: player.bh.celestialite.luck, enemySpeed: 6, bulletSpeed: 5}}, {width: 500, duration: 10+(magnitude*2)})
                 } else {
-                    bulletHell({"rotatingCircleRadialBurst": {locX: 500, locY: 125, circleAmount: 8, burstInterval: 1300-(magnitude*100), orbitSpeed: 0.02, orbitRadius: 200, bulletsPerBurst: player.bh.celestialte.luck, enemySpeed: 6, bulletSpeed: 5}}, {width: 250, height: 250, duration: 10+(magnitude*2)})
+                    bulletHell({"rotatingCircleRadialBurst": {locX: 500, locY: 125, circleAmount: 8, burstInterval: 1300-(magnitude*100), orbitSpeed: 0.02, orbitRadius: 200, bulletsPerBurst: player.bh.celestialite.luck, enemySpeed: 6, bulletSpeed: 5}}, {width: 250, height: 250, duration: 10+(magnitude*2)})
                 }
             },
             cooldown: new Decimal(6),

@@ -15,6 +15,7 @@ addLayer("dgj", {
         milestone3Effect: new Decimal(1),
         milestone4Effect: new Decimal(1),
         milestone6Effect: new Decimal(1),
+        milestone7Effect: new Decimal(1),
 
         grassJumpers: new Decimal(0),
         grassJumpersGain: new Decimal(0),
@@ -45,6 +46,7 @@ addLayer("dgj", {
         player.dgj.milestone3Effect = Decimal.pow(1.05, player.dgj.grassJump)
         player.dgj.milestone4Effect = buyableEffect("dgr", 13).mul(levelableEffect("st", 206)[0]).mul(buyableEffect("st", 102))
         player.dgj.milestone6Effect = Decimal.pow(1.01, player.dgj.grassJump.sub(12).max(1))
+        player.dgj.milestone7Effect = Decimal.pow(1.05, player.dgj.grassJump.sub(16).max(1))
 
         player.dgj.grassJumpersGain = player.dgj.grassJump.div(10).mul(Decimal.pow(1.2, player.dgj.grassJump))
         if (getLevelableTier("pu", 307, true)) player.dgj.grassJumpersGain = player.dgj.grassJumpersGain.mul(levelableEffect("pu", 307)[0])
@@ -357,8 +359,17 @@ addLayer("dgj", {
             },
         },
         16: {
-            effectDescription() { return "Replace the formulas for the dark grass buyables and scale the dark grass buyables by 1% per grass jump<br>Currently: x" + format(player.dgj.milestone6Effect) + "." },
+            effectDescription() { return "Replace the formulas for the dark grass buyables and scale the dark grass buyables by 1% per grass jump, starting at 12<br>Currently: x" + format(player.dgj.milestone6Effect) + "." },
             done() { return player.dgj.grassJump.gte(12) },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #00488F", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("dgj", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
+                return look
+            },
+        },
+        17: {
+            effectDescription() { return "Increase space pet xp gain by 5% per grass jump, starting at 16<br>Currently: x" + format(player.dgj.milestone7Effect) + "." },
+            done() { return player.dgj.grassJump.gte(16) },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #00488F", borderTop: "0px", borderRadius: "0px"}
                 if (hasMilestone("dgj", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
@@ -415,6 +426,12 @@ addLayer("dgj", {
                             ["raw-html", "12", {color: "white", fontSize: "32px", fontFamily: "monospace"}],
                         ], {backgroundColor: "#002e5c", border: "3px solid #00488F", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
                         ["titleless-milestone", 16],
+                    ]],
+                    ["style-row", [
+                        ["style-column", [
+                            ["raw-html", "16", {color: "white", fontSize: "32px", fontFamily: "monospace"}],
+                        ], {backgroundColor: "#002e5c", border: "3px solid #00488F", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                        ["titleless-milestone", 17],
                     ]],
                     ["style-row", [
                         ["raw-html", "Grass Jumps are not reset when leaving the dark universe.", {color: "white", fontSize: "16px", fontFamily: "monospace"}],

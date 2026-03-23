@@ -18,7 +18,7 @@
         crystalMax: false,
 
         doomSoftcap: new Decimal(0.5),
-        doomSoftcapStart: new Decimal("1e5000000"),
+        doomSoftcapStart: new Decimal("1e2000000"),
     }
     },
     automate() {
@@ -91,7 +91,7 @@
 
         // SOFTCAP OF DOOM
         player.p.doomSoftcap = new Decimal(0.5)
-        player.p.doomSoftcapStart = new Decimal("1e5000000")
+        player.p.doomSoftcapStart = new Decimal("1e2000000")
 
         // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
         let amt = player.p.prestigePoints

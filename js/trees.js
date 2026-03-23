@@ -19,7 +19,7 @@
         treeSoftcapStart: new Decimal(15),
 
         doomSoftcap: new Decimal(0.5),
-        doomSoftcapStart: new Decimal("1e5000000"),
+        doomSoftcapStart: new Decimal("1e2000000"),
     }},
     automate() {
         if (hasMilestone("r", 12))
@@ -79,7 +79,7 @@
 
         // SOFTCAP OF DOOM
         player.t.doomSoftcap = new Decimal(0.5)
-        player.t.doomSoftcapStart = new Decimal("1e5000000")
+        player.t.doomSoftcapStart = new Decimal("1e2000000")
 
         // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
         let amt = player.t.trees

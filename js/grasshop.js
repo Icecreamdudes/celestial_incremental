@@ -26,10 +26,10 @@
         steelMax: false,
 
         doomSoftcap: new Decimal(0.5),
-        doomSoftcapStart: new Decimal("1e3000000"),
+        doomSoftcapStart: new Decimal("1e2000000"),
 
         doomSoftcap2: new Decimal(0.5),
-        doomSoftcap2Start: new Decimal("1e10000000"),
+        doomSoftcap2Start: new Decimal("1e4000000"),
     }},
     automate() {
         if (hasMilestone("ip", 17)) {
@@ -97,7 +97,7 @@
 
         // SOFTCAP OF DOOM
         player.gh.doomSoftcap = new Decimal(0.5)
-        player.gh.doomSoftcapStart = new Decimal("1e3000000")
+        player.gh.doomSoftcapStart = new Decimal("1e2000000")
 
         // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
         let amt = player.gh.grasshoppers
@@ -167,7 +167,7 @@
 
         // SOFTCAP OF DOOM
         player.gh.doomSoftcap2 = new Decimal(0.5)
-        player.gh.doomSoftcap2Start = new Decimal("1e10000000")
+        player.gh.doomSoftcap2Start = new Decimal("1e4000000")
 
         // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
         let amt2 = player.gh.fertilizer

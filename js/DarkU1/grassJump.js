@@ -35,6 +35,7 @@ addLayer("dgj", {
         let onepersec = new Decimal(1)
 
         let grassJumpDiv = new Decimal(1)
+        if (getLevelableTier("pu", 213, true)) grassJumpDiv = grassJumpDiv.mul(levelableEffect("pu", 213)[0])
         
         player.dgj.grassJumpReq = Decimal.pow(1e10, player.dgj.grassJump).mul(1e20).div(grassJumpDiv)
         player.dgj.grassJumpGain = player.dgr.grass.mul(grassJumpDiv).div(1e20).add(1).ln().div(Decimal.ln(1e10))

@@ -178,6 +178,7 @@ addLayer('g', {
 
         // POWER MODIFIERS
         if (hasUpgrade("hpw", 1032)) player.g.goldGrassVal = player.g.goldGrassVal.pow(1.06)
+        player.g.goldGrassVal = player.g.goldGrassVal.pow(levelableEffect("pu", 113)[1])
 
         // ABNORMAL MODIFIERS
         if (player.po.halter.goldenGrass.enabled == 1) player.g.goldGrassVal = player.g.goldGrassVal.div(player.po.halter.goldenGrass.halt)

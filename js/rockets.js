@@ -125,6 +125,7 @@
         if (hasUpgrade("sma", 203)) player.ro.spacePetXPToGet = player.ro.spacePetXPToGet.mul(1.2).floor()
         player.ro.spacePetXPToGet = player.ro.spacePetXPToGet.mul(levelableEffect("pu", 306)[2]).floor()
         player.ro.spacePetXPToGet = player.ro.spacePetXPToGet.mul(buyableEffect("sme", 163)).floor()
+        if (hasMilestone("dgj", 17)) player.ro.spacePetXPToGet = player.ro.spacePetXPToGet.mul(player.dgj.milestone7Effect).floor()
 
         player.ro.evoCost = Decimal.mul(player.ro.selectedPassengersCommon.length, Decimal.add(7, player.ro.selectedPassengersCommon.length)).add(player.ro.evoShardsReq)
         player.ro.paragonCost = Decimal.mul(player.ro.selectedPassengersUncommon.length, Decimal.add(2, player.ro.selectedPassengersUncommon.length)).add(player.ro.paragonShardsReq)
@@ -133,11 +134,19 @@
             let lvl = player.pet.levelables[Decimal.add(101, player.ro.selectedPassengersCommon[i])][0]
             let tier = player.pet.levelables[Decimal.add(101, player.ro.selectedPassengersCommon[i])][2]
             player.ro.commonXPToGet[i] = lvl.mul(Decimal.pow(2, tier)).pow(Decimal.mul(1.2, Decimal.pow(1.1, tier))).floor()
+            if (hasUpgrade("sma", 203)) player.ro.commonXPToGet[i] = player.ro.commonXPToGet[i].mul(1.2).floor()
+            player.ro.commonXPToGet[i] = player.ro.commonXPToGet[i].mul(levelableEffect("pu", 306)[2]).floor()
+            player.ro.commonXPToGet[i] = player.ro.commonXPToGet[i].mul(buyableEffect("sme", 163)).floor()
+            if (hasMilestone("dgj", 17)) player.ro.commonXPToGet[i] = player.ro.commonXPToGet[i].mul(player.dgj.milestone7Effect).floor()
         }
         for (let i = 0; i < player.ro.selectedPassengersUncommon.length; i++) {
             let lvl = player.pet.levelables[Decimal.add(201, player.ro.selectedPassengersUncommon[i])][0]
             let tier = player.pet.levelables[Decimal.add(201, player.ro.selectedPassengersUncommon[i])][2]
             player.ro.uncommonXPToGet[i] = lvl.mul(Decimal.pow(2, tier)).pow(Decimal.mul(1.2, Decimal.pow(1.1, tier))).floor()
+            if (hasUpgrade("sma", 203)) player.ro.uncommonXPToGet[i] = player.ro.uncommonXPToGet[i].mul(1.2).floor()
+            player.ro.uncommonXPToGet[i] = player.ro.uncommonXPToGet[i].mul(levelableEffect("pu", 306)[2]).floor()
+            player.ro.uncommonXPToGet[i] = player.ro.uncommonXPToGet[i].mul(buyableEffect("sme", 163)).floor()
+            if (hasMilestone("dgj", 17)) player.ro.uncommonXPToGet[i] = player.ro.uncommonXPToGet[i].mul(player.dgj.milestone7Effect).floor()
         }
 
         player.ro.rocketImages = [

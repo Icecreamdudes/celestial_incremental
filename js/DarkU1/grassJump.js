@@ -49,9 +49,9 @@ addLayer("dgj", {
         player.dgj.milestone7Effect = Decimal.pow(1.05, player.dgj.grassJump.sub(16).max(1))
 
         player.dgj.grassJumpersGain = player.dgj.grassJump.div(10).mul(Decimal.pow(1.2, player.dgj.grassJump))
-        if (getLevelableTier("pu", 307, true)) player.dgj.grassJumpersGain = player.dgj.grassJumpersGain.mul(levelableEffect("pu", 307)[0])
+        if (getLevelableTier("pu", 308, true)) player.dgj.grassJumpersGain = player.dgj.grassJumpersGain.mul(levelableEffect("pu", 308)[0])
 
-        if (getLevelableTier("pu", 307, true)) player.dgj.grassJumpers = player.dgj.grassJumpers.add(player.dgj.grassJumpersGain.mul(delta))
+        if (getLevelableTier("pu", 308, true)) player.dgj.grassJumpers = player.dgj.grassJumpers.add(player.dgj.grassJumpersGain.mul(delta))
     },
     bars: {},
     clickables: {
@@ -440,7 +440,7 @@ addLayer("dgj", {
             },
             "Grassjumpers": {
                 buttonStyle() { return { border: "2px solid #00488F", borderRadius: "10px" } },
-                unlocked() { return getLevelableTier("pu", 307, true) },
+                unlocked() { return getLevelableTier("pu", 308, true) },
                 content: [
                     ["blank", "25px"],
                     ["row", [

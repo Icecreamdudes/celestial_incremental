@@ -42,7 +42,7 @@ addLayer("al", {
         if (player.al.cocoonLevel >= 1) player.al.honeycombGain = player.al.honeycombGain.mul(1.5)
         player.al.honeycombGain = player.al.honeycombGain.mul(buyableEffect("sme", 174))
         player.al.honeycombGain = player.al.honeycombGain.mul(levelableEffect("pet", 503)[1])
-        player.al.honeycombGain = player.al.honeycombGain.mul(levelableEffect("pu", 307)[1])
+        player.al.honeycombGain = player.al.honeycombGain.mul(levelableEffect("pu", 308)[1])
 
         // FLOOR HONEYCOMBS
         player.al.honeycombGain = player.al.honeycombGain.floor()
@@ -52,7 +52,7 @@ addLayer("al", {
         if (player.al.cocoonLevel >= 1) player.al.royalJellyGain = player.al.royalJellyGain.mul(1.5)
         player.al.royalJellyGain = player.al.royalJellyGain.mul(buyableEffect("sme", 174))
         player.al.royalJellyGain = player.al.royalJellyGain.mul(levelableEffect("pet", 503)[1])
-        player.al.royalJellyGain = player.al.royalJellyGain.mul(levelableEffect("pu", 307)[1])
+        player.al.royalJellyGain = player.al.royalJellyGain.mul(levelableEffect("pu", 308)[1])
 
         // FLOOR HONEYCOMBS
         player.al.royalJellyGain = player.al.royalJellyGain.floor()

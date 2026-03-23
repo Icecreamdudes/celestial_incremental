@@ -637,6 +637,7 @@
         player.dgj.buyables[14] = new Decimal(0)
         player.dgj.buyables[15] = new Decimal(0)
         player.dgj.buyables[16] = new Decimal(0)
+        player.subtabs["dgj"]["stuff"] = "Main"
 
         player.bl.blood = new Decimal(0)
         player.bl.bloodStones = new Decimal(0)

@@ -94,8 +94,8 @@ addLayer("dgj", {
                 return "Pointed Jumps"
             },
             display() {
-                return "Boosts dark celestialite points by +100% per level\n\
-                Dark celestialite point gain is doubled every 25 levels\n\
+                return "Boosts points by +100% per level\n\
+                Point gain is doubled every 25 levels\n\
                 Currently: x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                 Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grassjumpers"
             },

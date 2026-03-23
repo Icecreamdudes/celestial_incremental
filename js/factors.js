@@ -12,6 +12,8 @@
         factorPowerEffect: new Decimal(1),
         factorPowerPerSecond: new Decimal(0),
 
+        doomSoftcap: new Decimal(0.5),
+        doomSoftcapStart: new Decimal("1e10000000"),
     }},
     automate() {
         if (hasUpgrade("p", 15) && !hasUpgrade("cs", 201)) {
@@ -98,6 +100,18 @@
         // POWER MODIFIERS
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.pow(buyableEffect("fu", 32))
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.pow(player.co.cores.factor.effect[1])
+
+        // SOFTCAP OF DOOM
+        player.f.doomSoftcap = new Decimal(0.5)
+        player.f.doomSoftcapStart = new Decimal("1e10000000")
+
+        // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
+        let amt = player.f.factorPower
+        if (player.f.factorPowerPerSecond.gte(player.f.factorPower)) amt = player.f.factorPowerPerSecond
+        player.f.doomSoftcap = player.f.doomSoftcap.div(amt.div(player.f.doomSoftcapStart).add(1).log(player.f.doomSoftcapStart).add(1))
+
+        // APPLY DOOM SOFTCAP
+        if (player.f.factorPowerPerSecond.gt(player.f.doomSoftcapStart)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.div(player.f.doomSoftcapStart).pow(player.f.doomSoftcap).mul(player.f.doomSoftcapStart)
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.po.halter.factor.enabled == 1) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.div(player.po.halter.factor.halt)
@@ -1572,6 +1586,7 @@
                             return look
                         }],
                     ]],
+                    ["raw-html", () => {return player.f.factorPowerPerSecond.gt(player.f.doomSoftcapStart) ? "SOFTCAP OF DOOM: Gain past " + format(player.f.doomSoftcapStart) + " is raised by ^" + format(player.f.doomSoftcap, 3) + "." : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
                     ["row", [
                         ["raw-html", () => { return "Boosts celestial points by x" + format(player.f.factorPowerEffect) + "." }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ["raw-html", () => { return player.f.factorPowerEffect.gte("1e25000") ? "[SOFTCAPPED]" : "" }, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],

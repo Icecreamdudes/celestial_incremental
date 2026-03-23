@@ -122,7 +122,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '200px', }
         },
         12: {
             costBase() { return new Decimal(1e50) },
@@ -156,7 +156,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '200px', }
         },
         13: {
             costBase() { return new Decimal(1e65) },
@@ -190,7 +190,109 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '200px', }
+        },
+        14: {
+            costBase() { return new Decimal("1e10000") },
+            costGrowth() { return new Decimal("1e1000") },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.gh.steel},
+            pay(amt) { player.gh.steel = this.currency().sub(amt) },
+            effect(x) { return Decimal.pow(1.2, getBuyableAmount(this.layer, this.id)) },
+            unlocked() { return player.alephsChamber.milestone[25] > 0 },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Assembler"
+            },
+            display() {
+                return "Unlock a building where you can use your core fragments to attract more core fragments.\n\Each level multiplies assembler efficiency by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Steel"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '200px', }
+        }, // CORE FRAGMENT AUTOMATION
+        15: {
+            costBase() { return new Decimal("1e25000") },
+            costGrowth() { return new Decimal("1e2500") },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.gh.steel},
+            pay(amt) { player.gh.steel = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(100).add(1) },
+            unlocked() { return player.alephsChamber.milestone[25] > 0 },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Refinery"
+            },
+            display() {
+                return "Unlock a building where you can use your rocket fuel for permanent upgrades.\n\Each level raises rocket fuel gain by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Steel"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '200px', }
+        },
+        16: {
+            costBase() { return new Decimal("1e100000") },
+            costGrowth() { return new Decimal("1e10000") },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.gh.steel},
+            pay(amt) { player.gh.steel = this.currency().sub(amt) },
+            effect(x) { return Decimal.pow(2, getBuyableAmount(this.layer, this.id)) },
+            unlocked() { return player.alephsChamber.milestone[25] > 0 },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Star Accumulator"
+            },
+            display() {
+                return "Unlock a building where you can increase how many stars you obtain based on time since last launch.\n\Each level improves star gain before softcap by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Steel"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '200px', }
         },
 
         //FOUNDRY
@@ -645,10 +747,6 @@
             style: {width: "600px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
     },
-    challenges: {
-    },
-    infoboxes: {
-    },
     microtabs: {
         stuff: {
             "Buyables": {
@@ -656,7 +754,8 @@
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]], {maxWidth: "900px"}],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13],
+                        ["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16]], {maxWidth: "900px"}],
                 ]
             },
             "Foundry": {
@@ -716,6 +815,27 @@
                     ["milestone", 19],
                     ["milestone", 21],
                     ["milestone", 22],
+                ]
+            },
+            "Assembler": {
+                buttonStyle() {return {color: "#fff", borderRadius: "5px"}},
+                unlocked() {return player.fa.buyables[14].gte(1)},
+                content: [
+
+                ]
+            },
+            "Refinery": {
+                buttonStyle() {return {color: "#fff", borderRadius: "5px"}},
+                unlocked() {return player.fa.buyables[15].gte(1)},
+                content: [
+
+                ]
+            },
+            "Star Accumulator": {
+                buttonStyle() {return {color: "#fff", borderRadius: "5px"}},
+                unlocked() {return player.fa.buyables[16].gte(1)},
+                content: [
+
                 ]
             },
         },

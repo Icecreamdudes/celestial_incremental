@@ -38,6 +38,9 @@ addLayer('g', {
             new Decimal(1),
         ],
         moonstoneLevelMax: new Decimal(1),
+
+        doomSoftcap: new Decimal(0.5),
+        doomSoftcapStart: new Decimal("1e500000"),
     }},
     automate() {
         if (hasMilestone('r', 13)) {
@@ -112,6 +115,18 @@ addLayer('g', {
 
         // SOFTCAPPY
         if (player.g.grassVal.gte("1e100000")) player.g.grassVal = player.g.grassVal.div("1e100000").pow(0.1).mul("1e100000")
+
+        // SOFTCAP OF DOOM
+        player.g.doomSoftcap = new Decimal(0.5)
+        player.g.doomSoftcapStart = new Decimal("1e500000")
+
+        // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
+        let amt = player.g.grass
+        if (player.g.grassVal.gte(player.g.grass)) amt = player.g.grassVal
+        player.g.doomSoftcap = player.g.doomSoftcap.div(amt.div(player.g.doomSoftcapStart).add(1).log(player.g.doomSoftcapStart).add(1))
+
+        // APPLY DOOM SOFTCAP
+        if (player.g.grassVal.gt(player.g.doomSoftcapStart)) player.g.grassVal = player.g.grassVal.div(player.g.doomSoftcapStart).pow(player.g.doomSoftcap).mul(player.g.doomSoftcapStart)
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.po.halter.grass.enabled == 1) player.g.grassVal = player.g.grassVal.div(player.po.halter.grass.halt)
@@ -1281,6 +1296,7 @@ addLayer('g', {
             ["raw-html", () => {return "(+" + format(player.g.grassVal) + " GV)"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
             ['raw-html', () => {return player.g.grassVal.gte("1e100000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}]
         ]],
+        ["raw-html", () => {return player.g.grassVal.gt(player.g.doomSoftcapStart) ? "SOFTCAP OF DOOM: Value past " + format(player.g.doomSoftcapStart) + " is raised by ^" + format(player.g.doomSoftcap, 3) + "." : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace"}],
         ["row", [
             ["raw-html", () => {return "Boosts leaf gain by x" + format(player.g.grassEffect)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
             ['raw-html', () => {return player.g.grassEffect.gte("1e25000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace", marginLeft: "10px"}]

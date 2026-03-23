@@ -114,6 +114,7 @@
         tierDiv = tierDiv.mul(player.i.preOTFMult)
 
         let tiersGain = player.r.rank.div(3).mul(tierDiv).pow(Decimal.div(10, 11)).floor()
+
         player.r.tierEffect = player.r.tier.mul(0.55).add(1).pow(1.1)
         player.r.tierEffect = player.r.tierEffect.pow(player.p.crystalEffect)
         player.r.tierEffect = player.r.tierEffect.pow(buyableEffect("sb", 106))
@@ -137,7 +138,7 @@
         tetrDiv = tetrDiv.mul(player.i.preOTFMult)
 
         let tetrGain = player.r.tier.div(2).mul(tetrDiv).pow(Decimal.div(25, 27)).floor()
-
+        
         player.r.tetrEffect = player.r.tetr.add(1).pow(1.2)
         player.r.tetrEffect = player.r.tetrEffect.pow(player.p.crystalEffect)
         player.r.tetrEffect = player.r.tetrEffect.pow(buyableEffect("sb", 106))

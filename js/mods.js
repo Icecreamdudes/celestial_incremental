@@ -24,6 +24,12 @@
         modSoftcapStart: new Decimal(10),
 
         modMax: false,
+
+        doomSoftcap: new Decimal(0.5),
+        doomSoftcapStart: new Decimal("1e3000000"),
+
+        doomSoftcap2: new Decimal(0.5),
+        doomSoftcap2Start: new Decimal("1e3000000"),
     }},
     automate() {
         if (hasMilestone("ip", 17)) {
@@ -62,6 +68,18 @@
 
         // POWER MODIFIERS
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.pow(player.co.cores.code.effect[1])
+
+        // SOFTCAP OF DOOM
+        player.m.doomSoftcap = new Decimal(0.5)
+        player.m.doomSoftcapStart = new Decimal("1e3000000")
+
+        // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
+        let amt = player.m.codeExperience
+        if (player.m.codeExperienceToGet.gte(player.m.codeExperience)) amt = player.m.codeExperienceToGet
+        player.m.doomSoftcap = player.m.doomSoftcap.div(amt.div(player.m.doomSoftcapStart).add(1).log(player.m.doomSoftcapStart).add(1))
+
+        // APPLY DOOM SOFTCAP
+        if (player.m.codeExperienceToGet.gt(player.m.doomSoftcapStart)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.div(player.m.doomSoftcapStart).pow(player.m.doomSoftcap).mul(player.m.doomSoftcapStart)
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.po.halter.code.enabled == 1) player.m.codeExperienceToGet = player.m.codeExperienceToGet.div(player.po.halter.code.halt)
@@ -140,6 +158,18 @@
         player.m.modsToGet = player.m.modsToGet.pow(player.cs.scraps.code.effect)
         if (hasUpgrade("cs", 703)) player.m.modsToGet = player.m.modsToGet.pow(1.1)
         player.m.modsToGet = player.m.modsToGet.pow(buyableEffect("cof", 17))
+
+        // SOFTCAP OF DOOM
+        player.m.doomSoftcap2 = new Decimal(0.5)
+        player.m.doomSoftcap2Start = new Decimal("1e3000000")
+
+        // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
+        let amt2 = player.m.mods
+        if (player.m.modsToGet.gte(player.m.mods)) amt2 = player.m.modsToGet
+        player.m.doomSoftcap2 = player.m.doomSoftcap2.div(amt2.div(player.m.doomSoftcap2Start).add(1).log(player.m.doomSoftcap2Start).add(1))
+
+        // APPLY DOOM SOFTCAP
+        if (player.m.modsToGet.gt(player.m.doomSoftcap2Start)) player.m.modsToGet = player.m.modsToGet.div(player.m.doomSoftcap2Start).pow(player.m.doomSoftcap2).mul(player.m.doomSoftcap2Start)
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.po.halter.mods.enabled == 1) player.m.modsToGet = player.m.modsToGet.div(player.po.halter.mods.halt)
@@ -583,6 +613,7 @@
                 return look
             }],
         ]],
+        ["raw-html", () => {return player.m.codeExperienceToGet.gt(player.m.doomSoftcapStart) ? "SOFTCAP OF DOOM: Gain past " + format(player.m.doomSoftcapStart) + " is raised by ^" + format(player.m.doomSoftcap, 3) + "." : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
         ["raw-html", () => {return hasUpgrade("cs", 701) ? "Boosts factor base by x" + format(player.m.codeExperienceEffect) : ""}, {color: "#1377BF", fontSize: "20px", fontFamily: "monospace"}],
         ["blank", "15px"],
         ["clickable", 11],
@@ -593,6 +624,7 @@
                 ["raw-html", () => { return "You have " + formatWhole(player.m.mods) + " mods"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                 ["raw-html", () => { return player.m.linesOfCodePerSecond.div(20).gt(player.m.modsReq) ? "(+" + format(player.m.modsToGet, 1) + "/s)" : "(+" + format(player.m.modsToGet, 1) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
             ]],
+            ["raw-html", () => {return player.m.modsToGet.gt(player.m.doomSoftcap2Start) ? "SOFTCAP OF DOOM: Gain past " + format(player.m.doomSoftcap2Start) + " is raised by ^" + format(player.m.doomSoftcap2, 3) + "." : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace"}],
             ["raw-html", () => {return "Boosts tree gain by x" + format(player.m.modEffect) + "."}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
             ["blank", "10px"],
             ["bar", "modbar"],

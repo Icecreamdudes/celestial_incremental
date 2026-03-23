@@ -45,6 +45,7 @@
         if (getLevelableTier("pu", 101, true)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 101)[1])
         if (getLevelableTier("pu", 203, true)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 203)[0])
         if (getLevelableTier("pu", 301, true)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 301)[0])
+        if (getLevelableTier("pu", 307, true)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 307)[0])
         player.du.pointGain = player.du.pointGain.mul(buyableEffect("dgr", 14))
         player.du.pointGain = player.du.pointGain.mul(levelableEffect("st", 101)[0])
         player.du.pointGain = player.du.pointGain.mul(player.db.boosterEffect)

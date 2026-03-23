@@ -837,7 +837,7 @@
             currencyDisplayName: "Code Core Scraps",
             currencyInternalName: "amount",
             effect() {
-                return Decimal.div(1, player.m.linesOfCode.add(1).log("1e100000").div(10).add(1))
+                return Decimal.div(1, player.m.linesOfCode.add(1).log("1e1000000").div(10).add(1))
             },
             effectDisplay() { return "^"+format(upgradeEffect(this.layer, this.id), 4) }, // Add formatting to the effect
             style() {

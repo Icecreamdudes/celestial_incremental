@@ -1454,6 +1454,19 @@ BHB.centerSpreadAttack = {
     },
 }
 
+BHB.centerSingleAttack = {
+    //bulletHell({"centerSingleAttack": {bulletSpeed: 6, shootInterval: 1000}}, {width: window.innerWidth, height: window.innerHeight, duration: 15})
+    moveFunc(info, ticks, id) {
+        if (!info.actions[id].lastTime) info.actions[id].lastTime = ticks;
+        if (ticks - info.actions[id].lastTime > info.actions[id].shootInterval) {
+            info.shootAtPlayer(info.width / 2, info.height / 2, id, info.actions[id].bulletSpeed);
+            info.actions[id].lastTime = ticks;
+        }
+
+        return info
+    },
+}
+
 BHB.centerIcon = {
     //bulletHell({"centerIcon": {radius: 64, fillColor: "#fff", strokeColor: "#e22", symbol: "⊘"}}, {width: window.innerWidth, height: window.innerHeight, duration: 15})
     codeFunc(info, id) {

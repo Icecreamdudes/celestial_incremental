@@ -687,7 +687,7 @@ BHC.staticTheta = {
             type: "function",
             target: "allPlayer",
             onTrigger(index, slot, target, magnitude) {
-                bulletHell({"centerSpiralAttack": {spiralAngle: 0, spiralRate: 0.65, spiralInterval: 55-(magnitude*5), radialStart: 0, bulletSpeed: 4, spiralBullets: true}}, {start: "left", height: 700, duration: 7+magnitude})
+                bulletHell({"centerSpiralAttack": {spiralAngle: 0, spiralRate: 0.65, spiralInterval: 55-(magnitude*5), radialStart: 0, bulletSpeed: 4, spiralBullets: true}, "centerSingleAttack": {bulletSpeed: 6, shootInterval: 800-(magnitude*50)}}, {start: "left", height: 700, duration: 7+magnitude})
             },
             cooldown: new Decimal(6),
         },

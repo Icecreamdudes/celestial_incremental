@@ -135,6 +135,15 @@
         player.cof.coreFragmentEffects[6] = player.cof.coreFragments[6].pow(0.25).div(5).add(1)
 
         player.subtabs["cof"]["buyables"] = player.cof.fragmentIndex
+
+        // Core Fragment Automation
+        if (getBuyableAmount("fa", 301).gt(0)) player.cof.coreFragments[0] = player.cof.coreFragments[0].add(player.cof.coreFragmentsToGet[0].mul(buyableEffect("fa", 301).sub(1)).mul(delta))
+        if (getBuyableAmount("fa", 302).gt(0)) player.cof.coreFragments[1] = player.cof.coreFragments[1].add(player.cof.coreFragmentsToGet[1].mul(buyableEffect("fa", 302).sub(1)).mul(delta))
+        if (getBuyableAmount("fa", 303).gt(0)) player.cof.coreFragments[2] = player.cof.coreFragments[2].add(player.cof.coreFragmentsToGet[2].mul(buyableEffect("fa", 303).sub(1)).mul(delta))
+        if (getBuyableAmount("fa", 304).gt(0)) player.cof.coreFragments[3] = player.cof.coreFragments[3].add(player.cof.coreFragmentsToGet[3].mul(buyableEffect("fa", 304).sub(1)).mul(delta))
+        if (getBuyableAmount("fa", 305).gt(0)) player.cof.coreFragments[4] = player.cof.coreFragments[4].add(player.cof.coreFragmentsToGet[4].mul(buyableEffect("fa", 305).sub(1)).mul(delta))
+        if (getBuyableAmount("fa", 306).gt(0)) player.cof.coreFragments[5] = player.cof.coreFragments[5].add(player.cof.coreFragmentsToGet[5].mul(buyableEffect("fa", 306).sub(1)).mul(delta))
+        if (getBuyableAmount("fa", 307).gt(0)) player.cof.coreFragments[6] = player.cof.coreFragments[6].add(player.cof.coreFragmentsToGet[6].mul(buyableEffect("fa", 307).sub(1)).mul(delta))
     },
     clickables: {
         1: {

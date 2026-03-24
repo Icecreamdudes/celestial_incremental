@@ -75,6 +75,7 @@
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(player.co.cores.rocket.effect[1])
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(buyableEffect("cof", 18))
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(player.se.starsExploreEffect[0][3])
+        player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(buyableEffect("fa", 15))
 
         // ROCKET FUEL PER SECOND
         if (player.po.rocketFuel || inChallenge("ip", 16)) {

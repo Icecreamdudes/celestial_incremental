@@ -1074,6 +1074,17 @@ addLayer("st", {
                 return look
             }  
         },
+        // Normality
+        // Space Energy
+        // Space
+        // Length/Width/Depth
+        // Blood
+        // Clouds
+        // Grass Jump Req
+        // Starmetal Essence (Gain and/or cooldown)
+        // Eclipse Shards
+        // Eclipse Timer Tickspeed
+        // Punchcard XP
     },
     upgrades: {},
     buyables: {

@@ -38,6 +38,8 @@ addLayer("bee", {
         if (hasUpgrade("al", 225)) player.bee.preAlephMult = player.bee.preAlephMult.mul(2)
         player.bee.preAlephMult = player.bee.preAlephMult.mul(levelableEffect("pet", 503)[0])
         player.bee.preAlephMult = player.bee.preAlephMult.mul(levelableEffect("pu", 213)[1])
+        player.bee.preAlephMult = player.bee.preAlephMult.mul(buyableEffect("sme", 176))
+        player.bee.bps = player.bee.bps.mul(player.fl.glossaryEffects.preAleph)
 
         // Bee Calculations
         player.bee.bps = buyableEffect("bee", 11)
@@ -57,6 +59,7 @@ addLayer("bee", {
 
         // POWER MODIFIERS
         player.bee.bps = player.bee.bps.pow(buyableEffect("bee", 15))
+        player.bee.bps = player.bee.bps.pow(buyableEffect("sme", 175))
 
         player.bee.bees = player.bee.bees.add(player.bee.bps.mul(delta))
     },

@@ -761,7 +761,7 @@
                             ["row", [
                                 ["raw-html", () => {return "Rank " + formatWhole(player.r.rank)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                                 ["raw-html", () => {return hasUpgrade("p", 14) ? "(+" + formatWhole(player.r.ranksToGet) + ")" : ""}, () => {
-                                    let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                                    let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
                                     player.r.ranksToGet.gt(0) ? look.color = "white" : look.color = "gray"
                                     return look
                                 }],
@@ -775,7 +775,7 @@
                             ["row", [
                                 ["raw-html", () => {return "Tier " + formatWhole(player.r.tier)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                                 ["raw-html", () => {return hasUpgrade("p", 14) ? "(+" + formatWhole(player.r.tiersToGet) + ")" : ""}, () => {
-                                    let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                                    let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
                                     player.r.tiersToGet.gt(0) ? look.color = "white" : look.color = "gray"
                                     return look
                                 }],
@@ -789,7 +789,7 @@
                             ["row", [
                                 ["raw-html", () => {return "Tetr " + formatWhole(player.r.tetr)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                                 ["raw-html", () => {return hasUpgrade("p", 14) ? "(+" + formatWhole(player.r.tetrsToGet) + ")" : ""}, () => {
-                                    let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                                    let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
                                     player.r.tetrsToGet.gt(0) ? look.color = "white" : look.color = "gray"
                                     return look
                                 }],
@@ -818,7 +818,7 @@
                             ["row", [
                                 ["raw-html", () => {return "Pent " + formatWhole(player.r.pent)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                                 ["raw-html", () => {return (hasUpgrade("i", 32) && !inChallenge("ip", 14)) ? "(+" + formatWhole(player.r.pentToGet) + ")" : ""}, () => {
-                                    let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                                    let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
                                     player.r.pentToGet.gt(0) ? look.color = "white" : look.color = "gray"
                                     return look
                                 }],

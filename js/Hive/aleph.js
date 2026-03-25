@@ -17,7 +17,6 @@ addLayer("al", {
         highestRoyalJelly: new Decimal(0),
 
         cocoonLevel: 0,
-        alephFreedom: false,
 
         show: false,
     }},
@@ -40,6 +39,7 @@ addLayer("al", {
         // START OF HONEYCOMBS
         player.al.honeycombGain = player.bb.beeBread.div(1e10).pow(0.25)
         if (player.al.cocoonLevel >= 1) player.al.honeycombGain = player.al.honeycombGain.mul(1.5)
+        if (player.al.cocoonLevel >= 14) player.al.honeycombGain = player.al.honeycombGain.mul(2)
         player.al.honeycombGain = player.al.honeycombGain.mul(buyableEffect("sme", 174))
         player.al.honeycombGain = player.al.honeycombGain.mul(levelableEffect("pet", 503)[1])
         player.al.honeycombGain = player.al.honeycombGain.mul(levelableEffect("pu", 308)[1])
@@ -50,6 +50,7 @@ addLayer("al", {
         // START OF ROYAL JELLY
         player.al.royalJellyGain = player.ho.honey.div(1e10).pow(0.25)
         if (player.al.cocoonLevel >= 1) player.al.royalJellyGain = player.al.royalJellyGain.mul(1.5)
+        if (player.al.cocoonLevel >= 14) player.al.royalJellyGain = player.al.royalJellyGain.mul(2)
         player.al.royalJellyGain = player.al.royalJellyGain.mul(buyableEffect("sme", 174))
         player.al.royalJellyGain = player.al.royalJellyGain.mul(levelableEffect("pet", 503)[1])
         player.al.royalJellyGain = player.al.royalJellyGain.mul(levelableEffect("pu", 308)[1])
@@ -66,7 +67,7 @@ addLayer("al", {
             }
         }
     },
-    prestigeReset() {
+    prestigeReset(all = false) {
         // BEES
         player.bee.bees = new Decimal(1)
         player.bee.bps = new Decimal(0)
@@ -100,7 +101,7 @@ addLayer("al", {
             }
         }
 
-        if (player.al.cocoonLevel >= 7) {
+        if (player.al.cocoonLevel >= 7 && !all) {
             for (let i = 101; i < 116; ) {
                 player.fl.glossary[i] = new Decimal(1)
 
@@ -121,10 +122,20 @@ addLayer("al", {
         
         player.fl.gatherer[2].id = 505
         player.fl.gatherer[2].current = new Decimal(0)
+        if (all) {
+            player.fl.gatherer[2].max = new Decimal(5)
+            player.fl.gatherer[2].power = new Decimal(0)
+            player.fl.gatherer[2].mult = new Decimal(1)
+        }
 
         player.fl.buyables[1] = new Decimal(0)
         player.fl.buyables[2] = new Decimal(0)
         player.fl.buyables[3] = new Decimal(0)
+        if (all) {
+            player.fl.buyables[4] = new Decimal(0)
+            player.fl.buyables[5] = new Decimal(0)
+            player.fl.buyables[6] = new Decimal(0)
+        }
 
         // POLLEN
         player.bpl.pollen = new Decimal(0)
@@ -179,6 +190,18 @@ addLayer("al", {
             player.ho.effects[i].effect = new Decimal(1)
         }
         player.ho.upgrades.splice(0, player.ho.upgrades.length)
+
+        // ALEPH
+        if (all) {
+            player.al.honeycomb = new Decimal(0)
+            player.al.honeycombGain = new Decimal(0)
+            player.al.royalJelly = new Decimal(0)
+            player.al.royalJellyGain = new Decimal(0)
+            player.al.upgrades.splice(0, player.al.upgrades.length)
+            for (let i in player.al.buyables) {
+                player.al.buyables[i] = new Decimal(0)
+            }
+        }
     },
     clickables: {
         1: {

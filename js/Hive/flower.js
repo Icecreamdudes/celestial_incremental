@@ -27,6 +27,10 @@ addLayer("fl", {
                 current: new Decimal(45),
                 max: new Decimal(45),
             },
+            purple: {
+                current: new Decimal(60),
+                max: new Decimal(60),
+            },
         },
         pickingPower: new Decimal(1),
         flowerGain: new Decimal(1),
@@ -126,6 +130,25 @@ addLayer("fl", {
             523: new Decimal(0),
             524: new Decimal(0),
             525: new Decimal(0),
+            
+
+            601: new Decimal(0),
+            602: new Decimal(0),
+            603: new Decimal(0),
+            604: new Decimal(0),
+            605: new Decimal(0),
+
+            611: new Decimal(0),
+            612: new Decimal(0),
+            613: new Decimal(0),
+            614: new Decimal(0),
+            615: new Decimal(0),
+
+            621: new Decimal(0),
+            622: new Decimal(0),
+            623: new Decimal(0),
+            624: new Decimal(0),
+            625: new Decimal(0),
         },
         glossaryEffects: {
             bee: new Decimal(1),
@@ -133,6 +156,7 @@ addLayer("fl", {
             nectar: new Decimal(1),
             beeBread: new Decimal(1),
             honey: new Decimal(1),
+            preAleph: new Decimal(1),
         },
         glossaryIndex: 0,
         glossaryRig: 0,
@@ -190,6 +214,11 @@ addLayer("fl", {
         if (player.ho.cell.gte(CELL_MILESTONES[player.bee.path][4])) player.fl.timers.yellow.max = player.fl.timers.yellow.max.div(2)
         player.fl.timers.yellow.max = player.fl.timers.yellow.max.div(allCooldownDiv)
         if (player.ho.cell.gte(CELL_MILESTONES[player.bee.path][2])) player.fl.timers.yellow.current = player.fl.timers.yellow.current.sub(delta)
+
+        player.fl.timers.purple.max = new Decimal(60)
+        player.fl.timers.purple.max = player.fl.timers.purple.max.div(allCooldownDiv)
+        if (hasUpgrade("n", 11)) player.fl.timers.purple.current = player.fl.timers.purple.current.sub(delta)
+
 
         for (let thing in player.fl.timers) {
             if (player.fl.timers[thing].current.lte(0)) {
@@ -269,6 +298,14 @@ addLayer("fl", {
             if (i % 10 == 5) {i = i+6} else {i++}
         }
 
+        player.fl.glossaryEffects.preAleph = new Decimal(1)
+        for (let i = 601; i < 626; ) {
+            if (player.fl.glossary[i].gt(0)) {
+                player.fl.glossaryEffects.preAleph = player.fl.glossaryEffects.preAleph.mul(player.fl.glossary[i].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(50).add(1))
+            }
+            if (i % 10 == 5) {i = i+6} else {i++}
+        }
+
         // GATHERER STUFF
         player.fl.gatherer[1].max = new Decimal(5).div(buyableEffect("fl", 1))
         player.fl.gatherer[1].power = buyableEffect("fl", 2)
@@ -321,7 +358,7 @@ addLayer("fl", {
         let tier = Math.random()
         if (player.al.cocoonLevel >= 11 && player.fl.glossaryRig != 0) {
             let numType = player.fl.glossaryRig.toString()[0]
-            if (numType == '1' && type == "red" || numType == '2' && type == "blue" || numType == '3' && type == "green" || numType == '4' && type == "pink" || numType == '5' && type == "yellow") {
+            if (numType == '1' && type == "red" || numType == '2' && type == "blue" || numType == '3' && type == "green" || numType == '4' && type == "pink" || numType == '5' && type == "yellow" || numType == '6' && type == "purple") {
                 tier = player.fl.glossaryRig.toString()[1]
                 switch (tier) {
                     case '0':
@@ -620,6 +657,63 @@ addLayer("fl", {
                         if (getGridData("fl", val)[0] <= 504) setGridData("fl", val, [504, new Decimal(50)])
                     } else {
                         if (getGridData("fl", val)[0] <= 505) setGridData("fl", val, [505, new Decimal(60)])
+                    }
+                }
+                break;
+            case "purple":
+                // PENTAGONAL PURPLE
+                if (tier < 0.3 && false) {
+                    if (getGridData("fl", val)[0] <= player.fl.glossaryRig && player.fl.glossaryRig > 610 && player.fl.glossaryRig < 620) {
+                        setGridData("fl", val, [player.fl.glossaryRig, new Decimal(rigBase*100)])
+                        break;
+                    }
+                    let rng = Math.random()
+                    if (rng < 0.4 || buyableEffect("bee", 64).eq(1)) {
+                        if (getGridData("fl", val)[0] <= 611) setGridData("fl", val, [611, new Decimal(200)])
+                    } else if (rng < 0.7 || buyableEffect("bee", 64).eq(2)) {
+                        if (getGridData("fl", val)[0] <= 612) setGridData("fl", val, [612, new Decimal(300)])
+                    } else if (rng < 0.85 || buyableEffect("bee", 64).eq(3)) {
+                        if (getGridData("fl", val)[0] <= 613) setGridData("fl", val, [613, new Decimal(400)])
+                    } else if (rng < 0.95 || buyableEffect("bee", 64).eq(4)) {
+                        if (getGridData("fl", val)[0] <= 614) setGridData("fl", val, [614, new Decimal(500)])
+                    } else {
+                        if (getGridData("fl", val)[0] <= 615) setGridData("fl", val, [615, new Decimal(600)])
+                    }
+                // CUBIC PURPLE
+                } else if (tier < 0.4 && false) {
+                    if (getGridData("fl", val)[0] <= player.fl.glossaryRig && player.fl.glossaryRig > 620 && player.fl.glossaryRig < 630) {
+                        setGridData("fl", val, [player.fl.glossaryRig, new Decimal(rigBase*1000)])
+                        break;
+                    }
+                    let rng = Math.random()
+                    if (rng < 0.4 || buyableEffect("al", 203).eq(1)) {
+                        if (getGridData("fl", val)[0] <= 621) setGridData("fl", val, [621, new Decimal(2000)])
+                    } else if (rng < 0.7 || buyableEffect("al", 203).eq(2)) {
+                        if (getGridData("fl", val)[0] <= 622) setGridData("fl", val, [622, new Decimal(3000)])
+                    } else if (rng < 0.85 || buyableEffect("al", 203).eq(3)) {
+                        if (getGridData("fl", val)[0] <= 623) setGridData("fl", val, [623, new Decimal(4000)])
+                    } else if (rng < 0.95 || buyableEffect("al", 203).eq(4)) {
+                        if (getGridData("fl", val)[0] <= 624) setGridData("fl", val, [624, new Decimal(5000)])
+                    } else {
+                        if (getGridData("fl", val)[0] <= 625) setGridData("fl", val, [625, new Decimal(6000)])
+                    }
+                // REGULAR PURPLE
+                } else {
+                    if (getGridData("fl", val)[0] <= player.fl.glossaryRig && player.fl.glossaryRig > 600 && player.fl.glossaryRig < 610) {
+                        setGridData("fl", val, [player.fl.glossaryRig, new Decimal(rigBase*5)])
+                        break;
+                    }
+                    let rng = Math.random()
+                    if (rng < 0.4) {
+                        if (getGridData("fl", val)[0] <= 601) setGridData("fl", val, [601, new Decimal(10)])
+                    } else if (rng < 0.7) {
+                        if (getGridData("fl", val)[0] <= 602) setGridData("fl", val, [602, new Decimal(15)])
+                    } else if (rng < 0.85) {
+                        if (getGridData("fl", val)[0] <= 603) setGridData("fl", val, [603, new Decimal(20)])
+                    } else if (rng < 0.95) {
+                        if (getGridData("fl", val)[0] <= 604) setGridData("fl", val, [604, new Decimal(25)])
+                    } else {
+                        if (getGridData("fl", val)[0] <= 605) setGridData("fl", val, [605, new Decimal(30)])
                     }
                 }
                 break;
@@ -1788,6 +1882,235 @@ addLayer("fl", {
             onHover() {player.fl.glossaryIndex=525},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=525},
         },
+
+
+        601: {
+            name: "Circular 2-Petalled Purple Flower",
+            getTitle() {return "x" + formatShort(player.fl.glossary[601].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(50).add(1)) + " Pre-Aleph Resources"},
+            svg: `
+                <ellipse id="petal2" transform="translate(24, 16)" rx="16" ry="14" cx="16" cy="14" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal1" transform="translate(4, 16)" rx="16" ry="14" cx="16" cy="14" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal0" transform="translate(20, 20)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+            `,
+            display() {return hasUpgrade("n", 11)},
+            onHover() {player.fl.glossaryIndex=601},
+            onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=601},
+        },
+        602: {
+            name: "Circular 3-Petalled Purple Flower",
+            getTitle() {return "x" + formatShort(player.fl.glossary[602].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(50).add(1)) + " Pre-Aleph Resources"},
+            svg: `
+                <ellipse id="petal3" transform="translate(17.5, 6.5)" rx="12.5" cx="12.5" ry="12.5" cy="12.5" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal2" transform="translate(29.5, 28.5)" rx="12.5" cx="12.5" ry="12.5" cy="12.5" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal1" transform="translate(5.5, 28.5)" rx="12.5" cx="12.5" ry="12.5" cy="12.5" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal0" transform="translate(20, 24)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+            `,
+            display() {return hasUpgrade("n", 11)},
+            onHover() {player.fl.glossaryIndex=602},
+            onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=602},
+        },
+        603: {
+            name: "Circular 4-Petalled Purple Flower",
+            getTitle() {return "x" + formatShort(player.fl.glossary[603].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(50).add(1)) + " Pre-Aleph Resources"},
+            svg: `
+                <ellipse id="petal4" transform="translate(20, 6)" rx="10" cx="10" ry="10" cy="10" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal3" transform="translate(34, 20)" rx="10" cx="10" ry="10" cy="10" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal2" transform="translate(20, 34)" rx="10" cx="10" ry="10" cy="10" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal1" transform="translate(6, 20)" rx="10" cx="10" ry="10" cy="10" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal0" transform="translate(20, 20)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+            `,
+            display() {return hasUpgrade("n", 11)},
+            onHover() {player.fl.glossaryIndex=603},
+            onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=603},
+        },
+        604: {
+            name: "Circular 5-Petalled Purple Flower",
+            getTitle() {return "x" + formatShort(player.fl.glossary[604].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(50).add(1)) + " Pre-Aleph Resources"},
+            svg: `
+                <ellipse id="petal5" transform="translate(22.5, 9.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal4" transform="translate(34.5, 18.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal3" transform="translate(30.5, 32.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal2" transform="translate(15.5, 32.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal1" transform="translate(10.5, 18.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal0" transform="translate(20, 20)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+            `,
+            display() {return hasUpgrade("n", 11)},
+            onHover() {player.fl.glossaryIndex=604},
+            onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=604},
+        },
+        605: {
+            name: "Circular 6-Petalled Purple Flower",
+            getTitle() {return "x" + formatShort(player.fl.glossary[605].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(50).add(1)) + " Pre-Aleph Resources"},
+            svg: `
+                <ellipse id="petal6" transform="translate(24, 12)" rx="6" cx="6" ry="6" cy="6" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal5" transform="translate(34, 18)" rx="6" cx="6" ry="6" cy="6" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal4" transform="translate(34, 30)" rx="6" cx="6" ry="6" cy="6" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal3" transform="translate(24, 36)" rx="6" cx="6" ry="6" cy="6" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal2" transform="translate(14, 30)" rx="6" cx="6" ry="6" cy="6" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal1" transform="translate(14, 18)" rx="6" cx="6" ry="6" cy="6" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal0" transform="translate(20, 20)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+            `,
+            display() {return hasUpgrade("n", 11)},
+            onHover() {player.fl.glossaryIndex=605},
+            onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=605},
+        },
+
+        611: {
+            name: "Pentagonal 2-Petalled Purple Flower",
+            getTitle() {return "x" + formatShort(player.fl.glossary[611].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(50).add(1)) + " Pre-Aleph Resources"},
+            svg: `
+                <ellipse id="petal2" transform="translate(24, 16)" rx="16" ry="14" cx="16" cy="14" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal1" transform="translate(4, 16)" rx="16" ry="14" cx="16" cy="14" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+            `,
+            display() {return false},
+            onHover() {player.fl.glossaryIndex=611},
+            onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=611},
+        },
+        612: {
+            name: "Pentagonal 3-Petalled Purple Flower",
+            getTitle() {return "x" + formatShort(player.fl.glossary[612].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(50).add(1)) + " Pre-Aleph Resources"},
+            svg: `
+                <ellipse id="petal3" transform="translate(17.5, 6.5)" rx="12.5" cx="12.5" ry="12.5" cy="12.5" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal2" transform="translate(29.5, 28.5)" rx="12.5" cx="12.5" ry="12.5" cy="12.5" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal1" transform="translate(5.5, 28.5)" rx="12.5" cx="12.5" ry="12.5" cy="12.5" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <polygon id="petal0" transform="translate(20, 24)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+            `,
+            display() {return false},
+            onHover() {player.fl.glossaryIndex=612},
+            onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=612},
+        },
+        613: {
+            name: "Pentagonal 4-Petalled Purple Flower",
+            getTitle() {return "x" + formatShort(player.fl.glossary[613].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(50).add(1)) + " Pre-Aleph Resources"},
+            svg: `
+                <ellipse id="petal4" transform="translate(20, 6)" rx="10" cx="10" ry="10" cy="10" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal3" transform="translate(34, 20)" rx="10" cx="10" ry="10" cy="10" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal2" transform="translate(20, 34)" rx="10" cx="10" ry="10" cy="10" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal1" transform="translate(6, 20)" rx="10" cx="10" ry="10" cy="10" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+            `,
+            display() {return false},
+            onHover() {player.fl.glossaryIndex=613},
+            onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=613},
+        },
+        614: {
+            name: "Pentagonal 5-Petalled Purple Flower",
+            getTitle() {return "x" + formatShort(player.fl.glossary[614].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(50).add(1)) + " Pre-Aleph Resources"},
+            svg: `
+                <ellipse id="petal5" transform="translate(22.5, 9.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal4" transform="translate(34.5, 18.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal3" transform="translate(30.5, 32.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal2" transform="translate(15.5, 32.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal1" transform="translate(10.5, 18.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+            `,
+            display() {return false},
+            onHover() {player.fl.glossaryIndex=614},
+            onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=614},
+        },
+        615: {
+            name: "Pentagonal 6-Petalled Purple Flower",
+            getTitle() {return "x" + formatShort(player.fl.glossary[615].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(50).add(1)) + " Pre-Aleph Resources"},
+            svg: `
+                <ellipse id="petal6" transform="translate(24, 12)" rx="6" cx="6" ry="6" cy="6" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal5" transform="translate(34, 18)" rx="6" cx="6" ry="6" cy="6" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal4" transform="translate(34, 30)" rx="6" cx="6" ry="6" cy="6" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal3" transform="translate(24, 36)" rx="6" cx="6" ry="6" cy="6" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal2" transform="translate(14, 30)" rx="6" cx="6" ry="6" cy="6" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal1" transform="translate(14, 18)" rx="6" cx="6" ry="6" cy="6" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+            `,
+            display() {return false},
+            onHover() {player.fl.glossaryIndex=615},
+            onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=615},
+        },
+
+        621: {
+            name: "Cubic 2-Petalled Purple Flower",
+            getTitle() {return "x" + formatShort(player.fl.glossary[621].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(50).add(1)) + " Pre-Aleph Resources"},
+            svg: `
+                <ellipse id="petal2" transform="translate(24, 16)" rx="16" ry="14" cx="16" cy="14" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal1" transform="translate(4, 16)" rx="16" ry="14" cx="16" cy="14" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <polygon id="petal0" transform="translate(20, 19)" points="10 0, 0 6, 0 16, 10 22, 20 16, 20 6" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <line transform="translate(20, 19)" x1="10" y1="12" x2="10" y2="22" stroke="#000000" stroke-width="2.4"/>
+                <line transform="translate(20, 19)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
+                <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
+            `,
+            display() {return false},
+            onHover() {player.fl.glossaryIndex=621},
+            onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=621},
+        },
+        622: {
+            name: "Cubic 3-Petalled Purple Flower",
+            getTitle() {return "x" + formatShort(player.fl.glossary[622].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(50).add(1)) + " Pre-Aleph Resources"},
+            svg: `
+                <ellipse id="petal3" transform="translate(17.5, 6.5)" rx="12.5" cx="12.5" ry="12.5" cy="12.5" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal2" transform="translate(29.5, 28.5)" rx="12.5" cx="12.5" ry="12.5" cy="12.5" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal1" transform="translate(5.5, 28.5)" rx="12.5" cx="12.5" ry="12.5" cy="12.5" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <polygon id="petal0" transform="translate(20, 23)" points="10 0, 0 6, 0 16, 10 22, 20 16, 20 6" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <line transform="translate(20, 23)" x1="10" y1="12" x2="10" y2="22" stroke="#000000" stroke-width="2.4"/>
+                <line transform="translate(20, 23)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
+                <line transform="translate(20, 23)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
+            `,
+            display() {return false},
+            onHover() {player.fl.glossaryIndex=622},
+            onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=622},
+        },
+        623: {
+            name: "Cubic 4-Petalled Purple Flower",
+            getTitle() {return "x" + formatShort(player.fl.glossary[623].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(50).add(1)) + " Pre-Aleph Resources"},
+            svg: `
+                <ellipse id="petal4" transform="translate(20, 6)" rx="10" cx="10" ry="10" cy="10" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal3" transform="translate(34, 20)" rx="10" cx="10" ry="10" cy="10" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal2" transform="translate(20, 34)" rx="10" cx="10" ry="10" cy="10" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal1" transform="translate(6, 20)" rx="10" cx="10" ry="10" cy="10" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <polygon id="petal0" transform="translate(20, 19)" points="10 0, 0 6, 0 16, 10 22, 20 16, 20 6" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <line transform="translate(20, 19)" x1="10" y1="12" x2="10" y2="22" stroke="#000000" stroke-width="2.4"/>
+                <line transform="translate(20, 19)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
+                <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
+            `,
+            display() {return false},
+            onHover() {player.fl.glossaryIndex=623},
+            onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=623},
+        },
+        624: {
+            name: "Cubic 5-Petalled Purple Flower",
+            getTitle() {return "x" + formatShort(player.fl.glossary[624].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(50).add(1)) + " Pre-Aleph Resources"},
+            svg: `
+                <ellipse id="petal5" transform="translate(22.5, 9.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal4" transform="translate(34.5, 18.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal3" transform="translate(30.5, 32.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal2" transform="translate(15.5, 32.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal1" transform="translate(10.5, 18.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <polygon id="petal0" transform="translate(20, 19)" points="10 0, 0 6, 0 16, 10 22, 20 16, 20 6" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <line transform="translate(20, 19)" x1="10" y1="12" x2="10" y2="22" stroke="#000000" stroke-width="2.4"/>
+                <line transform="translate(20, 19)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
+                <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
+            `,
+            display() {return false},
+            onHover() {player.fl.glossaryIndex=624},
+            onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=624},
+        },
+        625: {
+            name: "Cubic 6-Petalled Purple Flower",
+            getTitle() {return "x" + formatShort(player.fl.glossary[625].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(50).add(1)) + " Pre-Aleph Resources"},
+            svg: `
+                <ellipse id="petal6" transform="translate(24, 12)" rx="6" cx="6" ry="6" cy="6" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal5" transform="translate(34, 18)" rx="6" cx="6" ry="6" cy="6" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal4" transform="translate(34, 30)" rx="6" cx="6" ry="6" cy="6" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal3" transform="translate(24, 36)" rx="6" cx="6" ry="6" cy="6" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal2" transform="translate(14, 30)" rx="6" cx="6" ry="6" cy="6" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <ellipse id="petal1" transform="translate(14, 18)" rx="6" cx="6" ry="6" cy="6" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <polygon id="petal0" transform="translate(20, 19)" points="10 0, 0 6, 0 16, 10 22, 20 16, 20 6" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+                <line transform="translate(20, 19)" x1="10" y1="12" x2="10" y2="22" stroke="#000000" stroke-width="2.4"/>
+                <line transform="translate(20, 19)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
+                <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
+            `,
+            display() {return false},
+            onHover() {player.fl.glossaryIndex=625},
+            onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=625},
+        },
     },
     grid: {
         rows: 5,
@@ -1806,22 +2129,25 @@ addLayer("fl", {
                     case 20: case 30:
                         num = num.div(3).ceil()
                         break;
-                    case 21: case 31:
-                        num = num.div(15).ceil()
+                    case 60:
+                        num = num.div(5).ceil()
                         break;
                     case 40: case 50:
                         num = num.div(10).ceil()
                         break;
+                    case 21: case 31:
+                        num = num.div(15).ceil()
+                        break;
                     case 41: case 51:
                         num = num.div(50).ceil()
                         break;
-                    case 12:
+                    case 12: case 61:
                         num = num.div(100).ceil()
                         break;
                     case 22: case 32:
                         num = num.div(300).ceil()
                         break;
-                    case 42: case 52:
+                    case 42: case 52: case 62:
                         num = num.div(1000).ceil()
                         break;
                     default:
@@ -1954,6 +2280,21 @@ addLayer("fl", {
                 return look
             }
         },
+        6: {
+            canClick: true,
+            unlocked() {return hasUpgrade("n", 11)},
+            onClick() {
+                player.fl.timers.purple.current = player.fl.timers.purple.current.sub(0.1)
+            },
+            onHold() {
+                player.fl.timers.purple.current = player.fl.timers.purple.current.sub(0.05)
+            },
+            style() {
+                let look = {width: "10px", minHeight: "480px", height: "480px", border: "0", borderRadius: "0", padding: "0", marginTop: "4px", transform: "scale(1)", boxShadow: "0 0 black"}
+                look.background = `linear-gradient(to top, #752653 ${format(player.fl.timers.purple.current.div(player.fl.timers.purple.max).mul(100).min(100))}%, black ${format(player.fl.timers.purple.current.div(player.fl.timers.purple.max).mul(100).add(0.25).min(100))}%)`
+                return look
+            }
+        },
     },
     buyables: {
         1: {
@@ -1985,7 +2326,7 @@ addLayer("fl", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: {width: '175px', height: '150px', color: "white", background: "#441b05", border: "5px solid #220d02", borderColor: "#220d02", boxSizing: "border-box"}
+            style: {width: '185px', height: '150px', color: "white", background: "#441b05", border: "5px solid #220d02", borderColor: "#220d02", boxSizing: "border-box"}
         },
         2: {
             costBase() { return new Decimal(1e10) },
@@ -2016,7 +2357,7 @@ addLayer("fl", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: {width: '175px', height: '150px', color: "white", background: "#441b05", border: "5px solid #220d02", borderColor: "#220d02", boxSizing: "border-box"}
+            style: {width: '185px', height: '150px', color: "white", background: "#441b05", border: "5px solid #220d02", borderColor: "#220d02", boxSizing: "border-box"}
         },
         3: {
             costBase() { return new Decimal(1e50) },
@@ -2047,7 +2388,7 @@ addLayer("fl", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: {width: '175px', height: '150px', color: "white", background: "#441b05", border: "5px solid #220d02", borderColor: "#220d02", boxSizing: "border-box"}
+            style: {width: '185px', height: '150px', color: "white", background: "#441b05", border: "5px solid #220d02", borderColor: "#220d02", boxSizing: "border-box"}
         },
         4: {
             costBase() { return new Decimal(10) },
@@ -2078,7 +2419,7 @@ addLayer("fl", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: {width: '175px', height: '140px', color: "white", background: "#445b05", border: "5px solid #222d02", borderColor: "#222d02", boxSizing: "border-box"}
+            style: {width: '185px', height: '140px', color: "white", background: "#445b05", border: "5px solid #222d02", borderColor: "#222d02", boxSizing: "border-box"}
         },
         5: {
             costBase() { return new Decimal(10) },
@@ -2109,7 +2450,7 @@ addLayer("fl", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: {width: '175px', height: '140px', color: "white", background: "#445b05", border: "5px solid #222d02", borderColor: "#222d02", boxSizing: "border-box"}
+            style: {width: '185px', height: '140px', color: "white", background: "#445b05", border: "5px solid #222d02", borderColor: "#222d02", boxSizing: "border-box"}
         },
         6: {
             costBase() { return new Decimal(1e300) },
@@ -2140,7 +2481,7 @@ addLayer("fl", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: {width: '175px', height: '140px', color: "white", background: "#445b05", border: "5px solid #222d02", borderColor: "#222d02", boxSizing: "border-box"}
+            style: {width: '185px', height: '140px', color: "white", background: "#445b05", border: "5px solid #222d02", borderColor: "#222d02", boxSizing: "border-box"}
         },
     },
     microtabs: {
@@ -2157,34 +2498,46 @@ addLayer("fl", {
                             ["clickable", 3],
                             ["clickable", 4],
                             ["clickable", 5],
-                        ], {width: "50px", height: "480px", backgroundColor: "black", borderLeft: "5px solid #3e3117"}],
-                    ], {width: "535px", height: "480px", backgroundColor: "#3e3117", border: "5px solid #3e3117"}],
+                            ["clickable", 6],
+                        ], {width: "80px", height: "480px", backgroundColor: "black", borderLeft: "5px solid #3e3117"}],
+                    ], {width: "565px", height: "480px", backgroundColor: "#3e3117", border: "5px solid #3e3117"}],
                 ],
             },
             "Glossary": {
                 content: [
                     ["top-column", [
                         "glossary-display",
-                        ["left-row", [
-                            ["category-button", [() => {return "Red<br><small>x" + formatShort(player.fl.glossaryEffects.bee) + "</small>"}, "Glossary", "Red"], {width: "103px", height: "40px", background: "#1a0402"}],
-                            ["style-row", [], {width: "5px", height: "40px", backgroundColor: "#3e3117"}],
-                            ["category-button", [() => {return "Blue<br><small>x" + formatShort(player.fl.glossaryEffects.pollen) + "</small>"}, "Glossary", "Blue", () => {return !hasUpgrade("bpl", 14) && !tmp.bb.layerShown}], {width: "103px", height: "40px", background: "#131e1d"}],
-                            ["style-row", [], {width: "5px", height: "40px", backgroundColor: "#3e3117"}],
-                            ["category-button", [() => {return "Green<br><small>x" + formatShort(player.fl.glossaryEffects.nectar) + "</small>"}, "Glossary", "Green", () => {return !hasUpgrade("ne", 201) && !tmp.ho.layerShown}], {width: "103px", height: "40px", background: "#141d11"}],
-                            ["style-row", [], {width: "5px", height: "40px", backgroundColor: "#3e3117"}],
-                            ["category-button", [() => {return "Pink<br><small>x" + formatShort(player.fl.glossaryEffects.beeBread) + "</small>"}, "Glossary", "Pink", () => {return buyableEffect("bee", 53).eq(0)}], {width: "103px", height: "40px", background: "#252122"}],
-                            ["style-row", [], {width: "5px", height: "40px", backgroundColor: "#3e3117"}],
-                            ["category-button", [() => {return "Yellow<br><small>x" + formatShort(player.fl.glossaryEffects.honey) + "</small>"}, "Glossary", "Yellow", () => {return player.ho.cell.lt(CELL_MILESTONES[player.bee.path][2])}], {width: "103px", height: "40px", background: "#252107"}],
-                        ], {width: "535px", height: "40px", background: "#181818", borderBottom: "5px solid #3e3117"}],
-                        ["buttonless-microtabs", "Glossary", {borderWidth: "0"}],
+                        ["row", [
+                            ["top-column", [
+                                ["style-row", [
+                                    ["category-button", [() => {return "Red<br><small>x" + formatShort(player.fl.glossaryEffects.bee) + "</small>"}, "Glossary", "Red"], {width: "100px", height: "40px", background: "#1a0402"}],
+                                ], {width: "100px", borderBottom: "5px solid #3e3117"}],
+                                ["style-row", [
+                                    ["category-button", [() => {return "Blue<br><small>x" + formatShort(player.fl.glossaryEffects.pollen) + "</small>"}, "Glossary", "Blue", () => {return !hasUpgrade("bpl", 14)}], {width: "100px", height: "40px", background: "#131e1d"}],
+                                ], () => {return hasUpgrade("bpl", 14) ? {width: "100px", borderBottom: "5px solid #3e3117"} : {display: "none !important"}}],
+                                ["style-row", [
+                                    ["category-button", [() => {return "Green<br><small>x" + formatShort(player.fl.glossaryEffects.nectar) + "</small>"}, "Glossary", "Green", () => {return !hasUpgrade("ne", 201)}], {width: "100px", height: "40px", background: "#141d11"}],
+                                ], () => {return hasUpgrade("ne", 201) ? {width: "100px", borderBottom: "5px solid #3e3117"} : {display: "none !important"}}],
+                                ["style-row", [
+                                    ["category-button", [() => {return "Pink<br><small>x" + formatShort(player.fl.glossaryEffects.beeBread) + "</small>"}, "Glossary", "Pink", () => {return buyableEffect("bee", 53).eq(0)}], {width: "100px", height: "40px", background: "#252122"}],
+                                ], () => {return buyableEffect("bee", 53).gt(0) ? {width: "100px", borderBottom: "5px solid #3e3117"} : {display: "none !important"}}],
+                                ["style-row", [
+                                    ["category-button", [() => {return "Yellow<br><small>x" + formatShort(player.fl.glossaryEffects.honey) + "</small>"}, "Glossary", "Yellow", () => {return player.ho.cell.lt(CELL_MILESTONES[player.bee.path][2])}], {width: "100px", height: "40px", background: "#252107"}],
+                                ], () => {return player.ho.cell.gte(CELL_MILESTONES[player.bee.path][2]) ? {width: "100px", borderBottom: "5px solid #3e3117"} : {display: "none !important"}}],
+                                ["style-row", [
+                                    ["category-button", [() => {return "Purple<br><small>x" + formatShort(player.fl.glossaryEffects.preAleph) + "</small>"}, "Glossary", "Purple", () => {return !hasUpgrade("n", 11)}], {width: "100px", height: "40px", background: "#11050c"}],
+                                ], () => {return hasUpgrade("n", 11) ? {width: "100px", borderBottom: "5px solid #3e3117"} : {display: "none !important"}}],
+                            ], {width: "100px", height: "345px", background: "#1f180b", borderRight: "5px solid #3e3117"}],
+                            ["buttonless-microtabs", "Glossary", {borderWidth: "0"}],
+                        ]],
                         ["style-row", [
-                            ["raw-html", "<button class='shopButton' style='width:65px;height:65px;background:#251d0d;font-size:12px' onclick='player.fl.glossaryRig=0'>Disable<br>Rigging</button>"],
+                            ["raw-html", "<button class='shopButton' style='width:65px;height:65px;background:#251d0d;font-size:12px' onclick='player.fl.glossaryRig=0'>Disable<br>Rigging</button>", () => {player.al.cocoonLevel >= 3 ? {} : {display: "none !important"}}],
                             ["style-column", [
                                 ["raw-html", () => {return "Currently rigging: " + layers.fl.glossary[player.fl.glossaryRig].name}, {color: "#ccc", fontSize: "14px", fontFamily: "monospace"}],
                                 ["raw-html", () => {return player.al.cocoonLevel >= 11 ? "(Rigged flowers are guaranteed to be rolled)" : "(Rigged flowers are guaranteed to be rolled if its tier is picked)"}, {color: "#ccc", fontSize: "12px", fontFamily: "monospace"}],
-                            ], {width: "465px", height: "65px", borderLeft: "5px solid #3e3117"}],
-                        ], () => {return player.al.cocoonLevel >= 3 ? {width: "535px", height: "65px", background: "#251d0d", borderTop: "5px solid #3e3117"} : {display: "none !important"}}],
-                    ], {width: "535px", height: "480px", backgroundColor: "#312712", border: "5px solid #3e3117"}],
+                            ], () => {return player.al.cocoonLevel >= 3 ? {width: "495px", height: "65px", borderLeft: "5px solid #3e3117"} : {display: "none !important"}}],
+                        ], {width: "565px", height: "65px", background: "#251d0d", borderTop: "5px solid #3e3117"}],
+                    ], {width: "565px", height: "480px", backgroundColor: "#312712", border: "5px solid #3e3117"}],
                 ]
             },
             "Gatherer": {
@@ -2193,67 +2546,67 @@ addLayer("fl", {
                         ["style-column", [
                             ["style-column", [
                                 ["raw-html", "Gatherer Mk.1", {color: "#ccc", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "535px", height: "32px", background: "#291003", borderBottom: "5px solid #3e3117"}],
+                            ], {width: "565px", height: "32px", background: "#291003", borderBottom: "5px solid #3e3117"}],
                             ["row", [
                                 ["style-column", [
                                     ["style-column", [
                                         ["raw-html", "Sweep Time", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
                                         ["style-row", [], {width: "150px", height: "1px", background: "#ccc", margin: "2px"}],
                                         ["raw-html", () => {return formatTime(player.fl.gatherer[1].max)}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "175px", height: "45px", borderBottom: "5px solid #3e3117"}],
+                                    ], {width: "185px", height: "45px", borderBottom: "5px solid #3e3117"}],
                                     ["ex-buyable", 1],
-                                ], {width: "175px", height: "200px", borderRight: "5px solid #3e3117"}],
+                                ], {width: "185px", height: "200px", borderRight: "5px solid #3e3117"}],
                                 ["style-column", [
                                     ["style-column", [
                                         ["raw-html", "Picking Power", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
                                         ["style-row", [], {width: "150px", height: "1px", background: "#ccc", margin: "2px"}],
                                         ["raw-html", () => {return formatSimple(player.fl.gatherer[1].power)}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "175px", height: "45px", borderBottom: "5px solid #3e3117"}],
+                                    ], {width: "185px", height: "45px", borderBottom: "5px solid #3e3117"}],
                                     ["ex-buyable", 2],
-                                ], {width: "175px", height: "200px", borderRight: "5px solid #3e3117"}],
+                                ], {width: "185px", height: "200px", borderRight: "5px solid #3e3117"}],
                                 ["style-column", [
                                     ["style-column", [
                                         ["raw-html", "Multiplier", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
                                         ["style-row", [], {width: "150px", height: "1px", background: "#ccc", margin: "2px"}],
                                         ["raw-html", () => {return "x" + formatSimple(player.fl.gatherer[1].mult)}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "175px", height: "45px", borderBottom: "5px solid #3e3117"}],
+                                    ], {width: "185px", height: "45px", borderBottom: "5px solid #3e3117"}],
                                     ["ex-buyable", 3],
-                                ], {width: "175px", height: "200px"}],
+                                ], {width: "185px", height: "200px"}],
                             ]],
-                        ], {width: "535px", height: "237px", background: "#1b0b02", borderBottom: "5px solid #3e3117"}],
+                        ], {width: "565px", height: "237px", background: "#1b0b02", borderBottom: "5px solid #3e3117"}],
                         ["style-row", [
                             ["style-column", [
                                 ["raw-html", "Gatherer Mk.2", {color: "#ccc", fontSize: "20px", fontFamily: "monospace"}],
                                 ["raw-html", "(Kept on Aleph resets)", {color: "#ccc", fontSize: "14px", fontFamily: "monospace"}],
-                            ], {width: "535px", height: "43px", background: "#1b2402", borderBottom: "5px solid #3e3117"}],
+                            ], {width: "565px", height: "43px", background: "#1b2402", borderBottom: "5px solid #3e3117"}],
                             ["row", [
                                 ["style-column", [
                                     ["style-column", [
                                         ["raw-html", "Sweep Time", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
                                         ["style-row", [], {width: "150px", height: "1px", background: "#ccc", margin: "2px"}],
                                         ["raw-html", () => {return formatTime(player.fl.gatherer[2].max)}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "175px", height: "45px", borderBottom: "5px solid #3e3117"}],
+                                    ], {width: "185px", height: "45px", borderBottom: "5px solid #3e3117"}],
                                     ["ex-buyable", 4],
-                                ], {width: "175px", height: "190px", borderRight: "5px solid #3e3117"}],
+                                ], {width: "185px", height: "190px", borderRight: "5px solid #3e3117"}],
                                 ["style-column", [
                                     ["style-column", [
                                         ["raw-html", "Picking Power", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
                                         ["style-row", [], {width: "150px", height: "1px", background: "#ccc", margin: "2px"}],
                                         ["raw-html", () => {return formatSimple(player.fl.gatherer[2].power)}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "175px", height: "45px", borderBottom: "5px solid #3e3117"}],
+                                    ], {width: "185px", height: "45px", borderBottom: "5px solid #3e3117"}],
                                     ["ex-buyable", 5],
-                                ], {width: "175px", height: "190px", borderRight: "5px solid #3e3117"}],
+                                ], {width: "185px", height: "190px", borderRight: "5px solid #3e3117"}],
                                 ["style-column", [
                                     ["style-column", [
                                         ["raw-html", "Multiplier", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
                                         ["style-row", [], {width: "150px", height: "1px", background: "#ccc", margin: "2px"}],
                                         ["raw-html", () => {return "x" + formatSimple(player.fl.gatherer[2].mult)}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "175px", height: "45px", borderBottom: "5px solid #3e3117"}],
+                                    ], {width: "185px", height: "45px", borderBottom: "5px solid #3e3117"}],
                                     ["ex-buyable", 6],
-                                ], {width: "175px", height: "190px"}],
+                                ], {width: "185px", height: "190px"}],
                             ]],
-                        ], () => {return tmp.al.layerShown ? {width: "535px", height: "238px", background: "#0d1201"} : {display: "none !important"}}],
-                    ], {width: "535px", height: "480px", backgroundColor: "#161616", border: "5px solid #3e3117"}],
+                        ], () => {return tmp.al.layerShown ? {width: "565px", height: "238px", background: "#0d1201"} : {display: "none !important"}}],
+                    ], {width: "565px", height: "480px", backgroundColor: "#161616", border: "5px solid #3e3117"}],
                 ],
             },
         },
@@ -2264,7 +2617,7 @@ addLayer("fl", {
                         ["left-row", [["glossary", 101], ["glossary", 102], ["glossary", 103], ["glossary", 104], ["glossary", 105]], {width: "500px"}],
                         ["left-row", [["glossary", 111], ["glossary", 112], ["glossary", 113], ["glossary", 114], ["glossary", 115]], {width: "500px"}],
                         ["left-row", [["glossary", 121], ["glossary", 122], ["glossary", 123], ["glossary", 124], ["glossary", 125]], {width: "500px"}],
-                    ], {width: "535px", height: "300px"}],
+                    ], {width: "460px", height: "345px"}],
                 ],
             },
             "Blue": {
@@ -2273,7 +2626,7 @@ addLayer("fl", {
                         ["left-row", [["glossary", 201], ["glossary", 202], ["glossary", 203], ["glossary", 204], ["glossary", 205]], {width: "500px"}],
                         ["left-row", [["glossary", 211], ["glossary", 212], ["glossary", 213], ["glossary", 214], ["glossary", 215]], {width: "500px"}],
                         ["left-row", [["glossary", 221], ["glossary", 222], ["glossary", 223], ["glossary", 224], ["glossary", 225]], {width: "500px"}],
-                    ], {width: "535px", height: "300px"}],
+                    ], {width: "460px", height: "345px"}],
                 ]
             },
             "Green": {
@@ -2282,7 +2635,7 @@ addLayer("fl", {
                         ["left-row", [["glossary", 301], ["glossary", 302], ["glossary", 303], ["glossary", 304], ["glossary", 305]], {width: "500px"}],
                         ["left-row", [["glossary", 311], ["glossary", 312], ["glossary", 313], ["glossary", 314], ["glossary", 315]], {width: "500px"}],
                         ["left-row", [["glossary", 321], ["glossary", 322], ["glossary", 323], ["glossary", 324], ["glossary", 325]], {width: "500px"}],
-                    ], {width: "535px", height: "300px"}],
+                    ], {width: "460px", height: "345px"}],
                 ]
             },
             "Pink": {
@@ -2291,7 +2644,7 @@ addLayer("fl", {
                         ["left-row", [["glossary", 401], ["glossary", 402], ["glossary", 403], ["glossary", 404], ["glossary", 405]], {width: "500px"}],
                         ["left-row", [["glossary", 411], ["glossary", 412], ["glossary", 413], ["glossary", 414], ["glossary", 415]], {width: "500px"}],
                         ["left-row", [["glossary", 421], ["glossary", 422], ["glossary", 423], ["glossary", 424], ["glossary", 425]], {width: "500px"}],
-                    ], {width: "535px", height: "300px"}],
+                    ], {width: "460px", height: "345px"}],
                 ]
             },
             "Yellow": {
@@ -2300,7 +2653,16 @@ addLayer("fl", {
                         ["left-row", [["glossary", 501], ["glossary", 502], ["glossary", 503], ["glossary", 504], ["glossary", 505]], {width: "500px"}],
                         ["left-row", [["glossary", 511], ["glossary", 512], ["glossary", 513], ["glossary", 514], ["glossary", 515]], {width: "500px"}],
                         ["left-row", [["glossary", 521], ["glossary", 522], ["glossary", 523], ["glossary", 524], ["glossary", 525]], {width: "500px"}],
-                    ], {width: "535px", height: "300px"}],
+                    ], {width: "460px", height: "345px"}],
+                ]
+            },
+            "Purple": {
+                content: [
+                    ["top-column", [
+                        ["left-row", [["glossary", 601], ["glossary", 602], ["glossary", 603], ["glossary", 604], ["glossary", 605]], {width: "500px"}],
+                        ["left-row", [["glossary", 611], ["glossary", 612], ["glossary", 613], ["glossary", 614], ["glossary", 615]], {width: "500px"}],
+                        ["left-row", [["glossary", 621], ["glossary", 622], ["glossary", 623], ["glossary", 624], ["glossary", 625]], {width: "500px"}],
+                    ], {width: "460px", height: "345px"}],
                 ]
             },
         },
@@ -2313,42 +2675,42 @@ addLayer("fl", {
         ["blank", "10px"],
         ["style-row", [
             ["raw-html", () => {
-                if (player.subtabs.fl.Tabs == "Garden") return "<button class='shopButton selected' style='width:175px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Garden`'>Garden</button>"
-                return "<button class='shopButton' style='width:175px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Garden`'>Garden</button>"
+                if (player.subtabs.fl.Tabs == "Garden") return "<button class='shopButton selected' style='width:185px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Garden`'>Garden</button>"
+                return "<button class='shopButton' style='width:185px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Garden`'>Garden</button>"
             }],
             ["style-row", [], {width: "5px", height: "40px", backgroundColor: "#3e3117"}],
             ["raw-html", () => {
-                if (player.subtabs.fl.Tabs == "Glossary") return "<button class='shopButton selected' style='width:175px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Glossary`'>Glossary</button>"
-                return "<button class='shopButton' style='width:175px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Glossary`'>Glossary</button>"
+                if (player.subtabs.fl.Tabs == "Glossary") return "<button class='shopButton selected' style='width:185px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Glossary`'>Glossary</button>"
+                return "<button class='shopButton' style='width:185px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Glossary`'>Glossary</button>"
             }],
             ["style-row", [], {width: "5px", height: "40px", backgroundColor: "#3e3117"}],
             ["raw-html", () => {
-                if (player.subtabs.fl.Tabs == "Gatherer") return "<button class='shopButton selected' style='width:175px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Gatherer`'>Gatherer</button>"
-                return "<button class='shopButton' style='width:175px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Gatherer`'>Gatherer</button>"
+                if (player.subtabs.fl.Tabs == "Gatherer") return "<button class='shopButton selected' style='width:185px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Gatherer`'>Gatherer</button>"
+                return "<button class='shopButton' style='width:185px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Gatherer`'>Gatherer</button>"
             }],
-        ], {width: "535px", height: "40px", border: "5px solid #3e3117", marginBottom: "-5px"}],
+        ], {width: "565px", height: "40px", border: "5px solid #3e3117", marginBottom: "-5px"}],
         ["buttonless-microtabs", "Tabs", {borderWidth: "0"}],
         ["style-row", [
             ["style-column", [
                 ["raw-html", "Picking Power", {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
                 ["style-row", [], {width: "150px", height: "1px", background: "#ccc", marginTop: "3px"}],
                 ["raw-html", () => {return formatSimple(player.fl.pickingPower, 1)}, {color: "#ccc", fontSize: "14px", fontFamily: "monospace"}],
-            ], {width: "175px", height: "50px", borderRight: "5px solid #3e3117"}],
+            ], {width: "185px", height: "50px", borderRight: "5px solid #3e3117"}],
             ["style-column", [
                 ["raw-html", "Flower Gain", {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
                 ["style-row", [], {width: "150px", height: "1px", background: "#ccc", marginTop: "3px"}],
                 ["raw-html", () => {return formatSimple(player.fl.flowerGain, 1)}, {color: "#ccc", fontSize: "14px", fontFamily: "monospace"}],
-            ], {width: "175px", height: "50px", borderRight: "5px solid #3e3117"}],
+            ], {width: "185px", height: "50px", borderRight: "5px solid #3e3117"}],
             ["style-column", [
                 ["raw-html", "GEB Multiplier", {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
                 ["style-row", [], {width: "150px", height: "1px", background: "#ccc", marginTop: "3px"}],
                 ["raw-html", () => {return formatSimple(player.fl.glossaryBase, 2)}, {color: "#ccc", fontSize: "14px", fontFamily: "monospace"}],
-            ], {width: "175px", height: "50px"}],
-        ], {width: "535px", height: "50px", background: "#181309", border: "5px solid #3e3117", marginTop: "-5px"}],
+            ], {width: "185px", height: "50px"}],
+        ], {width: "565px", height: "50px", background: "#181309", border: "5px solid #3e3117", marginTop: "-5px"}],
         ["style-column", [
             ["raw-html", "Click/hold flowers to pick them.", {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
             ["raw-html", "Click/hold flower bars to speed them up.", {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
-        ], {width: "535px", height: "40px", background: "#181309", border: "5px solid #3e3117", marginTop: "-5px"}],
+        ], {width: "565px", height: "40px", background: "#181309", border: "5px solid #3e3117", marginTop: "-5px"}],
     ],
     layerShown() { return player.startedGame && player.bee.totalResearch.gte(1) }
 })

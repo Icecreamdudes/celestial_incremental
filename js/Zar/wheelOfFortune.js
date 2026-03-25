@@ -107,6 +107,7 @@
         player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(buyableEffect("cf", 24))
         player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(player.sm.chipsEffect[2])
         if (hasUpgrade("cbs", 12)) player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(upgradeEffect("cbs", 12))
+        player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(buyableEffect("sme", 183))
 
         if (player.wof.autoSpin) {
             if (player.za.chancePoints.gte(player.wof.spinCost) && !player.wof.spinActive)

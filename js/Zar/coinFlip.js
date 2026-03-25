@@ -214,7 +214,7 @@
             unlocked() { return true },
             onClick() {
                 player.cf.coinsFlipped = player.cf.coinsFlipped.div(1.2).floor()
-                player.cf.reductionCooldown = new Decimal(1800)
+                player.cf.reductionCooldown = new Decimal(1800).div(buyableEffect("wof", 16))
             },
             style() {
                 let look = {width: '300px', minHeight: '60px', border: "2px solid #000000bf", borderRadius: "10px" }

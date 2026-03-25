@@ -90,9 +90,9 @@
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("bl", 22))
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("al", 105))
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(player.prj.modules[1].completionEffect)
+        if (hasMilestone("prj", 104)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(player.sma.starmetalExitTime.min(21600).div(600).add(1).pow(0.5));
 
         player.le.starmetalAlloyValue = new Decimal(1)
-        player.le.starmetalAlloyValue = player.le.starmetalAlloyValue.mul(buyableEffect("wel", 102))
 
         // Eclipse Shards
         player.le.eclipseShardsReq = Decimal.pow(1e1, player.le.resetAmount.add(1).pow(1.7).floor()).mul(1e3)
@@ -105,6 +105,7 @@
         if (getLevelableTier("pu", 304, true)) player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(levelableEffect("pu", 304)[0])
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(levelableEffect("pu", 304)[1])
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(buyableEffect("dv", 15))
+        if (hasMilestone("prj", 104)) player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(player.sma.eclipseExitTime.min(86400).div(1800).add(1).pow(0.4));
 
         player.le.eclipseShardsValue = new Decimal(5)
         player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(buyableEffect("le", 11))
@@ -208,6 +209,7 @@
                 pauseUniverse("CB")
                 pauseUniverse("DS")
 
+                player.sma.starmetalExitTime = new Decimal(0)
             },
             style() {
                 let look = {width: "400px", minHeight: "100px", fontSize: "9px", borderRadius: "15px", color: "white", border: "2px solid #384166"}
@@ -276,6 +278,8 @@
                 pauseUniverse("DS")
 
                 player.pet.legendaryPetAbilityCooldowns[0] = player.pet.legendaryPetAbilityCooldownsMax[0]
+
+                player.sma.eclipseExitTime = new Decimal(0)
             },
             style() {
                 let look = {width: "400px", minHeight: "100px", fontSize: "9px", borderRadius: "15px", color: "white", border: "2px solid #384166"}

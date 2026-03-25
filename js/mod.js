@@ -24,7 +24,7 @@
 		"Hive/unih.js", "Hive/flower.js", "Hive/pollen.js", "Hive/nectar.js", "Hive/beebread.js",
 		"Hive/honey.js", "Hive/wax.js", "Hive/aleph.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js",
-		"Interspace/well.js", "Interspace/bumpy.js", "Interspace/prisms.js", "Interspace/projects.js",
+		"Interspace/well.js", "Interspace/projects.js", "Interspace/prisms.js", "Interspace/bumpy.js", "Check Back/goobert.js",
 		//"Singularity/reactor.js",
 		"Check Back/singularityPet.js", "DarkU1/timeCapsules.js", "Check Back/dragon.js",
 		"DarkU1/blood.js", "Zar/zar.js", "Zar/coinFlip.js",
@@ -269,7 +269,7 @@ function updateStyles() {
 		case "ev8":
 			layerBG = "linear-gradient(0deg, #252525)"
 			break;
-		case "ep0": case "ep1": case "ep2": case "sp":
+		case "ep0": case "ep1": case "ep2": case "sp": case "goo":
 			layerBG = "linear-gradient(0deg, #7d3f98)"
 			break;
 		case "leg":

@@ -20,7 +20,7 @@
 
         currentlySelectedSegment: -1,
 
-        segmentGains: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
+        segmentGains: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
 
         wheelPoints: new Decimal(0),
         wheelPointsEffect: new Decimal(1),
@@ -125,7 +125,7 @@
                 player.wof.segmentGains[i] = Decimal.add(1, Decimal.mul(Math.random(), 2))
             } else
             {
-                player.wof.segmentGains[i] = Decimal.add(5, Decimal.mul(Math.random(), 10))  
+                player.wof.segmentGains[i] = Decimal.add(4, Decimal.mul(Math.random(), 8))  
             }
         }
     },
@@ -180,11 +180,11 @@
             style: {width: '300px', minHeight: '45px', color: "black", border: "2px solid #000000bf", borderRadius: "10px", backgroundImage: "linear-gradient(120deg, #1f7350 0%, #5abf95 100%)" }
         },
         12: {
-            title() { return player.wof.reductionCooldown.gt(0) ? "On cooldown...<br><small>" + formatTime(player.wof.reductionCooldown) + "</small>" : "Reduce wheels spun by /1.2<br><small>You suck at this game.</small>"},
+            title() { return player.wof.reductionCooldown.gt(0) ? "On cooldown...<br><small>" + formatTime(player.wof.reductionCooldown) + "</small>" : "Reduce wheels spun by /1.15<br><small>You suck at this game.</small>"},
             canClick() { return player.wof.reductionCooldown.lte(0) },
             unlocked() { return true },
             onClick() {
-                player.wof.wheelsSpinned = player.wof.wheelsSpinned.div(1.2).floor()
+                player.wof.wheelsSpinned = player.wof.wheelsSpinned.div(1.15).floor()
                 player.wof.reductionCooldown = new Decimal(2700)
             },
             style() {

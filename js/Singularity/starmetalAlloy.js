@@ -9,6 +9,9 @@
 
         starmetalAlloy: new Decimal(0),
 
+        starmetalExitTime: new Decimal(0),
+        eclipseExitTime: new Decimal(0),
+
         inStarmetalChallenge: false,
 
         // Auto
@@ -114,6 +117,9 @@
         }
 
         player.sma.starmetalAlloy = player.sma.starmetalAlloy.floor()
+
+        player.sma.starmetalExitTime = player.sma.starmetalExitTime.add(delta)
+        player.sma.eclipseExitTime = player.sma.eclipseExitTime.add(delta)
     },
     clickables: {
         11: {
@@ -765,12 +771,26 @@
             "ENTER": {
                 buttonStyle() {return {color: "white", borderRadius: "10px"}},
                 unlocked() { return true },
-                content: [
+                content() { let look = [
                     ["blank", "25px"],
                     ["clickable", 11],
+                    ["blank", "6px"],
+                    ["style-column", [
+                        ["raw-html", "It has been " + formatTime(player.sma.starmetalExitTime) + " since you exited D1.", {color: "#ffffffbf", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "<small>[EFFECTS HARDCAPPED AFTER 6h]</small>", {color: "red", fontSize: "18px", fontFamily: "monospace", display: player.sma.starmetalExitTime.gte(21600) ? "" : "none !important"}],
+                        ["raw-html", "<small>Boosts starmetal alloy gain by x" + format(player.sma.starmetalExitTime.min(21600).div(600).add(1).pow(0.5)) + "</small>", {color: "#ffffffbf", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "<small>Boosts stored space energy gain by x" + format(player.sma.starmetalExitTime.min(21600).div(900).add(1).pow(0.4)) + "</small>", {color: "#ffffffbf", fontSize: "18px", fontFamily: "monospace"}],
+                    ], {background: "#000", border: "3px solid #0000007f", borderRadius: "0px 0px 15px 15px", width: "594px", height: "94px", display: hasMilestone("prj", 104) ? "" : "none !important"}],
                     ["blank", "50px"],
                     ["clickable", 12],
-                ]
+                    ["blank", "6px"],
+                    ["style-column", [
+                        ["raw-html", "It has been " + formatTime(player.sma.eclipseExitTime) + " since you exited D1 eclipse.", {color: "#ffe066bf", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "<small>[EFFECTS HARDCAPPED AFTER 24h]</small>", {color: "red", fontSize: "18px", fontFamily: "monospace", display: player.sma.eclipseExitTime.gte(86400) ? "" : "none !important"}],
+                        ["raw-html", "<small>Boosts eclipse shard gain by x" + format(player.sma.eclipseExitTime.min(86400).div(1800).add(1).pow(0.4)) + "</small>", {color: "#ffe066bf", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "<small>Boosts stored time capsule gain by x" + format(player.sma.eclipseExitTime.min(86400).div(2700).add(1).pow(0.3)) + "</small>", {color: "#ffe066bf", fontSize: "18px", fontFamily: "monospace"}],
+                    ], {background: "#222", border: "3px solid #0000007f", borderRadius: "0px 0px 15px 15px", width: "594px", height: "94px", display: hasMilestone("prj", 104) ? "" : "none !important"}],
+                ]; return look}
             },
             "Starmetal Upgrades": {
                 buttonStyle() {return {color: "white", borderRadius: "10px"}},

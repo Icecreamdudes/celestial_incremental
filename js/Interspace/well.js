@@ -147,6 +147,7 @@
         }
         if (hasUpgrade("wel", 14)) player.wel.lightMult = player.wel.lightMult.mul(2);
         player.wel.lightMult = player.wel.lightMult.mul(levelableEffect("pu", 113)[1])
+        if (hasMilestone("prj", 103)) player.wel.lightMult = player.wel.lightMult.mul(2);
         if (hasMilestone("prj", 201)) player.wel.lightMult = player.wel.lightMult.mul(2);
         player.wel.lightMult = player.wel.lightMult.mul(player.pri.fountains[2].completionEffect)
         
@@ -170,6 +171,7 @@
             player.wel.modules[i].completionsGain = new Decimal(1)
             player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(player.wel.fountains[3].completionEffect)
             player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(levelableEffect("pu", 214)[1])
+            if (hasMilestone("prj", 102)) player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(2);
             player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(player.pri.fountains[1].completionEffect)
         }
         
@@ -345,13 +347,13 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Unlock projects.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Unlock projects and increase focus cap by +1.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><br><h3>Req: 1,000,000 light well α yield.</h3>"
                 }
                 return s
             },
-            cost: new Decimal(2.5e7),
+            cost: new Decimal(5e7),
             currencyLocation() { return player.wel },
             currencyDisplayName: "Light",
             currencyInternalName: "light",
@@ -383,7 +385,7 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Unlock more light buyables.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Double project speed.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><br><h3>Req: Light Well γ unlocked</h3>"
                 }
@@ -535,7 +537,7 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Unlock even more light buyables.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Improve the 3rd and 4th light fountain effects.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><br><h3>Req: 4 Blueshifts</h3>"
                 }
@@ -1052,6 +1054,7 @@
             canClick() { return player.wel.modules[this.id].time.gte(player.wel.modules[this.id].maxTime)},
             unlocked() { return true },
             onClick() {
+                tickProjects(player.wel.modules[this.id].maxTime.div(player.wel.modules[this.id].timeSpeed).div(4))
                 player.wel.light = player.wel.light.add(layers.wel.clickables[this.id].lightGain())
                 player.wel.modules[this.id].time = new Decimal(0)
                 player.wel.modules[this.id].completions = player.wel.modules[this.id].completions.add(player.wel.modules[this.id].completionsGain)
@@ -1060,6 +1063,7 @@
                 let gain = player.wel.lightMult
                 return gain
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "150px", minHeight: "50px", borderRadius: "0px 0px 10px 10px"}
                 if (this.canClick()) {
@@ -1079,6 +1083,7 @@
             canClick() { return player.wel.modules[this.id].time.gte(player.wel.modules[this.id].maxTime)},
             unlocked() { return true },
             onClick() {
+                tickProjects(player.wel.modules[this.id].maxTime.div(player.wel.modules[this.id].timeSpeed).div(4))
                 player.wel.light = player.wel.light.add(layers.wel.clickables[this.id].lightGain())
                 player.wel.modules[this.id].time = new Decimal(0)
                 player.wel.modules[this.id].completions = player.wel.modules[this.id].completions.add(player.wel.modules[this.id].completionsGain)
@@ -1088,6 +1093,7 @@
                 gain = gain.mul(5)
                 return gain
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "150px", minHeight: "50px", borderRadius: "0px 0px 10px 10px"}
                 if (this.canClick()) {
@@ -1107,6 +1113,7 @@
             canClick() { return player.wel.modules[this.id].time.gte(player.wel.modules[this.id].maxTime)},
             unlocked() { return true },
             onClick() {
+                tickProjects(player.wel.modules[this.id].maxTime.div(player.wel.modules[this.id].timeSpeed).div(4))
                 player.wel.light = player.wel.light.add(layers.wel.clickables[this.id].lightGain())
                 player.wel.modules[this.id].time = new Decimal(0)
                 player.wel.modules[this.id].completions = player.wel.modules[this.id].completions.add(player.wel.modules[this.id].completionsGain)
@@ -1116,6 +1123,7 @@
                 gain = gain.mul(20)
                 return gain
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "150px", minHeight: "50px", borderRadius: "0px 0px 10px 10px"}
                 if (this.canClick()) {
@@ -1135,6 +1143,7 @@
             canClick() { return player.wel.modules[this.id].time.gte(player.wel.modules[this.id].maxTime)},
             unlocked() { return true },
             onClick() {
+                tickProjects(player.wel.modules[this.id].maxTime.div(player.wel.modules[this.id].timeSpeed).div(4))
                 player.wel.light = player.wel.light.add(layers.wel.clickables[this.id].lightGain())
                 player.wel.modules[this.id].time = new Decimal(0)
                 player.wel.modules[this.id].completions = player.wel.modules[this.id].completions.add(player.wel.modules[this.id].completionsGain)
@@ -1144,6 +1153,7 @@
                 gain = gain.mul(50)
                 return gain
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "150px", minHeight: "50px", borderRadius: "0px 0px 10px 10px"}
                 if (this.canClick()) {
@@ -1154,6 +1164,36 @@
                     look.background = "#361e1e"
                     look.color = "white"
                     look.border = "3px solid #663737"
+                }
+                return look
+            },
+        },
+        101: {
+            title() { return "<h3>Respec Interspace Focus</h3><br><small>(you won't get your light back!)</small>" },
+            canClick() { return player.prj.focused.gt(0)},
+            unlocked() { return true },
+            onClick() {
+                player.prj.focused = new Decimal(0)
+                Object.keys(layers.wel.fountains).forEach(i => {
+                    player.wel.fountains[i].focused = false
+                });
+                Object.keys(layers.prj.projects).forEach(i => {
+                    player.prj.modules[i].focused = false
+                });
+                Object.keys(layers.pri.fountains).forEach(i => {
+                    player.pri.fountains[i].focused = false
+                });
+            },
+            style() {
+                let look = {width: "400px", minHeight: "75px", maxHeight: "75px", borderRadius: "10px"}
+                if (this.canClick()) {
+                    look.backgroundColor = "#a8ffd3"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
                 }
                 return look
             },
@@ -1256,9 +1296,9 @@
             title: "Light Fountain",
             completionEffectStat: "Light",
             getCompletionEffect() {
-                let completions = player.wel.fountains[1].completions.pow(0.95)
+                let completions = player.wel.fountains[1].completions.pow(0.9)
 
-                let s = completions.add(1).mul(completions.pow_base(1.06))
+                let s = completions.add(1).mul(completions.pow_base(1.08))
 
                 return s
             },
@@ -1299,9 +1339,9 @@
             title: "Light Fountain II",
             completionEffectStat: "Light",
             getCompletionEffect() {
-                let completions = player.wel.fountains[2].completions.pow(0.95)
+                let completions = player.wel.fountains[2].completions.pow(0.9)
 
-                let s = completions.add(1).mul(completions.pow_base(1.04))
+                let s = completions.add(1).mul(completions.pow_base(1.06))
 
                 return s
             },
@@ -1342,9 +1382,9 @@
             title: "Light Cycle Fountain",
             completionEffectStat: "Light Well Cycles",
             getCompletionEffect() {
-                let completions = player.wel.fountains[3].completions.pow(0.95)
+                let completions = player.wel.fountains[3].completions
 
-                let s = completions.add(1).mul(completions.pow_base(1.02))
+                let s = completions.pow(1.5).add(1)//.mul(completions.pow_base(1.04))
 
                 return s
             },
@@ -1385,9 +1425,9 @@
             title: "Light Speed Fountain",
             completionEffectStat: "Light Well Speed",
             getCompletionEffect() {
-                let completions = player.wel.fountains[4].completions.pow(0.95)
+                let completions = player.wel.fountains[4].completions
 
-                let s = completions.mul(0.15).mul(completions.pow_base(1.02)).add(1)
+                let s = completions.mul(0.25)/*.mul(completions.pow_base(1.03))*/.add(1)
 
                 return s
             },
@@ -1493,7 +1533,7 @@
                     ]],
                     ]],
                     ["blank", "10px"],
-                    ["raw-html", "All light well cycle effect scaling is reduced by ^" + format(player.wel.lightWellCycleEffectSoftcap) + " after 1,000!", {color: "#ff7f00", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", "All light well cycle effect scaling is reduced by ^" + format(player.wel.lightWellCycleEffectSoftcap) + " after 1,000!", {color: "#ff7f00", fontSize: "16px", fontFamily: "monospace", display: (player.wel.modules[1].completions.gte(1e3) ? "" : "none !important")}],
                     ["blank", "25px"],
                     ["row", []],
                     ["blank", "25px"]]
@@ -1654,7 +1694,7 @@
                             ["blank", "25px"],
                             ["raw-html", "You are gaining <h3>" + format(player.wel.light.mul(player.prj.projectSpeed)) + "</h3> fountain progress /s.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                             ["raw-html", "<small>Light gives a base progress rate of " + format(player.wel.light) + ".</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                            ["raw-html", "You are focusing on " + formatWhole(player.prj.focused) + "/1 interspace tasks.", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
+                            ["raw-html", "You are focusing on " + formatWhole(player.prj.focused) + "/" + formatWhole(player.prj.maxFocused) + " interspace tasks.", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
                             ["blank", "25px"],
                         ]],
                         ["style-row", [
@@ -1664,10 +1704,16 @@
                         ["style-row", [
 
                         ]],
-                        ["blank", "25px"],
+                        ["blank", "6px"],
                         ["style-row", [
 
                         ]],
+                        ["blank", "6px"],
+                        ["style-row", [
+
+                        ]],
+                        ["blank", "25px"],
+                        ["clickable", 101],
                         ["blank", "25px"],
                     ]
                     if (hasUpgrade("wel", 12)) {
@@ -1716,39 +1762,19 @@
                                 )
                             }
                         }
-                        if (true) {
+                        /*if (layers.wel.fountains[5].condition()) {
                             look[5][1].push(
-                                ["layerColor-dark-buyable", 101],
+                                ["blank", "6px", {width: "6px"}],
+                                makeWellFountain(5)
                             )
-                        }
-                        if (layers.wel.buyables[101].condition()) {
-                            if (layers.wel.buyables[102].condition()) {
-                                look[5][1].push(
-                                    ["layerColor-dark-buyable", 102],
-                                )
-                            } else {
-                                look[5][1].push(
-                                    ["blank", "6px", {width: "6px"}],
-                                    ["style-column", [
-                                        ["raw-html", "<h2>Starmetal XP Boost</h2><br><h3>Req: 1.00e11 Light</h3>", {color: "white", fontSize: "10px"}],
-                                ], {background: "black", border: "3px solid #663737", width: "394px", height: "204px", borderRadius: "10px 81px 10px 10px", lineHeight: "1"}]
-                                )
-                            }
-                        }
-                        if (layers.wel.buyables[102].condition()) {
-                            if (layers.wel.buyables[103].condition()) {
-                                look[5][1].push(
-                                    ["layerColor-dark-buyable", 103],
-                                )
-                            } else {
-                                look[5][1].push(
-                                    ["blank", "6px", {width: "6px"}],
-                                    ["style-column", [
-                                        ["raw-html", "<h2>Space and Time Boost</h2><br><h3>Req: 1.00e15 Light</h3>", {color: "white", fontSize: "10px"}],
-                                ], {background: "black", border: "3px solid #663737", width: "394px", height: "204px", borderRadius: "10px 81px 10px 10px", lineHeight: "1"}]
-                                )
-                            }
-                        }
+                        } else if (layers.wel.fountains[5].unlocked()) {
+                            look[5][1].push(
+                                ["blank", "6px", {width: "6px"}],
+                                ["style-column", [
+                                    ["raw-html", "<h2>Project Speed Fountain</h2><br><h3>Req: 1e9 Light</h3>", {color: "white", fontSize: "10px"}],
+                            ], {background: "black", border: "3px solid #663737", width: "394px", height: "204px", borderRadius: "10px 81px 10px 10px", lineHeight: "1"}]
+                            )
+                        }*/
                     }
                     return look
                 }
@@ -1802,4 +1828,19 @@ const makeWellFountain = function (id) {
             ], {background: "#4d9973", border: "3px solid #336659", borderRadius: "0px 0px 10px 10px", borderTop: "0px", height: "50px"}],
         ], {width: "400px"}]
     return thisFountain
+}
+
+const tickProjects = function (time) {
+    Object.keys(layers.prj.projects).forEach(i => {
+        let module = player.prj.modules[i]
+        if (module.focused) {
+            module.time = module.time.add(module.timeSpeed.mul(time))
+            if (module.time.gte(module.timeReq)) {
+                module.focused = false
+                module.completions = module.completions.add(1)
+                module.time = new Decimal(0)
+                player.prj.focused = player.prj.focused.sub(1)
+            }
+        }
+    });
 }

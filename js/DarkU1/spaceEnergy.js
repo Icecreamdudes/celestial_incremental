@@ -50,8 +50,6 @@
         //player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.div(player.ds.spaceEnergySoftcap)
         if (getLevelableTier("pu", 209, true)) player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(levelableEffect("pu", 209)[0])
             
-        player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(buyableEffect("wel", 103))
-
         player.ds.spaceEnergyPause = player.ds.spaceEnergyPause.sub(1)
         if (player.ds.spaceEnergyPause.gte(1)) layers.ds.spaceEnergyReset();
 
@@ -91,6 +89,7 @@
 
         //stored
         player.ds.storedSpaceEnergyToGet = player.ds.spaceEnergy.mul(0.05).pow(0.6)
+        if (hasMilestone("prj", 104)) player.ds.storedSpaceEnergyToGet = player.ds.storedSpaceEnergyToGet.mul(player.sma.starmetalExitTime.min(21600).div(900).add(1).pow(0.4));
         if (hasUpgrade("wel", 24)) player.ds.storedSpaceEnergyToGet = player.ds.storedSpaceEnergyToGet.mul(3);
     },
     bars: {},

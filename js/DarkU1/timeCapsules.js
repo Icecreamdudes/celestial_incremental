@@ -36,7 +36,6 @@
         player.dt.timeCapsulesToGet = player.dv.clouds.div(1e18).pow(0.2)
         if (getLevelableTier("pu", 113, true)) player.dt.timeCapsulesToGet = player.dt.timeCapsulesToGet.mul(levelableEffect("pu", 113)[0])
         if (getLevelableTier("pu", 214, true)) player.dt.timeCapsulesToGet = player.dt.timeCapsulesToGet.mul(levelableEffect("pu", 214)[0])
-        player.dt.timeCapsulesToGet = player.dt.timeCapsulesToGet.mul(buyableEffect("wel", 103))
 
         player.dt.timeCapsulesToGet = player.dt.timeCapsulesToGet.floor()
 
@@ -58,6 +57,7 @@
         player.dt.storedToGet = player.dt.timeCapsules.div(100).log(10).add(1).pow(0.2).sub(1).pow_base(10).sub(1).mul(5).add(1)
         player.dt.storedToGet = player.dt.storedToGet.mul(buyableEffect("dt", 16))
         player.dt.storedToGet = player.dt.storedToGet.mul(player.pri.fountains[3].completionEffect)
+        if (hasMilestone("prj", 104)) player.dt.storedToGet = player.dt.storedToGet.mul(player.sma.eclipseExitTime.min(86400).div(2700).add(1).pow(0.3));
         if (hasUpgrade("wel", 24)) player.dt.storedToGet = player.dt.storedToGet.mul(3);
         player.dt.storedToGet = player.dt.storedToGet.floor()
 
@@ -198,7 +198,7 @@
                 return "Power-Up"
             },
             display() {
-                return "which are boosting the booster effect by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are boosting the booster effect by ^" + format(tmp[this.layer].buyables[this.id].effect, 3) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Time Energy"
             },
             buy(mult) {
@@ -235,7 +235,7 @@
                 return "Running Out of Time"
             },
             display() {
-                return "which are dividing the eclipse timer tickspeed by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are reducing the eclipse timer tickspeed by /" + format(tmp[this.layer].buyables[this.id].effect, 1) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Time Energy"
             },
             buy(mult) {
@@ -265,7 +265,7 @@
                 let eff = getBuyableAmount(this.layer, this.id).pow(0.5).pow_base(2)
                 return eff
             },
-            unlocked() { return hasMilestone("prj", 206) || true },
+            unlocked() { return hasMilestone("prj", 206) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -299,14 +299,14 @@
             currency() { return player.dt.timeEnergy},
             pay(amt) { player.dt.timeEnergy = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).div(10).add(1) },
-            unlocked() { return hasMilestone("prj", 206) || true },
+            unlocked() { return hasMilestone("prj", 206) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "Extreme Forces"
             },
             display() {
-                return "which are boosting the time capsule effect by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are boosting the time capsule effect by ^" + format(tmp[this.layer].buyables[this.id].effect, 3) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Time Energy"
             },
             buy(mult) {
@@ -336,7 +336,7 @@
                 let eff = getBuyableAmount(this.layer, this.id).pow(0.85).pow_base(1.25)
                 return eff
             },
-            unlocked() { return hasMilestone("prj", 206) || true },
+            unlocked() { return hasMilestone("prj", 206) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {

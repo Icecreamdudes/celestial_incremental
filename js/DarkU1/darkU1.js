@@ -50,7 +50,6 @@
         player.du.pointGain = player.du.pointGain.mul(levelableEffect("st", 101)[0])
         player.du.pointGain = player.du.pointGain.mul(player.db.boosterEffect)
         if (hasMilestone("db", 12)) player.du.pointGain = player.du.pointGain.mul(player.db.milestone2Effect)
-        player.du.pointGain = player.du.pointGain.mul(buyableEffect("wel", 101))
 
         player.du.pointGain = player.du.pointGain.div(player.du.pointSoftcap)
 

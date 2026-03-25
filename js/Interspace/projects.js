@@ -15,11 +15,13 @@
 
         maxFocused: new Decimal(1),
         focused: new Decimal(0),
+
+        completedProjects: new Decimal(1),
         
         modules: {
             1: {
                 time: new Decimal(0),
-                timeReq: new Decimal(120),
+                timeReq: new Decimal(60),
                 timeSpeed: new Decimal(1),
                 canAddCompletion: false,
                 completions: new Decimal(0),
@@ -31,7 +33,31 @@
             },
             2: {
                 time: new Decimal(0),
-                timeReq: new Decimal(3600),
+                timeReq: new Decimal(1800),
+                timeSpeed: new Decimal(1),
+                canAddCompletion: false,
+                completions: new Decimal(0),
+                maxCompletions: new Decimal(0),
+
+                focused: false,
+                timeCapsuleReq: new Decimal(1),
+                completionEffect: new Decimal(1),
+            },
+            3: {
+                time: new Decimal(0),
+                timeReq: new Decimal(1e5),
+                timeSpeed: new Decimal(1),
+                canAddCompletion: false,
+                completions: new Decimal(0),
+                maxCompletions: new Decimal(0),
+
+                focused: false,
+                timeCapsuleReq: new Decimal(1),
+                completionEffect: new Decimal(1),
+            },
+            4: {
+                time: new Decimal(0),
+                timeReq: new Decimal(1e9),
                 timeSpeed: new Decimal(1),
                 canAddCompletion: false,
                 completions: new Decimal(0),
@@ -58,13 +84,19 @@
     color: "#dfffdf",
     update(delta) {
 
+        player.prj.maxFocused = new Decimal(1)
+        if (hasUpgrade("wel", 21)) player.prj.maxFocused = player.prj.maxFocused.add(1);
+
         player.prj.totalProjectLevels = player.prj.modules[1].completions
 
         player.prj.projectSpeed = new Decimal(1)
         player.prj.projectSpeed = player.prj.projectSpeed.mul(levelableEffect("pu", 307)[1])
         player.prj.projectSpeed = player.prj.projectSpeed.mul(player.prj.storedTimeCapsuleEffect)
+        if (hasUpgrade("wel", 22)) player.prj.projectSpeed = player.prj.projectSpeed.mul(2);
 
-        player.prj.storedTimeCapsuleEffect = player.prj.storedTimeCapsules.add(1).log(10).add(1).pow(0.5).sub(1).pow_base(10).pow(2).sub(1).div(10).add(1)
+        player.prj.storedTimeCapsuleEffect = player.prj.storedTimeCapsules.add(1).log(10).add(1).pow(0.5).sub(1).pow_base(10).pow(2).sub(1).div(5).add(1)
+
+        player.prj.completedProjects = new Decimal(0)
 
         // PROJECT PROGRESS
         Object.keys(layers.prj.projects).forEach(i => {
@@ -84,6 +116,8 @@
                     player.prj.focused = player.prj.focused.sub(1)
                 }
             }
+
+            player.prj.completedProjects = player.prj.completedProjects.add(module.completions)
         });
 
         // MILESTONE EFFECTS
@@ -138,17 +172,66 @@
                 return look
             },
         },
+        3: {
+            title() { return "<h3>Focus</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.prj.storedTimeCapsules.gte(player.prj.modules[this.id].timeCapsuleReq) && !player.prj.modules[this.id].focused},
+            unlocked() { return true },
+            onClick() {
+                player.prj.focused = player.prj.focused.add(1)
+                player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.sub(player.prj.modules[this.id].timeCapsuleReq)
+                player.prj.modules[this.id].focused = true
+            },
+            style() {
+                let look = {width: "238px", minHeight: "45px", borderRadius: "0px"}
+                if (this.canClick()) {
+                    look.backgroundColor = "#ffa8d3"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        4: {
+            title() { return "<h3>Focus</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.prj.storedTimeCapsules.gte(player.prj.modules[this.id].timeCapsuleReq) && !player.prj.modules[this.id].focused},
+            unlocked() { return true },
+            onClick() {
+                player.prj.focused = player.prj.focused.add(1)
+                player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.sub(player.prj.modules[this.id].timeCapsuleReq)
+                player.prj.modules[this.id].focused = true
+            },
+            style() {
+                let look = {width: "238px", minHeight: "45px", borderRadius: "0px"}
+                if (this.canClick()) {
+                    look.backgroundColor = "#ffa8d3"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
         101: {
             title() { return "<h3>Respec Interspace Focus</h3><br><small>(you won't get your stored time capsules back!)</small>" },
             canClick() { return player.prj.focused.gt(0)},
             unlocked() { return true },
             onClick() {
                 player.prj.focused = new Decimal(0)
+                Object.keys(layers.wel.fountains).forEach(i => {
+                    player.wel.fountains[i].focused = false
+                });
                 Object.keys(layers.prj.projects).forEach(i => {
                     player.prj.modules[i].focused = false
                 });
                 Object.keys(layers.pri.fountains).forEach(i => {
-                    player.pri.modules[i].focused = false
+                    player.pri.fountains[i].focused = false
                 });
             },
             style() {
@@ -175,7 +258,7 @@
             onComplete() {
                 doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock time capsules.</small>" },
+            effectDescription() { return "<small>Unlock a cloud upgrade in D1 eclipse.</small>" },
             cycleReq() { return new Decimal(1) },
             projectId() { return 1 },
             unlocked() { return true },
@@ -196,7 +279,7 @@
             onComplete() {
                 doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock more light buyables.</small>" },
+            effectDescription() { return "<small>x2 light well cycle gain and unlock 1 punchcard per project cycle up to 5.</small>" },
             cycleReq() { return new Decimal(2) },
             projectId() { return 1 },
             unlocked() { return true },
@@ -217,7 +300,7 @@
             onComplete() {
                 doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock more punchcards and another punchcard choice slot.</small>" },
+            effectDescription() { return "<small>x2 light gain and get a fourth punchcard choice.</small>" },
             cycleReq() { return new Decimal(3) },
             projectId() { return 1 },
             unlocked() { return true },
@@ -238,7 +321,7 @@
             onComplete() {
                 doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock the ability to extend eclipse duration with stored time capsules.</small>" },
+            effectDescription() { return "<small>Unlock time-based bonuses to D1 exit rewards.</small>" },
             cycleReq() { return new Decimal(4) },
             projectId() { return 1 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) },
@@ -283,7 +366,7 @@
             effectDescription() { return "<small>Unlock more time energy buyables.</small>" },
             cycleReq() { return new Decimal(6) },
             projectId() { return 1 },
-            unlocked() { return hasMilestone(this.layer, this.id - 3) },
+            unlocked() { return hasMilestone(this.layer, this.id - 3) && hasUpgrade("wel", 31) },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
@@ -304,7 +387,7 @@
             effectDescription() { return "<small>Unlock a permanent booster milestone.</small>" },
             cycleReq() { return new Decimal(7) },
             projectId() { return 1 },
-            unlocked() { return hasMilestone(this.layer, this.id - 3) },
+            unlocked() { return hasMilestone(this.layer, this.id - 3) && hasUpgrade("wel", 31) },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
@@ -325,7 +408,7 @@
             effectDescription() { return "<small>Unlock extra time capsules.</small>" },
             cycleReq() { return new Decimal(8) },
             projectId() { return 1 },
-            unlocked() { return hasMilestone(this.layer, this.id - 3) },
+            unlocked() { return hasMilestone(this.layer, this.id - 3) && hasUpgrade("wel", 31) },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
@@ -346,7 +429,7 @@
             effectDescription() { return "<small>/2 to the eclipse timer tickspeed.</small>" },
             cycleReq() { return new Decimal(9) },
             projectId() { return 1 },
-            unlocked() { return hasMilestone(this.layer, this.id - 3) },
+            unlocked() { return hasMilestone(this.layer, this.id - 3) && hasUpgrade("wel", 31) },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
@@ -364,10 +447,10 @@
             onComplete() {
                 doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock an epic punchcard.</small>" },
+            effectDescription() { return "<small>Passively generate 20% of best stored space energy/time capsules.</small>" },
             cycleReq() { return new Decimal(10) },
             projectId() { return 1 },
-            unlocked() { return hasMilestone(this.layer, this.id - 3) },
+            unlocked() { return hasMilestone(this.layer, this.id - 3) && hasUpgrade("wel", 31) },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
@@ -386,7 +469,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock the prismatic reset and double light gain.</small>" },
+            effectDescription() { return "<small>Unlock the prismatic reset and x2 light gain.</small>" },
             cycleReq() { return new Decimal(1) },
             projectId() { return 2 },
             unlocked() { return true },
@@ -407,7 +490,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock the third prismatic well.</small>" },
+            effectDescription() { return "<small>x3 light fountain speed.</small>" },
             cycleReq() { return new Decimal(2) },
             projectId() { return 2 },
             unlocked() { return true },
@@ -428,7 +511,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Double prism gain.</small>" },
+            effectDescription() { return "<small>Passively progress light fountains at 1% efficiency.</small>" },
             cycleReq() { return new Decimal(3) },
             projectId() { return 2 },
             unlocked() { return true },
@@ -449,7 +532,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock the fourth prismatic well.</small>" },
+            effectDescription() { return "<small>x3 prism gain.</small>" },
             cycleReq() { return new Decimal(4) },
             projectId() { return 2 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) },
@@ -470,7 +553,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>+1 interspace project focus cap and double stored time capsules.</small>" },
+            effectDescription() { return "<small>Increase focus cap by 1 and x2 stored time capsules.</small>" },
             cycleReq() { return new Decimal(5) },
             projectId() { return 2 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) },
@@ -491,10 +574,159 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock even more light buyables.</small>" },
+            effectDescription() { return "<small>x1.25 passive light well progress gain per blueshift. (x1.00)</small>" },
             cycleReq() { return new Decimal(6) },
             projectId() { return 2 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) },
+            done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
+            style() {
+                let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
+                if (hasMilestone("prj", this.id)) {
+                    look.backgroundColor = "#efffef"
+                    look.color = "#232e23"
+                } else {
+                    look.backgroundColor = "#232e23"
+                    look.color = "#efffef"
+                }
+                return look
+            },
+        },
+        // BLUESHIFT
+        301: {
+            onComplete() {
+                doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+            },
+            effectDescription() { return "<small>Unlock the ability to blueshift your wells.</small>" },
+            cycleReq() { return new Decimal(1) },
+            projectId() { return 3 },
+            unlocked() { return true },
+            done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
+            style() {
+                let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
+                if (hasMilestone("prj", this.id)) {
+                    look.backgroundColor = "#efffef"
+                    look.color = "#232e23"
+                } else {
+                    look.backgroundColor = "#232e23"
+                    look.color = "#efffef"
+                }
+                return look
+            },
+        },
+        302: {
+            onComplete() {
+                doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+            },
+            effectDescription() { return "<small>You can always enter D1 Eclipse, but reduce ES gain. Unlock ???</small>" },
+            cycleReq() { return new Decimal(2) },
+            projectId() { return 3 },
+            unlocked() { return true },
+            done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
+            style() {
+                let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
+                if (hasMilestone("prj", this.id)) {
+                    look.backgroundColor = "#efffef"
+                    look.color = "#232e23"
+                } else {
+                    look.backgroundColor = "#232e23"
+                    look.color = "#efffef"
+                }
+                return look
+            },
+        },
+        303: {
+            onComplete() {
+                doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+            },
+            effectDescription() { return "<small>Unlock more prismatic fountains.</small>" },
+            cycleReq() { return new Decimal(3) },
+            projectId() { return 3 },
+            unlocked() { return true },
+            done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
+            style() {
+                let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
+                if (hasMilestone("prj", this.id)) {
+                    look.backgroundColor = "#efffef"
+                    look.color = "#232e23"
+                } else {
+                    look.backgroundColor = "#232e23"
+                    look.color = "#efffef"
+                }
+                return look
+            },
+        },
+        304: {
+            onComplete() {
+                doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+            },
+            effectDescription() { return "<small>x3 prism gain.</small>" },
+            cycleReq() { return new Decimal(4) },
+            projectId() { return 3 },
+            unlocked() { return hasMilestone(this.layer, this.id - 3) },
+            done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
+            style() {
+                let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
+                if (hasMilestone("prj", this.id)) {
+                    look.backgroundColor = "#efffef"
+                    look.color = "#232e23"
+                } else {
+                    look.backgroundColor = "#232e23"
+                    look.color = "#efffef"
+                }
+                return look
+            },
+        },
+        305: {
+            onComplete() {
+                doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+            },
+            effectDescription() { return "<small>Increase focus cap by 1 and x2 stored time capsules.</small>" },
+            cycleReq() { return new Decimal(5) },
+            projectId() { return 3 },
+            unlocked() { return hasMilestone(this.layer, this.id - 3) },
+            done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
+            style() {
+                let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
+                if (hasMilestone("prj", this.id)) {
+                    look.backgroundColor = "#efffef"
+                    look.color = "#232e23"
+                } else {
+                    look.backgroundColor = "#232e23"
+                    look.color = "#efffef"
+                }
+                return look
+            },
+        },
+        306: {
+            onComplete() {
+                doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+            },
+            effectDescription() { return "<small>Unlock even more light buyables.</small>" },
+            cycleReq() { return new Decimal(6) },
+            projectId() { return 3 },
+            unlocked() { return hasMilestone(this.layer, this.id - 3) },
+            done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
+            style() {
+                let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
+                if (hasMilestone("prj", this.id)) {
+                    look.backgroundColor = "#efffef"
+                    look.color = "#232e23"
+                } else {
+                    look.backgroundColor = "#232e23"
+                    look.color = "#efffef"
+                }
+                return look
+            },
+        },
+        // STARSHINE
+        401: {
+            onComplete() {
+                doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+            },
+            effectDescription() { return "<small>Unlock the starshine reset.</small>" },
+            cycleReq() { return new Decimal(1) },
+            projectId() { return 4 },
+            unlocked() { return true },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
@@ -524,7 +756,7 @@
             },
             getTimeReq() {
                 let completions = player.prj.modules[1].completions
-                let s = new Decimal(120)
+                let s = new Decimal(60)
 
                 s = s.mul(completions.add(1).pow(2))
                 if (completions.gte(5)) {
@@ -564,7 +796,7 @@
             },
             getTimeReq() {
                 let completions = player.prj.modules[2].completions
-                let s = new Decimal(3600)
+                let s = new Decimal(1800)
 
                 s = s.mul(completions.add(1).mul(completions).div(2).add(1))
                 if (completions.gte(5)) {
@@ -591,9 +823,87 @@
                 return s
             },
             milestones: [201, 202, 203, 204, 205, 206,]// 207, 208, 209, 210],
-        }
-        // 3: x(1.2^n) Starmetal XP Value
-        // 4: x(2^n) Plasma
+        },
+        3: {
+            title: "Blueshift",
+            completionEffectStat: "Punchcard XP",
+            getCompletionEffect() {
+                let completions = player.prj.modules[3].completions
+
+                s = completions.pow(0.85).pow_base(1.2)
+
+                return s
+            },
+            getTimeReq() {
+                let completions = player.prj.modules[3].completions
+                let s = new Decimal(1e5)
+
+                s = s.mul(completions.add(1).mul(completions.pow(2)).div(2).add(1))
+                if (completions.gte(5)) {
+                    s = s.mul(8)
+                }
+
+                return s
+            },
+            getTimeCapsuleReq() {
+                let completions = player.prj.modules[3].completions
+                let s = completions.add(1).pow(3).mul(300)
+                
+                if (completions.gte(5)) {
+                    s = s.add(completions.sub(5).pow(3)).mul(10)
+                }
+
+                return s.floor()
+            },
+            getTimeSpeed() {
+                let s = new Decimal(1)
+
+                s = s.mul(player.prj.projectSpeed)
+
+                return s
+            },
+            milestones: [301, 302, 303, 304, 305, 306,]// 307, 308, 309, 310],
+        },
+        4: {
+            title: "Starshine",
+            completionEffectStat: "Stars, post-softcap",
+            getCompletionEffect() {
+                let completions = player.prj.modules[4].completions
+
+                s = completions.pow(0.85).pow_base(7)
+
+                return s
+            },
+            getTimeReq() {
+                let completions = player.prj.modules[4].completions
+                let s = new Decimal(1e9)
+
+                s = s.mul(completions.add(1).mul(completions.pow(3)).div(2).add(1))
+                if (completions.gte(5)) {
+                    s = s.mul(10)
+                }
+
+                return s
+            },
+            getTimeCapsuleReq() {
+                let completions = player.prj.modules[4].completions
+                let s = completions.add(1).pow(4).mul(1e5)
+                
+                if (completions.gte(5)) {
+                    s = s.add(completions.sub(5).pow(4)).mul(10)
+                }
+
+                return s.floor()
+            },
+            getTimeSpeed() {
+                let s = new Decimal(1)
+
+                s = s.mul(player.prj.projectSpeed)
+
+                return s
+            },
+            milestones: [401]//, 402, 403, 404, 405, 406, 407, 408, 409, 410],
+        },
     },
     microtabs: {
         stuff: {
@@ -611,12 +921,20 @@
                         ["raw-html", "Boosts project speed by x" + format(player.prj.storedTimeCapsuleEffect), {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "25px"],
                         ["raw-html", "You are gaining <h3>" + format(player.prj.projectSpeed) + "</h3> project progress /s.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "You are focusing on " + formatWhole(player.prj.focused) + "/1 interspace projects.", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "You are focusing on " + formatWhole(player.prj.focused) + "/" + formatWhole(player.prj.maxFocused) + " interspace projects.", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
+                        ["blank", "25px"],
+                        ["raw-html", "You have a total of <h3>" + formatWhole(player.prj.completedProjects) + "</h3> project cycles.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "25px"],
                         ["style-row", [
                             makeProject(1),
                             ["blank", "6px", {width: "6px"}],
                             hasUpgrade("wel", 23) ? makeProject(2) : null,
+                        ]],
+                        ["blank", "6px", {width: "6px"}],
+                        ["style-row", [
+                            makeProject(3),
+                            ["blank", "6px", {width: "6px"}],
+                            makeProject(4),
                         ]],
                         ["blank", "6px"],
                         ["clickable", 101],

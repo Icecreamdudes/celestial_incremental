@@ -114,10 +114,10 @@ addLayer("se", {
     },
     arriveAtStar(x, y)
     {
-        doPopup("none", "Arrived at " + player.se.starNames[player.se.currentPosition[0].toNumber()][player.se.currentPosition[1].toNumber()] + "!", "Exploration complete!", 5, "#00a2ffff")
         player.se.starsExploreCount[x][y] = player.se.starsExploreCount[x][y].add(1)
         player.se.currentPosition = player.se.currentStar
         player.se.currentlyTravelling = false
+        doPopup("none", "Arrived at " + player.se.starNames[player.se.currentPosition[0].toNumber()][player.se.currentPosition[1].toNumber()] + "!", "Exploration complete!", 5, "#00a2ffff")
     },
     bars: {
         explorationBar: {

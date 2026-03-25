@@ -3757,10 +3757,10 @@ addLayer("pet", {
             title() { return "Goobert" },
             lore() { return "A starlight-infused house cat. " }, 
             description() {
-                return "x" + format(this.effect()[0]) + " to light <small>(based on prisms)</small>.<br>" +
-                    "x" + format(this.effect()[1]) + " to project speed <small>(based on well cycles)</small>.<br>" +
-                    "x" + format(this.effect()[2]) + " to pet points."
-            },
+                return "x" + format(this.effect()[0]) + " to light <small>(based on stars)</small>.<br>" +
+                    "x" + format(this.effect()[1]) + " to starlight <small>(based on star power)</small>.<br>" +
+                    "x" + format(this.effect()[2]) + " to rare pet button yield <small>(based on space dust)</small>."
+            }, 
             levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))

@@ -253,14 +253,15 @@
         player.wof.buyables[13] = new Decimal(0)
         player.wof.buyables[14] = new Decimal(0)
         player.wof.buyables[15] = new Decimal(0)
+        player.wof.buyables[16] = new Decimal(0)
     },
     clickables: {
         12: {
-            title() { return player.sm.reductionCooldown.gt(0) ? "On cooldown...<br><small>" + formatTime(player.sm.reductionCooldown) + "</small>" : "Reduce slots spun by /1.2<br><small>You REALLY suck at this game!</small>"},
+            title() { return player.sm.reductionCooldown.gt(0) ? "On cooldown...<br><small>" + formatTime(player.sm.reductionCooldown) + "</small>" : "Reduce slots spun by /1.1<br><small>You REALLY suck at this game!</small>"},
             canClick() { return player.sm.reductionCooldown.lte(0) },
             unlocked() { return true },
             onClick() {
-                player.sm.spinAmount = player.sm.spinAmount.div(1.2).floor()
+                player.sm.spinAmount = player.sm.spinAmount.div(1.1).floor()
                 player.sm.reductionCooldown = new Decimal(3600)
             },
             style() {
@@ -876,115 +877,61 @@
                     ["blank", "25px"],
                 ]
             },
-            "temp": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return true },
-                content: [
-                    ["blank", "25px"],
-                    ["style-row", [
-                    ["style-column", [ //slots 
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "Requires " + format(player.sm.spinCost) + " chance points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Spinning slots resets previous dice space content." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 11],["clickable", 12],["clickable", 13],]],
-                    ["bar", "slots"],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 21], ["blank", "25px"], ["clickable", 22],]],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "Double repeating slots double all rewards." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Triple repeating slots quadruple all rewards." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "<h5>Mult: " + format(player.sm.totalChipMult) + "x. (also based on amount of slot spins)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h5>(Only boosts chip gains)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "<h5>Slots spinned: " + formatWhole(player.sm.spinAmount) + "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ], {width: "625px", height: "700px", background: "rgba(69, 80, 5, 0.5)", border: "0px solid #ccc", borderRight: "0px", borderLeft: "0px", borderRadius: "15px 0px 0px 15px"}],
-
-                    
-                    ["style-column", [ 
-                    ["style-column", [ 
-                        ["raw-html", function () { return "You have " + format(player.sm.chips[0]) + " red chips. (+" + format(player.sm.chipsToGet[0]) + ")" }, { "color": "#ff7070ff", "font-size": "24px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "Boosts chance point gain and extends softcap by x" + format(player.sm.chipsEffect[0]) + "." }, { "color": "#ff7070ff", "font-size": "16px", "font-family": "monospace" }],
-                    ["blank", "10px"],
-                        ["raw-html", function () { return "You have " + format(player.sm.chips[1]) + " blue chips. (+" + format(player.sm.chipsToGet[1]) + ")" }, { "color": "#7970ffff", "font-size": "24px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "Boosts heads and tails gain and extends softcap by x" + format(player.sm.chipsEffect[1]) + "." }, { "color": "#7970ffff", "font-size": "16px", "font-family": "monospace" }],
-                    ["blank", "10px"],
-                        ["raw-html", function () { return "You have " + format(player.sm.chips[2]) + " yellow chips. (+" + format(player.sm.chipsToGet[2]) + ")" }, { "color": "#fffd70ff", "font-size": "24px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "Boosts wheel point gain by x" + format(player.sm.chipsEffect[2]) + "." }, { "color": "#fffd70ff", "font-size": "16px", "font-family": "monospace" }],
-                    ], {width: "597px", height: "200px", background: "rgba(96, 107, 30, 0.5)", border: "3px solid #ccc",  borderBottom: "0px", borderTop: "0px", borderRadius: "0px 15px 0px 0px"}],
-                    ["style-column", [ 
-                            ["left-row", [
-                    ["blank", "25px"],
-            ["tooltip-row", [
-                ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cb.evolutionShards)}, {width: "93px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
-            ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
-            ["tooltip-row", [
-                ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cb.paragonShards)}, {width: "95px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
-            ], {width: "150px", height: "50px", borderRight: "2px solid white"}],
-            ["tooltip-row", [
-                ["raw-html", "<img src='resources/battle/temporalShards.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.fi.temporalShards)}, {width: "95px", height: "50px", color: "#0d62c4ff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                ["raw-html", "<div class='bottomTooltip'>Temporal Shards<hr><small>(Gained from check back battles)</small></div>"],
-            ], {width: "150px", height: "50px"}],
-        ], {width: "450px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
-                    ["blank", "25px"],
-                    ["row", [["ex-buyable", 11],["ex-buyable", 12],["ex-buyable", 13],]],
-                    ], {width: "600px", height: "500px", background: "rgba(96, 107, 30, 0.5)", border: "3px solid #ccc", borderRight: "0px", borderRadius: "0px 0px 15px 0px"}],
-                    ], {width: "600px", height: "700px", background: "rgba(96, 107, 30, 0.5)", border: "0px solid #ccc", borderRight: "0px", borderLeft: "0px", borderRadius: "0px 15px 15px 0px"}],
-                    ], {width: "1225px", height: "700px", background: "rgba(34, 124, 61, 0)", border: "3px solid #ccc", borderRadius: "15px"}],
-                ]
-            },
             "Research": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
-                    ["blank", "12.5px"],
-                        ["raw-html", function () { return "You have " + format(player.sm.chips[0]) + " red chips. (+" + format(player.sm.chipsToGet[0]) + ")" }, { "color": "#ff7070ff", "font-size": "20px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "You have " + format(player.sm.chips[1]) + " blue chips. (+" + format(player.sm.chipsToGet[1]) + ")" }, { "color": "#7970ffff", "font-size": "20px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "You have " + format(player.sm.chips[2]) + " yellow chips. (+" + format(player.sm.chipsToGet[2]) + ")" }, { "color": "#fffd70ff", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "12.5px"],
-                                    ["left-row", [
-            ["tooltip-row", [
-                ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cb.evolutionShards)}, {width: "93px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
-            ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
-            ["tooltip-row", [
-                ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cb.paragonShards)}, {width: "95px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
-            ], {width: "150px", height: "50px"}],
-        ], {width: "300px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
-                    ["blank", "12.5px"],
-                    ["always-scroll-column", [
-                        ["blank", "10px"],
-                        ["row", [
-                            ["ex-buyable", 101],
-                            ["ex-buyable", 102],
-                            ["ex-buyable", 103],
-                        ]],
-                        ["row", [
-                            ["ex-buyable", 104],
-                            ["ex-buyable", 105],
-                        ]],
-                        ["row", [
-                            ["ex-buyable", 107],
-                            ["ex-buyable", 106],
-                        ]],
-                        ["row", [
-                            ["ex-buyable", 108],
-                        ]],
-                        ["row", [
-                            ["ex-buyable", 109],
-                            ["ex-buyable", 111],
-                        ]],
-                    ], {width: "775px", height: "600px", backgroundColor: "#4a4a4a80", border: "3px solid white", borderRadius: "15px 0 0 15px"}],
+                    ["blank", "10px"],
+                    ["style-column", [
+                    ["style-column", [
+                    ["style-column", [
+                        ["blank", "12px"],
+                        ["raw-html", function () { return "You have <h3>" + format(player.sm.chips[0]) + "</h3> red chips." }, { "color": "#800000", "font-size": "16px", "font-family": "monospace" }],
+                        ["raw-html", function () { return "You have <h3>" + format(player.sm.chips[1]) + "</h3> blue chips." }, { "color": "#000080", "font-size": "16px", "font-family": "monospace" }],
+                        ["raw-html", function () { return "You have <h3>" + format(player.sm.chips[2]) + "</h3> yellow chips." }, { "color": "#404000", "font-size": "16px", "font-family": "monospace" }],
+                        ["blank", "12px"],
+                        ["left-row", [
+                            ["tooltip-row", [
+                                ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                                ["raw-html", () => { return formatWhole(player.cb.evolutionShards)}, {width: "93px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
+                            ], {width: "148px", height: "50px", borderRight: "2px solid #635400"}],
+                            ["tooltip-row", [
+                                ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                                ["raw-html", () => { return formatWhole(player.cb.paragonShards)}, {width: "95px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
+                            ], {width: "150px", height: "50px"}],
+                        ], {width: "300px", height: "50px", backgroundColor: "black", border: "2px solid #635400", borderRadius: "10px", userSelect: "none"}],
+                        ["blank", "13px"],
+                        ["always-scroll-column", [
+                            ["blank", "10px"],
+                            ["row", [
+                                ["ex-buyable", 101],
+                                ["ex-buyable", 102],
+                                ["ex-buyable", 103],
+                            ]],
+                            ["row", [
+                                ["ex-buyable", 104],
+                                ["ex-buyable", 105],
+                            ]],
+                            ["row", [
+                                ["ex-buyable", 107],
+                                ["ex-buyable", 106],
+                            ]],
+                            ["row", [
+                                ["ex-buyable", 108],
+                            ]],
+                            ["row", [
+                                ["ex-buyable", 109],
+                                ["ex-buyable", 111],
+                            ]],
+                        ], {width: "726px", height: "600px", backgroundColor: "#6354005f", border: "3px solid #635400", borderRadius: "15px 0 0 15px"}],
+                        ["blank", "6px"],
+                    ], {background: "#6354005f", width: "744px"}],
+                    ], {background: "linear-gradient(45deg, #c1c436ff 0%, #eaebc3ff 50%, #c1c436ff 100%)", border: "3px solid #635400",  borderRadius: "0px", width: "744px"}],
+                    ], () => {
+                        return {backgroundImage: "url(resources/ui/slot_machine_background_1.png)", backgroundPosition: (Date.now() / 1000 % 1 < 0.5) ? "25px 0px" : "", border: "3px solid #635400",  borderRadius: "13px", padding: "25px"}
+                    }],
                 ]
             },
         },

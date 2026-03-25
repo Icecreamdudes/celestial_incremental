@@ -24,7 +24,7 @@ addLayer("n", {
     update(delta) {
         let onepersec = new Decimal(1)
 
-        if (false) {
+        if (hasUpgrade("n", 31)) {
             player.n.nestGain = Decimal.pow(2, player.al.honeycomb.mul(player.al.royalJelly).div(1e50).add(1).log(1e10))
         } else {
             player.n.nestGain = new Decimal(1)
@@ -62,8 +62,8 @@ addLayer("n", {
                 return "<div style='height:25px;display:flex;align-items:center'><div>" +
                 "<h3>Nest Upgrade 1:1</h3>" + // TOP
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
-                "<br>Unlock purple flowers<br>" + // MIDDLE
-                "<br></div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "Unlock purple flowers" + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
                 "1 Nest" + // BOTTOM
                 "</div></div>"
             },
@@ -76,6 +76,70 @@ addLayer("n", {
                 return look
             },
         },
+        21: {
+            unlocked: true,
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>Nest Upgrade 2:1</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
+                "Unlock a honeycomb effect that buffs bees" + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "1 Nest" + // BOTTOM
+                "</div></div>"
+            },
+            cost: new Decimal(1),
+            canAfford() { return hasUpgrade("n", 11)},
+            currencyLocation() { return player.n },
+            currencyInternalName: "nest",
+            //style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {color: "#000000bf", borderColor: "#0000007f", fontSize: "14px", borderWidth: "2px", borderRadius: "10px", padding: "0px", width: "250px", height: "125px"}
+                return look
+            },
+        },
+        22: {
+            unlocked: true,
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>Nest Upgrade 2:2</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
+                "Unlock a royal jelly effect that lightly buffs pre-aleph resources" + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "1 Nest" + // BOTTOM
+                "</div></div>"
+            },
+            cost: new Decimal(1),
+            canAfford() { return hasUpgrade("n", 11)},
+            currencyLocation() { return player.n },
+            currencyInternalName: "nest",
+            //style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {color: "#000000bf", borderColor: "#0000007f", fontSize: "14px", borderWidth: "2px", borderRadius: "10px", padding: "0px", width: "250px", height: "125px"}
+                return look
+            },
+        },
+        31: {
+            unlocked: true,
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>Nest Upgrade 3:1</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
+                "Honeycombs and royal jelly now effect nest gain" + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "1 Nest" + // BOTTOM
+                "</div></div>"
+            },
+            cost: new Decimal(1),
+            canAfford() { return hasUpgrade("n", 21) || hasUpgrade("n", 22)},
+            currencyLocation() { return player.n },
+            currencyInternalName: "nest",
+            //style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {color: "#000000bf", borderColor: "#0000007f", fontSize: "14px", borderWidth: "2px", borderRadius: "10px", padding: "0px", width: "250px", height: "125px"}
+                return look
+            },
+        },
+        // Unlock effects for honeycomb and royal jelly
         // Unlock nest base formula
         // Unlock natural pylon
         // Unlock wax layer
@@ -84,7 +148,6 @@ addLayer("n", {
         // Keep Gatherer v2
         // Buyable that multiplies most flower research caps
         // Keep flower progress on aleph resets
-        
     },
     microtabs: {
         Tabs: {
@@ -95,17 +158,19 @@ addLayer("n", {
                     ["blank", "5px"],
                     ["tooltip-row", [
                         ["raw-html", () => {return player.n.nest.eq(1) ? "You have <h3>" + formatWhole(player.n.nest) + "</h3> Nest." : "You have <h3>" + formatWhole(player.n.nest) + "</h3> Nests." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return false ? "(+" + formatWhole(player.n.nestGain) + ")" : ""}, () => {
+                        ["raw-html", () => {return hasUpgrade("n", 31) ? "(+" + formatWhole(player.n.nestGain) + ")" : ""}, () => {
                             let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
                             player.al.honeycomb.gte(1e25) && player.al.royalJelly.gte(1e25) ? look.color = "white" : look.color = "gray"
                             return look
                         }],
-                        ["raw-html", () => {return false ? "<div class='bottomTooltip'>Base Formula<hr><small>2^(log<sub>1e10</sub>((Honeycombs*Royal Jelly)/1e50))</small></div>" : ""}],
+                        ["raw-html", () => {return hasUpgrade("n", 31) ? "<div class='bottomTooltip'>Base Formula<hr><small>2^(log<sub>1e10</sub>((Honeycombs*Royal Jelly)/1e50))</small></div>" : ""}],
                     ]],
                     ["blank", "10px"],
                     ["clickable", 1],
                     ["blank", "10px"],
                     ["upgrade", 11],
+                    ["row", [["upgrade", 21], ["upgrade", 22]]],
+                    ["upgrade", 31],
                 ],
             },
         },

@@ -99,7 +99,7 @@ addLayer("sp", {
             currencyDisplayName: "Nav Points",
             currencyInternalName: "navPoints",
             style() {
-                let look = {borderRadius: "15px", color: "black", border: "3px solid #480513", margin: "2px"}
+                let look = {borderRadius: "15px", color: "black", border: "3px solid #380548", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#710a91"
                 return look
             },
@@ -113,7 +113,7 @@ addLayer("sp", {
             currencyDisplayName: "Sel Points",
             currencyInternalName: "selPoints",
             style() {
-                let look = {borderRadius: "15px", color: "black", border: "3px solid #480513", margin: "2px"}
+                let look = {borderRadius: "15px", color: "black", border: "3px solid #032e0c", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#065c19"
                 return look
             },

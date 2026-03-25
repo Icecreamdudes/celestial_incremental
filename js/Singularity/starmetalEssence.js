@@ -1958,7 +1958,7 @@
                 player.bpl.pollen = this.currency()[0].sub(amt)
                 player.sme.starmetalEssence = this.currency()[1].sub(amt2)
             },
-            effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.004).add(1)},
+            effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.002).add(1)},
             unlocked() {return player.pol.unlockHive >= 2 && player.alephsChamber.milestone[25] > 0},
             branches: [[171, "#ffd69c"]],
             cost(x) {

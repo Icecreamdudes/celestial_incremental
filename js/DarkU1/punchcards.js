@@ -1643,7 +1643,7 @@ addLayer("pu", {
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = Decimal.pow(2, player.du.points.add(1).log(1e10)).pow(this.effectScale()).pow(player.bl.bloodEffect)
-                eff[1] = getLevelableAmount(this.layer, this.id).mul(0.1).add(1)
+                eff[1] = getLevelableAmount(this.layer, this.id).div(20).add(1)
                 return eff
             },
             // CLICK CODE
@@ -2073,7 +2073,7 @@ addLayer("pu", {
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = player.dgr.grass.pow(0.05).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
-                eff[1] = getLevelableAmount(this.layer, this.id).mul(0.05).add(1)
+                eff[1] = getLevelableAmount(this.layer, this.id).div(20).add(1)
                 return eff
             },
             // CLICK CODE

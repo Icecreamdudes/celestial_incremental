@@ -92,6 +92,7 @@
         player.sm.totalChipMult = player.sm.totalChipMult.mul(player.sm.spinAmount.pow(0.5).add(1))
         player.sm.totalChipMult = player.sm.totalChipMult.mul(buyableEffect("sm", 108))
         if (hasUpgrade("cbs", 15)) player.sm.totalChipMult = player.sm.totalChipMult.mul(upgradeEffect("cbs", 15))
+        player.sm.totalChipMult = player.sm.totalChipMult.mul(buyableEffect("sme", 184))
 
         player.sm.chipsToGet[0] = player.sm.chipsToGet[0].mul(buyableEffect("sm", 11))
         player.sm.chipsToGet[0] = player.sm.chipsToGet[0].mul(player.sm.totalChipMult)

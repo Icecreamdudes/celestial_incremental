@@ -13,7 +13,7 @@ addLayer("dgj", {
         milestone1Effect: new Decimal(1),
         milestone2Effect: new Decimal(1),
         milestone3Effect: new Decimal(1),
-        milestone4Effect: new Decimal(1),
+        milestone5Effect: new Decimal(1),
         milestone6Effect: new Decimal(1),
         milestone7Effect: new Decimal(1),
 
@@ -45,7 +45,7 @@ addLayer("dgj", {
         player.dgj.milestone1Effect = Decimal.pow(1.5, player.dgj.grassJump)
         player.dgj.milestone2Effect = Decimal.pow(2, player.dgj.grassJump)
         player.dgj.milestone3Effect = Decimal.pow(1.05, player.dgj.grassJump)
-        player.dgj.milestone4Effect = buyableEffect("dgr", 13).mul(levelableEffect("st", 206)[0]).mul(buyableEffect("st", 102))
+        player.dgj.milestone5Effect = buyableEffect("dgr", 13).mul(levelableEffect("st", 206)[0]).mul(buyableEffect("st", 102))
         player.dgj.milestone6Effect = Decimal.pow(1.01, player.dgj.grassJump.sub(12).max(0))
         player.dgj.milestone7Effect = Decimal.pow(1.05, player.dgj.grassJump.sub(16).max(0))
 
@@ -342,7 +342,7 @@ addLayer("dgj", {
             },
         },
         14: {
-            effectDescription() { return "All forms of dark grass automation are effected by dark grass growth speed<br>Currently: x" + format(player.dgj.milestone4Effect) + "." },
+            effectDescription() { return "Unlock a new layer in the hive." },
             done() { return player.dgj.grassJump.gte(6) },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #00488F", borderTop: "0px", borderRadius: "0px"}
@@ -351,7 +351,7 @@ addLayer("dgj", {
             },
         },
         15: {
-            effectDescription() { return "Unlock new Aleph upgrades in the hive." },
+            effectDescription() { return "All forms of dark grass automation are effected by dark grass growth speed<br>Currently: x" + format(player.dgj.milestone5Effect) + "." },
             done() { return player.dgj.grassJump.gte(8) },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #00488F", borderTop: "0px", borderRadius: "0px"}

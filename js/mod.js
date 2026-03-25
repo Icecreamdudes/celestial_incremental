@@ -28,6 +28,7 @@
 		"Black Heart/blackHeart.js", "Black Heart/blackHeartFunctions.js", "Black Heart/characters.js", "Black Heart/skills.js", "Black Heart/depth1.js",
 		"Black Heart/depth2.js", "Black Heart/depth3.js", "Black Heart/matosLair.js", "Black Heart/darkTemple.js", "Black Heart/bulletHell.js",
 		"Black Heart/stagnantSynestia.js", "Black Heart/depth4.js", "Black Heart/alephsChamber.js", "Black Heart/laboratory.js", "DarkU1/grassJump.js",
+		"Hive/nest.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 	],
@@ -260,6 +261,9 @@ function updateStyles() {
 			break;
 		case "al":
 			layerBG = "#1f001f"
+			break;
+		case "n":
+			layerBG = "linear-gradient(to right, #443812, #432236)"
 			break;
 		case "cb":
 			layerBG = "#021124"

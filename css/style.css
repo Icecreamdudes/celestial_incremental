@@ -1683,6 +1683,7 @@ button > * {
 }
 
 .shopButton {
+	display: block;
 	background: #181818;
 	border: 0;
 	border-radius: 0;
@@ -1728,8 +1729,9 @@ button > * {
 }
 
 .hoverable {
-	width: 80px;
-	height: 80px;
+	width: 92px;
+	height: 92px;
+	box-sizing: border-box;
 	position: relative;
 	color: white;
 	background-color: #51452e;
@@ -1758,7 +1760,7 @@ button > * {
 }
 
 .glossaryUpgDisplay {
-	width: 535px;
+	width: 565px;
 	height: 60px;
 	position: relative;
 	color: #ccc;

@@ -94,7 +94,7 @@
         player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("ds", 103))
 
         let autoMult = new Decimal(1)
-        if (hasMilestone("dgj", 14)) autoMult = autoMult.mul(player.dgj.milestone4Effect)
+        if (hasMilestone("dgj", 15)) autoMult = autoMult.mul(player.dgj.milestone5Effect)
 
         if (hasUpgrade("le", 24)) player.dgr.grass = player.dgr.grass.add(player.dgr.grassValue.mul(delta).mul(autoMult))
         if (hasMilestone("db", 14)) player.dgr.grass = player.dgr.grass.add(player.dgr.grassValue.mul(Decimal.mul(delta, 0.1)).mul(autoMult))

@@ -48,7 +48,7 @@
     tooltip: "Check Back Shrine",
     color: "#3466acff",
     branches: ["sm",],
-    update(delta, afk = false) {
+    update(delta) {
         if (arena == null && player.subtabs["cbs"]['stuff'] == 'Battle') {
             player.subtabs["cbs"]['stuff'] = "Refresh Page :(";
         }
@@ -121,7 +121,7 @@
         player.cbs.pylonTierEffect = player.cbs.pylonTier.sub(1).div(10).add(1)
 
         player.cbs.energyTimerMax = new Decimal(86400)
-        if (!afk) player.cbs.energyTimer = player.cbs.energyTimer.add(delta)
+        player.cbs.energyTimer = player.cbs.energyTimer.add(delta)
         if (player.cbs.energyTimer.gte(player.cbs.energyTimerMax)) {
             player.cbs.energyTimer = new Decimal(0)
             player.cbs.pylonEnergy = player.cbs.pylonEnergy.add(player.cbs.pylonEnergyToGet)

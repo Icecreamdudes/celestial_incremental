@@ -68,7 +68,6 @@
         if (hasAchievement("achievements", 4)) rankDiv = rankDiv.mul(1.15)
         if (hasAchievement("achievements", 5)) rankDiv = rankDiv.mul(1.1)
         rankDiv = rankDiv.mul(levelableEffect("pet", 204)[0])
-        rankDiv = rankDiv.mul(player.i.preOTFMult)
 
 
         let ranksGainPreS = player.points.div(10).mul(rankDiv).pow(Decimal.div(20, 29)).floor()
@@ -111,7 +110,6 @@
         if (hasAchievement("achievements", 4)) tierDiv = tierDiv.mul(1.15)
         if (hasAchievement("achievements", 5)) tierDiv = tierDiv.mul(1.1)
         tierDiv = tierDiv.mul(levelableEffect("pet", 204)[1])
-        tierDiv = tierDiv.mul(player.i.preOTFMult)
 
         let tiersGain = player.r.rank.div(3).mul(tierDiv).pow(Decimal.div(10, 11)).floor()
 
@@ -135,7 +133,6 @@
         let tetrDiv = new Decimal(1)
         if (hasAchievement("achievements", 5)) tetrDiv = tetrDiv.mul(1.1)
         tetrDiv = tetrDiv.mul(levelableEffect("pet", 204)[2])
-        tetrDiv = tetrDiv.mul(player.i.preOTFMult)
 
         let tetrGain = player.r.tier.div(2).mul(tetrDiv).pow(Decimal.div(25, 27)).floor()
         
@@ -170,7 +167,6 @@
         if (hasAchievement("achievements", 112)) pentDiv = pentDiv.mul(10)
         pentDiv = pentDiv.mul(buyableEffect("g", 19))
         if (hasUpgrade("ep2", 8)) pentDiv = pentDiv.mul(upgradeEffect("ep2", 8))
-        pentDiv = pentDiv.mul(player.i.preOTFMult)
         
         if (player.r.pent.lt(5)) player.r.pentReq = player.r.pent.add(1).pow(42.5).mul(1e28)
         if (player.r.pent.gte(5)) player.r.pentReq = player.r.pent.add(1).pow(75).mul(1e32).pow(1.1)

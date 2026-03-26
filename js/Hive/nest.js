@@ -143,13 +143,19 @@ addLayer("n", {
                 return look
             },
         },
-        // Buyable that multiplies most flower research caps (With tooltip that excess research doesn't count for new layers)
+        // Buyable that multiplies most bee research caps (With tooltip that excess research doesn't count for new layers)
         // Buyable that buffs nest gain based on total flower levels raised to a value
-        // Buyable that buffs pollinators based on highest nests
+
+        // Buyable that unlocks new aleph upgrades
         // Buyable that decrease all flower timers
         // Buyable that unlocks higher tier purple flowers
-        // Unlock natural pylon
+
+        // Buff to pollinators based on highest nests
         // Keep Gatherer v2
+
+        // Unlock natural pylon
+
+        // ==--- LATER ON STUFF ---==
         // Keep flower progress on aleph resets
         // Unlock wax layer
     },

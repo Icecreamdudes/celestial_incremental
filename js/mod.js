@@ -42,7 +42,7 @@
 // Set your version in num and name
 let VERSION = {
 	num: 190.2, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
-	name: "Black Heart Revamp",
+	name: "Aleph Update Pt II: Nested Metal",
 }
 
 function miscCode() {
@@ -802,6 +802,79 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.12 - Aleph Update Pt II: Nested Metal</h3><br>
+		Content:<br>
+			- Remade Black Heart.<br>
+			- Remade Depth 1.<br>
+			- Remade Depth 2.<br>
+			- Remade Depth 3.<br>
+			- Added ??? Temple.<br>
+			- Added Matos' Lair.<br>
+			- Added Starmetal Studies.<br>
+			- Removed Checkback Fighting.<br>
+			- Added Stagnant Synestia.<br>
+			- Added Depth 4.<br>
+			- Added Laboratory.<br>
+			- Added Alephs Chamber.<br>
+			- Added Grass Jump.<br>
+			- Added Nests.<br><br>
+		Minor Changes:<br>
+			- Added evolution fragments missing effect.<br>
+			- Added a new legendary pet.<br>
+			- Added 2 new BH characters.<br>
+			- Added 4 new punchcards.<br>
+			- Added a small teaser in hex of power.<br>
+			- Added new BH eclipse shop upgrades.<br>
+			- Added fun easter egg to Dice Space.<br>
+			- Replaced the 2 late game BI upgrades with new starmetal studies.<br><br>
+		QoL:<br>
+			- Added a performance mode for dynamic content.<br>
+			- Improved jukebox visuals slightly.<br>
+			- Improved clarity on what later celestialites unlocked.<br>
+			- Slightly changed flower layers UI to allow for more content.<br>
+			- Polished the universe pausing UI slightly.<br>
+			- Bullet hell content now uses mouse/touch controls, with keyboard as a side option.<br>
+			- Clarified the importance of Apathy upgrade VI in the apathy challenge.<br>
+			- Made Check Back Shrine and Singularity Pets run offline.<br><br>
+		Balancing:<br>
+			- Changed star softcap formula to make more sense.<br>
+			- Made defeating Iridite also give /1.5 SME generator cooldowns.<br>
+			- Many bullet hell bugs (thanks to redoing all the code).<br>
+			- Added doom softcaps to most Pre-OTF resources.<br>
+			- Added end game softcaps to anonymity and repli-trees.<br>
+			- Changed the effects of the black heart cookie upgrades. (Should still be worth-while)<br>
+			- Changed the pricing of legendary pets from fragmentation shop.<br>
+			- Very slighly buffed base fragmentation gain.<br>
+			- Reduced the scaling of fragmentation buyables.<br>
+			- Nerfed the ascension scaling of Nova pets first effect.<br>
+			- Nerfed the ascension scaling of Impossible Triangle pets first effect.<br>
+			- Nerfed the ascension scaling of Kres and Nav pet effects.<br>
+			- Added a new effect to Eclipse to make eclipse cooldown quicker.<br>
+			- Added a new effect to Geroa to make their effect more useful.<br>
+			- Changed the first singularity pet buyable for each pet to fit the new black heart.<br>
+			- Changed the unlock condition for the last 2 booster milestones.<br>
+			- Made best booster milestones not be unlocked else where<br>(Though you can't see what it buffs if you haven't unlocked that feature)<br>
+			- Added end game softcaps to nectar and pollen.<br>
+			- Changed the evolution requirements for wrath cookie to match new black heart resources.<br>
+			- Slightly reduced the nerf from the first tree core scrap upgrade.<br><br>
+		Bugfixes:<br>
+			- Added a check to hopefully prevent getting softlocked in space battles.<br>
+			- Fixed exiting certain areas of the game randomly pausing most of your universes.<br>
+			- Fixed XP button 9 showing up in the UI of button enhancement before being unlocked.<br>
+			- Fixed Funify level resets not changing the subtab of grass skips.<br>
+			- Fixed PS orb enhancer in CB orbs not functioning.<br>
+			- Fixed the tooltip on eclipse's ability tooltip.<br>
+			- Fixed Fragmentation buyable 7 not functioning.<br>
+			- Fixed a bug that causes newer saves to crash when entering blood layer.<br>
+			- Fixed the text of some punchcards being formatted wrong.<br>
+			- Fixed a typo in the blessing reset usage text.<br>
+			- Fixed cocoon milestone 14 not functioning.<br>
+			- Fixed a bug making Tav Domain's domain expander not switch domain subtabs.<br>
+			- Fixed Singularity upgrade XIX not working with auto singularity set to amount.<br>
+			- Fixed Zar sometimes forgetting to let you into dice space after finishing the unlocks.<br>
+			- Made booster dice speed toggle be disabled while in IC5 to prevent confusion.<br>
+			- Fixed tab layout's UI background not working while in portrait mode.<br>
+			- Fixed displayed space pet xp gain not matching actual xp gain.<br><br>
 	<h3>v1.11 - The Novasent Update Part II: Blood and Gambling</h3><br>
 		Content:<br>
 			- Added 10 new punchcards, including one legendary punchcard.<br>
@@ -818,7 +891,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added a Miniboss.<br>
 			- Added Ancient, Paradox, and Temporal Fragment Pylons.<br>
 			- Added 2 ships.<br>
-			- More stuff I don't remember.<br>
+			- More stuff I don't remember.<br><br>
 	    QoL:<br>
 			- Did I add QoL this update? I don't remember.<br><br>
 		Balancing:<br>

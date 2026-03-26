@@ -40,7 +40,11 @@ addLayer("n", {
             onClick() {
                 player.n.nest = player.n.nest.add(player.n.nestGain)
                 if (player.n.nest.gt(player.n.highestNest)) player.n.highestNest = player.n.nest
-                layers.al.prestigeReset(true)
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        layers.al.prestigeReset(true)
+                    }, 100*i)
+                }
             },
             style() {
                 let look = {width: "500px", minHeight: "100px", borderRadius: "15px"}
@@ -139,15 +143,15 @@ addLayer("n", {
                 return look
             },
         },
-        // Unlock effects for honeycomb and royal jelly
-        // Unlock nest base formula
-        // Unlock natural pylon
-        // Unlock wax layer
+        // Buyable that multiplies most flower research caps (With tooltip that excess research doesn't count for new layers)
+        // Buyable that buffs nest gain based on total flower levels raised to a value
+        // Buyable that buffs pollinators based on highest nests
         // Buyable that decrease all flower timers
-        // Unlocks for higher tier purple flowers
+        // Buyable that unlocks higher tier purple flowers
+        // Unlock natural pylon
         // Keep Gatherer v2
-        // Buyable that multiplies most flower research caps
         // Keep flower progress on aleph resets
+        // Unlock wax layer
     },
     microtabs: {
         Tabs: {

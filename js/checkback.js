@@ -498,7 +498,7 @@ addLayer("cb", {
         layers.ev2.update(time)
         layers.ev8.update(time)
         layers.sp.update(time)
-        layers.cbs.update(time, true)
+        layers.cbs.update(time)
     },
     branches: ["m"],
     clickables: {

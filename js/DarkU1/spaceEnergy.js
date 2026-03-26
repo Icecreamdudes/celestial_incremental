@@ -91,6 +91,7 @@
         player.ds.storedSpaceEnergyToGet = player.ds.spaceEnergy.mul(0.05).pow(0.6)
         if (hasMilestone("prj", 104)) player.ds.storedSpaceEnergyToGet = player.ds.storedSpaceEnergyToGet.mul(player.sma.starmetalExitTime.min(21600).div(900).add(1).pow(0.4));
         if (hasUpgrade("wel", 24)) player.ds.storedSpaceEnergyToGet = player.ds.storedSpaceEnergyToGet.mul(3);
+        player.ds.storedSpaceEnergyToGet = player.ds.storedSpaceEnergyToGet.mul(buyableEffect("st", 207))
     },
     bars: {},
     clickables: {

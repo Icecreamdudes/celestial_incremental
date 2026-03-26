@@ -57,6 +57,7 @@
         player.dt.storedToGet = player.dt.timeCapsules.div(100).log(10).add(1).pow(0.2).sub(1).pow_base(10).sub(1).mul(5).add(1)
         player.dt.storedToGet = player.dt.storedToGet.mul(buyableEffect("dt", 16))
         player.dt.storedToGet = player.dt.storedToGet.mul(player.pri.fountains[3].completionEffect)
+        player.dt.storedToGet = player.dt.storedToGet.mul(buyableEffect("st", 207))
         if (hasMilestone("prj", 104)) player.dt.storedToGet = player.dt.storedToGet.mul(player.sma.eclipseExitTime.min(86400).div(2700).add(1).pow(0.3));
         if (hasUpgrade("wel", 24)) player.dt.storedToGet = player.dt.storedToGet.mul(3);
         player.dt.storedToGet = player.dt.storedToGet.floor()

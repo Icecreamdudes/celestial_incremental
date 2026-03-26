@@ -723,8 +723,197 @@
             onComplete() {
                 doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock the starshine reset.</small>" },
+            effectDescription() { return "<small>Unlock the starshine reset and the study hall.</small>" },
             cycleReq() { return new Decimal(1) },
+            projectId() { return 4 },
+            unlocked() { return true },
+            done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
+            style() {
+                let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
+                if (hasMilestone("prj", this.id)) {
+                    look.backgroundColor = "#efffef"
+                    look.color = "#232e23"
+                } else {
+                    look.backgroundColor = "#232e23"
+                    look.color = "#efffef"
+                }
+                return look
+            },
+        },
+        402: {
+            onComplete() {
+                doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+            },
+            effectDescription() { return "<small>x2 starlight per project cycle after 1. Unlock more light upgrades.</small>" },
+            cycleReq() { return new Decimal(2) },
+            projectId() { return 4 },
+            unlocked() { return true },
+            done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
+            style() {
+                let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
+                if (hasMilestone("prj", this.id)) {
+                    look.backgroundColor = "#efffef"
+                    look.color = "#232e23"
+                } else {
+                    look.backgroundColor = "#232e23"
+                    look.color = "#efffef"
+                }
+                return look
+            },
+        },
+        403: {
+            onComplete() {
+                doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+            },
+            effectDescription() { return "<small>Double star general tree caps. Extend the star trees.</small>" },
+            cycleReq() { return new Decimal(3) },
+            projectId() { return 4 },
+            unlocked() { return true },
+            done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
+            style() {
+                let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
+                if (hasMilestone("prj", this.id)) {
+                    look.backgroundColor = "#efffef"
+                    look.color = "#232e23"
+                } else {
+                    look.backgroundColor = "#232e23"
+                    look.color = "#efffef"
+                }
+                return look
+            },
+        },
+        404: {
+            onComplete() {
+                doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+            },
+            effectDescription() { return "<small>Keep 1 light well δ cycle on starshine.</small>" },
+            cycleReq() { return new Decimal(4) },
+            projectId() { return 4 },
+            unlocked() { return true },
+            done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
+            style() {
+                let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
+                if (hasMilestone("prj", this.id)) {
+                    look.backgroundColor = "#efffef"
+                    look.color = "#232e23"
+                } else {
+                    look.backgroundColor = "#232e23"
+                    look.color = "#efffef"
+                }
+                return look
+            },
+        },
+        405: {
+            onComplete() {
+                doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+            },
+            effectDescription() { return "<small>Light fountains no longer require light to progress. +1 focus cap.</small>" },
+            cycleReq() { return new Decimal(5) },
+            projectId() { return 4 },
+            unlocked() { return true },
+            done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
+            style() {
+                let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
+                if (hasMilestone("prj", this.id)) {
+                    look.backgroundColor = "#efffef"
+                    look.color = "#232e23"
+                } else {
+                    look.backgroundColor = "#232e23"
+                    look.color = "#efffef"
+                }
+                return look
+            },
+        },
+        406: {
+            onComplete() {
+                doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+            },
+            effectDescription() { return "<small>Unlock prismatic wells.</small>" },
+            cycleReq() { return new Decimal(6) },
+            projectId() { return 4 },
+            unlocked() { return true },
+            done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
+            style() {
+                let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
+                if (hasMilestone("prj", this.id)) {
+                    look.backgroundColor = "#efffef"
+                    look.color = "#232e23"
+                } else {
+                    look.backgroundColor = "#232e23"
+                    look.color = "#efffef"
+                }
+                return look
+            },
+        },
+        407: {
+            onComplete() {
+                doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+            },
+            effectDescription() { return "<small>Unlock more starlight fountains.</small>" },
+            cycleReq() { return new Decimal(7) },
+            projectId() { return 4 },
+            unlocked() { return true },
+            done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
+            style() {
+                let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
+                if (hasMilestone("prj", this.id)) {
+                    look.backgroundColor = "#efffef"
+                    look.color = "#232e23"
+                } else {
+                    look.backgroundColor = "#232e23"
+                    look.color = "#efffef"
+                }
+                return look
+            },
+        },
+        408: {
+            onComplete() {
+                doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+            },
+            effectDescription() { return "<small>Unlock more Goobert content. Improve prismatic well cycle effects.</small>" },
+            cycleReq() { return new Decimal(8) },
+            projectId() { return 4 },
+            unlocked() { return true },
+            done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
+            style() {
+                let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
+                if (hasMilestone("prj", this.id)) {
+                    look.backgroundColor = "#efffef"
+                    look.color = "#232e23"
+                } else {
+                    look.backgroundColor = "#232e23"
+                    look.color = "#efffef"
+                }
+                return look
+            },
+        },
+        409: {
+            onComplete() {
+                doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+            },
+            effectDescription() { return "<small>Improve project cycle effects.</small>" },
+            cycleReq() { return new Decimal(9) },
+            projectId() { return 4 },
+            unlocked() { return true },
+            done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
+            style() {
+                let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
+                if (hasMilestone("prj", this.id)) {
+                    look.backgroundColor = "#efffef"
+                    look.color = "#232e23"
+                } else {
+                    look.backgroundColor = "#232e23"
+                    look.color = "#efffef"
+                }
+                return look
+            },
+        },
+        410: {
+            onComplete() {
+                doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+            },
+            effectDescription() { return "<small>x100 light. It's time.</small>" },
+            cycleReq() { return new Decimal(10) },
             projectId() { return 4 },
             unlocked() { return true },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
@@ -902,7 +1091,7 @@
 
                 return s
             },
-            milestones: [401]//, 402, 403, 404, 405, 406, 407, 408, 409, 410],
+            milestones: [401, 402, 403, 404, 405, 406, 407, 408, 409, 410],
         },
     },
     microtabs: {

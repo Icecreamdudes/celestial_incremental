@@ -10,6 +10,12 @@ addLayer("n", {
         nest: new Decimal(0),
         nestGain: new Decimal(0),
         highestNest: new Decimal(0),
+        nestReset: new Decimal(0),
+        nestEffect: new Decimal(1),
+
+        flowerPercentage: new Decimal(0.01),
+        milestone8Effect: new Decimal(1),
+        milestone14Effect: new Decimal(1),
     }},
     automate() {},
     nodeStyle() {
@@ -25,12 +31,26 @@ addLayer("n", {
         let onepersec = new Decimal(1)
 
         if (hasUpgrade("n", 31)) {
-            player.n.nestGain = Decimal.pow(2, player.al.honeycomb.mul(player.al.royalJelly).div(1e50).add(1).log(1e10))
+            player.n.nestGain = Decimal.pow(2, player.al.honeycomb.mul(player.al.royalJelly).div(1e60).add(1).log(1e20))
         } else {
             player.n.nestGain = new Decimal(1)
         }
 
         player.n.nestGain = player.n.nestGain.floor() // KEEP AT END
+
+        player.n.nestEffect = Decimal.pow("1e10000", player.n.highestNest.pow(0.7))
+
+        player.n.flowerPercentage = new Decimal(0.01)
+        if (hasMilestone("n", 19)) player.n.flowerPercentage = player.n.flowerPercentage.add(Decimal.div(player.n.milestones.length-8, 100))
+
+        player.n.milestone8Effect = new Decimal(1)
+        player.n.milestone8Effect = player.n.milestone8Effect.add(Decimal.div(player.n.upgrades.length, 100))
+        for (let i in player.n.buyables) {
+            player.n.milestone8Effect = player.n.milestone8Effect.add(Decimal.div(player.n.buyables[i], 100))
+        }
+
+        player.n.milestone14Effect = player.n.nestReset.pow(0.7).div(100).add(1)
+        if (player.n.milestone14Effect.gt(2)) player.n.milestone14Effect = player.n.milestone14Effect.div(2).pow(0.5).mul(2)
     },
     clickables: {
         1: {
@@ -39,6 +59,7 @@ addLayer("n", {
             unlocked: true,
             onClick() {
                 player.n.nest = player.n.nest.add(player.n.nestGain)
+                player.n.nestReset = player.n.nestReset.add(1)
                 if (player.n.nest.gt(player.n.highestNest)) player.n.highestNest = player.n.nest
                 for (let i = 0; i < 5; i++) {
                     setTimeout(() => {
@@ -143,25 +164,177 @@ addLayer("n", {
                 return look
             },
         },
+
         // Buyable that multiplies most bee research caps (With tooltip that excess research doesn't count for new layers)
         // Buyable that buffs nest gain based on total flower levels raised to a value
 
         // Buyable that unlocks new aleph upgrades
-        // Buyable that decrease all flower timers
+        // Buyable that decreases all flower timers
         // Buyable that unlocks higher tier purple flowers
 
-        // Buff to pollinators based on highest nests
-        // Keep Gatherer v2
+        // 2 SIMPLE UPGRADES
+        // One could be giving gatherers a flower gain mult
 
         // Unlock natural pylon
 
         // ==--- LATER ON STUFF ---==
-        // Keep flower progress on aleph resets
         // Unlock wax layer
+    },
+    milestones: {
+        11: {
+            requirementDescription: "1 Nest Reset",
+            effectDescription() { return "Keep cocoon milestones on nest reset" },
+            done() { return player.n.nestReset.gte(1) },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "black", border: "3px solid #9e6a55", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("n", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+        },
+        12: {
+            requirementDescription: "2 Nest Resets",
+            effectDescription() { return "Keep 2% of aleph buyables per nest reset<br>Currently: " + formatWhole(player.n.nestReset.mul(2).min(100)) + "%" },
+            done() { return player.n.nestReset.gte(2) },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "black", border: "3px solid #9e6a55", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("n", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+        },
+        13: {
+            requirementDescription: "3 Nest Resets",
+            effectDescription() { return "Increase red flower amounts by " + formatWhole(player.n.flowerPercentage.mul(100)) + "% of flower gain per second" },
+            done() { return player.n.nestReset.gte(3) },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "black", border: "3px solid #9e6a55", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("n", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+        },
+        14: {
+            requirementDescription: "4 Nest Resets",
+            effectDescription() { return "Unlock an effect for nest that buffs pollinator gain<br>(Based on highest nests)" },
+            done() { return player.n.nestReset.gte(4) },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "black", border: "3px solid #9e6a55", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("n", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+        },
+        15: {
+            requirementDescription: "6 Nest Resets",
+            effectDescription() { return "Increase blue flower amounts by " + formatWhole(player.n.flowerPercentage.mul(100)) + "% of flower gain per second" },
+            done() { return player.n.nestReset.gte(6) },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "black", border: "3px solid #9e6a55", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("n", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+        },
+        16: {
+            requirementDescription: "8 Nest Resets",
+            effectDescription() { return "Automatically purchase bee researches" },
+            done() { return player.n.nestReset.gte(8) },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "black", border: "3px solid #9e6a55", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("n", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+        },
+        17: {
+            requirementDescription: "10 Nest Resets",
+            effectDescription() { return "Increase green flower amounts by " + formatWhole(player.n.flowerPercentage.mul(100)) + "% of flower gain per second" },
+            done() { return player.n.nestReset.gte(10) },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "black", border: "3px solid #9e6a55", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("n", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+        },
+        18: {
+            requirementDescription: "15 Nest Resets",
+            effectDescription() { return "Total nest purchases boost golden grass gain<br>Currently: ^" + formatSimple(player.n.milestone8Effect, 2) },
+            done() { return player.n.nestReset.gte(15) },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "black", border: "3px solid #9e6a55", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("n", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+        },
+        19: {
+            requirementDescription: "20 Nest Resets",
+            effectDescription() { return "All flower automation milestones are buffed based by total nest milestones, starting with this milestone<br>Currently: +" + formatWhole(Decimal.max(player.n.milestones.length - 8, 0)) + "%" },
+            done() { return player.n.nestReset.gte(20) },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "black", border: "3px solid #9e6a55", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("n", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+        },
+        20: {
+            requirementDescription: "30 Nest Resets",
+            effectDescription() { return "Keep gatherers on all resets" },
+            done() { return player.n.nestReset.gte(30) },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "black", border: "3px solid #9e6a55", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("n", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+        },
+        21: {
+            requirementDescription: "40 Nest Resets",
+            effectDescription() { return "Increase pink flower amounts by " + formatWhole(player.n.flowerPercentage.mul(100)) + "% of flower gain per second" },
+            done() { return player.n.nestReset.gte(40) },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "black", border: "3px solid #9e6a55", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("n", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+        },
+        22: {
+            requirementDescription: "50 Nest Resets",
+            effectDescription() { return "Automate aleph upgrades" },
+            done() { return player.n.nestReset.gte(50) },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "black", border: "3px solid #9e6a55", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("n", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+        },
+        23: {
+            requirementDescription: "65 Nest Resets",
+            effectDescription() { return "Increase yellow flower amounts by " + formatWhole(player.n.flowerPercentage.mul(100)) + "% of flower gain per second" },
+            done() { return player.n.nestReset.gte(65) },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "black", border: "3px solid #9e6a55", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("n", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+        },
+        24: {
+            requirementDescription: "80 Nest Resets",
+            effectDescription() { return player.n.milestone14Effect.lte(2) ? "Boost rocket fuel gain based on nest resets<br>Currently: ^" + formatSimple(player.n.milestone14Effect, 2) : "Boost rocket fuel gain based on nest resets<br>Currently: ^" + formatSimple(player.n.milestone14Effect, 2) + " <small style='color:red'>[SOFTCAPPED]</small>" },
+            done() { return player.n.nestReset.gte(80) },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "black", border: "3px solid #9e6a55", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("n", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+        },
+        25: {
+            requirementDescription: "100 Nest Resets",
+            effectDescription() { return "Increase purple flower amounts by " + formatWhole(player.n.flowerPercentage.mul(100)) + "% of flower gain per second" },
+            done() { return player.n.nestReset.gte(100) },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "black", border: "3px solid #9e6a55", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("n", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+        },
     },
     microtabs: {
         Tabs: {
-            "Main": {
+            "Upgrades": {
                 buttonStyle: {borderColor: "#E3987A", borderRadius: "15px"},
                 unlocked: true,
                 content: [
@@ -173,14 +346,117 @@ addLayer("n", {
                             player.al.honeycomb.gte(1e25) && player.al.royalJelly.gte(1e25) ? look.color = "white" : look.color = "gray"
                             return look
                         }],
-                        ["raw-html", () => {return hasUpgrade("n", 31) ? "<div class='bottomTooltip'>Base Formula<hr><small>2^(log<sub>1e10</sub>((Honeycombs*Royal Jelly)/1e50))</small></div>" : ""}],
+                        ["raw-html", () => {return hasUpgrade("n", 31) ? "<div class='bottomTooltip'>Base Formula<hr><small>2^(log<sub>1e20</sub>((Honeycombs*Royal Jelly)/1e60))</small></div>" : ""}],
                     ]],
+                    ["raw-html", () => {return hasMilestone("n", 14) ? "Boosts pollinators by x" + formatSimple() : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "10px"],
                     ["clickable", 1],
                     ["blank", "10px"],
                     ["upgrade", 11],
                     ["row", [["upgrade", 21], ["upgrade", 22]]],
                     ["upgrade", 31],
+                ],
+            },
+            "Milestones": {
+                buttonStyle: {borderColor: "#E3987A", borderRadius: "15px"},
+                unlocked: true,
+                content: [
+                    ["blank", "15px"],
+                    ["style-row", [
+                        ["raw-html", () => {return player.n.nestReset.eq(1) ? "You have 1 nest reset" : "You have " + formatWhole(player.n.nestReset) + " nest resets"}, {color: "rgba(0,0,0,0.6)", fontSize: "24px", fontFamily: "monospace"}],
+                    ], {backgroundColor: "#E3987A", border: "3px solid #9e6a55", borderRadius: "13px 13px 0px 0px", width: "588px", height: "40px"}],
+                    ["style-row", [
+                        ["style-column", [
+                            ["raw-html", "1", {color: "rgba(0,0,0,0.6)", fontSize: "32px", fontFamily: "monospace"}],
+                        ], {backgroundColor: "#E3987A", border: "3px solid #9e6a55", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                        ["titleless-milestone", 11],
+                    ]],
+                    ["style-row", [
+                        ["style-column", [
+                            ["raw-html", "2", {color: "rgba(0,0,0,0.6)", fontSize: "32px", fontFamily: "monospace"}],
+                        ], {backgroundColor: "#E3987A", border: "3px solid #9e6a55", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                        ["titleless-milestone", 12],
+                    ]],
+                    ["style-row", [
+                        ["style-column", [
+                            ["raw-html", "3", {color: "rgba(0,0,0,0.6)", fontSize: "32px", fontFamily: "monospace"}],
+                        ], {backgroundColor: "#E3987A", border: "3px solid #9e6a55", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                        ["titleless-milestone", 13],
+                    ]],
+                    ["style-row", [
+                        ["style-column", [
+                            ["raw-html", "4", {color: "rgba(0,0,0,0.6)", fontSize: "32px", fontFamily: "monospace"}],
+                        ], {backgroundColor: "#E3987A", border: "3px solid #9e6a55", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                        ["titleless-milestone", 14],
+                    ]],
+                    ["style-row", [
+                        ["style-column", [
+                            ["raw-html", "6", {color: "rgba(0,0,0,0.6)", fontSize: "32px", fontFamily: "monospace"}],
+                        ], {backgroundColor: "#E3987A", border: "3px solid #9e6a55", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                        ["titleless-milestone", 15],
+                    ]],
+                    ["style-row", [
+                        ["style-column", [
+                            ["raw-html", "8", {color: "rgba(0,0,0,0.6)", fontSize: "32px", fontFamily: "monospace"}],
+                        ], {backgroundColor: "#E3987A", border: "3px solid #9e6a55", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                        ["titleless-milestone", 16],
+                    ]],
+                    ["style-row", [
+                        ["style-column", [
+                            ["raw-html", "10", {color: "rgba(0,0,0,0.6)", fontSize: "32px", fontFamily: "monospace"}],
+                        ], {backgroundColor: "#E3987A", border: "3px solid #9e6a55", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                        ["titleless-milestone", 17],
+                    ]],
+                    ["style-row", [
+                        ["style-column", [
+                            ["raw-html", "15", {color: "rgba(0,0,0,0.6)", fontSize: "32px", fontFamily: "monospace"}],
+                        ], {backgroundColor: "#E3987A", border: "3px solid #9e6a55", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                        ["titleless-milestone", 18],
+                    ]],
+                    ["style-row", [
+                        ["style-column", [
+                            ["raw-html", "20", {color: "rgba(0,0,0,0.6)", fontSize: "32px", fontFamily: "monospace"}],
+                        ], {backgroundColor: "#E3987A", border: "3px solid #9e6a55", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                        ["titleless-milestone", 19],
+                    ]],
+                    ["style-row", [
+                        ["style-column", [
+                            ["raw-html", "30", {color: "rgba(0,0,0,0.6)", fontSize: "32px", fontFamily: "monospace"}],
+                        ], {backgroundColor: "#E3987A", border: "3px solid #9e6a55", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                        ["titleless-milestone", 20],
+                    ]],
+                    ["style-row", [
+                        ["style-column", [
+                            ["raw-html", "40", {color: "rgba(0,0,0,0.6)", fontSize: "32px", fontFamily: "monospace"}],
+                        ], {backgroundColor: "#E3987A", border: "3px solid #9e6a55", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                        ["titleless-milestone", 21],
+                    ]],
+                    ["style-row", [
+                        ["style-column", [
+                            ["raw-html", "50", {color: "rgba(0,0,0,0.6)", fontSize: "32px", fontFamily: "monospace"}],
+                        ], {backgroundColor: "#E3987A", border: "3px solid #9e6a55", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                        ["titleless-milestone", 22],
+                    ]],
+                    ["style-row", [
+                        ["style-column", [
+                            ["raw-html", "65", {color: "rgba(0,0,0,0.6)", fontSize: "32px", fontFamily: "monospace"}],
+                        ], {backgroundColor: "#E3987A", border: "3px solid #9e6a55", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                        ["titleless-milestone", 23],
+                    ]],
+                    ["style-row", [
+                        ["style-column", [
+                            ["raw-html", "80", {color: "rgba(0,0,0,0.6)", fontSize: "32px", fontFamily: "monospace"}],
+                        ], {backgroundColor: "#E3987A", border: "3px solid #9e6a55", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                        ["titleless-milestone", 24],
+                    ]],
+                    ["style-row", [
+                        ["style-column", [
+                            ["raw-html", "100", {color: "rgba(0,0,0,0.6)", fontSize: "32px", fontFamily: "monospace"}],
+                        ], {backgroundColor: "#E3987A", border: "3px solid #9e6a55", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                        ["titleless-milestone", 25],
+                    ]],
+                    ["style-row", [
+                    ], {backgroundColor: "#E3987A", border: "3px solid #9e6a55", borderTop: "0px", borderRadius: "0px 0px 13px 13px", width: "588px", height: "10px"}],
                 ],
             },
         },

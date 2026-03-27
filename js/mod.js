@@ -819,7 +819,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added Grass Jump.<br>
 			- Added Nests.<br><br>
 		Minor Changes:<br>
-			- Added evolution fragments missing effect.<br>
+			- Added evolution fragment pets missing effect.<br>
 			- Added a new legendary pet.<br>
 			- Added 2 new BH characters.<br>
 			- Added 4 new punchcards.<br>
@@ -828,7 +828,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added fun easter egg to Dice Space.<br>
 			- Replaced the 2 late game BI upgrades with new starmetal studies.<br><br>
 		QoL:<br>
-			- Added a performance mode for dynamic content.<br>
+			- Added a performance mode option for dynamic content.<br>
 			- Improved jukebox visuals slightly.<br>
 			- Improved clarity on what later celestialites unlocked.<br>
 			- Slightly changed flower layers UI to allow for more content.<br>
@@ -839,7 +839,6 @@ let changelog = `<h1>Changelog:</h1><br>
 		Balancing:<br>
 			- Changed star softcap formula to make more sense.<br>
 			- Made defeating Iridite also give /1.5 SME generator cooldowns.<br>
-			- Many bullet hell bugs (thanks to redoing all the code).<br>
 			- Added doom softcaps to most Pre-OTF resources.<br>
 			- Added end game softcaps to anonymity and repli-trees.<br>
 			- Changed the effects of the black heart cookie upgrades. (Should still be worth-while)<br>
@@ -860,6 +859,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		Bugfixes:<br>
 			- Added a check to hopefully prevent getting softlocked in space battles.<br>
 			- Fixed exiting certain areas of the game randomly pausing most of your universes.<br>
+			- Fixed many bullet hell bugs (thanks to redoing all the code).<br>
 			- Fixed XP button 9 showing up in the UI of button enhancement before being unlocked.<br>
 			- Fixed Funify level resets not changing the subtab of grass skips.<br>
 			- Fixed PS orb enhancer in CB orbs not functioning.<br>

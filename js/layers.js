@@ -677,13 +677,13 @@
                 unlocked() { return hasUpgrade("s", 28)},
                 content: [
                     ["blank", "25px"],
-                            ["left-row", [
-            ["tooltip-row", [
-                ["raw-html", "<img src='resources/fragments/ancientFragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cof.coreFragments[0])}, {width: "93px", height: "50px", color: "#8B664B", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                ["raw-html", "<div class='bottomTooltip'>Ancient Core Fragments</div>"],
-            ], {width: "148px", height: "50px",}],
-        ], {width: "148px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
+                    ["left-row", [
+                        ["tooltip-row", [
+                            ["raw-html", "<img src='resources/fragments/ancientFragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                            ["raw-html", () => { return formatWhole(player.cof.coreFragments[0])}, {width: "103px", height: "50px", color: "#8B664B", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                            ["raw-html", "<div class='bottomTooltip'>Ancient Core Fragments</div>"],
+                        ], {width: "158px", height: "50px",}],
+                    ], {width: "158px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
                     ["blank", "25px"],
                     ["clickable", 12],
                     ["raw-html", () => { return player.i.pylonBuilt ? "You have <h3>" + format(player.i.pylonEnergy) + "/" + format(player.i.pylonEnergyMax) +  "</h3> ancient pylon energy (" + format(player.i.pylonEnergyPerSecond) + "/s)." : "" }, {color: "#000000ff", fontSize: "24px", fontFamily: "monospace"}],

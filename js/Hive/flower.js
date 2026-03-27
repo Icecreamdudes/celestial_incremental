@@ -245,6 +245,19 @@ addLayer("fl", {
         player.fl.flowerGain = player.fl.flowerGain.mul(player.bpl.roles.empress.effect)
         player.fl.flowerGain = player.fl.flowerGain.mul(player.bee.preAlephMult)
 
+        // FLOWER AUTOMATION
+        let max = 26
+        if (hasMilestone("n", 13)) max += 100
+        if (hasMilestone("n", 15)) max += 100
+        if (hasMilestone("n", 17)) max += 100
+        if (hasMilestone("n", 21)) max += 100
+        if (hasMilestone("n", 23)) max += 100
+        if (hasMilestone("n", 25)) max += 100
+        for (let i = 100; i < max; ) {
+            if (layers.fl.glossary[i].display()) player.fl.glossary[i] = player.fl.glossary[i].add(player.fl.flowerGain.mul(player.n.flowerPercentage).mul(delta))
+            if (i % 100 == 25) {i = i+76} else if (i % 10 == 5) {i = i+6} else {i++}
+        }
+
         // GLOSSARY ADDITIVE BASE
         player.fl.glossaryBase = new Decimal(1)
         player.fl.glossaryBase = player.fl.glossaryBase.add(buyableEffect("bee", 23))
@@ -2370,7 +2383,7 @@ addLayer("fl", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             display() {
-                return "Increases multiplier by +" + formatSimple(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "Multiplies picking power by x" + formatSimple(tmp[this.layer].buyables[this.id].effect.add(1)) + ".\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Bees"
             },
             buy(mult) {
@@ -2463,7 +2476,7 @@ addLayer("fl", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) && tmp.al.layerShown },
             display() {
-                return "Increases multiplier by +" + formatSimple(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "Multiplies picking power by x" + formatSimple(tmp[this.layer].buyables[this.id].effect.add(1)) + ".\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Pollinators"
             },
             buy(mult) {
@@ -2560,15 +2573,15 @@ addLayer("fl", {
                                     ["style-column", [
                                         ["raw-html", "Picking Power", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
                                         ["style-row", [], {width: "150px", height: "1px", background: "#ccc", margin: "2px"}],
-                                        ["raw-html", () => {return formatSimple(player.fl.gatherer[1].power)}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
+                                        ["raw-html", () => {return formatSimple(player.fl.gatherer[1].power.mul(player.fl.gatherer[1].mult))}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
                                     ], {width: "185px", height: "45px", borderBottom: "5px solid #3e3117"}],
                                     ["ex-buyable", 2],
                                 ], {width: "185px", height: "200px", borderRight: "5px solid #3e3117"}],
                                 ["style-column", [
                                     ["style-column", [
-                                        ["raw-html", "Multiplier", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
+                                        ["raw-html", "Flower Mult", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
                                         ["style-row", [], {width: "150px", height: "1px", background: "#ccc", margin: "2px"}],
-                                        ["raw-html", () => {return "x" + formatSimple(player.fl.gatherer[1].mult)}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
+                                        ["raw-html", () => {return "x" + formatSimple(1)}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
                                     ], {width: "185px", height: "45px", borderBottom: "5px solid #3e3117"}],
                                     ["ex-buyable", 3],
                                 ], {width: "185px", height: "200px"}],
@@ -2592,15 +2605,15 @@ addLayer("fl", {
                                     ["style-column", [
                                         ["raw-html", "Picking Power", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
                                         ["style-row", [], {width: "150px", height: "1px", background: "#ccc", margin: "2px"}],
-                                        ["raw-html", () => {return formatSimple(player.fl.gatherer[2].power)}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
+                                        ["raw-html", () => {return formatSimple(player.fl.gatherer[2].power.mul(player.fl.gatherer[2].mult))}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
                                     ], {width: "185px", height: "45px", borderBottom: "5px solid #3e3117"}],
                                     ["ex-buyable", 5],
                                 ], {width: "185px", height: "190px", borderRight: "5px solid #3e3117"}],
                                 ["style-column", [
                                     ["style-column", [
-                                        ["raw-html", "Multiplier", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
+                                        ["raw-html", "Flower Mult", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
                                         ["style-row", [], {width: "150px", height: "1px", background: "#ccc", margin: "2px"}],
-                                        ["raw-html", () => {return "x" + formatSimple(player.fl.gatherer[2].mult)}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
+                                        ["raw-html", () => {return "x" + formatSimple(1)}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
                                     ], {width: "185px", height: "45px", borderBottom: "5px solid #3e3117"}],
                                     ["ex-buyable", 6],
                                 ], {width: "185px", height: "190px"}],

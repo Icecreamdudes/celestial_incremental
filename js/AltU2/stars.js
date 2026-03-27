@@ -1107,8 +1107,10 @@ addLayer("st", {
                     return new Decimal("1e16")
                 } else if (getBuyableAmount(this.layer, this.id).eq(6)) {
                     return new Decimal("1e25")
+                } else if (getBuyableAmount(this.layer, this.id).eq(7)) {
+                    return new Decimal("1e36")
                 } else {
-                    return getBuyableAmount(this.layer, this.id).sub(6).mul("1e25")
+                    return Decimal.pow(10, getBuyableAmount(this.layer, this.id).sub(1).pow(2))
                 }
             },
             canAfford() { return this.currency().gte(this.cost()) },

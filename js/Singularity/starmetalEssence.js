@@ -1993,7 +1993,7 @@
                 player.ne.alpha.amount = this.currency()[0].sub(amt)
                 player.sme.starmetalEssence = this.currency()[1].sub(amt2)
             },
-            effect(x) {return getBuyableAmount(this.layer, this.id).div(10).add(1)},
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(5).add(1)},
             unlocked() {return player.pol.unlockHive >= 2 && player.alephsChamber.milestone[25] > 0},
             branches: [[173, "#ffd69c"]],
             cost(x) {
@@ -2004,7 +2004,7 @@
             },
             display() {
                 return "<h3>SME-H6</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/5)\n\
-                    Increase Pre-Aleph Resources by 10%\n\
+                    Increase Pre-Aleph Resources by 20%\n\
                     Currently: +" + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + "%\n\ \n\
                     Cost:<br>" + formatShortWhole(player.ne.alpha.amount) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[0]) + " Nectar α\n\
                     " + formatShortWhole(player.sme.starmetalEssence) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[1]) + " SME"

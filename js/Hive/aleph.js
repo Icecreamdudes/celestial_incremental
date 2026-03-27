@@ -22,7 +22,13 @@ addLayer("al", {
 
         show: false,
     }},
-    automate() {},
+    automate() {
+        if (hasMilestone("n", 22)) {
+            for (let i in layers.al.upgrades) {
+                buyUpgrade("al", i, false)
+            }
+        }
+    },
     nodeStyle() {
         return {
             background: "linear-gradient(45deg, #3f003f 0%, #a900a9 100%)",
@@ -50,7 +56,7 @@ addLayer("al", {
         player.al.honeycombGain = player.al.honeycombGain.floor()
 
         // HONEYCOMB EFFECT
-        player.al.honeycombEffect = hasUpgrade("n", 21) ? Decimal.pow(1.25, player.al.honeycomb.add(1).log(10)) : new Decimal(1)
+        player.al.honeycombEffect = hasUpgrade("n", 21) ? Decimal.pow(1.5, player.al.honeycomb.add(1).log(10)) : new Decimal(1)
 
         // START OF ROYAL JELLY
         player.al.royalJellyGain = player.ho.honey.div(1e10).pow(0.25)
@@ -64,7 +70,7 @@ addLayer("al", {
         player.al.royalJellyGain = player.al.royalJellyGain.floor()
 
         // ROYAL JELLY EFFECT
-        player.al.royalJellyEffect = hasUpgrade("n", 22) ? Decimal.pow(1.05, player.al.royalJelly.add(1).log(10)) : new Decimal(1)
+        player.al.royalJellyEffect = hasUpgrade("n", 22) ? Decimal.pow(1.1, player.al.royalJelly.add(1).log(10)) : new Decimal(1)
 
         if (player.al.honeycomb.gt(player.al.highestHoneycomb)) player.al.highestHoneycomb = player.al.honeycomb
         if (player.al.royalJelly.gt(player.al.highestRoyalJelly)) player.al.highestRoyalJelly = player.al.royalJelly
@@ -124,25 +130,29 @@ addLayer("al", {
 
         player.fl.gatherer[1].id = 101
         player.fl.gatherer[1].current = new Decimal(0)
-        player.fl.gatherer[1].max = new Decimal(5)
-        player.fl.gatherer[1].power = new Decimal(0)
-        player.fl.gatherer[1].mult = new Decimal(1)
+        if (!hasMilestone("n", 20)) {
+            player.fl.gatherer[1].max = new Decimal(5)
+            player.fl.gatherer[1].power = new Decimal(0)
+            player.fl.gatherer[1].mult = new Decimal(1)
+        }
         
         player.fl.gatherer[2].id = 505
         player.fl.gatherer[2].current = new Decimal(0)
-        if (all) {
+        if (all && !hasMilestone("n", 20)) {
             player.fl.gatherer[2].max = new Decimal(5)
             player.fl.gatherer[2].power = new Decimal(0)
             player.fl.gatherer[2].mult = new Decimal(1)
         }
 
-        player.fl.buyables[1] = new Decimal(0)
-        player.fl.buyables[2] = new Decimal(0)
-        player.fl.buyables[3] = new Decimal(0)
-        if (all) {
-            player.fl.buyables[4] = new Decimal(0)
-            player.fl.buyables[5] = new Decimal(0)
-            player.fl.buyables[6] = new Decimal(0)
+        if (!hasMilestone("n", 20)) {
+            player.fl.buyables[1] = new Decimal(0)
+            player.fl.buyables[2] = new Decimal(0)
+            player.fl.buyables[3] = new Decimal(0)
+            if (all) {
+                player.fl.buyables[4] = new Decimal(0)
+                player.fl.buyables[5] = new Decimal(0)
+                player.fl.buyables[6] = new Decimal(0)
+            }
         }
 
         // POLLEN
@@ -207,7 +217,11 @@ addLayer("al", {
             player.al.royalJellyGain = new Decimal(0)
             player.al.upgrades.splice(0, player.al.upgrades.length)
             for (let i in player.al.buyables) {
-                player.al.buyables[i] = new Decimal(0)
+                if (!hasMilestone("n", 12)) {
+                    player.al.buyables[i] = new Decimal(0)
+                } else {
+                    player.al.buyables[i] = layers.al.buyables[i].purchaseLimit().mul(player.n.nestReset.div(50).min(1)).floor()
+                }
             }
         }
     },
@@ -218,7 +232,11 @@ addLayer("al", {
             unlocked: true,
             onClick() {
                 player.al.honeycomb = player.al.honeycomb.add(player.al.honeycombGain)
-                layers.al.prestigeReset()
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        layers.al.prestigeReset()
+                    }, 100*i)
+                }
             },
             style() {
                 let look = { width: '300px', minHeight: '90px', border: "3px solid rgba(0,0,0,0.3)", borderRadius: '15px'}
@@ -232,7 +250,11 @@ addLayer("al", {
             unlocked: true,
             onClick() {
                 player.al.royalJelly = player.al.royalJelly.add(player.al.royalJellyGain)
-                layers.al.prestigeReset()
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        layers.al.prestigeReset()
+                    }, 100*i)
+                }
             },
             style() {
                 let look = { width: '300px', minHeight: '90px', border: "3px solid rgba(0,0,0,0.3)", borderRadius: '15px'}
@@ -1417,13 +1439,13 @@ addLayer("al", {
                     ["style-row", [
                         ["style-column", [
                             ["top-column", [
-                                ["blank", "15px"],
-                                ["row", [
-                                    ["raw-html", () => {return "You have <h3>" + formatWhole(player.al.honeycomb) + "</h3> Honeycombs"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ["raw-html", () => {return "(+" + formatWhole(player.al.honeycombGain) + ")"}, {color: "white", fontSize: "14px", fontFamily: "monospace", marginLeft: "7px"}],
-                                ]],
-                                ["raw-html", () => {return hasUpgrade("n", 21) ? "Boosts bees by x" + formatSimple(player.al.honeycombEffect) : "<div style='margin-bottom:10px'></div>"}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
-                                ["blank", "10px"],
+                                ["style-column", [
+                                    ["row", [
+                                        ["raw-html", () => {return "You have <h3>" + formatWhole(player.al.honeycomb) + "</h3> Honeycombs"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                        ["raw-html", () => {return "(+" + formatWhole(player.al.honeycombGain) + ")"}, {color: "white", fontSize: "14px", fontFamily: "monospace", marginLeft: "7px"}],
+                                    ]],
+                                    ["raw-html", () => {return hasUpgrade("n", 21) ? "Boosts bees by x" + formatSimple(player.al.honeycombEffect) : ""}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                                ], {width: "400px", height: "60px"}],
                                 ["clickable", 1],
                             ], {width: "400px", height: "162px", background: "#2d250c", borderBottom: "3px solid #a900a9", borderRadius: "17px 14px 0 0"}],
                             ["always-scroll-column", [
@@ -1446,13 +1468,13 @@ addLayer("al", {
                         ], {width: "400px", height: "725px", background: "#161206", borderRight: "3px solid #a900a9", borderRadius: "17px", marginRight: "-1.5px"}],
                         ["style-column", [
                             ["top-column", [
-                                ["blank", "15px"],
-                                ["row", [
-                                    ["raw-html", () => {return "You have <h3>" + formatWhole(player.al.royalJelly) + "</h3> Royal Jelly"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ["raw-html", () => {return "(+" + formatWhole(player.al.royalJellyGain) + ")"}, {color: "white", fontSize: "14px", fontFamily: "monospace", marginLeft: "7px"}],
-                                ]],
-                                ["raw-html", () => {return hasUpgrade("n", 22) ? "Boosts bees by x" + formatSimple(player.al.royalJellyEffect) : "<div style='margin-bottom:10px'></div>"}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
-                                ["blank", "10px"],
+                                ["style-column", [
+                                    ["row", [
+                                        ["raw-html", () => {return "You have <h3>" + formatWhole(player.al.royalJelly) + "</h3> Royal Jelly"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                        ["raw-html", () => {return "(+" + formatWhole(player.al.royalJellyGain) + ")"}, {color: "white", fontSize: "14px", fontFamily: "monospace", marginLeft: "7px"}],
+                                    ]],
+                                    ["raw-html", () => {return hasUpgrade("n", 22) ? "Boosts pre-aleph resources by x" + formatSimple(player.al.royalJellyEffect) : ""}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                                ], {width: "400px", height: "60px"}],
                                 ["clickable", 2],
                             ], {width: "400px", height: "162px", background: "#2d1624", borderBottom: "3px solid #a900a9", borderRadius: "17px 14px 0 0"}],
                             ["always-scroll-column", [

@@ -174,6 +174,7 @@ addLayer("pol", {
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.i.postOTFMult)
             if (player.pol.pollinatorEffects.plant.enabled) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.pol.pollinatorEffects.plant.effects[0])
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(buyableEffect("al", 104))
+            if (hasMilestone("n", 14)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.n.nestEffect)
 
             // SOFTCAP
             if (player.pol.pollinators.gt(1e15)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.div(1e15).pow(Decimal.add(0.5, buyableEffect("pol", 16))).mul(1e15)
@@ -182,6 +183,7 @@ addLayer("pol", {
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.co.cores.rocket.effect[2])
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(buyableEffect("gh", 25))
             if (hasUpgrade("hpw", 1033)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(upgradeEffect("hpw", 1033))
+
             // EXPONENTS
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.pow(buyableEffect("gh", 26))
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.pow(buyableEffect("cof", 16))
@@ -493,9 +495,15 @@ addLayer("pol", {
             currencyDisplayName: "Pollinators",
             currencyInternalName: "pollinators",
             effect() {
-                return player.pol.pollinators.add(1).pow(new Decimal(0.1).add(buyableEffect("pol", 13))).div(4).add(1)
+                let eff = player.pol.pollinators.add(1).pow(new Decimal(0.1).add(buyableEffect("pol", 13))).div(4).add(1)
+                if (eff.gt("1e100000")) eff = eff.div("1e100000").pow(0.3).mul("1e100000")
+                return eff
             },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            effectDisplay() {
+                let str = "x" + format(upgradeEffect(this.layer, this.id))
+                if (upgradeEffect(this.layer, this.id).gt("1e100000")) str = str.concat(" <small style='color:red'>[SOFTCAPPED]</small>")
+                return str
+            }, // Add formatting to the effect
             style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         13: {

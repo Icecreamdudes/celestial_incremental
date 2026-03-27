@@ -54,7 +54,7 @@
         //Star Softcap
         player.au2.starSoftcapStart = new Decimal(1000000)
 
-        let softcapBase = new Decimal(0.25)
+        let softcapBase = new Decimal(0.2)
         if (player.alephsChamber.milestone[25] > 0) softcapBase = softcapBase.add(0.05)
 
         if (player.au2.starsToGet.gte(player.au2.starSoftcapStart)) {

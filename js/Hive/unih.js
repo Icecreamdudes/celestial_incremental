@@ -19,7 +19,13 @@ addLayer("bee", {
 
         beeMax: false,
     }},
-    automate() {},
+    automate() {
+        if (hasMilestone("n", 16)) {
+            for (let i in player.bee.buyables) {
+                buyBuyable("bee", i)
+            }
+        }
+    },
     nodeStyle() {
         return {
             background: "#f9c901",

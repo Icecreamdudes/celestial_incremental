@@ -597,24 +597,24 @@
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
-                        ["blank", "25px"],
-                        ["infobox", "1"],
-                        ["infobox", "2"],
-                        ["infobox", "3"],
-                ]
+                    ["blank", "25px"],
+                    ["infobox", "1"],
+                    ["infobox", "2"],
+                    ["infobox", "3"],
+                ],
             },
             "Pylon": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return player.i.pylonTier.gte(2) },
                 content: [
-                        ["blank", "25px"],
-                            ["left-row", [
-            ["tooltip-row", [
-                ["raw-html", "<img src='resources/fragments/paradoxFragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cof.coreFragments[3])}, {width: "93px", height: "50px", color: "#1FD3B7", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                ["raw-html", "<div class='bottomTooltip'>Paradox Core Fragments</div>"],
-            ], {width: "148px", height: "50px",}],
-        ], {width: "148px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
+                    ["blank", "25px"],
+                    ["left-row", [
+                        ["tooltip-row", [
+                            ["raw-html", "<img src='resources/fragments/paradoxFragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                            ["raw-html", () => { return formatWhole(player.cof.coreFragments[3])}, {width: "103px", height: "50px", color: "#1FD3B7", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                            ["raw-html", "<div class='bottomTooltip'>Paradox Core Fragments</div>"],
+                        ], {width: "158px", height: "50px",}],
+                    ], {width: "158px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
                     ["blank", "25px"],
                     ["clickable", 11],
                     ["raw-html", () => { return player.in.pylonBuilt ? "You have <h3>" + format(player.in.pylonEnergy) + "/" + format(player.in.pylonEnergyMax) +  "</h3> paradox pylon energy (" + format(player.in.pylonEnergyPerSecond) + "/s)." : "" }, {color: "#000000ff", fontSize: "24px", fontFamily: "monospace"}],
@@ -628,7 +628,7 @@
                     ["raw-html", () => {return player.in.pylonBuilt ? "Your paradox pylon is tier " + formatWhole(player.in.pylonTier) + ", which boosts all pylon effects by ^" + format(player.in.pylonTierEffect) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["clickable", 12],
-                ]
+                ],
             },
         },
     },

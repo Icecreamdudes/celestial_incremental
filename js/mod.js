@@ -121,20 +121,16 @@ function updateStyles() {
 			layerBG = "linear-gradient(45deg, #450054, #00307f)"
 			break;
 		case "i":
-			if (player.i.pylonBuilt && player.subtabs["i"]["stuff"] == "Pylon")
-			{
+			if (player.i.pylonBuilt && player.subtabs["i"]["stuff"] == "Pylon") {
 				layerBG = "linear-gradient(90deg, #927550ff, #725442ff)"
-			} else
-			{
+			} else {
 				layerBG = "#161616"
 			}
 			break;
 		case "in":
-			if (player.i.pylonBuilt && player.subtabs["in"]["stuff"] == "Pylon")
-			{
+			if (player.i.pylonBuilt && player.subtabs["in"]["stuff"] == "Pylon") {
 				layerBG = "linear-gradient(0deg, #1FF8AF, #2162D2)"
-			} else
-			{
+			} else {
 				layerBG = "#001f18"
 			}
 			break;
@@ -263,7 +259,11 @@ function updateStyles() {
 			layerBG = "#1f001f"
 			break;
 		case "n":
-			layerBG = "linear-gradient(to right, #443812, #432236)"
+			if (player.subtabs["n"]["Tabs"] == "Pylon") {
+				layerBG = "linear-gradient(90deg, #458c46, #005410)"
+			} else {
+				layerBG = "linear-gradient(to right, #443812, #432236)"
+			}
 			break;
 		case "cb":
 			layerBG = "#021124"
@@ -817,7 +817,8 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added Laboratory.<br>
 			- Added Alephs Chamber.<br>
 			- Added Grass Jump.<br>
-			- Added Nests.<br><br>
+			- Added Nests.<br>
+			- Added the Natural Pylon.<br><br>
 		Minor Changes:<br>
 			- Added evolution fragment pets missing effect.<br>
 			- Added a new legendary pet.<br>

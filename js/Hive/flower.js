@@ -177,6 +177,8 @@ addLayer("fl", {
                 mult: new Decimal(1),
             },
         },
+
+        totalLevels: new Decimal(0),
     }},
     nodeStyle() {
         return {borderColor: "#7e3075"}
@@ -253,7 +255,7 @@ addLayer("fl", {
         if (hasMilestone("n", 21)) max += 100
         if (hasMilestone("n", 23)) max += 100
         if (hasMilestone("n", 25)) max += 100
-        for (let i = 100; i < max; ) {
+        for (let i = 101; i < max; ) {
             if (layers.fl.glossary[i].display()) player.fl.glossary[i] = player.fl.glossary[i].add(player.fl.flowerGain.mul(player.n.flowerPercentage).mul(delta))
             if (i % 100 == 25) {i = i+76} else if (i % 10 == 5) {i = i+6} else {i++}
         }
@@ -270,6 +272,7 @@ addLayer("fl", {
         if (hasUpgrade("al", 201)) player.fl.glossaryBase = player.fl.glossaryBase.mul(1.2)
         if (hasUpgrade("al", 210)) player.fl.glossaryBase = player.fl.glossaryBase.mul(1.1)
         player.fl.glossaryBase = player.fl.glossaryBase.mul(buyableEffect("bee", 14))
+        player.fl.glossaryBase = player.fl.glossaryBase.mul(player.n.pylonEnergyEffect2)
 
         player.fl.glossaryEffects.bee = new Decimal(1)
         for (let i = 101; i < 126; ) {
@@ -362,6 +365,12 @@ addLayer("fl", {
             } else {
                 player.fl.gatherer[2].id -= 1
             }
+        }
+
+        player.fl.totalLevels = new Decimal(0)
+        for (let i = 101; i < 626; ) {
+            player.fl.totalLevels = player.fl.totalLevels.add(player.fl.glossary[i].add(1).log(2).ceil())
+            if (i % 100 == 25) {i = i+76} else if (i % 10 == 5) {i = i+6} else {i++}
         }
     },
     generateFlower(type) {
@@ -2560,31 +2569,24 @@ addLayer("fl", {
                             ["style-column", [
                                 ["raw-html", "Gatherer Mk.1", {color: "#ccc", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "565px", height: "32px", background: "#291003", borderBottom: "5px solid #3e3117"}],
+                            ["style-row", [
+                                ["style-column", [
+                                    ["raw-html", "Sweep Time", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
+                                    ["style-row", [], {width: "200px", height: "1px", background: "#ccc", margin: "2px"}],
+                                    ["raw-html", () => {return formatTime(player.fl.gatherer[1].max)}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
+                                ], {width: "280px", height: "45px", borderRight: "5px solid #3e3117"}],
+                                ["style-column", [
+                                    ["raw-html", "Picking Power", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
+                                    ["style-row", [], {width: "200px", height: "1px", background: "#ccc", margin: "2px"}],
+                                    ["raw-html", () => {return formatSimple(player.fl.gatherer[1].power.mul(player.fl.gatherer[1].mult))}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
+                                ], {width: "280px", height: "45px"}],
+                            ], {borderBottom: "5px solid #3e3117"}],
                             ["row", [
-                                ["style-column", [
-                                    ["style-column", [
-                                        ["raw-html", "Sweep Time", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
-                                        ["style-row", [], {width: "150px", height: "1px", background: "#ccc", margin: "2px"}],
-                                        ["raw-html", () => {return formatTime(player.fl.gatherer[1].max)}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "185px", height: "45px", borderBottom: "5px solid #3e3117"}],
-                                    ["ex-buyable", 1],
-                                ], {width: "185px", height: "200px", borderRight: "5px solid #3e3117"}],
-                                ["style-column", [
-                                    ["style-column", [
-                                        ["raw-html", "Picking Power", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
-                                        ["style-row", [], {width: "150px", height: "1px", background: "#ccc", margin: "2px"}],
-                                        ["raw-html", () => {return formatSimple(player.fl.gatherer[1].power.mul(player.fl.gatherer[1].mult))}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "185px", height: "45px", borderBottom: "5px solid #3e3117"}],
-                                    ["ex-buyable", 2],
-                                ], {width: "185px", height: "200px", borderRight: "5px solid #3e3117"}],
-                                ["style-column", [
-                                    ["style-column", [
-                                        ["raw-html", "Flower Mult", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
-                                        ["style-row", [], {width: "150px", height: "1px", background: "#ccc", margin: "2px"}],
-                                        ["raw-html", () => {return "x" + formatSimple(1)}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "185px", height: "45px", borderBottom: "5px solid #3e3117"}],
-                                    ["ex-buyable", 3],
-                                ], {width: "185px", height: "200px"}],
+                                ["ex-buyable", 1],
+                                ["style-row", [], {width: "5px", height: "150px", background: "#3e3117"}],
+                                ["ex-buyable", 2],
+                                ["style-row", [], {width: "5px", height: "150px", background: "#3e3117"}],
+                                ["ex-buyable", 3],
                             ]],
                         ], {width: "565px", height: "237px", background: "#1b0b02", borderBottom: "5px solid #3e3117"}],
                         ["style-row", [
@@ -2592,31 +2594,24 @@ addLayer("fl", {
                                 ["raw-html", "Gatherer Mk.2", {color: "#ccc", fontSize: "20px", fontFamily: "monospace"}],
                                 ["raw-html", "(Kept on Aleph resets)", {color: "#ccc", fontSize: "14px", fontFamily: "monospace"}],
                             ], {width: "565px", height: "43px", background: "#1b2402", borderBottom: "5px solid #3e3117"}],
+                            ["style-row", [
+                                ["style-column", [
+                                    ["raw-html", "Sweep Time", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
+                                    ["style-row", [], {width: "200px", height: "1px", background: "#ccc", margin: "2px"}],
+                                    ["raw-html", () => {return formatTime(player.fl.gatherer[2].max)}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
+                                ], {width: "280px", height: "45px", borderRight: "5px solid #3e3117"}],
+                                ["style-column", [
+                                    ["raw-html", "Picking Power", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
+                                    ["style-row", [], {width: "200px", height: "1px", background: "#ccc", margin: "2px"}],
+                                    ["raw-html", () => {return formatSimple(player.fl.gatherer[2].power.mul(player.fl.gatherer[2].mult))}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
+                                ], {width: "280px", height: "45px"}],
+                            ], {borderBottom: "5px solid #3e3117"}],
                             ["row", [
-                                ["style-column", [
-                                    ["style-column", [
-                                        ["raw-html", "Sweep Time", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
-                                        ["style-row", [], {width: "150px", height: "1px", background: "#ccc", margin: "2px"}],
-                                        ["raw-html", () => {return formatTime(player.fl.gatherer[2].max)}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "185px", height: "45px", borderBottom: "5px solid #3e3117"}],
-                                    ["ex-buyable", 4],
-                                ], {width: "185px", height: "190px", borderRight: "5px solid #3e3117"}],
-                                ["style-column", [
-                                    ["style-column", [
-                                        ["raw-html", "Picking Power", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
-                                        ["style-row", [], {width: "150px", height: "1px", background: "#ccc", margin: "2px"}],
-                                        ["raw-html", () => {return formatSimple(player.fl.gatherer[2].power.mul(player.fl.gatherer[2].mult))}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "185px", height: "45px", borderBottom: "5px solid #3e3117"}],
-                                    ["ex-buyable", 5],
-                                ], {width: "185px", height: "190px", borderRight: "5px solid #3e3117"}],
-                                ["style-column", [
-                                    ["style-column", [
-                                        ["raw-html", "Flower Mult", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
-                                        ["style-row", [], {width: "150px", height: "1px", background: "#ccc", margin: "2px"}],
-                                        ["raw-html", () => {return "x" + formatSimple(1)}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "185px", height: "45px", borderBottom: "5px solid #3e3117"}],
-                                    ["ex-buyable", 6],
-                                ], {width: "185px", height: "190px"}],
+                                ["ex-buyable", 4],
+                                ["style-row", [], {width: "5px", height: "140px", background: "#3e3117"}],
+                                ["ex-buyable", 5],
+                                ["style-row", [], {width: "5px", height: "140px", background: "#3e3117"}],
+                                ["ex-buyable", 6],
                             ]],
                         ], () => {return tmp.al.layerShown ? {width: "565px", height: "238px", background: "#0d1201"} : {display: "none !important"}}],
                     ], {width: "565px", height: "480px", backgroundColor: "#161616", border: "5px solid #3e3117"}],

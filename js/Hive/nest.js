@@ -16,6 +16,18 @@ addLayer("n", {
         flowerPercentage: new Decimal(0.01),
         milestone8Effect: new Decimal(1),
         milestone14Effect: new Decimal(1),
+
+        pylonEnergyMax: new Decimal(1e6),
+        pylonEnergy: new Decimal(0),
+        pylonEnergyEffect: new Decimal(1),
+        pylonEnergyEffect2: new Decimal(1),
+        pylonEnergyEffect3: new Decimal(1),
+        pylonEnergyPerSecond: new Decimal(0),
+        
+        pylonPassiveEffect: new Decimal(1),
+
+        pylonTier: new Decimal(1),
+        pylonTierEffect: new Decimal(1),
     }},
     automate() {},
     nodeStyle() {
@@ -36,6 +48,8 @@ addLayer("n", {
             player.n.nestGain = new Decimal(1)
         }
 
+        player.n.nestGain = player.n.nestGain.mul(buyableEffect("n", 42))
+
         player.n.nestGain = player.n.nestGain.floor() // KEEP AT END
 
         player.n.nestEffect = Decimal.pow("1e10000", player.n.highestNest.pow(0.7))
@@ -51,6 +65,33 @@ addLayer("n", {
 
         player.n.milestone14Effect = player.n.nestReset.pow(0.7).div(100).add(1)
         if (player.n.milestone14Effect.gt(2)) player.n.milestone14Effect = player.n.milestone14Effect.div(2).pow(0.5).mul(2)
+
+        player.n.pylonEnergyMax = Decimal.pow(1e6, player.n.pylonTier)
+
+        if (hasUpgrade("n", 71)) {
+            player.n.pylonEnergyPerSecond = new Decimal(1)
+            player.n.pylonEnergyPerSecond = player.n.pylonEnergyPerSecond.mul(buyableEffect("n", 1))
+            player.n.pylonEnergyPerSecond = player.n.pylonEnergyPerSecond.mul(buyableEffect("n", 2))
+            player.n.pylonEnergyPerSecond = player.n.pylonEnergyPerSecond.mul(buyableEffect("n", 3))
+
+            player.n.pylonPassiveEffect = player.bee.bees.add(1).log(10).pow(0.06).div(6).add(1).pow(player.n.pylonTierEffect)
+        } else {
+            player.n.pylonEnergyPerSecond = new Decimal(0)
+
+            player.n.pylonPassiveEffect = new Decimal(1)
+        }
+
+        if (player.n.pylonEnergy.gte(player.n.pylonEnergyMax)) {
+            player.n.pylonEnergy = player.n.pylonEnergyMax
+            player.n.pylonEnergyPerSecond = new Decimal(0)
+        }
+        player.n.pylonEnergy = player.n.pylonEnergy.add(player.n.pylonEnergyPerSecond.mul(Decimal.div(delta, player.uni["UB"].tickspeed)))
+        
+        player.n.pylonEnergyEffect = player.n.pylonEnergy.add(1).log(10).div(10).add(1).pow(player.n.pylonTierEffect)
+        player.n.pylonEnergyEffect2 = player.n.pylonEnergy.add(1).log(10).div(20).add(1).pow(player.n.pylonTierEffect)
+        player.n.pylonEnergyEffect3 = player.n.pylonEnergy.pow(0.1).add(1).pow(player.n.pylonTierEffect)
+
+        player.n.pylonTierEffect = player.n.pylonTier.sub(1).pow(0.5).div(10).add(1)
     },
     clickables: {
         1: {
@@ -78,6 +119,17 @@ addLayer("n", {
                 }
                 return look
             },
+        },
+        2: {
+            title() { return "<h2>Tier up the Natural Pylon" },
+            canClick() { return player.n.pylonEnergy.gte(player.n.pylonEnergyMax) },
+            unlocked() { return player.n.pylonEnergy.gte(player.n.pylonEnergyMax) },
+            onClick() {
+                player.n.pylonEnergy = new Decimal(0)
+
+                player.n.pylonTier = player.n.pylonTier.add(1)
+            },
+            style: {width: "600px", minHeight: "200px", color: "#1b110eff", backgroundImage: "radial-gradient(circle, #007917 80%, #63C964 110%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
         },
     },
     upgrades: {
@@ -165,20 +217,333 @@ addLayer("n", {
             },
         },
 
-        // Buyable that multiplies most bee research caps (With tooltip that excess research doesn't count for new layers)
-        // Buyable that buffs nest gain based on total flower levels raised to a value
-
-        // Buyable that unlocks new aleph upgrades
-        // Buyable that decreases all flower timers
-        // Buyable that unlocks higher tier purple flowers
-
-        // 2 SIMPLE UPGRADES
-        // One could be giving gatherers a flower gain mult
-
-        // Unlock natural pylon
+        61: {
+            unlocked: true,
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>Nest Upgrade 6:1</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
+                "TEMP" + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "64 Nests" + // BOTTOM
+                "</div></div>"
+            },
+            cost: new Decimal(64),
+            canAfford() { return false},
+            currencyLocation() { return player.n },
+            currencyInternalName: "nest",
+            //style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {color: "#000000bf", borderColor: "#0000007f", fontSize: "14px", borderWidth: "2px", borderRadius: "10px", padding: "0px", width: "250px", height: "125px"}
+                return look
+            },
+        },
+        // MAKE ONE OF THESE ROW 6 UPGRADES BUFF NESTS
+        62: {
+            unlocked: true,
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>Nest Upgrade 6:2</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
+                "TEMP" + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "64 Nests" + // BOTTOM
+                "</div></div>"
+            },
+            cost: new Decimal(64),
+            canAfford() { return false},
+            currencyLocation() { return player.n },
+            currencyInternalName: "nest",
+            //style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {color: "#000000bf", borderColor: "#0000007f", fontSize: "14px", borderWidth: "2px", borderRadius: "10px", padding: "0px", width: "250px", height: "125px"}
+                return look
+            },
+        },
+        71: {
+            unlocked: true,
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>Nest Upgrade 7:1</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
+                "Unlock the natural pylon" + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "256 Nests" + // BOTTOM
+                "</div></div>"
+            },
+            cost: new Decimal(256),
+            canAfford() { return hasUpgrade("n", 61) || hasUpgrade("n", 62)},
+            currencyLocation() { return player.n },
+            currencyInternalName: "nest",
+            //style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {color: "#000000bf", borderColor: "#0000007f", fontSize: "14px", borderWidth: "2px", borderRadius: "10px", padding: "0px", width: "250px", height: "125px"}
+                return look
+            },
+        },
 
         // ==--- LATER ON STUFF ---==
         // Unlock wax layer
+    },
+    buyables: {
+        1: {
+            costBase() { return new Decimal(10000) },
+            costGrowth() { return new Decimal(1.2) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.cof.coreFragments[1] },
+            pay(amt) { player.cof.coreFragments[1] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(player.n.highestNest.add(1).log(10).add(1)).add(1)},
+            unlocked() { return hasUpgrade("n", 71) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Natural Pylon Factor I"
+            },
+            display() {
+                return 'which are boosting natural pylon energy by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    (Based on Highest Nests)\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#63C964", backgroundImage: "linear-gradient(120deg, #63C964 0%, #007917 100%)" }
+        },
+        2: {
+            costBase() { return new Decimal(25000) },
+            costGrowth() { return new Decimal(1.25) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.cof.coreFragments[1] },
+            pay(amt) { player.cof.coreFragments[1] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(player.n.highestNest.add(1).log(10).add(1)).add(1)},
+            unlocked() { return hasUpgrade("n", 71) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Natural Pylon Factor II"
+            },
+            display() {
+                return 'which are boosting natural pylon energy by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    (Based on Highest Nests)\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#63C964", backgroundImage: "linear-gradient(120deg, #63C964 0%, #007917 100%)" }
+        },
+        3: {
+            costBase() { return new Decimal(100000) },
+            costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.cof.coreFragments[1] },
+            pay(amt) { player.cof.coreFragments[1] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(player.n.highestNest.add(1).log(10).add(1)).add(1)},
+            unlocked() { return hasUpgrade("n", 71) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Natural Pylon Factor III"
+            },
+            display() {
+                return 'which are boosting natural pylon energy by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    (Based on Highest Nests)\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#63C964", backgroundImage: "linear-gradient(120deg, #63C964 0%, #007917 100%)" }
+        },
+
+        41: {
+            costBase() { return new Decimal(4) },
+            costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(90) },
+            currency() { return player.n.nest },
+            pay(amt) { player.n.nest = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(10).add(1)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id).pow(2)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) && hasUpgrade("n", 31) },
+            display() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>Nest Upgrade 4:1</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
+                "Multiply most bee research caps<br>" + // MIDDLE
+                "Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect) +
+                "<br>Next: x" + formatSimple(getBuyableAmount(this.layer, this.id).add(1).div(10).add(1)) +
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                formatWhole(tmp[this.layer].buyables[this.id].cost) + " Nests" + // BOTTOM
+                "</div></div>"
+            },
+            tooltip: "Excess research cap does not count for new layers",
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {color: "#000000bf", borderColor: "#0000007f", fontSize: "14px", borderWidth: "2px", borderRadius: "10px", padding: "0px", width: "250px", height: "125px"}
+                return look
+            },
+        },
+        42: {
+            costBase() { return new Decimal(4) },
+            costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.n.nest },
+            pay(amt) { player.n.nest = this.currency().sub(amt) },
+            effect(x) { return player.fl.totalLevels.div(1500).add(1).pow(getBuyableAmount(this.layer, this.id))},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id).pow(2)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) && hasUpgrade("n", 31) },
+            display() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>Nest Upgrade 4:2</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
+                "Buff nest gain based on total flower levels<br>" + // MIDDLE
+                "Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect) +
+                "<br>Next: x" + formatSimple(player.fl.totalLevels.div(1500).add(1).pow(getBuyableAmount(this.layer, this.id).add(1))) +
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                formatWhole(tmp[this.layer].buyables[this.id].cost) + " Nests" + // BOTTOM
+                "</div></div>"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {color: "#000000bf", borderColor: "#0000007f", fontSize: "14px", borderWidth: "2px", borderRadius: "10px", padding: "0px", width: "250px", height: "125px"}
+                return look
+            },
+        },
+
+        51: {
+            costBase() { return new Decimal(16) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(9) },
+            currency() { return player.n.nest },
+            pay(amt) { player.n.nest = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(2)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id).pow(2)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) && (getBuyableAmount("n", 41).gt(0) || getBuyableAmount("n", 42).gt(0)) },
+            display() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>Nest Upgrade 5:1</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
+                "Unlock new aleph researches<br>" + // MIDDLE
+                "Currently: +" + formatSimple(tmp[this.layer].buyables[this.id].effect) +
+                "<br>Next: +" + formatSimple(getBuyableAmount(this.layer, this.id).add(1).mul(2)) +
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                formatWhole(tmp[this.layer].buyables[this.id].cost) + " Nests" + // BOTTOM
+                "</div></div>"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {color: "#000000bf", borderColor: "#0000007f", fontSize: "14px", borderWidth: "2px", borderRadius: "10px", padding: "0px", width: "250px", height: "125px"}
+                return look
+            },
+        },
+        52: {
+            costBase() { return new Decimal(16) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.n.nest },
+            pay(amt) { player.n.nest = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(50).add(1)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id).pow(2)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) && (getBuyableAmount("n", 41).gt(0) || getBuyableAmount("n", 42).gt(0)) },
+            display() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>Nest Upgrade 5:2</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
+                "Raise pollen and nectar α gain<br>" + // MIDDLE
+                "Currently: ^" + formatSimple(tmp[this.layer].buyables[this.id].effect) +
+                "<br>Next: ^" + formatSimple(getBuyableAmount(this.layer, this.id).add(1).div(50).add(1), 2) +
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                formatWhole(tmp[this.layer].buyables[this.id].cost) + " Nests" + // BOTTOM
+                "</div></div>"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {color: "#000000bf", borderColor: "#0000007f", fontSize: "14px", borderWidth: "2px", borderRadius: "10px", padding: "0px", width: "250px", height: "125px"}
+                return look
+            },
+        },
+        53: {
+            costBase() { return new Decimal(16) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(10) },
+            currency() { return player.n.nest },
+            pay(amt) { player.n.nest = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id).pow(2)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) && (getBuyableAmount("n", 41).gt(0) || getBuyableAmount("n", 42).gt(0)) },
+            display() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>Nest Upgrade 5:3</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
+                "Unlock new purple flowers<br>" + // MIDDLE
+                "Currently: +" + formatSimple(tmp[this.layer].buyables[this.id].effect) +
+                "<br>Next: +" + formatSimple(getBuyableAmount(this.layer, this.id).add(1)) +
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                formatWhole(tmp[this.layer].buyables[this.id].cost) + " Nests" + // BOTTOM
+                "</div></div>"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {color: "#000000bf", borderColor: "#0000007f", fontSize: "14px", borderWidth: "2px", borderRadius: "10px", padding: "0px", width: "250px", height: "125px"}
+                return look
+            },
+        },
     },
     milestones: {
         11: {
@@ -355,6 +720,10 @@ addLayer("n", {
                     ["upgrade", 11],
                     ["row", [["upgrade", 21], ["upgrade", 22]]],
                     ["upgrade", 31],
+                    ["row", [["buyable", 41], ["buyable", 42]]],
+                    ["row", [["buyable", 51], ["buyable", 52], ["buyable", 53]]],
+                    ["row", [["upgrade", 61], ["upgrade", 62]]],
+                    ["upgrade", 71],
                 ],
             },
             "Milestones": {
@@ -457,6 +826,32 @@ addLayer("n", {
                     ]],
                     ["style-row", [
                     ], {backgroundColor: "#E3987A", border: "3px solid #9e6a55", borderTop: "0px", borderRadius: "0px 0px 13px 13px", width: "588px", height: "10px"}],
+                ],
+            },
+            "Pylon": {
+                buttonStyle: {borderColor: "#E3987A", borderRadius: "15px"},
+                unlocked() {return hasUpgrade("n", 71)},
+                content: [
+                    ["blank", "25px"],
+                    ["left-row", [
+                        ["tooltip-row", [
+                            ["raw-html", "<img src='resources/fragments/naturalFragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                            ["raw-html", () => { return formatWhole(player.cof.coreFragments[1])}, {width: "103px", height: "50px", color: "#458c46", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                            ["raw-html", "<div class='bottomTooltip'>Natural Core Fragments</div>"],
+                        ], {width: "158px", height: "50px",}],
+                    ], {width: "158px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
+                    ["blank", "25px"],
+                    ["raw-html", () => { return "You have <h3>" + format(player.n.pylonEnergy) + "/" + format(player.n.pylonEnergyMax) +  "</h3> natural pylon energy (" + format(player.n.pylonEnergyPerSecond) + "/s)."}, {color: "#000000ff", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "Boosts UB tickspeed by x" + format(player.n.pylonEnergyEffect) + "."}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "Boosts glossary effect base by x" + format(player.n.pylonEnergyEffect2) + "."}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "Boosts temporal pylon energy by x" + format(player.n.pylonEnergyEffect3) + "."}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "Passive effect: Boosts hex power gain by ^" + format(player.n.pylonPassiveEffect) + " (Based on bees)"}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                    ["blank", "25px"],
+                    ["row", [["ex-buyable", 1], ["ex-buyable", 2], ["ex-buyable", 3],]], 
+                    ["blank", "25px"],
+                    ["raw-html", () => {return "Your natural pylon is tier " + formatWhole(player.n.pylonTier) + ", which boosts all pylon effects by ^" + format(player.n.pylonTierEffect) + "."}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                    ["blank", "25px"],
+                    ["clickable", 2],
                 ],
             },
         },

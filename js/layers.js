@@ -698,7 +698,6 @@
                     ["raw-html", () => {return player.i.pylonTier.gte(2) ? "Tier 2 Ancient Pylon unlocks the Universe 2 Pylon" : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["clickable", 13],
-
                 ],
             },
             "Cutscene Viewer": {

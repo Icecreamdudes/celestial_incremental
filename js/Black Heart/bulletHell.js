@@ -34,11 +34,6 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
             if (storedInfo.px) {
                 info.px = storedInfo.px
                 info.py = storedInfo.py
-                info.bullets = storedInfo.bullets
-                info.bullets = info.bullets.filter(b => {
-                    if (b.draw) return true
-                    return false
-                });
             }
         }
         if (!info.px) info.values.saveContent = false
@@ -238,7 +233,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
     info.boxTop = gameCanvas.getBoundingClientRect().top;
 
     // Bullets
-    if (!info.values.saveContent) info.bullets = [];
+    info.bullets = [];
  
     // Bullet Code
     for (let i in info.actions) {
@@ -716,12 +711,14 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
                     window.removeEventListener("keyup", keyupHandler);
                 }
                 if (overlay.parentNode) overlay.remove();
-                player.subtabs["bh"]["stuff"] = "battle";
-                pauseUniverseAll(["BH"], "unpause", true)
-                player.universe = "U3"
                 bhState.active = false;
                 info.active = false;
-                options.fullscreen = info.full;
+                if (!info.values.continuous) {
+                    player.subtabs["bh"]["stuff"] = "battle";
+                    pauseUniverseAll(["BH"], "unpause", true)
+                    player.universe = "U3"
+                    options.fullscreen = info.full;
+                }
                 localStorage.setItem('bhState', JSON.stringify(info));
                 if (bhState.timer) clearTimeout(bhState.timer)
                 return;
@@ -984,12 +981,14 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
 
         }
         if (overlay.parentNode) overlay.remove();
-        player.subtabs["bh"]["stuff"] = "battle";
-        pauseUniverseAll(["BH"], "unpause", true)
-        player.universe = "U3"
         bhState.active = false;
         info.active = false;
-        options.fullscreen = info.full;
+        if (!info.values.continuous) {
+            player.subtabs["bh"]["stuff"] = "battle";
+            pauseUniverseAll(["BH"], "unpause", true)
+            player.universe = "U3"
+            options.fullscreen = info.full;
+        }
         if (info.timed) bhAttack(Decimal.mul(player.bh.celestialite.damage, 3), 3, 0, "allPlayer")
         localStorage.setItem('bhState', JSON.stringify(info));
     }, info.duration * 1000);
@@ -1032,9 +1031,13 @@ if (storedInfo && storedInfo != "") {
                 player.subtabs["bh"]["stuff"] = "battle";
                 pauseUniverseAll(["BH"], "unpause", true)
                 player.universe = "U3"
-                bhState.active = false;
-                options.fullscreen = bhState.full;
-                if (bhState.timed) bhAttack(Decimal.mul(player.bh.celestialite.damage, 3), 3, 0, "allPlayer")
+                if (bhStage) {
+                    bhState.active = false;
+                    options.fullscreen = bhState.full;
+                    if (bhState.timed) bhAttack(Decimal.mul(player.bh.celestialite.damage, 3), 3, 0, "allPlayer")
+                } else {
+                    options.fullscreen = false
+                }
                 storedInfo.active = false
                 localStorage.setItem('bhState', JSON.stringify(storedInfo));
             }

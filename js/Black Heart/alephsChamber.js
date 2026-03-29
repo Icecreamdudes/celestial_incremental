@@ -738,64 +738,52 @@ BHC.aleph = {
             constantTarget: "randomPlayer",
             onTrigger(index, slot, target) {
                 // MESSAGES ARE PLACEHOLDERS
-                if (!player.bh.celestialite.actions[3].variables.attacks) player.bh.celestialite.actions[3].variables.attacks = 0
-                if (player.bh.celestialite.health.lt(7500) && player.bh.celestialite.actions[3].variables.attacks == 0) {
-                    screenFlash("Is that all you have?", 3000)
-                    setTimeout(() => {
-                        bulletHell({"chargingBee": {beeAmount: 5, radius: 20, enemySpeed: 5, lastTick: false}}, {width: 300, height: 300, duration: 10})
-                    }, 3000)
-                    player.bh.celestialite.actions[3].variables.attacks = 1
+                if (player.bh.celestialite.health.lt(7500) && player.bh.celestialite.attackID == 0) {
+                    bulletHell({"chargingBee": {beeAmount: 5, radius: 20, enemySpeed: 5, lastTick: false}}, {width: 300, height: 300, duration: 10})
+                    player.bh.celestialite.attackID = 1
                 }
-                if (player.bh.celestialite.health.lt(6000) && player.bh.celestialite.actions[3].variables.attacks == 1 && player.tab != "c" && player.c.cutscenes['Hive-Chamber-Fight-Mid1'] >= 2) {
-                    screenFlash("I'm sure you can do better then this!", 3000)
-                    setTimeout(() => {
-                        bulletHell({"shootBee": {beesPerSec: 1.5, radius: 20, enemySpeed: 5}}, {width: 400, height: 400, duration: 10})
-                    }, 3000)
-                    player.bh.celestialite.actions[3].variables.attacks = 2
+                if (player.bh.celestialite.health.lt(6000) && player.bh.celestialite.attackID == 1 && player.tab != "c" && player.c.cutscenes['Hive-Chamber-Fight-Mid1'] >= 2) {
+                    bulletHell({"shootBee": {beesPerSec: 1.5, radius: 20, enemySpeed: 5}}, {width: 400, height: 400, duration: 10})
+                    player.bh.celestialite.attackID = 2
                 }
-                if (player.bh.celestialite.health.lt(4500) && player.bh.celestialite.actions[3].variables.attacks == 2) {
-                    screenFlash("That stung a little, but still not enough.", 3000)
-                    setTimeout(() => {
-                        bulletHell({"bouncingBees": {beeAmount: 10, radius: 20, enemySpeed: 3, chargeMult: 1.5, lastTick: false}}, {duration: 10})
-                    }, 3000)
-                    player.bh.celestialite.actions[3].variables.attacks = 3
+                if (player.bh.celestialite.health.lt(4500) && player.bh.celestialite.attackID == 2) {
+                    bulletHell({"bouncingBees": {beeAmount: 10, radius: 20, enemySpeed: 3, chargeMult: 1.5, lastTick: false}}, {duration: 10})
+                    player.bh.celestialite.attackID = 3
                 }
-                if (player.bh.celestialite.health.lt(3000) && player.bh.celestialite.actions[3].variables.attacks == 3 && player.tab != "c" && player.c.cutscenes['Hive-Chamber-Fight-Mid2'] >= 2) {
-                    screenFlash("Now you are starting to get close to my expectations.", 3000)
-                    setTimeout(() => {
-                        bulletHell({"chargingBee": {beeAmount: 3, radius: 40, enemySpeed: 6, lastTick: false}}, {width: 300, height: 300, duration: 10})
-                    }, 3000)
-                    player.bh.celestialite.actions[3].variables.attacks = 4
+                if (player.bh.celestialite.health.lt(3000) && player.bh.celestialite.attackID == 3 && player.tab != "c" && player.c.cutscenes['Hive-Chamber-Fight-Mid2'] >= 2) {
+                    bulletHell({"chargingBee": {beeAmount: 3, radius: 40, enemySpeed: 6, lastTick: false}}, {width: 300, height: 300, duration: 10})
+                    player.bh.celestialite.attackID = 4
                 }
-                if (player.bh.celestialite.health.lt(1500) && player.bh.celestialite.actions[3].variables.attacks == 4) {
-                    screenFlash("Good, at this rate you should be strong enough to protect the hive, but even so ...", 3000)
-                    setTimeout(() => {
-                        bulletHell({"waveBees": {beeRate: 5, radius: 20, gapStart: 0, gap: 200, enemySpeed: 6, waveSpeed: 4}, "shootBee": {beesPerSec: 1, radius: 20, enemySpeed: 4}}, {duration: 10})
-                    }, 3000)
-                    player.bh.celestialite.actions[3].variables.attacks = 5
+                if (player.bh.celestialite.health.lt(1500) && player.bh.celestialite.attackID == 4) {
+                    bulletHell({"waveBees": {beeRate: 5, radius: 20, gapStart: 0, gap: 200, enemySpeed: 6, waveSpeed: 4}, "shootBee": {beesPerSec: 1, radius: 20, enemySpeed: 4}}, {duration: 10})
+                    player.bh.celestialite.attackID = 5
                 }
-                if (player.bh.celestialite.health.lt(50) && player.bh.celestialite.actions[3].variables.attacks == 5) {
-                    screenFlash("Lets have one last final hurrah!", 3000)
-                    setTimeout(() => {
-                        bulletHell({"chargingBee": {beeAmount: 8, radius: 20, enemySpeed: 5, lastTick: false}}, {width: 400, height: 400, duration: 5}, () => {player.bh.celestialite.actions[3].variables.attacks = 6})
-                    }, 3000)
+                if (player.bh.celestialite.health.lt(50) && player.bh.celestialite.attackID == 5) {
+                    player.bh.celestialite.attackTimeout = [6, new Decimal(5)]
+                    bulletHell({"shootBee": {beesPerSec: 2, radius: 10, enemySpeed: 6}}, {width: 400, height: 400, duration: 5})
                 }
-                if (player.bh.celestialite.actions[3].variables.attacks == 6) {
+                if (player.bh.celestialite.attackID == 6) {
+                    screenFlash("", 150)
                     setTimeout(() => {
-                        bulletHell({"shootBee": {beesPerSec: 2, radius: 10, enemySpeed: 6}}, {width: 400, height: 400, duration: 5, saveContent: true}, () => {player.bh.celestialite.actions[3].variables.attacks = 7})
-                    }, 200)
+                        player.bh.celestialite.attackTimeout = [7, new Decimal(5)]
+                        bulletHell({"shootBee": {beesPerSec: 1.5, radius: 10, enemySpeed: 6}, "chargingBee": {beeAmount: 8, radius: 20, enemySpeed: 5, lastTick: false}}, {width: 400, height: 400, duration: 5, saveContent: true, continuous: true})
+                    }, 150)
                 }
-                if (player.bh.celestialite.actions[3].variables.attacks == 7) {
+                if (player.bh.celestialite.attackID == 7) {
+                    screenFlash("", 150)
                     setTimeout(() => {
-                        bulletHell({"bouncingBees": {beeAmount: 5, radius: 30, enemySpeed: 4, chargeMult: 1.5, lastTick: false}}, {width: 400, height: 400, duration: 5, saveContent: true}, () => {player.bh.celestialite.actions[3].variables.attacks = 8})
-                    }, 200)
+                        player.bh.celestialite.attackTimeout = [8, new Decimal(5)]
+                        bulletHell({"shootBee": {beesPerSec: 1, radius: 10, enemySpeed: 6}, "chargingBee": {beeAmount: 5, radius: 20, enemySpeed: 4, lastTick: false}, "bouncingBees": {beeAmount: 3, radius: 30, enemySpeed: 4, chargeMult: 1.5, lastTick: false}}, {width: 400, height: 400, duration: 5, saveContent: true, continuous: true})
+                    }, 150)
                 }
-                if (player.bh.celestialite.actions[3].variables.attacks == 8) {
+                if (player.bh.celestialite.attackID == 8) {
+                    screenFlash("", 150)
                     setTimeout(() => {
-                        bulletHell({"waveBees": {beeRate: 10, radius: 20, gapStart: 0, gap: 200, enemySpeed: 20, waveSpeed: 2}}, {width: 400, height: 400, duration: 5, saveContent: true}, () => {player.bh.celestialite.actions[3].variables.attacks = 9})
-                    }, 200)
+                        player.bh.celestialite.attackTimeout = [9, new Decimal(5)]
+                        bulletHell({"shootBee": {beesPerSec: 1, radius: 10, enemySpeed: 6}, "chargingBee": {beeAmount: 4, radius: 20, enemySpeed: 4, lastTick: false}, "bouncingBees": {beeAmount: 2, radius: 30, enemySpeed: 4, chargeMult: 1.5, lastTick: false}, "waveBees": {beeRate: 3, radius: 20, gapStart: 0, gap: 200, enemySpeed: 8, waveSpeed: 3}}, {width: 400, height: 400, duration: 5, saveContent: true, continuous: true})
+                    }, 150)
                 }
-                if (player.bh.celestialite.actions[3].variables.attacks >= 9) {
+                if (player.bh.celestialite.attackID >= 9) {
                     celestialiteDeath()
                 }
             },

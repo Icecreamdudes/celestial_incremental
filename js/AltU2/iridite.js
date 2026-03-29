@@ -227,7 +227,7 @@ addLayer("ir", {
             player.subtabs["ir"]['stuff'] = "Refresh Page :(";
         }
 
-        if (options.fullscreen && player.subtabs["ir"]["stuff"] != "Battle") options.fullscreen = false
+        if (options.fullscreen && player.tab == "ir" && player.subtabs["ir"]["stuff"] != "Battle") options.fullscreen = false
 
         // Ship max health by type
         if (player.ir.shipType == 1) player.ir.shipHealthMax = new Decimal(100)

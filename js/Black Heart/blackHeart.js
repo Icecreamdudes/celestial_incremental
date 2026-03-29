@@ -176,6 +176,8 @@ addLayer("bh", {
             curAdd: new Decimal(1),
             attributes: {},
             actionChances: [],
+            attackID: 0,
+            attackTimeout: [0, new Decimal(5)],
             actions: {
                 0: {
                     variables: {},
@@ -729,6 +731,15 @@ addLayer("bh", {
         if (player.bh.autoCooldown.gte(30) && player.bh.autoEnter) {
             player.bh.autoCooldown = new Decimal(0)
             BHStageEnter(player.bh.autoEnter)
+        }
+
+        if (player.bh.celestialite.attackTimeout[0]) {
+            if (Decimal.gt(player.bh.celestialite.attackTimeout[1], 0)) {
+                player.bh.celestialite.attackTimeout[1] = player.bh.celestialite.attackTimeout[1].sub(normTime)
+            } else {
+                player.bh.celestialite.attackID = player.bh.celestialite.attackTimeout[0]
+                player.bh.celestialite.attackTimeout = [0, new Decimal(5)]
+            }
         }
 
         if (player.bh.autoExit && (player.subtabs["bh"]["stuff"] == "dead" || player.subtabs["bh"]["stuff"] == "win")) clickClickable("bh", "Leave")

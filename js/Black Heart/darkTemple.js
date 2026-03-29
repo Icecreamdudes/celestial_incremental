@@ -378,6 +378,7 @@ addLayer("darkTemple", {
                 let look = {width: "50px", minHeight: "50px", color: "#88f", fontSize: "16px", background: "#113", border: "3px solid #339", borderRadius: "15px"}
                 if (player.darkTemple.selection == 4) look.borderColor = "#ccf"
                 if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #113"} else {look.boxShadow = "0px 0px 15px #339"}
+                if (getBuyableAmount("darkTemple", 4).gte(player.darkTemple.runeCap)) look.background = "#226"
                 return look
             },
         },
@@ -393,6 +394,7 @@ addLayer("darkTemple", {
                 let look = {width: "50px", minHeight: "50px", color: "#88f", fontSize: "16px", background: "#113", border: "3px solid #339", borderRadius: "15px"}
                 if (player.darkTemple.selection == 5) look.borderColor = "#ccf"
                 if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #113"} else {look.boxShadow = "0px 0px 15px #339"}
+                if (getBuyableAmount("darkTemple", 5).gte(player.darkTemple.runeCap)) look.background = "#226"
                 return look
             },
         },

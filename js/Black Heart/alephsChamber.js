@@ -641,7 +641,7 @@ BHC.ma3 = {
 BHC.aleph = {
     name: "Aleph",
     icon: "resources/aleph.png",
-    health: new Decimal(15000),
+    health: new Decimal(12000),
     damage: new Decimal(25),
     noRandomStats: true,
     timer: new Decimal(250),
@@ -738,33 +738,37 @@ BHC.aleph = {
             onTrigger(index, slot, target) {
                 // MESSAGES ARE PLACEHOLDERS
                 if (!player.bh.celestialite.actions[3].variables.attacks) player.bh.celestialite.actions[3].variables.attacks = 0
-                if (player.bh.celestialite.health.lt(12000) && player.bh.celestialite.actions[3].variables.attacks == 0) {
+                if (player.bh.celestialite.health.lt(10000) && player.bh.celestialite.actions[3].variables.attacks == 0) {
                     screenFlash("Is that all you have?", 3000)
                     setTimeout(() => {
                         bulletHell({"chargingBee": {beeAmount: 5, radius: 20, enemySpeed: 5, lastTick: false}}, {width: 300, height: 300, duration: 10})
                     }, 3000)
                     player.bh.celestialite.actions[3].variables.attacks += 1
                 }
-                if (player.bh.celestialite.health.lt(9000) && player.bh.celestialite.actions[3].variables.attacks == 1) {
-                    screenFlash("You're getting somewhere, but this isn't enough.", 3000)
+                if (player.bh.celestialite.health.lt(8000) && player.bh.celestialite.actions[3].variables.attacks == 1) {
+                    screenFlash("I'm sure you can do better then this!", 3000)
                     setTimeout(() => {
                         bulletHell({"shootBee": {beesPerSec: 1.5, radius: 20, enemySpeed: 5}}, {width: 400, height: 400, duration: 10})
                     }, 3000)
                     player.bh.celestialite.actions[3].variables.attacks += 1
                 }
                 if (player.bh.celestialite.health.lt(6000) && player.bh.celestialite.actions[3].variables.attacks == 2) {
-                    screenFlash("Much better, but keep going.", 3000)
+                    screenFlash("That stung a little, but still not enough.", 3000)
                     setTimeout(() => {
                         bulletHell({"bouncingBees": {beeAmount: 10, radius: 20, enemySpeed: 3, chargeMult: 1.5, lastTick: false}}, {duration: 10})
                     }, 3000)
                     player.bh.celestialite.actions[3].variables.attacks += 1
                 }
-                if (player.bh.celestialite.health.lt(3000) && player.bh.celestialite.actions[3].variables.attacks == 3) {
-                    screenFlash("Good, at this rate you should be strong enough to protect the hive.", 3000)
+                if (player.bh.celestialite.health.lt(2000) && player.bh.celestialite.actions[3].variables.attacks == 4) {
+                    screenFlash("Good, at this rate you should be strong enough to protect the hive, but even so ...", 3000)
                     setTimeout(() => {
                         bulletHell({"waveBees": {beeRate: 5, radius: 20, gapStart: 0, gap: 200, enemySpeed: 6, waveSpeed: 4}, "shootBee": {beesPerSec: 1, radius: 20, enemySpeed: 4}}, {duration: 10})
                     }, 3000)
                     player.bh.celestialite.actions[3].variables.attacks += 1
+                }
+                if (player.bh.celestialite.health.lt(50) && player.bh.celestialite.actions[3].variables.attacks == 5) {
+                    screenFlash("Lets have one last final hurrah!", 3000)
+                    
                 }
             },
             cooldown: new Decimal(Infinity),

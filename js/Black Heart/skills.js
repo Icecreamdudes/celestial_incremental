@@ -838,7 +838,7 @@ BHA.vespasian_paralyticBite = {
 
 BHA.vespasian_overdrive = {
     name: "Overdrive",
-    description() {
+    description(char) {
         let effect = new Decimal(new Decimal(50).add(player.bh.skillData["vespasian_overdrive"].level.mul(10)))
         if (player.alephsChamber.milestone[25] >= 2) effect = effect.mul(Decimal.div(char.potency.add(100), 100))
         return "Buff Vespasians damage and agility by " + formatSimple(effect) + "%, reduce defense by " + formatSimple(new Decimal(25).add(player.bh.skillData["vespasian_overdrive"].level.mul(5))) + ", and nullify regen for 8 seconds"
@@ -867,7 +867,7 @@ BHA.vespasian_overdrive = {
 
 BHA.vespasian_impale = {
     name: "Impale",
-    description() {return "Deals " + formatSimple(new Decimal(new Decimal(150).add(player.bh.skillData["vespasian_impale"].level.mul(30)))) + "% physical damage with a " + formatSimple(Decimal.mul(50, Decimal.div(Decimal.add(100, char.luck), 100))) + "% chance to deal double damage, at the cost of taking 50% self damage"},
+    description(char) {return "Deals " + formatSimple(new Decimal(new Decimal(150).add(player.bh.skillData["vespasian_impale"].level.mul(30)))) + "% physical damage with a " + formatSimple(Decimal.mul(50, Decimal.div(Decimal.add(100, char.luck), 100))) + "% chance to deal double damage, at the cost of taking 50% self damage"},
     passiveText() {return "+" + formatSimple(player.bh.skillData["vespasian_impale"].maxLevel.div(2)) + " LUCK"},
     char: "vespasian",
     spCost: new Decimal(16),
@@ -890,7 +890,7 @@ BHA.vespasian_impale = {
 
 BHA.vespasian_peakPerformance = {
     name: "Peak Performance",
-    description() {
+    description(char) {
         let eff = false
         let index
         let slot

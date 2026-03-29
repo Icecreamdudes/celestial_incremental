@@ -93,7 +93,7 @@
 
 
         //pylon
-        player.cbs.pylonEnergyMax = Decimal.pow(100, player.cbs.pylonTier.pow(0.5))
+        player.cbs.pylonEnergyMax = Decimal.pow(1e5, player.cbs.pylonTier.pow(0.7))
 
         if (player.cbs.pylonBuilt) {
             player.cbs.pylonEnergyToGet = new Decimal(1)

@@ -594,43 +594,42 @@ BHC.matos = {
             constantType: "function",
             constantTarget: "randomPlayer",
             onTrigger(index, slot, target) {
-                if (!player.bh.celestialite.actions[1].variables.attacks) player.bh.celestialite.actions[1].variables.attacks = 0
-                if (player.bh.celestialite.health.lt(7000) && player.bh.celestialite.actions[1].variables.attacks == 0) {
+                if (player.bh.celestialite.health.lt(7000) && player.bh.celestialite.attackID == 0) {
                     screenFlash("This is what Nova wanted all along!", 3000)
                     setTimeout(() => {
                         bulletHell({"diamondAttack": {diamondAmount: 2}}, {duration: 10})
                     }, 3000)
-                    player.bh.celestialite.actions[1].variables.attacks += 1
+                    player.bh.celestialite.attackID += 1
                 }
-                if (player.bh.celestialite.health.lt(6500) && player.bh.celestialite.actions[1].variables.attacks == 1) {
+                if (player.bh.celestialite.health.lt(6500) && player.bh.celestialite.attackID == 1) {
                     screenFlash("He is our lord. He will save us all from this torture.", 3000)
                     setTimeout(() => {
                         bulletHell({"bulletRain": {bulletPerSec: 10}}, {duration: 12})
                     }, 3000)
-                    player.bh.celestialite.actions[1].variables.attacks += 1
+                    player.bh.celestialite.attackID += 1
                 }
-                if (player.bh.celestialite.health.lt(6000) && player.bh.celestialite.actions[1].variables.attacks == 2) {
+                if (player.bh.celestialite.health.lt(6000) && player.bh.celestialite.attackID == 2) {
                     screenFlash("Once he comes back, so will civilization!", 3000)
                     setTimeout(() => {
                         bulletHell({"movingCircleRadialBurstAttack": {circleAmount: 1, burstInterval: 1200, bulletsPerBurst: 18, enemySpeed: 6, bulletSpeed: 5}}, {duration: 12})
                     }, 3000)
-                    player.bh.celestialite.actions[1].variables.attacks += 1
+                    player.bh.celestialite.attackID += 1
                 }
-                if (player.bh.celestialite.health.lt(5500) && player.bh.celestialite.actions[1].variables.attacks == 3) {
+                if (player.bh.celestialite.health.lt(5500) && player.bh.celestialite.attackID == 3) {
                     screenFlash("And it is too late for you guys... I have enough power!", 3000)
                     setTimeout(() => {
                         bulletHell({"knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 6, knifePerSec: 1.2}}, {width: 500, height: 300, duration: 15})
                     }, 3000)
-                    player.bh.celestialite.actions[1].variables.attacks += 1
+                    player.bh.celestialite.attackID += 1
                 }
-                if (player.bh.celestialite.health.lt(5000) && player.bh.celestialite.actions[1].variables.attacks == 4) {
+                if (player.bh.celestialite.health.lt(5000) && player.bh.celestialite.attackID == 4) {
                     screenFlash("I can bring Nova and the Novasent back!", 3000)
                     setTimeout(() => {
                         bulletHell({"bouncingDiamond": {diamondCount: 6, enemySpeed: 3}}, {duration: 15})
                     }, 3000)
-                    player.bh.celestialite.actions[1].variables.attacks += 1
+                    player.bh.celestialite.attackID += 1
                 }
-                if (player.bh.celestialite.health.lt(4500) && player.bh.celestialite.actions[1].variables.attacks == 5) {
+                if (player.bh.celestialite.health.lt(4500) && player.bh.celestialite.attackID == 5) {
                     screenFlash("Our great civilization will flourish! The sun will shine! The sky will be clear!", 3000)
                     setTimeout(() => {
                         let random = Math.random()
@@ -646,9 +645,9 @@ BHC.matos = {
                             bulletHell({"bouncingDiamond": {diamondCount: 6, enemySpeed: 3}}, {duration: 15})
                         }
                     }, 3000)
-                    player.bh.celestialite.actions[1].variables.attacks += 1
+                    player.bh.celestialite.attackID += 1
                 }
-                if (player.bh.celestialite.health.lt(4000) && player.bh.celestialite.actions[1].variables.attacks == 6) {
+                if (player.bh.celestialite.health.lt(4000) && player.bh.celestialite.attackID == 6) {
                     screenFlash("My hopes. My dreams. They will all become true.", 3000)
                     setTimeout(() => {
                         let random = Math.random()
@@ -664,44 +663,44 @@ BHC.matos = {
                             bulletHell({"bouncingDiamond": {diamondCount: 6, enemySpeed: 3}}, {duration: 15})
                         }
                     }, 3000)
-                    player.bh.celestialite.actions[1].variables.attacks += 1
+                    player.bh.celestialite.attackID += 1
                 }
-                if (player.bh.celestialite.health.lt(3500) && player.bh.celestialite.actions[1].variables.attacks == 7) {
+                if (player.bh.celestialite.health.lt(3500) && player.bh.celestialite.attackID == 7) {
                     screenFlash("NOVA WILL SAVE US ALL.", 3000)
                     setTimeout(() => {
                         bulletHell({"radialKnifeBurstAttack": {knifeLength: 64, knifeWidth: 16, burstInterval: 1500, bulletsPerBurst: 5, enemySpeed: 8}}, {duration: 12, width: 500})
                     }, 3000)
-                    player.bh.celestialite.actions[1].variables.attacks += 1
+                    player.bh.celestialite.attackID += 1
                 }
-                if (player.bh.celestialite.health.lt(3000) && player.bh.celestialite.actions[1].variables.attacks == 8) {
+                if (player.bh.celestialite.health.lt(3000) && player.bh.celestialite.attackID == 8) {
                     screenFlash("NOVA WILL BRING US PEACE.", 3000)
                     setTimeout(() => {
                         bulletHell({"bulletRain": {bulletPerSec: 7}, "knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 6, knifePerSec: 1.5}}, {duration: 15})
                     }, 3000)
-                    player.bh.celestialite.actions[1].variables.attacks += 1
+                    player.bh.celestialite.attackID += 1
                 }
-                if (player.bh.celestialite.health.lt(2500) && player.bh.celestialite.actions[1].variables.attacks == 9) {
+                if (player.bh.celestialite.health.lt(2500) && player.bh.celestialite.attackID == 9) {
                     screenFlash("NOVA WILL BRING US GLORY.", 3000)
                     setTimeout(() => {
                         bulletHell({}, {width: 750, duration: 20, timed: true, cellSize: 50, start: "cell", goal: "cell"})
                     }, 3000)
-                    player.bh.celestialite.actions[1].variables.attacks += 1
+                    player.bh.celestialite.attackID += 1
                 }
-                if (player.bh.celestialite.health.lt(2000) && player.bh.celestialite.actions[1].variables.attacks == 10) {
+                if (player.bh.celestialite.health.lt(2000) && player.bh.celestialite.attackID == 10) {
                     screenFlash("NOVA WILL BRING US GREATNESS.", 3000)
                     setTimeout(() => {
                         bulletHell({"knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 6, knifePerSec: 2}}, {width: 800, height: 500, duration: 15, subArena: true, subWidth: 300})
                     }, 3000)
-                    player.bh.celestialite.actions[1].variables.attacks += 1
+                    player.bh.celestialite.attackID += 1
                 }
-                if (player.bh.celestialite.health.lt(1500) && player.bh.celestialite.actions[1].variables.attacks == 11) {
+                if (player.bh.celestialite.health.lt(1500) && player.bh.celestialite.attackID == 11) {
                     screenFlash("Nova will....", 3000)
                     setTimeout(() => {
                         bulletHell({"bombAttack": {bombsPerSecond: 1, bombFallSpeed: 4, miniBombCount: 3, miniBombSpeed: 5, miniBombDelay: 600, bulletCount: 5, bulletSpeed: 3}}, {duration: 15})
                     }, 3000)
-                    player.bh.celestialite.actions[1].variables.attacks += 1
+                    player.bh.celestialite.attackID += 1
                 }
-                if (player.bh.celestialite.health.lt(1000) && player.bh.celestialite.actions[1].variables.attacks == 12) {
+                if (player.bh.celestialite.health.lt(1000) && player.bh.celestialite.attackID == 12) {
                     screenFlash("Nova will.......", 3000)
                     setTimeout(() => {
                         let random = Math.random()
@@ -717,9 +716,9 @@ BHC.matos = {
                             bulletHell({"bombAttack": {bombsPerSecond: 1, bombFallSpeed: 4, miniBombCount: 3, miniBombSpeed: 5, miniBombDelay: 600, bulletCount: 5, bulletSpeed: 3}}, {duration: 15})
                         }
                     }, 3000)
-                    player.bh.celestialite.actions[1].variables.attacks += 1
+                    player.bh.celestialite.attackID += 1
                 }
-                if (player.bh.celestialite.health.lt(500) && player.bh.celestialite.actions[1].variables.attacks == 13) {
+                if (player.bh.celestialite.health.lt(500) && player.bh.celestialite.attackID == 13) {
                     screenFlash("looks like my time is up...", 3000)
                     setTimeout(() => {
                         let random = Math.random()
@@ -735,25 +734,30 @@ BHC.matos = {
                             bulletHell({"bombAttack": {bombsPerSecond: 1, bombFallSpeed: 4, miniBombCount: 3, miniBombSpeed: 5, miniBombDelay: 600, bulletCount: 5, bulletSpeed: 3}}, {duration: 15})
                         }
                     }, 3000)
-                    player.bh.celestialite.actions[1].variables.attacks += 1
+                    player.bh.celestialite.attackID += 1
                 }
-                if (player.bh.celestialite.health.lt(50) && player.bh.celestialite.actions[1].variables.attacks == 14) {
+                if (player.bh.celestialite.health.lt(50) && player.bh.celestialite.attackID == 14) {
                     screenFlash("BUT I CAN'T LET YOU GUYS CONTINUE", 3000)
                     setTimeout(() => {
-                        bulletHell({"bulletRain": {bulletPerSec: 18}, "knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 8, knifePerSec: 1.5}}, {width: window.innerWidth, height: window.innerHeight, duration: 15, transparent: true}, () => {player.bh.celestialite.actions[1].variables.attacks = 15})
+                        player.bh.celestialite.attackTimeout = [15, new Decimal(15)]
+                        bulletHell({"bulletRain": {bulletPerSec: 18}, "knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 8, knifePerSec: 1.5}}, {width: window.innerWidth, height: window.innerHeight, duration: 15, transparent: true})
                     }, 3000)
                 }
-                if (player.bh.celestialite.actions[1].variables.attacks == 15) {
+                if (player.bh.celestialite.attackID == 15) {
+                    screenFlash("", 150)
                     setTimeout(() => {
-                        bulletHell({"centerSpiralAttack": {spiralAngle: 0, spiralRate: 0.325, spiralInterval: 30, radialStart: 64, bulletSpeed: 7, spiralKnives: true, knifeLength: 64, knifeWidth: 16}, "bouncingDiamond": {diamondCount: 3, enemySpeed: 4}, "centerSpreadAttack": {bulletSpeed: 6, spreadInterval: 1000, spreadCount: 7, spreadAngle: Math.PI/3}, "centerIcon": {radius: 64, fillColor: "#fff", strokeColor: "#e22", symbol: "⊘"}}, {width: window.innerWidth, height: window.innerHeight, duration: 15, transparent: true, saveContent: true}, () => {player.bh.celestialite.actions[1].variables.attacks = 16})
-                    }, 200)
+                        player.bh.celestialite.attackTimeout = [16, new Decimal(15)]
+                        bulletHell({"centerSpiralAttack": {spiralAngle: 0, spiralRate: 0.325, spiralInterval: 30, radialStart: 64, bulletSpeed: 7, spiralKnives: true, knifeLength: 64, knifeWidth: 16}, "bouncingDiamond": {diamondCount: 3, enemySpeed: 4}, "centerSpreadAttack": {bulletSpeed: 6, spreadInterval: 1000, spreadCount: 7, spreadAngle: Math.PI/3}, "centerIcon": {radius: 64, fillColor: "#fff", strokeColor: "#e22", symbol: "⊘"}}, {width: window.innerWidth, height: window.innerHeight, duration: 15, transparent: true, saveContent: true, continuous: true})
+                    }, 150)
                 }
-                if (player.bh.celestialite.actions[1].variables.attacks == 16) {
+                if (player.bh.celestialite.attackID == 16) {
+                    screenFlash("", 150)
                     setTimeout(() => {
-                        bulletHell({"finalMatosAttack": {radius: 64, fillColor: "#fff", strokeColor: "#e22", symbol: "⊘", burstBullets: 8, burstViolence: 0.5, lungeTimer: 0, lungeCooldown: 0, explosionBurstTimer: 0, explosionBurstCount: 0, lastTick: false}, "bulletRain": {bulletPerSec: 12, duration: 15}, "knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 8, knifePerSec: 1.2, duration: 15}}, {width: window.innerWidth, height: window.innerHeight, duration: 19, transparent: true, saveContent: true}, () => {player.bh.celestialite.actions[1].variables.attacks = 17})
-                    }, 200)
+                        player.bh.celestialite.attackTimeout = [17, new Decimal(19)]
+                        bulletHell({"finalMatosAttack": {radius: 64, fillColor: "#fff", strokeColor: "#e22", symbol: "⊘", burstBullets: 8, burstViolence: 0.5, lungeTimer: 0, lungeCooldown: 0, explosionBurstTimer: 0, explosionBurstCount: 0, lastTick: false}, "bulletRain": {bulletPerSec: 12, duration: 15}, "knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 8, knifePerSec: 1.2, duration: 15}}, {width: window.innerWidth, height: window.innerHeight, duration: 19, transparent: true, saveContent: true, continuous: true})
+                    }, 150)
                 }
-                if (player.bh.celestialite.actions[1].variables.attacks >= 17) {
+                if (player.bh.celestialite.attackID >= 17) {
                     celestialiteDeath()
                 }
             },

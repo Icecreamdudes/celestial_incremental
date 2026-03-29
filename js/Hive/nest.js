@@ -713,7 +713,7 @@ addLayer("n", {
                         }],
                         ["raw-html", () => {return hasUpgrade("n", 31) ? "<div class='bottomTooltip'>Base Formula<hr><small>2^(log<sub>1e20</sub>((Honeycombs*Royal Jelly)/1e60))</small></div>" : ""}],
                     ]],
-                    ["raw-html", () => {return hasMilestone("n", 14) ? "Boosts pollinators by x" + formatSimple() : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return hasMilestone("n", 14) ? "Boosts pollinators by x" + formatSimple(player.n.nestEffect) : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "10px"],
                     ["clickable", 1],
                     ["blank", "10px"],

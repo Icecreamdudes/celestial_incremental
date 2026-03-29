@@ -3276,7 +3276,6 @@
             type: "normal",
             background: "#cccccc",
             portrait: "resources/secret.png",
-            music: "music/alephCutscene.mp3",
             trigger() {return player.bh.currentStage == "alephsChamber" && Decimal.eq(player.bh.combo, 24) && player.bh.celestialite.actions[3].variables.attacks && player.bh.celestialite.actions[3].variables.attacks == 1},
             onStart() {player.bh.bhPause = true},
             dialogue: [
@@ -3316,7 +3315,6 @@
             type: "normal",
             background: "#cccccc",
             portrait: "resources/secret.png",
-            music: "music/alephCutscene.mp3",
             trigger() {return player.bh.currentStage == "alephsChamber" && Decimal.eq(player.bh.combo, 24) && player.bh.celestialite.actions[3].variables.attacks && player.bh.celestialite.actions[3].variables.attacks == 3},
             onStart() {player.bh.bhPause = true},
             dialogue: [

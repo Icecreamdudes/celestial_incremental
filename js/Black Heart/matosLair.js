@@ -594,6 +594,7 @@ BHC.matos = {
             constantType: "function",
             constantTarget: "randomPlayer",
             onTrigger(index, slot, target) {
+                let otherID = 0
                 if (player.bh.celestialite.health.lt(7000) && player.bh.celestialite.attackID == 0) {
                     screenFlash("This is what Nova wanted all along!", 3000)
                     setTimeout(() => {
@@ -736,28 +737,31 @@ BHC.matos = {
                     }, 3000)
                     player.bh.celestialite.attackID += 1
                 }
-                if (player.bh.celestialite.health.lt(50) && player.bh.celestialite.attackID == 14) {
+                if (player.bh.celestialite.health.lt(50) && player.bh.celestialite.attackID == 14 && otherID == 0) {
                     screenFlash("BUT I CAN'T LET YOU GUYS CONTINUE", 3000)
                     setTimeout(() => {
                         player.bh.celestialite.attackTimeout = [15, new Decimal(15)]
                         bulletHell({"bulletRain": {bulletPerSec: 18}, "knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 8, knifePerSec: 1.5}}, {width: window.innerWidth, height: window.innerHeight, duration: 15, transparent: true})
                     }, 3000)
+                    otherID = 1
                 }
-                if (player.bh.celestialite.attackID == 15) {
+                if (player.bh.celestialite.attackID == 15 && otherID == 1) {
                     screenFlash("", 200)
                     setTimeout(() => {
                         player.bh.celestialite.attackTimeout = [16, new Decimal(15)]
                         bulletHell({"centerSpiralAttack": {spiralAngle: 0, spiralRate: 0.325, spiralInterval: 30, radialStart: 64, bulletSpeed: 7, spiralKnives: true, knifeLength: 64, knifeWidth: 16}, "bouncingDiamond": {diamondCount: 3, enemySpeed: 4}, "centerSpreadAttack": {bulletSpeed: 6, spreadInterval: 1000, spreadCount: 7, spreadAngle: Math.PI/3}, "centerIcon": {radius: 64, fillColor: "#fff", strokeColor: "#e22", symbol: "⊘"}}, {width: window.innerWidth, height: window.innerHeight, duration: 15, transparent: true, saveContent: true})
                     }, 200)
+                    otherID = 2
                 }
-                if (player.bh.celestialite.attackID == 16) {
+                if (player.bh.celestialite.attackID == 16 && otherID == 2) {
                     screenFlash("", 200)
                     setTimeout(() => {
                         player.bh.celestialite.attackTimeout = [17, new Decimal(19)]
                         bulletHell({"finalMatosAttack": {radius: 64, fillColor: "#fff", strokeColor: "#e22", symbol: "⊘", burstBullets: 8, burstViolence: 0.5, lungeTimer: 0, lungeCooldown: 0, explosionBurstTimer: 0, explosionBurstCount: 0, lastTick: false}, "bulletRain": {bulletPerSec: 12, duration: 15}, "knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 8, knifePerSec: 1.2, duration: 15}}, {width: window.innerWidth, height: window.innerHeight, duration: 19, transparent: true, saveContent: true})
                     }, 200)
+                    otherID = 3
                 }
-                if (player.bh.celestialite.attackID >= 17) {
+                if (player.bh.celestialite.attackID >= 17 && otherID == 3) {
                     celestialiteDeath()
                 }
             },

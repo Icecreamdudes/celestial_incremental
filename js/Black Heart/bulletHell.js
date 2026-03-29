@@ -1843,7 +1843,7 @@ BHB.chargingBee = {
                     bossCtx.translate(b.x, b.y);
                     bossCtx.rotate(b.angle);
                     bossCtx.strokeStyle = "#000";
-                    bossCtx.lineWidth = 2;
+                    bossCtx.lineWidth = info.actions[id].radius/10;
                     if (!options.performanceMode) bossCtx.shadowColor = b.pulsingRed ? '#e22' : "#fff";
                     if (!options.performanceMode) bossCtx.shadowBlur = 4;
                     // Wings
@@ -1989,7 +1989,7 @@ BHB.shootBee = {
                     bossCtx.translate(b.x, b.y);
                     bossCtx.rotate(b.angle);
                     bossCtx.strokeStyle = "#000";
-                    bossCtx.lineWidth = 2;
+                    bossCtx.lineWidth = info.actions[id].radius/10;
                     if (!options.performanceMode) bossCtx.shadowColor = "#fff";
                     if (!options.performanceMode) bossCtx.shadowBlur = 4;
                     // Wings
@@ -2088,7 +2088,7 @@ BHB.bouncingBees = {
                     bossCtx.translate(b.x, b.y);
                     bossCtx.rotate(b.angle + Math.PI/2);
                     bossCtx.strokeStyle = "#000";
-                    bossCtx.lineWidth = 2;
+                    bossCtx.lineWidth = info.actions[id].radius/10;
                     if (!options.performanceMode) bossCtx.shadowColor = b.pulsingRed ? '#e22' : "#fff";
                     if (!options.performanceMode) bossCtx.shadowBlur = 4;
                     // Wings
@@ -2222,7 +2222,7 @@ BHB.waveBees = {
                     bossCtx.translate(b.x, b.y);
                     bossCtx.rotate(b.angle);
                     bossCtx.strokeStyle = "#000";
-                    bossCtx.lineWidth = 2;
+                    bossCtx.lineWidth = info.actions[id].radius/10;
                     if (!options.performanceMode) bossCtx.shadowColor = "#fff";
                     if (!options.performanceMode) bossCtx.shadowBlur = 4;
                     // Wings

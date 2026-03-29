@@ -910,6 +910,7 @@ function screenFlash(message, duration) {
     if (old) old.remove();
 
     if (!player.bh.bhPause) player.bh.bhPause = true
+    if (!player.bh.timerStop) player.bh.timerStop = true
 
     // Create overlay
     const overlay = document.createElement("div");
@@ -942,6 +943,7 @@ function screenFlash(message, duration) {
     setTimeout(() => {
         overlay.style.opacity = "0";
         player.bh.bhPause = false
+        player.bh.timerStop = false
         setTimeout(() => {
             if (overlay.parentNode) overlay.remove();
         }, 200);

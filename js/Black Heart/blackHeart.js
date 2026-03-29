@@ -555,6 +555,7 @@ addLayer("bh", {
         comboScalingReduction: 0,
         comboSoftcap: new Decimal(1),
         timer: new Decimal(0),
+        timerStop: false,
         timeSpeed: new Decimal(1),
         maxSkillPoints: new Decimal(10),
         skillCostDiv: new Decimal(1),
@@ -682,7 +683,7 @@ addLayer("bh", {
         if (BHS[player.bh.currentStage].respawnTime) player.bh.respawnMax = BHS[player.bh.currentStage].respawnTime
 
         if (BHS[player.bh.currentStage].timer || BHC[player.bh.celestialite.id].timer) {
-            if (unpaused && !BHS[player.bh.currentStage].timeStagnation) player.bh.timer = player.bh.timer.add(normTime)
+            if (unpaused && !BHS[player.bh.currentStage].timeStagnation && !player.bh.timerStop) player.bh.timer = player.bh.timer.add(normTime)
             if (BHS[player.bh.currentStage].timer && player.bh.timer.gte(run(BHS[player.bh.currentStage].timer, BHS[player.bh.currentStage]))) {
                 for (let i = 0; i < 3; i++) {
                     player.bh.characters[i].health = new Decimal(-Infinity)

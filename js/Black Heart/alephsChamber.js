@@ -760,28 +760,28 @@ BHC.aleph = {
                 }
                 if (player.bh.celestialite.health.lt(50) && player.bh.celestialite.attackID == 5) {
                     player.bh.celestialite.attackTimeout = [6, new Decimal(5)]
-                    bulletHell({"shootBee": {beesPerSec: 2, radius: 10, enemySpeed: 6}}, {width: 400, height: 400, duration: 5})
+                    bulletHell({"shootBee": {beesPerSec: 2, radius: 15, enemySpeed: 6}}, {width: 400, height: 400, duration: 5})
                 }
                 if (player.bh.celestialite.attackID == 6) {
-                    screenFlash("", 150)
+                    screenFlash("", 200)
                     setTimeout(() => {
                         player.bh.celestialite.attackTimeout = [7, new Decimal(5)]
-                        bulletHell({"shootBee": {beesPerSec: 1.5, radius: 10, enemySpeed: 6}, "chargingBee": {beeAmount: 8, radius: 20, enemySpeed: 5, lastTick: false}}, {width: 400, height: 400, duration: 5, saveContent: true, continuous: true})
-                    }, 150)
+                        bulletHell({"shootBee": {beesPerSec: 1, radius: 15, enemySpeed: 6}, "chargingBee": {beeAmount: 8, radius: 20, enemySpeed: 5, lastTick: false}}, {width: 400, height: 400, duration: 5, saveContent: true})
+                    }, 200)
                 }
                 if (player.bh.celestialite.attackID == 7) {
-                    screenFlash("", 150)
+                    screenFlash("", 200)
                     setTimeout(() => {
                         player.bh.celestialite.attackTimeout = [8, new Decimal(5)]
-                        bulletHell({"shootBee": {beesPerSec: 1, radius: 10, enemySpeed: 6}, "chargingBee": {beeAmount: 5, radius: 20, enemySpeed: 4, lastTick: false}, "bouncingBees": {beeAmount: 3, radius: 30, enemySpeed: 4, chargeMult: 1.5, lastTick: false}}, {width: 400, height: 400, duration: 5, saveContent: true, continuous: true})
-                    }, 150)
+                        bulletHell({"shootBee": {beesPerSec: 0.5, radius: 15, enemySpeed: 6}, "chargingBee": {beeAmount: 5, radius: 20, enemySpeed: 4, lastTick: false}, "bouncingBees": {beeAmount: 3, radius: 30, enemySpeed: 4, chargeMult: 1.5, lastTick: false}}, {width: 400, height: 400, duration: 5, saveContent: true})
+                    }, 200)
                 }
                 if (player.bh.celestialite.attackID == 8) {
-                    screenFlash("", 150)
+                    screenFlash("", 200)
                     setTimeout(() => {
                         player.bh.celestialite.attackTimeout = [9, new Decimal(5)]
-                        bulletHell({"shootBee": {beesPerSec: 1, radius: 10, enemySpeed: 6}, "chargingBee": {beeAmount: 4, radius: 20, enemySpeed: 4, lastTick: false}, "bouncingBees": {beeAmount: 2, radius: 30, enemySpeed: 4, chargeMult: 1.5, lastTick: false}, "waveBees": {beeRate: 3, radius: 20, gapStart: 0, gap: 200, enemySpeed: 8, waveSpeed: 3}}, {width: 400, height: 400, duration: 5, saveContent: true, continuous: true})
-                    }, 150)
+                        bulletHell({"chargingBee": {beeAmount: 4, radius: 20, enemySpeed: 4, lastTick: false}, "bouncingBees": {beeAmount: 2, radius: 30, enemySpeed: 4, chargeMult: 1.5, lastTick: false}, "waveBees": {beeRate: 2, radius: 20, gapStart: 0, gap: 200, enemySpeed: 5, waveSpeed: 3}}, {width: 400, height: 400, duration: 5, saveContent: true})
+                    }, 200)
                 }
                 if (player.bh.celestialite.attackID >= 9) {
                     celestialiteDeath()

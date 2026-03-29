@@ -822,7 +822,7 @@
             type: "normal",
             background: "#596c6c",
             portrait: "resources/secret.png",
-            onEnter() {player.tad.altSelection = "none"},
+            onStart() {player.tad.altSelection = "none"},
             trigger() {return player.tad.altInfinities.broken.amount.gte(1) || player.tad.altInfinities.shattered.amount.gte(1) || player.tad.altInfinities.fragmented.amount.gte(1)},
             dialogue: [
                 { text: "You take the infinitums, and step infront of the otherworldly feature altar.", },
@@ -3274,10 +3274,11 @@
         },
         "Hive-Chamber-Fight-Mid1": {
             type: "normal",
-            background: "#ffffff",
+            background: "#cccccc",
             portrait: "resources/secret.png",
             music: "music/alephCutscene.mp3",
-            trigger() {return false},
+            trigger() {return player.bh.currentStage == "alephsChamber" && Decimal.eq(player.bh.combo, 24) && player.bh.celestialite.actions[3].variables.attacks && player.bh.celestialite.actions[3].variables.attacks == 1},
+            onStart() {player.bh.bhPause = true},
             dialogue: [
                 { text: "You are brought into a flashback."},
                 { text: "The grass is green. The sky is blue. Birds are chirping, and you smell the sweet scent of fresh rain."},
@@ -3309,13 +3310,15 @@
                 { text: "That was definitely the land Nova told you about."},
                 { text: "I guess you'd have to go there yourself to see how its truly like."},
             ],
+            onEnd() {player.bh.bhPause = false},
         },
         "Hive-Chamber-Fight-Mid2": {
             type: "normal",
-            background: "#ffffff",
+            background: "#cccccc",
             portrait: "resources/secret.png",
             music: "music/alephCutscene.mp3",
-            trigger() {return false},
+            trigger() {return player.bh.currentStage == "alephsChamber" && Decimal.eq(player.bh.combo, 24) && player.bh.celestialite.actions[3].variables.attacks && player.bh.celestialite.actions[3].variables.attacks == 3},
+            onStart() {player.bh.bhPause = true},
             dialogue: [
                 { text: "I've had a glimpse of your past, Aleph.", portrait: "resources/player.png"},
                 { text: "You used to live in the Celestial Kingdom, didn't you.", portrait: "resources/player.png"},
@@ -3327,6 +3330,7 @@
                 { text: "You have the potential to look after my swarm. You seem to be a great fighter.", portrait: "resources/aleph.png"},
                 { text: "Now let us continue our battle, shall we?", portrait: "resources/aleph.png"},
             ],
+            onEnd() {player.bh.bhPause = false},
         },
         "Hive-Chamber-Fight-End": {
             type: "normal",

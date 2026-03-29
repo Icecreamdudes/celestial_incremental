@@ -3402,6 +3402,31 @@
                 { text: "It's very similar to the superphysical pets you have seen before, but Vespasian seems to have an intelligence of their own."},
                 { text: "You seem like someone I can trust, Vespasian.", portrait: "resources/player.png"},
             ],
+        },
+        "CB-Lab-Unlock": {
+            type: "normal",
+            background: "linear-gradient(-180deg, #1d2312 0%, #0b1109 100%)", //ADD THE MATOS LAB COLORS
+            portrait: "resources/secret.png",
+            trigger() {return player.tab == "bh" && player.subtabs["bh"]["stages"] == "laboratory"},
+            dialogue: [
+                { text: "Mr.Foresight... You might want to take a look at this.", portrait: "resources/kres.png"},
+                { text: "I found a strange laboratory in the black heart.", portrait: "resources/kres.png"},
+                { text: "It was probably Matos' work. We must investigate this place.", portrait: "resources/kres.png"},
+                { text: "Alright, let's go check it out.", portrait: "resources/player.png"},
+            ],
+        }, 
+        "CB-Lab-Enter": {
+            type: "normal",
+            background: "linear-gradient(-180deg, #1d2312 0%, #0b1109 100%)", 
+            portrait: "resources/secret.png",
+            trigger() {return player.bh.currentStage == "laboratory"},
+            dialogue: [
+                { text: "You enter the laboratory, and you are hit with a myriad of strange sensations."},
+                { text: "You feel the superphysical presence increase around you."},
+                { text: "Celestialites begin to appear around you."},
+                { text: "You feel the same presence that Matos had before."},
+                { text: "How strange..."},
+            ],
         }, 
         "Hive-Nests-Unlock": {
             type: "normal",

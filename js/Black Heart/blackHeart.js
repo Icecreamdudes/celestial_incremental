@@ -2867,7 +2867,9 @@ addLayer("bh", {
     bars: {
         "timer": {
             unlocked() {
-                return BHS[player.bh.currentStage].timer || BHC[player.bh.celestialite.id].timer
+                if (BHS[player.bh.currentStage].timer) return true
+                if (BHC[player.bh.celestialite.id].timer) return true
+                return false
             },
             direction: RIGHT,
             width: 600,
@@ -2955,7 +2957,7 @@ addLayer("bh", {
             },
             textStyle: {userSelect: "none", lineHeight: "1", fontSize: "10px"},
             display() {
-                if (!BHC[player.bh.celestialite.id].actions[0].duration) return new Decimal(0)
+                if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[0] || !BHC[player.bh.celestialite.id].actions[0].duration) return new Decimal(0)
                 let str = "<h5>" + formatTime(player.bh.celestialite.actions[0].duration) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[0].duration)
                 if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
                 return str
@@ -3004,7 +3006,7 @@ addLayer("bh", {
             },
             textStyle: {userSelect: "none", lineHeight: "1", fontSize: "10px"},
             display() {
-                if (!BHC[player.bh.celestialite.id].actions[1].duration) return new Decimal(0)
+                if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[1] || !BHC[player.bh.celestialite.id].actions[1].duration) return new Decimal(0)
                 let str = "<h5>" + formatTime(player.bh.celestialite.actions[1].duration) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[1].duration)
                 if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
                 return str
@@ -3053,7 +3055,7 @@ addLayer("bh", {
             },
             textStyle: {userSelect: "none", lineHeight: "1", fontSize: "10px"},
             display() {
-                if (!BHC[player.bh.celestialite.id].actions[2].duration) return new Decimal(0)
+                if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[2] || !BHC[player.bh.celestialite.id].actions[2].duration) return new Decimal(0)
                 let str = "<h5>" + formatTime(player.bh.celestialite.actions[2].duration) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[2].duration)
                 if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
                 return str
@@ -3102,7 +3104,7 @@ addLayer("bh", {
             },
             textStyle: {userSelect: "none", lineHeight: "1", fontSize: "10px"},
             display() {
-                if (!BHC[player.bh.celestialite.id].actions[3].duration) return new Decimal(0)
+                if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[3] || !BHC[player.bh.celestialite.id].actions[3].duration) return new Decimal(0)
                 let str = "<h5>" + formatTime(player.bh.celestialite.actions[3].duration) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[3].duration)
                 if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
                 return str

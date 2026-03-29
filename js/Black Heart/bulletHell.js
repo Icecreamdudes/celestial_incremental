@@ -61,21 +61,9 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
     localStorage.setItem('bhState', JSON.stringify(info));
 
     // If already active, clear previous overlay and timer
-    if (!window.__bh_state) window.__bh_state = {};
-    const bhState = window.__bh_state;
-    if (bhState.active) {
-        if (bhState.overlay && bhState.overlay.parentNode) bhState.overlay.remove();
-        if (bhState.timer) clearTimeout(bhState.timer);
-        if (!options.bhKeyboard) {
-            window.removeEventListener("mousemove", bhState.mouseHandler);
-            window.removeEventListener("touchmove", bhState.touchHandler);
-        } else {
-            window.removeEventListener("keydown", bhState.keydownHandler);
-            window.removeEventListener("keyup", bhState.keyupHandler);
-        }
-    }
+    const bhState = info;
     bhState.active = true;
-
+    
     const old = document.getElementById("bh-overlay")
     if (old) old.remove()
 
@@ -623,11 +611,11 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
                 window.removeEventListener("keyup", keyupHandler);
             }
             if (overlay.parentNode) overlay.remove();
-            // Do NOT return to battle tab here!
-            pauseUniverseAll(["BH"], "unpause", true)
-            player.universe = "U3"
             bhState.active = false;
             info.active = false;
+            player.subtabs["bh"]["stuff"] = "dead";
+            pauseUniverseAll(["BH"], "unpause", true)
+            player.universe = "U3"
             options.fullscreen = info.full;
             localStorage.setItem('bhState', JSON.stringify(info));
             if (bhState.timer) clearTimeout(bhState.timer)
@@ -713,12 +701,10 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
                 if (overlay.parentNode) overlay.remove();
                 bhState.active = false;
                 info.active = false;
-                if (!info.values.continuous) {
-                    player.subtabs["bh"]["stuff"] = "battle";
-                    pauseUniverseAll(["BH"], "unpause", true)
-                    player.universe = "U3"
-                    options.fullscreen = info.full;
-                }
+                player.subtabs["bh"]["stuff"] = "battle";
+                pauseUniverseAll(["BH"], "unpause", true)
+                player.universe = "U3"
+                options.fullscreen = info.full;
                 localStorage.setItem('bhState', JSON.stringify(info));
                 if (bhState.timer) clearTimeout(bhState.timer)
                 return;
@@ -983,12 +969,10 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         if (overlay.parentNode) overlay.remove();
         bhState.active = false;
         info.active = false;
-        if (!info.values.continuous) {
-            player.subtabs["bh"]["stuff"] = "battle";
-            pauseUniverseAll(["BH"], "unpause", true)
-            player.universe = "U3"
-            options.fullscreen = info.full;
-        }
+        player.subtabs["bh"]["stuff"] = "battle";
+        pauseUniverseAll(["BH"], "unpause", true)
+        player.universe = "U3"
+        options.fullscreen = info.full;
         if (info.timed) bhAttack(Decimal.mul(player.bh.celestialite.damage, 3), 3, 0, "allPlayer")
         localStorage.setItem('bhState', JSON.stringify(info));
     }, info.duration * 1000);
@@ -1026,6 +1010,7 @@ if (storedInfo && storedInfo != "") {
         }
     } else {
         setTimeout(() => {
+            const bhState = storedInfo
             if (player && player.subtabs && player.subtabs["bh"]["stuff"] == "bullet") {
                 if (storedInfo.exitAction) storedInfo.exitAction()
                 player.subtabs["bh"]["stuff"] = "battle";

@@ -234,7 +234,7 @@
         player.i.pylonEnergy = player.i.pylonEnergy.add(player.i.pylonEnergyPerSecond.mul(delta))
 
         player.i.pylonEnergyEffect = player.i.pylonEnergy.pow(4).add(1).pow(player.i.pylonTierEffect)
-        player.i.pylonEnergyEffect2 = player.i.pylonEnergy.pow(0.3).add(1).pow(player.i.pylonTierEffect)
+        player.i.pylonEnergyEffect2 = player.i.pylonEnergy.pow(0.15).add(1).pow(player.i.pylonTierEffect)
         player.i.pylonEnergyEffect3 = player.i.pylonEnergy.pow(0.1).add(1).pow(player.i.pylonTierEffect)
 
         player.i.pylonTierEffect = player.i.pylonTier.sub(1).pow(0.3).div(10).add(1)
@@ -255,7 +255,7 @@
             progress() {
                 return player.points.add(1).log10().div("308.25")
             },
-            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)", margin: "10px auto"},
             fillStyle: { backgroundColor: "#b28500" },
             borderStyle: { border: "3px solid", borderRadius: "20px"},
             display() {
@@ -653,9 +653,7 @@
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
-                    ["blank", "10px"],
-                    ["bar", "infbar"],
-                    ["blank", "15px"],
+                    ["blank", "25px"],
                     ["style-row", [
                         ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],
                         ["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23],
@@ -721,6 +719,15 @@
     tabFormat: [
         ["raw-html", () => {return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["raw-html", () => {return player.gain.gt(player.i.doomSoftcapStart) ? "SOFTCAP OF DOOM: Gain past " + format(player.i.doomSoftcapStart) + " is raised by ^" + format(player.i.doomSoftcap, 3) + "." : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
+        ["bar", "infbar"],
+        ["style-row", [
+            ["style-row", [
+                ["raw-html", () => {return "<h3>Pre-OTF Mult</h3><br>x" + format(player.i.preOTFMult)}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+            ], {width: "250px"}],
+            ["style-row", [
+                ["raw-html", () => {return "<h3>Post-OTF Mult</h3><br>x" + format(player.i.postOTFMult)}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+            ], () => {return player.i.postOTFMult.neq(1) ? {width: "250px", borderLeft: "3px solid #ccc"} : {display: "none !important"}}],
+        ], () => {return player.i.postOTFMult.neq(1) ? {width: "503px", height: "50px", background: "rgba(0,0,0,0.5)", border: "3px solid #ccc", borderRadius: "25px", margin: "10px auto"} : player.i.preOTFMult.neq(1) ? {width: "250px", height: "50px", background: "var(--miscButton)", border: "3px solid var(--regBorder)", borderRadius: "25px", margin: "10px auto"} : {display: "none !important"}}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],

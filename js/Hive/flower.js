@@ -684,37 +684,37 @@ addLayer("fl", {
                 break;
             case "purple":
                 // PENTAGONAL PURPLE
-                if (tier < 0.3 && false) {
+                if (tier < 0.3 && getBuyableAmount("n", 53).gt(0)) {
                     if (getGridData("fl", val)[0] <= player.fl.glossaryRig && player.fl.glossaryRig > 610 && player.fl.glossaryRig < 620) {
                         setGridData("fl", val, [player.fl.glossaryRig, new Decimal(rigBase*100)])
                         break;
                     }
                     let rng = Math.random()
-                    if (rng < 0.4 || buyableEffect("bee", 64).eq(1)) {
+                    if (rng < 0.4 || getBuyableAmount("n", 53).eq(1)) {
                         if (getGridData("fl", val)[0] <= 611) setGridData("fl", val, [611, new Decimal(200)])
-                    } else if (rng < 0.7 || buyableEffect("bee", 64).eq(2)) {
+                    } else if (rng < 0.7 || getBuyableAmount("n", 53).eq(2)) {
                         if (getGridData("fl", val)[0] <= 612) setGridData("fl", val, [612, new Decimal(300)])
-                    } else if (rng < 0.85 || buyableEffect("bee", 64).eq(3)) {
+                    } else if (rng < 0.85 || getBuyableAmount("n", 53).eq(3)) {
                         if (getGridData("fl", val)[0] <= 613) setGridData("fl", val, [613, new Decimal(400)])
-                    } else if (rng < 0.95 || buyableEffect("bee", 64).eq(4)) {
+                    } else if (rng < 0.95 || getBuyableAmount("n", 53).eq(4)) {
                         if (getGridData("fl", val)[0] <= 614) setGridData("fl", val, [614, new Decimal(500)])
                     } else {
                         if (getGridData("fl", val)[0] <= 615) setGridData("fl", val, [615, new Decimal(600)])
                     }
                 // CUBIC PURPLE
-                } else if (tier < 0.4 && false) {
+                } else if (tier < 0.4 && getBuyableAmount("n", 53).gt(5)) {
                     if (getGridData("fl", val)[0] <= player.fl.glossaryRig && player.fl.glossaryRig > 620 && player.fl.glossaryRig < 630) {
                         setGridData("fl", val, [player.fl.glossaryRig, new Decimal(rigBase*1000)])
                         break;
                     }
                     let rng = Math.random()
-                    if (rng < 0.4 || buyableEffect("al", 203).eq(1)) {
+                    if (rng < 0.4 || getBuyableAmount("n", 53).eq(6)) {
                         if (getGridData("fl", val)[0] <= 621) setGridData("fl", val, [621, new Decimal(2000)])
-                    } else if (rng < 0.7 || buyableEffect("al", 203).eq(2)) {
+                    } else if (rng < 0.7 || getBuyableAmount("n", 53).eq(7)) {
                         if (getGridData("fl", val)[0] <= 622) setGridData("fl", val, [622, new Decimal(3000)])
-                    } else if (rng < 0.85 || buyableEffect("al", 203).eq(3)) {
+                    } else if (rng < 0.85 || getBuyableAmount("n", 53).eq(8)) {
                         if (getGridData("fl", val)[0] <= 623) setGridData("fl", val, [623, new Decimal(4000)])
-                    } else if (rng < 0.95 || buyableEffect("al", 203).eq(4)) {
+                    } else if (rng < 0.95 || getBuyableAmount("n", 53).eq(9)) {
                         if (getGridData("fl", val)[0] <= 624) setGridData("fl", val, [624, new Decimal(5000)])
                     } else {
                         if (getGridData("fl", val)[0] <= 625) setGridData("fl", val, [625, new Decimal(6000)])
@@ -1985,7 +1985,7 @@ addLayer("fl", {
                 <ellipse id="petal1" transform="translate(4, 16)" rx="16" ry="14" cx="16" cy="14" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
-            display() {return false},
+            display() {return getBuyableAmount("n", 53).gte(1)},
             onHover() {player.fl.glossaryIndex=611},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=611},
         },
@@ -1998,7 +1998,7 @@ addLayer("fl", {
                 <ellipse id="petal1" transform="translate(5.5, 28.5)" rx="12.5" cx="12.5" ry="12.5" cy="12.5" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <polygon id="petal0" transform="translate(20, 24)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
-            display() {return false},
+            display() {return getBuyableAmount("n", 53).gte(2)},
             onHover() {player.fl.glossaryIndex=612},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=612},
         },
@@ -2012,7 +2012,7 @@ addLayer("fl", {
                 <ellipse id="petal1" transform="translate(6, 20)" rx="10" cx="10" ry="10" cy="10" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
-            display() {return false},
+            display() {return getBuyableAmount("n", 53).gte(3)},
             onHover() {player.fl.glossaryIndex=613},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=613},
         },
@@ -2027,7 +2027,7 @@ addLayer("fl", {
                 <ellipse id="petal1" transform="translate(10.5, 18.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
-            display() {return false},
+            display() {return getBuyableAmount("n", 53).gte(4)},
             onHover() {player.fl.glossaryIndex=614},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=614},
         },
@@ -2043,7 +2043,7 @@ addLayer("fl", {
                 <ellipse id="petal1" transform="translate(14, 18)" rx="6" cx="6" ry="6" cy="6" fill="#752653" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
-            display() {return false},
+            display() {return getBuyableAmount("n", 53).gte(5)},
             onHover() {player.fl.glossaryIndex=615},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=615},
         },
@@ -2059,7 +2059,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return false},
+            display() {return getBuyableAmount("n", 53).gte(6)},
             onHover() {player.fl.glossaryIndex=621},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=621},
         },
@@ -2075,7 +2075,7 @@ addLayer("fl", {
                 <line transform="translate(20, 23)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 23)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return false},
+            display() {return getBuyableAmount("n", 53).gte(7)},
             onHover() {player.fl.glossaryIndex=622},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=622},
         },
@@ -2092,7 +2092,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return false},
+            display() {return getBuyableAmount("n", 53).gte(8)},
             onHover() {player.fl.glossaryIndex=623},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=623},
         },
@@ -2110,7 +2110,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return false},
+            display() {return getBuyableAmount("n", 53).gte(9)},
             onHover() {player.fl.glossaryIndex=624},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=624},
         },
@@ -2129,7 +2129,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="0" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
-            display() {return false},
+            display() {return getBuyableAmount("n", 53).gte(10)},
             onHover() {player.fl.glossaryIndex=625},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=625},
         },

@@ -223,7 +223,7 @@ addLayer("n", {
                 return "<div style='height:25px;display:flex;align-items:center'><div>" +
                 "<h3>Nest Upgrade 6:1</h3>" + // TOP
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
-                "TEMP" + // MIDDLE
+                "[COMING SOON]" + // MIDDLE
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
                 "64 Nests" + // BOTTOM
                 "</div></div>"
@@ -238,14 +238,13 @@ addLayer("n", {
                 return look
             },
         },
-        // MAKE ONE OF THESE ROW 6 UPGRADES BUFF NESTS
         62: {
             unlocked: true,
             fullDisplay() {
                 return "<div style='height:25px;display:flex;align-items:center'><div>" +
                 "<h3>Nest Upgrade 6:2</h3>" + // TOP
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
-                "TEMP" + // MIDDLE
+                "Buff Aleph resources based on nest resets<br>Currently: x" + formatSimple(player.n.nestReset.add(1).pow(0.5)) + // MIDDLE
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
                 "64 Nests" + // BOTTOM
                 "</div></div>"
@@ -429,7 +428,7 @@ addLayer("n", {
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.n.nest },
             pay(amt) { player.n.nest = this.currency().sub(amt) },
-            effect(x) { return player.fl.totalLevels.div(1500).add(1).pow(getBuyableAmount(this.layer, this.id))},
+            effect(x) { return Decimal.pow(getBuyableAmount(this.layer, this.id).add(1), player.fl.totalLevels.div(1000).add(1).log(2))},
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id).pow(2)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) && hasUpgrade("n", 31) },
@@ -457,7 +456,7 @@ addLayer("n", {
         51: {
             costBase() { return new Decimal(16) },
             costGrowth() { return new Decimal(1.5) },
-            purchaseLimit() { return new Decimal(9) },
+            purchaseLimit() { return new Decimal(3) },
             currency() { return player.n.nest },
             pay(amt) { player.n.nest = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(2)},

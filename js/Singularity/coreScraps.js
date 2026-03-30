@@ -962,10 +962,10 @@
             },
         },
         904: {
-            title: "Unidentified Timely Object",
+            title: "Perpetual Motion",
             unlocked() {return hasUpgrade("depth4", 5)},
             canAfford() {return hasUpgrade("depth4", 5)},
-            description: "XP Button ability is x100 effective, but has a x100 longer cooldown.",
+            description: "\"Infinity Points Boost\" ability is exponentially more powerful.",
             cost: new Decimal(1e23),
             currencyLocation() { return player.cs.scraps.rocket },
             currencyDisplayName: "Rocket Core Scraps",

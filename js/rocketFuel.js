@@ -177,7 +177,6 @@
             unlocked() { return true },
             tooltip() {
                 if (player.rf.abilityIndex == 4) {
-                    if (hasUpgrade("cs", 904)) return "<h3>+5 UFO Pets"
                     return "<h3>5% chance for a pet???"
                 }
                 return ""
@@ -199,8 +198,7 @@
             unlocked() { return true },
             tooltip() {
                 if (player.rf.abilityIndex == 4) {
-                    if (hasUpgrade("cs", 904)) return "<h3>+" + formatSimple(player.rf.rocketFuel.div(100).add(1).log(10).pow(0.75).div(2).add(5).div(100)) + " UFO Pets"
-                    return "<h3>" + formatWhole(player.rf.rocketFuel.div(100).add(1).log(10).pow(0.75).div(2).add(5).floor()) + "% chance for a pet???"
+                    return "<h3>" + formatWhole(player.rf.rocketFuel.div(100).add(1).log(10).pow(0.75).div(2).add(5).floor().min(10000)) + "% chance for a pet???"
                 }
                 return ""
             },
@@ -221,8 +219,7 @@
             unlocked() { return true  },
             tooltip() {
                 if (player.rf.abilityIndex == 4) {
-                    if (hasUpgrade("cs", 904)) return "<h3>+" + formatSimple(player.rf.rocketFuel.div(10).add(1).log(10).pow(0.75).div(2).add(5).div(100)) + " UFO Pets"
-                    return "<h3>" + formatWhole(player.rf.rocketFuel.div(10).add(1).log(10).pow(0.75).div(2).add(5).floor()) + "% chance for a pet???"
+                    return "<h3>" + formatWhole(player.rf.rocketFuel.div(10).add(1).log(10).pow(0.75).div(2).add(5).floor().min(10000)) + "% chance for a pet???"
                 }
                 return ""
             },
@@ -243,8 +240,7 @@
             unlocked() { return true },
             tooltip() {
                 if (player.rf.abilityIndex == 4) {
-                    if (hasUpgrade("cs", 904)) return "<h3>+" + formatSimple(player.rf.rocketFuel.div(4).add(1).log(10).pow(0.75).div(2).add(5).div(100)) + " UFO Pets"
-                    return "<h3>" + formatWhole(player.rf.rocketFuel.div(4).add(1).log(10).pow(0.75).div(2).add(5).floor()) + "% chance for a pet???"
+                    return "<h3>" + formatWhole(player.rf.rocketFuel.div(4).add(1).log(10).pow(0.75).div(2).add(5).floor().min(10000)) + "% chance for a pet???"
                 }
                 return ""
             },
@@ -265,8 +261,7 @@
             unlocked() { return true },
             tooltip() {
                 if (player.rf.abilityIndex == 4) {
-                    if (hasUpgrade("cs", 904)) return "<h3>+" + formatSimple(player.rf.rocketFuel.add(1).log(10).pow(0.75).div(2).add(5).div(100)) + " UFO Pets"
-                    return "<h3>" + formatWhole(player.rf.rocketFuel.add(1).log(10).pow(0.75).div(2).add(5).floor()) + "% chance for a pet???"
+                    return "<h3>" + formatWhole(player.rf.rocketFuel.add(1).log(10).pow(0.75).div(2).add(5).floor().min(10000)) + "% chance for a pet???"
                 }
                 return ""
             },
@@ -406,14 +401,11 @@
             break;
             case 4:
                 player.rf.abilityEffects[4] = player.cb.xpTimers[0].base.mul(amount.add(1).log10().pow(0.7).div(10).add(1))
-                if (hasUpgrade("cs", 904)) player.rf.abilityEffects[4] = player.rf.abilityEffects[4].mul(100)
                 player.cb.xp = player.cb.xp.add(player.rf.abilityEffects[4])
                 player.cb.totalxp = player.cb.totalxp.add(player.rf.abilityEffects[4])
                 player.rf.abilityTimers[4] = player.cb.xpTimers[0].max.mul(amount.add(1).log10().pow(0.8).div(10).add(1.7))
-                if (hasUpgrade("cs", 904)) player.rf.abilityTimers[4] = player.rf.abilityTimers[4].mul(100)
 
-                let chance = amount.log(10).pow(0.75).div(2).add(4).floor()
-                if (hasUpgrade("cs", 904)) chance = chance.mul(100)
+                let chance = amount.log(10).pow(0.75).div(2).add(4).floor().min(10000)
                 let guarantee = chance.div(100).floor()
                 chance = chance.sub(guarantee.mul(100))
                 if (chance.gte(Math.random()*100)) guarantee = guarantee.add(1)
@@ -429,6 +421,7 @@
             break;
             case 6:
                 player.rf.abilityTimers[6] = amount.add(1).log(10).add(1).mul(60)
+                if (hasUpgrade("cs", 904)) player.rf.abilityTimers[6] = Decimal.pow(2, player.rf.abilityTimers[6].pow(0.3))
             break;
             case 7:
                 player.rf.abilityEffects[7] = amount.add(1).log(6).add(1).div(36).add(1).pow(player.cs.scraps.rocket.effect)

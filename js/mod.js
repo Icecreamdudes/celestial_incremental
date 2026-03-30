@@ -385,11 +385,11 @@ function updateStyles() {
     	if (embersBg) embersBg.remove();
 	}
 	if (player.tab == "bh" && player.bh.currentStage == "laboratory" && player.subtabs["bh"]["stuff"] == "battle") {
-		let layer = document.getElementById("layerHolder");
-		layer.style.filter = "brightness(90%)"
+		let lay = document.getElementById("layerHolder");
+		if (lay) lay.style.filter = "brightness(90%)"
 	} else {
-		let layer = document.getElementById("layerHolder");
-		layer.style.filter = ""
+		let lay = document.getElementById("layerHolder");
+		if (lay) lay.style.filter = "brightness(100%)"
 	}
 
 	// Solar Eclipse Effect (moving sun/moon)

@@ -784,7 +784,7 @@ BHC.aleph = {
                     screenFlash("", 200)
                     setTimeout(() => {
                         player.bh.celestialite.attackTimeout = [9, new Decimal(5)]
-                        bulletHell({"chargingBee": {beeAmount: 4, radius: 20, enemySpeed: 4, lastTick: false}, "bouncingBees": {beeAmount: 2, radius: 30, enemySpeed: 4, chargeMult: 1.5, lastTick: false}, "waveBees": {beeRate: 2, radius: 20, gapStart: 0, gap: 200, enemySpeed: 5, waveSpeed: 3}}, {width: 400, height: 400, duration: 5, saveContent: true})
+                        bulletHell({"chargingBee": {beeAmount: 4, radius: 20, enemySpeed: 4, lastTick: false}, "bouncingBees": {beeAmount: 2, radius: 30, enemySpeed: 4, chargeMult: 1.5, lastTick: false}, "waveBees": {beeRate: 3, radius: 20, gapStart: 0, gap: 350, enemySpeed: 6, waveSpeed: 4}}, {width: 400, height: 400, duration: 5, saveContent: true})
                     }, 200)
                     player.bh.celestialite.actions[3].variables.attacks = 4
                 }
@@ -797,7 +797,7 @@ BHC.aleph = {
     },
     reward() {
         let gain = {}
-        gain.gloomingNocturnium = new Decimal(250)
+        gain.gloomingNocturnium = new Decimal(500)
         gain.dimNocturnium = new Decimal(150)
         gain.darkEssence = new Decimal(50)
         return gain

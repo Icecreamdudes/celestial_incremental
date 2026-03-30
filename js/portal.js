@@ -14,6 +14,7 @@
         rocketFuel: false,
         hex: false,
         breakInfinity: false,
+        gwaTemple: false,
 
         keepOTFS: false,
 
@@ -100,6 +101,9 @@
             player.po.featureSlots = player.po.featureSlots.sub(1)
         }
         if (player.po.hex && !hasUpgrade("s", 18)) {
+            player.po.featureSlots = player.po.featureSlots.sub(1)
+        }
+        if (player.po.gwaTemple) {
             player.po.featureSlots = player.po.featureSlots.sub(1)
         }
         if (player.po.breakInfinity) {
@@ -304,6 +308,26 @@
                 "background": "linear-gradient(315deg, #7c5423 0%, #b87400 100%)",
                 "background-origin": "border-box",
                 "color": "white",
+                borderRadius: "20px",
+            },
+        },
+        15: {
+            title() { return "<h1>Gwa Temple" },
+            display() {
+                return player.po.gwaTemple ? "<h1>Worship the cat of limitless potential.<br>On<br><h2>(Progress is kept between resets)</h2>" : "<h1>Worship the cat of limitless potential.<br>Off<br><h2>(Progress is kept between resets)</h2>";
+            },
+            canClick() { return player.po.featureSlots.gte(1)},
+            unlocked() { return layers.pet.levelables[101].canClick()},
+            onClick() {
+                player.po.gwaTemple = true
+            },
+            style: {
+                width: '200px',
+                minHeight: '200px',
+                background: "linear-gradient(45deg, #ccc 0%, #aaa 100%)",
+                backgroundOrigin: "border-box",
+                color: "#222",
+                border: "5px solid #777",
                 borderRadius: "20px",
             },
         },
@@ -874,7 +898,7 @@
                     ["blank", "25px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],
                     ["blank", "25px"],
-                    ["style-row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14]], {maxWidth: "1000px"}],
+                    ["style-row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15]], {maxWidth: "1000px"}],
                 ]
             },
             "Halter": {

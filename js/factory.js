@@ -1074,6 +1074,7 @@
                 content: [
                     ["blank", "25px"],
                     ["raw-html", "COMING SOON", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    // Add softcap of doom nerfs here
                 ]
             },
             "Star Accumulator": {

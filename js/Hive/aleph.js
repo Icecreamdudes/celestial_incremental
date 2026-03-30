@@ -656,6 +656,20 @@ addLayer("al", {
                 return look
             },
         },
+        128: {
+            title: "Honeycomb <small>(10, 1)</small>",
+            unlocked() {return getBuyableAmount("n", 51).gte(1)},
+            description: "Improve \"Pollen Upgrade V\"'s effect.",
+            cost: new Decimal(1e30),
+            currencyLocation() { return player.al },
+            currencyDisplayName: "Honeycombs",
+            currencyInternalName: "honeycomb",
+            style() {
+                let look = {minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#e5bd3f"
+                return look
+            },
+        },
 
         201: {
             title: "Royal J. <small>(1, 1)</small>",
@@ -1034,6 +1048,20 @@ addLayer("al", {
             unlocked() {return hasChallenge("fu", 12)},
             description: "Automate pollen upgrades when on nectar path.",
             cost: new Decimal(1e25),
+            currencyLocation() { return player.al },
+            currencyDisplayName: "Royal Jelly",
+            currencyInternalName: "royalJelly",
+            style() {
+                let look = {minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#e172b5"
+                return look
+            },
+        },
+        228: {
+            title: "Royal J. <small>(10, 1)</small>",
+            unlocked() {return getBuyableAmount("n", 51).gte(1)},
+            description: "Improve \"Nectar γ-1\"'s effect.",
+            cost: new Decimal(1e30),
             currencyLocation() { return player.al },
             currencyDisplayName: "Royal Jelly",
             currencyInternalName: "royalJelly",
@@ -1461,6 +1489,7 @@ addLayer("al", {
                                 ["row", [["upgrade", 119], ["upgrade", 120], ["upgrade", 121]]],
                                 ["row", [["upgrade", 122], ["upgrade", 123], ["upgrade", 124]]],
                                 ["row", [["upgrade", 125], ["upgrade", 126], ["upgrade", 127]]],
+                                ["row", [["upgrade", 128]]],
                                 ["blank", "5px"],
                             ], {width: "400px", height: "327px", borderBottom: "3px solid #a900a9"}],
                             ["style-row", [
@@ -1490,6 +1519,7 @@ addLayer("al", {
                                 ["row", [["upgrade", 219], ["upgrade", 220], ["upgrade", 221]]],
                                 ["row", [["upgrade", 222], ["upgrade", 223], ["upgrade", 224]]],
                                 ["row", [["upgrade", 225], ["upgrade", 226], ["upgrade", 227]]],
+                                ["row", [["upgrade", 228]]],
                                 ["blank", "5px"],
                             ], {width: "400px", height: "327px", borderBottom: "3px solid #a900a9"}],
                             ["style-row", [

@@ -285,6 +285,7 @@ addLayer("bpl", {
             currencyDisplayName: "Pollen",
             currencyInternalName: "pollen",
             effect() {
+                if (hasUpgrade("al", 128)) return Decimal.pow(2, player.bee.totalResearch.div(10))
                 return player.bee.totalResearch.div(5).pow(0.5).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect

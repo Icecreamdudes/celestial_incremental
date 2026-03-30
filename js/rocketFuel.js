@@ -177,7 +177,8 @@
             unlocked() { return true },
             tooltip() {
                 if (player.rf.abilityIndex == 4) {
-                    return "<h3>5% chance for a pet???"
+                    if (layers.pet.levelables[303].canClick()) return "<h3>5% chance for a Drippy UFO pet"
+                    return "<h3>5% chance for a ??? pet"
                 }
                 return ""
             },
@@ -198,7 +199,10 @@
             unlocked() { return true },
             tooltip() {
                 if (player.rf.abilityIndex == 4) {
-                    return "<h3>" + formatWhole(player.rf.rocketFuel.div(100).add(1).log(10).pow(0.75).div(2).add(5).floor().min(10000)) + "% chance for a pet???"
+                    let chance = player.rf.rocketFuel.div(100).add(1).log(10).pow(0.75).div(2).add(5).floor().min(10000)
+                    if (chance.gte(100)) return "<h3>+" + formatSimple(chance.div(100)) + " Drippy UFO Pets"
+                    if (layers.pet.levelables[303].canClick()) return "<h3>" + formatWhole(chance) + "% chance for a Drippy UFO pet"
+                    return "<h3>" + formatWhole(chance) + "% chance for a ??? pet"
                 }
                 return ""
             },
@@ -219,7 +223,10 @@
             unlocked() { return true  },
             tooltip() {
                 if (player.rf.abilityIndex == 4) {
-                    return "<h3>" + formatWhole(player.rf.rocketFuel.div(10).add(1).log(10).pow(0.75).div(2).add(5).floor().min(10000)) + "% chance for a pet???"
+                    let chance = player.rf.rocketFuel.div(10).add(1).log(10).pow(0.75).div(2).add(5).floor().min(10000)
+                    if (chance.gte(100)) return "<h3>+" + formatSimple(chance.div(100)) + " Drippy UFO Pets"
+                    if (layers.pet.levelables[303].canClick()) return "<h3>" + formatWhole(chance) + "% chance for a Drippy UFO pet"
+                    return "<h3>" + formatWhole(chance) + "% chance for a ??? pet"
                 }
                 return ""
             },
@@ -240,7 +247,10 @@
             unlocked() { return true },
             tooltip() {
                 if (player.rf.abilityIndex == 4) {
-                    return "<h3>" + formatWhole(player.rf.rocketFuel.div(4).add(1).log(10).pow(0.75).div(2).add(5).floor().min(10000)) + "% chance for a pet???"
+                    let chance = player.rf.rocketFuel.div(4).add(1).log(10).pow(0.75).div(2).add(5).floor().min(10000)
+                    if (chance.gte(100)) return "<h3>+" + formatSimple(chance.div(100)) + " Drippy UFO Pets"
+                    if (layers.pet.levelables[303].canClick()) return "<h3>" + formatWhole(chance) + "% chance for a Drippy UFO pet"
+                    return "<h3>" + formatWhole(chance) + "% chance for a ??? pet"
                 }
                 return ""
             },
@@ -261,7 +271,10 @@
             unlocked() { return true },
             tooltip() {
                 if (player.rf.abilityIndex == 4) {
-                    return "<h3>" + formatWhole(player.rf.rocketFuel.add(1).log(10).pow(0.75).div(2).add(5).floor().min(10000)) + "% chance for a pet???"
+                    let chance = player.rf.rocketFuel.add(1).log(10).pow(0.75).div(2).add(5).floor().min(10000)
+                    if (chance.gte(100)) return "<h3>+" + formatSimple(chance.div(100)) + " Drippy UFO Pets"
+                    if (layers.pet.levelables[303].canClick()) return "<h3>" + formatWhole(chance) + "% chance for a Drippy UFO pet"
+                    return "<h3>" + formatWhole(chance) + "% chance for a ??? pet"
                 }
                 return ""
             },
@@ -400,10 +413,10 @@
                 player.rf.abilityTimers[3] = amount.add(1).log(10).add(1).mul(90)
             break;
             case 4:
-                player.rf.abilityEffects[4] = player.cb.xpTimers[0].base.mul(amount.add(1).log10().pow(0.7).div(10).add(1))
+                player.rf.abilityEffects[4] = player.cb.xpTimers[0].base.mul(amount.add(1).log(10).pow(0.7).div(10).add(1).min(250))
                 player.cb.xp = player.cb.xp.add(player.rf.abilityEffects[4])
                 player.cb.totalxp = player.cb.totalxp.add(player.rf.abilityEffects[4])
-                player.rf.abilityTimers[4] = player.cb.xpTimers[0].max.mul(amount.add(1).log10().pow(0.8).div(10).add(1.7))
+                player.rf.abilityTimers[4] = player.cb.xpTimers[0].max.mul(amount.add(1).log(10).pow(0.8).div(10).add(1.7).min(750))
 
                 let chance = amount.log(10).pow(0.75).div(2).add(4).floor().min(10000)
                 let guarantee = chance.div(100).floor()

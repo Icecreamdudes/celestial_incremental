@@ -328,6 +328,8 @@ Features:
 
 - immortal: A boolean that prevents death via the celestialite reaching zero health. Generally used to prevent the celestialite from dying before doing a "final attack".
 
+- timer: Starts a timer. If the player doesn't kill the celestialite before the timer ends, they die. Conflicts with the stage timer. (I'd assume)
+
 - Most stats can be applied to the celestialite, not going to list all the stats.
 
 - attributes: *optional* An object that holds attributes for the celestialite to start with. Attributes are listed in a seperate section.
@@ -504,6 +506,8 @@ stun() {return ["soft", new Decimal(8).sub(player.bh.skillData["eclipse_lightBar
 ```
 
 - actionChance: Gives a chance for a passive to trigger an active effect when an action is used. Formatted as a Decimal object.
+
+- noMessage: Prevents an instant effect from sending a message (Used when using a misc stat as a variable)
 
 - condtional: Prevents an instant/active action from being triggered until the condition returns true. Formatted as a function with the parameters index and slot.
 

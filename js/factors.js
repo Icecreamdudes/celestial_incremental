@@ -13,7 +13,7 @@
         factorPowerPerSecond: new Decimal(0),
 
         doomSoftcap: new Decimal(0.5),
-        doomSoftcapStart: new Decimal("1e4000000"),
+        doomSoftcapStart: new Decimal("1e2000000"),
     }},
     automate() {
         if (hasUpgrade("p", 15) && !hasUpgrade("cs", 201)) {
@@ -103,7 +103,7 @@
 
         // SOFTCAP OF DOOM
         player.f.doomSoftcap = new Decimal(0.5)
-        player.f.doomSoftcapStart = new Decimal("1e4000000")
+        player.f.doomSoftcapStart = new Decimal("1e2000000")
 
         // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
         let amt = player.f.factorPower

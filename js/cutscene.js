@@ -755,7 +755,7 @@
             type: "normal",
             background: "#596c6c",
             portrait: "resources/secret.png",
-            trigger() {return player.tad.matter.gte(player.tad.domainCap)},
+            trigger() {return player.tad.matter.gte(player.tad.domainCap) || player.tad.altInfinities.distorted.milestone.gte(3)},
             dialogue: [
                 { text: "You reach the physical limit of your matter, and it collapses into a new superphysical energy.", },
                 { text: "I am assuming this is infinitum?", portrait: "resources/player.png"  },
@@ -1511,7 +1511,7 @@
             background: "#260300",
             portrait: "resources/secret.png",
             music: "music/singularityWaltzPiano.mp3",
-            trigger() {return player.subtabs["co"]["stuff"] == "Cores"},
+            trigger() {return player.subtabs["co"]["stuff"] == "Cores" || player.matosLair.milestone[25] > 0},
             dialogue: [
                 { text: "When you travel back to the domain of singularity, you find yourself waking up in a small shelter.", },
                 { text: "Four people are standing in front of you, including the man from before.", },

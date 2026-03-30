@@ -1845,7 +1845,7 @@ BHB.chargingBee = {
                     bossCtx.strokeStyle = "#000";
                     bossCtx.lineWidth = info.actions[id].radius/10;
                     if (!options.performanceMode) bossCtx.shadowColor = b.pulsingRed ? '#e22' : "#fff";
-                    if (!options.performanceMode) bossCtx.shadowBlur = 4;
+                    if (!options.performanceMode) bossCtx.shadowBlur = 2;
                     // Wings
                     bossCtx.beginPath()
                     bossCtx.arcTo(0, 0, -b.r/2, b.r/2, b.r/4)
@@ -1991,7 +1991,7 @@ BHB.shootBee = {
                     bossCtx.strokeStyle = "#000";
                     bossCtx.lineWidth = info.actions[id].radius/10;
                     if (!options.performanceMode) bossCtx.shadowColor = "#fff";
-                    if (!options.performanceMode) bossCtx.shadowBlur = 4;
+                    if (!options.performanceMode) bossCtx.shadowBlur = 2;
                     // Wings
                     bossCtx.beginPath()
                     bossCtx.arcTo(0, 0, -b.r/2, b.r/2, b.r/4)
@@ -2090,7 +2090,7 @@ BHB.bouncingBees = {
                     bossCtx.strokeStyle = "#000";
                     bossCtx.lineWidth = info.actions[id].radius/10;
                     if (!options.performanceMode) bossCtx.shadowColor = b.pulsingRed ? '#e22' : "#fff";
-                    if (!options.performanceMode) bossCtx.shadowBlur = 4;
+                    if (!options.performanceMode) bossCtx.shadowBlur = 2;
                     // Wings
                     bossCtx.beginPath()
                     bossCtx.arcTo(0, 0, -b.r/2, b.r/2, b.r/4)
@@ -2224,7 +2224,7 @@ BHB.waveBees = {
                     bossCtx.strokeStyle = "#000";
                     bossCtx.lineWidth = info.actions[id].radius/10;
                     if (!options.performanceMode) bossCtx.shadowColor = "#fff";
-                    if (!options.performanceMode) bossCtx.shadowBlur = 4;
+                    if (!options.performanceMode) bossCtx.shadowBlur = 2;
                     // Wings
                     bossCtx.beginPath()
                     bossCtx.arcTo(0, 0, -b.r/2, b.r/2, b.r/4)

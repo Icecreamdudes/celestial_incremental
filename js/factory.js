@@ -1073,7 +1073,7 @@
                 unlocked() {return player.fa.buyables[15].gte(1)},
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", "COMING SOON", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", "COMING SOON<br><small>[THE BUILDING BUYABLE EFFECT STILL WORKS THOUGH]</small>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     // Add softcap of doom nerfs here
                 ]
             },
@@ -1082,7 +1082,7 @@
                 unlocked() {return player.fa.buyables[16].gte(1)},
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", "COMING SOON", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", "COMING SOON<br><small>[THE BUILDING BUYABLE EFFECT STILL WORKS THOUGH]</small>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                 ]
             },
         },

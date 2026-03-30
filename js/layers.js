@@ -235,7 +235,9 @@
 
         player.i.pylonEnergyEffect = player.i.pylonEnergy.pow(4).add(1).pow(player.i.pylonTierEffect)
         player.i.pylonEnergyEffect2 = player.i.pylonEnergy.pow(0.15).add(1).pow(player.i.pylonTierEffect)
+        if (player.i.pylonEnergyEffect2.gt(10000)) player.i.pylonEnergyEffect2 = player.i.pylonEnergyEffect2.div(10000).pow(0.5).mul(10000)
         player.i.pylonEnergyEffect3 = player.i.pylonEnergy.pow(0.1).add(1).pow(player.i.pylonTierEffect)
+        if (player.i.pylonEnergyEffect3.gt(1000)) player.i.pylonEnergyEffect3 = player.i.pylonEnergyEffect3.div(1000).pow(0.5).mul(1000)
 
         player.i.pylonTierEffect = player.i.pylonTier.sub(1).pow(0.3).div(10).add(1)
 
@@ -689,8 +691,14 @@
                     ["clickable", 12],
                     ["raw-html", () => { return player.i.pylonBuilt ? "You have <h3>" + format(player.i.pylonEnergy) + "/" + format(player.i.pylonEnergyMax) +  "</h3> ancient pylon energy (" + format(player.i.pylonEnergyPerSecond) + "/s)." : "" }, {color: "#000000ff", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", () => {return player.i.pylonBuilt ? "Boosts U1 tickspeed by x" + format(player.i.pylonEnergyEffect) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.i.pylonBuilt ? "Boosts pre-otf multiplier by ^" + format(player.i.pylonEnergyEffect2) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.i.pylonBuilt ? "Boosts post-otf multiplier by ^" + format(player.i.pylonEnergyEffect3) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                    ["row", [
+                        ["raw-html", () => {return player.i.pylonBuilt ? "Boosts pre-otf multiplier by ^" + format(player.i.pylonEnergyEffect2) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return player.i.pylonEnergyEffect2.gt(10000) ? "<small style='margin-left:10px'>[SOFTCAPPED]</small>" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace"}],
+                    ]],
+                    ["row", [
+                        ["raw-html", () => {return player.i.pylonBuilt ? "Boosts post-otf multiplier by ^" + format(player.i.pylonEnergyEffect3) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return player.i.pylonEnergyEffect3.gt(1000) ? "<small style='margin-left:10px'>[SOFTCAPPED]</small>" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace"}],
+                    ]],
                     ["raw-html", () => {return player.i.pylonBuilt ? "Passive effect: Boosts IP gain by x" + format(player.i.pylonPassiveEffect) + " (Based on points)" : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13],]], 

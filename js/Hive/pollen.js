@@ -79,6 +79,7 @@ addLayer("bpl", {
 
         // POWER MODIFIERS
         if (hasUpgrade("al", 126)) player.bpl.pollenGain = player.bpl.pollenGain.pow(1.01)
+        player.bpl.pollenGain = player.bpl.pollenGain.pow(buyableEffect("n", 52))
 
         // SOFTCAP
         if (player.bpl.pollenGain.gte(1e200)) player.bpl.pollenGain = player.bpl.pollenGain.div(1e200).pow(0.3).mul(1e200)

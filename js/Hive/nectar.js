@@ -86,6 +86,7 @@ addLayer("ne", {
 
         // POWER MODIFIERS
         if (hasUpgrade("al", 226)) player.ne.alpha.gain = player.ne.alpha.gain.pow(1.01)
+        player.ne.alpha.gain = player.ne.alpha.gain.pow(buyableEffect("n", 52))
 
         if (player.ne.alpha.gain.gte(1e250)) player.ne.alpha.gain = player.ne.alpha.gain.div(1e250).pow(0.3).mul(1e250)
 

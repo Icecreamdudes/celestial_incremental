@@ -456,7 +456,7 @@ addLayer("n", {
         51: {
             costBase() { return new Decimal(16) },
             costGrowth() { return new Decimal(1.5) },
-            purchaseLimit() { return new Decimal(3) },
+            purchaseLimit() { return new Decimal(1) },
             currency() { return player.n.nest },
             pay(amt) { player.n.nest = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(2)},
@@ -470,6 +470,7 @@ addLayer("n", {
                 "Unlock new aleph researches<br>" + // MIDDLE
                 "Currently: +" + formatSimple(tmp[this.layer].buyables[this.id].effect) +
                 "<br>Next: +" + formatSimple(getBuyableAmount(this.layer, this.id).add(1).mul(2)) +
+                "<br><small>[MORE WILL BE ADDED]</small>" +
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
                 formatWhole(tmp[this.layer].buyables[this.id].cost) + " Nests" + // BOTTOM
                 "</div></div>"

@@ -340,6 +340,7 @@ addLayer("ne", {
             currencyDisplayName: "Nectar γ",
             currencyInternalName: "amount",
             effect() {
+                if (hasUpgrade("al", 228)) return Decimal.pow(2, player.bee.totalResearch.div(10))
                 return player.bee.totalResearch.pow(0.7).div(10).add(1)
             },
             effectDisplay() { return "x" + formatSimple(upgradeEffect(this.layer, this.id), 1) }, // Add formatting to the effect

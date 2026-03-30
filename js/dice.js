@@ -393,8 +393,12 @@
             title() { return player.d.boosterDiceCooldown.gt(0) ? formatTime(player.d.boosterDiceCooldown) : "<h2>Roll to change currency boost!"},
             canClick() { return player.d.boosterDiceCooldown.lt(0) },
             tooltip() {
-                if (player.d.boosterSpeedToggle && !inChallenge("ip", 15)) return "<h3>" + player.d.dicePoints.add(1).log(10).pow(0.8).div(5).add(5).floor().mul(0.75).floor() + "% chance for a pet???</h3>"
-                return "<h3>" + player.d.dicePoints.add(1).log(10).pow(0.8).div(5).add(5).floor() + "% chance for a pet???</h3>"
+                let chance = player.d.dicePoints.add(1).log(10).pow(0.8).div(5).add(5).floor()
+                if (player.d.boosterSpeedToggle && !inChallenge("ip", 15)) chance = player.d.dicePoints.add(1).log(10).pow(0.8).div(5).add(5).floor().mul(0.75).floor()
+
+                if (chance.gte(100)) return "<h3>+" + formatSimple(chance.div(100)) + " Dice Pets"
+                if (layers.pet.levelables[302].canClick()) return "<h3>" + formatWhole(chance) + "% chance for a Dice pet</h3>"
+                return "<h3>" + formatWhole(chance) + "% chance for a ??? pet</h3>"
             },
             unlocked() { return true },
             onClick() {

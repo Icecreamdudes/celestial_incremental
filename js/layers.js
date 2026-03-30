@@ -183,10 +183,13 @@
         // SOFTCAP OF DOOM START
         player.i.doomSoftcapStart = new Decimal("1e2000000")
 
+        // LOG RAISER
+        let logRaise = new Decimal(1)
+
         // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
         let amt = player.points
         if (player.gain.gte(player.points)) amt = player.gain
-        player.i.doomSoftcap = player.i.doomSoftcap.div(amt.div(player.i.doomSoftcapStart).add(1).log(player.i.doomSoftcapStart).add(1))
+        player.i.doomSoftcap = player.i.doomSoftcap.div(amt.div(player.i.doomSoftcapStart).add(1).log(player.i.doomSoftcapStart.pow(logRaise)).add(1))
 
         // APPLY DOOM SOFTCAP
         if (player.gain.gt(player.i.doomSoftcapStart)) player.gain = player.gain.div(player.i.doomSoftcapStart).pow(player.i.doomSoftcap).mul(player.i.doomSoftcapStart)

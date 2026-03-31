@@ -2009,8 +2009,8 @@ addLayer("pet", {
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    amt.pow(3).pow(Decimal.pow(4, getLevelableTier(this.layer, this.id))).add(1), // Points Gain
-                    amt.mul(0.02).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Check Back XP Gain
+                    amt.pow(3).pow(Decimal.pow(4, getLevelableTier(this.layer, this.id))).add(1).pow(player.gwaTemple.gwaPointsEffect), // Points Gain
+                    amt.mul(0.02).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1).pow(player.gwaTemple.gwaPointsEffect), // Check Back XP Gain
                 ]
             },
             sellValue() { return new Decimal(5)},

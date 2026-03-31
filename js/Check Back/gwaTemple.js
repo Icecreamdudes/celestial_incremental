@@ -19,7 +19,7 @@ addLayer("gwaTemple", {
 
         gwank: new Decimal(0),
         gwankGet: new Decimal(1),
-        gwankReq: new Decimal(5000),
+        gwankReq: new Decimal(2500),
         highestGwank: new Decimal(0),
         gwankEffect: new Decimal(1),
 
@@ -31,16 +31,16 @@ addLayer("gwaTemple", {
 
         gwankest: new Decimal(0),
         gwankestGet: new Decimal(1),
-        gwankestReq: new Decimal(10),
+        gwankestReq: new Decimal(5),
         highestGwankest: new Decimal(0),
         gwankestEffect: new Decimal(1),
     }},
     automate() {},
     nodeStyle() {
         return {
-            background: "#fff",
+            background: "#ffb",
             backgroundOrigin: "border-box",
-            borderColor: "#763",
+            borderColor: "#996",
         };
     },
     tooltip: "Gwa Temple",
@@ -50,6 +50,7 @@ addLayer("gwaTemple", {
 
         // GWA POINTS
         let gwaAmt = new Decimal(3)/*getLevelableAmount("pet", 101).add(getLevelableTier("pet", 101).mul(5).min(40))*/
+        if (hasUpgrade("gwaTemple", 16)) gwaAmt = gwaAmt.mul(2)
         player.gwaTemple.gwaPointsGain = gwaAmt.add(1).log(2).div(6)
 
         if (hasUpgrade("gwaTemple", 1)) player.gwaTemple.gwaPointsGain = player.gwaTemple.gwaPointsGain.mul(2)
@@ -58,33 +59,36 @@ addLayer("gwaTemple", {
         if (hasUpgrade("gwaTemple", 6)) player.gwaTemple.gwaPointsGain = player.gwaTemple.gwaPointsGain.mul(4)
         if (hasUpgrade("gwaTemple", 11)) player.gwaTemple.gwaPointsGain = player.gwaTemple.gwaPointsGain.mul(4)
         player.gwaTemple.gwaPointsGain = player.gwaTemple.gwaPointsGain.mul(player.gwaTemple.gwankEffect)
+        if (hasUpgrade("gwaTemple", 20)) player.gwaTemple.gwaPointsGain = player.gwaTemple.gwaPointsGain.mul(upgradeEffect("gwaTemple", 20))
 
         player.gwaTemple.gwaPointsEffect = hasUpgrade("gwaTemple", 5) ? player.gwaTemple.gwaPoints.add(1).log(10).pow(0.5).div(20).add(1) : new Decimal(1)
 
         // GWANK
         let gwankDiv = new Decimal(1)
-        if (hasUpgrade("gwaTemple", 15)) gwankDiv = gwankDiv.mul(2)
 
-        player.gwaTemple.gwankReq = layers.h.hexReq(player.gwaTemple.gwank, 5000, 1.5, gwankDiv)
-        player.gwaTemple.gwankGet = false ? layers.h.hexGain(player.gwaTemple.gwaPoints, 5000, 1.5, gwankDiv).sub(player.gwaTemple.gwank) : new Decimal(1)
+        player.gwaTemple.gwankReq = layers.h.hexReq(player.gwaTemple.gwank, 2500, 1.5, gwankDiv)
+        player.gwaTemple.gwankGet = hasUpgrade("gwaTemple", 15) ? layers.h.hexGain(player.gwaTemple.gwaPoints, 2500, 1.5, gwankDiv).sub(player.gwaTemple.gwank) : new Decimal(1)
 
-        player.gwaTemple.gwankEffect = player.gwaTemple.gwank.div(2).add(1).pow(1.05).pow(player.gwaTemple.gwankerEffect)
+        player.gwaTemple.gwankEffect = player.gwaTemple.gwank.add(player.gwaTemple.gwankerEffect2).div(2).add(1).pow(1.05).pow(player.gwaTemple.gwankerEffect)
 
         // GWANKER
         let gwankerDiv = new Decimal(1)
+        if (hasUpgrade("gwaTemple", 19)) gwankerDiv = gwankerDiv.div(upgradeEffect("gwaTemple", 19))
 
         player.gwaTemple.gwankerReq = layers.h.hexReq(player.gwaTemple.gwanker, 10, 1.45, gwankerDiv)
         player.gwaTemple.gwankerGet = false ? layers.h.hexGain(player.gwaTemple.gwank, 10, 1.45, gwankerDiv).sub(player.gwaTemple.gwanker) : new Decimal(1)
 
-        player.gwaTemple.gwankerEffect = player.gwaTemple.gwanker.div(2).add(1).pow(0.5).pow(player.gwaTemple.gwankestEffect)
+        player.gwaTemple.gwankerEffect = player.gwaTemple.gwanker.add(player.gwaTemple.gwankestEffect2).div(2).add(1).pow(0.5).pow(player.gwaTemple.gwankestEffect)
+        player.gwaTemple.gwankerEffect2 = player.gwaTemple.gwanker.add(player.gwaTemple.gwankestEffect2).pow(player.gwaTemple.gwankestEffect)
 
         // GWANKEST
         let gwankestDiv = new Decimal(1)
 
-        player.gwaTemple.gwankestReq = layers.h.hexReq(player.gwaTemple.gwankest, 10, 1.4, gwankestDiv)
-        player.gwaTemple.gwankestGet = false ? layers.h.hexGain(player.gwaTemple.gwanker, 10, 1.4, gwankestDiv).sub(player.gwaTemple.gwankest) : new Decimal(1)
+        player.gwaTemple.gwankestReq = layers.h.hexReq(player.gwaTemple.gwankest, 5, 1.4, gwankestDiv)
+        player.gwaTemple.gwankestGet = false ? layers.h.hexGain(player.gwaTemple.gwanker, 5, 1.4, gwankestDiv).sub(player.gwaTemple.gwankest) : new Decimal(1)
 
         player.gwaTemple.gwankestEffect = player.gwaTemple.gwankest.div(5).add(1).pow(0.3)
+        player.gwaTemple.gwankestEffect2 = player.gwaTemple.gwankest
 
         // GWARSHIP
         player.gwaTemple.timeSinceGwarship = player.gwaTemple.timeSinceGwarship.add(delta)
@@ -103,14 +107,15 @@ addLayer("gwaTemple", {
             player.gwaTemple.gwaWorshipCooldown = new Decimal(0)
             player.gwaTemple.timeSinceGwarship = new Decimal(0)
             let gain = player.gwaTemple.gwaPointsGain
-            if (hasUpgrade("gwaTemple", 7) && Math.random() < 0.1) gain = gain.mul(10)
+            let chance = 0.1
+            if (hasUpgrade("gwaTemple", 7) && Math.random() < chance) gain = gain.mul(10)
             player.gwaTemple.gwaPoints = player.gwaTemple.gwaPoints.add(gain)
             makeParticles(BIG_COOKIE_NUMBER, 1, `normal`, {x: mouseX-80+(Math.random()*10), text: "+" + formatSimple(gain), style: {color: "#ffb"}})
         }
     },
     clickables: {
         11: {
-            title() {return "Reset previous gwagress, but gwank up.<br><small>Req: " + format(player.gwaTemple.gwankReq) + " Gwa Points</small>"},
+            title() {return "Reset previous gwagress, but gwank up.<br><small>Req: " + formatSimple(player.gwaTemple.gwankReq) + " Gwa Points</small>"},
             canClick() { return player.gwaTemple.gwaPoints.gte(player.gwaTemple.gwankReq) },
             unlocked() { return true },
             onClick() {
@@ -123,8 +128,9 @@ addLayer("gwaTemple", {
                 player.gwaTemple.gwaWorshipCooldown = new Decimal(0)
                 player.gwaTemple.timeSinceGwarship = new Decimal(0)
                 for (let i = 0; i < player.gwaTemple.upgrades.length; i++) {
-                    if (+player.gwaTemple.upgrades[i] < 13) {
-                        if (+player.gwaTemple.upgrades[i] == 12) continue
+                    let upg = +player.gwaTemple.upgrades[i]
+                    if (upg < 19) {
+                        if (upg == 12 || upg == 18) continue
                         player.gwaTemple.upgrades.splice(i, 1);
                         i--;
                     }
@@ -138,7 +144,7 @@ addLayer("gwaTemple", {
             },
         },
         12: {
-            title() {return "Reset previous gwagress, but gwanker up.<br><small>Req: " + format(player.gwaTemple.gwankerReq) + " Gwanks</small>"},
+            title() {return "Reset previous gwagress, but gwanker up.<br><small>Req: " + formatSimple(player.gwaTemple.gwankerReq) + " Gwanks</small>"},
             canClick() { return player.gwaTemple.gwank.gte(player.gwaTemple.gwankerReq) },
             unlocked() { return true },
             onClick() {
@@ -151,8 +157,9 @@ addLayer("gwaTemple", {
                 player.gwaTemple.gwaWorshipCooldown = new Decimal(0)
                 player.gwaTemple.timeSinceGwarship = new Decimal(0)
                 for (let i = 0; i < player.gwaTemple.upgrades.length; i++) {
-                    if (+player.gwaTemple.upgrades[i] < 13) {
-                        if (+player.gwaTemple.upgrades[i] == 12) continue
+                    let upg = +player.gwaTemple.upgrades[i]
+                    if (upg < 19) {
+                        if (upg == 12 || upg == 18) continue
                         player.gwaTemple.upgrades.splice(i, 1);
                         i--;
                     }
@@ -169,7 +176,7 @@ addLayer("gwaTemple", {
             },
         },
         13: {
-            title() {return "Reset previous gwagress, but gwankest up.<br><small>Req: " + format(player.gwaTemple.gwankestReq) + " Gwankers</small>"},
+            title() {return "Reset previous gwagress, but gwankest up.<br><small>Req: " + formatSimple(player.gwaTemple.gwankestReq) + " Gwankers</small>"},
             canClick() { return player.gwaTemple.gwanker.gte(player.gwaTemple.gwankestReq) },
             unlocked() { return true },
             onClick() {
@@ -182,8 +189,9 @@ addLayer("gwaTemple", {
                 player.gwaTemple.gwaWorshipCooldown = new Decimal(0)
                 player.gwaTemple.timeSinceGwarship = new Decimal(0)
                 for (let i = 0; i < player.gwaTemple.upgrades.length; i++) {
-                    if (+player.gwaTemple.upgrades[i] < 13) {
-                        if (+player.gwaTemple.upgrades[i] == 12) continue
+                    let upg = +player.gwaTemple.upgrades[i]
+                    if (upg < 19) {
+                        if (upg == 12 || upg == 18) continue
                         player.gwaTemple.upgrades.splice(i, 1);
                         i--;
                     }
@@ -227,7 +235,7 @@ addLayer("gwaTemple", {
         3: {
             title: "Gwantifiable",
             unlocked: true,
-            description: "Multiply Gwa Points based on amount of Gwapgrades.",
+            description: "Multiply Gwa Points based on amount of Gwagrades.",
             cost() {return new Decimal(1.5)},
             currencyLocation() { return player.gwaTemple },
             currencyDisplayName: "Gwa Points",
@@ -327,7 +335,7 @@ addLayer("gwaTemple", {
         12: {
             title: "Gwankup",
             unlocked: true,
-            description: "Unlock gwanks.",
+            description: "Unlock gwanks.<br><small>[Kept on Resets]</small>",
             cost() {return new Decimal(2500)},
             currencyLocation() { return player.gwaTemple },
             currencyDisplayName: "Gwa Points",
@@ -347,33 +355,99 @@ addLayer("gwaTemple", {
         14: {
             title: "Apprentice Gwarshiper",
             unlocked: true,
-            description: "Reduce gwarship time by /2.",
-            cost() {return new Decimal(20000)},
+            description: "Halve gwarship time.",
+            cost() {return new Decimal(15000)},
             currencyLocation() { return player.gwaTemple },
             currencyDisplayName: "Gwa Points",
             currencyInternalName: "gwaPoints",
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "2px", borderRadius: "15px"},
         },
         15: {
-            title: "Gwanked Match",
+            title: "Bulk Gwanking",
             unlocked: true,
-            description: "Halve gwank requirement.",
-            cost() {return new Decimal(30000)},
+            description: "Unlock bulk gwanking.<br><small>[Kept on Resets]</small>",
+            cost() {return new Decimal(25000)},
+            currencyLocation() { return player.gwaTemple },
+            currencyDisplayName: "Gwa Points",
+            currencyInternalName: "gwaPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "2px", borderRadius: "15px"},
+        },
+        16: {
+            title: "Gwanterfit",
+            unlocked: true,
+            description: "Improve gwa points base formula by doubling the effective gwa levels.",
+            cost() {return new Decimal(40000)},
+            currencyLocation() { return player.gwaTemple },
+            currencyDisplayName: "Gwa Points",
+            currencyInternalName: "gwaPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "2px", borderRadius: "15px"},
+        },
+        17: {
+            title: "Parallel Gwayers",
+            unlocked: true,
+            description() {return "Boost pet points based on the gwa point effect.<br>Currently: x" + formatSimple(player.gwaTemple.gwaPointsEffect, 2)},
+            cost() {return new Decimal(60000)},
+            currencyLocation() { return player.gwaTemple },
+            currencyDisplayName: "Gwa Points",
+            currencyInternalName: "gwaPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "2px", borderRadius: "15px"},
+        },
+        18: {
+            title: "Gwankerup",
+            unlocked: true,
+            description: "Unlock gwankers.<br><small>[Kept on Resets]</small>",
+            cost() {return new Decimal(80000)},
+            currencyLocation() { return player.gwaTemple },
+            currencyDisplayName: "Gwa Points",
+            currencyInternalName: "gwaPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "2px", borderRadius: "15px"},
+        },
+        19: {
+            title: "Gwaked Gwankers",
+            unlocked: true,
+            description: "Reduce gwanker cost based on gwa points",
+            cost() {return new Decimal(160000)},
+            currencyLocation() { return player.gwaTemple },
+            currencyDisplayName: "Gwa Points",
+            currencyInternalName: "gwaPoints",
+            effect() {
+                return player.gwaTemple.gwaPoints.add(1).log(10).div(10).add(1)
+            },
+            effectDisplay() { return "/" + formatSimple(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "2px", borderRadius: "15px"},
+        },
+        20: {
+            title: "Gwarshipped Gains",
+            unlocked: true,
+            description: "Boost gwa points based on total gwarship time",
+            cost() {return new Decimal(400000)},
+            currencyLocation() { return player.gwaTemple },
+            currencyDisplayName: "Gwa Points",
+            currencyInternalName: "gwaPoints",
+            effect() {
+                return player.gwaTemple.gwaWorshipTime.add(1).log(2).div(10).add(1)
+            },
+            effectDisplay() { return "x" + formatSimple(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "2px", borderRadius: "15px"},
+        },
+        21: {
+            title: "Gwankables",
+            unlocked: true,
+            description: "Unlock gwankables.<br><small>[Kept on Resets]</small>",
+            cost() {return new Decimal(1e6)},
             currencyLocation() { return player.gwaTemple },
             currencyDisplayName: "Gwa Points",
             currencyInternalName: "gwaPoints",
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "2px", borderRadius: "15px"},
         },
         // Reduce gwarship time based on time since last gwarship
-        // Buff gwankers based on gwa points (Reversal)
         // Gwank effect is based on best gwanks
-        // Boost gwa points based on total gwarship time
         // Gain passive gwarship time (WAY LATER ON)
     },
     branches: ["cb"],
     microtabs: {
         Tabs: {
-            "Gwapgrades": {
+            "Gwagrades": {
                 buttonStyle() { return { color: "#ffb", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
@@ -385,21 +459,23 @@ addLayer("gwaTemple", {
                             ["upgrade", 7], ["upgrade", 8], ["upgrade", 9],
                             ["upgrade", 10], ["upgrade", 11], ["upgrade", 12],
                             ["upgrade", 13], ["upgrade", 14], ["upgrade", 15],
+                            ["upgrade", 16], ["upgrade", 17], ["upgrade", 18],
+                            ["upgrade", 19], ["upgrade", 20], ["upgrade", 21],
                         ]],
                         ["blank", "2px"],
                     ], {width: "394px", height: "651px"}],
                 ]
             },
-            "Gwarks": {
+            "Gwankables": {
                 buttonStyle() { return { color: "#ffb", borderRadius: "5px" } },
-                unlocked() { return true },
+                unlocked() { return hasUpgrade("gwaTemple", 21) },
                 content: [
                     ["always-scroll-column", [
 
                     ], {width: "394px", height: "651px"}],
                 ]
             },
-            "Gwallenges": {
+            "Gwarks": {
                 buttonStyle() { return { color: "#ffb", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
@@ -427,7 +503,7 @@ addLayer("gwaTemple", {
                     ["style-column", [
                         ["row", [
                             ["raw-html", () => {return "Gwank " + formatWhole(player.gwaTemple.gwank)}, {color: "#ffb", fontSize: "20px", fontFamily: "monospace"}],
-                            ["raw-html", () => {return false ? "<small style='margin-left:10px'>(+" + formatWhole(player.gwaTemple.gwankGet) + ")</small>" : ""}, () => {
+                            ["raw-html", () => {return hasUpgrade("gwaTemple", 15) ? "<small style='margin-left:10px'>(+" + formatWhole(player.gwaTemple.gwankGet) + ")</small>" : ""}, () => {
                                 let look = {color: "#ffb", fontSize: "20px", fontFamily: "monospace"}
                                 player.gwaTemple.gwankGet.gt(0) ? look.color = "#ffb" : look.color = "#886"
                                 return look
@@ -440,17 +516,18 @@ addLayer("gwaTemple", {
                 ["style-row", [
                     ["style-column", [
                         ["row", [
-                            ["raw-html", () => {return "Gwank " + formatWhole(player.gwaTemple.gwanker)}, {color: "#ffb", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return "Gwanker " + formatWhole(player.gwaTemple.gwanker)}, {color: "#ffb", fontSize: "20px", fontFamily: "monospace"}],
                             ["raw-html", () => {return false ? "<small style='margin-left:10px'>(+" + formatWhole(player.gwaTemple.gwankerGet) + ")</small>" : ""}, () => {
                                 let look = {color: "#ffb", fontSize: "20px", fontFamily: "monospace"}
                                 player.gwaTemple.gwankerGet.gt(0) ? look.color = "#ffb" : look.color = "#886"
                                 return look
                             }],
                         ]],
-                        ["raw-html", () => { return "^" + formatSimple(player.gwaTemple.gwankerEffect) + " Gwank Effect" }, {color: "#ffb", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return "^" + formatSimple(player.gwaTemple.gwankerEffect, 2) + " Gwank Effect" }, {color: "#ffb", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return "+" + formatSimple(player.gwaTemple.gwankerEffect2) + " Effective Gwanks" }, {color: "#ffb", fontSize: "16px", fontFamily: "monospace"}],
                     ], {width: "197px", height: "75px", borderRight: "3px solid #29291a"}],
                     ["clickable", 12],
-                ], () => {return false || player.gwaTemple.highestGwanker.gt(0) ? {width: "350px", height: "75px", background: "#525234", border: "3px solid #29291a", borderRadius: "20px", marginTop: "10px"}: {display: "none !important"}}],
+                ], () => {return hasUpgrade("gwaTemple", 18) || player.gwaTemple.highestGwanker.gt(0) ? {width: "350px", height: "75px", background: "#525234", border: "3px solid #29291a", borderRadius: "20px", marginTop: "10px"}: {display: "none !important"}}],
                 ["style-row", [
                     ["style-column", [
                         ["row", [
@@ -461,18 +538,19 @@ addLayer("gwaTemple", {
                                 return look
                             }],
                         ]],
-                        ["raw-html", () => { return "^" + formatSimple(player.gwaTemple.gwankestEffect) + " Gwanker Effect" }, {color: "#ffb", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return "^" + formatSimple(player.gwaTemple.gwankestEffect, 2) + " Gwanker Effects" }, {color: "#ffb", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return "+" + formatSimple(player.gwaTemple.gwankestEffect2) + " Effective Gwankers" }, {color: "#ffb", fontSize: "16px", fontFamily: "monospace"}],
                     ], {width: "197px", height: "75px", borderRight: "3px solid #29291a"}],
                     ["clickable", 13],
                 ], () => {return false || player.gwaTemple.highestGwankest.gt(0) ? {width: "350px", height: "75px", background: "#525234", border: "3px solid #29291a", borderRadius: "20px", marginTop: "10px"}: {display: "none !important"}}],
             ], {width: "400px", height: "694px"}],
             ["top-column", [
                 ["style-row", [
-                    ["category-button", [() => {return "Gwapgrades"}, "Tabs", "Gwapgrades"], {width: "129px", height: "40px", background: "#414129", borderRadius: "17px 0 0 0"}],
+                    ["category-button", [() => {return "Gwagrades"}, "Tabs", "Gwagrades"], {width: "129px", height: "40px", background: "#414129", borderRadius: "17px 0 0 0"}],
                     ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#29291a"}],
-                    ["category-button", [() => {return "Gwarks"}, "Tabs", "Gwarks", () => {return true}], {width: "130px", height: "40px", background: "#414129"}],
+                    ["category-button", [() => {return "Gwankables"}, "Tabs", "Gwankables", () => {return !hasUpgrade("gwaTemple", 21)}], {width: "130px", height: "40px", background: "#414129"}],
                     ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#29291a"}],
-                    ["category-button", [() => {return "Gwallenges"}, "Tabs", "Gwallenges", () => {return true}], {width: "129px", height: "40px", background: "#414129", borderRadius: "0 17px 0 0"}],
+                    ["category-button", [() => {return "Gwarks"}, "Tabs", "Gwarks", () => {return true}], {width: "129px", height: "40px", background: "#414129", borderRadius: "0 17px 0 0"}],
                 ], {width: "394px", height: "40px", borderBottom: "3px solid #29291a"}],
                 ["buttonless-microtabs", "Tabs", { 'border-width': '0px' }],
             ], {width: "394px", height: "694px", background: "#525234", border: "3px solid #29291a", borderRadius: "20px 20px 0 20px"}],

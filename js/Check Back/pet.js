@@ -541,6 +541,7 @@ addLayer("pet", {
         player.pet.petPointMult = player.pet.petPointMult.mul(buyableEffect("pl", 14))
         if (hasMilestone("db", 101)) player.pet.petPointMult = player.pet.petPointMult.mul(1.15)
         player.pet.petPointMult = player.pet.petPointMult.mul(player.cbs.pylonEnergyEffect2)
+        if (hasUpgrade("gwaTemple", 17)) player.pet.petPointMult = player.pet.petPointMult.mul(player.gwaTemple.gwaPointsEffect)
 
         // PET BUTTON COOLDOWN CALC
         for (let i in player.pet.petTimers) {

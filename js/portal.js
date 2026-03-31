@@ -314,20 +314,20 @@
         15: {
             title() { return "<h1>Gwa Temple" },
             display() {
-                return player.po.gwaTemple ? "<h1>Worship the cat of limitless potential.<br>On<br><h2>(Progress is kept between resets)</h2>" : "<h1>Worship the cat of limitless potential.<br>Off<br><h2>(Progress is kept between resets)</h2>";
+                return player.po.gwaTemple ? "<h1>Gwarship the cat of limitless potential.<br>On<br><h2>(Progress is kept between resets)</h2>" : "<h1>Worship the cat of limitless potential.<br>Off<br><h2>(Progress is kept between resets)</h2>";
             },
             canClick() { return player.po.featureSlots.gte(1)},
-            unlocked() { return layers.pet.levelables[1101].canClick()},
+            unlocked() { return hasChallenge("ip", 11)},
             onClick() {
                 player.po.gwaTemple = true
             },
             style: {
                 width: '200px',
                 minHeight: '200px',
-                background: "linear-gradient(45deg, #db7 0%, #984 100%)",
+                background: "linear-gradient(45deg, #ffb 0%, #bb9 100%)",
                 backgroundOrigin: "border-box",
                 color: "#221",
-                border: "2px solid #763",
+                border: "2px solid #996",
                 borderRadius: "20px",
             },
         },

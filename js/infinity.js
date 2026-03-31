@@ -432,6 +432,7 @@
             player.po.rocketFuel = false
             player.po.hex = false
             player.po.breakInfinity = false
+            player.po.gwaTemple = false
             player.in.breakInfinity = false
             player.po.featureSlots = player.po.featureSlotsMax
         }

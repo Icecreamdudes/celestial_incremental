@@ -317,17 +317,17 @@
                 return player.po.gwaTemple ? "<h1>Worship the cat of limitless potential.<br>On<br><h2>(Progress is kept between resets)</h2>" : "<h1>Worship the cat of limitless potential.<br>Off<br><h2>(Progress is kept between resets)</h2>";
             },
             canClick() { return player.po.featureSlots.gte(1)},
-            unlocked() { return layers.pet.levelables[101].canClick()},
+            unlocked() { return layers.pet.levelables[1101].canClick()},
             onClick() {
                 player.po.gwaTemple = true
             },
             style: {
                 width: '200px',
                 minHeight: '200px',
-                background: "linear-gradient(45deg, #ccc 0%, #aaa 100%)",
+                background: "linear-gradient(45deg, #db7 0%, #984 100%)",
                 backgroundOrigin: "border-box",
-                color: "#222",
-                border: "5px solid #777",
+                color: "#221",
+                border: "2px solid #763",
                 borderRadius: "20px",
             },
         },

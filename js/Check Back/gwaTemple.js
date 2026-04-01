@@ -999,7 +999,7 @@ addLayer("gwaTemple", {
                         ["blank", "25px"],
                         ["clickable", 21],
                         ["blank", "25px"],
-                        ["raw-html", "I ran out of time to add more, but I hope you enjoyed this april fools minigame!", {color: "#ffb", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", "I ran out of time to add more, but I hope you enjoyed this april fools!", {color: "#ffb", fontSize: "16px", fontFamily: "monospace"}],
                     ], {width: "394px", height: "651px"}],
                 ]
             },

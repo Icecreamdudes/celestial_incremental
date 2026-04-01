@@ -317,7 +317,7 @@
                 return player.po.gwaTemple ? "<h1>Gwarship the cat of limitless potential.<br>On<br><h2>(Progress is kept between resets)</h2>" : "<h1>Worship the cat of limitless potential.<br>Off<br><h2>(Progress is kept between resets)</h2>";
             },
             canClick() { return player.po.featureSlots.gte(1)},
-            unlocked() { return hasChallenge("ip", 11)},
+            unlocked() { return player.gwaTemple.gwaWorshipTime.gt(0)},
             onClick() {
                 player.po.gwaTemple = true
             },

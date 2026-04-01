@@ -57,7 +57,7 @@ addLayer("gwaTemple", {
         let onepersec = new Decimal(1)
 
         // GWA POINTS
-        let gwaAmt = getLevelableAmount("pet", 101).add(getLevelableTier("pet", 101).mul(5).min(40))
+        let gwaAmt = new Decimal(0)
         if (hasUpgrade("gwaTemple", 16)) gwaAmt = gwaAmt.mul(2)
         player.gwaTemple.gwaPointsGain = gwaAmt.add(1).log(2).div(6)
 
@@ -1011,7 +1011,6 @@ addLayer("gwaTemple", {
             ["raw-html", () => { return "(+" + format(player.gwaTemple.gwaPointsGain) + ")"}, {color: "#ffb", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["raw-html", () => {return hasUpgrade("gwaTemple", 5) ? "Boosts gwa pet effects by ^" + formatSimple(player.gwaTemple.gwaPointsEffect, 3) : ""}, {color: "#ffb", fontSize: "20px", fontFamily: "monospace"}],
-        ["raw-html", () => {return getLevelableAmount("pet", 1101).gt(0) ? "[Based on gwa levels and ascensions]" : "[Based on gwa levels]"}, {color: "#ffb", fontSize: "16px", fontFamily: "monospace"}],
         ["blank", "25px"],
         ["style-row", [
             ["style-column", [

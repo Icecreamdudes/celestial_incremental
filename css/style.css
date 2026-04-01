@@ -1630,6 +1630,7 @@ button > * {
 
 .bigCookie.gwa {
 	background:url(../resources/gwa.png);
+	height: 164px;
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;

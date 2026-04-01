@@ -25,6 +25,7 @@
 		"Hive/honey.js", "Hive/wax.js", "Hive/aleph.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js", "DarkU1/blood.js", "Zar/zar.js", "Zar/coinFlip.js",
  		"Zar/wheelOfFortune.js", "Check Back/singularityPet.js", "Zar/slotMachine.js", "Zar/checkBackShrine.js", "Zar/cards.js", "Cantepocalypse/enhance.js",
+		"Check Back/gwaTemple.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 	],
@@ -260,6 +261,9 @@ function updateStyles() {
 		case "leg":
 			layerBG = "#eed200"
 			break;
+		case "gwaTemple":
+			layerBG = "#676742"
+			break
 		default:
 			layerBG = "var(--layerBackground)"
 			break;
@@ -763,6 +767,9 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.Gwa - The Gwaleph Update</h3><br>
+		Content:<br>
+			- Opened the door to true gwa-ness<br><br>
 	<h3>v1.11 - The Novasent Update Part II: Blood and Gambling</h3><br>
 		Content:<br>
 			- Added 10 new punchcards, including one legendary punchcard.<br>

@@ -65,6 +65,7 @@
         //Power modifiers
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(buyableEffect("sb", 104))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(player.se.starsExploreEffect[1][0])
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(buyableEffect("gwaTemple", 26))
 
         // SINGULARITY RAISERS
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(levelableEffect("pet", 308)[0])
@@ -76,6 +77,10 @@
         player.s.singularityTime = player.s.singularityTime.add(onepersec.mul(delta))
 
         player.s.singularitiesEffect = Decimal.pow(1.2, player.s.singularities.add(1).log(10))
+        
+        //tickspeed
+        player.uni["U3"].tickspeed = new Decimal(1)
+        player.uni["U3"].tickspeed = player.uni["U3"].tickspeed.mul(buyableEffect("gwaTemple", 25))
     },
     clickables: {},
     bars: {},

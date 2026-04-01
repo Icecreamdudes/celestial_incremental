@@ -176,6 +176,7 @@
         player.gain = player.gain.pow(levelableEffect("ir", 2)[0])
         player.gain = player.gain.pow(player.cof.coreFragmentEffects[0])
         player.gain = player.gain.pow(buyableEffect("cof", 12))
+        player.gain = player.gain.pow(buyableEffect("gwaTemple", 22))
 
         // SOFTCAP OF DOOM
         player.i.doomSoftcap = new Decimal(0.5)
@@ -242,6 +243,7 @@
         //tickspeed
         player.uni["U1"].tickspeed = new Decimal(1)
         player.uni["U1"].tickspeed = player.uni["U1"].tickspeed.mul(player.i.pylonEnergyEffect)
+        player.uni["U1"].tickspeed = player.uni["U1"].tickspeed.mul(buyableEffect("gwaTemple", 21))
         // BEST CELESTIAL POINTS
         if (player.i.bestPoints.lt(player.points)) player.i.bestPoints = player.points
 

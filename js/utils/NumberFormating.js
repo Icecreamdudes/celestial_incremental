@@ -159,7 +159,7 @@ function formatSimple(decimal, precision = 1) {
     else if (decimal.gte("1e10000")) return exponentialFormat(decimal, 0)
     else if (decimal.gte(1e9)) return exponentialFormat(decimal, 2)
     else if (decimal.gte(1e3)) return commaFormat(decimal, 0)
-    else if (decimal.gte(0.0001) && decimal.mag % 1 == 0) return regularFormat(decimal, 0)
+    else if (decimal.gte(0.0001) && (decimal.mag % 1 < 0.001 || decimal.mag % 1 > 0.999)) return regularFormat(decimal, 0)
     else if (decimal.gte(0.0001)) return regularFormat(decimal, precision)
     else if (decimal.eq(0)) return (0).toFixed(0)
 

@@ -45,6 +45,7 @@
         player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.mul(player.wof.wheelPointsEffect2)
         player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.mul(player.sm.chipsEffect[0])
         player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.pow(buyableEffect("sm", 109))
+        player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.mul(levelableEffect("car", 202)[0])
 
         if (player.za.chancePoints.add(player.za.chancePointsPerSecond).gte(player.za.chancePointsSoftcapStart))
         {
@@ -52,6 +53,7 @@
             player.za.chancePointsSoftcapEffect = player.za.chancePointsSoftcapEffect.pow(buyableEffect("wof", 15))
             player.za.chancePointsSoftcapEffect = player.za.chancePointsSoftcapEffect.pow(buyableEffect("sm", 102))
             if (hasUpgrade("cbs", 14)) player.za.chancePointsSoftcapEffect = player.za.chancePointsSoftcapEffect.pow(upgradeEffect("cbs", 14))
+            player.za.chancePointsSoftcapEffect = player.za.chancePointsSoftcapEffect.pow(levelableEffect("car", 203)[0])
         } else
         {
             player.za.chancePointsSoftcapEffect = new Decimal(1)
@@ -63,6 +65,7 @@
         player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(player.wof.wheelPointsEffect)
         player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(player.sm.chipsEffect[0])
         if (hasUpgrade("cbs", 11)) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(upgradeEffect("cbs", 11))
+        player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(levelableEffect("car", 201)[0])
         
         if (player.za.chancePoints.gte(player.za.chancePointsSoftcapStart)) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.div(player.za.chancePointsSoftcapEffect)
 

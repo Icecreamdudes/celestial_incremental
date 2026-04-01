@@ -226,7 +226,7 @@
         301: {
             title() { return "<img src='resources/Pets/enhanceDustEvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
-            unlocked() { return tmp.pet.levelables[109].canClick && player.d.diceSpaceUnlocked && false},
+            unlocked() { return tmp.pet.levelables[109].canClick && player.d.diceSpaceUnlocked && !player.ev.evolutionsUnlocked[13]},
             tooltip() { return "███████ ███████ ██████ in Alt-Universe 1." },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(201)
@@ -769,8 +769,8 @@
                 player.cb.paragonShards = player.cb.paragonShards.sub(250)
                 player.cbs.ascensionShards = player.cbs.ascensionShards.sub(3)
 
-                player.ev.evolutionsUnlocked[12] = true
-                setLevelableAmount("pet", 1102, new Decimal(1))
+                player.ev.evolutionsUnlocked[13] = true
+                setLevelableAmount("pet", 1401, new Decimal(1))
             }
         },
     },

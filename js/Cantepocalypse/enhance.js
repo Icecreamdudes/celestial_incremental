@@ -418,7 +418,6 @@
                 }
             },
         },
-
         enhancer1Bar: {
             unlocked() { return player.en.enhancersUnlocked[0] },
             direction: RIGHT,
@@ -605,5 +604,5 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && false} //ascension pet requirement
+    layerShown() { return player.startedGame == true && player.ev.evolutionsUnlocked[13] } //ascension pet requirement
 })

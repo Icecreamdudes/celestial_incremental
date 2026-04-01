@@ -102,11 +102,12 @@
         player.wof.wheelPointsEffect3 = player.wof.wheelPoints.pow(0.3).div(2).add(1)
 
         player.wof.wheelPointsMult = new Decimal(1)
-        player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(player.wof.wheelsSpinned.pow(buyableEffect("sm", 104)).pow(0.65).add(1))
+        player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(player.wof.wheelsSpinned.pow(buyableEffect("sm", 104).pow(levelableEffect("car", 209)[0])).pow(0.65).add(1))
         player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(buyableEffect("wof", 13))
         player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(buyableEffect("cf", 24))
         player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(player.sm.chipsEffect[2])
         if (hasUpgrade("cbs", 12)) player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(upgradeEffect("cbs", 12))
+        player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(levelableEffect("car", 208)[0])
 
         if (player.wof.autoSpin) {
             if (player.za.chancePoints.gte(player.wof.spinCost) && !player.wof.spinActive)

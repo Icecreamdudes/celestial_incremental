@@ -89,18 +89,21 @@
 
 
         player.sm.totalChipMult = new Decimal(1)
-        player.sm.totalChipMult = player.sm.totalChipMult.mul(player.sm.spinAmount.pow(0.5).add(1))
+        player.sm.totalChipMult = player.sm.totalChipMult.mul(player.sm.spinAmount.pow(levelableEffect("car", 210)[0]).pow(0.5).add(1))
         player.sm.totalChipMult = player.sm.totalChipMult.mul(buyableEffect("sm", 108))
         if (hasUpgrade("cbs", 15)) player.sm.totalChipMult = player.sm.totalChipMult.mul(upgradeEffect("cbs", 15))
 
         player.sm.chipsToGet[0] = player.sm.chipsToGet[0].mul(buyableEffect("sm", 11))
         player.sm.chipsToGet[0] = player.sm.chipsToGet[0].mul(player.sm.totalChipMult)
+        player.sm.chipsToGet[0] = player.sm.chipsToGet[0].mul(levelableEffect("car", 211)[0])
 
         player.sm.chipsToGet[1] = player.sm.chipsToGet[1].mul(buyableEffect("sm", 12))
         player.sm.chipsToGet[1] = player.sm.chipsToGet[1].mul(player.sm.totalChipMult)
+        player.sm.chipsToGet[1] = player.sm.chipsToGet[1].mul(levelableEffect("car", 212)[0])
 
         player.sm.chipsToGet[2] = player.sm.chipsToGet[2].mul(buyableEffect("sm", 13))
         player.sm.chipsToGet[2] = player.sm.chipsToGet[2].mul(player.sm.totalChipMult)
+        player.sm.chipsToGet[2] = player.sm.chipsToGet[2].mul(levelableEffect("car", 213)[0])
 
         player.sm.chipsEffect[0] = player.sm.chips[0].div(2).add(1)
         player.sm.chipsEffect[1] = player.sm.chips[1].pow(0.75).div(2).add(1)

@@ -214,7 +214,7 @@ addUniverse("D1", {
 addUniverse("CB", {
     name: "Check Back",
     symbol: "CB",
-    tree: [["cb"], ["ev0", "ev1", "ev2", "ev8"], ["ep0", "ep1", "ep2", "sp"]],
+    tree: [["cb", "gwaTemple"], ["ev0", "ev1", "ev2", "ev8"], ["ep0", "ep1", "ep2", "sp"]],
     nodeStyle() {
         return {
             background: "#094599",

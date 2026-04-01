@@ -1628,6 +1628,13 @@ button > * {
 	transition: transform 0.1s ease-out;
 }
 
+.bigCookie.gwa {
+	background:url(../resources/gwa.png);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
 .bigCookie:hover {
 	-webkit-transform:scale(1.05,1.05);
 	-moz-transform:scale(1.05,1.05);

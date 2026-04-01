@@ -1009,6 +1009,7 @@ addLayer("co", {
                 player.in.breakInfinity = false
             }
             if (hasMilestone("s", 18)) player.po.breakInfinity = true
+            player.po.gwaTemple = false
             player.po.featureSlots = player.po.featureSlotsMax
         }
 

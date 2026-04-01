@@ -666,7 +666,7 @@
                 if (hasUpgrade("bi", 28) && challengeCompletions(this.layer, this.id) >= 1) return player.points.gte("1e7500")
                 return player.points.gte(1.79e308)
             },
-            rewardDescription: "Unlock new grasshopper studies.",
+            rewardDescription: "Unlock new grasshopper studies, and gain the ability to ... gwarship?",
             onEnter() {
                 //OTF is reset here and not in crunch to prevent a bug
                 player.po.dice = false

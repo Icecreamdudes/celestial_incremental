@@ -149,6 +149,7 @@
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(buyableEffect("sb", 103))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(levelableEffect("ir", 4)[1]).floor()
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(player.cof.coreFragmentEffects[3])
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(buyableEffect("gwaTemple", 24))
 
         // ABNORMAL MODIFIERS
         if (player.po.halter.ip.enabled == 1) player.in.infinityPointsToGet = player.in.infinityPointsToGet.div(player.po.halter.ip.halt)
@@ -230,6 +231,7 @@
         //tickspeed
         player.uni["U2"].tickspeed = new Decimal(1)
         player.uni["U2"].tickspeed = player.uni["U2"].tickspeed.mul(player.in.pylonEnergyEffect)
+        player.uni["U2"].tickspeed = player.uni["U2"].tickspeed.mul(buyableEffect("gwaTemple", 23))
     },
     bigCrunch() {
         if (hasUpgrade("ta", 17)) {
@@ -431,6 +433,7 @@
             player.po.rocketFuel = false
             player.po.hex = false
             player.po.breakInfinity = false
+            player.po.gwaTemple = false
             player.in.breakInfinity = false
             player.po.featureSlots = player.po.featureSlotsMax
         }

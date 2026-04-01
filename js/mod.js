@@ -767,6 +767,9 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.Gwa - The Gwaleph Update</h3><br>
+		Content:<br>
+			- Opened the door to true gwa-ness<br><br>
 	<h3>v1.11 - The Novasent Update Part II: Blood and Gambling</h3><br>
 		Content:<br>
 			- Added 10 new punchcards, including one legendary punchcard.<br>

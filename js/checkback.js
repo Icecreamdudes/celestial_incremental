@@ -340,6 +340,7 @@ addLayer("cb", {
             player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(buyableEffect("ma", 34))
             player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(buyableEffect("cof", 32))
             player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(player.cbs.pylonEnergyEffect3)
+            if (hasUpgrade("gwaTemple", 10)) player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(1.1)
         }
 
         player.cb.crateTimers[0].max = new Decimal(900).div(buyableEffect("ev1", 202)).mul(buyableEffect("ev1", 204))

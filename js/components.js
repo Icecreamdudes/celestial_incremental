@@ -396,7 +396,7 @@ function loadVue() {
 				<span v-if= "layers[layer].upgrades[data].title"><h3 v-html="run(layers[layer].upgrades[data].title, layers[layer].upgrades[data])"></h3><br></span>
 				<span v-html="run(layers[layer].upgrades[data].description, layers[layer].upgrades[data])"></span>
 				<span v-if="layers[layer].upgrades[data].effectDisplay"><br>Currently: <span v-html="run(layers[layer].upgrades[data].effectDisplay, layers[layer].upgrades[data])"></span></span>
-				<br><br>Cost: {{ formatWhole(tmp[layer].upgrades[data].cost) }} {{(tmp[layer].upgrades[data].currencyDisplayName ? tmp[layer].upgrades[data].currencyDisplayName : tmp[layer].resource)}}
+				<br><br>Cost: {{ formatSimple(tmp[layer].upgrades[data].cost) }} {{(tmp[layer].upgrades[data].currencyDisplayName ? tmp[layer].upgrades[data].currencyDisplayName : tmp[layer].resource)}}
 			</span>
 			<tooltip v-if="layers[layer].upgrades[data].tooltip" :text="run(layers[layer].upgrades[data].tooltip, layers[layer].upgrades[data])"></tooltip>
 

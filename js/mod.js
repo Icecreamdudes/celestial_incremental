@@ -28,7 +28,7 @@
 		"Black Heart/blackHeart.js", "Black Heart/blackHeartFunctions.js", "Black Heart/characters.js", "Black Heart/skills.js", "Black Heart/depth1.js",
 		"Black Heart/depth2.js", "Black Heart/depth3.js", "Black Heart/matosLair.js", "Black Heart/darkTemple.js", "Black Heart/bulletHell.js",
 		"Black Heart/stagnantSynestia.js", "Black Heart/depth4.js", "Black Heart/alephsChamber.js", "Black Heart/laboratory.js", "DarkU1/grassJump.js",
-		"Hive/nest.js",
+		"Hive/nest.js", "Check Back/gwaTemple.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 	],
@@ -289,6 +289,9 @@ function updateStyles() {
 		case "leg":
 			layerBG = "#eed200"
 			break;
+		case "gwaTemple":
+			layerBG = "#676742"
+			break
 		default:
 			layerBG = "var(--layerBackground)"
 			break;
@@ -876,6 +879,9 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Made booster dice speed toggle be disabled while in IC5 to prevent confusion.<br>
 			- Fixed tab layout's UI background not working while in portrait mode.<br>
 			- Fixed displayed space pet xp gain not matching actual xp gain.<br><br>
+	<h3>v1.Gwa - The Gwaleph Update <small>[APRIL FOOLS]</small></h3><br>
+		Content:<br>
+			- Opened the door to true gwa-ness<br><br>
 	<h3>v1.11 - The Novasent Update Part II: Blood and Gambling</h3><br>
 		Content:<br>
 			- Added 10 new punchcards, including one legendary punchcard.<br>

@@ -36,6 +36,11 @@ addLayer("gwaTemple", {
         highestGwankest: new Decimal(0),
         gwankestEffect: new Decimal(1),
         gwankestEffect2: new Decimal(0),
+
+        gwark: new Decimal(0),
+        gwarkGain: new Decimal(1),
+        gwarkReq: new Decimal(1e25),
+        gwarkEffect: new Decimal(1),
     }},
     automate() {},
     nodeStyle() {
@@ -67,6 +72,8 @@ addLayer("gwaTemple", {
         player.gwaTemple.gwaPointsGain = player.gwaTemple.gwaPointsGain.mul(buyableEffect("gwaTemple", 11))
         if (hasUpgrade("gwaTemple", 28)) player.gwaTemple.gwaPointsGain = player.gwaTemple.gwaPointsGain.mul(10)
         if (hasUpgrade("gwaTemple", 29)) player.gwaTemple.gwaPointsGain = player.gwaTemple.gwaPointsGain.mul(upgradeEffect("gwaTemple", 29))
+
+        player.gwaTemple.gwaPointsGain = player.gwaTemple.gwaPointsGain.pow(player.gwaTemple.gwarkEffect)
 
         player.gwaTemple.gwaPointsEffect = hasUpgrade("gwaTemple", 5) ? player.gwaTemple.gwaPoints.add(1).log(10).pow(0.5).div(20).add(1) : new Decimal(1)
 
@@ -108,6 +115,12 @@ addLayer("gwaTemple", {
 
         player.gwaTemple.gwankestEffect = player.gwaTemple.gwankest.add(1).log(2).div(2).add(1).pow(0.3)
         player.gwaTemple.gwankestEffect2 = player.gwaTemple.gwankest.mul(10).pow(1.5).floor()
+
+        // GWARK
+        let gwarkDiv = new Decimal(1)
+        player.gwaTemple.gwarkReq = Decimal.pow(1e5, player.gwaTemple.gwark).mul(1e25).div(gwarkDiv)
+        player.gwaTemple.gwarkGain = player.gwaTemple.gwaPoints.add(1).div(1e25).mul(gwarkDiv).ln().div(new Decimal(1e5).ln()).add(1).sub(player.gwaTemple.gwark).floor()
+        player.gwaTemple.gwarkEffect = player.gwaTemple.gwark.add(1).log(2).div(10).add(1)
 
         // GWARSHIP
         player.gwaTemple.timeSinceGwarship = player.gwaTemple.timeSinceGwarship.add(delta)
@@ -227,6 +240,7 @@ addLayer("gwaTemple", {
                 player.gwaTemple.gwanker = new Decimal(0)
                 player.gwaTemple.gwankerGet = new Decimal(0)
                 player.gwaTemple.gwankerEffect = new Decimal(1)
+                player.gwaTemple.gwankerEffect2 = new Decimal(1)
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
@@ -234,6 +248,54 @@ addLayer("gwaTemple", {
                 this.canClick() ? look.backgroundColor = "#bb9" : look.backgroundColor = "#bf8f8f"
                 return look
             },
+        },
+        21: {
+            title() {
+                return "<h3>Gain a gwark, but all previous gwagress.</h3><br>Req: " + format(player.gwaTemple.gwarkReq) + " Gwa Points"
+            },
+            canClick() { return player.gwaTemple.gwarkGain.gte(1)},
+            unlocked: true,
+            onClick() {
+                if (false) {
+                    player.gwaTemple.gwark = player.gwaTemple.gwark.add(1)
+                } else {
+                    player.gwaTemple.gwark = player.gwaTemple.gwark.add(player.gwaTemple.gwarkGain)
+                }
+
+                // RESET CODE
+                player.gwaTemple.gwaPoints = new Decimal(0)
+                player.gwaTemple.gwaPointsGain = new Decimal(0)
+                player.gwaTemple.gwaWorshipCooldown = new Decimal(0)
+                player.gwaTemple.timeSinceGwarship = new Decimal(0)
+                for (let i = 0; i < player.gwaTemple.upgrades.length; i++) {
+                    let upg = +player.gwaTemple.upgrades[i]
+                    if (upg < 31) {
+                        if (upg == 30) continue
+                        player.gwaTemple.upgrades.splice(i, 1);
+                        i--;
+                    }
+                }
+                player.gwaTemple.gwank = new Decimal(0)
+                player.gwaTemple.gwankGet = new Decimal(0)
+                player.gwaTemple.gwankEffect = new Decimal(1)
+                player.gwaTemple.gwanker = new Decimal(0)
+                player.gwaTemple.gwankerGet = new Decimal(0)
+                player.gwaTemple.gwankerEffect = new Decimal(1)
+                player.gwaTemple.gwankerEffect2 = new Decimal(1)
+                player.gwaTemple.gwankest = new Decimal(0)
+                player.gwaTemple.gwankestGet = new Decimal(0)
+                player.gwaTemple.gwankestEffect = new Decimal(1)
+                player.gwaTemple.gwankestEffect2 = new Decimal(1)
+
+                for (let i in player.gwaTemple.buyables) {
+                    player.gwaTemple.buyables[i] = new Decimal(0)
+                }
+            },
+            style() {
+                let look = {width: "300px", minHeight: "100px", color: "black", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px"}
+                return look
+            },
+
         },
     },
     upgrades: {
@@ -925,7 +987,19 @@ addLayer("gwaTemple", {
                 content: [
                     ["top-column", [
                         ["blank", "25px"],
-                        ["raw-html", "I ran out of time to add this, but I hope you enjoyed this april fools minigame!", {color: "#ffb", fontSize: "16px", fontFamily: "monospace"}],
+                        ["row", [
+                            ["raw-html", () => {return player.gwaTemple.gwark.neq(1) ? "You have <h3>" + formatWhole(player.gwaTemple.gwark) + "</h3> gwarks." : "You have <h3>" + formatWhole(player.gwaTemple.gwark) + "</h3> gwark." }, {color: "#ffb", fontSize: "24px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return false ? "(+" + formatWhole(player.gwaTemple.gwarkGain) + ")" : "" }, () => {
+                                let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                                player.gwaTemple.gwarkGain.gt(0) ? look.color = "#ffb" : look.color = "#886"
+                                return look
+                            }],
+                        ]],
+                        ["raw-html", () => {return "Boosts gwa points by ^" + formatSimple(player.gwaTemple.gwarkEffect, 2)}, {color: "#ffb", fontSize: "20px", fontFamily: "monospace"}],
+                        ["blank", "25px"],
+                        ["clickable", 21],
+                        ["blank", "25px"],
+                        ["raw-html", "I ran out of time to add more, but I hope you enjoyed this april fools minigame!", {color: "#ffb", fontSize: "16px", fontFamily: "monospace"}],
                     ], {width: "394px", height: "651px"}],
                 ]
             },

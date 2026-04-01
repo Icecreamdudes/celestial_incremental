@@ -251,7 +251,7 @@ addLayer("gwaTemple", {
         },
         21: {
             title() {
-                return "<h3>Gain a gwark, but all previous gwagress.</h3><br>Req: " + format(player.gwaTemple.gwarkReq) + " Gwa Points"
+                return "<h3>Gain a gwark, but reset all previous gwagress.</h3><br>Req: " + format(player.gwaTemple.gwarkReq) + " Gwa Points"
             },
             canClick() { return player.gwaTemple.gwarkGain.gte(1)},
             unlocked: true,

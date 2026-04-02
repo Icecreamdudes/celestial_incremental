@@ -859,7 +859,8 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Made best booster milestones not be unlocked else where<br>(Though you can't see what it buffs if you haven't unlocked that feature)<br>
 			- Added end game softcaps to nectar and pollen.<br>
 			- Changed the evolution requirements for wrath cookie to match new black heart resources.<br>
-			- Slightly reduced the nerf from the first tree core scrap upgrade.<br><br>
+			- Slightly reduced the nerf from the first tree core scrap upgrade.<br>
+			- Nerfed the Pre-OTF effect of ancient pylon energy.<br><br>
 		Bugfixes:<br>
 			- Added a check to hopefully prevent getting softlocked in space battles.<br>
 			- Fixed exiting certain areas of the game randomly pausing most of your universes.<br>

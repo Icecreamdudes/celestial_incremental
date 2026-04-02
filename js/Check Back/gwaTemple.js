@@ -96,6 +96,8 @@ addLayer("gwaTemple", {
 
         player.gwaTemple.gwankEffect = player.gwaTemple.gwank.add(player.gwaTemple.gwankerEffect2).div(2).add(1).pow(1.05).pow(player.gwaTemple.gwankerEffect)
 
+        if (hasMilestone("gwaTemple", 14)) player.gwaTemple.gwank = player.gwaTemple.gwank.add(player.gwaTemple.gwankGet)
+
         // GWANKER
         let gwankerDiv = new Decimal(1)
         gwankerDiv = gwankerDiv.mul(buyableEffect("gwaTemple", 14))
@@ -112,7 +114,7 @@ addLayer("gwaTemple", {
         gwankestDiv = gwankestDiv.mul(buyableEffect("gwaTemple", 16))
 
         player.gwaTemple.gwankestReq = layers.h.hexReq(player.gwaTemple.gwankest, 1000, 1.4, gwankestDiv)
-        player.gwaTemple.gwankestGet = false ? layers.h.hexGain(player.gwaTemple.gwanker, 1000, 1.4, gwankestDiv).sub(player.gwaTemple.gwankest).max(0) : new Decimal(1)
+        player.gwaTemple.gwankestGet = hasMilestone("gwaTemple", 13) ? layers.h.hexGain(player.gwaTemple.gwanker, 1000, 1.4, gwankestDiv).sub(player.gwaTemple.gwankest).max(0) : new Decimal(1)
 
         player.gwaTemple.gwankestEffect = player.gwaTemple.gwankest.add(1).log(2).div(2).add(1).pow(0.3)
         player.gwaTemple.gwankestEffect2 = player.gwaTemple.gwankest.mul(10).pow(1.5).floor()
@@ -129,8 +131,10 @@ addLayer("gwaTemple", {
             player.gwaTemple.gwaWorshipTime = player.gwaTemple.gwaWorshipTime.add(delta)
             player.gwaTemple.gwaWorshipCooldown = player.gwaTemple.gwaWorshipCooldown.add(delta)
         } else if (hasMilestone("gwaTemple", 11)) {
-            player.gwaTemple.gwaWorshipTime = player.gwaTemple.gwaWorshipTime.add(Decimal.div(delta, 10))
-            player.gwaTemple.gwaWorshipCooldown = player.gwaTemple.gwaWorshipCooldown.add(Decimal.div(delta, 10))
+            let eff = 0.1
+            if (hasMilestone("gwaTemple", 16)) eff = 1
+            player.gwaTemple.gwaWorshipTime = player.gwaTemple.gwaWorshipTime.add(Decimal.mul(delta, eff))
+            player.gwaTemple.gwaWorshipCooldown = player.gwaTemple.gwaWorshipCooldown.add(Decimal.mul(delta, eff))
         }
 
         player.gwaTemple.gwaWorshipCooldownMax = new Decimal(10)
@@ -170,6 +174,7 @@ addLayer("gwaTemple", {
                 player.gwaTemple.gwaWorshipCooldown = new Decimal(0)
                 player.gwaTemple.timeSinceGwarship = new Decimal(0)
                 for (let i = 0; i < player.gwaTemple.upgrades.length; i++) {
+                    if (hasMilestone("gwaTemple", 12) && i < player.gwaTemple.milestones.length+1) i = player.gwaTemple.milestones.length+1
                     let upg = +player.gwaTemple.upgrades[i]
                     if (upg < 31) {
                         if (upg == 12 || upg == 15 || upg == 18 || upg == 21 || upg == 24 || upg == 27 || upg == 30) continue
@@ -199,6 +204,7 @@ addLayer("gwaTemple", {
                 player.gwaTemple.gwaWorshipCooldown = new Decimal(0)
                 player.gwaTemple.timeSinceGwarship = new Decimal(0)
                 for (let i = 0; i < player.gwaTemple.upgrades.length; i++) {
+                    if (hasMilestone("gwaTemple", 12) && i < player.gwaTemple.milestones.length+1) i = player.gwaTemple.milestones.length+1
                     let upg = +player.gwaTemple.upgrades[i]
                     if (upg < 31) {
                         if (upg == 12 || upg == 15 || upg == 18 || upg == 21 || upg == 24 || upg == 27 || upg == 30) continue
@@ -231,6 +237,7 @@ addLayer("gwaTemple", {
                 player.gwaTemple.gwaWorshipCooldown = new Decimal(0)
                 player.gwaTemple.timeSinceGwarship = new Decimal(0)
                 for (let i = 0; i < player.gwaTemple.upgrades.length; i++) {
+                    if (hasMilestone("gwaTemple", 12) && i < player.gwaTemple.milestones.length+1) i = player.gwaTemple.milestones.length+1
                     let upg = +player.gwaTemple.upgrades[i]
                     if (upg < 31) {
                         if (upg == 12 || upg == 15 || upg == 18 || upg == 21 || upg == 24 || upg == 27 || upg == 30) continue
@@ -260,7 +267,7 @@ addLayer("gwaTemple", {
             canClick() { return player.gwaTemple.gwarkGain.gte(1)},
             unlocked: true,
             onClick() {
-                if (false) {
+                if (!hasMilestone("gwaTemple", 17)) {
                     player.gwaTemple.gwark = player.gwaTemple.gwark.add(1)
                 } else {
                     player.gwaTemple.gwark = player.gwaTemple.gwark.add(player.gwaTemple.gwarkGain)
@@ -272,6 +279,7 @@ addLayer("gwaTemple", {
                 player.gwaTemple.gwaWorshipCooldown = new Decimal(0)
                 player.gwaTemple.timeSinceGwarship = new Decimal(0)
                 for (let i = 0; i < player.gwaTemple.upgrades.length; i++) {
+                    if (hasMilestone("gwaTemple", 12) && i < player.gwaTemple.milestones.length+1) i = player.gwaTemple.milestones.length+1
                     let upg = +player.gwaTemple.upgrades[i]
                     if (upg < 31) {
                         if (upg == 30) continue
@@ -942,8 +950,68 @@ addLayer("gwaTemple", {
             effectDescription() { return "Passively gwarship at 10% efficiency<br>Increase base gwa point gain by 1 eff. level per gwark<br>Currently: +" + formatWhole(player.gwaTemple.gwark) },
             done() { return player.gwaTemple.gwark.gte(1) },
             style() {
-                let look = {width: "306px", minHeight: "75px", fontSize: "12px", color: "black", border: "3px solid #29291a", borderTop: "0", borderRight: "0", borderRadius: "0px"}
-                if (hasMilestone("n", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                let look = {width: "291px", minHeight: "75px", fontSize: "12px", color: "black", border: "3px solid #29291a", borderTop: "0", borderRight: "0", borderRadius: "0px"}
+                if (hasMilestone("gwaTemple", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+        },
+        12: {
+            requirementDescription: "2 Gwarks",
+            effectDescription() { return "Keep a gwagrade upgrade on resets for every gwark milestone you have<br>Currently: " + formatWhole(player.gwaTemple.milestones.length) },
+            done() { return player.gwaTemple.gwark.gte(2) },
+            style() {
+                let look = {width: "291px", minHeight: "75px", fontSize: "12px", color: "black", border: "3px solid #29291a", borderTop: "0", borderRight: "0", borderRadius: "0px"}
+                if (hasMilestone("gwaTemple", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+        },
+        13: {
+            requirementDescription: "3 Gwarks",
+            effectDescription() { return "Unlock bulk gwankesting" },
+            done() { return player.gwaTemple.gwark.gte(3) },
+            style() {
+                let look = {width: "291px", minHeight: "75px", fontSize: "12px", color: "black", border: "3px solid #29291a", borderTop: "0", borderRight: "0", borderRadius: "0px"}
+                if (hasMilestone("gwaTemple", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+        },
+        14: {
+            requirementDescription: "4 Gwarks",
+            effectDescription() { return "Automate gwank gain" },
+            done() { return player.gwaTemple.gwark.gte(4) },
+            style() {
+                let look = {width: "291px", minHeight: "75px", fontSize: "12px", color: "black", border: "3px solid #29291a", borderTop: "0", borderRight: "0", borderRadius: "0px"}
+                if (hasMilestone("gwaTemple", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+        },
+        15: {
+            requirementDescription: "6 Gwarks",
+            effectDescription() { return "Increase space pet xp based on gwarks<br>Currently: x" + formatSimple(player.gwaTemple.gwark.div(10).add(1).pow(0.5), 2) },
+            done() { return player.gwaTemple.gwark.gte(6) },
+            style() {
+                let look = {width: "291px", minHeight: "75px", fontSize: "12px", color: "black", border: "3px solid #29291a", borderTop: "0", borderRight: "0", borderRadius: "0px"}
+                if (hasMilestone("gwaTemple", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+        },
+        16: {
+            requirementDescription: "8 Gwarks",
+            effectDescription() { return "Increase passive gwarship efficiency to 100%" },
+            done() { return player.gwaTemple.gwark.gte(8) },
+            style() {
+                let look = {width: "291px", minHeight: "75px", fontSize: "12px", color: "black", border: "3px solid #29291a", borderTop: "0", borderRight: "0", borderRadius: "0px"}
+                if (hasMilestone("gwaTemple", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+        },
+        17: {
+            requirementDescription: "10 Gwarks",
+            effectDescription() { return "Unlock bulk gwarking" },
+            done() { return player.gwaTemple.gwark.gte(10) },
+            style() {
+                let look = {width: "291px", minHeight: "75px", fontSize: "12px", color: "black", border: "3px solid #29291a", borderTop: "0", borderRight: "0", borderRadius: "0px"}
+                if (hasMilestone("gwaTemple", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
                 return look
             },
         },
@@ -1005,7 +1073,7 @@ addLayer("gwaTemple", {
                         ["style-column", [
                             ["row", [
                                 ["raw-html", () => {return player.gwaTemple.gwark.neq(1) ? "You have <h3>" + formatWhole(player.gwaTemple.gwark) + "</h3> gwarks." : "You have <h3>" + formatWhole(player.gwaTemple.gwark) + "</h3> gwark." }, {color: "#ffb", fontSize: "20px", fontFamily: "monospace"}],
-                                ["raw-html", () => {return false ? "(+" + formatWhole(player.gwaTemple.gwarkGain) + ")" : "" }, () => {
+                                ["raw-html", () => {return hasMilestone("gwaTemple", 17) ? "(+" + formatWhole(player.gwaTemple.gwarkGain) + ")" : "" }, () => {
                                     let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
                                     player.gwaTemple.gwarkGain.gt(0) ? look.color = "#ffb" : look.color = "#886"
                                     return look
@@ -1014,13 +1082,52 @@ addLayer("gwaTemple", {
                             ["raw-html", () => {return "Boosts gwa points by ^" + formatSimple(player.gwaTemple.gwarkEffect, 2)}, {color: "#ffb", fontSize: "16px", fontFamily: "monospace"}],
                         ], {width: "394px", height: "60px", borderBottom: "3px solid #29291a"}],
                         ["clickable", 21],
-                        ["top-column", [
+                        ["always-scroll-column", [
                             ["style-row", [
                                 ["style-column", [
                                     ["raw-html", "1", {color: "#ffb", fontSize: "32px", fontFamily: "monospace"}],
                                 ], {borderBottom: "3px solid #29291a", borderRadius: "0px", width: "75px", height: "75px"}],
                                 ["titleless-milestone", 11],
                             ]],
+                            ["style-row", [
+                                ["style-column", [
+                                    ["raw-html", "2", {color: "#ffb", fontSize: "32px", fontFamily: "monospace"}],
+                                ], {borderBottom: "3px solid #29291a", borderRadius: "0px", width: "75px", height: "75px"}],
+                                ["titleless-milestone", 12],
+                            ]],
+                            ["style-row", [
+                                ["style-column", [
+                                    ["raw-html", "3", {color: "#ffb", fontSize: "32px", fontFamily: "monospace"}],
+                                ], {borderBottom: "3px solid #29291a", borderRadius: "0px", width: "75px", height: "75px"}],
+                                ["titleless-milestone", 13],
+                            ]],
+                            ["style-row", [
+                                ["style-column", [
+                                    ["raw-html", "4", {color: "#ffb", fontSize: "32px", fontFamily: "monospace"}],
+                                ], {borderBottom: "3px solid #29291a", borderRadius: "0px", width: "75px", height: "75px"}],
+                                ["titleless-milestone", 14],
+                            ]],
+                            ["style-row", [
+                                ["style-column", [
+                                    ["raw-html", "6", {color: "#ffb", fontSize: "32px", fontFamily: "monospace"}],
+                                ], {borderBottom: "3px solid #29291a", borderRadius: "0px", width: "75px", height: "75px"}],
+                                ["titleless-milestone", 15],
+                            ]],
+                            ["style-row", [
+                                ["style-column", [
+                                    ["raw-html", "8", {color: "#ffb", fontSize: "32px", fontFamily: "monospace"}],
+                                ], {borderBottom: "3px solid #29291a", borderRadius: "0px", width: "75px", height: "75px"}],
+                                ["titleless-milestone", 16],
+                            ]],
+                            ["style-row", [
+                                ["style-column", [
+                                    ["raw-html", "10", {color: "#ffb", fontSize: "32px", fontFamily: "monospace"}],
+                                ], {borderBottom: "3px solid #29291a", borderRadius: "0px", width: "75px", height: "75px"}],
+                                ["titleless-milestone", 17],
+                            ]],
+                            ["style-row", [
+                                ["raw-html", "<i>Praise the being that says \"Gwa\"</i>", {color: "#ffb", fontSize: "16px", fontFamily: "monospace"}]
+                            ], {width: "394px", height: "30px", background: "#31311f", borderRadius: "0 0 0 17px"}],
                         ], {width: "394px", height: "511px", background: "#393924", borderTop: "3px solid #29291a", borderRadius: "0 0 0 17px"}],
                     ], {width: "394px", height: "651px"}],
                 ]
@@ -1072,7 +1179,7 @@ addLayer("gwaTemple", {
                     ["style-column", [
                         ["row", [
                             ["raw-html", () => {return "Gwankest " + formatShortSimple(player.gwaTemple.gwankest)}, {color: "#ffb", fontSize: "16px", fontFamily: "monospace"}],
-                            ["raw-html", () => {return false ? "<small style='margin-left:10px'>(+" + formatShortSimple(player.gwaTemple.gwankestGet) + ")</small>" : ""}, () => {
+                            ["raw-html", () => {return hasMilestone("gwaTemple", 13) ? "<small style='margin-left:10px'>(+" + formatShortSimple(player.gwaTemple.gwankestGet) + ")</small>" : ""}, () => {
                                 let look = {color: "#ffb", fontSize: "16px", fontFamily: "monospace"}
                                 player.gwaTemple.gwankestGet.gt(0) ? look.color = "#ffb" : look.color = "#886"
                                 return look

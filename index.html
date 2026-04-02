@@ -161,8 +161,7 @@
 					<layer-tab :layer="layer" :back="'none'" :spacing="'50px'" :key="'left'"></layer-tab>
 				</div>
 			</div>
-			<bg :layer="player.tab" ></bg>
-
+			<bg :layer="player.tab" style="visibility:hidden !important"></bg>
 		</div>
 		<div class="layerBG" id="uniBG" v-if="player.startedGame && !player.hideMenu"></div>
 	</div>

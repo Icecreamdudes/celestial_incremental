@@ -479,7 +479,7 @@ addLayer("cb", {
         player.cb.xp = new Decimal(0)
         player.cb.xp = player.cb.xp.add(leftover)
     },
-    instantProduction(time) {
+    instantProduction(time, offline = false) {
         if (player.ev2.doubleCurrent.gt(0)) {
             if (time.gte(player.ev2.doubleCurrent)) {
                 time = time.add(player.ev2.doubleCurrent)
@@ -499,7 +499,7 @@ addLayer("cb", {
         layers.ev2.update(time)
         layers.ev8.update(time)
         layers.sp.update(time)
-        layers.cbs.update(time)
+        if (offline) layers.cbs.update(time)
     },
     branches: ["m"],
     clickables: {

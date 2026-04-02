@@ -3957,6 +3957,7 @@ addLayer("bh", {
                         ["theme-scroll-column", [
                             ["blank", "4px"],
                             "bh-skills",
+                            ["blank", "4px"],
                         ], {width: "497px", height: "480px"}],
                     ], {width: "497px", height: "677px"}],
                 ]

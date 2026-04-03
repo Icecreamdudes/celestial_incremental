@@ -271,26 +271,6 @@ addUniverse("CH", {
     uniShown() { return player.startedGame && player.fu.defeatedJocus && !player.sma.inStarmetalChallenge},
 })
 
-addUniverse("UD", {
-    name: "Universe δ<br>Interspace",
-    symbol: "δ",
-    tree: [["wel"], ["pri", "prj"], ["bum"]],
-    nodeStyle() {
-        let style = {
-            background: "linear-gradient(135deg, #ff7fbf 0%, #bf7fff 100%)",
-            backgroundOrigin: "border-box",
-        	borderColor: "#7f007f",
-        }
-        if (player.universe=="UD") {
-            style.outline = "2px solid white"
-            style.outlineOffset = "-2px"
-            style.borderWidth = "5px"
-        }
-        return style
-    },
-    uniShown() { return player.startedGame && player.bi.interspaceUnlocked && !player.sma.inStarmetalChallenge},
-})
-
 addUniverse("DS", {
     name() {
         return "Universe ε<br>Dice Space"
@@ -312,4 +292,24 @@ addUniverse("DS", {
     },
     uniShown() { return player.d.diceSpaceUnlocked && !player.sma.inStarmetalChallenge }, //make it something
     disabled() {return false}
+})
+
+addUniverse("UD", {
+    name: "Universe δ<br>Interspace",
+    symbol: "δ",
+    tree: [["wel"], ["pri", "prj", "blu"], ["bum"]],
+    nodeStyle() {
+        let style = {
+            background: "linear-gradient(135deg, #ff7fbf 0%, #bf7fff 100%)",
+            backgroundOrigin: "border-box",
+        	borderColor: "#7f007f",
+        }
+        if (player.universe=="UD") {
+            style.outline = "2px solid white"
+            style.outlineOffset = "-2px"
+            style.borderWidth = "5px"
+        }
+        return style
+    },
+    uniShown() { return player.startedGame && player.bi.interspaceUnlocked && !player.sma.inStarmetalChallenge},
 })

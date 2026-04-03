@@ -131,18 +131,22 @@
 
             if (player.wel.modules[1].completions.gte(1e3)) player.wel.modules[1].completionsEffect = player.wel.modules[1].completions.div(1e3).pow(player.wel.lightWellCycleEffectSoftcap).mul(1e3).mul(0.01).add(1);
             else player.wel.modules[1].completionsEffect = player.wel.modules[1].completions.mul(0.02).add(1);
+            player.wel.modules[1].completionsEffect = player.wel.modules[1].completionsEffect.pow(0.1)
             player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[1].completionsEffect)
 
             if (player.wel.modules[2].completions.gte(1e3)) player.wel.modules[2].completionsEffect = player.wel.modules[2].completions.div(1e3).pow(player.wel.lightWellCycleEffectSoftcap).mul(1e3).mul(0.05).add(1);
             else player.wel.modules[2].completionsEffect = player.wel.modules[2].completions.mul(0.1).add(1);
+            player.wel.modules[2].completionsEffect = player.wel.modules[2].completionsEffect.pow(0.1)
             player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[2].completionsEffect)
 
             if (player.wel.modules[3].completions.gte(1e3)) player.wel.modules[3].completionsEffect = player.wel.modules[3].completions.div(1e3).pow(player.wel.lightWellCycleEffectSoftcap).mul(1e3).mul(0.01).add(1);
             else player.wel.modules[3].completionsEffect = player.wel.modules[3].completions.mul(0.01).add(1);
+            player.wel.modules[3].completionsEffect = player.wel.modules[3].completionsEffect.pow(0.1)
             player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[3].completionsEffect)
 
             if (player.wel.modules[4].completions.gte(1e3)) player.wel.modules[4].completionsEffect = player.wel.modules[4].completions.div(1e3).pow(player.wel.lightWellCycleEffectSoftcap).mul(1e3).div(1e9).add(1);
             else player.wel.modules[4].completionsEffect = player.wel.modules[4].completions.div(1e9).add(1);
+            player.wel.modules[4].completionsEffect = player.wel.modules[4].completionsEffect.pow(0.1)
             player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[4].completionsEffect)
         }
         if (hasUpgrade("wel", 14)) player.wel.lightMult = player.wel.lightMult.mul(2);

@@ -160,7 +160,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Starmetal Alloyer"
+                return "Normal Starmetal"
             },
             display() {
                 return "which are multiplying total starmetal alloy gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -181,7 +181,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black" }
+            style: { width: '250px', height: '150px', color: "black" },
         },
         12: {
             costBase() { return new Decimal(500) },
@@ -194,7 +194,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Prestige Generation"
+                return "Normal Passive Prestige"
             },
             display() {
                 return "which are generating " + format(tmp[this.layer].buyables[this.id].effect.mul(100)) + "% of prestige points per second.\n\
@@ -215,7 +215,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black" }
+            style: { width: '250px', height: '150px', color: "black" },
         },
         13: {
             costBase() { return new Decimal(25000) },
@@ -228,7 +228,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Generator Generation"
+                return "Normal Passive Generators"
             },
             display() {
                 return "which are generating " + format(tmp[this.layer].buyables[this.id].effect.mul(100)) + "% of generators per second.\n\
@@ -249,7 +249,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black" }
+            style: { width: '250px', height: '150px', color: "black" },
         },
         14: {
             costBase() { return new Decimal(1e10) },
@@ -262,7 +262,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Space Spaciator"
+                return "Normal Space Spaciator"
             },
             display() {
                 return "which are boosting length, width, and depth by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -283,7 +283,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black" }
+            style: { width: '275px', height: '150px', color: "black" },
         },
         15: {
             costBase() { return new Decimal(1e20) },
@@ -296,7 +296,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "General Generation"
+                return "Normal Generation Effect"
             },
             display() {
                 return "which are boosting generator power effect by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -317,7 +317,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black" }
+            style: { width: '275px', height: '150px', color: "black" },
         },
     },
     milestones: {},

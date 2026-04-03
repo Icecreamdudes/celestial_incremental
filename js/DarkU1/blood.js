@@ -1133,7 +1133,7 @@ class BloodArena extends SpaceArena {
         };
         this.enemies.push(enemy);
 
-        flashScreen("Nox, The Vampire Knight", 1200)
+        screenFlash("Nox, The Vampire Knight", 1200)
 
     }
 
@@ -2162,7 +2162,7 @@ function spawnNox() {
     } catch (e) {
         // fallthrough to create arena
     }
-    flashScreen("- Nox, The Vampire Knight -", 1200);
+    screenFlash("- Nox, The Vampire Knight -", 1200);
     // Create a new BloodArena sized to the window and spawn Nox
     try {
         const w = (typeof window !== 'undefined' && window.innerWidth) ? window.innerWidth : 1200;

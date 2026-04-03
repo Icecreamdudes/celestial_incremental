@@ -780,7 +780,7 @@ addLayer("ir", {
                 arena.spawnArena();
                 localStorage.setItem('arenaActive', 'true');
 
-                pauseUniverseAll(["A2"], "pause", true)
+                pauseUniverseAll(["A2", "DS"], "pause", true)
 
                 player.ir.shipHealth = player.ir.shipHealthMax
                 if (hasUpgrade("ir", 14)) arena.upgradeEffects.hpRegen += 0.5 / 60
@@ -807,7 +807,7 @@ addLayer("ir", {
                 }
                 localStorage.setItem('arenaActive', 'false');
 
-                pauseUniverseAll(["A2"], "unpause", true)
+                pauseUniverseAll(["A2", "DS"], "unpause", true)
 
                 player.ir.timers[player.ir.shipType].current = player.ir.timers[player.ir.shipType].max
 
@@ -1384,6 +1384,7 @@ class SpaceArena {
                 this.ship.y = this.height / 2;
             }
         };
+
         window.addEventListener('resize', this._onWindowResize);
     }
 
@@ -1685,8 +1686,8 @@ class SpaceArena {
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
-                    if (!options.performanceMode) ctx.shadowColor = "#fff";
-                    if (!options.performanceMode) ctx.shadowBlur = 8;
+                    ctx.shadowColor = "#fff";
+                    if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
                     ctx.fill();
                     ctx.font = "bold 32px monospace";
                     ctx.fillStyle = "#fff";
@@ -1717,8 +1718,8 @@ class SpaceArena {
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
-                    if (!options.performanceMode) ctx.shadowColor = "#fff";
-                    if (!options.performanceMode) ctx.shadowBlur = 8;
+                    ctx.shadowColor = "#fff";
+                    if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
                     ctx.fill();
                     ctx.font = "bold 32px monospace";
                     ctx.fillStyle = "#fff";
@@ -1749,8 +1750,8 @@ class SpaceArena {
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
-                    if (!options.performanceMode) ctx.shadowColor = "#fff";
-                    if (!options.performanceMode) ctx.shadowBlur = 12;
+                    ctx.shadowColor = "#fff";
+                    if (!options.performanceMode) {ctx.shadowBlur = 12} else {ctx.shadowBlur = 0};
                     ctx.fill();
                     ctx.font = "bold 32px monospace";
                     ctx.fillStyle = "#fff";
@@ -1782,8 +1783,8 @@ class SpaceArena {
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
-                    if (!options.performanceMode) ctx.shadowColor = "#bff";
-                    if (!options.performanceMode) ctx.shadowBlur = 8;
+                    ctx.shadowColor = "#bff";
+                    if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
                     ctx.fill();
                     ctx.font = "bold 20px monospace";
                     ctx.fillStyle = "#003";
@@ -1813,8 +1814,8 @@ class SpaceArena {
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
-                    if (!options.performanceMode) ctx.shadowColor = "#ffd";
-                    if (!options.performanceMode) ctx.shadowBlur = 10;
+                    ctx.shadowColor = "#ffd";
+                    if (!options.performanceMode) {ctx.shadowBlur = 10} else {ctx.shadowBlur = 0};
                     ctx.fill();
                     ctx.font = "bold 20px monospace";
                     ctx.fillStyle = "#111";
@@ -1845,8 +1846,8 @@ class SpaceArena {
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
-                    if (!options.performanceMode) ctx.shadowColor = "#fff6";
-                    if (!options.performanceMode) ctx.shadowBlur = 10;
+                    ctx.shadowColor = "#fff6";
+                    if (!options.performanceMode) {ctx.shadowBlur = 10} else {ctx.shadowBlur = 0};
                     ctx.fill();
                     ctx.font = "bold 18px monospace";
                     ctx.fillStyle = "#111";
@@ -1876,8 +1877,8 @@ class SpaceArena {
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
-                    if (!options.performanceMode) ctx.shadowColor = "#cfc";
-                    if (!options.performanceMode) ctx.shadowBlur = 8;
+                    ctx.shadowColor = "#cfc";
+                    if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
                     ctx.fill();
                     ctx.font = "bold 16px monospace";
                     ctx.fillStyle = "#021";
@@ -1908,8 +1909,8 @@ class SpaceArena {
                     ctx.beginPath();
                     ctx.ellipse(0, 0, enemy.radius, enemy.radius * 0.5, 0, 0, Math.PI * 2);
                     ctx.fillStyle = enemy.color;
-                    if (!options.performanceMode) ctx.shadowColor = "#9fffd4";
-                    if (!options.performanceMode) ctx.shadowBlur = 18;
+                    ctx.shadowColor = "#9fffd4";
+                    if (!options.performanceMode) {ctx.shadowBlur = 18} else {ctx.shadowBlur = 0};
                     ctx.fill();
                     // Dome
                     ctx.beginPath();
@@ -1958,8 +1959,8 @@ class SpaceArena {
                     const tipBend = Math.sin(phase * 1.9) * (0.6 + ease * 0.6);
 
                     // Glow for whole boss
-                    if (!options.performanceMode) ctx.shadowColor = "rgba(240,230,255,0.9)";
-                    if (!options.performanceMode) ctx.shadowBlur = 30;
+                    ctx.shadowColor = "rgba(240,230,255,0.9)";
+                    if (!options.performanceMode) {ctx.shadowBlur = 30} else {ctx.shadowBlur = 0}
 
                     // wing drawing function; draws a richer, layered feather set (no back/filler blob)
                     const drawWing = (mirror = false) => {
@@ -2050,7 +2051,7 @@ class SpaceArena {
 
                     // Thin white circle showing hitbox (centered)
                     ctx.save();
-                    if (!options.performanceMode) ctx.shadowBlur = 0;
+                    ctx.shadowBlur = 0;
                     ctx.lineWidth = 2;
                     ctx.strokeStyle = "rgba(255,255,255,0.95)";
                     ctx.beginPath();
@@ -2060,7 +2061,7 @@ class SpaceArena {
 
                     // Draw star centered exactly in hitbox: use middle baseline so glyph is vertically centered
                     ctx.save();
-                    if (!options.performanceMode) ctx.shadowBlur = 36;
+                    if (!options.performanceMode) {ctx.shadowBlur = 36} else {ctx.shadowBlur = 0};
                     const fontSize = Math.max(12, Math.floor(enemy.radius * 1.4));
                     ctx.font = `${fontSize}px monospace`;
                     ctx.textAlign = "center";
@@ -4810,8 +4811,8 @@ class SpaceArena {
             this.ctx.beginPath();
             this.ctx.arc(this.ship.x, this.ship.y, this.ship.radius, 0, 2 * Math.PI);
             this.ctx.fillStyle = "#a7a7a7ff";
-            if (!options.performanceMode) this.ctx.shadowColor = "#ffffffff";
-            if (!options.performanceMode) this.ctx.shadowBlur = 16;
+            this.ctx.shadowColor = "#ffffffff";
+            if (!options.performanceMode) {this.ctx.shadowBlur = 16} else {this.ctx.shadowBlur = 0};
             this.ctx.fill();
             this.ctx.restore();
         }
@@ -4882,8 +4883,8 @@ class SpaceArena {
             this.ctx.beginPath();
             this.ctx.ellipse(0, 0, bodyR, bodyR * 0.5, 0, 0, Math.PI * 2);
             this.ctx.fillStyle = "#66d9ff"; // distinct color from miniboss
-            if (!options.performanceMode) this.ctx.shadowColor = "#66d9ff";
-            if (!options.performanceMode) this.ctx.shadowBlur = 10;
+            this.ctx.shadowColor = "#66d9ff";
+            if (!options.performanceMode) {this.ctx.shadowBlur = 10} else {this.ctx.shadowBlur = 0};
             this.ctx.fill();
 
             // Dome
@@ -4971,8 +4972,8 @@ class SpaceArena {
             const spreadBase = 0.9 + ease * 0.6;
             const tipBend = Math.sin(phase * 1.9) * (0.6 + ease * 0.6);
 
-            if (!options.performanceMode) this.ctx.shadowColor = "rgba(240,230,255,0.7)";
-            if (!options.performanceMode) this.ctx.shadowBlur = 15;
+            this.ctx.shadowColor = "rgba(240,230,255,0.7)";
+            if (!options.performanceMode) {this.ctx.shadowBlur = 15} else {this.ctx.shadowBlur = 0};
 
             const drawWing = (mirror = false) => {
                 this.ctx.save();
@@ -5022,7 +5023,7 @@ class SpaceArena {
             drawWing(true);
 
             this.ctx.save();
-            if (!options.performanceMode) this.ctx.shadowBlur = 20;
+            if (!options.performanceMode) {this.ctx.shadowBlur = 20} else {this.ctx.shadowBlur = 0};
             const fontSize = Math.max(12, Math.floor(r * 1.5));
             this.ctx.font = `${fontSize}px monospace`;
             this.ctx.textAlign = "center";
@@ -5373,8 +5374,8 @@ class SpaceArena {
                 this.ctx.fill();
 
                 // Glow
-                if (!options.performanceMode) this.ctx.shadowColor = "rgba(255, 0, 0, 0.5)";
-                if (!options.performanceMode) this.ctx.shadowBlur = 20;
+                this.ctx.shadowColor = "rgba(255, 0, 0, 0.5)";
+                if (!options.performanceMode) {this.ctx.shadowBlur = 20} else {this.ctx.shadowBlur = 0};
                 this.ctx.strokeStyle = "rgba(255, 0, 0, 0.3)";
                 this.ctx.lineWidth = 4;
                 this.ctx.stroke();
@@ -5406,8 +5407,8 @@ class SpaceArena {
                 this.ctx.textAlign = "center";
                 this.ctx.textBaseline = "middle";
                 this.ctx.fillStyle = bullet.fromEnemy ? "#ffeecb" : "#ffec8b";
-                if (!options.performanceMode) this.ctx.shadowColor = "#fff1";
-                if (!options.performanceMode) this.ctx.shadowBlur = bullet.giant ? 18 : 6;
+                this.ctx.shadowColor = "#fff1";
+                if (!options.performanceMode) {this.ctx.shadowBlur = bullet.giant ? 18 : 6} else {this.ctx.shadowBlur = 0};
                 this.ctx.fillText("✦", 0, 0);
                 this.ctx.restore();
             } else {
@@ -5835,11 +5836,12 @@ function summonIridite() {
     // Mark boss active and spawn
     arena.bossActive = true;
     if (typeof arena.spawnIridite === "function") {
+        
         arena.spawnIridite();
     } else {
         console.warn("summonIridite: arena.spawnIridite not available");
     }
-    flashScreen("— Iridite, the Astral Celestial —", 1200)
+    screenFlash("— Iridite, the Astral Celestial —", 1200)
 }
 window.summonIridite = summonIridite;
 

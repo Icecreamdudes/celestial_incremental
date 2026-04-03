@@ -791,6 +791,10 @@ BHC.aleph = {
                 if (player.bh.celestialite.attackID >= 9 && player.bh.celestialite.actions[3].variables.attacks == 4) {
                     celestialiteDeath()
                 }
+                if (player.bh.celestialite.health.lt(-3000)) {
+                    screenFlash("This isn't supposed to happen<br>Sorry about the weird bug<br>-Forwaken", 3000)
+                    setTimeout(() => {celestialiteDeath()}, 3000)
+                }
             },
             cooldown: new Decimal(Infinity),
         },

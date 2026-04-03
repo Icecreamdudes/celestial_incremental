@@ -52,7 +52,7 @@
         let onepersec = new Decimal(1)
 
         // INFINITY POWER EFFECTS
-        player.id.infinityPowerEffect = player.id.infinityPower.pow(0.9).add(1)
+        player.id.infinityPowerEffect = player.id.infinityPower.pow(1.2).add(1)
         player.id.infinityPowerEffect2 = player.id.infinityPower.mul(3).pow(1.6).add(1)
         if (hasUpgrade("laboratory", 5)) player.id.infinityPowerEffect = player.id.infinityPowerEffect.pow(10)
         if (hasUpgrade("laboratory", 5)) player.id.infinityPowerEffect2 = player.id.infinityPowerEffect2.pow(10)

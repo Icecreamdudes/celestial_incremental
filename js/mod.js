@@ -2011,5 +2011,8 @@ function fixOldSave(oldVersion){
 			if (hasMilestone("fi", 103)) player.stagnantSynestia.upgrades.push(6)
 		}
 		if (hasUpgrade("ev8", 23)) player.ev8.upgrades.push(25)
+
+		// AD BALANCING
+		if (player.cs && player.cs.scraps.antimatter.effect.gte(1)) player.cs.scraps.antimatter.effect = new Decimal(0)
 	}
 }

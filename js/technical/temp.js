@@ -13,7 +13,7 @@ var activeFunctions = [
 	"tabFormat", "content",
 	"onComplete", "onPurchase", "onEnter", "onExit", "done",
 	"getUnlocked", "getStyle", "getCanClick", "getTitle", "getDisplay", "pointClick",
-	"evoClick", "onHover"
+	"evoClick", "onHover", "onStart", "onEnd"
 ]
 
 // Tmp will completely ignore these

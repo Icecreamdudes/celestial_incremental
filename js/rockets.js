@@ -89,6 +89,7 @@
         player.ro.activatedFuelToGet = player.ro.activatedFuelContributions[0].mul(player.ro.activatedFuelContributions[1]).mul(player.ro.activatedFuelContributions[2]).mul(player.ro.activatedFuelContributions[3])
         player.ro.activatedFuelToGet = player.ro.activatedFuelToGet.mul(levelableEffect("pet", 501)[2])
         player.ro.activatedFuelToGet = player.ro.activatedFuelToGet.mul(buyableEffect("cof", 19))
+        player.ro.activatedFuelToGet = player.ro.activatedFuelToGet.mul(buyableEffect("sme", 151))
         player.ro.activatedFuelEffect = player.ro.activatedFuel.pow(4).add(1)
 
         if (getBuyableAmount("st", 204).gt(0)) player.ro.activatedFuel = player.ro.activatedFuel.add(player.ro.activatedFuelToGet.mul(buyableEffect("st", 204).mul(delta)))
@@ -103,6 +104,7 @@
         player.ro.rocketPartsToGet = player.ro.rocketPartsContributions[0].mul(player.ro.rocketPartsContributions[1]).mul(player.ro.rocketPartsContributions[2]).mul(player.ro.rocketPartsContributions[3]).floor()
         player.ro.rocketPartsToGet = player.ro.rocketPartsToGet.mul(levelableEffect("pet", 501)[1]).floor()
         player.ro.rocketPartsToGet = player.ro.rocketPartsToGet.mul(buyableEffect("cof", 19))
+        player.ro.rocketPartsToGet = player.ro.rocketPartsToGet.mul(buyableEffect("sme", 151))
         player.ro.rocketPartsEffect = player.ro.rocketParts.mul(2).pow(0.9).add(1)
 
         if (getBuyableAmount("st", 205).gt(0)) player.ro.rocketParts = player.ro.rocketParts.add(player.ro.rocketPartsToGet.mul(buyableEffect("st", 205).mul(delta)))
@@ -122,6 +124,9 @@
         player.ro.spacePetXPToGet = player.ro.petLevel.mul(Decimal.pow(2, player.ro.petAscension)).pow(Decimal.mul(1.2, Decimal.pow(1.1, player.ro.petAscension))).floor()
         if (hasUpgrade("sma", 203)) player.ro.spacePetXPToGet = player.ro.spacePetXPToGet.mul(1.2).floor()
         player.ro.spacePetXPToGet = player.ro.spacePetXPToGet.mul(levelableEffect("pu", 306)[2]).floor()
+        player.ro.spacePetXPToGet = player.ro.spacePetXPToGet.mul(buyableEffect("sme", 163)).floor()
+        if (hasMilestone("dgj", 17)) player.ro.spacePetXPToGet = player.ro.spacePetXPToGet.mul(player.dgj.milestone7Effect).floor()
+        if (hasMilestone("gwaTemple", 15)) player.ro.spacePetXPToGet = player.ro.spacePetXPToGet.mul(player.gwaTemple.gwark.div(10).add(1).pow(0.5)).floor()
 
         player.ro.evoCost = Decimal.mul(player.ro.selectedPassengersCommon.length, Decimal.add(7, player.ro.selectedPassengersCommon.length)).add(player.ro.evoShardsReq)
         player.ro.paragonCost = Decimal.mul(player.ro.selectedPassengersUncommon.length, Decimal.add(2, player.ro.selectedPassengersUncommon.length)).add(player.ro.paragonShardsReq)
@@ -130,11 +135,21 @@
             let lvl = player.pet.levelables[Decimal.add(101, player.ro.selectedPassengersCommon[i])][0]
             let tier = player.pet.levelables[Decimal.add(101, player.ro.selectedPassengersCommon[i])][2]
             player.ro.commonXPToGet[i] = lvl.mul(Decimal.pow(2, tier)).pow(Decimal.mul(1.2, Decimal.pow(1.1, tier))).floor()
+            if (hasUpgrade("sma", 203)) player.ro.commonXPToGet[i] = player.ro.commonXPToGet[i].mul(1.2).floor()
+            player.ro.commonXPToGet[i] = player.ro.commonXPToGet[i].mul(levelableEffect("pu", 306)[2]).floor()
+            player.ro.commonXPToGet[i] = player.ro.commonXPToGet[i].mul(buyableEffect("sme", 163)).floor()
+            if (hasMilestone("dgj", 17)) player.ro.commonXPToGet[i] = player.ro.commonXPToGet[i].mul(player.dgj.milestone7Effect).floor()
+            if (hasMilestone("gwaTemple", 15)) player.ro.commonXPToGet[i] = player.ro.commonXPToGet[i].mul(player.gwaTemple.gwark.div(10).add(1).pow(0.5)).floor()
         }
         for (let i = 0; i < player.ro.selectedPassengersUncommon.length; i++) {
             let lvl = player.pet.levelables[Decimal.add(201, player.ro.selectedPassengersUncommon[i])][0]
             let tier = player.pet.levelables[Decimal.add(201, player.ro.selectedPassengersUncommon[i])][2]
             player.ro.uncommonXPToGet[i] = lvl.mul(Decimal.pow(2, tier)).pow(Decimal.mul(1.2, Decimal.pow(1.1, tier))).floor()
+            if (hasUpgrade("sma", 203)) player.ro.uncommonXPToGet[i] = player.ro.uncommonXPToGet[i].mul(1.2).floor()
+            player.ro.uncommonXPToGet[i] = player.ro.uncommonXPToGet[i].mul(levelableEffect("pu", 306)[2]).floor()
+            player.ro.uncommonXPToGet[i] = player.ro.uncommonXPToGet[i].mul(buyableEffect("sme", 163)).floor()
+            if (hasMilestone("dgj", 17)) player.ro.uncommonXPToGet[i] = player.ro.uncommonXPToGet[i].mul(player.dgj.milestone7Effect).floor()
+            if (hasMilestone("gwaTemple", 15)) player.ro.uncommonXPToGet[i] = player.ro.uncommonXPToGet[i].mul(player.gwaTemple.gwark.div(10).add(1).pow(0.5)).floor()
         }
 
         player.ro.rocketImages = [
@@ -368,7 +383,7 @@
         },
         16: {
             title() { return "<h2>Upgrade" },
-            canClick() { return player.cb.evolutionShards.gte('70') && player.cb.paragonShards.gte('15') && player.fi.temporalShards.gte('4') && player.au2.stars.gte('1e9') && player.sma.starmetalAlloy.gte('100000') 
+            canClick() { return player.cb.evolutionShards.gte('70') && player.cb.paragonShards.gte('15') && player.stagnantSynestia.temporalShard.gte(5) && player.au2.stars.gte('1e9') && player.sma.starmetalAlloy.gte('100000') 
                 && player.cof.coreFragments[0].gte('50') && player.cof.coreFragments[1].gte('50') && player.cof.coreFragments[2].gte('50') && player.cof.coreFragments[3].gte('50') && player.cof.coreFragments[4].gte('50')
                 && player.cof.coreFragments[5].gte('50') && player.cof.coreFragments[6].gte('50')
             },
@@ -376,7 +391,7 @@
             onClick() {
                 player.cb.evolutionShards = player.cb.evolutionShards.sub(70)
                 player.cb.paragonShards = player.cb.paragonShards.sub(15)
-                player.fi.temporalShards = player.fi.temporalShards.sub(4)
+                player.stagnantSynestia.temporalShard = player.stagnantSynestia.temporalShard.sub(5)
 
                 player.au2.stars = player.au2.stars.sub(1e9)
                 player.sma.starmetalAlloy = player.sma.starmetalAlloy.sub(100000)
@@ -984,7 +999,7 @@
                     ["style-column", [
                     ["raw-html", function () { return "Evolution Shards: " + formatWhole(player.cb.evolutionShards) + "/70" }, { "color": "#d487fd", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Paragon Shards: " + formatWhole(player.cb.paragonShards) + "/15" }, { "color": "#4b79ff", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Temporal Shards: " + formatWhole(player.fi.temporalShards) + "/4" }, { "color": "#77b0ffff", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Temporal Shards: " + formatWhole(player.stagnantSynestia.temporalShard) + "/5" }, { "color": "#77b0ffff", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Stars: " + format(player.au2.stars) + "/1e9" }, { "color": "#ffffff", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Starmetal Alloy: " + format(player.sma.starmetalAlloy) + "/100,000" }, { "color": "#ffffff", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "50 of every core fragment type." }, { "color": "#ffffff", "font-size": "24px", "font-family": "monospace" }],

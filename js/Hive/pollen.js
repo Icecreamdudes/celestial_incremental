@@ -79,6 +79,10 @@ addLayer("bpl", {
 
         // POWER MODIFIERS
         if (hasUpgrade("al", 126)) player.bpl.pollenGain = player.bpl.pollenGain.pow(1.01)
+        player.bpl.pollenGain = player.bpl.pollenGain.pow(buyableEffect("n", 52))
+
+        // SOFTCAP
+        if (player.bpl.pollenGain.gte(1e200)) player.bpl.pollenGain = player.bpl.pollenGain.div(1e200).pow(0.3).mul(1e200)
 
         // Pollen Timer Calculations
         player.bpl.pollenTimerMax = new Decimal(5)
@@ -281,6 +285,7 @@ addLayer("bpl", {
             currencyDisplayName: "Pollen",
             currencyInternalName: "pollen",
             effect() {
+                if (hasUpgrade("al", 128)) return Decimal.pow(2, player.bee.totalResearch.div(10))
                 return player.bee.totalResearch.div(5).pow(0.5).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
@@ -372,6 +377,7 @@ addLayer("bpl", {
         ["row", [
             ["raw-html", () => {return "You have <h3>" + format(player.bpl.pollen) + "</h3> pollen"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
             ["raw-html", () => {return hasUpgrade("al", 112) ? "(+" + format(player.bpl.pollenGain) + "/s)" : "(+" + format(player.bpl.pollenGain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return player.bpl.pollenGain.gte(1e200) ? "[SOFTCAPPED]" : ""}, {color: "#c00", fontSize: "16px", fontFamily: "monospace", marginLeft: "8px"}],
         ]],
         ["bar", "pollenBar"],
         ["blank", "25px"],

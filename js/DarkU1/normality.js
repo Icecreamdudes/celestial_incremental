@@ -30,7 +30,7 @@
         let onepersec = new Decimal(1)
 
         player.dn.normalityToGet = player.du.points.div(1e30).pow(0.1).div(10)
-        player.dn.normalityToGet = player.dn.normalityToGet.mul(buyableEffect("ma", 24))
+        player.dn.normalityToGet = player.dn.normalityToGet.mul(buyableEffect("depth1", 3))
         player.dn.normalityToGet = player.dn.normalityToGet.mul(levelableEffect("st", 207)[0])
         player.dn.normalityToGet = player.dn.normalityToGet.mul(buyableEffect("st", 106))
         player.dn.normalityToGet = player.dn.normalityToGet.mul(buyableEffect("ds", 104))

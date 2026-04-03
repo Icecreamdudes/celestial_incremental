@@ -12,6 +12,8 @@
         factorPowerEffect: new Decimal(1),
         factorPowerPerSecond: new Decimal(0),
 
+        doomSoftcap: new Decimal(0.5),
+        doomSoftcapStart: new Decimal("1e2000000"),
     }},
     automate() {
         if (hasUpgrade("p", 15) && !hasUpgrade("cs", 201)) {
@@ -98,6 +100,25 @@
         // POWER MODIFIERS
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.pow(buyableEffect("fu", 32))
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.pow(player.co.cores.factor.effect[1])
+
+        // SOFTCAP OF DOOM
+        player.f.doomSoftcap = new Decimal(0.5)
+
+        // SOFTCAP START
+        player.f.doomSoftcapStart = new Decimal("1e2000000")
+        player.f.doomSoftcapStart = player.f.doomSoftcapStart.pow(buyableEffect("fa", 406))
+
+        // SOFTCAP WEAKENER
+        let doomWeaken = new Decimal(1)
+        doomWeaken = doomWeaken.mul(buyableEffect("fa", 402))
+
+        // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
+        let amt = player.f.factorPower
+        if (player.f.factorPowerPerSecond.gte(player.f.factorPower)) amt = player.f.factorPowerPerSecond
+        player.f.doomSoftcap = player.f.doomSoftcap.div(amt.div(player.f.doomSoftcapStart).add(1).log(player.f.doomSoftcapStart).div(doomWeaken).add(1))
+
+        // APPLY DOOM SOFTCAP
+        if (player.f.factorPowerPerSecond.gt(player.f.doomSoftcapStart)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.div(player.f.doomSoftcapStart).pow(player.f.doomSoftcap).mul(player.f.doomSoftcapStart)
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.po.halter.factor.enabled == 1) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.div(player.po.halter.factor.halt)
@@ -1340,7 +1361,7 @@
         101: {
             costBase() { return new Decimal("1e10000") },
             costGrowth() { return new Decimal("1e10000") },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return hasUpgrade("depth4", 5) ? new Decimal(250) : new Decimal(100) },
             currency() { return player.points},
             pay(amt) { player.points = this.currency().sub(amt) },
             effect(x) { return Decimal.pow(player.f.factorBase.add(1).pow(4), getBuyableAmount(this.layer, this.id)).mul(1e40) },
@@ -1374,7 +1395,7 @@
         102: {
             costBase() { return new Decimal("1e10000") },
             costGrowth() { return new Decimal("1e10000") },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return hasUpgrade("depth4", 5) ? new Decimal(250) : new Decimal(100) },
             currency() { return player.p.prestigePoints},
             pay(amt) { player.p.prestigePoints = this.currency().sub(amt) },
             effect(x) { return Decimal.pow(player.f.factorBase.add(1).pow(4), getBuyableAmount(this.layer, this.id)).mul(1e20) },
@@ -1408,7 +1429,7 @@
         103: {
             costBase() { return new Decimal("1e1000") },
             costGrowth() { return new Decimal("1e1000") },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return hasUpgrade("depth4", 5) ? new Decimal(250) : new Decimal(100) },
             currency() { return player.g.grass},
             pay(amt) { player.g.grass = this.currency().sub(amt) },
             effect(x) { return Decimal.pow(player.f.factorBase.add(1).pow(2), getBuyableAmount(this.layer, this.id)).mul(1e15) },
@@ -1442,7 +1463,7 @@
         104: {
             costBase() { return new Decimal("1e1000") },
             costGrowth() { return new Decimal("1e1000") },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return hasUpgrade("depth4", 5) ? new Decimal(250) : new Decimal(100) },
             currency() { return player.gh.fertilizer},
             pay(amt) { player.gh.fertilizer = this.currency().sub(amt) },
             effect(x) { return Decimal.pow(player.f.factorBase.add(1).pow(2), getBuyableAmount(this.layer, this.id)).mul(1e15) },
@@ -1572,6 +1593,7 @@
                             return look
                         }],
                     ]],
+                    ["raw-html", () => {return player.f.factorPowerPerSecond.gt(player.f.doomSoftcapStart) ? "SOFTCAP OF DOOM: Gain past " + format(player.f.doomSoftcapStart) + " is raised by ^" + format(player.f.doomSoftcap, 3) + "." : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
                     ["row", [
                         ["raw-html", () => { return "Boosts celestial points by x" + format(player.f.factorPowerEffect) + "." }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ["raw-html", () => { return player.f.factorPowerEffect.gte("1e25000") ? "[SOFTCAPPED]" : "" }, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],

@@ -500,7 +500,7 @@
         }
         if (player.ma.health[3].lt(0) && !player.ma.deadCharacters[3]) {
             player.ma.deadCharacters[3] = true
-            logPrint("<span style='color: hsl(44, 76.70%, 40.40%);'>Eclipse has died!")
+            logPrint("<span style='color: #b68c18;'>Eclipse has died!")
         }
 
         if (player.ma.deadCharacters[0] && player.ma.deadCharacters[1] && player.ma.deadCharacters[2] && player.ma.deadCharacters[3] && player.subtabs["ma"]["stuff"] == "Fight") {

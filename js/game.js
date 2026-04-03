@@ -1,5 +1,11 @@
 var player;
 var needCanvasUpdate = true;
+// Black heart variables
+var BHC = {}
+var BHS = {}
+var BHA = {}
+var BHP = {}
+var BHB = {}
 
 // Don't change this
 const TMT_VERSION = {

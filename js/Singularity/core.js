@@ -155,11 +155,11 @@ const CORE_INFO = {
 }
 addLayer("co", {
     name() {
-        if (!player.ma.matosDefeated) return "Cores"
+        if (player.matosLair.milestone[25] == 0) return "Cores"
         return "<s>Cores</s>"
     }, // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol() {
-        if (!player.ma.matosDefeated) return "Co"
+        if (player.matosLair.milestone[25] == 0) return "Co"
         return "<s>Co</s>"
     }, // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "U3",
@@ -326,17 +326,17 @@ addLayer("co", {
         coreIndex: "point",
     }},
     nodeStyle() {
-        if (!player.ma.matosDefeated) return {background: "linear-gradient(0deg, #000000 -10%, #6b1919 100%)", backgroundOrigin: "border-box", borderColor: "#260300", color: "#8c3129"}
+        if (player.matosLair.milestone[25] == 0) return {background: "linear-gradient(0deg, #000000 -10%, #6b1919 100%)", backgroundOrigin: "border-box", borderColor: "#260300", color: "#8c3129"}
         return {background: "linear-gradient(0deg, #000000 -10%, #1a1a1a 100%)", backgroundOrigin: "border-box", borderColor: "#000000", color: "grey"}
     },
     tooltip: "Cores",
     color() {
-        if (!player.ma.matosDefeated) return "#8c3129"
+        if (player.matosLair.milestone[25] == 0) return "#8c3129"
         return "#000000"
     },
     update(delta) {
         //     <---------     CORE PREVENTION     -------->
-        if (player.ma.matosDefeated) {
+        if (player.matosLair.milestone[25] > 0) {
             if (player.subtabs["co"]["stuff"] == "Cores") player.subtabs["co"]["stuff"] = "Fuel"
 
             for (let prop in player.co.cores) {
@@ -943,7 +943,10 @@ addLayer("co", {
         player.gs.grassSkippers = new Decimal(0)
         player.gs.grassSkippersPerSecond = new Decimal(0)
 
-        if (!hasMilestone("s", 12)) player.gs.milestones.splice(0, player.gs.milestones.length)
+        if (!hasMilestone("s", 12)) {
+            player.gs.milestones.splice(0, player.gs.milestones.length)
+            player.subtabs["gs"]["stuff"] = "Grass-Skip"
+        }
 
         for (let i in player.gs.buyables) {
             player.gs.buyables[i] = new Decimal(0)
@@ -1522,7 +1525,7 @@ addLayer("co", {
         },
         1000: {
             title() {
-                if (player.ma.matosDefeated) return "<h1>Condense all your power into singularity points.<br><small>(Req: 1e40 infinity points)</small></h1><br><h3>(Singularity gain based on infinity points)</h3>"
+                if (player.matosLair.milestone[25] > 0) return "<h1>Condense all your power into singularity points.<br><small>(Req: 1e40 infinity points)</small></h1><br><h3>(Singularity gain based on infinity points)</h3>"
                 return "<h1>Condense all of your power into a core.<br><small>(Req: 1e40 infinity points)</small></h1><br><h3'>(Singularity gain based on infinity points)</h3>"
             },
             canClick() { return player.in.infinityPoints.gte(1e40) },
@@ -1542,7 +1545,7 @@ addLayer("co", {
                 }
 
                 let val = layers.co.coreXPCalc(player.co.resetIndex, player.s.singularityPointsToGet)
-                if (!player.ma.matosDefeated) {
+                if (player.matosLair.milestone[25] == 0) {
                     player.co.cores[player.co.resetIndex].totalxp = player.co.cores[player.co.resetIndex].totalxp.add(val)
                     player.co.cores[player.co.resetIndex].xp = player.co.cores[player.co.resetIndex].xp.add(val)
                 }
@@ -1601,14 +1604,14 @@ addLayer("co", {
                                 ["clickable", 211], ["clickable", 212], ["clickable", 213],
                             ]],
                         ], () => {return player.s.highestSingularityPoints.gt(0) ? {width: "700px", backgroundColor: "black", borderRadius: "0 0 12px 12px"} : {display: "none !important"}}],
-                    ], () => {return !player.ma.matosDefeated ? {width: "700px", backgroundColor: "#611", border: "3px solid white", borderRadius: "15px"} : {display: "none !important"}}],
+                    ], () => {return player.matosLair.milestone[25] == 0 ? {width: "700px", backgroundColor: "#611", border: "3px solid white", borderRadius: "15px"} : {display: "none !important"}}],
                     ["blank", "50px"],
                     ["clickable", 1000],
                 ],
             },
             "Cores": {
                 buttonStyle: {color: "white", borderRadius: "5px"},
-                unlocked() {return player.s.highestSingularityPoints.gt(0) && !player.ma.matosDefeated},
+                unlocked() {return player.s.highestSingularityPoints.gt(0) && player.matosLair.milestone[25] == 0},
                 content: [
                     ["blank", "25px"],
                     ["style-row", [
@@ -1682,7 +1685,7 @@ addLayer("co", {
             ["microtabs", "stuff", { 'border-width': '0px' }],
         ], () => {
             let look = {}
-            if (!player.ma.matosDefeated) {look.opacity = "1"} else {look.opacity = "0.5"}
+            if (player.matosLair.milestone[25] == 0) {look.opacity = "1"} else {look.opacity = "0.5"}
             return look
         }],
         ["blank", "25px"],

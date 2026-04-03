@@ -184,7 +184,7 @@
         if (player.cp.replicantiPoints.gte(player.cp.replicantiPointCap)) {
                 player.cp.replicantiPoints = player.cp.replicantiPointCap
         } else {
-            player.cp.replicantiPoints = player.cp.replicantiPoints.mul(player.cp.replicantiPointsMult)
+            player.cp.replicantiPoints = player.cp.replicantiPoints.mul(player.cp.replicantiPointsMult).min(player.cp.replicantiPointCap)
             let random = new Decimal(0)
             random = Math.random()
             if (random < player.pr.perkPointsChance) {

@@ -33,9 +33,12 @@ addLayer("sp", {
         // KRES
         player.sp.kresPointsMax = new Decimal(100)
         player.sp.kresPointsMax = player.sp.kresPointsMax.add(buyableEffect("sp", 11))
+        player.sp.kresPointsMax = player.sp.kresPointsMax.mul(buyableEffect("sme", 114))
 
         let kresAmt = getLevelableAmount("pet", 404).add(getLevelableTier("pet", 404).mul(5).min(40))
         player.sp.kresPointsPerSecond = kresAmt.pow(1.1).div(10).mul(getLevelableTier("pet", 404).add(1))
+        player.sp.kresPointsPerSecond = player.sp.kresPointsPerSecond.mul(buyableEffect("pet", 7))
+        player.sp.kresPointsPerSecond = player.sp.kresPointsPerSecond.mul(buyableEffect("sme", 114))
         player.sp.kresPoints = player.sp.kresPoints.add(player.sp.kresPointsPerSecond.mul(delta))
 
         if (player.sp.kresPoints.gte(player.sp.kresPointsMax)) {
@@ -45,9 +48,12 @@ addLayer("sp", {
         // NAV
         player.sp.navPointsMax = new Decimal(100)
         player.sp.navPointsMax = player.sp.navPointsMax.add(buyableEffect("sp", 21))
+        player.sp.navPointsMax = player.sp.navPointsMax.mul(buyableEffect("sme", 114))
 
         let navAmt = getLevelableAmount("pet", 405).add(getLevelableTier("pet", 405).mul(5).min(40))
         player.sp.navPointsPerSecond = navAmt.pow(1.1).div(10).mul(getLevelableTier("pet", 405).add(1))
+        player.sp.navPointsPerSecond = player.sp.navPointsPerSecond.mul(buyableEffect("pet", 7))
+        player.sp.navPointsPerSecond = player.sp.navPointsPerSecond.mul(buyableEffect("sme", 114))
         player.sp.navPoints = player.sp.navPoints.add(player.sp.navPointsPerSecond.mul(delta))
 
         if (player.sp.navPoints.gte(player.sp.navPointsMax)) {
@@ -57,14 +63,61 @@ addLayer("sp", {
         // SEL
         player.sp.selPointsMax = new Decimal(100)
         player.sp.selPointsMax = player.sp.selPointsMax.add(buyableEffect("sp", 31))
+        player.sp.selPointsMax = player.sp.selPointsMax.mul(buyableEffect("sme", 114))
 
         let selAmt = getLevelableAmount("pet", 406).add(getLevelableTier("pet", 406).mul(5).min(40))
         player.sp.selPointsPerSecond = selAmt.pow(1.1).div(10).mul(getLevelableTier("pet", 406).add(1))
+        player.sp.selPointsPerSecond = player.sp.selPointsPerSecond.mul(buyableEffect("pet", 7))
+        player.sp.selPointsPerSecond = player.sp.selPointsPerSecond.mul(buyableEffect("sme", 114))
         player.sp.selPoints = player.sp.selPoints.add(player.sp.selPointsPerSecond.mul(delta))
 
         if (player.sp.selPoints.gte(player.sp.selPointsMax)) {
             player.sp.selPoints = player.sp.selPointsMax
         }
+    },
+    upgrades: {
+        11: {
+            title: "Regenerative Anger",
+            unlocked() { return hasUpgrade("depth4", 4) },
+            description: "Increases Kres' base regen by +0.25",
+            cost: new Decimal(5000),
+            currencyLocation() { return player.sp },
+            currencyDisplayName: "Kres Points",
+            currencyInternalName: "kresPoints",
+            style() {
+                let look = {borderRadius: "15px", color: "black", border: "3px solid #480513", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#910a27"
+                return look
+            },
+        },
+        21: {
+            title: "Aura Shield",
+            unlocked() { return hasUpgrade("depth4", 4) },
+            description: "Increases Nav's base defense by +10",
+            cost: new Decimal(5000),
+            currencyLocation() { return player.sp },
+            currencyDisplayName: "Nav Points",
+            currencyInternalName: "navPoints",
+            style() {
+                let look = {borderRadius: "15px", color: "black", border: "3px solid #380548", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#710a91"
+                return look
+            },
+        },
+        31: {
+            title: "Lucky Intuition",
+            unlocked() { return hasUpgrade("depth4", 4) },
+            description: "Increases Sel's base luck by +10",
+            cost: new Decimal(5000),
+            currencyLocation() { return player.sp },
+            currencyDisplayName: "Sel Points",
+            currencyInternalName: "selPoints",
+            style() {
+                let look = {borderRadius: "15px", color: "black", border: "3px solid #032e0c", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#065c19"
+                return look
+            },
+        },
     },
     buyables: {
         11: {
@@ -94,19 +147,19 @@ addLayer("sp", {
         },
         12: {
             costBase() { return new Decimal(25) },
-            costGrowth() { return new Decimal(1.35) },
-            purchaseLimit() { return new Decimal(50) },
+            costGrowth() { return new Decimal(1.7) },
+            purchaseLimit() { return new Decimal(25) },
             currency() { return player.sp.kresPoints},
             pay(amt) { player.sp.kresPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(100).add(1) },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Kres Defense"
+                return "Kres Stats"
             },
             display() {
-                return 'which are boosting black heart defense by +' + formatWhole(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting Kres\'s base stats by +' + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + '%.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Kres Points'
             },
             buy(mult) {
@@ -256,19 +309,19 @@ addLayer("sp", {
         },
         22: {
             costBase() { return new Decimal(25) },
-            costGrowth() { return new Decimal(1.35) },
-            purchaseLimit() { return new Decimal(50) },
+            costGrowth() { return new Decimal(1.7) },
+            purchaseLimit() { return new Decimal(25) },
             currency() { return player.sp.navPoints},
             pay(amt) { player.sp.navPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(100).add(1) },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Nav Strength"
+                return "Nav Stats"
             },
             display() {
-                return 'which are boosting black heart strength by +' + formatWhole(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting Nav\'s base stats by +' + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + '%.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Nav Points'
             },
             buy(mult) {
@@ -418,19 +471,19 @@ addLayer("sp", {
         },
         32: {
             costBase() { return new Decimal(25) },
-            costGrowth() { return new Decimal(1.35) },
-            purchaseLimit() { return new Decimal(50) },
+            costGrowth() { return new Decimal(1.7) },
+            purchaseLimit() { return new Decimal(25) },
             currency() { return player.sp.selPoints},
             pay(amt) { player.sp.selPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(100).add(1) },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Sel Agility"
+                return "Sel Stats"
             },
             display() {
-                return 'which are boosting black heart agility by +' + formatWhole(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting Sel\'s base stats by +' + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + '%.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Sel Points'
             },
             buy(mult) {
@@ -562,13 +615,16 @@ addLayer("sp", {
                 content: [
                     ["blank", "10px"],
                     ["style-column", [
+                        ["blank", "20px"],
                         ["raw-html", () => {return "You have <h3>" + formatSimple(player.sp.kresPoints, 2) + "/" + formatWhole(player.sp.kresPointsMax) + "</h3> kres points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ["raw-html", () => {return "You are gaining <h3>" + format(player.sp.kresPointsPerSecond) + "</h3> kres points per second. (based on level/ascension)"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                         ["blank", "20px"],
                         ["buyable", 11],
                         ["blank", "20px"],
                         ["row", [["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14], ["ex-buyable", 15]], {maxWidth: "600px"}],
-                    ], {width: "700px", height: "550px", background: "#2b030b", border: "3px solid white", borderRadius: "20px"}],
+                        ["blank", "20px"],
+                        ["style-row", [["upgrade", 11]], () => {return hasUpgrade("depth4", 4) ? {marginBottom: "20px"} : {}}],
+                    ], {width: "700px", background: "#2b030b", border: "3px solid white", borderRadius: "20px"}],
                 ],
             },
             "Nav": {
@@ -578,13 +634,16 @@ addLayer("sp", {
                 content: [
                     ["blank", "10px"],
                     ["style-column", [
+                        ["blank", "20px"],
                         ["raw-html", () => {return "You have <h3>" + formatSimple(player.sp.navPoints, 2) + "/" + formatWhole(player.sp.navPointsMax) + "</h3> nav points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ["raw-html", () => {return "You are gaining <h3>" + format(player.sp.navPointsPerSecond) + "</h3> nav points per second. (based on level/ascension)"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                         ["blank", "20px"],
                         ["buyable", 21],
                         ["blank", "20px"],
                         ["row", [["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24], ["ex-buyable", 25]], {maxWidth: "600px"}],
-                    ], {width: "700px", height: "550px", background: "#21032b", border: "3px solid white", borderRadius: "20px"}],
+                        ["blank", "20px"],
+                        ["style-row", [["upgrade", 21]], () => {return hasUpgrade("depth4", 4) ? {marginBottom: "20px"} : {}}],
+                    ], {width: "700px", background: "#21032b", border: "3px solid white", borderRadius: "20px"}],
                 ],
             },
             "Sel": {
@@ -594,13 +653,16 @@ addLayer("sp", {
                 content: [
                     ["blank", "10px"],
                     ["style-column", [
+                        ["blank", "20px"],
                         ["raw-html", () => {return "You have <h3>" + formatSimple(player.sp.selPoints, 2) + "/" + formatWhole(player.sp.selPointsMax) + "</h3> sel points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ["raw-html", () => {return "You are gaining <h3>" + format(player.sp.selPointsPerSecond) + "</h3> sel points per second. (based on level/ascension)"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                         ["blank", "20px"],
                         ["buyable", 31],
                         ["blank", "20px"],
                         ["row", [["ex-buyable", 32], ["ex-buyable", 33], ["ex-buyable", 34], ["ex-buyable", 35]], {maxWidth: "600px"}],
-                    ], {width: "700px", height: "550px", background: "#011b07", border: "3px solid white", borderRadius: "20px"}],
+                        ["blank", "20px"],
+                        ["style-row", [["upgrade", 31]], () => {return hasUpgrade("depth4", 4) ? {marginBottom: "20px"} : {}}],
+                    ], {width: "700px", background: "#011b07", border: "3px solid white", borderRadius: "20px"}],
                 ],
             },
         },

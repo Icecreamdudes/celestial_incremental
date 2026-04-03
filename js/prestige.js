@@ -16,6 +16,9 @@
         crystalsToGet: new Decimal(0),
         crystalPause: new Decimal(0),
         crystalMax: false,
+
+        doomSoftcap: new Decimal(0.5),
+        doomSoftcapStart: new Decimal("1e2000000"),
     }
     },
     automate() {
@@ -86,6 +89,25 @@
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(buyableEffect("fu", 33))
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(player.co.cores.prestige.effect[1])
 
+        // SOFTCAP OF DOOM
+        player.p.doomSoftcap = new Decimal(0.5)
+
+        // SOFTCAP START
+        player.p.doomSoftcapStart = new Decimal("1e2000000")
+        player.p.doomSoftcapStart = player.p.doomSoftcapStart.pow(buyableEffect("fa", 406))
+
+        // SOFTCAP WEAKENER
+        let doomWeaken = new Decimal(1)
+        doomWeaken = doomWeaken.mul(buyableEffect("fa", 402))
+
+        // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
+        let amt = player.p.prestigePoints
+        if (player.p.prestigePointsToGet.gte(player.p.prestigePoints)) amt = player.p.prestigePointsToGet
+        player.p.doomSoftcap = player.p.doomSoftcap.div(amt.div(player.p.doomSoftcapStart).add(1).log(player.p.doomSoftcapStart).div(doomWeaken).add(1))
+
+        // APPLY DOOM SOFTCAP
+        if (player.p.prestigePointsToGet.gt(player.p.doomSoftcapStart)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.div(player.p.doomSoftcapStart).pow(player.p.doomSoftcap).mul(player.p.doomSoftcapStart)
+
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.po.halter.prestige.enabled == 1) player.p.prestigePointsToGet = player.p.prestigePointsToGet.div(player.po.halter.prestige.halt)
         if (player.po.halter.prestige.enabled == 2 && player.p.prestigePointsToGet.gt(player.po.halter.prestige.halt)) player.p.prestigePointsToGet = player.po.halter.prestige.halt
@@ -131,7 +153,12 @@
         // CRYSTAL EFFECT
         player.p.crystalEffect = player.p.crystals.plus(1).log(10).pow(0.265).mul(0.045).add(1)
         if (hasUpgrade("cs", 303)) player.p.crystalEffect = player.p.crystals.plus(1).log(10).pow(0.3).mul(0.05).add(1)
-        player.p.crystalEffect = player.p.crystalEffect.min(1.5)
+        if (!hasUpgrade("cs", 304)) {
+            player.p.crystalEffect = player.p.crystalEffect.min(1.5)
+        } else {
+            if (player.p.crystalEffect.gte(1.5)) player.p.crystalEffect = player.p.crystals.plus(1).log("1e100").pow(0.7).mul(0.01).add(1.41)
+            player.p.crystalEffect = player.p.crystalEffect.min(2)
+        }
     },
     prestigeReset()
     {
@@ -747,7 +774,7 @@
                     ["raw-html", "(Gain based on Tetr)", { color: "#b6658c", fontSize: "16px", fontFamily: "monospace" }],
                     ["row", [
                         ["raw-html", () => {return "Boosts ranks, tiers, tetr, and pent effect by <h3>^" + format(player.p.crystalEffect, 5) + "</h3>."}, {color: "#b6658c", fontSize: "16px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return player.p.crystalEffect.gte(1.5) ? "<small style='margin-left:8px'>[HARDCAPPED]</small>" : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return (!hasUpgrade("cs", 304) && player.p.crystalEffect.gte(1.5)) || player.p.crystalEffect.gte(2) ? "<small style='margin-left:8px'>[HARDCAPPED]</small>" : hasUpgrade("cs", 304) && player.p.crystalEffect.gte(1.5) ? "<small style='margin-left:8px'>[SOFTCAPPED]</small>" : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
                     ]],
                     ["blank", "25px"],
                     ["row", [["clickable", 12]]],
@@ -770,6 +797,7 @@
                 return look
             }],
         ]],
+        ["raw-html", () => {return player.p.prestigePointsToGet.gt(player.p.doomSoftcapStart) ? "SOFTCAP OF DOOM: Gain past " + format(player.p.doomSoftcapStart) + " is raised by ^" + format(player.p.doomSoftcap, 3) + "." : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
         ["row", [
             ["raw-html", () => {return hasUpgrade("p", 12) ? "Boosts celesial points by x" + format(player.p.prestigeEffect) : ""}, {color: "#31aeb0", fontSize: "20px", fontFamily: "monospace"}],
             ["raw-html", () => {return hasUpgrade("p", 12) && player.p.prestigePoints.gte("1e100000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],

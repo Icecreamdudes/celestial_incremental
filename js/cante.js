@@ -137,7 +137,7 @@
 
         if (hasMilestone("s", 13)) player.ca.galaxyDust = player.ca.galaxyDust.add(Decimal.mul(player.ca.galaxyDustToGet.mul(0.01), delta))
 
-        player.ca.galaxyDustEffect = player.ca.galaxyDust.plus(1).log10().mul(0.1).add(1)
+        player.ca.galaxyDustEffect = player.ca.galaxyDust.add(1).log(10).pow(0.7).div(5).add(1)
         player.ca.galaxyDustEffect = player.ca.galaxyDustEffect.pow(buyableEffect("cof", 27))
 
         //rep galax
@@ -178,7 +178,7 @@
         let random = new Decimal(0)
         random = Math.random()
         if (random < player.ca.replicateChance) {
-            if (player.ca.replicanti.lt(1.79e308) || hasUpgrade("ma", 21)) {
+            if (player.ca.replicanti.lt(1.79e308) || hasUpgrade("depth2", 6)) {
                 player.ca.replicanti = player.ca.replicanti.mul(player.ca.replicantiMult)
             } else {
                 player.ca.replicanti = new Decimal(1.79e308)
@@ -852,7 +852,7 @@
                     ["raw-html", () => {return "Boosts infinity points by x" + format(player.ca.replicantiEffect)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["raw-html", () => {return "Boosts infinity dimensions by x" + format(player.ca.replicantiEffect2)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["raw-html", () => {return "Boosts points by x" + format(player.ca.replicantiEffect3)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return !hasUpgrade("ma", 21) ? "(Caps out at 1.79e308 replicanti)" : "After 1.79e308 replicanti, Replicanti Mult is divided by /" + format(player.ca.replicantiSoftcap) + "."}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return !hasUpgrade("depth2", 6) ? "(Caps out at 1.79e308 replicanti)" : "After 1.79e308 replicanti, Replicanti Mult is divided by /" + format(player.ca.replicantiSoftcap) + "."}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["bar", "replicantiBar"]]],
                     ["blank", "25px"],

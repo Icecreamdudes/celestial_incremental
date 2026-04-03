@@ -11,7 +11,10 @@
         antimatterEffect: new Decimal(1),
         antimatterPerSecond: new Decimal(0),
 
-        secondSoftcap: new Decimal("1e100000"),
+        firstSoftcap: new Decimal(0.3),
+
+        secondSoftcap: new Decimal("1e10000"),
+        secondSoftcapStart: new Decimal(0.3),
 
         // Dimension Stuff
         dimensionAmounts: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
@@ -73,12 +76,6 @@
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.ta.dimensionPowerEffects[0])
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("ip", 14))
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("ta", 36))
-
-        // CHALLENGE MODIFIERS
-        // if (inChallenge("tad", 11)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(0.55)
-
-        // CONTINUED REGULAR MODIFIERS
-        // player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("tad", 13))
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.om.hexMasteryPointsEffect)
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("om", 15))
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("gh", 35))
@@ -87,14 +84,12 @@
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("m", 17))
 
         // SOFTCAP MODIFIER
-        if (player.ad.antimatterPerSecond.gt(1e300) && !hasChallenge("ip", 18)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(0.1)
-        let base = new Decimal(1000)
-        if (hasUpgrade("bi", 21)) base = base.mul(1.1)
-        base = base.mul(buyableEffect("m", 15))
-        base = base.mul(player.cs.scraps.antimatter.effect)
-        if (player.ir.iriditeDefeated) base = base.mul(2)
-        let max = Decimal.div(1, Decimal.pow(1.05, player.ad.antimatterPerSecond.add(1).log(Decimal.pow(10, base)))).max(0.01)
-        if (player.ad.antimatterPerSecond.gt(1e300) && hasChallenge("ip", 18)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.div(1e300).pow(Decimal.div(base, player.ad.antimatterPerSecond.plus(1).log(10)).min(max)).mul(1e300)
+        if (player.ad.antimatterPerSecond.gt(1e300) && !hasChallenge("ip", 18)) player.ad.antimatterPerSecond = new Decimal(1e300)
+        player.ad.firstSoftcap = new Decimal(0.3)
+        if (hasUpgrade("bi", 21)) player.ad.firstSoftcap = player.ad.firstSoftcap.add(0.1)
+        player.ad.firstSoftcap = player.ad.firstSoftcap.add(buyableEffect("m", 15).sub(1))
+        player.ad.firstSoftcap = player.ad.firstSoftcap.add(player.cs.scraps.antimatter.effect)
+        if (player.ad.antimatterPerSecond.gt(1e300) && hasChallenge("ip", 18)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.div(1e300).pow(player.ad.firstSoftcap).mul(1e300)
 
         // SOFTCAP IGNORING MODIFIERS
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("ta", 37))
@@ -107,11 +102,14 @@
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(levelableEffect("ir", 3)[0])
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(buyableEffect("sb", 105))
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(buyableEffect("cof", 21))
-        if (hasUpgrade("bi", 118)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(upgradeEffect("bi", 118))
 
         // SECOND SOFTCAP
-        player.ad.secondSoftcap = new Decimal("1e100000")
-        if (player.ad.antimatterPerSecond.gte(player.ad.secondSoftcap)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.div(player.ad.secondSoftcap).pow(0.1).mul(player.ad.secondSoftcap)
+        player.ad.secondSoftcapStart = new Decimal("1e10000")
+        if (player.ir.iriditeDefeated) player.ad.secondSoftcapStart = player.ad.secondSoftcapStart.pow(2)
+
+        player.ad.secondSoftcap = Decimal.div(0.3, player.ad.antimatterPerSecond.div(player.ad.secondSoftcapStart).add(1).log(player.ad.secondSoftcapStart).div(50).add(1))
+
+        if (player.ad.antimatterPerSecond.gte(player.ad.secondSoftcapStart)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.div(player.ad.secondSoftcapStart).pow(player.ad.secondSoftcap).mul(player.ad.secondSoftcapStart)
 
         // ABNORMAL MODIFIERS
         if (player.po.halter.antimatter.enabled == 1) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.div(player.po.halter.antimatter.halt)
@@ -121,11 +119,12 @@
         player.ad.antimatter = player.ad.antimatter.add(player.ad.antimatterPerSecond.mul(delta))
 
         // ANTIMATTER EFFECT
-        if (!hasUpgrade("bi", 22) && player.ad.antimatter.gte(0)) player.ad.antimatterEffect = player.points.pow(3).add(1).log10().add(1).pow(player.ad.antimatter.add(1).log10().pow(0.3))
-        if (hasUpgrade("bi", 22) && player.ad.antimatter.gte(0)) player.ad.antimatterEffect = player.points.pow(player.points.add(1).log10().pow(2)).add(1).log10().add(1).pow(player.ad.antimatter.add(1).log10().pow(0.3))
-        if (hasUpgrade("bi", 108)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(1.6)
+        if (!hasUpgrade("bi", 22) && player.ad.antimatter.gte(0)) player.ad.antimatterEffect = player.points.pow(3).add(1).log(10).add(1).pow(player.ad.antimatter.add(1).log10().pow(0.3))
+        if (hasUpgrade("bi", 22) && player.ad.antimatter.gte(0)) player.ad.antimatterEffect = player.points.pow(player.points.add(1).log(10).pow(2)).add(1).log10().add(1).pow(player.ad.antimatter.add(1).log10().pow(0.3))
+        if (hasUpgrade("bi", 108)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(2)
         if (hasUpgrade("bi", 114)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(3)
-        if (hasUpgrade("ma", 19)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(20)
+        if (hasUpgrade("depth1", 5)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(20)
+        player.ad.antimatterEffect = player.ad.antimatterEffect.pow(buyableEffect("sme", 122))
 
         //----------------------------------------
 
@@ -152,9 +151,8 @@
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("m", 17))
 
             // SOFTCAP MODIFIER
-            if (player.ad.dimensionsPerSecond[i].gt(1e300) && !hasChallenge("ip", 18)) player.ad.dimensionsPerSecond[i] = new Decimal(1e300)
-            if (player.ad.dimensionsPerSecond[i].gt(1e300) && hasChallenge("ip", 18) && !hasUpgrade("bi", 21)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].div(1e300).pow(0.96).mul(1e300)
-            if (player.ad.dimensionsPerSecond[i].gt(1e300) && hasChallenge("ip", 18) && hasUpgrade("bi", 21) && !player.ir.defeatedIridite) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].div(1e300).pow(0.975).mul(1e300)
+            if (player.ad.dimensionsPerSecond[i].gt(1e300) && hasChallenge("ip", 18)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].div(1e300).pow(0.7).mul(1e300)
+            if (player.ad.dimensionsPerSecond[i].gt("1e10000")) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].div("1e10000").pow(0.4).mul("1e10000")
 
             // CONTINUED REGULAR MODIFIERS
             if (hasUpgrade("ip", 43)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(upgradeEffect("ip", 43))
@@ -478,7 +476,7 @@
             style: { width: '400px', height: '50px', borderRadius: '10px 0px 0px 10px'}
         },
         2: {
-            purchaseLimit() { return !hasChallenge("ip", 18) ? new Decimal(6) : new Decimal(160) },
+            purchaseLimit() { return !hasChallenge("ip", 18) ? new Decimal(6) : !hasUpgrade("cs", 1004) ? new Decimal(160) : new Decimal(1280) },
             currency() {
                 if (getBuyableAmount(this.layer, this.id).eq(0)) {
                     return player.ad.dimensionAmounts[3]
@@ -899,9 +897,6 @@
                     ], () => {return inChallenge("ip", 18) ? {display: "none !important"} : {}}],
                     ["blank", "25px"],
                     ["row", [["buyable", 2], ["buyable", 3]]],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return !hasChallenge("ip", 18) ?  "Progress gets halted at 1e300 antimatter." : "" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return hasChallenge("ip", 18) ?  "Progress gets softcapped at 1e300 antimatter." : "" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
                 ]
             },
             "Reverse Break": {
@@ -929,7 +924,12 @@
             }],
         ]],
         ["raw-html", () => {return "Boosts points by x" + format(player.ad.antimatterEffect) + " (based on points and antimatter)"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-        ["raw-html", () => { return player.ad.antimatterPerSecond.gte(player.ad.secondSoftcap) ? "UNAVOIDABLE SOFTCAP: Gain past " + format(player.ad.secondSoftcap) + " is raised by ^0.1." : "" }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
+        ["raw-html", () => {return !hasChallenge("ip", 18) ? "UNAVOIDABLE HARDCAP: Gain past 1e300 is hardcapped" : "UNAVOIDABLE SOFTCAP: Gain past 1e300 is raised by ^" + formatShortSimple(player.ad.firstSoftcap, 3)}, () => {
+            let look = {color: "red", fontSize: "16px", fontFamily: "monospace"}
+            if (player.ad.antimatterPerSecond.lt(1e300)) look.color = "gray"
+            return look
+        }],
+        ["raw-html", () => { return player.ad.antimatterPerSecond.gte(player.ad.secondSoftcapStart) ? "UNAVOIDABLE SOFTCAP<sup>2</sup>: Gain past " + formatSimple(player.ad.secondSoftcapStart) + " is raised by ^" + formatShortSimple(player.ad.secondSoftcap, 3) : "" }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],

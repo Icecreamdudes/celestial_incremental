@@ -188,6 +188,7 @@
         if (getLevelableTier("pu", 103, true)) player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.mul(levelableEffect("pu", 103)[1])
         if (getLevelableTier("pu", 202, true)) player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.mul(levelableEffect("pu", 202)[1])
         if (getLevelableTier("pu", 301, true)) player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.mul(levelableEffect("pu", 301)[0])
+        if (getLevelableTier("pu", 307, true)) player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.mul(levelableEffect("pu", 307)[0])
         player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.mul(buyableEffect("dgr", 15))
         player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.mul(levelableEffect("st", 102)[0])
         if (player.pet.legPetTimers[0].active) player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.pow(0.6)
@@ -204,6 +205,7 @@
         if (getLevelableTier("pu", 104, true)) player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.mul(levelableEffect("pu", 104)[1])
         if (getLevelableTier("pu", 202, true)) player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.mul(levelableEffect("pu", 202)[1])
         if (getLevelableTier("pu", 301, true)) player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.mul(levelableEffect("pu", 301)[0])
+        if (getLevelableTier("pu", 307, true)) player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.mul(levelableEffect("pu", 307)[0])
         player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.mul(buyableEffect("dgr", 15))
         player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.mul(levelableEffect("st", 103)[0])
         if (player.pet.legPetTimers[0].active) player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.pow(0.6)
@@ -220,6 +222,7 @@
         if (getLevelableTier("pu", 105, true)) player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.mul(levelableEffect("pu", 105)[1])
         if (getLevelableTier("pu", 202, true)) player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.mul(levelableEffect("pu", 202)[1])
         if (getLevelableTier("pu", 301, true)) player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.mul(levelableEffect("pu", 301)[0])
+        if (getLevelableTier("pu", 307, true)) player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.mul(levelableEffect("pu", 307)[0])
         player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.mul(buyableEffect("dgr", 15))
         player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.mul(levelableEffect("st", 104)[0])
         if (player.pet.legPetTimers[0].active) player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.pow(0.6)
@@ -231,6 +234,7 @@
 
         player.dr.pentPointsPerSecond = Decimal.pow(5, player.dr.pent).sub(1).div(5)
         if (getLevelableTier("pu", 301, true)) player.dr.pentPointsPerSecond = player.dr.pentPointsPerSecond.mul(levelableEffect("pu", 301)[0])
+        if (getLevelableTier("pu", 307, true)) player.dr.pentPointsPerSecond = player.dr.pentPointsPerSecond.mul(levelableEffect("pu", 307)[0])
         player.dr.pentPointsPerSecond = player.dr.pentPointsPerSecond.mul(levelableEffect("st", 205)[0])
 
     },

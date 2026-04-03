@@ -54,6 +54,9 @@
         if (!inChallenge("fu", 12)) player.an.anonymityToGet = player.an.anonymityToGet.pow(levelableEffect("pet", 405)[0])
         if (inChallenge("fu", 12)) player.an.anonymityToGet = player.an.anonymityToGet.pow(player.fu.numbEffect2)
 
+        // SOFTCAP
+        if (player.an.anonymityToGet.gte("1e5000")) player.an.anonymityToGet = player.an.anonymityToGet.div("1e5000").pow(0.2).mul("1e5000")
+
         // ALWAYS AFTER
         if (inChallenge("fu", 11)) player.an.anonymityToGet = player.an.anonymityToGet.pow(Decimal.mul(0.2, buyableEffect("fu", 88)))
         if (inChallenge("fu", 12)) player.an.anonymityToGet = player.an.anonymityToGet.add(1).pow(Decimal.mul(0.2, buyableEffect("fu", 88))).sub(1)
@@ -266,6 +269,7 @@
                             player.an.anonymityToGet.gte(1) ? look.color = "white" : look.color = "gray"
                             return look
                         }],
+                        ['raw-html', () => {return player.an.anonymityToGet.gte("1e5000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}]
                     ]],
                     ["blank", "10px"],
                     ["row", [["clickable", 11]]],

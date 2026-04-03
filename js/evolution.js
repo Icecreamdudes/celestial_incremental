@@ -174,7 +174,7 @@
         112: {
             title() { return "<img src='resources/Pets/eggEvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
-            unlocked() { return tmp.pet.levelables[102].canClick && !player.ev.evolutionsUnlocked[12] && (player.cb.highestLevel.gte(100000) && player.ma.matosDefeated)},
+            unlocked() { return tmp.pet.levelables[102].canClick && !player.ev.evolutionsUnlocked[12] && (player.cb.highestLevel.gte(100000) && player.matosLair.milestone[25] > 0)},
             tooltip() { return "██████ █████ automation<br>███ █████████████" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(12)
@@ -205,7 +205,7 @@
         203: {
             title() { return "<img src='resources/Pets/cookie/wrathCookieEvo.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
-            unlocked() { return tmp.pet.levelables[403].canClick && player.ep2.obtainedShards && player.ma.matosUnlock && getLevelableAmount("pet", 2002).gte(1) && getLevelableAmount("pet", 2003).lt(1)},
+            unlocked() { return tmp.pet.levelables[403].canClick && player.ep2.obtainedShards && player.bh.unlockConditions.done && getLevelableAmount("pet", 2002).gte(1) && getLevelableAmount("pet", 2003).lt(1)},
             tooltip() { return "██████ ███ wrath ██████ upgrades" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(103)
@@ -608,14 +608,14 @@
                 "<div class='evoContainer'><h3>Requires:</h3>" +
                 "<br>"  + formatWhole(getLevelableTier("pet", 102)) + "/2 Egg Man Ascensions" +
                 "<br>"  + formatSimple(player.cof.coreFragments[6], 1) + "/1,000 Temporal Core Fragments" +
-                "<br>"  + formatSimple(player.fi.temporalDust, 1) + "/100 Temporal Dust" +
-                "<br>"  + formatSimple(player.fi.temporalShards, 1) + "/5 Temporal Shards" +
+                "<br>"  + formatSimple(player.stagnantSynestia.temporalDust, 1) + "/150 Temporal Dust" +
+                "<br>"  + formatSimple(player.stagnantSynestia.temporalShard, 1) + "/15 Temporal Shards" +
                 "</div>"
             },
             canClick() {
                 return (player.cb.evolutionShards.gte(250) && player.cb.paragonShards.gte(25) && player.cb.petPoints.gte(1000000)
-                && getLevelableTier("pet", 102).gte(2) && player.cof.coreFragments[6].gte(1000) && player.fi.temporalDust.gte(100)
-                && player.fi.temporalShards.gte(5))
+                && getLevelableTier("pet", 102).gte(2) && player.cof.coreFragments[6].gte(1000) && player.stagnantSynestia.temporalDust.gte(150)
+                && player.stagnantSynestia.temporalShard.gte(15))
             },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
@@ -692,16 +692,16 @@
                 "</div>" +
                 "<div class='evoContainer'><h3>Requires:</h3>" +
                 "<br>"  + formatWhole(getLevelableAmount("pet", 403)) + "/6 Cookie Levels" +
-                "<br>" + formatWhole(player.ma.commonMatosFragments) + "/6,666 Common Matos Fragments" +
-                "<br>" + formatWhole(player.ma.rareMatosFragments) + "/666 Rare Matos Fragments" +
-                "<br>" + formatWhole(player.ma.epicMatosFragments) + "/66 Epic Matos Fragments" +
-                "<br>" + formatWhole(player.ma.legendaryMatosFragments) + "/6 Legendary Matos Fragments" +
+                "<br>" + formatWhole(player.depth1.gloomingUmbrite) + "/666 Glooming Umbrite" +
+                "<br>" + formatWhole(player.depth2.faintUmbrite) + "/666 Faint Umbrite" +
+                "<br>" + formatWhole(player.depth3.vividUmbrite) + "/666 Vivid Umbrite" +
+                "<br>" + formatWhole(player.bh.darkEssence) + "/66 Dark Essence" +
                 "</div>"
             },
             canClick() {
                 return (player.ep2.chocoShards.gte(6) && player.cb.petPoints.gte(6666) && player.ca.rememberanceCores.gte(36)
-                && player.ma.commonMatosFragments.gte(6666) && player.ma.rareMatosFragments.gte(666) && player.ma.epicMatosFragments.gte(66)
-                && player.ma.legendaryMatosFragments.gte(6) && getLevelableAmount("pet", 403).gte(6))
+                && player.depth1.gloomingUmbrite.gte(666) && player.depth2.faintUmbrite.gte(666) && player.depth3.vividUmbrite.gte(666)
+                && player.bh.darkEssence.gte(66) && getLevelableAmount("pet", 403).gte(6))
             },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
@@ -919,6 +919,11 @@ addLayer("ev8", {
                 max: new Decimal(864000),
                 base: new Decimal(5),
             },
+            3: {
+                current: new Decimal(0),
+                max: new Decimal(2592000),
+                base: new Decimal(12),
+            },
         },
 
         evoButtonTimersMax: [new Decimal(18000),new Decimal(54000),new Decimal(108000),new Decimal(324000),],
@@ -942,21 +947,44 @@ addLayer("ev8", {
     update(delta) {
         let onepersec = player.cb.cbTickspeed
 
+        let ESCMult = levelableEffect("pet", 1107)[1]
+        ESCMult = ESCMult.add(buyableEffect("ev2", 31).sub(1))
+        ESCMult = ESCMult.add(buyableEffect("depth1", 4).sub(1))
+
+        ESCMult = ESCMult.mul(levelableEffect("pet", 1102)[1])
+        ESCMult = ESCMult.mul(levelableEffect("ir", 9)[0])
+        if (hasUpgrade("cbs", 102)) ESCMult = ESCMult.mul(upgradeEffect("cbs", 102))
+
+        ESCMult = ESCMult.sub(1).mul(buyableEffect("sme", 117).sub(1)).add(1)
+
+        player.ev8.evoTimers[0].base = new Decimal(1)
         player.ev8.evoTimers[0].max = new Decimal(18000)
+        player.ev8.evoTimers[1].base = new Decimal(2)
         player.ev8.evoTimers[1].max = new Decimal(54000)
+        player.ev8.evoTimers[2].base = new Decimal(4)
         player.ev8.evoTimers[2].max = new Decimal(108000)
+        player.ev8.evoTimers[3].base = new Decimal(9)
         player.ev8.evoTimers[3].max = new Decimal(324000)
         for (let thing in player.ev8.evoTimers) {
+            player.ev8.evoTimers[thing].base = player.ev8.evoTimers[thing].base.mul(ESCMult).floor()
             if (hasUpgrade("ev8", 11)) player.ev8.evoTimers[thing].max = player.ev8.evoTimers[thing].max.div(1.1)
+            if (hasUpgrade("ev8", 27)) player.ev8.evoTimers[thing].max = player.ev8.evoTimers[thing].max.div(1.2)
             
             player.ev8.evoTimers[thing].current = player.ev8.evoTimers[thing].current.sub(onepersec.mul(delta))
         }
 
+        player.ev8.paraTimers[0].base = new Decimal(1)
         player.ev8.paraTimers[0].max = new Decimal(180000)
+        player.ev8.paraTimers[1].base = new Decimal(3)
         player.ev8.paraTimers[1].max = new Decimal(450000)
+        player.ev8.paraTimers[2].base = new Decimal(5)
         player.ev8.paraTimers[2].max = new Decimal(864000)
+        player.ev8.paraTimers[3].base = new Decimal(12)
+        player.ev8.paraTimers[3].max = new Decimal(2592000)
         for (let thing in player.ev8.paraTimers) {
+            player.ev8.paraTimers[thing].base = player.ev8.paraTimers[thing].base.mul(ESCMult)
             if (hasUpgrade("ev8", 11)) player.ev8.paraTimers[thing].max = player.ev8.paraTimers[thing].max.div(1.1)
+            if (hasUpgrade("ev8", 27)) player.ev8.paraTimers[thing].max = player.ev8.paraTimers[thing].max.div(1.2)
 
             player.ev8.paraTimers[thing].current = player.ev8.paraTimers[thing].current.sub(onepersec.mul(delta))
         }
@@ -1067,15 +1095,30 @@ addLayer("ev8", {
             onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
+        104: {
+            title() { return player.ev8.paraTimers[3].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.paraTimers[3].current) + "." : "<h3>+" + formatWhole(player.ev8.paraTimers[3].base) + " Paragon Shards."},
+            canClick() { return player.ev8.paraTimers[3].current.lt(0) && this.unlocked() },
+            unlocked() { return hasUpgrade("ev8", 26) },
+            onClick() {
+                player.cb.paragonShards = player.cb.paragonShards.add(player.ev8.paraTimers[3].base)
+                player.ev8.paraTimers[3].current = player.ev8.paraTimers[3].max
+                doPopup("none", "+" + formatWhole(player.ev8.paraTimers[3].base) + " Paragon Shard!", "Shard Obtained!", 5, "#4c64ff", "resources/paragonShard.png")
+            },
+            onHold() { clickClickable(this.layer, this.id) },
+            style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
+        },
 
         199: {
             title() {return "Claim All"},
-            canClick() {return tmp.ev8.clickables[101].canClick || tmp.ev8.clickables[102].canClick || tmp.ev8.clickables[103].canClick},
+            canClick() {return tmp.ev8.clickables[101].canClick || tmp.ev8.clickables[102].canClick || tmp.ev8.clickables[103].canClick
+                || tmp.ev8.clickables[104].canClick
+            },
             unlocked() {return hasMilestone("s", 14)},
             onClick() {
                 clickClickable("ev8", 101)
                 clickClickable("ev8", 102)
                 clickClickable("ev8", 103)
+                clickClickable("ev8", 104)
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
@@ -1094,7 +1137,7 @@ addLayer("ev8", {
             currencyLocation() { return player.cb },
             currencyDisplayName: "Evolution Shards",
             currencyInternalName: "evolutionShards",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
         },
         12: {
             title: "Shard Research II",
@@ -1104,7 +1147,7 @@ addLayer("ev8", {
             currencyLocation() { return player.cb },
             currencyDisplayName: "Evolution Shards",
             currencyInternalName: "evolutionShards",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
         },
         13: {
             title: "Shard Research III",
@@ -1114,7 +1157,7 @@ addLayer("ev8", {
             currencyLocation() { return player.cb },
             currencyDisplayName: "Paragon Shards",
             currencyInternalName: "paragonShards",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
         },
         14: {
             title: "Shard Research IV",
@@ -1124,7 +1167,7 @@ addLayer("ev8", {
             currencyLocation() { return player.cb },
             currencyDisplayName: "Paragon Shards",
             currencyInternalName: "paragonShards",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
         },
         15: {
             title: "Shard Research V",
@@ -1134,7 +1177,7 @@ addLayer("ev8", {
             currencyLocation() { return player.cb },
             currencyDisplayName: "Evolution Shards",
             currencyInternalName: "evolutionShards",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
         },
         16: {
             title: "Shard Research VI",
@@ -1144,7 +1187,7 @@ addLayer("ev8", {
             currencyLocation() { return player.cb },
             currencyDisplayName: "Evolution Shards",
             currencyInternalName: "evolutionShards",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
         },
         17: {
             title: "Shard Research VII",
@@ -1154,7 +1197,7 @@ addLayer("ev8", {
             currencyLocation() { return player.cb },
             currencyDisplayName: "Paragon Shards",
             currencyInternalName: "paragonShards",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
         },
         18: {
             title: "Shard Research VIII",
@@ -1164,7 +1207,7 @@ addLayer("ev8", {
             currencyLocation() { return player.cb },
             currencyDisplayName: "Paragon Shards",
             currencyInternalName: "paragonShards",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
         },
         19: {
             title: "Shard Research IX",
@@ -1178,7 +1221,7 @@ addLayer("ev8", {
                 return player.cb.paragonShards.mul(0.3).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "135px", color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
         },
         21: {
             title: "Shard Research X",
@@ -1188,8 +1231,7 @@ addLayer("ev8", {
             currencyLocation() { return player.cb },
             currencyDisplayName: "Evolution Shards",
             currencyInternalName: "evolutionShards",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
-
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
         },
         22: {
             title: "Shard Research XI",
@@ -1203,19 +1245,57 @@ addLayer("ev8", {
                 return player.cb.evolutionShards.mul(0.02).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "135px", color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
-
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
         },
         23: {
             title: "Shard Research XII",
-            unlocked() { return player.ir.iriditeDefeated },
+            unlocked() { return hasMilestone("s", 14)},
+            description: "Multiplies fragmentation fragment gain by x1.2",
+            cost: new Decimal(10),
+            currencyLocation() {return player.cb},
+            currencyDisplayName: "Paragon Shards",
+            currencyInternalName: "paragonShards",
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
+        },
+        24: {
+            title: "Shard Research XIII",
+            unlocked() {return getBuyableAmount("sme", 112).gte(1)},
+            description: "Unlock Stagnant Synestia in Black Heart",
+            cost: new Decimal(200),
+            currencyLocation() {return player.cb},
+            currencyDisplayName: "Evolution Shards",
+            currencyInternalName: "evolutionShards",
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
+        },
+        25: {
+            title: "Shard Research XIV",
+            unlocked() { return getBuyableAmount("sme", 112).gte(3) },
             description: "Unlocks a new ship.",
             cost: new Decimal(500),
             currencyLocation() { return player.cb },
             currencyDisplayName: "Evolution Shards",
             currencyInternalName: "evolutionShards",
             style: {width: "135px", color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
-
+        },
+        26: {
+            title: "Shard Research XV",
+            unlocked() {return getBuyableAmount("sme", 112).gte(2)},
+            description: "Unlock a 4th paragon shard button",
+            cost: new Decimal(20),
+            currencyLocation() {return player.cb},
+            currencyDisplayName: "Paragon Shards",
+            currencyInternalName: "paragonShards",
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
+        },
+        27: {
+            title: "Shard Research XVI",
+            unlocked() {return getBuyableAmount("sme", 112).gte(4)},
+            description: "Divides shard button cooldowns by /1.2",
+            cost: new Decimal(50),
+            currencyLocation() {return player.cb},
+            currencyDisplayName: "Paragon Shards",
+            currencyInternalName: "paragonShards",
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
         },
       /*  23: {
             title: "Shard Research XII",
@@ -1249,6 +1329,7 @@ addLayer("ev8", {
                     ["clickable", 101],
                     ["clickable", 102],
                     ["clickable", 103],
+                    ["clickable", 104],
                     ["clickable", 199],
                 ]
             },
@@ -1259,7 +1340,8 @@ addLayer("ev8", {
                     ["blank", "25px"],
                     ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14],
                         ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18],
-                        ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]], {maxWidth: "500px"}],
+                        ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23],
+                        ["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27]], {maxWidth: "600px"}],
                 ]
             },
         },

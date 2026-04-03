@@ -254,7 +254,7 @@
                 }
                 while (player.d.previousBoosterRoll == player.d.currentBoosterRoll)
             }
-            player.d.boosterSpeedToggle ? player.d.boosterDiceCooldown = new Decimal(30) : player.d.boosterDiceCooldown = new Decimal(60)
+            player.d.boosterSpeedToggle && !inChallenge("ip", 15) ? player.d.boosterDiceCooldown = new Decimal(30) : player.d.boosterDiceCooldown = new Decimal(60)
 
 
             if (inChallenge("ip", 15) || player.ev.evolutionsUnlocked[5]) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet)
@@ -328,10 +328,11 @@
     clickables: {
         1: {
             title() {
+                if (inChallenge("ip", 15)) return "Double booster roll speed.<br>(Disabled in IC5)"
                 if (player.d.boosterSpeedToggle) return "Double booster roll speed.<br>(Currently on)"
                 return "Double booster roll speed.<br>(Currently off)"
             },
-            canClick: true,
+            canClick() {return !inChallenge("ip", 15)},
             tooltip() { return "<h3>Reduces pet chance by *0.75." },
             unlocked() {return hasAchievement("achievements", 22)},
             onClick() {
@@ -392,8 +393,12 @@
             title() { return player.d.boosterDiceCooldown.gt(0) ? formatTime(player.d.boosterDiceCooldown) : "<h2>Roll to change currency boost!"},
             canClick() { return player.d.boosterDiceCooldown.lt(0) },
             tooltip() {
-                if (player.d.boosterSpeedToggle) return "<h3>" + player.d.dicePoints.add(1).log(10).pow(0.8).div(5).add(5).floor().mul(0.75).floor() + "% chance for a pet???</h3>"
-                return "<h3>" + player.d.dicePoints.add(1).log(10).pow(0.8).div(5).add(5).floor() + "% chance for a pet???</h3>"
+                let chance = player.d.dicePoints.add(1).log(10).pow(0.8).div(5).add(5).floor()
+                if (player.d.boosterSpeedToggle && !inChallenge("ip", 15)) chance = player.d.dicePoints.add(1).log(10).pow(0.8).div(5).add(5).floor().mul(0.75).floor()
+
+                if (chance.gte(100)) return "<h3>+" + formatSimple(chance.div(100)) + " Dice Pets"
+                if (layers.pet.levelables[302].canClick()) return "<h3>" + formatWhole(chance) + "% chance for a Dice pet</h3>"
+                return "<h3>" + formatWhole(chance) + "% chance for a ??? pet</h3>"
             },
             unlocked() { return true },
             onClick() {
@@ -425,10 +430,10 @@
                     }
                     if (unlock) completeAchievement("achievements", 22)
                 }
-                player.d.boosterSpeedToggle ? player.d.boosterDiceCooldown = new Decimal(30) : player.d.boosterDiceCooldown = new Decimal(60)
+                player.d.boosterSpeedToggle && !inChallenge("ip", 15) ? player.d.boosterDiceCooldown = new Decimal(30) : player.d.boosterDiceCooldown = new Decimal(60)
 
                 let chance = player.d.dicePoints.add(1).log10().pow(0.8).div(5).add(4).floor()
-                if (player.d.boosterSpeedToggle) chance = chance.mul(0.75).floor()
+                if (player.d.boosterSpeedToggle && !inChallenge("ip", 15)) chance = chance.mul(0.75).floor()
                 let guarantee = chance.div(100).floor()
                 chance = chance.sub(guarantee.mul(100))
                 if (chance.gte(Math.random()*100)) guarantee = guarantee.add(1)
@@ -725,7 +730,7 @@
             onClick() {
                 player.d.diceSpaceUnlocked = true
                 player.tab = "za"
-                player.universe = "ds"
+                player.universe = "DS"
             },
             style: {width: "600px", minHeight: "200px", color: "#1b110eff", backgroundImage: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)", border: "3px solid #0061ff", borderRadius: "15px"},
         },

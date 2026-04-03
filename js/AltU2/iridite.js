@@ -227,6 +227,8 @@ addLayer("ir", {
             player.subtabs["ir"]['stuff'] = "Refresh Page :(";
         }
 
+        if (options.fullscreen && player.tab == "ir" && player.subtabs["ir"]["stuff"] != "Battle") options.fullscreen = false
+
         // Ship max health by type
         if (player.ir.shipType == 1) player.ir.shipHealthMax = new Decimal(100)
         if (player.ir.shipType == 2) player.ir.shipHealthMax = new Decimal(150)
@@ -706,9 +708,9 @@ addLayer("ir", {
             },
             sacValue() { return new Decimal(1)},
             // CLICK CODE
-            tooltip() { return  (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || hasUpgrade("ev8", 23) ? "" : "Purchase a certain shard research." },
+            tooltip() { return  (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || hasUpgrade("ev8", 25) ? "" : "Purchase a certain shard research." },
             unlocked() { return true },
-            canClick() { return (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || hasUpgrade("ev8", 23)},
+            canClick() { return (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || hasUpgrade("ev8", 25)},
             onClick() { 
                 player.ir.shipType = this.id
                 return layers[this.layer].levelables.index = this.id 
@@ -735,7 +737,7 @@ addLayer("ir", {
     clickables: {
         1: {
             title() { return "<h2>Unlock Iridite, the Astral Celestial" },
-            canClick() { return player.au2.stars.gte(5e10) && player.fi.tier2BestWave.gt(2) },
+            canClick() { return player.au2.stars.gte(5e10) && player.stagnantSynestia.highestCombo.gte(25) },
             unlocked() { return true },
             onClick() {
                 player.ir.iriditeUnlocked = true
@@ -771,19 +773,14 @@ addLayer("ir", {
             tooltip() { return "Universes are paused to save performance." },
             onClick() {
                 player.ir.inBattle = true
-                player.ma.inBlackHeart = true
+                options.fullscreen = true
                 player.subtabs["ir"]['stuff'] = 'Battle'
 
                 arena = new SpaceArena(1200, 600);
                 arena.spawnArena();
                 localStorage.setItem('arenaActive', 'true');
 
-                pauseUniverse("U1", "pause", true)
-                pauseUniverse("UA", "pause", true)
-                pauseUniverse("U2", "pause", true)
-                pauseUniverse("A1", "pause", true)
-                pauseUniverse("U3", "pause", true)
-                pauseUniverse("CB", "pause", true)
+                pauseUniverseAll(["A2"], "pause", true)
 
                 player.ir.shipHealth = player.ir.shipHealthMax
                 if (hasUpgrade("ir", 14)) arena.upgradeEffects.hpRegen += 0.5 / 60
@@ -801,7 +798,7 @@ addLayer("ir", {
             unlocked() { return !player.ir.iriditeFightActive || player.subtabs["ir"]["stuff"] == "Refresh Page :("},
             onClick() {
                 player.ir.inBattle = false
-                player.ma.inBlackHeart = false
+                options.fullscreen = false
                 player.subtabs["ir"]['stuff'] = 'Space Battle'
 
                 if (arena) {
@@ -810,12 +807,7 @@ addLayer("ir", {
                 }
                 localStorage.setItem('arenaActive', 'false');
 
-                pauseUniverse("U1", "unpause", true)
-                pauseUniverse("UA", "unpause", true)
-                pauseUniverse("U2", "unpause", true)
-                pauseUniverse("A1", "unpause", true)
-                pauseUniverse("U3", "unpause", true)
-                pauseUniverse("CB", "unpause", true)
+                pauseUniverseAll(["A2"], "unpause", true)
 
                 player.ir.timers[player.ir.shipType].current = player.ir.timers[player.ir.shipType].max
 
@@ -1103,6 +1095,92 @@ addLayer("ir", {
                 return look
             },
         },
+
+        // Geroa BH Upgrades
+        201: {
+            title: "Medkit",
+            unlocked() { return getLevelableAmount("pet", 502).gt(0) },
+            description: "Unlock Geroa's \"Self Repair\" skill",
+            cost: new Decimal(2000),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                return look
+            },
+        },
+        202: {
+            title: "Spicy Energy",
+            unlocked() { return getLevelableAmount("pet", 502).gt(0) },
+            description: "Unlock Geroa's \"Cosmic Ray\" skill",
+            cost: new Decimal(10000),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                return look
+            },
+        },
+        203: {
+            title: "I'M A FIRIN' MY LASAR",
+            unlocked() { return getLevelableAmount("pet", 502).gt(0) },
+            description: "Unlock Geroa's \"Orbital Cannon\" skill",
+            cost: new Decimal(50000),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                return look
+            },
+        },
+        204: {
+            title: "Probably should use these",
+            unlocked() { return getLevelableAmount("pet", 502).gt(0) },
+            description: "Unlock Geroa's \"Defense Satellites\" skill",
+            cost: new Decimal(4e5),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                return look
+            },
+        },
+        205: {
+            title: "Version 2.0",
+            unlocked() { return getLevelableAmount("pet", 502).gt(0) },
+            description: "Increase Geroa's base stats by 20%",
+            cost: new Decimal(1e7),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                return look
+            },
+        },
+        206: {
+            title: "Version 3.0",
+            unlocked() { return getLevelableAmount("pet", 502).gt(0) && hasUpgrade("depth4", 4) },
+            description: "Increase Geroa's base damage by 50%",
+            cost: new Decimal(1e8),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                return look
+            },
+        },
     },
     microtabs: {
         stuff: {
@@ -1112,7 +1190,7 @@ addLayer("ir", {
                 content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return formatWhole(player.au2.stars) + "/5e10 stars." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return formatWhole(player.fi.tier2BestWave) + "/8 tier 2 best wave." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return formatWhole(player.stagnantSynestia.highestCombo) + "/25 best stagnantion synestia combo." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Not a lot of requirements... I'm trying to be nice." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
@@ -1159,12 +1237,15 @@ addLayer("ir", {
                     ["raw-html", function () { return "You have " + formatWhole(player.ir.spaceRock) + " space rocks." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You have " + formatWhole(player.ir.spaceGem) + " space gem." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Space Rocks" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", "Space Rocks", { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["row", [["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14],["upgrade", 15],["upgrade", 16],]],
                     ["row", [["upgrade", 17],["upgrade", 18],["upgrade", 19],]],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Space Gems" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", "Space Gems", { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["row", [["upgrade", 101],["upgrade", 102],["upgrade", 103],["upgrade", 104],["upgrade", 105],["upgrade", 106],]],
+                    ["blank", "25px"],
+                    ["raw-html", () => {return getLevelableAmount("pet", 502).gt(0) ? "Geroa Skills" : ""}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["row", [["upgrade", 201], ["upgrade", 202], ["upgrade", 203], ["upgrade", 204], ["upgrade", 205], ["upgrade", 206]]],
                 ]
             },
             "Perks": {
@@ -1174,16 +1255,23 @@ addLayer("ir", {
                     ["blank", "25px"],
                     ["style-column", [
                         ["raw-html", "Perks for defeating Iridite", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                    ], {width: "1000px", border: "3px solid rgb(27, 0, 36)", backgroundImage: "linear-gradient(120deg, #480e8aff 0%, rgba(20, 7, 24, 1) 100%)", borderBottom: "5px", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}],
+                    ], {width: "800px", border: "3px solid rgb(27, 0, 36)", backgroundImage: "linear-gradient(120deg, #480e8aff 0%, rgba(20, 7, 24, 1) 100%)", borderBottom: "5px", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}],
                     ["style-column", [
-                        ["raw-html", () => { return player.pol.unlockHive == 2 ? "Unlocks: The Hive" : "Unlocks: Larva (In Pollinators)" }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["blank", "15px"],
-                        ["raw-html", () => { return "Greatly weakened antimatter softcap." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "<u>Unlocks</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return player.pol.unlockHive == 2 ? "The Hive" : "Larva (In Pollinators)" }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "New Punchcards", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "New D1 Upgrades", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "New Singularity Upgrades", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "New Starmetal Studies", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["blank", "10px"],
+                    ["raw-html", "<u>Effects</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", "^2 to 2nd antimatter softcap start.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", "Weakened 3rd replicanti point softcap.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", () => { return "x50 dice sides." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", () => { return "x1e12 post-OTF currencies." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", () => { return "Keep hex progress on singularity reset." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                    ], {width: "1000px", border: "3px solid rgb(27, 0, 36)", backgroundImage: "linear-gradient(120deg, #480e8aff 0%, rgba(20, 7, 24, 1) 100%)", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px"}]
+                        ["raw-html", "Keep hex progress on singularity reset.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "x50 dice sides.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "x1e12 post-OTF currencies.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "/1.5 starmetal essence generator cooldowns", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                    ], {width: "800px", border: "3px solid rgb(27, 0, 36)", backgroundImage: "linear-gradient(120deg, #480e8aff 0%, rgba(20, 7, 24, 1) 100%)", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px"}]
                 ]
             },
             "Battle": {
@@ -1597,8 +1685,8 @@ class SpaceArena {
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
-                    ctx.shadowColor = "#fff";
-                    ctx.shadowBlur = 8;
+                    if (!options.performanceMode) ctx.shadowColor = "#fff";
+                    if (!options.performanceMode) ctx.shadowBlur = 8;
                     ctx.fill();
                     ctx.font = "bold 32px monospace";
                     ctx.fillStyle = "#fff";
@@ -1629,8 +1717,8 @@ class SpaceArena {
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
-                    ctx.shadowColor = "#fff";
-                    ctx.shadowBlur = 8;
+                    if (!options.performanceMode) ctx.shadowColor = "#fff";
+                    if (!options.performanceMode) ctx.shadowBlur = 8;
                     ctx.fill();
                     ctx.font = "bold 32px monospace";
                     ctx.fillStyle = "#fff";
@@ -1661,8 +1749,8 @@ class SpaceArena {
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
-                    ctx.shadowColor = "#fff";
-                    ctx.shadowBlur = 12;
+                    if (!options.performanceMode) ctx.shadowColor = "#fff";
+                    if (!options.performanceMode) ctx.shadowBlur = 12;
                     ctx.fill();
                     ctx.font = "bold 32px monospace";
                     ctx.fillStyle = "#fff";
@@ -1694,8 +1782,8 @@ class SpaceArena {
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
-                    ctx.shadowColor = "#bff";
-                    ctx.shadowBlur = 8;
+                    if (!options.performanceMode) ctx.shadowColor = "#bff";
+                    if (!options.performanceMode) ctx.shadowBlur = 8;
                     ctx.fill();
                     ctx.font = "bold 20px monospace";
                     ctx.fillStyle = "#003";
@@ -1725,8 +1813,8 @@ class SpaceArena {
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
-                    ctx.shadowColor = "#ffd";
-                    ctx.shadowBlur = 10;
+                    if (!options.performanceMode) ctx.shadowColor = "#ffd";
+                    if (!options.performanceMode) ctx.shadowBlur = 10;
                     ctx.fill();
                     ctx.font = "bold 20px monospace";
                     ctx.fillStyle = "#111";
@@ -1757,8 +1845,8 @@ class SpaceArena {
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
-                    ctx.shadowColor = "#fff6";
-                    ctx.shadowBlur = 10;
+                    if (!options.performanceMode) ctx.shadowColor = "#fff6";
+                    if (!options.performanceMode) ctx.shadowBlur = 10;
                     ctx.fill();
                     ctx.font = "bold 18px monospace";
                     ctx.fillStyle = "#111";
@@ -1788,8 +1876,8 @@ class SpaceArena {
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
-                    ctx.shadowColor = "#cfc";
-                    ctx.shadowBlur = 8;
+                    if (!options.performanceMode) ctx.shadowColor = "#cfc";
+                    if (!options.performanceMode) ctx.shadowBlur = 8;
                     ctx.fill();
                     ctx.font = "bold 16px monospace";
                     ctx.fillStyle = "#021";
@@ -1820,8 +1908,8 @@ class SpaceArena {
                     ctx.beginPath();
                     ctx.ellipse(0, 0, enemy.radius, enemy.radius * 0.5, 0, 0, Math.PI * 2);
                     ctx.fillStyle = enemy.color;
-                    ctx.shadowColor = "#9fffd4";
-                    ctx.shadowBlur = 18;
+                    if (!options.performanceMode) ctx.shadowColor = "#9fffd4";
+                    if (!options.performanceMode) ctx.shadowBlur = 18;
                     ctx.fill();
                     // Dome
                     ctx.beginPath();
@@ -1870,8 +1958,8 @@ class SpaceArena {
                     const tipBend = Math.sin(phase * 1.9) * (0.6 + ease * 0.6);
 
                     // Glow for whole boss
-                    ctx.shadowColor = "rgba(240,230,255,0.9)";
-                    ctx.shadowBlur = 30;
+                    if (!options.performanceMode) ctx.shadowColor = "rgba(240,230,255,0.9)";
+                    if (!options.performanceMode) ctx.shadowBlur = 30;
 
                     // wing drawing function; draws a richer, layered feather set (no back/filler blob)
                     const drawWing = (mirror = false) => {
@@ -1962,7 +2050,7 @@ class SpaceArena {
 
                     // Thin white circle showing hitbox (centered)
                     ctx.save();
-                    ctx.shadowBlur = 0;
+                    if (!options.performanceMode) ctx.shadowBlur = 0;
                     ctx.lineWidth = 2;
                     ctx.strokeStyle = "rgba(255,255,255,0.95)";
                     ctx.beginPath();
@@ -1972,7 +2060,7 @@ class SpaceArena {
 
                     // Draw star centered exactly in hitbox: use middle baseline so glyph is vertically centered
                     ctx.save();
-                    ctx.shadowBlur = 36;
+                    if (!options.performanceMode) ctx.shadowBlur = 36;
                     const fontSize = Math.max(12, Math.floor(enemy.radius * 1.4));
                     ctx.font = `${fontSize}px monospace`;
                     ctx.textAlign = "center";
@@ -4722,8 +4810,8 @@ class SpaceArena {
             this.ctx.beginPath();
             this.ctx.arc(this.ship.x, this.ship.y, this.ship.radius, 0, 2 * Math.PI);
             this.ctx.fillStyle = "#a7a7a7ff";
-            this.ctx.shadowColor = "#ffffffff";
-            this.ctx.shadowBlur = 16;
+            if (!options.performanceMode) this.ctx.shadowColor = "#ffffffff";
+            if (!options.performanceMode) this.ctx.shadowBlur = 16;
             this.ctx.fill();
             this.ctx.restore();
         }
@@ -4794,8 +4882,8 @@ class SpaceArena {
             this.ctx.beginPath();
             this.ctx.ellipse(0, 0, bodyR, bodyR * 0.5, 0, 0, Math.PI * 2);
             this.ctx.fillStyle = "#66d9ff"; // distinct color from miniboss
-            this.ctx.shadowColor = "#66d9ff";
-            this.ctx.shadowBlur = 10;
+            if (!options.performanceMode) this.ctx.shadowColor = "#66d9ff";
+            if (!options.performanceMode) this.ctx.shadowBlur = 10;
             this.ctx.fill();
 
             // Dome
@@ -4883,8 +4971,8 @@ class SpaceArena {
             const spreadBase = 0.9 + ease * 0.6;
             const tipBend = Math.sin(phase * 1.9) * (0.6 + ease * 0.6);
 
-            this.ctx.shadowColor = "rgba(240,230,255,0.7)";
-            this.ctx.shadowBlur = 15;
+            if (!options.performanceMode) this.ctx.shadowColor = "rgba(240,230,255,0.7)";
+            if (!options.performanceMode) this.ctx.shadowBlur = 15;
 
             const drawWing = (mirror = false) => {
                 this.ctx.save();
@@ -4934,7 +5022,7 @@ class SpaceArena {
             drawWing(true);
 
             this.ctx.save();
-            this.ctx.shadowBlur = 20;
+            if (!options.performanceMode) this.ctx.shadowBlur = 20;
             const fontSize = Math.max(12, Math.floor(r * 1.5));
             this.ctx.font = `${fontSize}px monospace`;
             this.ctx.textAlign = "center";
@@ -5285,8 +5373,8 @@ class SpaceArena {
                 this.ctx.fill();
 
                 // Glow
-                this.ctx.shadowColor = "rgba(255, 0, 0, 0.5)";
-                this.ctx.shadowBlur = 20;
+                if (!options.performanceMode) this.ctx.shadowColor = "rgba(255, 0, 0, 0.5)";
+                if (!options.performanceMode) this.ctx.shadowBlur = 20;
                 this.ctx.strokeStyle = "rgba(255, 0, 0, 0.3)";
                 this.ctx.lineWidth = 4;
                 this.ctx.stroke();
@@ -5318,8 +5406,8 @@ class SpaceArena {
                 this.ctx.textAlign = "center";
                 this.ctx.textBaseline = "middle";
                 this.ctx.fillStyle = bullet.fromEnemy ? "#ffeecb" : "#ffec8b";
-                this.ctx.shadowColor = "#fff1";
-                this.ctx.shadowBlur = bullet.giant ? 18 : 6;
+                if (!options.performanceMode) this.ctx.shadowColor = "#fff1";
+                if (!options.performanceMode) this.ctx.shadowBlur = bullet.giant ? 18 : 6;
                 this.ctx.fillText("✦", 0, 0);
                 this.ctx.restore();
             } else {

@@ -105,7 +105,7 @@
         if (player.i.cutsceneInput.lt(0)) player.i.cutsceneInputAmount = new Decimal(0)
         // START OF POST-OTF-MULT MODIFIERS
         player.i.postOTFMult = new Decimal(1)
-        player.i.postOTFMult = player.i.postOTFMult.mul(buyableEffect("ma", 22))
+        player.i.postOTFMult = player.i.postOTFMult.mul(player.depth2.comboEffect)
         if (player.ir.iriditeDefeated) player.i.postOTFMult = player.i.postOTFMult.mul(1e12)
 
         player.i.postOTFMult = player.i.postOTFMult.pow(player.i.pylonEnergyEffect3)
@@ -181,20 +181,21 @@
         // SOFTCAP OF DOOM
         player.i.doomSoftcap = new Decimal(0.5)
 
+        // SOFTCAP OF DOOM START
+        player.i.doomSoftcapStart = new Decimal("1e2000000")
+        player.i.doomSoftcapStart = player.i.doomSoftcapStart.pow(buyableEffect("fa", 405))
+
+        // SOFTCAP WEAKENER
+        let doomWeaken = new Decimal(1)
+        doomWeaken = doomWeaken.mul(buyableEffect("fa", 401))
+
         // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
         let amt = player.points
         if (player.gain.gte(player.points)) amt = player.gain
-        player.i.doomSoftcap = player.i.doomSoftcap.div(amt.div(player.i.doomSoftcapStart).add(1).log(player.i.doomSoftcapStart).add(1))
-
-        // SOFTCAP OF DOOM START
-        player.i.doomSoftcapStart = new Decimal("1e2000000")
+        player.i.doomSoftcap = player.i.doomSoftcap.div(amt.div(player.i.doomSoftcapStart).add(1).log(player.i.doomSoftcapStart).div(doomWeaken).add(1))
 
         // APPLY DOOM SOFTCAP
-        if (player.gain.gt(player.i.doomSoftcapStart)) 
-        {
-            player.gain = player.gain.div(player.i.doomSoftcapStart).pow(player.i.doomSoftcap).mul(player.i.doomSoftcapStart)
-            player.points = player.gain //random solution that will change
-        }
+        if (player.gain.gt(player.i.doomSoftcapStart)) player.gain = player.gain.div(player.i.doomSoftcapStart).pow(player.i.doomSoftcap).mul(player.i.doomSoftcapStart)
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.r.timeReversed) {
@@ -218,6 +219,7 @@
             player.i.pylonEnergyPerSecond = player.i.pylonEnergyPerSecond.mul(buyableEffect("i", 12))
             player.i.pylonEnergyPerSecond = player.i.pylonEnergyPerSecond.mul(buyableEffect("i", 13))
             player.i.pylonEnergyPerSecond = player.i.pylonEnergyPerSecond.mul(player.in.pylonEnergyEffect3)
+            player.i.pylonEnergyPerSecond = player.i.pylonEnergyPerSecond.mul(buyableEffect("sme", 143))
 
             player.i.pylonPassiveEffect = player.points.pow(0.002).add(1).pow(player.i.pylonTierEffect)
         } else
@@ -235,8 +237,10 @@
         player.i.pylonEnergy = player.i.pylonEnergy.add(player.i.pylonEnergyPerSecond.mul(delta))
 
         player.i.pylonEnergyEffect = player.i.pylonEnergy.pow(4).add(1).pow(player.i.pylonTierEffect)
-        player.i.pylonEnergyEffect2 = player.i.pylonEnergy.pow(0.3).add(1).pow(player.i.pylonTierEffect)
+        player.i.pylonEnergyEffect2 = player.i.pylonEnergy.pow(0.15).add(1).pow(player.i.pylonTierEffect)
+        if (player.i.pylonEnergyEffect2.gt(10000)) player.i.pylonEnergyEffect2 = player.i.pylonEnergyEffect2.div(10000).pow(0.5).mul(10000)
         player.i.pylonEnergyEffect3 = player.i.pylonEnergy.pow(0.1).add(1).pow(player.i.pylonTierEffect)
+        if (player.i.pylonEnergyEffect3.gt(1000)) player.i.pylonEnergyEffect3 = player.i.pylonEnergyEffect3.div(1000).pow(0.5).mul(1000)
 
         player.i.pylonTierEffect = player.i.pylonTier.sub(1).pow(0.3).div(10).add(1)
 
@@ -246,9 +250,6 @@
         player.uni["U1"].tickspeed = player.uni["U1"].tickspeed.mul(buyableEffect("gwaTemple", 21))
         // BEST CELESTIAL POINTS
         if (player.i.bestPoints.lt(player.points)) player.i.bestPoints = player.points
-
-        // STEEL PER SECOND
-        if (hasUpgrade("sma", 103)) player.gh.steel = player.gh.steel.add(Decimal.mul(player.uni["U1"].tickspeed.mul(0.1), player.gh.steelToGet.mul(delta)))
     },
     bars: {
         infbar: {
@@ -259,7 +260,7 @@
             progress() {
                 return player.points.add(1).log10().div("308.25")
             },
-            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)", margin: "10px auto"},
             fillStyle: { backgroundColor: "#b28500" },
             borderStyle: { border: "3px solid", borderRadius: "20px"},
             display() {
@@ -657,9 +658,7 @@
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
-                    ["blank", "10px"],
-                    ["bar", "infbar"],
-                    ["blank", "15px"],
+                    ["blank", "25px"],
                     ["style-row", [
                         ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],
                         ["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23],
@@ -684,19 +683,25 @@
                 unlocked() { return hasUpgrade("s", 28)},
                 content: [
                     ["blank", "25px"],
-                            ["left-row", [
-            ["tooltip-row", [
-                ["raw-html", "<img src='resources/fragments/ancientFragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cof.coreFragments[0])}, {width: "93px", height: "50px", color: "#8B664B", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                ["raw-html", "<div class='bottomTooltip'>Ancient Core Fragments</div>"],
-            ], {width: "148px", height: "50px",}],
-        ], {width: "148px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
+                    ["left-row", [
+                        ["tooltip-row", [
+                            ["raw-html", "<img src='resources/fragments/ancientFragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                            ["raw-html", () => { return formatWhole(player.cof.coreFragments[0])}, {width: "103px", height: "50px", color: "#8B664B", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                            ["raw-html", "<div class='bottomTooltip'>Ancient Core Fragments</div>"],
+                        ], {width: "158px", height: "50px",}],
+                    ], {width: "158px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
                     ["blank", "25px"],
                     ["clickable", 12],
                     ["raw-html", () => { return player.i.pylonBuilt ? "You have <h3>" + format(player.i.pylonEnergy) + "/" + format(player.i.pylonEnergyMax) +  "</h3> ancient pylon energy (" + format(player.i.pylonEnergyPerSecond) + "/s)." : "" }, {color: "#000000ff", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", () => {return player.i.pylonBuilt ? "Boosts U1 tickspeed by x" + format(player.i.pylonEnergyEffect) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.i.pylonBuilt ? "Boosts pre-otf multiplier by ^" + format(player.i.pylonEnergyEffect2) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.i.pylonBuilt ? "Boosts post-otf multiplier by ^" + format(player.i.pylonEnergyEffect3) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                    ["row", [
+                        ["raw-html", () => {return player.i.pylonBuilt ? "Boosts pre-otf multiplier by ^" + format(player.i.pylonEnergyEffect2) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return player.i.pylonEnergyEffect2.gt(10000) ? "<small style='margin-left:10px'>[SOFTCAPPED]</small>" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace"}],
+                    ]],
+                    ["row", [
+                        ["raw-html", () => {return player.i.pylonBuilt ? "Boosts post-otf multiplier by ^" + format(player.i.pylonEnergyEffect3) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return player.i.pylonEnergyEffect3.gt(1000) ? "<small style='margin-left:10px'>[SOFTCAPPED]</small>" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace"}],
+                    ]],
                     ["raw-html", () => {return player.i.pylonBuilt ? "Passive effect: Boosts IP gain by x" + format(player.i.pylonPassiveEffect) + " (Based on points)" : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13],]], 
@@ -705,7 +710,6 @@
                     ["raw-html", () => {return player.i.pylonTier.gte(2) ? "Tier 2 Ancient Pylon unlocks the Universe 2 Pylon" : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["clickable", 13],
-
                 ],
             },
             "Cutscene Viewer": {
@@ -726,6 +730,15 @@
     tabFormat: [
         ["raw-html", () => {return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["raw-html", () => {return player.gain.gt(player.i.doomSoftcapStart) ? "SOFTCAP OF DOOM: Gain past " + format(player.i.doomSoftcapStart) + " is raised by ^" + format(player.i.doomSoftcap, 3) + "." : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
+        ["bar", "infbar"],
+        ["style-row", [
+            ["style-row", [
+                ["raw-html", () => {return "<h3>Pre-OTF Mult</h3><br>x" + format(player.i.preOTFMult)}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+            ], {width: "250px"}],
+            ["style-row", [
+                ["raw-html", () => {return "<h3>Post-OTF Mult</h3><br>x" + format(player.i.postOTFMult)}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+            ], () => {return player.i.postOTFMult.neq(1) ? {width: "250px", borderLeft: "3px solid #ccc"} : {display: "none !important"}}],
+        ], () => {return player.i.postOTFMult.neq(1) ? {width: "503px", height: "50px", background: "rgba(0,0,0,0.5)", border: "3px solid #ccc", borderRadius: "25px", margin: "10px auto"} : player.i.preOTFMult.neq(1) ? {width: "250px", height: "50px", background: "var(--miscButton)", border: "3px solid var(--regBorder)", borderRadius: "25px", margin: "10px auto"} : {display: "none !important"}}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],

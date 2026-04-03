@@ -11,6 +11,8 @@ addLayer("el", {
         log: [],
 
         elementsUnlocked: false,
+
+        currentElement: 0,
     }},
     automate() {},
     nodeStyle() {
@@ -56,6 +58,47 @@ addLayer("el", {
                 return look
             },
         },
+        // element clickables
+        "1-H": {
+            title: "1<br><h2>H</h2><br>1.008",
+            unlocked() { return player.el.elementsUnlocked; },
+            onClick() {
+                player.el.currentElement = 1
+            },
+            canClick() {
+                return true
+            },
+            style() {
+                let look = {width: "50px", minHeight: "50px", fontSize: "6px", borderRadius: "10px"}
+                if (player.el.currentElement == 1) {
+                    look.background = "linear-gradient(135deg, #ff0080ff 0%, #e00070ff 50%, #ff0080ff 100%)"
+                }
+                else {
+                    look.background = "#edf"
+                }
+                return look
+            }
+        },
+        "2-He": {
+            title: "2<br><h2>He</h2><br>4.00",
+            unlocked() { return player.el.elementsUnlocked; },
+            onClick() {
+                player.el.currentElement = 2
+            },
+            canClick() {
+                return true
+            },
+            style() {
+                let look = {width: "50px", minHeight: "50px", fontSize: "6px", borderRadius: "10px"}
+                if (player.el.currentElement == 2) {
+                    look.background = "linear-gradient(135deg, #ff0080ff 0%, #e00070ff 50%, #ff0080ff 100%)"
+                }
+                else {
+                    look.background = "#edf"
+                }
+                return look
+            }
+        },
     },
     bars: {},
     upgrades: {},
@@ -99,7 +142,7 @@ addLayer("el", {
                                     ["raw-html", "<h1>Ag</h1>", {fontSize: "24px", color: "#cbd", fontFamily: "monospace"}],
                                     ["blank", "10px"],
                                     ["raw-html", "107.87", {fontSize: "24px", color: "#cbd", fontFamily: "monospace"}],
-                                ], {width: "150px", height: "150px", background: "rgba(0,0,0,0.5)", border: "4px solid #cbd", borderRadius: "30px", padding: "12px 0", margin: "5px auto"}],
+                                ], {width: "150px", minHeight: "150px", background: "rgba(0,0,0,0.5)", border: "4px solid #cbd", borderRadius: "30px", padding: "12px 0", margin: "5px auto"}],
                             ], {width: "700px", background: "rgba(0,0,0,0)", paddingBottom: "10px", borderRadius: "15px"}],
                             ["blank", "5px"],
                             ["style-row", [], {width: "700px", height: "4px", background: "#cbd", marginBottom: "10px"}],
@@ -120,7 +163,13 @@ addLayer("el", {
                 unlocked() { return player.el.elementsUnlocked; },
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", () => "HIO<sub>4</sub>"]
+                    ["raw-html", () => "HIO<sub>4</sub>"],
+                    ["blank", "15px"],
+                    ["row", [
+                        ["clickable", "1-H"],
+                        ["blank", ["800px", "50px"]],
+                        ["clickable", "2-He"],
+                    ]]
                 ]
             },
         },

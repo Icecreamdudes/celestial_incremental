@@ -56,7 +56,7 @@
             antimatter: {
                 amount: new Decimal(0),
                 gain: new Decimal(0),
-                effect: new Decimal(1),
+                effect: new Decimal(0),
             },
             infinity: {
                 amount: new Decimal(0),

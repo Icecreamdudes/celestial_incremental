@@ -137,7 +137,7 @@
 
         if (hasMilestone("s", 13)) player.ca.galaxyDust = player.ca.galaxyDust.add(Decimal.mul(player.ca.galaxyDustToGet.mul(0.01), delta))
 
-        player.ca.galaxyDustEffect = player.ca.galaxyDust.plus(1).log10().mul(0.1).add(1)
+        player.ca.galaxyDustEffect = player.ca.galaxyDust.add(1).log(10).pow(0.7).div(5).add(1)
         player.ca.galaxyDustEffect = player.ca.galaxyDustEffect.pow(buyableEffect("cof", 27))
 
         //rep galax

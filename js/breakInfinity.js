@@ -330,7 +330,7 @@
         21: {
             title: "BI IP Upgrade IX",
             unlocked() { return true },
-            description: "Slightly weaken the post-1e300 AM softcap.",
+            description: "Increase the antimatter softcap's exponent by +0.1.",
             cost: new Decimal(1e15),
             currencyLocation() { return player.in },
             currencyDisplayName: "IP",
@@ -502,7 +502,7 @@
         108: {
             title: "BI NIP Upgrade VIII",
             unlocked() { return true },
-            description: "Raise antimatter effect to the ^1.6.",
+            description: "Raise antimatter effect to the ^2.",
             cost: new Decimal(2e11),
             currencyLocation() { return player.ta },
             currencyDisplayName: "NIP",

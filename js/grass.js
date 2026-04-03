@@ -118,12 +118,19 @@ addLayer('g', {
 
         // SOFTCAP OF DOOM
         player.g.doomSoftcap = new Decimal(0.5)
+
+        // SOFTCAP START
         player.g.doomSoftcapStart = new Decimal("1e500000")
+        player.g.doomSoftcapStart = player.g.doomSoftcapStart.pow(buyableEffect("fa", 407))
+
+        // SOFTCAP WEAKENER
+        let doomWeaken = new Decimal(1)
+        doomWeaken = doomWeaken.mul(buyableEffect("fa", 403))
 
         // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
         let amt = player.g.grass
         if (player.g.grassVal.gte(player.g.grass)) amt = player.g.grassVal
-        player.g.doomSoftcap = player.g.doomSoftcap.div(amt.div(player.g.doomSoftcapStart).add(1).log(player.g.doomSoftcapStart).add(1))
+        player.g.doomSoftcap = player.g.doomSoftcap.div(amt.div(player.g.doomSoftcapStart).add(1).log(player.g.doomSoftcapStart).div(doomWeaken).add(1))
 
         // APPLY DOOM SOFTCAP
         if (player.g.grassVal.gt(player.g.doomSoftcapStart)) player.g.grassVal = player.g.grassVal.div(player.g.doomSoftcapStart).pow(player.g.doomSoftcap).mul(player.g.doomSoftcapStart)

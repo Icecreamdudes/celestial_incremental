@@ -4080,6 +4080,7 @@
 
             ],
         },
+            //note: you can also use the original dice space song for cutscenes
         "CB-Goldsmith-Evo": {
             type: "normal",
             background: "#094599",
@@ -4100,8 +4101,24 @@
                 { text: "But thinking realistically, almost nothing comes without giving something up.", },
             ],
         },
-
-        //note: you can also use the original dice space song for cutscenes
+        "UZ-Puzzle-1": {
+            type: "normal",
+            background: "linear-gradient(135deg, #ff0080ff 0%, #e00070ff 50%, #ff0080ff 100%)",
+            portrait: "resources/secret.png",
+            music: "music/cutscenePiano.mp3",
+            trigger() {return player.ak.akashUnlocked },
+            dialogue: [
+                { text: "In a rather short period of time, you solve the first puzzle in this strange new universe." }, 
+                { text: "Well, since you solved the puzzle, I'm going to introduce myself.", portrait: "resources/akash.png"},
+                { text: "My name is Akash, the Celestial of Puzzles.", portrait: "resources/akash.png"},
+                { text: "You become more cautious."},
+                { text: "Don't worry, you'll be fine.", portrait: "resources/akash.png"},
+                { text: "However, one puzzle is nothing in this universe.", portrait: "resources/akash.png"},
+                { text: "Sure, you gained a little bit of skill, but in reality, you still have a long way to go in the puzzle world.", portrait: "resources/akash.png"},
+                { text: "Solving more puzzles will be key here.", portrait: "resources/akash.png"},
+                { text: "Feel free to explore.", portrait: "resources/akash.png"},
+            ],
+        },
     },
     clickables: {
         11: {

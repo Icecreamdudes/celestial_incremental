@@ -12,7 +12,7 @@ addLayer("el", {
 
         elementsUnlocked: false,
 
-        currentElement: 0,
+        currentElement: 1,
     }},
     automate() {},
     nodeStyle() {
@@ -69,7 +69,7 @@ addLayer("el", {
                 return true
             },
             style() {
-                let look = {width: "50px", minHeight: "50px", fontSize: "6px", borderRadius: "10px"}
+                let look = {width: "50px", minHeight: "50px", fontSize: "6px", borderRadius: "0px"}
                 if (player.el.currentElement == 1) {
                     look.background = "linear-gradient(135deg, #ff0080ff 0%, #e00070ff 50%, #ff0080ff 100%)"
                 }
@@ -89,8 +89,168 @@ addLayer("el", {
                 return true
             },
             style() {
-                let look = {width: "50px", minHeight: "50px", fontSize: "6px", borderRadius: "10px"}
+                let look = {width: "50px", minHeight: "50px", fontSize: "6px", borderRadius: "0px"}
                 if (player.el.currentElement == 2) {
+                    look.background = "linear-gradient(135deg, #ff0080ff 0%, #e00070ff 50%, #ff0080ff 100%)"
+                }
+                else {
+                    look.background = "#edf"
+                }
+                return look
+            }
+        },
+        "3-Li": {
+            title: "3<br><h2>Li</h2><br>6.94",
+            unlocked() { return player.el.elementsUnlocked; },
+            onClick() {
+                player.el.currentElement = 3
+            },
+            canClick() {
+                return true
+            },
+            style() {
+                let look = {width: "50px", minHeight: "50px", fontSize: "6px", borderRadius: "0px"}
+                if (player.el.currentElement == 3) {
+                    look.background = "linear-gradient(135deg, #ff0080ff 0%, #e00070ff 50%, #ff0080ff 100%)"
+                }
+                else {
+                    look.background = "#edf"
+                }
+                return look
+            }
+        },
+        "4-Be": {
+            title: "4<br><h2>Be</h2><br>9.01",
+            unlocked() { return player.el.elementsUnlocked; },
+            onClick() {
+                player.el.currentElement = 4
+            },
+            canClick() {
+                return true
+            },
+            style() {
+                let look = {width: "50px", minHeight: "50px", fontSize: "6px", borderRadius: "0px"}
+                if (player.el.currentElement == 4) {
+                    look.background = "linear-gradient(135deg, #ff0080ff 0%, #e00070ff 50%, #ff0080ff 100%)"
+                }
+                else {
+                    look.background = "#edf"
+                }
+                return look
+            }
+        },
+        "5-B": {
+            title: "5<br><h2>B</h2><br>10.81",
+            unlocked() { return player.el.elementsUnlocked; },
+            onClick() {
+                player.el.currentElement = 5
+            },
+            canClick() {
+                return true
+            },
+            style() {
+                let look = {width: "50px", minHeight: "50px", fontSize: "6px", borderRadius: "0px"}
+                if (player.el.currentElement == 5) {
+                    look.background = "linear-gradient(135deg, #ff0080ff 0%, #e00070ff 50%, #ff0080ff 100%)"
+                }
+                else {
+                    look.background = "#edf"
+                }
+                return look
+            }
+        },
+        "6-C": {
+            title: "6<br><h2>C</h2><br>12.01",
+            unlocked() { return player.el.elementsUnlocked; },
+            onClick() {
+                player.el.currentElement = 6
+            },
+            canClick() {
+                return true
+            },
+            style() {
+                let look = {width: "50px", minHeight: "50px", fontSize: "6px", borderRadius: "0px"}
+                if (player.el.currentElement == 6) {
+                    look.background = "linear-gradient(135deg, #ff0080ff 0%, #e00070ff 50%, #ff0080ff 100%)"
+                }
+                else {
+                    look.background = "#edf"
+                }
+                return look
+            }
+        },
+        "7-N": {
+            title: "7<br><h2>N</h2><br>14.01",
+            unlocked() { return player.el.elementsUnlocked; },
+            onClick() {
+                player.el.currentElement = 7
+            },
+            canClick() {
+                return true
+            },
+            style() {
+                let look = {width: "50px", minHeight: "50px", fontSize: "6px", borderRadius: "0px"}
+                if (player.el.currentElement == 7) {
+                    look.background = "linear-gradient(135deg, #ff0080ff 0%, #e00070ff 50%, #ff0080ff 100%)"
+                }
+                else {
+                    look.background = "#edf"
+                }
+                return look
+            }
+        },
+        "8-O": {
+            title: "8<br><h2>O</h2><br>16.00",
+            unlocked() { return player.el.elementsUnlocked; },
+            onClick() {
+                player.el.currentElement = 8
+            },
+            canClick() {
+                return true
+            },
+            style() {
+                let look = {width: "50px", minHeight: "50px", fontSize: "6px", borderRadius: "0px"}
+                if (player.el.currentElement == 8) {
+                    look.background = "linear-gradient(135deg, #ff0080ff 0%, #e00070ff 50%, #ff0080ff 100%)"
+                }
+                else {
+                    look.background = "#edf"
+                }
+                return look
+            }
+        },
+        "9-F": {
+            title: "9<br><h2>F</h2><br>19.00",
+            unlocked() { return player.el.elementsUnlocked; },
+            onClick() {
+                player.el.currentElement = 9
+            },
+            canClick() {
+                return true
+            },
+            style() {
+                let look = {width: "50px", minHeight: "50px", fontSize: "6px", borderRadius: "0px"}
+                if (player.el.currentElement == 9) {
+                    look.background = "linear-gradient(135deg, #ff0080ff 0%, #e00070ff 50%, #ff0080ff 100%)"
+                }
+                else {
+                    look.background = "#edf"
+                }
+                return look
+            }
+        },
+        "10-Ne": {
+            title: "10<br><h2>Ne</h2><br>20.18",
+            unlocked() { return player.el.elementsUnlocked; },
+            onClick() {
+                player.el.currentElement = 10
+            },
+            canClick() {
+                return true
+            },
+            style() {
+                let look = {width: "50px", minHeight: "50px", fontSize: "6px", borderRadius: "0px"}
+                if (player.el.currentElement == 10) {
                     look.background = "linear-gradient(135deg, #ff0080ff 0%, #e00070ff 50%, #ff0080ff 100%)"
                 }
                 else {
@@ -102,7 +262,85 @@ addLayer("el", {
     },
     bars: {},
     upgrades: {},
-    buyables: {},
+    buyables: {
+        0: {},
+        1: {
+            costBase() { return new Decimal(1) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(10) },
+            currency() { return player.ak.puzzlePoints},
+            pay(amt) { player.ak.puzzlePoints = this.currency().sub(amt) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(getBuyableAmount(this.layer, this.id).plus(1)).div(2)
+                return eff
+            },
+            unlocked() { return player.el.currentElement == 1 },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).sub(1) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Element 1. Hydrogen"
+            },
+            display() {
+                return "Increases base puzzle points by +" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Puzzle Points"
+            },
+            buy(mult) {
+                if (mult != true && true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (true) this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', backgroundColor: "#cbd" }
+        },
+        2: { // change effect later
+            costBase() { return new Decimal(1) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(10) },
+            currency() { return player.ak.puzzlePoints},
+            pay(amt) { player.ak.puzzlePoints = this.currency().sub(amt) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(getBuyableAmount(this.layer, this.id).plus(1)).div(2)
+                return eff
+            },
+            unlocked() { return player.el.currentElement == 2 },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).sub(1) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Element 2. Helium"
+            },
+            display() {
+                return "Increases base puzzle points by +" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Puzzle Points"
+            },
+            buy(mult) {
+                if (mult != true && true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (true) this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', backgroundColor: "#cbd" }
+        },
+    },
     milestones: {},
     challenges: {},
     infoboxes: {},
@@ -169,7 +407,21 @@ addLayer("el", {
                         ["clickable", "1-H"],
                         ["blank", ["800px", "50px"]],
                         ["clickable", "2-He"],
-                    ]]
+                    ]],
+                    ["row", [
+                        ["clickable", "3-Li"],
+                        ["clickable", "4-Be"],
+                        ["blank", ["500px", "50px"]],
+                        ["clickable", "5-B"],
+                        ["clickable", "6-C"],
+                        ["clickable", "7-N"],
+                        ["clickable", "8-O"],
+                        ["clickable", "9-F"],
+                        ["clickable", "10-Ne"],
+                    ]],
+                    ["blank", "25px"],
+                    ["ex-buyable", 1],
+                    ["ex-buyable", 2],
                 ]
             },
         },

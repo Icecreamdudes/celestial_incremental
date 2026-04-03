@@ -163,7 +163,7 @@ addLayer("el", {
                 unlocked() { return player.el.elementsUnlocked; },
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", () => "HIO<sub>4</sub>"],
+                    ["raw-html", () => "HIO<sub>4</sub> is periodic acid"],
                     ["blank", "15px"],
                     ["row", [
                         ["clickable", "1-H"],

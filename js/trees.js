@@ -17,6 +17,9 @@
 
         treeSoftcap: new Decimal(1),
         treeSoftcapStart: new Decimal(15),
+
+        doomSoftcap: new Decimal(0.5),
+        doomSoftcapStart: new Decimal("1e2000000"),
     }},
     automate() {
         if (hasMilestone("r", 12))
@@ -74,6 +77,25 @@
         player.t.treesToGet = player.t.treesToGet.pow(player.co.cores.tree.effect[1])
         if (hasUpgrade("cs", 401)) player.t.treesToGet = player.t.treesToGet.pow(1.1)
 
+        // SOFTCAP OF DOOM
+        player.t.doomSoftcap = new Decimal(0.5)
+
+        // SOFTCAP START
+        player.t.doomSoftcapStart = new Decimal("1e2000000")
+        player.t.doomSoftcapStart = player.t.doomSoftcapStart.pow(buyableEffect("fa", 407))
+
+        // SOFTCAP WEAKENER
+        let doomWeaken = new Decimal(1)
+        doomWeaken = doomWeaken.mul(buyableEffect("fa", 403))
+
+        // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
+        let amt = player.t.trees
+        if (player.t.treesToGet.gte(player.t.trees)) amt = player.t.treesToGet
+        player.t.doomSoftcap = player.t.doomSoftcap.div(amt.div(player.t.doomSoftcapStart).add(1).log(player.t.doomSoftcapStart).pow(doomWeaken).add(1))
+
+        // APPLY DOOM SOFTCAP
+        if (player.t.treesToGet.gt(player.t.doomSoftcapStart)) player.t.treesToGet = player.t.treesToGet.div(player.t.doomSoftcapStart).pow(player.t.doomSoftcap).mul(player.t.doomSoftcapStart)
+
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.po.halter.trees.enabled == 1) player.t.treesToGet = player.t.treesToGet.div(player.po.halter.trees.halt)
         if (player.po.halter.trees.enabled == 2 && player.t.treesToGet.gt(player.po.halter.trees.halt)) player.t.treesToGet = player.po.halter.trees.halt
@@ -116,6 +138,7 @@
 
         // POWER MODIFIERS
         player.t.leavesPerSecond = player.t.leavesPerSecond.pow(player.co.cores.tree.effect[2])
+        if (hasUpgrade("cs", 404)) player.t.leavesPerSecond = player.t.leavesPerSecond.pow(3)
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.r.timeReversed) player.t.leavesPerSecond = player.t.leavesPerSecond.mul(0)
@@ -127,7 +150,8 @@
         player.t.treeReq = player.t.trees.pow(1.35).add(10)
         player.t.treeReq = player.t.treeReq.div(buyableEffect("t", 14))
         player.t.treeReq = player.t.treeReq.div(levelableEffect("pet", 203)[0])
-        if (hasUpgrade("cs", 401)) player.t.treeReq = player.t.treeReq.pow(1.6)
+        if (hasUpgrade("cs", 401)) player.t.treeReq = player.t.treeReq.pow(1.5)
+        if (hasUpgrade("cs", 404)) player.t.treeReq = player.t.treeReq.pow(0.5)
 
         if (player.t.leaves.gte(player.t.treeReq)) {
             player.t.trees = player.t.trees.add(player.t.treesToGet)
@@ -489,6 +513,7 @@
                             ["raw-html", () => { return "You have " + formatWhole(player.t.trees) + " trees"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ["raw-html", () => { return player.t.leavesPerSecond.div(20).gt(player.t.treeReq) ? "(+" + format(player.t.treesToGet, 1) + "/s)" : "(+" + format(player.t.treesToGet, 1) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
                         ]],
+                        ["raw-html", () => {return player.t.treesToGet.gt(player.t.doomSoftcapStart) ? "SOFTCAP OF DOOM: Gain past " + format(player.t.doomSoftcapStart) + " is raised by ^" + format(player.t.doomSoftcap, 3) + "." : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace"}],
                         ["row", [
                             ["raw-html", () => {return "Boosts prestige point gain by x" + format(player.t.treeEffect) + "."}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                             ["raw-html", () => {return player.t.treeEffect.gte("1e15000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace", marginLeft: "10px"}]

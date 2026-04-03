@@ -52,6 +52,7 @@
             player.ep0.timers[thing].base = player.ep0.timers[thing].base.mul(buyableEffect("ep1", 13))
             if (hasUpgrade("ep2", 11)) player.ep0.timers[thing].base = player.ep0.timers[thing].base.mul(upgradeEffect("ep2", 11))
             player.ep0.timers[thing].base = player.ep0.timers[thing].base.mul(buyableEffect("sp", 13))
+            player.ep0.timers[thing].base = player.ep0.timers[thing].base.mul(buyableEffect("sme", 113))
         }
 
         player.ep0.timers[0].max = new Decimal(60)
@@ -377,6 +378,7 @@ addLayer("ep1", {
             if (hasUpgrade("ep2", 10)) player.ep1.timers[thing].base = player.ep1.timers[thing].base.mul(upgradeEffect("ep2", 10))
             if (hasUpgrade("ev8", 21)) player.ep1.timers[thing].base = player.ep1.timers[thing].base.mul(1.4)
             player.ep1.timers[thing].base = player.ep1.timers[thing].base.mul(buyableEffect("sp", 23))
+            player.ep1.timers[thing].base = player.ep1.timers[thing].base.mul(buyableEffect("sme", 113))
         }
 
         player.ep1.timers[0].max = new Decimal(1)

@@ -42,9 +42,11 @@
         if (getLevelableTier("pu", 102, true)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(buyableEffect("dp", 14))
         if (getLevelableTier("pu", 204, true)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("pu", 204)[0])
         if (getLevelableTier("pu", 301, true)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("pu", 301)[0])
+        if (getLevelableTier("pu", 307, true)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("pu", 307)[0])
         player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(buyableEffect("dgr", 16))
         player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("st", 105)[0])
         player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(buyableEffect("dv", 14))
+        player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(buyableEffect("dgj", 12))
 
         //power
         if (player.pet.legPetTimers[0].active) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.pow(0.8)

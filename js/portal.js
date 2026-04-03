@@ -317,7 +317,7 @@
                 return player.po.gwaTemple ? "<h1>Gwarship the cat of limitless potential.<br>On<br><h2>(Progress is kept between resets)</h2>" : "<h1>Worship the cat of limitless potential.<br>Off<br><h2>(Progress is kept between resets)</h2>";
             },
             canClick() { return player.po.featureSlots.gte(1)},
-            unlocked() { return hasChallenge("ip", 11)},
+            unlocked() { return player.gwaTemple.gwaWorshipTime.gt(0)},
             onClick() {
                 player.po.gwaTemple = true
             },
@@ -675,7 +675,7 @@
             },
             style() {
                 let look = {width: "200px", minHeight: "50px", color: "white", background: "black", border: "5px solid", borderRadius: "0 0 12px 12px"}
-                if (player.uni.UA.paused) {look.borderColor = "#0043b2"} else {look.borderColor = "#0061ff"}
+                if (player.uni.UA.paused) {look.borderColor = "#001333"} else {look.borderColor = "#00307f"}
                 return look
             }
         },
@@ -701,7 +701,7 @@
             },
             style() {
                 let look = {width: "200px", minHeight: "50px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0 0 12px 12px"}
-                if (player.uni.UB.paused) {look.backgroundColor = "#666666ff"} else {look.backgroundColor = "rgb(161, 161, 161)"}
+                if (player.uni.DS.paused) {look.backgroundColor = "#666666ff"} else {look.backgroundColor = "rgb(161, 161, 161)"}
                 return look
             }
         },
@@ -767,6 +767,19 @@
                 return look
             }
         },
+        403: {
+            title() {return player.uni.BH.paused ? "PAUSED<br>▶" : "UNPAUSED<br>⏸"},
+            canClick: true,
+            unlocked() {return uniShown("BH")},
+            onClick() {
+                pauseUniverse("BH")
+            },
+            style() {
+                let look = {width: "200px", minHeight: "50px", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "0 0 12px 12px"}
+                if (player.uni.BH.paused) {look.backgroundColor = "#45073c"} else {look.backgroundColor = "#6e0b60"}
+                return look
+            }
+        },
     },
     microtabs: {
         halt: {
@@ -809,81 +822,89 @@
                     ["style-column", [
                         ["raw-html", "Welcome to the Universe Pauser.<br><small>Paused universes have offline progress.<br>Effect values are not saved on page refresh.</small>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ], {width: "600px", height: "75px", background: "rgba(0,0,0,0.3)", border: "3px solid white", borderRadius: "15px"}],
-                    ["blank", "10px"],
-                    ["row", [
-                        ["style-column", [
+                    ["blank", "20px"],
+                    ["style-column", [
+                        ["row", [
                             ["style-column", [
-                                ["raw-html", "Universe 1", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "200px", height: "47px", borderBottom: "3px solid white"}],
-                            ["clickable", 101],
-                        ], () => {return uniShown("U1") ? {width: "200px", height: "100px", background: "#ccc", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
-                        ["style-column", [
+                                ["style-column", [
+                                    ["raw-html", "Universe 1", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "47px", borderBottom: "3px solid #777"}],
+                                ["clickable", 101],
+                            ], () => {return uniShown("U1") ? {width: "200px", height: "100px", background: "#ccc", border: "3px solid #777", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
                             ["style-column", [
-                                ["raw-html", "Universe 2", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "200px", height: "47px", borderBottom: "3px solid white"}],
-                            ["clickable", 102],
-                        ], () => {return uniShown("U2") ? {width: "200px", height: "100px", background: "#10B844", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
-                        ["style-column", [
+                                ["style-column", [
+                                    ["raw-html", "Universe 2", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "47px", borderBottom: "3px solid #085c22"}],
+                                ["clickable", 102],
+                            ], () => {return uniShown("U2") ? {width: "200px", height: "100px", background: "#10B844", border: "3px solid #085c22", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
                             ["style-column", [
-                                ["raw-html", "Universe 3", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "200px", height: "47px", borderBottom: "3px solid white"}],
-                            ["clickable", 103],
-                        ], () => {return uniShown("U3") ? {width: "200px", height: "100px", background: "#aa0000", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
-                    ]],
-                    ["row", [
-                        ["style-column", [
+                                ["style-column", [
+                                    ["raw-html", "Universe 3", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "47px", borderBottom: "3px solid #500"}],
+                                ["clickable", 103],
+                            ], () => {return uniShown("U3") ? {width: "200px", height: "100px", background: "#aa0000", border: "3px solid #500", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
+                        ]],
+                        ["row", [
                             ["style-column", [
-                                ["raw-html", "Check Back", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "200px", height: "47px", borderBottom: "3px solid white"}],
-                            ["clickable", 201],
-                        ], () => {return uniShown("CB") ? {width: "200px", height: "100px", background: "#094599", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
-                        ["style-column", [
+                                ["style-column", [
+                                    ["raw-html", "Check Back", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "47px", borderBottom: "3px solid #04224c"}],
+                                ["clickable", 201],
+                            ], () => {return uniShown("CB") ? {width: "200px", height: "100px", background: "#094599", border: "3px solid #04224c", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
                             ["style-column", [
-                                ["raw-html", "Pets", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "200px", height: "47px", borderBottom: "3px solid white"}],
-                            ["clickable", 401],
-                        ], () => {return uniShown("CB") && player.cb.highestLevel.gte(10) ? {width: "200px", height: "100px", background: "#4e7cff", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
-                        ["style-column", [
+                                ["style-column", [
+                                    ["raw-html", "Alt-Universe 1", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "47px", borderBottom: "3px solid #14303d"}],
+                                ["clickable", 301],
+                            ], () => {return uniShown("A1") ? {width: "200px", height: "100px", background: "#28617B", border: "3px solid #14303d", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
                             ["style-column", [
-                                ["raw-html", "Universe α", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "200px", height: "47px", borderBottom: "3px solid white"}],
-                            ["clickable", 202],
-                        ], () => {return uniShown("UA") ? {width: "200px", height: "100px", background: "black", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
-                    ]],
-                    ["row", [
-                        ["style-column", [
+                                ["style-column", [
+                                    ["raw-html", "Alt-Universe 2", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "47px", borderBottom: "3px solid #24204b"}],
+                                ["clickable", 302],
+                            ], () => {return uniShown("A2") ? {width: "200px", height: "100px", background: "#484096", border: "3px solid #24204b", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
+                        ]],
+                        ["row", [
                             ["style-column", [
-                                ["raw-html", "Alt-Universe 1", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "200px", height: "47px", borderBottom: "3px solid white"}],
-                            ["clickable", 301],
-                        ], () => {return uniShown("A1") ? {width: "200px", height: "100px", background: "#28617B", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
-                        ["style-column", [
+                                ["style-column", [
+                                    ["raw-html", "Universe α", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "47px", borderBottom: "3px solid #0061FF"}],
+                                ["clickable", 202],
+                            ], () => {return uniShown("UA") ? {width: "200px", height: "100px", background: "black", border: "3px solid #0061FF", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
                             ["style-column", [
-                                ["raw-html", "Punchcards", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "200px", height: "47px", borderBottom: "3px solid white"}],
-                            ["clickable", 402],
-                        ], () => {return hasUpgrade("sma", 14) ? {width: "200px", height: "100px", background: "#8CA3FF", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
-                        ["style-column", [
+                                ["style-column", [
+                                    ["raw-html", "Universe β", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "47px", borderBottom: "3px solid #625900"}],
+                                ["clickable", 203],
+                            ], () => {return uniShown("UB") ? {width: "200px", height: "100px", background: "#c4b300", border: "3px solid #625900", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
                             ["style-column", [
-                                ["raw-html", "Alt-Universe 2", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "200px", height: "47px", borderBottom: "3px solid white"}],
-                            ["clickable", 302],
-                        ], () => {return uniShown("A2") ? {width: "200px", height: "100px", background: "#484096", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
-                    ]],
-                    ["row", [
-                        ["style-column", [
+                                ["style-column", [
+                                    ["raw-html", "Universe ε", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "47px", borderBottom: "3px solid #333"}],
+                                ["clickable", 204],
+                            ], () => {return uniShown("DS") ? {width: "200px", height: "100px", background: "#666", border: "3px solid #333", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
+                        ]],
+                        ["row", [
                             ["style-column", [
-                                ["raw-html", "Universe β", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "200px", height: "47px", borderBottom: "3px solid white"}],
-                            ["clickable", 203],
-                        ], () => {return uniShown("UB") ? {width: "200px", height: "100px", background: "#c4b300", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
-                        ["style-column", [
+                                ["style-column", [
+                                    ["raw-html", "Pets", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "47px", borderBottom: "3px solid #273e7f"}],
+                                ["clickable", 401],
+                            ], () => {return uniShown("CB") && player.cb.highestLevel.gte(10) ? {width: "200px", height: "100px", background: "#4e7cff", border: "3px solid #273e7f", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
                             ["style-column", [
-                                ["raw-html", "Universe ε", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "200px", height: "47px", borderBottom: "3px solid white"}],
-                            ["clickable", 204],
-                        ], () => {return uniShown("DS") ? {width: "200px", height: "100px", background: "#666666ff", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
-                    ]],
+                                ["style-column", [
+                                    ["raw-html", "Punchcards", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "47px", borderBottom: "3px solid #46517f"}],
+                                ["clickable", 402],
+                            ], () => {return hasUpgrade("sma", 14) ? {width: "200px", height: "100px", background: "#8CA3FF", border: "3px solid #46517f", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
+                            ["style-column", [
+                                ["style-column", [
+                                    ["raw-html", "Black Heart", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "47px", borderBottom: "3px solid #8A0E79"}],
+                                ["clickable", 403],
+                            ], () => {return uniShown("BH") ? {width: "200px", height: "100px", background: "black", border: "3px solid #8A0E79", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
+                        ]],
+                    ], {background: "rgba(0,0,0,0.3)", border: "3px solid white", borderRadius: "15px", padding: "10px"}],
                 ],
             },
         },

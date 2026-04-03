@@ -18,8 +18,7 @@ var systemComponents = {
 		<button v-if="nodeShown(layer)"
 			v-bind:id="layer"
 			v-on:click="function() {
-				if (shiftDown && options.forceTooltips) player[layer].forceTooltip = !player[layer].forceTooltip
-				else if(tmp[layer].isLayer) {
+				if(tmp[layer].isLayer && !tmp[layer].onClick) {
 					showTab(layer, prev)
 				}
 				else {run(layers[layer].onClick, layers[layer])}
@@ -40,7 +39,7 @@ var systemComponents = {
 			v-bind:style="constructNodeStyle(layer)">
 			<span class="nodeLabel" v-html="(abb !== '' && tmp[layer].image === undefined) ? abb : '&nbsp;'"></span>
 			<tooltip
-      v-if="tmp[layer].tooltip != ''"
+      v-if="run(layers[layer].tooltip, layers[layer]) != ''"
 			:text="(tmp[layer].isLayer) ? (
 				player[layer].unlocked ? (run(layers[layer].tooltip, layers[layer]) ? run(layers[layer].tooltip, layers[layer]) : formatWhole(player[layer].points) + ' ' + tmp[layer].resource)
 				: (tmp[layer].tooltipLocked ? tmp[layer].tooltipLocked : 'Reach ' + formatWhole(tmp[layer].requires) + ' ' + tmp[layer].baseResource + ' to unlock (You have ' + formatWhole(tmp[layer].baseAmount) + ' ' + tmp[layer].baseResource + ')')
@@ -60,7 +59,7 @@ var systemComponents = {
 		template: `
 		<button v-if="nodeShown(layer)"
 			v-on:click="function() {
-				if(tmp[layer].isLayer) {
+				if(tmp[layer].isLayer && !tmp[layer].onClick) {
 					showTab(layer, prev)
 				}
 				else {run(layers[layer].onClick, layers[layer])}
@@ -89,7 +88,7 @@ var systemComponents = {
 		template: `
 		<button v-if="nodeShown(layer)"
 			v-on:click="function() {
-				if(tmp[layer].isLayer) {
+				if(tmp[layer].isLayer && !tmp[layer].onClick) {
 					showTab(layer, prev)
 				}
 				else {run(layers[layer].onClick, layers[layer])}

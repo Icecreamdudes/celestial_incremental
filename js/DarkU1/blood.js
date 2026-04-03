@@ -105,7 +105,7 @@
             tooltip() { return "Blood... The elixir of humanity." },
             onClick() {
                 player.ir.inBattle = true
-                player.ma.inBlackHeart = true
+                options.fullscreen = true
                 player.subtabs["bl"]['stuff'] = 'Battle'
 
                 arena = new BloodArena(1200, 600);
@@ -127,7 +127,7 @@
             unlocked() { return !player.bl.noxFightActive || player.subtabs["bl"]["stuff"] == "Refresh Page :("|| player.subtabs["bl"]["stuff"] == "Lose"},
             onClick() {
                 player.ir.inBattle = false
-                player.ma.inBlackHeart = false
+                options.fullscreen = false
                 player.subtabs["bl"]['stuff'] = 'Blood Battle'
 
                 if (arena) {
@@ -438,8 +438,8 @@
                 //        ["raw-html", () => {return (player.dp.prestigePointsToGet.gte(1e250)) ? "[SOFTCAPPED<sup>2</sup>]" : player.du.points.div(1000).pow(0.25).gte(1e7) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace", marginLeft: "10px"}],
                     ]],
                     ["raw-html", () => {return "You are draining " + format(player.bl.bloodDrainPerSecond) + " blood per second."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return !player.pet.activeAbilities[0] ? "You will gain " + format(player.bl.xpGainPercentage.mul(100)) + "% of punchcard XP per second. (+"+ format(player.le.starmetalAlloyToGetTrue.mul(player.bl.xpGainPercentage)) +"/s) <br>(Only the currently active ones)" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.pet.activeAbilities[0] ? "You will gain " + format(player.bl.xpGainPercentage.mul(100)) + "% of punchcard XP per second. (+"+ format(player.le.eclipseShardsToGetTrue.mul(player.bl.xpGainPercentage)) +"/s) <br>(Only the currently active ones)" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.pet.legPetTimers[0].current.lte(0) ? "You will gain " + format(player.bl.xpGainPercentage.mul(100)) + "% of punchcard XP per second. (+"+ format(player.le.starmetalAlloyToGetTrue.mul(player.bl.xpGainPercentage)) +"/s) <br>(Only the currently active ones)" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.pet.legPetTimers[0].current.gt(0) ? "You will gain " + format(player.bl.xpGainPercentage.mul(100)) + "% of punchcard XP per second. (+"+ format(player.le.eclipseShardsToGetTrue.mul(player.bl.xpGainPercentage)) +"/s) <br>(Only the currently active ones)" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["clickable", 102], ["clickable", 103]]],
                     ["blank", "25px"],
@@ -538,7 +538,7 @@
         ["raw-html", () => { return !player.ir.inBattle ? "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["raw-html", () => { return !player.ir.inBattle ? "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." : "" }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
         ["raw-html", () => { return !player.ir.inBattle && player.du.pointGain.gte(player.du.secondSoftcapStart) ? "UNAVOIDABLE SOFTCAP<sup>2</sup>: Gain past " + format(player.du.secondSoftcapStart) + " is raised by ^" + format(player.du.pointSoftcap2) + "." : "" }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
-        ["raw-html", () => { return !player.ir.inBattle && player.pet.legPetTimers[0].active ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legendaryPetAbilityTimers[0]) + "." : ""}, {color: "#FEEF5F", fontSize: "20px", fontFamily: "monospace"}],
+        ["raw-html", () => { return !player.ir.inBattle && player.pet.legPetTimers[0].current.gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legPetTimers[0].current) + "." : ""}, {color: "#FEEF5F", fontSize: "20px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],

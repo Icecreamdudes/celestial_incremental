@@ -299,6 +299,7 @@ addLayer("tad", {
         player.tad.infinitumGain = player.tad.infinitumGain.mul(buyableEffect("p", 18))
         player.tad.infinitumGain = player.tad.infinitumGain.mul(levelableEffect("pet", 1101)[1])
         player.tad.infinitumGain = player.tad.infinitumGain.mul(buyableEffect("tad", 212))
+        if (player.alephsChamber.milestone[25] > 0) player.tad.infinitumGain = player.tad.infinitumGain.mul(100)
 
         // FLOOR INFINTUM GAIN
         player.tad.infinitumGain = player.tad.infinitumGain.floor()
@@ -526,6 +527,7 @@ addLayer("tad", {
             onClick() {
                 player.tad.domainCap = player.tad.domainCap.div(10).floor()
                 layers.tad.domainReset(10)
+                player.subtabs["tad"]["Domain"] = "Tree"
             },
             style() {
                 let look = {width: "60px", minHeight: "50px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", borderWidth: "0", borderRadius: "0"}
@@ -542,6 +544,7 @@ addLayer("tad", {
             onClick() {
                 player.tad.domainCap = player.tad.domainCap.div(1e5).floor()
                 layers.tad.domainReset(10)
+                player.subtabs["tad"]["Domain"] = "Tree"
             },
             style() {
                 let look = {width: "60px", minHeight: "50px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", borderWidth: "0", borderRadius: "0"}
@@ -558,6 +561,7 @@ addLayer("tad", {
             onClick() {
                 player.tad.domainCap = player.tad.domainCap.div(1e25).floor()
                 layers.tad.domainReset(10)
+                player.subtabs["tad"]["Domain"] = "Tree"
             },
             style() {
                 let look = {width: "60px", minHeight: "50px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", borderWidth: "0", borderRadius: "0"}
@@ -574,6 +578,7 @@ addLayer("tad", {
             onClick() {
                 player.tad.domainCap = player.tad.domainCap.mul(10).floor()
                 layers.tad.domainReset(10)
+                player.subtabs["tad"]["Domain"] = "Tree"
             },
             style() {
                 let look = {width: "60px", minHeight: "50px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", borderWidth: "0", borderRadius: "0"}
@@ -590,6 +595,7 @@ addLayer("tad", {
             onClick() {
                 player.tad.domainCap = player.tad.domainCap.mul(1e5).floor()
                 layers.tad.domainReset(10)
+                player.subtabs["tad"]["Domain"] = "Tree"
             },
             style() {
                 let look = {width: "60px", minHeight: "50px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", borderWidth: "0", borderRadius: "0"}
@@ -606,6 +612,7 @@ addLayer("tad", {
             onClick() {
                 player.tad.domainCap = player.tad.domainCap.mul(1e25).floor()
                 layers.tad.domainReset(10)
+                player.subtabs["tad"]["Domain"] = "Tree"
             },
             style() {
                 let look = {width: "60px", minHeight: "50px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", borderWidth: "0", borderRadius: "0"}
@@ -621,6 +628,7 @@ addLayer("tad", {
             onClick() {
                 player.tad.domainCap = new Decimal(1e5)
                 layers.tad.domainReset(10)
+                player.subtabs["tad"]["Domain"] = "Tree"
             },
             style() {
                 let look = {width: "122px", minHeight: "50px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", borderWidth: "0", borderRadius: "0"}

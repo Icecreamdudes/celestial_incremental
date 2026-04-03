@@ -41,6 +41,8 @@
         if (getLevelableTier("pu", 109, true)) player.db.boosterReq = player.db.boosterReq.div(levelableEffect("pu", 109)[1])
         if (getLevelableTier("pu", 208, true)) player.db.boosterReq = player.db.boosterReq.div(levelableEffect("pu", 208)[0])
         if (getLevelableTier("pu", 208, true)) player.db.boosterReq = player.db.boosterReq.div(buyableEffect("dp", 16))
+        if (getLevelableTier("pu", 307, true)) player.db.boosterReq = player.db.boosterReq.div(levelableEffect("pu", 307)[0])
+        player.db.boosterReq = player.db.boosterReq.div(buyableEffect("dgj", 13))
 
         player.db.boosterReq = player.db.boosterReq.pow(buyableEffect("dv", 13))
 
@@ -112,8 +114,8 @@
         14: {
             requirementDescription: "<h3>12 Boosters",
             effectDescription() { return "Gain 10% of grass value per second, and boost grass value and capacity based on boosters<br>Currently: x" + format(player.db.milestone4Effect) + "." },
-            done() { return player.db.boosters.gte(12) && player.ir.iriditeDefeated },
-            unlocked() { return player.ir.iriditeDefeated },
+            unlocked() {return player.ir.iriditeDefeated && getBuyableAmount("sme", 161).gte(1)},
+            done() { return player.db.boosters.gte(12) && getBuyableAmount("sme", 161).gte(1) },
             style() {
                 let look = {width: "500px", minHeight: "90px", color: "white", border: "3px solid #6e64c4", borderRadius: "10px", margin: "-1.5px"}
                 if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
@@ -123,8 +125,8 @@
         15: {
             requirementDescription: "<h3>16 Boosters",
             effectDescription() { return "Gain 100% of prestige points per second and autobuy all prestige point buyables." },
-            done() { return player.db.boosters.gte(16) && player.ir.iriditeDefeated },
-            unlocked() { return player.ir.iriditeDefeated },
+            unlocked() {return player.ir.iriditeDefeated && getBuyableAmount("sme", 161).gte(2)},
+            done() { return player.db.boosters.gte(16) && getBuyableAmount("sme", 161).gte(2) },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #6e64c4", borderRadius: "10px", margin: "-1.5px"}
                 if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
@@ -154,10 +156,8 @@
         },
         103: {
             requirementDescription: "<h3>10 Best Boosters",
-            effectDescription: "/1.4 to starmetal essence generator time.",
-            unlocked() { return player.ma.matosDefeated },
-            done() { return player.db.bestBoosters.gte(10) && player.ma.matosDefeated },
-            unlocked() {return player.ma.matosDefeated},
+            effectDescription() {return player.matosLair.milestone[25] == 0 ? "[BUFFED FEATURE NOT UNLOCKED]" : "/1.4 to starmetal essence generator time."},
+            done() { return player.db.bestBoosters.gte(10)},
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #6e64c4", borderRadius: "10px", margin: "-1.5px"}
                 if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
@@ -166,9 +166,8 @@
         },
         104: {
             requirementDescription: "<h3>15 Best Boosters",
-            effectDescription() { return "Best boosters divides star exploration times.<br>Currently: /" + format(player.db.permaMilestone4Effect) + "." },
-            unlocked() { return player.ma.matosDefeated },
-            done() { return player.db.bestBoosters.gte(15) && player.ma.matosDefeated },
+            effectDescription() {return player.matosLair.milestone[25] == 0 ? "[BUFFED FEATURE NOT UNLOCKED]" : "Best boosters divides star exploration times.<br>Currently: /" + format(player.db.permaMilestone4Effect) + "." },
+            done() { return player.db.bestBoosters.gte(15)},
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #6e64c4", borderRadius: "10px", margin: "-1.5px"}
                 if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
@@ -177,9 +176,8 @@
         },
         105: {
             requirementDescription: "<h3>20 Best Boosters",
-            effectDescription() { return "Reduce matos combo softcap scaling by -0.1%.<br>"},
-            unlocked() { return player.ir.iriditeDefeated },
-            done() { return player.db.bestBoosters.gte(20) && player.ir.iriditeDefeated },
+            effectDescription() {return "Reduce black heart combo softcap scaling by -0.2%."},
+            done() {return player.db.bestBoosters.gte(20)},
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #6e64c4", borderRadius: "10px", margin: "-1.5px"}
                 if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
@@ -210,23 +208,23 @@
                 content: [
                     ['blank', '25px'],
                     ["row", [
-                    ["column", [
-                    ["raw-html", "<h3>Milestones", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                    ["row", [["milestone", 11]]],
-                    ["row", [["milestone", 12]]],
-                    ["row", [["milestone", 13]]],
-                    ["row", [["milestone", 14]]],
-                    ["row", [["milestone", 15]]],
-                    ]],
-                    ['blank', '25px'],
-                    ["column", [
-                    ["raw-html", "<h3>Permanent Milestones", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                    ["row", [["milestone", 101]]],
-                    ["row", [["milestone", 102]]],
-                    ["row", [["milestone", 103]]],
-                    ["row", [["milestone", 104]]],
-                    ["row", [["milestone", 105]]],
-                    ]],
+                        ["top-column", [
+                            ["raw-html", "<h3>Milestones", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["row", [["milestone", 11]]],
+                            ["row", [["milestone", 12]]],
+                            ["row", [["milestone", 13]]],
+                            ["row", [["milestone", 14]]],
+                            ["row", [["milestone", 15]]],
+                        ]],
+                        ['blank', '25px'],
+                        ["top-column", [
+                            ["raw-html", "<h3>Permanent Milestones", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["row", [["milestone", 101]]],
+                            ["row", [["milestone", 102]]],
+                            ["row", [["milestone", 103]]],
+                            ["row", [["milestone", 104]]],
+                            ["row", [["milestone", 105]]],
+                        ]],
                     ]],
                 ]
             },

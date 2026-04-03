@@ -30,6 +30,7 @@
         coinsFlipped: new Decimal(0),
 
         autoFlip: false,
+        coinExploit: 0,
 
         //softcap
         headsSoftcapStart: new Decimal(10000),
@@ -134,6 +135,7 @@
         player.cf.headsToGet = player.cf.headsToGet.mul(buyableEffect("wof", 11))
         player.cf.headsToGet = player.cf.headsToGet.mul(player.sm.chipsEffect[1])
         player.cf.headsToGet = player.cf.headsToGet.mul(buyableEffect("sm", 101))
+        player.cf.headsToGet = player.cf.headsToGet.mul(buyableEffect("sme", 182))
         
         player.cf.headsToGet = player.cf.headsToGet.div(player.cf.headsSoftcapEffect)
 
@@ -149,6 +151,7 @@
         player.cf.tailsToGet = player.cf.tailsToGet.mul(buyableEffect("wof", 11))
         player.cf.tailsToGet = player.cf.tailsToGet.mul(player.sm.chipsEffect[1])
         player.cf.tailsToGet = player.cf.tailsToGet.mul(buyableEffect("sm", 101))
+        player.cf.tailsToGet = player.cf.tailsToGet.mul(buyableEffect("sme", 182))
 
         player.cf.tailsToGet = player.cf.tailsToGet.div(player.cf.tailsSoftcapEffect)
 
@@ -176,6 +179,21 @@
             }
         }
 
+        if (player.cf.coinExploit > 0) {
+            player.cf.coinExploit = Math.max(player.cf.coinExploit - (0.5*delta), 0)
+        }
+        if (player.cf.coinExploit < 0) {
+            player.cf.coinExploit = player.cf.coinExploit + delta
+        }
+
+        if (player.cf.coinExploit >= 10) {
+            player.cf.heads = new Decimal(0)
+            player.cf.tails = new Decimal(0)
+            player.cf.coinsFlipped = new Decimal(0)
+
+            player.cf.coinExploit = -5
+            if (player.tab == "cf") makeParticles(BIG_COOKIE_NUMBER, 1, `normal`, {text: "SUPER COIN CLIP"})
+        }
     },
     clickables: {
         11: {
@@ -207,44 +225,45 @@
         },
         13: {
             title() { return "Coin Clipper" },
-            canClick() { return true },
+            canClick() { return player.cf.coinExploit >= 0 },
             tooltip() { return "<h5>Resets flip count, heads, tails, and heads and tails buyables. Use it when you screw up. (You suck at this game)" },
             unlocked() { return true },
             onClick() {
-        player.za.chancePoints = new Decimal(0)
+                player.za.chancePoints = new Decimal(0)
 
-        player.cf.coinsFlipped = new Decimal(0)
-        player.cf.heads = new Decimal(0)
-        player.cf.tails = new Decimal(0)
+                player.cf.coinsFlipped = new Decimal(0)
+                player.cf.heads = new Decimal(0)
+                player.cf.tails = new Decimal(0)
 
-        try {
-            if (typeof window !== 'undefined' && !window.__cfInitDone) {
-                // clear any leftover timeout id (might be present from a saved object)
-                if (player.cf && player.cf._flipTimeoutId) {
-                    try { clearTimeout(player.cf._flipTimeoutId) } catch (e) {}
-                    player.cf._flipTimeoutId = null
-                }
+                try {
+                    if (typeof window !== 'undefined' && !window.__cfInitDone) {
+                        // clear any leftover timeout id (might be present from a saved object)
+                        if (player.cf && player.cf._flipTimeoutId) {
+                            try { clearTimeout(player.cf._flipTimeoutId) } catch (e) {}
+                            player.cf._flipTimeoutId = null
+                        }
 
-                // reset runtime flip state so the coin isn't mid-flip on a reload
-                if (player.cf) {
-                    player.cf.flipping = false
-                    player.cf.flipTimer = new Decimal(0)
-                    player.cf.coinHeads = true
-                    player.cf._finalSide = null
-                }
+                        // reset runtime flip state so the coin isn't mid-flip on a reload
+                        if (player.cf) {
+                            player.cf.flipping = false
+                            player.cf.flipTimer = new Decimal(0)
+                            player.cf.coinHeads = true
+                            player.cf._finalSide = null
+                        }
 
-                window.__cfInitDone = true
-            }
-        } catch (e) { console.error("cf update init error:", e) }
+                        window.__cfInitDone = true
+                    }
+                } catch (e) { console.error("cf update init error:", e) }
 
-        player.cf.buyables[21] = new Decimal(0)
-        player.cf.buyables[22] = new Decimal(0)
-        player.cf.buyables[23] = new Decimal(0)
-        player.cf.buyables[31] = new Decimal(0)
-        player.cf.buyables[32] = new Decimal(0)
-        player.cf.buyables[33] = new Decimal(0)
-        player.cf.buyables[34] = new Decimal(0)
+                player.cf.buyables[21] = new Decimal(0)
+                player.cf.buyables[22] = new Decimal(0)
+                player.cf.buyables[23] = new Decimal(0)
+                player.cf.buyables[31] = new Decimal(0)
+                player.cf.buyables[32] = new Decimal(0)
+                player.cf.buyables[33] = new Decimal(0)
+                player.cf.buyables[34] = new Decimal(0)
             },
+            onHold() {player.cf.coinExploit = player.cf.coinExploit + 0.05},
             style() { 
                 return { width: '100px', "min-height": '100px', borderRadius: "15px 15px 15px 15px", border: "3px solid #9b5a48ff", backgroundColor: "#744335ff" }
             },

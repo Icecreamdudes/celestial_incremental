@@ -24,6 +24,12 @@
         modSoftcapStart: new Decimal(10),
 
         modMax: false,
+
+        doomSoftcap: new Decimal(0.5),
+        doomSoftcapStart: new Decimal("1e2000000"),
+
+        doomSoftcap2: new Decimal(0.5),
+        doomSoftcap2Start: new Decimal("1e2000000"),
     }},
     automate() {
         if (hasMilestone("ip", 17)) {
@@ -62,6 +68,25 @@
 
         // POWER MODIFIERS
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.pow(player.co.cores.code.effect[1])
+
+        // SOFTCAP OF DOOM
+        player.m.doomSoftcap = new Decimal(0.5)
+
+        // SOFTCAP START
+        player.m.doomSoftcapStart = new Decimal("1e2000000")
+        player.m.doomSoftcapStart = player.m.doomSoftcapStart.pow(buyableEffect("fa", 408))
+
+        // SOFTCAP WEAKENER
+        let doomWeaken = new Decimal(1)
+        doomWeaken = doomWeaken.mul(buyableEffect("fa", 404))
+
+        // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
+        let amt = player.m.codeExperience
+        if (player.m.codeExperienceToGet.gte(player.m.codeExperience)) amt = player.m.codeExperienceToGet
+        player.m.doomSoftcap = player.m.doomSoftcap.div(amt.div(player.m.doomSoftcapStart).add(1).log(player.m.doomSoftcapStart).div(doomWeaken).add(1))
+
+        // APPLY DOOM SOFTCAP
+        if (player.m.codeExperienceToGet.gt(player.m.doomSoftcapStart)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.div(player.m.doomSoftcapStart).pow(player.m.doomSoftcap).mul(player.m.doomSoftcapStart)
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.po.halter.code.enabled == 1) player.m.codeExperienceToGet = player.m.codeExperienceToGet.div(player.po.halter.code.halt)
@@ -139,6 +164,26 @@
         if (hasUpgrade("hpw", 1042)) player.m.modsToGet = player.m.modsToGet.pow(1.1)
         player.m.modsToGet = player.m.modsToGet.pow(player.cs.scraps.code.effect)
         if (hasUpgrade("cs", 703)) player.m.modsToGet = player.m.modsToGet.pow(1.1)
+        player.m.modsToGet = player.m.modsToGet.pow(buyableEffect("cof", 17))
+
+        // SOFTCAP OF DOOM
+        player.m.doomSoftcap2 = new Decimal(0.5)
+
+        // SOFTCAP START
+        player.m.doomSoftcap2Start = new Decimal("1e2000000")
+        player.m.doomSoftcap2Start = player.m.doomSoftcap2Start.pow(buyableEffect("fa", 408))
+
+        // SOFTCAP WEAKENER
+        let doomWeaken2 = new Decimal(1)
+        doomWeaken2 = doomWeaken2.mul(buyableEffect("fa", 404))
+
+        // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
+        let amt2 = player.m.mods
+        if (player.m.modsToGet.gte(player.m.mods)) amt2 = player.m.modsToGet
+        player.m.doomSoftcap2 = player.m.doomSoftcap2.div(amt2.div(player.m.doomSoftcap2Start).add(1).log(player.m.doomSoftcap2Start).div(doomWeaken2).add(1))
+
+        // APPLY DOOM SOFTCAP
+        if (player.m.modsToGet.gt(player.m.doomSoftcap2Start)) player.m.modsToGet = player.m.modsToGet.div(player.m.doomSoftcap2Start).pow(player.m.doomSoftcap2).mul(player.m.doomSoftcap2Start)
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.po.halter.mods.enabled == 1) player.m.modsToGet = player.m.modsToGet.div(player.po.halter.mods.halt)
@@ -151,6 +196,7 @@
         player.m.modsReq = player.m.mods.pow(1.45).add(100)
         player.m.modsReq = player.m.modsReq.div(levelableEffect("pet", 203)[1])
         if (hasUpgrade("cs", 702)) player.m.modsReq = player.m.modsReq.pow(5)
+        if (hasUpgrade("cs", 704)) player.m.modsReq = player.m.modsReq.pow(upgradeEffect("cs", 704))
 
         // MOD GAIN CODE
         if (player.m.linesOfCode.gte(player.m.modsReq)) {
@@ -434,7 +480,7 @@
             currency() { return player.m.mods},
             pay(amt) { player.m.mods = this.currency().sub(amt) },
             effect(x) {
-                return getBuyableAmount(this.layer, this.id).pow(0.75).mul(0.005).add(1)
+                return getBuyableAmount(this.layer, this.id).pow(0.834).div(1000).add(1)
             },
             unlocked() { return hasUpgrade("bi", 113) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -443,7 +489,7 @@
                 return "Antimatter Softcap Reducer"
             },
             display() {
-                return "which are boosting antimatter softcap base by x" + format(tmp[this.layer].buyables[this.id].effect, 3) + ".\n\
+                return "which are increasing antimatter's softcap exponent by +" + formatShortSimple(tmp[this.layer].buyables[this.id].effect.sub(1), 3) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Mods"
             },
             buy(mult) {
@@ -581,6 +627,7 @@
                 return look
             }],
         ]],
+        ["raw-html", () => {return player.m.codeExperienceToGet.gt(player.m.doomSoftcapStart) ? "SOFTCAP OF DOOM: Gain past " + format(player.m.doomSoftcapStart) + " is raised by ^" + format(player.m.doomSoftcap, 3) + "." : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
         ["raw-html", () => {return hasUpgrade("cs", 701) ? "Boosts factor base by x" + format(player.m.codeExperienceEffect) : ""}, {color: "#1377BF", fontSize: "20px", fontFamily: "monospace"}],
         ["blank", "15px"],
         ["clickable", 11],
@@ -591,6 +638,7 @@
                 ["raw-html", () => { return "You have " + formatWhole(player.m.mods) + " mods"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                 ["raw-html", () => { return player.m.linesOfCodePerSecond.div(20).gt(player.m.modsReq) ? "(+" + format(player.m.modsToGet, 1) + "/s)" : "(+" + format(player.m.modsToGet, 1) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
             ]],
+            ["raw-html", () => {return player.m.modsToGet.gt(player.m.doomSoftcap2Start) ? "SOFTCAP OF DOOM: Gain past " + format(player.m.doomSoftcap2Start) + " is raised by ^" + format(player.m.doomSoftcap2, 3) + "." : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace"}],
             ["raw-html", () => {return "Boosts tree gain by x" + format(player.m.modEffect) + "."}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
             ["blank", "10px"],
             ["bar", "modbar"],

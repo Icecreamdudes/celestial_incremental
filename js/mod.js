@@ -32,6 +32,7 @@
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js", "DarkU1/blood.js", "Zar/zar.js", "Zar/coinFlip.js",
  		"Zar/wheelOfFortune.js", "Check Back/singularityPet.js", "Zar/slotMachine.js", "Zar/checkBackShrine.js", "Zar/cards.js",
 		"Check Back/diamondDust.js", "Check Back/treasureRoom.js",
+		"Puzzle World/akash.js", "Puzzle World/elements.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 	],
@@ -273,6 +274,12 @@ function updateStyles() {
 			break;
 	    case "bl":
 			layerBG = "#130000ff"
+			break;
+		case "ak": 
+			layerBG = "linear-gradient(135deg, #000000ff 0%, #200010ff 50%, #000000ff 100%)"
+			break;
+		case "el":
+			layerBG = "#181020"
 			break;
 		case "ev0":
 			layerBG = "linear-gradient(-45deg, #655421, #fad25a)"
@@ -621,6 +628,9 @@ function updateStyles() {
 				break;
 			case "DS":
 				sideBG = "radial-gradient(circle, #303030ff, #000000)"
+				break;
+			case "UZ":
+				sideBG = "linear-gradient(135deg, #000000ff 0%, #200010ff 50%, #000000ff 100%)"
 				break;	
 			default:
 				sideBG = "#0b0b0b"

@@ -45,12 +45,14 @@ addLayer("st", {
         let onepersec = new Decimal(1)
 
         player.st.dimensionsGain = [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),]
+        player.st.dimensionsTimerMax = [new Decimal(5),new Decimal(8),new Decimal(12),new Decimal(18),new Decimal(25),new Decimal(36),new Decimal(50),new Decimal(75)]
         for (let i = 0; i < 8; i++) {
             if (player.st.buyables[i + 11].gt(0)) player.st.dimensionsTimer[i] = player.st.dimensionsTimer[i].add(delta)
             if (i < 7) {
                 player.st.dimensionsGain[i] = player.st.dimensionsGain[i].mul(player.st.dimensionPowerEffects[i + 1])
                 player.st.dimensionsGain[i] = player.st.dimensionsGain[i].mul(buyableEffect("st", i + 11))
             }
+            player.st.dimensionsTimerMax[i] = player.st.dimensionsTimerMax[i].div(buyableEffect("sme", 152))
             if (player.st.dimensionsTimer[i].gte(player.st.dimensionsTimerMax[i])) {
                 player.st.dimensionsTimer[i] = new Decimal(0)
                 player.st.dimensionAmounts[i] = player.st.dimensionAmounts[i].add(player.st.dimensionsGain[i])
@@ -65,7 +67,7 @@ addLayer("st", {
 
         player.st.starPower = player.st.starPower.add(player.st.starPowerPerSecond.mul(delta))
         player.st.starPowerPerSecond = player.st.dimensionPowerEffects[0]
-        player.st.starPowerPerSecond = player.st.starPowerPerSecond.mul(buyableEffect("ma", 32))
+        player.st.starPowerPerSecond = player.st.starPowerPerSecond.mul(buyableEffect("depth2", 3))
         player.st.starPowerPerSecond = player.st.starPowerPerSecond.mul(levelableEffect("pu", 208)[1])
         player.st.starPowerPerSecond = player.st.starPowerPerSecond.mul(levelableEffect("st", 210)[0])
 
@@ -1072,6 +1074,17 @@ addLayer("st", {
                 return look
             }  
         },
+        // Normality
+        // Space Energy
+        // Space
+        // Length/Width/Depth
+        // Blood
+        // Clouds
+        // Grass Jump Req
+        // Starmetal Essence (Gain and/or cooldown)
+        // Eclipse Shards
+        // Eclipse Timer Tickspeed
+        // Punchcard XP
     },
     upgrades: {},
     buyables: {
@@ -1094,8 +1107,10 @@ addLayer("st", {
                     return new Decimal("1e16")
                 } else if (getBuyableAmount(this.layer, this.id).eq(6)) {
                     return new Decimal("1e25")
+                } else if (getBuyableAmount(this.layer, this.id).eq(7)) {
+                    return new Decimal("1e36")
                 } else {
-                    return getBuyableAmount(this.layer, this.id).sub(6).mul("1e25")
+                    return Decimal.pow(10, getBuyableAmount(this.layer, this.id).sub(1).pow(2))
                 }
             },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -1679,11 +1694,11 @@ addLayer("st", {
             currency() { return player.au2.stars },
             pay(amt) { player.au2.stars = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.8).mul(0.1).add(1) },
-            unlocked() { return player.st.buyables[109].gte(50) && player.ma.matosDefeated  },
+            unlocked() { return player.st.buyables[109].gte(50) && player.matosLair.milestone[25] > 0},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             display() {
-                return "which are boosting all fragment scores by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are boosting core fragment scores by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
             },
             branches: [109],
@@ -1776,7 +1791,7 @@ addLayer("st", {
             currency() { return player.au2.stars},
             pay(amt) { player.au2.stars = this.currency().sub(amt) },
             effect(x) { return true },
-            unlocked() { return player.st.buyables[202].gte(1) && player.ma.matosDefeated},
+            unlocked() { return player.st.buyables[202].gte(1) && player.matosLair.milestone[25] > 0},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             display() {
@@ -2318,7 +2333,7 @@ addLayer("st", {
                 return look
             }],
         ]],
-        ["raw-html", () => {return player.au2.starSoftcapActive ? "After " + format(player.au2.starSoftcapStart) + " stars, divide star gain by /" + format(player.au2.starSoftcapEffect) + "." : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
+        ["raw-html", () => {return player.au2.starSoftcapActive ? "After " + format(player.au2.starSoftcapStart) + " stars, raise star gain by ^" + format(player.au2.starSoftcapEffect) + "." : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
         ["raw-html", () => {return "You have " + formatWhole(player.pl.planets) + " planets"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],

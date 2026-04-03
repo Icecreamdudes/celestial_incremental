@@ -201,7 +201,7 @@ addLayer("ep2", {
         player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(buyableEffect("pet", 5))
         if (hasUpgrade("ep1", 13)) player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(upgradeEffect("ep1", 13))
         player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(buyableEffect("sp", 33))
-        if (hasUpgrade("fi", 22)) player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(upgradeEffect("fi", 22))
+        player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(buyableEffect("sme", 113))
 
         player.ep2.cookies = player.ep2.cookies.add(player.ep2.cookiesPerSecond.mul(delta))
 
@@ -223,7 +223,7 @@ addLayer("ep2", {
         if (hasUpgrade("ep2", 9005)) player.ep2.averageGoldenCooldown = player.ep2.averageGoldenCooldown.div(1.5)
         player.ep2.averageGoldenCooldown = player.ep2.averageGoldenCooldown.div(buyableEffect("pet", 6).sub(1).div(10).add(1))
 
-        if (getLevelableAmount("pet", 403).gt(0)) {
+        if (getLevelableAmount("pet", 403).gt(0) || getLevelableTier("pet", 403).gt(0)) {
             if (player.tab == "ep2") {
                 player.ep2.goldenTimer = player.ep2.goldenTimer.sub(delta)
             } else if (player.ep2.externalGolden) {
@@ -2065,12 +2065,12 @@ addLayer("ep2", {
             img: "resources/checkback/wrath_simple.png",
             unlocked() {return getLevelableAmount("pet", 2003).gte(1)},
             title: "Annoyance",
-            description() {return "Total buildings boost black heart health.<br>Currently: x" + formatSimple(upgradeEffect(this.layer, this.id), 2)},
+            description() {return "Total buildings boost base character health.<br>Currently: +" + formatWhole(upgradeEffect(this.layer, this.id).mul(100)) + "%"},
             cost: new Decimal(6.66e12),
             currencyLocation() { return player.ep2 },
             currencyDisplayName: "Cookies",
             currencyInternalName: "cookies",
-            effect() {return player.ep2.totalBuildings.pow(0.7).mul(0.005).add(1)},
+            effect() {return player.ep2.totalBuildings.pow(0.7).div(200)},
             style: {background: "radial-gradient(#FFFFFF88, #FF9F7F88)"},
         },
         9102: {
@@ -2088,12 +2088,12 @@ addLayer("ep2", {
             img: "resources/checkback/wrath_simple.png",
             unlocked() {return getLevelableAmount("pet", 2003).gte(1)},
             title: "<span style='color:#F97448cc'>Resentment</span>",
-            description() {return "CPS boosts black heart damage.<br>Currently: x" + formatSimple(upgradeEffect(this.layer, this.id), 2)},
+            description() {return "CPS boosts base character damage.<br>Currently: +" + formatWhole(upgradeEffect(this.layer, this.id).mul(100)) + "%"},
             cost: new Decimal(6.66e16),
             currencyLocation() { return player.ep2 },
             currencyDisplayName: "Cookies",
             currencyInternalName: "cookies",
-            effect() {return player.ep2.cookiesPerSecond.add(1).log(10).pow(0.7).mul(0.1).add(1)},
+            effect() {return player.ep2.cookiesPerSecond.add(1).log(10).pow(0.7).div(8)},
             style: {background: "radial-gradient(#F9744888, #E0542688)"},
         },
         9104: {
@@ -2111,12 +2111,12 @@ addLayer("ep2", {
             img: "resources/checkback/wrath_simple.png",
             unlocked() {return getLevelableAmount("pet", 2003).gte(1)},
             title: "<span style='color:#D4410Dcc'>Anger</span>",
-            description() {return "Golden Cookie Clicks boost black heart regen.<br>Currently: x" + formatSimple(upgradeEffect(this.layer, this.id), 2)},
+            description() {return "Golden Cookie Clicks boost character luck.<br>Currently: +" + formatSimple(upgradeEffect(this.layer, this.id), 2)},
             cost: new Decimal(6.66e20),
             currencyLocation() { return player.ep2 },
             currencyDisplayName: "Cookies",
             currencyInternalName: "cookies",
-            effect() {return player.ep2.goldenClicks.pow(0.7).mul(0.01).add(1)},
+            effect() {return player.ep2.goldenClicks.pow(0.7).div(20)},
             style: {background: "radial-gradient(#D4410D88, #CA130A88)"},
         },
         9106: {
@@ -2134,7 +2134,7 @@ addLayer("ep2", {
             img: "resources/checkback/wrath_simple.png",
             unlocked() {return getLevelableAmount("pet", 2003).gte(1)},
             title: "<span style='color:#8C0000cc'>Fury</span>",
-            description: "Reduce black heart combo softcap scaling by -0.1%",
+            description: "Reduce black heart combo softcap scaling by -0.2%",
             cost: new Decimal(6.66e24),
             currencyLocation() { return player.ep2 },
             currencyDisplayName: "Cookies",

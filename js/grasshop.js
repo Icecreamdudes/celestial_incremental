@@ -24,6 +24,12 @@
 
         studyMax: false,
         steelMax: false,
+
+        doomSoftcap: new Decimal(0.5),
+        doomSoftcapStart: new Decimal("1e1000000"),
+
+        doomSoftcap2: new Decimal(0.5),
+        doomSoftcap2Start: new Decimal("1e2000000"),
     }},
     automate() {
         if (hasMilestone("ip", 17)) {
@@ -89,6 +95,25 @@
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(buyableEffect("cof", 15))
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(player.se.starsExploreEffect[0][4])
 
+        // SOFTCAP OF DOOM
+        player.gh.doomSoftcap = new Decimal(0.5)
+
+        // SOFTCAP START
+        player.gh.doomSoftcapStart = new Decimal("1e1000000")
+        player.gh.doomSoftcapStart = player.gh.doomSoftcapStart.pow(buyableEffect("fa", 407))
+
+        // SOFTCAP WEAKENER
+        let doomWeaken = new Decimal(1)
+        doomWeaken = doomWeaken.mul(buyableEffect("fa", 403))
+
+        // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
+        let amt = player.gh.grasshoppers
+        if (player.gh.grasshoppersToGet.gte(player.gh.grasshoppers)) amt = player.gh.grasshoppersToGet
+        player.gh.doomSoftcap = player.gh.doomSoftcap.div(amt.div(player.gh.doomSoftcapStart).add(1).log(player.gh.doomSoftcapStart).div(doomWeaken).add(1))
+
+        // APPLY DOOM SOFTCAP
+        if (player.gh.grasshoppersToGet.gt(player.gh.doomSoftcapStart)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.div(player.gh.doomSoftcapStart).pow(player.gh.doomSoftcap).mul(player.gh.doomSoftcapStart)
+
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.po.halter.grasshoppers.enabled == 1) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.div(player.po.halter.grasshoppers.halt)
         if (player.po.halter.grasshoppers.enabled == 2 && player.gh.grasshoppersToGet.gt(player.po.halter.grasshoppers.halt)) player.gh.grasshoppersToGet = player.po.halter.grasshoppers.halt
@@ -147,6 +172,25 @@
         // POWER MODIFIERS
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.pow(levelableEffect("pet", 301)[0])
 
+        // SOFTCAP OF DOOM
+        player.gh.doomSoftcap2 = new Decimal(0.5)
+
+        // SOFTCAP START
+        player.gh.doomSoftcap2Start = new Decimal("1e2000000")
+        player.gh.doomSoftcap2Start = player.gh.doomSoftcap2Start.pow(buyableEffect("fa", 408))
+
+        // SOFTCAP WEAKENER
+        let doomWeaken2 = new Decimal(1)
+        doomWeaken2 = doomWeaken2.mul(buyableEffect("fa", 404))
+
+        // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
+        let amt2 = player.gh.fertilizer
+        if (player.gh.fertilizerPerSecond.gte(player.gh.fertilizer)) amt2 = player.gh.fertilizerPerSecond
+        player.gh.doomSoftcap2 = player.gh.doomSoftcap2.div(amt2.div(player.gh.doomSoftcap2Start).add(1).log(player.gh.doomSoftcap2Start).div(doomWeaken2).add(1))
+
+        // APPLY DOOM SOFTCAP
+        if (player.gh.fertilizerPerSecond.gt(player.gh.doomSoftcap2Start)) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.div(player.gh.doomSoftcap2Start).pow(player.gh.doomSoftcap2).mul(player.gh.doomSoftcap2Start)
+
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.r.timeReversed) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(0)
 
@@ -162,6 +206,7 @@
         // START OF STEEL MODIFIERS
         if (player.m.codeExperience.pow(0.08).lt("1e500")) player.gh.steelToGet = player.m.codeExperience.pow(0.08)
         if (player.m.codeExperience.pow(0.08).gte("1e500")) player.gh.steelToGet = Decimal.mul("1e500", player.m.codeExperience.plus(10).log10().pow(10))
+        if (hasUpgrade("cs", 604)) player.gh.steelToGet = player.gh.steelToGet.pow(2)
         if (hasUpgrade("bi", 107)) player.gh.steelToGet = player.gh.steelToGet.mul(upgradeEffect("bi", 107))
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("p", 14))
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("id", 21))
@@ -182,7 +227,10 @@
         // POWER MODIFIERS
         player.gh.steelToGet = player.gh.steelToGet.pow(player.se.starsExploreEffect[0][5])
         player.gh.steelToGet = player.gh.steelToGet.pow(player.cof.coreFragmentEffects[2])
-        player.gh.steelToGet = player.gh.steelToGet.pow(buyableEffect("cof", 17))
+        player.gh.steelToGet = player.gh.steelToGet.pow(buyableEffect("laboratory", 12))
+
+        // STEEL PER SECOND
+        if (hasUpgrade("sma", 103)) player.gh.steel = player.gh.steel.add(Decimal.mul(player.uni["U1"].tickspeed.div(10), player.gh.steelToGet.mul(delta)))
 
         // STEEL EFFECT
         player.gh.steelEffect = player.gh.steel.pow(0.75).add(1)
@@ -1121,7 +1169,7 @@
             purchaseLimit() { return new Decimal(2500) },
             currency() { return player.gh.steel},
             pay(amt) { player.gh.steel = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(8).pow(1.3).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(8).pow(1.8).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -1155,7 +1203,7 @@
             purchaseLimit() { return new Decimal(2500) },
             currency() { return player.gh.steel},
             pay(amt) { player.gh.steel = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(3).pow(1.26).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(4).pow(1.4).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -1189,7 +1237,7 @@
             purchaseLimit() { return new Decimal(2500) },
             currency() { return player.gh.steel},
             pay(amt) { player.gh.steel = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.6).pow(1.05).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(2).pow(1.2).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -1291,6 +1339,7 @@
                         ["raw-html", () => { return "(+" + format(player.gh.fertilizerPerSecond) + "/s)"}, {color: "#EFD4B9", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
                         ["raw-html", () => {return player.gh.fertilizerEffect.gte("1e15000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
                     ]],
+                    ["raw-html", () => {return player.gh.fertilizerPerSecond.gt(player.gh.doomSoftcap2Start) ? "SOFTCAP OF DOOM: Gain past " + format(player.gh.doomSoftcap2Start) + " is raised by ^" + format(player.gh.doomSoftcap2, 3) + "." : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", function () { return "Boosts grass value by x" + format(player.gh.fertilizerEffect) + "." }, {color: "#EFD4B9", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "10px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],
@@ -1365,6 +1414,7 @@
                 return look
             }],
         ]],
+        ["raw-html", () => {return player.gh.grasshoppersToGet.gt(player.gh.doomSoftcapStart) ? "SOFTCAP OF DOOM: Gain past " + format(player.gh.doomSoftcapStart) + " is raised by ^" + format(player.gh.doomSoftcap, 3) + "." : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
         ],

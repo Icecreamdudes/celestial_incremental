@@ -31,8 +31,12 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
+        // BH Safety Check
+        if (player.universe == "U3" && player.uni.BH.paused) player.uni.BH.paused = false
+
         player.s.singularitiesToGet = new Decimal(1)
-        if (hasUpgrade("ma", 29)) player.s.singularitiesToGet = player.s.singularityPointsToGet.add(1).log(1e10).add(1).floor()
+        if (hasUpgrade("depth3", 5)) player.s.singularitiesToGet = player.s.singularityPointsToGet.add(1).log(1e10).add(1).floor()
+        if (player.alephsChamber.milestone[25] > 0) player.s.singularitiesToGet = Decimal.pow(2, player.s.singularityPointsToGet.add(1).log(1e100))
 
         if (player.in.infinityPoints.lt(2.5e193)) {
             player.s.singularityPointsToGet = player.in.infinityPoints.pow(0.125).div(15000)
@@ -53,10 +57,9 @@
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.d.boosterEffects[18])
         if (hasMilestone("r", 25)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.r.pentMilestone15Effect)
         if (hasChallenge("fu", 11)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(10)
-        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(buyableEffect("ma", 17))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(buyableEffect("st", 303))
-        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.ma.bestComboDepth3Effect)
-        if (player.ma.matosDefeated) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(1e40)
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.depth3.comboEffect)
+        if (player.matosLair.milestone[25] > 0) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(1e40)
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.cof.coreFragmentEffects[4])
         if (hasUpgrade("ir", 11)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(upgradeEffect("ir", 11))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("ir", 1)[1])

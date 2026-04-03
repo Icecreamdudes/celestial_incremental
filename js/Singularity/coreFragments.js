@@ -115,9 +115,11 @@
         player.cof.highestScore = maxIndex
 
         for (let i = 0; i < player.cof.coreFragments.length; i++) {
+            player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(buyableEffect("sme", 142))
             player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(buyableEffect("st", 110))
             player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(buyableEffect("sb", 102))
             player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(buyableEffect("fu", 91))
+            player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(buyableEffect("depth4", 3))
 
             player.cof.coreFragmentsToGet[i] = player.cof.fragmentScore[i].div(100).floor()
             player.cof.coreFragments[i] = player.cof.coreFragments[i].floor()
@@ -133,6 +135,15 @@
         player.cof.coreFragmentEffects[6] = player.cof.coreFragments[6].pow(0.25).div(5).add(1)
 
         player.subtabs["cof"]["buyables"] = player.cof.fragmentIndex
+
+        // Core Fragment Automation
+        if (getBuyableAmount("fa", 301).gt(0)) player.cof.coreFragments[0] = player.cof.coreFragments[0].add(player.cof.coreFragmentsToGet[0].mul(buyableEffect("fa", 301).sub(1)).mul(delta))
+        if (getBuyableAmount("fa", 302).gt(0)) player.cof.coreFragments[1] = player.cof.coreFragments[1].add(player.cof.coreFragmentsToGet[1].mul(buyableEffect("fa", 302).sub(1)).mul(delta))
+        if (getBuyableAmount("fa", 303).gt(0)) player.cof.coreFragments[2] = player.cof.coreFragments[2].add(player.cof.coreFragmentsToGet[2].mul(buyableEffect("fa", 303).sub(1)).mul(delta))
+        if (getBuyableAmount("fa", 304).gt(0)) player.cof.coreFragments[3] = player.cof.coreFragments[3].add(player.cof.coreFragmentsToGet[3].mul(buyableEffect("fa", 304).sub(1)).mul(delta))
+        if (getBuyableAmount("fa", 305).gt(0)) player.cof.coreFragments[4] = player.cof.coreFragments[4].add(player.cof.coreFragmentsToGet[4].mul(buyableEffect("fa", 305).sub(1)).mul(delta))
+        if (getBuyableAmount("fa", 306).gt(0)) player.cof.coreFragments[5] = player.cof.coreFragments[5].add(player.cof.coreFragmentsToGet[5].mul(buyableEffect("fa", 306).sub(1)).mul(delta))
+        if (getBuyableAmount("fa", 307).gt(0)) player.cof.coreFragments[6] = player.cof.coreFragments[6].add(player.cof.coreFragmentsToGet[6].mul(buyableEffect("fa", 307).sub(1)).mul(delta))
     },
     clickables: {
         1: {
@@ -734,7 +745,7 @@
             purchaseLimit() { return new Decimal(150) },
             currency() { return player.cof.coreFragments[5] },
             pay(amt) { player.cof.coreFragments[5] = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.45).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.7).div(100).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -1121,5 +1132,5 @@
         ], {width: "788px", height: "565px", background: "var(--layerBackground)", border: "3px solid var(--regBorder)"}],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && player.ma.matosDefeated }
+    layerShown() { return player.startedGame == true && player.matosLair.milestone[25] > 0 }
 })

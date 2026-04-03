@@ -38,6 +38,9 @@ addLayer('g', {
             new Decimal(1),
         ],
         moonstoneLevelMax: new Decimal(1),
+
+        doomSoftcap: new Decimal(0.5),
+        doomSoftcapStart: new Decimal("1e500000"),
     }},
     automate() {
         if (hasMilestone('r', 13)) {
@@ -110,6 +113,28 @@ addLayer('g', {
         player.g.grassVal = player.g.grassVal.pow(buyableEffect('st', 101))
         player.g.grassVal = player.g.grassVal.pow(buyableEffect("cof", 14))
 
+        // SOFTCAPPY
+        if (player.g.grassVal.gte("1e100000")) player.g.grassVal = player.g.grassVal.div("1e100000").pow(0.1).mul("1e100000")
+
+        // SOFTCAP OF DOOM
+        player.g.doomSoftcap = new Decimal(0.5)
+
+        // SOFTCAP START
+        player.g.doomSoftcapStart = new Decimal("1e500000")
+        player.g.doomSoftcapStart = player.g.doomSoftcapStart.pow(buyableEffect("fa", 407))
+
+        // SOFTCAP WEAKENER
+        let doomWeaken = new Decimal(1)
+        doomWeaken = doomWeaken.mul(buyableEffect("fa", 403))
+
+        // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
+        let amt = player.g.grass
+        if (player.g.grassVal.gte(player.g.grass)) amt = player.g.grassVal
+        player.g.doomSoftcap = player.g.doomSoftcap.div(amt.div(player.g.doomSoftcapStart).add(1).log(player.g.doomSoftcapStart).div(doomWeaken).add(1))
+
+        // APPLY DOOM SOFTCAP
+        if (player.g.grassVal.gt(player.g.doomSoftcapStart)) player.g.grassVal = player.g.grassVal.div(player.g.doomSoftcapStart).pow(player.g.doomSoftcap).mul(player.g.doomSoftcapStart)
+
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.po.halter.grass.enabled == 1) player.g.grassVal = player.g.grassVal.div(player.po.halter.grass.halt)
         if (player.po.halter.grass.enabled == 2 && player.g.grassVal.gt(player.po.halter.grass.halt)) player.g.grassVal = player.po.halter.grass.halt
@@ -170,11 +195,13 @@ addLayer('g', {
         player.g.goldGrassVal = player.g.goldGrassVal.mul(levelableEffect("pu", 108)[2])
         player.g.goldGrassVal = player.g.goldGrassVal.mul(player.ro.activatedFuelEffect)
         player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect('st', 103))
-        if (player.ma.matosDefeated) player.g.goldGrassVal = player.g.goldGrassVal.mul(1e20)
+        if (player.matosLair.milestone[25] > 0) player.g.goldGrassVal = player.g.goldGrassVal.mul(1e20)
         player.g.goldGrassVal = player.g.goldGrassVal.mul(player.cof.coreFragmentEffects[1])
 
         // POWER MODIFIERS
         if (hasUpgrade("hpw", 1032)) player.g.goldGrassVal = player.g.goldGrassVal.pow(1.06)
+        player.g.goldGrassVal = player.g.goldGrassVal.pow(levelableEffect("pu", 113)[1])
+        if (hasMilestone("n", 18)) player.g.goldGrassVal = player.g.goldGrassVal.pow(player.n.milestone8Effect)
 
         // ABNORMAL MODIFIERS
         if (player.po.halter.goldenGrass.enabled == 1) player.g.goldGrassVal = player.g.goldGrassVal.div(player.po.halter.goldenGrass.halt)
@@ -227,7 +254,7 @@ addLayer('g', {
         if (hasUpgrade("ep2", 7)) player.g.moonstoneVal = player.g.moonstoneVal.mul(upgradeEffect("ep2", 7))
         if (hasMilestone("r", 28)) player.g.moonstoneVal = player.g.moonstoneVal.mul(player.r.pentMilestone18Effect)
         player.g.moonstoneVal = player.g.moonstoneVal.mul(player.ro.rocketPartsEffect)
-        if (player.ma.matosDefeated) player.g.moonstoneVal = player.g.moonstoneVal.mul(5)
+        if (player.matosLair.milestone[25] > 0) player.g.moonstoneVal = player.g.moonstoneVal.mul(5)
         player.g.moonstoneVal = player.g.moonstoneVal.mul(buyableEffect("al", 204))
 
         // MOONSTONE AUTOMATION
@@ -1150,8 +1177,8 @@ addLayer('g', {
         },
         29: {
             costBase() { return new Decimal(100) },
-            costGrowth() { return new Decimal(10) },
-            purchaseLimit() { return new Decimal(24) },
+            costGrowth() { return hasUpgrade("cs", 504) ? new Decimal(100) : new Decimal(10) },
+            purchaseLimit() { return hasUpgrade("cs", 504) ? new Decimal(199) : new Decimal(24) },
             currency() { return player.g.moonstone},
             pay(amt) { player.g.moonstone = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).add(1) },
@@ -1275,7 +1302,9 @@ addLayer('g', {
         ["row", [
             ["raw-html", () => {return "You have " + format(player.g.grass) + " grass"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
             ["raw-html", () => {return "(+" + format(player.g.grassVal) + " GV)"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+            ['raw-html', () => {return player.g.grassVal.gte("1e100000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}]
         ]],
+        ["raw-html", () => {return player.g.grassVal.gt(player.g.doomSoftcapStart) ? "SOFTCAP OF DOOM: Value past " + format(player.g.doomSoftcapStart) + " is raised by ^" + format(player.g.doomSoftcap, 3) + "." : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace"}],
         ["row", [
             ["raw-html", () => {return "Boosts leaf gain by x" + format(player.g.grassEffect)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
             ['raw-html', () => {return player.g.grassEffect.gte("1e25000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace", marginLeft: "10px"}]

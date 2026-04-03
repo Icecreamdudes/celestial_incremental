@@ -39,7 +39,6 @@
             buyUpgrade("bi", 26)
             buyUpgrade("bi", 27)
             buyUpgrade("bi", 28)
-            buyUpgrade("bi", 29)
 
             buyUpgrade("bi", 101)
             buyUpgrade("bi", 102)
@@ -58,7 +57,6 @@
             buyUpgrade("bi", 116)
             buyUpgrade("bi", 117)
             buyUpgrade("bi", 117)
-            buyUpgrade("bi", 118)
         }
     },
     nodeStyle() {
@@ -332,7 +330,7 @@
         21: {
             title: "BI IP Upgrade IX",
             unlocked() { return true },
-            description: "Slightly weaken the post-1e300 AM softcap.",
+            description: "Increase the antimatter softcap's exponent by +0.1.",
             cost: new Decimal(1e15),
             currencyLocation() { return player.in },
             currencyDisplayName: "IP",
@@ -417,21 +415,6 @@
             currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
-        },
-        29:
-        {
-            title: "BI IP Upgrade XVIII",
-            unlocked() { return player.ma.matosDefeated },
-            description() { return "Boost infinity dimensions based on galaxy dust." },
-            cost: new Decimal("1e4000"),
-            currencyLocation() { return player.in },
-            currencyDisplayName: "Infinity Points",
-            currencyInternalName: "infinityPoints",
-            effect() {
-                return player.ca.galaxyDust.pow(4).add(1)
-            },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '150px', height: '100px', }
         },
         //Negative Infinity Points
         101: {
@@ -519,7 +502,7 @@
         108: {
             title: "BI NIP Upgrade VIII",
             unlocked() { return true },
-            description: "Raise antimatter effect to the ^1.6.",
+            description: "Raise antimatter effect to the ^2.",
             cost: new Decimal(2e11),
             currencyLocation() { return player.ta },
             currencyDisplayName: "NIP",
@@ -598,32 +581,13 @@
         },
         117: {
             title: "BI NIP Upgrade XVI",
-            unlocked() {return hasMilestone("s", 12) && hasUpgrade("ma", 21)},
+            unlocked() {return hasMilestone("s", 12) && hasUpgrade("depth2", 6)},
             description: "Triple replicanti mult, and replicanti effects are buffed.",
             cost: new Decimal(1e300),
             currencyLocation() { return player.ta },
             currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
-        },
-        118 :{
-            title: "BI NIP Upgrade XVI",
-            unlocked() { return player.ma.matosDefeated },
-            description: "Tickspeed effect boosts antimatter gain.",
-            cost: new Decimal("1e1000"),
-            currencyLocation() { return player.ta },
-            currencyDisplayName: "Negative Infinity Points",
-            currencyInternalName: "negativeInfinityPoints",
-            effect() {
-                let eff = buyableEffect("ad", 1).pow(0.2).add(1)
-                if (eff.gte("1e50000")) eff = eff.div("1e50000").pow(0.1).mul("1e50000")
-                return eff
-            },
-            effectDisplay() {
-                if (upgradeEffect(this.layer, this.id).gte("1e50000")) return format(upgradeEffect(this.layer, this.id))+"x <small style='color:red'>[SOFTCAPPED]</small>"
-                return format(upgradeEffect(this.layer, this.id))+"x"
-            }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px", width: '180px', height: '100px', }
         },
     },
     microtabs: {
@@ -641,7 +605,6 @@
                     ["style-row", [
                         ["upgrade", 101], ["upgrade", 102], ["upgrade", 103], ["upgrade", 104], ["upgrade", 105], ["upgrade", 106], ["upgrade", 107], ["upgrade", 108],
                         ["upgrade", 109], ["upgrade", 111], ["upgrade", 112], ["upgrade", 113], ["upgrade", 114], ["upgrade", 115], ["upgrade", 116], ["upgrade", 117],
-                        ["upgrade", 118]
                     ], {maxWidth: "1000px", padding: "5px 0", backgroundColor: "#232b2b", border: "3px solid #596c6c", borderRadius: "20px"}],
                 ]
             },

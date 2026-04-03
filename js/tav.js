@@ -144,7 +144,7 @@
 
         // BASE NIP GAIN
         if (!player.ta.unlockedReverseBreak) player.ta.negativeInfinityPointsToGet = new Decimal(1)
-        if (player.ta.unlockedReverseBreak && !hasMilestone("r", 26)) player.ta.negativeInfinityPointsToGet = Decimal.pow(2, player.ad.antimatter.div(1e308).add(1).log(1e308)).mul(10)
+        if (player.ta.unlockedReverseBreak && !hasMilestone("r", 26)) player.ta.negativeInfinityPointsToGet = Decimal.pow(2.5, player.ad.antimatter.div(1e308).add(1).log(1e308)).mul(10)
         if (player.ta.unlockedReverseBreak && hasMilestone("r", 26)) player.ta.negativeInfinityPointsToGet = Decimal.pow(5, player.ad.antimatter.div(1e308).add(1).log(1e308)).mul(10)
         if (hasUpgrade('ta', 12)) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.add(1)
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.pow(buyableEffect("m", 16))

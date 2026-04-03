@@ -30,7 +30,7 @@
         };
     },
     tooltip: "Starmetal Alloy",
-    branches() { return !player.ma.matosDefeated ? ["ra", "sd"] : ["ra"] },
+    branches() { return player.matosLair.milestone[25] == 0 ? ["ra", "sd"] : ["ra"] },
     color: "#d460eb",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -40,10 +40,20 @@
         if (player.sma.input.gt(0) && player.sma.type) player.sma.amount = player.sma.input
 
         if (player.s.singularityPointsToGet.gte(player.sma.amount) && player.sma.toggle && !player.sma.type) {
-                player.cof.coreFragments[player.cof.highestScore] = player.cof.coreFragments[player.cof.highestScore].add(player.cof.coreFragmentsToGet[player.cof.highestScore])
+                if (!hasUpgrade("s", 29)) {
+                    player.cof.coreFragments[player.cof.highestScore] = player.cof.coreFragments[player.cof.highestScore].add(player.cof.coreFragmentsToGet[player.cof.highestScore])
+                } else{
+                    player.cof.coreFragments[0] = player.cof.coreFragments[0].add(player.cof.coreFragmentsToGet[0])
+                    player.cof.coreFragments[1] = player.cof.coreFragments[1].add(player.cof.coreFragmentsToGet[1])
+                    player.cof.coreFragments[2] = player.cof.coreFragments[2].add(player.cof.coreFragmentsToGet[2])
+                    player.cof.coreFragments[3] = player.cof.coreFragments[3].add(player.cof.coreFragmentsToGet[3])
+                    player.cof.coreFragments[4] = player.cof.coreFragments[4].add(player.cof.coreFragmentsToGet[4])
+                    player.cof.coreFragments[5] = player.cof.coreFragments[5].add(player.cof.coreFragmentsToGet[5])
+                    player.cof.coreFragments[6] = player.cof.coreFragments[6].add(player.cof.coreFragmentsToGet[6])
+                }
 
                 let val = layers.co.coreXPCalc(player.co.resetIndex, player.s.singularityPointsToGet)
-                if (!player.ma.matosDefeated) {
+                if (player.matosLair.milestone[25] == 0) {
                     player.co.cores[player.co.resetIndex].totalxp = player.co.cores[player.co.resetIndex].totalxp.add(val)
                     player.co.cores[player.co.resetIndex].xp = player.co.cores[player.co.resetIndex].xp.add(val)
                 }
@@ -62,8 +72,7 @@
             player.sma.time = player.sma.time.add(onepersec.mul(delta));
             if (player.sma.time.gte(player.sma.amount)) {
                 player.sma.time = new Decimal(0)
-                                if (!hasUpgrade("s", 29))
-                {
+                if (!hasUpgrade("s", 29)) {
                     player.cof.coreFragments[player.cof.highestScore] = player.cof.coreFragments[player.cof.highestScore].add(player.cof.coreFragmentsToGet[player.cof.highestScore])
                 } else{
                     player.cof.coreFragments[0] = player.cof.coreFragments[0].add(player.cof.coreFragmentsToGet[0])
@@ -76,7 +85,7 @@
                 }
 
                 let val = layers.co.coreXPCalc(player.co.resetIndex, player.s.singularityPointsToGet)
-                if (!player.ma.matosDefeated) {
+                if (player.matosLair.milestone[25] == 0) {
                     player.co.cores[player.co.resetIndex].totalxp = player.co.cores[player.co.resetIndex].totalxp.add(val)
                     player.co.cores[player.co.resetIndex].xp = player.co.cores[player.co.resetIndex].xp.add(val)
                 }
@@ -124,13 +133,7 @@
                 player.subtabs["le"]["stuff"] = "Main"
                 player.subtabs.pu["stuff"] = "Selection"
 
-                pauseUniverse("U1")
-                pauseUniverse("UA")
-                pauseUniverse("U2")
-                pauseUniverse("A1")
-                pauseUniverse("U3")
-                pauseUniverse("CB")
-                pauseUniverse("DS")
+                pauseUniverseAll(["D1", "A2"], "pause", true)
             },
             style: {width: "600px", minHeight: "200px", color: "white", backgroundImage: "radial-gradient(circle, black 60%, #13292f 70%, #54265e 80%, #8d3947 90%, #e6eb57 110%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
         },
@@ -154,13 +157,7 @@
                 player.subtabs.le["stuff"] = "Shards"
                 player.subtabs.pu["stuff"] = "Selection"   
                 
-                pauseUniverse("U1")
-                pauseUniverse("UA")
-                pauseUniverse("U2")
-                pauseUniverse("A1")
-                pauseUniverse("U3")
-                pauseUniverse("CB")
-                pauseUniverse("DS")
+                pauseUniverseAll(["D1", "A2"], "pause", true)
             },
             style() {
                 let look = {width: "600px", minHeight: "200px", color: "#ffe066", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"}
@@ -473,33 +470,18 @@
         },
         108: {
             title: "Light Starmetal Upgrade VIII",
-            unlocked() { return hasUpgrade("sma", 107) && player.ma.secondAreaUnlock},
+            unlocked() { return hasUpgrade("sma", 107) && player.depth2.unlocked},
             description: "Number of dice sides is multiplied based on best depth 1 combo, and unlock new singularity milestones.",
             cost: new Decimal("1111"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
             effect() {
-                return player.ma.bestComboDepth1.mul(0.01).add(1)
+                return player.depth1.highestCombo.mul(0.01).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style() {
                 let look = {width: "200px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%, #60cfeb 100%)"
-                return look
-            }
-        },
-        109:
-        {
-            title: "Secondary Starmetal Upgrade IX",
-            unlocked() { return hasUpgrade("sma", 108) && player.ma.matosDefeated},
-            description: "Unlocks auto starmetal (in starmetal essence).",
-            cost: new Decimal("8888"),
-            currencyLocation() { return player.sma },
-            currencyDisplayName: "Starmetal Alloy",
-            currencyInternalName: "starmetalAlloy",
-            style() {
-                let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%, #60cfeb 100%)"
                 return look
             }
@@ -581,9 +563,9 @@
         },
         //skills
         221: {
-            title: "Second Skill",
-            unlocked() { return hasUpgrade("sma", 201) && hasUpgrade("sma", 202) && hasUpgrade("sma", 203)},
-            description: "Unlock Eclipse's second skill.",
+            title: "Encouragement",
+            unlocked: true,
+            description: "Unlock Eclipse's \"Motivation\" skill.",
             cost: new Decimal("20"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Eclipse Shards",
@@ -595,10 +577,66 @@
             }
         },
         222: {
-            title: "Third Skill",
+            title: "Hard Light?",
             unlocked() { return hasUpgrade("sma", 221)},
-            description: "Unlock Eclipse's third skill.",
+            description: "Unlock Eclipse's \"Light Barrier\" skill.",
             cost: new Decimal("50"),
+            currencyLocation() { return player.sma },
+            currencyDisplayName: "Eclipse Shards",
+            currencyInternalName: "eclipseShards",
+            style() {
+                let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "#f5ff68"
+                return look
+            }
+        },
+        223: {
+            title: "Blinding Rays",
+            unlocked() { return hasUpgrade("sma", 222)},
+            description: "Unlock Eclipse's \"Solar Retinopathy\" skill.",
+            cost: new Decimal("200"),
+            currencyLocation() { return player.sma },
+            currencyDisplayName: "Eclipse Shards",
+            currencyInternalName: "eclipseShards",
+            style() {
+                let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "#f5ff68"
+                return look
+            }
+        },
+        224: {
+            title: "Aligned Time",
+            unlocked() { return hasUpgrade("sma", 223)},
+            description: "Unlock Eclipse's \"Syzygy\" skill.",
+            cost: new Decimal("1000"),
+            currencyLocation() { return player.sma },
+            currencyDisplayName: "Eclipse Shards",
+            currencyInternalName: "eclipseShards",
+            style() {
+                let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "#f5ff68"
+                return look
+            }
+        },
+        225: {
+            title: "Partial Eclipse",
+            unlocked() { return hasUpgrade("sma", 224)},
+            description: "Increase Eclipse's base health by +20 and base defense by +5.",
+            cost: new Decimal("5000"),
+            currencyLocation() { return player.sma },
+            currencyDisplayName: "Eclipse Shards",
+            currencyInternalName: "eclipseShards",
+            style() {
+                let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "#f5ff68"
+                return look
+            }
+        },
+        226: {
+            title: "Total Eclipse",
+            unlocked() { return hasUpgrade("sma", 225) && hasUpgrade("depth4", 4)},
+            description: "Increase Eclipse's base damage by +2 and base agility by +5.",
+            cost: new Decimal("25000"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Eclipse Shards",
             currencyInternalName: "eclipseShards",
@@ -778,7 +816,7 @@
                     ["style-column", [
                         ["blank", "5px"],
                         ["style-row", [["upgrade", 101], ["upgrade", 102], ["upgrade", 103], ["upgrade", 104], ["upgrade", 105],
-                            ["upgrade", 106], ["upgrade", 107], ["upgrade", 108], ["upgrade", 109]], {maxWidth: "800px"}],
+                            ["upgrade", 106], ["upgrade", 107], ["upgrade", 108]], {maxWidth: "800px"}],
                         ["blank", "5px"],
                     ], {width: "800px", background: "linear-gradient(120deg, #b8bc45 0%, #987b28 25%, #bc4c5f 50%, #a94cbc, 75%, #4ca5bc 100%)", border: "3px solid #222", borderRadius: "15px"}],
                     ["blank", "25px"],
@@ -820,7 +858,7 @@
                 ]
             },
             "Eclipse Shop": {
-                buttonStyle() {return {color: "white", borderColor: "rgb(245, 255, 104)", borderRadius: "10px"}},
+                buttonStyle() {return {color: "white", borderColor: "#f5ff68", borderRadius: "10px"}},
                 unlocked() { return player.pet.levelables[501][0].gte(1) },
                 content: [
                     ["blank", "25px"],
@@ -832,7 +870,7 @@
                         ["blank", "5px"],
                         ["style-row", [], {width: "800px", height: "3px", backgroundColor: "#b29c47"}],
                         ["blank", "5px"],
-                        ["row", [["upgrade", 221], ["upgrade", 222]]],
+                        ["row", [["upgrade", 221], ["upgrade", 222], ["upgrade", 223], ["upgrade", 224], ["upgrade", 225], ["upgrade", 226]]],
                         ["blank", "5px"],
                     ], {width: "800px", backgroundColor: "#222", border: "3px solid #b29c47", borderRadius: "20px"}],
                 ]

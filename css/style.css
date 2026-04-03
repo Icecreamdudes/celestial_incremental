@@ -330,9 +330,19 @@ h1, h2, h3, b, input {
 	opacity: 0.7;
 	transition-duration: 0.2s;
 }
+.customBuyableBarProgress {
+	z-index: 2;
+	overflow: hidden;
+	width: 100%;
+	margin: 0%;
+	height: 100%;
+	background-color: #053311;
+	opacity: 1;
+	transition-duration: 0.2s;
+}
 
 .darkBuyableButton1 {
-	width: calc(50% - 2px);
+	width: calc(50% - 1.5px);
 	height: 100%;
 	border: 0px;
 	border-right: 2px solid;
@@ -341,7 +351,7 @@ h1, h2, h3, b, input {
 }
 
 .darkBuyableButton2 {
-	width: 50%;
+	width: calc(50% - 1.5px);
 	height: 100%;
 	border: 0px;
 	color: white;

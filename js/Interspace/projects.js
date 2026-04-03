@@ -29,6 +29,7 @@
 
                 focused: false,
                 timeCapsuleReq: new Decimal(1),
+                statReq: new Decimal(1),
                 completionEffect: new Decimal(1),
             },
             2: {
@@ -41,6 +42,7 @@
 
                 focused: false,
                 timeCapsuleReq: new Decimal(1),
+                statReq: new Decimal(1),
                 completionEffect: new Decimal(1),
             },
             3: {
@@ -53,6 +55,7 @@
 
                 focused: false,
                 timeCapsuleReq: new Decimal(1),
+                statReq: new Decimal(1),
                 completionEffect: new Decimal(1),
             },
             4: {
@@ -65,6 +68,7 @@
 
                 focused: false,
                 timeCapsuleReq: new Decimal(1),
+                statReq: new Decimal(1),
                 completionEffect: new Decimal(1),
             },
         },
@@ -105,6 +109,7 @@
             module.timeSpeed = project.getTimeSpeed()
             module.timeReq = project.getTimeReq()
             module.timeCapsuleReq = project.getTimeCapsuleReq()
+            module.statReq = project.getStatReq()
             module.completionEffect = project.getCompletionEffect()
 
             if (module.focused) {
@@ -447,7 +452,7 @@
             onComplete() {
                 doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Passively generate 20% of best stored space energy/time capsules.</small>" },
+            effectDescription() { return "<small>Passively generate 0.1% of best stored space energy/time capsule gain.</small>" },
             cycleReq() { return new Decimal(10) },
             projectId() { return 1 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) && hasUpgrade("wel", 31) },
@@ -936,6 +941,7 @@
         1: {
             title: "Time Capsules",
             completionEffectStat: "Starmetal Alloy",
+            statReqName: "Light",
             getCompletionEffect() {
                 let completions = player.prj.modules[1].completions
 
@@ -964,6 +970,14 @@
 
                 return s.floor()
             },
+            getStatReq() {
+                let completions = player.prj.modules[1].completions
+                let s = new Decimal(1e8)
+
+                s = s.mul(completions.sub(1).pow_base(completions.add(1).div(5).ceil().pow(1.25).pow_base(20)))
+
+                return s
+            },
             getTimeSpeed() {
                 let s = new Decimal(1)
 
@@ -976,6 +990,7 @@
         2: {
             title: "Prismatic",
             completionEffectStat: "Core Fragment Scores",
+            statReqName: "Prisms",
             getCompletionEffect() {
                 let completions = player.prj.modules[2].completions
 
@@ -1004,6 +1019,14 @@
 
                 return s.floor()
             },
+            getStatReq() {
+                let completions = player.prj.modules[2].completions
+                let s = new Decimal(10)
+
+                s = s.mul(completions.sub(1).pow_base(completions.add(1).div(5).ceil().pow(1.25).pow_base(5)))
+
+                return s
+            },
             getTimeSpeed() {
                 let s = new Decimal(1)
 
@@ -1016,6 +1039,7 @@
         3: {
             title: "Blueshift",
             completionEffectStat: "Punchcard XP",
+            statReqName: "δ ↻",
             getCompletionEffect() {
                 let completions = player.prj.modules[3].completions
 
@@ -1044,6 +1068,14 @@
 
                 return s.floor()
             },
+            getStatReq() {
+                let completions = player.prj.modules[3].completions
+                let s = new Decimal(1e10)
+
+                s = s.mul(completions.sub(1).pow_base(completions.add(1).div(5).ceil().pow(1.25).pow_base(50)))
+
+                return s
+            },
             getTimeSpeed() {
                 let s = new Decimal(1)
 
@@ -1056,6 +1088,7 @@
         4: {
             title: "Starshine",
             completionEffectStat: "Stars, post-softcap",
+            statReqName: "Starlight",
             getCompletionEffect() {
                 let completions = player.prj.modules[4].completions
 
@@ -1083,6 +1116,14 @@
                 }
 
                 return s.floor()
+            },
+            getStatReq() {
+                let completions = player.prj.modules[4].completions
+                let s = new Decimal(10)
+
+                s = s.mul(completions.sub(1).pow_base(completions.add(1).div(5).ceil().pow(1.25).pow_base(10)))
+
+                return s
             },
             getTimeSpeed() {
                 let s = new Decimal(1)
@@ -1121,9 +1162,9 @@
                         ]],
                         ["blank", "6px", {width: "6px"}],
                         ["style-row", [
-                            makeProject(3),
+                            hasUpgrade("wel", 31) ? makeProject(3) : null,
                             ["blank", "6px", {width: "6px"}],
-                            makeProject(4),
+                            hasUpgrade("wel", 34) ? makeProject(4) : null,
                         ]],
                         ["blank", "6px"],
                         ["clickable", 101],
@@ -1153,10 +1194,11 @@ const makeProject = function (id) {
                     ["blank", "10px"],
                     ["style-column", [
                         ["raw-html", player.prj.modules[id].timeCapsuleReq.eq(0) ? "Your first cycle is free!" : "-" + formatWhole(player.prj.modules[id].timeCapsuleReq) + " Time Capsules", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ], {background: "#994d86", borderRadius: "10px 10px 0px 0px", width: "238px", height:"25px"}],
+                        ["raw-html", player.prj.modules[id].statReq.eq(0) ? "" : "-" + formatWhole(player.prj.modules[id].statReq) + " " + layers.prj.projects[id].statReqName, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ], {background: "#994d86", borderRadius: "10px 10px 0px 0px", width: "238px", height: "41px"}],
                     ["blank", "3px"],
                     ["clickable", id],
-                ], {background: "#663366", border: "3px solid #663366", borderRadius: "16px 0px 0px 0px", width: "238px", height: "150px"}],
+                ], {background: "#663366", border: "3px solid #663366", borderRadius: "16px 0px 0px 0px", width: "238px", height: "166px"}],
                 ["style-column", [
                     ["style-column", [
                         ["style-column", [
@@ -1168,8 +1210,8 @@ const makeProject = function (id) {
                             "conic-gradient(#dfffdf " + (player.prj.modules[id].time.div(player.prj.modules[id].timeReq)).min(1).max(0) * 360 + "deg, #1a001a 0deg)" : "#1a001a"
                         }],
                     ], {background: "#663366", borderRadius: "0px 81px 0px 0px", width: "153px", height: "78px"}],
-                    ["style-column", [], {background: "#994d86", height: "78px"}],
-                ], {border: "3px solid #663366", borderBottom: "0px", borderLeft: "0px", borderRadius: "0px 81px 0px 0px", padding: "-3px", width: "153px", height: "153px"}],
+                    ["style-column", [], {background: "#994d86", height: "94px"}],
+                ], {border: "3px solid #663366", borderBottom: "0px", borderLeft: "0px", borderRadius: "0px 81px 0px 0px", padding: "-3px", width: "153px", height: "169px"}],
             ], {verticalAlign: "bottom"}],
             ["style-column", [
                     ["style-column", [

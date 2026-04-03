@@ -24,7 +24,7 @@
 		"Hive/unih.js", "Hive/flower.js", "Hive/pollen.js", "Hive/nectar.js", "Hive/beebread.js",
 		"Hive/honey.js", "Hive/wax.js", "Hive/aleph.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js",
-		"Interspace/well.js", "Interspace/projects.js", "Interspace/prisms.js", "Interspace/bumpy.js", "Check Back/goobert.js",
+		"Interspace/well.js", "Interspace/projects.js", "Interspace/prisms.js", "Interspace/blueshift.js", "Interspace/bumpy.js", "Check Back/goobert.js",
 		//"Singularity/reactor.js",
 		"Check Back/singularityPet.js", "DarkU1/timeCapsules.js", "Check Back/dragon.js",
 		"DarkU1/blood.js", "Zar/zar.js", "Zar/coinFlip.js",
@@ -238,11 +238,14 @@ function updateStyles() {
 		case "wel":
 			layerBG = "linear-gradient(0deg, #1f4040 0%, #0f1f1f 100%)"
 			break;
+		case "prj":
+			layerBG = "linear-gradient(0deg, #2e152e 0%, #1f0e1f 100%)"
+			break;
 		case "pri":
 			layerBG = "linear-gradient(0deg, #303440 0%, #17191f 100%)"
 			break;
-		case "prj":
-			layerBG = "linear-gradient(0deg, #2e152e 0%, #1f0e1f 100%)"
+		case "blu":
+			layerBG = "linear-gradient(0deg, #282040 0%, #130f1f 100%)"
 			break;
 		case "bum":
 			layerBG = "linear-gradient(0deg, #dfffdf -700%, #180b18 100%)"
@@ -320,7 +323,7 @@ function updateStyles() {
 	    }
 	}
 
-	if (player.tab === "wel" || player.tab === "prj" || player.tab === "pri" || player.tab === "bum") {
+	if (player.tab === "wel" || player.tab === "prj" || player.tab === "pri" || player.tab === "blu" || player.tab === "bum") {
     	let t = Date.now()
     	t = ((t % 1000) / 1000) * 32
 		// Add the dotted background if it doesn't already exist
@@ -1549,7 +1552,7 @@ var doNotCallTheseFunctionsEveryTick = [
 	"selectCelestialites", "petDeath", "celestialiteDeath", "petAbility", "celestialiteAbility",
 	"arriveAtStar", "spaceEnergyReset","coinFlip", "randomizeSegments", "spinWheel", "spinSlots", "evaluateRewards",
 	"slotReset",
-	"prismReset", "timeCapsuleReset", "createMultiverseMapConnection", "createClickableConnection", "makeProject", "makeLightWell", "makePrismFountain", "makeWellFountain", "getTimeReq", "getTimeCapsuleReq", "getTimeSpeed", "lightGain",,
+	"prismReset", "blueshiftReset", "timeCapsuleReset", "createMultiverseMapConnection", "createClickableConnection", "makeProject", "makeLightWell", "makePrismFountain", "makeWellFountain", "getTimeReq", "getTimeCapsuleReq", "getTimeSpeed", "lightGain",,
 ]
 
 function getStartPoints(){

@@ -780,7 +780,7 @@ addLayer("ir", {
                 arena.spawnArena();
                 localStorage.setItem('arenaActive', 'true');
 
-                pauseUniverseAll(["A2"], "pause", true)
+                pauseUniverseAll(["A2", "DS"], "pause", true)
 
                 player.ir.shipHealth = player.ir.shipHealthMax
                 if (hasUpgrade("ir", 14)) arena.upgradeEffects.hpRegen += 0.5 / 60
@@ -807,7 +807,7 @@ addLayer("ir", {
                 }
                 localStorage.setItem('arenaActive', 'false');
 
-                pauseUniverseAll(["A2"], "unpause", true)
+                pauseUniverseAll(["A2", "DS"], "unpause", true)
 
                 player.ir.timers[player.ir.shipType].current = player.ir.timers[player.ir.shipType].max
 
@@ -5841,7 +5841,7 @@ function summonIridite() {
     } else {
         console.warn("summonIridite: arena.spawnIridite not available");
     }
-    flashScreen("— Iridite, the Astral Celestial —", 1200)
+    screenFlash("— Iridite, the Astral Celestial —", 1200)
 }
 window.summonIridite = summonIridite;
 

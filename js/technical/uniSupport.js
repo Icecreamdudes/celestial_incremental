@@ -292,3 +292,27 @@ addUniverse("DS", {
     uniShown() { return player.d.diceSpaceUnlocked && !player.sma.inStarmetalChallenge }, //make it something
     disabled() {return false}
 })
+
+addUniverse("UZ", {
+    name() {
+        return "Universe ζ<br>Puzzle World"
+    },
+    symbol: "ζ",
+    tree: [["ak",],["el",]],
+    nodeStyle() {
+        let style = {
+            background: "linear-gradient(135deg, #000000ff 0%, #200010ff 50%, #000000ff 100%)",
+            backgroundOrigin: "border-box",
+            color: "#ff0080",
+            borderColor: "#ff0080ff",
+        }
+        if (player.universe=="UZ") {
+            style.outline = "2px solid white"
+            style.outlineOffset = "-2px"
+            style.borderWidth = "5px"
+        }
+        return style
+    },
+    uniShown() { return player.startedGame && !player.sma.inStarmetalChallenge },
+    disabled() {return false}
+})

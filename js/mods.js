@@ -71,12 +71,19 @@
 
         // SOFTCAP OF DOOM
         player.m.doomSoftcap = new Decimal(0.5)
+
+        // SOFTCAP START
         player.m.doomSoftcapStart = new Decimal("1e2000000")
+        player.m.doomSoftcapStart = player.m.doomSoftcapStart.pow(buyableEffect("fa", 408))
+
+        // SOFTCAP WEAKENER
+        let doomWeaken = new Decimal(1)
+        doomWeaken = doomWeaken.mul(buyableEffect("fa", 404))
 
         // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
         let amt = player.m.codeExperience
         if (player.m.codeExperienceToGet.gte(player.m.codeExperience)) amt = player.m.codeExperienceToGet
-        player.m.doomSoftcap = player.m.doomSoftcap.div(amt.div(player.m.doomSoftcapStart).add(1).log(player.m.doomSoftcapStart).add(1))
+        player.m.doomSoftcap = player.m.doomSoftcap.div(amt.div(player.m.doomSoftcapStart).add(1).log(player.m.doomSoftcapStart).div(doomWeaken).add(1))
 
         // APPLY DOOM SOFTCAP
         if (player.m.codeExperienceToGet.gt(player.m.doomSoftcapStart)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.div(player.m.doomSoftcapStart).pow(player.m.doomSoftcap).mul(player.m.doomSoftcapStart)
@@ -161,12 +168,19 @@
 
         // SOFTCAP OF DOOM
         player.m.doomSoftcap2 = new Decimal(0.5)
+
+        // SOFTCAP START
         player.m.doomSoftcap2Start = new Decimal("1e2000000")
+        player.m.doomSoftcap2Start = player.m.doomSoftcap2Start.pow(buyableEffect("fa", 408))
+
+        // SOFTCAP WEAKENER
+        let doomWeaken2 = new Decimal(1)
+        doomWeaken2 = doomWeaken2.mul(buyableEffect("fa", 404))
 
         // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
         let amt2 = player.m.mods
         if (player.m.modsToGet.gte(player.m.mods)) amt2 = player.m.modsToGet
-        player.m.doomSoftcap2 = player.m.doomSoftcap2.div(amt2.div(player.m.doomSoftcap2Start).add(1).log(player.m.doomSoftcap2Start).add(1))
+        player.m.doomSoftcap2 = player.m.doomSoftcap2.div(amt2.div(player.m.doomSoftcap2Start).add(1).log(player.m.doomSoftcap2Start).div(doomWeaken2).add(1))
 
         // APPLY DOOM SOFTCAP
         if (player.m.modsToGet.gt(player.m.doomSoftcap2Start)) player.m.modsToGet = player.m.modsToGet.div(player.m.doomSoftcap2Start).pow(player.m.doomSoftcap2).mul(player.m.doomSoftcap2Start)
@@ -466,7 +480,7 @@
             currency() { return player.m.mods},
             pay(amt) { player.m.mods = this.currency().sub(amt) },
             effect(x) {
-                return getBuyableAmount(this.layer, this.id).pow(0.75).mul(0.005).add(1)
+                return getBuyableAmount(this.layer, this.id).pow(0.834).div(1000).add(1)
             },
             unlocked() { return hasUpgrade("bi", 113) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -475,7 +489,7 @@
                 return "Antimatter Softcap Reducer"
             },
             display() {
-                return "which are boosting antimatter softcap base by x" + format(tmp[this.layer].buyables[this.id].effect, 3) + ".\n\
+                return "which are increasing antimatter's softcap exponent by +" + formatShortSimple(tmp[this.layer].buyables[this.id].effect.sub(1), 3) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Mods"
             },
             buy(mult) {

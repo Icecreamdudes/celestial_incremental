@@ -288,14 +288,14 @@ addLayer("laboratory", {
             purchaseLimit() { return new Decimal(50) },
             currency() { return player.laboratory.matosDust},
             pay(amt) { player.laboratory.matosDust = this.currency().sub(amt) },
-            effect(x) {return Decimal.pow(100, getBuyableAmount(this.layer, this.id))},
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(100).add(1)},
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {return this.currency().gte(this.cost())},
             display() {
                 return "<h3>MD-08</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/50)\n\
                     Boost charge gain\n\
-                    Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
+                    Currently: ^" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\ \n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Matos Dust"
             },
             buy() {

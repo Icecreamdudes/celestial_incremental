@@ -745,7 +745,7 @@
             purchaseLimit() { return new Decimal(150) },
             currency() { return player.cof.coreFragments[5] },
             pay(amt) { player.cof.coreFragments[5] = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.45).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.7).div(100).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },

@@ -97,12 +97,19 @@
 
         // SOFTCAP OF DOOM
         player.gh.doomSoftcap = new Decimal(0.5)
+
+        // SOFTCAP START
         player.gh.doomSoftcapStart = new Decimal("1e1000000")
+        player.gh.doomSoftcapStart = player.gh.doomSoftcapStart.pow(buyableEffect("fa", 407))
+
+        // SOFTCAP WEAKENER
+        let doomWeaken = new Decimal(1)
+        doomWeaken = doomWeaken.mul(buyableEffect("fa", 403))
 
         // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
         let amt = player.gh.grasshoppers
         if (player.gh.grasshoppersToGet.gte(player.gh.grasshoppers)) amt = player.gh.grasshoppersToGet
-        player.gh.doomSoftcap = player.gh.doomSoftcap.div(amt.div(player.gh.doomSoftcapStart).add(1).log(player.gh.doomSoftcapStart).add(1))
+        player.gh.doomSoftcap = player.gh.doomSoftcap.div(amt.div(player.gh.doomSoftcapStart).add(1).log(player.gh.doomSoftcapStart).div(doomWeaken).add(1))
 
         // APPLY DOOM SOFTCAP
         if (player.gh.grasshoppersToGet.gt(player.gh.doomSoftcapStart)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.div(player.gh.doomSoftcapStart).pow(player.gh.doomSoftcap).mul(player.gh.doomSoftcapStart)
@@ -167,12 +174,19 @@
 
         // SOFTCAP OF DOOM
         player.gh.doomSoftcap2 = new Decimal(0.5)
+
+        // SOFTCAP START
         player.gh.doomSoftcap2Start = new Decimal("1e2000000")
+        player.gh.doomSoftcap2Start = player.gh.doomSoftcap2Start.pow(buyableEffect("fa", 408))
+
+        // SOFTCAP WEAKENER
+        let doomWeaken2 = new Decimal(1)
+        doomWeaken2 = doomWeaken2.mul(buyableEffect("fa", 404))
 
         // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
         let amt2 = player.gh.fertilizer
         if (player.gh.fertilizerPerSecond.gte(player.gh.fertilizer)) amt2 = player.gh.fertilizerPerSecond
-        player.gh.doomSoftcap2 = player.gh.doomSoftcap2.div(amt2.div(player.gh.doomSoftcap2Start).add(1).log(player.gh.doomSoftcap2Start).add(1))
+        player.gh.doomSoftcap2 = player.gh.doomSoftcap2.div(amt2.div(player.gh.doomSoftcap2Start).add(1).log(player.gh.doomSoftcap2Start).div(doomWeaken2).add(1))
 
         // APPLY DOOM SOFTCAP
         if (player.gh.fertilizerPerSecond.gt(player.gh.doomSoftcap2Start)) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.div(player.gh.doomSoftcap2Start).pow(player.gh.doomSoftcap2).mul(player.gh.doomSoftcap2Start)

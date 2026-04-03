@@ -103,12 +103,19 @@
 
         // SOFTCAP OF DOOM
         player.f.doomSoftcap = new Decimal(0.5)
+
+        // SOFTCAP START
         player.f.doomSoftcapStart = new Decimal("1e2000000")
+        player.f.doomSoftcapStart = player.f.doomSoftcapStart.pow(buyableEffect("fa", 406))
+
+        // SOFTCAP WEAKENER
+        let doomWeaken = new Decimal(1)
+        doomWeaken = doomWeaken.mul(buyableEffect("fa", 402))
 
         // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
         let amt = player.f.factorPower
         if (player.f.factorPowerPerSecond.gte(player.f.factorPower)) amt = player.f.factorPowerPerSecond
-        player.f.doomSoftcap = player.f.doomSoftcap.div(amt.div(player.f.doomSoftcapStart).add(1).log(player.f.doomSoftcapStart).add(1))
+        player.f.doomSoftcap = player.f.doomSoftcap.div(amt.div(player.f.doomSoftcapStart).add(1).log(player.f.doomSoftcapStart).div(doomWeaken).add(1))
 
         // APPLY DOOM SOFTCAP
         if (player.f.factorPowerPerSecond.gt(player.f.doomSoftcapStart)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.div(player.f.doomSoftcapStart).pow(player.f.doomSoftcap).mul(player.f.doomSoftcapStart)

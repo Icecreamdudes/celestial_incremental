@@ -163,8 +163,8 @@
         player.cs.scraps.rocket.effect = player.cs.scraps.rocket.amount.add(1).log(10).mul(0.1).add(1)
         if (player.cs.scraps.rocket.amount.gte(1e10)) player.cs.scraps.rocket.effect = player.cs.scraps.rocket.amount.add(1).log(10).mul(0.01).add(1.9)
 
-        player.cs.scraps.antimatter.effect = player.cs.scraps.antimatter.amount.add(1).log(10).mul(0.05).add(1)
-        if (player.cs.scraps.antimatter.amount.gte(1e10)) player.cs.scraps.antimatter.effect = player.cs.scraps.antimatter.amount.add(1).log(10).mul(0.005).add(1.45)
+        player.cs.scraps.antimatter.effect = player.cs.scraps.antimatter.amount.add(1).log(10).mul(0.01)
+        if (player.cs.scraps.antimatter.amount.gte(1e10)) player.cs.scraps.antimatter.effect = player.cs.scraps.antimatter.amount.add(1).log(10).mul(0.001).add(0.09)
 
         player.cs.scraps.infinity.effect = player.cs.scraps.infinity.amount.add(1).log(10).mul(0.2).add(1)
         if (player.cs.scraps.infinity.amount.gte(1e10)) player.cs.scraps.infinity.effect = player.cs.scraps.infinity.amount.add(1).log(10).mul(0.02).add(2.8)
@@ -1446,7 +1446,7 @@
                             }],
                         ]],
                         ["row", [
-                            ["raw-html", () => {return "Boosts antimatter softcap base by x" + formatShort(player.cs.scraps.antimatter.effect, 3)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return "Increase antimatter softcap exponent by +" + formatShort(player.cs.scraps.antimatter.effect, 3)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                             ["raw-html", () => {return player.cs.scraps.antimatter.amount.gte(1e10) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace", marginLeft: "8px"}],
                         ]],
                     ], {width: "530px", height: "60px"}],

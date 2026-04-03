@@ -79,12 +79,19 @@
 
         // SOFTCAP OF DOOM
         player.t.doomSoftcap = new Decimal(0.5)
+
+        // SOFTCAP START
         player.t.doomSoftcapStart = new Decimal("1e2000000")
+        player.t.doomSoftcapStart = player.t.doomSoftcapStart.pow(buyableEffect("fa", 407))
+
+        // SOFTCAP WEAKENER
+        let doomWeaken = new Decimal(1)
+        doomWeaken = doomWeaken.mul(buyableEffect("fa", 403))
 
         // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
         let amt = player.t.trees
         if (player.t.treesToGet.gte(player.t.trees)) amt = player.t.treesToGet
-        player.t.doomSoftcap = player.t.doomSoftcap.div(amt.div(player.t.doomSoftcapStart).add(1).log(player.t.doomSoftcapStart).add(1))
+        player.t.doomSoftcap = player.t.doomSoftcap.div(amt.div(player.t.doomSoftcapStart).add(1).log(player.t.doomSoftcapStart).pow(doomWeaken).add(1))
 
         // APPLY DOOM SOFTCAP
         if (player.t.treesToGet.gt(player.t.doomSoftcapStart)) player.t.treesToGet = player.t.treesToGet.div(player.t.doomSoftcapStart).pow(player.t.doomSoftcap).mul(player.t.doomSoftcapStart)

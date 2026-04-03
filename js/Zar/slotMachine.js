@@ -205,7 +205,7 @@
         player.sm.slotIndexes = [getRandomInt(5), getRandomInt(5), getRandomInt(5)]
     },
     slotReset() {
-        //reets everything before unlocking slots
+        //resets everything before unlocking slots
         player.za.chancePoints = new Decimal(0)
 
         player.cf.coinsFlipped = new Decimal(0)

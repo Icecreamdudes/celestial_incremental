@@ -10,6 +10,8 @@
         cardPoints: [
             []
         ]
+
+        
     }},
     automate() {},
     nodeStyle() {
@@ -26,6 +28,74 @@
     color: "rgb(182, 0, 0)",
     branches: ["cbs",],
     update(delta) {
+    },
+    cardReset() {
+        //resets everything before unlocking cards except for check back shrine
+        player.za.chancePoints = new Decimal(0)
+
+        player.cf.coinsFlipped = new Decimal(0)
+        player.cf.heads = new Decimal(0)
+        player.cf.tails = new Decimal(0)
+
+        try {
+            if (typeof window !== 'undefined' && !window.__cfInitDone) {
+                // clear any leftover timeout id (might be present from a saved object)
+                if (player.cf && player.cf._flipTimeoutId) {
+                    try { clearTimeout(player.cf._flipTimeoutId) } catch (e) {}
+                    player.cf._flipTimeoutId = null
+                }
+
+                // reset runtime flip state so the coin isn't mid-flip on a reload
+                if (player.cf) {
+                    player.cf.flipping = false
+                    player.cf.flipTimer = new Decimal(0)
+                    player.cf.coinHeads = true
+                    player.cf._finalSide = null
+                }
+
+                window.__cfInitDone = true
+            }
+        } catch (e) { console.error("cf update init error:", e) }
+
+        player.cf.buyables[11] = new Decimal(0)
+        player.cf.buyables[12] = new Decimal(0)
+        player.cf.buyables[13] = new Decimal(0)
+        player.cf.buyables[14] = new Decimal(0)
+        player.cf.buyables[21] = new Decimal(0)
+        player.cf.buyables[22] = new Decimal(0)
+        player.cf.buyables[23] = new Decimal(0)
+        player.cf.buyables[24] = new Decimal(0)
+        player.cf.buyables[31] = new Decimal(0)
+        player.cf.buyables[32] = new Decimal(0)
+        player.cf.buyables[33] = new Decimal(0)
+        player.cf.buyables[34] = new Decimal(0)
+
+        player.cf.autoFlip = false
+
+        player.wof.wheelPoints = new Decimal(0)
+        player.wof.wheelsSpinned = new Decimal(0)
+        player.wof.buyables[11] = new Decimal(0)
+        player.wof.buyables[12] = new Decimal(0)
+        player.wof.buyables[13] = new Decimal(0)
+        player.wof.buyables[14] = new Decimal(0)
+        player.wof.buyables[15] = new Decimal(0)
+
+        player.sm.slotsSpinned = new Decimal(0)
+        player.sm.spinActive = false
+        //chips
+        player.sm.chips = [new Decimal(0), new Decimal(0), new Decimal(0)]
+
+        player.sm.buyables[101] = new Decimal(0)
+        player.sm.buyables[102] = new Decimal(0)
+        player.sm.buyables[103] = new Decimal(0)
+        player.sm.buyables[104] = new Decimal(0)
+        player.sm.buyables[105] = new Decimal(0)
+        player.sm.buyables[106] = new Decimal(0)
+        player.sm.buyables[107] = new Decimal(0)
+        player.sm.buyables[108] = new Decimal(0)
+        player.sm.buyables[109] = new Decimal(0)
+        player.sm.buyables[111] = new Decimal(0)
+
     },
     clickables: {
         1: {
@@ -1054,14 +1124,14 @@
             levelLimit() { return new Decimal(99) },
             description() {
                 let str = [
-                    "^" + format(this.effect()[0]) + " to rank, tier, and tetr effect.<br>", //not implemented
+                    "^" + format(this.effect()[0]) + " to pre-otf multiplier.<br>", //not implemented
                     "x" + format(this.effect()[1]) + " to diamond points.",
                 ]
                 return str.join("")
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.75).add(1)
+                eff[0] = getLevelableAmount(this.layer, this.id).mul(0.25).add(1)
                 eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
                 return eff
             },
@@ -1073,6 +1143,462 @@
             // LEVEL CODE
             xpReq() {
                 return getLevelableAmount(this.layer, this.id).add(1).pow(1.5).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        302: {
+            image() {return this.canClick() ? "resources/cards/Diamond2.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                return "2 of Diamonds"
+            },
+            levelLimit() { return new Decimal(99) },
+            description() {
+                let str = [
+                    "^" + format(this.effect()[0]) + " to post-otf multiplier.<br>", //not implemented
+                    "x" + format(this.effect()[1]) + " to diamond points.",
+                ]
+                return str.join("")
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.5).mul(0.15).add(1)
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                return eff
+            },
+            // CLICK CODE
+            unlocked: true,
+            canSelect: true,
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                return getLevelableAmount(this.layer, this.id).add(1).pow(1.525).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        303: {
+            image() {return this.canClick() ? "resources/cards/Diamond3.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                return "3 of Diamonds"
+            },
+            levelLimit() { return new Decimal(99) },
+            description() {
+                let str = [
+                    "^" + format(this.effect()[0]) + " to all pollinator effects.<br>", //not implemented
+                    "x" + format(this.effect()[1]) + " to diamond points.",
+                ]
+                return str.join("")
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = getLevelableAmount(this.layer, this.id).mul(0.5).add(1)
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                return eff
+            },
+            // CLICK CODE
+            unlocked: true,
+            canSelect: true,
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                return getLevelableAmount(this.layer, this.id).add(1).pow(1.55).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        304: {
+            image() {return this.canClick() ? "resources/cards/Diamond4.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                return "4 of Diamonds"
+            },
+            levelLimit() { return new Decimal(99) },
+            description() {
+                let str = [
+                    "^" + format(this.effect()[0]) + " to hex points.<br>", //not implemented
+                    "x" + format(this.effect()[1]) + " to diamond points.",
+                ]
+                return str.join("")
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.5).mul(0.03).add(1)
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                return eff
+            },
+            // CLICK CODE
+            unlocked: true,
+            canSelect: true,
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                return getLevelableAmount(this.layer, this.id).add(1).pow(1.575).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        305: {
+            image() {return this.canClick() ? "resources/cards/Diamond5.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                return "5 of Diamonds"
+            },
+            levelLimit() { return new Decimal(99) },
+            description() {
+                let str = [
+                    "x" + format(this.effect()[0]) + " to hex power (affected by hex power).<br>", //not implemented
+                    "x" + format(this.effect()[1]) + " to diamond points.",
+                ]
+                return str.join("")
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = player.hpw.power.pow(0.01).pow(getLevelableAmount(this.layer, this.id).mul(0.3))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                return eff
+            },
+            // CLICK CODE
+            unlocked: true,
+            canSelect: true,
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                return getLevelableAmount(this.layer, this.id).add(1).pow(1.6).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        306: {
+            image() {return this.canClick() ? "resources/cards/Diamond6.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                return "6 of Diamonds"
+            },
+            levelLimit() { return new Decimal(99) },
+            description() {
+                let str = [
+                    "^" + format(this.effect()[0]) + " to antimatter effect.<br>", //not implemented
+                    "x" + format(this.effect()[1]) + " to diamond points.",
+                ]
+                return str.join("")
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.85).mul(0.4).add(1)
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                return eff
+            },
+            // CLICK CODE
+            unlocked: true,
+            canSelect: true,
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                return getLevelableAmount(this.layer, this.id).add(1).pow(1.625).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        307: {
+            image() {return this.canClick() ? "resources/cards/Diamond7.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                return "7 of Diamonds"
+            },
+            levelLimit() { return new Decimal(99) },
+            description() {
+                let str = [
+                    "x" + format(this.effect()[0]) + " to infinities (affected by infinites).<br>", //not implemented
+                    "x" + format(this.effect()[1]) + " to diamond points.",
+                ]
+                return str.join("")
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = player.in.infinities.pow(0.015).pow(getLevelableAmount(this.layer, this.id).mul(0.25))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                return eff
+            },
+            // CLICK CODE
+            unlocked: true,
+            canSelect: true,
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                return getLevelableAmount(this.layer, this.id).add(1).pow(1.65).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        308: {
+            image() {return this.canClick() ? "resources/cards/Diamond8.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                return "8 of Diamonds"
+            },
+            levelLimit() { return new Decimal(99) },
+            description() {
+                let str = [
+                    "^" + format(this.effect()[0]) + " to replicanti point hardcap.<br>", //not implemented
+                    "x" + format(this.effect()[1]) + " to diamond points.",
+                ]
+                return str.join("")
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.65).mul(0.5).add(1)
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                return eff
+            },
+            // CLICK CODE
+            unlocked: true,
+            canSelect: true,
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                return getLevelableAmount(this.layer, this.id).add(1).pow(1.675).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        309: {
+            image() {return this.canClick() ? "resources/cards/Diamond9.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                return "9 of Diamonds"
+            },
+            levelLimit() { return new Decimal(99) },
+            description() {
+                let str = [
+                    "^" + format(this.effect()[0]) + " to singularity points.<br>", //not implemented
+                    "x" + format(this.effect()[1]) + " to diamond points.",
+                ]
+                return str.join("")
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.2).mul(0.1).add(1)
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                return eff
+            },
+            // CLICK CODE
+            unlocked: true,
+            canSelect: true,
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                return getLevelableAmount(this.layer, this.id).add(1).pow(1.7).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        310: {
+            image() {return this.canClick() ? "resources/cards/Diamond10.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                return "10 of Diamonds"
+            },
+            levelLimit() { return new Decimal(99) },
+            description() {
+                let str = [
+                    "x" + format(this.effect()[0]) + " to first three emotions.<br>", //not implemented
+                    "x" + format(this.effect()[1]) + " to diamond points.",
+                ]
+                return str.join("")
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(5.5).add(1)
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                return eff
+            },
+            // CLICK CODE
+            unlocked: true,
+            canSelect: true,
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                return getLevelableAmount(this.layer, this.id).add(1).pow(1.725).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        311: {
+            image() {return this.canClick() ? "resources/cards/DiamondJ.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                return "Jack of Diamonds"
+            },
+            levelLimit() { return new Decimal(99) },
+            description() {
+                let str = [
+                    "x" + format(this.effect()[0]) + " to stars (afffected by stars).<br>", //not implemented
+                    "x" + format(this.effect()[1]) + " to diamond points.",
+                ]
+                return str.join("")
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = player.au2.stars.pow(0.015).pow(getLevelableAmount(this.layer, this.id).mul(0.3))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                return eff
+            },
+            // CLICK CODE
+            unlocked: true,
+            canSelect: true,
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                return getLevelableAmount(this.layer, this.id).add(1).pow(1.75).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        312: {
+            image() {return this.canClick() ? "resources/cards/DiamondQ.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                return "Queen of Diamonds"
+            },
+            levelLimit() { return new Decimal(99) },
+            description() {
+                let str = [
+                    "x" + format(this.effect()[0]) + " to bees (afffected by bees).<br>", //not implemented
+                    "x" + format(this.effect()[1]) + " to diamond points.",
+                ]
+                return str.join("")
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = player.bee.bees.pow(0.05).pow(getLevelableAmount(this.layer, this.id).mul(0.3))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                return eff
+            },
+            // CLICK CODE
+            unlocked: true,
+            canSelect: true,
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                return getLevelableAmount(this.layer, this.id).add(1).pow(1.775).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        313: {
+            image() {return this.canClick() ? "resources/cards/DiamondK.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                return "King of Diamonds"
+            },
+            levelLimit() { return new Decimal(99) },
+            description() {
+                let str = [
+                    "x" + format(this.effect()[0]) + " to doom softcap start.<br>", //not implemented
+                    "x" + format(this.effect()[1]) + " to diamond points.",
+                ]
+                return str.join("")
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = Decimal.pow("1e100000", getLevelableAmount(this.layer, this.id).pow(0.75))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                return eff
+            },
+            // CLICK CODE
+            unlocked: true,
+            canSelect: true,
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                return getLevelableAmount(this.layer, this.id).add(1).pow(1.8).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE

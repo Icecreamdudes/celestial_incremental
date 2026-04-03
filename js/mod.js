@@ -281,6 +281,12 @@ function updateStyles() {
 		case "el":
 			layerBG = "#181020"
 			break;
+		case "ak": 
+			layerBG = "linear-gradient(135deg, #000000ff 0%, #200010ff 50%, #000000ff 100%)"
+			break;
+		case "el":
+			layerBG = "#181020"
+			break;
 		case "ev0":
 			layerBG = "linear-gradient(-45deg, #655421, #fad25a)"
 			break;

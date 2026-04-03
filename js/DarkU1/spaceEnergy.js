@@ -43,7 +43,7 @@
     color: "#221473ff",
     update(delta) {
         let onepersec = new Decimal(1)
-        player.ds.spaceEnergyToGet = player.dn.normality.div(1e30).pow(0.06).div(4)
+        player.ds.spaceEnergyToGet = player.dn.normality.div(1e20).pow(0.1).div(4)
         player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(buyableEffect("ds", 105))
         player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(levelableEffect("ir", 4)[0])
         if (getLevelableTier("pu", 111, true)) player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(levelableEffect("pu", 111)[0])
@@ -89,6 +89,7 @@
 
         //stored
         player.ds.storedSpaceEnergyToGet = player.ds.spaceEnergy.mul(0.05).pow(0.6)
+        if (hasUpgrade("laboratory", 15)) player.ds.storedSpaceEnergyToGet = player.ds.spaceEnergy.div(5).pow(0.8)
         if (hasMilestone("prj", 104)) player.ds.storedSpaceEnergyToGet = player.ds.storedSpaceEnergyToGet.mul(player.sma.starmetalExitTime.min(21600).div(900).add(1).pow(0.4));
         if (hasUpgrade("wel", 24)) player.ds.storedSpaceEnergyToGet = player.ds.storedSpaceEnergyToGet.mul(3);
         player.ds.storedSpaceEnergyToGet = player.ds.storedSpaceEnergyToGet.mul(buyableEffect("st", 207))

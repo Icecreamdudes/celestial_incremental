@@ -105,9 +105,9 @@
 
         // INFINITY POINT BASE
         if (!player.in.breakInfinity) player.in.infinityPointsToGet = new Decimal(1)
-        if (player.in.breakInfinity && !hasUpgrade("bi", 111)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().div(10)
-        if (player.in.breakInfinity && hasUpgrade("bi", 111)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().div(2).pow(1.25)
-        if (player.in.breakInfinity && hasUpgrade("bi", 115)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().pow(1.5)
+        if (player.in.breakInfinity && !hasUpgrade("bi", 111)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log(10).div(10).pow(1.1)
+        if (player.in.breakInfinity && hasUpgrade("bi", 111)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log(10).div(2).pow(1.3)
+        if (player.in.breakInfinity && hasUpgrade("bi", 115)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log(10).pow(1.5)
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(player.cs.scraps.infinity.effect)
 
 
@@ -136,12 +136,11 @@
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.fu.sadnessEffect2)
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.co.cores.infinity.effect[0])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(levelableEffect("pu", 101)[2])
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ma", 21))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.ma.bestComboDepth1Effect)
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.depth1.comboEffect)
         if (hasMilestone("r", 21)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.r.pentMilestone11Effect)
         if (player.pol.pollinatorEffects.water.enabled) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.pol.pollinatorEffects.water.effects[0])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("st", 301))
-        if (player.ma.matosDefeated) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul("1e600")
+        if (player.matosLair.milestone[25] > 0) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul("1e600")
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.i.pylonPassiveEffect)
 
         // POWER MODIFIERS
@@ -150,6 +149,7 @@
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(buyableEffect("sb", 103))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(levelableEffect("ir", 4)[1]).floor()
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(player.cof.coreFragmentEffects[3])
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(buyableEffect("gwaTemple", 24))
 
         // ABNORMAL MODIFIERS
         if (player.po.halter.ip.enabled == 1) player.in.infinityPointsToGet = player.in.infinityPointsToGet.div(player.po.halter.ip.halt)
@@ -196,7 +196,7 @@
         if (player.tad.altInfinities.fragmented.milestone.gte(3)) player.in.infinities = player.in.infinities.add(player.in.infinitiesToGet.div(4).mul(delta))
 
 
-        player.in.pylonEnergyMax = Decimal.pow(1e308, player.in.pylonTier)
+        player.in.pylonEnergyMax = Decimal.pow(1e15, player.in.pylonTier)
 
         if (player.in.pylonBuilt)
         {
@@ -227,11 +227,12 @@
         player.in.pylonEnergyEffect3 = player.in.pylonEnergy.add(1).log(10).pow(0.25).pow_base(10).sub(1).pow(player.in.pylonTierEffect).div(10).pow(2).add(1)
         
 
-        player.in.pylonTierEffect = player.in.pylonTier.sub(1).div(10).add(1)
+        player.in.pylonTierEffect = player.in.pylonTier.sub(1).pow(0.4).div(10).add(1)
 
         //tickspeed
         player.uni["U2"].tickspeed = new Decimal(1)
         player.uni["U2"].tickspeed = player.uni["U2"].tickspeed.mul(player.in.pylonEnergyEffect)
+        player.uni["U2"].tickspeed = player.uni["U2"].tickspeed.mul(buyableEffect("gwaTemple", 23))
     },
     bigCrunch() {
         if (hasUpgrade("ta", 17)) {
@@ -433,6 +434,7 @@
             player.po.rocketFuel = false
             player.po.hex = false
             player.po.breakInfinity = false
+            player.po.gwaTemple = false
             player.in.breakInfinity = false
             player.po.featureSlots = player.po.featureSlotsMax
         }
@@ -474,10 +476,10 @@
         11: {
             costBase() { return new Decimal(200) },
             costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(500) },
+            purchaseLimit() { return new Decimal(50) },
             currency() { return player.cof.coreFragments[3] },
             pay(amt) { player.cof.coreFragments[3] = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).div(5).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.9).div(5).add(1)},
             unlocked() { return player.in.pylonBuilt },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -508,10 +510,10 @@
         12: {
             costBase() { return new Decimal(500) },
             costGrowth() { return new Decimal(1.25) },
-            purchaseLimit() { return new Decimal(500) },
+            purchaseLimit() { return new Decimal(50) },
             currency() { return player.cof.coreFragments[3] },
             pay(amt) { player.cof.coreFragments[3] = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).div(5).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.9).div(5).add(1)},
             unlocked() { return player.in.pylonBuilt },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -542,10 +544,10 @@
         13: {
             costBase() { return new Decimal(1000) },
             costGrowth() { return new Decimal(1.3) },
-            purchaseLimit() { return new Decimal(500) },
+            purchaseLimit() { return new Decimal(50) },
             currency() { return player.cof.coreFragments[3] },
             pay(amt) { player.cof.coreFragments[3] = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).div(5).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.9).div(5).add(1)},
             unlocked() { return player.in.pylonBuilt },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -599,24 +601,24 @@
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
-                        ["blank", "25px"],
-                        ["infobox", "1"],
-                        ["infobox", "2"],
-                        ["infobox", "3"],
-                ]
+                    ["blank", "25px"],
+                    ["infobox", "1"],
+                    ["infobox", "2"],
+                    ["infobox", "3"],
+                ],
             },
             "Pylon": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return player.i.pylonTier.gte(2) },
                 content: [
-                        ["blank", "25px"],
-                            ["left-row", [
-            ["tooltip-row", [
-                ["raw-html", "<img src='resources/fragments/paradoxFragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cof.coreFragments[3])}, {width: "93px", height: "50px", color: "#1FD3B7", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                ["raw-html", "<div class='bottomTooltip'>Paradox Core Fragments</div>"],
-            ], {width: "148px", height: "50px",}],
-        ], {width: "148px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
+                    ["blank", "25px"],
+                    ["left-row", [
+                        ["tooltip-row", [
+                            ["raw-html", "<img src='resources/fragments/paradoxFragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                            ["raw-html", () => { return formatWhole(player.cof.coreFragments[3])}, {width: "103px", height: "50px", color: "#1FD3B7", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                            ["raw-html", "<div class='bottomTooltip'>Paradox Core Fragments</div>"],
+                        ], {width: "158px", height: "50px",}],
+                    ], {width: "158px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
                     ["blank", "25px"],
                     ["clickable", 11],
                     ["raw-html", () => { return player.in.pylonBuilt ? "You have <h3>" + format(player.in.pylonEnergy) + "/" + format(player.in.pylonEnergyMax) +  "</h3> paradox pylon energy (" + format(player.in.pylonEnergyPerSecond) + "/s)." : "" }, {color: "#000000ff", fontSize: "24px", fontFamily: "monospace"}],
@@ -627,10 +629,10 @@
                     ["blank", "25px"],
                     ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13],]], 
                     ["blank", "25px"],
-                    ["raw-html", () => {return player.in.pylonBuilt ? "Your ancient pylon is tier " + formatWhole(player.in.pylonTier) + ", which boosts all pylon effects by ^" + format(player.in.pylonTierEffect) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.in.pylonBuilt ? "Your paradox pylon is tier " + formatWhole(player.in.pylonTier) + ", which boosts all pylon effects by ^" + format(player.in.pylonTierEffect) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["clickable", 12],
-                ]
+                ],
             },
         },
     },

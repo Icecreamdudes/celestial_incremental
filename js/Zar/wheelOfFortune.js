@@ -104,6 +104,7 @@
         player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(buyableEffect("cf", 24))
         player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(player.sm.chipsEffect[2])
         if (hasUpgrade("cbs", 12)) player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(upgradeEffect("cbs", 12))
+        player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(buyableEffect("sme", 183))
 
         if (player.wof.autoSpin) {
             if (player.za.chancePoints.gte(player.wof.spinCost) && !player.wof.spinActive)
@@ -119,8 +120,10 @@
     },
     randomizeSegments() {
         for (let i = 0; i < 8; i++) {
+            let luckChance = 0.9
+            if (hasUpgrade("cs", 804)) luckChance = 0.8
             let random = Math.random()
-            if (random < 0.9)
+            if (random < luckChance)
             {
                 player.wof.segmentGains[i] = Decimal.add(1, Decimal.mul(Math.random(), 2))
             } else

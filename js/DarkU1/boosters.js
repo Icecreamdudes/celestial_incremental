@@ -49,6 +49,9 @@
         if (getLevelableTier("pu", 109, true)) player.db.boosterReqDivisor = player.db.boosterReqDivisor.mul(levelableEffect("pu", 109)[1])
         if (getLevelableTier("pu", 208, true)) player.db.boosterReqDivisor = player.db.boosterReqDivisor.mul(levelableEffect("pu", 208)[0])
         if (getLevelableTier("pu", 208, true)) player.db.boosterReqDivisor = player.db.boosterReqDivisor.mul(buyableEffect("dp", 16))
+        if (getLevelableTier("pu", 307, true)) player.db.boosterReqDivisor = player.db.boosterReqDivisor.div(levelableEffect("pu", 307)[0])
+        player.db.boosterReqDivisor = player.db.boosterReqDivisor.div(buyableEffect("dgj", 13))
+    
         player.db.boosterReqRoot = player.db.boosterReqRoot.div(buyableEffect("dv", 13))
     
         player.db.boosterBulk = player.du.points.pow(player.db.boosterReqRoot).add(1).div(1e8).mul(player.db.boosterReqDivisor).log(4).sub(player.db.boosters).max(0).floor();
@@ -158,7 +161,8 @@
         },
         14: {
             effectDescription() { return "Gain 10% of grass value per second, and boost grass value and capacity based on boosters<br>Currently: x" + format(player.db.milestone4Effect) + "." },
-            done() { return player.db.boosters.gte(12) && player.ir.iriditeDefeated },
+            unlocked() {return player.ir.iriditeDefeated && getBuyableAmount("sme", 161).gte(1)},
+            done() { return player.db.boosters.gte(12) && getBuyableAmount("sme", 161).gte(1) },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #9f98d4", borderTop: "0px", borderRadius: "0px"}
                 if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
@@ -167,7 +171,8 @@
         },
         15: {
             effectDescription() { return "Gain 100% of prestige points per second and autobuy all prestige point buyables." },
-            done() { return player.db.boosters.gte(16) && player.ir.iriditeDefeated },
+            unlocked() {return player.ir.iriditeDefeated && getBuyableAmount("sme", 161).gte(2)},
+            done() { return player.db.boosters.gte(16) && getBuyableAmount("sme", 161).gte(2) },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #9f98d4", borderTop: "0px", borderRadius: "0px"}
                 if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
@@ -211,7 +216,7 @@
             },
         },
         103: {
-            effectDescription: "/1.4 to starmetal essence generator time.",
+            effectDescription() {return player.matosLair.milestone[25] == 0 ? "[BUFFED FEATURE NOT UNLOCKED]" : "/1.4 to starmetal essence generator time."},
             unlocked() { return player.ma.matosDefeated },
             done() { return player.db.bestBoosters.gte(10) && player.ma.matosDefeated },
             unlocked() {return player.ma.matosDefeated},
@@ -222,7 +227,7 @@
             },
         },
         104: {
-            effectDescription() { return "Best boosters divides star exploration times.<br>Currently: /" + format(player.db.permaMilestone4Effect) + "." },
+            effectDescription() {return player.matosLair.milestone[25] == 0 ? "[BUFFED FEATURE NOT UNLOCKED]" : "Best boosters divides star exploration times.<br>Currently: /" + format(player.db.permaMilestone4Effect) + "." },
             unlocked() { return player.ma.matosDefeated },
             done() { return player.db.bestBoosters.gte(15) && player.ma.matosDefeated },
             style() {
@@ -232,9 +237,8 @@
             },
         },
         105: {
-            effectDescription() { return "Reduce matos combo softcap scaling by -0.1%.<br>"},
-            unlocked() { return player.ir.iriditeDefeated },
-            done() { return player.db.bestBoosters.gte(20) && player.ir.iriditeDefeated },
+            effectDescription() {return "Reduce black heart combo softcap scaling by -0.2%."},
+            done() {return player.db.bestBoosters.gte(20)},
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #9f98d4", borderTop: "0px", borderRadius: "0px"}
                 if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}

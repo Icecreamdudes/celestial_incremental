@@ -262,8 +262,8 @@ addLayer("cb", {
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("sp", 14))
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("pl", 12))
             if (hasMilestone("db", 101)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(1.25)
-            if (player.ma.matosDefeated) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(2)
-            if (hasUpgrade("fi", 11)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(upgradeEffect("fi", 11))
+            if (player.matosLair.milestone[25] > 0) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(2)
+            player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(player.stagnantSynestia.comboEffect)
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(player.se.starsExploreEffect[2][0])
             if (hasUpgrade("ir", 13)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(upgradeEffect("ir", 13))
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(player.cof.coreFragmentEffects[6])
@@ -321,7 +321,7 @@ addLayer("cb", {
         let mult = new Decimal(1)
         mult = mult.add(levelableEffect("pet", 1107)[1].sub(1))
         mult = mult.add(buyableEffect("ev2", 31).sub(1))
-        mult = mult.add(buyableEffect("ma", 33).sub(1))
+        mult = mult.add(buyableEffect("depth1", 4).sub(1))
         for (let i in player.cb.xpTimers) {
             player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(mult)
             player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(levelableEffect("pet", 1102)[1])
@@ -343,9 +343,10 @@ addLayer("cb", {
             player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(buyableEffect("ep0", 12))
             player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(buyableEffect("ev2", 21))
             if (hasUpgrade("cs", 1202)) player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(1.2)
-            player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(buyableEffect("ma", 34))
+            player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(buyableEffect("depth3", 4))
             player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(buyableEffect("cof", 32))
             player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(player.cbs.pylonEnergyEffect3)
+            if (hasUpgrade("gwaTemple", 10)) player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(1.1)
         }
 
         player.cb.crateTimers[0].max = new Decimal(900).div(buyableEffect("ev1", 202)).mul(buyableEffect("ev1", 204))
@@ -399,7 +400,7 @@ addLayer("cb", {
             player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(player.pet.gemEffects[2])
             player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(buyableEffect("sp", 34))
             player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(buyableEffect("pl", 13))
-            if (player.ma.matosDefeated) player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(1.5)
+            if (player.matosLair.milestone[25] > 0) player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(1.5)
             player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(levelableEffect("ir", 5)[1])
             player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(buyableEffect("cbs", 14))
             player.cb.boostTimers[i].base = player.cb.boostTimers[i].base.mul(buyableEffect("cbs", 15))
@@ -413,7 +414,7 @@ addLayer("cb", {
             player.cb.boostTimers[i].max = player.cb.boostTimers[i].max.div(levelableEffect("pet", 401)[2])
             player.cb.boostTimers[i].max = player.cb.boostTimers[i].max.div(buyableEffect("sp", 35))
             player.cb.boostTimers[i].max = player.cb.boostTimers[i].max.div(buyableEffect("ev2", 12))
-            if (hasUpgrade("fi", 14)) player.cb.boostTimers[i].max = player.cb.boostTimers[i].max.div(2)
+            player.cb.boostTimers[i].max = player.cb.boostTimers[i].max.div(buyableEffect("stagnantSynestia", 4))
 
             player.cb.boostTimers[i].current = player.cb.boostTimers[i].current.sub(onepersec.mul(delta))
 
@@ -428,7 +429,7 @@ addLayer("cb", {
         if (player.cb.XPBoost.lte(1000)) {
         player.cb.XPBoostEffect = player.cb.XPBoost
         } else if (player.cb.XPBoost.gte(1000)) {
-            player.cb.XPBoostEffect = Decimal.add(1000, player.cb.XPBoost.sub(1000).pow(0.5).mul(10))
+            player.cb.XPBoostEffect = Decimal.add(1000, player.cb.XPBoost.sub(1000).pow(Decimal.add(0.5, buyableEffect("sme", 116).sub(1))).mul(10))
         }
 
         // PITY
@@ -484,7 +485,7 @@ addLayer("cb", {
         player.cb.xp = new Decimal(0)
         player.cb.xp = player.cb.xp.add(leftover)
     },
-    instantProduction(time) {
+    instantProduction(time, offline = false) {
         if (player.ev2.doubleCurrent.gt(0)) {
             if (time.gte(player.ev2.doubleCurrent)) {
                 time = time.add(player.ev2.doubleCurrent)
@@ -503,7 +504,8 @@ addLayer("cb", {
         layers.ev1.update(time)
         layers.ev2.update(time)
         layers.ev8.update(time)
-        layers.fi.update(time)
+        layers.sp.update(time)
+        if (offline) layers.cbs.update(time)
     },
     branches: ["m"],
     clickables: {
@@ -1378,7 +1380,7 @@ addLayer("cb", {
         303: {
             title() { return player.cb.level.lt(1e6) ? "Requires level 1e6" : player.cb.boostTimers[2].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.boostTimers[2].current) + "." : "<h3>+" + format(player.cb.boostTimers[2].base) + " XP Boost."},
             canClick() { return player.cb.boostTimers[2].current.lt(0) && player.cb.level.gte(1e6)},
-            unlocked() { return hasUpgrade("fi", 13)},
+            unlocked() { return hasUpgrade("stagnantSynestia", 5)},
             tooltip() { return player.cb.highestLevel.gte(250) ? "Paragon Shard Rarity: 50%" : ""},
             onClick() {
                 player.cb.XPBoost = player.cb.XPBoost.add(player.cb.boostTimers[2].base)
@@ -2315,11 +2317,6 @@ addLayer("cb", {
                 buttonStyle() { return {color: "#1500bf", borderColor: "#1500bf", backgroundImage: "linear-gradient(90deg, #d487fd, #4b79ff)", borderRadius: "5px" }},
                 unlocked() { return player.cb.highestLevel.gte(35)  },
                 embedLayer: 'ev'
-            },
-            "Fighting": {
-                buttonStyle() { return {color: "#2e0000ff", borderColor: "#2e0000ff", backgroundImage: "linear-gradient(90deg, #ad0000ff, #920044ff)", borderRadius: "5px" }},
-                unlocked() { return player.ma.matosDefeated },
-                embedLayer: 'fi'
             },
         },
         buttons: {

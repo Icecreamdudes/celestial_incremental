@@ -3,6 +3,10 @@ const CELL_MILESTONES = [
     [new Decimal(1), new Decimal(125), new Decimal(3375), new Decimal(125000), new Decimal(1e6), new Decimal(8e6), new Decimal(1e9), new Decimal(1.5625e10), new Decimal(1e90), new Decimal(1e255)],
     [new Decimal(1), new Decimal(5), new Decimal(15), new Decimal(50), new Decimal(100), new Decimal(200), new Decimal(1000), new Decimal(2500), new Decimal(1e30), new Decimal(1e85)],
 ]
+// AT SOME POINT CAN DO FERMENTATION AS A HONEY FEATURE
+// HONEYDEW (SECRETION) IS NOTABLE
+// POLLEN CAKES IS NOTABLE
+// ADD STAMEN LAYER WHICH IS A FLOWER RESET LAYER
 addLayer("ho", {
     name: "Honey", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "HO", // This appears on the layer's node. Default is the id with the first letter capitalized

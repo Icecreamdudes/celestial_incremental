@@ -564,7 +564,9 @@ function bhHeal(heal, index, slot, target, str = "") {
     let arr = calcTarget(index, slot, target, "heal")
     for (let receive of arr) {
         if (index == 3) {
-            if (receive == 3) {
+            if (receive == undefined) {
+                bhLog(str + "<span style='color: #8b0e7a'>" + run(BHC[player.bh.celestialite.id].name, BHC[player.bh.celestialite.id]) + " was unable to find someone to heal.")
+            } else if (receive == 3) {
                 player.bh.celestialite.health = player.bh.celestialite.health.add(heal).min(player.bh.celestialite.maxHealth)
                 bhLog(str + "<span style='color: #8b0e7a'>" + run(BHC[player.bh.celestialite.id].name, BHC[player.bh.celestialite.id]) + " healed itself for " +format(heal) + " health.")
             } else {
@@ -572,7 +574,9 @@ function bhHeal(heal, index, slot, target, str = "") {
                 bhLog(str + "<span style='color: #8b0e7a'>" + run(BHC[player.bh.celestialite.id].name, BHC[player.bh.celestialite.id]) + " healed " + run(BHP[player.bh.characters[receive].id].name, BHP[player.bh.characters[receive].id]) + " for " +format(heal) + " health.")
             }
         } else {
-            if (index == receive) {
+            if (receive == undefined) {
+                bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + run(BHP[player.bh.characters[index].id].name, BHP[player.bh.characters[index].id]) + " was unable to find someone to heal.")
+            } else if (index == receive) {
                 player.bh.characters[receive].health = player.bh.characters[receive].health.add(heal).min(player.bh.characters[receive].maxHealth)
                 bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + run(BHP[player.bh.characters[index].id].name, BHP[player.bh.characters[index].id]) + " healed themself for " +format(heal) + " health.")
             } else if (receive != 3) {
@@ -824,6 +828,16 @@ function calcTarget(index, slot, target, action = "none") {
             let rndP = potTarget[Math.floor(Math.random()*potTarget.length)]
             result = [rndP]
             break;
+        case "randomPlayerHeal":
+            if (celestialiteTaunt && (action == "heal" || action == "effect") && player.bh.celestialite.health.lt(player.bh.celestialite.maxHealth)) return [3]
+            if (playerTaunt >= 0 && player.bh.characters[playerTaunt].health.lt(player.bh.characters[playerTaunt].maxHealth)) return [playerTaunt]
+            let pothTarget = []
+            for (let i = 0; i < 3; i++) {
+                if (player.bh.characters[i].health.gt(0) && (player.bh.characters[i].health.lt(player.bh.characters[i].maxHealth)) && player.bh.characters[i].id != "none") pothTarget.push(i)
+            }
+            let rndhP = pothTarget[Math.floor(Math.random()*pothTarget.length)]
+            result = [rndhP]
+            break;
         case "random":
             let rndTarget = [3]
             if (playerTaunt >= 0) {
@@ -835,6 +849,19 @@ function calcTarget(index, slot, target, action = "none") {
             }
             let rndA = rndTarget[Math.floor(Math.random()*rndTarget.length)]
             result = [rndA]
+            break;
+        case "randomHeal":
+            let rndhTarget = []
+            if (player.bh.celestialite.health.lt(player.bh.celestialite.maxHealth)) rndhTarget.push(3)
+            if (playerTaunt >= 0 && player.bh.characters[playerTaunt].health.lt(player.bh.characters[playerTaunt].maxHealth)) {
+                rndhTarget.push(playerTaunt)
+            } else {
+                for (let i = 0; i < 3; i++) {
+                    if (player.bh.characters[i].health.gt(0) && (player.bh.characters[i].health.lt(player.bh.characters[i].maxHealth)) && player.bh.characters[i].id != "none") rndhTarget.push(i)
+                }
+            }
+            let rndhA = rndhTarget[Math.floor(Math.random()*rndhTarget.length)]
+            result = [rndhA]
             break;
         case "self": // Use when start is player
             if (index == 3) return [3]

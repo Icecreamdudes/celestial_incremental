@@ -63,7 +63,7 @@
             player.cbs.ascensionShards = player.cbs.ascensionShards.add(1)
 
             player.ir.inBattle = false
-            player.ma.inBlackHeart = false
+            options.fullscreen = false
             player.subtabs["cbs"]['stuff'] = 'Ritual'
 
             if (arena) {
@@ -80,13 +80,7 @@
             player.cbs.inBattle = false
             player.cbs.ritualSpiritActive = false
 
-            pauseUniverse("U1")
-            pauseUniverse("UA")
-            pauseUniverse("U2")
-            pauseUniverse("A1")
-            pauseUniverse("U3")
-            pauseUniverse("CB")
-            pauseUniverse("UB")
+            pauseUniverseAll(["DS", "A2"], "unpause", true)
 
             flashScreen("Ritual Success.\nYou have earned a Shard of Ascension.", 3000)
         }
@@ -99,25 +93,23 @@
 
 
         //pylon
-        player.cbs.pylonEnergyMax = Decimal.pow(100, player.cbs.pylonTier.pow(0.5))
+        player.cbs.pylonEnergyMax = Decimal.pow(1e5, player.cbs.pylonTier.pow(0.7))
 
-        if (player.cbs.pylonBuilt)
-        {
+        if (player.cbs.pylonBuilt) {
             player.cbs.pylonEnergyToGet = new Decimal(1)
             player.cbs.pylonEnergyToGet = player.cbs.pylonEnergyToGet.mul(buyableEffect("cbs", 21))
             player.cbs.pylonEnergyToGet = player.cbs.pylonEnergyToGet.mul(buyableEffect("cbs", 22))
             player.cbs.pylonEnergyToGet = player.cbs.pylonEnergyToGet.mul(buyableEffect("cbs", 23))
+            player.cbs.pylonEnergyToGet = player.cbs.pylonEnergyToGet.mul(player.n.pylonEnergyEffect3)
 
             player.cbs.pylonPassiveEffect = player.pol.pollinators.plus(1).log10().pow(0.002).div(5).add(1).pow(player.cbs.pylonTierEffect)
-        } else
-        {
+        } else {
             player.cbs.pylonEnergyToGet = new Decimal(0)
 
             player.cbs.pylonPassiveEffect = new Decimal(1)
         }
 
-        if (player.cbs.pylonEnergy.gte(player.cbs.pylonEnergyMax))
-        {
+        if (player.cbs.pylonEnergy.gte(player.cbs.pylonEnergyMax)) {
             player.cbs.pylonEnergy = player.cbs.pylonEnergyMax
             player.cbs.pylonEnergyToGet = new Decimal(0)
         }
@@ -130,7 +122,7 @@
         player.cbs.pylonTierEffect = player.cbs.pylonTier.sub(1).div(10).add(1)
 
         player.cbs.energyTimerMax = new Decimal(86400)
-        player.cbs.energyTimer = player.cbs.energyTimer.add(delta)
+        player.cbs.energyTimer = player.cbs.energyTimer.add(Decimal.mul(delta, player.cb.cbTickspeed))
         if (player.cbs.energyTimer.gte(player.cbs.energyTimerMax)) {
             player.cbs.energyTimer = new Decimal(0)
             player.cbs.pylonEnergy = player.cbs.pylonEnergy.add(player.cbs.pylonEnergyToGet)
@@ -144,7 +136,7 @@
             tooltip() { return "Gives +4 movement speed, +2 HP/sec, and 40% damage reduction." },
             onClick() {
                 player.ir.inBattle = true
-                player.ma.inBlackHeart = true
+                options.fullscreen = true
                 player.subtabs["cbs"]['stuff'] = 'Battle'
 
                 arena = new RitualArena(1200, 600);
@@ -164,13 +156,7 @@
 
                 player.cbs.ritualSpiritCooldown = player.cbs.ritualSpiritCooldownMax
 
-                pauseUniverse("U1")
-                pauseUniverse("UA")
-                pauseUniverse("U2")
-                pauseUniverse("A1")
-                pauseUniverse("U3")
-                pauseUniverse("CB")
-                pauseUniverse("UB")
+                pauseUniverseAll(["DS", "A2"], "pause", true)
             },
             style: { width: '300px', "min-height": '100px', color: "white" },
         },
@@ -180,7 +166,7 @@
             unlocked() { return !player.bl.noxFightActive || player.subtabs["bl"]["stuff"] == "Refresh Page :("|| player.subtabs["bl"]["stuff"] == "Lose"},
             onClick() {
                 player.ir.inBattle = false
-                player.ma.inBlackHeart = false
+                options.fullscreen = false
                 player.subtabs["cbs"]['stuff'] = 'Ritual'
 
                 if (arena) {
@@ -197,13 +183,7 @@
                 player.cbs.inBattle = false
                 player.cbs.ritualSpiritActive = false
 
-                pauseUniverse("U1")
-                pauseUniverse("UA")
-                pauseUniverse("U2")
-                pauseUniverse("A1")
-                pauseUniverse("U3")
-                pauseUniverse("CB")
-                pauseUniverse("UB")
+                pauseUniverseAll(["DS", "A2"], "unpause", true)
             },
             style: { width: '300px', "min-height": '100px', color: "white" },
         },
@@ -1848,8 +1828,8 @@ class RitualArena extends SpaceArena {
 
                 // Glowing Eyes with phase-based intensity
                 let eyePulse = (0.8 + Math.sin(t * 2) * 0.2) * auraIntensity;
-                ctx.shadowColor = '#fff';
-                ctx.shadowBlur = 8 * eyePulse;
+                if (!options.performanceMode) ctx.shadowColor = '#fff';
+                if (!options.performanceMode) ctx.shadowBlur = 8 * eyePulse;
                 ctx.fillStyle = `rgba(255, 255, 255, ${eyePulse})`;
                 ctx.beginPath();
                 // Left eye
@@ -1857,7 +1837,7 @@ class RitualArena extends SpaceArena {
                 // Right eye
                 ctx.ellipse(enemy.radius * 0.1, -enemy.radius * 0.48, enemy.radius * 0.06, enemy.radius * 0.03, -0.2, 0, Math.PI * 2);
                 ctx.fill();
-                ctx.shadowBlur = 0;
+                if (!options.performanceMode) ctx.shadowBlur = 0;
 
                 // Arms - simplified
                 ctx.strokeStyle = '#88eaff';
@@ -2778,7 +2758,7 @@ class RitualArena extends SpaceArena {
                         try { if (typeof this.exitFullscreenBossMode === 'function') this.exitFullscreenBossMode(); } catch (e) {}
                         player.cbs.ascensionShards = player.cbs.ascensionShards.add(1)
                                         player.ir.inBattle = false
-                        player.ma.inBlackHeart = false
+                        options.fullscreen = false
                         player.subtabs["cbs"]['stuff'] = 'Ritual'
 
                         if (arena) {
@@ -2795,13 +2775,7 @@ class RitualArena extends SpaceArena {
                         player.cbs.inBattle = false
                         player.cbs.ritualSpiritActive = false
 
-                        pauseUniverse("U1")
-                        pauseUniverse("UA")
-                        pauseUniverse("U2")
-                        pauseUniverse("A1")
-                        pauseUniverse("U3")
-                        pauseUniverse("CB")
-                        pauseUniverse("UB")
+                        pauseUniverseAll(["DS", "A2"], "unpause", true)
                     }
                 }
             }
@@ -2852,7 +2826,7 @@ class RitualArena extends SpaceArena {
 
 /*
              player.ir.inBattle = true
-                player.ma.inBlackHeart = true
+                options.fullscreen = true
                 player.subtabs["cbs"]['stuff'] = 'Battle'
 
                 arena = new RitualArena(1800, 600);
@@ -2863,13 +2837,7 @@ class RitualArena extends SpaceArena {
                 if (hasUpgrade("ir", 14)) arena.upgradeEffects.hpRegen += 0.5 / 60
 
                 arena.upgradeEffects.attackDamage *= levelableEffect("ir", player.ir.shipType)[2]
-                pauseUniverse("U1")
-                pauseUniverse("UA")
-                pauseUniverse("U2")
-                pauseUniverse("A1")
-                pauseUniverse("U3")
-                pauseUniverse("CB")
-                pauseUniverse("UB")
+                pauseUniverseAll(["DS", "A2"], "pause", true)
 */
 
 //alternatively make the ritual a bullet hell attack
@@ -2895,8 +2863,9 @@ function summonSpirit() {
         try {
             if (player) {
                 player.ir.inBattle = true;
-                player.ma = player.ma || {};
-                player.ma.inBlackHeart = true;
+                if (options) {
+                    options.fullscreen = true;
+                }
                 player.subtabs = player.subtabs || {};
                 player.subtabs["cbs"] = player.subtabs["cbs"] || {};
                 player.subtabs["cbs"]["stuff"] = 'Battle';

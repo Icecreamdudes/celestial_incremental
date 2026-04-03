@@ -105,9 +105,9 @@
 
         // INFINITY POINT BASE
         if (!player.in.breakInfinity) player.in.infinityPointsToGet = new Decimal(1)
-        if (player.in.breakInfinity && !hasUpgrade("bi", 111)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().div(10)
-        if (player.in.breakInfinity && hasUpgrade("bi", 111)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().div(2).pow(1.25)
-        if (player.in.breakInfinity && hasUpgrade("bi", 115)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().pow(1.5)
+        if (player.in.breakInfinity && !hasUpgrade("bi", 111)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log(10).div(10).pow(1.1)
+        if (player.in.breakInfinity && hasUpgrade("bi", 111)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log(10).div(2).pow(1.3)
+        if (player.in.breakInfinity && hasUpgrade("bi", 115)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log(10).pow(1.5)
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(player.cs.scraps.infinity.effect)
 
 
@@ -136,12 +136,11 @@
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.fu.sadnessEffect2)
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.co.cores.infinity.effect[0])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(levelableEffect("pu", 101)[2])
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ma", 21))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.ma.bestComboDepth1Effect)
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.depth1.comboEffect)
         if (hasMilestone("r", 21)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.r.pentMilestone11Effect)
         if (player.pol.pollinatorEffects.water.enabled) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.pol.pollinatorEffects.water.effects[0])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("st", 301))
-        if (player.ma.matosDefeated) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul("1e600")
+        if (player.matosLair.milestone[25] > 0) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul("1e600")
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.i.pylonPassiveEffect)
 
         // POWER MODIFIERS
@@ -601,24 +600,24 @@
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
-                        ["blank", "25px"],
-                        ["infobox", "1"],
-                        ["infobox", "2"],
-                        ["infobox", "3"],
-                ]
+                    ["blank", "25px"],
+                    ["infobox", "1"],
+                    ["infobox", "2"],
+                    ["infobox", "3"],
+                ],
             },
             "Pylon": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return player.i.pylonTier.gte(2) },
                 content: [
-                        ["blank", "25px"],
-                            ["left-row", [
-            ["tooltip-row", [
-                ["raw-html", "<img src='resources/fragments/paradoxFragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cof.coreFragments[3])}, {width: "93px", height: "50px", color: "#1FD3B7", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                ["raw-html", "<div class='bottomTooltip'>Paradox Core Fragments</div>"],
-            ], {width: "148px", height: "50px",}],
-        ], {width: "148px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
+                    ["blank", "25px"],
+                    ["left-row", [
+                        ["tooltip-row", [
+                            ["raw-html", "<img src='resources/fragments/paradoxFragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                            ["raw-html", () => { return formatWhole(player.cof.coreFragments[3])}, {width: "103px", height: "50px", color: "#1FD3B7", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                            ["raw-html", "<div class='bottomTooltip'>Paradox Core Fragments</div>"],
+                        ], {width: "158px", height: "50px",}],
+                    ], {width: "158px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
                     ["blank", "25px"],
                     ["clickable", 11],
                     ["raw-html", () => { return player.in.pylonBuilt ? "You have <h3>" + format(player.in.pylonEnergy) + "/" + format(player.in.pylonEnergyMax) +  "</h3> paradox pylon energy (" + format(player.in.pylonEnergyPerSecond) + "/s)." : "" }, {color: "#000000ff", fontSize: "24px", fontFamily: "monospace"}],
@@ -629,10 +628,10 @@
                     ["blank", "25px"],
                     ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13],]], 
                     ["blank", "25px"],
-                    ["raw-html", () => {return player.in.pylonBuilt ? "Your ancient pylon is tier " + formatWhole(player.in.pylonTier) + ", which boosts all pylon effects by ^" + format(player.in.pylonTierEffect) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.in.pylonBuilt ? "Your paradox pylon is tier " + formatWhole(player.in.pylonTier) + ", which boosts all pylon effects by ^" + format(player.in.pylonTierEffect) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["clickable", 12],
-                ]
+                ],
             },
         },
     },

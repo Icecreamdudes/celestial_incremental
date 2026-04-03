@@ -16,16 +16,19 @@
 		"Misc/settings.js", "Misc/savebank.js", "Misc/changelog.js", "Misc/jukebox.js", "Check Back/pet.js",
 		"Singularity/starmetalAlloy.js", "DarkU1/darkU1.js", "DarkU1/lightExtractor.js", "DarkU1/darkRanks.js", "DarkU1/darkPrestige.js",
 		"DarkU1/boosters.js", "DarkU1/vaporizer.js", "DarkU1/generators.js", "DarkU1/darkGrass.js", "DarkU1/normality.js",
-		"Singularity/matos.js", "Singularity/core.js", "Singularity/matosAttacks.js", "Singularity/matosAttacks.js", "Singularity/coreFragments.js", 
+		"Singularity/core.js", "Singularity/coreFragments.js", 
 		"Singularity/starmetalEssence.js", "rockets.js", "AltU2/altUni2.js", "AltU2/stars.js", "AltU2/planets.js", "AltU2/exploration.js", "AltU2/iridite.js",
 		"Hex/hex.js", "Hex/provenance.js", "Hex/refinement.js", "Hex/blessings.js", "Hex/curses.js",
 		"Hex/purity.js", "Hex/power.js", "Hex/realms.js", "Hex/vex.js", "Hex/sacrifice.js",
 		"Check Back/cookie.js", "Check Back/coinDust.js", "Check Back/buttonEnhancement.js", "Check Back/dailyOrbs.js", "Misc/achievements.js",
 		"Hive/unih.js", "Hive/flower.js", "Hive/pollen.js", "Hive/nectar.js", "Hive/beebread.js",
 		"Hive/honey.js", "Hive/wax.js", "Hive/aleph.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
-		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js", "DarkU1/blood.js", "Zar/zar.js", "Zar/coinFlip.js",
+		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "DarkU1/blood.js", "Zar/zar.js", "Zar/coinFlip.js",
  		"Zar/wheelOfFortune.js", "Check Back/singularityPet.js", "Zar/slotMachine.js", "Zar/checkBackShrine.js", "Zar/cards.js", "Cantepocalypse/enhance.js",
-		"Check Back/gwaTemple.js",
+		"Black Heart/blackHeart.js", "Black Heart/blackHeartFunctions.js", "Black Heart/characters.js", "Black Heart/skills.js", "Black Heart/depth1.js",
+		"Black Heart/depth2.js", "Black Heart/depth3.js", "Black Heart/matosLair.js", "Black Heart/darkTemple.js", "Black Heart/bulletHell.js",
+		"Black Heart/stagnantSynestia.js", "Black Heart/depth4.js", "Black Heart/alephsChamber.js", "Black Heart/laboratory.js", "DarkU1/grassJump.js",
+		"Hive/nest.js", "Check Back/gwaTemple.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 	],
@@ -38,8 +41,8 @@
 
 // Set your version in num and name
 let VERSION = {
-	num: 190.1, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
-	name: "Aleph Update I: The Hive",
+	num: 190.2, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
+	name: "Aleph Update Pt II: Nested Metal",
 }
 
 function miscCode() {
@@ -54,7 +57,7 @@ function updateStyles() {
 	if (player.tab == 'bigc') player.hideMenu = true
 	if (player.tab == 'revc') player.hideMenu = true
 	if (player.tab == 'c') player.hideMenu = true
-	if (player.ma.inBlackHeart) player.hideMenu = true
+	if (options.fullscreen) player.hideMenu = true
 
 	// ===------   CHANGE LAYER SIZE   ------=== //
 	const LAYERHOLDER = document.getElementById('layerHolder')
@@ -101,31 +104,33 @@ function updateStyles() {
 			if (player.c.currentCutscene == 33 || player.c.currentCutscene == 34 || (player.c.currentCutscene == 35 && player.c.cutsceneIndex < 24)) layerBG = "linear-gradient(-180deg,rgb(114, 8, 4) 0%, rgb(114, 4, 85) 100%)"
 			break;
 		case "settings": case "jukebox": case "savebank": case "changelog": case "credits":
-			if (!player.sma.inStarmetalChallenge) layerBG = "linear-gradient(90deg, #57636d, #2e3d49)"
-			if (player.sma.inStarmetalChallenge) layerBG = "linear-gradient(90deg, #1b242b, #12181d)"
+			if (!player.sma.inStarmetalChallenge && !options.themeDarken) {
+				layerBG = "linear-gradient(90deg, #57636d, #2e3d49)"
+			} else {
+				layerBG = "linear-gradient(90deg, #1b242b, #12181d)"
+			}
 			break;
 		case "achievements":
-			if (!player.sma.inStarmetalChallenge) layerBG = "linear-gradient(45deg, #450054, #00307f)"
-			if (player.sma.inStarmetalChallenge) layerBG = "linear-gradient(90deg, #0d0010, #000919)"
+			if (!player.sma.inStarmetalChallenge && !options.themeDarken) {
+				layerBG = "linear-gradient(45deg, #450054, #00307f)"
+			} else {
+				layerBG = "linear-gradient(90deg, #0d0010, #000919)"
+			}
 			break;
 		case "po":
 			layerBG = "linear-gradient(45deg, #450054, #00307f)"
 			break;
 		case "i":
-			if (player.i.pylonBuilt && player.subtabs["i"]["stuff"] == "Pylon")
-			{
+			if (player.i.pylonBuilt && player.subtabs["i"]["stuff"] == "Pylon") {
 				layerBG = "linear-gradient(90deg, #927550ff, #725442ff)"
-			} else
-			{
+			} else {
 				layerBG = "#161616"
 			}
 			break;
 		case "in":
-			if (player.i.pylonBuilt && player.subtabs["in"]["stuff"] == "Pylon")
-			{
+			if (player.i.pylonBuilt && player.subtabs["in"]["stuff"] == "Pylon") {
 				layerBG = "linear-gradient(0deg, #1FF8AF, #2162D2)"
-			} else
-			{
+			} else {
 				layerBG = "#001f18"
 			}
 			break;
@@ -197,21 +202,41 @@ function updateStyles() {
 			break;
 		case "s": case "co": case "ra": case "sd": case "cs":
 		case "cof":
-			if (!player.ma.matosDefeated) layerBG = "#260300"
-			if (player.ma.matosDefeated) layerBG = "linear-gradient(-180deg, #540818 0%, #3a0202 100%)"
-			if (player.tab == "co" && player.ma.matosDefeated) layerBG = "linear-gradient(-180deg,rgb(0, 0, 0) 0%, rgb(15, 15, 15) 100%)"
+			if (player.matosLair.milestone[25] == 0) layerBG = "#260300"
+			if (player.matosLair.milestone[25] > 0) layerBG = "linear-gradient(-180deg, #540818 0%, #3a0202 100%)"
+			if (player.tab == "co" && player.matosLair.milestone[25] > 0) layerBG = "linear-gradient(-180deg,rgb(0, 0, 0) 0%, rgb(15, 15, 15) 100%)"
 			break;
 		case "sma": case "sme":
 			layerBG = "linear-gradient(120deg, #73752b 0%, #5f4d19 25%, #75303b 50%, #6a3075, 75%, #306775 100%)"
+			if (player.tab == "sme" && player.subtabs["sme"]["stuff"] == "Starmetal Studies") layerBG = "linear-gradient(120deg, #393a15 0%, #2f260c 25%, #3a181d 50%, #35183a, 75%, #18333a 100%)"
 			break;
-		case "ma": 
-			if (!player.ma.inBlackHeart) {
-				if (!player.ma.matosDefeated) layerBG = "#260300"
-				if (player.ma.matosDefeated) layerBG = "linear-gradient(-180deg, #540818 0%, #3a0202 100%)"
+		case "bh":
+			switch (player.bh.currentStage) {
+				case "depth2":
+					layerBG = "linear-gradient(-180deg, #720455 0%, #250121 100%)"
+					break;
+				case "depth3":
+					layerBG = "linear-gradient(-180deg, #720804 0%, #720455 100%)"
+					break;
+				case "matosLair":
+					layerBG = "linear-gradient(-180deg, #96221d 0%, #720804 100%)"
+					break;
+				case "stagnantSynestia":
+					layerBG = "linear-gradient(-90deg, #124, #081122)"
+					break;
+				case "depth4":
+					layerBG = "linear-gradient(-180deg, #980098 0%, #590059 100%)"
+					break;
+				case "alephsChamber":
+					layerBG = "linear-gradient(-180deg, #8C4670 0%, #7F007F 100%)"
+					break;
+				case "laboratory":
+					layerBG = "linear-gradient(-180deg, #3a4625 0%, #172312 100%)"
+					break;
+				default: 
+					layerBG = "black"
+					break;
 			}
-			if (player.ma.inBlackHeart) layerBG = "black"
-			if (player.ma.currentDepth.eq(2)) layerBG = "linear-gradient(-180deg, #720455 0%, #250121 100%)"
-			if (player.ma.currentDepth.eq(3)) layerBG = "linear-gradient(-180deg, #720804 0%, #720455 100%)"
 			break;
 		case "du": case "le": case "dr": case "dp": case "dg":
 		case "dgr": case "dn": case "db": case "dv": case "ds": case "pu":
@@ -233,15 +258,18 @@ function updateStyles() {
 		case "al":
 			layerBG = "#1f001f"
 			break;
+		case "n":
+			if (player.subtabs["n"]["Tabs"] == "Pylon") {
+				layerBG = "linear-gradient(90deg, #458c46, #005410)"
+			} else {
+				layerBG = "linear-gradient(to right, #443812, #432236)"
+			}
+			break;
 		case "cb":
 			layerBG = "#021124"
 			break;
 	    case "bl":
 			layerBG = "#130000ff"
-			break;
-		case "ba":
-			if (player.fi.battleTier.eq(1)) layerBG = "linear-gradient(-90deg, #5c2109ff, #5c0e04ff)"
-			if (player.fi.battleTier.eq(2)) layerBG = "linear-gradient(-90deg, #5c090dff, #910050ff)"
 			break;
 		case "ev0":
 			layerBG = "linear-gradient(-45deg, #655421, #fad25a)"
@@ -308,10 +336,7 @@ function updateStyles() {
 	        galaxyBackground.remove();
 	    }
 	}
-
-	
-
-	if ((player.tab == "ma" && player.ma.currentDepth && player.ma.currentDepth.eq && player.ma.currentDepth.eq(3) && (player.subtabs["ma"]["stuff"] == "Fight"))) {
+	if (!options.performanceMode && player.tab == "bh" && (player.bh.currentStage == "depth3" || player.bh.currentStage == "matosLair") && (player.subtabs["bh"]["stuff"] == "battle" || player.subtabs["bh"]["stuff"] == "bullet")) {
 	    if (!document.getElementById("embers-background")) {
     	    // Create embers background container
 	        const embersBg = document.createElement("div");
@@ -362,9 +387,16 @@ function updateStyles() {
     	const embersBg = document.getElementById("embers-background");
     	if (embersBg) embersBg.remove();
 	}
+	if (player.tab == "bh" && player.bh.currentStage == "laboratory" && player.subtabs["bh"]["stuff"] == "battle") {
+		let lay = document.getElementById("layerHolder");
+		if (lay) lay.style.filter = "brightness(90%)"
+	} else {
+		let lay = document.getElementById("layerHolder");
+		if (lay) lay.style.filter = "brightness(100%)"
+	}
 
 	// Solar Eclipse Effect (moving sun/moon)
-	if (player.sma.inStarmetalChallenge && player.pet.legPetTimers[0].active) {
+	if (!options.performanceMode && player.sma.inStarmetalChallenge && player.pet.legPetTimers[0].active) {
 	    if (!document.getElementById("solar-eclipse-bg")) {
     	    // Create the eclipse overlay
 	        const eclipse = document.createElement("div");
@@ -552,7 +584,7 @@ function updateStyles() {
 	let sideBG = ""
 
 	// Find background color
-	if (options.menuType == "Tree") {
+	if (options.menuType != "Tab") {
 		switch(player.universe) {
 			case "U2": 
 				sideBG = "#000f0c"
@@ -585,12 +617,11 @@ function updateStyles() {
 				sideBG = "#0b0b0b"
 				break;
 		}
-	}
-	if (options.menuType == "Tab") {
+	} else {
 		if (window.innerWidth > 1250) {
 			sideBG = "linear-gradient(to right, var(--tabTitle) 103px, var(--regBorder) 103px, var(--regBorder) 106px, var(--layerBackground) 106px)"
 		} else {
-			sideBG = "linear-gradient(to bottom, var(--tabTitle) 80px, var(--regBorder) 80px, var(--regBorder) 83px, (--layerBackground) 83px)"
+			sideBG = "linear-gradient(to bottom, var(--tabTitle) 80px, var(--regBorder) 80px, var(--regBorder) 83px, var(--layerBackground) 83px)"
 		}
 	}
 
@@ -625,7 +656,7 @@ function updateStyles() {
             player.musuniverse = "A1"
 			break;
 		case "s": case "co": case "ra": case "sd": case "cs":
-		case "sma": case "ma": case "cof": case "sme":
+		case "sma": case "bh": case "cof": case "sme":
             player.musuniverse = "U3"
 			break;
 		case "du": case "le": case "dr": case "dp": case "dg":
@@ -686,18 +717,27 @@ function updateStyles() {
 						playAndLoopAudio("music/alt-uni1.mp3", options.musicVolume/10)
 						break;
 					case "U3":
-						if (player.ma.inBlackHeart == false) {
-        		        	if (!player.ma.matosDefeated) playAndLoopAudio("music/singularity.mp3", options.musicVolume/10);
-		                	if (player.ma.matosDefeated) playAndLoopAudio("music/singularity2.mp3", options.musicVolume/10);
+						if (player.tab != "bh") {
+        		        	if (player.matosLair.milestone[25] == 0) playAndLoopAudio("music/singularity.mp3", options.musicVolume/10);
+		                	if (player.matosLair.milestone[25] > 0) playAndLoopAudio("music/singularity2.mp3", options.musicVolume/10);
             			} else {
-        		        	if (!player.ma.fightingCelestialites) {
-		                    	playAndLoopAudio("music/enteringBlackHeart.mp3", options.musicVolume/10);
-            				} else {
-        		            	if (player.ma.currentDepth.eq(1)) playAndLoopAudio("music/celestialites.mp3", options.musicVolume/10);
-		                    	if (player.ma.currentDepth.eq(2)) playAndLoopAudio("music/blackHeart.mp3", options.musicVolume/10);
-                		    	if (player.ma.currentDepth.eq(3) && !player.ma.matosFightActive && player.ma.currentCelestialiteType != 25) playAndLoopAudio("music/matosTheme.mp3", options.musicVolume/10);
-        		            	if (player.ma.currentDepth.eq(3) && player.ma.matosFightActive && player.ma.currentCelestialiteType == 25) playAndLoopAudio("music/matosFight.mp3", options.musicVolume/10);
-		                	} //use blackHeart.mp3 for depth 2, matosTheme.mp3 for depth 3
+							// Exceptions
+							if (player.bh.currentStage == "matosLair" && player.bh.combo.eq(24)) {
+								playAndLoopAudio("music/matosFight.mp3", options.musicVolume/10)
+								break;
+							}
+							if (player.bh.currentStage == "alephsChamber" && player.bh.combo.eq(24)) {
+								playAndLoopAudio("music/alephBattle.mp3", options.musicVolume/10)
+								break;
+							}
+							// Default Behavior
+							if (BHS[player.bh.currentStage] && BHS[player.bh.currentStage].music) {
+								playAndLoopAudio(BHS[player.bh.currentStage].music, options.musicVolume/10);
+								break;
+							} else {
+								playAndLoopAudio("music/enteringBlackHeart.mp3", options.musicVolume/10);
+								break;
+							}
             			}
 						break;
 					case "D1":
@@ -727,9 +767,7 @@ function updateStyles() {
 			    		if (player.ir.inBattle) playAndLoopAudio("music/ascensionSpirit.mp3", options.musicVolume/10);
 						break;
 					case "CB":
-						if (player.fi.battleTier.eq(0)) playAndLoopAudio("music/checkback.mp3", options.musicVolume/10)
-						if (player.fi.battleTier.eq(1)) playAndLoopAudio("music/fighting.mp3", options.musicVolume/10)
-						if (player.fi.battleTier.eq(2)) playAndLoopAudio("music/tier2.mp3", options.musicVolume/10)
+						playAndLoopAudio("music/checkback.mp3", options.musicVolume/10)
 						break;
 					default:
 						stopAudio()
@@ -767,7 +805,85 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v1.Gwa - The Gwaleph Update</h3><br>
+	<h3>v1.12 - Aleph Update Pt II: Nested Metal</h3><br>
+		Content:<br>
+			- Remade Black Heart.<br>
+			- Remade Depth 1.<br>
+			- Remade Depth 2.<br>
+			- Remade Depth 3.<br>
+			- Added ??? Temple.<br>
+			- Added Matos' Lair.<br>
+			- Added Starmetal Studies.<br>
+			- Removed Checkback Fighting.<br>
+			- Added Stagnant Synestia.<br>
+			- Added Depth 4.<br>
+			- Added Laboratory.<br>
+			- Added Alephs Chamber.<br>
+			- Added Grass Jump.<br>
+			- Added Nests.<br>
+			- Added the Natural Pylon.<br><br>
+		Minor Changes:<br>
+			- Added evolution fragment pets missing effect.<br>
+			- Added a new legendary pet.<br>
+			- Added 2 new BH characters.<br>
+			- Added 4 new punchcards.<br>
+			- Added a small teaser in hex of power.<br>
+			- Added new BH eclipse shop upgrades.<br>
+			- Added fun easter egg to Dice Space.<br>
+			- Replaced the 2 late game BI upgrades with new starmetal studies.<br><br>
+		QoL:<br>
+			- Added a performance mode option for dynamic content.<br>
+			- Improved jukebox visuals slightly.<br>
+			- Improved clarity on what later celestialites unlocked.<br>
+			- Slightly changed flower layers UI to allow for more content.<br>
+			- Polished the universe pausing UI slightly.<br>
+			- Bullet hell content now uses mouse/touch controls, with keyboard as a side option.<br>
+			- Clarified the importance of Apathy upgrade VI in the apathy challenge.<br>
+			- Made Check Back Shrine and Singularity Pets run offline.<br><br>
+		Balancing:<br>
+			- Changed star softcap formula to make more sense.<br>
+			- Made defeating Iridite also give /1.5 SME generator cooldowns.<br>
+			- Added doom softcaps to most Pre-OTF resources.<br>
+			- Nerfed ancient pylon energy effects. (for obvious inflationary reasons).<br>
+			- Redid AD balancing slightly. (It should be balanced correctly, but I can't 100% confident).<br>
+			- Added end game softcaps to anonymity and repli-trees.<br>
+			- Changed the effects of the black heart cookie upgrades. (Should still be worth-while)<br>
+			- Changed the pricing of legendary pets from fragmentation shop.<br>
+			- Very slighly buffed base fragmentation gain.<br>
+			- Reduced the scaling of fragmentation buyables.<br>
+			- Nerfed the ascension scaling of Nova pets first effect.<br>
+			- Nerfed the ascension scaling of Impossible Triangle pets first effect.<br>
+			- Nerfed the ascension scaling of Kres and Nav pet effects.<br>
+			- Added a new effect to Eclipse to make eclipse cooldown quicker.<br>
+			- Added a new effect to Geroa to make their effect more useful.<br>
+			- Changed the first singularity pet buyable for each pet to fit the new black heart.<br>
+			- Changed the unlock condition for the last 2 booster milestones.<br>
+			- Made best booster milestones not be unlocked else where<br>(Though you can't see what it buffs if you haven't unlocked that feature)<br>
+			- Added end game softcaps to nectar and pollen.<br>
+			- Changed the evolution requirements for wrath cookie to match new black heart resources.<br>
+			- Slightly reduced the nerf from the first tree core scrap upgrade.<br>
+			- Nerfed the Pre-OTF effect of ancient pylon energy.<br><br>
+		Bugfixes:<br>
+			- Added a check to hopefully prevent getting softlocked in space battles.<br>
+			- Fixed exiting certain areas of the game randomly pausing most of your universes.<br>
+			- Fixed many bullet hell bugs (thanks to redoing all the code).<br>
+			- Fixed XP button 9 showing up in the UI of button enhancement before being unlocked.<br>
+			- Fixed Funify level resets not changing the subtab of grass skips.<br>
+			- Fixed PS orb enhancer in CB orbs not functioning.<br>
+			- Fixed the tooltip on eclipse's ability tooltip.<br>
+			- Fixed Fragmentation buyable 7 not functioning.<br>
+			- Fixed a bug that causes newer saves to crash when entering blood layer.<br>
+			- Fixed the text of some punchcards being formatted wrong.<br>
+			- Fixed a typo in the blessing reset usage text.<br>
+			- Fixed cocoon milestone 14 not functioning.<br>
+			- Fixed a bug making Tav Domain's domain expander not switch domain subtabs.<br>
+			- Fixed Singularity upgrade XIX not working with auto singularity set to amount.<br>
+			- Fixed Zar sometimes forgetting to let you into dice space after finishing the unlocks.<br>
+			- Made booster dice speed toggle be disabled while in IC5 to prevent confusion.<br>
+			- Fixed tab layout's UI background not working while in portrait mode.<br>
+			- Fixed displayed space pet xp gain not matching actual xp gain.<br>
+			- Fixed the BI-Cante savebank page not working due to incorrect ID calls.<br><br>
+	<h3>v1.Gwa - The Gwaleph Update <small>[APRIL FOOLS]</small></h3><br>
 		Content:<br>
 			- Opened the door to true gwa-ness<br><br>
 	<h3>v1.11 - The Novasent Update Part II: Blood and Gambling</h3><br>
@@ -786,7 +902,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added a Miniboss.<br>
 			- Added Ancient, Paradox, and Temporal Fragment Pylons.<br>
 			- Added 2 ships.<br>
-			- More stuff I don't remember.<br>
+			- More stuff I don't remember.<br><br>
 	    QoL:<br>
 			- Did I add QoL this update? I don't remember.<br><br>
 		Balancing:<br>
@@ -1641,9 +1757,6 @@ function fixOldSave(oldVersion){
 		if (player.cb.XPBoost.gte(100000)) player.cb.XPBoost = new Decimal(100000)
 		if (player.cb.xp.gte(50000000)) player.cb.xp = new Decimal(50000000)
 		if (player.cb.totalxp.gte(2.23e12)) player.cb.totalxp = new Decimal(2.23e12)
-		if (player.ma.bestComboDepth1.gte(100)) player.ma.bestComboDepth1 = new Decimal(100)
-		if (player.ma.bestComboDepth2.gte(100)) player.ma.bestComboDepth2 = new Decimal(100)
-		if (player.ma.bestComboDepth3.gte(100)) player.ma.bestComboDepth3 = new Decimal(100)
 		if (!player.pet.singularityFragments) player.pet.singularityFragments = new Decimal(0)
 		player.pet.highestDicePetCombo = new Decimal(player.pet.highestDicePetCombo)
 		player.cb.evolutionShards = new Decimal(player.cb.evolutionShards).floor()
@@ -1667,10 +1780,7 @@ function fixOldSave(oldVersion){
 		for (let prop in player.fu.buyables) {
 			if (getBuyableAmount("fu", prop).gt(layers.fu.buyables[prop].purchaseLimit())) setBuyableAmount("fu", prop, layers.fu.buyables[prop].purchaseLimit())
 		}
-		setBuyableAmount("sma", 12, new Decimal(getBuyableAmount("sma", 12).mul(2))),
-		setBuyableAmount("ma", 101, new Decimal(0))
-		setBuyableAmount("ma", 102, new Decimal(0))
-		setBuyableAmount("ma", 103, new Decimal(0))
+		setBuyableAmount("sma", 12, new Decimal(getBuyableAmount("sma", 12).mul(2)))
 
 		if (player.le.punchcardsXP != undefined) {
 			setLevelableXP("pu", 101, new Decimal(player.le.punchcardsXP[0]))
@@ -1827,5 +1937,82 @@ function fixOldSave(oldVersion){
 			player.sp.buyables[34] = new Decimal(player.ep5.buyables[12])
 			player.sp.buyables[35] = new Decimal(player.ep5.buyables[13])
 		}
+	}
+	if (oldVersion < 190.2) {
+		// Matos Variables
+		if (player.ma.matosDefeated) player.matosLair.milestone[25] = 1
+		if (player.ma.matosUnlock) {
+			player.bh.unlockConditions.done = player.ma.matosUnlock
+			if (player.bh.unlockConditions.done) player.subtabs["bh"]["stuff"] = "party"
+		}
+		if (player.ma.matosUnlockConditions) {
+			player.bh.unlockConditions.core = player.ma.matosUnlockConditions[0]
+			player.bh.unlockConditions.level = player.ma.matosUnlockConditions[1]
+			player.bh.unlockConditions.replicanti = player.ma.matosUnlockConditions[2]
+			player.bh.unlockConditions.points = player.ma.matosUnlockConditions[3]
+		}
+		player.depth1.gloomingUmbrite = new Decimal(player.ma.commonMatosFragments).floor()
+		player.depth1.dimUmbrite = Decimal.pow(player.ma.commonMatosFragments, 0.7).floor()
+		player.depth2.faintUmbrite = new Decimal(player.ma.rareMatosFragments).floor()
+		player.depth2.clearUmbrite = Decimal.pow(player.ma.rareMatosFragments, 0.7).floor()
+		player.depth3.vividUmbrite = new Decimal(player.ma.epicMatosFragments).floor()
+		player.depth3.lustrousUmbrite = Decimal.pow(player.ma.epicMatosFragments, 0.7).floor()
+		player.bh.darkEssence = Decimal.pow(player.ma.legendaryMatosFragments, 1.5).floor()
+		// Depth 1
+		player.depth1.highestCombo = new Decimal(player.ma.bestComboDepth1).min(250)
+		for (let i in player.depth1.milestone) {
+			if (player.depth1.highestCombo.gte(i)) player.depth1.milestone[i] = 1
+		}
+		if (hasUpgrade("ma", 11)) player.depth1.upgrades.push(1)
+		if (hasUpgrade("ma", 12)) player.depth1.upgrades.push(2)
+		if (hasUpgrade("ma", 13)) player.depth1.upgrades.push(3)
+		if (hasUpgrade("ma", 19)) player.depth1.upgrades.push(5)
+		if (hasUpgrade("ma", 14)) player.depth1.upgrades.push(6)
+		player.depth1.buyables[1] = new Decimal(player.ma.buyables[14]).div(5).floor()
+		player.depth1.buyables[2] = new Decimal(player.ma.buyables[21]).div(5).floor()
+		player.depth1.buyables[3] = new Decimal(player.ma.buyables[24]).div(10).floor()
+		player.depth1.buyables[4] = new Decimal(player.ma.buyables[33])
+
+		// Depth 2
+		player.depth2.highestCombo = new Decimal(player.ma.bestComboDepth2).min(250)
+		for (let i in player.depth2.milestone) {
+			if (player.depth2.highestCombo.gte(i)) player.depth2.milestone[i] = 1
+		}
+		if (hasUpgrade("ma", 23)) player.depth2.upgrades.push(1)
+		if (hasUpgrade("ma", 24)) player.depth2.upgrades.push(2)
+		if (hasUpgrade("ma", 25)) player.depth2.upgrades.push(3)
+		if (hasUpgrade("ma", 22)) player.depth2.upgrades.push(5)
+		if (hasUpgrade("ma", 21)) player.depth2.upgrades.push(6)
+		player.depth2.buyables[1] = new Decimal(player.ma.buyables[15]).div(5).floor()
+		player.depth2.buyables[3] = new Decimal(player.ma.buyables[32]).div(2.5).floor()
+		player.depth2.buyables[4] = new Decimal(player.ma.buyables[23]).div(10).floor()
+
+		// Depth 3
+		player.depth3.highestCombo = new Decimal(player.ma.bestComboDepth3).min(250)
+		for (let i in player.depth3.milestone) {
+			if (player.depth3.highestCombo.gte(i)) player.depth3.milestone[i] = 1
+		}
+		if (hasUpgrade("ma", 29)) player.depth3.upgrades.push(5)
+		if (hasUpgrade("ma", 30)) player.depth3.upgrades.push(6)
+		player.depth3.buyables[1] = new Decimal(player.ma.buyables[16]).div(5).floor()
+		player.depth3.buyables[2] = new Decimal(player.ma.buyables[17]).div(5).floor().min(20)
+		player.depth3.buyables[3] = new Decimal(player.ma.buyables[31]).div(2.5).floor()
+		player.depth3.buyables[4] = new Decimal(player.ma.buyables[34])
+
+		// CB Fighting
+		if (player.fi) {
+			player.stagnantSynestia.temporalDust = new Decimal(player.fi.temporalDust).floor()
+			player.stagnantSynestia.temporalShard = new Decimal(player.fi.temporalShards).floor()
+			player.stagnantSynestia.highestCombo = new Decimal(player.fi.tier1BestWave).min(100)
+			for (let i in player.stagnantSynestia.milestone) {
+				if (player.stagnantSynestia.highestCombo.gte(i)) player.stagnantSynestia.milestone[i] = 1
+			}
+			if (hasUpgrade("fi", 13)) player.stagnantSynestia.upgrades.push(5)
+			if (hasMilestone("fi", 103)) player.stagnantSynestia.upgrades.push(6)
+		}
+		if (hasUpgrade("ev8", 23)) player.ev8.upgrades.push(25)
+
+		// AD BALANCING
+		if (player.cs && player.cs.scraps.antimatter.effect.gte(1)) player.cs.scraps.antimatter.effect = new Decimal(0)
 	}
 }

@@ -26,7 +26,7 @@ addLayer("hsa", {
         if (hasUpgrade("hsa", 24)) player.hsa.sacredEnergyGain = player.hsa.sacredEnergyGain.mul(upgradeEffect("hsa", 24))
         player.hsa.sacredEnergyGain = player.hsa.sacredEnergyGain.mul(buyableEffect("hsa", 1))
 
-        if (hasUpgrade("hsa", 26)) player.hsa.sacredEnergy = player.hsa.sacredEnergy.add(player.hsa.sacredEnergyGain.mul(0.1).mul(delta))
+        if (hasUpgrade("hsa", 26)) player.hsa.sacredEnergy = player.hsa.sacredEnergy.add(player.hsa.sacredEnergyGain.mul(delta))
 
         if (player.hsa.sacredEnergy.lt(46655)) player.hsa.sacredEffect = player.hsa.sacredEnergy.add(1).log(6).mul(0.05)
         if (player.hsa.sacredEnergy.gte(46655) && player.hsa.sacredEnergy.lt(1.7e20)) player.hsa.sacredEffect = player.hsa.sacredEnergy.add(1).log(6).mul(0.01).add(0.24).min(0.6)
@@ -188,7 +188,7 @@ addLayer("hsa", {
         26: {
             title: "Conscious",
             unlocked() {return challengeCompletions("hrm", 14) >= 2},
-            description: "Produce 10% sacred energy per second.",
+            description: "Produce 100% sacred energy per second.",
             cost: new Decimal(3e7),
             currencyLocation() { return player.hsa },
             currencyDisplayName: "Sacred Energy",

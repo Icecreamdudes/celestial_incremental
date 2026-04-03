@@ -176,6 +176,7 @@
         player.fu.happinessPerSecond = player.fu.happinessPerSecond.mul(buyableEffect("fu", 62))
         player.fu.happinessPerSecond = player.fu.happinessPerSecond.mul(buyableEffect("ep1", 12))
         if (hasUpgrade("fu", 115)) player.fu.happinessPerSecond = player.fu.happinessPerSecond.mul(upgradeEffect("fu", 115))
+        if (player.alephsChamber.milestone[25] > 0) player.fu.happinessPerSecond = player.fu.happinessPerSecond.mul(10)
         player.fu.happinessPerSecond = player.fu.happinessPerSecond.mul(player.en.enhancersEffect[2])
         
         player.fu.happinessEffect = player.fu.happiness.pow(0.35).add(1).div(player.fu.numbEffect)
@@ -190,6 +191,7 @@
         player.fu.sadnessPerSecond = player.fu.sadnessPerSecond.mul(buyableEffect("fu", 63))
         player.fu.sadnessPerSecond = player.fu.sadnessPerSecond.mul(buyableEffect("ep1", 12))
         if (hasUpgrade("fu", 115)) player.fu.sadnessPerSecond = player.fu.sadnessPerSecond.mul(upgradeEffect("fu", 115))
+        if (player.alephsChamber.milestone[25] > 0) player.fu.sadnessPerSecond = player.fu.sadnessPerSecond.mul(10)
         player.fu.sadnessPerSecond = player.fu.sadnessPerSecond.mul(player.en.enhancersEffect[2])
 
         player.fu.sadnessEffect = player.fu.sadness.pow(0.35).add(1).div(player.fu.numbEffect)
@@ -205,6 +207,7 @@
         player.fu.angerPerSecond = player.fu.angerPerSecond.mul(buyableEffect("fu", 64))
         player.fu.angerPerSecond = player.fu.angerPerSecond.mul(buyableEffect("ep1", 12))
         if (hasUpgrade("fu", 115)) player.fu.angerPerSecond = player.fu.angerPerSecond.mul(upgradeEffect("fu", 115))
+        if (player.alephsChamber.milestone[25] > 0) player.fu.angerPerSecond = player.fu.angerPerSecond.mul(10)
         player.fu.angerPerSecond = player.fu.angerPerSecond.mul(player.en.enhancersEffect[2])
 
         player.fu.angerEffect = player.fu.anger.pow(0.35).add(1).div(player.fu.numbEffect)
@@ -217,6 +220,7 @@
         player.fu.fearPerSecond = player.fu.fearPerSecond.mul(buyableEffect("ep1", 12))
         player.fu.fearPerSecond = player.fu.fearPerSecond.div(player.fu.fearEffect)
         if (hasUpgrade("fu", 115)) player.fu.fearPerSecond = player.fu.fearPerSecond.mul(upgradeEffect("fu", 115))
+        if (player.alephsChamber.milestone[25] > 0) player.fu.fearPerSecond = player.fu.fearPerSecond.mul(10)
         player.fu.fearPerSecond = player.fu.fearPerSecond.mul(player.en.enhancersEffect[2])
         
         player.fu.fearEffect = player.fu.fear.pow(0.35).add(1).div(player.fu.numbEffect)
@@ -238,6 +242,7 @@
         player.fu.numbPerSecond = player.fu.apathyEffect
         player.fu.numbPerSecond = player.fu.numbPerSecond.mul(buyableEffect("fu", 81))
         if (hasUpgrade("fu", 114)) player.fu.numbPerSecond = player.fu.numbPerSecond.mul(2)
+        if (player.alephsChamber.milestone[25] > 0) player.fu.numbPerSecond = player.fu.numbPerSecond.mul(10)
         player.fu.numbPerSecond = player.fu.numbPerSecond.mul(player.en.enhancersEffect[2])
 
         player.fu.numbEffect = player.fu.numb.pow(0.3).add(1)
@@ -326,6 +331,7 @@
                     i--;
                 }
             }
+            player.subtabs["gs"]["stuff"] = "Grass-Skip"
         }
         player.gs.buyables[11] = new Decimal(0)
         player.gs.buyables[12] = new Decimal(0)
@@ -874,7 +880,7 @@
         106: {
             title: "Apathy VI",
             unlocked() {return player.fu.enterNumb},
-            description: "Weaken replicanti softcaps in numbness challenge based on apathy.",
+            description: "Unlock a second apathy effect that weakens replicanti softcaps in numbness challenge.",
             cost: new Decimal(10),
             currencyLocation() {return player.fu},
             currencyDisplayName: "Apathy",
@@ -882,10 +888,6 @@
             effect() {
                 return Decimal.div(1, player.fu.apathy.add(1).log(10).div(10).add(1)).max(0.5)
             },
-            effectDisplay() {
-                if (upgradeEffect(this.layer, this.id).lte(0.5)) return "^" + formatSimple(upgradeEffect(this.layer, this.id), 3) + "<small style='color:red'>[HARDCAPPED]</small>"
-                return "^" + formatSimple(upgradeEffect(this.layer, this.id), 3)
-            }, // Add formatting to the effect
             style() {
                 let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "white"
@@ -3047,7 +3049,7 @@
                 return "Core Fragment Booster"
             },
             display() {
-                return "which are multiplying core fragment score by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are multiplying core fragment scores by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Numbness."
             },
             buy(mult) {
@@ -3276,11 +3278,17 @@
                             return look
                         }],
                     ]],
-                    ["raw-html", () => { return inChallenge("fu", 12) ? "Produces +" + formatSimple(player.fu.apathyEffect) + " numbness per second" : player.fu.enterNumb ? "Effect only active in Numbness Challenge" : "" }, () => {
+                    ["raw-html", () => { return inChallenge("fu", 12) ? "Produces +" + formatSimple(player.fu.apathyEffect) + " numbness per second" : hasUpgrade("fu", 106) ? "Effects only active in Numbness Challenge" : player.fu.enterNumb ? "Effect only active in Numbness Challenge" : "" }, () => {
                         let look = {fontSize: "20px", fontFamily: "monospace"}
                         if (inChallenge("fu", 12)) {look.color = "white"} else {look.color = "gray"}
                         return look
                     }],
+                    ["raw-html", () => {
+                        if (!inChallenge("fu", 12)) return ""
+                        let str = "^" + formatSimple(upgradeEffect("fu", 106), 3) + " to replicanti softcaps"
+                        if (upgradeEffect("fu", 106).lte(0.5)) str = str + "<small style='color:red'>[HARDCAPPED]</small>"
+                        return str
+                    }, {fontSize: "20px", color: "white", fontFamily: "monospace"}],                    
                     ["blank", "10px"],
                     ["clickable", 32],
                     ["blank", "10px"],

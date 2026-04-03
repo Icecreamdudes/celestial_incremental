@@ -844,6 +844,8 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Changed star softcap formula to make more sense.<br>
 			- Made defeating Iridite also give /1.5 SME generator cooldowns.<br>
 			- Added doom softcaps to most Pre-OTF resources.<br>
+			- Nerfed ancient pylon energy effects. (for obvious inflationary reasons).<br>
+			- Redid AD balancing slightly. (It should be balanced correctly, but I can't 100% confident).<br>
 			- Added end game softcaps to anonymity and repli-trees.<br>
 			- Changed the effects of the black heart cookie upgrades. (Should still be worth-while)<br>
 			- Changed the pricing of legendary pets from fragmentation shop.<br>

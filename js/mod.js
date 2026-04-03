@@ -881,7 +881,8 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Fixed Zar sometimes forgetting to let you into dice space after finishing the unlocks.<br>
 			- Made booster dice speed toggle be disabled while in IC5 to prevent confusion.<br>
 			- Fixed tab layout's UI background not working while in portrait mode.<br>
-			- Fixed displayed space pet xp gain not matching actual xp gain.<br><br>
+			- Fixed displayed space pet xp gain not matching actual xp gain.<br>
+			- Fixed the BI-Cante savebank page not working due to incorrect ID calls.<br><br>
 	<h3>v1.Gwa - The Gwaleph Update <small>[APRIL FOOLS]</small></h3><br>
 		Content:<br>
 			- Opened the door to true gwa-ness<br><br>

@@ -31,8 +31,12 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
+        // BH Safety Check
+        if (player.universe == "U3" && player.uni.BH.paused) player.uni.BH.paused = false
+
         player.s.singularitiesToGet = new Decimal(1)
-        if (hasUpgrade("ma", 29)) player.s.singularitiesToGet = player.s.singularityPointsToGet.add(1).log(1e10).add(1).floor()
+        if (hasUpgrade("depth3", 5)) player.s.singularitiesToGet = player.s.singularityPointsToGet.add(1).log(1e10).add(1).floor()
+        if (player.alephsChamber.milestone[25] > 0) player.s.singularitiesToGet = Decimal.pow(2, player.s.singularityPointsToGet.add(1).log(1e100))
 
         if (player.in.infinityPoints.lt(2.5e193)) {
             player.s.singularityPointsToGet = player.in.infinityPoints.pow(0.125).div(15000)
@@ -53,10 +57,9 @@
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.d.boosterEffects[18])
         if (hasMilestone("r", 25)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.r.pentMilestone15Effect)
         if (hasChallenge("fu", 11)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(10)
-        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(buyableEffect("ma", 17))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(buyableEffect("st", 303))
-        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.ma.bestComboDepth3Effect)
-        if (player.ma.matosDefeated) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(1e40)
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.depth3.comboEffect)
+        if (player.matosLair.milestone[25] > 0) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(1e40)
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.cof.coreFragmentEffects[4])
         if (hasUpgrade("ir", 11)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(upgradeEffect("ir", 11))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("ir", 1)[1])
@@ -65,6 +68,7 @@
         //Power modifiers
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(buyableEffect("sb", 104))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(player.se.starsExploreEffect[1][0])
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(buyableEffect("gwaTemple", 26))
 
         // SINGULARITY RAISERS
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(levelableEffect("pet", 308)[0])
@@ -76,6 +80,10 @@
         player.s.singularityTime = player.s.singularityTime.add(onepersec.mul(delta))
 
         player.s.singularitiesEffect = Decimal.pow(1.2, player.s.singularities.add(1).log(10))
+        
+        //tickspeed
+        player.uni["U3"].tickspeed = new Decimal(1)
+        player.uni["U3"].tickspeed = player.uni["U3"].tickspeed.mul(buyableEffect("gwaTemple", 25))
     },
     clickables: {},
     bars: {},
@@ -368,30 +376,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style() {
-                let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
-                return look
-            },
-        },
-        30: {
-            unlocked() { return player.bi.interspaceUnlocked},
-            fullDisplay() {
-                return "<div style='height:25px;display:flex;align-items:center'><div>" +
-                "<h3>Singularity Upgrade XX</h3>" + // TOP
-                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
-                "<br>Unlock the singularity reactor.<br>" + // MIDDLE
-                "<br></div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
-                "1e950 Singularity Points" + // BOTTOM
-                "</div></div>"
-            },
-            cost: new Decimal("1e950"),
-            currencyLocation() { return player.s },
-            currencyInternalName: "singularityPoints",
-            //style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
-            style() {
-                let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
-                return look
-            },
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {

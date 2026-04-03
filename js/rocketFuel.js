@@ -75,6 +75,8 @@
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(player.co.cores.rocket.effect[1])
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(buyableEffect("cof", 18))
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(player.se.starsExploreEffect[0][3])
+        player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(buyableEffect("fa", 15))
+        if (hasMilestone("n", 24)) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(player.n.milestone14Effect)
 
         // ROCKET FUEL PER SECOND
         if (player.po.rocketFuel || inChallenge("ip", 16)) {
@@ -173,7 +175,13 @@
             title() { return "1" },
             canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(1) : player.rf.rocketFuel.gt(1) && player.rf.abilityTimers[4].lte(0) },
             unlocked() { return true },
-            tooltip() { return player.rf.abilityIndex == 4 ? "<h3>5% chance for a pet???" : ""},
+            tooltip() {
+                if (player.rf.abilityIndex == 4) {
+                    if (layers.pet.levelables[303].canClick()) return "<h3>5% chance for a Drippy UFO pet"
+                    return "<h3>5% chance for a ??? pet"
+                }
+                return ""
+            },
             onClick() {
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), new Decimal(1))
                 player.rf.rocketFuel = player.rf.rocketFuel.sub(1)
@@ -189,7 +197,15 @@
             title() { return "1%" },
             canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(1) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0) },
             unlocked() { return true },
-            tooltip() { return player.rf.abilityIndex == 4 ? "<h3>" + formatWhole(player.rf.rocketFuel.mul(0.01).add(1).log10().pow(0.75).div(2).add(5).floor()) + "% chance for a pet???" : ""},
+            tooltip() {
+                if (player.rf.abilityIndex == 4) {
+                    let chance = player.rf.rocketFuel.div(100).add(1).log(10).pow(0.75).div(2).add(5).floor().min(10000)
+                    if (chance.gte(100)) return "<h3>+" + formatSimple(chance.div(100)) + " Drippy UFO Pets"
+                    if (layers.pet.levelables[303].canClick()) return "<h3>" + formatWhole(chance) + "% chance for a Drippy UFO pet"
+                    return "<h3>" + formatWhole(chance) + "% chance for a ??? pet"
+                }
+                return ""
+            },
             onClick() {
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel.mul(0.01))
                 player.rf.rocketFuel = player.rf.rocketFuel.sub(player.rf.rocketFuel.mul(0.01))
@@ -205,7 +221,15 @@
             title() { return "10%" },
             canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(1) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0)  },
             unlocked() { return true  },
-            tooltip() { return player.rf.abilityIndex == 4 ? "<h3>" + formatWhole(player.rf.rocketFuel.mul(0.1).add(1).log10().pow(0.75).div(2).add(5).floor()) + "% chance for a pet???" : ""},
+            tooltip() {
+                if (player.rf.abilityIndex == 4) {
+                    let chance = player.rf.rocketFuel.div(10).add(1).log(10).pow(0.75).div(2).add(5).floor().min(10000)
+                    if (chance.gte(100)) return "<h3>+" + formatSimple(chance.div(100)) + " Drippy UFO Pets"
+                    if (layers.pet.levelables[303].canClick()) return "<h3>" + formatWhole(chance) + "% chance for a Drippy UFO pet"
+                    return "<h3>" + formatWhole(chance) + "% chance for a ??? pet"
+                }
+                return ""
+            },
             onClick() {
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel.mul(0.1))
                 player.rf.rocketFuel = player.rf.rocketFuel.sub(player.rf.rocketFuel.mul(0.1))
@@ -221,7 +245,15 @@
             title() { return "25%" },
             canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(1) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0) },
             unlocked() { return true },
-            tooltip() { return player.rf.abilityIndex == 4 ? "<h3>" + formatWhole(player.rf.rocketFuel.mul(0.25).add(1).log10().pow(0.75).div(2).add(5).floor()) + "% chance for a pet???" : ""},
+            tooltip() {
+                if (player.rf.abilityIndex == 4) {
+                    let chance = player.rf.rocketFuel.div(4).add(1).log(10).pow(0.75).div(2).add(5).floor().min(10000)
+                    if (chance.gte(100)) return "<h3>+" + formatSimple(chance.div(100)) + " Drippy UFO Pets"
+                    if (layers.pet.levelables[303].canClick()) return "<h3>" + formatWhole(chance) + "% chance for a Drippy UFO pet"
+                    return "<h3>" + formatWhole(chance) + "% chance for a ??? pet"
+                }
+                return ""
+            },
             onClick() {
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel.mul(0.25))
                 player.rf.rocketFuel = player.rf.rocketFuel.sub(player.rf.rocketFuel.mul(0.25))
@@ -237,7 +269,15 @@
             title() { return "100%" },
             canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(1) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0) },
             unlocked() { return true },
-            tooltip() { return player.rf.abilityIndex == 4 ? "<h3>" + formatWhole(player.rf.rocketFuel.add(1).log10().pow(0.75).div(2).add(5).floor()) + "% chance for a pet???" : ""},
+            tooltip() {
+                if (player.rf.abilityIndex == 4) {
+                    let chance = player.rf.rocketFuel.add(1).log(10).pow(0.75).div(2).add(5).floor().min(10000)
+                    if (chance.gte(100)) return "<h3>+" + formatSimple(chance.div(100)) + " Drippy UFO Pets"
+                    if (layers.pet.levelables[303].canClick()) return "<h3>" + formatWhole(chance) + "% chance for a Drippy UFO pet"
+                    return "<h3>" + formatWhole(chance) + "% chance for a ??? pet"
+                }
+                return ""
+            },
             onClick() {
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel)
                 player.rf.rocketFuel = player.rf.rocketFuel.sub(player.rf.rocketFuel)
@@ -373,12 +413,12 @@
                 player.rf.abilityTimers[3] = amount.add(1).log(10).add(1).mul(90)
             break;
             case 4:
-                player.rf.abilityEffects[4] = player.cb.xpTimers[0].base.mul(amount.add(1).log10().pow(0.7).div(10).add(1))
+                player.rf.abilityEffects[4] = player.cb.xpTimers[0].base.mul(amount.add(1).log(10).pow(0.7).div(10).add(1).min(250))
                 player.cb.xp = player.cb.xp.add(player.rf.abilityEffects[4])
                 player.cb.totalxp = player.cb.totalxp.add(player.rf.abilityEffects[4])
-                player.rf.abilityTimers[4] = player.cb.xpTimers[0].max.mul(amount.add(1).log10().pow(0.8).div(10).add(1.7))
+                player.rf.abilityTimers[4] = player.cb.xpTimers[0].max.mul(amount.add(1).log(10).pow(0.8).div(10).add(1.7).min(750))
 
-                let chance = amount.log(10).pow(0.75).div(2).add(4).floor()
+                let chance = amount.log(10).pow(0.75).div(2).add(4).floor().min(10000)
                 let guarantee = chance.div(100).floor()
                 chance = chance.sub(guarantee.mul(100))
                 if (chance.gte(Math.random()*100)) guarantee = guarantee.add(1)
@@ -394,6 +434,7 @@
             break;
             case 6:
                 player.rf.abilityTimers[6] = amount.add(1).log(10).add(1).mul(60)
+                if (hasUpgrade("cs", 904)) player.rf.abilityTimers[6] = Decimal.pow(2, player.rf.abilityTimers[6].pow(0.3))
             break;
             case 7:
                 player.rf.abilityEffects[7] = amount.add(1).log(6).add(1).div(36).add(1).pow(player.cs.scraps.rocket.effect)

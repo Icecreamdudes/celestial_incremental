@@ -92,7 +92,7 @@
 
         for (let i = 0; i < player.oi.linkingPower.length; i++) {
             player.oi.linkingPowerPerSecond[i] = player.oi.linkingPowerPerSecond[i].mul(player.gs.milestone10Effect)
-            if (hasUpgrade('ma', 22) && !inChallenge("fu", 12)) player.oi.linkingPowerPerSecond[i] = player.oi.linkingPowerPerSecond[i].mul(upgradeEffect('ma', 22))
+            if (hasUpgrade('depth2', 5) && !inChallenge("fu", 12)) player.oi.linkingPowerPerSecond[i] = player.oi.linkingPowerPerSecond[i].mul(upgradeEffect('depth2', 5))
 
             // KEEP MULTIPLIERS BEFORE THIS
             if (inChallenge("fu", 11) || inChallenge("fu", 12)) player.oi.linkingPowerPerSecond[i] = player.oi.linkingPowerPerSecond[i].pow(Decimal.mul(0.1, buyableEffect("fu", 88)))

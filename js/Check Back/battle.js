@@ -968,7 +968,7 @@ celestialiteDeath(index){
             canClick() { return true },
             unlocked() { return true },
             onClick() {
-                player.ma.inBlackHeart = false
+                options.fullscreen = false
                 player.fi.inBattle = false
                 player.fi.battleTier = new Decimal(0)
                 toggleOpt('menuShown')

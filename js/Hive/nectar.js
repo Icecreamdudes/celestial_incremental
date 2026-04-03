@@ -86,6 +86,9 @@ addLayer("ne", {
 
         // POWER MODIFIERS
         if (hasUpgrade("al", 226)) player.ne.alpha.gain = player.ne.alpha.gain.pow(1.01)
+        player.ne.alpha.gain = player.ne.alpha.gain.pow(buyableEffect("n", 52))
+
+        if (player.ne.alpha.gain.gte(1e250)) player.ne.alpha.gain = player.ne.alpha.gain.div(1e250).pow(0.3).mul(1e250)
 
         if (hasUpgrade("al", 203) && tmp.ne.layerShown && (player.bee.path != 0 || player.bee.extremePath)) player.ne.alpha.amount = player.ne.alpha.amount.add(player.ne.alpha.gain.mul(delta))
 
@@ -337,6 +340,7 @@ addLayer("ne", {
             currencyDisplayName: "Nectar γ",
             currencyInternalName: "amount",
             effect() {
+                if (hasUpgrade("al", 228)) return Decimal.pow(2, player.bee.totalResearch.div(10))
                 return player.bee.totalResearch.pow(0.7).div(10).add(1)
             },
             effectDisplay() { return "x" + formatSimple(upgradeEffect(this.layer, this.id), 1) }, // Add formatting to the effect
@@ -467,6 +471,7 @@ addLayer("ne", {
                     ["row", [
                         ["raw-html", () => {return "You have " + format(player.ne.alpha.amount) + " Nectar α"}, {color: "#161616", fontSize: "16px", fontFamily: "monospace"}],
                         ["raw-html", () => {return "(+" + format(player.ne.alpha.gain) + ")"}, {color: "#161616", fontSize: "16px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ["raw-html", () => {return player.ne.alpha.gain.gte(1e250) ? "<small style='margin-left:7px'>[SOFTCAPPED]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace"}],
                     ]],
                     ["row", [
                         ["raw-html", () => {return "Boosts BPS by x" + formatSimple(player.ne.alpha.effect, 2)}, {color: "#161616", fontSize: "14px", fontFamily: "monospace"}],

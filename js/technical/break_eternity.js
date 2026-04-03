@@ -1388,6 +1388,79 @@
        * -1 for less than value, 0 for equals value, 1 for greater than value
        */
 
+      
+      /**
+       * Returns the remainder of 'this' divided by 'value': for example, 5 mod 2 = 1, because the remainder of 5 / 2 is 1.
+       * Uses the "truncated division" modulo, which is the same as JavaScript's native modulo operator (%)...
+       * unless 'floored' is true, in which case it uses the "floored" modulo, which is closer to how modulo works in number theory.
+       * These two forms of modulo are the same when only positive numbers are involved, but differ in how they work with negative numbers.
+       */
+      //Taken from OmegaNum.js, with a couple touch-ups
+      
+    }, {
+      key: "mod",
+      value: function mod(value) {
+        var floored = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+        var vd = D(value);
+        var decimal = vd.abs();
+        if (this.eq(Decimal.dZero) || decimal.eq(Decimal.dZero)) return FC_NN(0, 0, 0);
+
+        if (floored) {
+          var absmod = this.abs().mod(decimal);
+          if (this.sign == -1 != (vd.sign == -1)) absmod = vd.abs().sub(absmod);
+          return absmod.mul(vd.sign);
+        }
+
+        var num_this = this.toNumber();
+        var num_decimal = decimal.toNumber(); //Special case: To avoid precision issues, if both numbers are valid JS numbers, just call % on those
+
+        if (isFinite(num_this) && isFinite(num_decimal) && num_this != 0 && num_decimal != 0) {
+          return new Decimal(num_this % num_decimal);
+        }
+
+        if (this.sub(decimal).eq(this)) {
+          //decimal is too small to register to this
+          return FC_NN(0, 0, 0);
+        }
+
+        if (decimal.sub(this).eq(decimal)) {
+          //this is too small to register to decimal
+          return new Decimal(this);
+        }
+
+        if (this.sign == -1) return this.abs().mod(decimal).neg();
+        return this.sub(this.div(decimal).floor().mul(decimal));
+      }
+      /**
+       * Returns the remainder of 'this' divided by 'value': for example, 5 mod 2 = 1, because the remainder of 5 / 2 is 1.
+       * Uses the "truncated division" modulo, which is the same as JavaScript's native modulo operator (%)...
+       * unless 'floored' is true, in which case it uses the "floored" modulo, which is closer to how modulo works in number theory.
+       * These two forms of modulo are the same when only positive numbers are involved, but differ in how they work with negative numbers.
+       */
+
+    }, {
+      key: "modulo",
+      value: function modulo(value) {
+        var floored = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+        return this.mod(value, floored);
+      }
+      /**
+       * Returns the remainder of 'this' divided by 'value': for example, 5 mod 2 = 1, because the remainder of 5 / 2 is 1.
+       * Uses the "truncated division" modulo, which is the same as JavaScript's native modulo operator (%)...
+       * unless 'floored' is true, in which case it uses the "floored" modulo, which is closer to how modulo works in number theory.
+       * These two forms of modulo are the same when only positive numbers are involved, but differ in how they work with negative numbers.
+       */
+
+    }, {
+      key: "modular",
+      value: function modular(value) {
+        var floored = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+        return this.mod(value, floored);
+      }
+      /**
+       * Returns 1 if 'this' > 'value', returns -1 if 'this' < 'value', returns 0 if 'this' == 'value'.
+       */
+
     }, {
       key: "cmp",
       value: function cmp(value) {

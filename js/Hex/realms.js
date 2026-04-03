@@ -32,7 +32,7 @@ addLayer("hrm", {
         player.hrm.realmEssenceGain = Decimal.pow(1.35, player.hrm.realmCompletions).sub(1)
         player.hrm.realmEssenceGain = player.hrm.realmEssenceGain.mul(levelableEffect("pet", 1106)[2])
         player.hrm.realmEssenceGain = player.hrm.realmEssenceGain.mul(buyableEffect("hrm", 6))
-        if (hasUpgrade("ma", 30)) player.hrm.realmEssenceGain = player.hrm.realmEssenceGain.mul(upgradeEffect("ma", 30))
+        if (hasUpgrade("depth3", 6)) player.hrm.realmEssenceGain = player.hrm.realmEssenceGain.mul(upgradeEffect("depth3", 6))
 
         player.hrm.realmEssenceEffects = [new Decimal(1), new Decimal(1)]
         player.hrm.realmEssenceEffects[0] = Decimal.pow(2.5, player.hrm.realmEssence.add(1).log(6)).min(1e10)

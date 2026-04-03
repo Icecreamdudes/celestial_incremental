@@ -30,6 +30,46 @@ function pauseUniverse(universe, type = "toggle", temp = false) {
     }
 }
 
+function pauseUniverseAll(exemptions, type = "toggle", temp = false) {
+    for (let universe in player.uni) {
+        if (tmp.uni[uni].disabled) continue
+        let abort = false
+        for (let j in exemptions) {
+            if (exemptions[j] == universe) abort = true
+        }
+        if (abort) continue
+        if (type == "unpause" || type == "toggle" && player.uni[universe].paused) {
+            let time = (Date.now() - player.uni[universe].pauseTime) / 1000
+            let tree = universes[universe].tree
+    		for (row in tree) {
+	    		for (thing in tree[row]) {
+                    if (tree[row][thing] == "bh" && universe == "U3") continue
+                    layers[tree[row][thing]].update(time)
+                }
+            }
+            if (!temp) {
+                player.uni[universe].paused = false
+            } else {
+                player.uni[universe].paused = player.uni[universe].lastPaused
+            }
+        } else {
+            if (temp) player.uni[universe].lastPaused = player.uni[universe].paused
+            player.uni[universe].pauseTime = Date.now()
+            if (player.universe == universe) player.universe = 0
+            player.uni[universe].paused = true
+        }
+    }
+}
+
+function cleanseUniverse(universe) {
+    let tree = universes[universe].tree
+    for (let row in tree) {
+        for (thing in tree[row]) {
+            player.thing = getStartLayerData(thing)
+        }
+    }
+}
+
 var UNIS = Object.keys(universes);
 
 function updateUnis() {
@@ -129,7 +169,7 @@ addUniverse("U2", {
 addUniverse("A1", {
     name: "Alt-Universe 1<br>Cantepocalypse",
     symbol: "A1",
-    tree: [["cp"], ["ar", "pr"], ["an", "rt", "rg"], ["oi", "gs"], ["fu"]],
+    tree: [["cp"], ["ar", "pr"], ["an", "rt", "rg"], ["oi", "gs", "en"], ["fu"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(45deg, #064461 0%, #4a7d94 100%)",
@@ -172,7 +212,7 @@ addUniverse("A2", {
 addUniverse("U3", {
     name: "Universe 3<br>Domain of Singularity",
     symbol: "3",
-    tree: [["s"], ["co", "cof"], ["ra", "cs", "sd"], ["sma", "sme"], ["ma"]],
+    tree: [["s"], ["co", "cof"], ["ra", "cs", "sd"], ["sma", "sme"], ["bh"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(140deg, red 0%, black 125%)",
@@ -193,7 +233,7 @@ addUniverse("U3", {
 addUniverse("D1", {
     name: "Dark Universe 1<br>Shadow Overworld",
     symbol: "D1",
-    tree: [["le", "bl"], ["dr", "dp"], ["dg", "db", "dgr"], ["dn", "dv", "ds", "dt"]],
+    tree: [["le", "bl"], ["dr", "dp"], ["dg", "db", "dgr", "dgj"], ["dn", "dv", "ds", "dt"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(145deg, #2e2e2e 0%, #0d0d0d 100%)",
@@ -214,7 +254,7 @@ addUniverse("D1", {
 addUniverse("CB", {
     name: "Check Back",
     symbol: "CB",
-    tree: [["cb"], ["ev0", "ev1", "ev2", "ev8"], ["ep0", "ep1", "ep2", "sp"], ["goo"]],
+    tree: [["cb", "gwaTemple"], ["ev0", "ev1", "ev2", "ev8"], ["ep0", "ep1", "ep2", "sp"], ["goo"]],
     nodeStyle() {
         return {
             background: "#094599",
@@ -232,7 +272,7 @@ addUniverse("UB", {
         return "Universe β<br>Hive"
     },
     symbol: "β",
-    tree: [["bee", "fl"], ["bpl", "ne"], ["bb", "ho"], ["al", "wa"]],
+    tree: [["bee", "fl"], ["bpl", "ne"], ["bb", "ho"], ["al", "wa"], ["n"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(45deg, #f6e000 0%, #f9c901 100%)",
@@ -248,6 +288,29 @@ addUniverse("UB", {
     },
     uniShown() { return player.startedGame && player.pol.unlockHive >= 2 && !player.sma.inStarmetalChallenge},
     disabled() {return !player.startedGame && player.pol.unlockHive < 2}
+})
+
+addUniverse("BH", {
+    name: "Black Heart",
+    symbol: "♥",
+    tree: [["darkTemple", "depth1", "depth2"], ["matosLair", "depth3"], ["laboratory", "depth4", "alephsChamber"]],
+    tree2: [["stagnantSynestia"]],
+    nodeStyle() {
+        let style = {
+            background: "black",
+            backgroundOrigin: "border-box",
+            borderColor: "#8a0e79",
+            color: "#cf15b6",
+        }
+        if (player.universe=="BH") {
+            style.outline = "2px solid white"
+            style.outlineOffset = "-2px"
+            style.borderWidth = "5px"
+        }
+        return style
+    },
+    uniShown() { return player.startedGame && tmp.pu.levelables[302].canClick && !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge},
+    disabled() {return !player.startedGame || !tmp.pu.levelables[302].canClick}
 })
 
 addUniverse("CH", {

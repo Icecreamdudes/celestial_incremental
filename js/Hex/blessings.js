@@ -638,7 +638,7 @@ addLayer("hbl", {
             ["raw-html", () => {return player.hbl.blessingPerSec.eq(0) ? "" : player.hbl.blessingPerSec.gt(0) ? "(+" + format(player.hbl.blessingPerSec) + "/s)" : "<span style='color:red'>(" + format(player.hbl.blessingPerSec) + "/s)</span>" }, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
             ["raw-html", "<div class='bottomTooltip'>Base Formula<hr><small>(Refinements-17)^1.6</small></div>"],
         ]],
-        ["raw-html", () => {return inChallenge("hrm", 11) ? "Bless resets left: " + formatWhole(player.hrm.blessLimit) + "/6" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+        ["raw-html", () => {return inChallenge("hrm", 11) ? "Bless resets used: " + formatWhole(player.hrm.blessLimit) + "/6" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
         ["blank", "10px"],
         ["clickable", 1],
         ["blank", "5px"],

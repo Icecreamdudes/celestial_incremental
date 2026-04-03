@@ -92,6 +92,7 @@
         player.sm.totalChipMult = player.sm.totalChipMult.mul(player.sm.spinAmount.pow(0.5).add(1))
         player.sm.totalChipMult = player.sm.totalChipMult.mul(buyableEffect("sm", 108))
         if (hasUpgrade("cbs", 15)) player.sm.totalChipMult = player.sm.totalChipMult.mul(upgradeEffect("cbs", 15))
+        player.sm.totalChipMult = player.sm.totalChipMult.mul(buyableEffect("sme", 184))
 
         player.sm.chipsToGet[0] = player.sm.chipsToGet[0].mul(buyableEffect("sm", 11))
         player.sm.chipsToGet[0] = player.sm.chipsToGet[0].mul(player.sm.totalChipMult)
@@ -439,8 +440,8 @@
             costBase() { return new Decimal(1) },
             costGrowth() { return new Decimal(1.1) },
             purchaseLimit() { return new Decimal(250) },
-            currency() { return player.fi.temporalShards },
-            pay(amt) { player.fi.temporalShards = this.currency().sub(amt) },
+            currency() { return player.stagnantSynestia.temporalShard },
+            pay(amt) { player.stagnantSynestia.temporalShard = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.05).mul(0.25).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
@@ -454,14 +455,14 @@
             },
             buy(mult) {
                 if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
                     this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
                     this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))

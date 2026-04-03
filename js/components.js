@@ -294,6 +294,28 @@ function loadVue() {
 		</div>
 		`
 	})
+
+
+	// data = an array of Components to be displayed in a row
+	// look = Object that defines style
+	Vue.component('theme-scroll-row', {
+		props: ['layer', 'data', 'look'],
+		computed: {
+			key() {return this.$vnode.key}
+		},
+		template: `
+		<div id="scrCon" class="upgScrollRowTable upgAlwaysScrollRow themeTrack instant">
+			<div class="upgScrollRow" v-bind:style="look" >
+				<div style="margin:0" v-for="(item, index) in data">
+					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
+				</div>
+			</div>
+		</div>
+		`
+	})
+
 	// data = an array of functions returning the content (actually HTML)
 	// look = Object that defines style
 	Vue.component('stat-row', {
@@ -416,7 +438,7 @@ function loadVue() {
 				<span v-if= "layers[layer].upgrades[data].title"><h3 v-html="run(layers[layer].upgrades[data].title, layers[layer].upgrades[data])"></h3><br></span>
 				<span v-html="run(layers[layer].upgrades[data].description, layers[layer].upgrades[data])"></span>
 				<span v-if="layers[layer].upgrades[data].effectDisplay"><br>Currently: <span v-html="run(layers[layer].upgrades[data].effectDisplay, layers[layer].upgrades[data])"></span></span>
-				<br><br>Cost: {{ formatWhole(tmp[layer].upgrades[data].cost) }} {{(tmp[layer].upgrades[data].currencyDisplayName ? tmp[layer].upgrades[data].currencyDisplayName : tmp[layer].resource)}}
+				<br><br>Cost: {{ formatSimple(tmp[layer].upgrades[data].cost) }} {{(tmp[layer].upgrades[data].currencyDisplayName ? tmp[layer].upgrades[data].currencyDisplayName : tmp[layer].resource)}}
 			</span>
 			<tooltip v-if="layers[layer].upgrades[data].tooltip" :text="run(layers[layer].upgrades[data].tooltip, layers[layer].upgrades[data])"></tooltip>
 
@@ -1539,7 +1561,7 @@ function loadVue() {
 		template: `
 		<div v-bind:class="{hoverable: true, selected: player[layer].glossaryRig == data}" v-if="run(layers[layer].glossary[data].display, layers[layer].glossary[data])" :disabled="player[layer].glossary[data].eq(0)" v-on:click="layers[layer].glossary[data].onClick ? run(layers[layer].glossary[data].onClick, layers[layer].glossary[data]) : ''" v-bind:style="player[layer].glossary[data].eq(0) ? {'filter': 'brightness(50%)'} : {}" @mouseenter="hover" @touchstart="hover" @touchmove="hover">
 			<span style="position:absolute;top:4px;font-size:12px;z-index:10;user-select:none" v-html="'Lv.' + formatWhole(player.fl.glossary[data].add(1).log(2).ceil())"></span>
-			<svg width='60pt' height='60pt' viewBox='0 0 60 60' v-bind:style="player[layer].glossary[data].eq(0) ? {'filter': 'brightness(50%) drop-shadow(0px 3px 2px rgba(0, 0, 0, 0.5))'} : {}" style="filter:drop-shadow(0px 3px 2px rgba(0, 0, 0, 0.5))" v-html="layers[layer].glossary[data].svg"></svg>
+			<svg width='54pt' height='54pt' viewBox='0 0 60 60' v-bind:style="player[layer].glossary[data].eq(0) ? {'filter': 'brightness(50%) drop-shadow(0px 3px 2px rgba(0, 0, 0, 0.5))'} : {}" style="filter:drop-shadow(0px 3px 2px rgba(0, 0, 0, 0.5))" v-html="layers[layer].glossary[data].svg"></svg>
 		</div>
 		`,
 		methods: {
@@ -1556,7 +1578,7 @@ function loadVue() {
 				<span style="position:absolute;top:4px;left:15px;font-size:20px;text-shadow:#000 0px 1px 4px;letter-spacing:-1px" v-html="player.fl.glossaryIndex != 0 ? layers.fl.glossary[player.fl.glossaryIndex].name : ''"></span>
 				<span style="position:absolute;top:4px;right:15px;font-size:20px;text-shadow:#000 0px 1px 4px;letter-spacing:-1px" v-html="player.fl.glossaryIndex != 0 ? 'Lv.' + formatWhole(player.fl.glossary[player.fl.glossaryIndex].add(1).log(2).ceil()) : ''"></span>
 				<span style="position:absolute;top:34px;right:15px;font-size:14px" v-html="player.fl.glossaryIndex != 0 ? 'You have: ' + formatSimple(player.fl.glossary[player.fl.glossaryIndex], 1) : ''"></span>
-				<div style="position:absolute;top:30px;left:15px;width:505px;height:2px;border:0;background:#888"></div>
+				<div style="position:absolute;top:30px;left:15px;width:535px;height:2px;border:0;background:#888"></div>
 				<span style="position:absolute;top:34px;left:15px;font-size:14px" v-html="player.fl.glossaryIndex != 0 ? run(layers.fl.glossary[player.fl.glossaryIndex].getTitle, layers.fl.glossary[player.fl.glossaryIndex]) : ''"></span>
 			</div>
 		`
@@ -1566,10 +1588,16 @@ function loadVue() {
 		props: ['layer', 'data'],
 		template: `
 		<div v-bind:class="{jukebox: true, selected: options.jukeboxID == data, tooltipBox: true, can: true}" v-if="run(layers[layer].songs[data].unlocked, layers[layer].songs[data])" v-on:click="options.jukeboxID = data">
-			<img v-bind:src="layers.jukebox.songs[data].img" style='width:83px;height:83px;border:2px solid var(--regBorder);margin-top:1px'></img>
-			<div style="width:85px;height:25px;background:var(--miscButton);border-radius:15px;margin-top:1px">
-				<span style="font-size:12px;user-select:none" v-html="data != 'none' ? layers[layer].songs[data].name + '<br>' : 'Disable'"></span>
-				<span style="font-size:10px;user-select:none" v-html="layers[layer].songs[data].description"></span>
+			<img v-bind:src="layers.jukebox.songs[data].img" style='width:93px;height:93px;border:2px solid var(--regBorder);margin-top:1px'></img>
+			<div style="display:flex;align-items:center;width:89px;height:24px;background:var(--miscButton);border-radius:15px;margin-top:1px;padding:auto 3px">
+				<div style="line-height:0.9">
+					<span style="font-size:10px;user-select:none" v-html="data != 'none' ? layers[layer].songs[data].name + '<br>' : 'Disable'"></span>
+				</div>
+			</div>
+			<div style="display:flex;align-items:center;width:89px;height:20px;background:var(--miscButton);border-radius:15px;margin-top:3px;padding:auto 3px">
+				<div style="line-height:0.9">
+					<span style="font-size:10px;user-select:none" v-html="layers[layer].songs[data].description"></span>
+				</div>
 			</div>
 		</div>
 		`,
@@ -1591,6 +1619,28 @@ function loadVue() {
 		template: `
 		<div v-bind:class="{cutscenes: true, can: true}" v-on:click="player.c.cutscenes[data] = 0">
 			<span style="font-size:12px;user-select:none" v-html="data"></span>
+		</div>
+		`,
+	})
+
+	Vue.component('bh-milestone', {
+		props: ['layer', 'data'],
+		template: `
+		<button v-bind:class="{bhMilestoneButton: true, selected: player[data[1]].comboStart == data[0], semiFinish: player[data[1]].milestone[data[0]]>0 && player[data[1]].milestone[data[0]]<3, finish: player[data[1]].milestone[data[0]]>2}"
+			style="width:257px;height:50px" v-on:click="if(player[data[1]].milestone[data[0]]>0 && !data[3])player[data[1]].comboStart=data[0]"
+			v-html="data[0] + ' Combo (' + player[data[1]].milestone[data[0]] + '/3)<br><small>[' + (player[data[1]].milestone[data[0]]>2 ? '1 Character' : formatWhole(3-player[data[1]].milestone[data[0]]) + ' Characters') + ']</small>' + data[2]">
+		</button>
+		`,
+	})
+
+	Vue.component('bh-skills', {
+		props: ['layer', 'data'],
+		template: `
+		<div class="upgRow">
+			<div style="margin:0" v-for="(value, name, index) in BHA"  v-if="run(value.unlocked, value)">
+				<button v-bind:class="{can: true, bhSkill: true, selected: player.bh.skillData[name].selected[0] != 'none', outline: player.bh.skillSelection == name}" v-bind:style="{background: BHP[value.char].color, filter: (value.char == 'general' || value.char == player.bh.characters[Math.floor(player.bh.inputSkillSelection/4)].id) ? '' : 'brightness(25%)'}" v-on:click="player.bh.skillSelection = name"
+				v-html="value.name + '<br><small>[Lv ' + formatWhole(player.bh.skillData[name].level.add(1)) + '/' + formatWhole(player.bh.skillData[name].maxLevel.add(1)) + ']'"></button>
+			</div>
 		</div>
 		`,
 	})

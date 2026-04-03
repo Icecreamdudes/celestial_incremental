@@ -507,7 +507,7 @@ addLayer("achievements", {
                 ],
             },
             9: {
-                unlocked() {return hasAchievement("achievements", 801) || player.ma.matosDefeated},
+                unlocked() {return hasAchievement("achievements", 801) || player.matosLair.milestone[25] > 0},
                 content: [
                     ["top-column", [
                         ["row", [

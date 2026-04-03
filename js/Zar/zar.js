@@ -34,8 +34,7 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-        if (player.za.zarReqs[0] && player.za.zarReqs[1] && player.za.zarReqs[2] && player.za.zarReqs[3] && player.za.zarReqs[4] && player.za.zarReqs[5])
-        {
+        if (player.za.zarReqs[0] && player.za.zarReqs[1] && player.za.zarReqs[2] && player.za.zarReqs[3] && player.za.zarReqs[4] && player.za.zarReqs[5]) {
             player.za.zarUnlocked = true
         }
 
@@ -44,6 +43,7 @@
         player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.mul(buyableEffect("cf", 13))
         player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.mul(player.wof.wheelPointsEffect2)
         player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.mul(player.sm.chipsEffect[0])
+        player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.mul(buyableEffect("sme", 181))
         player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.pow(buyableEffect("sm", 109))
 
         if (player.za.chancePoints.add(player.za.chancePointsPerSecond).gte(player.za.chancePointsSoftcapStart))
@@ -63,6 +63,7 @@
         player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(player.wof.wheelPointsEffect)
         player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(player.sm.chipsEffect[0])
         if (hasUpgrade("cbs", 11)) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(upgradeEffect("cbs", 11))
+        player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(buyableEffect("sme", 181))
         
         if (player.za.chancePoints.gte(player.za.chancePointsSoftcapStart)) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.div(player.za.chancePointsSoftcapEffect)
 
@@ -78,8 +79,7 @@
             onClick() {
                 player.za.zarReqs[0] = true
 
-                if (player.za.zarUnlocked)
-                {
+                if (player.za.zarReqs[0] && player.za.zarReqs[1] && player.za.zarReqs[2] && player.za.zarReqs[3] && player.za.zarReqs[4] && player.za.zarReqs[5]) {
                     player.subtabs["za"]["stuff"] = "Main"
                 }
             },
@@ -93,8 +93,7 @@
             onClick() {
                 player.za.zarReqs[1] = true
 
-                if (player.za.zarUnlocked)
-                {
+                if (player.za.zarReqs[0] && player.za.zarReqs[1] && player.za.zarReqs[2] && player.za.zarReqs[3] && player.za.zarReqs[4] && player.za.zarReqs[5]) {
                     player.subtabs["za"]["stuff"] = "Main"
                 }
             },
@@ -108,8 +107,7 @@
             onClick() {
                 player.za.zarReqs[2] = true
 
-                if (player.za.zarUnlocked)
-                {
+                if (player.za.zarReqs[0] && player.za.zarReqs[1] && player.za.zarReqs[2] && player.za.zarReqs[3] && player.za.zarReqs[4] && player.za.zarReqs[5]) {
                     player.subtabs["za"]["stuff"] = "Main"
                 }
             },
@@ -123,8 +121,7 @@
             onClick() {
                 player.za.zarReqs[3] = true
 
-                if (player.za.zarUnlocked)
-                {
+                if (player.za.zarReqs[0] && player.za.zarReqs[1] && player.za.zarReqs[2] && player.za.zarReqs[3] && player.za.zarReqs[4] && player.za.zarReqs[5]) {
                     player.subtabs["za"]["stuff"] = "Main"
                 }
             },
@@ -138,8 +135,7 @@
             onClick() {
                 player.za.zarReqs[4] = true
 
-                if (player.za.zarUnlocked)
-                {
+                if (player.za.zarReqs[0] && player.za.zarReqs[1] && player.za.zarReqs[2] && player.za.zarReqs[3] && player.za.zarReqs[4] && player.za.zarReqs[5]) {
                     player.subtabs["za"]["stuff"] = "Main"
                 }
             },
@@ -153,8 +149,7 @@
             onClick() {
                 player.za.zarReqs[5] = true
 
-                if (player.za.zarUnlocked)
-                {
+                if (player.za.zarReqs[0] && player.za.zarReqs[1] && player.za.zarReqs[2] && player.za.zarReqs[3] && player.za.zarReqs[4] && player.za.zarReqs[5]) {
                     player.subtabs["za"]["stuff"] = "Main"
                 }
             },
@@ -166,7 +161,7 @@
     upgrades: {
         11: {
             title: "It begins lmao",
-            unlocked() { return true },
+            unlocked() { return player.za.zarUnlocked },
             description: "Earn 1 chance point per second. How lame.",
             cost: new Decimal(0),
             currencyLocation() { return player.za },

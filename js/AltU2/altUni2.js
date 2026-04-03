@@ -45,10 +45,11 @@
         player.au2.starsToGet = Decimal.mul(player.ro.rocketParts, player.ro.activatedFuel.pow(0.3)).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(levelableEffect("st", 209)[0]).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("st", 201)).floor()
-        player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("ma", 31)).floor()
+        player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("depth3", 3)).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(levelableEffect("pet", 501)[0]).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("cof", 29)).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(levelableEffect("pu", 109)[2]).floor()
+        player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("fa", 16)).floor()
 
         //Star Softcap
         player.au2.starSoftcapStart = new Decimal(1e6)
@@ -56,7 +57,8 @@
         if (player.au2.starsToGet.gte(player.au2.starSoftcapStart))
         {
             player.au2.starSoftcapEffect = player.au2.starsToGet.add(1).log(10).div(6).pow(0.5).recip()
-            player.au2.starsToGet = player.au2.starsToGet.div(1e6).pow(player.au2.starSoftcapEffect).div(1e6)
+            if (player.alephsChamber.milestone[25] > 0) player.au2.starSoftcapEffect = player.au2.starSoftcapEffect.pow(0.8)
+            player.au2.starsToGet = player.au2.starsToGet.div(1e6).pow(player.au2.starSoftcapEffect).mul(1e6)
             player.au2.starSoftcapActive = true  
         } else
         {
@@ -66,7 +68,7 @@
 
         if (player.ro.rocketIndex.eq(1)) player.au2.starsToGet = player.au2.starsToGet.mul(5)
         player.au2.starsToGet = player.au2.starsToGet.mul(player.se.starsExploreEffect[0][0]).floor()
-        if (hasUpgrade("fi", 23)) player.au2.starsToGet = player.au2.starsToGet.mul(upgradeEffect("fi", 23))
+        player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("stagnantSynestia", 3)).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(levelableEffect("ir", 1)[0]).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("sb", 101)).floor()
     },

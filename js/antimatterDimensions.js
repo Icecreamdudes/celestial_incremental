@@ -152,7 +152,7 @@
 
             // SOFTCAP MODIFIER
             if (player.ad.dimensionsPerSecond[i].gt(1e300) && hasChallenge("ip", 18)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].div(1e300).pow(0.7).mul(1e300)
-            if (player.ad.dimensionsPerSecond[i].gt("1e10000")) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].div("1e10000").pow(0.5).mul("1e10000")
+            if (player.ad.dimensionsPerSecond[i].gt("1e10000")) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].div("1e10000").pow(0.4).mul("1e10000")
 
             // CONTINUED REGULAR MODIFIERS
             if (hasUpgrade("ip", 43)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(upgradeEffect("ip", 43))

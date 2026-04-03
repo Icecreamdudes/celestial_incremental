@@ -326,7 +326,7 @@ BHA.nav_healSpell = {
 
     instant: true,
     type: "heal",
-    target: "randomPlayer",
+    target: "randomPlayerHeal",
     value() {return new Decimal(10).add(player.bh.skillData["nav_healSpell"].level.mul(2))},
     cooldown: new Decimal(15),
     cooldownCap: new Decimal(5),
@@ -781,7 +781,7 @@ BHA.vespasian_poisonStinger = {
     curCostBase: new Decimal(64),
     curCostScale: new Decimal(4),
     currency: "matosDust",
-    unlocked: true,
+    unlocked() {return getLevelableAmount("pet", 503).gt(0)},
 
     instant: true,
     type: "damage",

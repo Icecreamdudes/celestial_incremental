@@ -492,7 +492,7 @@ addLayer("settings", {
             title() {return player.au2.au2Unlocked ? "Midnight Theme" : "[LOCKED]"},
             canClick() {return options.theme != "midnight" && player.au2.au2Unlocked},
             unlocked: "true",
-            tooltip() {return !player.au2.au2Unlocked ? "Obtained from the vast expanse." : ""},
+            tooltip() {return !player.au2.au2Unlocked ? "Begin exploration of a vast expanse." : ""},
             onClick() {
                 options.theme = "midnight"
 	            changeTheme();

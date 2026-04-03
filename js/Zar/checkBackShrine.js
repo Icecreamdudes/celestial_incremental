@@ -82,7 +82,7 @@
 
             pauseUniverseAll(["DS", "A2"], "unpause", true)
 
-            flashScreen("Ritual Success.\nYou have earned a Shard of Ascension.", 3000)
+            screenFlash("Ritual Success.\nYou have earned a Shard of Ascension.", 3000)
         }
 
         player.cbs.ritualCosts[0] = Decimal.mul(player.cbs.ascensionShards.pow(1.25).mul(0.2).add(1), 50).floor()

@@ -220,7 +220,7 @@
         },
         6: {
             title: "Aleph, the Celestial of Swarms",
-            body() { return "" },
+            body() { return "A celestial who was once lived in the kingdom of celestials. She wanted to live a peaceful life, but tragedy struck her when her two brothers were killed by other celestials. Angered, she joined Avon's organization, but realized the threat that she would face. She fled to her own universe that Avon had gifted to her, which was the Hive. She spent the rest of her days building up and cultivating her swarm. She was happy. Her desire to build her swarm was greater than her desires to commit evil sins. However, that happiness faded when Nova invaded her universe and destroyed her swarm." },
             unlocked() { return player.ch.celestialIndex.eq(5) },      
         },
     },

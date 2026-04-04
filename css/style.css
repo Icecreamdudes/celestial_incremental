@@ -1590,6 +1590,7 @@ button > * {
 	border-radius: 50%;
 	cursor: pointer;
 	margin: -5%;
+	z-index: 50000;
 }
 
 .goldenCookie:hover {
@@ -1608,6 +1609,7 @@ button > * {
 	text-shadow: 1px 1px 1px #000,0px 0px 6px #000;
 	font-size: 24px;
 	line-height: 0.8;
+	z-index: 50000;
 }
 
 .bigCookie {

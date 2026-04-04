@@ -500,7 +500,7 @@ function bhAttack(damage, index, slot, target, str = "", method = "none", attr =
 
         if (attribute["rebound"] && !attr && target != "self") {
             let attStr = "<span style='color:cyan'>[REBOUND] </span>"
-            bhAttack(damage.mul(attribute["rebound"]), index, slot, receive, attStr, "none", true)
+            bhAttack(damage.mul(attribute["rebound"]), receive, slot, index, attStr, "none", true)
         }
 
         let resist = false

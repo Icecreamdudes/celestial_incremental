@@ -543,7 +543,7 @@ BHC.m14 = {
         borderColor: "#2F2F2F",
         fontSize: "60px",
     },
-    health: new Decimal(400),
+    health: new Decimal(350),
     damage: new Decimal(10),
     attributes: {
         "rebound": new Decimal(0.3), // Dmg Mult

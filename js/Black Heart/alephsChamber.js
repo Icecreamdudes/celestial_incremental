@@ -764,7 +764,7 @@ BHC.aleph = {
                     bulletHell({"shootBee": {beesPerSec: 2, radius: 15, enemySpeed: 6}}, {width: 400, height: 400, duration: 5})
                     player.bh.celestialite.actions[3].variables.attacks = 1
                 }
-                if (player.bh.celestialite.attackID == 6 && player.bh.celestialite.actions[3].variables.attacks == 1) {
+                if (player.bh.celestialite.attackID == 6 && player.bh.celestialite.actions[3].variables.attacks >= 1) {
                     screenFlash("", 200)
                     setTimeout(() => {
                         player.bh.celestialite.attackTimeout = [7, new Decimal(5)]
@@ -772,7 +772,7 @@ BHC.aleph = {
                     }, 200)
                     player.bh.celestialite.actions[3].variables.attacks = 2
                 }
-                if (player.bh.celestialite.attackID == 7 && player.bh.celestialite.actions[3].variables.attacks == 2) {
+                if (player.bh.celestialite.attackID == 7 && player.bh.celestialite.actions[3].variables.attacks >= 2) {
                     screenFlash("", 200)
                     setTimeout(() => {
                         player.bh.celestialite.attackTimeout = [8, new Decimal(5)]
@@ -780,7 +780,7 @@ BHC.aleph = {
                     }, 200)
                     player.bh.celestialite.actions[3].variables.attacks = 3
                 }
-                if (player.bh.celestialite.attackID == 8 && player.bh.celestialite.actions[3].variables.attacks == 3) {
+                if (player.bh.celestialite.attackID == 8 && player.bh.celestialite.actions[3].variables.attacks >= 3) {
                     screenFlash("", 200)
                     setTimeout(() => {
                         player.bh.celestialite.attackTimeout = [9, new Decimal(5)]
@@ -788,12 +788,12 @@ BHC.aleph = {
                     }, 200)
                     player.bh.celestialite.actions[3].variables.attacks = 4
                 }
-                if (player.bh.celestialite.attackID >= 9 && player.bh.celestialite.actions[3].variables.attacks == 4) {
+                if (player.bh.celestialite.attackID == 9 && player.bh.celestialite.actions[3].variables.attacks >= 4) {
                     celestialiteDeath()
                 }
-                if (player.bh.celestialite.health.lt(-3000)) {
-                    screenFlash("This isn't supposed to happen<br>Sorry about the weird bug<br>-Forwaken", 3000)
-                    setTimeout(() => {celestialiteDeath()}, 3000)
+                if (player.bh.celestialite.health.lt(-500)) {
+                    screenFlash("", 200)
+                    setTimeout(() => {celestialiteDeath()}, 200)
                 }
             },
             cooldown: new Decimal(Infinity),

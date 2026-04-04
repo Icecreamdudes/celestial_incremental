@@ -726,7 +726,7 @@ BHA.geroa_cosmicRay = {
 }
 BHA.geroa_orbitalCannon = {
     name: "Orbital Cannon",
-    description() {return "Hard-stuns Geroa for 5 seconds, then deals x" + formatWhole(new Decimal(10).add(player.bh.skillData["geroa_orbitalCannon"].level.mul(2))) + " ranged damage split into 10 hits, and hard-stuns the celestialite for 2.5 seconds"},
+    description() {return "Hard-stuns Geroa for 5 seconds, then deals x" + formatWhole(new Decimal(10).add(player.bh.skillData["geroa_orbitalCannon"].level.mul(2))) + " ranged damage split into 10 hits, and hard-stuns the celestialite for 2 seconds"},
     passiveText() {return "+" + formatSimple(player.bh.skillData["geroa_orbitalCannon"].maxLevel.div(5)) + " DMG"},
     char: "geroa",
     spCost: new Decimal(14),

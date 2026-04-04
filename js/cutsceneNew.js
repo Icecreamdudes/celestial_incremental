@@ -285,7 +285,7 @@ function showCutscene(dialogue, opt = {}) {
         }
         idx++;
     }
-    showNext();
+    if (!options.instantCutsceneText) showNext();
 }
 
 function showCinematicCutscene(dialogue, opt = {}) {

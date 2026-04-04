@@ -94,7 +94,7 @@
         player.prj.totalProjectLevels = player.prj.modules[1].completions
 
         player.prj.projectSpeed = new Decimal(1)
-        player.prj.projectSpeed = player.prj.projectSpeed.mul(levelableEffect("pu", 307)[1])
+        player.prj.projectSpeed = player.prj.projectSpeed.mul(levelableEffect("pu", 309)[1])
         player.prj.projectSpeed = player.prj.projectSpeed.mul(player.prj.storedTimeCapsuleEffect)
         if (hasUpgrade("wel", 22)) player.prj.projectSpeed = player.prj.projectSpeed.mul(2);
 

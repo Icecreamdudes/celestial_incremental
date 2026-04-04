@@ -150,7 +150,7 @@
             player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[4].completionsEffect)
         }
         if (hasUpgrade("wel", 14)) player.wel.lightMult = player.wel.lightMult.mul(2);
-        player.wel.lightMult = player.wel.lightMult.mul(levelableEffect("pu", 113)[1])
+        player.wel.lightMult = player.wel.lightMult.mul(levelableEffect("pu", 114)[1])
         if (hasMilestone("prj", 103)) player.wel.lightMult = player.wel.lightMult.mul(2);
         if (hasMilestone("prj", 201)) player.wel.lightMult = player.wel.lightMult.mul(2);
         player.wel.lightMult = player.wel.lightMult.mul(player.pri.fountains[2].completionEffect)
@@ -168,13 +168,13 @@
             // CYCLE SPEED
             player.wel.modules[i].timeSpeed = new Decimal(1)
             player.wel.modules[i].timeSpeed = player.wel.modules[i].timeSpeed.mul(player.wel.fountains[4].completionEffect)
-            player.wel.modules[i].timeSpeed = player.wel.modules[i].timeSpeed.mul(levelableEffect("pu", 213)[1])
+            player.wel.modules[i].timeSpeed = player.wel.modules[i].timeSpeed.mul(levelableEffect("pu", 214)[1])
             if (hasMilestone("prj", 105)) player.wel.modules[i].timeSpeed = player.wel.modules[i].timeSpeed.mul(player.prj.milestone105Effect)
 
             // CYCLE GAIN
             player.wel.modules[i].completionsGain = new Decimal(1)
             player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(player.wel.fountains[3].completionEffect)
-            player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(levelableEffect("pu", 214)[1])
+            player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(levelableEffect("pu", 215)[1])
             if (hasMilestone("prj", 102)) player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(2);
             player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(player.pri.fountains[1].completionEffect)
         }

@@ -903,6 +903,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Redesigned coin flip, wheel of fortune, and slot machine UI.<br>
 			- Removed the coin clipper and rewardless dice space reset buttons in favor of buttons that reduce total flips/spins on a cooldown.<br>
 		<br>Balancing:<br>
+			- The daily orb time skip no longer affects daily orbs.<br>
 			- Added an additional pet point button effect for the evolution fragment pet.<br>
 			- Reduced the scaling of several effects in D1 eclipse.<br>
 			- Changed the scaling and costs of check back factors.<br>

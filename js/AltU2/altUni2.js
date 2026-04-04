@@ -56,7 +56,7 @@
 
         if (player.au2.starsToGet.gte(player.au2.starSoftcapStart))
         {
-            player.au2.starSoftcapEffect = player.au2.starsToGet.add(1).log(10).div(6).pow(0.5).recip()
+            player.au2.starSoftcapEffect = player.au2.starsToGet.add(1).log(10).div(6).pow(0.75).recip()
             if (player.alephsChamber.milestone[25] > 0) player.au2.starSoftcapEffect = player.au2.starSoftcapEffect.pow(0.8)
             player.au2.starsToGet = player.au2.starsToGet.div(1e6).pow(player.au2.starSoftcapEffect).mul(1e6)
             player.au2.starSoftcapActive = true  

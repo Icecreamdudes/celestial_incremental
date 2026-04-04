@@ -41,7 +41,7 @@
 
 // Set your version in num and name
 let VERSION = {
-	num: 190.2, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
+	num: 190.21, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
 	name: "Aleph Update Pt II: Nested Metal",
 }
 
@@ -2015,4 +2015,5 @@ function fixOldSave(oldVersion){
 		// AD BALANCING
 		if (player.cs && player.cs.scraps.antimatter.effect.gte(1)) player.cs.scraps.antimatter.effect = new Decimal(0)
 	}
+	if (oldVersion < 190.21) player.m.buyables[15] = Decimal.min(player.m.buyables[15], 50)
 }

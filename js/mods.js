@@ -475,12 +475,12 @@
         },
         15: {
             costBase() { return new Decimal(1e60) },
-            costGrowth() { return new Decimal(100) },
-            purchaseLimit() { return new Decimal(250) },
+            costGrowth() { return new Decimal(1e8) },
+            purchaseLimit() { return new Decimal(50) },
             currency() { return player.m.mods},
             pay(amt) { player.m.mods = this.currency().sub(amt) },
             effect(x) {
-                return getBuyableAmount(this.layer, this.id).pow(0.834).div(1000).add(1)
+                return getBuyableAmount(this.layer, this.id).div(500).add(1).min(1.1)
             },
             unlocked() { return hasUpgrade("bi", 113) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },

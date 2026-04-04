@@ -502,7 +502,6 @@ addLayer("cb", {
         layers.ep2.update(time)
         layers.ev0.update(time)
         layers.ev1.update(time)
-        layers.ev2.update(time)
         layers.ev8.update(time)
         layers.sp.update(time)
         if (offline) layers.cbs.update(time)

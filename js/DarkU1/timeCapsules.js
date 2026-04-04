@@ -34,8 +34,8 @@
         let onepersec = new Decimal(1)
 
         player.dt.timeCapsulesToGet = player.dv.clouds.div(1e18).pow(0.2)
-        if (getLevelableTier("pu", 113, true)) player.dt.timeCapsulesToGet = player.dt.timeCapsulesToGet.mul(levelableEffect("pu", 113)[0])
-        if (getLevelableTier("pu", 214, true)) player.dt.timeCapsulesToGet = player.dt.timeCapsulesToGet.mul(levelableEffect("pu", 214)[0])
+        if (getLevelableTier("pu", 114, true)) player.dt.timeCapsulesToGet = player.dt.timeCapsulesToGet.mul(levelableEffect("pu", 114)[0])
+        if (getLevelableTier("pu", 215, true)) player.dt.timeCapsulesToGet = player.dt.timeCapsulesToGet.mul(levelableEffect("pu", 215)[0])
 
         player.dt.timeCapsulesToGet = player.dt.timeCapsulesToGet.floor()
 
@@ -46,7 +46,7 @@
         
         player.dt.timeEnergyToGet = player.dt.timeCapsules.pow(2)
         player.dt.timeEnergyToGet = player.dt.timeEnergyToGet.mul(buyableEffect("dt", 11))
-        if (getLevelableTier("pu", 213, true)) player.dt.timeEnergyToGet = player.dt.timeEnergyToGet.mul(levelableEffect("pu", 213)[0])
+        if (getLevelableTier("pu", 214, true)) player.dt.timeEnergyToGet = player.dt.timeEnergyToGet.mul(levelableEffect("pu", 214)[0])
 
         player.dt.timeEnergy = player.dt.timeEnergy.add(player.dt.timeEnergyToGet.mul(delta))
 
@@ -63,7 +63,7 @@
         player.dt.storedToGet = player.dt.storedToGet.floor()
 
         if (player.dt.timeCapsules.lt(100)) player.dt.storedToGet = new Decimal(0);
-        if (getLevelableTier("pu", 213, true)) player.dt.storedToGet = player.dt.storedToGet.add(1);
+        if (getLevelableTier("pu", 214, true)) player.dt.storedToGet = player.dt.storedToGet.add(1);
 
         // reset cooldown
         

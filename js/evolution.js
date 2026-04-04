@@ -645,7 +645,7 @@
                 return "<div class='evoContainer'><h3>Costs:</h3>" +
                 "<br>"  + formatWhole(player.cb.evolutionShards) + "/60 Evolution Shards" +
                 "<br>"  + formatWhole(player.cb.paragonShards) + "/12 Paragon Shards" +
-                "<br>"  + formatWhole(player.fi.temporalShards) + "/12 Temporal Shards" +
+                "<br>"  + formatWhole(player.stagnantSynestia.temporalShard) + "/12 Temporal Shards" +
                 "</div>" +
                 "<div class='evoContainer'><h3>Requires:</h3>" +
                 "<br>"  + formatWhole(player.au2.stars) + "/2.5e10 Stars" +
@@ -653,7 +653,7 @@
                 "</div>"
             },
             canClick() {
-                return (player.cb.evolutionShards.gte(60) && player.cb.paragonShards.gte(12) && player.fi.temporalShards.gte(12)
+                return (player.cb.evolutionShards.gte(60) && player.cb.paragonShards.gte(12) && player.stagnantSynestia.temporalShard.gte(12)
                 && player.au2.stars.gte("2.5e10") && player.oi.oil.gte("1e500"))
             },
             onClick() {
@@ -661,7 +661,7 @@
 
                 player.cb.evolutionShards = player.cb.evolutionShards.sub(60)
                 player.cb.paragonShards = player.cb.paragonShards.sub(12)
-                player.fi.temporalShards = player.fi.temporalShards.sub(12)
+                player.stagnantSynestia.temporalShard = player.stagnantSynestia.temporalShard.sub(12)
 
                 player.ev.evolutionsUnlocked[13] = true
                 setLevelableAmount("pet", 1209, new Decimal(1))

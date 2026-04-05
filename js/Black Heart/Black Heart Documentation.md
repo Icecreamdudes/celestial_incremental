@@ -473,17 +473,21 @@ Features:
 
     1. randomPlayer: Picks a random character, excluding the celestialite.
 
-    2. random: Picks randomly between both the characters and the celestialite.
+    2. randomPlayerHeal: Picks a random character, excluding the celestialite, BUT only if they aren't full health.
 
-    3. self: Picks the one doing the action.
+    3. random: Picks randomly between both the characters and the celestialite.
 
-    4. celestialite: Picks the celestialite.
+    4. randomHeal: Picks randomly between both the characters and the celestialite, BUT only if they aren't full health.
 
-    5. allPlayer: Picks all players.
+    5. self: Picks the one doing the action.
 
-    6. all: Picks all players and the celestialite.
+    6. celestialite: Picks the celestialite.
 
-    7. storedTarget: Uses the target stored from the action property storeTarget
+    7. allPlayer: Picks all players.
+
+    8. all: Picks all players and the celestialite.
+
+    9. storedTarget: Uses the target stored from the action property storeTarget
 
 - method: Used when the type is damage to decide what type of damage the action will deal. The potential types are "physical", "ranged", "magic", and "spirit".
 

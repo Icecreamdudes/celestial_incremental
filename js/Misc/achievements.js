@@ -7,6 +7,7 @@ addLayer("achievements", {
         unlocked: true,
     }},
     achievements: {
+        // Part 1
         1: {
             name: "First Reset<br><small>(of many)</small>",
             image: "resources/achievements/1_01.png",
@@ -204,7 +205,7 @@ addLayer("achievements", {
             complete() {return hasUpgrade("i", 32) || inChallenge("ip", 14)},
             unlocked: true,
         },
-
+        // Part 2
         101: {
             name: "To Infinity",
             image: "resources/achievements/2_01.png",
@@ -397,12 +398,20 @@ addLayer("achievements", {
             unlocked: true,
             marked: true,
         },
+        // Part 3
+        201: {
+            name: "To...  Negative Infinity?",
+            image: "resources/achievements/3_01.png",
+            tooltip: "<h3>To...  Negative Infinity?</h3><hr style='margin-bottom:4px'>Reach negative infinity.",
+            color: "#b2d8d8",
+            unlocked: true,
+        },
     },
     tooltip: "Achievements",
     color: "white",
     microtabs: {
         stars: {
-            1: {
+            1: { // Pre-Infinity
                 unlocked: true,
                 content: [
                     ["top-column", [
@@ -415,7 +424,7 @@ addLayer("achievements", {
                     ], {width: "621px", height: "409px", background: "#111", borderLeft: "3px solid white", padding: "3px"}],
                 ],
             },
-            2: {
+            2: { // Infinity & IP Challenges
                 unlocked() {return hasAchievement("achievements", 101) || player.in.unlockedInfinity},
                 content: [
                     ["top-column", [
@@ -428,7 +437,7 @@ addLayer("achievements", {
                     ], {width: "621px", height: "409px", background: "#191300", borderLeft: "3px solid white", padding: "3px"}],
                 ],
             },
-            3: {
+            3: { // Tav & NIP
                 unlocked() {return hasAchievement("achievements", 201) || (hasChallenge("ip", 18) || player.s.highestSingularityPoints.gt(0))},
                 content: [
                     ["top-column", [
@@ -441,7 +450,7 @@ addLayer("achievements", {
                     ], {width: "621px", height: "409px", background: "#232b2b", borderLeft: "3px solid white", padding: "3px"}],
                 ],
             },
-            4: {
+            4: { // Early Break Infinity
                 unlocked() {return hasAchievement("achievements", 301) || player.in.unlockedBreak},
                 content: [
                     ["top-column", [
@@ -454,7 +463,7 @@ addLayer("achievements", {
                     ], {width: "621px", height: "409px", background: "#081902", borderLeft: "3px solid white", padding: "3px"}],
                 ],
             },
-            5: {
+            5: { // Late BI, Cante, and Alt-Uni 1
                 unlocked() {return hasAchievement("achievements", 401) || (hasUpgrade("bi", 24) || player.s.highestSingularityPoints.gt(0))},
                 content: [
                     ["top-column", [
@@ -467,7 +476,7 @@ addLayer("achievements", {
                     ], {width: "621px", height: "409px", background: "#021a25", borderLeft: "3px solid white", padding: "3px"}],
                 ],
             },
-            6: {
+            6: { // Early Singularity and Jocus
                 unlocked() {return hasAchievement("achievements", 501) || player.s.highestSingularityPoints.gt(0)},
                 content: [
                     ["top-column", [
@@ -480,7 +489,7 @@ addLayer("achievements", {
                     ], {width: "621px", height: "409px", background: "#190606", borderLeft: "3px solid white", padding: "3px"}],
                 ],
             },
-            7: {
+            7: { // Starmetal Alloy, Dark-Uni 1, and Punchcards
                 unlocked() {return hasAchievement("achievements", 601) || hasUpgrade("s", 21)},
                 content: [
                     ["top-column", [
@@ -493,7 +502,7 @@ addLayer("achievements", {
                     ], {width: "621px", height: "409px", background: "#000", borderLeft: "3px solid white", padding: "3px"}],
                 ],
             },
-            8: {
+            8: { // Matos and Early Black Heart
                 unlocked() {return hasAchievement("achievements", 701) || tmp.pu.levelables[302].canClick},
                 content: [
                     ["top-column", [
@@ -506,7 +515,7 @@ addLayer("achievements", {
                     ], {width: "621px", height: "409px", background: "#1b0218", borderLeft: "3px solid white", padding: "3px"}],
                 ],
             },
-            9: {
+            9: { // Alt-Uni 2 and Iridite
                 unlocked() {return hasAchievement("achievements", 801) || player.matosLair.milestone[25] > 0},
                 content: [
                     ["top-column", [
@@ -519,15 +528,15 @@ addLayer("achievements", {
                     ], {width: "621px", height: "409px", background: "#0b011c", borderLeft: "3px solid white", padding: "3px"}],
                 ],
             },
-            10: {
+            10: { // Early-Mid Hive
                 unlocked() {return hasAchievement("achievements", 801) || player.ir.iriditeDefeated},
                 content: [
                     ["top-column", [
                         ["row", [
-                            ["achievement", 801], ["achievement", 802], ["achievement", 803], ["achievement", 804], ["achievement", 805], ["achievement", 806],
-                            ["achievement", 807], ["achievement", 808], ["achievement", 809], ["achievement", 810], ["achievement", 811], ["achievement", 812],
-                            ["achievement", 813], ["achievement", 814], ["achievement", 815], ["achievement", 816], ["achievement", 817], ["achievement", 818],
-                            ["achievement", 819], ["achievement", 820], ["achievement", 821], ["achievement", 822], ["achievement", 823], ["achievement", 824],
+                            ["achievement", 901], ["achievement", 902], ["achievement", 903], ["achievement", 904], ["achievement", 905], ["achievement", 906],
+                            ["achievement", 907], ["achievement", 908], ["achievement", 909], ["achievement", 910], ["achievement", 911], ["achievement", 912],
+                            ["achievement", 913], ["achievement", 914], ["achievement", 915], ["achievement", 916], ["achievement", 917], ["achievement", 918],
+                            ["achievement", 919], ["achievement", 920], ["achievement", 921], ["achievement", 922], ["achievement", 923], ["achievement", 924],
                         ]],
                     ], {width: "621px", height: "409px", background: "#201500", borderLeft: "3px solid white", padding: "3px"}],
                 ],
@@ -546,10 +555,10 @@ addLayer("achievements", {
                 ["style-row", [
                     ["category-button", ["<span style='color:#9bedff'>★★</span>★★★", "stars", 2], {width: "155px", height: "40px", color: "#aaa", background: "#332600", borderRight: "3px solid white"}],
                 ], () => {return tmp.achievements.microtabs.stars[2].unlocked ? {width: "155px", height: "40px", borderBottom: "3px solid white"} : {display: "none !important"}}],
-                /*
                 ["style-row", [
                     ["category-button", ["<span style='color:#9bedff'>★★★</span>★★<br><small style='color:#c00'>[NOT IMPLEMENTED]</small>", "stars", 3], {width: "155px", height: "40px", color: "#aaa", background: "#354040", borderRight: "3px solid white"}],
                 ], () => {return tmp.achievements.microtabs.stars[3].unlocked ? {width: "155px", height: "40px", borderBottom: "3px solid white"} : {display: "none !important"}}],
+                /*
                 ["style-row", [
                     ["category-button", ["<span style='color:#9bedff'>★★★★</span>★<br><small style='color:#c00'>[NOT IMPLEMENTED]</small>", "stars", 4], {width: "155px", height: "40px", color: "#aaa", background: "#113204", borderRight: "3px solid white"}],
                 ], () => {return tmp.achievements.microtabs.stars[4].unlocked ? {width: "155px", height: "40px", borderBottom: "3px solid white"} : {display: "none !important"}}],

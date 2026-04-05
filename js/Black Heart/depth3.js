@@ -588,7 +588,7 @@ BHC.greaterZeta = {
         color: "black",
         borderColor: "#520040",
     },
-    health: new Decimal(180),
+    health: new Decimal(140),
     damage: new Decimal(5),
     attributes: {
         "rebound": new Decimal(0.3), // Dmg Mult
@@ -626,7 +626,7 @@ BHC.greaterEta = {
         color: "black",
         borderColor: "#520040",
     },
-    health: new Decimal(260),
+    health: new Decimal(180),
     damage: new Decimal(6),
     attributes: {
         "rebound": new Decimal(0.3), // Dmg Mult
@@ -814,7 +814,7 @@ BHC.greaterMu = {
         color: "black",
         borderColor: "#520040",
     },
-    health: new Decimal(200),
+    health: new Decimal(160),
     damage: new Decimal(10),
     attributes: {
         "rebound": new Decimal(0.3), // Dmg Mult
@@ -852,7 +852,7 @@ BHC.greaterNu = {
         color: "black",
         borderColor: "#520040",
     },
-    health: new Decimal(100),
+    health: new Decimal(150),
     damage: new Decimal(4),
     attributes: {
         "explosive": new Decimal(8), // Dmg Mult
@@ -1059,7 +1059,7 @@ BHC.greaterHekaton = {
         color: "black",
         borderColor: "#520040",
     },
-    health: new Decimal(1250),
+    health: new Decimal(1000),
     damage: new Decimal(5),
     attributes: {
         "rebound": new Decimal(0.05), // Resistance DMG Mult
@@ -1163,7 +1163,7 @@ BHC.greaterMyrioi = {
         color: "black",
         borderColor: "#520040",
     },
-    health: new Decimal(1500),
+    health: new Decimal(1250),
     damage: new Decimal(10),
     regen: new Decimal(2),
     attributes: {

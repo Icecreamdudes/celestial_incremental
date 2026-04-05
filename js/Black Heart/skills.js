@@ -326,7 +326,7 @@ BHA.nav_healSpell = {
 
     instant: true,
     type: "heal",
-    target: "randomPlayer",
+    target: "randomPlayerHeal",
     value() {return new Decimal(10).add(player.bh.skillData["nav_healSpell"].level.mul(2))},
     cooldown: new Decimal(15),
     cooldownCap: new Decimal(5),
@@ -726,7 +726,7 @@ BHA.geroa_cosmicRay = {
 }
 BHA.geroa_orbitalCannon = {
     name: "Orbital Cannon",
-    description() {return "Hard-stuns Geroa for 10 seconds, then deals x" + formatWhole(new Decimal(10).add(player.bh.skillData["geroa_orbitalCannon"].level.mul(2))) + " ranged damage split into 10 hits, and hard-stuns the celestialite for 5 seconds"},
+    description() {return "Hard-stuns Geroa for 5 seconds, then deals x" + formatWhole(new Decimal(10).add(player.bh.skillData["geroa_orbitalCannon"].level.mul(2))) + " ranged damage split into 10 hits, and hard-stuns the celestialite for 2 seconds"},
     passiveText() {return "+" + formatSimple(player.bh.skillData["geroa_orbitalCannon"].maxLevel.div(5)) + " DMG"},
     char: "geroa",
     spCost: new Decimal(14),
@@ -740,13 +740,13 @@ BHA.geroa_orbitalCannon = {
     target: "celestialite",
     method: "ranged",
     properties: {
-        "stun": [new Decimal(1), "hard", new Decimal(5)], // Chance / Stun-Type / Stun-Time
+        "stun": [new Decimal(1), "hard", new Decimal(2)], // Chance / Stun-Type / Stun-Time
         "multi-hit": [10, 100], // Amount / Delay
     },
     value() {return new Decimal(1).add(player.bh.skillData["geroa_orbitalCannon"].level.mul(0.2))},
-    stun() {return ["hard", new Decimal(10), player.bh.skillData["geroa_cosmicRay"].selected[1]]},
-    cooldown: new Decimal(60),
-    cooldownCap: new Decimal(10),
+    stun() {return ["hard", new Decimal(5), player.bh.skillData["geroa_orbitalCannon"].selected[1]]},
+    cooldown: new Decimal(40),
+    cooldownCap: new Decimal(8),
 }
 BHA.geroa_defenseSatellites = {
     name: "Defense Satellites",
@@ -781,7 +781,7 @@ BHA.vespasian_poisonStinger = {
     curCostBase: new Decimal(64),
     curCostScale: new Decimal(4),
     currency: "matosDust",
-    unlocked: true,
+    unlocked() {return getLevelableAmount("pet", 503).gt(0)},
 
     instant: true,
     type: "damage",

@@ -186,7 +186,7 @@
             player.cf.coinExploit = player.cf.coinExploit + delta
         }
 
-        if (player.cf.coinExploit >= 10) {
+        if (player.cf.coinExploit >= 5) {
             player.cf.heads = new Decimal(0)
             player.cf.tails = new Decimal(0)
             player.cf.coinsFlipped = new Decimal(0)

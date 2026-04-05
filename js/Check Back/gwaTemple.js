@@ -41,6 +41,8 @@ addLayer("gwaTemple", {
         gwarkGain: new Decimal(1),
         gwarkReq: new Decimal(1e25),
         gwarkEffect: new Decimal(1),
+
+        firstSoftcap: new Decimal(0.5),
     }},
     automate() {},
     nodeStyle() {
@@ -75,6 +77,9 @@ addLayer("gwaTemple", {
         if (hasUpgrade("gwaTemple", 29)) player.gwaTemple.gwaPointsGain = player.gwaTemple.gwaPointsGain.mul(upgradeEffect("gwaTemple", 29))
 
         player.gwaTemple.gwaPointsGain = player.gwaTemple.gwaPointsGain.pow(player.gwaTemple.gwarkEffect)
+
+        player.gwaTemple.firstSoftcap = Decimal.div(0.5, player.gwaTemple.gwaPointsGain.div(1e100).add(1).log(1e100).div(100).add(1))
+        if (player.gwaTemple.gwaPointsGain.gte(1e100)) player.gwaTemple.gwaPointsGain = player.gwaTemple.gwaPointsGain.div(1e100).pow(player.gwaTemple.firstSoftcap).mul(1e100)
 
         player.gwaTemple.gwaPointsEffect = hasUpgrade("gwaTemple", 5) ? player.gwaTemple.gwaPoints.add(1).log(10).pow(0.5).div(20).add(1) : new Decimal(1)
 
@@ -117,6 +122,7 @@ addLayer("gwaTemple", {
         player.gwaTemple.gwankestGet = hasMilestone("gwaTemple", 13) ? layers.h.hexGain(player.gwaTemple.gwanker, 1000, 1.4, gwankestDiv).sub(player.gwaTemple.gwankest).max(0) : new Decimal(1)
 
         player.gwaTemple.gwankestEffect = player.gwaTemple.gwankest.add(1).log(2).div(2).add(1).pow(0.3)
+        if (player.gwaTemple.gwankestEffect.gte(3)) player.gwaTemple.gwankestEffect = player.gwaTemple.gwankestEffect.div(3).pow(0.3).mul(3)
         player.gwaTemple.gwankestEffect2 = player.gwaTemple.gwankest.mul(10).pow(1.5).floor()
 
         // GWARK
@@ -1140,6 +1146,7 @@ addLayer("gwaTemple", {
             ["raw-html", () => { return "(+" + format(player.gwaTemple.gwaPointsGain) + ")"}, {color: "#ffb", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["raw-html", () => {return hasUpgrade("gwaTemple", 5) ? "Boosts gwa pet effects by ^" + formatSimple(player.gwaTemple.gwaPointsEffect, 3) : ""}, {color: "#ffb", fontSize: "20px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.gwaTemple.gwaPoints.gte(1e100) ? "UNAVOIDABLE SOFTCAP: Gain past 1e100 is raised by ^" + formatShortSimple(player.gwaTemple.firstSoftcap, 3) : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
         ["blank", "25px"],
         ["style-row", [
             ["style-column", [

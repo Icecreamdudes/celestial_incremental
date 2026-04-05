@@ -214,7 +214,7 @@ addLayer("achievements", {
         },
         102: {
             name: "New Dimensions",
-            image: "resources/achievements/2_00.png",
+            image: "resources/achievements/2_02.png",
             tooltip: "<h3>New Dimensions</h3><hr style='margin-bottom:4px'>Do your first dimension<br>boost.",
             color: "#ffbf00",
             unlocked: true,
@@ -236,14 +236,14 @@ addLayer("achievements", {
         },
         105: {
             name: "Kept Time",
-            image: "resources/achievements/2_00.png",
+            image: "resources/achievements/2_05.png",
             tooltip: "<h3>Kept Time</h3><hr style='margin-bottom:4px'>Reach the third<br>infinity milestone.",
             color: "#ffbf00",
             unlocked: true,
         },
         106: {
             name: "Galactic Gains",
-            image: "resources/achievements/2_00.png",
+            image: "resources/achievements/2_06.png",
             tooltip: "<h3>Galactic Gains</h3><hr style='margin-bottom:4px'>Buy an antimatter galaxy.",
             color: "#ffbf00",
             unlocked: true,
@@ -276,7 +276,7 @@ addLayer("achievements", {
         },
         110: {
             name: "Rough Resets",
-            image: "resources/achievements/2_00.png",
+            image: "resources/achievements/2_10.png",
             tooltip: "<h3>Rough Resets</h3><hr style='margin-bottom:4px'>Reset for over<br>6 β-Provenance.<br><br>Reward: β-Provenances<br>are 10% cheaper.",
             color: "#ffbf00",
             complete() {return hasMilestone("hre", 6)},
@@ -285,7 +285,7 @@ addLayer("achievements", {
         },
         111: {
             name: "Hexing Challenge",
-            image: "resources/achievements/2_00.png",
+            image: "resources/achievements/2_11.png",
             tooltip: "<h3>Hexing Challenge</h3><hr style='margin-bottom:4px'>Beat infinity challenge 3.<br><br>Reward: x1.1 Infinities.",
             color: "#ffbf00",
             complete() {return hasChallenge("ip", 13)},
@@ -343,7 +343,7 @@ addLayer("achievements", {
         },
         118: {
             name: "Automated Scripts",
-            image: "resources/achievements/2_00.png",
+            image: "resources/achievements/2_18.png",
             tooltip: "<h3>Automated Scripts</h3><hr style='margin-bottom:4px'>Reach the twelfth<br>infinity milestone.",
             color: "#ffbf00",
             unlocked: true,
@@ -366,7 +366,7 @@ addLayer("achievements", {
         },
         121: {
             name: "Bless Up",
-            image: "resources/achievements/2_00.png",
+            image: "resources/achievements/2_21.png",
             tooltip: "<h3>Bless Up</h3><hr style='margin-bottom:4px'>Do your first<br>blessing reset.",
             color: "#ffbf00",
             unlocked: true,
@@ -382,7 +382,7 @@ addLayer("achievements", {
         },
         123: {
             name: "4x4",
-            image: "resources/achievements/2_00.png",
+            image: "resources/achievements/2_23.png",
             tooltip: "<h3>4x4</h3><hr style='margin-bottom:4px'>Reach 4 4th dimensions<br>without any dim-boosts<br>in infinity challenge 8.<br><br>Reward: Double Antimatter<br>Dimensions.",
             color: "#ffbf00",
             unlocked: true,
@@ -390,7 +390,7 @@ addLayer("achievements", {
         },
         124: {
             name: "The 8th Dimension is a lie",
-            image: "resources/achievements/2_00.png",
+            image: "resources/achievements/2_24.png",
             tooltip: "<h3>The 8th Dimension is a lie</h3><hr style='margin-bottom:4px'>Beat infinity challenge 8.<br><br>Reward: x1.1 Infinities.",
             color: "#ffbf00",
             complete() {return hasChallenge("ip", 18)},

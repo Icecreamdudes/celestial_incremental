@@ -1875,6 +1875,7 @@ addLayer("revc", {
             unlocked() { return true },
             onClick() {
                 player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
+                if (!hasAchievement("achievements", 201)) completeAchievement("achievements", 201)
                 player.tab = "ad"
                 player.revc.minipause = new Decimal(3)
             },

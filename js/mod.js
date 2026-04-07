@@ -844,6 +844,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Made the ancient pylon effect softcap notably stronger.<br>
 			- Nerfed moonstone's effect on rocket part gain.<br>
 			- Buffed the base formula for stars.<br>
+			- Decreased the star softcap exponent by -0.1. (Due to fixing the softcap start)<br>
 			- Nerfed the first space building.<br><br>
 		Bugfixes:<br>
 			- Fixed space battle boss-fights crashing the game.<br>
@@ -861,7 +862,8 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Fixed some black heart boss cutscenes not pausing black heart.<br>
 			- Fixed the aleph fight cutscenes having the wrong requirement code.<br>
 			- Fixed nest layer not changing your music.<br>
-			- Fixed some black heart character data not being reset properly.<br><br>
+			- Fixed some black heart character data not being reset properly.<br>
+			- Fixed the star softcap start not working properly.<br><br>
 	<h3>v1.12 - Aleph Update Pt II: Nested Metal</h3><br>
 		Content:<br>
 			- Remade Black Heart.<br>

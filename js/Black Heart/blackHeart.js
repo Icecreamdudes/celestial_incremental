@@ -171,6 +171,7 @@ addLayer("bh", {
             mending: new Decimal(0),
             potency: new Decimal(0),
             shield: new Decimal(0), // Not same as previous, is a prevent damage stack
+            shieldDecay: new Decimal(0),
             stun: ["none", new Decimal(0)],
             randomMult: new Decimal(1),
             curAdd: new Decimal(1),
@@ -221,6 +222,7 @@ addLayer("bh", {
                 mending: new Decimal(0),
                 potency: new Decimal(0),
                 shield: new Decimal(0),
+                shieldDecay: new Decimal(0),
                 stun: ["none", new Decimal(0)],
                 attributes: {},
                 actionChances: [],
@@ -276,6 +278,7 @@ addLayer("bh", {
                 mending: new Decimal(0),
                 potency: new Decimal(0),
                 shield: new Decimal(0),
+                shieldDecay: new Decimal(0),
                 stun: ["none", new Decimal(0)],
                 attributes: {},
                 actionChances: [],
@@ -331,6 +334,7 @@ addLayer("bh", {
                 mending: new Decimal(0),
                 potency: new Decimal(0),
                 shield: new Decimal(0),
+                shieldDecay: new Decimal(0),
                 stun: ["none", new Decimal(0)],
                 attributes: {},
                 actionChances: [],
@@ -556,6 +560,7 @@ addLayer("bh", {
         comboScalingStart: new Decimal(100),
         comboScalingReduction: 0,
         comboSoftcap: new Decimal(1),
+        shieldDecayMax: new Decimal(30),
         timer: new Decimal(0),
         timerStop: false,
         timeSpeed: new Decimal(1),
@@ -717,6 +722,9 @@ addLayer("bh", {
         player.bh.comboSoftcap = new Decimal(1)
         if (player.bh.combo.gte(player.bh.comboScalingStart)) player.bh.comboSoftcap = Decimal.pow(player.bh.comboScaling, player.bh.combo.sub(player.bh.comboScalingStart))
 
+        player.bh.shieldDecayMax = new Decimal(20)
+        if (BHS[player.bh.currentStage].shieldDecayMax) player.bh.shieldDecayMax = BHS[player.bh.currentStage].shieldDecayMax
+
         if (player.subtabs["bh"]["stuff"] == "bullet") {
             player.bh.bulletHell = true
         } else {
@@ -782,6 +790,16 @@ addLayer("bh", {
                         if (player.bh.celestialite.stun.length >= 3 && player.bh.celestialite.stun[1].lte(0)) {
                             bhAction(3, player.bh.celestialite.stun[2], false, 1, true)
                         }
+                    }
+                    
+                    if (player.bh.celestialite.shield.gt(0)) {
+                        player.bh.celestialite.shieldDecay = player.bh.celestialite.shieldDecay.add(delta)
+                        if (player.bh.celestialite.shieldDecay.gte(player.bh.shieldDecayMax)) {
+                            player.bh.celestialite.shieldDecay = new Decimal(0)
+                            player.bh.celestialite.shield = player.bh.celestialite.shield.sub(1).max(0)
+                        }
+                    } else if (player.bh.celestialite.shieldDecay.gt(0)) {
+                        player.bh.celestialite.shieldDecay = new Decimal(0)
                     }
                 }
 
@@ -914,6 +932,16 @@ addLayer("bh", {
                         if (player.bh.characters[i].stun.length >= 3 && player.bh.characters[i].stun[1].lte(0)) {
                             bhAction(i, player.bh.characters[i].stun[2], false, 1, true)
                         }
+                    }
+                    
+                    if (player.bh.characters[i].shield.gt(0)) {
+                        player.bh.characters[i].shieldDecay = player.bh.characters[i].shieldDecay.add(delta)
+                        if (player.bh.characters[i].shieldDecay.gte(player.bh.shieldDecayMax)) {
+                            player.bh.characters[i].shieldDecay = new Decimal(0)
+                            player.bh.characters[i].shield = player.bh.characters[i].shield.sub(1).max(0)
+                        }
+                    } else if (player.bh.characters[i].shieldDecay.gt(0)) {
+                        player.bh.characters[i].shieldDecay = new Decimal(0)
                     }
                 }
 

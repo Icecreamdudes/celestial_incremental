@@ -42,7 +42,7 @@
             player.subtabs["au2"]['stuff'] = 'Main'
         }
 
-        player.au2.starsToGet = Decimal.mul(player.ro.rocketParts, player.ro.activatedFuel.pow(0.3)).floor()
+        player.au2.starsToGet = Decimal.mul(player.ro.rocketParts, player.ro.activatedFuel.pow(0.5)).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(levelableEffect("st", 209)[0]).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("st", 201)).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("depth3", 3)).floor()
@@ -54,12 +54,12 @@
         //Star Softcap
         player.au2.starSoftcapStart = new Decimal(1000000)
 
-        let softcapBase = new Decimal(0.5)
+        let softcapBase = new Decimal(0.4)
         if (player.alephsChamber.milestone[25] > 0) softcapBase = softcapBase.add(0.1)
 
         if (player.au2.starsToGet.gte(player.au2.starSoftcapStart)) {
             player.au2.starSoftcapEffect = softcapBase.div(Decimal.div(player.au2.starsToGet.add(1).log(2).add(100), 100))
-            player.au2.starsToGet = player.au2.starsToGet.sub(player.au2.starSoftcapStart).pow(player.au2.starSoftcapEffect).add(player.au2.starSoftcapStart)
+            player.au2.starsToGet = player.au2.starsToGet.div(player.au2.starSoftcapStart).pow(player.au2.starSoftcapEffect).mul(player.au2.starSoftcapStart)
             player.au2.starSoftcapActive = true  
         } else
         {

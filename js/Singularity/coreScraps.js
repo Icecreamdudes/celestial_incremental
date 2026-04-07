@@ -831,13 +831,13 @@
             title: "CS Degree",
             unlocked() {return hasUpgrade("depth4", 5)},
             canAfford() {return hasUpgrade("depth4", 5)},
-            description: "Lines of code raise mod requirement.",
+            description: "Code experience raise mod requirement.",
             cost: new Decimal(1e21),
             currencyLocation() { return player.cs.scraps.code },
             currencyDisplayName: "Code Core Scraps",
             currencyInternalName: "amount",
             effect() {
-                return Decimal.div(1, player.m.linesOfCode.add(1).log("1e1000000").div(10).add(1))
+                return Decimal.div(1, player.m.codeExperience.add(1).log("1e1500000").add(1))
             },
             effectDisplay() { return "^"+format(upgradeEffect(this.layer, this.id), 4) }, // Add formatting to the effect
             style() {

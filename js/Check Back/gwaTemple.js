@@ -162,7 +162,7 @@ addLayer("gwaTemple", {
             if (hasUpgrade("gwaTemple", 25)) mult = new Decimal(25)
             if (hasUpgrade("gwaTemple", 7) && Math.random() < chance) gain = gain.mul(mult)
             player.gwaTemple.gwaPoints = player.gwaTemple.gwaPoints.add(gain)
-            if (player.tab == "gwaTemple") makeParticles(BIG_COOKIE_NUMBER, 1, `normal`, {x: mouseX-80+(Math.random()*10), text: "+" + formatSimple(gain), style: {color: "#ffb"}})
+            if (player.tab == "gwaTemple" && gain.gt(0)) makeParticles(BIG_COOKIE_NUMBER, 1, `normal`, {x: mouseX-80+(Math.random()*10), text: "+" + formatSimple(gain), style: {color: "#ffb"}})
         }
     },
     clickables: {
@@ -1143,7 +1143,7 @@ addLayer("gwaTemple", {
     tabFormat: [
         ["row", [
             ["raw-html", () => { return "You have <h3>" + format(player.gwaTemple.gwaPoints) + "</h3> gwa points" }, {color: "#ffb", fontSize: "24px", fontFamily: "monospace" }],
-            ["raw-html", () => { return "(+" + format(player.gwaTemple.gwaPointsGain) + ")"}, {color: "#ffb", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => { return player.gwaTemple.gwaPointsGain.gt(0) ? "(+" + format(player.gwaTemple.gwaPointsGain) + ")" : ""}, {color: "#ffb", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["raw-html", () => {return hasUpgrade("gwaTemple", 5) ? "Boosts gwa pet effects by ^" + formatSimple(player.gwaTemple.gwaPointsEffect, 3) : ""}, {color: "#ffb", fontSize: "20px", fontFamily: "monospace"}],
         ["raw-html", () => { return player.gwaTemple.gwaPoints.gte(1e100) ? "UNAVOIDABLE SOFTCAP: Gain past 1e100 is raised by ^" + formatShortSimple(player.gwaTemple.firstSoftcap, 3) : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],

@@ -244,9 +244,9 @@ BHC.m03 = {
         borderColor: "#2F2F2F",
         fontSize: "60px",
     },
-    health: new Decimal(150),
+    health: new Decimal(160),
     damage: new Decimal(10),
-    regen: new Decimal(5),
+    regen: new Decimal(6),
     actions: {
         0: {
             name: "Quick Shot",
@@ -575,7 +575,7 @@ BHC.matos = {
     name: "Matos",
     icon: "resources/matos.png",
     health: new Decimal(7500),
-    damage: new Decimal(6),
+    damage: new Decimal(10),
     noRandomStats: true,
     immortal: true,
     actions: {

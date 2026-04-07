@@ -811,8 +811,8 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v1.12.1 - Bugfixes (and beefixes)</h3><br>
-	<i>[This contains all fixes since v1.12]</i><br>
+	<h3>v1.12.1 - Bugfixes <small>(and beefixes)</small></h3><br>
+	<small><i>[This contains all fixes since v1.12]</i></small><br>
 		Content:<br>
 			- New attacks for most stagnant synestia celestialites.<br><br>
 		Minor Changes:<br>

@@ -811,6 +811,48 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.12.1 - Bugfixes (and beefixes)</h3><br>
+	<i>[This contains all fixes since v1.12]</i><br>
+		Content:<br>
+			- New attacks for most stagnant synestia celestialites.<br><br>
+		Minor Changes:<br>
+			- Aleph has a new perk that improves Tav's Domain Expansion cap increases.<br>
+			- Made \"Iridian Boost\" in Stagnant Synestia specify that it ignores softcaps.<br>
+			- Improved the text describing Stagnant Synestia's milestone effect.<br>
+			- Improved the text describing how to unlock the midnight theme.<br>
+			- Added a safety check in case Aleph doesn't do their final attack at -500 HP.<br>
+			- Added Aleph's celestial hall text.<br><br>
+		Balancing:<br>
+			- Heal spell no longer targets full health allies.<br>
+			- Added softcaps to gwa temple currencies.<br>
+			- Nerfed rebound celestialites.<br>
+			- Reduced time to trigger dice space easter egg.<br>
+			- Reduced Cante's antimatter requirement.<br>
+			- Reduced late game marcel upgrade costs.<br>
+			- Buffed Geroa's orbital cannon skill.<br>
+			- Nerfed M-03's regen from 10/s->5/s.<br>
+			- Increased timers for bullet hell maze attacks.<br>
+			- Replaced generator based on normality's passive effect. (It is practically a buff)<br>
+			- Decreased the cost of the hex teaser.<br>
+			<i>(This changes nothing, you can't buy it even if you reach the cost)</i><br>
+			- Added a softcap to oil gain at 1e10,000.<br>
+			- Added a softcap to infested infinities effect 1. (at /100)<br>
+			- Made the ancient pylon effect softcap notably stronger.<br><br>
+		Bugfixes:<br>
+			- Fixed space battle boss-fights crashing the game.<br>
+			- Fixed instant cutscene text option skipping the first dialogue.<br>
+			- Fixed Vespasians first skill showing up when you don't have them unlocked.<br>
+			- Fixed rebound actually making the enemy deal more damage to you <i>lmao</i>.<br>
+			- Fixed wheel of fortune being time dependent.<br>
+			- Fixed Avon not having their cutscene icon.<br>
+			- Fixed Geroa's orbital cannon skill not working.<br>
+			- Fixed black heart sometimes messing with particles.<br>
+			- Fixed MS-06 calling for the wrong currency.<br>
+			- Fixed Celestialite Static Hekaton crashing the game.<br>
+			- Fixed grass jump milestone 6 dividing eclipse tickspeed instead of multiplying.<br>
+			- Fixed generator based on normality punchcard not unlocking its relevant normality buyable.<br>
+			- Fixed the first aleph fight cutscene not pausing black heart.<br>
+			- Fixed nest layer not changing your music.<br><br>
 	<h3>v1.12 - Aleph Update Pt II: Nested Metal</h3><br>
 		Content:<br>
 			- Remade Black Heart.<br>

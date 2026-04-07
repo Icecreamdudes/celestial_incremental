@@ -95,11 +95,11 @@
         if (getBuyableAmount("st", 204).gt(0)) player.ro.activatedFuel = player.ro.activatedFuel.add(player.ro.activatedFuelToGet.mul(buyableEffect("st", 204).mul(delta)))
 
         player.ro.rocketPartsContributions[0] = player.gh.steel.add(1).log(10).pow(0.2)
-        if (player.st.buyables[203].lt(1)) player.ro.rocketPartsContributions[1] = player.sma.starmetalAlloy.div(300).pow(0.5)
-        if (player.st.buyables[203].gte(1)) player.ro.rocketPartsContributions[1] = player.sma.starmetalAlloy.div(300).pow(0.5).add(1)
+        if (player.st.buyables[203].lt(1)) player.ro.rocketPartsContributions[1] = player.sma.starmetalAlloy.div(50).pow(0.3)
+        if (player.st.buyables[203].gte(1)) player.ro.rocketPartsContributions[1] = player.sma.starmetalAlloy.div(50).pow(0.3).add(1)
         player.ro.rocketPartsContributions[2] = player.p.crystals.add(1).log(10).div(100)
-        if (player.st.buyables[203].lt(1)) player.ro.rocketPartsContributions[3] = player.g.moonstone.pow(0.4).div(100)
-        if (player.st.buyables[203].gte(1)) player.ro.rocketPartsContributions[3] = player.g.moonstone.pow(0.4).div(100).add(1)
+        if (player.st.buyables[203].lt(1)) player.ro.rocketPartsContributions[3] = player.g.moonstone.add(1).log(2).div(10)
+        if (player.st.buyables[203].gte(1)) player.ro.rocketPartsContributions[3] = player.g.moonstone.add(1).log(2).div(10).add(1)
 
         player.ro.rocketPartsToGet = player.ro.rocketPartsContributions[0].mul(player.ro.rocketPartsContributions[1]).mul(player.ro.rocketPartsContributions[2]).mul(player.ro.rocketPartsContributions[3]).floor()
         player.ro.rocketPartsToGet = player.ro.rocketPartsToGet.mul(levelableEffect("pet", 501)[1]).floor()
@@ -383,7 +383,7 @@
         },
         16: {
             title() { return "<h2>Upgrade" },
-            canClick() { return player.cb.evolutionShards.gte('70') && player.cb.paragonShards.gte('15') && player.stagnantSynestia.temporalShard.gte(5) && player.au2.stars.gte('1e9') && player.sma.starmetalAlloy.gte('100000') 
+            canClick() { return player.cb.evolutionShards.gte('70') && player.cb.paragonShards.gte('15') && player.stagnantSynestia.temporalShard.gte(5) && player.au2.stars.gte('1e8') && player.sma.starmetalAlloy.gte('100000') 
                 && player.cof.coreFragments[0].gte('50') && player.cof.coreFragments[1].gte('50') && player.cof.coreFragments[2].gte('50') && player.cof.coreFragments[3].gte('50') && player.cof.coreFragments[4].gte('50')
                 && player.cof.coreFragments[5].gte('50') && player.cof.coreFragments[6].gte('50')
             },
@@ -393,7 +393,7 @@
                 player.cb.paragonShards = player.cb.paragonShards.sub(15)
                 player.stagnantSynestia.temporalShard = player.stagnantSynestia.temporalShard.sub(5)
 
-                player.au2.stars = player.au2.stars.sub(1e9)
+                player.au2.stars = player.au2.stars.sub(1e8)
                 player.sma.starmetalAlloy = player.sma.starmetalAlloy.sub(100000)
 
                 for (let i = 0; i < 7; i++)
@@ -1000,7 +1000,7 @@
                     ["raw-html", function () { return "Evolution Shards: " + formatWhole(player.cb.evolutionShards) + "/70" }, { "color": "#d487fd", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Paragon Shards: " + formatWhole(player.cb.paragonShards) + "/15" }, { "color": "#4b79ff", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Temporal Shards: " + formatWhole(player.stagnantSynestia.temporalShard) + "/5" }, { "color": "#77b0ffff", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Stars: " + format(player.au2.stars) + "/1e9" }, { "color": "#ffffff", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Stars: " + format(player.au2.stars) + "/1e8" }, { "color": "#ffffff", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Starmetal Alloy: " + format(player.sma.starmetalAlloy) + "/100,000" }, { "color": "#ffffff", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "50 of every core fragment type." }, { "color": "#ffffff", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],

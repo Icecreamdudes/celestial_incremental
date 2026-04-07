@@ -3259,6 +3259,7 @@
             portrait: "resources/secret.png",
             music: "music/alephCutscene.mp3",
             trigger() {return player.bh.currentStage == "alephsChamber" && Decimal.eq(player.bh.combo, 24)},
+            onStart() {player.bh.bhPause = true},
             dialogue: [
                 { text: "After a barrage of bee-like celestialites, you finally approach Aleph."},
                 { text: "After all this time, you get to see how she looks up close."},
@@ -3271,6 +3272,7 @@
                 { text: "Aleph comes in for a strike."},
                 { text: "It's about time..."},
             ],
+            onEnd() {player.bh.bhPause = false},
         },
         "Hive-Chamber-Fight-Mid1": {
             type: "normal",

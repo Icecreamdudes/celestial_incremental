@@ -291,7 +291,7 @@ BHA.kres_berserker = {
 
 // Nav Skills
 BHA.nav_magicMissle = {
-    name: "Magic Missle",
+    name: "Magic Missile",
     description() {return "Deals " + formatWhole(new Decimal(100).add(player.bh.skillData["nav_magicMissle"].level.mul(20))) + "% magic damage"},
     passiveText() {return "+" + formatSimple(player.bh.skillData["nav_magicMissle"].maxLevel.div(5)) + " DMG"},
     char: "nav",

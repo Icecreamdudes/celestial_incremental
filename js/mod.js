@@ -816,6 +816,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		Content:<br>
 			- New attacks for most stagnant synestia celestialites.<br><br>
 		Minor Changes:<br>
+			- Made Gwa Point gain not show if equal to 0.<br>
 			- Aleph has a new perk that improves Tav's Domain Expansion cap increases.<br>
 			- Made \"Iridian Boost\" in Stagnant Synestia specify that it ignores softcaps.<br>
 			- Improved the text describing Stagnant Synestia's milestone effect.<br>

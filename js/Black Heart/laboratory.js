@@ -246,7 +246,7 @@ addLayer("laboratory", {
             description: "Unlock a 6th starmetal essence generator.",
             cost: new Decimal(256),
             currencyLocation() { return player.laboratory },
-            currencyDisplayName: "Matos Dust",
+            currencyDisplayName: "Matos Shards",
             currencyInternalName: "matosShard",
             style() {
                 let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}

@@ -246,7 +246,7 @@ BHC.m03 = {
     },
     health: new Decimal(150),
     damage: new Decimal(10),
-    regen: new Decimal(10),
+    regen: new Decimal(5),
     actions: {
         0: {
             name: "Quick Shot",
@@ -683,7 +683,7 @@ BHC.matos = {
                 if (player.bh.celestialite.health.lt(2500) && player.bh.celestialite.attackID == 9) {
                     screenFlash("NOVA WILL BRING US GLORY.", 3000)
                     setTimeout(() => {
-                        bulletHell({}, {width: 750, duration: 20, timed: true, cellSize: 50, start: "cell", goal: "cell"})
+                        bulletHell({}, {width: 750, duration: 30, timed: true, cellSize: 50, start: "cell", goal: "cell"})
                     }, 3000)
                     player.bh.celestialite.attackID += 1
                 }
@@ -710,7 +710,7 @@ BHC.matos = {
                         } else if (random > 0.2 && random < 0.4) {
                             bulletHell({"bulletRain": {bulletPerSec: 7}, "knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 6, knifePerSec: 1.5}}, {duration: 15})
                         } else if (random > 0.4 && random < 0.6) {
-                            bulletHell({}, {width: 750, duration: 20, timed: true, cellSize: 50, start: "cell", goal: "cell"})
+                            bulletHell({}, {width: 750, duration: 30, timed: true, cellSize: 50, start: "cell", goal: "cell"})
                         } else if (random > 0.6 && random < 0.7) {
                             bulletHell({"knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 6, knifePerSec: 2}}, {width: 800, height: 500, duration: 15, subArena: true, subWidth: 300})
                         } else  {
@@ -728,7 +728,7 @@ BHC.matos = {
                         } else if (random > 0.2 && random < 0.4) {
                             bulletHell({"bulletRain": {bulletPerSec: 7}, "knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 6, knifePerSec: 1.5}}, {duration: 15})
                         } else if (random > 0.4 && random < 0.6) {
-                            bulletHell({}, {width: 750, duration: 20, timed: true, cellSize: 50, start: "cell", goal: "cell"})
+                            bulletHell({}, {width: 750, duration: 30, timed: true, cellSize: 50, start: "cell", goal: "cell"})
                         } else if (random > 0.6 && random < 0.7) {
                             bulletHell({"knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 6, knifePerSec: 2}}, {width: 800, height: 500, duration: 15, subArena: true, subWidth: 300})
                         } else  {

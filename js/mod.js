@@ -85,6 +85,12 @@ function updateStyles() {
 		}
 	}
 
+	// ===------   PREVENT STYLING THE PARTICLE CONTAINER   ------=== //
+	const particleCont = document.getElementById('particleHolder')
+	if (particleCont && particleCont.hasAttribute('style')) {
+		particleCont.removeAttribute('style');
+	}
+
 	// ===------   Universe Bar Horizontal Scrolling   ------=== //
 	let scrollContainer = document.querySelector('.uniHolder')
 	if (scrollContainer) {
@@ -673,7 +679,7 @@ function updateStyles() {
 			player.musuniverse = "MI"
 			break;
 		case "bee": case "fl": case "bpl": case "ne": case "bb":
-		case "ho": case "wa": case "al":
+		case "ho": case "wa": case "al": case "n":
 			player.musuniverse = "UB"
 			break;
 		case "cb": case "ev0": case "ev1": case "ev2": case "ev4":
@@ -1939,6 +1945,7 @@ function fixOldSave(oldVersion){
 		}
 	}
 	if (oldVersion < 190.2) {
+		if (player.tab == "ba") player.tab = "i"
 		// Matos Variables
 		if (player.ma.matosDefeated) player.matosLair.milestone[25] = 1
 		if (player.ma.matosUnlock) {

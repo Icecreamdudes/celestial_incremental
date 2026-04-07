@@ -912,6 +912,8 @@ function BHStageEnter(stage) {
 
     for (let i = 0; i < 3; i++) {
         player.bh.characters[i].health = player.bh.characters[i].maxHealth
+        player.bh.characters[i].shield = new Decimal(0)
+        player.bh.characters[i].stun = ["none", new Decimal(0)]
 
         for (let j = 0; j < 4; j++) {
             player.bh.characters[i].skills[j].cooldown = player.bh.characters[i].skills[j].cooldownMax

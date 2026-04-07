@@ -853,7 +853,8 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Fixed grass jump milestone 6 dividing eclipse tickspeed instead of multiplying.<br>
 			- Fixed generator based on normality punchcard not unlocking its relevant normality buyable.<br>
 			- Fixed the first aleph fight cutscene not pausing black heart.<br>
-			- Fixed nest layer not changing your music.<br><br>
+			- Fixed nest layer not changing your music.<br>
+			- Fixed some black heart character data not being reset properly.<br><br>
 	<h3>v1.12 - Aleph Update Pt II: Nested Metal</h3><br>
 		Content:<br>
 			- Remade Black Heart.<br>

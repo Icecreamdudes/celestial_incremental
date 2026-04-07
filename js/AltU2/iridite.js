@@ -335,7 +335,7 @@ addLayer("ir", {
             image() { return this.canClick() ? "resources/ships/cruiser.png" : "resources/secret.png"},
             title() { return "Cruiser" },
             description() {
-                return "x" + format(this.effect()[0]) + " to stars.<br>x" + format(this.effect()[1]) + " to singularity points.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
+                return "x" + format(this.effect()[0]) + " to stars. <small>(Ignoring Softcap)</small><br>x" + format(this.effect()[1]) + " to singularity points.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
             },
             lore() {
                 return "Fast, slim, and rapid-firing bullets. Pretty average ship ngl."

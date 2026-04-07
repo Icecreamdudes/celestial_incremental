@@ -998,6 +998,16 @@ function stagnantUpdate(time) {
                             bhAction(3, player.bh.celestialite.stun[2], false, 1, true)
                         }
                     }
+
+                    if (player.bh.celestialite.shield.gt(0)) {
+                        player.bh.celestialite.shieldDecay = player.bh.celestialite.shieldDecay.add(delta)
+                        if (player.bh.celestialite.shieldDecay.gte(player.bh.shieldDecayMax)) {
+                            player.bh.celestialite.shieldDecay = new Decimal(0)
+                            player.bh.celestialite.shield = player.bh.celestialite.shield.sub(1).max(0)
+                        }
+                    } else if (player.bh.celestialite.shieldDecay.gt(0)) {
+                        player.bh.celestialite.shieldDecay = new Decimal(0)
+                    }
                     
                     // Cycle, increment cooldowns, and trigger celestialite actions
                     for (let i = 0; i < 4; i++) {
@@ -1066,6 +1076,16 @@ function stagnantUpdate(time) {
                         if (player.bh.characters[i].stun.length >= 3 && player.bh.characters[i].stun[1].lte(0)) {
                             bhAction(i, player.bh.characters[i].stun[2], false, 1, true)
                         }
+                    }
+                    
+                    if (player.bh.characters[i].shield.gt(0)) {
+                        player.bh.characters[i].shieldDecay = player.bh.characters[i].shieldDecay.add(delta)
+                        if (player.bh.characters[i].shieldDecay.gte(player.bh.shieldDecayMax)) {
+                            player.bh.characters[i].shieldDecay = new Decimal(0)
+                            player.bh.characters[i].shield = player.bh.characters[i].shield.sub(1).max(0)
+                        }
+                    } else if (player.bh.characters[i].shieldDecay.gt(0)) {
+                        player.bh.characters[i].shieldDecay = new Decimal(0)
                     }
 
                     // Cycle through character skills

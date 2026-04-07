@@ -831,14 +831,20 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Reduced Cante's antimatter requirement.<br>
 			- Reduced late game marcel upgrade costs.<br>
 			- Buffed Geroa's orbital cannon skill.<br>
-			- Nerfed M-03's regen from 10/s->5/s.<br>
+			- Nerfed M-03's regen from 10/s->6/s.<br>
+			- Buffed Matos' damage from 6->10.<br>
 			- Increased timers for bullet hell maze attacks.<br>
+			- Black heart shields now decay at 1 every 20s.<br>
+			- Shield related skills were buffed to match the previous change.<br>
 			- Replaced generator based on normality's passive effect. (It is practically a buff)<br>
 			- Decreased the cost of the hex teaser.<br>
 			<i>(This changes nothing, you can't buy it even if you reach the cost)</i><br>
 			- Added a softcap to oil gain at 1e10,000.<br>
 			- Added a softcap to infested infinities effect 1. (at /100)<br>
-			- Made the ancient pylon effect softcap notably stronger.<br><br>
+			- Made the ancient pylon effect softcap notably stronger.<br>
+			- Nerfed moonstone's effect on rocket part gain.<br>
+			- Buffed the base formula for stars.<br>
+			- Nerfed the first space building.<br><br>
 		Bugfixes:<br>
 			- Fixed space battle boss-fights crashing the game.<br>
 			- Fixed instant cutscene text option skipping the first dialogue.<br>
@@ -852,7 +858,8 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Fixed Celestialite Static Hekaton crashing the game.<br>
 			- Fixed grass jump milestone 6 dividing eclipse tickspeed instead of multiplying.<br>
 			- Fixed generator based on normality punchcard not unlocking its relevant normality buyable.<br>
-			- Fixed the first aleph fight cutscene not pausing black heart.<br>
+			- Fixed some black heart boss cutscenes not pausing black heart.<br>
+			- Fixed the aleph fight cutscenes having the wrong requirement code.<br>
 			- Fixed nest layer not changing your music.<br>
 			- Fixed some black heart character data not being reset properly.<br><br>
 	<h3>v1.12 - Aleph Update Pt II: Nested Metal</h3><br>

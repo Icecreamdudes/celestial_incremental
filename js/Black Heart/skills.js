@@ -134,7 +134,7 @@ BHA.general_block = {
         "defenseAdd"() {return new Decimal(25).add(player.bh.skillData["general_block"].level.mul(5))}, // Multiplicative Effect
     },
     duration: new Decimal(10),
-    cooldown: new Decimal(25),
+    cooldown: new Decimal(20),
     cooldownCap: new Decimal(5),
 }
 BHA.general_poisonNeedle = {
@@ -581,7 +581,7 @@ BHA.eclipse_lightBarrier = {
     description() {
         let time = "time"
         if (new Decimal(1).add(player.bh.skillData["eclipse_lightBarrier"].level.mul(0.2).floor()).neq(1)) time = "times"
-        let str = "Soft-stuns you for " + formatTime(new Decimal(8).sub(player.bh.skillData["eclipse_lightBarrier"].level.modulo(5).div(2))) + ", then shield all players " + formatWhole(new Decimal(1).add(player.bh.skillData["eclipse_lightBarrier"].level.mul(0.2).floor())) + " " + time
+        let str = "Soft-stuns you for " + formatTime(new Decimal(6).sub(player.bh.skillData["eclipse_lightBarrier"].level.modulo(5).div(2))) + ", then shield all players " + formatWhole(new Decimal(1).add(player.bh.skillData["eclipse_lightBarrier"].level.mul(0.2).floor())) + " " + time
         return str
     },
     passiveText() {return "+" + formatSimple(player.bh.skillData["eclipse_lightBarrier"].maxLevel.div(2)) + " DEF"},
@@ -596,9 +596,9 @@ BHA.eclipse_lightBarrier = {
     type: "shield",
     target: "allPlayer",
     value() {return new Decimal(1).add(player.bh.skillData["eclipse_lightBarrier"].level.mul(0.2).floor())},
-    stun() {return ["soft", new Decimal(8).sub(player.bh.skillData["eclipse_lightBarrier"].level.modulo(5).div(2)), player.bh.skillData["eclipse_lightBarrier"].selected[1]]},
-    cooldown: new Decimal(30),
-    cooldownCap: new Decimal(10),
+    stun() {return ["soft", new Decimal(6).sub(player.bh.skillData["eclipse_lightBarrier"].level.modulo(5).div(2)), player.bh.skillData["eclipse_lightBarrier"].selected[1]]},
+    cooldown: new Decimal(20),
+    cooldownCap: new Decimal(5),
 }
 BHA.eclipse_solarRetinopathy = {
     name: "Solar Retinopathy",

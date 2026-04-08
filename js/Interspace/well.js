@@ -11,6 +11,7 @@
         lightMult: new Decimal(1),
         lightModuleEffects: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
         lightWellCycleEffectSoftcap: new Decimal(0.5),
+        lightWellCycleEffectPrismaticExponent: new Decimal(1),
         
         modules: {
             1: {
@@ -122,7 +123,13 @@
 
         // LIGHT
 
+        player.wel.lightWellCycleEffectPrismaticExponent = new Decimal(1)
+        if (player.pri.totalPrisms.gt(0)) {
+            player.wel.lightWellCycleEffectPrismaticExponent = player.wel.lightWellCycleEffectPrismaticExponent.mul(player.pri.defraction)
+        }
+
         player.wel.lightWellCycleEffectSoftcap = new Decimal(0.5)
+
 
         player.wel.lightMult = new Decimal(1)
         player.wel.lightMult = player.wel.lightMult.mul(player.wel.fountains[1].completionEffect)
@@ -131,22 +138,18 @@
 
             if (player.wel.modules[1].completions.gte(1e3)) player.wel.modules[1].completionsEffect = player.wel.modules[1].completions.div(1e3).pow(player.wel.lightWellCycleEffectSoftcap).mul(1e3).mul(0.01).add(1);
             else player.wel.modules[1].completionsEffect = player.wel.modules[1].completions.mul(0.02).add(1);
-            player.wel.modules[1].completionsEffect = player.wel.modules[1].completionsEffect.pow(0.1)
             player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[1].completionsEffect)
 
             if (player.wel.modules[2].completions.gte(1e3)) player.wel.modules[2].completionsEffect = player.wel.modules[2].completions.div(1e3).pow(player.wel.lightWellCycleEffectSoftcap).mul(1e3).mul(0.05).add(1);
             else player.wel.modules[2].completionsEffect = player.wel.modules[2].completions.mul(0.1).add(1);
-            player.wel.modules[2].completionsEffect = player.wel.modules[2].completionsEffect.pow(0.1)
             player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[2].completionsEffect)
 
             if (player.wel.modules[3].completions.gte(1e3)) player.wel.modules[3].completionsEffect = player.wel.modules[3].completions.div(1e3).pow(player.wel.lightWellCycleEffectSoftcap).mul(1e3).mul(0.01).add(1);
             else player.wel.modules[3].completionsEffect = player.wel.modules[3].completions.mul(0.01).add(1);
-            player.wel.modules[3].completionsEffect = player.wel.modules[3].completionsEffect.pow(0.1)
             player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[3].completionsEffect)
 
             if (player.wel.modules[4].completions.gte(1e3)) player.wel.modules[4].completionsEffect = player.wel.modules[4].completions.div(1e3).pow(player.wel.lightWellCycleEffectSoftcap).mul(1e3).div(1e9).add(1);
             else player.wel.modules[4].completionsEffect = player.wel.modules[4].completions.div(1e9).add(1);
-            player.wel.modules[4].completionsEffect = player.wel.modules[4].completionsEffect.pow(0.1)
             player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[4].completionsEffect)
         }
         if (hasUpgrade("wel", 14)) player.wel.lightMult = player.wel.lightMult.mul(2);
@@ -1537,7 +1540,9 @@
                     ]],
                     ]],
                     ["blank", "10px"],
-                    ["raw-html", "All light well cycle effect scaling is reduced by ^" + format(player.wel.lightWellCycleEffectSoftcap) + " after 1,000!", {color: "#ff7f00", fontSize: "16px", fontFamily: "monospace", display: (player.wel.modules[1].completions.gte(1e3) ? "" : "none !important")}],
+                    ["raw-html", "All light well cycle effect scaling is ^" + format(player.wel.lightWellCycleEffectPrismaticExponent, 3) + " due to refraction!", {color: "#ffff00", fontSize: "16px", fontFamily: "monospace", display: (player.wel.modules[1].completions.gte(1e3) ? "" : "none !important")}],
+                    ["blank", "10px"],
+                    ["raw-html", "All light well cycle effect scaling is ^" + format(player.wel.lightWellCycleEffectSoftcap, 3) + " after 1,000!", {color: "#ff7f00", fontSize: "16px", fontFamily: "monospace", display: (player.wel.modules[1].completions.gte(1e3) ? "" : "none !important")}],
                     ["blank", "25px"],
                     ["row", []],
                     ["blank", "25px"]]

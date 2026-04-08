@@ -465,6 +465,51 @@ function loadVue() {
 		`
 	})
 
+	Vue.component('ex-upgrade', {
+		props: ['layer', 'data'],
+		template: `
+		<div v-if="tmp[layer].upgrades && tmp[layer].upgrades[data]!== undefined && tmp[layer].upgrades[data].unlocked" style="display: grid">
+			<div class="exBuyableHolder" v-bind:style="[{'background-color': tmp[layer].color, 'border': '3px solid #000000bf'}, run(layers[layer].upgrades[data].style, layers[layer].upgrades[data]), {'border-radius': '13px'}]">
+				<div class="exUpgradeInfo">
+					<div class="exUpgradeInfo2">
+						<div class="exUpgradeInfo2">
+							<span v-if= "layers[layer].upgrades[data].title"><h2 v-html="run(layers[layer].upgrades[data].title, layers[layer].upgrades[data])"></h2><br></span>
+						</div>
+						<div class="exUpgradeInfo2">
+							<br><span v-bind:style="{'white-space': 'pre-line'}"><h3 v-html="run(layers[layer].upgrades[data].description, layers[layer].upgrades[data])"></h3></span>
+						</div>
+						<div class="exUpgradeInfo2">
+							<br>Cost: {{ formatWhole(tmp[layer].upgrades[data].cost) }} {{(tmp[layer].upgrades[data].currencyDisplayName ? tmp[layer].upgrades[data].currencyDisplayName : tmp[layer].resource)}}
+						</div>
+					</div>
+				</div>
+				<div class="exBuyableRow" v-bind:style="[{'border-radius': '0px 0px 10px 10px'}]">
+					<button v-bind:class="{ exUpgradeButton: true, tooltipBox: true, can: !hasUpgrade(layer, data) && tmp[layer].upgrades[data].currencyLocation[tmp[layer].upgrades[data].currencyInternalName].gte(tmp[layer].upgrades[data].cost), locked: hasUpgrade(layer, data) || !tmp[layer].upgrades[data].currencyLocation[tmp[layer].upgrades[data].currencyInternalName].gte(tmp[layer].upgrades[data].cost), bought: hasUpgrade(layer, data)}"
+					v-bind:style="[hasUpgrade(layer, data) ? {'background-color': '#77bf5f', 'color': 'black', 'border': '3px solid #0000003f'} : tmp[layer].upgrades[data].currencyLocation[tmp[layer].upgrades[data].currencyInternalName].gte(tmp[layer].upgrades[data].cost) ? {'background-color': run(layers[layer].upgrades[data].buttonColor) || white, 'color': 'black', 'border': '3px solid #0000003f'} : {'background-color': '#bf8f8f', 'color': 'black', 'border': '3px solid #0000003f'}, run(layers[layer].upgrades[data].buttonStyle)]"
+					v-on:click="if(!interval) {buyUpg(layer, data)}" :id='"upgrade-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
+					Buy</button>
+				</div>
+			</div>
+		</div>
+		`,
+		data() { return { interval: false, time: 0,}},
+		methods: {
+			start() {
+				if (!this.interval) {
+					this.interval = setInterval((function() {
+						if(this.time >= 5)
+							buyBuyable(this.layer, this.data)
+						this.time = this.time+1
+					}).bind(this), 50)}
+			},
+			stop() {
+				clearInterval(this.interval)
+				this.interval = false
+			  	this.time = 0
+			}
+		},
+	})
+
 	// data = id
 	Vue.component('bt-upgrade', {
 		props: ['layer', 'data'],
@@ -756,6 +801,56 @@ function loadVue() {
 					Buy 1</button>
 					<button v-bind:class="{ darkBuyableButton2: true, tooltipBox: true, can: tmp[layer].buyables[data].canBuy, locked: !tmp[layer].buyables[data].canBuy, bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit)}"
 					v-bind:style="player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit) ? {'background-color': '#1a3b0f', 'border': '3px solid #33751d'} : tmp[layer].buyables[data].canBuy ? {'background-color': tmp[layer].color, 'color': 'black', 'border': '3px solid #0000003f'} : {'background-color': '#361e1e', 'color': 'white', 'border': '3px solid #663737'}"
+					v-on:click="{buyMaxExBuyable(layer, data)}" :id='"buyable-" + layer + "-" + data'>
+					Buy Max</button>
+				</div>
+			</div>
+		</div>
+		`,
+		data() { return { interval: false, time: 0,}},
+		methods: {
+			start() {
+				if (!this.interval) {
+					this.interval = setInterval((function() {
+						if(this.time >= 5)
+							buyBuyable(this.layer, this.data)
+						this.time = this.time+1
+					}).bind(this), 50)}
+			},
+			stop() {
+				clearInterval(this.interval)
+				this.interval = false
+			  	this.time = 0
+			}
+		},
+	})
+
+	Vue.component('rounded-ex-buyable', {
+		props: ['layer', 'data'],
+		template: `
+		<div v-if="tmp[layer].buyables && tmp[layer].buyables[data]!== undefined && tmp[layer].buyables[data].unlocked" style="display: grid">
+			<div class="exBuyableHolder" v-bind:style="[{'background-color': tmp[layer].color, 'border': '3px solid #000000bf'}, run(layers[layer].buyables[data].style, layers[layer].buyables[data]), {'border-radius': '13px'}]">
+				<div class="exBuyableBar" v-bind:style="[{'border-radius': '10px 10px 0px 0px', 'height': '40px'}]">
+					<div class="exBuyableBarText" v-bind:style="[{'height': '33px'}]">
+						<span v-html="tmp[layer].buyables[data].purchaseLimit.eq(Infinity) ? formatWhole(player[layer].buyables[data]) : formatWhole(player[layer].buyables[data])+'/'+formatWhole(tmp[layer].buyables[data].purchaseLimit)"></span>
+					</div>
+					<div class="customBuyableBarProgress" v-bind:style="{'width': tmp[layer].buyables[data].purchaseLimit.eq(Infinity) ? '100%' : toNumber(player[layer].buyables[data].div(tmp[layer].buyables[data].purchaseLimit).mul(100))+'%',
+					'background-color': run(layers[layer].buyables[data].progressColor) || (run(layers[layer].buyables[data].style, layers[layer].buyables[data]).borderColor != undefined ? run(layers[layer].buyables[data].style, layers[layer].buyables[data]).borderColor : run(layers[layer].buyables[data].style, layers[layer].buyables[data]).backgroundColor != undefined ? run(layers[layer].buyables[data].style, layers[layer].buyables[data]).backgroundColor : tmp[layer].color)}"></div>
+				</div>
+				<div class="exBuyableInfo">
+					<div class="exBuyableInfo2">
+						<span v-if= "layers[layer].buyables[data].title"><h2 v-html="run(layers[layer].buyables[data].title, layers[layer].buyables[data])"></h2><br></span>
+						<span v-bind:style="{'white-space': 'pre-line'}" v-html="run(layers[layer].buyables[data].display, layers[layer].buyables[data])"></span>
+					</div>
+				</div>
+				<div class="exBuyableRow" v-bind:style="[{'border-radius': '0px 0px 10px 10px'}]">
+					<button v-bind:class="{ darkBuyableButton1: true, tooltipBox: true, can: tmp[layer].buyables[data].canBuy, locked: !tmp[layer].buyables[data].canBuy, bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit)}"
+					v-bind:style="[player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit) ? {'background-color': '#5e4d18', 'border': '3px solid #0000003f'} : tmp[layer].buyables[data].canBuy ? {'background-color': run(layers[layer].buyables[data].buttonColor) || '#ccc', 'color': 'black', 'border': '3px solid #0000003f'} : {'background-color': '#402424', 'color': 'white', 'border': '3px solid #0000003f'}, {'border-radius': '0px 0px 0px 10px'}, run(layers[layer].buyables[data].buttonStyle)]"
+					v-on:click="if(!interval) {player.f.mfactorMax=false; buyBuyable(layer, data)}" :id='"buyable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
+					Buy 1</button>
+					<div style="background:#0000007f;width:3px;height:40px"></div>
+					<button v-bind:class="{ darkBuyableButton2: true, tooltipBox: true, can: tmp[layer].buyables[data].canBuy, locked: !tmp[layer].buyables[data].canBuy, bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit)}"
+					v-bind:style="[player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit) ? {'background-color': '#5e4d18', 'border': '3px solid #0000003f'} : tmp[layer].buyables[data].canBuy ? {'background-color': run(layers[layer].buyables[data].buttonColor) || '#ccc', 'color': 'black', 'border': '3px solid #0000003f'} : {'background-color': '#402424', 'color': 'white', 'border': '3px solid #0000003f'}, {'border-radius': '0px 0px 10px 0px'}, run(layers[layer].buyables[data].buttonStyle)]"
 					v-on:click="{buyMaxExBuyable(layer, data)}" :id='"buyable-" + layer + "-" + data'>
 					Buy Max</button>
 				</div>

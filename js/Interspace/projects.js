@@ -495,7 +495,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>x3 light fountain speed.</small>" },
+            effectDescription() { return "<small>Unlock the pyramid.</small>" },
             cycleReq() { return new Decimal(2) },
             projectId() { return 2 },
             unlocked() { return true },

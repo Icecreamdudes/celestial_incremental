@@ -11,6 +11,9 @@
         totalPrisms: new Decimal(0),
         prismsToGet: new Decimal(0),
 
+        defraction: new Decimal(0),
+        deltaRays: new Decimal(0),
+
         fountainSpeed: new Decimal(0),
 
         fountains: {
@@ -177,7 +180,7 @@
         },
         2: {
             title() { return "<h3>Focus</h3>" },
-            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id].focused},
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.pri.prisms.gte(player.pri.fountains[this.id].prismReq) && !player.pri.fountains[this.id].focused},
             unlocked() { return true },
             onClick() {
                 player.pri.prisms = player.pri.prisms.sub(player.pri.fountains[this.id].prismReq)
@@ -200,7 +203,7 @@
         },
         3: {
             title() { return "<h3>Focus</h3>" },
-            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id].focused},
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.pri.prisms.gte(player.pri.fountains[this.id].prismReq) && !player.pri.fountains[this.id].focused},
             unlocked() { return true },
             onClick() {
                 player.pri.prisms = player.pri.prisms.sub(player.pri.fountains[this.id].prismReq)
@@ -223,7 +226,7 @@
         },
         4: {
             title() { return "<h3>Focus</h3>" },
-            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id].focused},
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.pri.prisms.gte(player.pri.fountains[this.id].prismReq) && !player.pri.fountains[this.id].focused},
             unlocked() { return true },
             onClick() {
                 player.pri.prisms = player.pri.prisms.sub(player.pri.fountains[this.id].prismReq)
@@ -245,7 +248,7 @@
             },
         },
         101: {
-            title() { return "<h2>Form your light into Prisms.</h2><br>Req: 1e15 Light" },
+            title() { return "<h2>Form your light into prisms.</h2><br>Req: 1e15 Light" },
             canClick() { return player.wel.light.gte(1e15)},
             unlocked() { return true },
             onClick() {
@@ -266,7 +269,7 @@
             },
         },
         102: {
-            title() { return "<h3>Respec Interspace Focus</h3><br><small>(you won't get your prisms back! don't be an idiot!)</small>" },
+            title() { return "<h3>Respec Interspace Focus</h3><br><small>(you won't get your prisms back! don't be silly!)</small>" },
             canClick() { return player.prj.focused.gt(0)},
             unlocked() { return true },
             onClick() {
@@ -473,7 +476,7 @@
     },
     microtabs: {
         stuff: {
-            "Prisms": {
+            "Reset": {
                 buttonStyle() { return { color: "white", borderRadius: "8px"} },
                 unlocked() { return true },
                 content() {
@@ -488,26 +491,50 @@
                         ], {background: "#335966", borderRadius: "13px", padding: "3px", width: "612px"}],
                         ["blank", "25px"],
                         ["clickable", 101],
+                        ["blank", "25px"],
+                    ]
+                    return look
+                }
+            },
+            "Prismatics": {
+                buttonStyle() { return { color: "white", borderRadius: "8px"} },
+                unlocked() { return player.pri.totalPrisms.gt(0) },
+                content() {
+                    let look = [
+                        ["blank", "25px"],
                         ["style-column", [
-                            ["blank", "25px"],
-                            ["raw-html", "You are gaining <h3>" + format(player.pri.prisms.pow(2).div(10).mul(player.prj.projectSpeed)) + "</h3> fountain progress /s.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                            ["raw-html", "<small>Total prisms give a base progress rate of " + format(player.pri.fountainSpeed) + "</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                            ["raw-html", "You are focusing on " + formatWhole(player.prj.focused) + "/" + formatWhole(player.prj.maxFocused) + " interspace projects.", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
-                            ["blank", "25px"],
-                            ["style-row", [
-                                makePrismFountain(1),
-                                ["blank", "6px", {width: "6px"}],
-                                makePrismFountain(2),
-                            ]],
+                            ["top-column", [
+                                ["raw-html", "You have <h3>" + format(player.pri.prismatics) + "</h3> fountain progress /s.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                            ], {background: "#0000003f", border: "3px solid #4d9999", borderRadius: "10px", width: "600px", height: "600px", padding: "3px"}],                   
+                        ], {border: "3px solid #335966", borderRadius: "13px", width: "612px"}],
+                        ["blank", "25px"]
+                    ]
+                    return look
+                }
+            },
+            "Fountains": {
+                buttonStyle() { return { color: "white", borderRadius: "8px"} },
+                unlocked() { return player.pri.totalPrisms.gt(0) },
+                content() {
+                    let look = [
+                        ["blank", "25px"],
+                        ["raw-html", "You are gaining <h3>" + format(player.pri.prisms.pow(2).div(10).mul(player.prj.projectSpeed)) + "</h3> fountain progress /s.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "<small>Total prisms give a base progress rate of " + format(player.pri.fountainSpeed) + "</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "You are focusing on " + formatWhole(player.prj.focused) + "/" + formatWhole(player.prj.maxFocused) + " interspace projects.", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
+                        ["blank", "25px"],
+                        ["style-row", [
+                            makePrismFountain(1),
                             ["blank", "6px", {width: "6px"}],
-                            ["style-row", [
-                                hasMilestone("prj", 203) ? makePrismFountain(3) : null,
-                                ["blank", "6px", {width: "6px"}],
-                                hasUpgrade("wel", 206) ? makePrismFountain(4) : null,
-                            ]],
-                            ["blank", "25px"],
-                            ["clickable", 102],
-                        ], {display: player.pri.totalPrisms.gt(0) ? "" : "none !important"}],
+                            makePrismFountain(2),
+                        ]],
+                        ["blank", "6px", {width: "6px"}],
+                        ["style-row", [
+                            hasMilestone("prj", 203) ? makePrismFountain(3) : null,
+                            ["blank", "6px", {width: "6px"}],
+                            hasUpgrade("wel", 206) ? makePrismFountain(4) : null,
+                        ]],
+                        ["blank", "25px"],
+                        ["clickable", 102],
                         ["blank", "25px"],
                     ]
                     return look

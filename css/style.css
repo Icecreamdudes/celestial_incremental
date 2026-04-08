@@ -357,6 +357,29 @@ h1, h2, h3, b, input {
 	color: white;
 }
 
+.exUpgradeButton {
+	width: 100%;
+	height: 100%;
+	border: 0px;
+	border-radius: 0 0 10px 10px;
+	color: white;
+}
+
+.exUpgradeInfo {
+	width: 100%;
+	min-height: calc(80% - 43px);
+	display: flex;
+	flex: 1;
+	vertical-align: center;
+	border-bottom: 3px solid;
+	border-color: inherit;
+}
+
+.exUpgradeInfo2 {
+	margin: auto;
+	padding: 1px 6px 1px 6px;
+}
+
 .jinxTitle {
 	position: absolute;
 	top: 4px;

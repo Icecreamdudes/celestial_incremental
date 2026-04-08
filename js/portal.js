@@ -901,9 +901,9 @@
                             ["style-column", [
                                 ["style-column", [
                                     ["raw-html", "Universe δ", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                                ], {width: "200px", height: "47px", borderBottom: "3px solid white"}],
-                                ["clickable", 403],
-                            ], () => {return uniShown("UB") ? {width: "200px", height: "100px", background: "#cc6699", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
+                                ], {width: "200px", height: "47px", borderBottom: "3px solid #804060"}],
+                                ["clickable", 501],
+                            ], () => {return uniShown("UD") ? {width: "200px", height: "100px", background: "#de6fa6", border: "3px solid #804060", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
                         ]],
                     ], {background: "rgba(0,0,0,0.3)", border: "3px solid white", borderRadius: "15px", padding: "10px"}],
                 ],

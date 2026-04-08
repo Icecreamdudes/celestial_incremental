@@ -275,7 +275,7 @@ function updateStyles() {
 			layerBG = "linear-gradient(0deg, #2e152e 0%, #1f0e1f 100%)"
 			break;
 		case "pri":
-			layerBG = "linear-gradient(0deg, #303440 0%, #17191f 100%)"
+			layerBG = "linear-gradient(0deg, #203040 0%, #0f171f 100%)"
 			break;
 		case "blu":
 			layerBG = "linear-gradient(0deg, #282040 0%, #130f1f 100%)"

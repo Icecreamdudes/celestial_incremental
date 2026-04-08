@@ -233,51 +233,6 @@
                 return look
             }
         },
-        13: {
-            title() { return "Coin Clipper" },
-            canClick() { return player.cf.coinExploit >= 0 },
-            tooltip() { return "<h5>Resets flip count, heads, tails, and heads and tails buyables. Use it when you screw up. (You suck at this game)" },
-            unlocked() { return true },
-            onClick() {
-                player.za.chancePoints = new Decimal(0)
-
-                player.cf.coinsFlipped = new Decimal(0)
-                player.cf.heads = new Decimal(0)
-                player.cf.tails = new Decimal(0)
-
-                try {
-                    if (typeof window !== 'undefined' && !window.__cfInitDone) {
-                        // clear any leftover timeout id (might be present from a saved object)
-                        if (player.cf && player.cf._flipTimeoutId) {
-                            try { clearTimeout(player.cf._flipTimeoutId) } catch (e) {}
-                            player.cf._flipTimeoutId = null
-                        }
-
-                        // reset runtime flip state so the coin isn't mid-flip on a reload
-                        if (player.cf) {
-                            player.cf.flipping = false
-                            player.cf.flipTimer = new Decimal(0)
-                            player.cf.coinHeads = true
-                            player.cf._finalSide = null
-                        }
-
-                        window.__cfInitDone = true
-                    }
-                } catch (e) { console.error("cf update init error:", e) }
-
-                player.cf.buyables[21] = new Decimal(0)
-                player.cf.buyables[22] = new Decimal(0)
-                player.cf.buyables[23] = new Decimal(0)
-                player.cf.buyables[31] = new Decimal(0)
-                player.cf.buyables[32] = new Decimal(0)
-                player.cf.buyables[33] = new Decimal(0)
-                player.cf.buyables[34] = new Decimal(0)
-            },
-            onHold() {player.cf.coinExploit = player.cf.coinExploit + 0.05},
-            style() { 
-                return { width: '100px', "min-height": '100px', borderRadius: "15px 15px 15px 15px", border: "3px solid #9b5a48ff", backgroundColor: "#744335ff" }
-            },
-        },
     },
     coinFlip() {
         if (player.cf.flipLength.gt(0.2))

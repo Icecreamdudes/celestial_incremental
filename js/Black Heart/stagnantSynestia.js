@@ -213,7 +213,7 @@ addLayer("stagnantSynestia", {
             canAfford() {return this.currency().gte(this.cost())},
             display() {
                 return "<h3>Iridian Boost</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
-                    Boost star gain\n\
+                    Boost star gain (Ignoring softcap)\n\
                     Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Temporal Dust"
             },
@@ -304,7 +304,7 @@ addLayer("stagnantSynestia", {
                         ["raw-html", () => {return "Boosts check back xp by x" + formatSimple(player.stagnantSynestia.comboEffect, 2)}, {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
                     ], {width: "272px", height: "25px"}],
                     ["style-column", [
-                        ["raw-html", () => {return "<p style='line-height:1.2'>Milestones multiply time speed during respawn by x" + formatSimple(player.stagnantSynestia.milestoneEffect, 2)}, {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "<p style='line-height:1.2'>Milestones multiply tickspeed during celestialite respawn by x" + formatSimple(player.stagnantSynestia.milestoneEffect, 2)}, {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
                     ], {width: "272px", height: "47px", background: "var(--layerBackground)", borderTop: "3px solid var(--regBorder)"}],
                 ], {width: "272px", height: "114px", background: "var(--miscButtonHover)", borderBottom: "3px solid var(--regBorder)"}],
                 ["theme-scroll-column", [
@@ -372,7 +372,12 @@ BHC.staticAlpha = {
             type: "function",
             target: "allPlayer",
             onTrigger(index, slot, target, magnitude) {
-                bulletHell({"bulletRain": {bulletPerSec: 10+(magnitude*2)}}, {width: 800, height: 500, duration: 7+magnitude, subArena: true, subWidth: 300-(magnitude*20), subHeight: 300-(magnitude*20)})
+                let random = Math.random()
+                if (random < 0.5) {
+                    bulletHell({"bulletRain": {bulletPerSec: 10+(magnitude*2)}}, {width: 800, height: 500, duration: 7+magnitude, subArena: true, subWidth: 300-(magnitude*20), subHeight: 300-(magnitude*20)})
+                } else {
+                    bulletHell({"bulletRain": {bulletPerSec: 4+magnitude, bulletRadius: 18+(magnitude*2)}}, {width: 250, height: 250, duration: 7+magnitude})
+                }
             },
             cooldown: new Decimal(5),
         },
@@ -417,7 +422,12 @@ BHC.staticBeta = {
             type: "function",
             target: "allPlayer",
             onTrigger(index, slot, target, magnitude) {
-                bulletHell({"knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 2+(magnitude/8), knifePerSec: 2+(magnitude/8)}}, {width: 500, height: 300, duration: 7+magnitude})
+                let random = Math.random()
+                if (random < 0.5) {
+                    bulletHell({"knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 2+(magnitude/8), knifePerSec: 2+(magnitude/8)}}, {width: 500, height: 300, duration: 7+magnitude})
+                } else {
+                    bulletHell({"radialKnifeBurstAttack": {knifeLength: 64, knifeWidth: 16, burstInterval: 1500-(magnitude*100), bulletsPerBurst: 5, enemySpeed: 3+(magnitude/8)}}, {width: 400, height: 400, duration: 7+magnitude})
+                }
             },
             cooldown: new Decimal(6),
         },
@@ -471,7 +481,12 @@ BHC.staticGamma = {
             type: "function",
             target: "allPlayer",
             onTrigger(index, slot, target, magnitude) {
-                bulletHell({"diamondAttack": {diamondAmount: 1, intervalDiv: 1+(magnitude/10)}}, {width: 100, height: 100, duration: 7+magnitude})
+                let random = Math.random()
+                if (random < 0.5) {
+                    bulletHell({"diamondAttack": {diamondAmount: 1, intervalDiv: 0.75+(magnitude/8)}}, {width: 100, height: 100, duration: 7+magnitude})
+                } else {
+                    bulletHell({"diamondAttack": {diamondAmount: 1, diamondRadius: 50, bulletRadius: 15, enemySpeed: 3+(magnitude/5), intervalDiv: 0.75+(magnitude/8)}}, {width: 100, height: 100, duration: 7+magnitude})
+                }
             },
             cooldown: new Decimal(9),
         },
@@ -507,7 +522,8 @@ BHC.staticDelta = {
             type: "function",
             target: "allPlayer",
             onTrigger(index, slot, target, magnitude) {
-                bulletHell({"bulletRain": {bulletPerSec: 4+magnitude}, "inverseRain": {bulletPerSec: 4+magnitude}}, {duration: 7+magnitude})
+                let speedDist = 3 * Math.random()
+                bulletHell({"bulletRain": {bulletPerSec: (4+speedDist)*((magnitude/4)+1), enemySpeed: 3+(Math.random()*2)}, "inverseRain": {bulletPerSec: (4-speedDist)*((magnitude/4)+1), enemySpeed: 3+(Math.random()*2)}}, {duration: 7+magnitude})
             },
             cooldown: new Decimal(3.5),
         },
@@ -561,7 +577,12 @@ BHC.staticEpsilon = {
             type: "function",
             target: "allPlayer",
             onTrigger(index, slot, target, magnitude) {
-                bulletHell({"knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 6, knifePerSec: 1+(magnitude/5)}}, {duration: 10+(magnitude*2), start: "left", subArena: true, subWidth: 250, subHeight: 500, subMove: "right", subSpeed: 0.5})
+                let random = Math.random()
+                if (random < 0.5) {
+                    bulletHell({"knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 6, knifePerSec: 1+(magnitude/5)}}, {duration: 10+(magnitude*2), start: "left", subArena: true, subWidth: 250, subHeight: 500, subMove: "right", subSpeed: 0.5})
+                } else {
+                    bulletHell({"knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 5, knifePerSec: 1+(magnitude/5)}}, {duration: 10+(magnitude*2), subArena: true, subWidth: 250, subHeight: 250, subSpeed: 0.5})
+                }
             },
             cooldown: new Decimal(10),
         },
@@ -597,7 +618,8 @@ BHC.staticZeta = {
             type: "function",
             target: "allPlayer",
             onTrigger(index, slot, target, magnitude) {
-                bulletHell({"movingCircleRadialBurstAttack": {circleAmount: 3, burstInterval: 1300-(magnitude*100), bulletsPerBurst: 6, enemySpeed: 3, bulletSpeed: 3}}, {duration: 7+magnitude})
+                let speedDist = 2 * Math.random()
+                bulletHell({"movingCircleRadialBurstAttack": {circleAmount: Math.round(4+speedDist), burstInterval: 1300-(magnitude*100), bulletsPerBurst: Math.round(4-speedDist), enemySpeed: 3, bulletSpeed: 3}}, {duration: 7+magnitude})
             },
             cooldown: new Decimal(5),
         },
@@ -651,7 +673,12 @@ BHC.staticEta = {
             type: "function",
             target: "allPlayer",
             onTrigger(index, slot, target, magnitude) {
-                bulletHell({"bouncingDiamond": {diamondCount: 5+magnitude, enemySpeed: 3}}, {width: 700, height: 700, duration: 31-magnitude, timed: true, cellSize: 50, start: "cell", goal: "cell"})
+                let random = Math.random()
+                if (random < 0.5) {
+                    bulletHell({"bouncingDiamond": {diamondCount: 5+magnitude, enemySpeed: 3}}, {width: 600, height: 600, duration: 62-(magnitude*2), timed: true, cellSize: 50, start: "cell", goal: "cell"})
+                } else {
+                    bulletHell({"diamondAttack": {diamondAmount: 1, bulletRadius: 8, enemySpeed: 3+(magnitude/5), intervalDiv: 0.75+(magnitude/8)}}, {width: 600, height: 600, duration: 62-(magnitude*2), timed: true, cellSize: 50, start: "cell", goal: "cell"})
+                }
             },
             cooldown: new Decimal(10),
         },
@@ -687,7 +714,12 @@ BHC.staticTheta = {
             type: "function",
             target: "allPlayer",
             onTrigger(index, slot, target, magnitude) {
-                bulletHell({"centerSpiralAttack": {spiralAngle: 0, spiralRate: 0.65, spiralInterval: 55-(magnitude*5), radialStart: 0, bulletSpeed: 4, spiralBullets: true}, "centerSingleAttack": {bulletSpeed: 6, shootInterval: 800-(magnitude*50)}}, {start: "left", height: 700, duration: 7+magnitude})
+                let random = Math.random()
+                if (random < 0.5) {
+                    bulletHell({"centerSpiralAttack": {spiralAngle: 0, spiralRate: 0.65, spiralInterval: 55-(magnitude*5), radialStart: 0, bulletSpeed: 4, spiralBullets: true}, "centerSingleAttack": {bulletSpeed: 6, shootInterval: 650-(magnitude*50), bulletRadius: 20}}, {start: "left", height: 700, duration: 7+magnitude})
+                } else {
+                    bulletHell({"centerSpiralAttack": {spiralAngle: 0, spiralRate: 0.65, spiralInterval: 55-(magnitude*5), radialStart: 0, bulletSpeed: 4, spiralBullets: true}, "centerSpreadAttack": {bulletSpeed: 6, spreadInterval: 1000-(magnitude*100), spreadCount: 4, spreadAngle: Math.PI/3}}, {start: "left", height: 700, duration: 7+magnitude})
+                }
             },
             cooldown: new Decimal(6),
         },
@@ -741,7 +773,12 @@ BHC.staticIota = {
             type: "function",
             target: "allPlayer",
             onTrigger(index, slot, target, magnitude) {
-                bulletHell({"bombAttack": {bombsPerSecond: 1+(magnitude/8), bombFallSpeed: 4, miniBombCount: 2, miniBombSpeed: 2, miniBombDelay: 600, bulletCount: 8, bulletSpeed: 2}}, {duration: 7+magnitude})
+                let random = Math.random()
+                if (random < 0.5) {
+                    bulletHell({"bombAttack": {bombsPerSecond: 1+(magnitude/8), bombFallSpeed: 4, miniBombCount: 2, miniBombSpeed: 2, miniBombDelay: 600, bulletCount: 8, bulletSpeed: 2}}, {duration: 7+magnitude})
+                } else {
+                    bulletHell({"bombAttack": {bombsPerSecond: 0.5+(magnitude/10), bombFallSpeed: 4, miniBombCount: 3, miniBombSpeed: 5, miniBombDelay: 600, bulletCount: 5, bulletSpeed: 3}, "bulletRain": {bulletPerSec: 4+magnitude}}, {duration: 7+magnitude})
+                }
             },
             cooldown: new Decimal(12),
         },
@@ -952,7 +989,7 @@ BHC.staticHekaton = {
             onTrigger(index, slot, target, magnitude) {
                 let random = Math.random()
                 if (random < 0.33) {
-                    bulletHell({"centerIcon": {locX: 600, locY: 250, radius: 64, fillColor: "#0091DC", strokeColor: "#094394", symbol: "⧖"}, "centerSpiralAttack": {locX: 600, locY: 250, spiralAngle: 0, spiralRate: 0.65, spiralInterval: 26-(magnitude*2), radialStart: 64, bulletSpeed: 6, spiralBullets: true}}, {duration: 10+(magnitude*2)})
+                    bulletHell({"centerIcon": {locX: 600, locY: 250, radius: 64, fillColor: "#0091DC", strokeColor: "#094394", symbol: "⧖"}, "centerSpiralAttack": {locX: 600, locY: 250, spiralAngle: 0, spiralRate: 0.65, spiralInterval: 22-(magnitude*2), radialStart: 64, bulletSpeed: 6, spiralBullets: true}}, {duration: 10+(magnitude*2)})
                 } else if (random < 0.66) {
                     bulletHell({"chargingIcon": {locX: 600, locY: 250, radius: 64, fillColor: "#0091DC", strokeColor: "#094394", symbol: "⧖", enemySpeed: 5, burstBullets: 3, burstViolence: 0.5, lungeTimer: 0, lungeCooldown: 0, lastTick: false}}, {duration: 10+(magnitude*2)})
                 } else {
@@ -981,7 +1018,7 @@ BHC.staticHekaton = {
             name: "Blood Buzz",
             passive: true,
             constantType: "effect",
-            target: "celestialite",
+            constantTarget: "celestialite",
             properties: {
                 "agilityAdd"() {return Decimal.sub(1, player.bh.celestialite.health.div(player.bh.celestialite.maxHealth)).mul(150)},
             },

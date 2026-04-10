@@ -483,6 +483,7 @@ addLayer("tad", {
         player.tad.altInfinities.infected.effect2 = amt7.add(1).log(10).div(20).add(1)
 
         player.tad.altInfinities.infested.effect1 = amt8.add(1).log(10).div(2).add(1).pow(2)
+        if (player.tad.altInfinities.infested.effect1.gt(100)) player.tad.altInfinities.infested.effect1 = player.tad.altInfinities.infested.effect1.div(100).pow(0.2).mul(100)
         player.tad.altInfinities.infested.effect2 = amt8.add(1).log(10).div(10).add(1)
 
         // HIGHEST ALTERNATE INFINITIES AND MILESTONES
@@ -573,9 +574,16 @@ addLayer("tad", {
         },
         6: {
             title: "x10",
-            canClick() {return player.tad.highestCap.mul(10).gte(player.tad.domainCap.mul(10))},
+            canClick() {
+                if (player.alephsChamber.milestone[25] > 0) return player.tad.highestCap.mul(1e5).gte(player.tad.domainCap.mul(10))
+                return player.tad.highestCap.mul(10).gte(player.tad.domainCap.mul(10))
+            },
             unlocked: true,
-            tooltip() {return !this.canClick() ? "Need to beat " + formatWhole(player.tad.highestCap.mul(10)) + " cap first!" : ""},
+            tooltip() {
+                if (this.canClick()) return ""
+                if (player.alephsChamber.milestone[25] > 0) return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e5)) + " cap first!"
+                return "Need to beat " + formatWhole(player.tad.highestCap.mul(10)) + " cap first!"
+            },
             onClick() {
                 player.tad.domainCap = player.tad.domainCap.mul(10).floor()
                 layers.tad.domainReset(10)
@@ -590,9 +598,16 @@ addLayer("tad", {
         },
         7: {
             title: "x1e5",
-            canClick() {return player.tad.highestCap.mul(10).gte(player.tad.domainCap.mul(1e5))},
+            canClick() {
+                if (player.alephsChamber.milestone[25] > 0) return player.tad.highestCap.mul(1e5).gte(player.tad.domainCap.mul(1e5))
+                return player.tad.highestCap.mul(10).gte(player.tad.domainCap.mul(1e5))
+            },
             unlocked: true,
-            tooltip() {return !this.canClick() ? "Need to beat " + formatWhole(player.tad.highestCap.mul(10)) + " cap first!" : ""},
+            tooltip() {
+                if (this.canClick()) return ""
+                if (player.alephsChamber.milestone[25] > 0) return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e9)) + " cap first!"
+                return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e5)) + " cap first!"
+            },
             onClick() {
                 player.tad.domainCap = player.tad.domainCap.mul(1e5).floor()
                 layers.tad.domainReset(10)
@@ -607,9 +622,16 @@ addLayer("tad", {
         },
         8: {
             title: "x1e25",
-            canClick() {return player.tad.highestCap.mul(10).gte(player.tad.domainCap.mul(1e25))},
+            canClick() {
+                if (player.alephsChamber.milestone[25] > 0) return player.tad.highestCap.mul(1e5).gte(player.tad.domainCap.mul(1e25))
+                return player.tad.highestCap.mul(10).gte(player.tad.domainCap.mul(1e25))
+            },
             unlocked: true,
-            tooltip() {return !this.canClick() ? "Need to beat " + formatWhole(player.tad.highestCap.mul(10)) + " cap first!" : ""},
+            tooltip() {
+                if (this.canClick()) return ""
+                if (player.alephsChamber.milestone[25] > 0) return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e29)) + " cap first!"
+                return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e25)) + " cap first!"
+            },
             onClick() {
                 player.tad.domainCap = player.tad.domainCap.mul(1e25).floor()
                 layers.tad.domainReset(10)

@@ -291,7 +291,7 @@
             currency() { return player.dn.normality},
             pay(amt) { player.dn.normality = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
-            unlocked() { return getLevelableTier("pu", 209, true) },
+            unlocked() { return getLevelableTier("pu", 210, true) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {

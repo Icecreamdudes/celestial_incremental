@@ -149,7 +149,7 @@ addLayer("se", {
         },
         11: {
             title() { return "A0" },
-            tooltip() { return "Visited " + formatWhole(player.se.starsExploreCount[0][0].min(100)) + "/100 times.<br>Boosts star gain by x" + format(player.se.starsExploreEffect[0][0]) + "." },
+            tooltip() { return "Visited " + formatWhole(player.se.starsExploreCount[0][0].min(100)) + "/100 times.<br>Boosts star gain by x" + format(player.se.starsExploreEffect[0][0]) + ".<br><small>(Ignoring Softcap)</small>" },
             canClick() { 
                 return (player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(1)) && !player.se.currentlyTravelling || (player.se.currentPosition[0].eq(1) && player.se.currentPosition[1].eq(0)) && !player.se.currentlyTravelling
             },

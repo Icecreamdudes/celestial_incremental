@@ -411,6 +411,7 @@ addLayer("achievements", {
             image: "resources/achievements/3_02.png",
             tooltip: "<h3>Kept Dimensions</h3><hr style='margin-bottom:4px'>Buy a Dimboost Reserve.",
             color: "#b2d8d8",
+            complete() {return getBuyableAmount("ta", 38).gte(1)},
             unlocked: true,
         },
         203: {
@@ -540,6 +541,7 @@ addLayer("achievements", {
             image: "resources/achievements/3_19.png",
             tooltip: "<h3>Compress!</h3><hr style='margin-bottom:4px'>Do your first<br>compression reset.",
             color: "#b2d8d8",
+            complete() {return player.tad.altInfinities.disfigured.milestone.gte(3)},
             unlocked: true,
         },
         220: {
@@ -554,6 +556,7 @@ addLayer("achievements", {
             image: "resources/achievements/3_21.png",
             tooltip: "<h3>Infinity Conversion</h3><hr style='margin-bottom:4px'>Create an alternative infinity.<br><br>Reward: Increase matter gain by 20%.",
             color: "#b2d8d8",
+            complete() {return player.tad.altInfinities.broken.amount.gte(1) || player.tad.altInfinities.shattered.amount.gte(1) || player.tad.altInfinities.fragmented.amount.gte(1)},
             unlocked: true,
             marked: true,
         },
@@ -567,7 +570,7 @@ addLayer("achievements", {
         223: {
             name: "Seriously?",
             image: "resources/achievements/3_23.png",
-            tooltip: "<h3>Seriously?</h3><hr style='margin-bottom:4px'>Reach negative infinity without<br>any 7th or 8th dimensions.<br><br>Reward: Start with 100 antimatter.",
+            tooltip: "<h3>Seriously?</h3><hr style='margin-bottom:4px'>Reach negative infinity without<br>any 7th or 8th dimensions.<br><br>Reward: 1st - 6th dimensions are<br>3% stronger.",
             color: "#b2d8d8",
             unlocked: true,
             marked: true,
@@ -577,6 +580,7 @@ addLayer("achievements", {
             image: "resources/achievements/3_24.png",
             tooltip: "<h3>Goodbye, Friend...</h3><hr style='margin-bottom:4px'>Kill Tav.",
             color: "#b2d8d8",
+            complete() {return player.in.unlockedBreak},
             unlocked: true,
         },
     },

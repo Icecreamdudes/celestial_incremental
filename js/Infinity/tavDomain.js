@@ -954,6 +954,7 @@ addLayer("tad", {
             },
             unlocked: true,
             onClick() {
+                if (!hasAchievement("achievements", 224)) completeAchievement("achievements", 224)
                 player.in.unlockedBreak = true
                 player.tab = "po"
                 player.subtabs["po"]["stuff"] = "Otherworldly Features"

@@ -737,7 +737,7 @@ addLayer("pet", {
         let abilityTimeDecrease = new Decimal(1)
         abilityTimeDecrease = abilityTimeDecrease.mul(player.dv.timeDrainRate)
         if (getLevelableTier("pu", 303, true)) abilityTimeDecrease = abilityTimeDecrease.div(levelableEffect("pu", 303)[0])
-        if (hasMilestone("dgj", 16)) abilityTimeDecrease = abilityTimeDecrease.mul(player.dgj.milestone3Effect)
+        if (hasMilestone("dgj", 16)) abilityTimeDecrease = abilityTimeDecrease.div(player.dgj.milestone3Effect)
         player.pet.legPetTimers[0].current = player.pet.legPetTimers[0].current.sub(abilityTimeDecrease.mul(delta))
 
         player.pet.legPetTimers[1].current = player.pet.legPetTimers[1].current.sub(delta)

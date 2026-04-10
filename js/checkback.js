@@ -1313,6 +1313,7 @@ addLayer("cb", {
             unlocked() { return true },
             tooltip() { return player.cb.highestLevel.gte(250) ? "Paragon Shard Rarity: 10%" : ""},
             onClick() {
+                if (!hasAchievement("achievements", 208)) completeAchievement("achievements", 208)
                 player.cb.XPBoost = player.cb.XPBoost.add(player.cb.boostTimers[0].base)
                 player.cb.boostTimers[0].current = player.cb.boostTimers[0].max
 
@@ -1341,6 +1342,7 @@ addLayer("cb", {
             unlocked() { return player.cb.highestLevel.gte(666) },
             tooltip() { return player.cb.highestLevel.gte(250) ? "Paragon Shard Rarity: 25%" : ""},
             onClick() {
+                if (!hasAchievement("achievements", 208)) completeAchievement("achievements", 208)
                 player.cb.XPBoost = player.cb.XPBoost.add(player.cb.boostTimers[1].base)
                 player.cb.boostTimers[1].current = player.cb.boostTimers[1].max
 
@@ -1369,6 +1371,7 @@ addLayer("cb", {
             unlocked() { return hasUpgrade("stagnantSynestia", 5)},
             tooltip() { return player.cb.highestLevel.gte(250) ? "Paragon Shard Rarity: 50%" : ""},
             onClick() {
+                if (!hasAchievement("achievements", 208)) completeAchievement("achievements", 208)
                 player.cb.XPBoost = player.cb.XPBoost.add(player.cb.boostTimers[2].base)
                 player.cb.boostTimers[2].current = player.cb.boostTimers[2].max
 

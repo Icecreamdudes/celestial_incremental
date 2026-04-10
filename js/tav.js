@@ -1127,6 +1127,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 202)) completeAchievement("achievements", 202)
                 if (mult != true && !hasUpgrade("bi", 104)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -1875,7 +1876,6 @@ addLayer("revc", {
             unlocked() { return true },
             onClick() {
                 player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
-                if (!hasAchievement("achievements", 201)) completeAchievement("achievements", 201)
                 player.tab = "ad"
                 player.revc.minipause = new Decimal(3)
             },
@@ -1885,6 +1885,7 @@ addLayer("revc", {
     reverseCrunch(){
         player.ta.reachedNegativeInfinity = false
         player.ta.negativeInfinityPause = new Decimal(5)
+        if (!hasAchievement("achievements", 201)) completeAchievement("achievements", 201)
     },
     bars: {},
     upgrades: {},

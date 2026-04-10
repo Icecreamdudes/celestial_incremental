@@ -1666,6 +1666,7 @@ var doNotCallTheseFunctionsEveryTick = [
 	"slotReset", "enhanceReset",
 	"diamondDustReset",
 	"openChest",
+	"checkAchs",
 ]
 
 function getStartPoints(){

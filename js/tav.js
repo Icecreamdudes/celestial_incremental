@@ -136,6 +136,7 @@
                 player.tab = "revc"
             }
             else if (hasUpgrade("ta", 12) || player.ta.negativeInfinityPoints.gte(1000)) {
+                layers.revc.checkAchs();
                 layers.revc.reverseCrunch()
                 player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
 
@@ -324,6 +325,7 @@
             canClick() { return player.ad.antimatter.gte('1e308') },
             unlocked() { return true },
             onClick() {
+                layers.revc.checkAchs();
                 player.ad.revCrunchPause = new Decimal(6)
                 player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
             },
@@ -1890,6 +1892,7 @@ addLayer("revc", {
             canClick() { return true },
             unlocked() { return true },
             onClick() {
+                layers.revc.checkAchs();
                 player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
                 player.tab = "ad"
                 player.revc.minipause = new Decimal(3)
@@ -1898,7 +1901,11 @@ addLayer("revc", {
         },
     },
     reverseCrunch(){
-        
+        player.ta.reachedNegativeInfinity = false
+        player.ta.negativeInfinityPause = new Decimal(5)
+        if (!hasAchievement("achievements", 201)) completeAchievement("achievements", 201)
+    },
+    checkAchs() {
         if (getBuyableAmount("ad", 18).lte(0)) {
             if (getBuyableAmount("ad", 17).lte(0)) {
                 if (!hasAchievement("achievements", 223)) completeAchievement("achievements", 223)
@@ -1908,10 +1915,6 @@ addLayer("revc", {
         if (getBuyableAmount("ad", 3).lte(0)) {
             if (!hasAchievement("achievements", 209)) completeAchievement("achievements", 209)
         }
-        
-        player.ta.reachedNegativeInfinity = false
-        player.ta.negativeInfinityPause = new Decimal(5)
-        if (!hasAchievement("achievements", 201)) completeAchievement("achievements", 201)
     },
     bars: {},
     upgrades: {},

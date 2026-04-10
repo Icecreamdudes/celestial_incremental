@@ -496,6 +496,9 @@ addLayer("tad", {
             }
             if (player.tad.altInfinities[i].amount.gt(player.tad.altInfinities[i].highest)) player.tad.altInfinities[i].highest = player.tad.altInfinities[i].amount
         }
+
+        // CHECK FOR ACHIEVEMENTS
+        if (!hasAchievement("achievements", 215) && hasUpgrade("tad", 115)) completeAchievement("achievements", 215)
     },
     clickables: {
         1: {

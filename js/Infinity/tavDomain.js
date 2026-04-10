@@ -671,6 +671,7 @@ addLayer("tad", {
             canClick() { return player.tad.compressionGain.gte(1)},
             unlocked: true,
             onClick() {
+                if (!hasAchievement("achievements", 219)) completeAchievement("achievements", 219)
                 player.tad.compression = player.tad.compression.add(player.tad.compressionGain)
                 player.tad.compressionTotal = player.tad.compressionTotal.add(player.tad.compressionGain)
                 // RESET

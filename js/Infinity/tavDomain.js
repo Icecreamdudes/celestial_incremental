@@ -199,6 +199,7 @@ addLayer("tad", {
         player.tad.matterBase = player.tad.matterBase.add(buyableEffect("tad", 203))
 
         player.tad.matterGain = player.tad.matterBase
+        if (hasAchievement("achievements", 221)) player.tad.matterGain = player.tad.matterGain.mul(1.2)
         if (hasUpgrade("tad", 111)) player.tad.matterGain = player.tad.matterGain.mul(2)
         if (hasUpgrade("tad", 113)) player.tad.matterGain = player.tad.matterGain.mul(getBuyableAmount("tad", 11).mul(player.tad.accumulationMult).add(1))
         if (hasUpgrade("tad", 123)) player.tad.matterGain = player.tad.matterGain.mul(getBuyableAmount("tad", 12).mul(player.tad.accumulationMult).add(1))
@@ -822,6 +823,7 @@ addLayer("tad", {
                 } else {
                     player.tad.altSelection = "broken"
                 }
+                if (!hasAchievement("achievements", 221)) completeAchievement("achievements", 221)
             },
             style() {
                 let look = {width: "240px", minHeight: "70px", fontSize: "9px", lineHeight: "0.9", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px"}
@@ -842,6 +844,7 @@ addLayer("tad", {
                 } else {
                     player.tad.altSelection = "shattered"
                 }
+                if (!hasAchievement("achievements", 221)) completeAchievement("achievements", 221)
             },
             style() {
                 let look = {width: "240px", minHeight: "70px", fontSize: "9px", lineHeight: "0.9", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px"}
@@ -862,6 +865,7 @@ addLayer("tad", {
                 } else {
                     player.tad.altSelection = "fragmented"
                 }
+                if (!hasAchievement("achievements", 221)) completeAchievement("achievements", 221)
             },
             style() {
                 let look = {width: "240px", minHeight: "70px", fontSize: "9px", lineHeight: "0.9", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px"}
@@ -882,6 +886,7 @@ addLayer("tad", {
                 } else {
                     player.tad.altSelection = "corrupted"
                 }
+                if (!hasAchievement("achievements", 221)) completeAchievement("achievements", 221)
             },
             style() {
                 let look = {width: "240px", minHeight: "70px", fontSize: "9px", lineHeight: "0.9", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px"}
@@ -902,6 +907,7 @@ addLayer("tad", {
                 } else {
                     player.tad.altSelection = "disfigured"
                 }
+                if (!hasAchievement("achievements", 221)) completeAchievement("achievements", 221)
             },
             style() {
                 let look = {width: "240px", minHeight: "70px", fontSize: "9px", lineHeight: "0.9", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px"}
@@ -922,6 +928,7 @@ addLayer("tad", {
                 } else {
                     player.tad.altSelection = "distorted"
                 }
+                if (!hasAchievement("achievements", 221)) completeAchievement("achievements", 221)
             },
             style() {
                 let look = {width: "240px", minHeight: "70px", fontSize: "9px", lineHeight: "0.9", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px"}
@@ -942,6 +949,7 @@ addLayer("tad", {
                 } else {
                     player.tad.altSelection = "infected"
                 }
+                if (!hasAchievement("achievements", 221)) completeAchievement("achievements", 221)
             },
             style() {
                 let look = {width: "240px", minHeight: "70px", fontSize: "9px", lineHeight: "0.9", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px"}
@@ -962,6 +970,7 @@ addLayer("tad", {
                 } else {
                     player.tad.altSelection = "infested"
                 }
+                if (!hasAchievement("achievements", 221)) completeAchievement("achievements", 221)
             },
             style() {
                 let look = {width: "240px", minHeight: "70px", fontSize: "9px", lineHeight: "0.9", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px"}

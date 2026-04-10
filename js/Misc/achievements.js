@@ -512,6 +512,7 @@ addLayer("achievements", {
             image: "resources/achievements/3_15.png",
             tooltip: "<h3>Domain Expansion</h3><hr style='margin-bottom:4px'>Buy the infinitum upgrade in<br>row 1, column 5.",
             color: "#b2d8d8",
+            complete() {return hasUpgrade("tad", 115)},
             unlocked: true,
         },
         216: {

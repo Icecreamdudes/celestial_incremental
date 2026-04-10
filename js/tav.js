@@ -255,15 +255,15 @@
 
         if (player.ta.galaxyLimitInput.gte(0)) player.ta.galaxyLimit = player.ta.galaxyLimitInput.floor()
         if (player.ta.galaxyLimitInput.lt(0)) player.ta.galaxyLimit = new Decimal(0)
-            
+
         // CHECK FOR ACHIEVEMENTS
-        if (!hasAchievement("achievements", 203)) completeAchievement("achievements", 203)
-        if (!hasAchievement("achievements", 205)) completeAchievement("achievements", 205)
-        if (!hasAchievement("achievements", 206)) completeAchievement("achievements", 206)
-        if (!hasAchievement("achievements", 207)) completeAchievement("achievements", 207)
-        if (!hasAchievement("achievements", 210)) completeAchievement("achievements", 210)
-        if (!hasAchievement("achievements", 212)) completeAchievement("achievements", 212)
-        if (!hasAchievement("achievements", 213)) completeAchievement("achievements", 213)
+        if (!hasAchievement("achievements", 203) && hasUpgrade("ta", 13)) completeAchievement("achievements", 203)
+        if (!hasAchievement("achievements", 205) && hasUpgrade("ta", 15)) completeAchievement("achievements", 205)
+        if (!hasAchievement("achievements", 206) && hasUpgrade("ta", 16)) completeAchievement("achievements", 206)
+        if (!hasAchievement("achievements", 207) && hasUpgrade("ta", 17)) completeAchievement("achievements", 207)
+        if (!hasAchievement("achievements", 210) && hasUpgrade("ta", 18)) completeAchievement("achievements", 210)
+        if (!hasAchievement("achievements", 212) && hasUpgrade("ta", 19)) completeAchievement("achievements", 212)
+        if (!hasAchievement("achievements", 213) && hasUpgrade("ta", 21)) completeAchievement("achievements", 213)
     },
     negativeInfinityReset() {
         player.ad.antimatter = new Decimal(10)

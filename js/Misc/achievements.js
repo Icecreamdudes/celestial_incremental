@@ -517,14 +517,14 @@ addLayer("achievements", {
         },
         216: {
             name: "A little harder...",
-            image: "resources/achievements/3_00.png",
+            image: "resources/achievements/3_16.png",
             tooltip: "<h3>A little harder...</h3><hr style='margin-bottom:4px'>Collapse Tav's Domain with a<br>cap of 1e6 matter.",
             color: "#b2d8d8",
             unlocked: true,
         },
         217: {
             name: "A step up...",
-            image: "resources/achievements/3_00.png",
+            image: "resources/achievements/3_17.png",
             tooltip: "<h3>A step up...</h3><hr style='margin-bottom:4px'>Collapse Tav's Domain with a<br>cap of 1e7 matter.",
             color: "#b2d8d8",
             unlocked: true,
@@ -532,7 +532,7 @@ addLayer("achievements", {
         218: {
             name: "Not an AD Ach 34 Copy",
             image: "resources/achievements/3_18.png",
-            tooltip: "<h3>Not an AD Ach 34 Copy</h3><hr style='margin-bottom:4px'>Reach negative infinity<br>without any 8th dimensions.<br><br>Reward: 1st - 7th dimensions are<br>2% stronger.",
+            tooltip: "<h3>Not an AD Ach 34 Copy</h3><hr style='margin-bottom:4px'>Reach negative infinity<br>without any 8th dimensions.<br><br>Reward: +1 base NIP gain.",
             color: "#b2d8d8",
             unlocked: true,
             marked: true,
@@ -571,7 +571,7 @@ addLayer("achievements", {
         223: {
             name: "Seriously?",
             image: "resources/achievements/3_23.png",
-            tooltip: "<h3>Seriously?</h3><hr style='margin-bottom:4px'>Reach negative infinity without<br>any 7th or 8th dimensions.<br><br>Reward: 1st - 6th dimensions are<br>3% stronger.",
+            tooltip: "<h3>Seriously?</h3><hr style='margin-bottom:4px'>Reach negative infinity without<br>any 7th or 8th dimensions.<br><br>Reward: +1 base NIP gain.",
             color: "#b2d8d8",
             unlocked: true,
             marked: true,

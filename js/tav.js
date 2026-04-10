@@ -264,6 +264,12 @@
         if (!hasAchievement("achievements", 210) && hasUpgrade("ta", 18)) completeAchievement("achievements", 210)
         if (!hasAchievement("achievements", 212) && hasUpgrade("ta", 19)) completeAchievement("achievements", 212)
         if (!hasAchievement("achievements", 213) && hasUpgrade("ta", 21)) completeAchievement("achievements", 213)
+
+        if (!hasAchievement("achievements", 204)
+        && getBuyableAmount("ta", 21).gte(1)
+        && getBuyableAmount("ta", 25).gte(1)
+        && getBuyableAmount("ta", 29).gte(1)
+        && getBuyableAmount("ta", 31).gte(1)) completeAchievement("achievements", 204)
     },
     negativeInfinityReset() {
         player.ad.antimatter = new Decimal(10)
@@ -1892,6 +1898,17 @@ addLayer("revc", {
         },
     },
     reverseCrunch(){
+        
+        if (getBuyableAmount("ad", 18).lte(0)) {
+            if (getBuyableAmount("ad", 17).lte(0)) {
+                if (!hasAchievement("achievements", 223)) completeAchievement("achievements", 223)
+            }
+        if (!hasAchievement("achievements", 218)) completeAchievement("achievements", 218)
+        }
+        if (getBuyableAmount("ad", 3).lte(0)) {
+            if (!hasAchievement("achievements", 209)) completeAchievement("achievements", 209)
+        }
+        
         player.ta.reachedNegativeInfinity = false
         player.ta.negativeInfinityPause = new Decimal(5)
         if (!hasAchievement("achievements", 201)) completeAchievement("achievements", 201)

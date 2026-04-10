@@ -243,6 +243,7 @@ addLayer("cb", {
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(levelableEffect("pet", 101)[1])
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(levelableEffect("pet", 205)[0])
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(levelableEffect("pet", 301)[1])
+            if (hasAchievement("achievements", 208)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(1.5)
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(player.ev0.coinDustEffect)
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(player.cb.XPBoostEffect)
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(player.d.boosterEffects[12])

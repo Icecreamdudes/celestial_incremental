@@ -279,6 +279,8 @@ addLayer("tad", {
 
         // COLLAPSE CODE
         if (player.tad.matter.gte(player.tad.domainCap)) {
+            if (!hasAchievement("achievements", 216) && player.tad.domainCap.eq(1e6)) completeAchievement("achievements", 216)
+            if (!hasAchievement("achievements", 217) && player.tad.domainCap.eq(1e7)) completeAchievement("achievements", 217)
             if (!hasAchievement("achievements", 214)) completeAchievement("achievements", 214)
             if (player.tad.altInfinities.distorted.milestone.lt(3)) {
                 player.subtabs["tad"]["Domain"] = "Collapse"

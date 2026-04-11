@@ -690,6 +690,7 @@ addLayer("bh", {
         if (BHS[player.bh.currentStage].respawnTime) player.bh.respawnMax = BHS[player.bh.currentStage].respawnTime
 
         if (BHS[player.bh.currentStage].timer || BHC[player.bh.celestialite.id].timer) {
+            if (!document.getElementById("flash-overlay")) player.bh.timerStop = false
             if (unpaused && !BHS[player.bh.currentStage].timeStagnation && !player.bh.timerStop) player.bh.timer = player.bh.timer.add(normTime)
             if (BHS[player.bh.currentStage].timer && player.bh.timer.gte(run(BHS[player.bh.currentStage].timer, BHS[player.bh.currentStage]))) {
                 for (let i = 0; i < 3; i++) {
@@ -738,6 +739,10 @@ addLayer("bh", {
         if (player.bh.currentStage == "none" && player.bh.autoEnter) player.bh.autoCooldown = player.bh.autoCooldown.add(normTime)
         if (player.bh.autoCooldown.gte(30) && player.bh.autoEnter) {
             player.bh.autoCooldown = new Decimal(0)
+            if (player.bh.autoEnter == "laboratory") {
+                player.laboratory.cooldown = player.laboratory.cooldownMax
+                player.bh.autoCooldown = Decimal.mul(player.laboratory.cooldownMax.sub(30), -1)
+            }
             BHStageEnter(player.bh.autoEnter)
         }
 
@@ -848,7 +853,7 @@ addLayer("bh", {
                                 }
                             } else {
                                 let properties = BHC[player.bh.celestialite.id].actions[i].effects
-                                if (Object.keys(properties).length === 0) continue
+                                if (properties == undefined || Object.keys(properties).length === 0) continue
                                 let target = calcTarget(3, i, BHC[player.bh.celestialite.id].actions[i].constantTarget, "effect")
                                 for (let k in properties) {
                                     if (k == "target") continue
@@ -1578,6 +1583,10 @@ addLayer("bh", {
                     player.bh.autoCooldown = new Decimal(0)
                 } else {
                     player.bh.autoEnter = player.subtabs["bh"]["stages"]
+                    if (player.subtabs["bh"]["stages"] == "laboratory") {
+                        player.laboratory.cooldown = player.laboratory.cooldownMax
+                        player.bh.autoCooldown = Decimal.mul(player.laboratory.cooldown.sub(30), -1)
+                    }
                 }
             },
             style: {width: "110px", minHeight: "55px", color: "var(--textColor)", background: "var(--miscButtonHover)", border: "3px solid var(--miscButton)", borderRadius: "15px"},

@@ -1337,15 +1337,15 @@ addLayer("pet", {
                         doPopup("none", "+" + formatSimple(player.pet.fragShopBulk) + " Evolution Fragment", "Pet Obtained!", 5, "#4e7cff", "resources/Pets/evolutionFragmentRarePet.png")
                         break;
                     case 7:
-                        addLevelableXP("pet", 501, new Decimal(1))
+                        addLevelableXP("pet", 501, new Decimal(player.pet.fragShopBulk))
                         doPopup("none", "Eclipse becomes stronger", "Pet Obtained!", 5, "#eed200", "resources/Pets/eclipseLegendaryPet.png")
                         break;
                     case 8:
-                        addLevelableXP("pet", 502, new Decimal(1))
+                        addLevelableXP("pet", 502, new Decimal(player.pet.fragShopBulk))
                         doPopup("none", "Geroa gets enhancements", "Pet Obtained!", 5, "#eed200", "resources/Pets/geroaLegendaryPet.png")
                         break;
                     case 9:
-                        addLevelableXP("pet", 503, new Decimal(1))
+                        addLevelableXP("pet", 503, new Decimal(player.pet.fragShopBulk))
                         doPopup("none", "Vespasian mutates further", "Pet Obtained!", 5, "#eed200", "resources/Pets/vespasianLegendaryPet.png")
                         break;
                 }

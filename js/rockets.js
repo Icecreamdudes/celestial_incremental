@@ -158,7 +158,7 @@
         ]
         player.ro.rocketNames = [
             "Small Rocket<br><h6>Minimum: 20 Fuel, 6 Parts",
-            "Medium Rocket<br><h6>Minimum: 100,000 Fuel, 10,000,000 Parts, 3 Evo Shards, 1 Paragon Shard",
+            "Medium Rocket<br><h6>Minimum: 100,000 Fuel, 100,000 Parts, 3 Evo Shards, 1 Paragon Shard",
         ]
         if (player.ro.rocketIndex.eq(0)) {
             player.ro.rocketPartsReq = new Decimal(6)
@@ -168,7 +168,7 @@
             player.ro.paragonShardsReq = new Decimal(0)
         }
         if (player.ro.rocketIndex.eq(1)) {
-            player.ro.rocketPartsReq = new Decimal(10000000)
+            player.ro.rocketPartsReq = new Decimal(100000)
             player.ro.activatedFuelReq = new Decimal(100000) //,make it include shards
             
             player.ro.evoShardsReq = new Decimal(3)

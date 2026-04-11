@@ -111,7 +111,8 @@ addLayer("gwaTemple", {
         player.gwaTemple.gwankerReq = layers.h.hexReq(player.gwaTemple.gwanker, 10, 1.45, gwankerDiv)
         player.gwaTemple.gwankerGet = hasUpgrade("gwaTemple", 24) ? layers.h.hexGain(player.gwaTemple.gwank, 10, 1.45, gwankerDiv).sub(player.gwaTemple.gwanker).max(0) : new Decimal(1)
 
-        player.gwaTemple.gwankerEffect = player.gwaTemple.gwanker.add(player.gwaTemple.gwankestEffect2).add(1).log(2).div(2).add(1).pow(0.35).pow(player.gwaTemple.gwankestEffect)
+        player.gwaTemple.gwankerEffect = player.gwaTemple.gwanker.add(player.gwaTemple.gwankestEffect2).add(1).log(2).div(2).add(1).pow(0.3).pow(player.gwaTemple.gwankestEffect)
+        if (player.gwaTemple.gwankerEffect.gte(10)) player.gwaTemple.gwankerEffect = player.gwaTemple.gwankerEffect.div(10).pow(0.3).mul(10)
         player.gwaTemple.gwankerEffect2 = player.gwaTemple.gwanker.add(player.gwaTemple.gwankestEffect2).pow(player.gwaTemple.gwankestEffect).floor()
 
         // GWANKEST
@@ -121,8 +122,8 @@ addLayer("gwaTemple", {
         player.gwaTemple.gwankestReq = layers.h.hexReq(player.gwaTemple.gwankest, 1000, 1.4, gwankestDiv)
         player.gwaTemple.gwankestGet = hasMilestone("gwaTemple", 13) ? layers.h.hexGain(player.gwaTemple.gwanker, 1000, 1.4, gwankestDiv).sub(player.gwaTemple.gwankest).max(0) : new Decimal(1)
 
-        player.gwaTemple.gwankestEffect = player.gwaTemple.gwankest.add(1).log(2).div(2).add(1).pow(0.3)
-        if (player.gwaTemple.gwankestEffect.gte(3)) player.gwaTemple.gwankestEffect = player.gwaTemple.gwankestEffect.div(3).pow(0.3).mul(3)
+        player.gwaTemple.gwankestEffect = player.gwaTemple.gwankest.add(1).log(2).div(2).add(1).pow(0.2)
+        if (player.gwaTemple.gwankestEffect.gte(2)) player.gwaTemple.gwankestEffect = player.gwaTemple.gwankestEffect.div(2).pow(0.3).mul(23)
         player.gwaTemple.gwankestEffect2 = player.gwaTemple.gwankest.mul(10).pow(1.5).floor()
 
         // GWARK

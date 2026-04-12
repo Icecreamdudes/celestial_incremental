@@ -67,6 +67,7 @@
         if (hasUpgrade("cbs", 11)) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(upgradeEffect("cbs", 11))
         player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(levelableEffect("car", 201)[0])
         player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(buyableEffect("sme", 181))
+        player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(buyableEffect("car", 12))
         
         if (player.za.chancePoints.gte(player.za.chancePointsSoftcapStart)) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.div(player.za.chancePointsSoftcapEffect)
 

@@ -142,6 +142,7 @@
         player.cf.headsToGet = player.cf.headsToGet.mul(buyableEffect("sm", 101))
         player.cf.headsToGet = player.cf.headsToGet.mul(levelableEffect("car", 204)[0])
         player.cf.headsToGet = player.cf.headsToGet.mul(buyableEffect("sme", 182))
+        player.cf.headsToGet = player.cf.headsToGet.mul(buyableEffect("car", 22))
         
         player.cf.headsToGet = player.cf.headsToGet.div(player.cf.headsSoftcapEffect)
 
@@ -159,6 +160,7 @@
         player.cf.tailsToGet = player.cf.tailsToGet.mul(buyableEffect("sm", 101))
         player.cf.tailsToGet = player.cf.tailsToGet.mul(levelableEffect("car", 206)[0])
         player.cf.tailsToGet = player.cf.tailsToGet.mul(buyableEffect("sme", 182))
+        player.cf.tailsToGet = player.cf.tailsToGet.mul(buyableEffect("car", 22))
 
         player.cf.tailsToGet = player.cf.tailsToGet.div(player.cf.tailsSoftcapEffect)
 

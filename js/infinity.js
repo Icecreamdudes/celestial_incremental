@@ -184,6 +184,7 @@
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(levelableEffect("ir", 2)[1])
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("cof", 23))
         if (hasUpgrade("tad", 152)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(player.in.pylonEnergyEffect2)
+        player.in.infinitiesToGet = player.in.infinitiesToGet.mul(levelableEffect("car", 307)[0])
 
         // POWER MODIFIERS
         if (player.tad.altInfinities.infected.milestone.gte(2)) player.in.infinitiesToGet = player.in.infinitiesToGet.pow(player.tad.altInfinities.infected.effect2)

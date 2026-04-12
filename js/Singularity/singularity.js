@@ -69,6 +69,7 @@
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(buyableEffect("sb", 104))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(player.se.starsExploreEffect[1][0])
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(buyableEffect("gwaTemple", 26))
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(levelableEffect("car", 309)[0])
 
         // SINGULARITY RAISERS
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(levelableEffect("pet", 308)[0])

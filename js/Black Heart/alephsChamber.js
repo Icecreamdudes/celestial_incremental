@@ -74,6 +74,7 @@ addLayer("alephsChamber", {
                     ["raw-html", "<u>Effects</u>", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Weakened Star Softcap." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Improved SP's effect on singularity gain." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "Tav's Domain Expander cap now increments by x1e5"}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "x36 Hex Power." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "x100 Infinitum." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "x10 Emotions." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
@@ -764,7 +765,7 @@ BHC.aleph = {
                     bulletHell({"shootBee": {beesPerSec: 2, radius: 15, enemySpeed: 6}}, {width: 400, height: 400, duration: 5})
                     player.bh.celestialite.actions[3].variables.attacks = 1
                 }
-                if (player.bh.celestialite.attackID == 6 && player.bh.celestialite.actions[3].variables.attacks >= 1) {
+                if (player.bh.celestialite.attackID == 6 && player.bh.celestialite.actions[3].variables.attacks == 1) {
                     screenFlash("", 200)
                     setTimeout(() => {
                         player.bh.celestialite.attackTimeout = [7, new Decimal(5)]
@@ -772,7 +773,7 @@ BHC.aleph = {
                     }, 200)
                     player.bh.celestialite.actions[3].variables.attacks = 2
                 }
-                if (player.bh.celestialite.attackID == 7 && player.bh.celestialite.actions[3].variables.attacks >= 2) {
+                if (player.bh.celestialite.attackID == 7 && player.bh.celestialite.actions[3].variables.attacks == 2) {
                     screenFlash("", 200)
                     setTimeout(() => {
                         player.bh.celestialite.attackTimeout = [8, new Decimal(5)]
@@ -780,7 +781,7 @@ BHC.aleph = {
                     }, 200)
                     player.bh.celestialite.actions[3].variables.attacks = 3
                 }
-                if (player.bh.celestialite.attackID == 8 && player.bh.celestialite.actions[3].variables.attacks >= 3) {
+                if (player.bh.celestialite.attackID == 8 && player.bh.celestialite.actions[3].variables.attacks == 3) {
                     screenFlash("", 200)
                     setTimeout(() => {
                         player.bh.celestialite.attackTimeout = [9, new Decimal(5)]
@@ -788,7 +789,7 @@ BHC.aleph = {
                     }, 200)
                     player.bh.celestialite.actions[3].variables.attacks = 4
                 }
-                if (player.bh.celestialite.attackID == 9 && player.bh.celestialite.actions[3].variables.attacks >= 4) {
+                if (player.bh.celestialite.attackID == 9 && player.bh.celestialite.actions[3].variables.attacks == 4) {
                     celestialiteDeath()
                 }
                 if (player.bh.celestialite.health.lt(-500)) {

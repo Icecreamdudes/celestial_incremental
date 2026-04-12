@@ -19,7 +19,7 @@
 
         currentlySelectedSegment: -1,
 
-        segmentGains: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
+        segmentGains: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
 
         wheelPoints: new Decimal(0),
         wheelPointsEffect: new Decimal(1),

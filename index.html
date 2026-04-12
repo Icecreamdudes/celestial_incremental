@@ -149,7 +149,7 @@
 				</div>
 			</transition-group>
 		</div>
-		<div class="particle-container">
+		<div id="particleHolder" class="particle-container">
 				<div v-for="particle,index in particles">
 					<particle :data="particle" :index="index" v-bind:key="'b' + particle.id"></particle>
 				</div>

@@ -171,6 +171,7 @@ addLayer("bh", {
             mending: new Decimal(0),
             potency: new Decimal(0),
             shield: new Decimal(0), // Not same as previous, is a prevent damage stack
+            shieldDecay: new Decimal(0),
             stun: ["none", new Decimal(0)],
             randomMult: new Decimal(1),
             curAdd: new Decimal(1),
@@ -221,6 +222,7 @@ addLayer("bh", {
                 mending: new Decimal(0),
                 potency: new Decimal(0),
                 shield: new Decimal(0),
+                shieldDecay: new Decimal(0),
                 stun: ["none", new Decimal(0)],
                 attributes: {},
                 actionChances: [],
@@ -276,6 +278,7 @@ addLayer("bh", {
                 mending: new Decimal(0),
                 potency: new Decimal(0),
                 shield: new Decimal(0),
+                shieldDecay: new Decimal(0),
                 stun: ["none", new Decimal(0)],
                 attributes: {},
                 actionChances: [],
@@ -331,6 +334,7 @@ addLayer("bh", {
                 mending: new Decimal(0),
                 potency: new Decimal(0),
                 shield: new Decimal(0),
+                shieldDecay: new Decimal(0),
                 stun: ["none", new Decimal(0)],
                 attributes: {},
                 actionChances: [],
@@ -556,6 +560,7 @@ addLayer("bh", {
         comboScalingStart: new Decimal(100),
         comboScalingReduction: 0,
         comboSoftcap: new Decimal(1),
+        shieldDecayMax: new Decimal(30),
         timer: new Decimal(0),
         timerStop: false,
         timeSpeed: new Decimal(1),
@@ -685,6 +690,7 @@ addLayer("bh", {
         if (BHS[player.bh.currentStage].respawnTime) player.bh.respawnMax = BHS[player.bh.currentStage].respawnTime
 
         if (BHS[player.bh.currentStage].timer || BHC[player.bh.celestialite.id].timer) {
+            if (!document.getElementById("flash-overlay")) player.bh.timerStop = false
             if (unpaused && !BHS[player.bh.currentStage].timeStagnation && !player.bh.timerStop) player.bh.timer = player.bh.timer.add(normTime)
             if (BHS[player.bh.currentStage].timer && player.bh.timer.gte(run(BHS[player.bh.currentStage].timer, BHS[player.bh.currentStage]))) {
                 for (let i = 0; i < 3; i++) {
@@ -717,6 +723,9 @@ addLayer("bh", {
         player.bh.comboSoftcap = new Decimal(1)
         if (player.bh.combo.gte(player.bh.comboScalingStart)) player.bh.comboSoftcap = Decimal.pow(player.bh.comboScaling, player.bh.combo.sub(player.bh.comboScalingStart))
 
+        player.bh.shieldDecayMax = new Decimal(20)
+        if (BHS[player.bh.currentStage].shieldDecayMax) player.bh.shieldDecayMax = BHS[player.bh.currentStage].shieldDecayMax
+
         if (player.subtabs["bh"]["stuff"] == "bullet") {
             player.bh.bulletHell = true
         } else {
@@ -730,6 +739,10 @@ addLayer("bh", {
         if (player.bh.currentStage == "none" && player.bh.autoEnter) player.bh.autoCooldown = player.bh.autoCooldown.add(normTime)
         if (player.bh.autoCooldown.gte(30) && player.bh.autoEnter) {
             player.bh.autoCooldown = new Decimal(0)
+            if (player.bh.autoEnter == "laboratory") {
+                player.laboratory.cooldown = player.laboratory.cooldownMax
+                player.bh.autoCooldown = Decimal.mul(player.laboratory.cooldownMax.sub(30), -1)
+            }
             BHStageEnter(player.bh.autoEnter)
         }
 
@@ -783,6 +796,16 @@ addLayer("bh", {
                             bhAction(3, player.bh.celestialite.stun[2], false, 1, true)
                         }
                     }
+                    
+                    if (player.bh.celestialite.shield.gt(0)) {
+                        player.bh.celestialite.shieldDecay = player.bh.celestialite.shieldDecay.add(delta)
+                        if (player.bh.celestialite.shieldDecay.gte(player.bh.shieldDecayMax)) {
+                            player.bh.celestialite.shieldDecay = new Decimal(0)
+                            player.bh.celestialite.shield = player.bh.celestialite.shield.sub(1).max(0)
+                        }
+                    } else if (player.bh.celestialite.shieldDecay.gt(0)) {
+                        player.bh.celestialite.shieldDecay = new Decimal(0)
+                    }
                 }
 
                 // Cycle, increment cooldowns, and trigger celestialite actions
@@ -830,7 +853,7 @@ addLayer("bh", {
                                 }
                             } else {
                                 let properties = BHC[player.bh.celestialite.id].actions[i].effects
-                                if (Object.keys(properties).length === 0) continue
+                                if (properties == undefined || Object.keys(properties).length === 0) continue
                                 let target = calcTarget(3, i, BHC[player.bh.celestialite.id].actions[i].constantTarget, "effect")
                                 for (let k in properties) {
                                     if (k == "target") continue
@@ -914,6 +937,16 @@ addLayer("bh", {
                         if (player.bh.characters[i].stun.length >= 3 && player.bh.characters[i].stun[1].lte(0)) {
                             bhAction(i, player.bh.characters[i].stun[2], false, 1, true)
                         }
+                    }
+                    
+                    if (player.bh.characters[i].shield.gt(0)) {
+                        player.bh.characters[i].shieldDecay = player.bh.characters[i].shieldDecay.add(delta)
+                        if (player.bh.characters[i].shieldDecay.gte(player.bh.shieldDecayMax)) {
+                            player.bh.characters[i].shieldDecay = new Decimal(0)
+                            player.bh.characters[i].shield = player.bh.characters[i].shield.sub(1).max(0)
+                        }
+                    } else if (player.bh.characters[i].shieldDecay.gt(0)) {
+                        player.bh.characters[i].shieldDecay = new Decimal(0)
                     }
                 }
 
@@ -1562,6 +1595,10 @@ addLayer("bh", {
                     player.bh.autoCooldown = new Decimal(0)
                 } else {
                     player.bh.autoEnter = player.subtabs["bh"]["stages"]
+                    if (player.subtabs["bh"]["stages"] == "laboratory") {
+                        player.laboratory.cooldown = player.laboratory.cooldownMax
+                        player.bh.autoCooldown = Decimal.mul(player.laboratory.cooldown.sub(30), -1)
+                    }
                 }
             },
             style: {width: "110px", minHeight: "55px", color: "var(--textColor)", background: "var(--miscButtonHover)", border: "3px solid var(--miscButton)", borderRadius: "15px"},

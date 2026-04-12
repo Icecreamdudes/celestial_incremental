@@ -490,6 +490,14 @@ addLayer("jukebox", {
             file: "music/mysteryCutscene.mp3",
             unlocked() {return hasUpgrade("za", 19)},
         },
+        "akash": {
+            artist: "AkashG23",
+            name: "N/A", // Puzzling Waltz?
+            description: "Akash",
+            img: "resources/music/akash.png",
+            file: "music/akashCutscene.mp3",
+            unlocked() {return player.ak.akashUnlocked},
+        }
     },
     microtabs: {
         stuff: {
@@ -519,7 +527,7 @@ addLayer("jukebox", {
                         ["jukebox", "tav"], ["jukebox", "tav-box"], ["jukebox", "tav-rip"], ["jukebox", "cante"],
                         ["jukebox", "singularity-waltz"], ["jukebox", "jocus"], ["jukebox", "matos-box"], ["jukebox", "matos"],
                         ["jukebox", "nova"], ["jukebox", "iridite"], ["jukebox", "aleph"], ["jukebox", "zar"], 
-                        ["jukebox", "novasent-flashback"], ["jukebox", "mystery"], 
+                        ["jukebox", "novasent-flashback"], ["jukebox", "mystery"], ["jukebox", "akash"],
                     ]],
                     ["blank", "2px"],
                 ],

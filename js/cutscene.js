@@ -4109,7 +4109,7 @@
             type: "normal",
             background: "linear-gradient(135deg, #ff0080ff 0%, #e00070ff 50%, #ff0080ff 100%)",
             portrait: "resources/secret.png",
-            music: "music/cutscenePiano.mp3",
+            music: "music/akashCutscene.mp3",
             trigger() {return player.ak.akashUnlocked },
             dialogue: [
                 { text: "In a rather short period of time, you solve the first puzzle in this strange new universe." }, 

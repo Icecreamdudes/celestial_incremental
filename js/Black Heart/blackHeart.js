@@ -708,7 +708,7 @@ addLayer("bh", {
         if (hasMilestone("db", 105)) player.bh.comboScalingReduction = player.bh.comboScalingReduction + 0.002
         if (hasUpgrade("depth4", 3)) player.bh.comboScalingReduction = player.bh.comboScalingReduction + 0.002
         player.bh.comboScalingReduction = player.bh.comboScalingReduction + (buyableEffect("laboratory", 1).sub(1).toNumber())
-
+        player.bh.comboScalingReduction = player.bh.comboScalingReduction + levelableEffect("car", 113)[0].toNumber()
         player.bh.comboScaling = Math.max(player.bh.comboScaling - player.bh.comboScalingReduction , 1)
 
         player.bh.comboScalingStart = new Decimal(Infinity)
@@ -1098,6 +1098,7 @@ addLayer("bh", {
         player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(player.depth2.milestoneEffect)
         player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(player.depth3.milestoneEffect)
         player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(player.depth4.milestoneEffect)
+        player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(levelableEffect("car", 112)[0])
 
         player.bh.skillCostDiv = new Decimal(1)
         player.bh.skillCostDiv = player.bh.skillCostDiv.mul(player.darkTemple.skillCost)
@@ -1114,6 +1115,7 @@ addLayer("bh", {
         healthBase = healthBase.add(player.darkTemple.hpMult)
         healthBase = healthBase.add(buyableEffect("sme", 131))
         if (hasUpgrade("ep2", 9101)) healthBase = healthBase.add(upgradeEffect("ep2", 9101))
+        healthBase = healthBase.add(levelableEffect("car", 102)[0])
 
         let healthAdd = new Decimal(0)
         healthAdd = healthAdd.add(player.darkTemple.hpAdd)
@@ -1123,6 +1125,7 @@ addLayer("bh", {
         healthAdd = healthAdd.add(player.bh.skillData["nav_healSpell"].maxLevel)
         healthAdd = healthAdd.add(player.bh.skillData["geroa_selfRepair"].maxLevel)
         healthAdd = healthAdd.add(player.bh.skillData["vespasian_peakPerformance"].maxLevel)
+        healthAdd = healthAdd.add(levelableEffect("car", 101)[0])
 
         // =-- DAMAGE STUFF --= //
         let damageBase = new Decimal(1)
@@ -1130,6 +1133,7 @@ addLayer("bh", {
         damageBase = damageBase.add(player.darkTemple.dmgMult)
         damageBase = damageBase.add(buyableEffect("sme", 132))
         if (hasUpgrade("ep2", 9103)) damageBase = damageBase.add(upgradeEffect("ep2", 9103))
+        damageBase = damageBase.add(levelableEffect("car", 104)[0])
 
         let damageAdd = new Decimal(0)
         damageAdd = damageAdd.add(player.darkTemple.dmgAdd)
@@ -1143,6 +1147,7 @@ addLayer("bh", {
         damageAdd = damageAdd.add(player.bh.skillData["geroa_cosmicRay"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["geroa_orbitalCannon"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["geroa_defenseSatellites"].maxLevel.div(5))
+        damageAdd = damageAdd.add(levelableEffect("car", 103)[0])
 
         // =-- REGEN STUFF --= //
         let regenBase = new Decimal(1)
@@ -1153,11 +1158,13 @@ addLayer("bh", {
         regenAdd = regenAdd.add(player.bh.skillData["kres_berserker"].maxLevel.div(40))
         regenAdd = regenAdd.add(buyableEffect("sme", 134))
         regenAdd = regenAdd.add(buyableEffect("depth4", 1).sub(1))
+        regenAdd = regenAdd.add(levelableEffect("car", 105)[0])
 
         // =-- AGILITY STUFF --= //
         let agilityBase = new Decimal(1)
         agilityBase = agilityBase.add(buyableEffect("depth3", 1))
         agilityBase = agilityBase.add(player.darkTemple.agiMult)
+        agilityBase = agilityBase.add(levelableEffect("car", 107)[0])
 
         let agilityAdd = new Decimal(0)
         agilityAdd = agilityAdd.add(player.darkTemple.agiAdd)
@@ -1170,6 +1177,7 @@ addLayer("bh", {
         agilityAdd = agilityAdd.add(player.bh.skillData["vespasian_poisonStinger"].maxLevel.div(2))
         agilityAdd = agilityAdd.add(player.bh.skillData["vespasian_paralyticBite"].maxLevel.div(2))
         agilityAdd = agilityAdd.add(buyableEffect("sme", 133))
+        agilityAdd = agilityAdd.add(levelableEffect("car", 106)[0])
 
         // =-- DEFENSE STUFF --= //
         let defenseBase = new Decimal(1)
@@ -1182,6 +1190,7 @@ addLayer("bh", {
         defenseAdd = defenseAdd.add(player.bh.skillData["vespasian_overdrive"].maxLevel.div(2))
         defenseAdd = defenseAdd.add(levelableEffect("pet", 310)[1])
         defenseAdd = defenseAdd.add(buyableEffect("stagnantSynestia", 1))
+        defenseAdd = defenseAdd.add(levelableEffect("car", 108)[0])
 
         // =-- LUCK STUFF --= //
         let luckBase = new Decimal(1)
@@ -1195,6 +1204,7 @@ addLayer("bh", {
         luckAdd = luckAdd.add(player.bh.skillData["nav_soulShred"].maxLevel.div(2))
         luckAdd = luckAdd.add(player.bh.skillData["vespasian_impale"].maxLevel.div(2))
         if (hasUpgrade("ep2", 9105)) luckAdd = luckAdd.add(upgradeEffect("ep2", 9105))
+        luckAdd = luckAdd.add(levelableEffect("car", 109)[0])
 
         // =-- MENDING STUFF --= //
         let mendingBase = new Decimal(1)
@@ -1202,12 +1212,14 @@ addLayer("bh", {
         let mendingAdd = new Decimal(0)
         mendingAdd = mendingAdd.add(player.darkTemple.mndAdd)
         if (player.alephsChamber.milestone[25] > 0) mendingAdd = mendingAdd.add(10)
+        mendingAdd = mendingAdd.add(levelableEffect("car", 110)[0])
 
         // =-- POTENCY STUFF --= //
         let potencyBase = new Decimal(1)
 
         let potencyAdd = new Decimal(0)
         potencyAdd = potencyAdd.add(player.darkTemple.potAdd)
+        potencyAdd = potencyAdd.add(levelableEffect("car", 111)[0])
 
         // =-- STAT CALCULATION --=
         for (let i = 0; i < 3; i++) {

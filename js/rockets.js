@@ -140,6 +140,7 @@
             player.ro.commonXPToGet[i] = player.ro.commonXPToGet[i].mul(buyableEffect("sme", 163)).floor()
             if (hasMilestone("dgj", 17)) player.ro.commonXPToGet[i] = player.ro.commonXPToGet[i].mul(player.dgj.milestone7Effect).floor()
             if (hasMilestone("gwaTemple", 15)) player.ro.commonXPToGet[i] = player.ro.commonXPToGet[i].mul(player.gwaTemple.gwark.div(10).add(1).pow(0.5)).floor()
+            player.ro.commonXPToGet[i] = player.ro.commonXPToGet[i].mul(levelableEffect("car", 413)[0]).floor()
         }
         for (let i = 0; i < player.ro.selectedPassengersUncommon.length; i++) {
             let lvl = player.pet.levelables[Decimal.add(201, player.ro.selectedPassengersUncommon[i])][0]
@@ -150,6 +151,7 @@
             player.ro.uncommonXPToGet[i] = player.ro.uncommonXPToGet[i].mul(buyableEffect("sme", 163)).floor()
             if (hasMilestone("dgj", 17)) player.ro.uncommonXPToGet[i] = player.ro.uncommonXPToGet[i].mul(player.dgj.milestone7Effect).floor()
             if (hasMilestone("gwaTemple", 15)) player.ro.uncommonXPToGet[i] = player.ro.uncommonXPToGet[i].mul(player.gwaTemple.gwark.div(10).add(1).pow(0.5)).floor()
+            player.ro.uncommonXPToGet[i] = player.ro.uncommonXPToGet[i].mul(levelableEffect("car", 413)[0]).floor()
         }
 
         player.ro.rocketImages = [

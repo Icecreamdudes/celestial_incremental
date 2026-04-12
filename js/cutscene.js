@@ -885,7 +885,7 @@
                 { text: "You have defeated your first celestial.", },
             ],
         },
-        "U2-Tav-End": {
+ /*       "U2-Tav-End": {
             type: "cinematic",
             background: "#000000",
             portrait: "resources/secret.png",
@@ -900,7 +900,7 @@
                 { text: "<h1>You will face many dangers in your future. I know it.</h1>", duration: 7000, style: { color: "#ffffff", fontSize: "4vw" } },
                 { text: "<h1>Good luck.</h1>", duration: 5000, style: { color: "#ffffff", fontSize: "4vw" } },
             ],
-        },
+        }, */
         "U2-Break-Infinity": {
             type: "normal",
             background: "#000000",
@@ -4080,7 +4080,39 @@
 
             ],
         },
-
+        "DS-Zar-Card-Generator": {
+            type: "normal",
+            portrait: "resources/secret.png",
+            music: "music/lament.mp3",
+            background: "#4d1748",
+            trigger() {return player.car.cardGenerators.gte(1) },
+            dialogue: [
+                { text: "Nighttime approaches on this strange island."},
+                { text: "You see Zar and Tera are speaking to each other."},
+                { text: "I am scared.... What will happen to me? Am I going to become a celestial?", portrait: "resources/humanZar.png"  },
+                { text: "I don't think us non-foresight users were meant to go on this mission.", portrait: "resources/humanTera.png"  },
+                { text: "We should inform boss about the dangers that we have encountered.", portrait: "resources/humanTera.png"  },
+                { text: "Tera reaches for his communication device."},
+                { text: "Damn... Absolutely no signal.", portrait: "resources/humanTera.png"  },
+                { text: "Should we just turn back instead?", portrait: "resources/humanZar.png"  },
+                { text: "Iridite walks into frame."},
+                { text: "No, I don't think we should leave just yet.", portrait: "resources/humanIridite.png"  },
+                { text: "The information about the dark energy is very important to us.", portrait: "resources/humanIridite.png"  },
+                { text: "We will get it, and we will recieve the praise that we deserve.", portrait: "resources/humanIridite.png"  },
+                { text: "And plus, aren't you all pretty curious anyways? I am dying to know what's behind this dark energy!", portrait: "resources/humanIridite.png"  },
+                { text: "We have so much to learn about this multiverse, and boss gave us the opportunity to do so.", portrait: "resources/humanIridite.png"  },
+                { text: "This adventure would be a great memory for all of us. We can't just give up.", portrait: "resources/humanIridite.png"  },
+                { text: "Illira, you're right. We should just keep pushing forward.", portrait: "resources/humanTera.png"  },
+                { text: "I may be afraid of what could possibly happen to me, but I might as well keep going.", portrait: "resources/humanZar.png"  },
+                { text: "With the power of optimism, I believe we can all make it out of here alive!", portrait: "resources/humanZar.png"  },
+                { text: "That's right guys. We can do this.", portrait: "resources/humanIridite.png"  },
+                { text: "Now that the presence of death looms over me, I have something to tell you, Illira.", portrait: "resources/humanZar.png"  },
+                { text: "Yeah, what is it?", portrait: "resources/humanIridite.png"  },
+                { text: "All of a sudden, the flashback fades away."},
+                { text: "Damn... And we were just getting to the good part."},
+                { text: "Oh well."},
+            ],
+        },
         //REMINDER: Make enhance dust pet cutscene (reference the presence of ascension shards, and marcel's statue)
         "CB-Enhance-Dust": {
             type: "normal",

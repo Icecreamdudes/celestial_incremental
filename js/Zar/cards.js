@@ -8,10 +8,20 @@
         unlocked: true,
 
         cardPoints: [
-            []
-        ]
+            new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),
+        ],
+        cardPointsPerSecond: [
+            new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),
+        ],
+        cardGenerators: new Decimal(0),
+        cardGeneratorsToGet: new Decimal(0),
 
+        cardShreds: new Decimal(0),
+        cardShredsPerSecond: new Decimal(0),
+        cardShredReq: new Decimal(1000),
+        cardDrawAmount: new Decimal(0),
         
+        cardsToGet: new Decimal(0),
     }},
     automate() {},
     nodeStyle() {
@@ -28,12 +38,45 @@
     color: "rgb(182, 0, 0)",
     branches: ["cbs",],
     update(delta) {
+        player.car.cardGeneratorsToGet = player.za.chancePoints.pow(0.06).div(7).floor()
+
+        player.car.cardShreds = player.car.cardShreds.add(player.car.cardShredsPerSecond.mul(delta))
+        player.car.cardShredsPerSecond = player.car.cardGenerators.pow(2)
+        player.car.cardShredsPerSecond = player.car.cardShredsPerSecond.mul(buyableEffect("car", 13))
+        player.car.cardShredsPerSecond = player.car.cardShredsPerSecond.mul(buyableEffect("car", 23))
+        player.car.cardShredsPerSecond = player.car.cardShredsPerSecond.mul(buyableEffect("car", 33))
+        player.car.cardShredsPerSecond = player.car.cardShredsPerSecond.mul(buyableEffect("car", 43))
+
+        player.car.cardShredReq = new Decimal(1000)
+        player.car.cardShredReq = player.car.cardShredReq.mul(player.car.cardDrawAmount.pow(1.5).add(1))
+
+        player.car.cardsToGet = new Decimal(1)
+        player.car.cardsToGet = player.car.cardsToGet.add(buyableEffect("car", 14))
+        player.car.cardsToGet = player.car.cardsToGet.add(buyableEffect("car", 24))
+        player.car.cardsToGet = player.car.cardsToGet.add(buyableEffect("car", 34))
+        player.car.cardsToGet = player.car.cardsToGet.add(buyableEffect("car", 44))
+
+        if (player.car.cardGenerators.gte(1)) {
+            player.car.cardPointsPerSecond = [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)] 
+        }
+
+        for (let i = 0; i < player.car.cardPoints.length; i++) {
+            for (j = ((i + 1) * 100) + 1; j < ((i + 1) * 100) + 14; j++) {
+                player.car.cardPointsPerSecond[i] = player.car.cardPointsPerSecond[i].mul(levelableEffect("car", j)[1])
+            }
+            player.car.cardPoints[i] = player.car.cardPoints[i].add(player.car.cardPointsPerSecond[i].mul(delta))
+        }
+
+        player.car.cardPointsPerSecond[0] = player.car.cardPointsPerSecond[0].mul(buyableEffect("car", 11))
+        player.car.cardPointsPerSecond[1] = player.car.cardPointsPerSecond[1].mul(buyableEffect("car", 21))
+        player.car.cardPointsPerSecond[2] = player.car.cardPointsPerSecond[2].mul(buyableEffect("car", 31))
+        player.car.cardPointsPerSecond[3] = player.car.cardPointsPerSecond[3].mul(buyableEffect("car", 41))
     },
     cardReset() {
         //resets everything before unlocking cards except for check back shrine
         player.za.chancePoints = new Decimal(0)
 
-        player.cf.coinsFlipped = new Decimal(0)
+        player.cf.coinsFlipped = new Decimal(0) 
         player.cf.heads = new Decimal(0)
         player.cf.tails = new Decimal(0)
 
@@ -96,6 +139,25 @@
         player.sm.buyables[109] = new Decimal(0)
         player.sm.buyables[111] = new Decimal(0)
 
+        player.car.cardDrawAmount = new Decimal(0)
+
+        player.car.cardPoints = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)]
+        player.car.buyables[11] = new Decimal(0)
+        player.car.buyables[12] = new Decimal(0)
+        player.car.buyables[13] = new Decimal(0)
+        player.car.buyables[14] = new Decimal(0)
+        player.car.buyables[21] = new Decimal(0)
+        player.car.buyables[22] = new Decimal(0)
+        player.car.buyables[23] = new Decimal(0)
+        player.car.buyables[24] = new Decimal(0)
+        player.car.buyables[31] = new Decimal(0)
+        player.car.buyables[32] = new Decimal(0)
+        player.car.buyables[33] = new Decimal(0)
+        player.car.buyables[34] = new Decimal(0)
+        player.car.buyables[41] = new Decimal(0)
+        player.car.buyables[42] = new Decimal(0)
+        player.car.buyables[43] = new Decimal(0)
+        player.car.buyables[44] = new Decimal(0)
     },
     clickables: {
         1: {
@@ -113,6 +175,60 @@
                 return look
             }
         },
+        11: {
+            title() { return "<h3>Reset all previous dice space content (except for check back shrine) for card generators." },
+            canClick() { return player.car.cardGeneratorsToGet.gte(1)},
+            unlocked() { return true },
+            onClick() {
+                for (let i = 0; i < 12; i++){
+                    layers.car.cardReset();
+                }
+                player.car.cardGenerators = player.car.cardGenerators.add(player.car.cardGeneratorsToGet)
+            },
+            style: { width: '400px', "min-height": '100px', color: "white", backgroundImage: "linear-gradient(180deg, #990909 0%, rgb(94, 6, 6) 50%, #990909 100%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px" },
+        },
+        12: {
+            title() { return "<h3>Draw a card</h3><br><h3>Cost: " + format(player.car.cardShredReq) + " Card Shreds</h3>" },
+            canClick() { return player.car.cardShreds.gte(player.car.cardShredReq) },
+            tooltip() { return "Cost is reset on card reset." },
+            unlocked() { return true },
+            onClick() {
+                player.car.cardShreds = player.car.cardShreds.sub(player.car.cardShredReq)
+                player.car.cardDrawAmount = player.car.cardDrawAmount.add(1)
+
+                layers.car.cardDraw(); //tentative to change with multi draw
+            },
+            style: { width: '400px', "min-height": '100px', color: "white", backgroundImage: "linear-gradient(180deg, #990909 0%, rgb(94, 6, 6) 50%, #990909 100%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px" },
+        },
+    },
+    cardDraw()
+    {
+        let suit = getRandomInt(4) + 1
+        let rank = getRandomInt(13) + 1
+        let imgSuit = ""
+        let imgRank = ""
+        if (suit == 1) imgSuit = "Spade"
+        if (suit == 2) imgSuit = "Club"
+        if (suit == 3) imgSuit = "Diamond"
+        if (suit == 4) imgSuit = "Heart"
+
+        if (rank <= 10) imgRank = rank
+        if (rank == 11) imgRank = "J"
+        if (rank == 12) imgRank = "Q"
+        if (rank == 13) imgRank = "K"
+
+        let xOffset = getRandomInt(300)
+        makeParticles(BIG_COOKIE_NUMBER, 1, `normal`, {x: 1100 + xOffset, y: 350, text: "<img src='resources/cards/" + imgSuit + imgRank + ".png'style='width:75px;height:125px;margin:-35px;'></img>"})
+
+        let levelableID = ""
+        if (rank < 10)
+        {
+            levelableID = parseInt(suit + "0" + rank)
+        } else
+        {
+            levelableID = parseInt(suit + "" + rank)
+        }
+        player.car.levelables[levelableID][1] = player.car.levelables[levelableID][1].add(player.car.cardsToGet)
     },
     levelables: {
         0: {
@@ -248,7 +364,7 @@
             levelLimit() { return new Decimal(99) },
             description() {
                 let str = [
-                    "+" + format(this.effect()[0]) + " to base DMG mult.<br>", //not implemented
+                    "+" + format(this.effect()[0].mul(100)) + "% to base DMG mult.<br>", //not implemented
                     "x" + format(this.effect()[1]) + " to spade points.",
                 ]
                 return str.join("")
@@ -362,7 +478,7 @@
             levelLimit() { return new Decimal(99) },
             description() {
                 let str = [
-                    "+" + format(this.effect()[0]) + " to base AGI mult.<br>", //not implemented
+                    "+" + format(this.effect()[0].mul(100)) + "% to base AGI mult.<br>", //not implemented
                     "x" + format(this.effect()[1]) + " to spade points.",
                 ]
                 return str.join("")
@@ -552,7 +668,7 @@
             levelLimit() { return new Decimal(99) },
             description() {
                 let str = [
-                    "+" + format(this.effect()[0]) + " to max skill points. [FLOORED]<br>", //not implemented
+                    "+" + formatWhole(this.effect()[0]) + " to max skill points. [FLOORED]<br>", //not implemented
                     "x" + format(this.effect()[1]) + " to spade points.",
                 ]
                 return str.join("")
@@ -590,14 +706,14 @@
             levelLimit() { return new Decimal(99) },
             description() {
                 let str = [
-                    "-" + format(this.effect()[0]) + "% to combo scaling.<br>", //not implemented
+                    "-" + format(this.effect()[0].mul(100)) + "% to combo scaling.<br>", //not implemented
                     "x" + format(this.effect()[1]) + " to spade points.",
                 ]
                 return str.join("")
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.7).mul(0.01).floor()
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.5).mul(0.0003)
                 eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
                 return eff
             },
@@ -819,7 +935,7 @@
             levelLimit() { return new Decimal(99) },
             description() {
                 let str = [
-                    "^" + format(this.effect()[0]) + " to tails.<br>", //not implemented
+                    "x" + format(this.effect()[0]) + " to tails.<br>", //not implemented
                     "x" + format(this.effect()[1]) + " to club points.",
                 ]
                 return str.join("")
@@ -895,7 +1011,7 @@
             levelLimit() { return new Decimal(99) },
             description() {
                 let str = [
-                    "^" + format(this.effect()[0]) + " to wheel points.<br>", //not implemented
+                    "x" + format(this.effect()[0]) + " to wheel points.<br>", //not implemented
                     "x" + format(this.effect()[1]) + " to club points.",
                 ]
                 return str.join("")
@@ -1131,7 +1247,7 @@
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = getLevelableAmount(this.layer, this.id).mul(0.25).add(1)
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.75).mul(0.05).add(1)
                 eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
                 return eff
             },
@@ -1169,7 +1285,7 @@
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.5).mul(0.15).add(1)
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.5).mul(0.05).add(1)
                 eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
                 return eff
             },
@@ -1207,7 +1323,7 @@
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = getLevelableAmount(this.layer, this.id).mul(0.5).add(1)
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.65).mul(0.5).add(1)
                 eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
                 return eff
             },
@@ -1321,7 +1437,7 @@
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.85).mul(0.4).add(1)
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(1.15).mul(0.8).add(1)
                 eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
                 return eff
             },
@@ -1397,7 +1513,7 @@
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.65).mul(0.5).add(1)
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.5).mul(0.5).add(1)
                 eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
                 return eff
             },
@@ -1473,7 +1589,7 @@
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = getLevelableAmount(this.layer, this.id).pow(5.5).add(1)
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(4).add(1)
                 eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
                 return eff
             },
@@ -1511,7 +1627,7 @@
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.au2.stars.pow(0.015).pow(getLevelableAmount(this.layer, this.id).mul(0.3))
+                eff[0] = player.au2.stars.pow(0.03).pow(getLevelableAmount(this.layer, this.id).mul(0.4))
                 eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
                 return eff
             },
@@ -1549,7 +1665,7 @@
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.bee.bees.pow(0.05).pow(getLevelableAmount(this.layer, this.id).mul(0.3))
+                eff[0] = player.bee.bees.pow(0.005).pow(getLevelableAmount(this.layer, this.id).mul(0.5))
                 eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
                 return eff
             },
@@ -1587,7 +1703,503 @@
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = Decimal.pow("1e100000", getLevelableAmount(this.layer, this.id).pow(0.75))
+                eff[0] = Decimal.pow("1e100000", getLevelableAmount(this.layer, this.id).pow(0.6))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                return eff
+            },
+            // CLICK CODE
+            unlocked: true,
+            canSelect: true,
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                return getLevelableAmount(this.layer, this.id).add(1).pow(1.8).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+
+        //heart
+        401: {
+            image() {return this.canClick() ? "resources/cards/Heart1.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                return "Ace of Hearts"
+            },
+            levelLimit() { return new Decimal(99) },
+            description() {
+                let str = [
+                    "x" + format(this.effect()[0]) + " to dark celestial points.<br>", //not implemented
+                    "x" + format(this.effect()[1]) + " to heart points.",
+                ]
+                return str.join("")
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(4).add(1)
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                return eff
+            },
+            // CLICK CODE
+            unlocked: true,
+            canSelect: true,
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                return getLevelableAmount(this.layer, this.id).add(1).pow(1.5).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        402: {
+            image() {return this.canClick() ? "resources/cards/Heart2.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                return "2 of Hearts"
+            },
+            levelLimit() { return new Decimal(99) },
+            description() {
+                let str = [
+                    "x" + format(this.effect()[0]) + " to dark rank, tier, and tetr points.<br>", //not implemented
+                    "x" + format(this.effect()[1]) + " to heart points.",
+                ]
+                return str.join("")
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(3).add(1)
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                return eff
+            },
+            // CLICK CODE
+            unlocked: true,
+            canSelect: true,
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                return getLevelableAmount(this.layer, this.id).add(1).pow(1.525).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+                403: {
+            image() {return this.canClick() ? "resources/cards/Heart3.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                return "3 of Hearts"
+            },
+            levelLimit() { return new Decimal(99) },
+            description() {
+                let str = [
+                    "x" + format(this.effect()[0]) + " to dark prestige points.<br>", //not implemented
+                    "x" + format(this.effect()[1]) + " to heart points.",
+                ]
+                return str.join("")
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(3.5).add(1)
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                return eff
+            },
+            // CLICK CODE
+            unlocked: true,
+            canSelect: true,
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                return getLevelableAmount(this.layer, this.id).add(1).pow(1.55).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+                        404: {
+            image() {return this.canClick() ? "resources/cards/Heart4.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                return "4 of Hearts"
+            },
+            levelLimit() { return new Decimal(99) },
+            description() {
+                let str = [
+                    "x" + format(this.effect()[0]) + " to generators.<br>", //not implemented
+                    "x" + format(this.effect()[1]) + " to heart points.",
+                ]
+                return str.join("")
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = getLevelableAmount(this.layer, this.id).mul(2).pow(2.5).add(1)
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                return eff
+            },
+            // CLICK CODE
+            unlocked: true,
+            canSelect: true,
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                return getLevelableAmount(this.layer, this.id).add(1).pow(1.575).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        405: {
+            image() {return this.canClick() ? "resources/cards/Heart5.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                return "5 of Hearts"
+            },
+            levelLimit() { return new Decimal(99) },
+            description() {
+                let str = [
+                    "/" + format(this.effect()[0]) + " to booster requirement.<br>", //not implemented
+                    "x" + format(this.effect()[1]) + " to heart points.",
+                ]
+                return str.join("")
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(3).add(1)
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                return eff
+            },
+            // CLICK CODE
+            unlocked: true,
+            canSelect: true,
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                return getLevelableAmount(this.layer, this.id).add(1).pow(1.6).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        406: {
+            image() {return this.canClick() ? "resources/cards/Heart6.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                return "6 of Hearts"
+            },
+            levelLimit() { return new Decimal(99) },
+            description() {
+                let str = [
+                    "x" + format(this.effect()[0]) + " to dark grass value and capacity.<br>", //not implemented
+                    "x" + format(this.effect()[1]) + " to heart points.",
+                ]
+                return str.join("")
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = getLevelableAmount(this.layer, this.id).mul(2).pow(2).add(1)
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                return eff
+            },
+            // CLICK CODE
+            unlocked: true,
+            canSelect: true,
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                return getLevelableAmount(this.layer, this.id).add(1).pow(1.625).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        407: {
+            image() {return this.canClick() ? "resources/cards/Heart7.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                return "7 of Hearts"
+            },
+            levelLimit() { return new Decimal(99) },
+            description() {
+                let str = [
+                    "x" + format(this.effect()[0]) + " to normality.<br>", //not implemented
+                    "x" + format(this.effect()[1]) + " to heart points.",
+                ]
+                return str.join("")
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = getLevelableAmount(this.layer, this.id).mul(1.5).pow(2.5).add(1)
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                return eff
+            },
+            // CLICK CODE
+            unlocked: true,
+            canSelect: true,
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                return getLevelableAmount(this.layer, this.id).add(1).pow(1.65).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        408: {
+            image() {return this.canClick() ? "resources/cards/Heart8.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                return "8 of Hearts"
+            },
+            levelLimit() { return new Decimal(99) },
+            description() {
+                let str = [
+                    "x" + format(this.effect()[0]) + " to space energy.<br>", //not implemented
+                    "x" + format(this.effect()[1]) + " to heart points.",
+                ]
+                return str.join("")
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = getLevelableAmount(this.layer, this.id).mul(2).pow(1.5).add(1)
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                return eff
+            },
+            // CLICK CODE
+            unlocked: true,
+            canSelect: true,
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                return getLevelableAmount(this.layer, this.id).add(1).pow(1.675).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        409: {
+            image() {return this.canClick() ? "resources/cards/Heart9.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                return "9 of Hearts"
+            },
+            levelLimit() { return new Decimal(99) },
+            description() {
+                let str = [
+                    "x" + format(this.effect()[0]) + " to clouds.<br>", //not implemented
+                    "x" + format(this.effect()[1]) + " to heart points.",
+                ]
+                return str.join("")
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.8).add(1)
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                return eff
+            },
+            // CLICK CODE
+            unlocked: true,
+            canSelect: true,
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                return getLevelableAmount(this.layer, this.id).add(1).pow(1.7).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        410: {
+            image() {return this.canClick() ? "resources/cards/Heart10.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                return "10 of Hearts"
+            },
+            levelLimit() { return new Decimal(99) },
+            description() {
+                let str = [
+                    "x" + format(this.effect()[0]) + " to SMA.<br>", //not implemented
+                    "x" + format(this.effect()[1]) + " to heart points.",
+                ]
+                return str.join("")
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = getLevelableAmount(this.layer, this.id).mul(0.5).pow(1.1).add(1)
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                return eff
+            },
+            // CLICK CODE
+            unlocked: true,
+            canSelect: true,
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                return getLevelableAmount(this.layer, this.id).add(1).pow(1.725).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        411: {
+            image() {return this.canClick() ? "resources/cards/HeartJ.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                return "Jack of Hearts"
+            },
+            levelLimit() { return new Decimal(99) },
+            description() {
+                let str = [
+                    "x" + format(this.effect()[0]) + " to eclipse shards.<br>", //not implemented
+                    "x" + format(this.effect()[1]) + " to heart points.",
+                ]
+                return str.join("")
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.6).mul(0.2).add(1)
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                return eff
+            },
+            // CLICK CODE
+            unlocked: true,
+            canSelect: true,
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                return getLevelableAmount(this.layer, this.id).add(1).pow(1.75).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        412: {
+            image() {return this.canClick() ? "resources/cards/HeartQ.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                return "Queen of Hearts"
+            },
+            levelLimit() { return new Decimal(99) },
+            description() {
+                let str = [
+                    "x" + format(this.effect()[0]) + " to blood.<br>", //not implemented
+                    "x" + format(this.effect()[1]) + " to heart points.",
+                ]
+                return str.join("")
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.8).mul(0.3).add(1)
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                return eff
+            },
+            // CLICK CODE
+            unlocked: true,
+            canSelect: true,
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                return getLevelableAmount(this.layer, this.id).add(1).pow(1.775).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        413: {
+            image() {return this.canClick() ? "resources/cards/HeartK.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                return "King of Hearts"
+            },
+            levelLimit() { return new Decimal(99) },
+            description() {
+                let str = [
+                    "x" + format(this.effect()[0]) + " to space pet XP gain.<br>", //not implemented
+                    "x" + format(this.effect()[1]) + " to heart points.",
+                ]
+                return str.join("")
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.4).mul(0.5).add(1)
                 eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
                 return eff
             },
@@ -1616,6 +2228,505 @@
     upgrades: {
     },
     buyables: {
+        11: {
+            costBase() { return new Decimal(5) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.car.cardPoints[0]},
+            pay(amt) { player.car.cardPoints[0] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.25).add(1) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            display() {
+                return "which are boosting spade point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Spade Points"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '142px', color: "black", background: "#9c9c9c", border: "5px solid #dadada", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
+        12: {
+            costBase() { return new Decimal(50) },
+            costGrowth() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.car.cardPoints[0]},
+            pay(amt) { player.car.cardPoints[0] = this.currency().sub(amt) },
+            effect(x) { return player.car.cardPoints[0].add(1).pow(getBuyableAmount(this.layer, this.id).pow(0.3).div(1.25)) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            display() {
+                return "<h5>which are boosting chance point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ". (affected by Spade Points)\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Spade Points"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '142px', color: "black", background: "#9c9c9c", border: "5px solid #dadada", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
+        13: {
+            costBase() { return new Decimal(200) },
+            costGrowth() { return new Decimal(2.5) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.car.cardPoints[0]},
+            pay(amt) { player.car.cardPoints[0] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.25).add(1) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            display() {
+                return "which are boosting card shred gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Spade Points"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '142px', color: "black", background: "#9c9c9c", border: "5px solid #dadada", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
+        14: {
+            costBase() { return new Decimal(1000) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(10) },
+            currency() { return player.car.cardPoints[0]},
+            pay(amt) { player.car.cardPoints[0] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            display() {
+                return "which are adding +" + formatWhole(tmp[this.layer].buyables[this.id].effect) + " to base card draw amount.\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Spade Points"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '142px', color: "black", background: "#9c9c9c", border: "5px solid #dadada", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
+        //club
+        21: {
+            costBase() { return new Decimal(5) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.car.cardPoints[1]},
+            pay(amt) { player.car.cardPoints[1] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.25).add(1) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            display() {
+                return "which are boosting club point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Club Points"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '142px', color: "black", background: "#9c9c9c", border: "5px solid #dadada", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
+        22: {
+            costBase() { return new Decimal(50) },
+            costGrowth() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.car.cardPoints[1]},
+            pay(amt) { player.car.cardPoints[1] = this.currency().sub(amt) },
+            effect(x) { return player.car.cardPoints[1].add(1).pow(getBuyableAmount(this.layer, this.id).pow(0.25).div(2)) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            display() {
+                return "<h5>which are boosting head and tails gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ". (affected by Club Points)\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Club Points"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '142px', color: "black", background: "#9c9c9c", border: "5px solid #dadada", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
+        23: {
+            costBase() { return new Decimal(200) },
+            costGrowth() { return new Decimal(2.5) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.car.cardPoints[1]},
+            pay(amt) { player.car.cardPoints[1] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.25).add(1) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            display() {
+                return "which are boosting card shred gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Club Points"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '142px', color: "black", background: "#9c9c9c", border: "5px solid #dadada", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
+        24: {
+            costBase() { return new Decimal(1000) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(10) },
+            currency() { return player.car.cardPoints[1]},
+            pay(amt) { player.car.cardPoints[1] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            display() {
+                return "which are adding +" + formatWhole(tmp[this.layer].buyables[this.id].effect) + " to base card draw amount.\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Club Points"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '142px', color: "black", background: "#9c9c9c", border: "5px solid #dadada", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
+        //diamond
+        31: {
+            costBase() { return new Decimal(5) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.car.cardPoints[2]},
+            pay(amt) { player.car.cardPoints[2] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.25).add(1) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            display() {
+                return "which are boosting diamond point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Diamond Points"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '142px', color: "black", background: "#f18080", border: "5px solid #ff3333", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
+        32: {
+            costBase() { return new Decimal(50) },
+            costGrowth() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.car.cardPoints[2]},
+            pay(amt) { player.car.cardPoints[2] = this.currency().sub(amt) },
+            effect(x) { return player.car.cardPoints[2].add(1).pow(getBuyableAmount(this.layer, this.id).pow(0.2).div(3)) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            display() {
+                return "<h5>which are boosting wheel point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ". (affected by Diamond Points)\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Diamond Points"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '142px', color: "black", background: "#f18080", border: "5px solid #ff3333", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
+        33: {
+            costBase() { return new Decimal(200) },
+            costGrowth() { return new Decimal(2.5) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.car.cardPoints[2]},
+            pay(amt) { player.car.cardPoints[2] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.25).add(1) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            display() {
+                return "which are boosting card shred gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Diamond Points"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '142px', color: "black", background: "#f18080", border: "5px solid #ff3333", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
+        34: {
+            costBase() { return new Decimal(1000) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(10) },
+            currency() { return player.car.cardPoints[2]},
+            pay(amt) { player.car.cardPoints[2] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            display() {
+                return "which are adding +" + formatWhole(tmp[this.layer].buyables[this.id].effect) + " to base card draw amount.\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Diamond Points"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '142px', color: "black", background: "#f18080", border: "5px solid #ff3333", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
+        //heart
+        41: {
+            costBase() { return new Decimal(5) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.car.cardPoints[3]},
+            pay(amt) { player.car.cardPoints[3] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.25).add(1) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            display() {
+                return "which are boosting heart point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Heart Points"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '142px', color: "black", background: "#f18080", border: "5px solid #ff3333", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
+        42: {
+            costBase() { return new Decimal(50) },
+            costGrowth() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.car.cardPoints[3]},
+            pay(amt) { player.car.cardPoints[3] = this.currency().sub(amt) },
+            effect(x) { return player.car.cardPoints[3].add(1).pow(getBuyableAmount(this.layer, this.id).pow(0.2).div(6)) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            display() {
+                return "<h5>which are boosting all chip gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ". (affected by Heart Points)\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Heart Points"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '142px', color: "black", background: "#f18080", border: "5px solid #ff3333", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
+        43: {
+            costBase() { return new Decimal(200) },
+            costGrowth() { return new Decimal(2.5) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.car.cardPoints[3]},
+            pay(amt) { player.car.cardPoints[3] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.25).add(1) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            display() {
+                return "which are boosting card shred gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Heart Points"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '142px', color: "black", background: "#f18080", border: "5px solid #ff3333", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
+        44: {
+            costBase() { return new Decimal(1000) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(10) },
+            currency() { return player.car.cardPoints[3]},
+            pay(amt) { player.car.cardPoints[3] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            display() {
+                return "which are adding +" + formatWhole(tmp[this.layer].buyables[this.id].effect) + " to base card draw amount.\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Heart Points"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '142px', color: "black", background: "#f18080", border: "5px solid #ff3333", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
     },
     milestones: {},
     challenges: {},
@@ -1628,7 +2739,31 @@
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                ]
+                    ["style-row", [
+                    ["blank", "25px"],
+                    ["style-column", [
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.car.cardGenerators) + "</h3> card generators. (+" + formatWhole(player.car.cardGeneratorsToGet) + ")" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["clickable", 11], 
+                    ]],
+                    ["row", [ ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["clickable", 104], ]],
+                    ["style-column", [
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.car.cardShreds) + "</h3> card shreds. (+" + formatWhole(player.car.cardShredsPerSecond) + "/s)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "+" + formatWhole(player.car.cardsToGet) + " cards on draw." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["clickable", 12],
+                    ]],
+                    ], {width: "1100px", height: "250px", border: "3px solid rgb(68, 0, 0)", borderRadius: "10px 10px 0px 0px", background: "linear-gradient(180deg, #9e3b3b 0%, rgb(97, 44, 44) 50%, #9e3b3b 100%)"}],
+                    ["style-column", [
+                    ["blank", "25px"],
+                    ["style-column", [
+                    ["raw-html", function () { return "Upgrades" }, { "color": "white", "font-size": "24px", "font-family": "monospace",}],
+                    ], {width: "1100px", height: "75px",}],
+                    ["style-column", [
+                    ], {width: "1100px", height: "325px",}],
+                    ], {width: "1100px", height: "400px", border: "3px solid rgb(68, 0, 0)", borderRadius: "0px 0px 10px 10px", borderTop: "0px", background: "linear-gradient(180deg, #9e3b3b 0%, rgb(97, 44, 44) 50%, #9e3b3b 100%)"}],
+                ],         
+                            
             },
             "Collection": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
@@ -1670,15 +2805,57 @@
                                 ["levelable", 311], ["levelable", 312], ["levelable", 313],
                             ], () => {return {width: "1175px", height: "152px", backgroundColor: "#490c0c", padding: "5px"}}],
                             ["style-column", [
-                                ["raw-html", "[REDACTED]", {color: "#7f7f7f", fontSize: "30px", fontFamily: "monospace"}],
-                            ], () => {return {width: "1185px", height: "50px", backgroundColor: "#323232", borderTop: "3px solid #7f7f7f", borderBottom: "3px solid #7f7f7f", userSelect: "none"}}],
+                                ["raw-html", "♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥", {color: "#ff3333", fontSize: "50px", fontFamily: "monospace"}],
+                            ], () => {return {width: "1185px", height: "50px", backgroundColor: "#dadada", borderTop: "3px solid #7f7f7f", borderBottom: "3px solid #7f7f7f", userSelect: "none"}}],
                             ["style-row", [
                                 ["levelable", 401], ["levelable", 402], ["levelable", 403], ["levelable", 404], ["levelable", 405],
                                 ["levelable", 406], ["levelable", 407], ["levelable", 408], ["levelable", 409], ["levelable", 410],
                                 ["levelable", 411], ["levelable", 412], ["levelable", 413],
-                            ], () => {return{width: "1175px", height: "152px", backgroundColor: "#1c2033", padding: "5px"}}],
+                            ], () => {return{width: "1175px", height: "152px", backgroundColor: "#490c0c", padding: "5px"}}],
                         ], {width: "1200px", height: "522px", borderTop: "3px solid white"}],
                     ], {width: "1200px", height: "700px", border: "3px solid white", backgroundColor: "#1c2033"}],
+                ]
+            },
+            "Suit Points": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                unlocked() { return true },
+                content: [
+                    ["blank", "12.5px"],
+                    ["raw-html", "All suite points and buyables are reset on card reset.", {color: "#ff3333", fontSize: "16px", fontFamily: "monospace"}],
+                    ["blank", "12.5px"],
+                    ["style-column", [
+                            ["style-column", [
+                                ["raw-html", () => {return "You have " + format(player.car.cardPoints[0]) + " spade points (+" + format(player.car.cardPointsPerSecond[0]) + "/s)"}, {color: "#1f1f1f", fontSize: "24px", fontFamily: "monospace"}],
+                            ], {width: "785px", height: "30px", backgroundColor: "#dadada", borderTop: "3px solid #7f7f7f", borderBottom: "3px solid #7f7f7f", userSelect: "none"}],
+                            ["style-row", [
+
+                            ["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14],
+                            ], {width: "775px", height: "135px", backgroundColor: "#303030", padding: "5px"}],
+
+                            ["style-column", [
+                                ["raw-html", () => {return "You have " + format(player.car.cardPoints[1]) + " club points (+" + format(player.car.cardPointsPerSecond[1]) + "/s)"}, {color: "#1f1f1f", fontSize: "24px", fontFamily: "monospace"}],
+                            ], {width: "785px", height: "30px", backgroundColor: "#dadada", borderTop: "3px solid #7f7f7f", borderBottom: "3px solid #7f7f7f", userSelect: "none"}],
+                            ["style-row", [
+                            ["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24],
+
+                            ], () => {return {width: "775px", height: "135px", backgroundColor: "#303030", padding: "5px"}}],
+
+                            ["style-column", [
+                                ["raw-html", () => {return "You have " + format(player.car.cardPoints[2]) + " diamond points (+" + format(player.car.cardPointsPerSecond[2]) + "/s)"}, {color: "#ff3333", fontSize: "24px", fontFamily: "monospace"}],
+                            ], () => {return {width: "785px", height: "30px", backgroundColor: "#dadada", borderTop: "3px solid #7f7f7f", borderBottom: "3px solid #7f7f7f", userSelect: "none"}}],
+                            ["style-row", [
+                            ["ex-buyable", 31], ["ex-buyable", 32], ["ex-buyable", 33], ["ex-buyable", 34],
+
+                            ], () => {return {width: "775px", height: "135px", backgroundColor: "#490c0c", padding: "5px"}}],
+                            ["style-column", [
+                                ["raw-html", () => {return "You have " + format(player.car.cardPoints[3]) + " heart points (+" + format(player.car.cardPointsPerSecond[3]) + "/s)"}, {color: "#ff3333", fontSize: "24px", fontFamily: "monospace"}],
+
+                            ], () => {return {width: "785px", height: "30px", backgroundColor: "#dadada", borderTop: "3px solid #7f7f7f", borderBottom: "3px solid #7f7f7f", userSelect: "none"}}],
+                            ["style-row", [
+                            ["ex-buyable", 41], ["ex-buyable", 42], ["ex-buyable", 43], ["ex-buyable", 44],
+
+                            ], () => {return{width: "775px", height: "135px", backgroundColor: "#490c0c", padding: "5px"}}],
+                        ], {width: "785px", height: "722px", border: "3px solid white"}],
                 ]
             },
         },

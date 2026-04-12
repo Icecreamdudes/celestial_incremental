@@ -52,6 +52,7 @@
         if (hasMilestone("db", 12)) player.du.pointGain = player.du.pointGain.mul(player.db.milestone2Effect)
         if (hasMilestone("dgj", 12)) player.du.pointGain = player.du.pointGain.mul(player.dgj.milestone2Effect)
         player.du.pointGain = player.du.pointGain.mul(buyableEffect("dgj", 11))
+        player.du.pointGain = player.du.pointGain.mul(levelableEffect("car", 401)[0])
 
         player.du.pointGain = player.du.pointGain.div(player.du.pointSoftcap)
 

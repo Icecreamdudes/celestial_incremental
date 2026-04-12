@@ -193,6 +193,7 @@
         player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.mul(levelableEffect("st", 102)[0])
         if (player.pet.legPetTimers[0].active) player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.pow(0.6)
         if (hasMilestone("db", 13)) player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.mul(1000)
+        player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.mul(levelableEffect("car", 402)[0])
 
 
         player.dr.tierPoints = player.dr.tierPoints.add(player.dr.tierPointsPerSecond.mul(delta))   
@@ -210,6 +211,7 @@
         player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.mul(levelableEffect("st", 103)[0])
         if (player.pet.legPetTimers[0].active) player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.pow(0.6)
         if (hasMilestone("db", 13)) player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.mul(100)
+        player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.mul(levelableEffect("car", 402)[0])
 
 
         player.dr.tetrPoints = player.dr.tetrPoints.add(player.dr.tetrPointsPerSecond.mul(delta))
@@ -227,6 +229,7 @@
         player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.mul(levelableEffect("st", 104)[0])
         if (player.pet.legPetTimers[0].active) player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.pow(0.6)
         if (hasMilestone("db", 13)) player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.mul(10)
+        player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.mul(levelableEffect("car", 402)[0])
 
 
         player.dr.pentPoints = player.dr.pentPoints.add(player.dr.pentPointsPerSecond.mul(delta))

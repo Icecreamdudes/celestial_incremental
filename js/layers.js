@@ -97,7 +97,7 @@
         if (hasMilestone("fa", 22)) player.i.preOTFMult = player.i.preOTFMult.mul(player.fa.milestoneEffect[10])
 
         player.i.preOTFMult = player.i.preOTFMult.pow(player.i.pylonEnergyEffect2)
-
+        player.i.preOTFMult = player.i.preOTFMult.pow(levelableEffect("car", 301)[0])
         //----------------------------------------
 
         //cutscene
@@ -109,6 +109,7 @@
         if (player.ir.iriditeDefeated) player.i.postOTFMult = player.i.postOTFMult.mul(1e12)
 
         player.i.postOTFMult = player.i.postOTFMult.pow(player.i.pylonEnergyEffect3)
+        player.i.postOTFMult = player.i.postOTFMult.pow(levelableEffect("car", 302)[0])
 
         //----------------------------------------
 
@@ -183,6 +184,7 @@
 
         // SOFTCAP OF DOOM START
         player.i.doomSoftcapStart = new Decimal("1e2000000")
+        player.i.doomSoftcapStart = player.i.doomSoftcapStart.mul(levelableEffect("car", 313)[0])
         player.i.doomSoftcapStart = player.i.doomSoftcapStart.pow(buyableEffect("fa", 405))
 
         // SOFTCAP WEAKENER

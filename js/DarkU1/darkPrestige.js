@@ -47,6 +47,7 @@
         player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("st", 105)[0])
         player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(buyableEffect("dv", 14))
         player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(buyableEffect("dgj", 12))
+        player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("car", 403)[0])
 
         //power
         if (player.pet.legPetTimers[0].active) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.pow(0.8)

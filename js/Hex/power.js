@@ -29,6 +29,7 @@ addLayer("hpw", {
         player.hpw.powerGain = player.hpw.powerGain.mul(buyableEffect("sme", 144))
         player.hpw.powerGain = player.hpw.powerGain.mul(buyableEffect("al", 206))
         if (player.alephsChamber.milestone[25] > 0) player.hpw.powerGain = player.hpw.powerGain.mul(36)
+        player.hpw.powerGain = player.hpw.powerGain.mul(levelableEffect("car", 305)[0])
 
         // POWER MODIFIERS
         player.hpw.powerGain = player.hpw.powerGain.pow(player.n.pylonPassiveEffect)

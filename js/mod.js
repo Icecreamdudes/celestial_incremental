@@ -762,8 +762,7 @@ function updateStyles() {
 						playAndLoopAudio("music/hive.mp3", options.musicVolume/10)
 						break;
 					case "DS":
-						if (!hasUpgrade("za", 16)) playAndLoopAudio("music/diceSpace.mp3", options.musicVolume/10)
-						if (hasUpgrade("za", 16) && !player.ir.inBattle) playAndLoopAudio("music/casino.mp3", options.musicVolume/10)
+						if (!player.ir.inBattle) playAndLoopAudio("music/diceSpace.mp3", options.musicVolume/10)
 			    		if (player.ir.inBattle) playAndLoopAudio("music/ascensionSpirit.mp3", options.musicVolume/10);
 						break;
 					case "CB":
@@ -1579,7 +1578,7 @@ var doNotCallTheseFunctionsEveryTick = [
 	"startCutscene38", "startCutscene39", "cookieClick", "generateFlower", "generateMult", "flowerClick",
 	"selectCelestialites", "petDeath", "celestialiteDeath", "petAbility", "celestialiteAbility",
 	"arriveAtStar", "spaceEnergyReset", "coinFlip", "randomizeSegments", "spinWheel", "spinSlots", "evaluateRewards",
-	"slotReset", "enhanceReset", "cardReset"
+	"slotReset", "enhanceReset", "cardReset", "cardDraw"
 ]
 
 function getStartPoints(){

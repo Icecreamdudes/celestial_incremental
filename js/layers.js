@@ -240,9 +240,9 @@
 
         player.i.pylonEnergyEffect = player.i.pylonEnergy.pow(4).add(1).pow(player.i.pylonTierEffect)
         player.i.pylonEnergyEffect2 = player.i.pylonEnergy.pow(0.15).add(1).pow(player.i.pylonTierEffect)
-        if (player.i.pylonEnergyEffect2.gt(10000)) player.i.pylonEnergyEffect2 = player.i.pylonEnergyEffect2.div(10000).pow(0.5).mul(10000)
+        if (player.i.pylonEnergyEffect2.gt(10000)) player.i.pylonEnergyEffect2 = player.i.pylonEnergyEffect2.div(10000).pow(0.1).mul(10000)
         player.i.pylonEnergyEffect3 = player.i.pylonEnergy.pow(0.1).add(1).pow(player.i.pylonTierEffect)
-        if (player.i.pylonEnergyEffect3.gt(1000)) player.i.pylonEnergyEffect3 = player.i.pylonEnergyEffect3.div(1000).pow(0.5).mul(1000)
+        if (player.i.pylonEnergyEffect3.gt(1000)) player.i.pylonEnergyEffect3 = player.i.pylonEnergyEffect3.div(1000).pow(0.1).mul(1000)
 
         player.i.pylonTierEffect = player.i.pylonTier.sub(1).pow(0.3).div(10).add(1)
 

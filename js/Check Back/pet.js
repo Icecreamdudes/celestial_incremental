@@ -731,7 +731,7 @@ addLayer("pet", {
         let abilityTimeDecrease = new Decimal(1)
         abilityTimeDecrease = abilityTimeDecrease.mul(player.dv.timeDrainRate)
         if (getLevelableTier("pu", 303, true)) abilityTimeDecrease = abilityTimeDecrease.div(levelableEffect("pu", 303)[0])
-        if (hasMilestone("dgj", 16)) abilityTimeDecrease = abilityTimeDecrease.mul(player.dgj.milestone3Effect)
+        if (hasMilestone("dgj", 16)) abilityTimeDecrease = abilityTimeDecrease.div(player.dgj.milestone3Effect)
         player.pet.legPetTimers[0].current = player.pet.legPetTimers[0].current.sub(abilityTimeDecrease.mul(delta))
 
         player.pet.legPetTimers[1].current = player.pet.legPetTimers[1].current.sub(delta)
@@ -1337,15 +1337,15 @@ addLayer("pet", {
                         doPopup("none", "+" + formatSimple(player.pet.fragShopBulk) + " Evolution Fragment", "Pet Obtained!", 5, "#4e7cff", "resources/Pets/evolutionFragmentRarePet.png")
                         break;
                     case 7:
-                        addLevelableXP("pet", 501, new Decimal(1))
+                        addLevelableXP("pet", 501, new Decimal(player.pet.fragShopBulk))
                         doPopup("none", "Eclipse becomes stronger", "Pet Obtained!", 5, "#eed200", "resources/Pets/eclipseLegendaryPet.png")
                         break;
                     case 8:
-                        addLevelableXP("pet", 502, new Decimal(1))
+                        addLevelableXP("pet", 502, new Decimal(player.pet.fragShopBulk))
                         doPopup("none", "Geroa gets enhancements", "Pet Obtained!", 5, "#eed200", "resources/Pets/geroaLegendaryPet.png")
                         break;
                     case 9:
-                        addLevelableXP("pet", 503, new Decimal(1))
+                        addLevelableXP("pet", 503, new Decimal(player.pet.fragShopBulk))
                         doPopup("none", "Vespasian mutates further", "Pet Obtained!", 5, "#eed200", "resources/Pets/vespasianLegendaryPet.png")
                         break;
                 }
@@ -3794,7 +3794,7 @@ addLayer("pet", {
                 return [
                     player.au2.stars.pow(0.04).add(1).pow(amt.pow(0.15)).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // stars (Based on Stars)
                     player.au2.stars.pow(0.15).div(2).add(1).pow(amt.pow(0.15)).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // fuel (Based on Stars)
-                    player.au2.stars.pow(0.1).div(2).add(1).pow(amt.pow(0.15)).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // rocket parts (Based on Stars)
+                    player.au2.stars.pow(0.15).div(2).add(1).pow(amt.pow(0.15)).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // rocket parts (Based on Stars)
                     amt.sub(1).div(2).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))) // Eclipse Cooldown
                 ]
             },

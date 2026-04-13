@@ -7,7 +7,12 @@ addLayer("pf", {
         unlocked: true,
     }},
     automate() {},
-    nodeStyle() {},
+    nodeStyle() {
+        return {
+            background: "linear-gradient(45deg, #333 0%, #666 100%)",
+            "background-origin": "border-box",
+        }
+    },
     tooltip: "Puzzle Fighting",
     color: "white",
     update(delta) {
@@ -30,6 +35,15 @@ addLayer("pf", {
                     
                 ]
             },
+            "Map": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                unlocked() { return true },
+                content: [
+                    ["style-column", [
+                        "blank",
+                    ], {width: "800px", height: "720px", border: "3px solid var(--regBorder)", borderRadius: "30px"}]
+                ]
+            }
         },
     },
     tabFormat: [

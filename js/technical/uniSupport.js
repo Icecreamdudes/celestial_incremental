@@ -361,7 +361,7 @@ addUniverse("UZ", {
         return "Universe ζ<br>Puzzle World"
     },
     symbol: "ζ",
-    tree: [["ak",],["el",]],
+    tree: [["ak", "pf",],["el",]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(135deg, #000000ff 0%, #200010ff 50%, #000000ff 100%)",

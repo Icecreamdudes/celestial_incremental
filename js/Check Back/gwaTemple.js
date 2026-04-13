@@ -60,7 +60,7 @@ addLayer("gwaTemple", {
 
         // GWA POINTS
         let gwaAmt = new Decimal(0)
-        if (hasMilestone("gwaTemple", 11)) gwaAmt = gwaAmt.add(1)
+        if (hasMilestone("gwaTemple", 11)) gwaAmt = gwaAmt.add(player.gwaTemple.gwark)
         if (hasUpgrade("gwaTemple", 16)) gwaAmt = gwaAmt.mul(2)
         player.gwaTemple.gwaPointsGain = gwaAmt.add(1).log(2).div(6)
 
@@ -90,7 +90,7 @@ addLayer("gwaTemple", {
 
         if (player.gwaTemple.gwank.lt(10000)) {player.gwaTemple.gwankReq = layers.h.hexReq(player.gwaTemple.gwank, 2500, 1.5, gwankDiv)
         } else {
-            player.gwaTemple.gwankReq = player.gwaTemple.gwank.sub(7088).pow(player.gwaTemple.gwank.div(1000).log(10).div(2).add(1.5)).mul(2500).div(gwankDiv).ceil()
+            player.gwaTemple.gwankReq = player.gwaTemple.gwank.sub(7088).pow(player.gwaTemple.gwank.add(1).div(1000).log(10).div(2).add(1.5)).mul(2500).div(gwankDiv).ceil()
         }
         
         if (!hasUpgrade("gwaTemple", 15)) {player.gwaTemple.gwankGet = new Decimal(1)
@@ -111,7 +111,8 @@ addLayer("gwaTemple", {
         player.gwaTemple.gwankerReq = layers.h.hexReq(player.gwaTemple.gwanker, 10, 1.45, gwankerDiv)
         player.gwaTemple.gwankerGet = hasUpgrade("gwaTemple", 24) ? layers.h.hexGain(player.gwaTemple.gwank, 10, 1.45, gwankerDiv).sub(player.gwaTemple.gwanker).max(0) : new Decimal(1)
 
-        player.gwaTemple.gwankerEffect = player.gwaTemple.gwanker.add(player.gwaTemple.gwankestEffect2).add(1).log(2).div(2).add(1).pow(0.35).pow(player.gwaTemple.gwankestEffect)
+        player.gwaTemple.gwankerEffect = player.gwaTemple.gwanker.add(player.gwaTemple.gwankestEffect2).add(1).log(2).div(2).add(1).pow(0.3).pow(player.gwaTemple.gwankestEffect)
+        if (player.gwaTemple.gwankerEffect.gte(10)) player.gwaTemple.gwankerEffect = player.gwaTemple.gwankerEffect.div(10).pow(0.3).mul(10)
         player.gwaTemple.gwankerEffect2 = player.gwaTemple.gwanker.add(player.gwaTemple.gwankestEffect2).pow(player.gwaTemple.gwankestEffect).floor()
 
         // GWANKEST
@@ -121,8 +122,8 @@ addLayer("gwaTemple", {
         player.gwaTemple.gwankestReq = layers.h.hexReq(player.gwaTemple.gwankest, 1000, 1.4, gwankestDiv)
         player.gwaTemple.gwankestGet = hasMilestone("gwaTemple", 13) ? layers.h.hexGain(player.gwaTemple.gwanker, 1000, 1.4, gwankestDiv).sub(player.gwaTemple.gwankest).max(0) : new Decimal(1)
 
-        player.gwaTemple.gwankestEffect = player.gwaTemple.gwankest.add(1).log(2).div(2).add(1).pow(0.3)
-        if (player.gwaTemple.gwankestEffect.gte(3)) player.gwaTemple.gwankestEffect = player.gwaTemple.gwankestEffect.div(3).pow(0.3).mul(3)
+        player.gwaTemple.gwankestEffect = player.gwaTemple.gwankest.add(1).log(2).div(2).add(1).pow(0.2)
+        if (player.gwaTemple.gwankestEffect.gte(2)) player.gwaTemple.gwankestEffect = player.gwaTemple.gwankestEffect.div(2).pow(0.3).mul(23)
         player.gwaTemple.gwankestEffect2 = player.gwaTemple.gwankest.mul(10).pow(1.5).floor()
 
         // GWARK
@@ -146,10 +147,10 @@ addLayer("gwaTemple", {
         player.gwaTemple.gwaWorshipCooldownMax = new Decimal(10)
         if (hasUpgrade("gwaTemple", 2)) player.gwaTemple.gwaWorshipCooldownMax = player.gwaTemple.gwaWorshipCooldownMax.div(1.25)
         if (hasUpgrade("gwaTemple", 8)) player.gwaTemple.gwaWorshipCooldownMax = player.gwaTemple.gwaWorshipCooldownMax.div(1.6)
-        if (hasUpgrade("gwaTemple", 11)) player.gwaTemple.gwaWorshipCooldownMax = player.gwaTemple.gwaWorshipCooldownMax.mul(2)
+        if (hasUpgrade("gwaTemple", 11)) player.gwaTemple.gwaWorshipCooldownMax = player.gwaTemple.gwaWorshipCooldownMax.mul(1.5)
         if (hasUpgrade("gwaTemple", 14)) player.gwaTemple.gwaWorshipCooldownMax = player.gwaTemple.gwaWorshipCooldownMax.div(2)
         if (hasUpgrade("gwaTemple", 23)) player.gwaTemple.gwaWorshipCooldownMax = player.gwaTemple.gwaWorshipCooldownMax.div(upgradeEffect("gwaTemple", 23))
-        player.gwaTemple.gwaWorshipCooldownMax = player.gwaTemple.gwaWorshipCooldownMax.div(buyableEffect("gwaTemple", 12))
+        player.gwaTemple.gwaWorshipCooldownMax = player.gwaTemple.gwaWorshipCooldownMax.div(buyableEffect("gwaTemple", 13))
         if (hasUpgrade("gwaTemple", 26)) player.gwaTemple.gwaWorshipCooldownMax = player.gwaTemple.gwaWorshipCooldownMax.mul(2)
 
         if (player.gwaTemple.gwaWorshipCooldown.gte(player.gwaTemple.gwaWorshipCooldownMax)) {
@@ -433,7 +434,7 @@ addLayer("gwaTemple", {
         11: {
             title: "Charged Gwarship",
             unlocked: true,
-            description: "Double gwarship time, but gwadruple gwa point gain.",
+            description: "Increase gwarship time by x1.5, but gwadruple gwa point gain.",
             cost() {return new Decimal(1200)},
             currencyLocation() { return player.gwaTemple },
             currencyDisplayName: "Gwa Points",
@@ -596,7 +597,7 @@ addLayer("gwaTemple", {
         26: {
             title: "Gwaffering",
             unlocked: true,
-            description: "Improve \"Gwarshipped Gains\", but halve gwarship time",
+            description: "Improve \"Gwarshipped Gains\", but double gwarship time",
             cost() {return new Decimal(1e16)},
             currencyLocation() { return player.gwaTemple },
             currencyDisplayName: "Gwa Points",

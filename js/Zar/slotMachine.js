@@ -849,7 +849,7 @@
                                     ], {width: "150px", height: "50px", borderRight: "2px solid #635400ff"}],
                                     ["tooltip-row", [
                                         ["raw-html", "<img src='resources/battle/temporalShards.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                                        ["raw-html", () => { return formatWhole(player.fi.temporalShards)}, {width: "95px", height: "50px", color: "#0d62c4ff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                        ["raw-html", () => { return formatWhole(player.stagnantSynestia.temporalShard)}, {width: "95px", height: "50px", color: "#0d62c4ff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                                         ["raw-html", "<div class='bottomTooltip'>Temporal Shards<hr><small>(Gained from check back battles)</small></div>"],
                                     ], {width: "150px", height: "50px"}],
                                 ], {height: "50px", backgroundColor: "black", border: "2px solid #635400ff", borderRadius: "10px", userSelect: "none"}],

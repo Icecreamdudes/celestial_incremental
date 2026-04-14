@@ -133,7 +133,7 @@
     clickables: {
         1: {
             title() { return "<h3>Focus</h3>" },
-            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.prj.storedTimeCapsules.gte(player.prj.modules[this.id].timeCapsuleReq) && !player.prj.modules[this.id].focused},
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.prj.storedTimeCapsules.gte(player.prj.modules[this.id].statReq) && player.prj.storedTimeCapsules.gte(player.prj.modules[this.id].timeCapsuleReq) && !player.prj.modules[this.id].focused},
             unlocked() { return true },
             onClick() {
                 player.prj.focused = player.prj.focused.add(1)

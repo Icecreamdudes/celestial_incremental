@@ -1063,7 +1063,7 @@
             getCompletionEffect() {
                 let completions = player.wel.fountains[1].completions.pow(0.9)
 
-                let s = completions.add(1).mul(completions.pow_base(1.1))
+                let s = completions.add(1).mul(completions.pow_base(1.08))
 
                 return s.floor()
             },
@@ -1072,7 +1072,7 @@
                 let s = new Decimal(60)
 
                 s = s.mul(completions.add(1))
-                s = s.mul(completions.pow_base(Math.pow(1.5, 1.15)))
+                s = s.mul(completions.pow_base(Math.pow(1.4, 1.1)))
                 if (completions.gte(1e3)) {
                     s = s.pow(1.05)
                 }
@@ -1084,7 +1084,7 @@
                 let s = new Decimal(5)
 
                 s = s.mul(completions.mul(0.25).add(1))
-                s = s.mul(completions.pow_base(1.5))
+                s = s.mul(completions.pow_base(1.4))
                 if (completions.gte(1e3)) {
                     s = s.pow(1.05)
                 }
@@ -1118,7 +1118,7 @@
                 let s = new Decimal(2.7e4)
 
                 s = s.mul(completions.add(1))
-                s = s.mul(completions.pow_base(Math.pow(1.75, 1.15)))
+                s = s.mul(completions.pow_base(Math.pow(1.6, 1.1)))
                 if (completions.gte(1e3)) {
                     s = s.pow(1.05)
                 }
@@ -1130,7 +1130,7 @@
                 let s = new Decimal(1.5e3)
 
                 s = s.mul(completions.mul(0.25).add(1))
-                s = s.mul(completions.pow_base(1.75))
+                s = s.mul(completions.pow_base(1.6))
                 if (completions.gte(1e3)) {
                     s = s.pow(1.05)
                 }
@@ -1161,10 +1161,10 @@
             },
             getTimeReq() {
                 let completions = player.wel.fountains[3].completions
-                let s = new Decimal(6e6)
+                let s = new Decimal(3e6)
 
                 s = s.mul(completions.add(1))
-                s = s.mul(completions.pow_base(Math.pow(5, 1.15)))
+                s = s.mul(completions.pow_base(Math.pow(5, 1.1)))
                 if (completions.gte(1e3)) {
                     s = s.pow(1.05)
                 }
@@ -1207,10 +1207,10 @@
             },
             getTimeReq() {
                 let completions = player.wel.fountains[4].completions
-                let s = new Decimal(2e8)
+                let s = new Decimal(1e8)
 
                 s = s.mul(completions.add(1))
-                s = s.mul(completions.pow_base(Math.pow(4, 1.15)))
+                s = s.mul(completions.pow_base(Math.pow(4, 1.1)))
                 if (completions.gte(1e3)) {
                     s = s.pow(1.05)
                 }

@@ -133,11 +133,15 @@
     clickables: {
         1: {
             title() { return "<h3>Focus</h3>" },
-            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.prj.storedTimeCapsules.gte(player.prj.modules[this.id].statReq) && player.prj.storedTimeCapsules.gte(player.prj.modules[this.id].timeCapsuleReq) && !player.prj.modules[this.id].focused},
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused)
+                && player.prj.storedTimeCapsules.gte(player.prj.modules[this.id].timeCapsuleReq)
+                && layers.prj.projects[this.id].statReqLocation()[layers.prj.projects[this.id].statReqInternalName].gte(player.prj.modules[this.id].statReq)
+                && !player.prj.modules[this.id].focused},
             unlocked() { return true },
             onClick() {
                 player.prj.focused = player.prj.focused.add(1)
                 player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.sub(player.prj.modules[this.id].timeCapsuleReq)
+                layers.prj.projects[this.id].statReqLocation()[layers.prj.projects[this.id].statReqInternalName] = layers.prj.projects[this.id].statReqLocation()[layers.prj.projects[this.id].statReqInternalName].sub(player.prj.modules[this.id].statReq)
                 player.prj.modules[this.id].focused = true
             },
             style() {
@@ -156,11 +160,15 @@
         },
         2: {
             title() { return "<h3>Focus</h3>" },
-            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.prj.storedTimeCapsules.gte(player.prj.modules[this.id].timeCapsuleReq) && !player.prj.modules[this.id].focused},
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused)
+                && player.prj.storedTimeCapsules.gte(player.prj.modules[this.id].timeCapsuleReq)
+                && layers.prj.projects[this.id].statReqLocation()[layers.prj.projects[this.id].statReqInternalName].gte(player.prj.modules[this.id].statReq)
+                && !player.prj.modules[this.id].focused},
             unlocked() { return true },
             onClick() {
                 player.prj.focused = player.prj.focused.add(1)
                 player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.sub(player.prj.modules[this.id].timeCapsuleReq)
+                layers.prj.projects[this.id].statReqLocation()[layers.prj.projects[this.id].statReqInternalName] = layers.prj.projects[this.id].statReqLocation()[layers.prj.projects[this.id].statReqInternalName].sub(player.prj.modules[this.id].statReq)
                 player.prj.modules[this.id].focused = true
             },
             style() {
@@ -179,11 +187,15 @@
         },
         3: {
             title() { return "<h3>Focus</h3>" },
-            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.prj.storedTimeCapsules.gte(player.prj.modules[this.id].timeCapsuleReq) && !player.prj.modules[this.id].focused},
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused)
+                && player.prj.storedTimeCapsules.gte(player.prj.modules[this.id].timeCapsuleReq)
+                && layers.prj.projects[this.id].statReqLocation()[layers.prj.projects[this.id].statReqInternalName].gte(player.prj.modules[this.id].statReq)
+                && !player.prj.modules[this.id].focused},
             unlocked() { return true },
             onClick() {
                 player.prj.focused = player.prj.focused.add(1)
                 player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.sub(player.prj.modules[this.id].timeCapsuleReq)
+                layers.prj.projects[this.id].statReqLocation()[layers.prj.projects[this.id].statReqInternalName] = layers.prj.projects[this.id].statReqLocation()[layers.prj.projects[this.id].statReqInternalName].sub(player.prj.modules[this.id].statReq)
                 player.prj.modules[this.id].focused = true
             },
             style() {
@@ -202,11 +214,15 @@
         },
         4: {
             title() { return "<h3>Focus</h3>" },
-            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.prj.storedTimeCapsules.gte(player.prj.modules[this.id].timeCapsuleReq) && !player.prj.modules[this.id].focused},
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused)
+                && player.prj.storedTimeCapsules.gte(player.prj.modules[this.id].timeCapsuleReq)
+                && layers.prj.projects[this.id].statReqLocation()[layers.prj.projects[this.id].statReqInternalName].gte(player.prj.modules[this.id].statReq)
+                && !player.prj.modules[this.id].focused},
             unlocked() { return true },
             onClick() {
                 player.prj.focused = player.prj.focused.add(1)
                 player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.sub(player.prj.modules[this.id].timeCapsuleReq)
+                layers.prj.projects[this.id].statReqLocation()[layers.prj.projects[this.id].statReqInternalName] = layers.prj.projects[this.id].statReqLocation()[layers.prj.projects[this.id].statReqInternalName].sub(player.prj.modules[this.id].statReq)
                 player.prj.modules[this.id].focused = true
             },
             style() {
@@ -942,6 +958,8 @@
             title: "Time Capsules",
             completionEffectStat: "Starmetal Alloy",
             statReqName: "Light",
+            statReqLocation() {return player.wel},
+            statReqInternalName: "light",
             getCompletionEffect() {
                 let completions = player.prj.modules[1].completions
 
@@ -972,6 +990,7 @@
             },
             getStatReq() {
                 let completions = player.prj.modules[1].completions
+                if (completions.eq(0)) return new Decimal(0);
                 let s = new Decimal(1e8)
 
                 s = s.mul(completions.sub(1).pow_base(completions.add(1).div(5).ceil().pow(1.25).pow_base(20)))
@@ -991,6 +1010,8 @@
             title: "Prismatic",
             completionEffectStat: "Core Fragment Scores",
             statReqName: "Prisms",
+            statReqLocation() {return player.pri},
+            statReqInternalName: "prisms",
             getCompletionEffect() {
                 let completions = player.prj.modules[2].completions
 
@@ -1021,6 +1042,7 @@
             },
             getStatReq() {
                 let completions = player.prj.modules[2].completions
+                if (completions.eq(0)) return new Decimal(0);
                 let s = new Decimal(10)
 
                 s = s.mul(completions.sub(1).pow_base(completions.add(1).div(5).ceil().pow(1.25).pow_base(5)))
@@ -1040,6 +1062,8 @@
             title: "Blueshift",
             completionEffectStat: "Punchcard XP",
             statReqName: "δ ↻",
+            statReqLocation() {return player.wel.modules[4]},
+            statReqInternalName: "completions",
             getCompletionEffect() {
                 let completions = player.prj.modules[3].completions
 
@@ -1070,6 +1094,7 @@
             },
             getStatReq() {
                 let completions = player.prj.modules[3].completions
+                if (completions.eq(0)) return new Decimal(0);
                 let s = new Decimal(1e10)
 
                 s = s.mul(completions.sub(1).pow_base(completions.add(1).div(5).ceil().pow(1.25).pow_base(50)))
@@ -1089,6 +1114,8 @@
             title: "Starshine",
             completionEffectStat: "Stars, post-softcap",
             statReqName: "Starlight",
+            statReqLocation() {return player.bum},
+            statReqInternalName: "starlight",
             getCompletionEffect() {
                 let completions = player.prj.modules[4].completions
 
@@ -1119,6 +1146,7 @@
             },
             getStatReq() {
                 let completions = player.prj.modules[4].completions
+                if (completions.eq(0)) return new Decimal(0);
                 let s = new Decimal(10)
 
                 s = s.mul(completions.sub(1).pow_base(completions.add(1).div(5).ceil().pow(1.25).pow_base(10)))

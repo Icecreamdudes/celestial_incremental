@@ -354,6 +354,8 @@
                 player.tab = "wel"
                 player.universe = "UD"
                 player.subtabs["bi"]['stuff'] = 'Break Infinity Upgrades'
+
+                if (!hasAchievement("achievements", 1201)) completeAchievement("achievements", 1201)
             },
             style() {
                 let look = {width: "527px", minHeight: "50px", borderRadius: "0px 0px 16px 16px"}

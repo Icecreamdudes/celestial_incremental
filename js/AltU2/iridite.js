@@ -1260,7 +1260,7 @@ addLayer("ir", {
                         ["raw-html", "<u>Unlocks</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ["raw-html", () => { return player.pol.unlockHive == 2 ? "The Hive" : "Larva (In Pollinators)" }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", "New Punchcards", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "New D1 Upgrades", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "New Dark Universe 1 Upgrades", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", "New Singularity Upgrades", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", "New Starmetal Studies", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "10px"],

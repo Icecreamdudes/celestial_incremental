@@ -43,7 +43,7 @@ addLayer("n", {
         let onepersec = new Decimal(1)
 
         if (hasUpgrade("n", 31)) {
-            player.n.nestGain = Decimal.pow(2, player.al.honeycomb.mul(player.al.royalJelly).div(1e60).add(1).log(1e20))
+            player.n.nestGain = Decimal.pow(2, player.al.honeycomb.mul(player.al.royalJelly).div(1e50).add(1).log(1e25))
         } else {
             player.n.nestGain = new Decimal(1)
         }
@@ -711,7 +711,7 @@ addLayer("n", {
                             player.al.honeycomb.gte(1e25) && player.al.royalJelly.gte(1e25) ? look.color = "white" : look.color = "gray"
                             return look
                         }],
-                        ["raw-html", () => {return hasUpgrade("n", 31) ? "<div class='bottomTooltip'>Base Formula<hr><small>2^(log<sub>1e20</sub>((Honeycombs*Royal Jelly)/1e60))</small></div>" : ""}],
+                        ["raw-html", () => {return hasUpgrade("n", 31) ? "<div class='bottomTooltip'>Base Formula<hr><small>2^(log<sub>1e25</sub>((Honeycombs*Royal Jelly)/1e50))</small></div>" : ""}],
                     ]],
                     ["raw-html", () => {return hasMilestone("n", 14) ? "Boosts pollinators by x" + formatSimple(player.n.nestEffect) : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "10px"],

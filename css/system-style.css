@@ -556,3 +556,68 @@ button > * {
 	background: transparent !important;
 	background-image: none !important;
 }
+
+.debugHide {
+	display: none;
+}
+
+.debugContainer {
+	z-index: 100000;
+	position: absolute;
+	display: block !important;
+	bottom: 0;
+	right: 0;
+	width: 300px !important;
+	height: 400px !important;
+	background: #000;
+	border: 3px solid #2CFF05;
+	outline: 3px solid #000;
+}
+
+.debugTitle {
+	display: flex;
+	align-items: center;
+	height: 40px;
+	width: 300px;
+	border-bottom: 3px solid #2CFF05;
+}
+
+.debugExit {
+	position: absolute;
+	top: 0;
+	right: 0;
+	background: #000;
+	border-left: 2px solid #2CFF05;
+	color: #2CFF05;
+	font-size: 20px;
+	width: 40px;
+	height: 40px;
+	cursor: pointer;
+}
+
+.debugRow {
+	display: flex;
+}
+
+.debugInputText {
+	display: flex;
+	align-items: center;
+	width: 150px;
+	height: 30px;
+	border-bottom: 2px solid #2CFF05;
+	border-right: 2px solid #2CFF05;
+}
+
+.debugInput {
+	width: 180px;
+	height: 30px;
+	background: #000;
+	color: #2CFF05;
+	font-size: 20px;
+	text-align: left;
+	padding: 0 10px;
+	border-left: 0px;
+	border-right: 0px;
+	border-top: 0px;
+	border-bottom: 2px solid #2CFF05;
+}

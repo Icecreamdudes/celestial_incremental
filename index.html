@@ -164,5 +164,17 @@
 			<bg :layer="player.tab" style="visibility:hidden !important"></bg>
 		</div>
 		<div class="layerBG" id="uniBG" v-if="player.startedGame && !player.hideMenu"></div>
+		<div id="debugHolder" style="height:400px !important" class="debugHide" v-bind:class="{debugContainer: options.debug}" v-if="options.debug">
+			<div class="debugTitle">
+				<p style="font-size:20px;color:#2CFF05">Debug</p>
+				<button class="debugExit" onclick="options.debug = false">X</button>
+			</div>
+			<div class="debugRow">
+				<div class="debugInputText">
+					<p style="font-size:16px;color:#2CFF05">Dev Speed</p>
+				</div>
+				<input class="debugInput" v-model.lazy.number="player.devSpeed" type="text" inputmode="numeric" pattern="[0-9]*">
+			</div>
+		</div>
 	</div>
 </body>

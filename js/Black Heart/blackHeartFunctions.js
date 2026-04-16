@@ -807,12 +807,12 @@ function calcTarget(index, slot, target, action = "none") {
         case "storedTarget":
             stored = true
             if (index == 3) {
-                if (player.bh.celestialite.actions[slot].variables["specTarget"]) {
+                if (player.bh.celestialite.actions[slot].variables["specTarget"] && player.bh.celestialite.actions[slot].variables["specTarget"] != null) {
                     result = player.bh.celestialite.actions[slot].variables["specTarget"]
                     break;
                 }
             } else {
-                if (player.bh.characters[index].skills[slot].variables["specTarget"]) {
+                if (player.bh.characters[index].skills[slot].variables["specTarget"] && player.bh.characters[index].skills[slot].variables["specTarget"] != null) {
                     result = player.bh.characters[index].skills[slot].variables["specTarget"]
                     break;
                 }

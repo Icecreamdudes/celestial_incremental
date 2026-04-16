@@ -821,7 +821,7 @@ addLayer("co", {
         player.ta.upgrades.splice(0, player.ta.upgrades.length)
 
         //     <----     TAV'S DOMAIN LAYER     ---->
-        layers.tad.domainReset(10)
+        if (player.alephsChamber.milestone[25] <= 0) layers.tad.domainReset(10)
 
         if (!hasMilestone("s", 15)) {
             player.tad.upgrades.splice(0, player.tad.upgrades.length)

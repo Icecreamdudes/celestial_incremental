@@ -196,12 +196,12 @@
 				<button class="debugButton" onclick="gameLoop(3600)">1h</button>
 				<button class="debugButton" onclick="gameLoop(86400)">1d</button>
 			</div>
-			<div class="debugRow" style="height:50px;padding:0 8px">
+			<div class="debugRow" style="height:50px;padding:4px 8px 0px 8px">
 				<button class="debugButton" style="width:85px;font-size:12px" onclick="save()">Save</button>
 				<button class="debugButton" style="width:85px;font-size:12px" onclick="toggleOpt('autosave')" v-html="`Autosave<br>[` + options.autosave + `]`"></button>
 				<button class="debugButton" style="width:85px;font-size:10px" onclick="toggleOpt('performanceMode')" v-html="`Canvas Performance [` + options.performanceMode + `]`"></button>
 			</div>
-			<div class="debugRow" style="height:40px;padding:0 8px">
+			<div class="debugRow" style="height:40px;padding:2px 8px">
 			<label class=can for='importfile' style='display:flex;align-items:center;justify-content:center;width:81px;height:36px;background:#000;border:2px solid #3CFF05;font-size:12px;color:#3CFF05'>Import<br>file</label><input id='importfile' type='file' onchange='importFile()' style='display:none' />
 				<button class="debugButton" style="width:85px;font-size:12px" onclick="exportFile()">Export File</button>
 				<button class="debugButton" style="width:85px;font-size:10px" onclick="toggleOpt('musicToggle')" v-html="`Music Toggle [` + options.musicToggle + `]`"></button>

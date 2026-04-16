@@ -3284,7 +3284,7 @@
                         return look
                     }],
                     ["raw-html", () => {
-                        if (!inChallenge("fu", 12)) return ""
+                        if (!inChallenge("fu", 12) || !hasUpgrade("fu", 106)) return ""
                         let str = "^" + formatSimple(upgradeEffect("fu", 106), 3) + " to replicanti softcaps"
                         if (upgradeEffect("fu", 106).lte(0.5)) str = str + "<small style='color:red'>[HARDCAPPED]</small>"
                         return str

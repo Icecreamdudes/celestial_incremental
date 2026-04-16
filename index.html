@@ -164,7 +164,7 @@
 			<bg :layer="player.tab" style="visibility:hidden !important"></bg>
 		</div>
 		<div class="layerBG" id="uniBG" v-if="player.startedGame && !player.hideMenu"></div>
-		<div id="debugHolder" style="height:400px !important" class="debugHide" v-bind:class="{debugContainer: options.debug}" v-if="options.debug">
+		<div id="debugHolder" class="debugHide" v-bind:class="{debugContainer: options.debug}" v-if="options.debug">
 			<div class="debugTitle">
 				<p style="font-size:20px;color:#2CFF05">Debug</p>
 				<button class="debugExit" onclick="options.debug = false">X</button>
@@ -190,11 +190,24 @@
 			<div class="debugTitle" style="border-bottom:0px">
 				<p style="font-size:20px;color:#2CFF05">Time Skip</p>
 			</div>
-			<div class="debugRow" style="padding:0px 10px 10px 10px;border-bottom:3px solid #3CFF05">
+			<div class="debugRow" style="padding:0px 10px 10px 10px;border-bottom:2px solid #3CFF05">
 				<button class="debugButton" onclick="gameLoop(60)">1m</button>
 				<button class="debugButton" onclick="gameLoop(600)">10m</button>
 				<button class="debugButton" onclick="gameLoop(3600)">1h</button>
 				<button class="debugButton" onclick="gameLoop(86400)">1d</button>
+			</div>
+			<div class="debugRow" style="height:50px;padding:0 8px">
+				<button class="debugButton" style="width:85px;font-size:12px" onclick="save()">Save</button>
+				<button class="debugButton" style="width:85px;font-size:12px" onclick="toggleOpt('autosave')" v-html="`Autosave<br>[` + options.autosave + `]`"></button>
+				<button class="debugButton" style="width:85px;font-size:10px" onclick="toggleOpt('performanceMode')" v-html="`Canvas Performance [` + options.performanceMode + `]`"></button>
+			</div>
+			<div class="debugRow" style="height:40px;padding:0 8px">
+			<label class=can for='importfile' style='display:flex;align-items:center;justify-content:center;width:81px;height:36px;background:#000;border:2px solid #3CFF05;font-size:12px;color:#3CFF05'>Import<br>file</label><input id='importfile' type='file' onchange='importFile()' style='display:none' />
+				<button class="debugButton" style="width:85px;font-size:12px" onclick="exportFile()">Export File</button>
+				<button class="debugButton" style="width:85px;font-size:10px" onclick="toggleOpt('musicToggle')" v-html="`Music Toggle [` + options.musicToggle + `]`"></button>
+			</div>
+			<div class="debugRow" style="height:50px;padding:0 8px">
+				<button class="debugButton" style="width:85px;font-size:12px" onclick="if(options.fullscreen){options.fullscreen=false}else{options.fullscreen=true}" v-html="`Fullscreen<br>[` + options.fullscreen + `]`"></button>
 			</div>
 		</div>
 		<!--gameLoop(diff)-->

@@ -54,6 +54,46 @@
                 
                 completionsEffect: new Decimal(1),
             },
+            5: {
+                time: new Decimal(0),
+                maxTime: new Decimal(60),
+                timeSpeed: new Decimal(1),
+                completionsGain: new Decimal(1),
+                completions: new Decimal(0),
+                maxCompletions: new Decimal(0),
+                
+                completionsEffect: new Decimal(1),
+            },
+            6: {
+                time: new Decimal(0),
+                maxTime: new Decimal(1800),
+                timeSpeed: new Decimal(1),
+                completionsGain: new Decimal(1),
+                completions: new Decimal(0),
+                maxCompletions: new Decimal(0),
+                
+                completionsEffect: new Decimal(1),
+            },
+            7: {
+                time: new Decimal(0),
+                maxTime: new Decimal(21600),
+                timeSpeed: new Decimal(1),
+                completionsGain: new Decimal(1),
+                completions: new Decimal(0),
+                maxCompletions: new Decimal(0),
+                
+                completionsEffect: new Decimal(1),
+            },
+            8: {
+                time: new Decimal(0),
+                maxTime: new Decimal(259200),
+                timeSpeed: new Decimal(1),
+                completionsGain: new Decimal(1),
+                completions: new Decimal(0),
+                maxCompletions: new Decimal(0),
+                
+                completionsEffect: new Decimal(1),
+            },
         },
 
         fountains: {
@@ -164,6 +204,10 @@
         player.wel.modules[2].maxTime = new Decimal(60)
         player.wel.modules[3].maxTime = new Decimal(300)
         player.wel.modules[4].maxTime = new Decimal(3600)
+        player.wel.modules[5].maxTime = new Decimal(60)
+        player.wel.modules[6].maxTime = new Decimal(1800)
+        player.wel.modules[7].maxTime = new Decimal(21600)
+        player.wel.modules[8].maxTime = new Decimal(259200)
 
         for (let i = 1; i < Object.keys(player.wel.modules).length + 1; i++) {
             player.wel.modules[i].time = player.wel.modules[i].time.add(player.wel.modules[i].timeSpeed.mul(delta))
@@ -201,6 +245,26 @@
                 }
             }
         });
+
+        // PRISM WELLS
+
+        if (player.wel.modules[5].completions.gte(1e3)) player.wel.modules[5].completionsEffect = player.wel.modules[5].completions.div(1e3).pow(player.wel.lightWellCycleEffectSoftcap).mul(1e3).mul(0.01).add(1);
+        else player.wel.modules[5].completionsEffect = player.wel.modules[5].completions.mul(0.01).add(1);
+        player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[5].completionsEffect)
+
+        if (player.wel.modules[6].completions.gte(1e3)) player.wel.modules[6].completionsEffect = player.wel.modules[6].completions.div(1e3).pow(player.wel.lightWellCycleEffectSoftcap).mul(1e3).mul(0.05).add(1);
+        else player.wel.modules[6].completionsEffect = player.wel.modules[6].completions.mul(0.05).add(1);
+        player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[6].completionsEffect)
+
+        if (player.wel.modules[7].completions.gte(1e3)) player.wel.modules[7].completionsEffect = player.wel.modules[7].completions.div(1e3).pow(player.wel.lightWellCycleEffectSoftcap).mul(1e3).mul(0.01).add(1);
+        else player.wel.modules[7].completionsEffect = player.wel.modules[7].completions.mul(0.01).add(1);
+        player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[7].completionsEffect)
+
+        if (player.wel.modules[8].completions.gte(1e3)) player.wel.modules[8].completionsEffect = player.wel.modules[8].completions.div(1e3).pow(player.wel.lightWellCycleEffectSoftcap).mul(1e3).div(1e9).add(1);
+        else player.wel.modules[8].completionsEffect = player.wel.modules[8].completions.div(1e9).add(1);
+        player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[8].completionsEffect)
+
+        //
 
         if (player.wel.bestLight.lt(player.wel.light)) player.wel.bestLight = player.wel.light;
     },
@@ -930,6 +994,126 @@
                 return look
             },
         },
+        5: {
+            title() { return "<h3>Collect</h3> ↻" },
+            canClick() { return player.wel.modules[this.id].time.gte(player.wel.modules[this.id].maxTime)},
+            unlocked() { return true },
+            onClick() {
+                tickProjects(player.wel.modules[this.id].maxTime.div(player.wel.modules[this.id].timeSpeed).div(4))
+                player.wel.light = player.wel.light.add(layers.wel.clickables[this.id].lightGain())
+                player.wel.modules[this.id].time = new Decimal(0)
+                player.wel.modules[this.id].completions = player.wel.modules[this.id].completions.add(player.wel.modules[this.id].completionsGain)
+            },
+            lightGain() {
+                let gain = player.pri.prismsToGet
+                gain = gain.mul(0.01)
+                return gain.floor()
+            },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "150px", minHeight: "50px", borderRadius: "0"}
+                if (this.canClick()) {
+                    look.backgroundColor = "#d6ebff"
+                    look.color = "black"
+                    look.border = "3px solid #0000003f"
+                } else {
+                    look.background = "#361e1e"
+                    look.color = "white"
+                    look.border = "3px solid #663737"
+                }
+                return look
+            },
+        },
+        6: {
+            title() { return "<h3>Collect</h3> ↻" },
+            canClick() { return player.wel.modules[this.id].time.gte(player.wel.modules[this.id].maxTime)},
+            unlocked() { return true },
+            onClick() {
+                tickProjects(player.wel.modules[this.id].maxTime.div(player.wel.modules[this.id].timeSpeed).div(4))
+                player.wel.light = player.wel.light.add(layers.wel.clickables[this.id].lightGain())
+                player.wel.modules[this.id].time = new Decimal(0)
+                player.wel.modules[this.id].completions = player.wel.modules[this.id].completions.add(player.wel.modules[this.id].completionsGain)
+            },
+            lightGain() {
+                let gain = player.pri.prismsToGet
+                gain = gain.mul(0.1)
+                return gain.floor()
+            },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "150px", minHeight: "50px", borderRadius: "0"}
+                if (this.canClick()) {
+                    look.backgroundColor = "#d6ebff"
+                    look.color = "black"
+                    look.border = "3px solid #0000003f"
+                } else {
+                    look.background = "#361e1e"
+                    look.color = "white"
+                    look.border = "3px solid #663737"
+                }
+                return look
+            },
+        },
+        7: {
+            title() { return "<h3>Collect</h3> ↻" },
+            canClick() { return player.wel.modules[this.id].time.gte(player.wel.modules[this.id].maxTime)},
+            unlocked() { return true },
+            onClick() {
+                tickProjects(player.wel.modules[this.id].maxTime.div(player.wel.modules[this.id].timeSpeed).div(4))
+                player.wel.light = player.wel.light.add(layers.wel.clickables[this.id].lightGain())
+                player.wel.modules[this.id].time = new Decimal(0)
+                player.wel.modules[this.id].completions = player.wel.modules[this.id].completions.add(player.wel.modules[this.id].completionsGain)
+            },
+            lightGain() {
+                let gain = player.pri.prismsToGet
+                gain = gain.mul(1)
+                return gain.floor()
+            },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "150px", minHeight: "50px", borderRadius: "0"}
+                if (this.canClick()) {
+                    look.backgroundColor = "#d6ebff"
+                    look.color = "black"
+                    look.border = "3px solid #0000003f"
+                } else {
+                    look.background = "#361e1e"
+                    look.color = "white"
+                    look.border = "3px solid #663737"
+                }
+                return look
+            },
+        },
+        8: {
+            title() { return "<h3>Collect</h3> ↻" },
+            canClick() { return player.wel.modules[this.id].time.gte(player.wel.modules[this.id].maxTime)},
+            unlocked() { return true },
+            onClick() {
+                tickProjects(player.wel.modules[this.id].maxTime.div(player.wel.modules[this.id].timeSpeed).div(4))
+                player.wel.light = player.wel.light.add(layers.wel.clickables[this.id].lightGain())
+                player.wel.modules[this.id].time = new Decimal(0)
+                player.wel.modules[this.id].completions = player.wel.modules[this.id].completions.add(player.wel.modules[this.id].completionsGain)
+            },
+            lightGain() {
+                let gain = player.pri.prismsToGet
+                gain = gain.mul(10)
+                return gain.floor()
+            },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "150px", minHeight: "50px", borderRadius: "0"}
+                if (this.canClick()) {
+                    look.backgroundColor = "#d6ebff"
+                    look.color = "black"
+                    look.border = "3px solid #0000003f"
+                } else {
+                    look.background = "#361e1e"
+                    look.color = "white"
+                    look.border = "3px solid #663737"
+                }
+                return look
+            },
+        },
         101: {
             title() { return "<h3>Respec Interspace Focus</h3><br><small>(you won't get your light back!)</small>" },
             canClick() { return player.prj.focused.gt(0)},
@@ -1063,7 +1247,7 @@
             getCompletionEffect() {
                 let completions = player.wel.fountains[1].completions.pow(0.9)
 
-                let s = completions.add(1).mul(completions.pow_base(1.08))
+                let s = completions.add(1).mul(completions.pow_base(1.1))
 
                 return s.floor()
             },
@@ -1072,7 +1256,7 @@
                 let s = new Decimal(60)
 
                 s = s.mul(completions.add(1))
-                s = s.mul(completions.pow_base(Math.pow(1.4, 1.1)))
+                s = s.mul(completions.pow_base(Math.pow(1.3, 1.1)))
                 if (completions.gte(1e3)) {
                     s = s.pow(1.05)
                 }
@@ -1084,7 +1268,7 @@
                 let s = new Decimal(5)
 
                 s = s.mul(completions.mul(0.25).add(1))
-                s = s.mul(completions.pow_base(1.4))
+                s = s.mul(completions.pow_base(1.3))
                 if (completions.gte(1e3)) {
                     s = s.pow(1.05)
                 }
@@ -1109,7 +1293,7 @@
             getCompletionEffect() {
                 let completions = player.wel.fountains[2].completions.pow(0.9)
 
-                let s = completions.add(1).mul(completions.pow_base(1.06))
+                let s = completions.add(1).mul(completions.pow_base(1.08))
 
                 return s.floor()
             },
@@ -1118,7 +1302,7 @@
                 let s = new Decimal(2.7e4)
 
                 s = s.mul(completions.add(1))
-                s = s.mul(completions.pow_base(Math.pow(1.6, 1.1)))
+                s = s.mul(completions.pow_base(Math.pow(1.5, 1.1)))
                 if (completions.gte(1e3)) {
                     s = s.pow(1.05)
                 }
@@ -1130,7 +1314,7 @@
                 let s = new Decimal(1.5e3)
 
                 s = s.mul(completions.mul(0.25).add(1))
-                s = s.mul(completions.pow_base(1.6))
+                s = s.mul(completions.pow_base(1.5))
                 if (completions.gte(1e3)) {
                     s = s.pow(1.05)
                 }
@@ -1461,6 +1645,196 @@
                         ]],
                     )
                     }
+
+                    // PRISM WELLS
+
+                    }
+                    if (true) {
+                        // prism well epsilon
+                        look[7][1].push(["blank", "1px"])
+                        look[7][1].push(
+                        ["style-column", [
+                            ["style-column", [
+                                    ["style-column", [
+                                        ["style-column", [
+                                            ["style-column", [
+                                                ["raw-html", formatShortestWhole(player.wel.modules[5].time.div(player.wel.modules[5].maxTime).min(1).max(0).mul(100).floor()) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                            ], {background: "#4d9999", border: "3px solid #335966", borderRadius: "100px", width: "75px", height:"75px"}],
+                                        ], {borderRadius: "50%", width: "125px", height:"125px", margin: "9.5px", border: "3px solid #335966", marginTop: "81px",
+                                            background: player.wel.modules[5].time.lt(player.wel.modules[5].maxTime) ?
+                                            "conic-gradient(#ffdfdf " + (player.wel.modules[5].time.div(player.wel.modules[5].maxTime)).min(1).max(0) * 360 + "deg, #0b1711 0deg)" : "#d6ebff"
+                                        }],
+                                    ], {background: "#4d9999", height: "75px", borderRadius: "75px 75px 0 0"}],
+                                    ["style-column", [], {height: "61px"}],
+                            ["blank", "9px"],
+                            ["raw-html", "Prism Well ε", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", player.wel.modules[5].time.lt(player.wel.modules[5].maxTime) ? formatTime(player.wel.modules[5].maxTime.sub(player.wel.modules[5].time).div(player.wel.modules[5].timeSpeed)) : formatTime(player.wel.modules[5].maxTime.div(player.wel.modules[5].timeSpeed)) + " CD", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["blank", "9px"],
+                            ["style-column", [
+                                    ["raw-html", "+" + formatWhole(layers.wel.clickables[5].lightGain()) + " Prisms", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ], {background: "#4d9999", borderRadius: "10px 10px 0px 0px", width: "150px", height:"25px"}],
+                            ["blank", "3px"],
+                            ["clickable", 5],
+                            ["blank", "3px"],
+                            ["style-column", [
+                                ["raw-html", formatShortWhole(player.wel.modules[5].completions) + " ε ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", "(x" + formatShort(player.wel.modules[5].completionsEffect) + " Prisms)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                            ], {border: "3px solid #4d9999", borderRadius: "0 0 10px 10px", height: "44px"}],
+                        
+                        ], {background: "#335966",border: "3px solid #335966", borderRadius: "103px 103px 16px 16px", width: "150px"}],
+                        ["blank", "9px"],
+                    ]],
+                    )
+                    }
+                    if (true) {
+                        if (player.wel.modules[5].completions.gte(50)) {
+                            // prism well zeta
+                            look[7][1].push(["blank", "1px"])
+                            look[7][1].push(
+                            ["style-column", [
+                                ["style-column", [
+                                        ["style-column", [
+                                            ["style-column", [
+                                                ["style-column", [
+                                                    ["raw-html", formatShortestWhole(player.wel.modules[6].time.div(player.wel.modules[6].maxTime).min(1).max(0).mul(100).floor()) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                                ], {background: "#4d9999", border: "3px solid #335966", borderRadius: "100px", width: "75px", height:"75px"}],
+                                            ], {borderRadius: "50%", width: "125px", height:"125px", margin: "9.5px", border: "3px solid #335966", marginTop: "81px",
+                                                background: player.wel.modules[6].time.lt(player.wel.modules[6].maxTime) ?
+                                                "conic-gradient(#ffdfdf " + (player.wel.modules[6].time.div(player.wel.modules[6].maxTime)).min(1).max(0) * 360 + "deg, #0b1711 0deg)" : "#d6ebff"
+                                            }],
+                                        ], {background: "#4d9999", height: "75px", borderRadius: "75px 75px 0 0"}],
+                                        ["style-column", [], {height: "61px"}],
+                                ["blank", "9px"],
+                                ["raw-html", "Prism Well ζ", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", player.wel.modules[6].time.lt(player.wel.modules[6].maxTime) ? formatTime(player.wel.modules[6].maxTime.sub(player.wel.modules[6].time).div(player.wel.modules[6].timeSpeed)) : formatTime(player.wel.modules[6].maxTime.div(player.wel.modules[6].timeSpeed)) + " CD", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ["blank", "9px"],
+                                ["style-column", [
+                                        ["raw-html", "+" + formatWhole(layers.wel.clickables[5].lightGain()) + " Prisms", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                    ], {background: "#4d9999", borderRadius: "10px 10px 0px 0px", width: "150px", height:"25px"}],
+                                ["blank", "3px"],
+                                ["clickable", 5],
+                                ["blank", "3px"],
+                                ["style-column", [
+                                    ["raw-html", formatShortWhole(player.wel.modules[6].completions) + " ζ ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                    ["raw-html", "(x" + formatShort(player.wel.modules[6].completionsEffect) + " Prisms)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                                ], {border: "3px solid #4d9999", borderRadius: "0 0 10px 10px", height: "44px"}],
+                            
+                            ], {background: "#335966",border: "3px solid #335966", borderRadius: "103px 103px 16px 16px", width: "150px"}],
+                            ["blank", "9px"],
+                        ]],
+                        )
+                        } else {
+                                // prism well zeta locked
+                            look[7][1].push(["blank", "1px"])
+                            look[7][1].push(
+                                ["style-column", [
+                                    ["style-column", [
+                                        ["raw-html", "<h2>Prism Well ζ<h2><br><h3>Req: 500 ε ↻</h3>", {color: "white", fontSize: "10px"}],
+                                    ], {background: "black",border: "3px solid #663737", borderRadius: "103px 103px 16px 16px", width: "150px", height: "323px", lineHeight: "1"}],
+                                ["blank", "9px"],
+                            ]],
+                        )
+                        }
+                    }
+                    if (player.wel.modules[5].completions.gte(50)) {
+                        if (player.wel.modules[6].completions.gte(1e6)) {
+                            // prism well eta
+                            look[7][1].push(["blank", "1px"])
+                            look[7][1].push(
+                            ["style-column", [
+                                ["style-column", [
+                                        ["style-column", [
+                                            ["style-column", [
+                                                ["style-column", [
+                                                    ["raw-html", formatShortestWhole(player.wel.modules[6].time.div(player.wel.modules[6].maxTime).min(1).max(0).mul(100).floor()) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                                ], {background: "#4d9999", border: "3px solid #335966", borderRadius: "100px", width: "75px", height:"75px"}],
+                                            ], {borderRadius: "50%", width: "125px", height:"125px", margin: "9.5px", border: "3px solid #335966", marginTop: "81px",
+                                                background: player.wel.modules[6].time.lt(player.wel.modules[6].maxTime) ?
+                                                "conic-gradient(#ffdfdf " + (player.wel.modules[6].time.div(player.wel.modules[6].maxTime)).min(1).max(0) * 360 + "deg, #0b1711 0deg)" : "#d6ebff"
+                                            }],
+                                        ], {background: "#4d9999", height: "75px", borderRadius: "75px 75px 0 0"}],
+                                        ["style-column", [], {height: "61px"}],
+                                ["blank", "9px"],
+                                ["raw-html", "Prism Well η", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", player.wel.modules[6].time.lt(player.wel.modules[6].maxTime) ? formatTime(player.wel.modules[6].maxTime.sub(player.wel.modules[6].time).div(player.wel.modules[6].timeSpeed)) : formatTime(player.wel.modules[6].maxTime.div(player.wel.modules[6].timeSpeed)) + " CD", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ["blank", "9px"],
+                                ["style-column", [
+                                        ["raw-html", "+" + formatWhole(layers.wel.clickables[5].lightGain()) + " Prisms", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                    ], {background: "#4d9999", borderRadius: "10px 10px 0px 0px", width: "150px", height:"25px"}],
+                                ["blank", "3px"],
+                                ["clickable", 5],
+                                ["blank", "3px"],
+                                ["style-column", [
+                                    ["raw-html", formatShortWhole(player.wel.modules[6].completions) + " η ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                    ["raw-html", "(x" + formatShort(player.wel.modules[6].completionsEffect) + " Prisms)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                                ], {border: "3px solid #4d9999", borderRadius: "0 0 10px 10px", height: "44px"}],
+                            
+                            ], {background: "#335966",border: "3px solid #335966", borderRadius: "103px 103px 16px 16px", width: "150px"}],
+                            ["blank", "9px"],
+                        ]],
+                        )
+                        } else {
+                                // prism well eta locked
+                            look[7][1].push(["blank", "1px"])
+                            look[7][1].push(
+                                ["style-column", [
+                                    ["style-column", [
+                                        ["raw-html", "<h2>Prism Well η<h2><br><h3>Req: 1,000,000 ζ ↻</h3>", {color: "white", fontSize: "10px"}],
+                                    ], {background: "black",border: "3px solid #663737", borderRadius: "103px 103px 16px 16px", width: "150px", height: "323px", lineHeight: "1"}],
+                                ["blank", "9px"],
+                            ]],
+                        )
+                        }
+                    }
+                    if (player.wel.modules[6].completions.gte(1e6)) {
+                        if (player.wel.modules[7].completions.gte(1e12)) {
+                            // prism well theta
+                            look[7][1].push(["blank", "1px"])
+                            look[7][1].push(
+                            ["style-column", [
+                                ["style-column", [
+                                        ["style-column", [
+                                            ["style-column", [
+                                                ["style-column", [
+                                                    ["raw-html", formatShortestWhole(player.wel.modules[6].time.div(player.wel.modules[6].maxTime).min(1).max(0).mul(100).floor()) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                                ], {background: "#4d9999", border: "3px solid #335966", borderRadius: "100px", width: "75px", height:"75px"}],
+                                            ], {borderRadius: "50%", width: "125px", height:"125px", margin: "9.5px", border: "3px solid #335966", marginTop: "81px",
+                                                background: player.wel.modules[6].time.lt(player.wel.modules[6].maxTime) ?
+                                                "conic-gradient(#ffdfdf " + (player.wel.modules[6].time.div(player.wel.modules[6].maxTime)).min(1).max(0) * 360 + "deg, #0b1711 0deg)" : "#d6ebff"
+                                            }],
+                                        ], {background: "#4d9999", height: "75px", borderRadius: "75px 75px 0 0"}],
+                                        ["style-column", [], {height: "61px"}],
+                                ["blank", "9px"],
+                                ["raw-html", "Prism Well θ", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", player.wel.modules[6].time.lt(player.wel.modules[6].maxTime) ? formatTime(player.wel.modules[6].maxTime.sub(player.wel.modules[6].time).div(player.wel.modules[6].timeSpeed)) : formatTime(player.wel.modules[6].maxTime.div(player.wel.modules[6].timeSpeed)) + " CD", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ["blank", "9px"],
+                                ["style-column", [
+                                        ["raw-html", "+" + formatWhole(layers.wel.clickables[5].lightGain()) + " Prisms", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                    ], {background: "#4d9999", borderRadius: "10px 10px 0px 0px", width: "150px", height:"25px"}],
+                                ["blank", "3px"],
+                                ["clickable", 5],
+                                ["blank", "3px"],
+                                ["style-column", [
+                                    ["raw-html", formatShortWhole(player.wel.modules[6].completions) + " θ ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                    ["raw-html", "(x" + formatShort(player.wel.modules[6].completionsEffect) + " Prisms)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                                ], {border: "3px solid #4d9999", borderRadius: "0 0 10px 10px", height: "44px"}],
+                            
+                            ], {background: "#335966",border: "3px solid #335966", borderRadius: "103px 103px 16px 16px", width: "150px"}],
+                            ["blank", "9px"],
+                        ]],
+                        )
+                        } else {
+                                // prism well theta locked
+                            look[7][1].push(["blank", "1px"])
+                            look[7][1].push(
+                                ["style-column", [
+                                    ["style-column", [
+                                        ["raw-html", "<h2>Prism Well θ<h2><br><h3>Req: 1e12 η ↻</h3>", {color: "white", fontSize: "10px"}],
+                                    ], {background: "black",border: "3px solid #663737", borderRadius: "103px 103px 16px 16px", width: "150px", height: "323px", lineHeight: "1"}],
+                                ["blank", "9px"],
+                            ]],
+                        )
+                        }
                     }
                     return look
                 },

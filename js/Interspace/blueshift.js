@@ -13,6 +13,8 @@
             3: new Decimal(0),
             4: new Decimal(0),
         },
+        blueshiftEffectBase: new Decimal(0),
+        blueshiftEffect: new Decimal(0),
     }},
     automate() {},
     nodeStyle() {
@@ -26,6 +28,8 @@
     tooltip: "Blueshift",
     color: "#ffffd1",
     update(delta) {
+        player.blu.blueshiftEffectBase = new Decimal(2)
+        player.blu.blueshiftEffect = player.blu.totalBlueshifts.pow_base(player.blu.blueshiftEffectBase)
     },
     blueshiftReset(isRewarded, id) {
         prismReset(false)
@@ -40,7 +44,7 @@
             onClick() {
             },
             style() {
-                let look = {width: "150px", minHeight: "50px", borderRadius: "0px 0px 10px 10px"}
+                let look = {width: "150px", minHeight: "50px", borderRadius: "0"}
                 if (this.canClick()) {
                     look.backgroundColor = "#ffffd1"
                     look.color = "black"
@@ -71,19 +75,19 @@
                         ["style-column", [
                             ["style-column", [
                                 ["raw-html", 
-                                    "<small>When a fountain's timer gets below 0.2s, you can do a blueshift. Blueshifting resets everything prismatic does, as well as all light well cycles. Each blueshift done roots cycle speed and increases cycle gain for its respective well. You also gain multipliers from total blueshifts done.</small>"
+                                    "<small>When a fountain's timer gets at or below 0.1s, you can do a blueshift. Blueshifting resets everything prismatic does, as well as all light well cycles. Each blueshift done divides added cycle speed and increases cycle gain for its respective well. You also gain multipliers from total blueshifts done.</small>"
                                 , {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                             ], {background: "#2f2f80", border: "3px solid #4242b3", borderRadius: "10px", width: "600px", height: "125px", padding: "3px"}],                   
                         ], {background: "#2f2f80", borderRadius: "13px", padding: "3px", width: "612px"}],
                         ["blank", "25px"],
                         ["raw-html", "You have blueshifted " + formatWhole(player.blu.totalBlueshifts) + " times.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "<small>Boosts prismatic gain by x1.</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "<small>Boosts light well cycle gain by x" + format(player.blu.blueshiftEffect, 1) + ".</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "25px"],
                         ["style-row", [
                             ["style-column", [
                                 ["blank", "9px"],
                                 ["raw-html", "Light Well α", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                ["raw-html", "<small>(0.67/0.2s)</small>", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", "<small>(0.67/0.1s)</small>", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                 ["blank", "9px"],
                                 ["style-column", [
                                     ["raw-html", "+1 Blueshift", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
@@ -91,11 +95,13 @@
                                 ["blank", "3px"],
                                 ["clickable", 1001],
                             ]],
+                            ["blank", "3px"],
+                            ["style-column", [
+                                ["raw-html", "1 α →", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", "(x100 α ↻)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                                ["raw-html", "(/100 Added ↻ Spd)", {color: "#ffff00", fontSize: "12px", fontFamily: "monospace"}],
+                            ], {border: "3px solid #4d9973", borderRadius: "0 0 10px 10px", width: "144px", height: "60px"}],
                         ], {backgroundColor: "#336659", borderRadius: "13px", width: "150px", padding: "3px"}],
-                        ["blank", "9px"],
-                        ["raw-html", "1 α →", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                        ["raw-html", "(x100 α ↻)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
-                        ["raw-html", "(2√ α ↻ Spd)", {color: "#ff7f00", fontSize: "12px", fontFamily: "monospace"}],
                         ["blank", "25px"],
                     ]
                 }
@@ -115,5 +121,5 @@
         ["raw-html", () => { return "You have <h3>" + format(player.wel.light) + "</h3> light." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && hasMilestone("prj", 301)}
+    layerShown() { return player.startedGame == true && hasMilestone("prj", 301) || true}
 })

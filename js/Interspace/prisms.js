@@ -300,7 +300,377 @@
         },
     },
     bars: {},
-    upgrades: {},
+    upgrades: {
+        11: {
+            unlocked() { return true },
+            fullDisplay() {
+                let s = "<h2>"
+                s += "Enable getting more than one prism on reset.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                return s
+            },
+            cost: new Decimal(10),
+            currencyLocation() { return player.pri },
+            currencyDisplayName: "Prisms",
+            currencyInternalName: "prisms",
+            canAfford() { return true },
+            style() {
+                let look = {width: "200px", borderRadius: "8px 8px 0 0", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#4d9999"
+                    look.border = "3px solid #335966"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#d6ebff"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        21: {
+            unlocked() { return true },
+            condition() { return hasUpgrade("pri", 11) },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "Unlock the first light fountain.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><h3>Req: Buy the above upgrade.</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(10),
+            currencyLocation() { return player.pri },
+            currencyDisplayName: "Prisms",
+            currencyInternalName: "prisms",
+            canAfford() {
+                return this.condition()
+            },
+            style() {
+                let look = {width: "200px", borderRadius: "8px 0 0 0", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#4d9999"
+                    look.border = "3px solid #335966"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#d6ebff"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        22: {
+            unlocked() { return true },
+            condition() { return hasUpgrade("pri", 11) },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "Unlock the first light fountain.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><h3>Req: Buy the above upgrade.</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(10),
+            currencyLocation() { return player.pri },
+            currencyDisplayName: "Prisms",
+            currencyInternalName: "prisms",
+            canAfford() {
+                return this.condition()
+            },
+            style() {
+                let look = {width: "200px", borderRadius: "0 8px 0 0", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#4d9999"
+                    look.border = "3px solid #335966"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#d6ebff"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        31: {
+            unlocked() { return true },
+            condition() { return hasUpgrade("pri", 11) },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "Unlock the first light fountain.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><h3>Req: Buy one of the previous row's upgrades.</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(10),
+            currencyLocation() { return player.pri },
+            currencyDisplayName: "Prisms",
+            currencyInternalName: "prisms",
+            canAfford() {
+                return this.condition()
+            },
+            style() {
+                let look = {width: "200px", borderRadius: "8px 0 0 0", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#4d9999"
+                    look.border = "3px solid #335966"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#d6ebff"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        32: {
+            unlocked() { return true },
+            condition() { return hasUpgrade("pri", 11) },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "Unlock the first light fountain.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><h3>Req: Buy one of the previous row's upgrades.</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(10),
+            currencyLocation() { return player.pri },
+            currencyDisplayName: "Prisms",
+            currencyInternalName: "prisms",
+            canAfford() {
+                return this.condition()
+            },
+            style() {
+                let look = {width: "200px", borderRadius: "0", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#4d9999"
+                    look.border = "3px solid #335966"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#d6ebff"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        33: {
+            unlocked() { return true },
+            condition() { return hasUpgrade("pri", 11) },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "Unlock the first light fountain.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><h3>Req: Buy one of the previous row's upgrades.</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(10),
+            currencyLocation() { return player.pri },
+            currencyDisplayName: "Prisms",
+            currencyInternalName: "prisms",
+            canAfford() {
+                return this.condition()
+            },
+            style() {
+                let look = {width: "200px", borderRadius: "0 8px 0 0", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#4d9999"
+                    look.border = "3px solid #335966"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#d6ebff"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        41: {
+            unlocked() { return true },
+            condition() { return hasUpgrade("pri", 11) },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "Unlock the first light fountain.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><h3>Req: Buy two of the previous row's upgrades.</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(10),
+            currencyLocation() { return player.pri },
+            currencyDisplayName: "Prisms",
+            currencyInternalName: "prisms",
+            canAfford() {
+                return this.condition()
+            },
+            style() {
+                let look = {width: "200px", borderRadius: "8px 0 0 0", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#4d9999"
+                    look.border = "3px solid #335966"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#d6ebff"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        42: {
+            unlocked() { return true },
+            condition() { return hasUpgrade("pri", 11) },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "Unlock the first light fountain.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><h3>Req: Buy two of the previous row's upgrades.</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(10),
+            currencyLocation() { return player.pri },
+            currencyDisplayName: "Prisms",
+            currencyInternalName: "prisms",
+            canAfford() {
+                return this.condition()
+            },
+            style() {
+                let look = {width: "200px", borderRadius: "0", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#4d9999"
+                    look.border = "3px solid #335966"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#d6ebff"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        43: {
+            unlocked() { return true },
+            condition() { return hasUpgrade("pri", 11) },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "Unlock the first light fountain.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><h3>Req: Buy two of the previous row's upgrades.</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(10),
+            currencyLocation() { return player.pri },
+            currencyDisplayName: "Prisms",
+            currencyInternalName: "prisms",
+            canAfford() {
+                return this.condition()
+            },
+            style() {
+                let look = {width: "200px", borderRadius: "0", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#4d9999"
+                    look.border = "3px solid #335966"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#d6ebff"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        44: {
+            unlocked() { return true },
+            condition() { return hasUpgrade("pri", 11) },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "Unlock the first light fountain.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><h3>Req: Buy two of the previous row's upgrades.</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(10),
+            currencyLocation() { return player.pri },
+            currencyDisplayName: "Prisms",
+            currencyInternalName: "prisms",
+            canAfford() {
+                return this.condition()
+            },
+            style() {
+                let look = {width: "200px", borderRadius: "0 8px 0 0", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#4d9999"
+                    look.border = "3px solid #335966"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#d6ebff"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+    },
     buyables: {},
     milestones: {},
     challenges: {},
@@ -496,18 +866,25 @@
                     return look
                 }
             },
-            "Prismatics": {
+            "Pyramid": {
                 buttonStyle() { return { color: "white", borderRadius: "8px"} },
-                unlocked() { return player.pri.totalPrisms.gt(0) },
+                unlocked() { return player.pri.totalPrisms.gt(0) || true },
                 content() {
                     let look = [
                         ["blank", "25px"],
-                        ["style-column", [
-                            ["top-column", [
-                                ["raw-html", "You have <h3>" + format(player.pri.prismatics) + "</h3> fountain progress /s.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                            ], {background: "#0000003f", border: "3px solid #4d9999", borderRadius: "10px", width: "600px", height: "600px", padding: "3px"}],                   
-                        ], {border: "3px solid #335966", borderRadius: "13px", width: "612px"}],
-                        ["blank", "25px"]
+                        ["row", [
+                            ["upgrade", 11], 
+                        ]],
+                        ["row", [
+                            ["upgrade", 21], ["upgrade", 22],
+                        ]],
+                        ["row", [
+                            ["upgrade", 31], ["upgrade", 32], ["upgrade", 33],
+                        ]],
+                        ["row", [
+                            ["upgrade", 41], ["upgrade", 42], ["upgrade", 43], ["upgrade", 44],
+                        ]],
+                        ["blank", "25px"],
                     ]
                     return look
                 }
@@ -554,7 +931,7 @@
         ]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && hasMilestone("prj", 201)}
+    layerShown() { return player.startedGame == true && hasMilestone("prj", 201) || true}
 })
 const makePrismFountain = function (id) {
     let thisFountain =

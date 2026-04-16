@@ -759,7 +759,7 @@ addLayer("pet", {
             player.subtabs.pu["stuff"] = "Collection"
             changeTheme()
 
-            pauseUniverseAll(["D1", "A2"], "unpause", true)
+            pauseUniverseAll(["D1", "U3", "A2"], "unpause", true)
 
             layers.pu.generateSelection();
         }
@@ -1046,7 +1046,7 @@ addLayer("pet", {
                 player.subtabs.le["stuff"] = "Shards"
                 player.subtabs.pu["stuff"] = "Selection"   
                 
-                pauseUniverseAll(["D1", "A2"], "pause", true)
+                pauseUniverseAll(["D1", "U3", "A2"], "pause", true)
             },
             style() {
                 let look = {width: '125px', minHeight: '40px', borderRadius: '0px', fontSize: '8px'}
@@ -1422,7 +1422,7 @@ addLayer("pet", {
         138: {
             title() { return "<img src='resources/Pets/eclipseLegendaryPet.png'style='width:65px;height:65px;margin:0px;margin-bottom:-4px'></img>" },
             canClick: true,
-            unlocked() { return getLevelableAmount("pet", 501).gt(0) },
+            unlocked() { return getLevelableAmount("pet", 501).gt(0) || getLevelableTier("pet", 501).gt(0) },
             onClick() {
                 player.pet.fragShopIndex = 7
             },
@@ -1431,7 +1431,7 @@ addLayer("pet", {
         139: {
             title() { return "<img src='resources/Pets/geroaLegendaryPet.png'style='width:65px;height:65px;margin:0px;margin-bottom:-4px'></img>" },
             canClick: true,
-            unlocked() { return getLevelableAmount("pet", 502).gt(0) },
+            unlocked() { return getLevelableAmount("pet", 502).gt(0) || getLevelableTier("pet", 502).gt(0) },
             onClick() {
                 player.pet.fragShopIndex = 8
             },
@@ -1440,7 +1440,7 @@ addLayer("pet", {
         140: {
             title() { return "<img src='resources/Pets/vespasianLegendaryPet.png'style='width:65px;height:65px;margin:0px;margin-bottom:-4px'></img>" },
             canClick: true,
-            unlocked() { return getLevelableAmount("pet", 503).gt(0) },
+            unlocked() { return getLevelableAmount("pet", 503).gt(0) || getLevelableTier("pet", 503).gt(0) },
             onClick() {
                 player.pet.fragShopIndex = 9
             },

@@ -737,7 +737,7 @@ BHC.aleph = {
             passive: true,
             constantType: "function",
             constantTarget: "randomPlayer",
-            onTrigger(index, slot, target) {
+            onPassive(index, slot, target) {
                 if (!player.bh.celestialite.actions[3].variables.attacks) player.bh.celestialite.actions[3].variables.attacks = 0
                 // MESSAGES ARE PLACEHOLDERS
                 if (player.bh.celestialite.health.lt(7500) && player.bh.celestialite.attackID == 0) {

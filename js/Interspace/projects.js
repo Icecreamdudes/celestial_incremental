@@ -1207,7 +1207,7 @@
         ["raw-html", () => { return "You have <h3>" + format(player.wel.light) + "</h3> light." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && hasUpgrade("wel", 21)}
+    layerShown() { return player.startedGame == true && hasUpgrade("wel", 21) || true}
 })
 
 const makeProject = function (id) {

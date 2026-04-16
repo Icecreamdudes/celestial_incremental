@@ -171,10 +171,32 @@
 			</div>
 			<div class="debugRow">
 				<div class="debugInputText">
+					<p style="font-size:16px;color:#2CFF05">Layer</p>
+				</div>
+				<input class="debugInput" v-model.lazy="player.tab" type="text">
+			</div>
+			<div class="debugRow">
+				<div class="debugInputText">
+					<p style="font-size:16px;color:#2CFF05">Universe</p>
+				</div>
+				<input class="debugInput" v-model.lazy="player.universe" type="text">
+			</div>
+			<div class="debugRow">
+				<div class="debugInputText">
 					<p style="font-size:16px;color:#2CFF05">Dev Speed</p>
 				</div>
 				<input class="debugInput" v-model.lazy.number="player.devSpeed" type="text" inputmode="numeric" pattern="[0-9]*">
 			</div>
+			<div class="debugTitle" style="border-bottom:0px">
+				<p style="font-size:20px;color:#2CFF05">Time Skip</p>
+			</div>
+			<div class="debugRow" style="padding:0px 10px 10px 10px;border-bottom:3px solid #3CFF05">
+				<button class="debugButton" onclick="gameLoop(60)">1m</button>
+				<button class="debugButton" onclick="gameLoop(600)">10m</button>
+				<button class="debugButton" onclick="gameLoop(3600)">1h</button>
+				<button class="debugButton" onclick="gameLoop(86400)">1d</button>
+			</div>
 		</div>
+		<!--gameLoop(diff)-->
 	</div>
 </body>

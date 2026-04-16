@@ -399,7 +399,7 @@ addLayer("achievements", {
         },
         1201: {
             name: "Welcome to Inter Space",
-            image: "resources/achievements/12_00.png",
+            image: "resources/achievements/12_01.png",
             tooltip: "<h3>Welcome to Inter Space</h3><hr style='margin-bottom:4px'>Enter interspace.",
             color: "#994d99",
             complete() {return player.bi.interspaceUnlocked},
@@ -407,7 +407,7 @@ addLayer("achievements", {
         },
         1202: {
             name: "Shallow Waters",
-            image: "resources/achievements/12_00.png",
+            image: "resources/achievements/12_02.png",
             tooltip: "<h3>Shallow Waters</h3><hr style='margin-bottom:4px'>Obtain a β ↻.",
             color: "#994d99",
             complete() {return false},

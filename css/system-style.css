@@ -595,6 +595,16 @@ button > * {
 	cursor: pointer;
 }
 
+.debugButton {
+	background: #000;
+	border: 2px solid #2CFF05;
+	color: #2CFF05;
+	font-size: 20px;
+	width: 50px;
+	height: 40px;
+	cursor: pointer;
+}
+
 .debugRow {
 	display: flex;
 }

@@ -1045,8 +1045,8 @@ function stagnantUpdate(time) {
 
                             // Calculate Variables (and remove inactive active)
                             if (passive || (active && player.bh.celestialite.actions[i].duration.gt(0))) {
-                                if (BHC[player.bh.celestialite.id].actions[i].onTrigger) {
-                                    BHC[player.bh.celestialite.id].actions[i].onTrigger(3, i, BHC[player.bh.celestialite.id].actions[i].constantTarget)
+                                if (BHC[player.bh.celestialite.id].actions[i].onPassive) {
+                                    BHC[player.bh.celestialite.id].actions[i].onPassive(3, i, BHC[player.bh.celestialite.id].actions[i].constantTarget)
                                 } else if (BHC[player.bh.celestialite.id].actions[i].interval) {
                                     player.bh.celestialite.actions[i].interval = player.bh.celestialite.actions[i].interval.add(delta)
                                     if (player.bh.celestialite.actions[i].interval.gte(BHC[player.bh.celestialite.id].actions[i].interval)) {
@@ -1119,7 +1119,9 @@ function stagnantUpdate(time) {
 
                         // Calculate Variables (and remove inactive active)
                         if (passive || (active && player.bh.characters[i].skills[j].duration.gt(0))) {
-                            if (BHA[player.bh.characters[i].skills[j].id].interval) {
+                            if (BHA[player.bh.characters[i].skills[j].id].onPassive) {
+                                if (unpaused) BHA[player.bh.characters[i].skills[j].id].onPassive(i, j, BHA[player.bh.characters[i].skills[j].id].constantTarget)
+                            } else if (BHA[player.bh.characters[i].skills[j].id].interval) {
                                 player.bh.characters[i].skills[j].interval = player.bh.characters[i].skills[j].interval.add(delta)
                                 if (player.bh.characters[i].skills[j].interval.gte(BHA[player.bh.characters[i].skills[j].id].interval)) {
                                     player.bh.characters[i].skills[j].interval = new Decimal(0)

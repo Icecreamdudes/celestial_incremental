@@ -593,7 +593,7 @@ BHC.matos = {
             passive: true,
             constantType: "function",
             constantTarget: "randomPlayer",
-            onTrigger(index, slot, target) {
+            onPassive(index, slot, target) {
                 if (!player.bh.celestialite.actions[1].variables.attacks) player.bh.celestialite.actions[1].variables.attacks = 0
                 if (player.bh.celestialite.health.lt(7000) && player.bh.celestialite.attackID == 0) {
                     screenFlash("This is what Nova wanted all along!", 3000)

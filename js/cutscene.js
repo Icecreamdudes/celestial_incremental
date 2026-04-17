@@ -3866,7 +3866,7 @@
             portrait: "resources/secret.png",
             music: "music/novasentFlashback.mp3",
             background: "#5c4b4b",
-            trigger() {return player.sm.slotsSpinned.gte(1) },
+            trigger() {return player.sm.spinAmount.gte(1) },
             dialogue: [
                 { text: "Upon spinning the slots, your field of vision flashes again, and you enter a new flashback."  },
                 { text: "This time, you appear back on the ship, and see Zar and the other Novasent's human forms talking to each other."  },
@@ -4117,6 +4117,32 @@
                 { text: "Oh well."},
             ],
         },
+        "DS-Zar-Card-Draw": {
+            type: "normal",
+            portrait: "resources/secret.png",
+            music: "music/mysteryCutscene.mp3",
+            background: "linear-gradient(180deg, #094599 0%, #062a5eff 50%, #094599 100%)",
+            trigger() {return player.car.cardDrawAmount.gte(1)},
+            dialogue: [
+                { text: "You draw a card out of the card pile."},
+                { text: "Alright. I've decided what game I want to play.", portrait: "resources/player.png"  },
+                { text: "I want to play blackjack. It's a true game of chance that doesn't depend on psychological manipulation.", portrait: "resources/player.png"  },
+                { text: "Interesting... I hope you would let me play poker, but it's whatever.", portrait: "resources/zar.png"  },
+                { text: "You sense superphysical power eminating from the cards."},
+                { text: "I don't trust this deck. Let me analyze every single card before we can start playing.", portrait: "resources/player.png"  },
+                { text: "Do as you wish.", portrait: "resources/zar.png"  },
+                { text: "Strange... These cards form links with many superphysical values in multiple universes."},
+                { text: "Also, I've noticed a strange ascensionist shrine right outside of this room.", portrait: "resources/zar.png"  },
+                { text: "Seems like you're still a devout follower, number Five. You have a lot of explaining to do.", portrait: "resources/zar.png"  },
+                { text: "You see Zar, I can't just let go of my religion. I will one day reach ascension.", portrait: "resources/diceFive.png"  },
+                { text: "Zar starts laughing."},
+                { text: "Yeah yeah whatever that ain't happening.", portrait: "resources/zar.png"  },
+                { text: "Keep believing in whatever buddy.", portrait: "resources/zar.png"  },
+                { text: "And what will you do about me?", portrait: "resources/nav.png"  },
+                { text: "I'll worry about you later.", portrait: "resources/zar.png"  },
+
+            ],
+        },
         //REMINDER: Make enhance dust pet cutscene (reference the presence of ascension shards, and marcel's statue)
         "CB-Enhance-Dust": {
             type: "normal",
@@ -4148,7 +4174,7 @@
                 { text: "Just keep finding the rest of the prestige tree layers, and we'll know what truly happened.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"},
             ], 
         },
-        //note: you can also use the original dice space song for cutscenes
+        //note: zar is an ascensionist as well
         
     },
     clickables: {

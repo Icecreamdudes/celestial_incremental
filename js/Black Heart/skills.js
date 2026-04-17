@@ -935,7 +935,29 @@ BHA.vespasian_peakPerformance = {
     },
     cooldown: new Decimal(Infinity)
 }
+BHA.creation_cardThrow = {
+    name: "Card Throw",
+    description() {return "Throws " + formatWhole(player.cart.cardsToThrow) + " cards at the enemy, dealing damage based on many factors."},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["creation_cardThrow"].maxLevel.div(5)) + " DMG"},
+    char: "creation",
+    spCost: new Decimal(10),
+    curCostBase: new Decimal(3),
+    curCostScale: new Decimal(3),
+    currency: "darkEssence",
+    unlocked() {return true},
 
+    instant: true,
+    type: "function",
+    target: "celestialite",
+    method: "physical",
+    value() {return new Decimal(0.75).add(player.bh.skillData["creation_cardThrow"].level.mul(0.15))},
+    cooldown: new Decimal(10),
+    cooldownCap: new Decimal(4),
+    onTrigger()
+    {
+        cardThrow();
+    }
+}
 // NON-VESPASIAN SKILL IDEAS
 
 // A skill that temporarily increases team agility and decreases celestialite agility

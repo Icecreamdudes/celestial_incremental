@@ -168,6 +168,13 @@
         player.cf.tailsEffect = player.cf.tails.pow(0.5).add(1).pow(buyableEffect("cf", 14))
         player.cf.tailsEffect2 = player.cf.tails.div(10).pow(0.25).add(1).pow(buyableEffect("cf", 14))
 
+        //auto
+        if (hasUpgrade("car", 13))
+        {
+            player.cf.heads = player.cf.heads.add(player.cf.headsToGet.mul(delta))
+            player.cf.tails = player.cf.tails.add(player.cf.tailsToGet.mul(delta))
+        }
+
         //flip prices
         if (player.cf.coinsFlipped.lt(25)) player.cf.flipCost = player.cf.coinsFlipped.pow(1.5).div(3).add(1).mul(10)
         if (player.cf.coinsFlipped.gte(25)) player.cf.flipCost = player.cf.coinsFlipped.pow(2.25).div(3).add(1).mul(10)

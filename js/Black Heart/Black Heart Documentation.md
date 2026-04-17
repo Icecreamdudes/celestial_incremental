@@ -515,7 +515,9 @@ stun() {return ["soft", new Decimal(8).sub(player.bh.skillData["eclipse_lightBar
 
 - condtional: Prevents an instant/active action from being triggered until the condition returns true. Formatted as a function with the parameters index and slot.
 
-- onTrigger: Function that is triggered when type is function. Formatted as a function with the parameters index, slot, and target. (The parameter magnitude is added if the time stagnation stage property is active)
+- onTrigger: Function that is triggered when type is function and it is active. Formatted as a function with the parameters index, slot, and target. (The parameter magnitude is added if the time stagnation stage property is active)
+
+- onPassive: Function that is triggered when type is function and it is passive. Formatted as a function with the parameters index, slot, and target. (The parameter magnitude is added if the time stagnation stage property is active)
 
 - properties: Object that describes the properties of an instant action. Below are the potential properties:
 

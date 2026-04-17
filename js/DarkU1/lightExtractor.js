@@ -120,7 +120,7 @@
             player.le.starmetalAlloyToGet = player.le.starmetalAlloyToGet.add(player.le.starmetalAlloyToGetToGet)
         }
         if (player.sme.autoLeaveToggle && player.le.starmetalAlloyToGetTrue.gte(player.sme.leaveAmount) && !player.pet.legPetTimers[0].active) {
-            pauseUniverseAll(["D1", "A2"], "unpause", true)
+            pauseUniverseAll(["D1", "U3", "A2"], "unpause", true)
             player.sb.storedSpaceEnergy = player.sb.storedSpaceEnergy.add(player.ds.storedSpaceEnergyToGet)
 
             player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.le.starmetalAlloyToGetTrue.floor())
@@ -173,7 +173,7 @@
             canClick() { return player.le.starmetalAlloyToGet.gte(1) },
             unlocked() { return true },
             onClick() {
-                pauseUniverseAll(["D1", "A2"], "unpause", true)
+                pauseUniverseAll(["D1", "U3", "A2"], "unpause", true)
                 player.sb.storedSpaceEnergy = player.sb.storedSpaceEnergy.add(player.ds.storedSpaceEnergyToGet)
 
                 player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.le.starmetalAlloyToGetTrue.floor())
@@ -229,7 +229,7 @@
             canClick() { return player.le.eclipseShardsToGet.gte(1) },
             unlocked() { return true },
             onClick() {
-                pauseUniverseAll(["D1", "A2"], "unpause", true)
+                pauseUniverseAll(["D1", "U3", "A2"], "unpause", true)
                 player.sma.eclipseShards = player.sma.eclipseShards.add(player.le.eclipseShardsToGetTrue.floor())
                 player.le.starmetalAlloyPauseAgain = new Decimal(10)
                 for (let prop in player.pu.levelables) {
@@ -886,7 +886,7 @@
             title: "Grass Jump [PERMANENT]",
             unlocked() { return player.alephsChamber.milestone[25] > 0 && (player.pet.legPetTimers[0].active || hasUpgrade("le", 202)) },
             description: "Unlocks Grass Jump.",
-            cost: new Decimal(1e200),
+            cost: new Decimal(1e150),
             currencyLocation() { return player.du },
             currencyDisplayName: "Dark Celestial Points",
             currencyInternalName: "points",

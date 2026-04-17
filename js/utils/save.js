@@ -5,6 +5,12 @@ function save(force) {
 	window.ldb.set(modInfo.id, btoa(unescape(encodeURIComponent(JSON.stringify(player)))));
 	localStorage.setItem(modInfo.id+"_options", btoa(unescape(encodeURIComponent(JSON.stringify(options)))));
 }
+function saveBackup(force) {
+	NaNcheck(player)
+	if (NaNalert && !force) return
+	window.ldb.set(modInfo.id+"_backup", btoa(unescape(encodeURIComponent(JSON.stringify(player)))));
+	localStorage.setItem(modInfo.id+"_options", btoa(unescape(encodeURIComponent(JSON.stringify(options)))));
+}
 function startPlayerBase() {
 	return {
 		tab: layoutInfo.startTab,
@@ -229,15 +235,23 @@ function fixData(defaultData, newData) {
 function load() {
 	window.ldb.get(modInfo.id, function (get) {
 		if (get === null || get === undefined) {
-			local = localStorage.getItem(modInfo.id);
-			if (local === null || local === undefined) {
-				player = getStartPlayer();
-				options = getStartOptions();
-			} else {
-				player = Object.assign(getStartPlayer(), JSON.parse(decodeURIComponent(escape(atob(local)))));
-				fixSave();
-				loadOptions();
-			}
+			window.ldb.get(modInfo.id+"_backup", function (get2) {
+				if (get2 === null || get2 === undefined) {
+					local = localStorage.getItem(modInfo.id);
+					if (local === null || local === undefined) {
+						player = getStartPlayer();
+						options = getStartOptions();
+					} else {
+						player = Object.assign(getStartPlayer(), JSON.parse(decodeURIComponent(escape(atob(local)))));
+						fixSave();
+						loadOptions();
+					}
+				} else {
+					player = Object.assign(getStartPlayer(), JSON.parse(decodeURIComponent(escape(atob(get2)))));
+					fixSave();
+					loadOptions();
+				}
+			})
 		} else {
 			player = Object.assign(getStartPlayer(), JSON.parse(decodeURIComponent(escape(atob(get)))));
 			fixSave();
@@ -405,4 +419,24 @@ function removePlayerExcess() {
     return acc;
   }, {}) 
   	player = filteredPlayer
+}
+
+
+function loadBackup() {
+	if (!confirm("So are you sure you want to reset everything???")) return
+	window.ldb.get(modInfo.id + "_backup", function (get) {
+		player = null
+		if (get === null || get === undefined) {
+			player = getStartPlayer();
+		} else {
+			player = Object.assign(getStartPlayer(), JSON.parse(decodeURIComponent(escape(atob(get)))));
+			player.versionType = modInfo.id;
+			fixSave();
+		}
+
+		versionCheck();
+		NaNcheck(save);
+		save();
+		window.location.reload();
+	})
 }

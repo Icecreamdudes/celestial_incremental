@@ -90,7 +90,7 @@ addLayer("gwaTemple", {
 
         if (player.gwaTemple.gwank.lt(10000)) {player.gwaTemple.gwankReq = layers.h.hexReq(player.gwaTemple.gwank, 2500, 1.5, gwankDiv)
         } else {
-            player.gwaTemple.gwankReq = player.gwaTemple.gwank.sub(7088).pow(player.gwaTemple.gwank.add(1).div(1000).log(10).div(2).add(1.5)).mul(2500).div(gwankDiv).ceil()
+            player.gwaTemple.gwankReq = player.gwaTemple.gwank.sub(7088).pow(player.gwaTemple.gwank.div(1000).log(10).div(2).add(1.5)).mul(2500).div(gwankDiv).ceil()
         }
         
         if (!hasUpgrade("gwaTemple", 15)) {player.gwaTemple.gwankGet = new Decimal(1)

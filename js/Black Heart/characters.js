@@ -109,3 +109,29 @@ BHP.vespasian = {
     mending: new Decimal(5),
     potency: new Decimal(5),
 }
+BHP.creation = {
+    name: "The Creation",
+    color: "#8a76b0", //linear-gradient(90deg, #7a97b9, #8a76b0)
+    icon: "resources/player.png",
+    health: new Decimal(75),
+    damage: new Decimal(5),
+    defense: new Decimal(15),
+    regen: new Decimal(0.25),
+    agility: new Decimal(5),
+    luck: new Decimal(2.5),
+    mending: new Decimal(5),
+    potency: new Decimal(5),
+}
+BHP.diceFive = {
+    name: "Dice Five",
+    color: "#a3a3a3", 
+    icon: "resources/diceFive.png",
+    health: new Decimal(125),
+    damage: new Decimal(3),
+    defense: new Decimal(10),
+    regen: new Decimal(0),
+    agility: new Decimal(5),
+    luck: new Decimal(50),
+    mending: new Decimal(5),
+    potency: new Decimal(5),
+}

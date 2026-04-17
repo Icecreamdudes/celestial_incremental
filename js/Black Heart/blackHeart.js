@@ -489,6 +489,42 @@ addLayer("bh", {
                 mending: new Decimal(5),
                 potency: new Decimal(5),
             },
+            "creation": {
+                selected: false,
+                skills: {
+                    0: "creation_cardThrow",
+                    1: "none",
+                    2: "none",
+                    3: "none",
+                },
+                usedSP: new Decimal(10),
+                health: new Decimal(75),
+                damage: new Decimal(5),
+                defense: new Decimal(15),
+                regen: new Decimal(0.25),
+                agility: new Decimal(5),
+                luck: new Decimal(2.5),
+                mending: new Decimal(5),
+                potency: new Decimal(5),
+            },
+            "diceFive": {
+                selected: false,
+                skills: {
+                    0: "diceFive_diceSlice",
+                    1: "none", 
+                    2: "none",
+                    3: "none",
+                },
+                usedSP: new Decimal(6),
+                health: new Decimal(125),
+                damage: new Decimal(3),
+                defense: new Decimal(10),
+                regen: new Decimal(0),
+                agility: new Decimal(8),
+                luck: new Decimal(25),
+                mending: new Decimal(5),
+                potency: new Decimal(5),
+            },
         },
 
         // Saved Skill Stats
@@ -542,6 +578,12 @@ addLayer("bh", {
             "vespasian_overdrive": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "vespasian_impale": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "vespasian_peakPerformance": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+
+            // CREATION
+            "creation_cardThrow": {selected: ["creation", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+
+            // DICE FIVE
+            "diceFive_diceSlice": {selected: ["diceFive", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
         },
 
         //Stagnant Timer
@@ -684,6 +726,7 @@ addLayer("bh", {
         } else {
             unpaused = !player.bh.bhPause
         }
+
 
         // Stage Code
         player.bh.respawnMax = new Decimal(5)
@@ -2754,6 +2797,32 @@ addLayer("bh", {
                 return look
             },
         },
+        "Char-Creation": {
+            title() {return "<img src='" + run(BHP["creation"].icon, BHP["creation"]) + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
+            canClick: true,
+            unlocked() {return false},
+            onClick() {
+                player.bh.characterSelection = "creation"
+            },
+            style() {
+                let look = {width: "90px", minHeight: "90px", color: "white", background: "transparent", padding: "0", borderRadius: "0", margin: "2px"}
+                if (player.bh.characterData.creation.selected) look.filter = "brightness(50%)"
+                return look
+            },
+        },
+        "Char-DiceFive": {
+            title() {return "<img src='" + run(BHP["diceFive"].icon, BHP["diceFive"]) + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
+            canClick: true,
+            unlocked() {return true}, //change eventually
+            onClick() {
+                player.bh.characterSelection = "diceFive"
+            },
+            style() {
+                let look = {width: "90px", minHeight: "90px", color: "white", background: "transparent", padding: "0", borderRadius: "0", margin: "2px"}
+                if (player.bh.characterData.diceFive.selected) look.filter = "brightness(50%)"
+                return look
+            },
+        },
         "Skill-Equip": {
             title() {return player.bh.skillData[player.bh.skillSelection].selected[0] != "none" ? "Unequip Skill" : "Equip Skill"},
             canClick() {
@@ -3924,7 +3993,7 @@ addLayer("bh", {
                         ["theme-scroll-column", [
                             ["blank", "2px"],
                             ["row", [
-                                ["clickable", "Char-Kres"], ["clickable", "Char-Nav"], ["clickable", "Char-Sel"], ["clickable", "Char-Eclipse"], ["clickable", "Char-Geroa"], ["clickable", "Char-Vespasian"]
+                                ["clickable", "Char-Kres"], ["clickable", "Char-Nav"], ["clickable", "Char-Sel"], ["clickable", "Char-Eclipse"], ["clickable", "Char-Geroa"], ["clickable", "Char-Vespasian"], ["clickable", "Char-Creation"]
                             ]],
                         ], {width: "497px", height: "480px"}],
                     ], {width: "497px", height: "677px"}],

@@ -39,6 +39,7 @@
     branches: ["cbs",],
     update(delta) {
         player.car.cardGeneratorsToGet = player.za.chancePoints.pow(0.06).div(7).floor()
+        player.car.cardGeneratorsToGet = player.car.cardGeneratorsToGet.mul(buyableEffect("sm", 114))
 
         player.car.cardShreds = player.car.cardShreds.add(player.car.cardShredsPerSecond.mul(delta))
         player.car.cardShredsPerSecond = player.car.cardGenerators.pow(2)
@@ -48,7 +49,8 @@
         player.car.cardShredsPerSecond = player.car.cardShredsPerSecond.mul(buyableEffect("car", 43))
 
         player.car.cardShredReq = new Decimal(1000)
-        player.car.cardShredReq = player.car.cardShredReq.mul(player.car.cardDrawAmount.pow(1.5).add(1))
+        if (player.car.cardDrawAmount.lte(50)) player.car.cardShredReq = player.car.cardShredReq.mul(player.car.cardDrawAmount.pow(4).add(1))
+        if (player.car.cardDrawAmount.gte(50)) player.car.cardShredReq = player.car.cardShredReq.mul(player.car.cardDrawAmount.pow(5).add(1))
 
         player.car.cardsToGet = new Decimal(1)
         player.car.cardsToGet = player.car.cardsToGet.add(buyableEffect("car", 14))
@@ -60,6 +62,11 @@
             player.car.cardPointsPerSecond = [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)] 
         }
 
+        player.car.cardPointsPerSecond[0] = player.car.cardPointsPerSecond[0].mul(buyableEffect("car", 11))
+        player.car.cardPointsPerSecond[1] = player.car.cardPointsPerSecond[1].mul(buyableEffect("car", 21))
+        player.car.cardPointsPerSecond[2] = player.car.cardPointsPerSecond[2].mul(buyableEffect("car", 31))
+        player.car.cardPointsPerSecond[3] = player.car.cardPointsPerSecond[3].mul(buyableEffect("car", 41))
+
         for (let i = 0; i < player.car.cardPoints.length; i++) {
             for (j = ((i + 1) * 100) + 1; j < ((i + 1) * 100) + 14; j++) {
                 player.car.cardPointsPerSecond[i] = player.car.cardPointsPerSecond[i].mul(levelableEffect("car", j)[1])
@@ -67,10 +74,23 @@
             player.car.cardPoints[i] = player.car.cardPoints[i].add(player.car.cardPointsPerSecond[i].mul(delta))
         }
 
-        player.car.cardPointsPerSecond[0] = player.car.cardPointsPerSecond[0].mul(buyableEffect("car", 11))
-        player.car.cardPointsPerSecond[1] = player.car.cardPointsPerSecond[1].mul(buyableEffect("car", 21))
-        player.car.cardPointsPerSecond[2] = player.car.cardPointsPerSecond[2].mul(buyableEffect("car", 31))
-        player.car.cardPointsPerSecond[3] = player.car.cardPointsPerSecond[3].mul(buyableEffect("car", 41))
+        for (let i = 1; i < 5; i++)
+        {
+            for (let j = 1; j < 14; j++)
+            {
+                if (player.car.levelables[(i*100)+j][1].lt(0))
+                {
+                    player.car.levelables[(i*100)+j][1] = new Decimal(0)
+                }
+            }
+        }
+
+        if (player.car.cardShreds.lt(0))
+        {
+            player.car.cardShreds = new Decimal(0)
+        }
+
+
     },
     cardReset() {
         //resets everything before unlocking cards except for check back shrine
@@ -123,7 +143,7 @@
         player.wof.buyables[14] = new Decimal(0)
         player.wof.buyables[15] = new Decimal(0)
 
-        player.sm.slotsSpinned = new Decimal(0)
+        player.sm.spinAmount = new Decimal(0)
         player.sm.spinActive = false
         //chips
         player.sm.chips = [new Decimal(0), new Decimal(0), new Decimal(0)]
@@ -136,8 +156,8 @@
         player.sm.buyables[106] = new Decimal(0)
         player.sm.buyables[107] = new Decimal(0)
         player.sm.buyables[108] = new Decimal(0)
-        player.sm.buyables[109] = new Decimal(0)
-        player.sm.buyables[111] = new Decimal(0)
+        if (!hasUpgrade("car", 14)) player.sm.buyables[109] = new Decimal(0)
+        if (!hasUpgrade("car", 14)) player.sm.buyables[111] = new Decimal(0)
 
         player.car.cardDrawAmount = new Decimal(0)
 
@@ -158,6 +178,8 @@
         player.car.buyables[42] = new Decimal(0)
         player.car.buyables[43] = new Decimal(0)
         player.car.buyables[44] = new Decimal(0)
+
+        player.car.cardShreds = new Decimal(0)
     },
     clickables: {
         1: {
@@ -258,7 +280,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(0.9)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -296,7 +318,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(0.5).mul(0.06)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -334,7 +356,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).mul(0.1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -372,7 +394,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(0.5).mul(0.06)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -410,7 +432,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).mul(0.005)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -448,7 +470,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).mul(0.1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -486,7 +508,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(0.5).mul(0.04)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -524,7 +546,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).mul(0.1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -562,7 +584,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).mul(0.1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -600,7 +622,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).mul(0.1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -638,7 +660,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).mul(0.1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -676,7 +698,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).mul(0.2).floor()
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -714,7 +736,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(0.5).mul(0.0003)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -753,7 +775,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(4).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -791,7 +813,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(4).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -829,7 +851,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = Decimal.div(1, getLevelableAmount(this.layer, this.id).pow(0.3).add(1))
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -867,7 +889,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(3).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -905,7 +927,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = Decimal.div(1, getLevelableAmount(this.layer, this.id).pow(0.25).add(1))
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -943,7 +965,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(3).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -981,7 +1003,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = Decimal.div(1, getLevelableAmount(this.layer, this.id).pow(0.25).add(1))
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -1019,7 +1041,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(1.75).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -1057,7 +1079,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(0.625).mul(0.1).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -1095,7 +1117,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(0.5).mul(0.1).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -1133,7 +1155,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).mul(3).pow(0.65).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -1171,7 +1193,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).mul(2).pow(0.65).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -1209,7 +1231,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(0.65).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -1248,7 +1270,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(0.75).mul(0.05).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -1286,7 +1308,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(0.5).mul(0.05).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -1324,7 +1346,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(0.65).mul(0.5).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -1362,7 +1384,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(0.5).mul(0.03).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -1400,7 +1422,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = player.hpw.power.pow(0.01).pow(getLevelableAmount(this.layer, this.id).mul(0.3))
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -1438,7 +1460,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(1.15).mul(0.8).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -1476,7 +1498,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = player.in.infinities.pow(0.015).pow(getLevelableAmount(this.layer, this.id).mul(0.25))
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -1514,7 +1536,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(0.5).mul(0.5).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -1552,7 +1574,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(0.2).mul(0.1).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -1590,7 +1612,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(4).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -1620,7 +1642,7 @@
             levelLimit() { return new Decimal(99) },
             description() {
                 let str = [
-                    "x" + format(this.effect()[0]) + " to stars (afffected by stars).<br>", //not implemented
+                    "x" + format(this.effect()[0]) + " to stars (affected by stars).<br>", //not implemented
                     "x" + format(this.effect()[1]) + " to diamond points.",
                 ]
                 return str.join("")
@@ -1628,7 +1650,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = player.au2.stars.pow(0.03).pow(getLevelableAmount(this.layer, this.id).mul(0.4))
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -1658,7 +1680,7 @@
             levelLimit() { return new Decimal(99) },
             description() {
                 let str = [
-                    "x" + format(this.effect()[0]) + " to bees (afffected by bees).<br>", //not implemented
+                    "x" + format(this.effect()[0]) + " to bees (affected by bees).<br>", //not implemented
                     "x" + format(this.effect()[1]) + " to diamond points.",
                 ]
                 return str.join("")
@@ -1666,7 +1688,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = player.bee.bees.pow(0.005).pow(getLevelableAmount(this.layer, this.id).mul(0.5))
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -1704,7 +1726,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = Decimal.pow("1e100000", getLevelableAmount(this.layer, this.id).pow(0.6))
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -1744,7 +1766,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(4).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -1782,7 +1804,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(3).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -1820,7 +1842,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(3.5).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -1858,7 +1880,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).mul(2).pow(2.5).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -1896,7 +1918,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(3).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -1934,7 +1956,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).mul(2).pow(2).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -1972,7 +1994,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).mul(1.5).pow(2.5).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -2010,7 +2032,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).mul(2).pow(1.5).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -2048,7 +2070,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(0.8).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -2086,7 +2108,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).mul(0.5).pow(1.1).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -2124,7 +2146,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(0.6).mul(0.2).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -2162,7 +2184,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(0.8).mul(0.3).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -2200,7 +2222,7 @@
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = getLevelableAmount(this.layer, this.id).pow(0.4).mul(0.5).add(1)
-                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id))
+                eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
             // CLICK CODE
@@ -2226,6 +2248,80 @@
     bars: {
     },
     upgrades: {
+        11: {
+            title: "Well its not my fault you have bad rng :/",
+            unlocked() { return player.cbs.shrineReactivated },
+            description: "Always gain 25% of each chip on slot reset.",
+            cost: new Decimal(1),
+            currencyLocation() { return player.car },
+            currencyDisplayName: "Card Generators",
+            currencyInternalName: "cardGenerators",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '125px', },
+        },    
+        12: {
+            title: "So lazy you can't even spin a wheel...",
+            unlocked() { return player.cbs.shrineReactivated },
+            description: "Gain 25% of wheel point mult as wheel points per second.",
+            cost: new Decimal(10),
+            currencyLocation() { return player.car },
+            currencyDisplayName: "Card Generators",
+            currencyInternalName: "cardGenerators",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '125px', },
+        },  
+        13: {
+            title: "It seems like you've maximized laziness out here.",
+            unlocked() { return player.cbs.shrineReactivated },
+            description: "Gain 100% of heads and tails per second.",
+            cost: new Decimal(100),
+            currencyLocation() { return player.car },
+            currencyDisplayName: "Card Generators",
+            currencyInternalName: "cardGenerators",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '125px', },
+        },  
+        14: {
+            title: "How can you do research with this stuff?",
+            unlocked() { return player.cbs.shrineReactivated },
+            description: "Unlock 3 new researches, and shard researches are kept on card reset.",
+            cost: new Decimal(1000),
+            currencyLocation() { return player.car },
+            currencyDisplayName: "Card Generators",
+            currencyInternalName: "cardGenerators",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '125px', },
+        },  
+        15: {
+            title: "Just do that I guess",
+            unlocked() { return player.cbs.shrineReactivated },
+            description: "Boosts chance point gain based on card generators.",
+            cost: new Decimal(10000),
+            currencyLocation() { return player.car },
+            currencyDisplayName: "Card Generators",
+            currencyInternalName: "cardGenerators",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '125px', },
+            effect() {
+                return player.car.cardGenerators.pow(1.01).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+        }, 
+        16: {
+            title: "Okay this ones slightly justifiable",
+            unlocked() { return player.cbs.shrineReactivated },
+            description: "Gain 5% of each chip every second.",
+            cost: new Decimal(100000),
+            currencyLocation() { return player.car },
+            currencyDisplayName: "Card Generators",
+            currencyInternalName: "cardGenerators",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '125px', },
+        },   
+        17: {
+            title: "So should this be full automation now?",
+            unlocked() { return player.cbs.shrineReactivated },
+            description: "Automatically purchase all non-shard researches and wheel buyables.",
+            cost: new Decimal(1e6),
+            currencyLocation() { return player.car },
+            currencyDisplayName: "Card Generators",
+            currencyInternalName: "cardGenerators",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '125px', },
+        },   
     },
     buyables: {
         11: {
@@ -2257,7 +2353,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: {width: '140px', height: '142px', color: "black", background: "#9c9c9c", border: "5px solid #dadada", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+            style: {width: '193px', height: '142px', color: "black", background: "#9c9c9c", border: "5px solid #dadada", borderRadius: "5px 0px 0px 5px", borderRight: "0px", boxSizing: "border-box",}
         },
         12: {
             costBase() { return new Decimal(50) },
@@ -2265,12 +2361,12 @@
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.car.cardPoints[0]},
             pay(amt) { player.car.cardPoints[0] = this.currency().sub(amt) },
-            effect(x) { return player.car.cardPoints[0].add(1).pow(getBuyableAmount(this.layer, this.id).pow(0.3).div(1.25)) },
+            effect(x) { return player.car.cardPoints[0].pow(0.45).add(1).pow(getBuyableAmount(this.layer, this.id).pow(0.3).div(1.25)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             display() {
-                return "<h5>which are boosting chance point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ". (affected by Spade Points)\n\
+                return "which are boosting chance point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ". (affected by Spade Points)\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Spade Points"
             },
             buy(mult) {
@@ -2288,7 +2384,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: {width: '140px', height: '142px', color: "black", background: "#9c9c9c", border: "5px solid #dadada", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+            style: {width: '193px', height: '142px', color: "black", background: "#9c9c9c", border: "5px solid #dadada", borderRadius: "0px", boxSizing: "border-box", borderRight: "0px",}
         },
         13: {
             costBase() { return new Decimal(200) },
@@ -2319,11 +2415,11 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: {width: '140px', height: '142px', color: "black", background: "#9c9c9c", border: "5px solid #dadada", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+            style: {width: '193px', height: '142px', color: "black", background: "#9c9c9c", border: "5px solid #dadada", borderRadius: "0px", boxSizing: "border-box",borderRight: "0px",}
         },
         14: {
-            costBase() { return new Decimal(1000) },
-            costGrowth() { return new Decimal(10) },
+            costBase() { return new Decimal(1e6) },
+            costGrowth() { return new Decimal(1000) },
             purchaseLimit() { return new Decimal(10) },
             currency() { return player.car.cardPoints[0]},
             pay(amt) { player.car.cardPoints[0] = this.currency().sub(amt) },
@@ -2350,7 +2446,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: {width: '140px', height: '142px', color: "black", background: "#9c9c9c", border: "5px solid #dadada", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+            style: {width: '193px', height: '142px', color: "black", background: "#9c9c9c", border: "5px solid #dadada", borderRadius: "0px 5px 5px 0px", boxSizing: "border-box",}
         },
         //club
         21: {
@@ -2382,7 +2478,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: {width: '140px', height: '142px', color: "black", background: "#9c9c9c", border: "5px solid #dadada", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+            style: {width: '193px', height: '142px', color: "black", background: "#9c9c9c", border: "5px solid #dadada", borderRadius: "5px 0px 0px 5px", boxSizing: "border-box",borderRight: "0px",}
         },
         22: {
             costBase() { return new Decimal(50) },
@@ -2390,12 +2486,12 @@
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.car.cardPoints[1]},
             pay(amt) { player.car.cardPoints[1] = this.currency().sub(amt) },
-            effect(x) { return player.car.cardPoints[1].add(1).pow(getBuyableAmount(this.layer, this.id).pow(0.25).div(2)) },
+            effect(x) { return player.car.cardPoints[1].pow(0.45).add(1).pow(getBuyableAmount(this.layer, this.id).pow(0.25).div(2)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             display() {
-                return "<h5>which are boosting head and tails gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ". (affected by Club Points)\n\
+                return "which are boosting head and tails gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ". (affected by Club Points)\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Club Points"
             },
             buy(mult) {
@@ -2413,7 +2509,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: {width: '140px', height: '142px', color: "black", background: "#9c9c9c", border: "5px solid #dadada", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+            style: {width: '193px', height: '142px', color: "black", background: "#9c9c9c", border: "5px solid #dadada", borderRadius: "0px", boxSizing: "border-box",borderRight: "0px",}
         },
         23: {
             costBase() { return new Decimal(200) },
@@ -2444,11 +2540,11 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: {width: '140px', height: '142px', color: "black", background: "#9c9c9c", border: "5px solid #dadada", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+            style: {width: '193px', height: '142px', color: "black", background: "#9c9c9c", border: "5px solid #dadada", borderRadius: "0px", boxSizing: "border-box", borderRight: "0px",}
         },
         24: {
-            costBase() { return new Decimal(1000) },
-            costGrowth() { return new Decimal(10) },
+            costBase() { return new Decimal(1e6) },
+            costGrowth() { return new Decimal(1000) },
             purchaseLimit() { return new Decimal(10) },
             currency() { return player.car.cardPoints[1]},
             pay(amt) { player.car.cardPoints[1] = this.currency().sub(amt) },
@@ -2475,7 +2571,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: {width: '140px', height: '142px', color: "black", background: "#9c9c9c", border: "5px solid #dadada", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+            style: {width: '193px', height: '142px', color: "black", background: "#9c9c9c", border: "5px solid #dadada", borderRadius: "0px 5px 5px 0px", boxSizing: "border-box",}
         },
         //diamond
         31: {
@@ -2507,7 +2603,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: {width: '140px', height: '142px', color: "black", background: "#f18080", border: "5px solid #ff3333", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+            style: {width: '193px', height: '142px', color: "black", background: "#f18080", border: "5px solid #ff3333",  borderRadius: "5px 0px 0px 5px", boxSizing: "border-box",borderRight: "0px",}
         },
         32: {
             costBase() { return new Decimal(50) },
@@ -2515,12 +2611,12 @@
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.car.cardPoints[2]},
             pay(amt) { player.car.cardPoints[2] = this.currency().sub(amt) },
-            effect(x) { return player.car.cardPoints[2].add(1).pow(getBuyableAmount(this.layer, this.id).pow(0.2).div(3)) },
+            effect(x) { return player.car.cardPoints[2].pow(0.35).add(1).pow(getBuyableAmount(this.layer, this.id).pow(0.2).div(3)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             display() {
-                return "<h5>which are boosting wheel point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ". (affected by Diamond Points)\n\
+                return "which are boosting wheel point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ". (affected by Diamond Points)\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Diamond Points"
             },
             buy(mult) {
@@ -2538,7 +2634,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: {width: '140px', height: '142px', color: "black", background: "#f18080", border: "5px solid #ff3333", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+            style: {width: '193px', height: '142px', color: "black", background: "#f18080", border: "5px solid #ff3333", borderRadius: "0px", boxSizing: "border-box",borderRight: "0px",}
         },
         33: {
             costBase() { return new Decimal(200) },
@@ -2569,11 +2665,11 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: {width: '140px', height: '142px', color: "black", background: "#f18080", border: "5px solid #ff3333", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+            style: {width: '193px', height: '142px', color: "black", background: "#f18080", border: "5px solid #ff3333", borderRadius: "0px", boxSizing: "border-box",borderRight: "0px",}
         },
         34: {
-            costBase() { return new Decimal(1000) },
-            costGrowth() { return new Decimal(10) },
+            costBase() { return new Decimal(1e6) },
+            costGrowth() { return new Decimal(1000) },
             purchaseLimit() { return new Decimal(10) },
             currency() { return player.car.cardPoints[2]},
             pay(amt) { player.car.cardPoints[2] = this.currency().sub(amt) },
@@ -2600,7 +2696,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: {width: '140px', height: '142px', color: "black", background: "#f18080", border: "5px solid #ff3333", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+            style: {width: '193px', height: '142px', color: "black", background: "#f18080", border: "5px solid #ff3333", borderRadius: "0px 5px 5px 0px", boxSizing: "border-box",}
         },
         //heart
         41: {
@@ -2632,7 +2728,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: {width: '140px', height: '142px', color: "black", background: "#f18080", border: "5px solid #ff3333", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+            style: {width: '193px', height: '142px', color: "black", background: "#f18080", border: "5px solid #ff3333", borderRadius: "5px 0px 0px 5px", boxSizing: "border-box",borderRight: "0px",}
         },
         42: {
             costBase() { return new Decimal(50) },
@@ -2640,12 +2736,12 @@
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.car.cardPoints[3]},
             pay(amt) { player.car.cardPoints[3] = this.currency().sub(amt) },
-            effect(x) { return player.car.cardPoints[3].add(1).pow(getBuyableAmount(this.layer, this.id).pow(0.2).div(6)) },
+            effect(x) { return player.car.cardPoints[3].pow(0.3).add(1).pow(getBuyableAmount(this.layer, this.id).pow(0.2).div(6)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             display() {
-                return "<h5>which are boosting all chip gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ". (affected by Heart Points)\n\
+                return "which are boosting all chip gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ". (affected by Heart Points)\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Heart Points"
             },
             buy(mult) {
@@ -2663,7 +2759,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: {width: '140px', height: '142px', color: "black", background: "#f18080", border: "5px solid #ff3333", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+            style: {width: '193px', height: '142px', color: "black", background: "#f18080", border: "5px solid #ff3333", borderRadius: "0px", boxSizing: "border-box",borderRight: "0px",}
         },
         43: {
             costBase() { return new Decimal(200) },
@@ -2694,11 +2790,11 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: {width: '140px', height: '142px', color: "black", background: "#f18080", border: "5px solid #ff3333", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+            style: {width: '193px', height: '142px', color: "black", background: "#f18080", border: "5px solid #ff3333", borderRadius: "0px", boxSizing: "border-box",borderRight: "0px",}
         },
         44: {
-            costBase() { return new Decimal(1000) },
-            costGrowth() { return new Decimal(10) },
+            costBase() { return new Decimal(1e6) },
+            costGrowth() { return new Decimal(1000) },
             purchaseLimit() { return new Decimal(10) },
             currency() { return player.car.cardPoints[3]},
             pay(amt) { player.car.cardPoints[3] = this.currency().sub(amt) },
@@ -2725,7 +2821,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: {width: '140px', height: '142px', color: "black", background: "#f18080", border: "5px solid #ff3333", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+            style: {width: '193px', height: '142px', color: "black", background: "#f18080", border: "5px solid #ff3333", borderRadius: "0px 5px 5px 0px", boxSizing: "border-box",}
         },
     },
     milestones: {},
@@ -2742,26 +2838,27 @@
                     ["style-row", [
                     ["blank", "25px"],
                     ["style-column", [
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.car.cardGenerators) + "</h3> card generators. (+" + formatWhole(player.car.cardGeneratorsToGet) + ")" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.car.cardGenerators) + "</h3> card generators. (+" + formatWhole(player.car.cardGeneratorsToGet) + ")" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["clickable", 11], 
                     ]],
                     ["row", [ ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["clickable", 104], ]],
                     ["style-column", [
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.car.cardShreds) + "</h3> card shreds. (+" + formatWhole(player.car.cardShredsPerSecond) + "/s)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "+" + formatWhole(player.car.cardsToGet) + " cards on draw." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.car.cardShreds) + "</h3> card shreds. (+" + formatWhole(player.car.cardShredsPerSecond) + "/s)" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "+" + formatWhole(player.car.cardsToGet) + " cards on draw." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["clickable", 12],
                     ]],
                     ], {width: "1100px", height: "250px", border: "3px solid rgb(68, 0, 0)", borderRadius: "10px 10px 0px 0px", background: "linear-gradient(180deg, #9e3b3b 0%, rgb(97, 44, 44) 50%, #9e3b3b 100%)"}],
-                    ["style-column", [
                     ["blank", "25px"],
-                    ["style-column", [
                     ["raw-html", function () { return "Upgrades" }, { "color": "white", "font-size": "24px", "font-family": "monospace",}],
-                    ], {width: "1100px", height: "75px",}],
-                    ["style-column", [
-                    ], {width: "1100px", height: "325px",}],
-                    ], {width: "1100px", height: "400px", border: "3px solid rgb(68, 0, 0)", borderRadius: "0px 0px 10px 10px", borderTop: "0px", background: "linear-gradient(180deg, #9e3b3b 0%, rgb(97, 44, 44) 50%, #9e3b3b 100%)"}],
+                    ["blank", "25px"],
+                    ["style-row", [
+                            ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15],
+                    ],],
+                    ["style-row", [
+                            ["upgrade", 16], ["upgrade", 17],
+                    ],],
                 ],         
                             
             },
@@ -2825,7 +2922,7 @@
                     ["blank", "12.5px"],
                     ["style-column", [
                             ["style-column", [
-                                ["raw-html", () => {return "You have " + format(player.car.cardPoints[0]) + " spade points (+" + format(player.car.cardPointsPerSecond[0]) + "/s)"}, {color: "#1f1f1f", fontSize: "24px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + format(player.car.cardPoints[0]) + " spade points (+" + format(player.car.cardPointsPerSecond[0]) + "/s)"}, {color: "#1f1f1f", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "785px", height: "30px", backgroundColor: "#dadada", borderTop: "3px solid #7f7f7f", borderBottom: "3px solid #7f7f7f", userSelect: "none"}],
                             ["style-row", [
 
@@ -2833,7 +2930,7 @@
                             ], {width: "775px", height: "135px", backgroundColor: "#303030", padding: "5px"}],
 
                             ["style-column", [
-                                ["raw-html", () => {return "You have " + format(player.car.cardPoints[1]) + " club points (+" + format(player.car.cardPointsPerSecond[1]) + "/s)"}, {color: "#1f1f1f", fontSize: "24px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + format(player.car.cardPoints[1]) + " club points (+" + format(player.car.cardPointsPerSecond[1]) + "/s)"}, {color: "#1f1f1f", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "785px", height: "30px", backgroundColor: "#dadada", borderTop: "3px solid #7f7f7f", borderBottom: "3px solid #7f7f7f", userSelect: "none"}],
                             ["style-row", [
                             ["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24],
@@ -2841,14 +2938,14 @@
                             ], () => {return {width: "775px", height: "135px", backgroundColor: "#303030", padding: "5px"}}],
 
                             ["style-column", [
-                                ["raw-html", () => {return "You have " + format(player.car.cardPoints[2]) + " diamond points (+" + format(player.car.cardPointsPerSecond[2]) + "/s)"}, {color: "#ff3333", fontSize: "24px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + format(player.car.cardPoints[2]) + " diamond points (+" + format(player.car.cardPointsPerSecond[2]) + "/s)"}, {color: "#ff3333", fontSize: "20px", fontFamily: "monospace"}],
                             ], () => {return {width: "785px", height: "30px", backgroundColor: "#dadada", borderTop: "3px solid #7f7f7f", borderBottom: "3px solid #7f7f7f", userSelect: "none"}}],
                             ["style-row", [
                             ["ex-buyable", 31], ["ex-buyable", 32], ["ex-buyable", 33], ["ex-buyable", 34],
 
                             ], () => {return {width: "775px", height: "135px", backgroundColor: "#490c0c", padding: "5px"}}],
                             ["style-column", [
-                                ["raw-html", () => {return "You have " + format(player.car.cardPoints[3]) + " heart points (+" + format(player.car.cardPointsPerSecond[3]) + "/s)"}, {color: "#ff3333", fontSize: "24px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + format(player.car.cardPoints[3]) + " heart points (+" + format(player.car.cardPointsPerSecond[3]) + "/s)"}, {color: "#ff3333", fontSize: "20px", fontFamily: "monospace"}],
 
                             ], () => {return {width: "785px", height: "30px", backgroundColor: "#dadada", borderTop: "3px solid #7f7f7f", borderBottom: "3px solid #7f7f7f", userSelect: "none"}}],
                             ["style-row", [

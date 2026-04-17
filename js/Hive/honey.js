@@ -88,6 +88,7 @@ addLayer("ho", {
         if (hasUpgrade("ho", 4)) player.ho.cellGain = player.ho.cellGain.mul(upgradeEffect("ho", 4))
         if (hasUpgrade("al", 202)) player.ho.cellGain = player.ho.cellGain.mul(2)
         player.ho.cellGain = player.ho.cellGain.mul(player.bee.preAlephMult)
+        if (hasUpgrade("za", 22)) player.ho.cellGain = player.ho.cellGain.mul(upgradeEffect("za", 22))
 
         //FLOOR VALUE
         player.ho.cellGain = player.ho.cellGain.floor()

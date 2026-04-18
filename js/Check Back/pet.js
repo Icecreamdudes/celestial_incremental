@@ -3877,7 +3877,7 @@ addLayer("pet", {
             description() {
                 return "x" + format(this.effect()[0]) + " to pre aleph resources.<br>" +
                     "x" + format(this.effect()[1]) + " to aleph resources.<br>" +
-                    "^" + format(this.effect()[2]) + " to pollinators.<br>" +
+                    "^" + format(this.effect()[2]) + " to rocket layer SPV effects.<br>" +
                     "/" + format(this.effect()[3]) + " to laboratory celestialite stats."
             },
             levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
@@ -3886,7 +3886,7 @@ addLayer("pet", {
                 return [
                     amt.add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Pre-Aleph Resources
                     amt.div(2).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Aleph Resources
-                    amt.pow(0.5).div(10).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Pollinators
+                    amt.div(2).add(1).mul(getLevelableTier(this.layer, this.id).add(1)).pow(0.5), // Rocket Part and Activated Fuel effects
                     amt.sub(1).div(2).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Laboratory celestialite stats
                 ]
             },

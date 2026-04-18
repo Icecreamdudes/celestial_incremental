@@ -1108,7 +1108,10 @@
                 ], {width: "110px", height: "200px"}],
             ], {width: "788px", height: "200px", borderBottom: "3px solid var(--regBorder)"}],
             ["style-column", [
-                ["raw-html", () => { return "You will gain <h3>" + formatWhole(player.cof.coreFragmentsToGet[player.cof.highestScore]) + "</h3> " + player.cof.coreFragmentNames[player.cof.highestScore] + " on singularity reset." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace" }],
+                ["raw-html", () => {
+                    if (hasUpgrade("s", 29)) return "You will gain <h3>" + formatWhole(player.cof.coreFragmentsToGet[player.cof.fragmentIndex]) + "</h3> " + player.cof.coreFragmentNames[player.cof.fragmentIndex] + " on singularity reset."
+                    return "You will gain <h3>" + formatWhole(player.cof.coreFragmentsToGet[player.cof.highestScore]) + "</h3> " + player.cof.coreFragmentNames[player.cof.highestScore] + " on singularity reset."
+                }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace" }],
             ], {width: "788px", height: "37px", background: "var(--miscButton)", borderBottom: "3px solid var(--regBorder)"}],
             ["top-column", [
                     ["blank", "10px"],

@@ -2574,6 +2574,13 @@ addLayer("tad", {
             unlocked: true,
             style: {width: "350px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
+        6: {
+            requirementDescription: "<h3>32 Magnification",
+            effectDescription() { return "Keep magnification layer content on all resets."},
+            done() { return player.tad.magnification.gte(32) },
+            unlocked: true,
+            style: {width: "350px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
+        },
     },
     domainReset(tier = 0) {
         // MATTER
@@ -2602,7 +2609,7 @@ addLayer("tad", {
         }
 
         // MAGNIFICATIONS
-        if (tier > 3) {
+        if (tier > 3 && !hasMilestone("tad", 6)) {
             player.tad.magnification = new Decimal(0)
             player.tad.magnificationGain = new Decimal(0)
             player.tad.milestones.splice(0, player.tad.milestones.length)
@@ -3043,6 +3050,7 @@ addLayer("tad", {
                     ["milestone", 3],
                     ["milestone", 4],
                     ["milestone", 5],
+                    ["milestone", 6],
                 ]
             },
             "Stabilization": {

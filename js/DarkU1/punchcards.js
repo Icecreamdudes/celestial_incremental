@@ -77,7 +77,7 @@ addLayer("pu", {
         }
         if (player.pu.legendarySelectionActive) {
 
-            if (run(layers.pu.levelables[401].canSelect, layers.pu.levelables[401])) player.pu.selectedPunchcards[3] = 401 //MAKE THEM RANDOMIZED EVENTUALLY
+            if (run(layers.pu.levelables[401].canSelect, layers.pu.levelables[401]) && !getLevelableTier("pu", 401, true)) player.pu.selectedPunchcards[3] = 401 //MAKE THEM RANDOMIZED EVENTUALLY
 
         }
     },
@@ -249,7 +249,7 @@ addLayer("pu", {
             },
             style() {
                 let look = {width: "75px", height: "125px", border: "3px solid", padding: "0px", borderRadius: "0px", margin: "5px"}
-                if (player.pu.selectionIndex == 2 && player.pu.storedSelections.gte(1)) {look.borderColor = "white"} else {look.borderColor = "#444"}
+                if (player.pu.selectionIndex == 3 && player.pu.storedSelections.gte(1)) {look.borderColor = "white"} else {look.borderColor = "#444"}
                 return look
             },
         },

@@ -44,7 +44,7 @@
         player.ar.rankPointsPerSec = new Decimal(0)
         if (hasUpgrade("an", 13)) player.ar.rankPointsPerSec = player.ar.rankPointsPerSec.add(0.05)
         if (hasUpgrade("an", 15)) player.ar.rankPointsPerSec = player.ar.rankPointsPerSec.add(0.25)
-        if (hasUpgrade("an", 18)) player.ar.rankPointsPerSec = player.ar.rankPointsPerSec.add(1)
+        if (hasUpgrade("an", 17)) player.ar.rankPointsPerSec = player.ar.rankPointsPerSec.add(1)
         if (hasMilestone("gs", 19)) player.ar.rankPointsPerSec = player.ar.rankPointsPerSec.add(5)
         player.ar.rankPoints = player.ar.rankPoints.add(player.ar.rankPointsToGet.mul(Decimal.mul(delta, player.ar.rankPointsPerSec)))
 
@@ -59,7 +59,7 @@
 
         player.ar.tierPointsPerSec = new Decimal(0)
         if (hasUpgrade("an", 15)) player.ar.tierPointsPerSec = player.ar.tierPointsPerSec.add(0.05)
-        if (hasUpgrade("an", 18)) player.ar.tierPointsPerSec = player.ar.tierPointsPerSec.add(0.25)
+        if (hasUpgrade("an", 17)) player.ar.tierPointsPerSec = player.ar.tierPointsPerSec.add(0.25)
         if (hasMilestone("gs", 19)) player.ar.tierPointsPerSec = player.ar.tierPointsPerSec.add(5)
         player.ar.tierPoints = player.ar.tierPoints.add(player.ar.tierPointsToGet.mul(Decimal.mul(delta, player.ar.tierPointsPerSec)))
 
@@ -72,7 +72,7 @@
         if (inChallenge("fu", 11) || inChallenge("fu", 12)) player.ar.tetrPointsToGet = player.ar.tetrPointsToGet.pow(Decimal.mul(0.2, buyableEffect("fu", 88)))
 
         player.ar.tetrPointsPerSec = new Decimal(0)
-        if (hasUpgrade("an", 18)) player.ar.tetrPointsPerSec = player.ar.tetrPointsPerSec.add(0.05)
+        if (hasUpgrade("an", 17)) player.ar.tetrPointsPerSec = player.ar.tetrPointsPerSec.add(0.05)
         if (hasMilestone("gs", 19)) player.ar.tetrPointsPerSec = player.ar.tetrPointsPerSec.add(5)
         player.ar.tetrPoints = player.ar.tetrPoints.add(player.ar.tetrPointsToGet.mul(Decimal.mul(delta, player.ar.tetrPointsPerSec)))
 

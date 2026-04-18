@@ -82,7 +82,9 @@ addLayer("bpl", {
         player.bpl.pollenGain = player.bpl.pollenGain.pow(buyableEffect("n", 52))
 
         // SOFTCAP
-        if (player.bpl.pollenGain.gte(1e200)) player.bpl.pollenGain = player.bpl.pollenGain.div(1e200).pow(0.3).mul(1e200)
+        let softcap = 0.3
+        if (hasUpgrade("al", 129)) softcap += 0.1
+        if (player.bpl.pollenGain.gte(1e200)) player.bpl.pollenGain = player.bpl.pollenGain.div(1e200).pow(softcap).mul(1e200)
 
         // Pollen Timer Calculations
         player.bpl.pollenTimerMax = new Decimal(5)

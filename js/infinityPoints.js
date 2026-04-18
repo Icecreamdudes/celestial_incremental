@@ -113,6 +113,10 @@
                                 }
                             }
                         }
+
+                        // Check for achievements
+                        if (!hasAchievement("achievements", 211) && player.ip.upgrades.length >= 16) completeAchievement("achievements", 211)
+
     },
     clickables: {
         11: {

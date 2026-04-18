@@ -425,9 +425,10 @@ addLayer("achievements", {
         204: {
             name: "Age of Automation",
             image: "resources/achievements/3_04.png",
-            tooltip: "<h3>Age of Automation</h3><hr style='margin-bottom:4px'>Have at least 1 divider<br>for each autobuyer.",
+            tooltip: "<h3>Age of Automation</h3><hr style='margin-bottom:4px'>Have at least 1 divider<br>for each autobuyer.<br><br>Reward: +1 base NIP gain.",
             color: "#b2d8d8",
             unlocked: true,
+            marked: true,
         },
         205: {
             name: "New Blessings",
@@ -456,7 +457,7 @@ addLayer("achievements", {
         208: {
             name: "More XP",
             image: "resources/achievements/3_08.png",
-            tooltip: "<h3>More XP</h3><hr style='margin-bottom:4px'>Do your first XPBoost reset.<br><br>Reward: Check back XP gain is<br>increased by 50%.",
+            tooltip: "<h3>More XP</h3><hr style='margin-bottom:4px'>Do your first XPBoost reset.<br><br>Reward: Increase check back<br>XP gain by 50%.",
             color: "#b2d8d8",
             unlocked: true,
             marked: true,
@@ -471,18 +472,19 @@ addLayer("achievements", {
         },
         210: {
             name: "Amazing Grace",
-            image: "resources/achievements/3_00.png",
+            image: "resources/achievements/3_10.png",
             tooltip: "<h3>Amazing Grace</h3><hr style='margin-bottom:4px'>Buy the 8th NIP upgrade.",
             color: "#b2d8d8",
             complete() {return hasUpgrade("ta", 18)},
             unlocked: true,
         },
         211: {
-            name: "Title",
-            image: "resources/achievements/3_00.png",
-            tooltip: "<h3>Title</h3><hr style='margin-bottom:4px'>Description",
+            name: "Fullmetal Infinities",
+            image: "resources/achievements/3_11.png",
+            tooltip: "<h3>Fullmetal Infinities</h3><hr style='margin-bottom:4px'>Buy the first 16<br>infinity upgrades.<br><br>Reward: Increase IP<br>gain by 50%.",
             color: "#b2d8d8",
             unlocked: true,
+            marked: true,
         },
         212: {
             name: "OTFs and NIP, Oh My!",
@@ -503,9 +505,10 @@ addLayer("achievements", {
         214: {
             name: "You have collapsed!",
             image: "resources/achievements/3_14.png",
-            tooltip: "<h3>You have collapsed!</h3><hr style='margin-bottom:4px'>Collapse Tav's Domain.",
+            tooltip: "<h3>You have collapsed!</h3><hr style='margin-bottom:4px'>Collapse Tav's Domain.<br><br>Reward: +1 base NIP gain.",
             color: "#b2d8d8",
             unlocked: true,
+            marked: true,
         },
         215: {
             name: "Domain Expansion",
@@ -518,16 +521,18 @@ addLayer("achievements", {
         216: {
             name: "A little harder...",
             image: "resources/achievements/3_16.png",
-            tooltip: "<h3>A little harder...</h3><hr style='margin-bottom:4px'>Collapse Tav's Domain with a<br>cap of 1e6 matter.",
+            tooltip: "<h3>A little harder...</h3><hr style='margin-bottom:4px'>Collapse Tav's Domain with a<br>cap of 1e6 matter.<br><br>Reward: Increase matter<br>gain by 25%.",
             color: "#b2d8d8",
             unlocked: true,
+            marked: true,
         },
         217: {
             name: "A step up...",
             image: "resources/achievements/3_17.png",
-            tooltip: "<h3>A step up...</h3><hr style='margin-bottom:4px'>Collapse Tav's Domain with a<br>cap of 1e7 matter.",
+            tooltip: "<h3>A step up...</h3><hr style='margin-bottom:4px'>Collapse Tav's Domain with a<br>cap of 1e7 matter.<br><br>Reward: Increase matter<br>gain by 25%.",
             color: "#b2d8d8",
             unlocked: true,
+            marked: true,
         },
         218: {
             name: "Not an AD Ach 34 Copy",
@@ -540,33 +545,36 @@ addLayer("achievements", {
         219: {
             name: "Compress!",
             image: "resources/achievements/3_19.png",
-            tooltip: "<h3>Compress!</h3><hr style='margin-bottom:4px'>Do your first<br>compression reset.",
+            tooltip: "<h3>Compress!</h3><hr style='margin-bottom:4px'>Do your first<br>compression reset.<br><br>Reward: Increase matter<br>gain by 50%.",
             color: "#b2d8d8",
             complete() {return player.tad.altInfinities.disfigured.milestone.gte(3)},
             unlocked: true,
+            marked: true,
         },
         220: {
-            name: "Title",
-            image: "resources/achievements/3_00.png",
-            tooltip: "<h3>Title</h3><hr style='margin-bottom:4px'>Description",
+            name: "New Effects",
+            image: "resources/achievements/3_20.png",
+            tooltip: "<h3>New Effects</h3><hr style='margin-bottom:4px'>Buy the infinitum upgrade in<br>row 3, column 3.<br><br>Reward: Increase matter<br>gain by 50%.",
             color: "#b2d8d8",
             unlocked: true,
+            marked: true,
         },
         221: {
             name: "Infinity Conversion",
             image: "resources/achievements/3_21.png",
-            tooltip: "<h3>Infinity Conversion</h3><hr style='margin-bottom:4px'>Create an alternative infinity.<br><br>Reward: Increase matter gain by 20%.",
+            tooltip: "<h3>Infinity Conversion</h3><hr style='margin-bottom:4px'>Create an alternative<br>infinity.<br><br>Reward: Increase matter<br>gain by 50%.",
             color: "#b2d8d8",
             complete() {return player.tad.altInfinities.broken.amount.gte(1) || player.tad.altInfinities.shattered.amount.gte(1) || player.tad.altInfinities.fragmented.amount.gte(1)},
             unlocked: true,
             marked: true,
         },
         222: {
-            name: "Title",
-            image: "resources/achievements/3_00.png",
-            tooltip: "<h3>Title</h3><hr style='margin-bottom:4px'>Description",
+            name: "Centfinitum",
+            image: "resources/achievements/3_22.png",
+            tooltip: "<h3>Centfinitum</h3><hr style='margin-bottom:4px'>Have at least 100 infinitum.<br><br>Reward: Increase infinitum<br>gain by 50%.",
             color: "#b2d8d8",
             unlocked: true,
+            marked: true,
         },
         223: {
             name: "Seriously?",
@@ -728,13 +736,13 @@ addLayer("achievements", {
         ["style-row", [
             ["always-scroll-column", [
                 ["style-row", [
-                    ["category-button", ["<span style='color:#9bedff'>★</span>★★★★", "stars", 1], {width: "155px", height: "40px", color: "#aaa", background: "#333", borderRight: "3px solid white"}],
+                    ["category-button", ["~ 1 ~<br><h6>Pre-Infinity</h6>", "stars", 1], {width: "155px", height: "40px", color: "white", background: "#333", borderRight: "3px solid white"}],
                 ], {width: "155px", height: "40px", borderBottom: "3px solid white"}],
                 ["style-row", [
-                    ["category-button", ["<span style='color:#9bedff'>★★</span>★★★", "stars", 2], {width: "155px", height: "40px", color: "#aaa", background: "#332600", borderRight: "3px solid white"}],
+                    ["category-button", ["~ 2 ~<br><h6>Early Infinity</h6>", "stars", 2], {width: "155px", height: "40px", color: "#ffbf00", background: "#332600", borderRight: "3px solid white"}],
                 ], () => {return tmp.achievements.microtabs.stars[2].unlocked ? {width: "155px", height: "40px", borderBottom: "3px solid white"} : {display: "none !important"}}],
                 ["style-row", [
-                    ["category-button", ["<span style='color:#9bedff'>★★★</span>★★<br><small style='color:#c00'>[NOT IMPLEMENTED]</small>", "stars", 3], {width: "155px", height: "40px", color: "#aaa", background: "#354040", borderRight: "3px solid white"}],
+                    ["category-button", ["~ 3 ~<br><h6>Tav</h6>", "stars", 3], {width: "155px", height: "40px", color: "#b2d8d8", background: "#354040", borderRight: "3px solid white"}],
                 ], () => {return tmp.achievements.microtabs.stars[3].unlocked ? {width: "155px", height: "40px", borderBottom: "3px solid white"} : {display: "none !important"}}],
                 /*
                 ["style-row", [

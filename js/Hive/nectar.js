@@ -88,7 +88,9 @@ addLayer("ne", {
         if (hasUpgrade("al", 226)) player.ne.alpha.gain = player.ne.alpha.gain.pow(1.01)
         player.ne.alpha.gain = player.ne.alpha.gain.pow(buyableEffect("n", 52))
 
-        if (player.ne.alpha.gain.gte(1e250)) player.ne.alpha.gain = player.ne.alpha.gain.div(1e250).pow(0.3).mul(1e250)
+        let softcap = 0.3
+        if (hasUpgrade("al", 229)) softcap += 0.1
+        if (player.ne.alpha.gain.gte(1e250)) player.ne.alpha.gain = player.ne.alpha.gain.div(1e250).pow(softcap).mul(1e250)
 
         if (hasUpgrade("al", 203) && tmp.ne.layerShown && (player.bee.path != 0 || player.bee.extremePath)) player.ne.alpha.amount = player.ne.alpha.amount.add(player.ne.alpha.gain.mul(delta))
 

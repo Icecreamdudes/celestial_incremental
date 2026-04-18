@@ -456,7 +456,7 @@ addLayer("n", {
         51: {
             costBase() { return new Decimal(16) },
             costGrowth() { return new Decimal(1.3) },
-            purchaseLimit() { return new Decimal(1) },
+            purchaseLimit() { return new Decimal(2) },
             currency() { return player.n.nest },
             pay(amt) { player.n.nest = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(2)},

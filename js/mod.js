@@ -1600,7 +1600,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Added Alternate Ranks, Perks, Anonymity, Repli-Trees, Repli-Grass, Grass-Skip, and Oil.<br>
 		- Added 2 Celestials: Tav and Cante.<br>
 		- Added cutscenes.<br>
-		- Removed Herobrine.
+		- <button style="background:transparent;border: 0px;color:var(--textColor)" onclick="if(options.debug){options.debug=false}else{options.debug=true}">Removed Herobrine</button>.
 		`
 
 let winText = `Congratulations! You have completed the entirety of Celestial Incremental for now...`

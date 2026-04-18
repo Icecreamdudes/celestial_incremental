@@ -5418,6 +5418,8 @@ addLayer("pet", {
                                             return "(" + player.pet.levelables[501][1] + "/" + tmp.pet.levelables[501].xpReq + ")"
                                         case 8:
                                             return "(" + player.pet.levelables[502][1] + "/" + tmp.pet.levelables[502].xpReq + ")"
+                                        case 9:
+                                            return "(" + player.pet.levelables[503][1] + "/" + tmp.pet.levelables[503].xpReq + ")"
                                         default:
                                             return ""
                                     }

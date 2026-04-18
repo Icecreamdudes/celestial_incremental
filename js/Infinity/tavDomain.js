@@ -199,7 +199,11 @@ addLayer("tad", {
         player.tad.matterBase = player.tad.matterBase.add(buyableEffect("tad", 203))
 
         player.tad.matterGain = player.tad.matterBase
-        if (hasAchievement("achievements", 221)) player.tad.matterGain = player.tad.matterGain.mul(1.2)
+        if (hasAchievement("achievements", 216)) player.tad.matterGain = player.tad.matterGain.mul(1.25)
+        if (hasAchievement("achievements", 217)) player.tad.matterGain = player.tad.matterGain.mul(1.25)
+        if (hasAchievement("achievements", 219)) player.tad.matterGain = player.tad.matterGain.mul(1.5)
+        if (hasAchievement("achievements", 220)) player.tad.matterGain = player.tad.matterGain.mul(1.5)
+        if (hasAchievement("achievements", 221)) player.tad.matterGain = player.tad.matterGain.mul(1.5)
         if (hasUpgrade("tad", 111)) player.tad.matterGain = player.tad.matterGain.mul(2)
         if (hasUpgrade("tad", 113)) player.tad.matterGain = player.tad.matterGain.mul(getBuyableAmount("tad", 11).mul(player.tad.accumulationMult).add(1))
         if (hasUpgrade("tad", 123)) player.tad.matterGain = player.tad.matterGain.mul(getBuyableAmount("tad", 12).mul(player.tad.accumulationMult).add(1))
@@ -207,7 +211,7 @@ addLayer("tad", {
         if (hasUpgrade("tad", 143)) player.tad.matterGain = player.tad.matterGain.mul(getBuyableAmount("tad", 14).mul(player.tad.accumulationMult).add(1))
         if (hasUpgrade("tad", 121)) player.tad.matterGain = player.tad.matterGain.mul(player.tad.infinitumEffect)
         player.tad.matterGain = player.tad.matterGain.mul(buyableEffect("tad", 101))
-        if (hasUpgrade("tad", 133)) player.tad.matterGain = player.tad.matterGain.mul(1.5) // TEMP UNTIL ACHIEVEMENTS
+        // if (hasUpgrade("tad", 133)) player.tad.matterGain = player.tad.matterGain.mul(1.5) // TEMP UNTIL ACHIEVEMENTS
         if (player.tad.altInfinities.broken.milestone.gte(1)) player.tad.matterGain = player.tad.matterGain.mul(player.tad.altInfinities.broken.effect1)
         player.tad.matterGain = player.tad.matterGain.mul(buyableEffect("p", 17))
         player.tad.matterGain = player.tad.matterGain.mul(levelableEffect("pet", 209)[1])
@@ -298,6 +302,7 @@ addLayer("tad", {
         // INFINITUM MODIFIERS
         player.tad.infinitumGain = Decimal.pow(2, player.tad.domainCap.div(99999).log(10))
         player.tad.infinitumGain = player.tad.infinitumGain.mul(buyableEffect("tad", 104))
+        if (hasAchievement("achievements", 222)) player.tad.infinitumGain = player.tad.infinitumGain.mul(1.5)
         if (player.tad.altInfinities.fragmented.milestone.gte(2)) player.tad.infinitumGain = player.tad.infinitumGain.mul(player.tad.altInfinities.fragmented.effect2)
         player.tad.infinitumGain = player.tad.infinitumGain.mul(buyableEffect("om", 12))
         player.tad.infinitumGain = player.tad.infinitumGain.mul(buyableEffect("p", 18))
@@ -501,6 +506,8 @@ addLayer("tad", {
 
         // CHECK FOR ACHIEVEMENTS
         if (!hasAchievement("achievements", 215) && hasUpgrade("tad", 115)) completeAchievement("achievements", 215)
+        if (!hasAchievement("achievements", 220) && hasUpgrade("tad", 133)) completeAchievement("achievements", 220)
+        if (!hasAchievement("achievements", 222) && player.tad.infinitum.gte(100)) completeAchievement("achievements", 222)
     },
     clickables: {
         1: {

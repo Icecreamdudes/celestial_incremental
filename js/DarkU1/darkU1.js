@@ -54,6 +54,8 @@
         player.du.pointGain = player.du.pointGain.mul(buyableEffect("dgj", 11))
 
         player.du.pointGain = player.du.pointGain.div(player.du.pointSoftcap)
+        if (player.pet.legPetTimers[0].active) player.du.pointGain = player.du.pointGain.pow(0.7)
+        if (getLevelableTier("pu", 305, true)) player.du.pointGain = player.du.pointGain.pow(levelableEffect("pu", 305)[1])
 
         // =-- SOFTCAP 2 --=
         player.du.pointSoftcap2 = new Decimal(0.1)
@@ -71,8 +73,6 @@
         // =-- SOFTCAP 2 END --=
         if (player.du.pointGain.gte(player.du.secondSoftcapStart)) player.du.pointGain = player.du.pointGain.div(player.du.secondSoftcapStart).pow(player.du.pointSoftcap2).mul(player.du.secondSoftcapStart)
         
-        if (player.pet.legPetTimers[0].active) player.du.pointGain = player.du.pointGain.pow(0.7)
-        if (getLevelableTier("pu", 305, true)) player.du.pointGain = player.du.pointGain.pow(levelableEffect("pu", 305)[1])
         if (player.sma.inStarmetalChallenge) {
             player.du.points = player.du.points.add(player.du.pointGain.mul(delta))
         }

@@ -781,6 +781,19 @@
             }
         },
     },
+    hotkeys: [
+        {
+            key: "ctrl+~", // What the hotkey button is. Use uppercase if it's combined with shift, or "ctrl+x" for holding down ctrl.
+            description: "shift+ctrl+`: open/close debug menu", // The description of the hotkey that is displayed in the game's How To Play tab
+            onPress() {
+                if (options.debug) {
+                    options.debug = false
+                } else {
+                    options.debug = true
+                }
+            },
+        }
+    ],
     microtabs: {
         halt: {
             "Halter": {

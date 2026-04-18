@@ -80,7 +80,7 @@
             player.cbs.inBattle = false
             player.cbs.ritualSpiritActive = false
 
-            pauseUniverseAll(["DS", "A2"], "unpause", true)
+            if (player.uni.U1.paused == true) pauseUniverseAll(["DS", "A2"], "unpause", true) // The if statement is a poor method to prevent checkback resource dupe
 
             screenFlash("Ritual Success.\nYou have earned a Shard of Ascension.", 3000)
         }

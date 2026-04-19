@@ -360,7 +360,7 @@ addUniverse("DS", {
 addUniverse("UD", {
     name: "Universe δ<br>Interspace",
     symbol: "δ",
-    tree: [["wel"], ["pri", "prj", "blu"], ["bum"]],
+    tree: [["wel"], ["pri", "prj", "blu"], ["bum"], ["cer"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(135deg, #ff7fbf 0%, #bf7fff 100%)",

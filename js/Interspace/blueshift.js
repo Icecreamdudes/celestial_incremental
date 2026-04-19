@@ -8,10 +8,26 @@
 
         totalBlueshifts: new Decimal(0),
         blueshifts: {
-            1: new Decimal(0),
-            2: new Decimal(0),
-            3: new Decimal(0),
-            4: new Decimal(0),
+            1: {
+                amount: new Decimal(0),
+                cycleGainMul: new Decimal(1),
+                cycleAddedSpeedDiv: new Decimal(1),
+            },
+            2: {
+                amount: new Decimal(0),
+                cycleGainMul: new Decimal(1),
+                cycleAddedSpeedDiv: new Decimal(1),
+            },
+            3: {
+                amount: new Decimal(0),
+                cycleGainMul: new Decimal(1),
+                cycleAddedSpeedDiv: new Decimal(1),
+            },
+            4: {
+                amount: new Decimal(0),
+                cycleGainMul: new Decimal(1),
+                cycleAddedSpeedDiv: new Decimal(1),
+            },
         },
         blueshiftEffectBase: new Decimal(0),
         blueshiftEffect: new Decimal(0),

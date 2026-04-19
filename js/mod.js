@@ -30,7 +30,7 @@
 		"Black Heart/stagnantSynestia.js", "Black Heart/depth4.js", "Black Heart/alephsChamber.js", "Black Heart/laboratory.js", "DarkU1/grassJump.js",
 		"Hive/nest.js", "Check Back/gwaTemple.js",
 
-		"Interspace/well.js", "Interspace/projects.js", "Interspace/prisms.js", "Interspace/blueshift.js", "Interspace/bumpy.js", "Check Back/goobert.js",
+		"Interspace/well.js", "Interspace/projects.js", "Interspace/prisms.js", "Interspace/blueshift.js", "Interspace/bumpy.js", "Interspace/cere.js", "Check Back/goobert.js",
 		"DarkU1/timeCapsules.js", "Check Back/dragon.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
@@ -283,6 +283,9 @@ function updateStyles() {
 		case "bum":
 			layerBG = "linear-gradient(0deg, #dfffdf -700%, #180b18 100%)"
 			break;
+		case "cer":
+			layerBG = "linear-gradient(0deg, #402030 0%, #1f0812 100%)"
+			break;
 		case "n":
 			if (player.subtabs["n"]["Tabs"] == "Pylon") {
 				layerBG = "linear-gradient(90deg, #458c46, #005410)"
@@ -362,7 +365,7 @@ function updateStyles() {
 	    }
 	}
 
-	if (player.tab === "wel" || player.tab === "prj" || player.tab === "pri" || player.tab === "blu" || player.tab === "bum") {
+	if (player.tab === "wel" || player.tab === "prj" || player.tab === "pri" || player.tab === "blu" || player.tab === "bum" || player.tab === "cer") {
     	let t = Date.now()
     	t = ((t % 1000) / 1000) * 32
 		// Add the dotted background if it doesn't already exist
@@ -381,15 +384,23 @@ function updateStyles() {
     	    
         	dottedBackground.style.overflow = "hidden";
 			dottedBackground.style.backgroundSize = "32px 32px";
-			dottedBackground.style.backgroundPosition = `${t}px ${t}px`;
+			if (player.tab == "cer") {
+				dottedBackground.style.backgroundPosition = `0px ${2*t}px`;
+			} else {
+				dottedBackground.style.backgroundPosition = `${t}px ${t}px`;
+			}
 	    }
 		const el = document.getElementById("dotted-background");
-		if (player.tab === "bum") {
+		if (player.tab === "bum" || player.tab === "cer") {
 			el.style.backgroundImage = "url(resources/ui/dotted_background_light.png)";
 		} else {
 			el.style.backgroundImage = "url(resources/ui/dotted_background.png)";
 		}
-		el.style.backgroundPosition = `${t}px ${t}px`;
+		if (player.tab == "cer") {
+			el.style.backgroundPosition = `0px ${4*t}px`;
+		} else {
+			el.style.backgroundPosition = `${t}px ${t}px`;
+		}
 	} else {
 	    // Remove the galaxy background if the tab is not in the well
 	    const dottedBackground = document.getElementById("dotted-background");

@@ -538,7 +538,7 @@
                 return this.condition()
             },
             style() {
-                let look = {width: "200px", borderRadius: "8px 0 0 0", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                let look = {width: "200px", borderRadius: "8px 0 0 8px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
                 if (hasUpgrade(this.layer, this.id)) {
                     look.backgroundColor = "#4d9999"
                     look.border = "3px solid #335966"
@@ -652,7 +652,7 @@
                 return this.condition()
             },
             style() {
-                let look = {width: "200px", borderRadius: "0 8px 0 0", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                let look = {width: "200px", borderRadius: "0 8px 8px 0", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
                 if (hasUpgrade(this.layer, this.id)) {
                     look.backgroundColor = "#4d9999"
                     look.border = "3px solid #335966"
@@ -677,7 +677,7 @@
     infoboxes: {},
     fountains: {
         1: {
-            title: "Light Cycle Fountain",
+            title: "Fountain of Reflection",
             completionEffectStat: "Light Well Cycles",
             getCompletionEffect() {
                 let completions = player.pri.fountains[1].completions
@@ -718,7 +718,7 @@
             },
         },
         2: {
-            title: "Light² Fountain",
+            title: "Fountain of Ultramarine",
             completionEffectStat: "Light, based on Light",
             getCompletionEffect() {
                 let completions = player.pri.fountains[2].completions
@@ -760,7 +760,7 @@
             },
         },
         3: {
-            title: "Time Capsule Fountain",
+            title: "Fountain of Time",
             completionEffectStat: "Stored Time Capsules",
             getCompletionEffect() {
                 let completions = player.pri.fountains[3].completions
@@ -802,7 +802,7 @@
             },
         },
         4: {
-            title: "Light Speed Fountain",
+            title: "Fountain of Light Speed II",
             completionEffectStat: "Light Well Speed",
             getCompletionEffect() {
                 let completions = player.pri.fountains[4].completions
@@ -931,7 +931,7 @@
         ]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && hasMilestone("prj", 201) || true}
+    layerShown() { return player.startedGame == true && hasMilestone("prj", 201)}
 })
 const makePrismFountain = function (id) {
     let thisFountain =

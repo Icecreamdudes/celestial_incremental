@@ -52,7 +52,7 @@
     infoboxes: {},
     microtabs: {
         stuff: {
-            "Entry": {
+            "Entry Point": {
                 buttonStyle() { return { color: "white", borderRadius: "8px"} },
                 unlocked() { return true },
                 content: [
@@ -96,5 +96,5 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true}
+    layerShown() { return player.startedGame == true && false}
 })

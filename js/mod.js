@@ -384,11 +384,7 @@ function updateStyles() {
     	    
         	dottedBackground.style.overflow = "hidden";
 			dottedBackground.style.backgroundSize = "32px 32px";
-			if (player.tab == "cer") {
-				dottedBackground.style.backgroundPosition = `0px ${2*t}px`;
-			} else {
-				dottedBackground.style.backgroundPosition = `${t}px ${t}px`;
-			}
+			dottedBackground.style.backgroundPosition = `${t}px ${t}px`;
 	    }
 		const el = document.getElementById("dotted-background");
 		if (player.tab === "bum" || player.tab === "cer") {
@@ -396,16 +392,49 @@ function updateStyles() {
 		} else {
 			el.style.backgroundImage = "url(resources/ui/dotted_background.png)";
 		}
-		if (player.tab == "cer") {
-			el.style.backgroundPosition = `0px ${4*t}px`;
-		} else {
-			el.style.backgroundPosition = `${t}px ${t}px`;
-		}
+		el.style.backgroundPosition = `${t}px ${t}px`;
 	} else {
-	    // Remove the galaxy background if the tab is not in the well
+	    // Remove the dotted background if the tab is not in interspace
 	    const dottedBackground = document.getElementById("dotted-background");
 	    if (dottedBackground) {
 	        dottedBackground.remove();
+	    }
+	}
+	if (player.tab === "wel") {
+    	let t = Date.now()
+    	t = ((t % 60000) / 60000) * 25
+		// Add the light ray background if it doesn't already exist
+    	if (!document.getElementById("lightRay-background")) {
+	        const lightRayBackground = document.createElement("div");
+        	lightRayBackground.id = "lightRay-background";
+        	lightRayBackground.className = "instant";
+    	    lightRayBackground.style.position = "fixed";
+	        lightRayBackground.style.top = "0";
+        	lightRayBackground.style.left = "0";
+    	    lightRayBackground.style.width = "100%";
+	        lightRayBackground.style.height = "100%";
+        	lightRayBackground.style.overflow = "hidden";
+    	    lightRayBackground.style.zIndex = "-2003"; // Ensure it stays in the background
+        	document.body.appendChild(lightRayBackground);
+    	    
+        	lightRayBackground.style.overflow = "hidden";
+	    }
+		const el = document.getElementById("lightRay-background");
+		el.style.background = "conic-gradient(at 50% -64px, " +
+		"#0000 " + t + "%, #0000 " + (t + 12.5) + "%," +
+		"#4d99730f " + (t + 12.5) + "%, #4d99730f " + (t + 25) + "%," +
+		"#0000 " + (t + 25) + "%, #0000 " + (t + 37.5) + "%," +
+		"#4d99730f " + (t + 37.5) + "%, #4d99730f " + (t + 50) + "%," +
+		"#0000 " + (t + 50) + "%, #0000 " + (t + 62.5) + "%," +
+		"#4d99730f " + (t + 62.5) + "%, #4d99730f " + (t + 75) + "%," +
+		"#0000 " + (t + 75) + "%, #0000 " + (t + 87.5) + "%," +
+		"#4d99730f " + (t + 87.5) + "%, #4d99730f " + (t + 100) + "%," +
+		"#0000 " + (t + 100) + "%)"
+	} else {
+	    // Remove the light ray background if the tab is not in the well
+	    const lightRayBackground = document.getElementById("lightRay-background");
+	    if (lightRayBackground) {
+	        lightRayBackground.remove();
 	    }
 	}
 
@@ -758,6 +787,7 @@ function updateStyles() {
 			player.musuniverse = "UB"
 			break;
 		case "wel": case "pri": case "prj": case "bum":
+		case "cer":
 			player.musuniverse = "UD"
 			break;
 		case "cb": case "ev0": case "ev1": case "ev2": case "ev4":
@@ -1698,7 +1728,8 @@ var doNotCallTheseFunctionsEveryTick = [
 	"selectCelestialites", "petDeath", "celestialiteDeath", "petAbility", "celestialiteAbility",
 	"arriveAtStar", "spaceEnergyReset", "coinFlip", "randomizeSegments", "spinWheel", "spinSlots", "evaluateRewards",
 	"slotReset", "enhanceReset",
-	"prismReset", "blueshiftReset", "timeCapsuleReset", "createMultiverseMapConnection", "createClickableConnection", "makeProject", "makeLightWell", "makePrismFountain", "makeWellFountain", "getTimeReq", "getTimeCapsuleReq", "getTimeSpeed", "lightGain",
+	"prismReset", "blueshiftReset", "timeCapsuleReset", "createMultiverseMapConnection", "createClickableConnection",
+	"makeProject", "makeLightWell", "makePrismFountain", "makeWellFountain", "makeStarlightFountain", "getTimeReq", "getTimeCapsuleReq", "getTimeSpeed", "lightGain",
 ]
 
 function getStartPoints(){

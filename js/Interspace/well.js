@@ -913,6 +913,7 @@
                 player.wel.light = player.wel.light.add(layers.wel.clickables[this.id].lightGain())
                 player.wel.modules[this.id].time = new Decimal(0)
                 player.wel.modules[this.id].completions = player.wel.modules[this.id].completions.add(player.wel.modules[this.id].completionsGain)
+                if (!hasAchievement("achievements", 1202)) completeAchievement("achievements", 1202)
             },
             lightGain() {
                 let gain = player.wel.lightMult
@@ -943,6 +944,7 @@
                 player.wel.light = player.wel.light.add(layers.wel.clickables[this.id].lightGain())
                 player.wel.modules[this.id].time = new Decimal(0)
                 player.wel.modules[this.id].completions = player.wel.modules[this.id].completions.add(player.wel.modules[this.id].completionsGain)
+                if (!hasAchievement("achievements", 1205)) completeAchievement("achievements", 1205)
             },
             lightGain() {
                 let gain = player.wel.lightMult
@@ -973,6 +975,7 @@
                 player.wel.light = player.wel.light.add(layers.wel.clickables[this.id].lightGain())
                 player.wel.modules[this.id].time = new Decimal(0)
                 player.wel.modules[this.id].completions = player.wel.modules[this.id].completions.add(player.wel.modules[this.id].completionsGain)
+                if (!hasAchievement("achievements", 1212)) completeAchievement("achievements", 1212)
             },
             lightGain() {
                 let gain = player.wel.lightMult

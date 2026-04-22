@@ -983,9 +983,12 @@ addLayer("ev8", {
         player.ev8.evoTimers[3].base = new Decimal(9)
         player.ev8.evoTimers[3].max = new Decimal(324000)
         for (let thing in player.ev8.evoTimers) {
-            player.ev8.evoTimers[thing].base = player.ev8.evoTimers[thing].base.mul(ESCMult).floor()
+            if (hasUpgrade("ev8", 27)) {
+                player.ev8.evoTimers[thing].base = player.ev8.evoTimers[thing].base.mul(ESCMult.pow(2)).floor()
+            } else {
+                player.ev8.evoTimers[thing].base = player.ev8.evoTimers[thing].base.mul(ESCMult).floor()
+            }
             if (hasUpgrade("ev8", 11)) player.ev8.evoTimers[thing].max = player.ev8.evoTimers[thing].max.div(1.1)
-            if (hasUpgrade("ev8", 27)) player.ev8.evoTimers[thing].max = player.ev8.evoTimers[thing].max.div(1.2)
             
             player.ev8.evoTimers[thing].current = player.ev8.evoTimers[thing].current.sub(onepersec.mul(delta))
         }
@@ -1001,7 +1004,6 @@ addLayer("ev8", {
         for (let thing in player.ev8.paraTimers) {
             player.ev8.paraTimers[thing].base = player.ev8.paraTimers[thing].base.mul(ESCMult)
             if (hasUpgrade("ev8", 11)) player.ev8.paraTimers[thing].max = player.ev8.paraTimers[thing].max.div(1.1)
-            if (hasUpgrade("ev8", 27)) player.ev8.paraTimers[thing].max = player.ev8.paraTimers[thing].max.div(1.2)
 
             player.ev8.paraTimers[thing].current = player.ev8.paraTimers[thing].current.sub(onepersec.mul(delta))
         }
@@ -1243,7 +1245,7 @@ addLayer("ev8", {
         21: {
             title: "Shard Research X",
             unlocked() { return hasMilestone("s", 14) },
-            description: "Multiplies all epic pet currency gain by x1.4",
+            description: "Multiplies all epic pet currency gain by x1.4.",
             cost: new Decimal(80),
             currencyLocation() { return player.cb },
             currencyDisplayName: "Evolution Shards",
@@ -1267,7 +1269,7 @@ addLayer("ev8", {
         23: {
             title: "Shard Research XII",
             unlocked() { return hasMilestone("s", 14)},
-            description: "Multiplies fragmentation fragment gain by x1.2",
+            description: "Multiplies fragmentation fragment gain by x1.2.",
             cost: new Decimal(10),
             currencyLocation() {return player.cb},
             currencyDisplayName: "Paragon Shards",
@@ -1277,7 +1279,7 @@ addLayer("ev8", {
         24: {
             title: "Shard Research XIII",
             unlocked() {return getBuyableAmount("sme", 112).gte(1)},
-            description: "Unlock Stagnant Synestia in Black Heart",
+            description: "Unlock Stagnant Synestia in Black Heart.",
             cost: new Decimal(150),
             currencyLocation() {return player.cb},
             currencyDisplayName: "Evolution Shards",
@@ -1297,7 +1299,7 @@ addLayer("ev8", {
         26: {
             title: "Shard Research XV",
             unlocked() {return getBuyableAmount("sme", 112).gte(2)},
-            description: "Unlock a 4th paragon shard button",
+            description: "Unlock a 4th paragon shard button.",
             cost: new Decimal(15),
             currencyLocation() {return player.cb},
             currencyDisplayName: "Paragon Shards",
@@ -1307,7 +1309,8 @@ addLayer("ev8", {
         27: {
             title: "Shard Research XVI",
             unlocked() {return getBuyableAmount("sme", 112).gte(4)},
-            description: "Divides shard button cooldowns by /1.2",
+            description: "ESC mult effectiveness on evo shard buttons is squared.",
+            tooltip: "ESC only effects shard buttons via SME Study B:7",
             cost: new Decimal(40),
             currencyLocation() {return player.cb},
             currencyDisplayName: "Paragon Shards",

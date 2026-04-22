@@ -331,7 +331,6 @@ function importSave(imported = undefined, forced = false) {
 	if (imported === undefined)
 		imported = prompt("Paste your save here. Don't screw up the timeline though.");
 	try {
-		console.log(atob(imported))
 		tempPlr = Object.assign(getStartPlayer(), JSON.parse(atob(imported)));
 		if (tempPlr.versionType != modInfo.id && !forced && !confirm("This save may or may not work, just press 'ok' and see what happens.")) // Wrong save (use "Forced" to force it to accept.)
 			return;

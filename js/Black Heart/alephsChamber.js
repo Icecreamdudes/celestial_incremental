@@ -50,6 +50,7 @@ addLayer("alephsChamber", {
             canClick: true,
             unlocked: true,
             onClick() {
+                if (!hasAchievement("achievements", 923)) completeAchievement("achievements", 923)
                 BHStageEnter("alephsChamber")
             },
             style: {width: "200px", minHeight: "75px", color: "white", background: "linear-gradient(45deg, #3f003f 0%, #a900a9 100%)", border: "3px solid #000", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"},

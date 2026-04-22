@@ -46,7 +46,7 @@ addLayer("al", {
 
         // START OF HONEYCOMBS
         player.al.honeycombGain = player.bb.beeBread.div(1e10).pow(0.25)
-        if (player.al.cocoonLevel >= 1) player.al.honeycombGain = player.al.honeycombGain.mul(1.5)
+        if (hasAchievement("achievements", 913)) player.al.honeycombGain = player.al.honeycombGain.mul(1.5)
         if (player.al.cocoonLevel >= 14) player.al.honeycombGain = player.al.honeycombGain.mul(2)
         player.al.honeycombGain = player.al.honeycombGain.mul(buyableEffect("sme", 174))
         player.al.honeycombGain = player.al.honeycombGain.mul(levelableEffect("pet", 503)[1])
@@ -61,7 +61,7 @@ addLayer("al", {
 
         // START OF ROYAL JELLY
         player.al.royalJellyGain = player.ho.honey.div(1e10).pow(0.25)
-        if (player.al.cocoonLevel >= 1) player.al.royalJellyGain = player.al.royalJellyGain.mul(1.5)
+        if (hasAchievement("achievements", 913)) player.al.royalJellyGain = player.al.royalJellyGain.mul(1.5)
         if (player.al.cocoonLevel >= 14) player.al.royalJellyGain = player.al.royalJellyGain.mul(2)
         player.al.royalJellyGain = player.al.royalJellyGain.mul(buyableEffect("sme", 174))
         player.al.royalJellyGain = player.al.royalJellyGain.mul(levelableEffect("pet", 503)[1])
@@ -98,8 +98,14 @@ addLayer("al", {
         player.fl.pickingPower = new Decimal(1)
         player.fl.flowerGain = new Decimal(1)
         player.fl.glossaryBase = new Decimal(1)
-        for (let i in player.fl.glossary) {
-            player.fl.glossary[i] = new Decimal(0)
+        if (all) {
+            for (let i in player.fl.glossary) {
+                player.fl.glossary[i] = new Decimal(0)
+            }
+        } else {
+            for (let i in player.fl.glossary) {
+                if (player.fl.gilding[i] == false) player.fl.glossary[i] = new Decimal(0)
+            }
         }
         for (let i in player.fl.glossaryEffect) {
             player.fl.glossaryEffects[i] = new Decimal(1)
@@ -114,19 +120,6 @@ addLayer("al", {
                 i = i+96
             } else {
                 i++
-            }
-        }
-
-        if (player.al.cocoonLevel >= 7 && !all) {
-            for (let i = 101; i < 116; ) {
-                player.fl.glossary[i] = new Decimal(1)
-
-                // Increase i value
-                if (i % 5 == 0) {
-                    i = i+6
-                } else {
-                    i++
-                }
             }
         }
 
@@ -154,6 +147,13 @@ addLayer("al", {
                 player.fl.buyables[4] = new Decimal(0)
                 player.fl.buyables[5] = new Decimal(0)
                 player.fl.buyables[6] = new Decimal(0)
+            }
+        }
+
+        if (all) {
+            player.fl.gildingIndex = 101
+            for (let i in player.fl.gilding) {
+                player.fl.gilding[i] = false
             }
         }
 
@@ -215,8 +215,10 @@ addLayer("al", {
         if (all) {
             player.al.honeycomb = new Decimal(0)
             player.al.honeycombGain = new Decimal(0)
+            player.al.highestHoneycomb = new Decimal(0)
             player.al.royalJelly = new Decimal(0)
             player.al.royalJellyGain = new Decimal(0)
+            player.al.highestRoyalJelly = new Decimal(0)
             player.al.upgrades.splice(0, player.al.upgrades.length)
             for (let i in player.al.buyables) {
                 if (!hasMilestone("n", 12)) {
@@ -233,6 +235,8 @@ addLayer("al", {
             canClick() { return player.bb.beeBread.gte(1e10) && player.bee.path == 1 },
             unlocked: true,
             onClick() {
+                if (!hasAchievement("achievements", 912)) completeAchievement("achievements", 912)
+                if (!hasAchievement("achievements", 913) && player.al.highestRoyalJelly.gt(0)) completeAchievement("achievements", 913)
                 player.al.honeycomb = player.al.honeycomb.add(player.al.honeycombGain)
                 for (let i = 0; i < 5; i++) {
                     setTimeout(() => {
@@ -251,6 +255,8 @@ addLayer("al", {
             canClick() { return player.ho.honey.gte(1e10) && player.bee.path == 2 },
             unlocked: true,
             onClick() {
+                if (!hasAchievement("achievements", 912)) completeAchievement("achievements", 912)
+                if (!hasAchievement("achievements", 913) && player.al.highestHoneycomb.gt(0)) completeAchievement("achievements", 913)
                 player.al.royalJelly = player.al.royalJelly.add(player.al.royalJellyGain)
                 for (let i = 0; i < 5; i++) {
                     setTimeout(() => {
@@ -1421,6 +1427,7 @@ addLayer("al", {
             height: 600,
             progress() {
                 let base = 1/16
+                if (player.n.highestNest.gt(0)) return new Decimal(1)
                 for (let i = 1; i < COCOON_MILESTONE.length; i++) {
                     if (player.al.highestHoneycomb.lt(COCOON_MILESTONE[i])) return player.al.highestHoneycomb.sub(COCOON_MILESTONE[i-1]).div(COCOON_MILESTONE[i].sub(COCOON_MILESTONE[i-1])).mul(base).add(base*i)
                 }
@@ -1458,6 +1465,7 @@ addLayer("al", {
             height: 600,
             progress() {
                 let base = 1/16
+                if (player.n.highestNest.gt(0)) return new Decimal(1)
                 for (let i = 1; i < COCOON_MILESTONE.length; i++) {
                     if (player.al.highestRoyalJelly.lt(COCOON_MILESTONE[i])) return player.al.highestRoyalJelly.sub(COCOON_MILESTONE[i-1]).div(COCOON_MILESTONE[i].sub(COCOON_MILESTONE[i-1])).mul(base).add(base*i)
                 }
@@ -1603,7 +1611,7 @@ addLayer("al", {
                                         ["color-text", [() => {return "1"}, true, "white", () => {return player.al.cocoonLevel >= 1}, "gray"]],
                                     ], {width: "115px", height: "35px", borderRight: "2px solid #a900a9"}],
                                     ["style-row", [
-                                        ["color-text", [() => {return "x1.5 Aleph Resources"}, true, "white", () => {return player.al.cocoonLevel >= 1}, "gray"]],
+                                        ["color-text", [() => {return "Unlock flower gilding"}, true, "white", () => {return player.al.cocoonLevel >= 1}, "gray"]],
                                     ], {width: "281px", height: "35px"}],
                                 ], {width: "398px", height: "35px", background: "#190019", borderBottom: "2px solid #a900a9"}],
                                 ["style-row", [
@@ -1651,7 +1659,7 @@ addLayer("al", {
                                         ["color-text", [() => {return "1,000,000"}, true, "white", () => {return player.al.cocoonLevel >= 7}, "gray"]],
                                     ], {width: "115px", height: "35px", borderRight: "2px solid #a900a9"}],
                                     ["style-row", [
-                                        ["color-text", [() => {return "<p style='font-size:12px;line-height:1'>Start with 1 of each<br>circular/pentagonal red flower</p>"}, true, "white", () => {return player.al.cocoonLevel >= 7}, "gray"]],
+                                        ["color-text", [() => {return "Gain 3 extra golden seeds"}, true, "white", () => {return player.al.cocoonLevel >= 7}, "gray"]],
                                     ], {width: "281px", height: "35px"}],
                                 ], () => {return player.al.cocoonLevel >= 6 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "2px solid #a900a9"} : {display: "none !important"}}],
                                 ["style-row", [

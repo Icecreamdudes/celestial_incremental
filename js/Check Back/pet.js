@@ -1345,6 +1345,7 @@ addLayer("pet", {
                         doPopup("none", "Geroa gets enhancements", "Pet Obtained!", 5, "#eed200", "resources/Pets/geroaLegendaryPet.png")
                         break;
                     case 9:
+                        if (!hasAchievement("achievements", 922)) completeAchievement("achievements", 922)
                         addLevelableXP("pet", 503, new Decimal(player.pet.fragShopBulk))
                         doPopup("none", "Vespasian mutates further", "Pet Obtained!", 5, "#eed200", "resources/Pets/vespasianLegendaryPet.png")
                         break;
@@ -4673,6 +4674,7 @@ addLayer("pet", {
                 doPopup("none", "Geroa gets enhancements", "Pet Obtained!", 5, "#eed200", "resources/Pets/geroaLegendaryPet.png")
             }
             if (player.pet.summonIndex.eq(2)) {
+                if (!hasAchievement("achievements", 922)) completeAchievement("achievements", 922)
                 player.pet.levelables[503][1] = player.pet.levelables[503][1].add(1)
                 doPopup("none", "Vespasian mutates further", "Pet Obtained!", 5, "#eed200", "resources/Pets/vespasianLegendaryPet.png")
             }
@@ -4743,6 +4745,7 @@ addLayer("pet", {
                 doPopup("none", "Geroa gets enhancements", "Pet Obtained!", 5, "#eed200", "resources/Pets/geroaLegendaryPet.png")
             }
             if (player.pet.summonIndex.eq(2)) {
+                if (!hasAchievement("achievements", 922)) completeAchievement("achievements", 922)
                 player.pet.levelables[503][1] = player.pet.levelables[503][1].add(1)
                 doPopup("none", "Vespasian mutates further", "Pet Obtained!", 5, "#eed200", "resources/Pets/vespasianLegendaryPet.png")
             }

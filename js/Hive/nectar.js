@@ -4,6 +4,10 @@ addLayer("ne", {
     universe: "UB",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    onClick() {
+        showTab("ne")
+        if (!hasAchievement("achievements", 908)) completeAchievement("achievements", 908)
+    },
     startData() { return {
         unlocked: true,
 
@@ -66,9 +70,11 @@ addLayer("ne", {
         let allGain = player.fl.glossaryEffects.nectar
         allGain = allGain.mul(buyableEffect("bee", 42))
         allGain = allGain.mul(player.ne.delta.effect)
+        if (hasAchievement("achievements", 910)) allGain = allGain.mul(1.2)
         allGain = allGain.mul(buyableEffect("al", 201))
         allGain = allGain.mul(player.ho.effects.nectar.effect)
         if (hasUpgrade("ho", 2)) allGain = allGain.mul(upgradeEffect("ho", 2))
+        if (hasAchievement("achievements", 914)) allGain = allGain.mul(1.2)
         if (player.bb.breadMilestone >= 9) allGain = allGain.mul(player.bb.breadEffects[8])
         allGain = allGain.mul(player.bee.preAlephMult.pow(0.5))
 
@@ -234,6 +240,7 @@ addLayer("ne", {
             canClick() { return (player.bee.path == 2 && player.ne.delta.amount.gte(1e40)) || (player.bee.path != 2 && player.ne.delta.amount.gte(1e120)) },
             unlocked() {return hasUpgrade("al", 211)},
             onClick() {
+                if (!hasAchievement("achievements", 917)) completeAchievement("achievements", 917)
                 player.ne.epsilon.amount = player.ne.epsilon.amount.add(player.ne.epsilon.gain)
                 
                 player.bee.bees = new Decimal(1)

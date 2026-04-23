@@ -279,7 +279,7 @@
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.dp.prestigePoints},
             pay(amt) { player.dp.prestigePoints = this.currency().sub(amt) },
-            effect(x) { return Decimal.pow(1.1, getBuyableAmount(this.layer, this.id)) },
+            effect(x) { return Decimal.pow(1.5, getBuyableAmount(this.layer, this.id)) },
             unlocked() { return getLevelableTier("pu", 208, true) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },

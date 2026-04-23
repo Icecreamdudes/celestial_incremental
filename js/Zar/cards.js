@@ -38,7 +38,7 @@
     color: "rgb(182, 0, 0)",
     branches: ["cbs",],
     update(delta) {
-        player.car.cardGeneratorsToGet = player.za.chancePoints.pow(0.06).div(7).floor()
+        player.car.cardGeneratorsToGet = player.za.chancePoints.pow(0.085).div(12).floor()
         player.car.cardGeneratorsToGet = player.car.cardGeneratorsToGet.mul(buyableEffect("sm", 114))
 
         player.car.cardShreds = player.car.cardShreds.add(player.car.cardShredsPerSecond.mul(delta))
@@ -2315,8 +2315,28 @@
         17: {
             title: "So should this be full automation now?",
             unlocked() { return player.cbs.shrineReactivated },
-            description: "Automatically purchase all non-shard researches and wheel buyables.",
+            description: "Automatically purchase all pre-cardnon-shard researches and wheel buyables.",
             cost: new Decimal(1e6),
+            currencyLocation() { return player.car },
+            currencyDisplayName: "Card Generators",
+            currencyInternalName: "cardGenerators",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '125px', },
+        },   
+        18: {
+            title: "Research upon research",
+            unlocked() { return player.cbs.shrineReactivated },
+            description: "Unlock 3 more researches.",
+            cost: new Decimal(1e7),
+            currencyLocation() { return player.car },
+            currencyDisplayName: "Card Generators",
+            currencyInternalName: "cardGenerators",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '125px', },
+        },   
+        19: {
+            title: "The dungeon",
+            unlocked() { return player.cbs.shrineReactivated },
+            description: "Unlock Zar's dungeon.",
+            cost: new Decimal(1e8),
             currencyLocation() { return player.car },
             currencyDisplayName: "Card Generators",
             currencyInternalName: "cardGenerators",
@@ -2418,8 +2438,8 @@
             style: {width: '193px', height: '142px', color: "black", background: "#9c9c9c", border: "5px solid #dadada", borderRadius: "0px", boxSizing: "border-box",borderRight: "0px",}
         },
         14: {
-            costBase() { return new Decimal(1e6) },
-            costGrowth() { return new Decimal(1000) },
+            costBase() { return new Decimal(1e5) },
+            costGrowth() { return new Decimal(100) },
             purchaseLimit() { return new Decimal(10) },
             currency() { return player.car.cardPoints[0]},
             pay(amt) { player.car.cardPoints[0] = this.currency().sub(amt) },
@@ -2543,8 +2563,8 @@
             style: {width: '193px', height: '142px', color: "black", background: "#9c9c9c", border: "5px solid #dadada", borderRadius: "0px", boxSizing: "border-box", borderRight: "0px",}
         },
         24: {
-            costBase() { return new Decimal(1e6) },
-            costGrowth() { return new Decimal(1000) },
+            costBase() { return new Decimal(1e5) },
+            costGrowth() { return new Decimal(100) },
             purchaseLimit() { return new Decimal(10) },
             currency() { return player.car.cardPoints[1]},
             pay(amt) { player.car.cardPoints[1] = this.currency().sub(amt) },
@@ -2668,8 +2688,8 @@
             style: {width: '193px', height: '142px', color: "black", background: "#f18080", border: "5px solid #ff3333", borderRadius: "0px", boxSizing: "border-box",borderRight: "0px",}
         },
         34: {
-            costBase() { return new Decimal(1e6) },
-            costGrowth() { return new Decimal(1000) },
+            costBase() { return new Decimal(1e5) },
+            costGrowth() { return new Decimal(100) },
             purchaseLimit() { return new Decimal(10) },
             currency() { return player.car.cardPoints[2]},
             pay(amt) { player.car.cardPoints[2] = this.currency().sub(amt) },
@@ -2793,8 +2813,8 @@
             style: {width: '193px', height: '142px', color: "black", background: "#f18080", border: "5px solid #ff3333", borderRadius: "0px", boxSizing: "border-box",borderRight: "0px",}
         },
         44: {
-            costBase() { return new Decimal(1e6) },
-            costGrowth() { return new Decimal(1000) },
+            costBase() { return new Decimal(1e5) },
+            costGrowth() { return new Decimal(100) },
             purchaseLimit() { return new Decimal(10) },
             currency() { return player.car.cardPoints[3]},
             pay(amt) { player.car.cardPoints[3] = this.currency().sub(amt) },
@@ -2838,18 +2858,18 @@
                     ["style-row", [
                     ["blank", "25px"],
                     ["style-column", [
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.car.cardGenerators) + "</h3> card generators. (+" + formatWhole(player.car.cardGeneratorsToGet) + ")" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.car.cardGenerators) + "</h3> card generators. (+" + formatWhole(player.car.cardGeneratorsToGet) + ")" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["clickable", 11], 
                     ]],
                     ["row", [ ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["clickable", 104], ]],
                     ["style-column", [
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.car.cardShreds) + "</h3> card shreds. (+" + formatWhole(player.car.cardShredsPerSecond) + "/s)" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "+" + formatWhole(player.car.cardsToGet) + " cards on draw." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.car.cardShreds) + "</h3> card shreds. (+" + formatWhole(player.car.cardShredsPerSecond) + "/s)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "+" + formatWhole(player.car.cardsToGet) + " cards on draw." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["clickable", 12],
                     ]],
-                    ], {width: "1100px", height: "250px", border: "3px solid rgb(68, 0, 0)", borderRadius: "10px 10px 0px 0px", background: "linear-gradient(180deg, #9e3b3b 0%, rgb(97, 44, 44) 50%, #9e3b3b 100%)"}],
+                    ], {width: "1100px", height: "250px", border: "3px solid rgb(68, 0, 0)", borderRadius: "10px 10px 10px 10px", background: "linear-gradient(180deg, #9e3b3b 0%, rgb(97, 44, 44) 50%, #9e3b3b 100%)"}],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Upgrades" }, { "color": "white", "font-size": "24px", "font-family": "monospace",}],
                     ["blank", "25px"],
@@ -2857,7 +2877,7 @@
                             ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15],
                     ],],
                     ["style-row", [
-                            ["upgrade", 16], ["upgrade", 17],
+                            ["upgrade", 16], ["upgrade", 17], ["upgrade", 18], ["upgrade", 19],
                     ],],
                 ],         
                             
@@ -2918,7 +2938,7 @@
                 unlocked() { return true },
                 content: [
                     ["blank", "12.5px"],
-                    ["raw-html", "All suite points and buyables are reset on card reset.", {color: "#ff3333", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", "All suit points and buyables are reset on card reset.", {color: "#ff3333", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "12.5px"],
                     ["style-column", [
                             ["style-column", [

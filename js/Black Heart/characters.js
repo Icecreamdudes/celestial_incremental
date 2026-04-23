@@ -125,10 +125,10 @@ BHP.creation = {
 BHP.diceFive = {
     name: "Dice Five",
     color: "#a3a3a3", 
-    icon: "resources/diceFive.png",
-    health: new Decimal(125),
+    icon: "resources/diceFiveF.png",
+    health: new Decimal(75),
     damage: new Decimal(3),
-    defense: new Decimal(10),
+    defense: new Decimal(5),
     regen: new Decimal(0),
     agility: new Decimal(5),
     luck: new Decimal(50),

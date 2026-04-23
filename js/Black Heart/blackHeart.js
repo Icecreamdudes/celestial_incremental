@@ -516,9 +516,9 @@ addLayer("bh", {
                     3: "none",
                 },
                 usedSP: new Decimal(6),
-                health: new Decimal(125),
+                health: new Decimal(75),
                 damage: new Decimal(3),
-                defense: new Decimal(10),
+                defense: new Decimal(5),
                 regen: new Decimal(0),
                 agility: new Decimal(8),
                 luck: new Decimal(25),
@@ -584,6 +584,8 @@ addLayer("bh", {
 
             // DICE FIVE
             "diceFive_diceSlice": {selected: ["diceFive", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "diceFive_luckyLift": {selected: ["diceFive", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "diceFive_coinToss": {selected: ["diceFive", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
         },
 
         //Stagnant Timer
@@ -1281,6 +1283,9 @@ addLayer("bh", {
         luckAdd = luckAdd.add(player.bh.skillData["sel_scavenger"].maxLevel.div(2))
         luckAdd = luckAdd.add(player.bh.skillData["nav_soulShred"].maxLevel.div(2))
         luckAdd = luckAdd.add(player.bh.skillData["vespasian_impale"].maxLevel.div(2))
+        luckAdd = luckAdd.add(player.bh.skillData["diceFive_diceSlice"].maxLevel.div(2))
+        luckAdd = luckAdd.add(player.bh.skillData["diceFive_luckyLift"].maxLevel.div(2))
+        luckAdd = luckAdd.add(player.bh.skillData["diceFive_coinToss"].maxLevel.div(2))
         if (hasUpgrade("ep2", 9105)) luckAdd = luckAdd.add(upgradeEffect("ep2", 9105))
         luckAdd = luckAdd.add(levelableEffect("car", 109)[0])
 
@@ -3995,7 +4000,7 @@ addLayer("bh", {
                         ["theme-scroll-column", [
                             ["blank", "2px"],
                             ["row", [
-                                ["clickable", "Char-Kres"], ["clickable", "Char-Nav"], ["clickable", "Char-Sel"], ["clickable", "Char-Eclipse"], ["clickable", "Char-Geroa"], ["clickable", "Char-Vespasian"], ["clickable", "Char-Creation"]
+                                ["clickable", "Char-Kres"], ["clickable", "Char-Nav"], ["clickable", "Char-Sel"], ["clickable", "Char-Eclipse"], ["clickable", "Char-Geroa"], ["clickable", "Char-Vespasian"], ["clickable", "Char-Creation"], ["clickable", "Char-DiceFive"]
                             ]],
                         ], {width: "497px", height: "480px"}],
                     ], {width: "497px", height: "677px"}],

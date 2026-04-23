@@ -121,7 +121,7 @@
         player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(buyableEffect("sme", 183))
         player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(buyableEffect("car", 32))
 
-        if (hasUpgrade("car", 12)) player.wof.wheelPoints = player.wof.wheelPoints.add(player.wof.wheelPointsMult.mul(delta.mul(0.25)))
+        if (hasUpgrade("car", 12)) player.wof.wheelPoints = player.wof.wheelPoints.add(player.wof.wheelPointsMult.mul(Decimal.mul(delta, 0.25)))
 
         if (player.wof.autoSpin) {
             if (player.za.chancePoints.gte(player.wof.spinCost) && !player.wof.spinActive)

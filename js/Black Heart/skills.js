@@ -944,7 +944,7 @@ BHA.creation_cardThrow = {
     curCostBase: new Decimal(3),
     curCostScale: new Decimal(3),
     currency: "darkEssence",
-    unlocked() {return true},
+    unlocked() {return false},
 
     instant: true,
     type: "function",
@@ -953,10 +953,102 @@ BHA.creation_cardThrow = {
     value() {return new Decimal(0.75).add(player.bh.skillData["creation_cardThrow"].level.mul(0.15))},
     cooldown: new Decimal(10),
     cooldownCap: new Decimal(4),
-    onTrigger()
+    onTrigger(index, slot, target)
     {
         cardThrow();
     }
+}
+BHA.diceFive_diceSlice = {
+    name: "Dice Slice",
+    description() {return "Deals " + formatWhole(new Decimal(40).add(player.bh.skillData["diceFive_diceSlice"].level.mul(7.5))) + "% * d" + formatWhole(player.bh.skillData["diceFive_diceSlice"].level.add(6)) + " physical damage and reduces enemy's luck by 75% for 7 seconds."},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["diceFive_diceSlice"].maxLevel.div(2)) + " LUCK"},
+    char: "diceFive",
+    spCost: new Decimal(6),
+    curCostBase: new Decimal(3),
+    curCostScale: new Decimal(3),
+    currency: "darkEssence", //change to pips later
+    unlocked() {return true},
+
+    instant: true,
+    type: "function",
+    target: "celestialite",
+    effects: {
+        "luckMult"() {return new Decimal(0.25) }, // Multiplicative Effect
+    },
+    cooldown: new Decimal(15),
+    cooldownCap: new Decimal(6),
+    method: "physical",
+    duration: new Decimal(7),
+    active: true,
+    constantTarget: "celestialite",
+    constantType: "effect",
+    onTrigger(index, slot, target, method)
+    {
+        let roll = getRandomInt(player.bh.skillData["diceFive_diceSlice"].level.add(6)) + 1
+        let baseDmg = new Decimal(0.4).add(player.bh.skillData["diceFive_diceSlice"].level.mul(0.075))
+
+        let dmg = baseDmg.mul(roll).mul(player.bh.characters[index].damage)
+
+        bhAttack(dmg, index, slot, "celestialite", "", "physical")
+    },
+}
+BHA.diceFive_luckyLift = {
+    name: "Lucky Lift",
+    description(char) {
+         let effect = new Decimal(80).add(player.bh.skillData["diceFive_luckyLift"].level.mul(10))
+         if (player.alephsChamber.milestone[25] >= 2) effect = effect.mul(Decimal.div(char.potency.add(100), 100))
+         return "Boosts the entire team's luck by +" + formatWhole(effect) + "% for 10 seconds."},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["diceFive_luckyLift"].maxLevel.div(2)) + " LUCK"},
+    char: "diceFive",
+    spCost: new Decimal(8),
+    curCostBase: new Decimal(4),
+    curCostScale: new Decimal(4),
+    currency: "darkEssence", //change to pips later
+    unlocked() {return true},
+    active: true,
+    constantType: "effect",
+    constantTarget: "allPlayer",
+    effects: {
+        "luckMult"() {return new Decimal(1.8).add(player.bh.skillData["diceFive_luckyLift"].level.mul(0.1))}, // Multiplicative Effect
+    },
+    cooldown: new Decimal(35),
+    duration: new Decimal(10),
+    cooldownCap: new Decimal(4.5),
+}
+BHA.diceFive_coinToss = {
+    name: "Coin Toss",
+    description() {
+        return "Either deals " + formatWhole(new Decimal(300).add(player.bh.skillData["diceFive_coinToss"].level.mul(50))) + "% ranged damage or soft-stuns Dice Five for 5 seconds. (Unaffected by luck)"},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["diceFive_coinToss"].maxLevel.div(2)) + " LUCK"},
+    char: "diceFive",
+    spCost: new Decimal(10),
+    curCostBase: new Decimal(5),
+    curCostScale: new Decimal(5),
+    currency: "darkEssence", //change to pips later
+    unlocked() {return true},
+
+    instant: true,
+    type: "function",
+    target: "celestialite",
+    cooldown: new Decimal(24),
+    cooldownCap: new Decimal(6),
+    duration: new Decimal(0),
+    method: "ranged",
+    active: true,
+    onTrigger(index, slot, target, method)
+    {
+        let baseDmg = new Decimal(3).add(player.bh.skillData["diceFive_coinToss"].level.mul(0.5))
+        let dmg = baseDmg.mul(player.bh.characters[index].damage)
+
+        let random = getRandomInt(2)
+
+        if (random == 0) {
+            bhAttack(dmg, index, slot, "celestialite", "", "ranged")
+        } else
+        {
+            player.bh.characters[index].stun = ["soft", new Decimal(5), player.bh.skillData["diceFive_coinToss"].selected[1]]
+        }
+    },
 }
 // NON-VESPASIAN SKILL IDEAS
 

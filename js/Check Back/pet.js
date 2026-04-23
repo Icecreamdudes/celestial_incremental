@@ -4350,7 +4350,7 @@ addLayer("pet", {
             unlocked() { return hasMilestone("s", 12) },
             canClick() { return getLevelableAmount(this.layer, this.id).gt(0)},
             onClick() {
-                if (Math.random()<0.01) blinkTime = 10
+                if (Math.random()<0.01) blinkTime = 5
                 return layers[this.layer].levelables.index = this.id
             },
             // BUY CODE

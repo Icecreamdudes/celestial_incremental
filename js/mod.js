@@ -32,7 +32,8 @@
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js", "DarkU1/blood.js", "Zar/zar.js", "Zar/coinFlip.js",
  		"Zar/wheelOfFortune.js", "Check Back/singularityPet.js", "Zar/slotMachine.js", "Zar/checkBackShrine.js", "Zar/cards.js",
 		"Check Back/diamondDust.js", "Check Back/treasureRoom.js",
-		"Puzzle World/akash.js", "Puzzle World/elements.js", "Puzzle World/puzzleFighting.js",
+		"Puzzle World/akash.js", "Puzzle World/elements.js", 
+		"Puzzle World/Puzzle Fighting/puzzleFighting.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 	],

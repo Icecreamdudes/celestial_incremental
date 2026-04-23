@@ -379,3 +379,23 @@ addUniverse("UZ", {
     uniShown() { return player.startedGame && !player.sma.inStarmetalChallenge },
     disabled() {return false}
 })
+
+addUniverse("PF", {
+    name: "Puzzle Fighting",
+    symbol: "҂",
+    tree: [],
+    nodeStyle() {
+        let style = {
+            background: "black",
+            backgroundOrigin: "border-box",
+            borderColor: "#8a0e79",
+            color: "#cf15b6",
+        }
+        if (player.universe=="PF") {
+            style.outline = "2px solid white"
+            style.outlineOffset = "-2px"
+            style.borderWidth = "5px"
+        }
+        return style
+    },
+})

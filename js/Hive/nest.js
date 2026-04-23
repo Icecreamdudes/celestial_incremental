@@ -43,14 +43,14 @@ addLayer("n", {
         let onepersec = new Decimal(1)
 
         if (hasUpgrade("n", 31)) {
-            player.n.nestGain = Decimal.pow(2, player.al.honeycomb.mul(player.al.royalJelly).div(1e60).add(1).log(1e20))
+            player.n.nestGain = Decimal.pow(2, player.al.honeycomb.mul(player.al.royalJelly).div(1e40).add(1).log(1e20))
         } else {
             player.n.nestGain = new Decimal(1)
         }
 
         player.n.nestGain = player.n.nestGain.mul(buyableEffect("n", 42))
 
-        player.n.nestGain = player.n.nestGain.floor() // KEEP AT END
+        player.n.nestGain = player.n.nestGain.mul(10).floor().div(10) // KEEP AT END
 
         player.n.nestEffect = Decimal.pow("1e10000", player.n.highestNest.pow(0.7))
 
@@ -399,7 +399,7 @@ addLayer("n", {
             pay(amt) { player.n.nest = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).div(10).add(1)},
             unlocked: true,
-            cost(x) { return this.costGrowth().pow(x.pow(2) || getBuyableAmount(this.layer, this.id).pow(2)).mul(this.costBase()).floor() },
+            cost(x) { return this.costGrowth().pow(x.pow(2) || getBuyableAmount(this.layer, this.id).pow(2)).mul(this.costBase()).mul(10).floor().div(10) },
             canAfford() { return this.currency().gte(this.cost()) && hasUpgrade("n", 31) },
             display() {
                 return "<div style='height:25px;display:flex;align-items:center'><div>" +
@@ -409,7 +409,7 @@ addLayer("n", {
                 "Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect) +
                 "<br>Next: x" + formatSimple(getBuyableAmount(this.layer, this.id).add(1).div(10).add(1)) +
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
-                formatWhole(tmp[this.layer].buyables[this.id].cost) + " Nests" + // BOTTOM
+                formatSimple(tmp[this.layer].buyables[this.id].cost) + " Nests" + // BOTTOM
                 "</div></div>"
             },
             tooltip: "Excess research cap does not count for new layers",
@@ -428,9 +428,9 @@ addLayer("n", {
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.n.nest },
             pay(amt) { player.n.nest = this.currency().sub(amt) },
-            effect(x) { return Decimal.pow(getBuyableAmount(this.layer, this.id).add(1), player.fl.totalLevels.add(1).div(1000).log(2)).max(1)},
+            effect(x) { return Decimal.pow(getBuyableAmount(this.layer, this.id).add(1), player.fl.totalLevels.add(1).div(1500).log(2)).max(1)},
             unlocked: true,
-            cost(x) { return this.costGrowth().pow(x.pow(2) || getBuyableAmount(this.layer, this.id).pow(2)).mul(this.costBase()).floor() },
+            cost(x) { return this.costGrowth().pow(x.pow(2) || getBuyableAmount(this.layer, this.id).pow(2)).mul(this.costBase()).mul(10).floor().div(10) },
             canAfford() { return this.currency().gte(this.cost()) && hasUpgrade("n", 31) },
             display() {
                 return "<div style='height:25px;display:flex;align-items:center'><div>" +
@@ -438,9 +438,9 @@ addLayer("n", {
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
                 "Buff nest gain based on total flower levels<br>" + // MIDDLE
                 "Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect) +
-                "<br>Next: x" + formatSimple(Decimal.pow(getBuyableAmount(this.layer, this.id).add(2), player.fl.totalLevels.add(1).div(1000).log(2)).max(1)) +
+                "<br>Next: x" + formatSimple(Decimal.pow(getBuyableAmount(this.layer, this.id).add(2), player.fl.totalLevels.add(1).div(1500).log(2)).max(1)) +
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
-                formatWhole(tmp[this.layer].buyables[this.id].cost) + " Nests" + // BOTTOM
+                formatSimple(tmp[this.layer].buyables[this.id].cost) + " Nests" + // BOTTOM
                 "</div></div>"
             },
             buy() {
@@ -456,12 +456,12 @@ addLayer("n", {
         51: {
             costBase() { return new Decimal(16) },
             costGrowth() { return new Decimal(1.3) },
-            purchaseLimit() { return new Decimal(1) },
+            purchaseLimit() { return new Decimal(2) },
             currency() { return player.n.nest },
             pay(amt) { player.n.nest = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(2)},
             unlocked: true,
-            cost(x) { return this.costGrowth().pow(x.pow(2) || getBuyableAmount(this.layer, this.id).pow(2)).mul(this.costBase()).floor() },
+            cost(x) { return this.costGrowth().pow(x.pow(2) || getBuyableAmount(this.layer, this.id).pow(2)).mul(this.costBase()).mul(10).floor().div(10) },
             canAfford() { return this.currency().gte(this.cost()) && (getBuyableAmount("n", 41).gt(0) || getBuyableAmount("n", 42).gt(0)) },
             display() {
                 return "<div style='height:25px;display:flex;align-items:center'><div>" +
@@ -472,7 +472,7 @@ addLayer("n", {
                 "<br>Next: +" + formatSimple(getBuyableAmount(this.layer, this.id).add(1).mul(2)) +
                 "<br><small>[MORE WILL BE ADDED]</small>" +
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
-                formatWhole(tmp[this.layer].buyables[this.id].cost) + " Nests" + // BOTTOM
+                formatSimple(tmp[this.layer].buyables[this.id].cost) + " Nests" + // BOTTOM
                 "</div></div>"
             },
             buy() {
@@ -492,7 +492,7 @@ addLayer("n", {
             pay(amt) { player.n.nest = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).div(50).add(1)},
             unlocked: true,
-            cost(x) { return this.costGrowth().pow(x.pow(2) || getBuyableAmount(this.layer, this.id).pow(2)).mul(this.costBase()).floor() },
+            cost(x) { return this.costGrowth().pow(x.pow(2) || getBuyableAmount(this.layer, this.id).pow(2)).mul(this.costBase()).mul(10).floor().div(10) },
             canAfford() { return this.currency().gte(this.cost()) && (getBuyableAmount("n", 41).gt(0) || getBuyableAmount("n", 42).gt(0)) },
             display() {
                 return "<div style='height:25px;display:flex;align-items:center'><div>" +
@@ -502,7 +502,7 @@ addLayer("n", {
                 "Currently: ^" + formatSimple(tmp[this.layer].buyables[this.id].effect) +
                 "<br>Next: ^" + formatSimple(getBuyableAmount(this.layer, this.id).add(1).div(50).add(1), 2) +
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
-                formatWhole(tmp[this.layer].buyables[this.id].cost) + " Nests" + // BOTTOM
+                formatSimple(tmp[this.layer].buyables[this.id].cost) + " Nests" + // BOTTOM
                 "</div></div>"
             },
             buy() {
@@ -522,7 +522,7 @@ addLayer("n", {
             pay(amt) { player.n.nest = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id)},
             unlocked: true,
-            cost(x) { return this.costGrowth().pow(x.pow(2) || getBuyableAmount(this.layer, this.id).pow(2)).mul(this.costBase()).floor() },
+            cost(x) { return this.costGrowth().pow(x.pow(2) || getBuyableAmount(this.layer, this.id).pow(2)).mul(this.costBase()).mul(10).floor().div(10) },
             canAfford() { return this.currency().gte(this.cost()) && (getBuyableAmount("n", 41).gt(0) || getBuyableAmount("n", 42).gt(0)) },
             display() {
                 return "<div style='height:25px;display:flex;align-items:center'><div>" +
@@ -532,7 +532,7 @@ addLayer("n", {
                 "Currently: +" + formatSimple(tmp[this.layer].buyables[this.id].effect) +
                 "<br>Next: +" + formatSimple(getBuyableAmount(this.layer, this.id).add(1)) +
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
-                formatWhole(tmp[this.layer].buyables[this.id].cost) + " Nests" + // BOTTOM
+                formatSimple(tmp[this.layer].buyables[this.id].cost) + " Nests" + // BOTTOM
                 "</div></div>"
             },
             buy() {
@@ -705,13 +705,13 @@ addLayer("n", {
                 content: [
                     ["blank", "5px"],
                     ["tooltip-row", [
-                        ["raw-html", () => {return player.n.nest.eq(1) ? "You have <h3>" + formatWhole(player.n.nest) + "</h3> Nest." : "You have <h3>" + formatWhole(player.n.nest) + "</h3> Nests." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return hasUpgrade("n", 31) ? "(+" + formatWhole(player.n.nestGain) + ")" : ""}, () => {
+                        ["raw-html", () => {return player.n.nest.eq(1) ? "You have <h3>" + formatSimple(player.n.nest) + "</h3> Nest." : "You have <h3>" + formatSimple(player.n.nest) + "</h3> Nests." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return player.n.nestGain.gt(1) ? "(+" + formatSimple(player.n.nestGain) + ")" : ""}, () => {
                             let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
                             player.al.honeycomb.gte(1e25) && player.al.royalJelly.gte(1e25) ? look.color = "white" : look.color = "gray"
                             return look
                         }],
-                        ["raw-html", () => {return hasUpgrade("n", 31) ? "<div class='bottomTooltip'>Base Formula<hr><small>2^(log<sub>1e20</sub>((Honeycombs*Royal Jelly)/1e60))</small></div>" : ""}],
+                        ["raw-html", () => {return hasUpgrade("n", 31) ? "<div class='bottomTooltip'>Base Formula<hr><small>2^(log<sub>1e20</sub>((Honeycombs*Royal Jelly)/1e40))</small></div>" : ""}],
                     ]],
                     ["raw-html", () => {return hasMilestone("n", 14) ? "Boosts pollinators by x" + formatSimple(player.n.nestEffect) : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "10px"],

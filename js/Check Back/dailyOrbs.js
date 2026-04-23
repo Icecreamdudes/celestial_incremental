@@ -53,6 +53,8 @@ addLayer("ev2", {
 
         doubleTime: new Decimal(4),
         doubleCurrent: new Decimal(0),
+
+        orbAssign: 1
     }},
     nodeStyle: {
         background: "#106ccc",
@@ -77,6 +79,7 @@ addLayer("ev2", {
         player.ev2.potentialBoost = new Decimal(1)
         if (player.ev2.evoInput.gt(0)) player.ev2.potentialBoost = player.ev2.potentialBoost.mul(player.ev2.evoInput.add(1).log(Decimal.div(10, buyableEffect("ev2", 14))).add(1))
         if (player.ev2.paraInput.gt(0)) player.ev2.potentialBoost = player.ev2.potentialBoost.mul(player.ev2.paraInput.add(1).log(Decimal.div(3, buyableEffect("ev2", 24))).add(1))
+        if (player.ev2.potentialBoost.gte(25)) player.ev2.potentialBoost = player.ev2.potentialBoost.div(25).pow(0.7).mul(25)
 
         // DAY EFFECT
         player.ev2.dayEffect = player.ev2.day.add(1).log(Decimal.div(10, buyableEffect("ev2", 13))).add(1)
@@ -114,7 +117,10 @@ addLayer("ev2", {
     },
     clickables: {
         1: {
-            title() {return "Multiply your next orb gain by x" + formatSimple(player.ev2.potentialBoost) + "."},
+            title() {
+                if (player.ev2.potentialBoost.gte(25)) return "Multiply your next orb gain by x" + formatSimple(player.ev2.potentialBoost) + ". <small style='color:darkred'>[SOFTCAPPED]</small>"
+                return "Multiply your next orb gain by x" + formatSimple(player.ev2.potentialBoost) + "."
+            },
             canClick() { return (player.ev2.evoInput.gt(0) || player.ev2.paraInput.gt(0)) && player.cb.evolutionShards.gte(player.ev2.evoInput) && player.cb.paragonShards.gte(player.ev2.paraInput) && player.ev2.shardBoost.lte(1)},
             unlocked: true,
             tooltip() {
@@ -128,7 +134,7 @@ addLayer("ev2", {
                 player.cb.paragonShards = player.cb.paragonShards.sub(player.ev2.paraInput)
                 player.ev2.shardBoost = player.ev2.potentialBoost
             },
-            style: {width: '180px', minHeight: '50px', borderRadius: "30px"},
+            style: {width: '180px', minHeight: '50px', lineHeight: "1", borderRadius: "30px"},
         },
         11: {
             title() {return player.ev2.timers[0].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev2.timers[0].current) + "." : "<h3>+" + formatSimple(player.ev2.timers[0].base.mul(levelableEffect("pet", 2203)[1])) + " Orb"},
@@ -180,83 +186,128 @@ addLayer("ev2", {
             style: {width: '200px', minHeight: '50px', borderRadius: "30px / 15px"},
         },
         21: {
-            title() {return "Spend an orb to gain<br>" + formatSimple(player.ev2.xpTime, 1) + " minutes of XP"},
-            canClick() {return player.ev2.orbs.gte(1)},
+            title() {
+                if (Decimal.gt(player.ev2.orbAssign, 1)) return "Spend " + formatWhole(player.ev2.orbAssign) + " orbs to gain<br>" + formatSimple(player.ev2.xpTime.mul(player.ev2.orbAssign), 1) + " minutes of XP"
+                return "Spend an orb to gain<br>" + formatSimple(player.ev2.xpTime.mul(player.ev2.orbAssign), 1) + " minutes of XP"
+            },
+            canClick() {return player.ev2.orbs.gte(player.ev2.orbAssign)},
             unlocked: true,
-            tooltip() {return "+" + formatSimple(player.ev2.xpGain, 1)},
+            tooltip() {return "+" + formatSimple(player.ev2.xpGain.mul(player.ev2.orbAssign), 1)},
             onClick() {
-                player.ev2.orbs = player.ev2.orbs.sub(1)
+                player.ev2.orbs = player.ev2.orbs.sub(player.ev2.orbAssign)
 
-                player.cb.totalxp = player.cb.totalxp.add(player.ev2.xpGain)
-                player.cb.xp = player.cb.xp.add(player.ev2.xpGain)
-                doPopup("none", "+" + formatWhole(player.ev2.xpGain) + " xp!", "Resource Obtained!", 5, "#0098E5", "resources/level.png")
+                player.cb.totalxp = player.cb.totalxp.add(player.ev2.xpGain.mul(player.ev2.orbAssign))
+                player.cb.xp = player.cb.xp.add(player.ev2.xpGain.mul(player.ev2.orbAssign))
+                doPopup("none", "+" + formatWhole(player.ev2.xpGain.mul(player.ev2.orbAssign)) + " xp!", "Resource Obtained!", 5, "#0098E5", "resources/level.png")
             },
             style: {width: "250px", minHeight: "60px", fontSize: "9px", borderRadius: "30px", margin: "5px"},
         },
         22: {
-            title() {return "Spend an orb to gain<br>" + formatSimple(player.ev2.pointTime, 1) + " minutes of Pet Points"},
-            canClick() {return player.ev2.orbs.gte(1)},
+            title() {
+                if (Decimal.gt(player.ev2.orbAssign, 1)) return "Spend " + formatWhole(player.ev2.orbAssign) + " orbs to gain<br>" + formatSimple(player.ev2.pointTime.mul(player.ev2.orbAssign), 1) + " minutes of Pet Points"
+                return "Spend an orb to gain<br>" + formatSimple(player.ev2.pointTime.mul(player.ev2.orbAssign), 1) + " minutes of Pet Points"
+            },
+            canClick() {return player.ev2.orbs.gte(player.ev2.orbAssign)},
             unlocked: true,
-            tooltip() {return "+" + formatSimple(player.ev2.pointGain, 1)},
+            tooltip() {return "+" + formatSimple(player.ev2.pointGain.mul(player.ev2.orbAssign), 1)},
             onClick() {
-                player.ev2.orbs = player.ev2.orbs.sub(1)
+                player.ev2.orbs = player.ev2.orbs.sub(player.ev2.orbAssign)
 
-                player.cb.petPoints = player.cb.petPoints.add(player.ev2.pointGain)
-                doPopup("none", "+" + formatWhole(player.ev2.pointGain) + " pet points!", "Resource Obtained!", 5, "#A2D800", "resources/petPoint.png")
+                player.cb.petPoints = player.cb.petPoints.add(player.ev2.pointGain.mul(player.ev2.orbAssign))
+                doPopup("none", "+" + formatWhole(player.ev2.pointGain.mul(player.ev2.orbAssign)) + " pet points!", "Resource Obtained!", 5, "#A2D800", "resources/petPoint.png")
             },
             style: {width: "250px", minHeight: "60px", fontSize: "9px", borderRadius: "30px", margin: "5px"},
         },
         23: {
-            title() {return "Spend an orb to skip forward <br>" + formatSimple(player.ev2.skipTime, 1) + " minutes into the future"},
-            canClick() {return player.ev2.orbs.gte(1)},
+            title() {
+                if (Decimal.gt(player.ev2.orbAssign, 1)) return "Spend " + formatWhole(player.ev2.orbAssign) + " orbs to skip forward <br>" + formatSimple(player.ev2.skipTime.mul(player.ev2.orbAssign), 1) + " minutes into the future"
+                return "Spend an orb to skip forward <br>" + formatSimple(player.ev2.skipTime.mul(player.ev2.orbAssign), 1) + " minutes into the future"
+            },
+            canClick() {return player.ev2.orbs.gte(player.ev2.orbAssign)},
             unlocked: true,
             onClick() {
-                player.ev2.orbs = player.ev2.orbs.sub(1)
+                player.ev2.orbs = player.ev2.orbs.sub(player.ev2.orbAssign)
 
-                layers.cb.instantProduction(player.ev2.skipTime.mul(60))
+                layers.cb.instantProduction(player.ev2.skipTime.mul(player.ev2.orbAssign).mul(60))
             },
             style: {width: "250px", minHeight: "60px", fontSize: "9px", borderRadius: "30px", margin: "5px"},
         },
         24: {
-            title() {return "Spend an orb to gain<br>" + formatSimple(player.ev2.boostTime, 1) + " minutes of XPBoost"},
-            canClick() {return player.ev2.orbs.gte(1)},
+            title() {
+                if (Decimal.gt(player.ev2.orbAssign, 1)) return "Spend " + formatWhole(player.ev2.orbAssign) + " orbs to gain<br>" + formatSimple(player.ev2.boostTime.mul(player.ev2.orbAssign), 1) + " minutes of XPBoost"
+                return "Spend an orb to gain<br>" + formatSimple(player.ev2.boostTime.mul(player.ev2.orbAssign), 1) + " minutes of XPBoost"
+            },
+            canClick() {return player.ev2.orbs.gte(player.ev2.orbAssign)},
             unlocked() {return player.ev.evolutionsUnlocked[10]},
-            tooltip() {return "+" + formatSimple(player.ev2.boostGain, 1)},
+            tooltip() {return "+" + formatSimple(player.ev2.boostGain.mul(player.ev2.orbAssign), 1)},
             onClick() {
-                player.ev2.orbs = player.ev2.orbs.sub(1)
+                player.ev2.orbs = player.ev2.orbs.sub(player.ev2.orbAssign)
 
-                player.cb.XPBoost = player.cb.XPBoost.add(player.ev2.boostGain)
-                doPopup("none", "+" + formatWhole(player.ev2.boostGain) + " XPBoost!", "Resource Obtained!", 5, "#00B229", "resources/XPBoost.png")
+                player.cb.XPBoost = player.cb.XPBoost.add(player.ev2.boostGain.mul(player.ev2.orbAssign))
+                doPopup("none", "+" + formatWhole(player.ev2.boostGain.mul(player.ev2.orbAssign)) + " XPBoost!", "Resource Obtained!", 5, "#00B229", "resources/XPBoost.png")
             },
             style: {width: "250px", minHeight: "60px", fontSize: "9px", borderRadius: "30px", margin: "5px"},
         },
         25: {
-            title() {return "Spend an orb to gain<br>" + formatSimple(player.ev2.petTime, 1) + " minutes of crate rolls"},
-            canClick() {return player.ev2.orbs.gte(1)},
+            title() {
+                if (Decimal.gt(player.ev2.orbAssign, 1)) return "Spend " + formatWhole(player.ev2.orbAssign) + " orbs to gain<br>" + formatSimple(player.ev2.petTime.mul(player.ev2.orbAssign), 1) + " minutes of crate rolls"
+                return "Spend an orb to gain<br>" + formatSimple(player.ev2.petTime.mul(player.ev2.orbAssign), 1) + " minutes of crate rolls"
+            },
+            canClick() {return player.ev2.orbs.gte(player.ev2.orbAssign)},
             unlocked() {return player.ev.evolutionsUnlocked[10]},
             onClick() {
-                player.ev2.orbs = player.ev2.orbs.sub(1)
+                player.ev2.orbs = player.ev2.orbs.sub(player.ev2.orbAssign)
 
-                layers.cb.petButton1(player.cb.crateTimers[0].average.mul(player.ev2.petTime.mul(60)))
-                layers.cb.petButton2(player.cb.crateTimers[1].average.mul(player.ev2.petTime.mul(60)))
-                layers.cb.petButton3(player.cb.crateTimers[2].average.mul(player.ev2.petTime.mul(60)))
-                layers.cb.petButton4(player.cb.crateTimers[3].average.mul(player.ev2.petTime.mul(60)))
-                layers.cb.petButton5(player.cb.crateTimers[4].average.mul(player.ev2.petTime.mul(60)))
-                layers.cb.petButton6(player.cb.crateTimers[5].average.mul(player.ev2.petTime.mul(60)))
-                layers.cb.petButton7(player.cb.crateTimers[6].average.mul(player.ev2.petTime.mul(60)))
+                layers.cb.petButton1(player.cb.crateTimers[0].average.mul(player.ev2.petTime.mul(60).mul(player.ev2.orbAssign)))
+                layers.cb.petButton2(player.cb.crateTimers[1].average.mul(player.ev2.petTime.mul(60).mul(player.ev2.orbAssign)))
+                layers.cb.petButton3(player.cb.crateTimers[2].average.mul(player.ev2.petTime.mul(60).mul(player.ev2.orbAssign)))
+                layers.cb.petButton4(player.cb.crateTimers[3].average.mul(player.ev2.petTime.mul(60).mul(player.ev2.orbAssign)))
+                layers.cb.petButton5(player.cb.crateTimers[4].average.mul(player.ev2.petTime.mul(60).mul(player.ev2.orbAssign)))
+                layers.cb.petButton6(player.cb.crateTimers[5].average.mul(player.ev2.petTime.mul(60).mul(player.ev2.orbAssign)))
+                layers.cb.petButton7(player.cb.crateTimers[6].average.mul(player.ev2.petTime.mul(60).mul(player.ev2.orbAssign)))
             },
             style: {width: "250px", minHeight: "60px", fontSize: "9px", borderRadius: "30px", margin: "5px"},
         },
         26: {
-            title() {return "Spend an orb to gain<br>+" + formatSimple(player.ev2.doubleTime, 1) + " minutes of x" + formatSimple(Decimal.add(2, buyableEffect("ev2", 33)), 1) + " CB Tickspeed<br>[" + formatTime(player.ev2.doubleCurrent) + "]"},
-            canClick() {return player.ev2.orbs.gte(1)},
+            title() {
+                if (Decimal.gt(player.ev2.orbAssign, 1)) return "Spend " + formatWhole(player.ev2.orbAssign) + " orbs to gain<br>+" + formatSimple(player.ev2.doubleTime.mul(player.ev2.orbAssign), 1) + " minutes of x" + formatSimple(Decimal.add(2, buyableEffect("ev2", 33)), 1) + " CB Tickspeed<br>[" + formatTime(player.ev2.doubleCurrent) + "]"
+                return "Spend an orb to gain<br>+" + formatSimple(player.ev2.doubleTime.mul(player.ev2.orbAssign), 1) + " minutes of x" + formatSimple(Decimal.add(2, buyableEffect("ev2", 33)), 1) + " CB Tickspeed<br>[" + formatTime(player.ev2.doubleCurrent) + "]"
+            },
+            canClick() {return player.ev2.orbs.gte(player.ev2.orbAssign)},
             unlocked() {return player.ev.evolutionsUnlocked[10]},
             onClick() {
-                player.ev2.orbs = player.ev2.orbs.sub(1)
+                player.ev2.orbs = player.ev2.orbs.sub(player.ev2.orbAssign)
 
-                player.ev2.doubleCurrent = player.ev2.doubleCurrent.add(player.ev2.doubleTime.mul(60))
+                player.ev2.doubleCurrent = player.ev2.doubleCurrent.add(player.ev2.doubleTime.mul(player.ev2.orbAssign).mul(60))
             },
             style: {width: "250px", minHeight: "60px", fontSize: "8px", borderRadius: "30px", margin: "5px"},
+        },
+        101: {
+            title: "1",
+            canClick() { return player.ev2.orbAssign != 1},
+            unlocked: true,
+            onClick() {
+                player.ev2.orbAssign = 1
+            },
+            style: {width: "50px", minHeight: "40px", borderRadius: "0px"},
+        },
+        102: {
+            title: "5",
+            canClick() { return player.ev2.orbAssign != 5},
+            unlocked: true,
+            onClick() {
+                player.ev2.orbAssign = 5
+            },
+            style: {width: "50px", minHeight: "40px", borderRadius: "0px"},
+        },
+        103: {
+            title: "25",
+            canClick() { return player.ev2.orbAssign != 25},
+            unlocked: true,
+            onClick() {
+                player.ev2.orbAssign = 25
+            },
+            style: {width: "50px", minHeight: "40px", borderRadius: "0 18px 18px 0"},
         },
     },
     buyables: {
@@ -711,12 +762,12 @@ addLayer("ev2", {
                 ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
             ], () => { return player.cb.highestLevel.gte(250) ? {width: "125px", height: "50px"} : {display: "none !important"}}],
         ], {width: "375px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
-        ["blank", "25px"],
+        ["blank", "10px"],
         ["style-column", [
             ["raw-html", () => {return "<h2>Day " + formatWhole(player.ev2.day) }, {color: "white", fontSize: "30px", fontFamily: "monospace"}],
             ["raw-html", () => {return "Boosts orb effects by x" + formatSimple(player.ev2.dayEffect, 1)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}]
         ], {width: "265px", height: "80px", backgroundColor: "rgba(0,0,0,0.4)", borderRadius: "10px"}],
-        ["blank", "25px"],
+        ["blank", "10px"],
         ["row", [
             ["top-column", [
                 ["clickable", 11],
@@ -739,12 +790,19 @@ addLayer("ev2", {
                 ["clickable", 1],
             ], () => {return player.ev.evolutionsUnlocked[10] ? {width: "200px", height: "200px", padding: "10px", backgroundColor: "rgba(0,0,0,0.4)", borderRadius: "10px", marginLeft: "20px"} : {display: "none !important"}}],
         ]],
-        ["blank", "25px"],
+        ["blank", "10px"],
         ["style-column", [
             ["row", [["clickable", 21], ["clickable", 22], ["clickable", 23]]],
             ["row", [["clickable", 24], ["clickable", 25], ["clickable", 26]]],
         ], {width: "780px", backgroundColor: "rgba(0,0,0,0.4)", borderRadius: "20px", padding: "5px"}],
-        ["blank", "25px"],
+        ["blank", "10px"],
+        ["style-row", [
+            ["style-row", [
+                ["raw-html", "Spend Amount", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+            ], {width: "98px", height: "40px", borderRight: "2px solid rgba(0,0,0,0.5)"}],
+            ["clickable", 101], ["clickable", 102], ["clickable", 103],
+        ], {width: "250px", height: "40px", backgroundColor: "rgba(0,0,0,0.4)", border: "2px solid rgba(0,0,0,0.5)", borderRadius: "20px"}],
+        ["blank", "10px"],
         ["top-column", [
             ["row", [
                 ["category-button", ["Evolution Shards", "Tabs", "Evo-Shards"], {width: "193px", height: "40px", background: "rgba(0,0,0,0.4)", borderRadius: "20px 0 0 0"}],

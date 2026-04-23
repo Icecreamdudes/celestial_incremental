@@ -117,6 +117,7 @@ const fragShopBase = {
         2: new Decimal(1000),
     },
 }
+let blinkTime = 0
 addLayer("pet", {
     name: "Pets", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "Pet", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -765,7 +766,7 @@ addLayer("pet", {
             player.subtabs.pu["stuff"] = "Collection"
             changeTheme()
 
-            pauseUniverseAll(["D1", "A2"], "unpause", true)
+            pauseUniverseAll(["D1", "U3", "A2"], "unpause", true)
 
             layers.pu.generateSelection();
         }
@@ -786,6 +787,8 @@ addLayer("pet", {
         for (let thing in player.pet.legPetTimers) {
             player.pet.legPetTimers[thing].cooldown = player.pet.legPetTimers[thing].cooldown.sub(delta)
         }
+
+        if (blinkTime && blinkTime>0) blinkTime = blinkTime-1
     },
     clickables: {
         2: {
@@ -1052,7 +1055,7 @@ addLayer("pet", {
                 player.subtabs.le["stuff"] = "Shards"
                 player.subtabs.pu["stuff"] = "Selection"   
                 
-                pauseUniverseAll(["D1", "A2"], "pause", true)
+                pauseUniverseAll(["D1", "U3", "A2"], "pause", true)
             },
             style() {
                 let look = {width: '125px', minHeight: '40px', borderRadius: '0px', fontSize: '8px'}
@@ -1351,6 +1354,7 @@ addLayer("pet", {
                         doPopup("none", "Geroa gets enhancements", "Pet Obtained!", 5, "#eed200", "resources/Pets/geroaLegendaryPet.png")
                         break;
                     case 9:
+                        if (!hasAchievement("achievements", 922)) completeAchievement("achievements", 922)
                         addLevelableXP("pet", 503, new Decimal(player.pet.fragShopBulk))
                         doPopup("none", "Vespasian mutates further", "Pet Obtained!", 5, "#eed200", "resources/Pets/vespasianLegendaryPet.png")
                         break;
@@ -1428,7 +1432,7 @@ addLayer("pet", {
         138: {
             title() { return "<img src='resources/Pets/eclipseLegendaryPet.png'style='width:65px;height:65px;margin:0px;margin-bottom:-4px'></img>" },
             canClick: true,
-            unlocked() { return getLevelableAmount("pet", 501).gt(0) },
+            unlocked() { return getLevelableAmount("pet", 501).gt(0) || getLevelableTier("pet", 501).gt(0) },
             onClick() {
                 player.pet.fragShopIndex = 7
             },
@@ -1437,7 +1441,7 @@ addLayer("pet", {
         139: {
             title() { return "<img src='resources/Pets/geroaLegendaryPet.png'style='width:65px;height:65px;margin:0px;margin-bottom:-4px'></img>" },
             canClick: true,
-            unlocked() { return getLevelableAmount("pet", 502).gt(0) },
+            unlocked() { return getLevelableAmount("pet", 502).gt(0) || getLevelableTier("pet", 502).gt(0) },
             onClick() {
                 player.pet.fragShopIndex = 8
             },
@@ -1446,7 +1450,7 @@ addLayer("pet", {
         140: {
             title() { return "<img src='resources/Pets/vespasianLegendaryPet.png'style='width:65px;height:65px;margin:0px;margin-bottom:-4px'></img>" },
             canClick: true,
-            unlocked() { return getLevelableAmount("pet", 503).gt(0) },
+            unlocked() { return getLevelableAmount("pet", 503).gt(0) || getLevelableTier("pet", 503).gt(0) },
             onClick() {
                 player.pet.fragShopIndex = 9
             },
@@ -3883,7 +3887,7 @@ addLayer("pet", {
             description() {
                 return "x" + format(this.effect()[0]) + " to pre aleph resources.<br>" +
                     "x" + format(this.effect()[1]) + " to aleph resources.<br>" +
-                    "^" + format(this.effect()[2]) + " to pollinators.<br>" +
+                    "^" + format(this.effect()[2]) + " to rocket layer SPV effects.<br>" +
                     "/" + format(this.effect()[3]) + " to laboratory celestialite stats."
             },
             levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
@@ -3892,7 +3896,7 @@ addLayer("pet", {
                 return [
                     amt.add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Pre-Aleph Resources
                     amt.div(2).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Aleph Resources
-                    amt.pow(0.5).div(10).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Pollinators
+                    amt.div(2).add(1).mul(getLevelableTier(this.layer, this.id).add(1)).pow(0.5), // Rocket Part and Activated Fuel effects
                     amt.sub(1).div(2).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Laboratory celestialite stats
                 ]
             },
@@ -4326,7 +4330,9 @@ addLayer("pet", {
             } 
         },
         1205: {
-            image() { return this.canClick() ? "resources/Pets/eyeEvoPet.png" : "resources/secret.png"},
+            image() {
+                return blinkTime>0 ? "resources/Pets/eyeEvoPetBlink.png" : this.canClick() ? "resources/Pets/eyeEvoPet.png" : "resources/secret.png"
+            },
             title() { return "EYE" },
             lore() { return "Don't look at it." }, 
             description() {
@@ -4351,7 +4357,10 @@ addLayer("pet", {
             // CLICK CODE
             unlocked() { return hasMilestone("s", 12) },
             canClick() { return getLevelableAmount(this.layer, this.id).gt(0)},
-            onClick() { return layers[this.layer].levelables.index = this.id },
+            onClick() {
+                if (Math.random()<0.01) blinkTime = 5
+                return layers[this.layer].levelables.index = this.id
+            },
             // BUY CODE
             pay(amt) { player.cb.paragonShards = player.cb.paragonShards.sub(amt) },
             canAfford() { return player.cb.paragonShards.gte(this.xpReq()) },
@@ -4777,6 +4786,7 @@ addLayer("pet", {
                 doPopup("none", "Geroa gets enhancements", "Pet Obtained!", 5, "#eed200", "resources/Pets/geroaLegendaryPet.png")
             }
             if (player.pet.summonIndex.eq(2)) {
+                if (!hasAchievement("achievements", 922)) completeAchievement("achievements", 922)
                 player.pet.levelables[503][1] = player.pet.levelables[503][1].add(1)
                 doPopup("none", "Vespasian mutates further", "Pet Obtained!", 5, "#eed200", "resources/Pets/vespasianLegendaryPet.png")
             }
@@ -4847,6 +4857,7 @@ addLayer("pet", {
                 doPopup("none", "Geroa gets enhancements", "Pet Obtained!", 5, "#eed200", "resources/Pets/geroaLegendaryPet.png")
             }
             if (player.pet.summonIndex.eq(2)) {
+                if (!hasAchievement("achievements", 922)) completeAchievement("achievements", 922)
                 player.pet.levelables[503][1] = player.pet.levelables[503][1].add(1)
                 doPopup("none", "Vespasian mutates further", "Pet Obtained!", 5, "#eed200", "resources/Pets/vespasianLegendaryPet.png")
             }
@@ -5529,6 +5540,8 @@ addLayer("pet", {
                                             return "(" + player.pet.levelables[501][1] + "/" + tmp.pet.levelables[501].xpReq + ")"
                                         case 8:
                                             return "(" + player.pet.levelables[502][1] + "/" + tmp.pet.levelables[502].xpReq + ")"
+                                        case 9:
+                                            return "(" + player.pet.levelables[503][1] + "/" + tmp.pet.levelables[503].xpReq + ")"
                                         default:
                                             return ""
                                     }

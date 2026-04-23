@@ -178,6 +178,124 @@ addLayer("fl", {
             },
         },
 
+        goldenSeeds: new Decimal(0),
+        goldenSeedsTotal: new Decimal(0),
+        gildingIndex: 101,
+        gilding: {
+            101: false,
+            102: false,
+            103: false,
+            104: false,
+            105: false,
+
+            111: false,
+            112: false,
+            113: false,
+            114: false,
+            115: false,
+
+            121: false,
+            122: false,
+            123: false,
+            124: false,
+            125: false,
+
+
+            201: false,
+            202: false,
+            203: false,
+            204: false,
+            205: false,
+
+            211: false,
+            212: false,
+            213: false,
+            214: false,
+            215: false,
+
+            221: false,
+            222: false,
+            223: false,
+            224: false,
+            225: false,
+
+
+            301: false,
+            302: false,
+            303: false,
+            304: false,
+            305: false,
+
+            311: false,
+            312: false,
+            313: false,
+            314: false,
+            315: false,
+
+            321: false,
+            322: false,
+            323: false,
+            324: false,
+            325: false,
+
+
+            401: false,
+            402: false,
+            403: false,
+            404: false,
+            405: false,
+
+            411: false,
+            412: false,
+            413: false,
+            414: false,
+            415: false,
+
+            421: false,
+            422: false,
+            423: false,
+            424: false,
+            425: false,
+            
+
+            501: false,
+            502: false,
+            503: false,
+            504: false,
+            505: false,
+
+            511: false,
+            512: false,
+            513: false,
+            514: false,
+            515: false,
+
+            521: false,
+            522: false,
+            523: false,
+            524: false,
+            525: false,
+            
+
+            601: false,
+            602: false,
+            603: false,
+            604: false,
+            605: false,
+
+            611: false,
+            612: false,
+            613: false,
+            614: false,
+            615: false,
+
+            621: false,
+            622: false,
+            623: false,
+            624: false,
+            625: false,
+        },
+
         totalLevels: new Decimal(0),
     }},
     nodeStyle() {
@@ -189,6 +307,7 @@ addLayer("fl", {
     update(delta) {
         let onepersec = new Decimal(1)
         let allCooldownDiv = new Decimal(1)
+        if (hasAchievement("achievements", 912)) allCooldownDiv = allCooldownDiv.mul(1.1)
         if (player.al.cocoonLevel >= 8) allCooldownDiv = allCooldownDiv.mul(2)
         if (hasUpgrade("al", 503)) allCooldownDiv = allCooldownDiv.mul(upgradeEffect("ne", 503))
 
@@ -231,6 +350,7 @@ addLayer("fl", {
 
         player.fl.pickingPower = new Decimal(1)
         player.fl.pickingPower = player.fl.pickingPower.add(buyableEffect("bee", 24))
+        if (hasAchievement("achievements", 903)) player.fl.pickingPower = player.fl.pickingPower.add(1)
         if (hasUpgrade("ne", 403)) player.fl.pickingPower = player.fl.pickingPower.mul(2)
         if (player.bb.breadMilestone >= 6) player.fl.pickingPower = player.fl.pickingPower.mul(player.bb.breadEffects[5])
         if (hasUpgrade("ho", 3)) player.fl.pickingPower = player.fl.pickingPower.mul(upgradeEffect("ho", 3))
@@ -238,6 +358,7 @@ addLayer("fl", {
         if (hasUpgrade("al", 202)) player.fl.pickingPower = player.fl.pickingPower.mul(2)
 
         player.fl.flowerGain = new Decimal(1)
+        if (hasAchievement("achievements", 904)) player.fl.flowerGain = player.fl.flowerGain.mul(1.25)
         player.fl.flowerGain = player.fl.flowerGain.mul(buyableEffect("sme", 172))
         player.fl.flowerGain = player.fl.flowerGain.mul(player.ne.beta.effect)
         if (hasUpgrade("ho", 5)) player.fl.flowerGain = player.fl.flowerGain.mul(upgradeEffect("ho", 5))
@@ -263,6 +384,7 @@ addLayer("fl", {
         // GLOSSARY ADDITIVE BASE
         player.fl.glossaryBase = new Decimal(1)
         player.fl.glossaryBase = player.fl.glossaryBase.add(buyableEffect("bee", 23))
+        if (hasAchievement("achievements", 908)) player.fl.glossaryBase = player.fl.glossaryBase.add(0.1)
         player.fl.glossaryBase = player.fl.glossaryBase.add(player.ho.effects.flower.effect)
         player.fl.glossaryBase = player.fl.glossaryBase.add(player.ne.gamma.effect)
         if (player.bb.breadMilestone >= 4) player.fl.glossaryBase = player.fl.glossaryBase.add(player.bb.breadEffects[3])
@@ -370,6 +492,17 @@ addLayer("fl", {
         player.fl.totalLevels = new Decimal(0)
         for (let i = 101; i < 626; ) {
             player.fl.totalLevels = player.fl.totalLevels.add(player.fl.glossary[i].add(1).log(2).ceil())
+            if (i % 100 == 25) {i = i+76} else if (i % 10 == 5) {i = i+6} else {i++}
+        }
+
+        player.fl.goldenSeedsTotal = new Decimal(0)
+        player.fl.goldenSeedsTotal = player.fl.goldenSeedsTotal.add(player.al.highestHoneycomb.add(1).log(3).floor())
+        player.fl.goldenSeedsTotal = player.fl.goldenSeedsTotal.add(player.al.highestRoyalJelly.add(1).log(3).floor())
+        if (player.al.cocoonLevel >= 7) player.fl.goldenSeedsTotal = player.fl.goldenSeedsTotal.add(3)
+
+        player.fl.goldenSeeds = player.fl.goldenSeedsTotal
+        for (let i = 101; i < 626; ) {
+            if (player.fl.gilding[i]) player.fl.goldenSeeds = player.fl.goldenSeeds.sub(parseInt(i.toString()[1])+1)
             if (i % 100 == 25) {i = i+76} else if (i % 10 == 5) {i = i+6} else {i++}
         }
     },
@@ -757,6 +890,21 @@ addLayer("fl", {
             }
         }
     },
+    evaluateRewards(id) {
+        let flowerType = Math.floor(id/100)
+        if (!hasAchievement("achievements", 902) && flowerType == 1) completeAchievement("achievements", 902)
+        if (!hasAchievement("achievements", 903)) {
+            let gain = true
+            for (let i = 101; i < 106; i++) {
+                if (player.fl.glossary[i].eq(0)) gain = false
+            }
+            if (gain) completeAchievement("achievements", 903)
+        }
+        if (!hasAchievement("achievements", 905) && flowerType == 2) completeAchievement("achievements", 905)
+        if (!hasAchievement("achievements", 909) && flowerType == 3) completeAchievement("achievements", 909)
+        if (!hasAchievement("achievements", 907) && flowerType == 4) completeAchievement("achievements", 907)
+        if (!hasAchievement("achievements", 911) && flowerType == 5) completeAchievement("achievements", 911)
+    },
     glossary: {
         0: {
             name: "None",
@@ -771,6 +919,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 20)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return true},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=101},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=101},
         },
@@ -784,6 +933,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 24)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return true},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=102},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=102},
         },
@@ -798,6 +948,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 20)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return true},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=103},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=103},
         },
@@ -813,6 +964,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 20)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return true},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=104},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=104},
         },
@@ -829,6 +981,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 20)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return true},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=105},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=105},
         },
@@ -842,6 +995,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return buyableEffect("bee", 22).gte(1)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=111},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=111},
         },
@@ -855,6 +1009,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 24)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return buyableEffect("bee", 22).gte(2)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=112},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=112},
         },
@@ -869,6 +1024,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return buyableEffect("bee", 22).gte(3)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=113},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=113},
         },
@@ -884,6 +1040,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return buyableEffect("bee", 22).gte(4)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=114},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=114},
         },
@@ -900,6 +1057,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return buyableEffect("bee", 22).gte(5)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=115},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=115},
         },
@@ -916,6 +1074,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return buyableEffect("bee", 13).gte(1) && buyableEffect("bee", 22).gte(1)},
+            gildDisplay() {return player.al.cocoonLevel >= 4},
             onHover() {player.fl.glossaryIndex=121},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=121},
         },
@@ -932,6 +1091,7 @@ addLayer("fl", {
                 <line transform="translate(20, 23)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return buyableEffect("bee", 13).gte(2)},
+            gildDisplay() {return player.al.cocoonLevel >= 4},
             onHover() {player.fl.glossaryIndex=122},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=122},
         },
@@ -949,6 +1109,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return buyableEffect("bee", 13).gte(3) && buyableEffect("bee", 22).gte(1)},
+            gildDisplay() {return player.al.cocoonLevel >= 4},
             onHover() {player.fl.glossaryIndex=123},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=123},
         },
@@ -967,6 +1128,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return buyableEffect("bee", 13).gte(4) && buyableEffect("bee", 22).gte(1)},
+            gildDisplay() {return player.al.cocoonLevel >= 4},
             onHover() {player.fl.glossaryIndex=124},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=124},
         },
@@ -986,6 +1148,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return buyableEffect("bee", 13).gte(5) && buyableEffect("bee", 22).gte(1)},
+            gildDisplay() {return player.al.cocoonLevel >= 4},
             onHover() {player.fl.glossaryIndex=125},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=125},
         },
@@ -999,6 +1162,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 20)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return true},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=201},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=201},
         },
@@ -1012,6 +1176,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 24)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return true},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=202},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=202},
         },
@@ -1026,6 +1191,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 20)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return true},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=203},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=203},
         },
@@ -1041,6 +1207,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 20)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return true},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=204},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=204},
         },
@@ -1057,6 +1224,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 20)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return true},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=205},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=205},
         },
@@ -1070,6 +1238,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return buyableEffect("bee", 34).gte(1)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=211},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=211},
         },
@@ -1083,6 +1252,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 24)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return buyableEffect("bee", 34).gte(2)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=212},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=212},
         },
@@ -1097,6 +1267,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return buyableEffect("bee", 34).gte(3)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=213},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=213},
         },
@@ -1112,6 +1283,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return buyableEffect("bee", 34).gte(4)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=214},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=214},
         },
@@ -1128,6 +1300,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return buyableEffect("bee", 34).gte(5)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=215},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=215},
         },
@@ -1144,6 +1317,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return buyableEffect("al", 102).gte(1) && buyableEffect("bee", 34).gte(1)},
+            gildDisplay() {return buyableEffect("al", 102).gte(1)},
             onHover() {player.fl.glossaryIndex=221},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=221},
         },
@@ -1160,6 +1334,7 @@ addLayer("fl", {
                 <line transform="translate(20, 23)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return buyableEffect("al", 102).gte(2) && buyableEffect("bee", 34).gte(1)},
+            gildDisplay() {return buyableEffect("al", 102).gte(2)},
             onHover() {player.fl.glossaryIndex=222},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=222},
         },
@@ -1177,6 +1352,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return buyableEffect("al", 102).gte(3) && buyableEffect("bee", 34).gte(1)},
+            gildDisplay() {return buyableEffect("al", 102).gte(3)},
             onHover() {player.fl.glossaryIndex=223},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=223},
         },
@@ -1195,6 +1371,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return buyableEffect("al", 102).gte(4) && buyableEffect("bee", 34).gte(1)},
+            gildDisplay() {return buyableEffect("al", 102).gte(4)},
             onHover() {player.fl.glossaryIndex=224},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=224},
         },
@@ -1214,6 +1391,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return buyableEffect("al", 102).gte(5) && buyableEffect("bee", 34).gte(1)},
+            gildDisplay() {return buyableEffect("al", 102).gte(5)},
             onHover() {player.fl.glossaryIndex=225},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=225},
         },
@@ -1228,6 +1406,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 20)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return true},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=301},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=301},
         },
@@ -1241,6 +1420,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 24)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return true},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=302},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=302},
         },
@@ -1255,6 +1435,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 20)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return true},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=303},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=303},
         },
@@ -1270,6 +1451,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 20)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return true},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=304},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=304},
         },
@@ -1286,6 +1468,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 20)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return true},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=305},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=305},
         },
@@ -1299,6 +1482,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return buyableEffect("bee", 44).gte(1)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=311},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=311},
         },
@@ -1312,6 +1496,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 24)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return buyableEffect("bee", 44).gte(2)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=312},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=312},
         },
@@ -1326,6 +1511,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return buyableEffect("bee", 44).gte(3)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=313},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=313},
         },
@@ -1341,6 +1527,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return buyableEffect("bee", 44).gte(4)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=314},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=314},
         },
@@ -1357,6 +1544,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return buyableEffect("bee", 44).gte(5)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=315},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=315},
         },
@@ -1373,6 +1561,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return buyableEffect("al", 202).gte(1) && buyableEffect("bee", 44).gte(1)},
+            gildDisplay() {return buyableEffect("al", 202).gte(1)},
             onHover() {player.fl.glossaryIndex=321},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=321},
         },
@@ -1389,6 +1578,7 @@ addLayer("fl", {
                 <line transform="translate(20, 23)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return buyableEffect("al", 202).gte(2) && buyableEffect("bee", 44).gte(1)},
+            gildDisplay() {return buyableEffect("al", 202).gte(2)},
             onHover() {player.fl.glossaryIndex=322},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=322},
         },
@@ -1406,6 +1596,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return buyableEffect("al", 202).gte(3) && buyableEffect("bee", 44).gte(1)},
+            gildDisplay() {return buyableEffect("al", 202).gte(3)},
             onHover() {player.fl.glossaryIndex=323},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=323},
         },
@@ -1424,6 +1615,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return buyableEffect("al", 202).gte(4) && buyableEffect("bee", 44).gte(1)},
+            gildDisplay() {return buyableEffect("al", 202).gte(4)},
             onHover() {player.fl.glossaryIndex=324},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=324},
         },
@@ -1443,6 +1635,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return buyableEffect("al", 202).gte(5) && buyableEffect("bee", 44).gte(1)},
+            gildDisplay() {return buyableEffect("al", 202).gte(5)},
             onHover() {player.fl.glossaryIndex=325},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=325},
         },
@@ -1457,6 +1650,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 20)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return buyableEffect("bee", 53).gte(1)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=401},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=401},
         },
@@ -1470,6 +1664,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 24)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return buyableEffect("bee", 53).gte(2)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=402},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=402},
         },
@@ -1484,6 +1679,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 20)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return buyableEffect("bee", 53).gte(3)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=403},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=403},
         },
@@ -1499,6 +1695,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 20)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return buyableEffect("bee", 53).gte(4)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=404},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=404},
         },
@@ -1515,6 +1712,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 20)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return buyableEffect("bee", 53).gte(5)},
+            gildDisplay: true,
             onHover() {player.fl.glossaryIndex=405},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=405},
         },
@@ -1528,6 +1726,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return player.bb.breadMilestone >= 7 && player.bb.breadEffects[6].gte(1)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=411},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=411},
         },
@@ -1541,6 +1740,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 24)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return player.bb.breadMilestone >= 7 && player.bb.breadEffects[6].gte(2)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=412},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=412},
         },
@@ -1555,6 +1755,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return player.bb.breadMilestone >= 7 && player.bb.breadEffects[6].gte(3)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=413},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=413},
         },
@@ -1570,6 +1771,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return player.bb.breadMilestone >= 7 && player.bb.breadEffects[6].gte(4)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=414},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=414},
         },
@@ -1586,6 +1788,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return player.bb.breadMilestone >= 7 && player.bb.breadEffects[6].gte(5)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=415},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=415},
         },
@@ -1602,6 +1805,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return buyableEffect("al", 103).gte(1) && player.bb.breadMilestone >= 7 && player.bb.breadEffects[6].gte(1)},
+            gildDisplay() {return buyableEffect("al", 103).gte(1)},
             onHover() {player.fl.glossaryIndex=421},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=421},
         },
@@ -1618,6 +1822,7 @@ addLayer("fl", {
                 <line transform="translate(20, 23)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return buyableEffect("al", 103).gte(2) && player.bb.breadMilestone >= 7 && player.bb.breadEffects[6].gte(1)},
+            gildDisplay() {return buyableEffect("al", 103).gte(2)},
             onHover() {player.fl.glossaryIndex=422},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=422},
         },
@@ -1635,6 +1840,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return buyableEffect("al", 103).gte(3) && player.bb.breadMilestone >= 7 && player.bb.breadEffects[6].gte(1)},
+            gildDisplay() {return buyableEffect("al", 103).gte(3)},
             onHover() {player.fl.glossaryIndex=423},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=423},
         },
@@ -1653,6 +1859,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return buyableEffect("al", 103).gte(4) && player.bb.breadMilestone >= 7 && player.bb.breadEffects[6].gte(1)},
+            gildDisplay() {return buyableEffect("al", 103).gte(4)},
             onHover() {player.fl.glossaryIndex=424},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=424},
         },
@@ -1672,6 +1879,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return buyableEffect("al", 103).gte(5) && player.bb.breadMilestone >= 7 && player.bb.breadEffects[6].gte(1)},
+            gildDisplay() {return buyableEffect("al", 103).gte(5)},
             onHover() {player.fl.glossaryIndex=425},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=425},
         },
@@ -1686,6 +1894,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 20)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return player.ho.cell.gte(CELL_MILESTONES[player.bee.path][2])},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=501},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=501},
         },
@@ -1699,6 +1908,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 24)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return player.ho.cell.gte(CELL_MILESTONES[player.bee.path][2])},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=502},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=502},
         },
@@ -1713,6 +1923,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 20)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return player.ho.cell.gte(CELL_MILESTONES[player.bee.path][2])},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=503},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=503},
         },
@@ -1728,6 +1939,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 20)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return player.ho.cell.gte(CELL_MILESTONES[player.bee.path][2])},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=504},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=504},
         },
@@ -1744,6 +1956,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 20)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return player.ho.cell.gte(CELL_MILESTONES[player.bee.path][2])},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=505},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=505},
         },
@@ -1757,6 +1970,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return buyableEffect("bee", 64).gte(1)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=511},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=511},
         },
@@ -1770,6 +1984,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 24)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return buyableEffect("bee", 64).gte(2)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=512},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=512},
         },
@@ -1784,6 +1999,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return buyableEffect("bee", 64).gte(3)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=513},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=513},
         },
@@ -1799,6 +2015,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return buyableEffect("bee", 64).gte(4)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=514},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=514},
         },
@@ -1815,6 +2032,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return buyableEffect("bee", 64).gte(5)},
+            gildDisplay() {return true},
             onHover() {player.fl.glossaryIndex=515},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=515},
         },
@@ -1831,6 +2049,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return buyableEffect("al", 203).gte(1) && buyableEffect("bee", 64).gte(1)},
+            gildDisplay() {return buyableEffect("al", 203).gte(1)},
             onHover() {player.fl.glossaryIndex=521},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=521},
         },
@@ -1847,6 +2066,7 @@ addLayer("fl", {
                 <line transform="translate(20, 23)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return buyableEffect("al", 203).gte(2) && buyableEffect("bee", 64).gte(1)},
+            gildDisplay() {return buyableEffect("al", 203).gte(2)},
             onHover() {player.fl.glossaryIndex=522},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=522},
         },
@@ -1864,6 +2084,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return buyableEffect("al", 203).gte(3) && buyableEffect("bee", 64).gte(1)},
+            gildDisplay() {return buyableEffect("al", 203).gte(3)},
             onHover() {player.fl.glossaryIndex=523},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=523},
         },
@@ -1882,6 +2103,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return buyableEffect("al", 203).gte(4) && buyableEffect("bee", 64).gte(1)},
+            gildDisplay() {return buyableEffect("al", 203).gte(4)},
             onHover() {player.fl.glossaryIndex=524},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=524},
         },
@@ -1901,6 +2123,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return buyableEffect("al", 203).gte(5) && buyableEffect("bee", 64).gte(1)},
+            gildDisplay() {return buyableEffect("al", 203).gte(5)},
             onHover() {player.fl.glossaryIndex=525},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=525},
         },
@@ -1915,6 +2138,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 20)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return hasUpgrade("n", 11)},
+            gildDisplay() {return hasUpgrade("n", 11)},
             onHover() {player.fl.glossaryIndex=601},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=601},
         },
@@ -1928,6 +2152,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 24)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return hasUpgrade("n", 11)},
+            gildDisplay() {return hasUpgrade("n", 11)},
             onHover() {player.fl.glossaryIndex=602},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=602},
         },
@@ -1942,6 +2167,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 20)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return hasUpgrade("n", 11)},
+            gildDisplay() {return hasUpgrade("n", 11)},
             onHover() {player.fl.glossaryIndex=603},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=603},
         },
@@ -1957,6 +2183,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 20)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return hasUpgrade("n", 11)},
+            gildDisplay() {return hasUpgrade("n", 11)},
             onHover() {player.fl.glossaryIndex=604},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=604},
         },
@@ -1973,6 +2200,7 @@ addLayer("fl", {
                 <ellipse id="petal0" transform="translate(20, 20)" rx="10" cx="10" ry="10" cy="10" fill="#ffefc5" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return hasUpgrade("n", 11)},
+            gildDisplay() {return hasUpgrade("n", 11)},
             onHover() {player.fl.glossaryIndex=605},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=605},
         },
@@ -1986,6 +2214,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return getBuyableAmount("n", 53).gte(1)},
+            gildDisplay() {return getBuyableAmount("n", 53).gte(1)},
             onHover() {player.fl.glossaryIndex=611},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=611},
         },
@@ -1999,6 +2228,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 24)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return getBuyableAmount("n", 53).gte(2)},
+            gildDisplay() {return getBuyableAmount("n", 53).gte(2)},
             onHover() {player.fl.glossaryIndex=612},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=612},
         },
@@ -2013,6 +2243,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return getBuyableAmount("n", 53).gte(3)},
+            gildDisplay() {return getBuyableAmount("n", 53).gte(3)},
             onHover() {player.fl.glossaryIndex=613},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=613},
         },
@@ -2028,6 +2259,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return getBuyableAmount("n", 53).gte(4)},
+            gildDisplay() {return getBuyableAmount("n", 53).gte(4)},
             onHover() {player.fl.glossaryIndex=614},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=614},
         },
@@ -2044,6 +2276,7 @@ addLayer("fl", {
                 <polygon id="petal0" transform="translate(20, 20)" points="10 0, 0 9, 6 20, 14 20, 20 9" fill="#ffdd87" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
             `,
             display() {return getBuyableAmount("n", 53).gte(5)},
+            gildDisplay() {return getBuyableAmount("n", 53).gte(5)},
             onHover() {player.fl.glossaryIndex=615},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=615},
         },
@@ -2060,6 +2293,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return getBuyableAmount("n", 53).gte(6)},
+            gildDisplay() {return getBuyableAmount("n", 53).gte(6)},
             onHover() {player.fl.glossaryIndex=621},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=621},
         },
@@ -2076,6 +2310,7 @@ addLayer("fl", {
                 <line transform="translate(20, 23)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return getBuyableAmount("n", 53).gte(7)},
+            gildDisplay() {return getBuyableAmount("n", 53).gte(7)},
             onHover() {player.fl.glossaryIndex=622},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=622},
         },
@@ -2093,6 +2328,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return getBuyableAmount("n", 53).gte(8)},
+            gildDisplay() {return getBuyableAmount("n", 53).gte(8)},
             onHover() {player.fl.glossaryIndex=623},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=623},
         },
@@ -2111,6 +2347,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return getBuyableAmount("n", 53).gte(9)},
+            gildDisplay() {return getBuyableAmount("n", 53).gte(9)},
             onHover() {player.fl.glossaryIndex=624},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=624},
         },
@@ -2130,6 +2367,7 @@ addLayer("fl", {
                 <line transform="translate(20, 19)" x1="20" y1="6" x2="10" y2="12" stroke="#000000" stroke-width="2.4"/>
             `,
             display() {return getBuyableAmount("n", 53).gte(10)},
+            gildDisplay() {return getBuyableAmount("n", 53).gte(10)},
             onHover() {player.fl.glossaryIndex=625},
             onClick() {if (player.al.cocoonLevel >= 3) player.fl.glossaryRig=625},
         },
@@ -2193,10 +2431,12 @@ addLayer("fl", {
                 setGridData("fl", id, [getGridData("fl", id)[0], getGridData("fl", id)[1].sub(player.fl.pickingPower)])
                 if (player.al.cocoonLevel >= 6 && getGridData("fl", id)[1].lte(0)) {
                     player.fl.glossary[getGridData("fl", id)[0]] = player.fl.glossary[getGridData("fl", id)[0]].add(player.fl.flowerGain)
+                    layers.fl.evaluateRewards(getGridData("fl", id)[0])
                     setGridData("fl", id, [0, new Decimal(1)])
                 }
             } else {
                 player.fl.glossary[getGridData("fl", id)[0]] = player.fl.glossary[getGridData("fl", id)[0]].add(player.fl.flowerGain)
+                layers.fl.evaluateRewards(getGridData("fl", id)[0])
                 setGridData("fl", id, [0, new Decimal(1)])
             }
         },
@@ -2205,10 +2445,12 @@ addLayer("fl", {
                 setGridData("fl", id, [getGridData("fl", id)[0], getGridData("fl", id)[1].sub(player.fl.pickingPower.div(4))])
                 if (player.al.cocoonLevel >= 6 && getGridData("fl", id)[1].lte(0)) {
                     player.fl.glossary[getGridData("fl", id)[0]] = player.fl.glossary[getGridData("fl", id)[0]].add(player.fl.flowerGain)
+                    layers.fl.evaluateRewards(getGridData("fl", id)[0])
                     setGridData("fl", id, [0, new Decimal(1)])
                 }
             } else {
                 player.fl.glossary[getGridData("fl", id)[0]] = player.fl.glossary[getGridData("fl", id)[0]].add(player.fl.flowerGain)
+                layers.fl.evaluateRewards(getGridData("fl", id)[0])
                 setGridData("fl", id, [0, new Decimal(1)])
             }
         },
@@ -2316,6 +2558,33 @@ addLayer("fl", {
                 look.background = `linear-gradient(to top, #752653 ${format(player.fl.timers.purple.current.div(player.fl.timers.purple.max).mul(100).min(100))}%, black ${format(player.fl.timers.purple.current.div(player.fl.timers.purple.max).mul(100).add(0.25).min(100))}%)`
                 return look
             }
+        },
+        101: {
+            title() {return player.fl.gilding[player.fl.gildingIndex] ? "Ungild Flower" : "Gild Flower"},
+            unlocked: true,
+            canClick() {
+                if (player.fl.gilding[player.fl.gildingIndex]) return true
+                let tier = parseInt(player.fl.gildingIndex.toString()[1])+1
+                return player.fl.goldenSeeds.gte(tier)
+            },
+            onClick() {
+                if (player.fl.gilding[player.fl.gildingIndex]) {
+                    let tier = parseInt(player.fl.gildingIndex.toString()[1])+1
+                    player.fl.gilding[player.fl.gildingIndex] = false
+                    player.fl.goldenSeeds = player.fl.goldenSeeds.add(tier)
+                } else {
+                    let tier = parseInt(player.fl.gildingIndex.toString()[1])+1
+                    player.fl.gilding[player.fl.gildingIndex] = true
+                    player.fl.goldenSeeds = player.fl.goldenSeeds.sub(tier)
+                }
+            },
+            style() {
+                let look = {width: "410px", minHeight: "40px", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "0"}
+                if (player.fl.gilding[player.fl.gildingIndex]) {look.backgroundColor = "#DAA520"}
+                else if (this.canClick()) {look.backgroundColor = "#ae8419"}
+                else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
         },
     },
     buyables: {
@@ -2506,6 +2775,38 @@ addLayer("fl", {
             style: {width: '185px', height: '140px', color: "white", background: "#445b05", border: "5px solid #222d02", borderColor: "#222d02", boxSizing: "border-box"}
         },
     },
+    bars: {
+        honeycombBar: {
+            unlocked: true,
+            direction: RIGHT,
+            width: 150,
+            height: 20,
+            progress() {
+                return player.al.highestHoneycomb.div(Decimal.pow(3, player.al.highestHoneycomb.add(1).log(3).ceil()))
+            },
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
+            borderStyle: {border: "0", borderRadius: "0"},
+            fillStyle: {backgroundColor: "#725e1f"},
+            display() {
+                return "<h5>" + formatShortWhole(player.al.highestHoneycomb) + "/" + formatShortWhole(Decimal.pow(3, player.al.highestHoneycomb.add(1).log(3).ceil())) + " HC</h5>";
+            },
+        },
+        royalJellyBar: {
+            unlocked: true,
+            direction: RIGHT,
+            width: 150,
+            height: 20,
+            progress() {
+                return player.al.highestRoyalJelly.div(Decimal.pow(3, player.al.highestRoyalJelly.add(1).log(3).ceil()))
+            },
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
+            borderStyle: {border: "0", borderRadius: "0"},
+            fillStyle: {backgroundColor: "#70395a"},
+            display() {
+                return "<h5>" + formatShortWhole(player.al.highestRoyalJelly) + "/" + formatShortWhole(Decimal.pow(3, player.al.highestRoyalJelly.add(1).log(3).ceil())) + " RJ</h5>";
+            },
+        },
+    },
     microtabs: {
         Tabs: {
             "Garden": {
@@ -2617,6 +2918,61 @@ addLayer("fl", {
                     ], {width: "565px", height: "480px", backgroundColor: "#161616", border: "5px solid #3e3117"}],
                 ],
             },
+            "Gilding": {
+                content: [
+                    ["top-column", [
+                        ["style-row", [
+                            ["style-column", [
+                                ["top-column", [
+                                    ["style-row", [
+                                        ["raw-html", () => {return player.fl.gildingIndex != 0 ? layers.fl.glossary[player.fl.gildingIndex].name : ''}, {color: "white", fontSize: "15px", fontFamily: "monospace"}],
+                                    ], {width: "380px", height: "30px", borderBottom: "2px solid white", marginBottom: "5px"}],
+                                    ["style-column", [
+                                        ["raw-html", () => {
+                                            let tier = parseInt(player.fl.gildingIndex.toString()[1])+1
+                                            if (tier == 1) return "Gild Cost: 1 Golden Seed"
+                                            return "Gild Cost: " + formatWhole(tier) + " Golden Seeds"
+                                        }, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                                    ], {width: "410px", height: "43px"}],
+                                ], {width: "410px", height: "85px"}],
+                                ["style-column", [
+                                    ["clickable", 101],
+                                ], {width: "410px", height: "40px", background: "#291003", borderTop: "5px solid #3e3117"}],
+                            ], {width: "410px", height: "130px", borderRight: "5px solid #3e3117"}],
+                            ["top-column", [
+                                ["style-column", [
+                                    ["raw-html", () => {return "You have<br>" + formatWhole(player.fl.goldenSeeds) + "/" + formatWhole(player.fl.goldenSeedsTotal) + "<br>Golden Seeds"}]
+                                ], {width: "150px", height: "85px", borderBottom: "5px solid #3e3117"}],
+                                ["bar", "honeycombBar"],
+                                ["bar", "royalJellyBar"],
+                            ], {width: "150px", height: "130px"}],
+                        ], {width: "565px", height: "130px", background: "#251d0d", borderBottom: "5px solid #3e3117"}],
+                        ["row", [
+                            ["top-column", [
+                                ["style-row", [
+                                    ["category-button", [() => {return "Red"}, "Gilding", "Red"], {width: "100px", height: "40px", background: "#1a0402"}],
+                                ], {width: "100px", borderBottom: "5px solid #3e3117"}],
+                                ["style-row", [
+                                    ["category-button", [() => {return "Blue"}, "Gilding", "Blue"], {width: "100px", height: "40px", background: "#131e1d"}],
+                                ], {width: "100px", borderBottom: "5px solid #3e3117"}],
+                                ["style-row", [
+                                    ["category-button", [() => {return "Green"}, "Gilding", "Green"], {width: "100px", height: "40px", background: "#141d11"}],
+                                ], {width: "100px", borderBottom: "5px solid #3e3117"}],
+                                ["style-row", [
+                                    ["category-button", [() => {return "Pink"}, "Gilding", "Pink"], {width: "100px", height: "40px", background: "#252122"}],
+                                ], {width: "100px", borderBottom: "5px solid #3e3117"}],
+                                ["style-row", [
+                                    ["category-button", [() => {return "Yellow"}, "Gilding", "Yellow"], {width: "100px", height: "40px", background: "#252107"}],
+                                ], {width: "100px", borderBottom: "5px solid #3e3117"}],
+                                ["style-row", [
+                                    ["category-button", [() => {return "Purple"}, "Gilding", "Purple", () => {return !hasUpgrade("n", 11)}], {width: "100px", height: "40px", background: "#11050c"}],
+                                ], () => {return hasUpgrade("n", 11) ? {width: "100px", borderBottom: "5px solid #3e3117"} : {display: "none !important"}}],
+                            ], {width: "100px", height: "345px", background: "#1f180b", borderRight: "5px solid #3e3117"}],
+                            ["buttonless-microtabs", "Gilding", {borderWidth: "0"}],
+                        ]],
+                    ], {width: "565px", height: "480px", backgroundColor: "#312712", border: "5px solid #3e3117"}],
+                ]
+            },
         },
         Glossary: {
             "Red": {
@@ -2674,6 +3030,80 @@ addLayer("fl", {
                 ]
             },
         },
+        Gilding: {
+            "Red": {
+                content: [
+                    ["top-column", [
+                        ["left-row", [["gilding", 101], ["gilding", 102], ["gilding", 103], ["gilding", 104], ["gilding", 105]], {width: "500px"}],
+                        ["left-row", [["gilding", 111], ["gilding", 112], ["gilding", 113], ["gilding", 114], ["gilding", 115]], {width: "500px"}],
+                        ["left-row", [["gilding", 121], ["gilding", 122], ["gilding", 123], ["gilding", 124], ["gilding", 125]], {width: "500px"}],
+                    ], {width: "460px", height: "300px"}],
+                    ["style-column", [
+                        ["raw-html", "Gilded flowers are kept on aleph resets", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                    ], {width: "460px", height: "40px", background: "#251d0d", borderTop: "5px solid #3e3117"}],
+                ],
+            },
+            "Blue": {
+                content: [
+                    ["top-column", [
+                        ["left-row", [["gilding", 201], ["gilding", 202], ["gilding", 203], ["gilding", 204], ["gilding", 205]], {width: "500px"}],
+                        ["left-row", [["gilding", 211], ["gilding", 212], ["gilding", 213], ["gilding", 214], ["gilding", 215]], {width: "500px"}],
+                        ["left-row", [["gilding", 221], ["gilding", 222], ["gilding", 223], ["gilding", 224], ["gilding", 225]], {width: "500px"}],
+                    ], {width: "460px", height: "300px"}],
+                    ["style-column", [
+                        ["raw-html", "Gilded flowers are kept on aleph resets", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                    ], {width: "460px", height: "40px", background: "#251d0d", borderTop: "5px solid #3e3117"}],
+                ]
+            },
+            "Green": {
+                content: [
+                    ["top-column", [
+                        ["left-row", [["gilding", 301], ["gilding", 302], ["gilding", 303], ["gilding", 304], ["gilding", 305]], {width: "500px"}],
+                        ["left-row", [["gilding", 311], ["gilding", 312], ["gilding", 313], ["gilding", 314], ["gilding", 315]], {width: "500px"}],
+                        ["left-row", [["gilding", 321], ["gilding", 322], ["gilding", 323], ["gilding", 324], ["gilding", 325]], {width: "500px"}],
+                    ], {width: "460px", height: "300px"}],
+                    ["style-column", [
+                        ["raw-html", "Gilded flowers are kept on aleph resets", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                    ], {width: "460px", height: "40px", background: "#251d0d", borderTop: "5px solid #3e3117"}],
+                ]
+            },
+            "Pink": {
+                content: [
+                    ["top-column", [
+                        ["left-row", [["gilding", 401], ["gilding", 402], ["gilding", 403], ["gilding", 404], ["gilding", 405]], {width: "500px"}],
+                        ["left-row", [["gilding", 411], ["gilding", 412], ["gilding", 413], ["gilding", 414], ["gilding", 415]], {width: "500px"}],
+                        ["left-row", [["gilding", 421], ["gilding", 422], ["gilding", 423], ["gilding", 424], ["gilding", 425]], {width: "500px"}],
+                    ], {width: "460px", height: "300px"}],
+                    ["style-column", [
+                        ["raw-html", "Gilded flowers are kept on aleph resets", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                    ], {width: "460px", height: "40px", background: "#251d0d", borderTop: "5px solid #3e3117"}],
+                ]
+            },
+            "Yellow": {
+                content: [
+                    ["top-column", [
+                        ["left-row", [["gilding", 501], ["gilding", 502], ["gilding", 503], ["gilding", 504], ["gilding", 505]], {width: "500px"}],
+                        ["left-row", [["gilding", 511], ["gilding", 512], ["gilding", 513], ["gilding", 514], ["gilding", 515]], {width: "500px"}],
+                        ["left-row", [["gilding", 521], ["gilding", 522], ["gilding", 523], ["gilding", 524], ["gilding", 525]], {width: "500px"}],
+                    ], {width: "460px", height: "300px"}],
+                    ["style-column", [
+                        ["raw-html", "Gilded flowers are kept on aleph resets", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                    ], {width: "460px", height: "40px", background: "#251d0d", borderTop: "5px solid #3e3117"}],
+                ]
+            },
+            "Purple": {
+                content: [
+                    ["top-column", [
+                        ["left-row", [["gilding", 601], ["gilding", 602], ["gilding", 603], ["gilding", 604], ["gilding", 605]], {width: "500px"}],
+                        ["left-row", [["gilding", 611], ["gilding", 612], ["gilding", 613], ["gilding", 614], ["gilding", 615]], {width: "500px"}],
+                        ["left-row", [["gilding", 621], ["gilding", 622], ["gilding", 623], ["gilding", 624], ["gilding", 625]], {width: "500px"}],
+                    ], {width: "460px", height: "300px"}],
+                    ["style-column", [
+                        ["raw-html", "Gilded flowers are kept on aleph resets", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                    ], {width: "460px", height: "40px", background: "#251d0d", borderTop: "5px solid #3e3117"}],
+                ]
+            },
+        },
     },
     tabFormat: [
         ["row", [
@@ -2683,18 +3113,24 @@ addLayer("fl", {
         ["blank", "10px"],
         ["style-row", [
             ["raw-html", () => {
-                if (player.subtabs.fl.Tabs == "Garden") return "<button class='shopButton selected' style='width:185px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Garden`'>Garden</button>"
-                return "<button class='shopButton' style='width:185px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Garden`'>Garden</button>"
+                if (player.subtabs.fl.Tabs == "Garden") return "<button class='shopButton selected' style='width:137px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Garden`'>Garden</button>"
+                return "<button class='shopButton' style='width:137px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Garden`'>Garden</button>"
             }],
             ["style-row", [], {width: "5px", height: "40px", backgroundColor: "#3e3117"}],
             ["raw-html", () => {
-                if (player.subtabs.fl.Tabs == "Glossary") return "<button class='shopButton selected' style='width:185px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Glossary`'>Glossary</button>"
-                return "<button class='shopButton' style='width:185px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Glossary`'>Glossary</button>"
+                if (player.subtabs.fl.Tabs == "Glossary") return "<button class='shopButton selected' style='width:138px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Glossary`'>Glossary</button>"
+                return "<button class='shopButton' style='width:138px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Glossary`'>Glossary</button>"
             }],
             ["style-row", [], {width: "5px", height: "40px", backgroundColor: "#3e3117"}],
             ["raw-html", () => {
-                if (player.subtabs.fl.Tabs == "Gatherer") return "<button class='shopButton selected' style='width:185px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Gatherer`'>Gatherer</button>"
-                return "<button class='shopButton' style='width:185px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Gatherer`'>Gatherer</button>"
+                if (player.subtabs.fl.Tabs == "Gatherer") return "<button class='shopButton selected' style='width:138px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Gatherer`'>Gatherer</button>"
+                return "<button class='shopButton' style='width:138px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Gatherer`'>Gatherer</button>"
+            }],
+            ["style-row", [], {width: "5px", height: "40px", backgroundColor: "#3e3117"}],
+            ["raw-html", () => {
+                if (player.al.cocoonLevel < 1) return "<button class='shopButton' style='width:137px;height:40px;background:#181309;cursor:default'>???</button>"
+                if (player.subtabs.fl.Tabs == "Gilding") return "<button class='shopButton selected' style='width:137px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Gilding`'>Gilding</button>"
+                return "<button class='shopButton' style='width:137px;height:40px;background:#181309' onclick='player.subtabs.fl.Tabs = `Gilding`'>Gilding</button>"
             }],
         ], {width: "565px", height: "40px", border: "5px solid #3e3117", marginBottom: "-5px"}],
         ["buttonless-microtabs", "Tabs", {borderWidth: "0"}],

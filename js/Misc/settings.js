@@ -99,6 +99,25 @@ addLayer("settings", {
             },
             style: { width: '100px', minHeight: '80px', color: "#c88", background: "#300", borderRadius: '0', border: "3px solid #200"},
         },
+        18: {
+            title() { return "Save Backup" },
+            canClick: true,
+            unlocked: true,
+            tooltip() {return "Saves a backup of your save.<br>Doesn't protect you from cache clears,<br>but does from corruption.<br>Only way to definitively prevent save loss<br>is regularly exporting your files."},
+            onClick() {
+                saveBackup()
+            },
+            style: { width: '100px', minHeight: '80px', color: "var(--textColor)", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+        },
+        19: {
+            title() { return "Load Backup<br><div style='color:#c88;background:#300;font-size:10px;border:3px solid #200;line-height:1;margin-bottom:-20px;margin-top:2px'>RESETS CURRENT SAVE</div>" },
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                loadBackup()
+            },
+            style: { width: '100px', minHeight: '80px', color: "var(--textColor)", background: "var(--miscButton)", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+        },
         21: {
             title() { return "Hide Milestone Popups<hr style='border:1px solid #888;margin-top:1px'>" + options.hideMilestonePopups },
             canClick: true,
@@ -537,8 +556,9 @@ addLayer("settings", {
                         ["clickable", 16],
                     ], {width: "306px", borderBottom: "3px solid var(--regBorder)"}],
                     ["row", [
-                        ["style-row", [], {width: "3px", height: "80px", background: "var(--regBorder)"}],
-                        ["clickable", 17], ["style-row", [], {width: "3px", height: "80px", background: "var(--regBorder)"}],
+                        ["bt-clickable", 18], ["style-row", [], {width: "3px", height: "80px", background: "var(--regBorder)"}],
+                        ["clickable", 19], ["style-row", [], {width: "3px", height: "80px", background: "var(--regBorder)"}],
+                        ["clickable", 17],
                     ]],
                 ], {width: "306px", background: "var(--layerBackground)", border: "3px solid var(--regBorder)"}],
                 ["blank", "8px"],

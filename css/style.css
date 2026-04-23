@@ -1776,6 +1776,7 @@ button > * {
 .gild {
 	background-color: #6b460e;
 	cursor: pointer;
+	user-select: none;
 }
 
 .hoverableImg {

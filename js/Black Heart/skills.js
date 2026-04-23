@@ -672,7 +672,7 @@ BHA.eclipse_syzygy = {
     constantTarget: "self",
     effects: {
         "agilityMult"() {
-            if (hasUpgrade(hasUpgrade("sma", 227))) return new Decimal(1.25).add(player.bh.skillData["eclipse_syzygy"].level.mul(0.05))
+            if (hasUpgrade("sma", 227)) return new Decimal(1.25).add(player.bh.skillData["eclipse_syzygy"].level.mul(0.05))
             return new Decimal(1)
         },
         "timeMult"() {return new Decimal(1.25).add(player.bh.skillData["eclipse_syzygy"].level.mul(0.05))}, // Multiplicative Effect

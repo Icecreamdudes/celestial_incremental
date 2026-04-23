@@ -2559,33 +2559,6 @@ addLayer("fl", {
                 return look
             }
         },
-        101: {
-            title() {return player.fl.gilding[player.fl.gildingIndex] ? "Ungild Flower" : "Gild Flower"},
-            unlocked: true,
-            canClick() {
-                if (player.fl.gilding[player.fl.gildingIndex]) return true
-                let tier = parseInt(player.fl.gildingIndex.toString()[1])+1
-                return player.fl.goldenSeeds.gte(tier)
-            },
-            onClick() {
-                if (player.fl.gilding[player.fl.gildingIndex]) {
-                    let tier = parseInt(player.fl.gildingIndex.toString()[1])+1
-                    player.fl.gilding[player.fl.gildingIndex] = false
-                    player.fl.goldenSeeds = player.fl.goldenSeeds.add(tier)
-                } else {
-                    let tier = parseInt(player.fl.gildingIndex.toString()[1])+1
-                    player.fl.gilding[player.fl.gildingIndex] = true
-                    player.fl.goldenSeeds = player.fl.goldenSeeds.sub(tier)
-                }
-            },
-            style() {
-                let look = {width: "410px", minHeight: "40px", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "0"}
-                if (player.fl.gilding[player.fl.gildingIndex]) {look.backgroundColor = "#DAA520"}
-                else if (this.canClick()) {look.backgroundColor = "#ae8419"}
-                else {look.backgroundColor = "#bf8f8f"}
-                return look
-            },
-        },
     },
     buyables: {
         1: {
@@ -2779,7 +2752,7 @@ addLayer("fl", {
         honeycombBar: {
             unlocked: true,
             direction: RIGHT,
-            width: 150,
+            width: 565,
             height: 20,
             progress() {
                 return player.al.highestHoneycomb.div(Decimal.pow(3, player.al.highestHoneycomb.add(1).log(3).ceil()))
@@ -2788,13 +2761,13 @@ addLayer("fl", {
             borderStyle: {border: "0", borderRadius: "0"},
             fillStyle: {backgroundColor: "#725e1f"},
             display() {
-                return "<h5>" + formatShortWhole(player.al.highestHoneycomb) + "/" + formatShortWhole(Decimal.pow(3, player.al.highestHoneycomb.add(1).log(3).ceil())) + " HC</h5>";
+                return "<h5>" + formatShortWhole(player.al.highestHoneycomb) + "/" + formatShortWhole(Decimal.pow(3, player.al.highestHoneycomb.add(1).log(3).ceil())) + " HC [+" + formatWhole(player.al.highestHoneycomb.add(1).log(3).floor()) + "]</h5>";
             },
         },
         royalJellyBar: {
             unlocked: true,
             direction: RIGHT,
-            width: 150,
+            width: 565,
             height: 20,
             progress() {
                 return player.al.highestRoyalJelly.div(Decimal.pow(3, player.al.highestRoyalJelly.add(1).log(3).ceil()))
@@ -2803,7 +2776,7 @@ addLayer("fl", {
             borderStyle: {border: "0", borderRadius: "0"},
             fillStyle: {backgroundColor: "#70395a"},
             display() {
-                return "<h5>" + formatShortWhole(player.al.highestRoyalJelly) + "/" + formatShortWhole(Decimal.pow(3, player.al.highestRoyalJelly.add(1).log(3).ceil())) + " RJ</h5>";
+                return "<h5>" + formatShortWhole(player.al.highestRoyalJelly) + "/" + formatShortWhole(Decimal.pow(3, player.al.highestRoyalJelly.add(1).log(3).ceil())) + " RJ [+" + formatWhole(player.al.highestRoyalJelly.add(1).log(3).floor()) + "]</h5>";
             },
         },
     },
@@ -2921,31 +2894,31 @@ addLayer("fl", {
             "Gilding": {
                 content: [
                     ["top-column", [
-                        ["style-row", [
-                            ["style-column", [
+                        ["style-column", [
+                            ["row", [
                                 ["top-column", [
                                     ["style-row", [
-                                        ["raw-html", () => {return player.fl.gildingIndex != 0 ? layers.fl.glossary[player.fl.gildingIndex].name : ''}, {color: "white", fontSize: "15px", fontFamily: "monospace"}],
-                                    ], {width: "380px", height: "30px", borderBottom: "2px solid white", marginBottom: "5px"}],
+                                        ["raw-html", () => {
+                                            if (!layers.fl.glossary[player.fl.gildingIndex]) return ""
+                                            let str = layers.fl.glossary[player.fl.gildingIndex].name
+                                            if (player.fl.gilding[player.fl.gildingIndex]) str = str + "<br><div style='font-size:12px;margin-top:-2px'>[GILDED]</div>"
+                                            return str
+                                        }, {color: "white", fontSize: "15px", fontFamily: "monospace"}],
+                                    ], {width: "330px", height: "38px", borderBottom: "2px solid white", marginBottom: "5px"}],
                                     ["style-column", [
                                         ["raw-html", () => {
                                             let tier = parseInt(player.fl.gildingIndex.toString()[1])+1
                                             if (tier == 1) return "Gild Cost: 1 Golden Seed"
                                             return "Gild Cost: " + formatWhole(tier) + " Golden Seeds"
                                         }, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
-                                    ], {width: "410px", height: "43px"}],
-                                ], {width: "410px", height: "85px"}],
-                                ["style-column", [
-                                    ["clickable", 101],
-                                ], {width: "410px", height: "40px", background: "#291003", borderTop: "5px solid #3e3117"}],
-                            ], {width: "410px", height: "130px", borderRight: "5px solid #3e3117"}],
-                            ["top-column", [
+                                    ], {width: "360px", height: "35px"}],
+                                ], {width: "360px", height: "85px", borderRight: "5px solid #3e3117", borderBottom: "5px solid #3e3117"}],
                                 ["style-column", [
                                     ["raw-html", () => {return "You have<br>" + formatWhole(player.fl.goldenSeeds) + "/" + formatWhole(player.fl.goldenSeedsTotal) + "<br>Golden Seeds"}]
-                                ], {width: "150px", height: "85px", borderBottom: "5px solid #3e3117"}],
-                                ["bar", "honeycombBar"],
-                                ["bar", "royalJellyBar"],
-                            ], {width: "150px", height: "130px"}],
+                                ], {width: "200px", height: "85px", borderBottom: "5px solid #3e3117"}],
+                            ]],
+                            ["bar", "honeycombBar"],
+                            ["bar", "royalJellyBar"],
                         ], {width: "565px", height: "130px", background: "#251d0d", borderBottom: "5px solid #3e3117"}],
                         ["row", [
                             ["top-column", [
@@ -3039,6 +3012,7 @@ addLayer("fl", {
                         ["left-row", [["gilding", 121], ["gilding", 122], ["gilding", 123], ["gilding", 124], ["gilding", 125]], {width: "500px"}],
                     ], {width: "460px", height: "300px"}],
                     ["style-column", [
+                        ["raw-html", "Click to gild/ungild flowers", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                         ["raw-html", "Gilded flowers are kept on aleph resets", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                     ], {width: "460px", height: "40px", background: "#251d0d", borderTop: "5px solid #3e3117"}],
                 ],
@@ -3051,6 +3025,7 @@ addLayer("fl", {
                         ["left-row", [["gilding", 221], ["gilding", 222], ["gilding", 223], ["gilding", 224], ["gilding", 225]], {width: "500px"}],
                     ], {width: "460px", height: "300px"}],
                     ["style-column", [
+                        ["raw-html", "Click to gild/ungild flowers", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                         ["raw-html", "Gilded flowers are kept on aleph resets", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                     ], {width: "460px", height: "40px", background: "#251d0d", borderTop: "5px solid #3e3117"}],
                 ]
@@ -3063,6 +3038,7 @@ addLayer("fl", {
                         ["left-row", [["gilding", 321], ["gilding", 322], ["gilding", 323], ["gilding", 324], ["gilding", 325]], {width: "500px"}],
                     ], {width: "460px", height: "300px"}],
                     ["style-column", [
+                        ["raw-html", "Click to gild/ungild flowers", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                         ["raw-html", "Gilded flowers are kept on aleph resets", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                     ], {width: "460px", height: "40px", background: "#251d0d", borderTop: "5px solid #3e3117"}],
                 ]
@@ -3075,6 +3051,7 @@ addLayer("fl", {
                         ["left-row", [["gilding", 421], ["gilding", 422], ["gilding", 423], ["gilding", 424], ["gilding", 425]], {width: "500px"}],
                     ], {width: "460px", height: "300px"}],
                     ["style-column", [
+                        ["raw-html", "Click to gild/ungild flowers", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                         ["raw-html", "Gilded flowers are kept on aleph resets", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                     ], {width: "460px", height: "40px", background: "#251d0d", borderTop: "5px solid #3e3117"}],
                 ]
@@ -3087,6 +3064,7 @@ addLayer("fl", {
                         ["left-row", [["gilding", 521], ["gilding", 522], ["gilding", 523], ["gilding", 524], ["gilding", 525]], {width: "500px"}],
                     ], {width: "460px", height: "300px"}],
                     ["style-column", [
+                        ["raw-html", "Click to gild/ungild flowers", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                         ["raw-html", "Gilded flowers are kept on aleph resets", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                     ], {width: "460px", height: "40px", background: "#251d0d", borderTop: "5px solid #3e3117"}],
                 ]
@@ -3099,6 +3077,7 @@ addLayer("fl", {
                         ["left-row", [["gilding", 621], ["gilding", 622], ["gilding", 623], ["gilding", 624], ["gilding", 625]], {width: "500px"}],
                     ], {width: "460px", height: "300px"}],
                     ["style-column", [
+                        ["raw-html", "Click to gild/ungild flowers", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                         ["raw-html", "Gilded flowers are kept on aleph resets", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                     ], {width: "460px", height: "40px", background: "#251d0d", borderTop: "5px solid #3e3117"}],
                 ]

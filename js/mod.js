@@ -820,7 +820,9 @@ let changelog = `<h1>Changelog:</h1><br>
 		Minor Changes:<br>
 			- Levelable bars now flash when able to be leveled.<br>
 			- Import save fails now give an error message in the console.<br>
-			- You can now gain tenths of a nest.<br><br>
+			- You can now gain tenths of a nest.<br>
+			- Fixed coin clip easter egg.<br>
+			- Added a pet easter egg.<br><br>
 	<h3>v1.12.1 - Bugfixes <small>(and beefixes)</small></h3><br>
 	<small><i>[This contains all fixes since v1.12]</i></small><br>
 		Content:<br>

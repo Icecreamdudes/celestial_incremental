@@ -1659,7 +1659,7 @@ addLayer("al", {
                                         ["color-text", [() => {return "1,000,000"}, true, "white", () => {return player.al.cocoonLevel >= 7}, "gray"]],
                                     ], {width: "115px", height: "35px", borderRight: "2px solid #a900a9"}],
                                     ["style-row", [
-                                        ["color-text", [() => {return "Gain 3 extra golden seeds"}, true, "white", () => {return player.al.cocoonLevel >= 7}, "gray"]],
+                                        ["color-text", [() => {return "Gain 5 extra golden seeds"}, true, "white", () => {return player.al.cocoonLevel >= 7}, "gray"]],
                                     ], {width: "281px", height: "35px"}],
                                 ], () => {return player.al.cocoonLevel >= 6 ? {width: "398px", height: "35px", background: "#190019", borderBottom: "2px solid #a900a9"} : {display: "none !important"}}],
                                 ["style-row", [

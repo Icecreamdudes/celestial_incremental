@@ -635,6 +635,7 @@
             canClick() { return player.fu.apathyToGet.gte(1) && inChallenge("fu", 12) && player.cp.replicantiPoints.gte(1e20)},
             unlocked() { return inChallenge("fu", 12) || player.fu.enterNumb},
             onClick() {
+                if (!hasAchievement("achievements", 918)) completeAchievement("achievements", 918)
                 player.fu.funifyPause = new Decimal(12)
                 if (!hasUpgrade("fu", 105)) {
                     for (let i = 0; i < player.an.upgrades.length; i++) {
@@ -3162,6 +3163,7 @@
             onExit() {
                 player.fu.funifyPause = new Decimal(12)
             },
+            onComplete() {if (!hasAchievement("achievements", 919)) completeAchievement("achievements", 919)},
             style: { width: '350px', height: '290px', }
         },
     },

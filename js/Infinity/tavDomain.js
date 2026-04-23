@@ -434,6 +434,7 @@ addLayer("tad", {
                     if (player.tad.altInfinities.disfigured.amount.lt(1e8)) player.tad.altInfinities.disfigured.amount = new Decimal(0)
                     if (player.tad.altInfinities.distorted.amount.lt(1e8)) player.tad.altInfinities.distorted.amount = new Decimal(0)
                     player.tad.altInfinities[player.tad.altSelection].amount = player.tad.altInfinities[player.tad.altSelection].amount.add(player.tad.altInfinities[player.tad.altSelection].gain.mul(Decimal.div(delta, player.uni["U2"].tickspeed)))
+                    if (!hasAchievement("achievements", 915) && player.tad.altInfinities[player.tad.altSelection].amount.gte(1)) completeAchievement("achievements", 915)
                 }
                 break;
         }
@@ -1009,6 +1010,7 @@ addLayer("tad", {
             },
             unlocked: true,
             onClick() {
+                if (!hasAchievement("achievements", 916)) completeAchievement("achievements", 916)
                 player.tad.hiveExpand = true
             },
             style() {

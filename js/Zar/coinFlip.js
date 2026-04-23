@@ -30,7 +30,7 @@
         coinsFlipped: new Decimal(0),
 
         autoFlip: false,
-        coinExploit: 0,
+        coinExploit: new Decimal(0),
 
         //softcap
         headsSoftcapStart: new Decimal(10000),
@@ -179,19 +179,19 @@
             }
         }
 
-        if (player.cf.coinExploit > 0) {
-            player.cf.coinExploit = Math.max(player.cf.coinExploit - (0.5*delta), 0)
+        if (Decimal.gt(player.cf.coinExploit, 0)) {
+            player.cf.coinExploit = Decimal.sub(player.cf.coinExploit, delta.mul(0.5)).max(0)
         }
-        if (player.cf.coinExploit < 0) {
-            player.cf.coinExploit = player.cf.coinExploit + delta
+        if (Decimal.lt(player.cf.coinExploit, 0)) {
+            player.cf.coinExploit = Decimal.add(player.cf.coinExploit, delta)
         }
 
-        if (player.cf.coinExploit >= 5) {
+        if (Decimal.gte(player.cf.coinExploit, 5)) {
             player.cf.heads = new Decimal(0)
             player.cf.tails = new Decimal(0)
             player.cf.coinsFlipped = new Decimal(0)
 
-            player.cf.coinExploit = -5
+            player.cf.coinExploit = new Decimal(-5)
             if (player.tab == "cf") makeParticles(BIG_COOKIE_NUMBER, 1, `normal`, {text: "SUPER COIN CLIP"})
         }
     },
@@ -225,7 +225,7 @@
         },
         13: {
             title() { return "Coin Clipper" },
-            canClick() { return player.cf.coinExploit >= 0 },
+            canClick() { return Decimal.gte(player.cf.coinExploit, 0) || typeof player.cf.coinExploit === "string" },
             tooltip() { return "<h5>Resets flip count, heads, tails, and heads and tails buyables. Use it when you screw up. (You suck at this game)" },
             unlocked() { return true },
             onClick() {
@@ -263,7 +263,7 @@
                 player.cf.buyables[33] = new Decimal(0)
                 player.cf.buyables[34] = new Decimal(0)
             },
-            onHold() {player.cf.coinExploit = player.cf.coinExploit + 0.05},
+            onHold() {player.cf.coinExploit = Decimal.add(player.cf.coinExploit, 0.05)},
             style() { 
                 return { width: '100px', "min-height": '100px', borderRadius: "15px 15px 15px 15px", border: "3px solid #9b5a48ff", backgroundColor: "#744335ff" }
             },

@@ -46,6 +46,7 @@
         player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.mul(buyableEffect("sme", 181))
         player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.pow(buyableEffect("sm", 109))
         player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.mul(levelableEffect("car", 202)[0])
+        player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.pow(buyableEffect("sm", 116))
 
         if (player.za.chancePoints.add(player.za.chancePointsPerSecond).gte(player.za.chancePointsSoftcapStart))
         {
@@ -69,6 +70,7 @@
         player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(buyableEffect("sme", 181))
         player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(buyableEffect("car", 12))
         if (hasUpgrade("car", 15)) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(upgradeEffect("car", 15))
+        player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.pow(buyableEffect("sm", 115))
         
         if (player.za.chancePoints.gte(player.za.chancePointsSoftcapStart)) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.div(player.za.chancePointsSoftcapEffect)
 
@@ -270,7 +272,7 @@
         },
         22: {
             title: "I don't like bees but I do like honey.",
-            unlocked() { return hasUpgrade("za", 21) },
+            unlocked() { return hasUpgrade("za", 21) && player.al.show },
             description: "Boosts honey-cells based on chance points.",
             cost: new Decimal(1e40),
             currencyLocation() { return player.za },
@@ -278,7 +280,7 @@
             currencyInternalName: "chancePoints",
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(15, 12, 12, 0.5)", borderRadius: "15px", margin: "2px", width: '150px',},
             effect() {
-                return player.za.chancePoints.pow(0.06).div(1000).add(1)
+                return player.za.chancePoints.pow(0.06).add(1)
             },
             effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
         },

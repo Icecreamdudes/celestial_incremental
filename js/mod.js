@@ -28,7 +28,7 @@
 		"Black Heart/blackHeart.js", "Black Heart/blackHeartFunctions.js", "Black Heart/characters.js", "Black Heart/skills.js", "Black Heart/depth1.js",
 		"Black Heart/depth2.js", "Black Heart/depth3.js", "Black Heart/matosLair.js", "Black Heart/darkTemple.js", "Black Heart/bulletHell.js",
 		"Black Heart/stagnantSynestia.js", "Black Heart/depth4.js", "Black Heart/alephsChamber.js", "Black Heart/laboratory.js", "DarkU1/grassJump.js",
-		"Hive/nest.js", "Check Back/gwaTemple.js", "Black Heart/cardThrow.js",
+		"Hive/nest.js", "Check Back/gwaTemple.js", "Black Heart/cardThrow.js", "Zar/zarDungeon.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 	],
@@ -140,7 +140,7 @@ function updateStyles() {
 				layerBG = "#001f18"
 			}
 			break;
-	    case "za": case "cf": case "wof": case "sm": case "car":
+	    case "za": case "cf": case "wof": case "sm": case "car": case "zd":
 			layerBG = "linear-gradient(-180deg, #3b3b3bff 0%, #8d8d8dff 100%)"
 			break;
 		case "cbs":
@@ -690,7 +690,7 @@ function updateStyles() {
 		case "od": case "mu":
             player.musuniverse = "OD"
 			break;
-		case "za": case "cf": case "wof": case "sm": case "cbs": case "car":
+		case "za": case "cf": case "wof": case "sm": case "cbs": case "car": case "zd":
             player.musuniverse = "DS"
 			break;
 	}
@@ -1637,7 +1637,7 @@ var doNotCallTheseFunctionsEveryTick = [
 	"startCutscene38", "startCutscene39", "cookieClick", "generateFlower", "generateMult", "flowerClick",
 	"selectCelestialites", "petDeath", "celestialiteDeath", "petAbility", "celestialiteAbility",
 	"arriveAtStar", "spaceEnergyReset", "coinFlip", "randomizeSegments", "spinWheel", "spinSlots", "evaluateRewards",
-	"slotReset", "enhanceReset", "cardReset", "cardDraw"
+	"slotReset", "enhanceReset", "cardReset", "cardDraw", "startGame", "endGame",
 ]
 
 function getStartPoints(){

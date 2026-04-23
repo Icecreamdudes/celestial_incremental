@@ -338,7 +338,7 @@ addUniverse("DS", {
         return "Universe ε<br>Dice Space"
     },
     symbol: "ε",
-    tree: [["za",],["cf","wof",], ["sm",], ["cbs","car",]],
+    tree: [["za",],["cf","wof",], ["sm",], ["cbs","car",], ["zd",]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(45deg, #666666ff 0%, #585858ff 100%)",

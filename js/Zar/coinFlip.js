@@ -101,6 +101,7 @@
         player.cf.headsSoftcapStart = player.cf.headsSoftcapStart.mul(buyableEffect("cf", 33))
         player.cf.headsSoftcapStart = player.cf.headsSoftcapStart.mul(player.sm.chipsEffect[1])
         player.cf.headsSoftcapStart = player.cf.headsSoftcapStart.mul(levelableEffect("car", 205)[0])
+        player.cf.headsSoftcapStart = player.cf.headsSoftcapStart.pow(buyableEffect("sm", 116))
 
         player.cf.headsSoftcapStart = player.cf.headsSoftcapStart.pow(buyableEffect("sm", 111))
 
@@ -119,6 +120,7 @@
         player.cf.tailsSoftcapStart = player.cf.tailsSoftcapStart.mul(buyableEffect("cf", 23))
         player.cf.tailsSoftcapStart = player.cf.tailsSoftcapStart.mul(player.sm.chipsEffect[1])
         player.cf.tailsSoftcapStart = player.cf.tailsSoftcapStart.mul(levelableEffect("car", 207)[0])
+        player.cf.tailsSoftcapStart = player.cf.tailsSoftcapStart.pow(buyableEffect("sm", 116))
 
         player.cf.tailsSoftcapStart = player.cf.tailsSoftcapStart.pow(buyableEffect("sm", 111))
 

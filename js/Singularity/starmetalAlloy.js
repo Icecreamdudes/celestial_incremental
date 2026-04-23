@@ -110,10 +110,14 @@
             player.tab = "le"
             changeTheme()
 
+            layers.le.starmetalResetAgain()
+
             layers.pu.generateSelection();
 
             player.subtabs["le"]["stuff"] = "Main"
             player.subtabs.pu["stuff"] = "Selection"
+
+            pauseUniverseAll(["D1", "U3", "A2"], "pause", true)
         }
 
         player.sma.starmetalAlloy = player.sma.starmetalAlloy.floor()
@@ -136,7 +140,7 @@
                 player.subtabs["le"]["stuff"] = "Main"
                 player.subtabs.pu["stuff"] = "Selection"
 
-                pauseUniverseAll(["D1", "A2"], "pause", true)
+                pauseUniverseAll(["D1", "U3", "A2"], "pause", true)
             },
             style: {width: "600px", minHeight: "200px", color: "white", backgroundImage: "radial-gradient(circle, black 60%, #13292f 70%, #54265e 80%, #8d3947 90%, #e6eb57 110%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
         },
@@ -160,7 +164,7 @@
                 player.subtabs.le["stuff"] = "Shards"
                 player.subtabs.pu["stuff"] = "Selection"   
                 
-                pauseUniverseAll(["D1", "A2"], "pause", true)
+                pauseUniverseAll(["D1", "U3", "A2"], "pause", true)
             },
             style() {
                 let look = {width: "600px", minHeight: "200px", color: "#ffe066", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"}
@@ -649,6 +653,20 @@
                 return look
             }
         },
+        227: {
+            title: "Hybrid Eclipse",
+            unlocked() { return hasUpgrade("sma", 226) && false},
+            description: "\"Syzygy\" now also increases eclipse's agility by +25%.",
+            cost: new Decimal("100000"),
+            currencyLocation() { return player.sma },
+            currencyDisplayName: "Eclipse Shards",
+            currencyInternalName: "eclipseShards",
+            style() {
+                let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "#f5ff68"
+                return look
+            }
+        },
         //Automatic starmetal resets
     },
     buyables: {
@@ -873,7 +891,8 @@
                         ["blank", "5px"],
                         ["style-row", [], {width: "800px", height: "3px", backgroundColor: "#b29c47"}],
                         ["blank", "5px"],
-                        ["row", [["upgrade", 221], ["upgrade", 222], ["upgrade", 223], ["upgrade", 224], ["upgrade", 225], ["upgrade", 226]]],
+                        ["row", [["upgrade", 221], ["upgrade", 222], ["upgrade", 223], ["upgrade", 224], ["upgrade", 225],
+                            ["upgrade", 226], ["upgrade", 227]]],
                         ["blank", "5px"],
                     ], {width: "800px", backgroundColor: "#222", border: "3px solid #b29c47", borderRadius: "20px"}],
                 ]

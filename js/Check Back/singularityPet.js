@@ -90,6 +90,20 @@ addLayer("sp", {
                 return look
             },
         },
+        12: {
+            title: "Focused Fury",
+            unlocked() { return false},
+            description: "Decreases \"Berserker\" skill penalty from 20%->10%",
+            cost: new Decimal(10000),
+            currencyLocation() { return player.sp },
+            currencyDisplayName: "Kres Points",
+            currencyInternalName: "kresPoints",
+            style() {
+                let look = {borderRadius: "15px", color: "black", border: "3px solid #480513", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#910a27"
+                return look
+            },
+        },
         21: {
             title: "Aura Shield",
             unlocked() { return hasUpgrade("depth4", 4) },
@@ -104,11 +118,39 @@ addLayer("sp", {
                 return look
             },
         },
+        22: {
+            title: "Improved Knowledge",
+            unlocked() { return false },
+            description: "Nav's \"Magic Missile\" skill now shoots 2 missiles that deal 60% damage",
+            cost: new Decimal(10000),
+            currencyLocation() { return player.sp },
+            currencyDisplayName: "Nav Points",
+            currencyInternalName: "navPoints",
+            style() {
+                let look = {borderRadius: "15px", color: "black", border: "3px solid #380548", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#710a91"
+                return look
+            },
+        },
         31: {
             title: "Lucky Intuition",
             unlocked() { return hasUpgrade("depth4", 4) },
             description: "Increases Sel's base luck by +10",
             cost: new Decimal(5000),
+            currencyLocation() { return player.sp },
+            currencyDisplayName: "Sel Points",
+            currencyInternalName: "selPoints",
+            style() {
+                let look = {borderRadius: "15px", color: "black", border: "3px solid #032e0c", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#065c19"
+                return look
+            },
+        },
+        32: {
+            title: "Techinical Improvement",
+            unlocked() { return false },
+            description: "Sel's \"Turret\" skill now does 50% damage every 0.5s for 6s.",
+            cost: new Decimal(10000),
             currencyLocation() { return player.sp },
             currencyDisplayName: "Sel Points",
             currencyInternalName: "selPoints",
@@ -623,7 +665,7 @@ addLayer("sp", {
                         ["blank", "20px"],
                         ["row", [["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14], ["ex-buyable", 15]], {maxWidth: "600px"}],
                         ["blank", "20px"],
-                        ["style-row", [["upgrade", 11]], () => {return hasUpgrade("depth4", 4) ? {marginBottom: "20px"} : {}}],
+                        ["style-row", [["upgrade", 11], ["upgrade", 12]], () => {return hasUpgrade("depth4", 4) ? {marginBottom: "20px"} : {}}],
                     ], {width: "700px", background: "#2b030b", border: "3px solid white", borderRadius: "20px"}],
                 ],
             },
@@ -642,7 +684,7 @@ addLayer("sp", {
                         ["blank", "20px"],
                         ["row", [["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24], ["ex-buyable", 25]], {maxWidth: "600px"}],
                         ["blank", "20px"],
-                        ["style-row", [["upgrade", 21]], () => {return hasUpgrade("depth4", 4) ? {marginBottom: "20px"} : {}}],
+                        ["style-row", [["upgrade", 21], ["upgrade", 22]], () => {return hasUpgrade("depth4", 4) ? {marginBottom: "20px"} : {}}],
                     ], {width: "700px", background: "#21032b", border: "3px solid white", borderRadius: "20px"}],
                 ],
             },
@@ -661,7 +703,7 @@ addLayer("sp", {
                         ["blank", "20px"],
                         ["row", [["ex-buyable", 32], ["ex-buyable", 33], ["ex-buyable", 34], ["ex-buyable", 35]], {maxWidth: "600px"}],
                         ["blank", "20px"],
-                        ["style-row", [["upgrade", 31]], () => {return hasUpgrade("depth4", 4) ? {marginBottom: "20px"} : {}}],
+                        ["style-row", [["upgrade", 31], ["upgrade", 32]], () => {return hasUpgrade("depth4", 4) ? {marginBottom: "20px"} : {}}],
                     ], {width: "700px", background: "#011b07", border: "3px solid white", borderRadius: "20px"}],
                 ],
             },

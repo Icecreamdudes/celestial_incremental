@@ -266,18 +266,22 @@
                 "<br>"  + formatWhole(player.cb.evolutionShards) + "/4 Evolution Shards" +
                 "</div>" +
                 "<div class='evoContainer'><h3>Requires:</h3>" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 101)) + "/3 Gwa Level" + 
-                "<br>"  + formatWhole(getLevelableAmount("pet", 102)) + "/3 Egg Guy Level" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 103)) + "/6 Unsmith Level" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 104)) + "/3 Gd Checkpoint Level" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 105)) + "/3 Slax Level" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 302)) + "/1 Dice Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 101).add(getLevelableTier("pet", 101).mul(5).min(40))) + "/3 Eff. Gwa Level" + 
+                "<br>"  + formatWhole(getLevelableAmount("pet", 102).add(getLevelableTier("pet", 102).mul(5).min(40))) + "/3 Eff. Egg Guy Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 103).add(getLevelableTier("pet", 103).mul(5).min(40)).add(levelableEffect("pet", 1103)[0])) + "/6 Eff. Unsmith Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 104).add(getLevelableTier("pet", 104).mul(5).min(40))) + "/3 Eff. Gd Checkpoint Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 105).add(getLevelableTier("pet", 105).mul(5).min(40))) + "/3 Eff. Slax Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 302).add(getLevelableTier("pet", 302).mul(5).min(40)).add(levelableEffect("pet", 1302)[0])) + "/1 Eff. Dice Level" +
                 "</div>"
             },
             canClick() {
-                return (player.cb.evolutionShards.gte(4) && getLevelableAmount("pet", 101).gte(3) && getLevelableAmount("pet", 102).gte(3)
-                && getLevelableAmount("pet", 103).gte(6) && getLevelableAmount("pet", 104).gte(3) && getLevelableAmount("pet", 105).gte(3)
-                && getLevelableAmount("pet", 302).gte(1))
+                return (player.cb.evolutionShards.gte(4)
+                && getLevelableAmount("pet", 101).add(getLevelableTier("pet", 101).mul(5).min(40)).gte(3)
+                && getLevelableAmount("pet", 102).add(getLevelableTier("pet", 102).mul(5).min(40)).gte(3)
+                && getLevelableAmount("pet", 103).add(getLevelableTier("pet", 103).mul(5).min(40)).add(levelableEffect("pet", 1103)[0]).gte(6)
+                && getLevelableAmount("pet", 104).add(getLevelableTier("pet", 104).mul(5).min(40)).gte(3)
+                && getLevelableAmount("pet", 105).add(getLevelableTier("pet", 105).mul(5).min(40)).gte(3)
+                && getLevelableAmount("pet", 302).add(getLevelableTier("pet", 302).mul(5).min(40)).add(levelableEffect("pet", 1302)[0]).gte(1))
             },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
@@ -296,18 +300,22 @@
                 "<br>"  + formatWhole(player.cb.evolutionShards) + "/6 Evolution Shards" +
                 "</div>" +
                 "<div class='evoContainer'><h3>Requires:</h3>" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 201)) + "/2 Teste Level" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 202)) + "/2 Star Level" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 203)) + "/2 Normal Face Level" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 204)) + "/4 Shark Level" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 205)) + "/2 THE WATCHING EYE Level" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 303)) + "/1 Drippy Ufo Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 201).add(getLevelableTier("pet", 201).mul(5).min(40))) + "/2 Eff. Teste Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 202).add(getLevelableTier("pet", 202).mul(5).min(40)).add(levelableEffect("pet", 1202)[0])) + "/2 Eff. Star Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 203).add(getLevelableTier("pet", 203).mul(5).min(40))) + "/2 Eff. Normal Face Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 204).add(getLevelableTier("pet", 204).mul(5).min(40)).add(levelableEffect("pet", 1204)[0])) + "/4 Eff. Shark Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 205).add(getLevelableTier("pet", 205).mul(5).min(40))) + "/2 Eff. THE WATCHING EYE Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 303).add(getLevelableTier("pet", 303).mul(5).min(40))) + "/1 Eff. Drippy Ufo Level" +
                 "</div>"
             },
             canClick() {
-                return (player.cb.evolutionShards.gte(6) && getLevelableAmount("pet", 201).gte(2) && getLevelableAmount("pet", 202).gte(2)
-                && getLevelableAmount("pet", 203).gte(2) && getLevelableAmount("pet", 204).gte(4) && getLevelableAmount("pet", 205).gte(2)
-                && getLevelableAmount("pet", 303).gte(1))
+                return (player.cb.evolutionShards.gte(6)
+                && getLevelableAmount("pet", 201).add(getLevelableTier("pet", 201).mul(5).min(40)).gte(2)
+                && getLevelableAmount("pet", 202).add(getLevelableTier("pet", 202).mul(5).min(40)).add(levelableEffect("pet", 1202)[0]).gte(2)
+                && getLevelableAmount("pet", 203).add(getLevelableTier("pet", 203).mul(5).min(40)).gte(2)
+                && getLevelableAmount("pet", 204).add(getLevelableTier("pet", 204).mul(5).min(40)).add(levelableEffect("pet", 1204)[0]).gte(4)
+                && getLevelableAmount("pet", 205).add(getLevelableTier("pet", 205).mul(5).min(40)).gte(2)
+                && getLevelableAmount("pet", 303).add(getLevelableTier("pet", 303).mul(5).min(40)).gte(1))
             },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
@@ -327,14 +335,16 @@
                 "<div class='evoContainer'><h3>Requires:</h3>" +
                 "<br>"  + formatWhole(player.ip.diceRuns) + "/10 Dice Runs" +
                 "<br>"  + formatWhole(player.ip.rocketFuelRuns) + "/10 Rocket Fuel Runs" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 301)) + "/2 Nova Level" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 304)) + "/2 Goofy Ahh Thing Level" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 203)) + "/6 Normal Face Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 301).add(getLevelableTier("pet", 301).mul(5).min(40))) + "/2 Eff. Nova Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 304).add(getLevelableTier("pet", 304).mul(5).min(40))) + "/2 Eff. Goofy Ahh Thing Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 203).add(getLevelableTier("pet", 203).mul(5).min(40))) + "/6 Eff. Normal Face Level" +
                 "</div>"
             },
             canClick() {
                 return (player.cb.evolutionShards.gte(10) && player.ip.diceRuns.gte(10) && player.ip.rocketFuelRuns.gte(10)
-                && getLevelableAmount("pet", 301).gte(2) && getLevelableAmount("pet", 304).gte(2) && getLevelableAmount("pet", 203).gte(6))
+                && getLevelableAmount("pet", 301).add(getLevelableTier("pet", 301).mul(5).min(40)).gte(2)
+                && getLevelableAmount("pet", 304).add(getLevelableTier("pet", 304).mul(5).min(40)).gte(2)
+                && getLevelableAmount("pet", 203).add(getLevelableTier("pet", 203).mul(5).min(40)).gte(6))
             },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
@@ -358,13 +368,14 @@
                 "<br>"  + formatWhole(player.ip.hexRuns) + "/2,000 Hex Runs" +
                 "<br>"  + formatWhole(player.points) + "/1e500 Celestial Points" +
                 "<br>"  + formatWhole(player.tad.infinitum) + "/800 Infinitum" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 101)) + "/10 Gwa Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 101).add(getLevelableTier("pet", 101).mul(5).min(40))) + "/10 Eff. Gwa Level" +
                 "</div>"
             },
             canClick() {
                 return (player.cb.evolutionShards.gte(8) && player.ip.diceRuns.gte(2000) && player.ip.rocketFuelRuns.gte(2000)
                 && player.ip.hexRuns.gte(2000) && player.points.gte("1e500") && player.tad.infinitum.gte(800)
-                && player.cb.petPoints.gte(400) && getLevelableAmount("pet", 101).gte(10))
+                && player.cb.petPoints.gte(400)
+                && getLevelableAmount("pet", 101).add(getLevelableTier("pet", 101).mul(5).min(40)).gte(10))
             },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
@@ -386,24 +397,25 @@
                 "<br>"  + formatWhole(player.in.infinityPoints) + "/1e11 Infinity Points" +
                 "</div>" +
                 "<div class='evoContainer'><h3>Requires:</h3>" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 201)) + "/4 Teste Level" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 202)) + "/8 Star Level" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 203)) + "/4 Normal Face Level" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 204)) + "/4 Shark Level" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 205)) + "/4 THE WATCHING EYE Level" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 206)) + "/2 Clock Level" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 207)) + "/2 Trollface Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 201).add(getLevelableTier("pet", 201).mul(5).min(40))) + "/4 Eff. Teste Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 202).add(getLevelableTier("pet", 202).mul(5).min(40)).add(levelableEffect("pet", 1202)[0])) + "/8 Eff. Star Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 203).add(getLevelableTier("pet", 203).mul(5).min(40))) + "/4 Eff. Normal Face Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 204).add(getLevelableTier("pet", 204).mul(5).min(40)).add(levelableEffect("pet", 1204)[0])) + "/4 Eff. Shark Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 205).add(getLevelableTier("pet", 205).mul(5).min(40))) + "/4 Eff. THE WATCHING EYE Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 206).add(getLevelableTier("pet", 206).mul(5).min(40))) + "/2 Eff. Clock Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 207).add(getLevelableTier("pet", 207).mul(5).min(40))) + "/2 Eff. Trollface Level" +
                 "</div>"
             },
             canClick() {
                 return (player.cb.evolutionShards.gte(20) && player.cb.paragonShards.gte(1) && player.cb.petPoints.gte(250)
-                && player.in.infinityPoints.gte(1e11) && (getLevelableAmount("pet", 201).gte(4) || getLevelableTier("pet", 201).gt(0))
-                && (getLevelableAmount("pet", 202).gte(8) || getLevelableTier("pet", 202).gt(0))
-                && (getLevelableAmount("pet", 203).gte(4) || getLevelableTier("pet", 203).gt(0))
-                && (getLevelableAmount("pet", 204).gte(4) || getLevelableTier("pet", 204).gt(0))
-                && (getLevelableAmount("pet", 205).gte(4) || getLevelableTier("pet", 204).gt(0))
-                && (getLevelableAmount("pet", 206).gte(2) || getLevelableTier("pet", 206).gt(0))
-                && (getLevelableAmount("pet", 207).gte(2) || getLevelableTier("pet", 207).gt(0)))
+                && player.in.infinityPoints.gte(1e11)
+                && getLevelableAmount("pet", 201).add(getLevelableTier("pet", 201).mul(5).min(40)).gte(4)
+                && getLevelableAmount("pet", 202).add(getLevelableTier("pet", 202).mul(5).min(40)).add(levelableEffect("pet", 1202)[0]).gte(8)
+                && getLevelableAmount("pet", 203).add(getLevelableTier("pet", 203).mul(5).min(40)).gte(4)
+                && getLevelableAmount("pet", 204).add(getLevelableTier("pet", 204).mul(5).min(40)).add(levelableEffect("pet", 1204)[0]).gte(4)
+                && getLevelableAmount("pet", 205).add(getLevelableTier("pet", 205).mul(5).min(40)).gte(4)
+                && getLevelableAmount("pet", 206).add(getLevelableTier("pet", 206).mul(5).min(40)).gte(2)
+                && getLevelableAmount("pet", 207).add(getLevelableTier("pet", 207).mul(5).min(40)).gte(2))
             },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
@@ -430,13 +442,14 @@
                 "<br>"  + formatWhole(getLevelableAmount("pet", 1103)) + "/6 Goldsmith Level" +
                 "<br>"  + formatWhole(getLevelableAmount("pet", 1204)) + "/3 MrRedShark Level" +
                 "<br>"  + formatWhole(getLevelableAmount("pet", 1203)) + "/3 Insane Face Level" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 302)) + "/3 Dice Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 302).add(getLevelableTier("pet", 302).mul(5).min(40)).add(levelableEffect("pet", 1302)[0])) + "/3 Eff. Dice Level" +
                 "</div>"
             },
             canClick() {
                 return (player.cb.evolutionShards.gte(25) && player.cb.paragonShards.gte(1) && player.ta.highestDicePoints.gte(1e45)
                 && getLevelableAmount("pet", 1103).gte(6) && getLevelableAmount("pet", 1204).gte(3) && getLevelableAmount("pet", 1203).gte(3)
-                && player.cb.XPBoost.gte(7) && (getLevelableAmount("pet", 302).gte(3) || getLevelableTier("pet", 302).gt(0)))
+                && player.cb.XPBoost.gte(7)
+                && getLevelableAmount("pet", 302).add(getLevelableTier("pet", 302).mul(5).min(40)).add(levelableEffect("pet", 1302)[0]).gte(3))
             },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
@@ -509,14 +522,16 @@
                 "</div>" +
                 "<div class='evoContainer'><h3>Requires:</h3>" +
                 "<br>"  + formatWhole(player.cb.level) + "/1,500 Check Back Levels" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 206)) + "/6 Clock Level" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 207)) + "/6 Trollface Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 206).add(getLevelableTier("pet", 206).mul(5).min(40))) + "/6 Eff. Clock Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 207).add(getLevelableTier("pet", 207).mul(5).min(40))) + "/6 Eff. Trollface Level" +
                 "</div>"
             },
             canClick() {
                 return (player.cb.evolutionShards.gte(30) && player.cb.paragonShards.gte(1) && player.cb.level.gte(1500)
                 && (getLevelableAmount("pet", 206).gte(6) || getLevelableTier("pet", 206).gt(0))
-                && (getLevelableAmount("pet", 207).gte(6) || getLevelableTier("pet", 207).gt(0)) && player.ca.rememberanceCores.gte(5))
+                && getLevelableAmount("pet", 206).add(getLevelableTier("pet", 206).mul(5).min(40)).gte(6)
+                && getLevelableAmount("pet", 207).add(getLevelableTier("pet", 207).mul(5).min(40)).gte(6)
+                && player.ca.rememberanceCores.gte(5))
             },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
@@ -733,12 +748,12 @@
                 "<br>" + formatWhole(player.ca.rememberanceCores) + "/10 Rememberance Cores" +
                 "</div>" +
                 "<div class='evoContainer'><h3>Requires:</h3>" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 403)) + "/2 Cookie Levels" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 403).add(getLevelableTier("pet", 403).mul(5).min(40))) + "/2 Eff. Cookie Levels" +
                 "</div>"
             },
             canClick() {
                 return (player.ep2.chocoShards.gte(1) && player.cb.petPoints.gte(1000) && player.ca.rememberanceCores.gte(10)
-                && getLevelableAmount("pet", 403).gte(2))
+                && getLevelableAmount("pet", 403).add(getLevelableTier("pet", 403).mul(5).min(40)).gte(2))
             },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
@@ -759,13 +774,14 @@
                 "<br>" + formatWhole(player.ca.rememberanceCores) + "/17 Rememberance Cores" +
                 "</div>" +
                 "<div class='evoContainer'><h3>Requires:</h3>" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 403)) + "/4 Cookie Levels" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 403).add(getLevelableTier("pet", 403).mul(5).min(40))) + "/4 Eff. Cookie Levels" +
                 "<br>" + formatWhole(player.sma.starmetalAlloy) + "/777 Starmetal Alloy" +
                 "</div>"
             },
             canClick() {
                 return (player.ep2.chocoShards.gte(2) && player.cb.petPoints.gte(2777) && player.ca.rememberanceCores.gte(17)
-                && player.sma.starmetalAlloy.gte(777) && getLevelableAmount("pet", 403).gte(3))
+                && player.sma.starmetalAlloy.gte(777)
+                && getLevelableAmount("pet", 403).add(getLevelableTier("pet", 403).mul(5).min(40)).gte(4))
             },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
@@ -786,7 +802,7 @@
                 "<br>" + formatWhole(player.ca.rememberanceCores) + "/36 Rememberance Cores" +
                 "</div>" +
                 "<div class='evoContainer'><h3>Requires:</h3>" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 403)) + "/6 Cookie Levels" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 403).add(getLevelableTier("pet", 403).mul(5).min(40))) + "/6 Eff. Cookie Levels" +
                 "<br>" + formatWhole(player.depth1.gloomingUmbrite) + "/666 Glooming Umbrite" +
                 "<br>" + formatWhole(player.depth2.faintUmbrite) + "/666 Faint Umbrite" +
                 "<br>" + formatWhole(player.depth3.vividUmbrite) + "/666 Vivid Umbrite" +
@@ -796,7 +812,8 @@
             canClick() {
                 return (player.ep2.chocoShards.gte(6) && player.cb.petPoints.gte(6666) && player.ca.rememberanceCores.gte(36)
                 && player.depth1.gloomingUmbrite.gte(666) && player.depth2.faintUmbrite.gte(666) && player.depth3.vividUmbrite.gte(666)
-                && player.bh.darkEssence.gte(66) && getLevelableAmount("pet", 403).gte(6))
+                && player.bh.darkEssence.gte(66)
+                && getLevelableAmount("pet", 403).add(getLevelableTier("pet", 403).mul(5).min(40)).gte(6))
             },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
@@ -1061,9 +1078,12 @@ addLayer("ev8", {
         player.ev8.evoTimers[3].base = new Decimal(9)
         player.ev8.evoTimers[3].max = new Decimal(324000)
         for (let thing in player.ev8.evoTimers) {
-            player.ev8.evoTimers[thing].base = player.ev8.evoTimers[thing].base.mul(ESCMult).floor()
+            if (hasUpgrade("ev8", 27)) {
+                player.ev8.evoTimers[thing].base = player.ev8.evoTimers[thing].base.mul(ESCMult.pow(2)).floor()
+            } else {
+                player.ev8.evoTimers[thing].base = player.ev8.evoTimers[thing].base.mul(ESCMult).floor()
+            }
             if (hasUpgrade("ev8", 11)) player.ev8.evoTimers[thing].max = player.ev8.evoTimers[thing].max.div(1.1)
-            if (hasUpgrade("ev8", 27)) player.ev8.evoTimers[thing].max = player.ev8.evoTimers[thing].max.div(1.2)
             
             player.ev8.evoTimers[thing].current = player.ev8.evoTimers[thing].current.sub(onepersec.mul(delta))
         }
@@ -1079,7 +1099,6 @@ addLayer("ev8", {
         for (let thing in player.ev8.paraTimers) {
             player.ev8.paraTimers[thing].base = player.ev8.paraTimers[thing].base.mul(ESCMult)
             if (hasUpgrade("ev8", 11)) player.ev8.paraTimers[thing].max = player.ev8.paraTimers[thing].max.div(1.1)
-            if (hasUpgrade("ev8", 27)) player.ev8.paraTimers[thing].max = player.ev8.paraTimers[thing].max.div(1.2)
 
             player.ev8.paraTimers[thing].current = player.ev8.paraTimers[thing].current.sub(onepersec.mul(delta))
         }
@@ -1321,7 +1340,7 @@ addLayer("ev8", {
         21: {
             title: "Shard Research X",
             unlocked() { return hasMilestone("s", 14) },
-            description: "Multiplies all epic pet currency gain by x1.4",
+            description: "Multiplies all epic pet currency gain by x1.4.",
             cost: new Decimal(80),
             currencyLocation() { return player.cb },
             currencyDisplayName: "Evolution Shards",
@@ -1345,7 +1364,7 @@ addLayer("ev8", {
         23: {
             title: "Shard Research XII",
             unlocked() { return hasMilestone("s", 14)},
-            description: "Multiplies fragmentation fragment gain by x1.2",
+            description: "Multiplies fragmentation fragment gain by x1.2.",
             cost: new Decimal(10),
             currencyLocation() {return player.cb},
             currencyDisplayName: "Paragon Shards",
@@ -1355,7 +1374,7 @@ addLayer("ev8", {
         24: {
             title: "Shard Research XIII",
             unlocked() {return getBuyableAmount("sme", 112).gte(1)},
-            description: "Unlock Stagnant Synestia in Black Heart",
+            description: "Unlock Stagnant Synestia in Black Heart.",
             cost: new Decimal(150),
             currencyLocation() {return player.cb},
             currencyDisplayName: "Evolution Shards",
@@ -1375,7 +1394,7 @@ addLayer("ev8", {
         26: {
             title: "Shard Research XV",
             unlocked() {return getBuyableAmount("sme", 112).gte(2)},
-            description: "Unlock a 4th paragon shard button",
+            description: "Unlock a 4th paragon shard button.",
             cost: new Decimal(15),
             currencyLocation() {return player.cb},
             currencyDisplayName: "Paragon Shards",
@@ -1385,7 +1404,8 @@ addLayer("ev8", {
         27: {
             title: "Shard Research XVI",
             unlocked() {return getBuyableAmount("sme", 112).gte(4)},
-            description: "Divides shard button cooldowns by /1.2",
+            description: "ESC mult effectiveness on evo shard buttons is squared.",
+            tooltip: "ESC only effects shard buttons via SME Study B:7",
             cost: new Decimal(40),
             currencyLocation() {return player.cb},
             currencyDisplayName: "Paragon Shards",

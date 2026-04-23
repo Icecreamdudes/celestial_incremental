@@ -825,7 +825,7 @@ addLayer("bh", {
                                         if (instant) {
                                             for (let z = 0; z < player.bh.celestialite.actionChances.length; z++) {
                                                 if (Decimal.mul(player.bh.celestialite.actionChances[z][1], Decimal.div(Decimal.add(100, player.bh.celestialite.luck), 100)).gte(Math.random())) {
-                                                    player.bh.celestialite.actions[player.bh.celestialite.actionChances[z][0]].duration = BHC[player.bh.celestialite.id].actions[player.bh.celestialite.actionChances[z][0]].duration
+                                                    player.bh.celestialite.actions[player.bh.celestialite.actionChances[z][0]].duration = run(BHC[player.bh.celestialite.id].actions[player.bh.celestialite.actionChances[z][0]].duration, BHC[player.bh.celestialite.id].actions[player.bh.celestialite.actionChances[z][0]])
                                                 }
                                             }
                                             bhAction(3, i)
@@ -841,8 +841,8 @@ addLayer("bh", {
 
                         // Calculate Variables (and remove inactive active)
                         if ((passive && !BHC[player.bh.celestialite.id].actions[i].actionChance) || (active && player.bh.celestialite.actions[i].duration.gt(0))) {
-                            if (BHC[player.bh.celestialite.id].actions[i].onTrigger) {
-                                if (unpaused) BHC[player.bh.celestialite.id].actions[i].onTrigger(3, i, BHC[player.bh.celestialite.id].actions[i].constantTarget)
+                            if (BHC[player.bh.celestialite.id].actions[i].onPassive) {
+                                if (unpaused) BHC[player.bh.celestialite.id].actions[i].onPassive(3, i, BHC[player.bh.celestialite.id].actions[i].constantTarget)
                             } else if (BHC[player.bh.celestialite.id].actions[i].interval) {
                                 if (unpaused) player.bh.celestialite.actions[i].interval = player.bh.celestialite.actions[i].interval.add(delta)
                                 if (player.bh.celestialite.actions[i].interval.gte(BHC[player.bh.celestialite.id].actions[i].interval)) {
@@ -969,7 +969,7 @@ addLayer("bh", {
                                     if (instant) {
                                         for (let z = 0; z < player.bh.characters[i].actionChances.length; z++) {
                                             if (Decimal.mul(player.bh.characters[i].actionChances[z][1], Decimal.div(Decimal.add(100, player.bh.characters[i].luck), 100)).gte(Math.random())) {
-                                                player.bh.characters[i].skills[player.bh.characters[i].actionChances[z][0]].duration = BHA[player.bh.characters[i].skills[player.bh.characters[i].actionChances[z][0]].id].duration
+                                                player.bh.characters[i].skills[player.bh.characters[i].actionChances[z][0]].duration = run(BHA[player.bh.characters[i].skills[player.bh.characters[i].actionChances[z][0]].id].duration, BHA[player.bh.characters[i].skills[player.bh.characters[i].actionChances[z][0]].id])
                                             }
                                         }
                                         bhAction(i, j)
@@ -985,7 +985,9 @@ addLayer("bh", {
 
                     // Calculate Variables (and remove inactive active)
                     if ((passive && !BHA[player.bh.characters[i].skills[j].id].actionChance) || (active && player.bh.characters[i].skills[j].duration.gt(0))) {
-                        if (BHA[player.bh.characters[i].skills[j].id].interval) {
+                        if (BHA[player.bh.characters[i].skills[j].id].onPassive) {
+                            if (unpaused) BHA[player.bh.characters[i].skills[j].id].onPassive(i, j, BHA[player.bh.characters[i].skills[j].id].constantTarget)
+                        } else if (BHA[player.bh.characters[i].skills[j].id].interval) {
                             if (unpaused) player.bh.characters[i].skills[j].interval = player.bh.characters[i].skills[j].interval.add(delta)
                             if (player.bh.characters[i].skills[j].interval.gte(BHA[player.bh.characters[i].skills[j].id].interval)) {
                                 player.bh.characters[i].skills[j].interval = new Decimal(0)
@@ -1131,6 +1133,7 @@ addLayer("bh", {
         player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(player.depth2.milestoneEffect)
         player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(player.depth3.milestoneEffect)
         player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(player.depth4.milestoneEffect)
+        if (hasAchievement("achievements", 921)) player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(1)
 
         player.bh.skillCostDiv = new Decimal(1)
         player.bh.skillCostDiv = player.bh.skillCostDiv.mul(player.darkTemple.skillCost)
@@ -1176,6 +1179,7 @@ addLayer("bh", {
         damageAdd = damageAdd.add(player.bh.skillData["geroa_cosmicRay"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["geroa_orbitalCannon"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["geroa_defenseSatellites"].maxLevel.div(5))
+        if (hasAchievement("achievements", 922)) damageAdd = damageAdd.add(1)
 
         // =-- REGEN STUFF --= //
         let regenBase = new Decimal(1)
@@ -1234,6 +1238,7 @@ addLayer("bh", {
 
         let mendingAdd = new Decimal(0)
         mendingAdd = mendingAdd.add(player.darkTemple.mndAdd)
+        if (hasAchievement("achievements", 923)) mendingAdd = mendingAdd.add(1)
         if (player.alephsChamber.milestone[25] > 0) mendingAdd = mendingAdd.add(10)
 
         // =-- POTENCY STUFF --= //
@@ -1638,14 +1643,14 @@ addLayer("bh", {
                 if (BHA[player.bh.characters[0].skills[0].id].instant) {
                     for (let z = 0; z < player.bh.characters[0].actionChances.length; z++) {
                         if (Decimal.mul(player.bh.characters[0].actionChances[z][1], Decimal.div(Decimal.add(100, player.bh.characters[0].luck), 100)).gte(Math.random())) {
-                            player.bh.characters[0].skills[player.bh.characters[0].actionChances[z][0]].duration = BHA[player.bh.characters[0].skills[player.bh.characters[0].actionChances[z][0]].id].duration
+                            player.bh.characters[0].skills[player.bh.characters[0].actionChances[z][0]].duration = run(BHA[player.bh.characters[0].skills[player.bh.characters[0].actionChances[z][0]].id].duration, BHA[player.bh.characters[0].skills[player.bh.characters[0].actionChances[z][0]].id])
                         }
                     }
                     bhAction(0, 0)
                 }
                 if (BHA[player.bh.characters[0].skills[0].id].active) {
                     player.bh.characters[0].skills[0].cooldown = new Decimal(0)
-                    player.bh.characters[0].skills[0].duration = BHA[player.bh.characters[0].skills[0].id].duration
+                    player.bh.characters[0].skills[0].duration = run(BHA[player.bh.characters[0].skills[0].id].duration, BHA[player.bh.characters[0].skills[0].id])
                 }
             },
             style() {
@@ -1678,14 +1683,14 @@ addLayer("bh", {
                 if (BHA[player.bh.characters[0].skills[1].id].instant) {
                     for (let z = 0; z < player.bh.characters[0].actionChances.length; z++) {
                         if (Decimal.mul(player.bh.characters[0].actionChances[z][1], Decimal.div(Decimal.add(100, player.bh.characters[0].luck), 100)).gte(Math.random())) {
-                            player.bh.characters[0].skills[player.bh.characters[0].actionChances[z][0]].duration = BHA[player.bh.characters[0].skills[player.bh.characters[0].actionChances[z][0]].id].duration
+                            player.bh.characters[0].skills[player.bh.characters[0].actionChances[z][0]].duration = run(BHA[player.bh.characters[0].skills[player.bh.characters[0].actionChances[z][0]].id].duration, BHA[player.bh.characters[0].skills[player.bh.characters[0].actionChances[z][0]].id])
                         }
                     }
                     bhAction(0, 1)
                 }
                 if (BHA[player.bh.characters[0].skills[1].id].active) {
                     player.bh.characters[0].skills[1].cooldown = new Decimal(0)
-                    player.bh.characters[0].skills[1].duration = BHA[player.bh.characters[0].skills[1].id].duration
+                    player.bh.characters[0].skills[1].duration = run(BHA[player.bh.characters[0].skills[1].id].duration, BHA[player.bh.characters[0].skills[1].id])
                 }
             },
             style() {
@@ -1718,14 +1723,14 @@ addLayer("bh", {
                 if (BHA[player.bh.characters[0].skills[2].id].instant) {
                     for (let z = 0; z < player.bh.characters[0].actionChances.length; z++) {
                         if (Decimal.mul(player.bh.characters[0].actionChances[z][1], Decimal.div(Decimal.add(100, player.bh.characters[0].luck), 100)).gte(Math.random())) {
-                            player.bh.characters[0].skills[player.bh.characters[0].actionChances[z][0]].duration = BHA[player.bh.characters[0].skills[player.bh.characters[0].actionChances[z][0]].id].duration
+                            player.bh.characters[0].skills[player.bh.characters[0].actionChances[z][0]].duration = run(BHA[player.bh.characters[0].skills[player.bh.characters[0].actionChances[z][0]].id].duration, BHA[player.bh.characters[0].skills[player.bh.characters[0].actionChances[z][0]].id])
                         }
                     }
                     bhAction(0, 2)
                 }
                 if (BHA[player.bh.characters[0].skills[2].id].active) {
                     player.bh.characters[0].skills[2].cooldown = new Decimal(0)
-                    player.bh.characters[0].skills[2].duration = BHA[player.bh.characters[0].skills[2].id].duration
+                    player.bh.characters[0].skills[2].duration = run(BHA[player.bh.characters[0].skills[2].id].duration, BHA[player.bh.characters[0].skills[2].id])
                 }
             },
             style() {
@@ -1758,14 +1763,14 @@ addLayer("bh", {
                 if (BHA[player.bh.characters[0].skills[3].id].instant) {
                     for (let z = 0; z < player.bh.characters[0].actionChances.length; z++) {
                         if (Decimal.mul(player.bh.characters[0].actionChances[z][1], Decimal.div(Decimal.add(100, player.bh.characters[0].luck), 100)).gte(Math.random())) {
-                            player.bh.characters[0].skills[player.bh.characters[0].actionChances[z][0]].duration = BHA[player.bh.characters[0].skills[player.bh.characters[0].actionChances[z][0]].id].duration
+                            player.bh.characters[0].skills[player.bh.characters[0].actionChances[z][0]].duration = run(BHA[player.bh.characters[0].skills[player.bh.characters[0].actionChances[z][0]].id].duration, BHA[player.bh.characters[0].skills[player.bh.characters[0].actionChances[z][0]].id])
                         }
                     }
                     bhAction(0, 3)
                 }
                 if (BHA[player.bh.characters[0].skills[3].id].active) {
                     player.bh.characters[0].skills[3].cooldown = new Decimal(0)
-                    player.bh.characters[0].skills[3].duration = BHA[player.bh.characters[0].skills[3].id].duration
+                    player.bh.characters[0].skills[3].duration = run(BHA[player.bh.characters[0].skills[3].id].duration, BHA[player.bh.characters[0].skills[3].id])
                 }
             },
             style() {
@@ -1811,14 +1816,14 @@ addLayer("bh", {
                 if (BHA[player.bh.characters[1].skills[0].id].instant) {
                     for (let z = 0; z < player.bh.characters[1].actionChances.length; z++) {
                         if (Decimal.mul(player.bh.characters[1].actionChances[z][1], Decimal.div(Decimal.add(100, player.bh.characters[1].luck), 100)).gte(Math.random())) {
-                            player.bh.characters[1].skills[player.bh.characters[1].actionChances[z][0]].duration = BHA[player.bh.characters[1].skills[player.bh.characters[1].actionChances[z][0]].id].duration
+                            player.bh.characters[1].skills[player.bh.characters[1].actionChances[z][0]].duration = run(BHA[player.bh.characters[1].skills[player.bh.characters[1].actionChances[z][0]].id].duration, BHA[player.bh.characters[1].skills[player.bh.characters[1].actionChances[z][0]].id])
                         }
                     }
                     bhAction(1, 0)
                 }
                 if (BHA[player.bh.characters[1].skills[0].id].active) {
                     player.bh.characters[1].skills[0].cooldown = new Decimal(0)
-                    player.bh.characters[1].skills[0].duration = BHA[player.bh.characters[1].skills[0].id].duration
+                    player.bh.characters[1].skills[0].duration = run(BHA[player.bh.characters[1].skills[0].id].duration, BHA[player.bh.characters[1].skills[0].id])
                 }
             },
             style() {
@@ -1851,14 +1856,14 @@ addLayer("bh", {
                 if (BHA[player.bh.characters[1].skills[1].id].instant) {
                     for (let z = 0; z < player.bh.characters[1].actionChances.length; z++) {
                         if (Decimal.mul(player.bh.characters[1].actionChances[z][1], Decimal.div(Decimal.add(100, player.bh.characters[1].luck), 100)).gte(Math.random())) {
-                            player.bh.characters[1].skills[player.bh.characters[1].actionChances[z][0]].duration = BHA[player.bh.characters[1].skills[player.bh.characters[1].actionChances[z][0]].id].duration
+                            player.bh.characters[1].skills[player.bh.characters[1].actionChances[z][0]].duration = run(BHA[player.bh.characters[1].skills[player.bh.characters[1].actionChances[z][0]].id].duration, BHA[player.bh.characters[1].skills[player.bh.characters[1].actionChances[z][0]].id])
                         }
                     }
                     bhAction(1, 1)
                 }
                 if (BHA[player.bh.characters[1].skills[1].id].active) {
                     player.bh.characters[1].skills[1].cooldown = new Decimal(0)
-                    player.bh.characters[1].skills[1].duration = BHA[player.bh.characters[1].skills[1].id].duration
+                    player.bh.characters[1].skills[1].duration = run(BHA[player.bh.characters[1].skills[1].id].duration, BHA[player.bh.characters[1].skills[1].id])
                 }
             },
             style() {
@@ -1891,14 +1896,14 @@ addLayer("bh", {
                 if (BHA[player.bh.characters[1].skills[2].id].instant) {
                     for (let z = 0; z < player.bh.characters[1].actionChances.length; z++) {
                         if (Decimal.mul(player.bh.characters[1].actionChances[z][1], Decimal.div(Decimal.add(100, player.bh.characters[1].luck), 100)).gte(Math.random())) {
-                            player.bh.characters[1].skills[player.bh.characters[1].actionChances[z][0]].duration = BHA[player.bh.characters[1].skills[player.bh.characters[1].actionChances[z][0]].id].duration
+                            player.bh.characters[1].skills[player.bh.characters[1].actionChances[z][0]].duration = run(BHA[player.bh.characters[1].skills[player.bh.characters[1].actionChances[z][0]].id].duration, BHA[player.bh.characters[1].skills[player.bh.characters[1].actionChances[z][0]].id])
                         }
                     }
                     bhAction(1, 2)
                 }
                 if (BHA[player.bh.characters[1].skills[2].id].active) {
                     player.bh.characters[1].skills[2].cooldown = new Decimal(0)
-                    player.bh.characters[1].skills[2].duration = BHA[player.bh.characters[1].skills[2].id].duration
+                    player.bh.characters[1].skills[2].duration = run(BHA[player.bh.characters[1].skills[2].id].duration, BHA[player.bh.characters[1].skills[2].id])
                 }
             },
             style() {
@@ -1931,14 +1936,14 @@ addLayer("bh", {
                 if (BHA[player.bh.characters[1].skills[3].id].instant) {
                     for (let z = 0; z < player.bh.characters[1].actionChances.length; z++) {
                         if (Decimal.mul(player.bh.characters[1].actionChances[z][1], Decimal.div(Decimal.add(100, player.bh.characters[1].luck), 100)).gte(Math.random())) {
-                            player.bh.characters[1].skills[player.bh.characters[1].actionChances[z][0]].duration = BHA[player.bh.characters[1].skills[player.bh.characters[1].actionChances[z][0]].id].duration
+                            player.bh.characters[1].skills[player.bh.characters[1].actionChances[z][0]].duration = run(BHA[player.bh.characters[1].skills[player.bh.characters[1].actionChances[z][0]].id].duration, BHA[player.bh.characters[1].skills[player.bh.characters[1].actionChances[z][0]].id])
                         }
                     }
                     bhAction(1, 3)
                 }
                 if (BHA[player.bh.characters[1].skills[3].id].active) {
                     player.bh.characters[1].skills[3].cooldown = new Decimal(0)
-                    player.bh.characters[1].skills[3].duration = BHA[player.bh.characters[1].skills[3].id].duration
+                    player.bh.characters[1].skills[3].duration = run(BHA[player.bh.characters[1].skills[3].id].duration, BHA[player.bh.characters[1].skills[3].id])
                 }
             },
             style() {
@@ -1984,14 +1989,14 @@ addLayer("bh", {
                 if (BHA[player.bh.characters[2].skills[0].id].instant) {
                     for (let z = 0; z < player.bh.characters[2].actionChances.length; z++) {
                         if (Decimal.mul(player.bh.characters[2].actionChances[z][1], Decimal.div(Decimal.add(100, player.bh.characters[2].luck), 100)).gte(Math.random())) {
-                            player.bh.characters[2].skills[player.bh.characters[2].actionChances[z][0]].duration = BHA[player.bh.characters[2].skills[player.bh.characters[2].actionChances[z][0]].id].duration
+                            player.bh.characters[2].skills[player.bh.characters[2].actionChances[z][0]].duration = run(BHA[player.bh.characters[2].skills[player.bh.characters[2].actionChances[z][0]].id].duration, BHA[player.bh.characters[2].skills[player.bh.characters[2].actionChances[z][0]].id])
                         }
                     }
                     bhAction(2, 0)
                 }
                 if (BHA[player.bh.characters[2].skills[0].id].active) {
                     player.bh.characters[2].skills[0].cooldown = new Decimal(0)
-                    player.bh.characters[2].skills[0].duration = BHA[player.bh.characters[2].skills[0].id].duration
+                    player.bh.characters[2].skills[0].duration = run(BHA[player.bh.characters[2].skills[0].id].duration, BHA[player.bh.characters[2].skills[0].id])
                 }
             },
             style() {
@@ -2024,14 +2029,14 @@ addLayer("bh", {
                 if (BHA[player.bh.characters[2].skills[1].id].instant) {
                     for (let z = 0; z < player.bh.characters[2].actionChances.length; z++) {
                         if (Decimal.mul(player.bh.characters[2].actionChances[z][1], Decimal.div(Decimal.add(100, player.bh.characters[2].luck), 100)).gte(Math.random())) {
-                            player.bh.characters[2].skills[player.bh.characters[2].actionChances[z][0]].duration = BHA[player.bh.characters[2].skills[player.bh.characters[2].actionChances[z][0]].id].duration
+                            player.bh.characters[2].skills[player.bh.characters[2].actionChances[z][0]].duration = run(BHA[player.bh.characters[2].skills[player.bh.characters[2].actionChances[z][0]].id].duration, BHA[player.bh.characters[2].skills[player.bh.characters[2].actionChances[z][0]].id])
                         }
                     }
                     bhAction(2, 1)
                 }
                 if (BHA[player.bh.characters[2].skills[1].id].active) {
                     player.bh.characters[2].skills[1].cooldown = new Decimal(0)
-                    player.bh.characters[2].skills[1].duration = BHA[player.bh.characters[2].skills[1].id].duration
+                    player.bh.characters[2].skills[1].duration = run(BHA[player.bh.characters[2].skills[1].id].duration, BHA[player.bh.characters[2].skills[1].id])
                 }
             },
             style() {
@@ -2064,14 +2069,14 @@ addLayer("bh", {
                 if (BHA[player.bh.characters[2].skills[2].id].instant) {
                     for (let z = 0; z < player.bh.characters[2].actionChances.length; z++) {
                         if (Decimal.mul(player.bh.characters[2].actionChances[z][1], Decimal.div(Decimal.add(100, player.bh.characters[2].luck), 100)).gte(Math.random())) {
-                            player.bh.characters[2].skills[player.bh.characters[2].actionChances[z][0]].duration = BHA[player.bh.characters[2].skills[player.bh.characters[2].actionChances[z][0]].id].duration
+                            player.bh.characters[2].skills[player.bh.characters[2].actionChances[z][0]].duration = run(BHA[player.bh.characters[2].skills[player.bh.characters[2].actionChances[z][0]].id].duration, BHA[player.bh.characters[2].skills[player.bh.characters[2].actionChances[z][0]].id])
                         }
                     }
                     bhAction(2, 2)
                 }
                 if (BHA[player.bh.characters[2].skills[2].id].active) {
                     player.bh.characters[2].skills[2].cooldown = new Decimal(0)
-                    player.bh.characters[2].skills[2].duration = BHA[player.bh.characters[2].skills[2].id].duration
+                    player.bh.characters[2].skills[2].duration = run(BHA[player.bh.characters[2].skills[2].id].duration, BHA[player.bh.characters[2].skills[2].id])
                 }
             },
             style() {
@@ -2104,14 +2109,14 @@ addLayer("bh", {
                 if (BHA[player.bh.characters[2].skills[3].id].instant) {
                     for (let z = 0; z < player.bh.characters[2].actionChances.length; z++) {
                         if (Decimal.mul(player.bh.characters[2].actionChances[z][1], Decimal.div(Decimal.add(100, player.bh.characters[2].luck), 100)).gte(Math.random())) {
-                            player.bh.characters[2].skills[player.bh.characters[2].actionChances[z][0]].duration = BHA[player.bh.characters[2].skills[player.bh.characters[2].actionChances[z][0]].id].duration
+                            player.bh.characters[2].skills[player.bh.characters[2].actionChances[z][0]].duration = run(BHA[player.bh.characters[2].skills[player.bh.characters[2].actionChances[z][0]].id].duration, BHA[player.bh.characters[2].skills[player.bh.characters[2].actionChances[z][0]].id])
                         }
                     }
                     bhAction(2, 3)
                 }
                 if (BHA[player.bh.characters[2].skills[3].id].active) {
                     player.bh.characters[2].skills[3].cooldown = new Decimal(0)
-                    player.bh.characters[2].skills[3].duration = BHA[player.bh.characters[2].skills[3].id].duration
+                    player.bh.characters[2].skills[3].duration = run(BHA[player.bh.characters[2].skills[3].id].duration, BHA[player.bh.characters[2].skills[3].id])
                 }
             },
             style() {
@@ -2985,7 +2990,7 @@ addLayer("bh", {
             height: 13,
             progress() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[0] || !BHC[player.bh.celestialite.id].actions[0].duration) return new Decimal(0)
-                return player.bh.celestialite.actions[0].duration.div(BHC[player.bh.celestialite.id].actions[0].duration);
+                return player.bh.celestialite.actions[0].duration.div(run(BHC[player.bh.celestialite.id].actions[0].duration, BHC[player.bh.celestialite.id].actions[0]));
             },
             borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
@@ -2996,7 +3001,7 @@ addLayer("bh", {
             textStyle: {userSelect: "none", lineHeight: "1", fontSize: "10px"},
             display() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[0] || !BHC[player.bh.celestialite.id].actions[0].duration) return new Decimal(0)
-                let str = "<h5>" + formatTime(player.bh.celestialite.actions[0].duration) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[0].duration)
+                let str = "<h5>" + formatTime(player.bh.celestialite.actions[0].duration) + "/" + formatTime(run(BHC[player.bh.celestialite.id].actions[0].duration, BHC[player.bh.celestialite.id].actions[0]))
                 if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
                 return str
             },
@@ -3034,7 +3039,7 @@ addLayer("bh", {
             height: 13,
             progress() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[1] || !BHC[player.bh.celestialite.id].actions[1].duration) return new Decimal(0)
-                return player.bh.celestialite.actions[1].duration.div(BHC[player.bh.celestialite.id].actions[1].duration);
+                return player.bh.celestialite.actions[1].duration.div(run(BHC[player.bh.celestialite.id].actions[1].duration, BHC[player.bh.celestialite.id].actions[1]));
             },
             borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
@@ -3045,7 +3050,7 @@ addLayer("bh", {
             textStyle: {userSelect: "none", lineHeight: "1", fontSize: "10px"},
             display() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[1] || !BHC[player.bh.celestialite.id].actions[1].duration) return new Decimal(0)
-                let str = "<h5>" + formatTime(player.bh.celestialite.actions[1].duration) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[1].duration)
+                let str = "<h5>" + formatTime(player.bh.celestialite.actions[1].duration) + "/" + formatTime(run(BHC[player.bh.celestialite.id].actions[1].duration, BHC[player.bh.celestialite.id].actions[1]))
                 if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
                 return str
             },
@@ -3082,7 +3087,7 @@ addLayer("bh", {
             width: 125,
             height: 13,
             progress() {
-                if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[2] || !BHC[player.bh.celestialite.id].actions[2].duration) return new Decimal(0)
+                if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[2] || !run(BHC[player.bh.celestialite.id].actions[2].duration, BHC[player.bh.celestialite.id].actions[2])) return new Decimal(0)
                 return player.bh.celestialite.actions[2].duration.div(BHC[player.bh.celestialite.id].actions[2].duration);
             },
             borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
@@ -3094,7 +3099,7 @@ addLayer("bh", {
             textStyle: {userSelect: "none", lineHeight: "1", fontSize: "10px"},
             display() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[2] || !BHC[player.bh.celestialite.id].actions[2].duration) return new Decimal(0)
-                let str = "<h5>" + formatTime(player.bh.celestialite.actions[2].duration) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[2].duration)
+                let str = "<h5>" + formatTime(player.bh.celestialite.actions[2].duration) + "/" + formatTime(run(BHC[player.bh.celestialite.id].actions[2].duration, BHC[player.bh.celestialite.id].actions[2]))
                 if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
                 return str
             },
@@ -3132,7 +3137,7 @@ addLayer("bh", {
             height: 13,
             progress() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[3] || !BHC[player.bh.celestialite.id].actions[3].duration) return new Decimal(0)
-                return player.bh.celestialite.actions[3].duration.div(BHC[player.bh.celestialite.id].actions[3].duration);
+                return player.bh.celestialite.actions[3].duration.div(run(BHC[player.bh.celestialite.id].actions[3].duration, BHC[player.bh.celestialite.id].actions[3]));
             },
             borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
@@ -3143,7 +3148,7 @@ addLayer("bh", {
             textStyle: {userSelect: "none", lineHeight: "1", fontSize: "10px"},
             display() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[3] || !BHC[player.bh.celestialite.id].actions[3].duration) return new Decimal(0)
-                let str = "<h5>" + formatTime(player.bh.celestialite.actions[3].duration) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[3].duration)
+                let str = "<h5>" + formatTime(player.bh.celestialite.actions[3].duration) + "/" + formatTime(run(BHC[player.bh.celestialite.id].actions[3].duration, BHC[player.bh.celestialite.id].actions[3]))
                 if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
                 return str
             },
@@ -3204,7 +3209,7 @@ addLayer("bh", {
             height: 48,
             progress() {
                 if (!BHA[player.bh.characters[0].skills[0].id].duration) return new Decimal(0)
-                return player.bh.characters[0].skills[0].duration.div(BHA[player.bh.characters[0].skills[0].id].duration);
+                return player.bh.characters[0].skills[0].duration.div(run(BHA[player.bh.characters[0].skills[0].id].duration, BHA[player.bh.characters[0].skills[0].id]));
             },
             borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
@@ -3215,7 +3220,7 @@ addLayer("bh", {
             textStyle: {userSelect: "none"},
             display() {
                 if (!BHA[player.bh.characters[0].skills[0].id].duration) return new Decimal(0)
-                let str = "<h5>" + formatTime(player.bh.characters[0].skills[0].duration) + "/" + formatTime(BHA[player.bh.characters[0].skills[0].id].duration)
+                let str = "<h5>" + formatTime(player.bh.characters[0].skills[0].duration) + "/" + formatTime(run(BHA[player.bh.characters[0].skills[0].id].duration, BHA[player.bh.characters[0].skills[0].id]))
                 if (player.bh.characters[0].stun[0] == "hard" && player.bh.characters[0].stun[1].gt(0)) str = str + "<br>[STUNNED]"
                 return str
             },
@@ -3248,7 +3253,7 @@ addLayer("bh", {
             height: 48,
             progress() {
                 if (!BHA[player.bh.characters[0].skills[1].id].duration) return new Decimal(0)
-                return player.bh.characters[0].skills[1].duration.div(BHA[player.bh.characters[0].skills[1].id].duration);
+                return player.bh.characters[0].skills[1].duration.div(run(BHA[player.bh.characters[0].skills[1].id].duration, BHA[player.bh.characters[0].skills[1].id]));
             },
             borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
@@ -3259,7 +3264,7 @@ addLayer("bh", {
             textStyle: {userSelect: "none"},
             display() {
                 if (!BHA[player.bh.characters[0].skills[1].id].duration) return new Decimal(0)
-                let str = "<h5>" + formatTime(player.bh.characters[0].skills[1].duration) + "/" + formatTime(BHA[player.bh.characters[0].skills[1].id].duration)
+                let str = "<h5>" + formatTime(player.bh.characters[0].skills[1].duration) + "/" + formatTime(run(BHA[player.bh.characters[0].skills[1].id].duration, BHA[player.bh.characters[0].skills[1].id]))
                 if (player.bh.characters[0].stun[0] == "hard" && player.bh.characters[0].stun[1].gt(0)) str = str + "<br>[STUNNED]"
                 return str
             },
@@ -3292,7 +3297,7 @@ addLayer("bh", {
             height: 48,
             progress() {
                 if (!BHA[player.bh.characters[0].skills[2].id].duration) return new Decimal(0)
-                return player.bh.characters[0].skills[2].duration.div(BHA[player.bh.characters[0].skills[2].id].duration);
+                return player.bh.characters[0].skills[2].duration.div(run(BHA[player.bh.characters[0].skills[2].id].duration, BHA[player.bh.characters[0].skills[2].id]));
             },
             borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
@@ -3303,7 +3308,7 @@ addLayer("bh", {
             textStyle: {userSelect: "none"},
             display() {
                 if (!BHA[player.bh.characters[0].skills[2].id].duration) return new Decimal(0)
-                let str = "<h5>" + formatTime(player.bh.characters[0].skills[2].duration) + "/" + formatTime(BHA[player.bh.characters[0].skills[2].id].duration)
+                let str = "<h5>" + formatTime(player.bh.characters[0].skills[2].duration) + "/" + formatTime(run(BHA[player.bh.characters[0].skills[2].id].duration, BHA[player.bh.characters[0].skills[2].id]))
                 if (player.bh.characters[0].stun[0] == "hard" && player.bh.characters[0].stun[1].gt(0)) str = str + "<br>[STUNNED]"
                 return str
             },
@@ -3336,7 +3341,7 @@ addLayer("bh", {
             height: 48,
             progress() {
                 if (!BHA[player.bh.characters[0].skills[3].id].duration) return new Decimal(0)
-                return player.bh.characters[0].skills[3].duration.div(BHA[player.bh.characters[0].skills[3].id].duration);
+                return player.bh.characters[0].skills[3].duration.div(run(BHA[player.bh.characters[0].skills[3].id].duration, BHA[player.bh.characters[0].skills[3].id]));
             },
             borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
@@ -3347,7 +3352,7 @@ addLayer("bh", {
             textStyle: {userSelect: "none"},
             display() {
                 if (!BHA[player.bh.characters[0].skills[3].id].duration) return new Decimal(0)
-                let str = "<h5>" + formatTime(player.bh.characters[0].skills[3].duration) + "/" + formatTime(BHA[player.bh.characters[0].skills[3].id].duration)
+                let str = "<h5>" + formatTime(player.bh.characters[0].skills[3].duration) + "/" + formatTime(run(BHA[player.bh.characters[0].skills[3].id].duration, BHA[player.bh.characters[0].skills[3].id]))
                 if (player.bh.characters[0].stun[0] == "hard" && player.bh.characters[0].stun[1].gt(0)) str = str + "<br>[STUNNED]"
                 return str
             },
@@ -3408,7 +3413,7 @@ addLayer("bh", {
             height: 48,
             progress() {
                 if (!BHA[player.bh.characters[1].skills[0].id].duration) return new Decimal(0)
-                return player.bh.characters[1].skills[0].duration.div(BHA[player.bh.characters[1].skills[0].id].duration);
+                return player.bh.characters[1].skills[0].duration.div(run(BHA[player.bh.characters[1].skills[0].id].duration, BHA[player.bh.characters[1].skills[0].id]));
             },
             borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
@@ -3419,7 +3424,7 @@ addLayer("bh", {
             textStyle: {userSelect: "none"},
             display() {
                 if (!BHA[player.bh.characters[1].skills[0].id].duration) return new Decimal(0)
-                let str = "<h5>" + formatTime(player.bh.characters[1].skills[0].duration) + "/" + formatTime(BHA[player.bh.characters[1].skills[0].id].duration)
+                let str = "<h5>" + formatTime(player.bh.characters[1].skills[0].duration) + "/" + formatTime(run(BHA[player.bh.characters[1].skills[0].id].duration, BHA[player.bh.characters[1].skills[0].id]))
                 if (player.bh.characters[1].stun[0] == "hard" && player.bh.characters[1].stun[1].gt(0)) str = str + "<br>[STUNNED]"
                 return str
             },
@@ -3452,7 +3457,7 @@ addLayer("bh", {
             height: 48,
             progress() {
                 if (!BHA[player.bh.characters[1].skills[1].id].duration) return new Decimal(0)
-                return player.bh.characters[1].skills[1].duration.div(BHA[player.bh.characters[1].skills[1].id].duration);
+                return player.bh.characters[1].skills[1].duration.div(run(BHA[player.bh.characters[1].skills[1].id].duration, BHA[player.bh.characters[1].skills[1].id]));
             },
             borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
@@ -3463,7 +3468,7 @@ addLayer("bh", {
             textStyle: {userSelect: "none"},
             display() {
                 if (!BHA[player.bh.characters[1].skills[1].id].duration) return new Decimal(0)
-                let str = "<h5>" + formatTime(player.bh.characters[1].skills[1].duration) + "/" + formatTime(BHA[player.bh.characters[1].skills[1].id].duration)
+                let str = "<h5>" + formatTime(player.bh.characters[1].skills[1].duration) + "/" + formatTime(run(BHA[player.bh.characters[1].skills[1].id].duration, BHA[player.bh.characters[1].skills[1].id]))
                 if (player.bh.characters[1].stun[0] == "hard" && player.bh.characters[1].stun[1].gt(0)) str = str + "<br>[STUNNED]"
                 return str
             },
@@ -3496,7 +3501,7 @@ addLayer("bh", {
             height: 48,
             progress() {
                 if (!BHA[player.bh.characters[1].skills[2].id].duration) return new Decimal(0)
-                return player.bh.characters[1].skills[2].duration.div(BHA[player.bh.characters[1].skills[2].id].duration);
+                return player.bh.characters[1].skills[2].duration.div(run(BHA[player.bh.characters[1].skills[2].id].duration, BHA[player.bh.characters[1].skills[2].id]));
             },
             borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
@@ -3507,7 +3512,7 @@ addLayer("bh", {
             textStyle: {userSelect: "none"},
             display() {
                 if (!BHA[player.bh.characters[1].skills[2].id].duration) return new Decimal(0)
-                let str = "<h5>" + formatTime(player.bh.characters[1].skills[2].duration) + "/" + formatTime(BHA[player.bh.characters[1].skills[2].id].duration)
+                let str = "<h5>" + formatTime(player.bh.characters[1].skills[2].duration) + "/" + formatTime(run(BHA[player.bh.characters[1].skills[2].id].duration, BHA[player.bh.characters[1].skills[2].id]))
                 if (player.bh.characters[1].stun[0] == "hard" && player.bh.characters[1].stun[1].gt(0)) str = str + "<br>[STUNNED]"
                 return str
             },
@@ -3540,7 +3545,7 @@ addLayer("bh", {
             height: 48,
             progress() {
                 if (!BHA[player.bh.characters[1].skills[3].id].duration) return new Decimal(0)
-                return player.bh.characters[1].skills[3].duration.div(BHA[player.bh.characters[1].skills[3].id].duration);
+                return player.bh.characters[1].skills[3].duration.div(run(BHA[player.bh.characters[1].skills[3].id].duration, BHA[player.bh.characters[1].skills[3].id]));
             },
             borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
@@ -3551,7 +3556,7 @@ addLayer("bh", {
             textStyle: {userSelect: "none"},
             display() {
                 if (!BHA[player.bh.characters[1].skills[3].id].duration) return new Decimal(0)
-                let str = "<h5>" + formatTime(player.bh.characters[1].skills[3].duration) + "/" + formatTime(BHA[player.bh.characters[1].skills[3].id].duration)
+                let str = "<h5>" + formatTime(player.bh.characters[1].skills[3].duration) + "/" + formatTime(run(BHA[player.bh.characters[1].skills[3].id].duration, BHA[player.bh.characters[1].skills[3].id]))
                 if (player.bh.characters[1].stun[0] == "hard" && player.bh.characters[1].stun[1].gt(0)) str = str + "<br>[STUNNED]"
                 return str
             },
@@ -3612,7 +3617,7 @@ addLayer("bh", {
             height: 48,
             progress() {
                 if (!BHA[player.bh.characters[2].skills[0].id].duration) return new Decimal(0)
-                return player.bh.characters[2].skills[0].duration.div(BHA[player.bh.characters[2].skills[0].id].duration);
+                return player.bh.characters[2].skills[0].duration.div(run(BHA[player.bh.characters[2].skills[0].id].duration, BHA[player.bh.characters[2].skills[0].id]));
             },
             borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
@@ -3623,7 +3628,7 @@ addLayer("bh", {
             textStyle: {userSelect: "none"},
             display() {
                 if (!BHA[player.bh.characters[2].skills[0].id].duration) return new Decimal(0)
-                let str = "<h5>" + formatTime(player.bh.characters[2].skills[0].duration) + "/" + formatTime(BHA[player.bh.characters[2].skills[0].id].duration)
+                let str = "<h5>" + formatTime(player.bh.characters[2].skills[0].duration) + "/" + formatTime(run(BHA[player.bh.characters[2].skills[0].id].duration, BHA[player.bh.characters[2].skills[0].id]))
                 if (player.bh.characters[2].stun[0] == "hard" && player.bh.characters[2].stun[1].gt(0)) str = str + "<br>[STUNNED]"
                 return str
             },
@@ -3656,7 +3661,7 @@ addLayer("bh", {
             height: 48,
             progress() {
                 if (!BHA[player.bh.characters[2].skills[1].id].duration) return new Decimal(0)
-                return player.bh.characters[2].skills[1].duration.div(BHA[player.bh.characters[2].skills[1].id].duration);
+                return player.bh.characters[2].skills[1].duration.div(run(BHA[player.bh.characters[2].skills[1].id].duration, BHA[player.bh.characters[2].skills[1].id]));
             },
             borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
@@ -3667,7 +3672,7 @@ addLayer("bh", {
             textStyle: {userSelect: "none"},
             display() {
                 if (!BHA[player.bh.characters[2].skills[1].id].duration) return new Decimal(0)
-                let str = "<h5>" + formatTime(player.bh.characters[2].skills[1].duration) + "/" + formatTime(BHA[player.bh.characters[2].skills[1].id].duration)
+                let str = "<h5>" + formatTime(player.bh.characters[2].skills[1].duration) + "/" + formatTime(run(BHA[player.bh.characters[2].skills[1].id].duration, BHA[player.bh.characters[2].skills[1].id]))
                 if (player.bh.characters[2].stun[0] == "hard" && player.bh.characters[2].stun[1].gt(0)) str = str + "<br>[STUNNED]"
                 return str
             },
@@ -3700,7 +3705,7 @@ addLayer("bh", {
             height: 48,
             progress() {
                 if (!BHA[player.bh.characters[2].skills[2].id].duration) return new Decimal(0)
-                return player.bh.characters[2].skills[2].duration.div(BHA[player.bh.characters[2].skills[2].id].duration);
+                return player.bh.characters[2].skills[2].duration.div(run(BHA[player.bh.characters[2].skills[2].id].duration, BHA[player.bh.characters[2].skills[2].id]));
             },
             borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
@@ -3711,7 +3716,7 @@ addLayer("bh", {
             textStyle: {userSelect: "none"},
             display() {
                 if (!BHA[player.bh.characters[2].skills[2].id].duration) return new Decimal(0)
-                let str = "<h5>" + formatTime(player.bh.characters[2].skills[2].duration) + "/" + formatTime(BHA[player.bh.characters[2].skills[2].id].duration)
+                let str = "<h5>" + formatTime(player.bh.characters[2].skills[2].duration) + "/" + formatTime(run(BHA[player.bh.characters[2].skills[2].id].duration, BHA[player.bh.characters[2].skills[2].id]))
                 if (player.bh.characters[2].stun[0] == "hard" && player.bh.characters[2].stun[1].gt(0)) str = str + "<br>[STUNNED]"
                 return str
             },
@@ -3744,7 +3749,7 @@ addLayer("bh", {
             height: 48,
             progress() {
                 if (!BHA[player.bh.characters[2].skills[3].id].duration) return new Decimal(0)
-                return player.bh.characters[2].skills[3].duration.div(BHA[player.bh.characters[2].skills[3].id].duration);
+                return player.bh.characters[2].skills[3].duration.div(run(BHA[player.bh.characters[2].skills[3].id].duration, BHA[player.bh.characters[2].skills[3].id]));
             },
             borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
@@ -3755,7 +3760,7 @@ addLayer("bh", {
             textStyle: {userSelect: "none"},
             display() {
                 if (!BHA[player.bh.characters[2].skills[3].id].duration) return new Decimal(0)
-                let str = "<h5>" + formatTime(player.bh.characters[2].skills[3].duration) + "/" + formatTime(BHA[player.bh.characters[2].skills[3].id].duration)
+                let str = "<h5>" + formatTime(player.bh.characters[2].skills[3].duration) + "/" + formatTime(run(BHA[player.bh.characters[2].skills[3].id].duration, BHA[player.bh.characters[2].skills[3].id]))
                 if (player.bh.characters[2].stun[0] == "hard" && player.bh.characters[2].stun[1].gt(0)) str = str + "<br>[STUNNED]"
                 return str
             },

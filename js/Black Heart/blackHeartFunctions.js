@@ -725,6 +725,7 @@ function celestialiteDeath() {
                     doPopup("milestone", BHS[player.bh.currentStage].nameCap + ": " + player.bh.combo + " Combo<br>" + charStr + " Characters", "Milestone Gotten!", 3, "#888")
                 }
             }
+            if (!hasAchievement("achievements", 924) && player.bh.currentStage == "alephsChamber") completeAchievement("achievements", 924)
         }
         if (player.bh.combo.gte(BHS[player.bh.currentStage].comboLimit)) {
             for (let i = 0; i < 3; i++) {
@@ -807,12 +808,12 @@ function calcTarget(index, slot, target, action = "none") {
         case "storedTarget":
             stored = true
             if (index == 3) {
-                if (player.bh.celestialite.actions[slot].variables["specTarget"]) {
+                if (player.bh.celestialite.actions[slot].variables["specTarget"] && player.bh.celestialite.actions[slot].variables["specTarget"] != null) {
                     result = player.bh.celestialite.actions[slot].variables["specTarget"]
                     break;
                 }
             } else {
-                if (player.bh.characters[index].skills[slot].variables["specTarget"]) {
+                if (player.bh.characters[index].skills[slot].variables["specTarget"] && player.bh.characters[index].skills[slot].variables["specTarget"] != null) {
                     result = player.bh.characters[index].skills[slot].variables["specTarget"]
                     break;
                 }
@@ -1025,7 +1026,7 @@ function stagnantUpdate(time) {
                                         if (!BHC[player.bh.celestialite.id].actions[i].conditional || BHC[player.bh.celestialite.id].actions[i].conditional(3, i)) {
                                             for (let k = 0; k < player.bh.celestialite.actionChances.length; k++) {
                                                 if (Decimal.mul(player.bh.celestialite.actionChances[k][1], Decimal.div(Decimal.add(100, player.bh.celestialite.luck), 100)).gte(Math.random())) {
-                                                    player.bh.celestialite.actions[player.bh.celestialite.actionChances[k][0]].duration = BHC[player.bh.celestialite.id].actions[player.bh.celestialite.actionChances[k][0]].duration
+                                                    player.bh.celestialite.actions[player.bh.celestialite.actionChances[k][0]].duration = run(BHC[player.bh.celestialite.id].actions[player.bh.celestialite.actionChances[k][0]].duration, BHC[player.bh.celestialite.id].actions[player.bh.celestialite.actionChances[k][0]].duration)
                                                 }
                                             }
                                             let mag = player.bh.celestialite.actions[i].cooldown.div(BHC[player.bh.celestialite.id].actions[i].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility)))).floor().toNumber()
@@ -1045,8 +1046,8 @@ function stagnantUpdate(time) {
 
                             // Calculate Variables (and remove inactive active)
                             if (passive || (active && player.bh.celestialite.actions[i].duration.gt(0))) {
-                                if (BHC[player.bh.celestialite.id].actions[i].onTrigger) {
-                                    BHC[player.bh.celestialite.id].actions[i].onTrigger(3, i, BHC[player.bh.celestialite.id].actions[i].constantTarget)
+                                if (BHC[player.bh.celestialite.id].actions[i].onPassive) {
+                                    BHC[player.bh.celestialite.id].actions[i].onPassive(3, i, BHC[player.bh.celestialite.id].actions[i].constantTarget)
                                 } else if (BHC[player.bh.celestialite.id].actions[i].interval) {
                                     player.bh.celestialite.actions[i].interval = player.bh.celestialite.actions[i].interval.add(delta)
                                     if (player.bh.celestialite.actions[i].interval.gte(BHC[player.bh.celestialite.id].actions[i].interval)) {
@@ -1104,7 +1105,7 @@ function stagnantUpdate(time) {
                                     if (instant) {
                                         for (let z = 0; z < player.bh.characters[i].actionChances.length; z++) {
                                             if (Decimal.mul(player.bh.characters[i].actionChances[z][1], Decimal.div(Decimal.add(100, player.bh.characters[i].luck), 100)).gte(Math.random())) {
-                                                player.bh.characters[i].skills[player.bh.characters[i].actionChances[z][0]].duration = BHA[player.bh.characters[i].skills[player.bh.characters[i].actionChances[z][0]].id].duration
+                                                player.bh.characters[i].skills[player.bh.characters[i].actionChances[z][0]].duration = run(BHA[player.bh.characters[i].skills[player.bh.characters[i].actionChances[z][0]].id].duration, BHA[player.bh.characters[i].skills[player.bh.characters[i].actionChances[z][0]].id])
                                             }
                                         }
                                         bhAction(i, j)
@@ -1119,7 +1120,9 @@ function stagnantUpdate(time) {
 
                         // Calculate Variables (and remove inactive active)
                         if (passive || (active && player.bh.characters[i].skills[j].duration.gt(0))) {
-                            if (BHA[player.bh.characters[i].skills[j].id].interval) {
+                            if (BHA[player.bh.characters[i].skills[j].id].onPassive) {
+                                if (unpaused) BHA[player.bh.characters[i].skills[j].id].onPassive(i, j, BHA[player.bh.characters[i].skills[j].id].constantTarget)
+                            } else if (BHA[player.bh.characters[i].skills[j].id].interval) {
                                 player.bh.characters[i].skills[j].interval = player.bh.characters[i].skills[j].interval.add(delta)
                                 if (player.bh.characters[i].skills[j].interval.gte(BHA[player.bh.characters[i].skills[j].id].interval)) {
                                     player.bh.characters[i].skills[j].interval = new Decimal(0)

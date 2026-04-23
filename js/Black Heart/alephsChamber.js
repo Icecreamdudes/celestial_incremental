@@ -50,6 +50,7 @@ addLayer("alephsChamber", {
             canClick: true,
             unlocked: true,
             onClick() {
+                if (!hasAchievement("achievements", 923)) completeAchievement("achievements", 923)
                 BHStageEnter("alephsChamber")
             },
             style: {width: "200px", minHeight: "75px", color: "white", background: "linear-gradient(45deg, #3f003f 0%, #a900a9 100%)", border: "3px solid #000", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"},
@@ -74,7 +75,7 @@ addLayer("alephsChamber", {
                     ["raw-html", "<u>Effects</u>", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Weakened Star Softcap." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Improved SP's effect on singularity gain." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
-                    ["raw-html", () => { return "Tav's Domain Expander cap now increments by x1e5"}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "Tav's Domain Expander cap now increments by x1e5."}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "x36 Hex Power." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "x100 Infinitum." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "x10 Emotions." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
@@ -737,7 +738,7 @@ BHC.aleph = {
             passive: true,
             constantType: "function",
             constantTarget: "randomPlayer",
-            onTrigger(index, slot, target) {
+            onPassive(index, slot, target) {
                 if (!player.bh.celestialite.actions[3].variables.attacks) player.bh.celestialite.actions[3].variables.attacks = 0
                 // MESSAGES ARE PLACEHOLDERS
                 if (player.bh.celestialite.health.lt(7500) && player.bh.celestialite.attackID == 0) {

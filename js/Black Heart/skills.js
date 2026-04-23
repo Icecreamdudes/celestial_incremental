@@ -267,6 +267,7 @@ BHA.kres_berserker = {
     description(char) {
         let effect = new Decimal(50).add(player.bh.skillData["kres_berserker"].level.mul(10))
         if (player.alephsChamber.milestone[25] >= 2) effect = effect.mul(Decimal.div(char.potency.add(100), 100))
+        if (hasUpgrade("sp", 12)) return "Increases Kres' damage, agility, and regen by +" + formatSimple(effect) + "%, but gain the Berserk<small>[10%]</small> attribute"
         return "Increases Kres' damage, agility, and regen by +" + formatSimple(effect) + "%, but gain the Berserk<small>[20%]</small> attribute"
     },
     passiveText() {return "+" + formatSimple(player.bh.skillData["kres_berserker"].maxLevel.div(40), 2) + " RGN"},
@@ -284,7 +285,10 @@ BHA.kres_berserker = {
         "damageMult"() {return new Decimal(1.5).add(player.bh.skillData["kres_berserker"].level.mul(0.1))}, // Multiplicative Effect
         "agilityMult"() {return new Decimal(1.5).add(player.bh.skillData["kres_berserker"].level.mul(0.1))}, // Multiplicative Effect
         "regenMult"() {return new Decimal(1.5).add(player.bh.skillData["kres_berserker"].level.mul(0.1))}, // Multiplicative Effect
-        "attributes": {"berserk": new Decimal(0.2)},
+        "attributes"() {
+            if (hasUpgrade("sp", 12)) return {"berserk": new Decimal(0.1)}
+            return {"berserk": new Decimal(0.2)}
+        },
     },
     cooldown: new Decimal(Infinity),
 }
@@ -292,7 +296,10 @@ BHA.kres_berserker = {
 // Nav Skills
 BHA.nav_magicMissle = {
     name: "Magic Missile",
-    description() {return "Deals " + formatWhole(new Decimal(100).add(player.bh.skillData["nav_magicMissle"].level.mul(20))) + "% magic damage"},
+    description() {
+        if (hasUpgrade("sp", 22)) return "Shoots 2 missiles, dealing " + formatWhole(new Decimal(60).add(player.bh.skillData["nav_magicMissle"].level.mul(12))) + "% magic damage each"
+        return "Deals " + formatWhole(new Decimal(100).add(player.bh.skillData["nav_magicMissle"].level.mul(20))) + "% magic damage"
+    },
     passiveText() {return "+" + formatSimple(player.bh.skillData["nav_magicMissle"].maxLevel.div(5)) + " DMG"},
     char: "nav",
     spCost: new Decimal(4),
@@ -305,7 +312,16 @@ BHA.nav_magicMissle = {
     type: "damage",
     target: "celestialite",
     method: "magic",
-    value() {return new Decimal(1).add(player.bh.skillData["nav_magicMissle"].level.mul(0.2))},
+    properties: {
+        "multi-hit"() {
+            if (hasUpgrade("sp", 22)) return [2, 100]
+            return [1, 200]
+        }, // Amount / Delay
+    },
+    value() {
+        if (hasUpgrade("sp", 22)) return new Decimal(0.60).add(player.bh.skillData["nav_magicMissle"].level.mul(0.12))
+        return new Decimal(1).add(player.bh.skillData["nav_magicMissle"].level.mul(0.2))
+    },
     cooldown: new Decimal(6),
     cooldownCap: new Decimal(1.5),
 }
@@ -424,7 +440,10 @@ BHA.sel_singleShot = {
 }
 BHA.sel_turret = {
     name: "Turret",
-    description() {return "A turret will attack every 0.5s for 12s, dealing " + formatWhole(new Decimal(20).add(player.bh.skillData["sel_turret"].level.mul(4))) + "% ranged damage"},
+    description() {
+        if (hasUpgrade("sp", 32)) return "A turret will attack every 0.5s for 6s, dealing " + formatWhole(new Decimal(50).add(player.bh.skillData["sel_turret"].level.mul(10))) + "% ranged damage"
+        return "A turret will attack every 0.5s for 12s, dealing " + formatWhole(new Decimal(20).add(player.bh.skillData["sel_turret"].level.mul(4))) + "% ranged damage"
+    },
     passiveText() {return "+" + formatSimple(player.bh.skillData["sel_turret"].maxLevel.div(2)) + " AGI"},
     char: "sel",
     spCost: new Decimal(6),
@@ -437,9 +456,15 @@ BHA.sel_turret = {
     constantType: "damage",
     target: "celestialite",
     method: "ranged",
-    value() {return new Decimal(0.2).add(player.bh.skillData["sel_turret"].level.mul(0.04))},
+    value() {
+        if (hasUpgrade("sp", 32)) return new Decimal(0.5).add(player.bh.skillData["sel_turret"].level.mul(0.1))
+        return new Decimal(0.2).add(player.bh.skillData["sel_turret"].level.mul(0.04))
+    },
     interval: new Decimal(0.5),
-    duration: new Decimal(12),
+    duration() {
+        if (hasUpgrade("sp", 32)) return new Decimal(6)
+        return new Decimal(12)
+    },
     cooldown: new Decimal(30),
     cooldownCap: new Decimal(6),
 }
@@ -631,6 +656,7 @@ BHA.eclipse_syzygy = {
     description(char) {
         let effect = new Decimal(25).add(player.bh.skillData["eclipse_syzygy"].level.mul(5))
         if (player.alephsChamber.milestone[25] >= 2) effect = effect.mul(Decimal.div(char.potency.add(100), 100))
+        if (hasUpgrade("sma", 227)) return "Speed up time by +" + formatSimple(effect) + "%, and increase eclipse's agility by +" + formatSimple(effect) + "%"
         return "Speed up time by +" + formatSimple(effect) + "%"
     },
     passiveText() {return "+" + formatSimple(player.bh.skillData["eclipse_syzygy"].maxLevel.div(2)) + " AGI"},
@@ -645,6 +671,10 @@ BHA.eclipse_syzygy = {
     constantType: "effect",
     constantTarget: "self",
     effects: {
+        "agilityMult"() {
+            if (hasUpgrade(hasUpgrade("sma", 227))) return new Decimal(1.25).add(player.bh.skillData["eclipse_syzygy"].level.mul(0.05))
+            return new Decimal(1)
+        },
         "timeMult"() {return new Decimal(1.25).add(player.bh.skillData["eclipse_syzygy"].level.mul(0.05))}, // Multiplicative Effect
     },
     cooldown: new Decimal(Infinity),
@@ -678,7 +708,8 @@ BHA.geroa_selfRepair = {
     description(char) {
         let heal = new Decimal(25).add(player.bh.skillData["geroa_selfRepair"].level.mul(5))
         if (player.matosLair.milestone[25] >= 2) heal = heal.mul(char.mending.div(10).add(1))
-        return "If under 25% health, heal yourself for " + formatWhole(heal) + " health"
+        if (hasUpgrade("ir", 207)) return "If under 50% health, heal yourself for " + formatSimple(heal.mul(1.2)) + " health"
+        return "If under 25% health, heal yourself for " + formatSimple(heal) + " health"
     },
     passiveText() {return "+" + formatSimple(player.bh.skillData["geroa_selfRepair"].maxLevel) + " HP"},
     char: "geroa",
@@ -691,9 +722,13 @@ BHA.geroa_selfRepair = {
     instant: true,
     type: "heal",
     target: "self",
-    value() {return new Decimal(25).add(player.bh.skillData["geroa_selfRepair"].level.mul(5))},
+    value() {
+        if (hasUpgrade("ir", 207)) return new Decimal(30).add(player.bh.skillData["geroa_selfRepair"].level.mul(6))
+        return new Decimal(25).add(player.bh.skillData["geroa_selfRepair"].level.mul(5))
+    },
     conditional(index, slot) {
         if (index == 3) {console.log("what");return false}
+        if (hasUpgrade("ir", 207)) return player.bh.characters[index].health.lte(player.bh.characters[index].maxHealth.div(2))
         return player.bh.characters[index].health.lte(player.bh.characters[index].maxHealth.div(4))
     },
     cooldown: new Decimal(30),

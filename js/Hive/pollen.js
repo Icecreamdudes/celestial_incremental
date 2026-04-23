@@ -4,6 +4,10 @@ addLayer("bpl", {
     universe: "UB",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    onClick() {
+        showTab("bpl")
+        if (!hasAchievement("achievements", 904)) completeAchievement("achievements", 904)
+    },
     startData() { return {
         unlocked: true,
         pollen: new Decimal(0), // Currency Pollen
@@ -69,9 +73,11 @@ addLayer("bpl", {
         player.bpl.pollenGain = player.bpl.pollenGain.mul(player.bpl.roles.worker.effect)
         if (hasUpgrade("bpl", 11)) player.bpl.pollenGain = player.bpl.pollenGain.mul(2)
         if (hasUpgrade("bpl", 15)) player.bpl.pollenGain = player.bpl.pollenGain.mul(upgradeEffect("bpl", 15))
+        if (hasAchievement("achievements", 906)) player.bpl.pollenGain = player.bpl.pollenGain.mul(1.5)
         if (player.bb.breadMilestone >= 2) player.bpl.pollenGain = player.bpl.pollenGain.mul(player.bb.breadEffects[1])
         player.bpl.pollenGain = player.bpl.pollenGain.mul(buyableEffect("al", 101))
         if (hasUpgrade("al", 108)) player.bpl.pollenGain = player.bpl.pollenGain.mul(upgradeEffect("al", 108))
+        if (hasAchievement("achievements", 914)) player.bpl.pollenGain = player.bpl.pollenGain.mul(1.5)
         if (hasUpgrade("bpl", 20)) player.bpl.pollenGain = player.bpl.pollenGain.mul(upgradeEffect("bpl", 20))
         player.bpl.pollenGain = player.bpl.pollenGain.mul(player.ne.epsilon.effect)
         player.bpl.pollenGain = player.bpl.pollenGain.mul(player.ho.effects.pollen.effect)
@@ -82,7 +88,9 @@ addLayer("bpl", {
         player.bpl.pollenGain = player.bpl.pollenGain.pow(buyableEffect("n", 52))
 
         // SOFTCAP
-        if (player.bpl.pollenGain.gte(1e200)) player.bpl.pollenGain = player.bpl.pollenGain.div(1e200).pow(0.3).mul(1e200)
+        let softcap = 0.3
+        if (hasUpgrade("al", 129)) softcap += 0.1
+        if (player.bpl.pollenGain.gte(1e200)) player.bpl.pollenGain = player.bpl.pollenGain.div(1e200).pow(softcap).mul(1e200)
 
         // Pollen Timer Calculations
         player.bpl.pollenTimerMax = new Decimal(5)
@@ -192,6 +200,7 @@ addLayer("bpl", {
             unlocked: true,
             onClick() {
                 player.bpl.roles.empress.amount = player.bpl.roles.empress.amount.add(player.bpl.roles.empress.gain)
+                if (!hasAchievement("achievements", 920) && player.bpl.roles.empress.amount.gte(1)) completeAchievement("achievements", 920)
                 player.bpl.pollen = new Decimal(0)
             },
             style: { width: '175px', minHeight: '60px', border: "3px solid rgba(0,0,0,0.3)", borderRadius: '0px' },
@@ -354,6 +363,7 @@ addLayer("bpl", {
                 if (player.bee.path != 1) return new Decimal(1e240)
                 return new Decimal(1e60)
             },
+            onPurchase() {if (!hasAchievement("achievements", 914)) completeAchievement("achievements", 914)},
             currencyLocation() { return player.bpl },
             currencyDisplayName: "Pollen",
             currencyInternalName: "pollen",

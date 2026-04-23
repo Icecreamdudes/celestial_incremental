@@ -498,7 +498,7 @@ addLayer("fl", {
         player.fl.goldenSeedsTotal = new Decimal(0)
         player.fl.goldenSeedsTotal = player.fl.goldenSeedsTotal.add(player.al.highestHoneycomb.add(1).log(3).floor())
         player.fl.goldenSeedsTotal = player.fl.goldenSeedsTotal.add(player.al.highestRoyalJelly.add(1).log(3).floor())
-        if (player.al.cocoonLevel >= 7) player.fl.goldenSeedsTotal = player.fl.goldenSeedsTotal.add(3)
+        if (player.al.cocoonLevel >= 7) player.fl.goldenSeedsTotal = player.fl.goldenSeedsTotal.add(5)
 
         player.fl.goldenSeeds = player.fl.goldenSeedsTotal
         for (let i = 101; i < 626; ) {

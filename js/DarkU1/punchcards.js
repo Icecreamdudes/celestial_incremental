@@ -1007,7 +1007,7 @@ addLayer("pu", {
                     "x" + format(this.effect()[0]) + " to time capsules <small>(Based on time capsules)</small><br>",
                     !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
-                    "x" + format(this.effect()[1]) + " to light",
+                    "x" + format(this.effect()[1]) + " to ancient pylon energy",
                     getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
@@ -1022,7 +1022,7 @@ addLayer("pu", {
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = player.dt.timeCapsules.pow(0.1).div(2).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
-                eff[1] = getLevelableAmount(this.layer, this.id).pow(0.5).pow_base(1.5)
+                eff[1] = getLevelableAmount(this.layer, this.id).pow(0.75).pow_base(1.5)
                 return eff
             },
             // CLICK CODE
@@ -1762,7 +1762,7 @@ addLayer("pu", {
                     "Add one to time capsules stored on universe exit<br>",
                     !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
-                    "x" + format(this.effect()[1]) + " to light well cycle speed",
+                    "+" + format(this.effect()[1]) + " to paradox pylon energy base",
                     getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
@@ -1777,8 +1777,7 @@ addLayer("pu", {
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = player.dt.timeEnergy.pow(0.15).div(2).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
-                if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.08).add(1)
-                if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.04).add(1.4)
+                eff[1] = getLevelableAmount(this.layer, this.id).pow(0.75).pow_base(1.2).div(100)
                 return eff
             },
             // CLICK CODE
@@ -1816,7 +1815,7 @@ addLayer("pu", {
                     "Add one to time capsules stored on universe exit<br>",
                     !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
-                    "x" + format(this.effect()[1]) + " to light well cycles",
+                    "x" + format(this.effect()[1]) + " to temporal pylon energy",
                     getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
@@ -1831,8 +1830,7 @@ addLayer("pu", {
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = player.db.boosters.div(30).pow(2).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
-                if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.1).add(1)
-                if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.05).add(1.5)
+                eff[1] = getLevelableAmount(this.layer, this.id).div(5).add(1)
                 return eff
             },
             // CLICK CODE
@@ -2299,7 +2297,7 @@ addLayer("pu", {
                     "x" + format(this.effect()[0]) + " to D1 tickspeed<br><small>(Based on universe resets)</small><br>",
                     !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
-                    "x" + format(this.effect()[1]) + " to project speed",
+                    "x" + format(this.effect()[1]) + " to natural pylon energy",
                     getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
@@ -2314,8 +2312,7 @@ addLayer("pu", {
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = player.le.resetAmount.pow(1.5).pow_base(1.15).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
-                if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.1).add(1)
-                if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.05).add(1.5)
+                eff[1] = getLevelableAmount(this.layer, this.id).pow(2).div(10).add(1)
                 return eff
             },
             // CLICK CODE

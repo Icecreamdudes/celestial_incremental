@@ -256,8 +256,6 @@ addLayer("ir", {
         player.ir.timers[9].max = new Decimal(1500)
         for (let i in player.ir.timers) {
             if (hasUpgrade("ir", 18)) player.ir.timers[i].max = player.ir.timers[i].max.div(upgradeEffect("ir", 18))
-
-            if (hasUpgrade("ir", 18)) player.ir.timers[i].max = player.ir.timers[i].max.div(upgradeEffect("ir", 18))
             player.ir.timers[i].max = player.ir.timers[i].max.div(levelableEffect("pu", 401)[1])
             player.ir.timers[i].current = player.ir.timers[i].current.sub(delta)
         }
@@ -982,7 +980,7 @@ addLayer("ir", {
             unlocked() { return buyableEffect("sb", 12).gte(3) },
             description: "Cut ship cooldown times based on space gems.",
             effect() {
-                return player.ir.spaceGem.pow(0.75).mul(0.02).add(1)
+                return player.ir.spaceGem.pow(0.75).mul(0.03).add(1)
             },
             effectDisplay() { return "/" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             cost: new Decimal(8000),

@@ -4080,6 +4080,28 @@
 
             ],
         },
+        "U2-Wells-Of-Infinity": {
+            type: "normal",
+            portrait: "resources/secret.png",
+            music: "music/novasentFlashback.mp3",
+            background: "#5c4b4b",
+            trigger() {return true },
+            dialogue: [
+                { text: "You find yourself in another flashback following your defeat of Zar."  },
+                { text: "[placeholder]"  },
+                { text: "Someone handed me this book before we departed. He told me to give it to you.", portrait: "resources/humanZar.png"  },
+                { text: "Ah. This is something my mentor gave me to record my progress in English.", portrait: "resources/humanTera.png"  },
+                { text: "Taro flips through a few pages, then pauses for a few seconds."  },
+                { text: "This isn't his writing... what is this?", portrait: "resources/humanTera.png"  },
+                { text: "What writing? It's blank, isn't it?", portrait: "resources/humanZar.png"  },
+                { text: "No, there's a lot here, and I can't read any of it.", portrait: "resources/humanTera.png"  },
+                { text: "???", portrait: "resources/humanZar.png"  },
+                { text: "My mentor has a very special type of foresight that enables him to very precisely shape particular SPVs.", portrait: "resources/humanTera.png"  },
+                { text: "So precise that he can write with them. Both of us can read his writing.", portrait: "resources/humanTera.png"  },
+                { text: "But I don't know how either of them would get a hold of his book...", portrait: "resources/humanTera.png"  },
+                { text: "[extend this]"  },
+            ],
+        },
         "UD-Start": {
             type: "normal",
             portrait: "resources/secret.png",

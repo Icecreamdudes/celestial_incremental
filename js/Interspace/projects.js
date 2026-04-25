@@ -489,7 +489,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock the prismatic reset and x2 light gain.</small>" },
+            effectDescription() { return "<small>Unlock the prismatic reset.</small>" },
             cycleReq() { return new Decimal(1) },
             projectId() { return 2 },
             unlocked() { return true },

@@ -248,8 +248,10 @@
             },
         },
         101: {
-            title() { return "<h2>Form your light into prisms.</h2><br>Req: 1e15 Light" },
-            canClick() { return player.wel.light.gte(1e15)},
+            //title() { return "<h2>Form your light into prisms.</h2><br>Req: 1e15 Light" },
+            //canClick() { return player.wel.light.gte(1e15)},
+            title() { return "<h2>Good job, ur done for now!</h2><br>Req: 1e999 Light" },
+            canClick() { return player.wel.light.gte("1e999")},
             unlocked() { return true },
             onClick() {
                 layers.pri.prismReset(true)
@@ -855,7 +857,7 @@
                         ["style-column", [
                             ["style-column", [
                                 ["raw-html", 
-                                    "<small>Prismatics reset light and apply a temporary nerf to light well cycle effects. Light well cycles are kept... for now.</small>"
+                                    "<small>iuefefhuawigdgiagidogiwd</small>"
                                 , {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                             ], {background: "#335966", border: "3px solid #4d9999", borderRadius: "10px", width: "600px", height: "50px", padding: "3px"}],                   
                         ], {background: "#335966", borderRadius: "13px", padding: "3px", width: "612px"}],
@@ -868,7 +870,7 @@
             },
             "Pyramid": {
                 buttonStyle() { return { color: "white", borderRadius: "8px"} },
-                unlocked() { return player.pri.totalPrisms.gt(0) || true },
+                unlocked() { return hasMilestone("prj", 202) },
                 content() {
                     let look = [
                         ["blank", "25px"],

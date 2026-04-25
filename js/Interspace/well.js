@@ -169,6 +169,7 @@
         }
 
         player.wel.lightWellCycleEffectSoftcap = new Decimal(0.5)
+        if (hasUpgrade("wel", 23)) player.wel.lightWellCycleEffectSoftcap = player.wel.lightWellCycleEffectSoftcap.add(player.prj.totalProjectLevels.mul(0.02).min(0.5));
 
 
         player.wel.lightMult = new Decimal(1)
@@ -194,7 +195,6 @@
         }
         if (hasUpgrade("wel", 14)) player.wel.lightMult = player.wel.lightMult.mul(2);
         if (hasMilestone("prj", 103)) player.wel.lightMult = player.wel.lightMult.mul(2);
-        if (hasMilestone("prj", 201)) player.wel.lightMult = player.wel.lightMult.mul(2);
         player.wel.lightMult = player.wel.lightMult.mul(player.pri.fountains[2].completionEffect)
         
         // WELLS
@@ -491,7 +491,7 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Improve the 3rd and 4th light fountain effect formulae.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Weaken the light well cycle effect softcap every project cycle.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><br><h3>Req: Time capsule project level 5</h3>"
                 }
@@ -525,17 +525,17 @@
         },
         24: {
             unlocked() { return hasUpgrade("wel", 21) },
-            condition() { return player.wel.modules[1].maxTime.div(player.wel.modules[1].timeSpeed).lte(1) },
+            condition() { return player.wel.bestLight.gte(1e15) },
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
                     s += "Unlock the second project.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
-                    s += "???</h2><br><br><h3>Req: 1s light well α timer</h3>"
+                    s += "???</h2><br><br><h3>Req: 1e15 light</h3>"
                 }
                 return s
             },
-            cost: new Decimal(1e18),
+            cost: new Decimal(1e14),
             currencyLocation() { return player.wel },
             currencyDisplayName: "Light",
             currencyInternalName: "light",
@@ -877,7 +877,7 @@
             canClick() { return player.wel.modules[this.id].time.gte(player.wel.modules[this.id].maxTime)},
             unlocked() { return true },
             onClick() {
-                tickProjects(player.wel.modules[this.id].maxTime.div(player.wel.modules[this.id].timeSpeed).div(4))
+                tickProjects(player.wel.modules[this.id].maxTime.div(player.wel.modules[this.id].timeSpeed).div(2))
                 player.wel.light = player.wel.light.add(layers.wel.clickables[this.id].lightGain())
                 player.wel.modules[this.id].time = new Decimal(0)
                 player.wel.modules[this.id].completions = player.wel.modules[this.id].completions.add(player.wel.modules[this.id].completionsGain)
@@ -908,7 +908,7 @@
             canClick() { return player.wel.modules[this.id].time.gte(player.wel.modules[this.id].maxTime)},
             unlocked() { return true },
             onClick() {
-                tickProjects(player.wel.modules[this.id].maxTime.div(player.wel.modules[this.id].timeSpeed).div(4))
+                tickProjects(player.wel.modules[this.id].maxTime.div(player.wel.modules[this.id].timeSpeed).div(2))
                 player.wel.light = player.wel.light.add(layers.wel.clickables[this.id].lightGain())
                 player.wel.modules[this.id].time = new Decimal(0)
                 player.wel.modules[this.id].completions = player.wel.modules[this.id].completions.add(player.wel.modules[this.id].completionsGain)
@@ -939,7 +939,7 @@
             canClick() { return player.wel.modules[this.id].time.gte(player.wel.modules[this.id].maxTime)},
             unlocked() { return true },
             onClick() {
-                tickProjects(player.wel.modules[this.id].maxTime.div(player.wel.modules[this.id].timeSpeed).div(4))
+                tickProjects(player.wel.modules[this.id].maxTime.div(player.wel.modules[this.id].timeSpeed).div(2))
                 player.wel.light = player.wel.light.add(layers.wel.clickables[this.id].lightGain())
                 player.wel.modules[this.id].time = new Decimal(0)
                 player.wel.modules[this.id].completions = player.wel.modules[this.id].completions.add(player.wel.modules[this.id].completionsGain)
@@ -970,7 +970,7 @@
             canClick() { return player.wel.modules[this.id].time.gte(player.wel.modules[this.id].maxTime)},
             unlocked() { return true },
             onClick() {
-                tickProjects(player.wel.modules[this.id].maxTime.div(player.wel.modules[this.id].timeSpeed).div(4))
+                tickProjects(player.wel.modules[this.id].maxTime.div(player.wel.modules[this.id].timeSpeed).div(2))
                 player.wel.light = player.wel.light.add(layers.wel.clickables[this.id].lightGain())
                 player.wel.modules[this.id].time = new Decimal(0)
                 player.wel.modules[this.id].completions = player.wel.modules[this.id].completions.add(player.wel.modules[this.id].completionsGain)
@@ -1001,7 +1001,7 @@
             canClick() { return player.wel.modules[this.id].time.gte(player.wel.modules[this.id].maxTime)},
             unlocked() { return true },
             onClick() {
-                tickProjects(player.wel.modules[this.id].maxTime.div(player.wel.modules[this.id].timeSpeed).div(4))
+                tickProjects(player.wel.modules[this.id].maxTime.div(player.wel.modules[this.id].timeSpeed).div(2))
                 player.wel.light = player.wel.light.add(layers.wel.clickables[this.id].lightGain())
                 player.wel.modules[this.id].time = new Decimal(0)
                 player.wel.modules[this.id].completions = player.wel.modules[this.id].completions.add(player.wel.modules[this.id].completionsGain)
@@ -1031,7 +1031,7 @@
             canClick() { return player.wel.modules[this.id].time.gte(player.wel.modules[this.id].maxTime)},
             unlocked() { return true },
             onClick() {
-                tickProjects(player.wel.modules[this.id].maxTime.div(player.wel.modules[this.id].timeSpeed).div(4))
+                tickProjects(player.wel.modules[this.id].maxTime.div(player.wel.modules[this.id].timeSpeed).div(2))
                 player.wel.light = player.wel.light.add(layers.wel.clickables[this.id].lightGain())
                 player.wel.modules[this.id].time = new Decimal(0)
                 player.wel.modules[this.id].completions = player.wel.modules[this.id].completions.add(player.wel.modules[this.id].completionsGain)
@@ -1061,7 +1061,7 @@
             canClick() { return player.wel.modules[this.id].time.gte(player.wel.modules[this.id].maxTime)},
             unlocked() { return true },
             onClick() {
-                tickProjects(player.wel.modules[this.id].maxTime.div(player.wel.modules[this.id].timeSpeed).div(4))
+                tickProjects(player.wel.modules[this.id].maxTime.div(player.wel.modules[this.id].timeSpeed).div(2))
                 player.wel.light = player.wel.light.add(layers.wel.clickables[this.id].lightGain())
                 player.wel.modules[this.id].time = new Decimal(0)
                 player.wel.modules[this.id].completions = player.wel.modules[this.id].completions.add(player.wel.modules[this.id].completionsGain)
@@ -1091,7 +1091,7 @@
             canClick() { return player.wel.modules[this.id].time.gte(player.wel.modules[this.id].maxTime)},
             unlocked() { return true },
             onClick() {
-                tickProjects(player.wel.modules[this.id].maxTime.div(player.wel.modules[this.id].timeSpeed).div(4))
+                tickProjects(player.wel.modules[this.id].maxTime.div(player.wel.modules[this.id].timeSpeed).div(2))
                 player.wel.light = player.wel.light.add(layers.wel.clickables[this.id].lightGain())
                 player.wel.modules[this.id].time = new Decimal(0)
                 player.wel.modules[this.id].completions = player.wel.modules[this.id].completions.add(player.wel.modules[this.id].completionsGain)
@@ -1249,7 +1249,7 @@
             getCompletionEffect() {
                 let completions = player.wel.fountains[1].completions.pow(0.9)
 
-                let s = completions.add(1).mul(completions.pow_base(1.075))
+                let s = completions.add(1).mul(completions.pow_base(1.06))
 
                 return s.floor()
             },
@@ -1295,7 +1295,7 @@
             getCompletionEffect() {
                 let completions = player.wel.fountains[2].completions.pow(0.9)
 
-                let s = completions.add(1).mul(completions.pow_base(1.05))
+                let s = completions.add(1).mul(completions.pow_base(1.04))
 
                 return s.floor()
             },
@@ -1341,8 +1341,7 @@
             getCompletionEffect() {
                 let completions = player.wel.fountains[3].completions
 
-                let s = completions.pow(1.5).add(1)
-                if (hasUpgrade("wel", 23)) s = s.mul(completions.pow(0.9).pow_base(1.1))
+                let s = completions.pow(1.5).add(1).mul(completions.pow(0.9).pow_base(1.05))
 
                 return s.floor()
             },
@@ -1389,7 +1388,6 @@
                 let completions = player.wel.fountains[4].completions
 
                 let s = completions.mul(0.25).add(1)
-                if (hasUpgrade("wel", 23)) s = s.mul(completions.pow(0.9).pow_base(1.02))
 
                 return s
             },
@@ -1496,7 +1494,7 @@
                             ]],
                         ]],
                         ["blank", "10px"],
-                        ["raw-html", "All light well cycle effect scaling is ^" + format(player.wel.lightWellCycleEffectSoftcap, 3) + " after 1,000!", {color: "#ff7f00", fontSize: "16px", fontFamily: "monospace", display: (player.wel.modules[1].completions.gte(1e3) ? "" : "none !important")}],
+                        ["raw-html", "All light well cycle effect scaling is ^" + format(player.wel.lightWellCycleEffectSoftcap, 2) + " after 1,000!", {color: "#ff7f00", fontSize: "16px", fontFamily: "monospace", display: (player.wel.modules[1].completions.gte(1e3) ? "" : "none !important")}],
                         ["blank", "25px"],
                         ["row", []],
                         ["blank", "25px"]

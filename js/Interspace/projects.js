@@ -92,6 +92,9 @@
         if (hasUpgrade("wel", 21)) player.prj.maxFocused = player.prj.maxFocused.add(1);
 
         player.prj.totalProjectLevels = player.prj.modules[1].completions
+        .add(player.prj.modules[2].completions)
+        .add(player.prj.modules[3].completions)
+        .add(player.prj.modules[4].completions)
 
         player.prj.projectSpeed = new Decimal(1)
         player.prj.projectSpeed = player.prj.projectSpeed.mul(player.prj.storedTimeCapsuleEffect)

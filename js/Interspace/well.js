@@ -193,7 +193,7 @@
             else player.wel.modules[4].completionsEffect = player.wel.modules[4].completions.div(1e9).add(1);
             player.wel.lightMult = player.wel.lightMult.mul(player.wel.modules[4].completionsEffect)
         }
-        if (hasUpgrade("wel", 14)) player.wel.lightMult = player.wel.lightMult.mul(2);
+        if (hasUpgrade("wel", 14)) player.wel.lightMult = player.wel.lightMult.mul(player.wel.bestLight.add(1).log(1e4).floor().pow_base(2));
         if (hasMilestone("prj", 103)) player.wel.lightMult = player.wel.lightMult.mul(2);
         player.wel.lightMult = player.wel.lightMult.mul(player.pri.fountains[2].completionEffect)
         
@@ -377,7 +377,7 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Double light gain.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Double light gain every 4 OoM of light.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><h3>Req: 3 Light Fountain II Cycles</h3>"
                 }

@@ -243,7 +243,7 @@
         },
         101: {
             title() { return "<h3>" + (player.bi.interspaceConditions[0] ? "<h3>CYCLED" : "<h3>DEPOSIT INFINITIES") },
-            canClick() { return player.in.infinities.gte(1e25) && !player.bi.interspaceConditions[0] },
+            canClick() { return player.in.infinities.gte(1e50) && !player.bi.interspaceConditions[0] },
             unlocked() { return true },
             onClick() {
                 player.bi.interspaceConditions[0] = true
@@ -321,7 +321,7 @@
         },
         104: {
             title() { return "<h3>" + (player.bi.interspaceConditions[3] ? "<h3>TORTURED" : "<h3>DEPOSIT CORE FRAGMENTS") },
-            canClick() { return player.cof.coreFragments[3].gte(1e6) && !player.bi.interspaceConditions[3] },
+            canClick() { return player.cof.coreFragments[6].gte(1e6) && !player.bi.interspaceConditions[3] },
             unlocked() { return true },
             onClick() {
                 player.bi.interspaceConditions[3] = true
@@ -803,7 +803,7 @@
                             ["style-column", [
                                 ["raw-html", "α", {color: "#502080", fontSize: "125px", fontFamily: "monospace"}],
                                 ["style-row", [
-                                    ["raw-html", () => {return format(player.in.infinities) + " / 1e25<br>Infinities"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                    ["raw-html", () => {return format(player.in.infinities) + " / 1e50<br>Infinities"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                 ], {background: "#502080", borderRadius: "10px 10px 0px 0px", width: "250px", height:"50px"}],
                                 ["blank", "3px", {width: "3px"}],
                                 ["clickable", 101],
@@ -832,7 +832,7 @@
                             ["style-column", [
                                 ["raw-html", "δ", {color: "#502080", fontSize: "125px", fontFamily: "monospace"}],
                                 ["style-row", [
-                                    ["raw-html", () => {return format(player.cof.coreFragments[3]) + " / 200,000<br>Paradox Core Fragments"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                    ["raw-html", () => {return format(player.cof.coreFragments[6]) + " / 1,000,000<br>Cosmic Core Fragments"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                 ], {background: "#502080", borderRadius: "10px 10px 0px 0px", width: "250px", height:"50px"}],
                                 ["blank", "3px", {width: "3px"}],
                                 ["clickable", 104],

@@ -4099,7 +4099,11 @@
                 { text: "My mentor has a very special type of foresight that enables him to very precisely shape particular SPVs.", portrait: "resources/humanTera.png"  },
                 { text: "So precise that he can write with them. Both of us can read his writing.", portrait: "resources/humanTera.png"  },
                 { text: "But I don't know how either of them would get a hold of his book...", portrait: "resources/humanTera.png"  },
-                { text: "[extend this]"  },
+                { text: "The flashback concludes."  },
+                { text: "Four pink beams of light appear and brighten the antimatter sky."  },
+                { text: "A developer is calling out to you, creation.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+                { text: "I'm unaware of what he wants, but the situation must be urgent for him to contact you so soon.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+                { text: "Then I need to hurry!", portrait: "resources/player.png"  },
             ],
         },
         "UD-Start": {

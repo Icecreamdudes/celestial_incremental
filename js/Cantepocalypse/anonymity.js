@@ -36,7 +36,7 @@
         let onepersec = new Decimal(1)
 
         player.an.anonymityToGet = player.cp.replicantiPoints.div(250000).pow(Decimal.mul(0.25, buyableEffect("fu", 83)))
-        if (hasUpgrade("an", 17)) player.an.anonymityToGet = player.an.anonymityToGet.mul(upgradeEffect("an", 17))
+        if (hasUpgrade("an", 18)) player.an.anonymityToGet = player.an.anonymityToGet.mul(upgradeEffect("an", 18))
         player.an.anonymityToGet = player.an.anonymityToGet.mul(player.rt.repliTreesEffect)
         player.an.anonymityToGet = player.an.anonymityToGet.mul(buyableEffect("rg", 17))
         player.an.anonymityToGet = player.an.anonymityToGet.mul(buyableEffect("gs", 16))
@@ -177,8 +177,18 @@
         17: {
             title: "Anonymity VII",
             unlocked() { return true },
-            description: "Boost anonymity based on perk points.",
+            description: "Gain 100% of rank points per second, and gain 25% of tier points per second, and gain 5% of tetr points per second.",
             cost: new Decimal(2345),
+            currencyLocation() { return player.an },
+            currencyDisplayName: "Anonymity",
+            currencyInternalName: "anonymity",
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
+        18: {
+            title: "Anonymity VIII",
+            unlocked() { return true },
+            description: "Boost anonymity based on perk points.",
+            cost: new Decimal(15000),
             currencyLocation() { return player.an },
             currencyDisplayName: "Anonymity",
             currencyInternalName: "anonymity",
@@ -187,16 +197,6 @@
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
-        },
-        18: {
-            title: "Anonymity VIII",
-            unlocked() { return true },
-            description: "Gain 100% of rank points per second, and gain 25% of tier points per second, and gain 5% of tetr points per second.",
-            cost: new Decimal(15000),
-            currencyLocation() { return player.an },
-            currencyDisplayName: "Anonymity",
-            currencyInternalName: "anonymity",
-            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         19: {
             title: "Anonymity IX",

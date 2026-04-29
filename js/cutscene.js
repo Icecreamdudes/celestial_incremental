@@ -2220,6 +2220,7 @@
             portrait: "resources/secret.png",
             music: "music/matosCutscene.mp3",
             trigger() {return player.bh.currentStage == "matosLair" && player.bh.combo == 24},
+            onStart() {player.bh.bhPause = true},
             dialogue: [
                 { text: "As the last of Matos' minions are slain, a light emanates from the deepest depths of the hole." },
                 { text: "Matos' form appears from the light. A metallic being made out of red-glowing rusted metal and steel." },
@@ -2240,6 +2241,7 @@
                 { text: "I have been waiting thousands of years for this very moment.", portrait: "resources/matos.png"  },
                 { text: "Our battle will begin.", portrait: "resources/matos.png"  },
             ],
+            onEnd() {player.bh.bhPause = false},
         },
         "BH-Matos-End": {
             type: "normal",
@@ -3259,6 +3261,7 @@
             portrait: "resources/secret.png",
             music: "music/alephCutscene.mp3",
             trigger() {return player.bh.currentStage == "alephsChamber" && Decimal.eq(player.bh.combo, 24)},
+            onStart() {player.bh.bhPause = true},
             dialogue: [
                 { text: "After a barrage of bee-like celestialites, you finally approach Aleph."},
                 { text: "After all this time, you get to see how she looks up close."},
@@ -3271,12 +3274,13 @@
                 { text: "Aleph comes in for a strike."},
                 { text: "It's about time..."},
             ],
+            onEnd() {player.bh.bhPause = false},
         },
         "Hive-Chamber-Fight-Mid1": {
             type: "normal",
             background: "#cccccc",
             portrait: "resources/secret.png",
-            trigger() {return player.bh.currentStage == "alephsChamber" && Decimal.eq(player.bh.combo, 24) && player.bh.celestialite.actions[3].variables.attacks && player.bh.celestialite.actions[3].variables.attacks == 1},
+            trigger() {return player.bh.currentStage == "alephsChamber" && Decimal.eq(player.bh.combo, 24) && player.bh.celestialite.health.lte(6000)},
             onStart() {player.bh.bhPause = true},
             dialogue: [
                 { text: "You are brought into a flashback."},
@@ -3315,7 +3319,7 @@
             type: "normal",
             background: "#cccccc",
             portrait: "resources/secret.png",
-            trigger() {return player.bh.currentStage == "alephsChamber" && Decimal.eq(player.bh.combo, 24) && player.bh.celestialite.actions[3].variables.attacks && player.bh.celestialite.actions[3].variables.attacks == 3},
+            trigger() {return player.bh.currentStage == "alephsChamber" && Decimal.eq(player.bh.combo, 24) && player.bh.celestialite.health.lte(3000)},
             onStart() {player.bh.bhPause = true},
             dialogue: [
                 { text: "I've had a glimpse of your past, Aleph.", portrait: "resources/player.png"},

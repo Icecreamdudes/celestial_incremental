@@ -77,7 +77,7 @@ addLayer("pu", {
         }
         if (player.pu.legendarySelectionActive) {
 
-            if (run(layers.pu.levelables[401].canSelect, layers.pu.levelables[401])) player.pu.selectedPunchcards[3] = 401 //MAKE THEM RANDOMIZED EVENTUALLY
+            if (run(layers.pu.levelables[401].canSelect, layers.pu.levelables[401]) && !getLevelableTier("pu", 401, true)) player.pu.selectedPunchcards[3] = 401 //MAKE THEM RANDOMIZED EVENTUALLY
 
         }
     },
@@ -278,7 +278,7 @@ addLayer("pu", {
             },
             style() {
                 let look = {width: "75px", height: "125px", border: "3px solid", padding: "0px", borderRadius: "0px", margin: "5px"}
-                if (player.pu.selectionIndex == 2 && player.pu.storedSelections.gte(1)) {look.borderColor = "white"} else {look.borderColor = "#444"}
+                if (player.pu.selectionIndex == 3 && player.pu.storedSelections.gte(1)) {look.borderColor = "white"} else {look.borderColor = "#444"}
                 return look
             },
         },
@@ -636,7 +636,7 @@ addLayer("pu", {
                     "Unlock a new generator buyable<br>",
                     !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
-                    "x" + format(this.effect()[1]) + " to pre-hex power resources",
+                    "x" + format(this.effect()[1]) + " to pre-power hex resources",
                     getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
@@ -1550,7 +1550,7 @@ addLayer("pu", {
                     "Unlock a new normality buyable<br>",
                     !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
-                    "x" + format(this.effect()[1]) + " to hex power",
+                    "^" + format(this.effect()[1]) + " to hex power",
                     getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
@@ -1565,8 +1565,8 @@ addLayer("pu", {
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = player.dn.normality.pow(0.11).mul(100).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
-                if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = getLevelableAmount(this.layer, this.id).add(1).pow(1.4)
-                if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = getLevelableAmount(this.layer, this.id).add(1).sub(9).pow(1.2).mul(28.70)
+                if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = getLevelableAmount(this.layer, this.id).div(100).add(1)
+                if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = getLevelableAmount(this.layer, this.id).div(500).add(1.08)
                 return eff
             },
             // CLICK CODE

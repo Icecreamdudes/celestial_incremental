@@ -73,6 +73,9 @@
         // POWER MODIFIERS
         if (!inChallenge("fu", 12)) player.oi.oilToGet = player.oi.oilToGet.pow(levelableEffect("pet", 405)[1])
 
+        // SOFTCAP
+        if (player.oi.oilToGet.gte("1e10000")) player.oi.oilToGet = player.oi.oilToGet.div("1e10000").pow(0.2).mul("1e10000")
+
         if (!inChallenge("fu", 11) && !inChallenge("fu", 12)) player.oi.oil = player.oi.oil.add(player.oi.oilToGet.mul(Decimal.mul(buyableEffect("fa", 204), delta)))
 
         player.oi.oilEffect = player.oi.oil.pow(0.65).div(1.5).add(1)
@@ -625,6 +628,7 @@
                             player.oi.oilToGet.gte(1) ? look.color = "white" : look.color = "gray"
                             return look
                         }],
+                        ['raw-html', () => {return player.oi.oilToGet.gte("1e10000") ? "<small style='margin-left:8px'>[SOFTCAPPED]</small>" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace"}]
                     ]],
                     ["raw-html", () => {return "Boosts repli-trees and extends repli-tree softcap by x" + format(player.oi.oilEffect)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],

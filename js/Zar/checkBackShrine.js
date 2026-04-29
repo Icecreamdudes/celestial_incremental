@@ -98,9 +98,9 @@ addLayer("cbs", {
             player.cbs.inBattle = false
             player.cbs.ritualSpiritActive = false
 
-            pauseUniverseAll(["DS", "A2"], "unpause", true)
+            if (player.uni.U1.paused == true) pauseUniverseAll(["DS", "A2"], "unpause", true) // The if statement is a poor method to prevent checkback resource dupe
 
-            flashScreen("Ritual Success.\nYou have earned a Shard of Ascension.", 3000)
+            screenFlash("Ritual Success.\nYou have earned a Shard of Ascension.", 3000)
         }
 
         player.cbs.ritualCosts[0] = Decimal.mul(player.cbs.ascensionShards.pow(1.25).mul(0.2).add(1), 50).floor()
@@ -3112,8 +3112,8 @@ class RitualArena extends SpaceArena {
 
                 // Glowing Eyes with phase-based intensity
                 let eyePulse = (0.8 + Math.sin(t * 2) * 0.2) * auraIntensity;
-                if (!options.performanceMode) ctx.shadowColor = '#fff';
-                if (!options.performanceMode) ctx.shadowBlur = 8 * eyePulse;
+                ctx.shadowColor = '#fff';
+                if (!options.performanceMode) {ctx.shadowBlur = 8 * eyePulse} else {ctx.shadowBlur = 0};
                 ctx.fillStyle = `rgba(255, 255, 255, ${eyePulse})`;
                 ctx.beginPath();
                 // Left eye
@@ -3121,7 +3121,7 @@ class RitualArena extends SpaceArena {
                 // Right eye
                 ctx.ellipse(enemy.radius * 0.1, -enemy.radius * 0.48, enemy.radius * 0.06, enemy.radius * 0.03, -0.2, 0, Math.PI * 2);
                 ctx.fill();
-                if (!options.performanceMode) ctx.shadowBlur = 0;
+                ctx.shadowBlur = 0;
 
                 // Arms - simplified
                 ctx.strokeStyle = '#88eaff';

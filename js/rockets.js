@@ -87,26 +87,28 @@
         player.ro.activatedFuelContributions[3] = player.fa.charge.add(1).log(10).div(200)
 
         player.ro.activatedFuelToGet = player.ro.activatedFuelContributions[0].mul(player.ro.activatedFuelContributions[1]).mul(player.ro.activatedFuelContributions[2]).mul(player.ro.activatedFuelContributions[3])
-        player.ro.activatedFuelToGet = player.ro.activatedFuelToGet.mul(levelableEffect("pet", 501)[2])
+        player.ro.activatedFuelToGet = player.ro.activatedFuelToGet.mul(levelableEffect("pet", 501)[1])
         player.ro.activatedFuelToGet = player.ro.activatedFuelToGet.mul(buyableEffect("cof", 19))
         player.ro.activatedFuelToGet = player.ro.activatedFuelToGet.mul(buyableEffect("sme", 151))
         player.ro.activatedFuelEffect = player.ro.activatedFuel.pow(4).add(1)
+        player.ro.activatedFuelEffect = player.ro.activatedFuelEffect.pow(levelableEffect("pet", 503)[2])
 
         if (getBuyableAmount("st", 204).gt(0)) player.ro.activatedFuel = player.ro.activatedFuel.add(player.ro.activatedFuelToGet.mul(buyableEffect("st", 204).mul(delta)))
 
         player.ro.rocketPartsContributions[0] = player.gh.steel.add(1).log(10).pow(0.2)
-        if (player.st.buyables[203].lt(1)) player.ro.rocketPartsContributions[1] = player.sma.starmetalAlloy.div(300).pow(0.5)
-        if (player.st.buyables[203].gte(1)) player.ro.rocketPartsContributions[1] = player.sma.starmetalAlloy.div(300).pow(0.5).add(1)
+        if (player.st.buyables[203].lt(1)) player.ro.rocketPartsContributions[1] = player.sma.starmetalAlloy.div(50).pow(0.3)
+        if (player.st.buyables[203].gte(1)) player.ro.rocketPartsContributions[1] = player.sma.starmetalAlloy.div(50).pow(0.3).add(1)
         player.ro.rocketPartsContributions[2] = player.p.crystals.add(1).log(10).div(100)
-        if (player.st.buyables[203].lt(1)) player.ro.rocketPartsContributions[3] = player.g.moonstone.pow(0.4).div(100)
-        if (player.st.buyables[203].gte(1)) player.ro.rocketPartsContributions[3] = player.g.moonstone.pow(0.4).div(100).add(1)
+        if (player.st.buyables[203].lt(1)) player.ro.rocketPartsContributions[3] = player.g.moonstone.add(1).log(2).div(10)
+        if (player.st.buyables[203].gte(1)) player.ro.rocketPartsContributions[3] = player.g.moonstone.add(1).log(2).div(10).add(1)
 
         player.ro.rocketPartsToGet = player.ro.rocketPartsContributions[0].mul(player.ro.rocketPartsContributions[1]).mul(player.ro.rocketPartsContributions[2]).mul(player.ro.rocketPartsContributions[3]).floor()
-        player.ro.rocketPartsToGet = player.ro.rocketPartsToGet.mul(levelableEffect("pet", 501)[1]).floor()
+        player.ro.rocketPartsToGet = player.ro.rocketPartsToGet.mul(levelableEffect("pet", 501)[2]).floor()
         player.ro.rocketPartsToGet = player.ro.rocketPartsToGet.mul(levelableEffect("pet", 1209)[1]).floor()
         player.ro.rocketPartsToGet = player.ro.rocketPartsToGet.mul(buyableEffect("cof", 19))
         player.ro.rocketPartsToGet = player.ro.rocketPartsToGet.mul(buyableEffect("sme", 151))
         player.ro.rocketPartsEffect = player.ro.rocketParts.mul(2).pow(0.9).add(1)
+        player.ro.rocketPartsEffect = player.ro.rocketPartsEffect.pow(levelableEffect("pet", 503)[2])
 
         if (getBuyableAmount("st", 205).gt(0)) player.ro.rocketParts = player.ro.rocketParts.add(player.ro.rocketPartsToGet.mul(buyableEffect("st", 205).mul(delta)))
 
@@ -159,7 +161,7 @@
         ]
         player.ro.rocketNames = [
             "Small Rocket<br><h6>Minimum: 20 Fuel, 6 Parts",
-            "Medium Rocket<br><h6>Minimum: 100,000 Fuel, 10,000,000 Parts, 3 Evo Shards, 1 Paragon Shard",
+            "Medium Rocket<br><h6>Minimum: 100,000 Fuel, 100,000 Parts, 3 Evo Shards, 1 Paragon Shard",
         ]
         if (player.ro.rocketIndex.eq(0)) {
             player.ro.rocketPartsReq = new Decimal(6)
@@ -169,7 +171,7 @@
             player.ro.paragonShardsReq = new Decimal(0)
         }
         if (player.ro.rocketIndex.eq(1)) {
-            player.ro.rocketPartsReq = new Decimal(10000000)
+            player.ro.rocketPartsReq = new Decimal(100000)
             player.ro.activatedFuelReq = new Decimal(100000) //,make it include shards
             
             player.ro.evoShardsReq = new Decimal(3)
@@ -385,7 +387,7 @@
         },
         16: {
             title() { return "<h2>Upgrade" },
-            canClick() { return player.cb.evolutionShards.gte('70') && player.cb.paragonShards.gte('15') && player.stagnantSynestia.temporalShard.gte(5) && player.au2.stars.gte('1e9') && player.sma.starmetalAlloy.gte('100000') 
+            canClick() { return player.cb.evolutionShards.gte('70') && player.cb.paragonShards.gte('15') && player.stagnantSynestia.temporalShard.gte(5) && player.au2.stars.gte('1e8') && player.sma.starmetalAlloy.gte('100000') 
                 && player.cof.coreFragments[0].gte('50') && player.cof.coreFragments[1].gte('50') && player.cof.coreFragments[2].gte('50') && player.cof.coreFragments[3].gte('50') && player.cof.coreFragments[4].gte('50')
                 && player.cof.coreFragments[5].gte('50') && player.cof.coreFragments[6].gte('50')
             },
@@ -395,7 +397,7 @@
                 player.cb.paragonShards = player.cb.paragonShards.sub(15)
                 player.stagnantSynestia.temporalShard = player.stagnantSynestia.temporalShard.sub(5)
 
-                player.au2.stars = player.au2.stars.sub(1e9)
+                player.au2.stars = player.au2.stars.sub(1e8)
                 player.sma.starmetalAlloy = player.sma.starmetalAlloy.sub(100000)
 
                 for (let i = 0; i < 7; i++)
@@ -877,7 +879,7 @@
                     ["blank", "25px"],
                     ["style-column", [
                         ["raw-html", function () { return "You have <h3>" + formatWhole(player.ro.rocketParts) + "</h3> rocket parts." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "Activated fuel boosts moonstone value by x<h3>" + format(player.ro.rocketPartsEffect) + "</h3>." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                        ["raw-html", function () { return "Rocket parts boosts moonstone value by x<h3>" + format(player.ro.rocketPartsEffect) + "</h3>." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                         ["raw-html", function () { return "You will gain <h3>" + formatWhole(player.ro.rocketPartsToGet) + "</h3> rocket parts on reset." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ], {width: "1000px", border: "3px solid #0a0c19", borderBottom: "0px", backgroundColor: "#191e40", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}],
                         ["style-row", [
@@ -1002,7 +1004,7 @@
                     ["raw-html", function () { return "Evolution Shards: " + formatWhole(player.cb.evolutionShards) + "/70" }, { "color": "#d487fd", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Paragon Shards: " + formatWhole(player.cb.paragonShards) + "/15" }, { "color": "#4b79ff", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Temporal Shards: " + formatWhole(player.stagnantSynestia.temporalShard) + "/5" }, { "color": "#77b0ffff", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Stars: " + format(player.au2.stars) + "/1e9" }, { "color": "#ffffff", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Stars: " + format(player.au2.stars) + "/1e8" }, { "color": "#ffffff", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Starmetal Alloy: " + format(player.sma.starmetalAlloy) + "/100,000" }, { "color": "#ffffff", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "50 of every core fragment type." }, { "color": "#ffffff", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],

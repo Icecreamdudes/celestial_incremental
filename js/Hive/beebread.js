@@ -86,6 +86,7 @@ addLayer("bb", {
         player.bb.breadTierMult = new Decimal(2)
         player.bb.breadTierMult = player.bb.breadTierMult.mul(buyableEffect("bee", 52))
         if (hasUpgrade("al", 107)) player.bb.breadTierMult = player.bb.breadTierMult.mul(10)
+        if (hasAchievement("achievements", 920)) player.bb.breadTierMult = player.bb.breadTierMult.mul(1.5)
 
         // Raise by BB tier
         player.bb.breadTierMult = player.bb.breadTierMult.pow(player.bb.breadTier.sub(1)) // Bread Tier Multiplier
@@ -142,6 +143,7 @@ addLayer("bb", {
             canClick() { return (player.bee.path == 1 && player.bpl.pollen.gte(1e10)) || player.bpl.pollen.gte(1e40)},
             unlocked() { return true},
             onClick() {
+                if (!hasAchievement("achievements", 906)) completeAchievement("achievements", 906)
                 layers.bb.prestigeReset()
                 player.bb.beeBreadPerSecond = player.bb.beeBreadPerSecond.add(player.bb.beeBreadGain)
             },

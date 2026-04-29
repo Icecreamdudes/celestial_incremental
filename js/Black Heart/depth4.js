@@ -80,6 +80,7 @@ addLayer("depth4", {
             canClick: true,
             unlocked: true,
             onClick() {
+                if (!hasAchievement("achievements", 921)) completeAchievement("achievements", 921)
                 BHStageEnter("depth4")
             },
             style: {width: "200px", minHeight: "75px", color: "white", background: "radial-gradient(#980098, #590059)", border: "3px solid #370037", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"},

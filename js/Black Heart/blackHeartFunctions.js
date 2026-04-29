@@ -500,7 +500,7 @@ function bhAttack(damage, index, slot, target, str = "", method = "none", attr =
 
         if (attribute["rebound"] && !attr && target != "self") {
             let attStr = "<span style='color:cyan'>[REBOUND] </span>"
-            bhAttack(damage.mul(attribute["rebound"]), index, slot, receive, attStr, "none", true)
+            bhAttack(damage.mul(attribute["rebound"]), receive, slot, index, attStr, "none", true)
         }
 
         let resist = false
@@ -564,7 +564,9 @@ function bhHeal(heal, index, slot, target, str = "") {
     let arr = calcTarget(index, slot, target, "heal")
     for (let receive of arr) {
         if (index == 3) {
-            if (receive == 3) {
+            if (receive == undefined) {
+                bhLog(str + "<span style='color: #8b0e7a'>" + run(BHC[player.bh.celestialite.id].name, BHC[player.bh.celestialite.id]) + " was unable to find someone to heal.")
+            } else if (receive == 3) {
                 player.bh.celestialite.health = player.bh.celestialite.health.add(heal).min(player.bh.celestialite.maxHealth)
                 bhLog(str + "<span style='color: #8b0e7a'>" + run(BHC[player.bh.celestialite.id].name, BHC[player.bh.celestialite.id]) + " healed itself for " +format(heal) + " health.")
             } else {
@@ -572,7 +574,9 @@ function bhHeal(heal, index, slot, target, str = "") {
                 bhLog(str + "<span style='color: #8b0e7a'>" + run(BHC[player.bh.celestialite.id].name, BHC[player.bh.celestialite.id]) + " healed " + run(BHP[player.bh.characters[receive].id].name, BHP[player.bh.characters[receive].id]) + " for " +format(heal) + " health.")
             }
         } else {
-            if (index == receive) {
+            if (receive == undefined) {
+                bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + run(BHP[player.bh.characters[index].id].name, BHP[player.bh.characters[index].id]) + " was unable to find someone to heal.")
+            } else if (index == receive) {
                 player.bh.characters[receive].health = player.bh.characters[receive].health.add(heal).min(player.bh.characters[receive].maxHealth)
                 bhLog(str + "<span style='color: " + BHP[player.bh.characters[index].id].color + "'>" + run(BHP[player.bh.characters[index].id].name, BHP[player.bh.characters[index].id]) + " healed themself for " +format(heal) + " health.")
             } else if (receive != 3) {
@@ -721,6 +725,7 @@ function celestialiteDeath() {
                     doPopup("milestone", BHS[player.bh.currentStage].nameCap + ": " + player.bh.combo + " Combo<br>" + charStr + " Characters", "Milestone Gotten!", 3, "#888")
                 }
             }
+            if (!hasAchievement("achievements", 924) && player.bh.currentStage == "alephsChamber") completeAchievement("achievements", 924)
         }
         if (player.bh.combo.gte(BHS[player.bh.currentStage].comboLimit)) {
             for (let i = 0; i < 3; i++) {
@@ -803,12 +808,12 @@ function calcTarget(index, slot, target, action = "none") {
         case "storedTarget":
             stored = true
             if (index == 3) {
-                if (player.bh.celestialite.actions[slot].variables["specTarget"]) {
+                if (player.bh.celestialite.actions[slot].variables["specTarget"] && player.bh.celestialite.actions[slot].variables["specTarget"] != null) {
                     result = player.bh.celestialite.actions[slot].variables["specTarget"]
                     break;
                 }
             } else {
-                if (player.bh.characters[index].skills[slot].variables["specTarget"]) {
+                if (player.bh.characters[index].skills[slot].variables["specTarget"] && player.bh.characters[index].skills[slot].variables["specTarget"] != null) {
                     result = player.bh.characters[index].skills[slot].variables["specTarget"]
                     break;
                 }
@@ -824,6 +829,16 @@ function calcTarget(index, slot, target, action = "none") {
             let rndP = potTarget[Math.floor(Math.random()*potTarget.length)]
             result = [rndP]
             break;
+        case "randomPlayerHeal":
+            if (celestialiteTaunt && (action == "heal" || action == "effect") && player.bh.celestialite.health.lt(player.bh.celestialite.maxHealth)) return [3]
+            if (playerTaunt >= 0 && player.bh.characters[playerTaunt].health.lt(player.bh.characters[playerTaunt].maxHealth)) return [playerTaunt]
+            let pothTarget = []
+            for (let i = 0; i < 3; i++) {
+                if (player.bh.characters[i].health.gt(0) && (player.bh.characters[i].health.lt(player.bh.characters[i].maxHealth)) && player.bh.characters[i].id != "none") pothTarget.push(i)
+            }
+            let rndhP = pothTarget[Math.floor(Math.random()*pothTarget.length)]
+            result = [rndhP]
+            break;
         case "random":
             let rndTarget = [3]
             if (playerTaunt >= 0) {
@@ -835,6 +850,19 @@ function calcTarget(index, slot, target, action = "none") {
             }
             let rndA = rndTarget[Math.floor(Math.random()*rndTarget.length)]
             result = [rndA]
+            break;
+        case "randomHeal":
+            let rndhTarget = []
+            if (player.bh.celestialite.health.lt(player.bh.celestialite.maxHealth)) rndhTarget.push(3)
+            if (playerTaunt >= 0 && player.bh.characters[playerTaunt].health.lt(player.bh.characters[playerTaunt].maxHealth)) {
+                rndhTarget.push(playerTaunt)
+            } else {
+                for (let i = 0; i < 3; i++) {
+                    if (player.bh.characters[i].health.gt(0) && (player.bh.characters[i].health.lt(player.bh.characters[i].maxHealth)) && player.bh.characters[i].id != "none") rndhTarget.push(i)
+                }
+            }
+            let rndhA = rndhTarget[Math.floor(Math.random()*rndhTarget.length)]
+            result = [rndhA]
             break;
         case "self": // Use when start is player
             if (index == 3) return [3]
@@ -885,6 +913,8 @@ function BHStageEnter(stage) {
 
     for (let i = 0; i < 3; i++) {
         player.bh.characters[i].health = player.bh.characters[i].maxHealth
+        player.bh.characters[i].shield = new Decimal(0)
+        player.bh.characters[i].stun = ["none", new Decimal(0)]
 
         for (let j = 0; j < 4; j++) {
             player.bh.characters[i].skills[j].cooldown = player.bh.characters[i].skills[j].cooldownMax
@@ -969,6 +999,16 @@ function stagnantUpdate(time) {
                             bhAction(3, player.bh.celestialite.stun[2], false, 1, true)
                         }
                     }
+
+                    if (player.bh.celestialite.shield.gt(0)) {
+                        player.bh.celestialite.shieldDecay = player.bh.celestialite.shieldDecay.add(delta)
+                        if (player.bh.celestialite.shieldDecay.gte(player.bh.shieldDecayMax)) {
+                            player.bh.celestialite.shieldDecay = new Decimal(0)
+                            player.bh.celestialite.shield = player.bh.celestialite.shield.sub(1).max(0)
+                        }
+                    } else if (player.bh.celestialite.shieldDecay.gt(0)) {
+                        player.bh.celestialite.shieldDecay = new Decimal(0)
+                    }
                     
                     // Cycle, increment cooldowns, and trigger celestialite actions
                     for (let i = 0; i < 4; i++) {
@@ -986,7 +1026,7 @@ function stagnantUpdate(time) {
                                         if (!BHC[player.bh.celestialite.id].actions[i].conditional || BHC[player.bh.celestialite.id].actions[i].conditional(3, i)) {
                                             for (let k = 0; k < player.bh.celestialite.actionChances.length; k++) {
                                                 if (Decimal.mul(player.bh.celestialite.actionChances[k][1], Decimal.div(Decimal.add(100, player.bh.celestialite.luck), 100)).gte(Math.random())) {
-                                                    player.bh.celestialite.actions[player.bh.celestialite.actionChances[k][0]].duration = BHC[player.bh.celestialite.id].actions[player.bh.celestialite.actionChances[k][0]].duration
+                                                    player.bh.celestialite.actions[player.bh.celestialite.actionChances[k][0]].duration = run(BHC[player.bh.celestialite.id].actions[player.bh.celestialite.actionChances[k][0]].duration, BHC[player.bh.celestialite.id].actions[player.bh.celestialite.actionChances[k][0]].duration)
                                                 }
                                             }
                                             let mag = player.bh.celestialite.actions[i].cooldown.div(BHC[player.bh.celestialite.id].actions[i].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility)))).floor().toNumber()
@@ -998,7 +1038,7 @@ function stagnantUpdate(time) {
                                     if (player.bh.celestialite.actions[i].cooldown.gte(BHC[player.bh.celestialite.id].actions[i].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))) {
                                         if (!BHC[player.bh.celestialite.id].actions[i].conditional || BHC[player.bh.celestialite.id].actions[i].conditional(3, i)) {
                                             player.bh.celestialite.actions[i].cooldown = new Decimal(0)
-                                            player.bh.celestialite.actions[i].duration = BHC[player.bh.celestialite.id].actions[i].duration
+                                            player.bh.celestialite.actions[i].duration = run(BHC[player.bh.celestialite.id].actions[i].duration, BHC[player.bh.celestialite.id].actions[i])
                                         }
                                     }
                                 }
@@ -1006,8 +1046,8 @@ function stagnantUpdate(time) {
 
                             // Calculate Variables (and remove inactive active)
                             if (passive || (active && player.bh.celestialite.actions[i].duration.gt(0))) {
-                                if (BHC[player.bh.celestialite.id].actions[i].onTrigger) {
-                                    BHC[player.bh.celestialite.id].actions[i].onTrigger(3, i, BHC[player.bh.celestialite.id].actions[i].constantTarget)
+                                if (BHC[player.bh.celestialite.id].actions[i].onPassive) {
+                                    BHC[player.bh.celestialite.id].actions[i].onPassive(3, i, BHC[player.bh.celestialite.id].actions[i].constantTarget)
                                 } else if (BHC[player.bh.celestialite.id].actions[i].interval) {
                                     player.bh.celestialite.actions[i].interval = player.bh.celestialite.actions[i].interval.add(delta)
                                     if (player.bh.celestialite.actions[i].interval.gte(BHC[player.bh.celestialite.id].actions[i].interval)) {
@@ -1038,6 +1078,16 @@ function stagnantUpdate(time) {
                             bhAction(i, player.bh.characters[i].stun[2], false, 1, true)
                         }
                     }
+                    
+                    if (player.bh.characters[i].shield.gt(0)) {
+                        player.bh.characters[i].shieldDecay = player.bh.characters[i].shieldDecay.add(delta)
+                        if (player.bh.characters[i].shieldDecay.gte(player.bh.shieldDecayMax)) {
+                            player.bh.characters[i].shieldDecay = new Decimal(0)
+                            player.bh.characters[i].shield = player.bh.characters[i].shield.sub(1).max(0)
+                        }
+                    } else if (player.bh.characters[i].shieldDecay.gt(0)) {
+                        player.bh.characters[i].shieldDecay = new Decimal(0)
+                    }
 
                     // Cycle through character skills
                     for (let j = 0; j < 4; j++) {
@@ -1055,14 +1105,14 @@ function stagnantUpdate(time) {
                                     if (instant) {
                                         for (let z = 0; z < player.bh.characters[i].actionChances.length; z++) {
                                             if (Decimal.mul(player.bh.characters[i].actionChances[z][1], Decimal.div(Decimal.add(100, player.bh.characters[i].luck), 100)).gte(Math.random())) {
-                                                player.bh.characters[i].skills[player.bh.characters[i].actionChances[z][0]].duration = BHA[player.bh.characters[i].skills[player.bh.characters[i].actionChances[z][0]].id].duration
+                                                player.bh.characters[i].skills[player.bh.characters[i].actionChances[z][0]].duration = run(BHA[player.bh.characters[i].skills[player.bh.characters[i].actionChances[z][0]].id].duration, BHA[player.bh.characters[i].skills[player.bh.characters[i].actionChances[z][0]].id])
                                             }
                                         }
                                         bhAction(i, j)
                                     }
                                     if (active) {
                                         player.bh.characters[i].skills[j].cooldown = new Decimal(0)
-                                        player.bh.characters[i].skills[j].duration = BHA[player.bh.characters[i].skills[j].id].duration
+                                        player.bh.characters[i].skills[j].duration = run(BHA[player.bh.characters[i].skills[j].id].duration, BHA[player.bh.characters[i].skills[j].id])
                                     }
                                 }
                             }
@@ -1070,7 +1120,9 @@ function stagnantUpdate(time) {
 
                         // Calculate Variables (and remove inactive active)
                         if (passive || (active && player.bh.characters[i].skills[j].duration.gt(0))) {
-                            if (BHA[player.bh.characters[i].skills[j].id].interval) {
+                            if (BHA[player.bh.characters[i].skills[j].id].onPassive) {
+                                if (unpaused) BHA[player.bh.characters[i].skills[j].id].onPassive(i, j, BHA[player.bh.characters[i].skills[j].id].constantTarget)
+                            } else if (BHA[player.bh.characters[i].skills[j].id].interval) {
                                 player.bh.characters[i].skills[j].interval = player.bh.characters[i].skills[j].interval.add(delta)
                                 if (player.bh.characters[i].skills[j].interval.gte(BHA[player.bh.characters[i].skills[j].id].interval)) {
                                     player.bh.characters[i].skills[j].interval = new Decimal(0)

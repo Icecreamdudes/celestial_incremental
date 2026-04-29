@@ -41,6 +41,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
 
     // Check if tabbed in, if not just deal a bunch of damage
     if (player && player.tab && player.tab != "bh") {
+        if (player.bh.celestialite.health.lte(0)) return
         if (!BHS[player.bh.currentStage].timeStagnation) {
             for (let i = 0; i < 3; i++) {
                 player.bh.characters[i].stun = ["hard", new Decimal(info.duration)]
@@ -68,6 +69,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
     if (old) old.remove()
 
     if (player.subtabs["bh"]["stuff"] != "bullet") {
+        if (player.bh.celestialite.health.lte(0)) return
         player.subtabs["bh"]["stuff"] = "bullet";
         pauseUniverseAll(["BH"], "pause", true)
         options.fullscreen = true
@@ -253,13 +255,14 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         const dx = playerGlobalX - bx;
         const dy = playerGlobalY - by;
         const dist = Math.sqrt(dx * dx + dy * dy);
+        const bulletRadius = info.actions[id].bulletRadius ?? 10
         if (dist === 0) return;
         info.bullets.push({
             x: bx,
             y: by,
             vx: (dx / dist) * speed,
             vy: (dy / dist) * speed,
-            r: 10,
+            r: bulletRadius,
             draw(b, bossCtx) {
                 bossCtx.beginPath();
                 bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);
@@ -291,8 +294,8 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
 
     // Shoot spread at coordinates
     info.shootSpreadAtPlayer = (bx, by, id) => {
-        let dx = info.px - bx;
-        let dy = info.py - by;
+        let dx = info.px - bx + info.boxLeft;
+        let dy = info.py - by + info.boxTop;
         let baseAngle = Math.atan2(dy, dx);
         for (let i = 0; i < info.actions[id].spreadCount; i++) {
             let angle = baseAngle + (i - (info.actions[id].spreadCount - 1) / 2) * (info.actions[id].spreadAngle / (info.actions[id].spreadCount - 1));
@@ -758,7 +761,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
                 const dx = Math.cos(b.angle), dy = Math.sin(b.angle);
                 // Project player onto knife axis
                 const t = ((playerX - b.x) * dx + (playerY - b.y) * dy);
-                if (t >= 0 && t <= b.r) {
+                if (t >= -b.r+info.pr && t <= b.r - info.pr) {
                     // Perpendicular distance
                     const perp = Math.abs((playerX - b.x) * dy - (playerY - b.y) * dx);
                     if (perp < info.pr + b.width / 2) {
@@ -1033,6 +1036,7 @@ if (storedInfo && storedInfo != "") {
 BHB.diamondAttack = {
     //bulletHell({"diamondAttack": {diamondAmount: 2, intervalDiv: 1}}, {duration: 10})
     codeFunc(info, id) {
+        const diamondRadius = info.actions[id].diamondRadius ?? 40;
         for (let i = 0; i < info.actions[id].diamondAmount; i++) {
             let angleOffset = (2 * Math.PI * i) / info.actions[id].diamondAmount;
             info.bullets.push({
@@ -1041,7 +1045,7 @@ BHB.diamondAttack = {
                 y: info.boxTop + info.py + 200 * Math.sin(angleOffset),
                 vx: 0,
                 vy: 0,
-                r: 40,
+                r: diamondRadius,
                 orbitRadius: 200,
                 orbitAngle: angleOffset,
                 orbitSpeed: 0.015 + 0.003 * i, // slightly different speeds
@@ -1081,9 +1085,10 @@ BHB.diamondAttack = {
                 b.y += (targetBy - b.y) * lerpFactor;
 
                 // Each diamond shoots at its own interval
+                const speed = info.actions[id].enemySpeed ?? 5
                 if (!b.lastShotTime) b.lastShotTime = ticks;
                 if (ticks - b.lastShotTime > b.shootInterval) {
-                    info.shootAtPlayer(b.x, b.y, id);
+                    info.shootAtPlayer(b.x, b.y, id, speed);
                     b.lastShotTime = ticks;
                 }
             }
@@ -1149,8 +1154,8 @@ BHB.bulletRain = {
     //bulletHell({"bulletRain": {bulletPerSec: 10}}, {duration: 12})
     moveFunc(info, ticks, id) {
         // Rain Bullets
-        const bulletRadius = 12;
-        const bulletSpeed = 4;
+        const bulletRadius = info.actions[id].bulletRadius ?? 12;
+        const bulletSpeed = info.actions[id].enemySpeed ?? 4;
         if (!info.actions[id].lastTime) info.actions[id].lastTime = ticks;
         const bulletsToSpawn = Math.floor(((ticks - info.actions[id].lastTime) / 1000) * info.actions[id].bulletPerSec); // LAST NUMBER IS AMOUNT OF BULLETS PER SECOND
         for (let i = 0; i < bulletsToSpawn; i++) {
@@ -1168,7 +1173,7 @@ BHB.inverseRain = {
     //bulletHell({"inverseRain": {bulletPerSec: 10}}, {duration: 12})
     moveFunc(info, ticks, id) {
         // Rain Bullets
-        const bulletRadius = 12;
+        const bulletRadius = info.actions[id].bulletRadius ?? 12;
         const bulletSpeed = 4;
         if (!info.actions[id].lastTime) info.actions[id].lastTime = ticks;
         const bulletsToSpawn = Math.floor(((ticks - info.actions[id].lastTime) / 1000) * info.actions[id].bulletPerSec); // LAST NUMBER IS AMOUNT OF BULLETS PER SECOND
@@ -1434,7 +1439,7 @@ BHB.centerSpreadAttack = {
     moveFunc(info, ticks, id) {
         if (!info.actions[id].lastTime) info.actions[id].lastTime = ticks;
         if (ticks - info.actions[id].lastTime > info.actions[id].spreadInterval) {
-            info.shootSpreadAtPlayer(info.width / 2, info.height / 2, id);
+            info.shootSpreadAtPlayer(info.width / 2 + info.boxLeft, info.height / 2 + info.boxTop, id);
             info.actions[id].lastTime = ticks;
         }
 
@@ -1447,7 +1452,7 @@ BHB.centerSingleAttack = {
     moveFunc(info, ticks, id) {
         if (!info.actions[id].lastTime) info.actions[id].lastTime = ticks;
         if (ticks - info.actions[id].lastTime > info.actions[id].shootInterval) {
-            info.shootAtPlayer(info.width / 2, info.height / 2, id, info.actions[id].bulletSpeed);
+            info.shootAtPlayer(info.width / 2 + info.boxLeft, info.height / 2 + info.boxTop, id, info.actions[id].bulletSpeed);
             info.actions[id].lastTime = ticks;
         }
 

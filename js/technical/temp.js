@@ -9,7 +9,7 @@ var activeFunctions = [
 	"startData", "onPrestige", "doReset", "update", "automate",
 	"buy", "buyMax", "respec", "onPress", "onClick", "onHold", "masterButtonPress",
 	"sellOne", "sellAll", "pay", "actualCostFunction", "actualEffectFunction",
-	"effectDescription", "display", "fullDisplay", "effectDisplay", "rewardDisplay",
+	"effectDescription", "display", "gildDisplay", "fullDisplay", "effectDisplay", "rewardDisplay",
 	"tabFormat", "content",
 	"onComplete", "onPurchase", "onEnter", "onExit", "done",
 	"getUnlocked", "getStyle", "getCanClick", "getTitle", "getDisplay", "pointClick",

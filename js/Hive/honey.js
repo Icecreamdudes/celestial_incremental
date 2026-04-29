@@ -101,6 +101,7 @@ addLayer("ho", {
 
         let base = new Decimal(1)
         base = base.mul(buyableEffect("bee", 63))
+        if (hasAchievement("achievements", 917)) base = base.mul(1.05)
         if (hasUpgrade("al", 207)) base = base.mul(1.1)
         if (player.bb.breadMilestone >= 10) base = base.mul(player.bb.breadEffects[9])
 
@@ -157,6 +158,7 @@ addLayer("ho", {
             canClick() { return (player.bee.path == 2 && player.ne.delta.amount.gte(100)) || (player.bee.path != 2 && player.ne.delta.amount.gte(1e16))},
             unlocked: true,
             onClick() {
+                if (!hasAchievement("achievements", 910)) completeAchievement("achievements", 910)
                 player.ho.cell = player.ho.cell.add(player.ho.cellGain)
 
                 player.bee.bees = new Decimal(1)

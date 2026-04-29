@@ -25,12 +25,12 @@ addLayer("hpw", {
         if (hasUpgrade("cs", 202)) player.hpw.powerGain = player.hpw.powerGain.mul(2)
         player.hpw.powerGain = player.hpw.powerGain.mul(levelableEffect("pu", 203)[2])
         player.hpw.powerGain = player.hpw.powerGain.mul(levelableEffect("pet", 1106)[1])
-        player.hpw.powerGain = player.hpw.powerGain.mul(levelableEffect("pu", 210)[1])
         player.hpw.powerGain = player.hpw.powerGain.mul(buyableEffect("sme", 144))
         player.hpw.powerGain = player.hpw.powerGain.mul(buyableEffect("al", 206))
         if (player.alephsChamber.milestone[25] > 0) player.hpw.powerGain = player.hpw.powerGain.mul(36)
 
         // POWER MODIFIERS
+        player.hpw.powerGain = player.hpw.powerGain.pow(levelableEffect("pu", 210)[1])
         player.hpw.powerGain = player.hpw.powerGain.pow(player.n.pylonPassiveEffect)
 
         player.hpw.powerGain = player.hpw.powerGain.floor() // To keep power to whole numbers
@@ -1155,8 +1155,8 @@ addLayer("hpw", {
             style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "10px"},
         },
         7: {
-            costBase() { return new Decimal(1e60) },
-            costGrowth() { return new Decimal(1e6) },
+            costBase() { return new Decimal(1e49) },
+            costGrowth() { return new Decimal(1e7) },
             purchaseLimit() { return new Decimal(1) },
             currency() { return player.hpw.power},
             effect(x) { return getBuyableAmount(this.layer, this.id) },

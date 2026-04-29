@@ -28,6 +28,7 @@ function getStartOptions() {
 		fullscreen: false,
 		bhKeyboard: false,
 		performanceMode: false,
+		debug: false,
 	}
 }
 function updateMusicVolume() {

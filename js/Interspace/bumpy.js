@@ -213,7 +213,7 @@
             getCompletionEffect() {
                 let completions = player.bum.fountains[1].completions.add(1)
 
-                s = player.prj.projectSpeed.log(10).add(1).pow(0.5).sub(1).pow_base(10).pow(completions.pow(0.5))
+                s = player.prj.projectSpeed.add(1).log(10).add(1).pow(0.5).sub(1).pow_base(10).pow(completions.pow(0.5))
 
                 return s
             },

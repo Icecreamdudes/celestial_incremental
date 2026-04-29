@@ -119,13 +119,13 @@
         player.wel.bestLight = new Decimal(0)
 
         player.wel.modules[1].time = new Decimal(0)
-        //player.wel.modules[1].completions = new Decimal(0)
+        player.wel.modules[1].completions = new Decimal(0)
         player.wel.modules[2].time = new Decimal(0)
-        //player.wel.modules[2].completions = new Decimal(0)
+        player.wel.modules[2].completions = new Decimal(0)
         player.wel.modules[3].time = new Decimal(0)
-        //player.wel.modules[3].completions = new Decimal(0)
+        player.wel.modules[3].completions = new Decimal(0)
         player.wel.modules[4].time = new Decimal(0)
-        //player.wel.modules[4].completions = new Decimal(0)
+        player.wel.modules[4].completions = new Decimal(0)
 
         player.wel.fountains[1].completions = new Decimal(0)
         if (player.wel.fountains[1].focused) {
@@ -147,11 +147,6 @@
             player.wel.fountains[4].focused = false
             player.prj.focused = player.prj.focused.add(1)
         }
-
-        setBuyableAmount("wel", 11, new Decimal(0))
-        setBuyableAmount("wel", 12, new Decimal(0))
-        setBuyableAmount("wel", 13, new Decimal(0))
-        setBuyableAmount("wel", 14, new Decimal(0))
     },
     branches: ["wel"],
     clickables: {
@@ -248,10 +243,8 @@
             },
         },
         101: {
-            //title() { return "<h2>Form your light into prisms.</h2><br>Req: 1e15 Light" },
-            //canClick() { return player.wel.light.gte(1e15)},
-            title() { return "<h2>Good job, ur done for now!</h2><br>Req: 1e999 Light" },
-            canClick() { return player.wel.light.gte("1e999")},
+            title() { return "<h2>Form your light into prisms.</h2><br>Req: 1e15 Light" },
+            canClick() { return player.wel.light.gte(1e15)},
             unlocked() { return true },
             onClick() {
                 layers.pri.prismReset(true)
@@ -681,10 +674,13 @@
         1: {
             title: "Fountain of Reflection",
             completionEffectStat: "Light Well Cycles",
+            condition() {
+                return true
+            },
             getCompletionEffect() {
                 let completions = player.pri.fountains[1].completions
 
-                s = completions.pow(0.666).pow_base(2.5)
+                s = completions.pow(0.666).pow_base(2)
 
                 return s
             },
@@ -693,7 +689,7 @@
                 let s = new Decimal(60)
 
                 s = s.mul(completions.add(1))
-                s = s.mul(completions.pow_base(2))
+                s = s.mul(completions.pow_base(Math.pow(1.8, 1.06)))
                 if (completions.gte(10)) {
                     s = s.pow(10)
                 }
@@ -702,7 +698,7 @@
             },
             getprismReq() {
                 let completions = player.pri.fountains[1].completions
-                let s = completions.div(4).add(1).pow(1.25)
+                let s = completions.div(4).add(1).pow(1.8)
                 
                 if (completions.gte(20)) {
                     s = s.mul(completions.sub(20).pow_base(1.1))
@@ -722,6 +718,9 @@
         2: {
             title: "Fountain of Ultramarine",
             completionEffectStat: "Light, based on Light",
+            condition() {
+                return player.pri.bestPrisms.gte(2)
+            },
             getCompletionEffect() {
                 let completions = player.pri.fountains[2].completions
 
@@ -764,6 +763,9 @@
         3: {
             title: "Fountain of Time",
             completionEffectStat: "Stored Time Capsules",
+            condition() {
+                return player.pri.bestPrisms.gte(100)
+            },
             getCompletionEffect() {
                 let completions = player.pri.fountains[3].completions
 
@@ -806,6 +808,9 @@
         4: {
             title: "Fountain of Light Speed II",
             completionEffectStat: "Light Well Speed",
+            condition() {
+                return player.pri.bestPrisms.gte(1e3)
+            },
             getCompletionEffect() {
                 let completions = player.pri.fountains[4].completions
 
@@ -848,26 +853,6 @@
     },
     microtabs: {
         stuff: {
-            "Reset": {
-                buttonStyle() { return { color: "white", borderRadius: "8px"} },
-                unlocked() { return true },
-                content() {
-                    let look = [
-                        ["blank", "25px"],
-                        ["style-column", [
-                            ["style-column", [
-                                ["raw-html", 
-                                    "<small>iuefefhuawigdgiagidogiwd</small>"
-                                , {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                            ], {background: "#335966", border: "3px solid #4d9999", borderRadius: "10px", width: "600px", height: "50px", padding: "3px"}],                   
-                        ], {background: "#335966", borderRadius: "13px", padding: "3px", width: "612px"}],
-                        ["blank", "25px"],
-                        ["clickable", 101],
-                        ["blank", "25px"],
-                    ]
-                    return look
-                }
-            },
             "Pyramid": {
                 buttonStyle() { return { color: "white", borderRadius: "8px"} },
                 unlocked() { return hasMilestone("prj", 202) },
@@ -893,18 +878,16 @@
             },
             "Fountains": {
                 buttonStyle() { return { color: "white", borderRadius: "8px"} },
-                unlocked() { return player.pri.totalPrisms.gt(0) },
+                unlocked() { return true },
                 content() {
                     let look = [
                         ["blank", "25px"],
-                        ["raw-html", "You are gaining <h3>" + format(player.pri.prisms.pow(2).div(10).mul(player.prj.projectSpeed)) + "</h3> fountain progress /s.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "You are gaining <h3>" + format(player.pri.totalPrisms.pow(2).div(10).mul(player.prj.projectSpeed)) + "</h3> fountain progress /s.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", "<small>Total prisms give a base progress rate of " + format(player.pri.fountainSpeed) + "</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", "You are focusing on " + formatWhole(player.prj.focused) + "/" + formatWhole(player.prj.maxFocused) + " interspace projects.", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "25px"],
                         ["style-row", [
                             makePrismFountain(1),
-                            ["blank", "6px", {width: "6px"}],
-                            makePrismFountain(2),
                         ]],
                         ["blank", "6px", {width: "6px"}],
                         ["style-row", [
@@ -916,6 +899,41 @@
                         ["clickable", 102],
                         ["blank", "25px"],
                     ]
+                    if (layers.pri.fountains[2].condition()) {
+
+                        look[7][1].push(
+                            ["blank", "6px", {width: "6px"}],
+                            makePrismFountain(2)
+                        )
+
+                        if (layers.pri.fountains[3].condition()) {
+
+                            look[7][1].push(
+                                ["blank", "6px", {width: "6px"}],
+                                makePrismFountain(3)
+                            )
+
+                        } else {
+
+                            look[7][1].push(
+                                ["blank", "6px", {width: "6px"}],
+                                ["style-column", [
+                                    ["raw-html", "Fountain of Time<br><small>Req: 1e22 Light</small>", {color: "white", fontSize: "16px"}],
+                                ], {background: "black", border: "3px solid #663737", width: "394px", height: "204px", borderRadius: "10px 81px 10px 10px", lineHeight: "1"}]
+                            )
+
+                        }
+
+                    } else {
+
+                        look[5][1].push(
+                            ["blank", "6px", {width: "6px"}],
+                            ["style-column", [
+                                ["raw-html", "Fountain of Ultramarine<br><small>Req: 2 Prisms</small>", {color: "white", fontSize: "16px"}],
+                            ], {background: "black", border: "3px solid #663737", width: "394px", height: "204px", borderRadius: "10px 81px 10px 10px", lineHeight: "1"}]
+                        )
+
+                    }
                     return look
                 }
             },
@@ -931,7 +949,14 @@
                 return look
             }],
         ]],
-        ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "15px"],
+        ["clickable", 101],
+        ["blank", "15px"],
+        ["style-column", [
+            ["microtabs", "stuff", { 'border-width': '0px' }],
+        ], () => {
+            return {display: player.pri.bestPrisms.gt(0) ? "" : "none !important"}
+        }]
     ],
     layerShown() { return player.startedGame == true && hasMilestone("prj", 201)}
 })

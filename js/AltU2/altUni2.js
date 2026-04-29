@@ -42,7 +42,7 @@
             player.subtabs["au2"]['stuff'] = 'Main'
         }
 
-        player.au2.starsToGet = Decimal.mul(player.ro.rocketParts, player.ro.activatedFuel.pow(0.3)).floor()
+        player.au2.starsToGet = Decimal.mul(player.ro.rocketParts, player.ro.activatedFuel.pow(0.5)).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(levelableEffect("st", 209)[0]).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("st", 201)).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("depth3", 3)).floor()

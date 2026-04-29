@@ -336,6 +336,7 @@
 
                 player.wof.spinActive = true
                 player.wof.wheelsSpinned = player.wof.wheelsSpinned.add(1)
+                layers.wof.randomizeSegments()
             },
             style() {
                 let look = {width: '125px', minHeight: '125px', border: "2px solid black", borderRadius: "0px" }

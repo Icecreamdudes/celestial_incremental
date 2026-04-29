@@ -69,7 +69,7 @@
             purchaseLimit() {return buyableEffect("sb", 12)},
             currency() { return player.ir.spaceRock},
             pay(amt) { player.ir.spaceRock = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).add(1).pow(5).pow(player.sb.sseEffect) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).add(1).pow(4).pow(player.sb.sseEffect) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -78,6 +78,7 @@
             },
             display() {
                 return "Boosts star gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    <small>(Ignoring Softcap)</small>\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Space Rocks"
             },
             buy(mult) {

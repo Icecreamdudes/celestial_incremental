@@ -434,6 +434,7 @@ addLayer("tad", {
                     if (player.tad.altInfinities.disfigured.amount.lt(1e8)) player.tad.altInfinities.disfigured.amount = new Decimal(0)
                     if (player.tad.altInfinities.distorted.amount.lt(1e8)) player.tad.altInfinities.distorted.amount = new Decimal(0)
                     player.tad.altInfinities[player.tad.altSelection].amount = player.tad.altInfinities[player.tad.altSelection].amount.add(player.tad.altInfinities[player.tad.altSelection].gain.mul(Decimal.div(delta, player.uni["U2"].tickspeed)))
+                    if (!hasAchievement("achievements", 915) && player.tad.altInfinities[player.tad.altSelection].amount.gte(1)) completeAchievement("achievements", 915)
                 }
                 break;
         }
@@ -482,6 +483,7 @@ addLayer("tad", {
         player.tad.altInfinities.infected.effect2 = amt7.add(1).log(10).div(20).add(1)
 
         player.tad.altInfinities.infested.effect1 = amt8.add(1).log(10).div(2).add(1).pow(2)
+        if (player.tad.altInfinities.infested.effect1.gt(100)) player.tad.altInfinities.infested.effect1 = player.tad.altInfinities.infested.effect1.div(100).pow(0.2).mul(100)
         player.tad.altInfinities.infested.effect2 = amt8.add(1).log(10).div(10).add(1)
 
         // HIGHEST ALTERNATE INFINITIES AND MILESTONES
@@ -572,9 +574,16 @@ addLayer("tad", {
         },
         6: {
             title: "x10",
-            canClick() {return player.tad.highestCap.mul(10).gte(player.tad.domainCap.mul(10))},
+            canClick() {
+                if (player.alephsChamber.milestone[25] > 0) return player.tad.highestCap.mul(1e5).gte(player.tad.domainCap.mul(10))
+                return player.tad.highestCap.mul(10).gte(player.tad.domainCap.mul(10))
+            },
             unlocked: true,
-            tooltip() {return !this.canClick() ? "Need to beat " + formatWhole(player.tad.highestCap.mul(10)) + " cap first!" : ""},
+            tooltip() {
+                if (this.canClick()) return ""
+                if (player.alephsChamber.milestone[25] > 0) return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e5)) + " cap first!"
+                return "Need to beat " + formatWhole(player.tad.highestCap.mul(10)) + " cap first!"
+            },
             onClick() {
                 player.tad.domainCap = player.tad.domainCap.mul(10).floor()
                 layers.tad.domainReset(10)
@@ -589,9 +598,16 @@ addLayer("tad", {
         },
         7: {
             title: "x1e5",
-            canClick() {return player.tad.highestCap.mul(10).gte(player.tad.domainCap.mul(1e5))},
+            canClick() {
+                if (player.alephsChamber.milestone[25] > 0) return player.tad.highestCap.mul(1e5).gte(player.tad.domainCap.mul(1e5))
+                return player.tad.highestCap.mul(10).gte(player.tad.domainCap.mul(1e5))
+            },
             unlocked: true,
-            tooltip() {return !this.canClick() ? "Need to beat " + formatWhole(player.tad.highestCap.mul(10)) + " cap first!" : ""},
+            tooltip() {
+                if (this.canClick()) return ""
+                if (player.alephsChamber.milestone[25] > 0) return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e9)) + " cap first!"
+                return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e5)) + " cap first!"
+            },
             onClick() {
                 player.tad.domainCap = player.tad.domainCap.mul(1e5).floor()
                 layers.tad.domainReset(10)
@@ -606,9 +622,16 @@ addLayer("tad", {
         },
         8: {
             title: "x1e25",
-            canClick() {return player.tad.highestCap.mul(10).gte(player.tad.domainCap.mul(1e25))},
+            canClick() {
+                if (player.alephsChamber.milestone[25] > 0) return player.tad.highestCap.mul(1e5).gte(player.tad.domainCap.mul(1e25))
+                return player.tad.highestCap.mul(10).gte(player.tad.domainCap.mul(1e25))
+            },
             unlocked: true,
-            tooltip() {return !this.canClick() ? "Need to beat " + formatWhole(player.tad.highestCap.mul(10)) + " cap first!" : ""},
+            tooltip() {
+                if (this.canClick()) return ""
+                if (player.alephsChamber.milestone[25] > 0) return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e29)) + " cap first!"
+                return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e25)) + " cap first!"
+            },
             onClick() {
                 player.tad.domainCap = player.tad.domainCap.mul(1e25).floor()
                 layers.tad.domainReset(10)
@@ -987,6 +1010,7 @@ addLayer("tad", {
             },
             unlocked: true,
             onClick() {
+                if (!hasAchievement("achievements", 916)) completeAchievement("achievements", 916)
                 player.tad.hiveExpand = true
             },
             style() {
@@ -2552,6 +2576,13 @@ addLayer("tad", {
             unlocked: true,
             style: {width: "350px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
+        6: {
+            requirementDescription: "<h3>32 Magnification",
+            effectDescription() { return "Keep magnification layer content on all resets."},
+            done() { return player.tad.magnification.gte(32) },
+            unlocked: true,
+            style: {width: "350px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
+        },
     },
     domainReset(tier = 0) {
         // MATTER
@@ -2580,7 +2611,7 @@ addLayer("tad", {
         }
 
         // MAGNIFICATIONS
-        if (tier > 3) {
+        if (tier > 3 && !hasMilestone("tad", 6)) {
             player.tad.magnification = new Decimal(0)
             player.tad.magnificationGain = new Decimal(0)
             player.tad.milestones.splice(0, player.tad.milestones.length)
@@ -3021,6 +3052,7 @@ addLayer("tad", {
                     ["milestone", 3],
                     ["milestone", 4],
                     ["milestone", 5],
+                    ["milestone", 6],
                 ]
             },
             "Stabilization": {

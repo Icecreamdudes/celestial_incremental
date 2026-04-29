@@ -46,7 +46,7 @@
 
 // Set your version in num and name
 let VERSION = {
-	num: 190.2, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
+	num: 190.21, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
 	name: "Aleph Update Pt II: Nested Metal",
 }
 
@@ -88,6 +88,12 @@ function updateStyles() {
 				LAYERHOLDER.style.setProperty("height", "calc(86% - 313px)", "important")
 			}
 		}
+	}
+
+	// ===------   PREVENT STYLING THE PARTICLE CONTAINER   ------=== //
+	const particleCont = document.getElementById('particleHolder')
+	if (particleCont && particleCont.hasAttribute('style')) {
+		particleCont.removeAttribute('style');
 	}
 
 	// ===------   Universe Bar Horizontal Scrolling   ------=== //
@@ -783,7 +789,7 @@ function updateStyles() {
 			player.musuniverse = "MI"
 			break;
 		case "bee": case "fl": case "bpl": case "ne": case "bb":
-		case "ho": case "wa": case "al":
+		case "ho": case "wa": case "al": case "n":
 			player.musuniverse = "UB"
 			break;
 		case "wel": case "pri": case "prj": case "bum":
@@ -953,6 +959,71 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Cutscene "DS-Zar-Slot-Spin" now correctly triggers after spinning the slots.<br>
 		<br>
 
+	<h3>v1.12.2 - Hive QoL Stuff</h3><br>
+		Content:<br>
+			- Added hive achievements<br>
+			- Added flower gilding<br>
+			- Added 2 new aleph upgrades<br>
+			- Replaced the last SME study marcel upgrade<br><br>
+		Minor Changes:<br>
+			- Levelable bars now flash when able to be leveled.<br>
+			- Import save fails now give an error message in the console.<br>
+			- You can now gain tenths of a nest.<br>
+			- Fixed coin clip easter egg.<br>
+			- Added a pet easter egg.<br><br>
+	<h3>v1.12.1 - Bugfixes <small>(and beefixes)</small></h3><br>
+	<small><i>[This contains all fixes since v1.12]</i></small><br>
+		Content:<br>
+			- New attacks for most stagnant synestia celestialites.<br><br>
+		Minor Changes:<br>
+			- Made Gwa Point gain not show if equal to 0.<br>
+			- Aleph has a new perk that improves Tav's Domain Expansion cap increases.<br>
+			- Made \"Iridian Boost\" in Stagnant Synestia specify that it ignores softcaps.<br>
+			- Improved the text describing Stagnant Synestia's milestone effect.<br>
+			- Improved the text describing how to unlock the midnight theme.<br>
+			- Added a safety check in case Aleph doesn't do their final attack at -500 HP.<br>
+			- Added Aleph's celestial hall text.<br><br>
+		Balancing:<br>
+			- Heal spell no longer targets full health allies.<br>
+			- Added softcaps to gwa temple currencies.<br>
+			- Nerfed rebound celestialites.<br>
+			- Reduced time to trigger dice space easter egg.<br>
+			- Reduced Cante's antimatter requirement.<br>
+			- Reduced late game marcel upgrade costs.<br>
+			- Buffed Geroa's orbital cannon skill.<br>
+			- Nerfed M-03's regen from 10/s->6/s.<br>
+			- Buffed Matos' damage from 6->10.<br>
+			- Increased timers for bullet hell maze attacks.<br>
+			- Black heart shields now decay at 1 every 20s.<br>
+			- Shield related skills were buffed to match the previous change.<br>
+			- Replaced generator based on normality's passive effect. (It is practically a buff)<br>
+			- Decreased the cost of the hex teaser.<br>
+			<i>(This changes nothing, you can't buy it even if you reach the cost)</i><br>
+			- Added a softcap to oil gain at 1e10,000.<br>
+			- Added a softcap to infested infinities effect 1. (at /100)<br>
+			- Made the ancient pylon effect softcap notably stronger.<br>
+			- Nerfed moonstone's effect on rocket part gain.<br>
+			- Buffed the base formula for stars.<br>
+			- Decreased the star softcap exponent by -0.1. (Due to fixing the softcap start)<br>
+			- Nerfed the first space building.<br><br>
+		Bugfixes:<br>
+			- Fixed space battle boss-fights crashing the game.<br>
+			- Fixed instant cutscene text option skipping the first dialogue.<br>
+			- Fixed Vespasians first skill showing up when you don't have them unlocked.<br>
+			- Fixed rebound actually making the enemy deal more damage to you <i>lmao</i>.<br>
+			- Fixed wheel of fortune being time dependent.<br>
+			- Fixed Avon not having their cutscene icon.<br>
+			- Fixed Geroa's orbital cannon skill not working.<br>
+			- Fixed black heart sometimes messing with particles.<br>
+			- Fixed MS-06 calling for the wrong currency.<br>
+			- Fixed Celestialite Static Hekaton crashing the game.<br>
+			- Fixed grass jump milestone 6 dividing eclipse tickspeed instead of multiplying.<br>
+			- Fixed generator based on normality punchcard not unlocking its relevant normality buyable.<br>
+			- Fixed some black heart boss cutscenes not pausing black heart.<br>
+			- Fixed the aleph fight cutscenes having the wrong requirement code.<br>
+			- Fixed nest layer not changing your music.<br>
+			- Fixed some black heart character data not being reset properly.<br>
+			- Fixed the star softcap start not working properly.<br><br>
 	<h3>v1.12 - Aleph Update Pt II: Nested Metal</h3><br>
 		Content:<br>
 			- Remade Black Heart.<br>
@@ -1690,7 +1761,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Added Alternate Ranks, Perks, Anonymity, Repli-Trees, Repli-Grass, Grass-Skip, and Oil.<br>
 		- Added 2 Celestials: Tav and Cante.<br>
 		- Added cutscenes.<br>
-		- Removed Herobrine.
+		- <button style="background:transparent;border: 0px;color:var(--textColor)" onclick="if(options.debug){options.debug=false}else{options.debug=true}">Removed Herobrine</button>.
 		`
 
 let winText = `Congratulations! You have completed the entirety of Celestial Incremental for now...`
@@ -2089,6 +2160,7 @@ function fixOldSave(oldVersion){
 		}
 	}
 	if (oldVersion < 190.2) {
+		if (player.tab == "ba") player.tab = "i"
 		// Matos Variables
 		if (player.ma.matosDefeated) player.matosLair.milestone[25] = 1
 		if (player.ma.matosUnlock) {
@@ -2165,4 +2237,5 @@ function fixOldSave(oldVersion){
 		// AD BALANCING
 		if (player.cs && player.cs.scraps.antimatter.effect.gte(1)) player.cs.scraps.antimatter.effect = new Decimal(0)
 	}
+	if (oldVersion < 190.21) player.m.buyables[15] = Decimal.min(player.m.buyables[15], 50)
 }

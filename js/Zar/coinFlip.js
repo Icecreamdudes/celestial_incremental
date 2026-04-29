@@ -32,7 +32,7 @@
         reductionCooldown: new Decimal(0),
 
         autoFlip: false,
-        coinExploit: 0,
+        coinExploit: new Decimal(0),
 
         //softcap
         headsSoftcapStart: new Decimal(10000),
@@ -180,6 +180,22 @@
 
                 player.cf.coinsFlipped = player.cf.coinsFlipped.add(1)
             }
+        }
+
+        if (player.cf.coinExploit > 0) {
+            player.cf.coinExploit = Math.max(player.cf.coinExploit - (0.5*delta), 0)
+        }
+        if (player.cf.coinExploit < 0) {
+            player.cf.coinExploit = player.cf.coinExploit + delta
+        }
+
+        if (player.cf.coinExploit >= 10) {
+            player.cf.heads = new Decimal(0)
+            player.cf.tails = new Decimal(0)
+            player.cf.coinsFlipped = new Decimal(0)
+
+            player.cf.coinExploit = -5
+            if (player.tab == "cf") makeParticles(BIG_COOKIE_NUMBER, 1, `normal`, {text: "SUPER COIN CLIP"})
         }
     },
     clickables: {

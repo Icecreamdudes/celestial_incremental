@@ -90,6 +90,7 @@
 
         player.prj.maxFocused = new Decimal(1)
         if (hasUpgrade("wel", 21)) player.prj.maxFocused = player.prj.maxFocused.add(1);
+        if (hasUpgrade("wel", 24)) player.prj.maxFocused = player.prj.maxFocused.add(1);
 
         player.prj.totalProjectLevels = player.prj.modules[1].completions
         .add(player.prj.modules[2].completions)

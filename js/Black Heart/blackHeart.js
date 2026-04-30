@@ -573,6 +573,7 @@ addLayer("bh", {
         skillSelection: "kres_chop",
         bulletHell: false,
         currentTree: 0,
+        exitConfirm: new Decimal(0),
 
         // General Currencies
         darkEssence: new Decimal(0),
@@ -708,6 +709,7 @@ addLayer("bh", {
 
         player.bh.comboScaling = 1
         if (BHS[player.bh.currentStage].comboScaling) player.bh.comboScaling = BHS[player.bh.currentStage].comboScaling
+        if (player.bh.combo.lt(0)) player.bh.comboScaling = ((player.bh.comboScaling-1)*(1+(Math.abs(player.bh.combo/100))))+1
 
         player.bh.comboScalingReduction = 0
         if (hasUpgrade("ep2", 9107)) player.bh.comboScalingReduction = player.bh.comboScalingReduction + 0.002
@@ -720,8 +722,13 @@ addLayer("bh", {
         player.bh.comboScalingStart = new Decimal(Infinity)
         if ("comboScalingStart" in BHS[player.bh.currentStage]) player.bh.comboScalingStart = BHS[player.bh.currentStage].comboScalingStart
 
+        let negStart = 25
+        if ("comboScalingStart" in BHS[player.bh.currentStage] && "comboLimit" in BHS[player.bh.currentStage]) negStart = BHS[player.bh.currentStage].comboLimit - BHS[player.bh.currentStage].comboScalingStart
+
         player.bh.comboSoftcap = new Decimal(1)
         if (player.bh.combo.gte(player.bh.comboScalingStart)) player.bh.comboSoftcap = Decimal.pow(player.bh.comboScaling, player.bh.combo.sub(player.bh.comboScalingStart))
+        if (player.bh.combo.lt(0)) player.bh.comboSoftcap = Decimal.pow(player.bh.comboScaling, Decimal.mul(player.bh.combo-negStart, -1))
+        if (BHS[player.bh.currentStage].celestialiteNerf) player.bh.comboSoftcap = player.bh.comboSoftcap.div(BHS[player.bh.currentStage].celestialiteNerf())
 
         player.bh.shieldDecayMax = new Decimal(20)
         if (BHS[player.bh.currentStage].shieldDecayMax) player.bh.shieldDecayMax = BHS[player.bh.currentStage].shieldDecayMax
@@ -745,6 +752,7 @@ addLayer("bh", {
             }
             BHStageEnter(player.bh.autoEnter)
         }
+        if (player.bh.exitConfirm.gt(0)) player.bh.exitConfirm = player.bh.exitConfirm.sub(normTime)
 
         if (player.bh.celestialite.attackTimeout[0]) {
             if (Decimal.gt(player.bh.celestialite.attackTimeout[1], 0)) {
@@ -840,16 +848,15 @@ addLayer("bh", {
                         }
 
                         // Calculate Variables (and remove inactive active)
-                        if ((passive && !BHC[player.bh.celestialite.id].actions[i].actionChance) || (active && player.bh.celestialite.actions[i].duration.gt(0))) {
+                        let condition = !BHC[player.bh.celestialite.id].actions[i].conditional || BHC[player.bh.celestialite.id].actions[i].conditional(3, i)
+                        if ((passive && condition && !BHC[player.bh.celestialite.id].actions[i].actionChance) || (active && player.bh.celestialite.actions[i].duration.gt(0))) {
                             if (BHC[player.bh.celestialite.id].actions[i].onPassive) {
                                 if (unpaused) BHC[player.bh.celestialite.id].actions[i].onPassive(3, i, BHC[player.bh.celestialite.id].actions[i].constantTarget)
                             } else if (BHC[player.bh.celestialite.id].actions[i].interval) {
                                 if (unpaused) player.bh.celestialite.actions[i].interval = player.bh.celestialite.actions[i].interval.add(delta)
                                 if (player.bh.celestialite.actions[i].interval.gte(BHC[player.bh.celestialite.id].actions[i].interval)) {
                                     player.bh.celestialite.actions[i].interval = new Decimal(0)
-                                    if (!BHC[player.bh.celestialite.id].actions[i].conditional || BHC[player.bh.celestialite.id].actions[i].conditional(3, i)) {
-                                        bhAction(3, i, true)
-                                    }
+                                    bhAction(3, i, true)
                                 }
                             } else {
                                 let properties = BHC[player.bh.celestialite.id].actions[i].effects
@@ -984,16 +991,15 @@ addLayer("bh", {
                     }
 
                     // Calculate Variables (and remove inactive active)
-                    if ((passive && !BHA[player.bh.characters[i].skills[j].id].actionChance) || (active && player.bh.characters[i].skills[j].duration.gt(0))) {
+                    let condition = !BHA[player.bh.characters[i].skills[j].id].conditional || BHA[player.bh.characters[i].skills[j].id].conditional(i, j)
+                    if ((passive && condition && !BHA[player.bh.characters[i].skills[j].id].actionChance) || (active && player.bh.characters[i].skills[j].duration.gt(0))) {
                         if (BHA[player.bh.characters[i].skills[j].id].onPassive) {
                             if (unpaused) BHA[player.bh.characters[i].skills[j].id].onPassive(i, j, BHA[player.bh.characters[i].skills[j].id].constantTarget)
                         } else if (BHA[player.bh.characters[i].skills[j].id].interval) {
                             if (unpaused) player.bh.characters[i].skills[j].interval = player.bh.characters[i].skills[j].interval.add(delta)
                             if (player.bh.characters[i].skills[j].interval.gte(BHA[player.bh.characters[i].skills[j].id].interval)) {
                                 player.bh.characters[i].skills[j].interval = new Decimal(0)
-                                if (!BHA[player.bh.characters[i].skills[j].id].conditional || BHA[player.bh.characters[i].skills[j].id].conditional(i, j)) {
-                                    bhAction(i, j, true)
-                                }
+                                bhAction(i, j, true)
                             }
                         } else {
                             let properties = BHA[player.bh.characters[i].skills[j].id].effects
@@ -1083,6 +1089,8 @@ addLayer("bh", {
         // =-- Calculate celestialite stats --=
         let scale = new Decimal(1)
         if (player.bh.combo.gte(player.bh.comboScalingStart)) scale = Decimal.pow(player.bh.comboScaling, player.bh.combo.sub(player.bh.comboScalingStart))
+        if (player.bh.combo.lt(0)) scale = Decimal.pow(player.bh.comboScaling, Decimal.mul(player.bh.combo-negStart, -1))
+        if (BHS[player.bh.currentStage].celestialiteNerf) scale = scale.div(BHS[player.bh.currentStage].celestialiteNerf())
             
         player.bh.celestialite.maxHealth = BHC[player.bh.celestialite.id].health ?? new Decimal(0)
         player.bh.celestialite.maxHealth = player.bh.celestialite.maxHealth.mul(player.bh.celestialite.randomMult)
@@ -1535,12 +1543,17 @@ addLayer("bh", {
             },
         },
         "Give-Up": {
-            title() { return "Give up" },
+            title() { return player.bh.exitConfirm.lte(0) ? "Give up" : "Are you sure?" },
             canClick: true,
             unlocked: true,
             onClick() {
-                for (let i = 0; i < 3; i++) {
-                    player.bh.characters[i].health = new Decimal(-Infinity)
+                if (player.bh.exitConfirm.lte(0)) {
+                    player.bh.exitConfirm = new Decimal(3)
+                } else {
+                    for (let i = 0; i < 3; i++) {
+                        player.bh.characters[i].health = new Decimal(-Infinity)
+                    }
+                    player.bh.exitConfirm = new Decimal(0)
                 }
             },
             style: {width: "250px", minHeight: "40px", color: "black", border: "3px solid rgba(0,0,0,0.5)", backgroundColor: "white", borderRadius: "15px"},
@@ -4489,13 +4502,22 @@ addLayer("bh", {
                                 ["raw-html", () => {
                                     if (player.bh.currentStage == "none" || BHS[player.bh.currentStage].comboLimit >= Infinity) {
                                         return "Kill Combo: " + formatShortestWhole(player.bh.combo)
-                                    } else if (player.bh.combo.gte(player[player.bh.currentStage].highestCombo)) {
-                                        return "Kill Combo: " + formatShortestWhole(player.bh.combo) + "/" + BHS[player.bh.currentStage].comboLimit
+                                    }
+                                    if (player.bh.combo.gte(0)) {
+                                        if (player.bh.combo.gte(player[player.bh.currentStage].highestCombo)) {
+                                            return "Kill Combo: " + formatShortestWhole(player.bh.combo) + "/" + BHS[player.bh.currentStage].comboLimit
+                                        } else {
+                                            return "Kill Combo: <span style='color:gray'>" + formatShortestWhole(player.bh.combo) + "</span>/" + BHS[player.bh.currentStage].comboLimit
+                                        }
                                     } else {
-                                        return "Kill Combo: <span style='color:gray'>" + formatShortestWhole(player.bh.combo) + "</span>/" + BHS[player.bh.currentStage].comboLimit
+                                        if (player.bh.combo.lte(player[player.bh.currentStage].lowestCombo)) {
+                                            return "Kill Combo: " + formatShortestWhole(player.bh.combo) + "/-" + BHS[player.bh.currentStage].comboLimit
+                                        } else {
+                                            return "Kill Combo: <span style='color:gray'>" + formatShortestWhole(player.bh.combo) + "</span>/-" + BHS[player.bh.currentStage].comboLimit
+                                        }
                                     }
                                 }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                ["raw-html", () => {return player.bh.combo.gte(player.bh.comboScalingStart) ? "[SOFTCAP: x" + formatShort(player.bh.comboSoftcap) + " Celestialite Stats]" : ""}, {color: "red", fontSize: "12px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return player.bh.combo.gte(player.bh.comboScalingStart) || player.bh.combo.lt(0) ? "[SOFTCAP: x" + formatShort(player.bh.comboSoftcap) + " Celestialite Stats]" : ""}, {color: "red", fontSize: "12px", fontFamily: "monospace"}],
                             ], {width: "300px", height: "60px"}],
                             ["style-column", [
                                 ["bar", "celestialite-Health"],

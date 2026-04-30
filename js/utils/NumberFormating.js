@@ -73,6 +73,7 @@ function format(decimal, precision = 2, small) {
 function formatWhole(decimal, precision = 2) {
     decimal = new Decimal(decimal)
     if (decimal.gte(1e9)) return format(decimal, precision)
+    if (decimal.lte(-1)) return format(decimal, 0)
     if (decimal.lte(0.99) && !decimal.eq(0)) return format(decimal, precision)
     return format(decimal, 0)
 }
@@ -112,6 +113,7 @@ function formatShortWhole(decimal) {
     decimal = new Decimal(decimal)
     if (decimal.gte(1e6)) return exponentialFormat(decimal, 2)
     if (decimal.gte(1e3)) return commaFormat(decimal, 0)
+    if (decimal.lte(-1)) return format(decimal, 0)
     if (decimal.lte(0.99) && !decimal.eq(0)) return formatShort(decimal, 2)
     return formatShort(decimal, 0)
 }
@@ -119,6 +121,7 @@ function formatShortWhole(decimal) {
 function formatShorterWhole(decimal) {
     decimal = new Decimal(decimal)
     if (decimal.gte(1e3)) return exponentialFormat(decimal, 2)
+    if (decimal.lte(-1)) return format(decimal, 0)
     if (decimal.lte(0.99) && !decimal.eq(0)) return formatShort(decimal, 2)
     return formatShort(decimal, 0)
 }
@@ -126,6 +129,7 @@ function formatShorterWhole(decimal) {
 function formatShortestWhole(decimal) {
     decimal = new Decimal(decimal)
     if (decimal.gte(1e3)) return exponentialFormat(decimal, 0)
+    if (decimal.lte(-1)) return format(decimal, 0)
     if (decimal.lte(0.99) && !decimal.eq(0)) return formatShort(decimal, 2)
     return formatShort(decimal, 0)
 }

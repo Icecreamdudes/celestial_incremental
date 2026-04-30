@@ -15,10 +15,21 @@ addLayer("depth3", {
         depth3Mult: new Decimal(1),
 
         highestCombo: new Decimal(0),
+        lowestCombo: new Decimal(0),
         comboEffect: new Decimal(1),
         comboStart: 0,
 
         milestone: {
+            "-250": 0,
+            "-225": 0,
+            "-200": 0,
+            "-175": 0,
+            "-150": 0,
+            "-125": 0,
+            "-100": 0,
+            "-75": 0,
+            "-50": 0,
+            "-25": 0,
             25: 0,
             50: 0,
             75: 0,
@@ -31,6 +42,7 @@ addLayer("depth3", {
             250: 0,
         },
         milestoneEffect: new Decimal(0),
+        negToggle: false,
     }},
     automate() {},
     nodeStyle() {
@@ -64,12 +76,13 @@ addLayer("depth3", {
     update(delta) {
         player.depth3.unlocked = player.depth2.milestone[25] > 0
 
-        player.depth3.comboEffect = Decimal.pow(1.15, player.depth3.highestCombo).pow(buyableEffect("depth3", 2))
+        player.depth3.comboEffect = Decimal.pow(1.15, player.depth3.highestCombo.min(250)).pow(buyableEffect("depth3", 2))
 
         player.depth3.milestoneEffect = new Decimal(0)
         for (let i = 25; i < 251; i = i+25) {
             player.depth3.milestoneEffect = player.depth3.milestoneEffect.add(player.depth3.milestone[i])
         }
+        player.depth3.milestoneEffect = player.depth3.milestoneEffect.pow(1.2).floor()
 
         player.depth3.depth3Mult = new Decimal(1)
         player.depth3.depth3Mult = player.depth3.depth3Mult.mul(player.darkTemple.depth3CurMult)
@@ -83,6 +96,19 @@ addLayer("depth3", {
                 BHStageEnter("depth3")
             },
             style: {width: "200px", minHeight: "75px", color: "white", background: "radial-gradient(#720804, #410230)", border: "3px solid #961d76", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"},
+        },
+        "neg": {
+            title() {return player.depth3.negToggle ? "Switch to positive milestones" : "Switch to negative milestones"},
+            canClick: true,
+            unlocked() {return player.depth3.lowestCombo.lt(0)},
+            onClick() {
+                if (player.depth3.negToggle) {
+                    player.depth3.negToggle = false
+                } else {
+                    player.depth3.negToggle = true
+                }
+            },
+            style: {width: "257px", minHeight: "40px", fontSize: "9px", color: "var(--textColor)", background: "var(--miscButtonDisable)", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0", padding: "0 5px"},
         },
     },
     upgrades: {
@@ -325,7 +351,7 @@ addLayer("depth3", {
             ["style-column", [
                 ["top-column", [
                     ["style-column", [
-                        ["raw-html", () => {return "Highest Combo: " + formatWhole(player.depth3.highestCombo) + "/" + BHS["depth3"].comboLimit}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "Highest Combo: " + formatWhole(player.depth3.highestCombo.min(250)) + "/" + BHS["depth3"].comboLimit}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
                     ], {width: "225px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "2px"}],
                     ["top-column", [
                         ["raw-html", () => {return "Boosts singularity points by x" + formatSimple(player.depth3.comboEffect)}, {color: "var(--textColor)", fontSize: "11px", fontFamily: "monospace"}],
@@ -336,17 +362,33 @@ addLayer("depth3", {
                     ], {width: "272px", height: "30px", background: "var(--layerBackground)", borderTop: "3px solid var(--regBorder)"}],
                 ], {width: "272px", height: "97px", background: "var(--miscButtonHover)", borderBottom: "3px solid var(--regBorder)"}],
                 ["theme-scroll-column", [
-                    ["raw-html", () => {return "<button class='bhMilestoneButton  base' style='width:257px;height:50px' onclick='player.depth3.comboStart=0'>Starting combo value: " + player.depth3.comboStart + "<br>[Click to set to 0]</button>"}],
-                    ["bh-milestone", [25, "depth3", ""]],
-                    ["bh-milestone", [50, "depth3", ""]],
-                    ["bh-milestone", [75, "depth3", ""]],
-                    ["bh-milestone", [100, "depth3", ""]],
-                    ["bh-milestone", [125, "depth3", ""]],
-                    ["bh-milestone", [150, "depth3", ""]],
-                    ["bh-milestone", [175, "depth3", ""]],
-                    ["bh-milestone", [200, "depth3", ""]],
-                    ["bh-milestone", [225, "depth3", ""]],
-                    ["bh-milestone", [250, "depth3", ""]],
+                    ["hoverless-clickable", "neg"],
+                    ["style-column", [
+                        ["raw-html", () => {return "<button class='bhMilestoneButton  base' style='width:257px;height:50px' onclick='player.depth3.comboStart=0'>Starting combo value: " + player.depth3.comboStart + "<br>[Click to set to 0]</button>"}],
+                        ["bh-milestone", [25, "depth3", ""]],
+                        ["bh-milestone", [50, "depth3", ""]],
+                        ["bh-milestone", [75, "depth3", ""]],
+                        ["bh-milestone", [100, "depth3", ""]],
+                        ["bh-milestone", [125, "depth3", ""]],
+                        ["bh-milestone", [150, "depth3", ""]],
+                        ["bh-milestone", [175, "depth3", ""]],
+                        ["bh-milestone", [200, "depth3", ""]],
+                        ["bh-milestone", [225, "depth3", ""]],
+                        ["bh-milestone", [250, "depth3", ""]],
+                    ], () => {return !player.depth3.negToggle ? {} : {display: "none !important"}}],
+                    ["style-column", [
+                        ["raw-html", () => {return "<button class='bhMilestoneButton base' style='width:257px;height:50px' onclick='player.depth3.comboStart=-1'>Starting combo value: " + player.depth3.comboStart + "<br>[Click to set to -1]</button>"}],
+                        ["bh-milestone", ["-25", "depth3", ""]],
+                        ["bh-milestone", ["-50", "depth3", ""]],
+                        ["bh-milestone", ["-75", "depth3", ""]],
+                        ["bh-milestone", ["-100", "depth3", ""]],
+                        ["bh-milestone", ["-125", "depth3", ""]],
+                        ["bh-milestone", ["-150", "depth3", ""]],
+                        ["bh-milestone", ["-175", "depth3", ""]],
+                        ["bh-milestone", ["-200", "depth3", ""]],
+                        ["bh-milestone", ["-225", "depth3", ""]],
+                        ["bh-milestone", ["-250", "depth3", ""]],
+                    ], () => {return player.depth3.negToggle ? {} : {display: "none !important"}}],
                 ], {width: "272px", height: "267px", background: "var(--miscButton)", borderBottom: "3px solid var(--regBorder)"}],
                 ["style-column", [
                     ["raw-html", "<p style='line-height:1'>Clicking on a cleared milestone allows you to start at that milestones combo value.", {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
@@ -387,6 +429,7 @@ BHS.depth3 = {
                 if (combo >= 100) cel.push("greaterMu")
                 if (combo >= 150) cel.push("greaterNu")
                 if (combo >= 200) cel.push("greaterXi") //ξ
+                if (combo < 0) cel = ["greaterEnas", "greaterPente", "greaterDeka", "greaterHekaton", "greaterKhilioi", "greaterMyrioi"]
                 return cel[Math.floor(Math.random()*cel.length)]
         }
     },

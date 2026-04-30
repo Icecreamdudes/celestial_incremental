@@ -656,12 +656,12 @@ function celestialiteReward(gain) {
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.dimNocturnium) + " dim nocturnium! (You have " + formatWhole(player.depth4.dimNocturnium) + ")")
     }
     if (gain.matosDust) {
-        gain.matosDust = gain.matosDust.mul(player.laboratory.matosMult).mul(generalMult).floor()
+        gain.matosDust = gain.matosDust.mul(player.laboratory.matosMult).mul(generalMult).mul(player.laboratory.matosFragment.add(1).log(10)).floor()
         player.laboratory.matosDust = player.laboratory.matosDust.add(gain.matosDust)
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.matosDust) + " matos dust! (You have " + formatWhole(player.laboratory.matosDust) + ")")
     }
     if (gain.matosShard) {
-        gain.matosDust = gain.matosShard.mul(player.laboratory.matosMult).mul(generalMult).floor()
+        gain.matosDust = gain.matosShard.mul(player.laboratory.matosMult).mul(generalMult).mul(player.laboratory.matosEssence.add(1).log(10)).floor()
         player.laboratory.matosShard = player.laboratory.matosShard.add(gain.matosShard)
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.matosShard) + " matos shards! (You have " + formatWhole(player.laboratory.matosShard) + ")")
     }
@@ -683,7 +683,7 @@ function celestialiteDeath() {
     if (BHC[player.bh.celestialite.id].onDeath) BHC[player.bh.celestialite.id].onDeath()
     player.bh.respawnTimer = player.bh.respawnMax
     if (!BHS[player.bh.currentStage].timer) player.bh.timer = new Decimal(0)
-    player.bh.combo = player.bh.combo.add(1)
+    if (player.bh.combo.gte(0)) {player.bh.combo = player.bh.combo.add(1)} else {player.bh.combo = player.bh.combo.sub(1)}
 
     if (BHC[player.bh.celestialite.id].attributes) {
         // Explosion Modifier
@@ -709,7 +709,8 @@ function celestialiteDeath() {
     }
     
     if (player.bh.currentStage != "none") {
-        if (player[player.bh.currentStage].highestCombo && player.bh.combo.gt(player[player.bh.currentStage].highestCombo)) player[player.bh.currentStage].highestCombo = player.bh.combo
+        if (player[player.bh.currentStage].highestCombo && player.bh.combo.gt(player[player.bh.currentStage].highestCombo)) player[player.bh.currentStage].highestCombo = player.bh.combo.min(BHS[player.bh.currentStage].comboLimit)
+        if (player[player.bh.currentStage].lowestCombo && player.bh.combo.lt(player[player.bh.currentStage].lowestCombo)) player[player.bh.currentStage].lowestCombo = player.bh.combo.max(Decimal.mul(BHS[player.bh.currentStage].comboLimit, -1))
         if (player[player.bh.currentStage].milestone && Object.hasOwn(player[player.bh.currentStage].milestone, player.bh.combo)) {
             let curVal = player[player.bh.currentStage].milestone[player.bh.combo]
             let charAmt = 4
@@ -750,9 +751,26 @@ function celestialiteDeath() {
 function celestialiteSpawn() {
     let celestialiteId = BHS[player.bh.currentStage].generateCelestialite(player.bh.combo)
 
+    player.bh.comboScaling = 1
+    if (BHS[player.bh.currentStage].comboScaling) player.bh.comboScaling = BHS[player.bh.currentStage].comboScaling
+    if (player.bh.combo.lt(0)) player.bh.comboScaling = ((player.bh.comboScaling-1)*(1+(Math.abs(player.bh.combo/100))))+1
+
+    player.bh.comboScalingReduction = 0
+    if (hasUpgrade("ep2", 9107)) player.bh.comboScalingReduction = player.bh.comboScalingReduction + 0.002
+    if (hasMilestone("db", 105)) player.bh.comboScalingReduction = player.bh.comboScalingReduction + 0.002
+    if (hasUpgrade("depth4", 3)) player.bh.comboScalingReduction = player.bh.comboScalingReduction + 0.002
+    player.bh.comboScalingReduction = player.bh.comboScalingReduction + (buyableEffect("laboratory", 1).sub(1).toNumber())
+
+    player.bh.comboScaling = Math.max(player.bh.comboScaling - player.bh.comboScalingReduction , 1)
+
+    let negStart = 25
+    if ("comboScalingStart" in BHS[player.bh.currentStage] && "comboLimit" in BHS[player.bh.currentStage]) negStart = BHS[player.bh.currentStage].comboLimit - BHS[player.bh.currentStage].comboScalingStart
+
     let scale = new Decimal(1)
     if (player.bh.combo.gte(player.bh.comboScalingStart)) scale = Decimal.pow(player.bh.comboScaling, player.bh.combo.sub(player.bh.comboScalingStart))
+    if (player.bh.combo.lt(0)) scale = Decimal.pow(player.bh.comboScaling, Decimal.mul(player.bh.combo-negStart, -1))
     if (BHS[player.bh.currentStage].celestialiteNerf) scale = scale.div(BHS[player.bh.currentStage].celestialiteNerf())
+
     player.bh.celestialite.id = celestialiteId
     player.bh.celestialite.randomMult = Decimal.add(0.85, Decimal.mul(Math.random(), 0.3))
     if (BHC[player.bh.celestialite.id].noRandomStats) player.bh.celestialite.randomMult = new Decimal(1)
@@ -926,6 +944,7 @@ function BHStageEnter(stage) {
     player.bh.currentStage = stage
     if (player[stage].comboStart) {
         player.bh.combo = new Decimal(player[stage].comboStart)
+        if (Math.random() < 0.33 && Decimal.gte(player[stage].comboStart, BHS[player.bh.currentStage].comboLimit)) player.bh.combo = new Decimal(-1)
     } else {
         player.bh.combo = new Decimal(0)
     }

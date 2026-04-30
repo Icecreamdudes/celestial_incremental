@@ -980,3 +980,84 @@ BHA.vespasian_peakPerformance = {
 // A passive skill that gives the chance for an action to trigger a team buff that doubles damage
 
 // A skill that passively gives you one of the three resistance attributes. Has an instant part of it that cycles the attribute
+
+// Bumpy Skills
+BHA.bumpy_starbeam = {
+    name: "Starbeam",
+    description() {return "Deals " + formatWhole(new Decimal(100).add(player.bh.skillData["bumpy_starbeam"].level.mul(20))) + "% magic damage, " + formatWhole(new Decimal(10).add(player.bh.skillData["bumpy_starbeam"].level.mul(2))) + "% spirit damage per second for 4 seconds, and invert " + formatSimple(new Decimal(200).add(player.bh.skillData["bumpy_starbeam"].level.mul(40))) + "% of the celestialite's regen for 4 seconds"},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["bumpy_starbeam"].maxLevel.div(5)) + " DMG"},
+    char: "bumpy",
+    spCost: new Decimal(10),
+    curCostBase: new Decimal(18),
+    curCostScale: new Decimal(6),
+    currency: "matosDust",
+    unlocked() {return true},
+
+    instant: true,
+    type: "damage",
+    target: "celestialite",
+    method: "physical",
+    value() {return new Decimal(0.75).add(player.bh.skillData["bumpy_starbeam"].level.mul(0.05))},
+
+    active: true,
+    constantType: "effect",
+    constantTarget: "celestialite",
+    value() {return new Decimal(1).add(player.bh.skillData["bumpy_starbeam"].level.mul(0.2))},
+    effects: {
+        "regenAdd"(char) {
+            return new Decimal(2).add(player.bh.skillData["bumpy_starbeam"].level.mul(0.4)).add(1).mul(BHC[player.bh.celestialite.id].regen).add(char.damage.mul(0.1)).div(-1)
+        },
+    },
+    duration: new Decimal(4),
+    cooldown: new Decimal(16),
+    cooldownCap: new Decimal(4),
+}
+
+BHA.bumpy_tunnelVision = {
+    name: "Tunnel Vision",
+    description(char) {
+        let eff = false
+        let index
+        let slot
+        for (let i = 0; i < 3; i++) {
+            if (player.bh.characters[i].id == "bumpy") {
+                index = i
+                for (let j = 0; j < 4; j++) {
+                    if (player.bh.characters[i].skills[j].id == "bumpy_tunnelVision") {
+                        slot = j
+                        if (player.bh.characters[i].skills[j].variables["damageMult"]) eff = true
+                    }
+                }
+            }
+        }
+        let effectBase = new Decimal(new Decimal(1).add(player.bh.skillData["bumpy_tunnelVision"].level.mul(0.2)))
+        let effectiveSkillPoints = player.bh.maxSkillPoints.sub(player.bh.characterData["bumpy"].usedSP)
+        if (effectiveSkillPoints.gte(50)) effectiveSkillPoints = effectiveSkillPoints.sub(50).pow(0.75).div(2).add(50); 
+        if (player.alephsChamber.milestone[25] >= 2) effectBase = effectBase.mul(Decimal.div(char.potency.add(100), 100))
+        let effect = effectBase.mul(effectiveSkillPoints)
+        if (!eff) {
+            return "Boosts damage by " + formatSimple(effectBase) + "% per leftover skill point (harshly softcapped beyond " + formatSimple(effectBase.mul(50)) + "%)<br><small>[Currently: +" + formatSimple(effect) + "% DMG]"
+        }
+    },
+    passiveText() {return "+" + formatSimple(player.bh.skillData["bumpy_tunnelVision"].maxLevel.div(5)) + " DMG"},
+    char: "bumpy",
+    spCost: new Decimal(18),
+    curCostBase: new Decimal(18),
+    curCostScale: new Decimal(6),
+    currency: "matosShard",
+    unlocked() {return true},
+
+    passive: true,
+    constantType: "effect",
+    constantTarget: "self",
+    effects: {
+        "damageMult"(char) {
+            let effectBase = new Decimal(new Decimal(1).add(player.bh.skillData["bumpy_tunnelVision"].level.mul(0.2)))
+            let effectiveSkillPoints = player.bh.maxSkillPoints.sub(player.bh.characterData["bumpy"].usedSP)
+            if (effectiveSkillPoints.gte(50)) effectiveSkillPoints = effectiveSkillPoints.sub(50).pow(0.5).div(2).add(50); 
+            if (player.alephsChamber.milestone[25] >= 2) effectBase = effectBase.mul(Decimal.div(char.potency.add(100), 100))
+            return effectBase.mul(effectiveSkillPoints).div(100).add(1)
+        },
+    },
+    cooldown: new Decimal(Infinity)
+}

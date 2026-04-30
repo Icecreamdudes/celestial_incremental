@@ -82,6 +82,7 @@
     color: "#d6ebff",
     update(delta) {
         player.pri.prismsToGet = player.wel.light.add(1).log(10).sub(15).pow_base(1.41421356237).floor()
+        if (!hasUpgrade("pri", 11)) player.pri.prismsToGet = player.pri.prismsToGet.min(1);
 
         if (hasMilestone("pri", 203)) player.pri.prismsToGet = player.pri.prismsToGet.mul(2);
 
@@ -243,7 +244,7 @@
             },
         },
         101: {
-            title() { return "<h2>Form your light into prisms.</h2><br>Req: 1e15 Light" },
+            title() { return "<h2>" + (hasUpgrade("pri", 11) ? "Form your light into prisms." : "Form your light into a prism.") + "</h2><br>Req: 1e15 Light" },
             canClick() { return player.wel.light.gte(1e15)},
             unlocked() { return true },
             onClick() {
@@ -329,7 +330,7 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Unlock the first light fountain.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Unlock bulk light well collection.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><h3>Req: Buy the above upgrade.</h3>"
                 }
@@ -367,7 +368,7 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Unlock the first light fountain.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Unlock focus retention for light fountains.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><h3>Req: Buy the above upgrade.</h3>"
                 }
@@ -405,7 +406,7 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Unlock the first light fountain.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Light upgrade 1-4 affects prism fountain speed at a 50% rate.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><h3>Req: Buy one of the previous row's upgrades.</h3>"
                 }
@@ -719,7 +720,7 @@
             title: "Fountain of Ultramarine",
             completionEffectStat: "Light, based on Light",
             condition() {
-                return player.pri.bestPrisms.gte(2)
+                return true
             },
             getCompletionEffect() {
                 let completions = player.pri.fountains[2].completions
@@ -730,10 +731,10 @@
             },
             getTimeReq() {
                 let completions = player.pri.fountains[2].completions
-                let s = new Decimal(1.2e3)
+                let s = new Decimal(120)
 
-                s = s.mul(completions.add(1).pow(1.25))
-                s = s.mul(completions.pow_base(2))
+                s = s.mul(completions.add(1))
+                s = s.mul(completions.pow_base(Math.pow(2.5, 1.06)))
                 if (completions.gte(50)) {
                     s = s.pow(1.05)
                 }
@@ -742,8 +743,7 @@
             },
             getprismReq() {
                 let completions = player.pri.fountains[2].completions
-                let s = completions.div(4).add(1).pow(1.25)
-                s = s.mul(1.5)
+                let s = completions.div(4).add(1).pow(2.5)
                 
                 if (completions.gte(20)) {
                     s = s.mul(completions.sub(20).pow_base(1.1))
@@ -765,6 +765,9 @@
             completionEffectStat: "Stored Time Capsules",
             condition() {
                 return player.pri.bestPrisms.gte(100)
+            },
+            unlocked() {
+                return hasMilestone("prj", 202)
             },
             getCompletionEffect() {
                 let completions = player.pri.fountains[3].completions
@@ -853,6 +856,51 @@
     },
     microtabs: {
         stuff: {
+            "Fountains": {
+                buttonStyle() { return { color: "white", borderRadius: "8px"} },
+                unlocked() { return true },
+                content() {
+                    let look = [
+                        ["blank", "25px"],
+                        ["raw-html", "You are gaining <h3>" + format(player.pri.totalPrisms.pow(2).div(10).mul(player.prj.projectSpeed)) + "</h3> fountain progress /s.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "<small>Total prisms give a base progress rate of " + format(player.pri.fountainSpeed) + "</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "You are focusing on " + formatWhole(player.prj.focused) + "/" + formatWhole(player.prj.maxFocused) + " interspace projects.", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
+                        ["blank", "25px"],
+                        ["style-row", [
+                            makePrismFountain(1),
+                            ["blank", "6px", {width: "6px"}],
+                            makePrismFountain(2),
+                        ]],
+                        ["blank", "6px", {width: "6px"}],
+                        ["style-row", [
+                        ]],
+                        ["blank", "25px"],
+                        ["clickable", 102],
+                        ["blank", "25px"],
+                    ]
+                    if (layers.pri.fountains[2].condition()) {
+
+                        if (layers.pri.fountains[3].condition()) {
+
+                            look[7][1].push(
+                                ["blank", "6px", {width: "6px"}],
+                                makePrismFountain(3)
+                            )
+
+                        } else if (layers.pri.fountains[3].unlocked()) {
+
+                            look[7][1].push(
+                                ["blank", "6px", {width: "6px"}],
+                                ["style-column", [
+                                    ["raw-html", "Fountain of Time<br><small>Req: 1e22 Light</small>", {color: "white", fontSize: "16px"}],
+                                ], {background: "black", border: "3px solid #663737", width: "394px", height: "204px", borderRadius: "10px 81px 10px 10px", lineHeight: "1"}]
+                            )
+
+                        }
+                    }
+                    return look
+                }
+            },
             "Pyramid": {
                 buttonStyle() { return { color: "white", borderRadius: "8px"} },
                 unlocked() { return hasMilestone("prj", 202) },
@@ -876,67 +924,6 @@
                     return look
                 }
             },
-            "Fountains": {
-                buttonStyle() { return { color: "white", borderRadius: "8px"} },
-                unlocked() { return true },
-                content() {
-                    let look = [
-                        ["blank", "25px"],
-                        ["raw-html", "You are gaining <h3>" + format(player.pri.totalPrisms.pow(2).div(10).mul(player.prj.projectSpeed)) + "</h3> fountain progress /s.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "<small>Total prisms give a base progress rate of " + format(player.pri.fountainSpeed) + "</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "You are focusing on " + formatWhole(player.prj.focused) + "/" + formatWhole(player.prj.maxFocused) + " interspace projects.", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
-                        ["blank", "25px"],
-                        ["style-row", [
-                            makePrismFountain(1),
-                        ]],
-                        ["blank", "6px", {width: "6px"}],
-                        ["style-row", [
-                            hasMilestone("prj", 203) ? makePrismFountain(3) : null,
-                            ["blank", "6px", {width: "6px"}],
-                            hasUpgrade("wel", 206) ? makePrismFountain(4) : null,
-                        ]],
-                        ["blank", "25px"],
-                        ["clickable", 102],
-                        ["blank", "25px"],
-                    ]
-                    if (layers.pri.fountains[2].condition()) {
-
-                        look[7][1].push(
-                            ["blank", "6px", {width: "6px"}],
-                            makePrismFountain(2)
-                        )
-
-                        if (layers.pri.fountains[3].condition()) {
-
-                            look[7][1].push(
-                                ["blank", "6px", {width: "6px"}],
-                                makePrismFountain(3)
-                            )
-
-                        } else {
-
-                            look[7][1].push(
-                                ["blank", "6px", {width: "6px"}],
-                                ["style-column", [
-                                    ["raw-html", "Fountain of Time<br><small>Req: 1e22 Light</small>", {color: "white", fontSize: "16px"}],
-                                ], {background: "black", border: "3px solid #663737", width: "394px", height: "204px", borderRadius: "10px 81px 10px 10px", lineHeight: "1"}]
-                            )
-
-                        }
-
-                    } else {
-
-                        look[5][1].push(
-                            ["blank", "6px", {width: "6px"}],
-                            ["style-column", [
-                                ["raw-html", "Fountain of Ultramarine<br><small>Req: 2 Prisms</small>", {color: "white", fontSize: "16px"}],
-                            ], {background: "black", border: "3px solid #663737", width: "394px", height: "204px", borderRadius: "10px 81px 10px 10px", lineHeight: "1"}]
-                        )
-
-                    }
-                    return look
-                }
-            },
         },
     },
     tabFormat: [
@@ -947,7 +934,7 @@
                 let look = {fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
                 if (player.pri.prismsToGet.gte(1)) {look.color = "#d6ebff"} else {look.color = "gray"}
                 return look
-            }],
+            }, {display: () => {return hasUpgrade("pri", 11) ? "" : "none !important"}}],
         ]],
         ["blank", "15px"],
         ["clickable", 101],

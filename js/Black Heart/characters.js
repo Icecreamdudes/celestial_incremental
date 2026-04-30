@@ -109,3 +109,16 @@ BHP.vespasian = {
     mending: new Decimal(5),
     potency: new Decimal(5),
 }
+BHP.bumpy = {
+    name: "Bumpy",
+    color: "#bf6090",
+    icon: "resources/bumpyFighting.png",
+    health: new Decimal(48),
+    damage: new Decimal(12),
+    defense: new Decimal(12),
+    regen: new Decimal(0.8),
+    agility: new Decimal(8),
+    luck: new Decimal(8),
+    mending: new Decimal(8),
+    potency: new Decimal(8),
+}

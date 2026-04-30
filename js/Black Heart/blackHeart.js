@@ -489,6 +489,24 @@ addLayer("bh", {
                 mending: new Decimal(5),
                 potency: new Decimal(5),
             },
+            "bumpy": {
+                selected: false,
+                skills: {
+                    0: "bumpy_starbeam",
+                    1: "none",
+                    2: "none",
+                    3: "none",
+                },
+                usedSP: new Decimal(10),
+                health: new Decimal(48),
+                damage: new Decimal(12),
+                defense: new Decimal(12),
+                regen: new Decimal(0.8),
+                agility: new Decimal(8),
+                luck: new Decimal(8),
+                mending: new Decimal(8),
+                potency: new Decimal(8),
+            },
         },
 
         // Saved Skill Stats
@@ -542,6 +560,10 @@ addLayer("bh", {
             "vespasian_overdrive": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "vespasian_impale": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "vespasian_peakPerformance": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+
+            // BUMPY
+            "bumpy_starbeam": {selected: ["bumpy", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "bumpy_tunnelVision": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
         },
 
         //Stagnant Timer
@@ -1179,6 +1201,8 @@ addLayer("bh", {
         damageAdd = damageAdd.add(player.bh.skillData["geroa_cosmicRay"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["geroa_orbitalCannon"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["geroa_defenseSatellites"].maxLevel.div(5))
+        damageAdd = damageAdd.add(player.bh.skillData["bumpy_starbeam"].maxLevel.div(5))
+        damageAdd = damageAdd.add(player.bh.skillData["bumpy_tunnelVision"].maxLevel.div(5))
         if (hasAchievement("achievements", 922)) damageAdd = damageAdd.add(1)
 
         // =-- REGEN STUFF --= //
@@ -2747,6 +2771,19 @@ addLayer("bh", {
                 return look
             },
         },
+        "Char-Bumpy": {
+            title() {return "<img src='" + run(BHP["bumpy"].icon, BHP["bumpy"]) + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
+            canClick: true,
+            unlocked() {return true},
+            onClick() {
+                player.bh.characterSelection = "bumpy"
+            },
+            style() {
+                let look = {width: "90px", minHeight: "90px", color: "white", background: "transparent", padding: "0", borderRadius: "0", margin: "2px"}
+                if (player.bh.characterData.bumpy.selected) look.filter = "brightness(50%)"
+                return look
+            },
+        },
         "Skill-Equip": {
             title() {return player.bh.skillData[player.bh.skillSelection].selected[0] != "none" ? "Unequip Skill" : "Equip Skill"},
             canClick() {
@@ -3917,7 +3954,7 @@ addLayer("bh", {
                         ["theme-scroll-column", [
                             ["blank", "2px"],
                             ["row", [
-                                ["clickable", "Char-Kres"], ["clickable", "Char-Nav"], ["clickable", "Char-Sel"], ["clickable", "Char-Eclipse"], ["clickable", "Char-Geroa"], ["clickable", "Char-Vespasian"]
+                                ["clickable", "Char-Kres"], ["clickable", "Char-Nav"], ["clickable", "Char-Sel"], ["clickable", "Char-Eclipse"], ["clickable", "Char-Geroa"], ["clickable", "Char-Vespasian"], ["clickable", "Char-Bumpy"]
                             ]],
                         ], {width: "497px", height: "480px"}],
                     ], {width: "497px", height: "677px"}],

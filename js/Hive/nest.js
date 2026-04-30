@@ -499,7 +499,7 @@ addLayer("n", {
                 "<h3>Nest Upgrade 5:2</h3>" + // TOP
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
                 "Raise pollen and nectar α gain<br>" + // MIDDLE
-                "Currently: ^" + formatSimple(tmp[this.layer].buyables[this.id].effect) +
+                "Currently: ^" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) +
                 "<br>Next: ^" + formatSimple(getBuyableAmount(this.layer, this.id).add(1).div(50).add(1), 2) +
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
                 formatSimple(tmp[this.layer].buyables[this.id].cost) + " Nests" + // BOTTOM

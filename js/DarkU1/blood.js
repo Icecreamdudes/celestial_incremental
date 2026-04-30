@@ -1810,7 +1810,7 @@ class BloodArena extends SpaceArena {
                     // optional loot flash if arena supports it
                     try {
                         if (this.lootFlashes && Array.isArray(this.lootFlashes)) {
-                            this.lootFlashes.push({ x: enemy.x, y: enemy.y, text: `+${amt} blood stones`, timer: 120, color: "#ff6b6b", style: "18px monospace" });
+                            this.lootFlashes.push({ x: enemy.x, y: enemy.y, text: `+${formatWhole(amt)} blood stones`, timer: 120, color: "#ff6b6b", style: "18px monospace" });
                         }
                     } catch (e) {}
                 }
@@ -1864,7 +1864,7 @@ class BloodArena extends SpaceArena {
                 this.ctx.font = '14px monospace';
                 this.ctx.fillStyle = '#fff';
                 this.ctx.textAlign = 'center';
-                this.ctx.fillText(Math.max(0, Math.floor(h)) + '/' + Math.floor(mh), enemy.x, enemy.y - (enemy.radius || 12) - 6);
+                this.ctx.fillText(formatWhole(Math.max(0, Math.floor(h))) + '/' + formatWhole(Math.floor(mh)), enemy.x, enemy.y - (enemy.radius || 12) - 6);
                 this.ctx.restore();
             }
             // draw vampire knight warnings (red aiming lines) and decrement timers

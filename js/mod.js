@@ -218,20 +218,28 @@ function updateStyles() {
 			break;
 		case "bh":
 			switch (player.bh.currentStage) {
+				case "depth1":
+					layerBG = "black"
+					if (player.bh.combo.lt(0)) layerBG = "radial-gradient(#00000066, #22226666), #000000"
+					break;
 				case "depth2":
 					layerBG = "linear-gradient(-180deg, #720455 0%, #250121 100%)"
+					if (player.bh.combo.lt(0)) layerBG = "radial-gradient(#00000066, #22226666), linear-gradient(-180deg, #720455 0%, #250121 100%)"
 					break;
 				case "depth3":
 					layerBG = "linear-gradient(-180deg, #720804 0%, #720455 100%)"
+					if (player.bh.combo.lt(0)) layerBG = "radial-gradient(#00000066, #22226666), linear-gradient(-180deg, #720804 0%, #720455 100%)"
 					break;
 				case "matosLair":
 					layerBG = "linear-gradient(-180deg, #96221d 0%, #720804 100%)"
 					break;
 				case "stagnantSynestia":
 					layerBG = "linear-gradient(-90deg, #124, #081122)"
+					if (player.bh.combo.lt(0)) layerBG = "radial-gradient(#00000066, #22226666), linear-gradient(-90deg, #124, #081122)"
 					break;
 				case "depth4":
 					layerBG = "linear-gradient(-180deg, #980098 0%, #590059 100%)"
+					if (player.bh.combo.lt(0)) layerBG = "radial-gradient(#00000066, #22226666), linear-gradient(-180deg, #980098 0%, #590059 100%)"
 					break;
 				case "alephsChamber":
 					layerBG = "linear-gradient(-180deg, #8C4670 0%, #7F007F 100%)"

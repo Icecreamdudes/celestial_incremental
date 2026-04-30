@@ -14,16 +14,22 @@ addLayer("stagnantSynestia", {
         temporalMult: new Decimal(1),
 
         highestCombo: new Decimal(0),
+        lowestCombo: new Decimal(0),
         comboEffect: new Decimal(1),
         comboStart: 0,
 
         milestone: {
+            "-100": 0,
+            "-75": 0,
+            "-50": 0,
+            "-25": 0,
             25: 0,
             50: 0,
             75: 0,
             100: 0,
         },
         milestoneEffect: new Decimal(0),
+        negToggle: false,
     }},
     automate() {},
     nodeStyle() {
@@ -41,7 +47,7 @@ addLayer("stagnantSynestia", {
     tooltip: "Stagnant Synestia",
     color: "#0091DC",
     update(delta) {
-        player.stagnantSynestia.comboEffect = player.stagnantSynestia.highestCombo.div(50).add(1).pow(buyableEffect("stagnantSynestia", 2))
+        player.stagnantSynestia.comboEffect = player.stagnantSynestia.highestCombo.min(100).div(50).add(1).pow(buyableEffect("stagnantSynestia", 2))
 
         player.stagnantSynestia.milestoneEffect = new Decimal(1)
         for (let i = 25; i < 101; i = i+25) {
@@ -60,6 +66,19 @@ addLayer("stagnantSynestia", {
                 BHStageEnter("stagnantSynestia")
             },
             style: {width: "200px", minHeight: "75px", color: "white", background: "radial-gradient(#094394, #052653)", border: "3px solid #021124", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"},
+        },
+        "neg": {
+            title() {return player.stagnantSynestia.negToggle ? "Switch to positive milestones" : "Switch to negative milestones"},
+            canClick: true,
+            unlocked() {return player.stagnantSynestia.lowestCombo.lt(0)},
+            onClick() {
+                if (player.stagnantSynestia.negToggle) {
+                    player.stagnantSynestia.negToggle = false
+                } else {
+                    player.stagnantSynestia.negToggle = true
+                }
+            },
+            style: {width: "257px", minHeight: "40px", fontSize: "9px", color: "var(--textColor)", background: "var(--miscButtonDisable)", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0", padding: "0 5px"},
         },
     },
     upgrades: {
@@ -298,7 +317,7 @@ addLayer("stagnantSynestia", {
             ["style-column", [
                 ["top-column", [
                     ["style-column", [
-                        ["raw-html", () => {return "Highest Combo: " + formatWhole(player.stagnantSynestia.highestCombo) + "/" + BHS["stagnantSynestia"].comboLimit}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "Highest Combo: " + formatWhole(player.stagnantSynestia.highestCombo.min(100)) + "/" + BHS["stagnantSynestia"].comboLimit}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
                     ], {width: "225px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "2px"}],
                     ["top-column", [
                         ["raw-html", () => {return "Boosts check back xp by x" + formatSimple(player.stagnantSynestia.comboEffect, 2)}, {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
@@ -308,11 +327,21 @@ addLayer("stagnantSynestia", {
                     ], {width: "272px", height: "47px", background: "var(--layerBackground)", borderTop: "3px solid var(--regBorder)"}],
                 ], {width: "272px", height: "114px", background: "var(--miscButtonHover)", borderBottom: "3px solid var(--regBorder)"}],
                 ["theme-scroll-column", [
-                    ["raw-html", () => {return "<button class='bhMilestoneButton  base' style='width:257px;height:50px' onclick='player.stagnantSynestia.comboStart=0'>Starting combo value: " + player.stagnantSynestia.comboStart + "<br>[Click to set to 0]</button>"}],
-                    ["bh-milestone", [25, "stagnantSynestia", ""]],
-                    ["bh-milestone", [50, "stagnantSynestia", ""]],
-                    ["bh-milestone", [75, "stagnantSynestia", ""]],
-                    ["bh-milestone", [100, "stagnantSynestia", ""]],
+                    ["hoverless-clickable", "neg"],
+                    ["style-column", [
+                        ["raw-html", () => {return "<button class='bhMilestoneButton  base' style='width:257px;height:50px' onclick='player.stagnantSynestia.comboStart=0'>Starting combo value: " + player.stagnantSynestia.comboStart + "<br>[Click to set to 0]</button>"}],
+                        ["bh-milestone", [25, "stagnantSynestia", ""]],
+                        ["bh-milestone", [50, "stagnantSynestia", ""]],
+                        ["bh-milestone", [75, "stagnantSynestia", ""]],
+                        ["bh-milestone", [100, "stagnantSynestia", ""]],
+                    ], () => {return !player.stagnantSynestia.negToggle ? {} : {display: "none !important"}}],
+                    ["style-column", [
+                        ["raw-html", () => {return "<button class='bhMilestoneButton base' style='width:257px;height:50px' onclick='player.stagnantSynestia.comboStart=-1'>Starting combo value: " + player.stagnantSynestia.comboStart + "<br>[Click to set to -1]</button>"}],
+                        ["bh-milestone", ["-25", "stagnantSynestia", ""]],
+                        ["bh-milestone", ["-50", "stagnantSynestia", ""]],
+                        ["bh-milestone", ["-75", "stagnantSynestia", ""]],
+                        ["bh-milestone", ["-100", "stagnantSynestia", ""]],
+                    ], () => {return player.stagnantSynestia.negToggle ? {} : {display: "none !important"}}],
                 ], {width: "272px", height: "250px", background: "var(--layerBackground)", borderBottom: "3px solid var(--regBorder)"}],
                 ["style-column", [
                     ["raw-html", "<p style='line-height:1'>Clicking on a cleared milestone allows you to start at that milestones combo value.", {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
@@ -348,6 +377,7 @@ BHS.stagnantSynestia = {
                 if (combo >= 25) cel.push("staticEta")
                 if (combo >= 50) cel.push("staticTheta")
                 if (combo >= 75) cel.push("staticIota")
+                if (combo < 0) cel = ["staticEnas", "staticPente", "staticDeka", "staticHekaton"]
                 return cel[Math.floor(Math.random()*cel.length)]
         }
     },

@@ -486,7 +486,7 @@
                 return "Paradox Pylon Power Factor I"
             },
             display() {
-                return 'which are boosting ancient pylon energy by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting paradox pylon energy by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
             },
             buy(mult) {
@@ -520,7 +520,7 @@
                 return "Paradox Pylon Power Factor II"
             },
             display() {
-                return 'which are boosting ancient pylon energy by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting paradox pylon energy by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
             },
             buy(mult) {
@@ -554,7 +554,7 @@
                 return "Paradox Pylon Power Factor III"
             },
             display() {
-                return 'which are boosting ancient pylon energy by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting paradox pylon energy by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
             },
             buy(mult) {

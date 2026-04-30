@@ -437,8 +437,8 @@ addLayer("rg", {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
-                    ["raw-html", () => { return "Repli-Grass mult: x" + formatSimple(player.rg.repliGrassMult) + "." }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => { return "Repli-Grass mult cap: x" + formatSimple(player.rg.repliGrassMult.mul(player.rg.repliGrassCap)) + "." }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "Repli-Grass mult: x" + formatSimple(player.rg.repliGrassMult, 3) + "." }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "Repli-Grass mult cap: x" + formatSimple(player.rg.repliGrassMult.mul(player.rg.repliGrassCap), 3) + "." }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["raw-html", () => { return player.rg.repliGrass.gte(player.rg.repliGrassSoftcapStart) ? "After " + formatSimple(player.rg.repliGrassSoftcapStart) + " repli-grass, multiplier effectiveness is divided by /" + formatSimple(player.rg.repliGrassSoftcapEffect) + "." : "" }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["style-column", [

@@ -379,6 +379,20 @@ addLayer("laboratory", {
                 ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14]]],
                 ["row", [["upgrade", 15], ["upgrade", 16], ["buyable", 11], ["buyable", 12]]],
                 ["blank", "4px"],
+                ["style-row", [
+                    ["raw-html", () => {return "You have " + formatWhole(player.laboratory.matosFragment) + " Matos Fragments."}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "Boosts matos dust gain by x" + formatSimple(player.laboratory.matosFragment.add(1).log(10))}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                ], () => {return player.laboratory.highestCombo.gt(10) ? {width: "547px", height: "35px", background: "var(--miscButtonHover)", borderTop: "3px solid var(--regBorder)", borderBottom: "3px solid var(--regBorder)"} : {display: "none !important"}}],
+                ["blank", "4px"],
+
+                ["blank", "4px"],
+                ["style-row", [
+                    ["raw-html", () => {return "You have " + formatWhole(player.laboratory.matosEssence) + " Matos Essence."}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "Boosts matos shard gain by x" + formatSimple(player.laboratory.matosEssence.add(1).log(10))}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                ], () => {return player.laboratory.highestCombo.gt(15) ? {width: "547px", height: "35px", background: "var(--miscButtonHover)", borderTop: "3px solid var(--regBorder)", borderBottom: "3px solid var(--regBorder)"} : {display: "none !important"}}],
+                ["blank", "4px"],
+
+                ["blank", "4px"],
             ], {width: "547px", height: "420px", background: "var(--miscButton)", borderRadius: "0 0 0 27px"}],
             ["style-column", [
                 ["style-column", [
@@ -450,10 +464,18 @@ BHS.laboratory = {
                 return "f09"
             case 10:
                 return "f10"
+            case 11:
+                return "f11"
+            case 12:
+                return "f12"
+            case 13:
+                return "f13"
+            case 14:
+                return "f14"
+            case 15:
+                return "f15"
             default:
-                let random = Math.random()
-                let cel = ["f00", "f01", "f02", "f03", "f04", "f05", "f06", "f07", "f08", "f09", "f10"]
-                return cel[Math.floor(Math.random()*cel.length)]
+                return "f" + Math.floor(Math.random()*16)
         }
     },
 }
@@ -487,6 +509,8 @@ BHC.f00 = {
             gain.matosShard = Decimal.pow(2, player.bh.combo).div(32)
         } else if (random < 0.5 && player.bh.combo.gte(10)) {
             gain.matosFragment = Decimal.pow(2, player.bh.combo).div(1024)
+        } else if (random < 0.6 && player.bh.combo.gte(15)) {
+            gain.matosEssence = Decimal.pow(2, player.bh.combo).div(32768)
         } else {
             gain.matosDust = Decimal.pow(2, player.bh.combo)
         }
@@ -900,13 +924,13 @@ BHC.f10 = {
             name() {
                 if (player.bh.celestialite.actions[0].variables.attacks) {
                     if (player.bh.celestialite.actions[0].variables.attacks == 0) {
-                        return "???"
+                        return "Mimic"
                     }
                     if (player.bh.celestialite.actions[0].variables.attacks == 1) {
                         return "Gwa"
                     }
                 }
-                return "???"
+                return "Mimic"
             },
             instant: true,
             type: "function",
@@ -945,15 +969,217 @@ BHC.f10 = {
     },
 }
 
+BHC.f11 = {
+    name: "Celestialite F-11",
+    symbol: "11",
+    style: {
+        background: "linear-gradient(135deg, #84a83e, #21331b)",
+        color: "black",
+        borderColor: "#0a2700",
+        fontSize: "60px",
+        borderRadius: "50%"
+    },
+    health: new Decimal(100),
+    damage: new Decimal(5),
+    actions: {
+        0: {
+            name: "Roll",
+            instant: true,
+            type: "function",
+            target: "randomPlayer",
+            onTrigger(index, slot, target) {
+                bhLog("<span style='color: #fff'><i>RrrRrrRrr</i>")
+            },
+            cooldown: new Decimal(10),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.3 && player.bh.combo.gte(5)) {
+            gain.matosShard = Decimal.pow(2, player.bh.combo).div(32)
+        } else if (random < 0.5 && player.bh.combo.gte(10)) {
+            gain.matosFragment = Decimal.pow(2, player.bh.combo).div(1024)
+        } else if (random < 0.6 && player.bh.combo.gte(15)) {
+            gain.matosEssence = Decimal.pow(2, player.bh.combo).div(32768)
+        } else {
+            gain.matosDust = Decimal.pow(2, player.bh.combo)
+        }
+        return gain
+    },
+}
+
+BHC.f12 = {
+    name: "Celestialite F-12",
+    symbol: "12",
+    style: {
+        background: "linear-gradient(135deg, #84a83e, #21331b)",
+        color: "black",
+        borderColor: "#0a2700",
+        fontSize: "60px",
+    },
+    health: new Decimal(100),
+    damage: new Decimal(5),
+    actions: {
+        0: {
+            name: "Concussion",
+            instant: true,
+            type: "damage",
+            target: "celestialite",
+            method: "physical",
+            value: new Decimal(0.01),
+            cooldown: new Decimal(8),
+
+            active: true,
+            constantType: "effect",
+            constantTarget: "celestialite",
+            effects: {
+                "attributes"() {return {"daze": new Decimal(0.5)}},
+            },
+            duration: new Decimal(3),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.3 && player.bh.combo.gte(5)) {
+            gain.matosShard = Decimal.pow(2, player.bh.combo).div(32)
+        } else if (random < 0.5 && player.bh.combo.gte(10)) {
+            gain.matosFragment = Decimal.pow(2, player.bh.combo).div(1024)
+        } else if (random < 0.6 && player.bh.combo.gte(15)) {
+            gain.matosEssence = Decimal.pow(2, player.bh.combo).div(32768)
+        } else {
+            gain.matosDust = Decimal.pow(2, player.bh.combo)
+        }
+        return gain
+    },
+}
+
+BHC.f13 = {
+    name: "Celestialite F-13",
+    symbol: "13",
+    style: {
+        background: "linear-gradient(135deg, #84a83e, #21331b)",
+        color: "black",
+        borderColor: "#0a2700",
+        fontSize: "60px",
+    },
+    health: new Decimal(100),
+    damage: new Decimal(5),
+    actions: {
+        0: {
+            name: "Unlucky 1d100",
+            instant: true,
+            type: "function",
+            target: "randomPlayer",
+            onTrigger(index, slot, target) {
+                let roll = Math.ceil(Math.random()*100)
+                if (roll == 13) {
+                    bhLog("<span style='color: #fff'>Celestialite F-13 rolled a 13. Heals Celestialite F-13 for 13 health.")
+                    player.bh.celestialite.health = player.bh.celestialite.health.add(13).min(player.bh.celestialite.maxHealth)
+                } else {
+                    bhLog("<span style='color: #fff'>Celestialite F-13 rolled a " + formatWhole(roll) + ". Does nothing.")
+                }
+            },
+            cooldown: new Decimal(13),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.3 && player.bh.combo.gte(5)) {
+            gain.matosShard = Decimal.pow(2, player.bh.combo).div(32)
+        } else if (random < 0.5 && player.bh.combo.gte(10)) {
+            gain.matosFragment = Decimal.pow(2, player.bh.combo).div(1024)
+        } else if (random < 0.6 && player.bh.combo.gte(15)) {
+            gain.matosEssence = Decimal.pow(2, player.bh.combo).div(32768)
+        } else {
+            gain.matosDust = Decimal.pow(2, player.bh.combo)
+        }
+        return gain
+    },
+}
+
+BHC.f14 = {
+    name: "Celestialite F-14",
+    symbol: "14",
+    style: {
+        background: "linear-gradient(135deg, #84a83e, #21331b)",
+        color: "black",
+        borderColor: "#0a2700",
+        fontSize: "60px",
+    },
+    health: new Decimal(100),
+    damage: new Decimal(5),
+    actions: {
+        0: {
+            name: "Healing Ray",
+            instant: true,
+            type: "heal",
+            target: "randomPlayerHeal",
+            value: new Decimal(25),
+            cooldown: new Decimal(8),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.3 && player.bh.combo.gte(5)) {
+            gain.matosShard = Decimal.pow(2, player.bh.combo).div(32)
+        } else if (random < 0.5 && player.bh.combo.gte(10)) {
+            gain.matosFragment = Decimal.pow(2, player.bh.combo).div(1024)
+        } else if (random < 0.6 && player.bh.combo.gte(15)) {
+            gain.matosEssence = Decimal.pow(2, player.bh.combo).div(32768)
+        } else {
+            gain.matosDust = Decimal.pow(2, player.bh.combo)
+        }
+        return gain
+    },
+}
+
+BHC.f15 = {
+    name: "Celestialite F-15",
+    symbol: "15",
+    style: {
+        background: "linear-gradient(135deg, #84a83e, #21331b)",
+        color: "black",
+        borderColor: "#0a2700",
+        fontSize: "60px",
+    },
+    health: new Decimal(100),
+    damage: new Decimal(5),
+    actions: {
+        0: {
+            name: "Time Stabilization",
+            instant: true,
+            type: "function",
+            target: "celestialite",
+            onTrigger(index, slot, target) {
+                player.bh.timer = player.bh.timer.sub(0.1)
+                bhLog("<span style='color: #fff'>Celestialite F-15 reduces current time spent by -0.1s.")
+            },
+            cooldown: new Decimal(2),
+        },
+    },
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.3 && player.bh.combo.gte(5)) {
+            gain.matosShard = Decimal.pow(2, player.bh.combo).div(32)
+        } else if (random < 0.5 && player.bh.combo.gte(10)) {
+            gain.matosFragment = Decimal.pow(2, player.bh.combo).div(1024)
+        } else if (random < 0.6 && player.bh.combo.gte(15)) {
+            gain.matosEssence = Decimal.pow(2, player.bh.combo).div(32768)
+        } else {
+            gain.matosDust = Decimal.pow(2, player.bh.combo)
+        }
+        return gain
+    },
+}
+
 // Pot of Greed (just puts a gag message in the log)
 
-// Subtract 0.1 seconds from the timer =-15TH COMBO-=
-
-// Dazes itself
-
 // Passive that constantly stuns the celestialite
-
-// 1d100 (99% chance to miss)
 
 // Increase size of celestialite icon
 

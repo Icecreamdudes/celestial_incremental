@@ -18,7 +18,20 @@
         abilityIndex: -1,
         abilityDesc: [],
     }},
-    automate() {},
+    automate() {
+        if (hasMilestone("s", 17)) {
+            buyUpgrade("rf", 11)
+            buyUpgrade("rf", 12)
+            buyUpgrade("rf", 13)
+            buyUpgrade("rf", 14)
+            buyUpgrade("rf", 15)
+            buyUpgrade("rf", 16)
+            buyUpgrade("rf", 17)
+            buyUpgrade("rf", 18)
+            buyUpgrade("rf", 19)
+            buyUpgrade("rf", 20)
+        }
+    },
     nodeStyle() {
         function degreesToRadians(degrees) {
             return (degrees * Math.PI) / 180;

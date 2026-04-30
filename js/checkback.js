@@ -2249,8 +2249,10 @@ addLayer("cb", {
                     ["blank", "25px"],
                     ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 15],
                         ["ex-buyable", 13], ["ex-buyable", 14], ["ex-buyable", 16]], {maxWidth: "900px"}],
-                    ["blank", "25px"],
-                    ["style-row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23]], {maxWidth: "900px"}],
+                    ["blank", "20px"],
+                    ["style-column", [
+                        ["raw-html", "Buyable costs are based on total xp", {color: "black", fontSize: "16px", fontFamily: "monospace"}],
+                    ], {width: "350px", height: "30px", background: "#094599", borderRadius: "20px"}],
                 ]
             },
             "Evolution": {

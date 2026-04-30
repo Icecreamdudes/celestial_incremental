@@ -1202,7 +1202,7 @@ addLayer("ir", {
                 content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return formatWhole(player.au2.stars) + "/5e10 stars." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return formatWhole(player.stagnantSynestia.highestCombo) + "/25 best stagnantion synestia combo." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return formatWhole(player.stagnantSynestia.highestCombo) + "/25 best stagnant synestia combo." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Not a lot of requirements... I'm trying to be nice." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
@@ -1590,10 +1590,10 @@ class SpaceArena {
                 collisionDamage: 10,
             };
             this.lastDashClick = 0;
-            this.dashCooldown = 2000; // 2 seconds in ms
+            this.dashCooldown = 1000; // 1 second in ms
             this.canvasClickListener = (e) => {
                 let now = Date.now();
-                this.dashCooldown = 2000 / this.upgradeEffects.attackSpeed
+                this.dashCooldown = 1000 / this.upgradeEffects.attackSpeed
                 if (now - this.lastDashClick < this.dashCooldown) return;
                 this.lastDashClick = now;
                 let rect = this.canvas.getBoundingClientRect();
@@ -4557,8 +4557,7 @@ class SpaceArena {
                 let enemyDmg = (typeof enemyDmgRaw === 'number') ? enemyDmgRaw : (enemyDmgRaw.toNumber ? enemyDmgRaw.toNumber() : Number(enemyDmgRaw));
                 if (Number.isNaN(enemyDmg) || !isFinite(enemyDmg) || enemyDmg < 0) enemyDmg = 0;
                 if (player.ir.shipType != 3 && player.ir.shipType != 7) enemy.health -= enemyDmg * 0.05;
-                if (player.ir.shipType == 3) enemy.health -= enemyDmg * 2.5;
-                if (player.ir.shipType == 7) enemy.health -= enemyDmg * 1.5;
+                if (player.ir.shipType == 3 || player.ir.shipType == 7) enemy.health -= enemyDmg * 2.5;
 
                 let shipDmgRaw = enemy.damage * this.upgradeEffects.damageReduction * 6;
                 let shipDmg = (typeof shipDmgRaw === 'number') ? shipDmgRaw : (shipDmgRaw.toNumber ? shipDmgRaw.toNumber() : Number(shipDmgRaw));
@@ -4691,7 +4690,7 @@ class SpaceArena {
                 this.lootFlashes.push({
                     x: pos.x,
                     y: pos.y,
-                    text: `+${pos.amount} space rock`,
+                    text: `+${formatWhole(pos.amount)} space rock`,
                     timer: 120,
                     color: "#ffe066",
                     style: "18px monospace"
@@ -4701,7 +4700,7 @@ class SpaceArena {
                 this.lootFlashes.push({
                     x: pos.x,
                     y: pos.y,
-                    text: `+${pos.amount} space gem`,
+                    text: `+${formatWhole(pos.amount)} space gem`,
                     timer: 240,
                     color: "#66e8ffff",
                     style: "24px monospace"
@@ -5144,7 +5143,7 @@ class SpaceArena {
                 this.ctx.fillStyle = "#fff";
                 this.ctx.textAlign = "center";
                 this.ctx.fillText(
-                    Math.max(0, Math.floor(enemy.health)) + "/" + Math.floor(enemy.maxHealth),
+                    formatWhole(Math.max(0, Math.floor(enemy.health))) + "/" + formatWhole(Math.floor(enemy.maxHealth)),
                     enemy.x,
                     enemy.y - enemy.radius - 6
                 );
@@ -5572,7 +5571,7 @@ class SpaceArena {
                 this.ctx.fillStyle = "#fff";
                 this.ctx.textAlign = "center";
                 this.ctx.fillText(
-                    Math.max(0, Math.floor(asteroid.health)) + "/" + Math.floor(asteroid.maxHealth),
+                    formatWhole(Math.max(0, Math.floor(asteroid.health))) + "/" + formatWhole(Math.floor(asteroid.maxHealth)),
                     asteroid.x,
                     asteroid.y - asteroid.size - 6
                 );

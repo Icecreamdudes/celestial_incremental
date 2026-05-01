@@ -140,7 +140,7 @@
                 return "Vaporized Rank-Tier-Tetr"
             },
             display() {
-                return "which are raising rank-tier-tetr requirements by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are raising rank-tier-tetr requirements by ^" + format(tmp[this.layer].buyables[this.id].effect, 3) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Clouds"
             },
             buy(mult) {
@@ -174,7 +174,7 @@
                 return "Vaporized Boosters"
             },
             display() {
-                return "which are raising booster requirements by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are raising booster requirements by ^" + format(tmp[this.layer].buyables[this.id].effect, 3) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Clouds"
             },
             buy(mult) {

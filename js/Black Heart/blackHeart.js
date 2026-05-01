@@ -124,6 +124,7 @@ BH_CURRENCY = {
     "darkEssence": ["Dark Essence", "bh"],
     "eclipseShards": ["Eclipse Shards", "sma"],
     "spaceRock": ["Space Rocks", "ir"],
+    "spaceGem": ["Space Gems", "ir"],
     "temporalDust": ["Temporal Dust", "stagnantSynestia"],
     "temporalShard": ["Temporal Shards", "stagnantSynestia"],
     "gloomingNocturnium": ["Glooming Nocturnium", "depth4"],

@@ -195,7 +195,7 @@
         }
         if (hasUpgrade("wel", 14)) player.wel.lightMult = player.wel.lightMult.mul(player.wel.bestLight.add(1).log(1e4).floor().pow_base(2));
         if (hasMilestone("prj", 103)) player.wel.lightMult = player.wel.lightMult.mul(2);
-        player.wel.lightMult = player.wel.lightMult.mul(player.pri.fountains[2].completionEffect)
+        player.wel.lightMult = player.wel.lightMult.mul(player.pri.fountains[1].completionEffect)
         
         // WELLS
 
@@ -1498,6 +1498,8 @@
                         ["blank", "25px"],
                         ["row", []],
                         ["blank", "25px"]
+                        ["row", []],
+                        ["blank", "25px"]
                     ]
                     if (player.wel.modules[1].completions.gte(50)) {
                             // light well beta
@@ -1651,8 +1653,8 @@
                     }
                     if (false) {
                         // prism well epsilon
-                        look[5][1].push(["blank", "1px"])
-                        look[5][1].push(
+                        look[7][1].push(["blank", "1px"])
+                        look[7][1].push(
                         ["style-column", [
                             ["style-column", [
                                     ["style-column", [
@@ -1689,8 +1691,8 @@
                     if (false) {
                         if (player.wel.modules[5].completions.gte(50)) {
                             // prism well zeta
-                            look[5][1].push(["blank", "1px"])
-                            look[5][1].push(
+                            look[7][1].push(["blank", "1px"])
+                            look[7][1].push(
                             ["style-column", [
                                 ["style-column", [
                                         ["style-column", [
@@ -1725,8 +1727,8 @@
                         )
                         } else {
                                 // prism well zeta locked
-                            look[5][1].push(["blank", "1px"])
-                            look[5][1].push(
+                            look[7][1].push(["blank", "1px"])
+                            look[7][1].push(
                                 ["style-column", [
                                     ["style-column", [
                                         ["raw-html", "Prism Well ζ<br><small>Req: 500 ε ↻</small>", {color: "white", fontSize: "16px"}],
@@ -1739,8 +1741,8 @@
                     if (player.wel.modules[5].completions.gte(50)) {
                         if (player.wel.modules[6].completions.gte(1e6)) {
                             // prism well eta
-                            look[5][1].push(["blank", "1px"])
-                            look[5][1].push(
+                            look[7][1].push(["blank", "1px"])
+                            look[7][1].push(
                             ["style-column", [
                                 ["style-column", [
                                         ["style-column", [
@@ -1775,8 +1777,8 @@
                         )
                         } else {
                                 // prism well eta locked
-                            look[5][1].push(["blank", "1px"])
-                            look[5][1].push(
+                            look[7][1].push(["blank", "1px"])
+                            look[7][1].push(
                                 ["style-column", [
                                     ["style-column", [
                                         ["raw-html", "Prism Well η<br><small>Req: 1,000,000 ζ ↻</small>", {color: "white", fontSize: "16px"}],
@@ -1789,8 +1791,8 @@
                     if (player.wel.modules[6].completions.gte(1e6)) {
                         if (player.wel.modules[7].completions.gte(1e12)) {
                             // prism well theta
-                            look[5][1].push(["blank", "1px"])
-                            look[5][1].push(
+                            look[7][1].push(["blank", "1px"])
+                            look[7][1].push(
                             ["style-column", [
                                 ["style-column", [
                                         ["style-column", [
@@ -1825,8 +1827,8 @@
                         )
                         } else {
                                 // prism well theta locked
-                            look[5][1].push(["blank", "1px"])
-                            look[5][1].push(
+                            look[7][1].push(["blank", "1px"])
+                            look[7][1].push(
                                 ["style-column", [
                                     ["style-column", [
                                         ["raw-html", "Prism Well θ<br><small>Req: 1e12 η ↻</small>", {color: "white", fontSize: "16px"}],
@@ -1917,12 +1919,12 @@
                             }
                         }
                         /*if (layers.wel.fountains[5].condition()) {
-                            look[5][1].push(
+                            look[7][1].push(
                                 ["blank", "6px", {width: "6px"}],
                                 makeWellFountain(5)
                             )
                         } else if (layers.wel.fountains[5].unlocked()) {
-                            look[5][1].push(
+                            look[7][1].push(
                                 ["blank", "6px", {width: "6px"}],
                                 ["style-column", [
                                     ["raw-html", "<h2>Project Speed Fountain</h2><br><h3>Req: 1e9 Light</h3>", {color: "white", fontSize: "10px"}],
@@ -2007,7 +2009,7 @@ const makeWellFountain = function (id) {
                 ["style-column", [
                     ["blank", "10px"],
                     ["raw-html", layers.wel.fountains[id].title, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ["raw-html", player.wel.fountains[id].timeSpeed.lte(0) ? "<span style='color:#ff7f7f;font-size:14px'>Can't Complete w/o Light!</span>" : (player.wel.fountains[id].focused ? formatTime(player.wel.fountains[id].timeReq.sub(player.wel.fountains[id].time).div(player.wel.fountains[id].timeSpeed)) : formatTime(player.wel.fountains[id].timeReq.div(player.wel.fountains[id].timeSpeed))) + " CD", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                    ["raw-html", player.wel.fountains[id].timeSpeed.lte(0) ? "<span style='color:#ffff00'>Can't Complete w/o Light!</span>" : (player.wel.fountains[id].focused ? formatTime(player.wel.fountains[id].timeReq.sub(player.wel.fountains[id].time).div(player.wel.fountains[id].timeSpeed)) : player.wel.light.lte(player.wel.fountains[id].lightReq) ? "<span style='color:#ffff00'>Can't afford!</span>" : (formatTime(player.wel.fountains[id].timeReq.div(player.wel.fountains[id].timeSpeed.mul(player.wel.light.sub(player.wel.fountains[id].lightReq).div(player.wel.light))))) + " CD"), {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                     ["raw-html", "<small>(" + format(player.wel.fountains[id].time, 1) + "/" + format(player.wel.fountains[id].timeReq, 1) + ")</small>", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                     ["blank", "10px"],
                     ["style-column", [

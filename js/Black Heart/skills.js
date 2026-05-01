@@ -688,7 +688,7 @@ BHA.geroa_radioactiveMissile = {
     char: "geroa",
     spCost: new Decimal(8),
     curCostBase: new Decimal(1000),
-    curCostScale: new Decimal(1000),
+    curCostScale: new Decimal(10),
     currency: "spaceRock",
     unlocked() {return getLevelableAmount("pet", 502).gt(0)},
 
@@ -714,9 +714,9 @@ BHA.geroa_selfRepair = {
     passiveText() {return "+" + formatSimple(player.bh.skillData["geroa_selfRepair"].maxLevel) + " HP"},
     char: "geroa",
     spCost: new Decimal(10),
-    curCostBase: new Decimal(5000),
-    curCostScale: new Decimal(2500),
-    currency: "spaceRock",
+    curCostBase: new Decimal(20),
+    curCostScale: new Decimal(2),
+    currency: "spaceGem",
     unlocked() {return hasUpgrade("ir", 201)},
 
     instant: true,
@@ -740,8 +740,8 @@ BHA.geroa_cosmicRay = {
     passiveText() {return "+" + formatSimple(player.bh.skillData["geroa_cosmicRay"].maxLevel.div(5)) + " DMG"},
     char: "geroa",
     spCost: new Decimal(12),
-    curCostBase: new Decimal(20000),
-    curCostScale: new Decimal(5000),
+    curCostBase: new Decimal(5000),
+    curCostScale: new Decimal(25),
     currency: "spaceRock",
     unlocked() {return hasUpgrade("ir", 202)},
 
@@ -765,9 +765,9 @@ BHA.geroa_orbitalCannon = {
     passiveText() {return "+" + formatSimple(player.bh.skillData["geroa_orbitalCannon"].maxLevel.div(5)) + " DMG"},
     char: "geroa",
     spCost: new Decimal(14),
-    curCostBase: new Decimal(100000),
-    curCostScale: new Decimal(10000),
-    currency: "spaceRock", // Temp, probably something else
+    curCostBase: new Decimal(50),
+    curCostScale: new Decimal(3),
+    currency: "spaceGem", // Temp, probably something else
     unlocked() {return hasUpgrade("ir", 203)},
 
     instant: true,
@@ -789,8 +789,8 @@ BHA.geroa_defenseSatellites = {
     passiveText() {return "+" + formatSimple(player.bh.skillData["geroa_defenseSatellites"].maxLevel.div(5)) + " DMG"},
     char: "geroa",
     spCost: new Decimal(16),
-    curCostBase: new Decimal(1e6),
-    curCostScale: new Decimal(1e5),
+    curCostBase: new Decimal(1e5),
+    curCostScale: new Decimal(100),
     currency: "spaceRock",
     unlocked() {return hasUpgrade("ir", 204)},
 

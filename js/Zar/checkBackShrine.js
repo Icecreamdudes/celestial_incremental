@@ -145,6 +145,7 @@
 
                 player.ir.shipHealth = player.ir.shipHealthMax
                 if (hasUpgrade("ir", 14)) arena.upgradeEffects.hpRegen += 0.5 / 60
+                arena.upgradeEffects.hpRegen += buyableEffect("bl", 13).sub(1).toNumber() / 60
 
                 arena.upgradeEffects.attackDamage *= levelableEffect("ir", player.ir.shipType)[2]
                 arena.upgradeEffects.moveSpeed += 4

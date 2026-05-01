@@ -225,7 +225,7 @@ addLayer("se", {
             },
             style() {
                 let look = {width: "75px", minHeight: "75px", borderRadius: "100px", fontSize: '12px', color: "white",}
-                player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(3) ? look.border = "3px solid #ff0000ff" : player.se.starsExploreCount[0][30].gte(100) ? look.border = "3px solid #ffee88" : look.border = "3px solid #ffffff",
+                player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(3) ? look.border = "3px solid #ff0000ff" : player.se.starsExploreCount[0][3].gte(100) ? look.border = "3px solid #ffee88" : look.border = "3px solid #ffffff",
                 look.backgroundImage = "linear-gradient(-315deg, #271ab9ff 0%, #1e033dff 74%)"
                 return look
             },

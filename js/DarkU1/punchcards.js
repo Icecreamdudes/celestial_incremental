@@ -26,11 +26,13 @@ addLayer("pu", {
     tooltip: "Punchcards",
     color: "black",
     update(delta) {
-        if (player.pu.selectedPunchcards[player.pu.selectionIndex] > 400)
-        {
-            player.pu.selectionCost = new Decimal(5)
-        } else
-        {
+        if (player.pu.selectedPunchcards[player.pu.selectionIndex] > 400) {
+            if (player.bl.noxDefeated && player.pu.selectedPunchcards[player.pu.selectionIndex] == 401) {
+                player.pu.selectionCost = new Decimal(3)
+            } else {
+                player.pu.selectionCost = new Decimal(5)
+            }
+        } else {
             player.pu.selectionCost = new Decimal(1)
         }
     },
@@ -2188,7 +2190,11 @@ addLayer("pu", {
                     ], () => {return {returnwidth: "550px", height: "390px", border: "3px solid white", backgroundColor: "#1c2033"}}],
                                         ["style-column", [
                     ["style-column", [
-                            ["raw-html", () => { return "Legendary Punchcards<br><small>(Costs 5 Punchcard Selections)"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", () => {
+                                let cost = 5
+                                if (player.bl.noxDefeated && player.pu.selectedPunchcards[3] == 401) cost = 3
+                                return "Legendary Punchcards<br><small>(Costs " + cost + " Punchcard Selections)"
+                            }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                         ], {width: "550px", height: "50px"}],
                         ["style-column", [
                             ["row", [["clickable", 14],]],

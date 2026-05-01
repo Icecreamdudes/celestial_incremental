@@ -678,22 +678,21 @@
             condition() {
                 return true
             },
+            unlocked() {
+                return true
+            },
             getCompletionEffect() {
                 let completions = player.pri.fountains[1].completions
 
-                s = completions.pow(0.666).pow_base(2)
+                s = player.wel.light.add(1).log10().div(10).add(1).pow(completions.pow(0.666).mul(0.8))
 
                 return s
             },
             getTimeReq() {
                 let completions = player.pri.fountains[1].completions
-                let s = new Decimal(60)
+                let s = new Decimal(6)
 
-                s = s.mul(completions.add(1))
-                s = s.mul(completions.pow_base(Math.pow(1.8, 1.06)))
-                if (completions.gte(10)) {
-                    s = s.pow(10)
-                }
+                s = s.mul(completions.add(1).pow(2))
 
                 return s
             },
@@ -710,16 +709,19 @@
             getTimeSpeed() {
                 let s = new Decimal(1)
 
-                s = s.mul(player.prj.projectSpeed)
+                //s = s.mul(player.prj.projectSpeed)
                 s = s.mul(player.pri.fountainSpeed)
 
                 return s
             },
         },
         2: {
-            title: "Fountain of Ultramarine",
-            completionEffectStat: "Light, based on Light",
+            title: "Spiral",
+            completionEffectStat: "Light Well ↻ Gen until best",
             condition() {
+                return player.pri.fountains[1].completions.gt(0)
+            },
+            unlocked() {
                 return true
             },
             getCompletionEffect() {
@@ -731,19 +733,15 @@
             },
             getTimeReq() {
                 let completions = player.pri.fountains[2].completions
-                let s = new Decimal(120)
+                let s = new Decimal(12)
 
-                s = s.mul(completions.add(1))
-                s = s.mul(completions.pow_base(Math.pow(2.5, 1.06)))
-                if (completions.gte(50)) {
-                    s = s.pow(1.05)
-                }
+                s = s.mul(completions.add(1).pow(3))
 
                 return s
             },
             getprismReq() {
                 let completions = player.pri.fountains[2].completions
-                let s = completions.div(4).add(1).pow(2.5)
+                let s = completions.div(4).add(1).pow(3)
                 
                 if (completions.gte(20)) {
                     s = s.mul(completions.sub(20).pow_base(1.1))
@@ -754,20 +752,20 @@
             getTimeSpeed() {
                 let s = new Decimal(1)
 
-                s = s.mul(player.prj.projectSpeed)
+                //s = s.mul(player.prj.projectSpeed)
                 s = s.mul(player.pri.fountainSpeed)
 
                 return s
             },
         },
         3: {
-            title: "Fountain of Time",
-            completionEffectStat: "Stored Time Capsules",
+            title: "Arrow",
+            completionEffectStat: "Light Fountain ↻ Gen until best",
             condition() {
-                return player.pri.bestPrisms.gte(100)
+                return player.pri.fountains[1].completions.gt(0)
             },
             unlocked() {
-                return hasMilestone("prj", 202)
+                return true
             },
             getCompletionEffect() {
                 let completions = player.pri.fountains[3].completions
@@ -778,10 +776,9 @@
             },
             getTimeReq() {
                 let completions = player.pri.fountains[3].completions
-                let s = new Decimal(1e6)
+                let s = new Decimal(12)
 
-                s = s.mul(completions.add(1).pow(1.5))
-                s = s.mul(completions.pow_base(2.5))
+                s = s.mul(completions.pow_base(Math.pow(3, 1.06)))
                 if (completions.gte(50)) {
                     s = s.pow(1.05)
                 }
@@ -790,11 +787,10 @@
             },
             getprismReq() {
                 let completions = player.pri.fountains[3].completions
-                let s = completions.add(1).pow(1.5)
-                s = s.mul(3)
+                let s = completions.div(4).add(1).pow(3)
                 
                 if (completions.gte(20)) {
-                    s = s.mul(completions.sub(20).pow_base(1.15))
+                    s = s.mul(completions.sub(20).pow_base(1.1))
                 }
 
                 return s.floor()
@@ -802,7 +798,7 @@
             getTimeSpeed() {
                 let s = new Decimal(1)
 
-                s = s.mul(player.prj.projectSpeed)
+                //s = s.mul(player.prj.projectSpeed)
                 s = s.mul(player.pri.fountainSpeed)
 
                 return s
@@ -813,6 +809,9 @@
             completionEffectStat: "Light Well Speed",
             condition() {
                 return player.pri.bestPrisms.gte(1e3)
+            },
+            unlocked() {
+                return player.pri.fountains[2].completions.gt(0) || player.pri.fountains[3].completions.gt(0)
             },
             getCompletionEffect() {
                 let completions = player.pri.fountains[4].completions
@@ -847,7 +846,7 @@
             getTimeSpeed() {
                 let s = new Decimal(1)
 
-                s = s.mul(player.prj.projectSpeed)
+                //s = s.mul(player.prj.projectSpeed)
                 s = s.mul(player.pri.fountainSpeed)
 
                 return s
@@ -867,13 +866,6 @@
                         ]],
                         ["blank", "6px", {width: "6px"}],
                         ["style-row", [
-                            ["style-column", [
-                                ["raw-html", "Spiral<br><small>Req: 1 Tetrahedron ↻</small>", {color: "white", fontSize: "16px"}],
-                            ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
-                            ["blank", "6px", {width: "6px"}],
-                            ["style-column", [
-                                ["raw-html", "Arrow<br><small>Req: 1 Tetrahedron ↻</small>", {color: "white", fontSize: "16px"}],
-                            ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
                         ]],
                         ["blank", "6px", {width: "6px"}],
                         ["style-row", [
@@ -890,6 +882,31 @@
                             ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
                         ]],
                     ]
+
+                    if (layers.pri.fountains[2].unlocked()) {
+                        if (layers.pri.fountains[2].condition()) {
+                            look[3][1].push(makePrismFountain(2))
+                        } else {
+                            look[3][1].push(
+                                ["style-column", [
+                                    ["raw-html", "Spiral<br><small>Req: 1 Tetrahedron ↻</small>", {color: "white", fontSize: "16px"}],
+                                ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
+                            )
+                        }
+                    }
+                    if (layers.pri.fountains[3].unlocked()) {
+                        look[3][1].push(["blank", "6px", {width: "6px"}])
+                        if (layers.pri.fountains[3].condition()) {
+                            look[3][1].push(makePrismFountain(3))
+                        } else {
+                            look[3][1].push(
+                                ["style-column", [
+                                    ["raw-html", "Arrow<br><small>Req: 1 Tetrahedron ↻</small>", {color: "white", fontSize: "16px"}],
+                                ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
+                            )
+                        }
+                    }
+
                     return look
                 }
             },

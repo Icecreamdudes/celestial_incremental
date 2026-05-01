@@ -648,9 +648,9 @@ addLayer("achievements", {
             unlocked: true,
         },
         1208: {
-            name: "Another Triangle",
+            name: "triangle",
             image: "resources/achievements/12_08.png",
-            tooltip: "<h3>Another Triangle</h3><hr style='margin-bottom:4px'>Buy a pyramid upgrade.",
+            tooltip: "<h3>triangle</h3><hr style='margin-bottom:4px'>Get at least 1 ↻ for each<br>of the first three pyramid<br>fountains.",
             color: "#994d99",
             complete() {return false},
             unlocked: true,

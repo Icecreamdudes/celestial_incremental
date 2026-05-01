@@ -991,13 +991,12 @@ BHA.bumpy_starbeam = {
     curCostBase: new Decimal(18),
     curCostScale: new Decimal(6),
     currency: "matosDust",
-    unlocked() {return true},
+    unlocked() {return false},
 
     instant: true,
     type: "damage",
     target: "celestialite",
-    method: "physical",
-    value() {return new Decimal(0.75).add(player.bh.skillData["bumpy_starbeam"].level.mul(0.05))},
+    method: "magic",
 
     active: true,
     constantType: "effect",
@@ -1010,6 +1009,29 @@ BHA.bumpy_starbeam = {
     },
     duration: new Decimal(4),
     cooldown: new Decimal(16),
+    cooldownCap: new Decimal(4),
+}
+
+BHA.bumpy_flashbang = {
+    name: "Flashbang",
+    description() {return "Deals " + formatWhole(new Decimal(60).add(player.bh.skillData["bumpy_flashbang"].level.mul(12))) + "% spirit damage and hard-stuns the celestialite for 1 second"},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["bumpy_flashbang"].maxLevel.div(5)) + " DMG"},
+    char: "bumpy",
+    spCost: new Decimal(10),
+    curCostBase: new Decimal(18),
+    curCostScale: new Decimal(6),
+    currency: "matosDust",
+    unlocked() {return false},
+    instant: true,
+    type: "damage",
+    target: "celestialite",
+    method: "true",
+    properties: {
+        "stun": [new Decimal(1), "hard", new Decimal(1)], // Chance / Stun-Type / Stun-Time
+    },
+    value() {return new Decimal(0.6).add(player.bh.skillData["bumpy_flashbang"].level.mul(0.12))},
+    duration: new Decimal(1),
+    cooldown: new Decimal(12),
     cooldownCap: new Decimal(4),
 }
 
@@ -1045,7 +1067,7 @@ BHA.bumpy_tunnelVision = {
     curCostBase: new Decimal(18),
     curCostScale: new Decimal(6),
     currency: "matosShard",
-    unlocked() {return true},
+    unlocked() {return false},
 
     passive: true,
     constantType: "effect",

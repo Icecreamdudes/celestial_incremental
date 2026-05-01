@@ -161,7 +161,7 @@
                 player.pri.fountains[this.id].focused = true
             },
             style() {
-                let look = {width: "238px", minHeight: "45px", borderRadius: "0px"}
+                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
                 if (this.canClick()) {
                     look.backgroundColor = "#a8ffff"
                     look.border = "3px solid #0000003f"
@@ -184,7 +184,7 @@
                 player.pri.fountains[this.id].focused = true
             },
             style() {
-                let look = {width: "238px", minHeight: "45px", borderRadius: "0px"}
+                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
                 if (this.canClick()) {
                     look.backgroundColor = "#a8ffff"
                     look.border = "3px solid #0000003f"
@@ -207,7 +207,7 @@
                 player.pri.fountains[this.id].focused = true
             },
             style() {
-                let look = {width: "238px", minHeight: "45px", borderRadius: "0px"}
+                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
                 if (this.canClick()) {
                     look.backgroundColor = "#a8ffff"
                     look.border = "3px solid #0000003f"
@@ -230,7 +230,7 @@
                 player.pri.fountains[this.id].focused = true
             },
             style() {
-                let look = {width: "238px", minHeight: "45px", borderRadius: "0px"}
+                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
                 if (this.canClick()) {
                     look.backgroundColor = "#a8ffff"
                     look.border = "3px solid #0000003f"
@@ -673,8 +673,8 @@
     infoboxes: {},
     fountains: {
         1: {
-            title: "Fountain of Reflection",
-            completionEffectStat: "Light Well Cycles",
+            title: "Tetrahedron",
+            completionEffectStat: "Light, based on Light",
             condition() {
                 return true
             },
@@ -856,70 +856,39 @@
     },
     microtabs: {
         stuff: {
-            "Fountains": {
+            "Pyramid": {
                 buttonStyle() { return { color: "white", borderRadius: "8px"} },
                 unlocked() { return true },
                 content() {
                     let look = [
                         ["blank", "25px"],
-                        ["raw-html", "You are gaining <h3>" + format(player.pri.totalPrisms.pow(2).div(10).mul(player.prj.projectSpeed)) + "</h3> fountain progress /s.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "<small>Total prisms give a base progress rate of " + format(player.pri.fountainSpeed) + "</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "You are focusing on " + formatWhole(player.prj.focused) + "/" + formatWhole(player.prj.maxFocused) + " interspace projects.", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
-                        ["blank", "25px"],
                         ["style-row", [
-                            makePrismFountain(1),
-                            ["blank", "6px", {width: "6px"}],
-                            makePrismFountain(2),
+                            makePrismFountain(1)
                         ]],
                         ["blank", "6px", {width: "6px"}],
                         ["style-row", [
+                            ["style-column", [
+                                ["raw-html", "Spiral<br><small>Req: 1 Tetrahedron ↻</small>", {color: "white", fontSize: "16px"}],
+                            ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
+                            ["blank", "6px", {width: "6px"}],
+                            ["style-column", [
+                                ["raw-html", "Arrow<br><small>Req: 1 Tetrahedron ↻</small>", {color: "white", fontSize: "16px"}],
+                            ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
                         ]],
-                        ["blank", "25px"],
-                        ["clickable", 102],
-                        ["blank", "25px"],
-                    ]
-                    if (layers.pri.fountains[2].condition()) {
-
-                        if (layers.pri.fountains[3].condition()) {
-
-                            look[7][1].push(
-                                ["blank", "6px", {width: "6px"}],
-                                makePrismFountain(3)
-                            )
-
-                        } else if (layers.pri.fountains[3].unlocked()) {
-
-                            look[7][1].push(
-                                ["blank", "6px", {width: "6px"}],
-                                ["style-column", [
-                                    ["raw-html", "Fountain of Time<br><small>Req: 1e22 Light</small>", {color: "white", fontSize: "16px"}],
-                                ], {background: "black", border: "3px solid #663737", width: "394px", height: "204px", borderRadius: "10px 81px 10px 10px", lineHeight: "1"}]
-                            )
-
-                        }
-                    }
-                    return look
-                }
-            },
-            "Pyramid": {
-                buttonStyle() { return { color: "white", borderRadius: "8px"} },
-                unlocked() { return hasMilestone("prj", 202) },
-                content() {
-                    let look = [
-                        ["blank", "25px"],
-                        ["row", [
-                            ["upgrade", 11], 
+                        ["blank", "6px", {width: "6px"}],
+                        ["style-row", [
+                            ["style-column", [
+                                ["raw-html", "Octahedron<br><small>Req: 8 Tetrahedron ↻</small>", {color: "white", fontSize: "16px"}],
+                            ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
+                            ["blank", "6px", {width: "6px"}],
+                            ["style-column", [
+                                ["raw-html", "Cone<br><small>Req: +5 Prisms in one reset</small>", {color: "white", fontSize: "16px"}],
+                            ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
+                            ["blank", "6px", {width: "6px"}],
+                            ["style-column", [
+                                ["raw-html", "Staircase<br><small>Req: 6 Spiral ↻ and 6 Arrow ↻</small>", {color: "white", fontSize: "16px"}],
+                            ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
                         ]],
-                        ["row", [
-                            ["upgrade", 21], ["upgrade", 22],
-                        ]],
-                        ["row", [
-                            ["upgrade", 31], ["upgrade", 32], ["upgrade", 33],
-                        ]],
-                        ["row", [
-                            ["upgrade", 41], ["upgrade", 42], ["upgrade", 43], ["upgrade", 44],
-                        ]],
-                        ["blank", "25px"],
                     ]
                     return look
                 }
@@ -943,27 +912,42 @@
             ["microtabs", "stuff", { 'border-width': '0px' }],
         ], () => {
             return {display: player.pri.bestPrisms.gt(0) ? "" : "none !important"}
-        }]
+        }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && hasMilestone("prj", 201)}
 })
 const makePrismFountain = function (id) {
     let thisFountain =
-        ["style-column", [
-            ["style-row", [
+        ["style-row", [
+            ["style-column", [
+                ["style-column", [
+                    ["style-column", [
+                        ["style-column", [
+                            ["style-column", [
+                            ], {background: "linear-gradient(0deg, #ffd6d6 0, #abffd6 63.67px, #d6ebff 127.33px, #ffabff 191px)", borderRadius: "0", width: "38px", height: (format(player.pri.fountains[id].time.div(player.pri.fountains[id].timeReq).min(1).max(0).mul(191))) + "px", marginTop: (format(new Decimal(191).sub(player.pri.fountains[id].time.div(player.pri.fountains[id].timeReq).min(1).max(0).mul(191)))) + "px"}],
+                        ], {background: "black", borderRadius: "10px 0 0 10px", width: "38px", height: "191px"}],
+                    ], {width: "44px", height: "0"}],
+                    ["style-column", [
+                        ["style-column", [
+                        ], {border: "3px solid #a8ffff", borderRadius: "10px 0 0 10px", width: "38px", height: "191px"}],
+                    ], {width: "44px", height: "0"}],
+                ], {background: "#4d9999", borderRadius: "10px 0 0 10px", width: "50px", height: "203px"}],
+            ], {background: "#335966", border: "3px solid #335966", borderRadius: "10px 0 0 10px", borderRight: "0", width: "50px", height: "203px"}],
+            ["style-column", [
                 ["style-column", [
                     ["blank", "10px"],
                     ["raw-html", layers.pri.fountains[id].title, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ["raw-html", player.pri.fountains[id].timeSpeed.lte(0) ? "<span style='color:#ff7f7f;font-size:14px'>Can't Complete w/o Prismatics!</span>" : (player.pri.fountains[id].focused ? formatTime(player.pri.fountains[id].timeReq.sub(player.pri.fountains[id].time).div(player.pri.fountains[id].timeSpeed)) : formatTime(player.pri.fountains[id].timeReq.div(player.pri.fountains[id].timeSpeed))) + " CD", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ["raw-html", "<small>(" + format(player.pri.fountains[id].time, 1) + "/" + format(player.pri.fountains[id].timeReq, 1) + ")</small>", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", player.pri.fountains[id].timeSpeed.lte(0) ? "<span style='color:#ff7f7f;font-size:14px'>Can't Complete w/o Prismatics!</span>" : (player.pri.fountains[id].focused ? formatTime(player.pri.fountains[id].timeReq.sub(player.pri.fountains[id].time).div(player.pri.fountains[id].timeSpeed)) : formatTime(player.pri.fountains[id].timeReq.div(player.pri.fountains[id].timeSpeed))) + " CD", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                    ["raw-html", "<small>(" + format(player.pri.fountains[id].time, 1) + "/" + format(player.pri.fountains[id].timeReq, 1) + ")</small>", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                     ["blank", "10px"],
                     ["style-column", [
-                        ["raw-html", player.pri.fountains[id].prismReq.eq(0) ? "Your first cycle is free!" : "-" + formatWhole(player.pri.fountains[id].prismReq) + " Prisms", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ], {background: "#4d9999", borderRadius: "10px 10px 0px 0px", width: "238px", height:"25px"}],
+                        ["raw-html", player.pri.fountains[id].prismReq.eq(0) ? "Your first cycle is free!" : "-" + formatWhole(player.pri.fountains[id].prismReq) + " Prisms", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                    ], {background: "#4d9999", borderRadius: "0 10px 0px 0px", width: "200px", height:"25px"}],
                     ["blank", "3px"],
                     ["clickable", id],
-                ], {background: "#335966", border: "3px solid #335966", borderRadius: "16px 0px 0px 0px", width: "238px", height: "150px"}],
-                ["style-column", [
+                ], {background: "#335966", border: "3px solid #335966", borderRadius: "0 10px 0px 0px", width: "200px", height: "150px"}],
+                /*["style-column", [
                     ["style-column", [
                         ["style-column", [
                             ["style-column", [
@@ -976,12 +960,13 @@ const makePrismFountain = function (id) {
                     ], {background: "#335966", borderRadius: "0px 81px 0px 0px", width: "153px", height: "78px"}],
                     ["style-column", [], {background: "#4d9999", height: "78px"}],
                 ], {border: "3px solid #335966", borderBottom: "0px", borderLeft: "0px", borderRadius: "0px 81px 0px 0px", padding: "-3px", width: "153px", height: "153px"}],
-            ], {verticalAlign: "bottom"}],
-            ["style-column", [
-                    ["style-column", [
-                    ["raw-html", formatWhole(player.pri.fountains[id].completions) + " ↻<br><small>(x" + formatShort(layers.pri.fountains[id].getCompletionEffect()) + " " + layers.pri.fountains[id].completionEffectStat + ")</small>", {color: "white", fontSize: "16px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
-                ], {background: "#335966", border: "3px solid #4d9999", borderRadius: "0px 0px 7px 7px", width: "388px", height: "44px"}],
-            ], {background: "#4d9999", border: "3px solid #335966", borderRadius: "0px 0px 10px 10px", borderTop: "0px", height: "50px"}],
-        ], {width: "400px"}]
+                */
+                ["style-column", [
+                        ["style-column", [
+                        ["raw-html", formatWhole(player.pri.fountains[id].completions) + " ↻<br><small>(x" + formatShort(layers.pri.fountains[id].getCompletionEffect()) + " " + layers.pri.fountains[id].completionEffectStat + ")</small>", {color: "white", fontSize: "14px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
+                    ], {background: "#335966", border: "3px solid #4d9999", borderRadius: "0px 0px 7px 0px", width: "197px", height: "44px"}],
+                ], {background: "#4d9999", border: "3px solid #335966", borderRadius: "0px 0px 10px 0px", borderTop: "0px", borderLeft: "0px", height: "50px"}],
+            ], {width: "206px"}]
+        ]]
     return thisFountain
 }

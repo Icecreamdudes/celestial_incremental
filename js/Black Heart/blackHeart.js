@@ -563,6 +563,7 @@ addLayer("bh", {
 
             // BUMPY
             "bumpy_starbeam": {selected: ["bumpy", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "bumpy_flashbang": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "bumpy_tunnelVision": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
         },
 
@@ -1202,6 +1203,7 @@ addLayer("bh", {
         damageAdd = damageAdd.add(player.bh.skillData["geroa_orbitalCannon"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["geroa_defenseSatellites"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["bumpy_starbeam"].maxLevel.div(5))
+        damageAdd = damageAdd.add(player.bh.skillData["bumpy_flashbang"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["bumpy_tunnelVision"].maxLevel.div(5))
         if (hasAchievement("achievements", 922)) damageAdd = damageAdd.add(1)
 
@@ -2774,7 +2776,7 @@ addLayer("bh", {
         "Char-Bumpy": {
             title() {return "<img src='" + run(BHP["bumpy"].icon, BHP["bumpy"]) + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
             canClick: true,
-            unlocked() {return true},
+            unlocked() {return false},
             onClick() {
                 player.bh.characterSelection = "bumpy"
             },

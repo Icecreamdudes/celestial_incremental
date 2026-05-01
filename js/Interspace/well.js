@@ -1156,7 +1156,7 @@
                 player.wel.fountains[this.id - 1000].focused = true
             },
             style() {
-                let look = {width: "238px", minHeight: "45px", borderRadius: "0px"}
+                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"} // 238px
                 if (this.canClick()) {
                     look.backgroundColor = "#a8ffd3"
                     look.border = "3px solid #0000003f"
@@ -1179,7 +1179,7 @@
                 player.wel.fountains[this.id - 1000].focused = true
             },
             style() {
-                let look = {width: "238px", minHeight: "45px", borderRadius: "0px"}
+                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
                 if (this.canClick()) {
                     look.backgroundColor = "#a8ffd3"
                     look.border = "3px solid #0000003f"
@@ -1202,7 +1202,7 @@
                 player.wel.fountains[this.id - 1000].focused = true
             },
             style() {
-                let look = {width: "238px", minHeight: "45px", borderRadius: "0px"}
+                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
                 if (this.canClick()) {
                     look.backgroundColor = "#a8ffd3"
                     look.border = "3px solid #0000003f"
@@ -1225,7 +1225,7 @@
                 player.wel.fountains[this.id - 1000].focused = true
             },
             style() {
-                let look = {width: "238px", minHeight: "45px", borderRadius: "0px"}
+                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
                 if (this.canClick()) {
                     look.backgroundColor = "#a8ffd3"
                     look.border = "3px solid #0000003f"
@@ -1241,7 +1241,7 @@
     },
     fountains: {
         1: {
-            title: "Fountain of Light",
+            title: "Light Fountain",
             completionEffectStat: "Light",
             condition() {
                 return true
@@ -1287,7 +1287,7 @@
             },
         },
         2: {
-            title: "Fountain of Light II",
+            title: "Light Fountain II",
             completionEffectStat: "Light",
             condition() {
                 return player.wel.bestLight.gte(1.5e3)
@@ -1333,7 +1333,7 @@
             },
         },
         3: {
-            title: "Fountain of Light Cycles",
+            title: "Cycle Fountain",
             completionEffectStat: "Light Well Cycles",
             condition() {
                 return player.wel.bestLight.gte(5e4)
@@ -1379,7 +1379,7 @@
             },
         },
         4: {
-            title: "Fountain of Light Speed",
+            title: "Speed Fountain",
             completionEffectStat: "Light Well Speed",
             condition() {
                 return player.wel.bestLight.gte(1.5e6)
@@ -1881,10 +1881,10 @@
                             )
                         } else {
                             look[1][1].push(
-                                    ["blank", "6px", {width: "6px"}],
+                                ["blank", "6px", {width: "6px"}],
                                 ["style-column", [
-                                    ["raw-html", "Fountain of Light II<br><small>Req: 1,500 Light</small>", {color: "white", fontSize: "16px"}],
-                                ], {background: "black", border: "3px solid #663737", width: "394px", height: "204px", borderRadius: "10px 81px 10px 10px", lineHeight: "1"}]
+                                    ["raw-html", "Light Fountain II<br><small>Req: 1,500 Light</small>", {color: "white", fontSize: "16px"}],
+                                ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
                             )
                         }
                         if (layers.wel.fountains[2].condition()) {
@@ -1894,10 +1894,10 @@
                                 )
                             } else {
                                 look[3][1].push(
-                                    ["blank", "6px", {width: "6px"}],
-                                    ["style-column", [
-                                        ["raw-html", "Fountain of Light Cycles<br><small>Req: 50,000 Light</small>", {color: "white", fontSize: "16px"}],
-                                ], {background: "black", border: "3px solid #663737", width: "394px", height: "204px", borderRadius: "10px 81px 10px 10px", lineHeight: "1"}]
+                                ["blank", "6px", {width: "6px"}],
+                                ["style-column", [
+                                    ["raw-html", "Cycle Fountain<br><small>Req: 50,000 Light</small>", {color: "white", fontSize: "16px"}],
+                                ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
                                 )
                             }
                         }
@@ -1909,10 +1909,10 @@
                                 )
                             } else {
                                 look[3][1].push(
-                                    ["blank", "6px", {width: "6px"}],
-                                    ["style-column", [
-                                        ["raw-html", "Fountain of Light Speed<br><small>Req: 1,500,000 Light</small>", {color: "white", fontSize: "16px"}],
-                                ], {background: "black", border: "3px solid #663737", width: "394px", height: "204px", borderRadius: "10px 81px 10px 10px", lineHeight: "1"}]
+                                ["blank", "6px", {width: "6px"}],
+                                ["style-column", [
+                                    ["raw-html", "Speed Fountain<br><small>Req: 1,500,000 Light</small>", {color: "white", fontSize: "16px"}],
+                                ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
                                 )
                             }
                         }
@@ -1944,7 +1944,7 @@
     },
     playerhown() { return player.startedGame == true}
 })
-
+/*
 const makeWellFountain = function (id, effectIsWhole) {
     let thisFountain =
         ["style-column", [
@@ -1981,6 +1981,48 @@ const makeWellFountain = function (id, effectIsWhole) {
                 ], {background: "#336659", border: "3px solid #4d9973", borderRadius: "0px 0px 7px 7px", width: "388px", height: "44px"}],
             ], {background: "#4d9973", border: "3px solid #336659", borderRadius: "0px 0px 10px 10px", borderTop: "0px", height: "50px"}],
         ], {width: "400px"}]
+    return thisFountain
+}
+*/
+
+
+const makeWellFountain = function (id) {
+    let thisFountain =
+        ["style-row", [
+            ["style-column", [
+                ["style-column", [
+                    ["style-column", [
+                        ["style-column", [
+                            ["style-column", [
+                            ], {background: "#ffdfdf", borderRadius: "0", width: "38px", height: (format(player.wel.fountains[id].time.div(player.wel.fountains[id].timeReq).min(1).max(0).mul(191))) + "px", marginTop: (format(new Decimal(191).sub(player.wel.fountains[id].time.div(player.wel.fountains[id].timeReq).min(1).max(0).mul(191)))) + "px"}],
+                        ], {background: "black", borderRadius: "10px 0 0 10px", width: "38px", height: "191px"}],
+                    ], {width: "44px", height: "0"}],
+                    ["style-column", [
+                        ["style-column", [
+                        ], {border: "3px solid #a8ffd3", borderRadius: "10px 0 0 10px", width: "38px", height: "191px"}],
+                    ], {width: "44px", height: "0"}],
+                ], {background: "#4d9973", borderRadius: "10px 0 0 10px", width: "50px", height: "203px"}],
+            ], {background: "#336659", border: "3px solid #336659", borderRadius: "10px 0 0 10px", borderRight: "0", width: "50px", height: "203px"}],
+            ["style-column", [
+                ["style-column", [
+                    ["blank", "10px"],
+                    ["raw-html", layers.wel.fountains[id].title, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", player.wel.fountains[id].timeSpeed.lte(0) ? "<span style='color:#ff7f7f;font-size:14px'>Can't Complete w/o Light!</span>" : (player.wel.fountains[id].focused ? formatTime(player.wel.fountains[id].timeReq.sub(player.wel.fountains[id].time).div(player.wel.fountains[id].timeSpeed)) : formatTime(player.wel.fountains[id].timeReq.div(player.wel.fountains[id].timeSpeed))) + " CD", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                    ["raw-html", "<small>(" + format(player.wel.fountains[id].time, 1) + "/" + format(player.wel.fountains[id].timeReq, 1) + ")</small>", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                    ["blank", "10px"],
+                    ["style-column", [
+                        ["raw-html", player.wel.fountains[id].lightReq.eq(0) ? "Your first cycle is free!" : "-" + formatWhole(player.wel.fountains[id].lightReq) + " Light", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                    ], {background: "#4d9973", borderRadius: "0 10px 0px 0px", width: "200px", height:"25px"}],
+                    ["blank", "3px"],
+                    ["clickable", id + 1000],
+                ], {background: "#336659", border: "3px solid #336659", borderRadius: "0 10px 0px 0px", width: "200px", height: "150px"}],
+                ["style-column", [
+                        ["style-column", [
+                        ["raw-html", formatWhole(player.wel.fountains[id].completions) + " ↻<br><small>(x" + formatWhole(layers.wel.fountains[id].getCompletionEffect()) + " " + layers.wel.fountains[id].completionEffectStat + ")</small>", {color: "white", fontSize: "14px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
+                    ], {background: "#336659", border: "3px solid #4d9973", borderRadius: "0px 0px 7px 0px", width: "197px", height: "44px"}],
+                ], {background: "#4d9973", border: "3px solid #336659", borderRadius: "0px 0px 10px 0px", borderTop: "0px", borderLeft: "0px", height: "50px"}],
+            ], {width: "206px"}]
+        ]]
     return thisFountain
 }
 

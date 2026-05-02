@@ -148,7 +148,20 @@
                 player.bl.foughtNox = false
                 player.bl.noxFightActive = false
             },
-            style: { width: '300px', "min-height": '100px', color: "white" },
+            style: {width: "200px", minHeight: '100px', color: "white", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
+        },
+        13: {
+            title() { return player.ir.autoShoot ? "<h2>Auto-Shoot<br>[ENABLED]" : "<h2>Auto-Shoot<br>[DISABLED]" },
+            canClick() { return true },
+            unlocked() { return !player.ir.iriditeFightActive},
+            onClick() {
+                if (player.ir.autoShoot) {
+                    player.ir.autoShoot = false
+                } else {
+                    player.ir.autoShoot = true
+                }
+            },
+            style: {width: "200px", minHeight: '100px', color: "white", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
         },
 
         101: {
@@ -191,6 +204,54 @@
                 !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
                 return look
             }
+        },
+        1001: {
+            title() {return "W"},
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                document.dispatchEvent(new KeyboardEvent('keydown', {key: 'w', code: 'KeyW', bubbles: true}))
+                setTimeout(() => {
+                    document.dispatchEvent(new KeyboardEvent('keyup', {key: 'w', code: 'KeyW', bubbles: true}))
+                }, 100)
+            },
+            style: {width: "50px", minHeight: "50px", fontSize: "12px", color: "white", backgroundColor: "#222", border: "2px solid white", margin: "-1px"}
+        },
+        1002: {
+            title() {return "A"},
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                document.dispatchEvent(new KeyboardEvent('keydown', {key: 'a', code: 'KeyA', bubbles: true}))
+                setTimeout(() => {
+                    document.dispatchEvent(new KeyboardEvent('keyup', {key: 'a', code: 'KeyA', bubbles: true}))
+                }, 100)
+            },
+            style: {width: "50px", minHeight: "50px", fontSize: "12px", color: "white", backgroundColor: "#222", border: "2px solid white", margin: "-1px"}
+        },
+        1003: {
+            title() {return "S"},
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                document.dispatchEvent(new KeyboardEvent('keydown', {key: 's', code: 'KeyS', bubbles: true}))
+                setTimeout(() => {
+                    document.dispatchEvent(new KeyboardEvent('keyup', {key: 's', code: 'KeyS', bubbles: true}))
+                }, 100)
+            },
+            style: {width: "50px", minHeight: "50px", fontSize: "12px", color: "white", backgroundColor: "#222", border: "2px solid white", margin: "-1px"}
+        },
+        1004: {
+            title() {return "D"},
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                document.dispatchEvent(new KeyboardEvent('keydown', {key: 'd', code: 'KeyD', bubbles: true}))
+                setTimeout(() => {
+                    document.dispatchEvent(new KeyboardEvent('keyup', {key: 'd', code: 'KeyD', bubbles: true}))
+                }, 100)
+            },
+            style: {width: "50px", minHeight: "50px", fontSize: "12px", color: "white", backgroundColor: "#222", border: "2px solid white", margin: "-1px"}
         },
     },
     bloodReset() {
@@ -623,13 +684,13 @@
                     ["style-row", [
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", function () { return "You have " + formatWhole(player.bl.bloodStones) + " blood stones." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                                ["raw-html", function () { return "You have " + formatWhole(player.bl.bloodStones) + " blood stones." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                             ], {width: "405px", height: "40px", borderRight: "2px solid #f57171ff"}],
                             ["row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13],["dark-buyable", 14]]],
                         ], {width: "407px"}],
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", function () { return "You have " + formatWhole(player.bl.bloodGems) + " blood gems." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                                ["raw-html", function () { return "You have " + formatWhole(player.bl.bloodGems) + " blood gems." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                             ], {width: "405px", height: "40px", borderLeft: "2px solid #f57171ff"}],
                             ["row", [["dark-buyable", 31], ["dark-buyable", 32], ["dark-buyable", 33],["dark-buyable", 34]]],
                         ], {width: "407px"}],
@@ -676,19 +737,22 @@
                 buttonStyle() { return { border: "2px solid #f57171ff", borderRadius: "10px" } },
                 unlocked() { return false },
                 content: [
-                ["layer-proxy", ["ir", [
-
-                                        ["raw-html", function () { return "Level: " + formatWhole(player.ir.battleLevel) }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Use W and S to more forwards or backwards, A to D to rotate, and Space or Mouse to shoot." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["row", [["bar", "healthBar"], ["bar", "xpBar"],]],
-                    ["blank", "650px"],
-                    ["row", [["layer-proxy", ["bl", [["clickable", 12]]]], ["clickable", 13], ["blank", "50px"],
-                                                            ["style-column", [
-                            ["clickable", 1001],
-                            ["row", [["clickable", 1002], ["clickable", 1003], ["clickable", 1004]]],
-                        ], {width: "150px", height: "100px"}],     
-                ]],  
-            ]]],
+                    ["layer-proxy", ["ir", [
+                        ["raw-html", function () { return "Level: " + formatWhole(player.ir.battleLevel) }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
+                        ["raw-html", function () { return "Use W and S to more forwards or backwards, A to D to rotate, and Space or Mouse to shoot." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                        ["row", [["bar", "healthBar"], ["bar", "xpBar"],]],
+                        ["blank", "650px"],
+                        ["style-row", [
+                            ["layer-proxy", ["bl", [["clickable", 12]]]],
+                            ["blank", ["100px", "50px"]],
+                            ["style-column", [
+                                ["clickable", 1001],
+                                ["row", [["clickable", 1002], ["clickable", 1003], ["clickable", 1004]]],
+                            ], {width: "150px", height: "100px", zIndex: 15000}],
+                            ["blank", ["100px", "50px"]],
+                            ["layer-proxy", ["bl", [["clickable", 13]]]],
+                        ], {position: "fixed", top: "calc(50% + 320px)", left: "calc(50% - 375px)", isolation: "isolate"}],
+                    ]]],
                 ]
             },
             "Refresh Page :(": {

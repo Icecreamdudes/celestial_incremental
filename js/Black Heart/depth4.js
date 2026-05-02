@@ -1153,7 +1153,6 @@ BHC.majorEnas = {
     health: new Decimal(2500),
     damage: new Decimal(8),
     regen: new Decimal(2),
-    luck: new Decimal(3),
     actions: {
         0: {
             name: "Multi-shot Bow",
@@ -1163,18 +1162,22 @@ BHC.majorEnas = {
             method: "ranged",
             value: new Decimal(1),
             properties: {
-                "multi-hit"() {return [player.bh.celestialite.luck.toNumber(), 200]}
+                "multi-hit"() {
+                    if (!player.bh.celestialite.actions[0].variables.bullets) player.bh.celestialite.actions[0].variables.bullets = 3
+                    return [player.bh.celestialite.actions[0].variables.bullets, 200]
+                }
             },
             cooldown: new Decimal(4),
         },
         1: {
             name: "Arrow Resupply",
             instant: true,
-            type: "effect",
-            target: "celestialite",
-            noMessage: true,
-            properties: {
-                "luckAdd": new Decimal(1),
+            type: "function",
+            target: "allPlayer",
+            onTrigger(index, slot, target, magnitude) {
+                if (!player.bh.celestialite.actions[0].variables.bullets) player.bh.celestialite.actions[0].variables.bullets = 3
+                player.bh.celestialite.actions[0].variables.bullets += 1
+                bhLog("<span style='color: #8b0e7a'>" + run(BHC[player.bh.celestialite.id].name, BHC[player.bh.celestialite.id]) + " increases its arrow count.")
             },
             cooldown: new Decimal(10),
         },
@@ -1256,18 +1259,22 @@ BHC.majorDeka = {
             constantType: "effect",
             constantTarget: "allPlayer",
             effects: {
-                "regenAdd"() {return Decimal.mul(-1, player.bh.celestialite.luck)}
+                "regenAdd"() {
+                    if (!player.bh.celestialite.actions[0].variables.bullets) player.bh.celestialite.actions[0].variables.bullets = player.bh.celestialite.luck.toNumber()
+                    return Decimal.mul(-1, player.bh.celestialite.actions[0].variables.bullets)
+                }
             },
             duration: new Decimal(3),
         },
         1: {
             name: "Increased Toxicity",
             instant: true,
-            type: "effect",
-            target: "celestialite",
-            noMessage: true,
-            properties: {
-                "luckAdd": new Decimal(1),
+            type: "function",
+            target: "allPlayer",
+            onTrigger(index, slot, target, magnitude) {
+                if (!player.bh.celestialite.actions[0].variables.bullets) player.bh.celestialite.actions[0].variables.bullets = player.bh.celestialite.luck.toNumber()
+                player.bh.celestialite.actions[0].variables.bullets *= 1.3
+                bhLog("<span style='color: #8b0e7a'>" + run(BHC[player.bh.celestialite.id].name, BHC[player.bh.celestialite.id]) + " increases its poison slash's toxicity.")
             },
             cooldown: new Decimal(12),
         },

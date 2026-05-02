@@ -514,7 +514,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock the pyramid.</small>" },
+            effectDescription() { return "<small>Enable gaining more than one prism on reset.</small>" },
             cycleReq() { return new Decimal(2) },
             projectId() { return 2 },
             unlocked() { return true },
@@ -535,7 +535,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Passively progress light fountains at 1% efficiency.</small>" },
+            effectDescription() { return "<small>.</small>" },
             cycleReq() { return new Decimal(3) },
             projectId() { return 2 },
             unlocked() { return true },
@@ -1186,6 +1186,9 @@
                         ["blank", "25px"],
                         ["raw-html", "You have a total of <h3>" + formatWhole(player.prj.completedProjects) + "</h3> project cycles.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "25px"],
+                        ["raw-html", "<small>Stat multipliers from project milestones are only active when their second requirement is fulfilled.</small>", {color: "#bfbfbf", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "<small>Unlocks from project milestones are permanent!</small>", {color: "#bfbfbf", fontSize: "18px", fontFamily: "monospace"}],
+                        ["blank", "15px"],
                         ["style-row", [
                             makeProject(1),
                             ["blank", "6px", {width: "6px"}],
@@ -1197,7 +1200,7 @@
                             ["blank", "6px", {width: "6px"}],
                             hasUpgrade("wel", 34) ? makeProject(4) : null,
                         ]],
-                        ["blank", "6px"],
+                        ["blank", "12px"],
                         ["clickable", 101],
                         ["blank", "25px"],
                     ]

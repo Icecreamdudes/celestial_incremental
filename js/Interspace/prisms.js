@@ -11,8 +11,12 @@
         totalPrisms: new Decimal(0),
         prismsToGet: new Decimal(0),
 
-        defraction: new Decimal(0),
-        deltaRays: new Decimal(0),
+        prismatic: new Decimal(0),
+        prismaticGain: new Decimal(0),
+        prismaticLevel: new Decimal(0),
+        prismaticLevelReq: new Decimal(100),
+        prismaticLevelReqPrev: new Decimal(0),
+        prismaticLevelEffect: new Decimal(1),
 
         fountainSpeed: new Decimal(0),
 
@@ -88,7 +92,23 @@
 
         if (player.pri.bestPrisms.lt(player.pri.prisms)) player.pri.bestPrisms = player.pri.prisms;
         
-        player.pri.fountainSpeed = player.pri.totalPrisms.pow(2).div(10)
+        player.pri.prismaticGain = player.pri.totalPrisms
+
+        if (player.pri.prismatic.gte(100)) {
+            player.pri.prismaticLevel = player.pri.prismatic.div(100).log(3).pow(0.8).floor().add(1)
+            player.pri.prismaticLevelReqPrev = player.pri.prismaticLevel.sub(1).pow(1.25).pow_base(3).mul(100)
+        } else {
+            player.pri.prismaticLevel = new Decimal(0)
+            player.pri.prismaticLevelReqPrev = new Decimal(0)
+        }
+
+        player.pri.prismaticLevelReq = player.pri.prismaticLevel.pow(1.25).pow_base(3).mul(100)
+
+        player.pri.prismaticLevelEffect = player.pri.prismaticLevel.add(1).pow(0.5)
+
+        player.pri.fountainSpeed = player.pri.prismaticGain.div(10)
+
+        player.pri.prismaticGain = player.pri.prismaticGain.mul(player.wel.lightWellSpeed)
 
         // FOUNTAIN PROGRESS
         Object.keys(layers.pri.fountains).forEach(i => {
@@ -101,12 +121,14 @@
 
             if (module.focused) {
                 module.time = module.time.add(module.timeSpeed.mul(delta))
-                if (module.time.gte(module.timeReq)) {
+            }
+            if (module.time.gte(module.timeReq)) {
+                if (module.focused) {
+                    player.prj.focused = player.prj.focused.sub(1);
                     module.focused = false
-                    module.completions = module.completions.add(1)
-                    module.time = new Decimal(0)
-                    player.prj.focused = player.prj.focused.sub(1)
                 }
+                module.completions = module.completions.add(1)
+                module.time = new Decimal(0)
             }
         });
     },
@@ -148,6 +170,11 @@
             player.wel.fountains[4].focused = false
             player.prj.focused = player.prj.focused.add(1)
         }
+
+        player.pri.prismatic = new Decimal(0)
+        player.pri.prismaticGain = new Decimal(1)
+        player.pri.prismaticLevel = new Decimal(0)
+        player.pri.prismaticLevelEffect = new Decimal(1)
     },
     branches: ["wel"],
     clickables: {
@@ -674,7 +701,7 @@
     fountains: {
         1: {
             title: "Tetrahedron",
-            completionEffectStat: "Light, based on Light",
+            completionEffectStat: "Light",
             condition() {
                 return true
             },
@@ -684,9 +711,9 @@
             getCompletionEffect() {
                 let completions = player.pri.fountains[1].completions
 
-                s = player.wel.light.add(1).log10().div(10).add(1).pow(completions.pow(0.666).mul(0.8))
+                s = player.wel.light.add(1).log10().div(4).add(1).pow(completions).log(10).add(1).pow(0.5).sub(1).pow_base(10)
 
-                return s
+                return s.mul(player.pri.prismaticLevelEffect)
             },
             getTimeReq() {
                 let completions = player.pri.fountains[1].completions
@@ -729,7 +756,7 @@
 
                 s = player.wel.light.add(1).log10().div(10).add(1).pow(completions.pow(0.666).mul(0.8))
 
-                return s
+                return s.mul(player.pri.prismaticLevelEffect)
             },
             getTimeReq() {
                 let completions = player.pri.fountains[2].completions
@@ -772,7 +799,7 @@
 
                 s = completions.pow(0.666).pow_base(1.5)
 
-                return s
+                return s.mul(player.pri.prismaticLevelEffect)
             },
             getTimeReq() {
                 let completions = player.pri.fountains[3].completions
@@ -808,7 +835,7 @@
             title: "Fountain of Light Speed II",
             completionEffectStat: "Light Well Speed",
             condition() {
-                return player.pri.bestPrisms.gte(1e3)
+                return player.pri.fountains[1].completions.gt(8)
             },
             unlocked() {
                 return player.pri.fountains[2].completions.gt(0) || player.pri.fountains[3].completions.gt(0)
@@ -818,7 +845,7 @@
 
                 s = completions.pow(0.666).pow_base(2).sub(1).div(4).add(1)
 
-                return s
+                return s.mul(player.pri.prismaticLevelEffect)
             },
             getTimeReq() {
                 let completions = player.pri.fountains[4].completions
@@ -862,6 +889,9 @@
                     let look = [
                         ["blank", "25px"],
                         ["style-row", [
+                            ["style-column", [
+                                ["style-column", [], {background: "#d6ebff", border: "3px solid #d6ebff", borderRadius: "13px 13px 0 0", borderRight: "0", width: "268px", height: "215px", marginLeft: "-5.25px"}],
+                            ], {width: "0", height: "0"}],
                             makePrismFountain(1)
                         ]],
                         ["blank", "6px", {width: "6px"}],
@@ -869,21 +899,16 @@
                         ]],
                         ["blank", "6px", {width: "6px"}],
                         ["style-row", [
-                            ["style-column", [
-                                ["raw-html", "Octahedron<br><small>Req: 8 Tetrahedron ↻</small>", {color: "white", fontSize: "16px"}],
-                            ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
-                            ["blank", "6px", {width: "6px"}],
-                            ["style-column", [
-                                ["raw-html", "Cone<br><small>Req: +5 Prisms in one reset</small>", {color: "white", fontSize: "16px"}],
-                            ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
-                            ["blank", "6px", {width: "6px"}],
-                            ["style-column", [
-                                ["raw-html", "Staircase<br><small>Req: 6 Spiral ↻ and 6 Arrow ↻</small>", {color: "white", fontSize: "16px"}],
-                            ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
                         ]],
                     ]
 
+                    // Spiral
                     if (layers.pri.fountains[2].unlocked()) {
+                            look[3][1].push(
+                                ["style-column", [
+                                    ["style-column", [], {background: "#d6ebff", border: "3px solid #d6ebff", borderRadius: "16px 0 0 0", borderRight: "0", width: "268px", height: "215px", marginLeft: "-5.25px"}],
+                                ], {width: "0", height: "0"}],
+                            )
                         if (layers.pri.fountains[2].condition()) {
                             look[3][1].push(makePrismFountain(2))
                         } else {
@@ -894,8 +919,15 @@
                             )
                         }
                     }
+
+                    // Arrow
                     if (layers.pri.fountains[3].unlocked()) {
                         look[3][1].push(["blank", "6px", {width: "6px"}])
+                            look[3][1].push(
+                                ["style-column", [
+                                    ["style-column", [], {background: "#d6ebff", border: "3px solid #d6ebff", borderRadius: "0 13px 0 0", borderRight: "0", width: "268px", height: "215px", marginLeft: "-5.25px"}],
+                                ], {width: "0", height: "0"}],
+                            )
                         if (layers.pri.fountains[3].condition()) {
                             look[3][1].push(makePrismFountain(3))
                         } else {
@@ -903,6 +935,62 @@
                                 ["style-column", [
                                     ["raw-html", "Arrow<br><small>Req: 1 Tetrahedron ↻</small>", {color: "white", fontSize: "16px"}],
                                 ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
+                            )
+                        }
+                    }
+
+                    // Octahedron
+                    if (layers.pri.fountains[4].unlocked()) {
+                            look[5][1].push(
+                                ["style-column", [
+                                    ["style-column", [], {background: "#d6ebff", border: "3px solid #d6ebff", borderRadius: "0 13px 0 0", borderRight: "0", width: "268px", height: "215px", marginLeft: "-5.25px"}],
+                                ], {width: "0", height: "0"}],
+                            )
+                        if (layers.pri.fountains[4].condition()) {
+                            look[5][1].push(makePrismFountain(4))
+                        } else {
+                            look[5][1].push(
+                                ["style-column", [
+                                    ["raw-html", "Octahedron<br><small>Req: 8 Tetrahedron ↻</small>", {color: "white", fontSize: "16px"}],
+                                ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
+                            )
+                        }
+                    }
+
+                    // Cone
+                    if (layers.pri.fountains[4].unlocked()) {
+                        look[5][1].push(["blank", "6px", {width: "6px"}])
+                            look[5][1].push(
+                                ["style-column", [
+                                    ["style-column", [], {background: "#d6ebff", border: "3px solid #d6ebff", borderRadius: "0 13px 0 0", borderRight: "0", width: "268px", height: "215px", marginLeft: "-5.25px"}],
+                                ], {width: "0", height: "0"}],
+                            )
+                        if (layers.pri.fountains[4].condition()) {
+                            look[5][1].push(makePrismFountain(4))
+                        } else {
+                            look[5][1].push(
+                                ["style-column", [
+                                    ["raw-html", "Cone<br><small>Req: +5 Prisms in one reset</small>", {color: "white", fontSize: "16px"}],
+                                ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
+                            )
+                        }
+                    }
+
+                    // Staircase
+                    if (layers.pri.fountains[4].unlocked()) {
+                        look[5][1].push(["blank", "6px", {width: "6px"}])
+                            look[5][1].push(
+                                ["style-column", [
+                                    ["style-column", [], {background: "#d6ebff", border: "3px solid #d6ebff", borderRadius: "0 13px 0 0", borderRight: "0", width: "268px", height: "215px", marginLeft: "-5.25px"}],
+                                ], {width: "0", height: "0"}],
+                            )
+                        if (layers.pri.fountains[4].condition()) {
+                            look[5][1].push(makePrismFountain(4))
+                        } else {
+                            look[5][1].push(
+                            ["style-column", [
+                                ["raw-html", "Staircase<br><small>Req: 6 Spiral ↻ and 6 Arrow ↻</small>", {color: "white", fontSize: "16px"}],
+                            ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
                             )
                         }
                     }
@@ -942,13 +1030,13 @@ const makePrismFountain = function (id) {
                     ["style-column", [
                         ["style-column", [
                             ["style-column", [
-                            ], {background: "linear-gradient(0deg, #ffd6d6 0, #abffd6 63.67px, #d6ebff 127.33px, #ffabff 191px)", borderRadius: "0", width: "38px", height: (format(player.pri.fountains[id].time.div(player.pri.fountains[id].timeReq).min(1).max(0).mul(191))) + "px", marginTop: (format(new Decimal(191).sub(player.pri.fountains[id].time.div(player.pri.fountains[id].timeReq).min(1).max(0).mul(191)))) + "px"}],
-                        ], {background: "black", borderRadius: "10px 0 0 10px", width: "38px", height: "191px"}],
-                    ], {width: "44px", height: "0"}],
+                            ], {background: "#d6ebff", borderRadius: "0", width: "44px", height: (format(player.pri.fountains[id].time.div(player.pri.fountains[id].timeReq).min(1).max(0).mul(197))) + "px", marginTop: (format(new Decimal(197).sub(player.pri.fountains[id].time.div(player.pri.fountains[id].timeReq).min(1).max(0).mul(197)))) + "px"}],
+                        ], {background: "#0b1417", borderRadius: "10px 0 0 10px", width: "50px", height: "197px"}],
+                    ], {width: "50px", height: "0"}],
                     ["style-column", [
                         ["style-column", [
-                        ], {border: "3px solid #a8ffff", borderRadius: "10px 0 0 10px", width: "38px", height: "191px"}],
-                    ], {width: "44px", height: "0"}],
+                        ], {border: "3px solid #4d9999", borderRadius: "10px 0 0 10px", width: "44px", height: "197px"}],
+                    ], {width: "50px", height: "0"}],
                 ], {background: "#4d9999", borderRadius: "10px 0 0 10px", width: "50px", height: "203px"}],
             ], {background: "#335966", border: "3px solid #335966", borderRadius: "10px 0 0 10px", borderRight: "0", width: "50px", height: "203px"}],
             ["style-column", [
@@ -964,23 +1052,9 @@ const makePrismFountain = function (id) {
                     ["blank", "3px"],
                     ["clickable", id],
                 ], {background: "#335966", border: "3px solid #335966", borderRadius: "0 10px 0px 0px", width: "200px", height: "150px"}],
-                /*["style-column", [
-                    ["style-column", [
-                        ["style-column", [
-                            ["style-column", [
-                                ["raw-html", player.pri.fountains[id].time.gte(player.pri.fountains[id].timeReq) ? "0%" : formatShortestWhole(player.pri.fountains[id].time.div(player.pri.fountains[id].timeReq).min(1).max(0).mul(100)) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                            ], {background: "#4d9999", border: "3px solid #335966", borderRadius: "100px", width: "75px", height:"75px"}]
-                        ], {borderRadius: "50%", width: "125px", height:"125px", border: "3px solid #335966", margin: "-3px", marginTop: "75px",
-                            background: player.pri.fountains[id].time.lt(player.pri.fountains[id].timeReq) ?
-                            "conic-gradient(#d6ebff " + (player.pri.fountains[id].time.div(player.pri.fountains[id].timeReq)).min(1).max(0) * 360 + "deg, #000d1a 0deg)" : "#000d1a"
-                        }],
-                    ], {background: "#335966", borderRadius: "0px 81px 0px 0px", width: "153px", height: "78px"}],
-                    ["style-column", [], {background: "#4d9999", height: "78px"}],
-                ], {border: "3px solid #335966", borderBottom: "0px", borderLeft: "0px", borderRadius: "0px 81px 0px 0px", padding: "-3px", width: "153px", height: "153px"}],
-                */
                 ["style-column", [
                         ["style-column", [
-                        ["raw-html", formatWhole(player.pri.fountains[id].completions) + " ↻<br><small>(x" + formatShort(layers.pri.fountains[id].getCompletionEffect()) + " " + layers.pri.fountains[id].completionEffectStat + ")</small>", {color: "white", fontSize: "14px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
+                        ["raw-html", format(player.pri.fountains[id].completions.mul(player.pri.prismaticLevelEffect)) + " ↻ <small>(" + formatWhole(player.pri.fountains[id].completions) + " Base)</small><br><small>(x" + formatShort(layers.pri.fountains[id].getCompletionEffect()) + " " + layers.pri.fountains[id].completionEffectStat + ")</small>", {color: "white", fontSize: "14px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
                     ], {background: "#335966", border: "3px solid #4d9999", borderRadius: "0px 0px 7px 0px", width: "197px", height: "44px"}],
                 ], {background: "#4d9999", border: "3px solid #335966", borderRadius: "0px 0px 10px 0px", borderTop: "0px", borderLeft: "0px", height: "50px"}],
             ], {width: "206px"}]

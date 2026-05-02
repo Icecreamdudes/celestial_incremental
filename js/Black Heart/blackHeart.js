@@ -1123,6 +1123,24 @@ addLayer("bh", {
         player.bh.celestialite.agility = player.bh.celestialite.agility.add(bhTemp[3].agilityAdd)
         player.bh.celestialite.agility = player.bh.celestialite.agility.mul(bhTemp[3].agilityMult)
 
+        player.bh.celestialite.luck = BHC[player.bh.celestialite.id].luck ?? new Decimal(0)
+        player.bh.celestialite.luck = player.bh.celestialite.luck.mul(player.bh.celestialite.randomMult)
+        player.bh.celestialite.luck = player.bh.celestialite.luck.mul(scale)
+        player.bh.celestialite.luck = player.bh.celestialite.luck.add(bhTemp[3].luckAdd)
+        player.bh.celestialite.luck = player.bh.celestialite.luck.mul(bhTemp[3].luckMult)
+
+        player.bh.celestialite.mending = BHC[player.bh.celestialite.id].mending ?? new Decimal(0)
+        player.bh.celestialite.mending = player.bh.celestialite.mending.mul(player.bh.celestialite.randomMult)
+        player.bh.celestialite.mending = player.bh.celestialite.mending.mul(scale)
+        player.bh.celestialite.mending = player.bh.celestialite.mending.add(bhTemp[3].mendingAdd)
+        player.bh.celestialite.mending = player.bh.celestialite.mending.mul(bhTemp[3].mendingMult)
+
+        player.bh.celestialite.potency = BHC[player.bh.celestialite.id].potency ?? new Decimal(0)
+        player.bh.celestialite.potency = player.bh.celestialite.potency.mul(player.bh.celestialite.randomMult)
+        player.bh.celestialite.potency = player.bh.celestialite.potency.mul(scale)
+        player.bh.celestialite.potency = player.bh.celestialite.potency.add(bhTemp[3].potencyAdd)
+        player.bh.celestialite.potency = player.bh.celestialite.potency.mul(bhTemp[3].potencyMult)
+
         player.bh.celestialite.curAdd = BHC[player.bh.celestialite.id].curAdd ?? new Decimal(0)
         player.bh.celestialite.curAdd = player.bh.celestialite.curAdd.add(bhTemp[3].curAdd.sub(1))
         player.bh.celestialite.curAdd = player.bh.celestialite.curAdd.add(buyableEffect("laboratory", 11))

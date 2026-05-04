@@ -674,7 +674,7 @@ addLayer("achievements", {
         },
         1211: {
             name: "c^2",
-            image: "resources/achievements/12_00.png",
+            image: "resources/achievements/12_11.png",
             tooltip: "<h3>c^2</h3><hr style='margin-bottom:4px'>Blueshift a single light<br>well twice.",
             color: "#994d99",
             complete() {return false},
@@ -689,16 +689,16 @@ addLayer("achievements", {
             unlocked: true,
         },
         1213: {
-            name: "Time Has Tuck",
-            image: "resources/achievements/12_00.png",
-            tooltip: "<h3>Time Has Tuck</h3><hr style='margin-bottom:4px'>Store at least 3,600 time<br>capsules at once.",
+            name: "Longest Hour of My Life",
+            image: "resources/achievements/12_13.png",
+            tooltip: "<h3>Longest Hour of My Life</h3><hr style='margin-bottom:4px'>Store at least 3,600 time<br>capsules at once.",
             color: "#994d99",
             complete() {return false},
             unlocked: true,
         },
         1214: {
             name: "Ultraviolet",
-            image: "resources/achievements/12_00.png",
+            image: "resources/achievements/12_14.png",
             tooltip: "<h3>Ultraviolet</h3><hr style='margin-bottom:4px'>Reset for starlight.",
             color: "#994d99",
             complete() {return false},
@@ -714,7 +714,7 @@ addLayer("achievements", {
         },
         1216: {
             name: "Staying Warm",
-            image: "resources/achievements/12_00.png",
+            image: "resources/achievements/12_16.png",
             tooltip: "<h3>Staying Warm</h3><hr style='margin-bottom:4px'>Reset for starlight without<br>blueshifting.",
             color: "#994d99",
             complete() {return false},
@@ -778,7 +778,7 @@ addLayer("achievements", {
         },
         1224: {
             name: "Elite Bumpy Knowledge",
-            image: "resources/achievements/12_00.png",
+            image: "resources/achievements/12_24.png",
             tooltip: "<h3>Elite Bumpy Knowledge</h3><hr style='margin-bottom:4px'>Have 60 total project ↻.",
             color: "#994d99",
             complete() {return false},

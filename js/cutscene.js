@@ -4107,7 +4107,7 @@
                 { text: "Four pink beams of light appear and brighten the antimatter sky."  },
                 { text: "A developer is calling out to you, creation.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
                 { text: "I'm unaware of what he wants, but the situation must be urgent for him to contact you so soon.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
-                { text: "Then I need to hurry!", portrait: "resources/player.png"  },
+                { text: "Then I should hurry!", portrait: "resources/player.png"  },
             ],
         },
         "UD-Start": {
@@ -4117,7 +4117,10 @@
             background: "linear-gradient(135deg, #2e152e 0%, #384038 100%)",
             trigger() {return player.bi.interspaceUnlocked },
             dialogue: [
-                { text: "UD-Start placeholder text" },
+                { text: "The light bends through the air like it's liquid." },
+                { text: "It all merges into a single beam, then shoots back into the endless space." },
+                { text: "What a show.", portrait: "resources/Player.png"  },
+                { text: "I'm unaware of what he wants, but the situation must be urgent for him to contact you so soon.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
             ],
         },
         "UD-LightWellAlpha": {

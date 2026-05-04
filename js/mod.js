@@ -867,7 +867,7 @@ function updateStyles() {
 			    		if (player.ir.inBattle && player.bl.noxFightActive) playAndLoopAudio("music/nox.mp3", options.musicVolume/10);
 						break;
 					case "CH":
-						if (player.tab == "ch") playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10)
+						if (player.tab == "ch" || player.tab == "mm") playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10)
 						//if (player.tab == "ch" && player.subtabs["ch"]["stuff"] != "???") playAndLoopAudio("music/aniciffoCutscene.mp3", options.musicVolume/10)
 						break;
 					case "A2":

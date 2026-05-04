@@ -11,13 +11,6 @@
         totalPrisms: new Decimal(0),
         prismsToGet: new Decimal(0),
 
-        prismatic: new Decimal(0),
-        prismaticGain: new Decimal(0),
-        prismaticLevel: new Decimal(0),
-        prismaticLevelReq: new Decimal(100),
-        prismaticLevelReqPrev: new Decimal(0),
-        prismaticLevelEffect: new Decimal(1),
-
         fountainSpeed: new Decimal(0),
 
         fountains: {
@@ -28,10 +21,11 @@
                 canAddCompletion: false,
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
+                completionEffect: new Decimal(1),
 
                 focused: false,
+                automated: false,
                 prismReq: new Decimal(1),
-                completionEffect: new Decimal(1),
             },
             2: {
                 time: new Decimal(0),
@@ -40,10 +34,11 @@
                 canAddCompletion: false,
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
+                completionEffect: new Decimal(1),
 
                 focused: false,
+                automated: false,
                 prismReq: new Decimal(1),
-                completionEffect: new Decimal(1),
             },
             3: {
                 time: new Decimal(0),
@@ -52,22 +47,24 @@
                 canAddCompletion: false,
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
+                completionEffect: new Decimal(1),
 
                 focused: false,
+                automated: false,
                 prismReq: new Decimal(1),
-                completionEffect: new Decimal(1),
             },
             4: {
-                time: new Decimal(1e8),
-                timeReq: new Decimal(1200),
+                time: new Decimal(0),
+                timeReq: new Decimal(1e8),
                 timeSpeed: new Decimal(1),
                 canAddCompletion: false,
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
+                completionEffect: new Decimal(1),
 
                 focused: false,
+                automated: false,
                 prismReq: new Decimal(1),
-                completionEffect: new Decimal(1),
             },
         },
 
@@ -92,23 +89,7 @@
 
         if (player.pri.bestPrisms.lt(player.pri.prisms)) player.pri.bestPrisms = player.pri.prisms;
         
-        player.pri.prismaticGain = player.pri.totalPrisms
-
-        if (player.pri.prismatic.gte(100)) {
-            player.pri.prismaticLevel = player.pri.prismatic.div(100).log(3).pow(0.8).floor().add(1)
-            player.pri.prismaticLevelReqPrev = player.pri.prismaticLevel.sub(1).pow(1.25).pow_base(3).mul(100)
-        } else {
-            player.pri.prismaticLevel = new Decimal(0)
-            player.pri.prismaticLevelReqPrev = new Decimal(0)
-        }
-
-        player.pri.prismaticLevelReq = player.pri.prismaticLevel.pow(1.25).pow_base(3).mul(100)
-
-        player.pri.prismaticLevelEffect = player.pri.prismaticLevel.add(1).pow(0.5)
-
-        player.pri.fountainSpeed = player.pri.prismaticGain.div(10)
-
-        player.pri.prismaticGain = player.pri.prismaticGain.mul(player.wel.lightWellSpeed)
+        player.pri.fountainSpeed = player.pri.totalPrisms.div(10)
 
         // FOUNTAIN PROGRESS
         Object.keys(layers.pri.fountains).forEach(i => {
@@ -170,11 +151,6 @@
             player.wel.fountains[4].focused = false
             player.prj.focused = player.prj.focused.add(1)
         }
-
-        player.pri.prismatic = new Decimal(0)
-        player.pri.prismaticGain = new Decimal(1)
-        player.pri.prismaticLevel = new Decimal(0)
-        player.pri.prismaticLevelEffect = new Decimal(1)
     },
     branches: ["wel"],
     clickables: {
@@ -292,20 +268,18 @@
             },
         },
         102: {
-            title() { return "<h3>Respec Interspace Focus</h3><br><small>(you won't get your prisms back! don't be silly!)</small>" },
+            title() { return "<h3>Respec Focus</h3><br><small>(you won't get your prisms back! don't be silly!)</small>" },
             canClick() { return player.prj.focused.gt(0)},
             unlocked() { return true },
             onClick() {
-                player.prj.focused = new Decimal(0)
-                Object.keys(layers.wel.fountains).forEach(i => {
-                    player.wel.fountains[i].focused = false
-                });
-                Object.keys(layers.prj.projects).forEach(i => {
-                    player.prj.modules[i].focused = false
-                });
-                Object.keys(layers.pri.fountains).forEach(i => {
+                if (player.pri.fountains[i].focused) {
                     player.pri.fountains[i].focused = false
-                });
+                    player.prj.focused = player.prj.focused.sub(1)
+                }
+                if (player.pri.fountains[i].automated) {
+                    player.pri.fountains[i].automated = false
+                    player.prj.focused = player.prj.focused.sub(1)
+                }
             },
             style() {
                 let look = {width: "400px", minHeight: "75px", maxHeight: "75px", borderRadius: "10px"}
@@ -324,375 +298,6 @@
     },
     bars: {},
     upgrades: {
-        11: {
-            unlocked() { return true },
-            fullDisplay() {
-                let s = "<h2>"
-                s += "Enable getting more than one prism on reset.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
-                return s
-            },
-            cost: new Decimal(10),
-            currencyLocation() { return player.pri },
-            currencyDisplayName: "Prisms",
-            currencyInternalName: "prisms",
-            canAfford() { return true },
-            style() {
-                let look = {width: "200px", borderRadius: "8px 8px 0 0", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
-                if (hasUpgrade(this.layer, this.id)) {
-                    look.backgroundColor = "#4d9999"
-                    look.border = "3px solid #335966"
-                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
-                    look.backgroundColor = "#d6ebff"
-                } else {
-                    look.backgroundColor = "#361e1e"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                }
-                return look
-            },
-        },
-        21: {
-            unlocked() { return true },
-            condition() { return hasUpgrade("pri", 11) },
-            fullDisplay() {
-                let s = "<h2>"
-                if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Unlock bulk light well collection.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
-                } else {
-                    s += "???</h2><br><h3>Req: Buy the above upgrade.</h3>"
-                }
-                return s
-            },
-            cost: new Decimal(10),
-            currencyLocation() { return player.pri },
-            currencyDisplayName: "Prisms",
-            currencyInternalName: "prisms",
-            canAfford() {
-                return this.condition()
-            },
-            style() {
-                let look = {width: "200px", borderRadius: "8px 0 0 0", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
-                if (hasUpgrade(this.layer, this.id)) {
-                    look.backgroundColor = "#4d9999"
-                    look.border = "3px solid #335966"
-                } else if (!this.condition()) {
-                    look.backgroundColor = "black"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
-                    look.backgroundColor = "#d6ebff"
-                } else {
-                    look.backgroundColor = "#361e1e"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                }
-                return look
-            },
-        },
-        22: {
-            unlocked() { return true },
-            condition() { return hasUpgrade("pri", 11) },
-            fullDisplay() {
-                let s = "<h2>"
-                if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Unlock focus retention for light fountains.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
-                } else {
-                    s += "???</h2><br><h3>Req: Buy the above upgrade.</h3>"
-                }
-                return s
-            },
-            cost: new Decimal(10),
-            currencyLocation() { return player.pri },
-            currencyDisplayName: "Prisms",
-            currencyInternalName: "prisms",
-            canAfford() {
-                return this.condition()
-            },
-            style() {
-                let look = {width: "200px", borderRadius: "0 8px 0 0", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
-                if (hasUpgrade(this.layer, this.id)) {
-                    look.backgroundColor = "#4d9999"
-                    look.border = "3px solid #335966"
-                } else if (!this.condition()) {
-                    look.backgroundColor = "black"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
-                    look.backgroundColor = "#d6ebff"
-                } else {
-                    look.backgroundColor = "#361e1e"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                }
-                return look
-            },
-        },
-        31: {
-            unlocked() { return true },
-            condition() { return hasUpgrade("pri", 11) },
-            fullDisplay() {
-                let s = "<h2>"
-                if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Light upgrade 1-4 affects prism fountain speed at a 50% rate.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
-                } else {
-                    s += "???</h2><br><h3>Req: Buy one of the previous row's upgrades.</h3>"
-                }
-                return s
-            },
-            cost: new Decimal(10),
-            currencyLocation() { return player.pri },
-            currencyDisplayName: "Prisms",
-            currencyInternalName: "prisms",
-            canAfford() {
-                return this.condition()
-            },
-            style() {
-                let look = {width: "200px", borderRadius: "8px 0 0 0", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
-                if (hasUpgrade(this.layer, this.id)) {
-                    look.backgroundColor = "#4d9999"
-                    look.border = "3px solid #335966"
-                } else if (!this.condition()) {
-                    look.backgroundColor = "black"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
-                    look.backgroundColor = "#d6ebff"
-                } else {
-                    look.backgroundColor = "#361e1e"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                }
-                return look
-            },
-        },
-        32: {
-            unlocked() { return true },
-            condition() { return hasUpgrade("pri", 11) },
-            fullDisplay() {
-                let s = "<h2>"
-                if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Unlock the first light fountain.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
-                } else {
-                    s += "???</h2><br><h3>Req: Buy one of the previous row's upgrades.</h3>"
-                }
-                return s
-            },
-            cost: new Decimal(10),
-            currencyLocation() { return player.pri },
-            currencyDisplayName: "Prisms",
-            currencyInternalName: "prisms",
-            canAfford() {
-                return this.condition()
-            },
-            style() {
-                let look = {width: "200px", borderRadius: "0", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
-                if (hasUpgrade(this.layer, this.id)) {
-                    look.backgroundColor = "#4d9999"
-                    look.border = "3px solid #335966"
-                } else if (!this.condition()) {
-                    look.backgroundColor = "black"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
-                    look.backgroundColor = "#d6ebff"
-                } else {
-                    look.backgroundColor = "#361e1e"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                }
-                return look
-            },
-        },
-        33: {
-            unlocked() { return true },
-            condition() { return hasUpgrade("pri", 11) },
-            fullDisplay() {
-                let s = "<h2>"
-                if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Unlock the first light fountain.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
-                } else {
-                    s += "???</h2><br><h3>Req: Buy one of the previous row's upgrades.</h3>"
-                }
-                return s
-            },
-            cost: new Decimal(10),
-            currencyLocation() { return player.pri },
-            currencyDisplayName: "Prisms",
-            currencyInternalName: "prisms",
-            canAfford() {
-                return this.condition()
-            },
-            style() {
-                let look = {width: "200px", borderRadius: "0 8px 0 0", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
-                if (hasUpgrade(this.layer, this.id)) {
-                    look.backgroundColor = "#4d9999"
-                    look.border = "3px solid #335966"
-                } else if (!this.condition()) {
-                    look.backgroundColor = "black"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
-                    look.backgroundColor = "#d6ebff"
-                } else {
-                    look.backgroundColor = "#361e1e"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                }
-                return look
-            },
-        },
-        41: {
-            unlocked() { return true },
-            condition() { return hasUpgrade("pri", 11) },
-            fullDisplay() {
-                let s = "<h2>"
-                if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Unlock the first light fountain.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
-                } else {
-                    s += "???</h2><br><h3>Req: Buy two of the previous row's upgrades.</h3>"
-                }
-                return s
-            },
-            cost: new Decimal(10),
-            currencyLocation() { return player.pri },
-            currencyDisplayName: "Prisms",
-            currencyInternalName: "prisms",
-            canAfford() {
-                return this.condition()
-            },
-            style() {
-                let look = {width: "200px", borderRadius: "8px 0 0 8px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
-                if (hasUpgrade(this.layer, this.id)) {
-                    look.backgroundColor = "#4d9999"
-                    look.border = "3px solid #335966"
-                } else if (!this.condition()) {
-                    look.backgroundColor = "black"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
-                    look.backgroundColor = "#d6ebff"
-                } else {
-                    look.backgroundColor = "#361e1e"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                }
-                return look
-            },
-        },
-        42: {
-            unlocked() { return true },
-            condition() { return hasUpgrade("pri", 11) },
-            fullDisplay() {
-                let s = "<h2>"
-                if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Unlock the first light fountain.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
-                } else {
-                    s += "???</h2><br><h3>Req: Buy two of the previous row's upgrades.</h3>"
-                }
-                return s
-            },
-            cost: new Decimal(10),
-            currencyLocation() { return player.pri },
-            currencyDisplayName: "Prisms",
-            currencyInternalName: "prisms",
-            canAfford() {
-                return this.condition()
-            },
-            style() {
-                let look = {width: "200px", borderRadius: "0", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
-                if (hasUpgrade(this.layer, this.id)) {
-                    look.backgroundColor = "#4d9999"
-                    look.border = "3px solid #335966"
-                } else if (!this.condition()) {
-                    look.backgroundColor = "black"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
-                    look.backgroundColor = "#d6ebff"
-                } else {
-                    look.backgroundColor = "#361e1e"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                }
-                return look
-            },
-        },
-        43: {
-            unlocked() { return true },
-            condition() { return hasUpgrade("pri", 11) },
-            fullDisplay() {
-                let s = "<h2>"
-                if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Unlock the first light fountain.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
-                } else {
-                    s += "???</h2><br><h3>Req: Buy two of the previous row's upgrades.</h3>"
-                }
-                return s
-            },
-            cost: new Decimal(10),
-            currencyLocation() { return player.pri },
-            currencyDisplayName: "Prisms",
-            currencyInternalName: "prisms",
-            canAfford() {
-                return this.condition()
-            },
-            style() {
-                let look = {width: "200px", borderRadius: "0", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
-                if (hasUpgrade(this.layer, this.id)) {
-                    look.backgroundColor = "#4d9999"
-                    look.border = "3px solid #335966"
-                } else if (!this.condition()) {
-                    look.backgroundColor = "black"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
-                    look.backgroundColor = "#d6ebff"
-                } else {
-                    look.backgroundColor = "#361e1e"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                }
-                return look
-            },
-        },
-        44: {
-            unlocked() { return true },
-            condition() { return hasUpgrade("pri", 11) },
-            fullDisplay() {
-                let s = "<h2>"
-                if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Unlock the first light fountain.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
-                } else {
-                    s += "???</h2><br><h3>Req: Buy two of the previous row's upgrades.</h3>"
-                }
-                return s
-            },
-            cost: new Decimal(10),
-            currencyLocation() { return player.pri },
-            currencyDisplayName: "Prisms",
-            currencyInternalName: "prisms",
-            canAfford() {
-                return this.condition()
-            },
-            style() {
-                let look = {width: "200px", borderRadius: "0 8px 8px 0", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
-                if (hasUpgrade(this.layer, this.id)) {
-                    look.backgroundColor = "#4d9999"
-                    look.border = "3px solid #335966"
-                } else if (!this.condition()) {
-                    look.backgroundColor = "black"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
-                    look.backgroundColor = "#d6ebff"
-                } else {
-                    look.backgroundColor = "#361e1e"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                }
-                return look
-            },
-        },
     },
     buyables: {},
     milestones: {},
@@ -701,7 +306,8 @@
     fountains: {
         1: {
             title: "Tetrahedron",
-            completionEffectStat: "Light",
+            completionEffectPrefix: "x",
+            completionEffectSuffix: " Light, based on Light",
             condition() {
                 return true
             },
@@ -711,9 +317,9 @@
             getCompletionEffect() {
                 let completions = player.pri.fountains[1].completions
 
-                s = player.wel.light.add(1).log10().div(4).add(1).pow(completions).log(10).add(1).pow(0.5).sub(1).pow_base(10)
+                s = player.wel.light.add(1).log10().div(4).add(1).pow(completions).log(10).add(1).pow(0.5).sub(1).pow_base(10).sub(1).mul(3).add(1)
 
-                return s.mul(player.pri.prismaticLevelEffect)
+                return s
             },
             getTimeReq() {
                 let completions = player.pri.fountains[1].completions
@@ -744,7 +350,8 @@
         },
         2: {
             title: "Spiral",
-            completionEffectStat: "Light Well ↻ Gen until best",
+            completionEffectPrefix: "x",
+            completionEffectSuffix: " Light Well ↻",
             condition() {
                 return player.pri.fountains[1].completions.gt(0)
             },
@@ -754,15 +361,19 @@
             getCompletionEffect() {
                 let completions = player.pri.fountains[2].completions
 
-                s = player.wel.light.add(1).log10().div(10).add(1).pow(completions.pow(0.666).mul(0.8))
+                s = completions.add(1)
 
-                return s.mul(player.pri.prismaticLevelEffect)
+                return s
             },
             getTimeReq() {
                 let completions = player.pri.fountains[2].completions
-                let s = new Decimal(12)
+                let s = new Decimal(1)
 
-                s = s.mul(completions.add(1).pow(3))
+                s = s.mul(completions.div(4).add(1).pow(3))
+                if (completions.gte(20)) {
+                    s = s.mul(completions.sub(20).pow_base(1.1))
+                }
+                s = s.pow(1.0625).mul(12)
 
                 return s
             },
@@ -787,7 +398,8 @@
         },
         3: {
             title: "Arrow",
-            completionEffectStat: "Light Fountain ↻ Gen until best",
+            completionEffectPrefix: "x",
+            completionEffectSuffix: " Light Fountain ↻ Gen",
             condition() {
                 return player.pri.fountains[1].completions.gt(0)
             },
@@ -797,18 +409,19 @@
             getCompletionEffect() {
                 let completions = player.pri.fountains[3].completions
 
-                s = completions.pow(0.666).pow_base(1.5)
+                s = completions.add(1)
 
-                return s.mul(player.pri.prismaticLevelEffect)
+                return s
             },
             getTimeReq() {
                 let completions = player.pri.fountains[3].completions
-                let s = new Decimal(12)
+                let s = new Decimal(1)
 
-                s = s.mul(completions.pow_base(Math.pow(3, 1.06)))
-                if (completions.gte(50)) {
-                    s = s.pow(1.05)
+                s = s.mul(completions.div(4).add(1).pow(3))
+                if (completions.gte(20)) {
+                    s = s.mul(completions.sub(20).pow_base(1.1))
                 }
+                s = s.pow(1.0625).mul(12)
 
                 return s
             },
@@ -832,8 +445,9 @@
             },
         },
         4: {
-            title: "Fountain of Light Speed II",
-            completionEffectStat: "Light Well Speed",
+            title: "Octahedron",
+            completionEffectPrefix: "x",
+            completionEffectSuffix: " Light, based on Prisms",
             condition() {
                 return player.pri.fountains[1].completions.gt(8)
             },
@@ -841,11 +455,11 @@
                 return player.pri.fountains[2].completions.gt(0) || player.pri.fountains[3].completions.gt(0)
             },
             getCompletionEffect() {
-                let completions = player.pri.fountains[4].completions
+                let completions = player.pri.fountains[1].completions
 
-                s = completions.pow(0.666).pow_base(2).sub(1).div(4).add(1)
+                s = player.pri.prisms.add(1).log10().div(2).add(1).pow(completions).log(10).add(1).pow(0.5).sub(1).pow_base(10).sub(1).mul(3).add(1)
 
-                return s.mul(player.pri.prismaticLevelEffect)
+                return s
             },
             getTimeReq() {
                 let completions = player.pri.fountains[4].completions
@@ -862,7 +476,7 @@
             getprismReq() {
                 let completions = player.pri.fountains[4].completions
                 let s = completions.div(2).add(1).pow(1.25)
-                s = s.mul(2)
+                s = s.mul(8)
                 
                 if (completions.gte(20)) {
                     s = s.mul(completions.sub(20).pow_base(1.125))
@@ -892,7 +506,7 @@
                             ["style-column", [
                                 ["style-column", [], {background: "#d6ebff", border: "3px solid #d6ebff", borderRadius: "13px 13px 0 0", borderRight: "0", width: "268px", height: "215px", marginLeft: "-5.25px"}],
                             ], {width: "0", height: "0"}],
-                            makePrismFountain(1)
+                            makePrismFountain(1, false)
                         ]],
                         ["blank", "6px", {width: "6px"}],
                         ["style-row", [
@@ -910,7 +524,7 @@
                                 ], {width: "0", height: "0"}],
                             )
                         if (layers.pri.fountains[2].condition()) {
-                            look[3][1].push(makePrismFountain(2))
+                            look[3][1].push(makePrismFountain(2, true))
                         } else {
                             look[3][1].push(
                                 ["style-column", [
@@ -929,7 +543,7 @@
                                 ], {width: "0", height: "0"}],
                             )
                         if (layers.pri.fountains[3].condition()) {
-                            look[3][1].push(makePrismFountain(3))
+                            look[3][1].push(makePrismFountain(3, true))
                         } else {
                             look[3][1].push(
                                 ["style-column", [
@@ -947,7 +561,7 @@
                                 ], {width: "0", height: "0"}],
                             )
                         if (layers.pri.fountains[4].condition()) {
-                            look[5][1].push(makePrismFountain(4))
+                            look[5][1].push(makePrismFountain(4, false))
                         } else {
                             look[5][1].push(
                                 ["style-column", [
@@ -966,7 +580,7 @@
                                 ], {width: "0", height: "0"}],
                             )
                         if (layers.pri.fountains[4].condition()) {
-                            look[5][1].push(makePrismFountain(4))
+                            look[5][1].push(makePrismFountain(4, false))
                         } else {
                             look[5][1].push(
                                 ["style-column", [
@@ -985,7 +599,7 @@
                                 ], {width: "0", height: "0"}],
                             )
                         if (layers.pri.fountains[4].condition()) {
-                            look[5][1].push(makePrismFountain(4))
+                            look[5][1].push(makePrismFountain(4, false))
                         } else {
                             look[5][1].push(
                             ["style-column", [
@@ -1022,7 +636,7 @@
     ],
     layerShown() { return player.startedGame == true && hasMilestone("prj", 201)}
 })
-const makePrismFountain = function (id) {
+const makePrismFountain = function (id, effectIsWhole) {
     let thisFountain =
         ["style-row", [
             ["style-column", [
@@ -1043,7 +657,7 @@ const makePrismFountain = function (id) {
                 ["style-column", [
                     ["blank", "10px"],
                     ["raw-html", layers.pri.fountains[id].title, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ["raw-html", player.pri.fountains[id].timeSpeed.lte(0) ? "<span style='color:#ff7f7f;font-size:14px'>Can't Complete w/o Prismatics!</span>" : (player.pri.fountains[id].focused ? formatTime(player.pri.fountains[id].timeReq.sub(player.pri.fountains[id].time).div(player.pri.fountains[id].timeSpeed)) : formatTime(player.pri.fountains[id].timeReq.div(player.pri.fountains[id].timeSpeed))) + " CD", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                    ["raw-html", player.pri.fountains[id].timeSpeed.lte(0) ? "<span style='color:#ff7f7f;font-size:14px'>Can't Complete w/o Prisms!</span>" : (player.pri.fountains[id].focused ? formatTime(player.pri.fountains[id].timeReq.sub(player.pri.fountains[id].time).div(player.pri.fountains[id].timeSpeed)) : formatTime(player.pri.fountains[id].timeReq.div(player.pri.fountains[id].timeSpeed))) + " CD", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                     ["raw-html", "<small>(" + format(player.pri.fountains[id].time, 1) + "/" + format(player.pri.fountains[id].timeReq, 1) + ")</small>", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                     ["blank", "10px"],
                     ["style-column", [
@@ -1054,7 +668,7 @@ const makePrismFountain = function (id) {
                 ], {background: "#335966", border: "3px solid #335966", borderRadius: "0 10px 0px 0px", width: "200px", height: "150px"}],
                 ["style-column", [
                         ["style-column", [
-                        ["raw-html", format(player.pri.fountains[id].completions.mul(player.pri.prismaticLevelEffect)) + " ↻ <small>(" + formatWhole(player.pri.fountains[id].completions) + " Base)</small><br><small>(x" + formatShort(layers.pri.fountains[id].getCompletionEffect()) + " " + layers.pri.fountains[id].completionEffectStat + ")</small>", {color: "white", fontSize: "14px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
+                        ["raw-html", formatWhole(player.pri.fountains[id].completions) + " ↻<br><small>(" + layers.pri.fountains[id].completionEffectPrefix + (effectIsWhole ? formatWhole(layers.pri.fountains[id].getCompletionEffect()) : formatShort(layers.pri.fountains[id].getCompletionEffect())) + layers.pri.fountains[id].completionEffectSuffix + ")</small>", {color: "white", fontSize: "14px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
                     ], {background: "#335966", border: "3px solid #4d9999", borderRadius: "0px 0px 7px 0px", width: "197px", height: "44px"}],
                 ], {background: "#4d9999", border: "3px solid #335966", borderRadius: "0px 0px 10px 0px", borderTop: "0px", borderLeft: "0px", height: "50px"}],
             ], {width: "206px"}]

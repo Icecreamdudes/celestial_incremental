@@ -493,7 +493,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock the prismatic reset.</small>" },
+            effectDescription() { return "<small>Unlock prismatic. Unlock a light fountain automator every primsatic.</small>" },
             cycleReq() { return new Decimal(1) },
             projectId() { return 2 },
             unlocked() { return true },
@@ -535,7 +535,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>.</small>" },
+            effectDescription() { return "<small>Improve the Spiral and Arrow prismatic fountains.</small>" },
             cycleReq() { return new Decimal(3) },
             projectId() { return 2 },
             unlocked() { return true },
@@ -556,7 +556,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>x3 prism gain.</small>" },
+            effectDescription() { return "<small>Unlock auto-prismatic. x2 prism gain.</small>" },
             cycleReq() { return new Decimal(4) },
             projectId() { return 2 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) },
@@ -641,7 +641,7 @@
             onComplete() {
                 doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>You can always enter D1 Eclipse, but reduce ES gain. Unlock ???</small>" },
+            effectDescription() { return "<small>Light fountains no longer consume light.</small>" },
             cycleReq() { return new Decimal(2) },
             projectId() { return 3 },
             unlocked() { return true },
@@ -662,7 +662,7 @@
             onComplete() {
                 doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock more prismatic fountains.</small>" },
+            effectDescription() { return "<small>Extend the pyramid.</small>" },
             cycleReq() { return new Decimal(3) },
             projectId() { return 3 },
             unlocked() { return true },
@@ -683,7 +683,7 @@
             onComplete() {
                 doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>x3 prism gain.</small>" },
+            effectDescription() { return "<small>Start prismatics with 1 δ ↻.</small>" },
             cycleReq() { return new Decimal(4) },
             projectId() { return 3 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) },
@@ -704,7 +704,7 @@
             onComplete() {
                 doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Increase focus cap by 1 and x2 stored time capsules.</small>" },
+            effectDescription() { return "<small>x2 stored time capsules.</small>" },
             cycleReq() { return new Decimal(5) },
             projectId() { return 3 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) },
@@ -747,7 +747,7 @@
             onComplete() {
                 doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock the starshine reset and the study hall.</small>" },
+            effectDescription() { return "<small>Unlock starshine and the study hall.</small>" },
             cycleReq() { return new Decimal(1) },
             projectId() { return 4 },
             unlocked() { return true },
@@ -768,7 +768,7 @@
             onComplete() {
                 doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>x2 starlight per project cycle after 1. Unlock more light upgrades.</small>" },
+            effectDescription() { return "<small>x2 starlight per project cycle after 1. Keep pyramid on blueshift.</small>" },
             cycleReq() { return new Decimal(2) },
             projectId() { return 4 },
             unlocked() { return true },
@@ -789,7 +789,7 @@
             onComplete() {
                 doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Double star general tree caps. Extend the star trees.</small>" },
+            effectDescription() { return "<small>x10 light. Extend the AU2 star trees.</small>" },
             cycleReq() { return new Decimal(3) },
             projectId() { return 4 },
             unlocked() { return true },
@@ -810,7 +810,7 @@
             onComplete() {
                 doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Keep 1 light well δ cycle on starshine.</small>" },
+            effectDescription() { return "<small>Unlock auto-starlight.</small>" },
             cycleReq() { return new Decimal(4) },
             projectId() { return 4 },
             unlocked() { return true },
@@ -831,7 +831,7 @@
             onComplete() {
                 doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Light fountains no longer require light to progress. +1 focus cap.</small>" },
+            effectDescription() { return "<small>Light fountains no longer require light to progress.</small>" },
             cycleReq() { return new Decimal(5) },
             projectId() { return 4 },
             unlocked() { return true },
@@ -873,7 +873,7 @@
             onComplete() {
                 doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock more starlight fountains.</small>" },
+            effectDescription() { return "<small>Blueshift no longer resets well ↻.</small>" },
             cycleReq() { return new Decimal(7) },
             projectId() { return 4 },
             unlocked() { return true },
@@ -1182,7 +1182,7 @@
                         ["raw-html", "Boosts project speed by x" + format(player.prj.storedTimeCapsuleEffect), {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "25px"],
                         ["raw-html", "You are gaining <h3>" + format(player.prj.projectSpeed) + "</h3> project progress /s.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "You are focusing on " + formatWhole(player.prj.focused) + "/" + formatWhole(player.prj.maxFocused) + " interspace projects.", {color: "#ccc", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "You are using " + formatWhole(player.prj.focused) + "/" + formatWhole(player.prj.maxFocused) + " focus.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "25px"],
                         ["raw-html", "You have a total of <h3>" + formatWhole(player.prj.completedProjects) + "</h3> project cycles.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "25px"],

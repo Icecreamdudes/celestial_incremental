@@ -114,6 +114,7 @@
                 canAddCompletion: false,
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
+                bestCompletions: new Decimal(0),
                 completionEffect: new Decimal(1),
 
                 focused: false,
@@ -127,6 +128,7 @@
                 canAddCompletion: false,
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
+                bestCompletions: new Decimal(0),
                 completionEffect: new Decimal(1),
 
                 focused: false,
@@ -140,6 +142,7 @@
                 canAddCompletion: false,
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
+                bestCompletions: new Decimal(0),
                 completionEffect: new Decimal(1),
 
                 focused: false,
@@ -153,6 +156,7 @@
                 canAddCompletion: false,
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
+                bestCompletions: new Decimal(0),
                 completionEffect: new Decimal(1),
 
                 focused: false,
@@ -204,6 +208,7 @@
         if (hasUpgrade("wel", 14)) player.wel.lightGain = player.wel.lightGain.mul(player.wel.bestLight.add(1).log(1e4).floor().pow_base(2));
         if (hasMilestone("prj", 103)) player.wel.lightGain = player.wel.lightGain.mul(2);
         player.wel.lightGain = player.wel.lightGain.mul(player.pri.fountains[1].completionEffect)
+        player.wel.lightGain = player.wel.lightGain.mul(player.pri.fountains[4].completionEffect)
         
         // WELL CYCLE SPEED
 
@@ -233,6 +238,10 @@
             player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(player.wel.fountains[3].completionEffect)
             player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(player.pri.fountains[2].completionEffect)
             if (hasMilestone("prj", 102)) player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(2);
+            if (hasUpgrade("wel", 32) && player.wel.modules[i].completions < player.wel.modules[i].bestCompletions) {
+                // MAKE THIS MORE DYNAMIC EVENTUALLY
+                player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(3);
+            }
 
             // MISC
             if (player.wel.modules[i].completions.gte(player.wel.modules[i].bestCompletions)) player.wel.modules[i].bestCompletions = player.wel.modules[i].completions;
@@ -262,6 +271,7 @@
                 }
                 module.completions = module.completions.add(1)
                 module.time = new Decimal(0)
+                if (module.completions.gte(module.bestCompletions)) module.bestCompletions = module.completions;
             }
         });
 
@@ -627,7 +637,7 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Triple light well cycles until your highest and increase focus cap by +1.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Triple light well cycles until your highest.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><br><h3>Req: 3 Arrow ↻</h3>"
                 }
@@ -1277,7 +1287,7 @@
         },
         2001: {
             title() { return "<h3>Auto</h3>" },
-            canClick() { return player.prj.focused.add(1).lt(player.prj.maxFocused) && !player.wel.fountains[this.id - 2000].automated },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.wel.fountains[this.id - 2000].automated },
             unlocked() { return layers.wel.fountains[this.id - 2000].canAuto() },
             onClick() {
                 player.prj.focused = player.prj.focused.add(1)
@@ -1308,7 +1318,7 @@
         },
         2002: {
             title() { return "<h3>Auto</h3>" },
-            canClick() { return player.prj.focused.add(1).lt(player.prj.maxFocused) && !player.wel.fountains[this.id - 2000].automated },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.wel.fountains[this.id - 2000].automated },
             unlocked() { return layers.wel.fountains[this.id - 2000].canAuto() },
             onClick() {
                 player.prj.focused = player.prj.focused.add(1)
@@ -1334,7 +1344,7 @@
         },
         2003: {
             title() { return "<h3>Auto</h3>" },
-            canClick() { return player.prj.focused.add(1).lt(player.prj.maxFocused) && !player.wel.fountains[this.id - 2000].automated },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.wel.fountains[this.id - 2000].automated },
             unlocked() { return layers.wel.fountains[this.id - 2000].canAuto() },
             onClick() {
                 player.prj.focused = player.prj.focused.add(1)
@@ -1360,7 +1370,7 @@
         },
         2004: {
             title() { return "<h3>Auto</h3>" },
-            canClick() { return player.prj.focused.add(1).lt(player.prj.maxFocused) && !player.wel.fountains[this.id - 2000].automated },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.wel.fountains[this.id - 2000].automated },
             unlocked() { return layers.wel.fountains[this.id - 2000].canAuto() },
             onClick() {
                 player.prj.focused = player.prj.focused.add(1)
@@ -1635,7 +1645,7 @@
                                     ["style-column", [], {height: "61px"}],
                                     ["blank", "9px"],
                                     ["raw-html", "Light Well α", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ["raw-html", player.wel.modules[1].time.lt(player.wel.modules[1].maxTime) ? formatTime(player.wel.modules[1].maxTime.sub(player.wel.modules[1].time).div(player.wel.modules[1].timeSpeed)) : formatTime(player.wel.modules[1].maxTime.div(player.wel.modules[1].timeSpeed)) + " CD", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                    ["raw-html", player.wel.modules[1].time.lt(player.wel.modules[1].maxTime) ? formatTime(player.wel.modules[1].maxTime.sub(player.wel.modules[1].time).div(player.wel.modules[1].timeSpeed).max(0.1)) : formatTime(player.wel.modules[1].maxTime.div(player.wel.modules[1].timeSpeed).max(0.1)) + " CD", {color: "white", fontSize: "16px", fontFamily: "monospace", textShadow: player.wel.modules[1].maxTime.div(player.wel.modules[1].timeSpeed).lte(0.1) ? "1px 1px 0 #3f3fff, -1px 1px 0 #3f3fff, 1px -1px 0 #3f3fff, -1px -1px 0 #3f3fff" : ""}],
                                     ["blank", "9px"],
                                     ["style-column", [
                                             ["raw-html", "+" + formatShortWhole(layers.wel.clickables[1].lightGain()) + " Light", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
@@ -1644,10 +1654,13 @@
                                     ["hoverless-clickable", 1],
                                     ["blank", "3px"],
                                     ["style-column", [
-                                        ["raw-html", formatShortWhole(player.wel.modules[1].completions) + " α ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                        ["tooltip-row", [
+                                            ["raw-html", formatShortWhole(player.wel.modules[1].completions) + " α ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                            ["raw-html", "<div class='bottomTooltip'>Best: " + formatShortWhole(player.wel.modules[1].bestCompletions) + " α ↻</div>"],
+                                        ], {}],
                                         ["raw-html", "(x" + formatShort(player.wel.modules[1].completionsEffect) + " Light)", {color: "white", fontSize: "12px", fontFamily: "monospace", display: hasUpgrade("wel", 13) ? "" : "none !important"}],
                                     ], {border: "3px solid #4d9973", borderRadius: "0 0 10px 10px", height: "44px"}],
-                                ], {background: "#336659", border: "3px solid #336659", borderRadius: "103px 103px 16px 16px", width: "150px"}],
+                                ], {background: "#336659", border: "3px solid #336659", borderRadius: "103px 103px 16px 16px", width: "150px", boxShadow: player.wel.modules[1].maxTime.div(player.wel.modules[1].timeSpeed).lte(0.1) ? "1px 1px 0 #3f3fff, -1px 1px 0 #3f3fff, 1px -1px 0 #3f3fff, -1px -1px 0 #3f3fff" : ""}],
                                 ["blank", "6px"],                  
                             ]],
                         ]],
@@ -1686,7 +1699,10 @@
                             ["hoverless-clickable", 2],
                             ["blank", "3px"],
                             ["style-column", [
-                                ["raw-html", formatShortWhole(player.wel.modules[2].completions) + " β ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ["tooltip-row", [
+                                    ["raw-html", formatShortWhole(player.wel.modules[2].completions) + " β ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                    ["raw-html", "<div class='bottomTooltip'>Best: " + formatShortWhole(player.wel.modules[2].bestCompletions) + " β ↻</div>"],
+                                ], {}],
                                 ["raw-html", "(x" + formatShort(player.wel.modules[2].completionsEffect) + " Light)", {color: "white", fontSize: "12px", fontFamily: "monospace", display: hasUpgrade("wel", 13) ? "" : "none !important"}],
                             ], {border: "3px solid #4d9973", borderRadius: "0 0 10px 10px", height: "44px"}],
                         
@@ -1735,7 +1751,10 @@
                             ["hoverless-clickable", 3],
                             ["blank", "3px"],
                             ["style-column", [
-                                ["raw-html", formatShortWhole(player.wel.modules[3].completions) + " γ ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ["tooltip-row", [
+                                    ["raw-html", formatShortWhole(player.wel.modules[3].completions) + " γ ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                    ["raw-html", "<div class='bottomTooltip'>Best: " + formatShortWhole(player.wel.modules[3].bestCompletions) + " γ ↻</div>"],
+                                ], {}],
                                 ["raw-html", "(x" + formatShort(player.wel.modules[3].completionsEffect) + " Light)", {color: "white", fontSize: "12px", fontFamily: "monospace", display: hasUpgrade("wel", 13) ? "" : "none !important"}],
                             ], {border: "3px solid #4d9973", borderRadius: "0 0 10px 10px", height: "44px"}],
                         
@@ -1785,7 +1804,10 @@
                             ["hoverless-clickable", 4],
                             ["blank", "3px"],
                             ["style-column", [
-                                ["raw-html", formatShortWhole(player.wel.modules[4].completions) + " δ ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ["tooltip-row", [
+                                    ["raw-html", formatShortWhole(player.wel.modules[4].completions) + " δ ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                    ["raw-html", "<div class='bottomTooltip'>Best: " + formatShortWhole(player.wel.modules[4].bestCompletions) + " δ ↻</div>"],
+                                ], {}],
                                 ["raw-html", "(x" + formatShort(player.wel.modules[4].completionsEffect) + " Light)", {color: "white", fontSize: "12px", fontFamily: "monospace", display: hasUpgrade("wel", 13) ? "" : "none !important"}],
                             ], {border: "3px solid #4d9973", borderRadius: "0 0 10px 10px", height: "44px"}],
                         ], {background: "#336659",border: "3px solid #336659", borderRadius: "103px 103px 16px 16px", width: "150px"}],
@@ -2124,8 +2146,12 @@ const makeWellFountain = function (id, effectIsWhole) {
                     ], {height: "45px"}]
                 ], {background: "#336659", border: "3px solid #336659", borderRadius: "0 10px 0px 0px", width: "200px", height: "150px"}],
                 ["style-column", [
-                        ["style-column", [
-                        ["raw-html", formatWhole(player.wel.fountains[id].completions) + " ↻<br><small>(x" + (effectIsWhole ? formatWhole(layers.wel.fountains[id].getCompletionEffect()) : formatShort(layers.wel.fountains[id].getCompletionEffect())) + " " + layers.wel.fountains[id].completionEffectStat + ")</small>", {color: "white", fontSize: "14px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
+                    ["style-column", [
+                        ["tooltip-row", [
+                            ["raw-html", formatWhole(player.wel.fountains[id].completions) + " ↻", {color: "white", fontSize: "14px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
+                            ["raw-html", "<div class='bottomTooltip'>Best: " + formatShortWhole(player.wel.fountains[id].bestCompletions) + " " + layers.wel.fountains[id].title + " ↻</div>"],
+                        ], {}],
+                        ["raw-html", "<small>(x" + (effectIsWhole ? formatWhole(layers.wel.fountains[id].getCompletionEffect()) : formatShort(layers.wel.fountains[id].getCompletionEffect())) + " " + layers.wel.fountains[id].completionEffectStat + ")</small>", {color: "white", fontSize: "14px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
                     ], {background: "#336659", border: "3px solid #4d9973", borderRadius: "0px 0px 7px 0px", width: "197px", height: "44px"}],
                 ], {background: "#4d9973", border: "3px solid #336659", borderRadius: "0px 0px 10px 0px", borderTop: "0px", borderLeft: "0px", height: "50px"}],
             ], {width: "206px"}]

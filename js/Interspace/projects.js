@@ -28,6 +28,7 @@
                 maxCompletions: new Decimal(0),
 
                 focused: false,
+                automated: false,
                 timeCapsuleReq: new Decimal(1),
                 statReq: new Decimal(1),
                 completionEffect: new Decimal(1),
@@ -41,6 +42,7 @@
                 maxCompletions: new Decimal(0),
 
                 focused: false,
+                automated: false,
                 timeCapsuleReq: new Decimal(1),
                 statReq: new Decimal(1),
                 completionEffect: new Decimal(1),
@@ -54,6 +56,7 @@
                 maxCompletions: new Decimal(0),
 
                 focused: false,
+                automated: false,
                 timeCapsuleReq: new Decimal(1),
                 statReq: new Decimal(1),
                 completionEffect: new Decimal(1),
@@ -67,6 +70,7 @@
                 maxCompletions: new Decimal(0),
 
                 focused: false,
+                automated: false,
                 timeCapsuleReq: new Decimal(1),
                 statReq: new Decimal(1),
                 completionEffect: new Decimal(1),
@@ -91,6 +95,7 @@
         player.prj.maxFocused = new Decimal(1)
         if (hasUpgrade("wel", 21)) player.prj.maxFocused = player.prj.maxFocused.add(1);
         if (hasUpgrade("wel", 24)) player.prj.maxFocused = player.prj.maxFocused.add(1);
+        if (hasUpgrade("wel", 31)) player.prj.maxFocused = player.prj.maxFocused.add(1);
 
         player.prj.totalProjectLevels = player.prj.modules[1].completions
         .add(player.prj.modules[2].completions)
@@ -247,15 +252,15 @@
             canClick() { return player.prj.focused.gt(0)},
             unlocked() { return true },
             onClick() {
-                player.prj.focused = new Decimal(0)
-                Object.keys(layers.wel.fountains).forEach(i => {
-                    player.wel.fountains[i].focused = false
-                });
                 Object.keys(layers.prj.projects).forEach(i => {
-                    player.prj.modules[i].focused = false
-                });
-                Object.keys(layers.pri.fountains).forEach(i => {
-                    player.pri.fountains[i].focused = false
+                    if (player.prj.projects[i].focused) {
+                        player.prj.projects[i].focused = false
+                        player.prj.focused = player.prj.focused.sub(1)
+                    }
+                    if (player.prj.projects[i].automated) {
+                        player.prj.projects[i].automated = false
+                        player.prj.focused = player.prj.focused.sub(1)
+                    }
                 });
             },
             style() {
@@ -1186,7 +1191,7 @@
                         ["blank", "25px"],
                         ["raw-html", "You have a total of <h3>" + formatWhole(player.prj.completedProjects) + "</h3> project cycles.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "25px"],
-                        ["raw-html", "<small>Stat multipliers from project milestones are only active when their second requirement is fulfilled.</small>", {color: "#bfbfbf", fontSize: "18px", fontFamily: "monospace"}],
+                        //["raw-html", "<small>Stat multipliers from project milestones are only active when their second requirement is fulfilled.</small>", {color: "#bfbfbf", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", "<small>Unlocks from project milestones are permanent!</small>", {color: "#bfbfbf", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "15px"],
                         ["style-row", [

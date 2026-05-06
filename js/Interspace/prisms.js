@@ -66,6 +66,32 @@
                 automated: false,
                 prismReq: new Decimal(1),
             },
+            5: {
+                time: new Decimal(0),
+                timeReq: new Decimal(1e8),
+                timeSpeed: new Decimal(1),
+                canAddCompletion: false,
+                completions: new Decimal(0),
+                maxCompletions: new Decimal(0),
+                completionEffect: new Decimal(1),
+
+                focused: false,
+                automated: false,
+                prismReq: new Decimal(1),
+            },
+            6: {
+                time: new Decimal(0),
+                timeReq: new Decimal(1e8),
+                timeSpeed: new Decimal(1),
+                canAddCompletion: false,
+                completions: new Decimal(0),
+                maxCompletions: new Decimal(0),
+                completionEffect: new Decimal(1),
+
+                focused: false,
+                automated: false,
+                prismReq: new Decimal(1),
+            },
         },
 
         blueshifts: new Decimal(0),
@@ -123,12 +149,16 @@
         player.wel.bestLight = new Decimal(0)
 
         player.wel.modules[1].time = new Decimal(0)
+        player.wel.modules[1].timeSpeed = new Decimal(0)
         player.wel.modules[1].completions = new Decimal(0)
         player.wel.modules[2].time = new Decimal(0)
+        player.wel.modules[2].timeSpeed = new Decimal(0)
         player.wel.modules[2].completions = new Decimal(0)
         player.wel.modules[3].time = new Decimal(0)
+        player.wel.modules[3].timeSpeed = new Decimal(0)
         player.wel.modules[3].completions = new Decimal(0)
         player.wel.modules[4].time = new Decimal(0)
+        player.wel.modules[4].timeSpeed = new Decimal(0)
         player.wel.modules[4].completions = new Decimal(0)
 
         player.wel.fountains[1].completions = new Decimal(0)
@@ -369,7 +399,7 @@
                 let completions = player.pri.fountains[2].completions
                 let s = new Decimal(1)
 
-                s = s.mul(completions.div(4).add(1).pow(3))
+                s = s.mul(completions.div(4).add(1).pow(1.5))
                 if (completions.gte(20)) {
                     s = s.mul(completions.sub(20).pow_base(1.1))
                 }
@@ -379,7 +409,7 @@
             },
             getprismReq() {
                 let completions = player.pri.fountains[2].completions
-                let s = completions.div(4).add(1).pow(3)
+                let s = completions.div(4).add(1).pow(1.5)
                 
                 if (completions.gte(20)) {
                     s = s.mul(completions.sub(20).pow_base(1.1))
@@ -417,7 +447,7 @@
                 let completions = player.pri.fountains[3].completions
                 let s = new Decimal(1)
 
-                s = s.mul(completions.div(4).add(1).pow(3))
+                s = s.mul(completions.div(4).add(1).pow(1.5))
                 if (completions.gte(20)) {
                     s = s.mul(completions.sub(20).pow_base(1.1))
                 }
@@ -427,7 +457,7 @@
             },
             getprismReq() {
                 let completions = player.pri.fountains[3].completions
-                let s = completions.div(4).add(1).pow(3)
+                let s = completions.div(4).add(1).pow(1.5)
                 
                 if (completions.gte(20)) {
                     s = s.mul(completions.sub(20).pow_base(1.1))
@@ -455,7 +485,7 @@
                 return player.pri.fountains[2].completions.gt(0) || player.pri.fountains[3].completions.gt(0)
             },
             getCompletionEffect() {
-                let completions = player.pri.fountains[1].completions
+                let completions = player.pri.fountains[4].completions
 
                 s = player.pri.prisms.add(1).log10().div(2).add(1).pow(completions).log(10).add(1).pow(0.5).sub(1).pow_base(10).sub(1).mul(3).add(1)
 
@@ -463,24 +493,113 @@
             },
             getTimeReq() {
                 let completions = player.pri.fountains[4].completions
-                let s = new Decimal(1e8)
+                let s = new Decimal(1)
 
                 s = s.mul(completions.add(1).pow(1.5))
                 s = s.mul(completions.pow_base(2.5))
                 if (completions.gte(50)) {
                     s = s.pow(1.05)
                 }
+                s = s.pow(1.0625).mul(12)
 
                 return s
             },
             getprismReq() {
                 let completions = player.pri.fountains[4].completions
-                let s = completions.div(2).add(1).pow(1.25)
-                s = s.mul(8)
+                let s = completions.div(4).add(1).pow(2).mul(8)
                 
                 if (completions.gte(20)) {
-                    s = s.mul(completions.sub(20).pow_base(1.125))
+                    s = s.mul(completions.sub(20).pow_base(1.1))
                 }
+                s = s.pow(1.0625).mul(18)
+
+                return s.floor()
+            },
+            getTimeSpeed() {
+                let s = new Decimal(1)
+
+                //s = s.mul(player.prj.projectSpeed)
+                s = s.mul(player.pri.fountainSpeed)
+
+                return s
+            },
+        },
+        5: {
+            title: "Cone",
+            completionEffectPrefix: "x",
+            completionEffectSuffix: " Light Well Speed",
+            condition() {
+                return player.pri.fountains[1].completions.gt(8)
+            },
+            unlocked() {
+                return player.pri.fountains[2].completions.gt(0) || player.pri.fountains[3].completions.gt(0)
+            },
+            getCompletionEffect() {
+                let completions = player.pri.fountains[5].completions
+
+                s = completions.pow(0.5).pow_base(2)
+
+                return s
+            },
+            getTimeReq() {
+                let completions = player.pri.fountains[5].completions
+                let s = new Decimal(1)
+
+                s = s.mul(completions.pow_base(2))
+                if (completions.gte(50)) {
+                    s = s.pow(1.05)
+                }
+                s = s.pow(1.0625).mul(18)
+
+                return s
+            },
+            getprismReq() {
+                let completions = player.pri.fountains[5].completions
+                let s = completions.pow_base(2).mul(12)
+
+                return s.floor()
+            },
+            getTimeSpeed() {
+                let s = new Decimal(1)
+
+                //s = s.mul(player.prj.projectSpeed)
+                s = s.mul(player.pri.fountainSpeed)
+
+                return s
+            },
+        },
+        6: {
+            title: "Hourglass",
+            completionEffectPrefix: "x",
+            completionEffectSuffix: " Stored Time Capsules",
+            condition() {
+                return player.pri.fountains[1].completions.gt(8)
+            },
+            unlocked() {
+                return player.pri.fountains[2].completions.gt(0) || player.pri.fountains[3].completions.gt(0)
+            },
+            getCompletionEffect() {
+                let completions = player.pri.fountains[6].completions
+
+                s = completions.pow(0.5).pow_base(2)
+
+                return s
+            },
+            getTimeReq() {
+                let completions = player.pri.fountains[6].completions
+                let s = new Decimal(1)
+
+                s = s.mul(completions.pow_base(2))
+                if (completions.gte(50)) {
+                    s = s.pow(1.05)
+                }
+                s = s.pow(1.0625).mul(24)
+
+                return s
+            },
+            getprismReq() {
+                let completions = player.pri.fountains[6].completions
+                let s = completions.pow_base(2).mul(12)
 
                 return s.floor()
             },
@@ -590,7 +709,7 @@
                         }
                     }
 
-                    // Staircase
+                    // hourglass
                     if (layers.pri.fountains[4].unlocked()) {
                         look[5][1].push(["blank", "6px", {width: "6px"}])
                             look[5][1].push(
@@ -603,7 +722,7 @@
                         } else {
                             look[5][1].push(
                             ["style-column", [
-                                ["raw-html", "Staircase<br><small>Req: 6 Spiral ↻ and 6 Arrow ↻</small>", {color: "white", fontSize: "16px"}],
+                                ["raw-html", "Hourglass<br><small>Req: 6 Spiral ↻ and 6 Arrow ↻</small>", {color: "white", fontSize: "16px"}],
                             ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
                             )
                         }

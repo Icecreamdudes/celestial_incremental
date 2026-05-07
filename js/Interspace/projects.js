@@ -1053,7 +1053,7 @@
                 if (completions.eq(0)) return new Decimal(0);
                 let s = new Decimal(10)
 
-                s = s.mul(completions.sub(1).pow_base(completions.add(1).div(5).ceil().pow(1.25).pow_base(5)))
+                s = s.mul(completions.sub(1).pow_base(completions.add(1).div(5).ceil().pow_base(5)))
 
                 return s
             },
@@ -1170,6 +1170,10 @@
             },
             milestones: [401, 402, 403, 404, 405, 406, 407, 408, 409, 410],
         },
+        // 5, Singularity Points,
+        // 6, Starmetal Essence,
+        // 7, Singularities,
+        // 8, lmao no spoilers for what this boosts,
     },
     microtabs: {
         stuff: {

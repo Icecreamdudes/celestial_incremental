@@ -361,10 +361,10 @@
             },
             getprismReq() {
                 let completions = player.pri.fountains[1].completions
-                let s = completions.div(4).add(1).pow(1.8)
+                let s = completions.div(8).add(1).pow(4)
                 
                 if (completions.gte(20)) {
-                    s = s.mul(completions.sub(20).pow_base(1.1))
+                    s = s.mul(completions.sub(20).pow_base(1.2))
                 }
 
                 return s.floor()
@@ -397,9 +397,8 @@
             },
             getTimeReq() {
                 let completions = player.pri.fountains[2].completions
-                let s = new Decimal(1)
+                let s = completions.div(8).add(1).pow(3)
 
-                s = s.mul(completions.div(4).add(1).pow(1.5))
                 if (completions.gte(20)) {
                     s = s.mul(completions.sub(20).pow_base(1.1))
                 }
@@ -409,7 +408,7 @@
             },
             getprismReq() {
                 let completions = player.pri.fountains[2].completions
-                let s = completions.div(4).add(1).pow(1.5)
+                let s = completions.div(8).add(1).pow(3)
                 
                 if (completions.gte(20)) {
                     s = s.mul(completions.sub(20).pow_base(1.1))
@@ -444,10 +443,9 @@
                 return s
             },
             getTimeReq() {
-                let completions = player.pri.fountains[3].completions
-                let s = new Decimal(1)
-
-                s = s.mul(completions.div(4).add(1).pow(1.5))
+                let completions = player.pri.fountains[2].completions
+                let s = completions.div(8).add(1).pow(3)
+                
                 if (completions.gte(20)) {
                     s = s.mul(completions.sub(20).pow_base(1.1))
                 }
@@ -456,8 +454,8 @@
                 return s
             },
             getprismReq() {
-                let completions = player.pri.fountains[3].completions
-                let s = completions.div(4).add(1).pow(1.5)
+                let completions = player.pri.fountains[2].completions
+                let s = completions.div(8).add(1).pow(3)
                 
                 if (completions.gte(20)) {
                     s = s.mul(completions.sub(20).pow_base(1.1))
@@ -676,7 +674,7 @@
                     if (layers.pri.fountains[4].unlocked()) {
                             look[5][1].push(
                                 ["style-column", [
-                                    ["style-column", [], {background: "#d6ebff", border: "3px solid #d6ebff", borderRadius: "0 13px 0 0", borderRight: "0", width: "268px", height: "215px", marginLeft: "-5.25px"}],
+                                    ["style-column", [], {background: "#d6ebff", border: "3px solid #d6ebff", borderRadius: "13px 0 0 13px", borderRight: "0", width: "268px", height: "215px", marginLeft: "-5.25px"}],
                                 ], {width: "0", height: "0"}],
                             )
                         if (layers.pri.fountains[4].condition()) {
@@ -691,15 +689,15 @@
                     }
 
                     // Cone
-                    if (layers.pri.fountains[4].unlocked()) {
+                    if (layers.pri.fountains[5].unlocked()) {
                         look[5][1].push(["blank", "6px", {width: "6px"}])
                             look[5][1].push(
                                 ["style-column", [
-                                    ["style-column", [], {background: "#d6ebff", border: "3px solid #d6ebff", borderRadius: "0 13px 0 0", borderRight: "0", width: "268px", height: "215px", marginLeft: "-5.25px"}],
+                                    ["style-column", [], {background: "#d6ebff", border: "3px solid #d6ebff", borderRadius: "0", borderRight: "0", width: "268px", height: "215px", marginLeft: "-5.25px"}],
                                 ], {width: "0", height: "0"}],
                             )
-                        if (layers.pri.fountains[4].condition()) {
-                            look[5][1].push(makePrismFountain(4, false))
+                        if (layers.pri.fountains[5].condition()) {
+                            look[5][1].push(makePrismFountain(5, false))
                         } else {
                             look[5][1].push(
                                 ["style-column", [
@@ -710,15 +708,15 @@
                     }
 
                     // hourglass
-                    if (layers.pri.fountains[4].unlocked()) {
+                    if (layers.pri.fountains[6].unlocked()) {
                         look[5][1].push(["blank", "6px", {width: "6px"}])
                             look[5][1].push(
                                 ["style-column", [
-                                    ["style-column", [], {background: "#d6ebff", border: "3px solid #d6ebff", borderRadius: "0 13px 0 0", borderRight: "0", width: "268px", height: "215px", marginLeft: "-5.25px"}],
+                                    ["style-column", [], {background: "#d6ebff", border: "3px solid #d6ebff", borderRadius: "0 13px 13px 0", borderRight: "0", width: "268px", height: "215px", marginLeft: "-5.25px"}],
                                 ], {width: "0", height: "0"}],
                             )
-                        if (layers.pri.fountains[4].condition()) {
-                            look[5][1].push(makePrismFountain(4, false))
+                        if (layers.pri.fountains[6].condition()) {
+                            look[5][1].push(makePrismFountain(6, false))
                         } else {
                             look[5][1].push(
                             ["style-column", [

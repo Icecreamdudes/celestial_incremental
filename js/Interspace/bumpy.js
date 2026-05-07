@@ -178,15 +178,15 @@
         },
         1001: {
             title() { return "<h3>Focus</h3>" },
-            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.bum.starlight.gte(player.bum.fountains[this.id - 1000].lightReq) && !player.bum.fountains[this.id - 1000].focused},
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.bum.starlight.gte(player.bum.fountains[this.id - 1000].starlightReq) && !player.bum.fountains[this.id - 1000].focused},
             unlocked() { return true },
             onClick() {
-                player.bum.starlight = player.bum.starlight.sub(player.bum.fountains[this.id - 1000].lightReq)
+                player.bum.starlight = player.bum.starlight.sub(player.bum.fountains[this.id - 1000].starlightReq)
                 player.prj.focused = player.prj.focused.add(1)
                 player.bum.fountains[this.id - 1000].focused = true
             },
             style() {
-                let look = {width: "238px", minHeight: "45px", borderRadius: "0px"}
+                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
                 if (this.canClick()) {
                     look.backgroundColor = "#ffbfff"
                     look.border = "3px solid #0000003f"
@@ -208,8 +208,14 @@
     infoboxes: {},
     fountains: {
         1: {
-            title: "Fountain of Acceleration",
+            title: "ACCELERATION",
             completionEffectStat: "Light, based on Project Speed",
+            condition() {
+                return true
+            },
+            canAuto() {
+                return false
+            },
             getCompletionEffect() {
                 let completions = player.bum.fountains[1].completions.add(1)
 
@@ -251,18 +257,6 @@
     },
     microtabs: {
         stuff: {
-            "Reset": {
-                buttonStyle() { return { color: "white", borderRadius: "8px"} },
-                unlocked() { return true },
-                content() {
-                    let look = [
-                        ["blank", "25px"],
-                        ["clickable", 1],
-                        ["blank", "25px"],
-                    ]
-                    return look
-                }
-            },
             "Fountains": {
                 buttonStyle() { return { color: "white", borderRadius: "8px"} },
                 unlocked() { return true },
@@ -335,6 +329,7 @@
                                 ["style-row", [], {background: "#180b18", width: "400px", height: "10px", borderRadius: "0 0 4px 0", margin: "3px", marginTop: "0"}],
                             ], {background: "#180b187f", borderRadius: "0 0 7px 7px"}],
                         ], {background: "#dfffdf", border: "3px solid #dfffdf", borderRadius: "10px"}],
+                        ["blank", "25px"],
                     ]
                     return look
                 }
@@ -351,45 +346,60 @@
                 return look
             }],
         ]],
+        ["blank", "15px"],
+        ["clickable", 1],
+        ["blank", "15px"],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true && false}
 })
-const makeStarlightFountain = function (id) {
+
+const makeStarlightFountain = function (id, effectIsWhole) {
     let thisFountain =
-        ["style-column", [
-            ["style-row", [
-                ["style-column", [
-                    ["blank", "10px"],
-                    ["raw-html", layers.bum.fountains[id].title, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ["raw-html", player.bum.fountains[id].timeSpeed.lte(0) ? "<span style='color:#ff7f7f;font-size:14px'>Can't Complete w/o Starlight!</span>" : (player.bum.fountains[id].focused ? formatTime(player.bum.fountains[id].timeReq.sub(player.bum.fountains[id].time).div(player.bum.fountains[id].timeSpeed)) : formatTime(player.bum.fountains[id].timeReq.div(player.bum.fountains[id].timeSpeed))) + " CD", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ["raw-html", "<small>(" + format(player.bum.fountains[id].time, 1) + "/" + format(player.bum.fountains[id].timeReq, 1) + ")</small>", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ["blank", "10px"],
-                    ["style-column", [
-                        ["raw-html", player.bum.fountains[id].starlightReq.eq(0) ? "Your first cycle is free!" : "-" + formatWhole(player.bum.fountains[id].starlightReq) + " Starlight", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ], {background: "#806080", borderRadius: "10px 10px 0px 0px", width: "238px", height:"25px"}],
-                    ["blank", "3px"],
-                    ["clickable", id + 1000],
-                ], {background: "#4d394d", border: "3px solid #4d394d", borderRadius: "16px 0px 0px 0px", width: "238px", height: "150px"}],
+        ["style-row", [
+            ["style-column", [
                 ["style-column", [
                     ["style-column", [
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", player.bum.fountains[id].time.gte(player.bum.fountains[id].timeReq) ? "0%" : formatShortestWhole(player.bum.fountains[id].time.div(player.bum.fountains[id].timeReq).min(1).max(0).mul(100)) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                            ], {background: "#806080", border: "3px solid #4d394d", borderRadius: "100px", width: "75px", height:"75px"}]
-                        ], {borderRadius: "50%", width: "125px", height:"125px", border: "3px solid #4d394d", margin: "-3px", marginTop: "75px",
-                            background: player.bum.fountains[id].time.lt(player.bum.fountains[id].timeReq) ?
-                            "conic-gradient(#ffbfff " + (player.bum.fountains[id].time.div(player.bum.fountains[id].timeReq)).min(1).max(0) * 360 + "deg, #080008 0deg)" : "#080008"
-                        }],
-                    ], {background: "#4d394d", borderRadius: "0px 81px 0px 0px", width: "153px", height: "78px"}],
-                    ["style-column", [], {background: "#806080", height: "78px"}],
-                ], {border: "3px solid #4d394d", borderBottom: "0px", borderLeft: "0px", borderRadius: "0px 81px 0px 0px", padding: "-3px", width: "153px", height: "153px"}],
-            ], {verticalAlign: "bottom"}],
-            ["style-column", [
+                            ], {background: "#bfffbf", borderRadius: "0", width: "44px", height: (format(player.bum.fountains[id].time.div(player.bum.fountains[id].timeReq).min(1).max(0).mul(197))) + "px", marginTop: (format(new Decimal(197).sub(player.bum.fountains[id].time.div(player.bum.fountains[id].timeReq).min(1).max(0).mul(197)))) + "px"}],
+                        ], {background: "#171117", borderRadius: "10px 0 0 10px", width: "50px", height: "197px"}],
+                    ], {width: "50px", height: "0"}],
                     ["style-column", [
-                    ["raw-html", formatWhole(player.bum.fountains[id].completions) + " ↻<br><small>(x" + formatShort(layers.bum.fountains[id].getCompletionEffect()) + " " + layers.bum.fountains[id].completionEffectStat + ")</small>", {color: "white", fontSize: "16px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
-                ], {background: "#4d394d", border: "3px solid #806080", borderRadius: "0px 0px 7px 7px", width: "388px", height: "44px"}],
-            ], {background: "#806080", border: "3px solid #4d394d", borderRadius: "0px 0px 10px 10px", borderTop: "0px", height: "50px"}],
-        ], {width: "400px"}]
+                        ["style-column", [
+                        ], {border: "3px solid #806080", borderRadius: "10px 0 0 10px", width: "44px", height: "197px"}],
+                    ], {width: "50px", height: "0"}],
+                ], {background: "#806080", borderRadius: "10px 0 0 10px", width: "50px", height: "203px"}],
+            ], {background: "#4d394d", border: "3px solid #4d394d", borderRadius: "10px 0 0 10px", borderRight: "0", width: "50px", height: "203px"}],
+            ["style-column", [
+                ["style-column", [
+                    ["blank", "10px"],
+                    ["raw-html", layers.bum.fountains[id].title, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", player.bum.fountains[id].timeSpeed.lte(0) ? "<span style='color:#ffff00'>Can't Complete w/o Light!</span>" : (player.bum.fountains[id].focused ? formatTime(player.bum.fountains[id].timeReq.sub(player.bum.fountains[id].time).div(player.bum.fountains[id].timeSpeed)) : player.wel.light.lte(player.bum.fountains[id].starlightReq) ? "<span style='color:#ffff00'>Can't afford!</span>" : (formatTime(player.bum.fountains[id].timeReq.div(player.bum.fountains[id].timeSpeed).mul(player.bum.fountains[id].time.div(player.bum.fountains[id].timeReq).neg().add(1)))) + " CD"), {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                    ["raw-html", "<small>(" + format(player.bum.fountains[id].time, 1) + "/" + format(player.bum.fountains[id].timeReq, 1) + ")</small>", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                    ["blank", "10px"],
+                    ["style-column", [
+                        ["raw-html", player.bum.fountains[id].starlightReq.eq(0) ? "Your first cycle is free!" : "-" + formatWhole(player.bum.fountains[id].starlightReq) + " Light", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                    ], {background: "#806080", borderRadius: "0 10px 0px 0px", width: "200px", height:"25px"}],
+                    ["blank", "3px"],
+                    ["style-row", [
+                        ["hoverless-clickable", id + 1000],
+                        ["style-row", [
+                            ["blank", "3px", {width: "3px"}],
+                        ], {display: layers.bum.fountains[id].canAuto() ? "" : "none !important"}],
+                        ["hoverless-clickable", id + 2000],
+                    ], {height: "45px"}]
+                ], {background: "#4d394d", border: "3px solid #4d394d", borderRadius: "0 10px 0px 0px", width: "200px", height: "150px"}],
+                ["style-column", [
+                    ["style-column", [
+                        ["tooltip-row", [
+                            ["raw-html", formatWhole(player.bum.fountains[id].completions) + " ↻", {color: "white", fontSize: "14px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
+                            ["raw-html", "<div class='bottomTooltip'>Best: " + formatShortWhole(player.bum.fountains[id].bestCompletions) + " " + layers.bum.fountains[id].title + " ↻</div>"],
+                        ], {}],
+                        ["raw-html", "<small>(x" + (effectIsWhole ? formatWhole(layers.bum.fountains[id].getCompletionEffect()) : formatShort(layers.bum.fountains[id].getCompletionEffect())) + " " + layers.bum.fountains[id].completionEffectStat + ")</small>", {color: "white", fontSize: "14px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
+                    ], {background: "#4d394d", border: "3px solid #806080", borderRadius: "0px 0px 7px 0px", width: "197px", height: "44px"}],
+                ], {background: "#806080", border: "3px solid #4d394d", borderRadius: "0px 0px 10px 0px", borderTop: "0px", borderLeft: "0px", height: "50px"}],
+            ], {width: "206px"}]
+        ]]
     return thisFountain
 }

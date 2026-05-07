@@ -1418,8 +1418,8 @@
 
                 s = s.mul(completions.add(1))
                 s = s.mul(completions.pow_base(Math.pow(1.4, 1.0625)))
-                if (completions.gte(1e3)) {
-                    s = s.pow(1.05)
+                if (completions.gte(400)) {
+                    s = s.pow(completions.sub(400).div(400).add(1))
                 }
 
                 return s
@@ -1430,8 +1430,8 @@
 
                 s = s.mul(completions.mul(0.25).add(1))
                 s = s.mul(completions.pow_base(1.4))
-                if (completions.gte(1e3)) {
-                    s = s.pow(1.05)
+                if (completions.gte(400)) {
+                    s = s.pow(completions.sub(400).div(400).add(1))
                 }
 
                 return s.floor()
@@ -1467,8 +1467,8 @@
 
                 s = s.mul(completions.add(1))
                 s = s.mul(completions.pow_base(Math.pow(1.6, 1.0625)))
-                if (completions.gte(1e3)) {
-                    s = s.pow(1.05)
+                if (completions.gte(400)) {
+                    s = s.pow(completions.sub(400).div(400).add(1))
                 }
 
                 return s
@@ -1479,8 +1479,8 @@
 
                 s = s.mul(completions.mul(0.25).add(1))
                 s = s.mul(completions.pow_base(1.6))
-                if (completions.gte(1e3)) {
-                    s = s.pow(1.05)
+                if (completions.gte(400)) {
+                    s = s.pow(completions.sub(400).div(400).add(1))
                 }
 
                 return s.floor()
@@ -1516,8 +1516,8 @@
 
                 s = s.mul(completions.add(1))
                 s = s.mul(completions.pow_base(Math.pow(5, 1.06)))
-                if (completions.gte(1e3)) {
-                    s = s.pow(1.05)
+                if (completions.gte(400)) {
+                    s = s.pow(completions.sub(400).div(400).add(1))
                 }
 
                 return s
@@ -1528,8 +1528,8 @@
 
                 s = s.mul(completions.mul(0.25).add(1))
                 s = s.mul(completions.pow_base(5))
-                if (completions.gte(1e3)) {
-                    s = s.pow(1.05)
+                if (completions.gte(400)) {
+                    s = s.pow(completions.sub(400).div(400).add(1))
                 }
 
                 return s.floor()
@@ -1565,8 +1565,8 @@
 
                 s = s.mul(completions.add(1))
                 s = s.mul(completions.pow_base(Math.pow(4, 1.06)))
-                if (completions.gte(1e3)) {
-                    s = s.pow(1.05)
+                if (completions.gte(400)) {
+                    s = s.pow(completions.sub(400).div(400).add(1))
                 }
 
                 return s
@@ -1577,8 +1577,8 @@
 
                 s = s.mul(completions.mul(0.25).add(1))
                 s = s.mul(completions.pow_base(4))
-                if (completions.gte(1e3)) {
-                    s = s.pow(1.05)
+                if (completions.gte(400)) {
+                    s = s.pow(completions.sub(400).div(400).add(1))
                 }
 
                 return s.floor()

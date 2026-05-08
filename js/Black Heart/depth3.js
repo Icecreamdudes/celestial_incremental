@@ -388,7 +388,7 @@ addLayer("depth3", {
                                 ["bh-milestone", [175, "depth3", ""]],
                                 ["bh-milestone", [200, "depth3", ""]],
                                 ["bh-milestone", [225, "depth3", ""]],
-                                ["bh-milestone", [250, "depth3", ""]],
+                                ["bh-milestone", [250, "depth3", "<br><small style='color:#ff000088'>[Combo Selection Sealed]</small>", () => {return true}]],
                             ], {width: "272px", height: "267px", background: "var(--miscButton)", borderBottom: "3px solid var(--regBorder)"}],
                             ["style-column", [
                                 ["raw-html", "<p style='line-height:1'>Clicking on a cleared milestone allows you to start at that milestones combo value.", {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],

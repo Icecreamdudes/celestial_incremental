@@ -2927,16 +2927,24 @@ addLayer("pet", {
             title() { return "Nova" },
             lore() { return "A clown from the domain of singularity. Likes playing pranks and causing havoc. Only here to watch what you are doing." }, 
             description() {
-                return "^" + format(this.effect()[0], 3) + " to fertilizer <small>(based on grass magnitude)</small>.<br>" +
-                    "x" + format(this.effect()[1]) + " to check back xp <small>(based on level magnitude)</small>."
+                if (this.effect()[0].gt(1.5)) {
+                    return "^" + format(this.effect()[0], 3) + " to fertilizer <small>(based on grass magnitude)</small> <small style='color:red'>[SOFTCAPPED]</small><br>" +
+                        "x" + format(this.effect()[1]) + " to check back xp <small>(based on level magnitude)</small>"
+                }
+                return "^" + format(this.effect()[0], 3) + " to fertilizer <small>(based on grass magnitude)</small><br>" +
+                    "x" + format(this.effect()[1]) + " to check back xp <small>(based on level magnitude)</small>"
             },
             levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
-                return [
-                    amt.pow(0.5).mul(0.0035).mul(player.g.grass.add(10).log(10).log(10).add(1)).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Fertilizer (Based on Grass Magnitude^2)
+                let eff = [
+                    amt.pow(0.5).mul(0.0035).mul(player.g.grass.add(10).log(10).log(10).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Fertilizer (Based on Grass Magnitude^2)
                     amt.div(8).mul(player.cb.level.add(2).log(2).log(2).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1) // Check Back XP (Based on Level Magnitude)
                 ]
+                if (eff[0].gt(1.5)) {
+                    eff[0] = eff[0].div(1.5).pow(0.3).mul(1.5)
+                }
+                return eff
             },
             sellValue() { return new Decimal(100)},
             // PET POINT CODE
@@ -3332,16 +3340,22 @@ addLayer("pet", {
             title() { return "Impossible Triangle" },
             lore() { return "An anomaly of a shape, but is only a mere illusion. Celestials love their illusions." }, 
             description() {
+                if (this.effect()[0].gt(1.25)) {
+                    return "^" + format(this.effect()[0], 3) + " to singularity points <small>(based on radiation)</small> <small style='color:red'>[SOFTCAPPED]</small><br>" +
+                        "x" + format(this.effect()[1]) + " to singularity dimensions <small>(based on singularity points)</small>"
+                }
                 return "^" + format(this.effect()[0], 3) + " to singularity points <small>(based on radiation)</small>.<br>" +
                     "x" + format(this.effect()[1]) + " to singularity dimensions <small>(based on singularity points)</small>."
             },
             levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
-                return [
-                    amt.pow(0.5).mul(0.0065).mul(player.ra.radiation.add(10).log(10).log(10).add(1)).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Singularity Points (Based on Radiation)
+                let eff = [
+                    amt.pow(0.5).mul(0.0065).mul(player.ra.radiation.add(10).log(10).log(10).add(1)).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Singularity Points (Based on Radiation)
                     amt.mul(player.s.singularityPoints.add(2).log(2).log(2).add(1)).pow(2.5).pow(Decimal.pow(3, getLevelableTier(this.layer, this.id))).add(1) // Singularity Dimenstions (Based on Singularity Points)
                 ]
+                if (eff[0].gt(1.25)) eff[0] = eff[0].div(1.25).pow(0.3).mul(1.25)
+                return eff
             },
             sellValue() { return new Decimal(300)},
             // PET POINT CODE
@@ -3438,16 +3452,22 @@ addLayer("pet", {
             title() { return "Evolution Fragment" },
             lore() { return "Unsure if it actually originates from an evolution shard, or is just mimicking one." }, 
             description() {
+                if (this.effect()[1].gt(50)) {
+                    return "/" + format(this.effect()[0]) + " to pets consumed on fragmentation<br><small>(based on rememberance cores)</small><br>" +
+                        "+" + format(this.effect()[1]) + " to black heart defense <small>(based on evo-shards)</small> <small style='color:red'>[SOFTCAPPED]</small>"
+                }
                 return "/" + format(this.effect()[0]) + " to pets consumed on fragmentation<br><small>(based on rememberance cores)</small><br>" +
                     "+" + format(this.effect()[1]) + " to black heart defense <small>(based on evo-shards)</small>"
             },
             levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
-                return [
+                let eff = [
                     amt.mul(player.ca.rememberanceCores.add(2).log(2).log(2).add(1)).div(50).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Pets Consumed On Fragmentation (Based on Rememberance Cores)
                     amt.mul(player.cb.evolutionShards.add(2).log(2).log(2).add(1)).div(8).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id))) // Black Heart Defense (Based on Evolution Shards)
                 ]
+                if (eff[1].gt(50)) eff[1] = eff[1].div(50).pow(0.3).mul(50)
+                return eff
             },
             sellValue() { return new Decimal(400)},
             // PET POINT CODE
@@ -3639,18 +3659,24 @@ addLayer("pet", {
             title() { return "Kres" },
             lore() { return "<small>Kres a member of the Celestial Hunting Corporation, and was sent out on the mission to the domain of singularity. Originally in the military from one universe's Earth, he joined the corporation when his universe got taken over by celestials.</small>" }, 
             description() {
-                return "^" + format(this.effect()[0], 3) + " to infinity points <small>(based on check back level)</small>.<br>" +
-                    "x" + format(this.effect()[1]) + " to singularity points <small>(based on check back level)</small>.<br>" +
-                    "x" + format(this.effect()[2]) + " to starmetal alloy <small>(based on check back level)</small>."
+                let str = "^" + format(this.effect()[0], 3) + " to infinity points <small>(based on check back level)</small>"
+                if (this.effect()[0].gt(1.15)) str = str.concat(" <small style='color:red'>[SOFTCAPPED]</small>")
+                str = str.concat("<br>x" + format(this.effect()[1]) + " to singularity points <small>(based on check back level)</small><br>" +
+                    "x" + format(this.effect()[2]) + " to starmetal alloy <small>(based on check back level)</small>")
+                if (this.effect()[2].gt(100)) str = str.concat(" <small style='color:red'>[SOFTCAPPED]</small>")
+                return str
             },
             levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
-                return [
-                    amt.mul(player.cb.level.add(2).log(2).log(2).add(1)).div(3000).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Infinity Points (Based on Check Back Level)
+                let eff = [
+                    amt.mul(player.cb.level.add(2).log(2).log(2).add(1)).div(3000).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Infinity Points (Based on Check Back Level)
                     amt.pow(2).mul(player.cb.level.add(2).log(2).log(2).add(1)).pow(2.4).pow(getLevelableTier(this.layer, this.id).add(1)).add(1), // Singularity Points (Based on Check Back Level)
-                    amt.mul(player.cb.level.add(2).log(2).log(2).add(1)).div(20).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Starmetal Alloy (Based on Check Back Level)
+                    amt.mul(player.cb.level.add(2).log(2).log(2).add(1)).div(20).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Starmetal Alloy (Based on Check Back Level)
                 ]
+                if (eff[0].gt(1.15)) eff[0] = eff[0].div(1.15).pow(0.3).mul(1.15)
+                if (eff[2].gt(100)) eff[2] = eff[2].div(100).pow(0.3).mul(100)
+                return eff
             },
             sellValue() { return new Decimal(500)},
             shopLayer() { return "sp" },
@@ -3688,18 +3714,26 @@ addLayer("pet", {
             title() { return "Nav" },
             lore() { return "Nav, another member of the corporation, has mastered the art of superphysical magic. She was born from a line of talented superphysical wizards that worked for the corporation." }, 
             description() {
-                return "^" + format(this.effect()[0], 3) + " to anonymity <small>(based on radiation)</small>.<br>" +
-                    "^" + format(this.effect()[1], 3) + " to oil <small>(based on radiation)</small>.<br>" +
-                    "^" + format(this.effect()[2], 3) + " to fun <small>(based on radiation)</small>."
+                let str = "^" + format(this.effect()[0], 3) + " to anonymity <small>(based on radiation)</small>"
+                if (this.effect()[0].gt(2)) str = str.concat(" <small style='color:red'>[SOFTCAPPED]</small>")
+                str = str.concat("<br>^" + format(this.effect()[1], 3) + " to oil <small>(based on radiation)</small>")
+                if (this.effect()[1].gt(2)) str = str.concat(" <small style='color:red'>[SOFTCAPPED]</small>")
+                str = str.concat("<br>^" + format(this.effect()[2], 3) + " to fun <small>(based on radiation)</small>")
+                if (this.effect()[2].gt(2.5)) str = str.concat(" <small style='color:red'>[SOFTCAPPED]</small>")
+                return str
             },
             levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
-                return [
-                    amt.mul(player.ra.radiation.add(2).log(2).log(2).add(1)).div(300).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Anonymity (Based on Radiation)
-                    amt.mul(player.ra.radiation.add(2).log(2).log(2).add(1)).div(300).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Oil (Based on Radiation)
-                    amt.mul(player.ra.radiation.add(2).log(2).log(2).add(1)).div(220).mul(getLevelableTier(this.layer, this.id).add(1)).add(1), // Fun (Based on Radiation)
+                let eff = [
+                    amt.mul(player.ra.radiation.add(2).log(2).log(2).add(1)).div(300).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Anonymity (Based on Radiation)
+                    amt.mul(player.ra.radiation.add(2).log(2).log(2).add(1)).div(300).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Oil (Based on Radiation)
+                    amt.mul(player.ra.radiation.add(2).log(2).log(2).add(1)).div(220).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Fun (Based on Radiation)
                 ]
+                if (eff[0].gt(2)) eff[0] = eff[0].div(2).pow(0.3).mul(2)
+                if (eff[1].gt(2)) eff[1] = eff[1].div(2).pow(0.3).mul(2)
+                if (eff[2].gt(2.5)) eff[2] = eff[2].div(2.5).pow(0.3).mul(2.5)
+                return eff
             },
             sellValue() { return new Decimal(500)},
             shopLayer() { return "sp" },
@@ -3879,6 +3913,12 @@ addLayer("pet", {
             title() { return "Vespasian" },
             lore() { return "<h5>Originally a secret weapon of Matos, it has now been further modified and combined with a wasp to create a fierce killing machine. Fortunately, Aleph accidentally gave it free will, so it isn't particularly interested in her goals." }, 
             description() {
+                if (this.effect()[2].gt(100)) {
+                    return "x" + format(this.effect()[0]) + " to pre aleph resources.<br>" +
+                        "x" + format(this.effect()[1]) + " to aleph resources.<br>" +
+                        "^" + format(this.effect()[2]) + " to rocket layer SPV effects. <small style='color:red'>[SOFTCAPPED]</small><br>" +
+                        "/" + format(this.effect()[3]) + " to laboratory celestialite stats."
+                }
                 return "x" + format(this.effect()[0]) + " to pre aleph resources.<br>" +
                     "x" + format(this.effect()[1]) + " to aleph resources.<br>" +
                     "^" + format(this.effect()[2]) + " to rocket layer SPV effects.<br>" +
@@ -3887,12 +3927,14 @@ addLayer("pet", {
             levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
-                return [
+                let eff = [
                     amt.add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Pre-Aleph Resources
                     amt.div(2).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Aleph Resources
-                    amt.div(2).add(1).mul(getLevelableTier(this.layer, this.id).add(1)).pow(0.5), // Rocket Part and Activated Fuel effects
+                    amt.div(2).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).pow(0.5), // Rocket Part and Activated Fuel effects
                     amt.sub(1).div(2).add(1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Laboratory celestialite stats
                 ]
+                if (eff[2].gt(10)) eff[2] = eff[2].div(10).pow(0.3).mul(10)
+                return eff
             },
             sellValue() { return new Decimal(10000)},
             // CLICK CODE

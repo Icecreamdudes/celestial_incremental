@@ -150,6 +150,7 @@ addLayer("ir", {
         if (player.ir.shipType == 8) player.ir.shipHealthMax = new Decimal(100)
         if (player.ir.shipType == 9) player.ir.shipHealthMax = new Decimal(67.5)
 
+        if (arena && arena.upgradeEffects && arena.upgradeEffects.maxHp) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(arena.upgradeEffects.maxHp)
         if (hasUpgrade("ir", 102)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.25)
         if (player.ir.shipType != 0) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(levelableEffect("ir", player.ir.shipType)[3])
         if (hasUpgrade("ir", 17)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.3)

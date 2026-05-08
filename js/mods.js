@@ -84,6 +84,7 @@
         let amt = player.m.codeExperience
         if (player.m.codeExperienceToGet.gte(player.m.codeExperience)) amt = player.m.codeExperienceToGet
         player.m.doomSoftcap = player.m.doomSoftcap.div(amt.div(player.m.doomSoftcapStart).add(1).log(player.m.doomSoftcapStart).div(doomWeaken).add(1))
+        if (hasUpgrade("depth2", 104)) player.m.doomSoftcap = player.m.doomSoftcap.max(0.01)
 
         // APPLY DOOM SOFTCAP
         if (player.m.codeExperienceToGet.gt(player.m.doomSoftcapStart)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.div(player.m.doomSoftcapStart).pow(player.m.doomSoftcap).mul(player.m.doomSoftcapStart)
@@ -181,6 +182,7 @@
         let amt2 = player.m.mods
         if (player.m.modsToGet.gte(player.m.mods)) amt2 = player.m.modsToGet
         player.m.doomSoftcap2 = player.m.doomSoftcap2.div(amt2.div(player.m.doomSoftcap2Start).add(1).log(player.m.doomSoftcap2Start).div(doomWeaken2).add(1))
+        if (hasUpgrade("depth2", 104)) player.m.doomSoftcap2 = player.m.doomSoftcap2.max(0.01)
 
         // APPLY DOOM SOFTCAP
         if (player.m.modsToGet.gt(player.m.doomSoftcap2Start)) player.m.modsToGet = player.m.modsToGet.div(player.m.doomSoftcap2Start).pow(player.m.doomSoftcap2).mul(player.m.doomSoftcap2Start)

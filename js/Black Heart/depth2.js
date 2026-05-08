@@ -17,6 +17,7 @@ addLayer("depth2", {
         highestCombo: new Decimal(0),
         lowestCombo: new Decimal(0),
         comboEffect: new Decimal(1),
+        negComboEffect: new Decimal(1),
         comboStart: 0,
 
         milestone: {
@@ -42,7 +43,6 @@ addLayer("depth2", {
             250: 0,
         },
         milestoneEffect: new Decimal(0),
-        negToggle: false,
     }},
     automate() {},
     nodeStyle() {
@@ -77,6 +77,7 @@ addLayer("depth2", {
         player.depth2.unlocked = player.depth1.milestone[25] > 0
 
         player.depth2.comboEffect = player.depth2.highestCombo.min(250).add(1).pow(2).pow(buyableEffect("depth2", 2))
+        player.depth2.negComboEffect = Decimal.pow(1.25, player.depth2.lowestCombo.div(-1))
 
         player.depth2.milestoneEffect = new Decimal(0)
         for (let i = 25; i < 251; i = i+25) {
@@ -98,17 +99,25 @@ addLayer("depth2", {
             style: {width: "200px", minHeight: "75px", color: "white", background: "radial-gradient(#720455, #250121)", border: "3px solid #961d76", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"},
         },
         "neg": {
-            title() {return player.depth2.negToggle ? "Switch to positive milestones" : "Switch to negative milestones"},
+            title: "Swap Sides",
             canClick: true,
             unlocked() {return player.depth2.lowestCombo.lt(0)},
             onClick() {
-                if (player.depth2.negToggle) {
-                    player.depth2.negToggle = false
+                if (player.subtabs["depth2"]["stuff"] == "negative") {
+                    player.subtabs["depth2"]["stuff"] = "positive"
                 } else {
-                    player.depth2.negToggle = true
+                    player.subtabs["depth2"]["stuff"] = "negative"
                 }
             },
-            style: {width: "257px", minHeight: "40px", fontSize: "9px", color: "var(--textColor)", background: "var(--miscButtonDisable)", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0", padding: "0 5px"},
+            style() {
+                let look = {width: "250px", minHeight: "30px", color: "var(--textColor)", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0", padding: "0 5px"}
+                if (player.subtabs["depth2"]["stuff"] == "negative") {
+                    look.background = "var(--miscButtonHover)"
+                } else {
+                    look.background = "var(--menuBackground)"
+                }
+                return look
+            },
         },
     },
     upgrades: {
@@ -200,12 +209,81 @@ addLayer("depth2", {
                 return look
             },
         },
+
+        
+        101: {
+            title: "Innate Healing",
+            unlocked() {return player.depth2.lowestCombo.lt(0)},
+            description: "Give all characters without base RGN +0.1 base RGN stat.",
+            cost: new Decimal(30000),
+            currencyLocation() { return player.depth2 },
+            currencyDisplayName: "Faint Umbrite",
+            currencyInternalName: "faintUmbrite",
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
+        102: {
+            title: "Skill Savings",
+            unlocked() {return player.depth2.lowestCombo.lt(0)},
+            description: "Reduce skill level cap cost based on skill points.",
+            cost: new Decimal(12500),
+            currencyLocation() { return player.depth2 },
+            currencyDisplayName: "Clear Umbrite",
+            currencyInternalName: "clearUmbrite",
+            effect() {
+                return Decimal.pow(1.5, player.bh.maxSkillPoints.div(64).add(1).log(2))
+            },
+            effectDisplay() { return "/" + formatSimple(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
+        103: {
+            title: "Proto Power",
+            unlocked() {return player.depth2.lowestCombo.lt(0)},
+            description: "Proto memory buyables are vastly more powerful and expensive.",
+            tooltip: "Buying this resets proto memory buyables, and keeps proto memories on reset",
+            cost: new Decimal(300000),
+            onPurchase() {
+                player.oi.buyables[21] = new Decimal(0)
+                player.oi.buyables[22] = new Decimal(0)
+                player.oi.buyables[23] = new Decimal(0)
+                player.oi.buyables[24] = new Decimal(0)
+            },
+            currencyLocation() { return player.depth2 },
+            currencyDisplayName: "Faint Umbrite",
+            currencyInternalName: "faintUmbrite",
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
+        104: {
+            title: "Doom Hardcap Breaker",
+            unlocked() {return player.depth2.lowestCombo.lt(0)},
+            description: "Doom softcap stops decreasing at ^0.01.",
+            cost: new Decimal(125000),
+            currencyLocation() { return player.depth2 },
+            currencyDisplayName: "Clear Umbrite",
+            currencyInternalName: "clearUmbrite",
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
     },
     buyables: {
         1: {
             costBase() { return new Decimal(12) },
             costGrowth() { return new Decimal(1.5) },
-            purchaseLimit() { return new Decimal(20) },
+            purchaseLimit() { return new Decimal(20).mul(buyableEffect("depth2", 102)).floor() },
             currency() { return player.depth2.faintUmbrite},
             pay(amt) { player.depth2.faintUmbrite = this.currency().sub(amt) },
             effect(x) {return getBuyableAmount(this.layer, this.id).div(10)},
@@ -213,7 +291,7 @@ addLayer("depth2", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {return this.currency().gte(this.cost())},
             display() {
-                return "<h3>Deadly</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/20)\n\
+                return "<h3>Deadly</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")\n\
                     Boost base character damage\n\
                     Currently: +" + formatWhole(tmp[this.layer].buyables[this.id].effect.mul(100)) + "%\n\ \n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Faint Umbrite"
@@ -231,7 +309,7 @@ addLayer("depth2", {
         2: {
             costBase() { return new Decimal(6) },
             costGrowth() { return new Decimal(1.3) },
-            purchaseLimit() { return new Decimal(20) },
+            purchaseLimit() { return new Decimal(20).mul(buyableEffect("depth2", 102)).floor() },
             currency() { return player.depth2.clearUmbrite},
             pay(amt) { player.depth2.clearUmbrite = this.currency().sub(amt) },
             effect(x) {return getBuyableAmount(this.layer, this.id).div(20).add(1)},
@@ -239,7 +317,7 @@ addLayer("depth2", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {return this.currency().gte(this.cost())},
             display() {
-                return "<h3>Posted</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/20)\n\
+                return "<h3>Posted</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")\n\
                     Boost depth 2 combo effect\n\
                     Currently: ^" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\ \n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Clear Umbrite"
@@ -257,7 +335,7 @@ addLayer("depth2", {
         3: {
             costBase() { return new Decimal(60) },
             costGrowth() { return new Decimal(2) },
-            purchaseLimit() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(10).mul(buyableEffect("depth2", 102)).floor() },
             currency() { return player.depth2.faintUmbrite},
             pay(amt) { player.depth2.faintUmbrite = this.currency().sub(amt) },
             effect(x) {return getBuyableAmount(this.layer, this.id).add(1).pow(2.5) },
@@ -265,7 +343,7 @@ addLayer("depth2", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {return this.currency().gte(this.cost())},
             display() {
-                return "<h3>Faint Lights</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
+                return "<h3>Faint Lights</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")\n\
                     Boost star power gain\n\
                     Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\ \n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Faint Umbrite"
@@ -283,7 +361,7 @@ addLayer("depth2", {
         4: {
             costBase() { return new Decimal(25) },
             costGrowth() { return new Decimal(1.5) },
-            purchaseLimit() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(10).mul(buyableEffect("depth2", 102)).floor() },
             currency() { return player.depth2.clearUmbrite},
             pay(amt) { player.depth2.clearUmbrite = this.currency().sub(amt) },
             effect(x) {return getBuyableAmount(this.layer, this.id).div(5).add(1)},
@@ -291,7 +369,7 @@ addLayer("depth2", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {return this.currency().gte(this.cost())},
             display() {
-                return "<h3>Clear Metal</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
+                return "<h3>Clear Metal</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")\n\
                     Boost starmetal alloy gain\n\
                     Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\ \n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Clear Umbrite"
@@ -306,93 +384,217 @@ addLayer("depth2", {
                 return look
             },
         },
+        101: {
+            costBase() { return new Decimal(6000) },
+            costGrowth() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(20) },
+            currency() { return player.depth2.faintUmbrite},
+            pay(amt) { player.depth2.faintUmbrite = this.currency().sub(amt) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(100).add(1)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>Deadliest</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/20)\n\
+                    Boost character damage\n\
+                    Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Faint Umbrite"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "100px", color: "white", border: "2px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#1a3b0f" : !this.canAfford() ? look.background =  "#361e1e" : look.background = "#250121"
+                return look
+            },
+        },
+        102: {
+            costBase() { return new Decimal(2500) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(20) },
+            currency() { return player.depth2.clearUmbrite},
+            pay(amt) { player.depth2.clearUmbrite = this.currency().sub(amt) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(10).add(1)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>Deepened Caps</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/20)\n\
+                    Boost regular Depth 2 buyable caps\n\
+                    Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Clear Umbrite"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "100px", color: "white", border: "2px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#1a3b0f" : !this.canAfford() ? look.background =  "#361e1e" : look.background = "#250121"
+                return look
+            },
+        },
+    },
+    microtabs: {
+        stuff: {
+            "positive": {
+                unlocked: true,
+                content: [
+                    ["style-row", [
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", () => {return "You have " + formatShortWhole(player.depth2.faintUmbrite) + " faint umbrite."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + formatShortWhole(player.depth2.clearUmbrite) + " clear umbrite."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + formatShortWhole(player.bh.darkEssence) + " dark essence."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                            ], {width: "272px", height: "72px", background: "var(--miscButtonHover)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["theme-scroll-column", [
+                                ["blank", "2px"],
+                                ["row", [["upgrade", 1], ["upgrade", 2]]],
+                                ["row", [["upgrade", 3], ["upgrade", 4]]],
+                                ["row", [["upgrade", 5], ["upgrade", 6]]],
+                                ["row", [["buyable", 1], ["buyable", 2]]],
+                                ["row", [["buyable", 3], ["buyable", 4]]],
+                                ["blank", "2px"],
+                            ], {width: "272px", height: "345px", background: "var(--miscButton)", borderRadius: "0 0 0 27px"}],
+                        ], {width: "272px", height: "420px", borderRight: "3px solid var(--regBorder)"}],
+                        ["style-column", [
+                            ["style-column", [
+                                ["style-column", [
+                                    ["raw-html", "Depth 2", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "5px"}],
+                                ["clickable", "enter"],
+                            ], {width: "250px", height: "127px", background: "var(--miscButtonDisable)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["top-column", [
+                                ["style-column", [
+                                    ["clickable", "neg"]
+                                ], () => {return player.depth2.lowestCombo.lt(0) ? {width: "250px", height: "30px", borderBottom: "3px solid var(--regBorder)"} : {display: "none !important"}}],
+                                ["blank", "10px"],
+                                ["style-column", [
+                                    ["raw-html", "Properties", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "10px"}],
+                                ["raw-html", () => {return Decimal.sub(1.015, player.bh.comboScalingReduction).gt(1) ? "<u>Combo Scaling" : ""}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return Decimal.sub(1.015, player.bh.comboScalingReduction).gt(1) ? formatSimple(Decimal.sub(1.015, player.bh.comboScalingReduction).max(1).sub(1).mul(100)) + "% starting at 100" : ""}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                            ], {width: "250px", height: "217px", background: "var(--layerBackground)"}],
+                            ["style-row", [
+                                ["layer-proxy", ["bh", [
+                                    ["row", [["clickable", "Auto-Enter"], ["blank", ["10px", "10px"]], ["clickable", "Auto-Exit"]]],
+                                ]]],
+                            ], {width: "250px", height: "70px", background: "var(--miscButtonDisable)", borderTop: "3px solid var(--regBorder)"}],
+                        ], {width: "250px", height: "420px"}],
+                        ["style-column", [
+                            ["top-column", [
+                                ["style-column", [
+                                    ["raw-html", () => {return "Highest Combo: " + formatWhole(player.depth2.highestCombo.min(250)) + "/" + BHS["depth2"].comboLimit}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                                ], {width: "225px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "2px"}],
+                                ["top-column", [
+                                    ["raw-html", () => {return "Boosts Post-OTF Resources by x" + formatSimple(player.depth2.comboEffect)}, {color: "var(--textColor)", fontSize: "11px", fontFamily: "monospace"}],
+                                ], {width: "272px", height: "25px"}],
+                                ["top-column", [
+                                    ["blank", "4px"],
+                                    ["raw-html", () => {return "Milestones increase skill points by +" + formatSimple(player.depth2.milestoneEffect)}, {color: "var(--textColor)", fontSize: "11px", fontFamily: "monospace"}],
+                                ], {width: "272px", height: "30px", background: "var(--layerBackground)", borderTop: "3px solid var(--regBorder)"}],
+                            ], {width: "272px", height: "97px", background: "var(--miscButtonHover)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["theme-scroll-column", [
+                                ["raw-html", () => {return "<button class='bhMilestoneButton  base' style='width:257px;height:50px' onclick='player.depth2.comboStart=0'>Starting combo value: " + player.depth2.comboStart + "<br>[Click to set to 0]</button>"}],
+                                ["bh-milestone", [25, "depth2", ""]],
+                                ["bh-milestone", [50, "depth2", ""]],
+                                ["bh-milestone", [75, "depth2", ""]],
+                                ["bh-milestone", [100, "depth2", ""]],
+                                ["bh-milestone", [125, "depth2", ""]],
+                                ["bh-milestone", [150, "depth2", ""]],
+                                ["bh-milestone", [175, "depth2", ""]],
+                                ["bh-milestone", [200, "depth2", ""]],
+                                ["bh-milestone", [225, "depth2", ""]],
+                                ["bh-milestone", [250, "depth2", ""]],
+                            ], {width: "272px", height: "267px", background: "var(--miscButton)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["style-column", [
+                                ["raw-html", "<p style='line-height:1'>Clicking on a cleared milestone allows you to start at that milestones combo value.", {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                            ], {width: "272px", height: "50px", background: "var(--miscButtonHover)", borderRadius: "0 0 27px 0"}],
+                        ], {width: "272px", height: "420px", borderLeft: "3px solid var(--regBorder)"}],
+                    ], {width: "800px", height: "420px"}],
+                ],
+            },
+            "negative": {
+                unlocked() {return player.depth2.lowestCombo.lt(0)},
+                content: [
+                    ["style-row", [
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", () => {return "You have " + formatShortWhole(player.depth2.faintUmbrite) + " faint umbrite."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + formatShortWhole(player.depth2.clearUmbrite) + " clear umbrite."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + formatShortWhole(player.bh.darkEssence) + " dark essence."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                            ], {width: "272px", height: "72px", background: "var(--layerBackground)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["theme-scroll-column", [
+                                ["blank", "2px"],
+                                ["row", [["upgrade", 101], ["upgrade", 102]]],
+                                ["row", [["upgrade", 103], ["upgrade", 104]]],
+                                ["row", [["buyable", 101], ["buyable", 102]]],
+                                ["blank", "2px"],
+                            ], {width: "272px", height: "345px", background: "var(--miscButtonDisable)", borderRadius: "0 0 0 27px"}],
+                        ], {width: "272px", height: "420px", borderRight: "3px solid var(--regBorder)"}],
+                        ["style-column", [
+                            ["style-column", [
+                                ["style-column", [
+                                    ["raw-html", "Depth 2", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "5px"}],
+                                ["clickable", "enter"],
+                            ], {width: "250px", height: "127px", background: "var(--miscButton)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["top-column", [
+                                ["style-column", [
+                                    ["clickable", "neg"]
+                                ], () => {return player.depth2.lowestCombo.lt(0) ? {width: "250px", height: "30px", borderBottom: "3px solid var(--regBorder)"} : {display: "none !important"}}],
+                                ["blank", "10px"],
+                                ["style-column", [
+                                    ["raw-html", "Properties", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "10px"}],
+                                ["raw-html", () => {return "<u>Negative"}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "Combo scaling increases based on combo value"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                            ], {width: "250px", height: "217px", background: "var(--miscButtonDisable)"}],
+                            ["style-row", [
+                                ["layer-proxy", ["bh", [
+                                    ["row", [["clickable", "Auto-Enter"], ["blank", ["10px", "10px"]], ["clickable", "Auto-Exit"]]],
+                                ]]],
+                            ], {width: "250px", height: "70px", background: "var(--miscButton)", borderTop: "3px solid var(--regBorder)"}],
+                        ], {width: "250px", height: "420px"}],
+                        ["style-column", [
+                            ["top-column", [
+                                ["style-column", [
+                                    ["raw-html", () => {return "Lowest Combo: " + formatWhole(player.depth2.lowestCombo.max(-250)) + "/-" + BHS["depth2"].comboLimit}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                                ], {width: "225px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "2px"}],
+                                ["top-column", [
+                                    ["raw-html", () => {return "Boosts Pre-OTF Resources by x" + formatSimple(player.depth2.negComboEffect)}, {color: "var(--textColor)", fontSize: "11px", fontFamily: "monospace"}],
+                                ], {width: "272px", height: "25px"}],
+                                ["top-column", [
+                                    ["blank", "4px"],
+                                    ["raw-html", () => {return "Milestones increase skill points by +" + formatSimple(player.depth2.milestoneEffect)}, {color: "var(--textColor)", fontSize: "11px", fontFamily: "monospace"}],
+                                ], {width: "272px", height: "30px", background: "var(--menuBackground)", borderTop: "3px solid var(--regBorder)"}],
+                            ], {width: "272px", height: "97px", background: "var(--layerBackground)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["theme-scroll-column", [
+                                ["raw-html", () => {return "<button class='bhMilestoneButton base' style='width:257px;height:50px' onclick='player.depth2.comboStart=-1'>Starting combo value: " + player.depth2.comboStart + "<br>[Click to set to -1]</button>"}],
+                                ["bh-milestone", ["-25", "depth2", ""]],
+                                ["bh-milestone", ["-50", "depth2", ""]],
+                                ["bh-milestone", ["-75", "depth2", ""]],
+                                ["bh-milestone", ["-100", "depth2", ""]],
+                                ["bh-milestone", ["-125", "depth2", ""]],
+                                ["bh-milestone", ["-150", "depth2", ""]],
+                                ["bh-milestone", ["-175", "depth2", ""]],
+                                ["bh-milestone", ["-200", "depth2", ""]],
+                                ["bh-milestone", ["-225", "depth2", ""]],
+                                ["bh-milestone", ["-250", "depth2", ""]],
+                            ], {width: "272px", height: "267px", background: "var(--miscButtonDisable)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["style-column", [
+                                ["raw-html", "<p style='line-height:1'>Clicking on a cleared milestone allows you to start at that milestones combo value.", {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                            ], {width: "272px", height: "50px", background: "var(--layerBackground)", borderRadius: "0 0 27px 0"}],
+                        ], {width: "272px", height: "420px", borderLeft: "3px solid var(--regBorder)"}],
+                    ], {width: "800px", height: "420px"}],
+                ],
+            },
+        },
     },
     tabFormat: [
-        ["style-row", [
-            ["style-column", [
-                ["style-column", [
-                    ["raw-html", () => {return "You have " + formatShortWhole(player.depth2.faintUmbrite) + " faint umbrite."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return "You have " + formatShortWhole(player.depth2.clearUmbrite) + " clear umbrite."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return "You have " + formatShortWhole(player.bh.darkEssence) + " dark essence."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
-                ], {width: "272px", height: "72px", background: "var(--miscButtonHover)", borderBottom: "3px solid var(--regBorder)"}],
-                ["theme-scroll-column", [
-                    ["blank", "2px"],
-                    ["row", [["upgrade", 1], ["upgrade", 2]]],
-                    ["row", [["upgrade", 3], ["upgrade", 4]]],
-                    ["row", [["upgrade", 5], ["upgrade", 6]]],
-                    ["row", [["buyable", 1], ["buyable", 2]]],
-                    ["row", [["buyable", 3], ["buyable", 4]]],
-                    ["blank", "2px"],
-                ], {width: "272px", height: "345px", background: "var(--miscButton)", borderRadius: "0 0 0 27px"}],
-            ], {width: "272px", height: "420px", borderRight: "3px solid var(--regBorder)"}],
-            ["style-column", [
-                ["style-column", [
-                    ["style-column", [
-                        ["raw-html", "Depth 2", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
-                    ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "10px"}],
-                    ["clickable", "enter"],
-                ], {width: "250px", height: "147px", background: "var(--miscButtonDisable)", borderBottom: "3px solid var(--regBorder)"}],
-                ["top-column", [
-                    ["blank", "10px"],
-                    ["style-column", [
-                        ["raw-html", "Properties", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
-                    ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "10px"}],
-                    ["raw-html", () => {return Decimal.sub(1.015, player.bh.comboScalingReduction).gt(1) ? "<u>Combo Scaling" : ""}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return Decimal.sub(1.015, player.bh.comboScalingReduction).gt(1) ? formatSimple(Decimal.sub(1.015, player.bh.comboScalingReduction).max(1).sub(1).mul(100)) + "% starting at 100" : ""}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                ], {width: "250px", height: "197px", background: "var(--layerBackground)"}],
-                ["style-row", [
-                    ["layer-proxy", ["bh", [
-                        ["row", [["clickable", "Auto-Enter"], ["blank", ["10px", "10px"]], ["clickable", "Auto-Exit"]]],
-                    ]]],
-                ], {width: "250px", height: "70px", background: "var(--miscButtonDisable)", borderTop: "3px solid var(--regBorder)"}],
-            ], {width: "250px", height: "420px"}],
-            ["style-column", [
-                ["top-column", [
-                    ["style-column", [
-                        ["raw-html", () => {return "Highest Combo: " + formatWhole(player.depth2.highestCombo.min(250)) + "/" + BHS["depth2"].comboLimit}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
-                    ], {width: "225px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "2px"}],
-                    ["top-column", [
-                        ["raw-html", () => {return "Boosts Post-OTF Resources by x" + formatSimple(player.depth2.comboEffect)}, {color: "var(--textColor)", fontSize: "11px", fontFamily: "monospace"}],
-                    ], {width: "272px", height: "25px"}],
-                    ["top-column", [
-                        ["blank", "4px"],
-                        ["raw-html", () => {return "Milestones increase skill points by +" + formatSimple(player.depth2.milestoneEffect)}, {color: "var(--textColor)", fontSize: "11px", fontFamily: "monospace"}],
-                    ], {width: "272px", height: "30px", background: "var(--layerBackground)", borderTop: "3px solid var(--regBorder)"}],
-                ], {width: "272px", height: "97px", background: "var(--miscButtonHover)", borderBottom: "3px solid var(--regBorder)"}],
-                ["theme-scroll-column", [
-                    ["hoverless-clickable", "neg"],
-                    ["style-column", [
-                        ["raw-html", () => {return "<button class='bhMilestoneButton  base' style='width:257px;height:50px' onclick='player.depth2.comboStart=0'>Starting combo value: " + player.depth2.comboStart + "<br>[Click to set to 0]</button>"}],
-                        ["bh-milestone", [25, "depth2", ""]],
-                        ["bh-milestone", [50, "depth2", ""]],
-                        ["bh-milestone", [75, "depth2", ""]],
-                        ["bh-milestone", [100, "depth2", ""]],
-                        ["bh-milestone", [125, "depth2", ""]],
-                        ["bh-milestone", [150, "depth2", ""]],
-                        ["bh-milestone", [175, "depth2", ""]],
-                        ["bh-milestone", [200, "depth2", ""]],
-                        ["bh-milestone", [225, "depth2", ""]],
-                        ["bh-milestone", [250, "depth2", ""]],
-                    ], () => {return !player.depth2.negToggle ? {} : {display: "none !important"}}],
-                    ["style-column", [
-                        ["raw-html", () => {return "<button class='bhMilestoneButton base' style='width:257px;height:50px' onclick='player.depth2.comboStart=-1'>Starting combo value: " + player.depth2.comboStart + "<br>[Click to set to -1]</button>"}],
-                        ["bh-milestone", ["-25", "depth2", ""]],
-                        ["bh-milestone", ["-50", "depth2", ""]],
-                        ["bh-milestone", ["-75", "depth2", ""]],
-                        ["bh-milestone", ["-100", "depth2", ""]],
-                        ["bh-milestone", ["-125", "depth2", ""]],
-                        ["bh-milestone", ["-150", "depth2", ""]],
-                        ["bh-milestone", ["-175", "depth2", ""]],
-                        ["bh-milestone", ["-200", "depth2", ""]],
-                        ["bh-milestone", ["-225", "depth2", ""]],
-                        ["bh-milestone", ["-250", "depth2", ""]],
-                    ], () => {return player.depth2.negToggle ? {} : {display: "none !important"}}],
-                ], {width: "272px", height: "267px", background: "var(--miscButton)", borderBottom: "3px solid var(--regBorder)"}],
-                ["style-column", [
-                    ["raw-html", "<p style='line-height:1'>Clicking on a cleared milestone allows you to start at that milestones combo value.", {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
-                ], {width: "272px", height: "50px", background: "var(--miscButtonHover)", borderRadius: "0 0 27px 0"}],
-            ], {width: "272px", height: "420px", borderLeft: "3px solid var(--regBorder)"}],
-        ], {width: "800px", height: "420px"}],
+        ["buttonless-microtabs", "stuff", {borderWidth: "0"}],
     ],
     layerShown() {return player.startedGame && tmp.pu.levelables[302].canClick},
 })
@@ -926,6 +1128,7 @@ BHC.minorEnas = {
     health: new Decimal(300),
     damage: new Decimal(10),
     regen: new Decimal(2),
+    negMult: new Decimal(3.9),
     actions: {
         0: {
             name: "Mindless Chop",
@@ -966,6 +1169,7 @@ BHC.minorPente = {
     health: new Decimal(500),
     damage: new Decimal(10),
     regen: new Decimal(1),
+    negMult: new Decimal(2.7),
     actions: {
         0: {
             name: "Slash",
@@ -1005,6 +1209,7 @@ BHC.minorDeka = {
     },
     health: new Decimal(750),
     damage: new Decimal(15),
+    negMult: new Decimal(2.1),
     attributes: {
         "air": new Decimal(0.2), // Resistance DMG Mult
     },
@@ -1046,6 +1251,7 @@ BHC.minorHekaton = {
     },
     health: new Decimal(1000),
     damage: new Decimal(15),
+    negMult: new Decimal(1.8),
     attributes: {
         "warded": new Decimal(0.2), // Resistance DMG Mult
     },
@@ -1090,6 +1296,7 @@ BHC.minorKhilioi = {
     health: new Decimal(1250),
     damage: new Decimal(4),
     regen: new Decimal(2),
+    negMult: new Decimal(1.65),
     actions: {
         0: {
             name: "Pummel",
@@ -1139,6 +1346,7 @@ BHC.minorMyrioi = {
     health: new Decimal(1500),
     damage: new Decimal(8),
     regen: new Decimal(2),
+    negMult: new Decimal(1.5),
     actions: {
         0: {
             name: "Pummel",

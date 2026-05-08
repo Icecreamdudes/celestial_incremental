@@ -53,6 +53,7 @@
         if (player.bl.bloodToGet.gte(10)) player.bl.bloodToGet = player.bl.bloodToGet.div(10).pow(0.2).mul(10)
 
         player.bl.bloodEffect = player.bl.blood.pow(0.15).div(15).add(1)
+        if (player.bl.blood.gte(6713)) player.bl.bloodEffect = player.bl.blood.add(1).log(2).div(100).add(1.123)
 
         if (player.bl.bloodDrain && player.bl.blood.gte(0))
         {
@@ -652,7 +653,10 @@
                         }],
 
                     ]],
-                    ["raw-html", () => {return "Boosts punchcard efficiency by ^" + formatSimple(player.bl.bloodEffect, 3) + ". (Only active effects)"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["row", [
+                        ["raw-html", () => {return "Boosts punchcard efficiency by ^" + formatSimple(player.bl.bloodEffect, 3) + ". (Only active effects)"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return player.bl.blood.gte(6713) ? "<small style='margin-left: 10px'>[SOFTCAPPED]</small>" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace"}],
+                    ]],
                     ["blank", "25px"],
                     ["row", [["clickable", 101]]],
                     ["blank", "25px"],

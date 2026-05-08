@@ -501,6 +501,7 @@ addLayer("bh", {
             "general_recklessAbandon": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "general_block": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "general_poisonNeedle": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "general_rest": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
 
             // KRES
             "kres_chop": {selected: ["kres", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
@@ -1165,6 +1166,7 @@ addLayer("bh", {
         player.bh.skillCostDiv = new Decimal(1)
         player.bh.skillCostDiv = player.bh.skillCostDiv.mul(player.darkTemple.skillCost)
         player.bh.skillCostDiv = player.bh.skillCostDiv.mul(buyableEffect("sme", 136))
+        if (hasUpgrade("depth2", 102)) player.bh.skillCostDiv = player.bh.skillCostDiv.mul(upgradeEffect("depth2", 102))
 
         player.bh.timeSpeed = new Decimal(1)
         player.bh.timeSpeed = player.bh.timeSpeed.add(bhTemp.timeAdd)
@@ -1215,6 +1217,7 @@ addLayer("bh", {
         regenAdd = regenAdd.add(player.darkTemple.rgnAdd)
         regenAdd = regenAdd.add(player.bh.skillData["general_scream"].maxLevel.div(40))
         regenAdd = regenAdd.add(player.bh.skillData["kres_berserker"].maxLevel.div(40))
+        regenAdd = regenAdd.add(player.bh.skillData["general_rest"].maxLevel.div(40))
         regenAdd = regenAdd.add(buyableEffect("sme", 134))
         regenAdd = regenAdd.add(buyableEffect("depth4", 1).sub(1))
 
@@ -1280,6 +1283,7 @@ addLayer("bh", {
             player.bh.characters[i].maxHealth = run(BHP[player.bh.characters[i].id].health, BHP[player.bh.characters[i].id]) ?? new Decimal(0)
             player.bh.characters[i].maxHealth = player.bh.characters[i].maxHealth.mul(healthBase)
             player.bh.characters[i].maxHealth = player.bh.characters[i].maxHealth.add(healthAdd)
+            player.bh.characters[i].maxHealth = player.bh.characters[i].maxHealth.mul(buyableEffect("depth1", 101))
             player.bh.characters[i].maxHealth = player.bh.characters[i].maxHealth.add(bhTemp[i].healthAdd)
             player.bh.characters[i].maxHealth = player.bh.characters[i].maxHealth.mul(bhTemp[i].healthMult)
 
@@ -1287,6 +1291,7 @@ addLayer("bh", {
             player.bh.characters[i].damage = run(BHP[player.bh.characters[i].id].damage, BHP[player.bh.characters[i].id]) ?? new Decimal(0)
             player.bh.characters[i].damage = player.bh.characters[i].damage.mul(damageBase)
             player.bh.characters[i].damage = player.bh.characters[i].damage.add(damageAdd)
+            player.bh.characters[i].damage = player.bh.characters[i].damage.mul(buyableEffect("depth2", 101))
             player.bh.characters[i].damage = player.bh.characters[i].damage.add(bhTemp[i].damageAdd)
             player.bh.characters[i].damage = player.bh.characters[i].damage.mul(bhTemp[i].damageMult)
 
@@ -1360,11 +1365,13 @@ addLayer("bh", {
             player.bh.characterData[i].health = run(BHP[i].health, BHP[i]) ?? new Decimal(0)
             player.bh.characterData[i].health = player.bh.characterData[i].health.mul(healthBase)
             player.bh.characterData[i].health = player.bh.characterData[i].health.add(healthAdd)
+            player.bh.characterData[i].health = player.bh.characterData[i].health.mul(buyableEffect("depth1", 101))
 
             // DAMAGE
             player.bh.characterData[i].damage = run(BHP[i].damage, BHP[i]) ?? new Decimal(0)
             player.bh.characterData[i].damage = player.bh.characterData[i].damage.mul(damageBase)
             player.bh.characterData[i].damage = player.bh.characterData[i].damage.add(damageAdd)
+            player.bh.characterData[i].damage = player.bh.characterData[i].damage.mul(buyableEffect("depth2", 101))
 
             // DEFENSE
             player.bh.characterData[i].defense = run(BHP[i].defense, BHP[i]) ?? new Decimal(0)

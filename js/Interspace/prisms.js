@@ -10,6 +10,7 @@
         bestPrisms: new Decimal(0),
         totalPrisms: new Decimal(0),
         prismsToGet: new Decimal(0),
+        bestPrismsInOneReset: new Decimal(0),
 
         fountainSpeed: new Decimal(0),
 
@@ -109,7 +110,7 @@
     color: "#d6ebff",
     update(delta) {
         player.pri.prismsToGet = player.wel.light.add(1).log(10).sub(15).pow_base(1.41421356237).floor()
-        if (!hasUpgrade("pri", 11)) player.pri.prismsToGet = player.pri.prismsToGet.min(1);
+        if (!hasMilestone("prj", 201)) player.pri.prismsToGet = player.pri.prismsToGet.min(1);
 
         if (hasMilestone("pri", 203)) player.pri.prismsToGet = player.pri.prismsToGet.mul(2);
 
@@ -143,43 +144,64 @@
         if (isRewarded) {
             player.pri.prisms = player.pri.prisms.add(player.pri.prismsToGet)
             player.pri.totalPrisms = player.pri.totalPrisms.add(player.pri.prismsToGet)
+            if (player.pri.prismsToGet.gt(player.pri.bestPrismsInOneReset)) player.pri.bestPrismsInOneReset = player.pri.prismsToGet;
         }
 
         player.wel.light = new Decimal(0)
         player.wel.bestLight = new Decimal(0)
 
-        player.wel.modules[1].time = new Decimal(0)
+        player.wel.modules[1].time = player.wel.modules[1].maxTime
         player.wel.modules[1].timeSpeed = new Decimal(0)
         player.wel.modules[1].completions = new Decimal(0)
-        player.wel.modules[2].time = new Decimal(0)
+        player.wel.modules[2].time = player.wel.modules[2].maxTime
         player.wel.modules[2].timeSpeed = new Decimal(0)
         player.wel.modules[2].completions = new Decimal(0)
-        player.wel.modules[3].time = new Decimal(0)
+        player.wel.modules[3].time = player.wel.modules[3].maxTime
         player.wel.modules[3].timeSpeed = new Decimal(0)
         player.wel.modules[3].completions = new Decimal(0)
-        player.wel.modules[4].time = new Decimal(0)
+        player.wel.modules[4].time = player.wel.modules[4].maxTime
         player.wel.modules[4].timeSpeed = new Decimal(0)
         player.wel.modules[4].completions = new Decimal(0)
 
         player.wel.fountains[1].completions = new Decimal(0)
+        player.wel.fountains[1].canAddCompletion = false
         if (player.wel.fountains[1].focused) {
             player.wel.fountains[1].focused = false
-            player.prj.focused = player.prj.focused.add(1)
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        if (player.wel.fountains[1].automated) {
+            player.wel.fountains[1].automated = false
+            player.prj.focused = player.prj.focused.sub(1)
         }
         player.wel.fountains[2].completions = new Decimal(0)
+        player.wel.fountains[2].canAddCompletion = false
         if (player.wel.fountains[2].focused) {
             player.wel.fountains[2].focused = false
-            player.prj.focused = player.prj.focused.add(1)
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        if (player.wel.fountains[2].automated) {
+            player.wel.fountains[2].automated = false
+            player.prj.focused = player.prj.focused.sub(1)
         }
         player.wel.fountains[3].completions = new Decimal(0)
+        player.wel.fountains[3].canAddCompletion = false
         if (player.wel.fountains[3].focused) {
             player.wel.fountains[3].focused = false
-            player.prj.focused = player.prj.focused.add(1)
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        if (player.wel.fountains[3].automated) {
+            player.wel.fountains[3].automated = false
+            player.prj.focused = player.prj.focused.sub(1)
         }
         player.wel.fountains[4].completions = new Decimal(0)
+        player.wel.fountains[4].canAddCompletion = false
         if (player.wel.fountains[4].focused) {
             player.wel.fountains[4].focused = false
-            player.prj.focused = player.prj.focused.add(1)
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        if (player.wel.fountains[4].automated) {
+            player.wel.fountains[4].automated = false
+            player.prj.focused = player.prj.focused.sub(1)
         }
     },
     branches: ["wel"],
@@ -276,8 +298,54 @@
                 return look
             },
         },
+        5: {
+            title() { return "<h3>Focus</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.pri.prisms.gte(player.pri.fountains[this.id].prismReq) && !player.pri.fountains[this.id].focused},
+            unlocked() { return true },
+            onClick() {
+                player.pri.prisms = player.pri.prisms.sub(player.pri.fountains[this.id].prismReq)
+                player.prj.focused = player.prj.focused.add(1)
+                player.pri.fountains[this.id].focused = true
+            },
+            style() {
+                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
+                if (this.canClick()) {
+                    look.backgroundColor = "#a8ffff"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        6: {
+            title() { return "<h3>Focus</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.pri.prisms.gte(player.pri.fountains[this.id].prismReq) && !player.pri.fountains[this.id].focused},
+            unlocked() { return true },
+            onClick() {
+                player.pri.prisms = player.pri.prisms.sub(player.pri.fountains[this.id].prismReq)
+                player.prj.focused = player.prj.focused.add(1)
+                player.pri.fountains[this.id].focused = true
+            },
+            style() {
+                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
+                if (this.canClick()) {
+                    look.backgroundColor = "#a8ffff"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
         101: {
-            title() { return "<h2>" + (hasUpgrade("pri", 11) ? "Form your light into prisms." : "Form your light into a prism.") + "</h2><br>Req: 1e15 Light" },
+            title() { return "<h2>" + (hasMilestone("prj", 201) ? "Form your light into prisms." : "Form your light into a prism.") + "</h2><br>Req: 1e15 Light" },
             canClick() { return player.wel.light.gte(1e15)},
             unlocked() { return true },
             onClick() {
@@ -345,7 +413,7 @@
                 return true
             },
             getCompletionEffect() {
-                let completions = player.pri.fountains[1].completions
+                let completions = player.pri.fountains[1].completions.pow(0.9)
 
                 s = player.wel.light.add(1).log10().div(4).add(1).pow(completions).log(10).add(1).pow(0.5).sub(1).pow_base(10).sub(1).mul(3).add(1)
 
@@ -364,7 +432,7 @@
                 let s = completions.div(8).add(1).pow(4)
                 
                 if (completions.gte(20)) {
-                    s = s.mul(completions.sub(20).pow_base(1.2))
+                    s = s.mul(completions.sub(20).pow_base(1.25))
                 }
 
                 return s.floor()
@@ -443,7 +511,7 @@
                 return s
             },
             getTimeReq() {
-                let completions = player.pri.fountains[2].completions
+                let completions = player.pri.fountains[3].completions
                 let s = completions.div(8).add(1).pow(3)
                 
                 if (completions.gte(20)) {
@@ -454,7 +522,7 @@
                 return s
             },
             getprismReq() {
-                let completions = player.pri.fountains[2].completions
+                let completions = player.pri.fountains[3].completions
                 let s = completions.div(8).add(1).pow(3)
                 
                 if (completions.gte(20)) {
@@ -477,39 +545,37 @@
             completionEffectPrefix: "x",
             completionEffectSuffix: " Light, based on Prisms",
             condition() {
-                return player.pri.fountains[1].completions.gt(8)
+                return player.pri.fountains[1].completions.gte(8)
             },
             unlocked() {
                 return player.pri.fountains[2].completions.gt(0) || player.pri.fountains[3].completions.gt(0)
             },
             getCompletionEffect() {
-                let completions = player.pri.fountains[4].completions
+                let completions = player.pri.fountains[4].completions.pow(0.9)
 
-                s = player.pri.prisms.add(1).log10().div(2).add(1).pow(completions).log(10).add(1).pow(0.5).sub(1).pow_base(10).sub(1).mul(3).add(1)
+                s = player.pri.prisms.add(1).log10().div(4).add(1).pow(completions).log(10).add(1).pow(0.5).sub(1).pow_base(10).sub(1).mul(4).add(1).pow(2)
 
                 return s
             },
             getTimeReq() {
                 let completions = player.pri.fountains[4].completions
-                let s = new Decimal(1)
+                let s = completions.div(4).add(1).pow(5)
 
-                s = s.mul(completions.add(1).pow(1.5))
-                s = s.mul(completions.pow_base(2.5))
                 if (completions.gte(50)) {
                     s = s.pow(1.05)
                 }
-                s = s.pow(1.0625).mul(12)
+                s = s.pow(1.0625).mul(400)
 
                 return s
             },
             getprismReq() {
                 let completions = player.pri.fountains[4].completions
-                let s = completions.div(4).add(1).pow(2).mul(8)
+                let s = completions.div(4).add(1).pow(5)
                 
                 if (completions.gte(20)) {
-                    s = s.mul(completions.sub(20).pow_base(1.1))
+                    s = s.mul(completions.sub(20).pow_base(1.5))
                 }
-                s = s.pow(1.0625).mul(18)
+                s = s.mul(8)
 
                 return s.floor()
             },
@@ -527,7 +593,7 @@
             completionEffectPrefix: "x",
             completionEffectSuffix: " Light Well Speed",
             condition() {
-                return player.pri.fountains[1].completions.gt(8)
+                return player.pri.bestPrismsInOneReset.gte(40)
             },
             unlocked() {
                 return player.pri.fountains[2].completions.gt(0) || player.pri.fountains[3].completions.gt(0)
@@ -535,7 +601,7 @@
             getCompletionEffect() {
                 let completions = player.pri.fountains[5].completions
 
-                s = completions.pow(0.5).pow_base(2)
+                s = completions.pow(0.8).pow_base(1.2).sub(1).mul(2.5).add(1)
 
                 return s
             },
@@ -543,17 +609,17 @@
                 let completions = player.pri.fountains[5].completions
                 let s = new Decimal(1)
 
-                s = s.mul(completions.pow_base(2))
+                s = s.mul(completions.pow_base(1.5))
                 if (completions.gte(50)) {
                     s = s.pow(1.05)
                 }
-                s = s.pow(1.0625).mul(18)
+                s = s.pow(1.0625).mul(400)
 
                 return s
             },
             getprismReq() {
                 let completions = player.pri.fountains[5].completions
-                let s = completions.pow_base(2).mul(12)
+                let s = completions.pow_base(1.5).mul(40)
 
                 return s.floor()
             },
@@ -571,7 +637,7 @@
             completionEffectPrefix: "x",
             completionEffectSuffix: " Stored Time Capsules",
             condition() {
-                return player.pri.fountains[1].completions.gt(8)
+                return player.pri.fountains[2].completions.gte(10) && player.pri.fountains[3].completions.gte(10)
             },
             unlocked() {
                 return player.pri.fountains[2].completions.gt(0) || player.pri.fountains[3].completions.gt(0)
@@ -579,7 +645,7 @@
             getCompletionEffect() {
                 let completions = player.pri.fountains[6].completions
 
-                s = completions.pow(0.5).pow_base(2)
+                s = completions.pow(0.8).pow_base(1.2).sub(1).mul(2).add(1)
 
                 return s
             },
@@ -597,7 +663,7 @@
             },
             getprismReq() {
                 let completions = player.pri.fountains[6].completions
-                let s = completions.pow_base(2).mul(12)
+                let s = completions.pow_base(2).mul(400)
 
                 return s.floor()
             },
@@ -701,7 +767,7 @@
                         } else {
                             look[5][1].push(
                                 ["style-column", [
-                                    ["raw-html", "Cone<br><small>Req: +5 Prisms in one reset</small>", {color: "white", fontSize: "16px"}],
+                                    ["raw-html", "Cone<br><small>Req: +40 Prisms in one reset</small>", {color: "white", fontSize: "16px"}],
                                 ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
                             )
                         }
@@ -720,7 +786,7 @@
                         } else {
                             look[5][1].push(
                             ["style-column", [
-                                ["raw-html", "Hourglass<br><small>Req: 6 Spiral ↻ and 6 Arrow ↻</small>", {color: "white", fontSize: "16px"}],
+                                ["raw-html", "Hourglass<br><small>Req: 10 Spiral ↻ and 10 Arrow ↻</small>", {color: "white", fontSize: "16px"}],
                             ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
                             )
                         }
@@ -733,13 +799,15 @@
     },
     tabFormat: [
         ["raw-html", () => { return "You have <h3>" + format(player.wel.light) + "</h3> light." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-        ["row", [
-            ["raw-html", () => { return "You have <h3>" + formatWhole(player.pri.prisms) + "</h3> prisms." }, {color: "#d6ebff", fontSize: "24px", fontFamily: "monospace"}],
-            ["raw-html", () => {return "(+" + formatWhole(player.pri.prismsToGet) + ")"}, () => {
-                let look = {fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
-                if (player.pri.prismsToGet.gte(1)) {look.color = "#d6ebff"} else {look.color = "gray"}
-                return look
-            }, {display: () => {return hasUpgrade("pri", 11) ? "" : "none !important"}}],
+        ["style-column", [
+            ["style-row", [
+                ["raw-html", () => { return "You have <h3>" + formatWhole(player.pri.prisms) + "</h3> prisms." }, {color: "#d6ebff", fontSize: "24px", fontFamily: "monospace"}],
+                ["raw-html", () => {return "(+" + formatWhole(player.pri.prismsToGet) + ")"}, () => {
+                    let look = {fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                    if (player.pri.prismsToGet.gte(1)) {look.color = "#d6ebff"} else {look.color = "gray"}
+                    return look
+                }],
+            ], {display: () => {return hasMilestone("prj", 201) ? "" : "none !important"}}],
         ]],
         ["blank", "15px"],
         ["clickable", 101],

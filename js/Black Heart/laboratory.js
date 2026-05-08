@@ -18,7 +18,7 @@ addLayer("laboratory", {
 
         matosMult: new Decimal(1),
         cooldown: new Decimal(0),
-        cooldownMax: new Decimal(1800),
+        cooldownMax: new Decimal(1200),
     }},
     automate() {},
     nodeStyle() {
@@ -56,7 +56,7 @@ addLayer("laboratory", {
 
         player.laboratory.cooldown = player.laboratory.cooldown.sub(delta)
 
-        player.laboratory.cooldownMax = new Decimal(1800)
+        player.laboratory.cooldownMax = new Decimal(1200)
         if (hasUpgrade("laboratory", 14)) player.laboratory.cooldownMax = player.laboratory.cooldownMax.div(upgradeEffect("laboratory", 14))
     },
     clickables: {
@@ -381,14 +381,14 @@ addLayer("laboratory", {
                 ["blank", "4px"],
                 ["style-row", [
                     ["raw-html", () => {return "You have " + formatWhole(player.laboratory.matosFragment) + " Matos Fragments."}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return "Boosts matos dust gain by x" + formatSimple(player.laboratory.matosFragment.add(1).log(10))}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "Boosts matos dust gain by x" + formatSimple(player.laboratory.matosFragment.add(1).log(10).add(1))}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
                 ], () => {return player.laboratory.highestCombo.gt(10) ? {width: "547px", height: "35px", background: "var(--miscButtonHover)", borderTop: "3px solid var(--regBorder)", borderBottom: "3px solid var(--regBorder)"} : {display: "none !important"}}],
                 ["blank", "4px"],
 
                 ["blank", "4px"],
                 ["style-row", [
                     ["raw-html", () => {return "You have " + formatWhole(player.laboratory.matosEssence) + " Matos Essence."}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return "Boosts matos shard gain by x" + formatSimple(player.laboratory.matosEssence.add(1).log(10))}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "Boosts matos shard gain by x" + formatSimple(player.laboratory.matosEssence.add(1).log(10).add(1))}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
                 ], () => {return player.laboratory.highestCombo.gt(15) ? {width: "547px", height: "35px", background: "var(--miscButtonHover)", borderTop: "3px solid var(--regBorder)", borderBottom: "3px solid var(--regBorder)"} : {display: "none !important"}}],
                 ["blank", "4px"],
 

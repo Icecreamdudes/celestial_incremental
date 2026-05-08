@@ -656,12 +656,12 @@ function celestialiteReward(gain) {
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.dimNocturnium) + " dim nocturnium! (You have " + formatWhole(player.depth4.dimNocturnium) + ")")
     }
     if (gain.matosDust) {
-        gain.matosDust = gain.matosDust.mul(player.laboratory.matosMult).mul(generalMult).mul(player.laboratory.matosFragment.add(1).log(10)).floor()
+        gain.matosDust = gain.matosDust.mul(player.laboratory.matosMult).mul(generalMult).mul(player.laboratory.matosFragment.add(1).log(10).add(1)).floor()
         player.laboratory.matosDust = player.laboratory.matosDust.add(gain.matosDust)
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.matosDust) + " matos dust! (You have " + formatWhole(player.laboratory.matosDust) + ")")
     }
     if (gain.matosShard) {
-        gain.matosDust = gain.matosShard.mul(player.laboratory.matosMult).mul(generalMult).mul(player.laboratory.matosEssence.add(1).log(10)).floor()
+        gain.matosDust = gain.matosShard.mul(player.laboratory.matosMult).mul(generalMult).mul(player.laboratory.matosEssence.add(1).log(10).add(1)).floor()
         player.laboratory.matosShard = player.laboratory.matosShard.add(gain.matosShard)
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.matosShard) + " matos shards! (You have " + formatWhole(player.laboratory.matosShard) + ")")
     }
@@ -774,6 +774,7 @@ function celestialiteSpawn() {
     player.bh.celestialite.id = celestialiteId
     player.bh.celestialite.randomMult = Decimal.add(0.85, Decimal.mul(Math.random(), 0.3))
     if (BHC[player.bh.celestialite.id].noRandomStats) player.bh.celestialite.randomMult = new Decimal(1)
+    if (player.bh.combo.lt(0) && BHC[player.bh.celestialite.id].negMult) player.bh.celestialite.randomMult = player.bh.celestialite.randomMult.mul(BHC[player.bh.celestialite.id].negMult)
     player.bh.celestialite.health = BHC[celestialiteId].health ?? new Decimal(0)
     player.bh.celestialite.maxHealth = BHC[celestialiteId].health ?? new Decimal(0)
     player.bh.celestialite.damage = BHC[celestialiteId].damage ?? new Decimal(0)

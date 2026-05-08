@@ -17,6 +17,7 @@ addLayer("depth1", {
         highestCombo: new Decimal(0),
         lowestCombo: new Decimal(0),
         comboEffect: new Decimal(1),
+        negComboEffect: new Decimal(1),
         comboStart: 0,
 
         milestone: {
@@ -61,6 +62,7 @@ addLayer("depth1", {
     color: "#8a0e79",
     update(delta) {
         player.depth1.comboEffect = Decimal.pow(3, player.depth1.highestCombo.min(250)).pow(buyableEffect("depth1", 2))
+        player.depth1.negComboEffect = player.depth1.lowestCombo.div(-10).add(1)
 
         player.depth1.milestoneEffect = new Decimal(0)
         for (let i = 25; i < 251; i = i+25) {
@@ -81,17 +83,25 @@ addLayer("depth1", {
             style: {width: "200px", minHeight: "75px", color: "white", background: "radial-gradient(#250121, black)", border: "3px solid #720455", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"},
         },
         "neg": {
-            title() {return player.depth1.negToggle ? "Switch to positive milestones" : "Switch to negative milestones"},
+            title: "Swap Sides",
             canClick: true,
             unlocked() {return player.depth1.lowestCombo.lt(0)},
             onClick() {
-                if (player.depth1.negToggle) {
-                    player.depth1.negToggle = false
+                if (player.subtabs["depth1"]["stuff"] == "negative") {
+                    player.subtabs["depth1"]["stuff"] = "positive"
                 } else {
-                    player.depth1.negToggle = true
+                    player.subtabs["depth1"]["stuff"] = "negative"
                 }
             },
-            style: {width: "257px", minHeight: "40px", fontSize: "9px", color: "var(--textColor)", background: "var(--miscButtonDisable)", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0", padding: "0 5px"},
+            style() {
+                let look = {width: "250px", minHeight: "30px", color: "var(--textColor)", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0", padding: "0 5px"}
+                if (player.subtabs["depth1"]["stuff"] == "negative") {
+                    look.background = "var(--miscButtonHover)"
+                } else {
+                    look.background = "var(--menuBackground)"
+                }
+                return look
+            },
         },
     },
     upgrades: {
@@ -179,12 +189,70 @@ addLayer("depth1", {
                 return look
             },
         },
+
+
+        101: {
+            title: "Multi Darkness",
+            unlocked() {return player.depth1.lowestCombo.lt(0)},
+            description: "Increase the base stats of all characters by 5%.",
+            cost: new Decimal(25000),
+            currencyLocation() { return player.depth1 },
+            currencyDisplayName: "Glooming Umbrite",
+            currencyInternalName: "gloomingUmbrite",
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
+        102: {
+            title: "Tiring Darkness",
+            unlocked() {return player.depth1.lowestCombo.lt(0)},
+            description: "Unlocks the general skill \"Rest\".",
+            cost: new Decimal(10000),
+            currencyLocation() { return player.depth1 },
+            currencyDisplayName: "Dim Umbrite",
+            currencyInternalName: "dimUmbrite",
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
+        103: {
+            title: "Exponential Darkness",
+            unlocked() {return player.depth1.lowestCombo.lt(0)},
+            description: "Unlock Exponentiation in Tav's Domain.",
+            cost: new Decimal(250000),
+            currencyLocation() { return player.depth1 },
+            currencyDisplayName: "Glooming Umbrite",
+            currencyInternalName: "gloomingUmbrite",
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
+        104: {
+            title: "Vast Darkness",
+            unlocked() {return player.depth1.lowestCombo.lt(0)},
+            description: "Unlock a new space buyable.",
+            cost: new Decimal(100000),
+            currencyLocation() { return player.depth1 },
+            currencyDisplayName: "Dim Umbrite",
+            currencyInternalName: "dimUmbrite",
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
     },
     buyables: {
         1: {
             costBase() { return new Decimal(10) },
             costGrowth() { return new Decimal(1.5) },
-            purchaseLimit() { return new Decimal(20) },
+            purchaseLimit() { return new Decimal(20).mul(buyableEffect("depth1", 102)).floor() },
             currency() { return player.depth1.gloomingUmbrite},
             pay(amt) { player.depth1.gloomingUmbrite = this.currency().sub(amt) },
             effect(x) {return getBuyableAmount(this.layer, this.id).div(10)},
@@ -192,7 +260,7 @@ addLayer("depth1", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {return this.currency().gte(this.cost())},
             display() {
-                return "<h3>Healthy</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/20)\n\
+                return "<h3>Healthy</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")\n\
                     Boost base character health\n\
                     Currently: +" + formatWhole(tmp[this.layer].buyables[this.id].effect.mul(100)) + "%\n\ \n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Glooming Umbrite"
@@ -210,7 +278,7 @@ addLayer("depth1", {
         2: {
             costBase() { return new Decimal(5) },
             costGrowth() { return new Decimal(1.3) },
-            purchaseLimit() { return new Decimal(20) },
+            purchaseLimit() { return new Decimal(20).mul(buyableEffect("depth1", 102)).floor() },
             currency() { return player.depth1.dimUmbrite},
             pay(amt) { player.depth1.dimUmbrite = this.currency().sub(amt) },
             effect(x) {return getBuyableAmount(this.layer, this.id).div(10).add(1)},
@@ -218,7 +286,7 @@ addLayer("depth1", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {return this.currency().gte(this.cost())},
             display() {
-                return "<h3>Infinitier</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/20)\n\
+                return "<h3>Infinitier</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")\n\
                     Boost depth 1 combo effect\n\
                     Currently: ^" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\ \n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Dim Umbrite"
@@ -236,7 +304,7 @@ addLayer("depth1", {
         3: {
             costBase() { return new Decimal(50) },
             costGrowth() { return new Decimal(2) },
-            purchaseLimit() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(10).mul(buyableEffect("depth1", 102)).floor() },
             currency() { return player.depth1.gloomingUmbrite},
             pay(amt) { player.depth1.gloomingUmbrite = this.currency().sub(amt) },
             effect(x) {return getBuyableAmount(this.layer, this.id).pow(3).add(1) },
@@ -244,7 +312,7 @@ addLayer("depth1", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {return this.currency().gte(this.cost())},
             display() {
-                return "<h3>Normality</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
+                return "<h3>Normality</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")\n\
                     Boost normality gain\n\
                     Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 1) + "\n\ \n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Glooming Umbrite"
@@ -262,7 +330,7 @@ addLayer("depth1", {
         4: {
             costBase() { return new Decimal(20) },
             costGrowth() { return new Decimal(1.5) },
-            purchaseLimit() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(10).mul(buyableEffect("depth1", 102)).floor() },
             currency() { return player.depth1.dimUmbrite},
             pay(amt) { player.depth1.dimUmbrite = this.currency().sub(amt) },
             effect(x) {return getBuyableAmount(this.layer, this.id).div(20).add(1)},
@@ -270,7 +338,7 @@ addLayer("depth1", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {return this.currency().gte(this.cost())},
             display() {
-                return "<h3>Shards-o-Shards</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
+                return "<h3>Shards-o-Shards</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")\n\
                     Boost CB XP Button ESC\n\
                     Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\ \n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Dim Umbrite"
@@ -285,93 +353,217 @@ addLayer("depth1", {
                 return look
             },
         },
+        101: {
+            costBase() { return new Decimal(5000) },
+            costGrowth() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(20) },
+            currency() { return player.depth1.gloomingUmbrite},
+            pay(amt) { player.depth1.gloomingUmbrite = this.currency().sub(amt) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(100).add(1)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>Healthiest</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/20)\n\
+                    Boost character health\n\
+                    Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Glooming Umbrite"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "100px", color: "white", border: "2px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#1a3b0f" : !this.canAfford() ? look.background =  "#361e1e" : look.background = "#250121"
+                return look
+            },
+        },
+        102: {
+            costBase() { return new Decimal(2000) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(20) },
+            currency() { return player.depth1.dimUmbrite},
+            pay(amt) { player.depth1.dimUmbrite = this.currency().sub(amt) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(10).add(1)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>Darkened Caps</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/20)\n\
+                    Boost regular Depth 1 buyable caps\n\
+                    Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Dim Umbrite"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "100px", color: "white", border: "2px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#1a3b0f" : !this.canAfford() ? look.background =  "#361e1e" : look.background = "#250121"
+                return look
+            },
+        },
+    },
+    microtabs: {
+        stuff: {
+            "positive": {
+                unlocked: true,
+                content: [
+                    ["style-row", [
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", () => {return "You have " + formatShortWhole(player.depth1.gloomingUmbrite) + " glooming umbrite."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + formatShortWhole(player.depth1.dimUmbrite) + " dim umbrite."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + formatShortWhole(player.bh.darkEssence) + " dark essence."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                            ], {width: "272px", height: "72px", background: "var(--miscButtonHover)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["theme-scroll-column", [
+                                ["blank", "2px"],
+                                ["row", [["upgrade", 1], ["upgrade", 2]]],
+                                ["row", [["upgrade", 3], ["upgrade", 4]]],
+                                ["row", [["upgrade", 5], ["upgrade", 6]]],
+                                ["row", [["buyable", 1], ["buyable", 2]]],
+                                ["row", [["buyable", 3], ["buyable", 4]]],
+                                ["blank", "2px"],
+                            ], {width: "272px", height: "345px", background: "var(--miscButton)", borderRadius: "0 0 0 27px"}],
+                        ], {width: "272px", height: "420px", borderRight: "3px solid var(--regBorder)"}],
+                        ["style-column", [
+                            ["style-column", [
+                                ["style-column", [
+                                    ["raw-html", "Depth 1", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "5px"}],
+                                ["clickable", "enter"],
+                            ], {width: "250px", height: "127px", background: "var(--miscButtonDisable)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["top-column", [
+                                ["style-column", [
+                                    ["clickable", "neg"]
+                                ], () => {return player.depth1.lowestCombo.lt(0) ? {width: "250px", height: "30px", borderBottom: "3px solid var(--regBorder)"} : {display: "none !important"}}],
+                                ["blank", "10px"],
+                                ["style-column", [
+                                    ["raw-html", "Properties", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "10px"}],
+                                ["raw-html", () => {return Decimal.sub(1.015, player.bh.comboScalingReduction).gt(1) ? "<u>Combo Scaling" : ""}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return Decimal.sub(1.015, player.bh.comboScalingReduction).gt(1) ? formatSimple(Decimal.sub(1.015, player.bh.comboScalingReduction).max(1).sub(1).mul(100)) + "% starting at 100" : ""}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                            ], {width: "250px", height: "217px", background: "var(--layerBackground)"}],
+                            ["style-row", [
+                                ["layer-proxy", ["bh", [
+                                    ["row", [["clickable", "Auto-Enter"], ["blank", ["10px", "10px"]], ["clickable", "Auto-Exit"]]],
+                                ]]],
+                            ], {width: "250px", height: "70px", background: "var(--miscButtonDisable)", borderTop: "3px solid var(--regBorder)"}],
+                        ], {width: "250px", height: "420px"}],
+                        ["style-column", [
+                            ["top-column", [
+                                ["style-column", [
+                                    ["raw-html", () => {return "Highest Combo: " + formatWhole(player.depth1.highestCombo.min(250)) + "/" + BHS["depth1"].comboLimit}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                                ], {width: "225px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "2px"}],
+                                ["top-column", [
+                                    ["raw-html", () => {return "Boosts infinity points by x" + formatSimple(player.depth1.comboEffect)}, {color: "var(--textColor)", fontSize: "11px", fontFamily: "monospace"}],
+                                ], {width: "272px", height: "25px"}],
+                                ["top-column", [
+                                    ["blank", "4px"],
+                                    ["raw-html", () => {return "Milestones increase skill points by +" + formatSimple(player.depth1.milestoneEffect)}, {color: "var(--textColor)", fontSize: "11px", fontFamily: "monospace"}],
+                                ], {width: "272px", height: "30px", background: "var(--layerBackground)", borderTop: "3px solid var(--regBorder)"}],
+                            ], {width: "272px", height: "97px", background: "var(--miscButtonHover)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["theme-scroll-column", [
+                                ["raw-html", () => {return "<button class='bhMilestoneButton base' style='width:257px;height:50px' onclick='player.depth1.comboStart=0'>Starting combo value: " + player.depth1.comboStart + "<br>[Click to set to 0]</button>"}],
+                                ["bh-milestone", [25, "depth1", ""]],
+                                ["bh-milestone", [50, "depth1", ""]],
+                                ["bh-milestone", [75, "depth1", ""]],
+                                ["bh-milestone", [100, "depth1", ""]],
+                                ["bh-milestone", [125, "depth1", ""]],
+                                ["bh-milestone", [150, "depth1", ""]],
+                                ["bh-milestone", [175, "depth1", ""]],
+                                ["bh-milestone", [200, "depth1", ""]],
+                                ["bh-milestone", [225, "depth1", ""]],
+                                ["bh-milestone", [250, "depth1", ""]],
+                            ], {width: "272px", height: "267px", background: "var(--miscButton)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["style-column", [
+                                ["raw-html", "<p style='line-height:1'>Clicking on a cleared milestone allows you to start at that milestones combo value.", {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                            ], {width: "272px", height: "50px", background: "var(--miscButtonHover)", borderRadius: "0 0 27px 0"}],
+                        ], {width: "272px", height: "420px", borderLeft: "3px solid var(--regBorder)"}],
+                    ], {width: "800px", height: "420px"}],
+                ],
+            },
+            "negative": {
+                unlocked() {return player.depth2.lowestCombo.lt(0)},
+                content: [
+                    ["style-row", [
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", () => {return "You have " + formatShortWhole(player.depth1.gloomingUmbrite) + " glooming umbrite."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + formatShortWhole(player.depth1.dimUmbrite) + " dim umbrite."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + formatShortWhole(player.bh.darkEssence) + " dark essence."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                            ], {width: "272px", height: "72px", background: "var(--layerBackground)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["theme-scroll-column", [
+                                ["blank", "2px"],
+                                ["row", [["upgrade", 101], ["upgrade", 102]]],
+                                ["row", [["upgrade", 103], ["upgrade", 104]]],
+                                ["row", [["buyable", 101], ["buyable", 102]]],
+                                ["blank", "2px"],
+                            ], {width: "272px", height: "345px", background: "var(--miscButtonDisable)", borderRadius: "0 0 0 27px"}],
+                        ], {width: "272px", height: "420px", borderRight: "3px solid var(--regBorder)"}],
+                        ["style-column", [
+                            ["style-column", [
+                                ["style-column", [
+                                    ["raw-html", "Depth 1", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "5px"}],
+                                ["clickable", "enter"],
+                            ], {width: "250px", height: "127px", background: "var(--miscButton)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["top-column", [
+                                ["style-column", [
+                                    ["clickable", "neg"]
+                                ], () => {return player.depth1.lowestCombo.lt(0) ? {width: "250px", height: "30px", borderBottom: "3px solid var(--regBorder)"} : {display: "none !important"}}],
+                                ["blank", "10px"],
+                                ["style-column", [
+                                    ["raw-html", "Properties", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "10px"}],
+                                ["raw-html", () => {return "<u>Negative"}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "Combo scaling increases based on combo value"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                            ], {width: "250px", height: "217px", background: "var(--miscButtonDisable)"}],
+                            ["style-row", [
+                                ["layer-proxy", ["bh", [
+                                    ["row", [["clickable", "Auto-Enter"], ["blank", ["10px", "10px"]], ["clickable", "Auto-Exit"]]],
+                                ]]],
+                            ], {width: "250px", height: "70px", background: "var(--miscButton)", borderTop: "3px solid var(--regBorder)"}],
+                        ], {width: "250px", height: "420px"}],
+                        ["style-column", [
+                            ["top-column", [
+                                ["style-column", [
+                                    ["raw-html", () => {return "Lowest Combo: " + formatWhole(player.depth1.lowestCombo.max(-250)) + "/-" + BHS["depth1"].comboLimit}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                                ], {width: "225px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "2px"}],
+                                ["top-column", [
+                                    ["raw-html", () => {return "Boosts base IP gain by ^" + formatSimple(player.depth1.negComboEffect)}, {color: "var(--textColor)", fontSize: "11px", fontFamily: "monospace"}],
+                                ], {width: "272px", height: "25px"}],
+                                ["top-column", [
+                                    ["blank", "4px"],
+                                    ["raw-html", () => {return "Milestones increase skill points by +" + formatSimple(player.depth1.milestoneEffect)}, {color: "var(--textColor)", fontSize: "11px", fontFamily: "monospace"}],
+                                ], {width: "272px", height: "30px", background: "var(--menuBackground)", borderTop: "3px solid var(--regBorder)"}],
+                            ], {width: "272px", height: "97px", background: "var(--layerBackground)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["theme-scroll-column", [
+                                ["raw-html", () => {return "<button class='bhMilestoneButton base' style='width:257px;height:50px' onclick='player.depth1.comboStart=-1'>Starting combo value: " + player.depth1.comboStart + "<br>[Click to set to -1]</button>"}],
+                                ["bh-milestone", ["-25", "depth1", ""]],
+                                ["bh-milestone", ["-50", "depth1", ""]],
+                                ["bh-milestone", ["-75", "depth1", ""]],
+                                ["bh-milestone", ["-100", "depth1", ""]],
+                                ["bh-milestone", ["-125", "depth1", ""]],
+                                ["bh-milestone", ["-150", "depth1", ""]],
+                                ["bh-milestone", ["-175", "depth1", ""]],
+                                ["bh-milestone", ["-200", "depth1", ""]],
+                                ["bh-milestone", ["-225", "depth1", ""]],
+                                ["bh-milestone", ["-250", "depth1", ""]],
+                            ], {width: "272px", height: "267px", background: "var(--miscButtonDisable)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["style-column", [
+                                ["raw-html", "<p style='line-height:1'>Clicking on a cleared milestone allows you to start at that milestones combo value.", {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                            ], {width: "272px", height: "50px", background: "var(--layerBackground)", borderRadius: "0 0 27px 0"}],
+                        ], {width: "272px", height: "420px", borderLeft: "3px solid var(--regBorder)"}],
+                    ], {width: "800px", height: "420px"}],
+                ],
+            },
+        },
     },
     tabFormat: [
-        ["style-row", [
-            ["style-column", [
-                ["style-column", [
-                    ["raw-html", () => {return "You have " + formatShortWhole(player.depth1.gloomingUmbrite) + " glooming umbrite."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return "You have " + formatShortWhole(player.depth1.dimUmbrite) + " dim umbrite."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return "You have " + formatShortWhole(player.bh.darkEssence) + " dark essence."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
-                ], {width: "272px", height: "72px", background: "var(--miscButtonHover)", borderBottom: "3px solid var(--regBorder)"}],
-                ["theme-scroll-column", [
-                    ["blank", "2px"],
-                    ["row", [["upgrade", 1], ["upgrade", 2]]],
-                    ["row", [["upgrade", 3], ["upgrade", 4]]],
-                    ["row", [["upgrade", 5], ["upgrade", 6]]],
-                    ["row", [["buyable", 1], ["buyable", 2]]],
-                    ["row", [["buyable", 3], ["buyable", 4]]],
-                    ["blank", "2px"],
-                ], {width: "272px", height: "345px", background: "var(--miscButton)", borderRadius: "0 0 0 27px"}],
-            ], {width: "272px", height: "420px", borderRight: "3px solid var(--regBorder)"}],
-            ["style-column", [
-                ["style-column", [
-                    ["style-column", [
-                        ["raw-html", "Depth 1", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
-                    ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "10px"}],
-                    ["clickable", "enter"],
-                ], {width: "250px", height: "147px", background: "var(--miscButtonDisable)", borderBottom: "3px solid var(--regBorder)"}],
-                ["top-column", [
-                    ["blank", "10px"],
-                    ["style-column", [
-                        ["raw-html", "Properties", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
-                    ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "10px"}],
-                    ["raw-html", () => {return Decimal.sub(1.015, player.bh.comboScalingReduction).gt(1) ? "<u>Combo Scaling" : ""}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return Decimal.sub(1.015, player.bh.comboScalingReduction).gt(1) ? formatSimple(Decimal.sub(1.015, player.bh.comboScalingReduction).max(1).sub(1).mul(100)) + "% starting at 100" : ""}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                ], {width: "250px", height: "197px", background: "var(--layerBackground)"}],
-                ["style-row", [
-                    ["layer-proxy", ["bh", [
-                        ["row", [["clickable", "Auto-Enter"], ["blank", ["10px", "10px"]], ["clickable", "Auto-Exit"]]],
-                    ]]],
-                ], {width: "250px", height: "70px", background: "var(--miscButtonDisable)", borderTop: "3px solid var(--regBorder)"}],
-            ], {width: "250px", height: "420px"}],
-            ["style-column", [
-                ["top-column", [
-                    ["style-column", [
-                        ["raw-html", () => {return "Highest Combo: " + formatWhole(player.depth1.highestCombo.min(250)) + "/" + BHS["depth1"].comboLimit}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
-                    ], {width: "225px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "2px"}],
-                    ["top-column", [
-                        ["raw-html", () => {return "Boosts infinity points by x" + formatSimple(player.depth1.comboEffect)}, {color: "var(--textColor)", fontSize: "11px", fontFamily: "monospace"}],
-                    ], {width: "272px", height: "25px"}],
-                    ["top-column", [
-                        ["blank", "4px"],
-                        ["raw-html", () => {return "Milestones increase skill points by +" + formatSimple(player.depth1.milestoneEffect)}, {color: "var(--textColor)", fontSize: "11px", fontFamily: "monospace"}],
-                    ], {width: "272px", height: "30px", background: "var(--layerBackground)", borderTop: "3px solid var(--regBorder)"}],
-                ], {width: "272px", height: "97px", background: "var(--miscButtonHover)", borderBottom: "3px solid var(--regBorder)"}],
-                ["theme-scroll-column", [
-                    ["hoverless-clickable", "neg"],
-                    ["style-column", [
-                        ["raw-html", () => {return "<button class='bhMilestoneButton base' style='width:257px;height:50px' onclick='player.depth1.comboStart=0'>Starting combo value: " + player.depth1.comboStart + "<br>[Click to set to 0]</button>"}],
-                        ["bh-milestone", [25, "depth1", ""]],
-                        ["bh-milestone", [50, "depth1", ""]],
-                        ["bh-milestone", [75, "depth1", ""]],
-                        ["bh-milestone", [100, "depth1", ""]],
-                        ["bh-milestone", [125, "depth1", ""]],
-                        ["bh-milestone", [150, "depth1", ""]],
-                        ["bh-milestone", [175, "depth1", ""]],
-                        ["bh-milestone", [200, "depth1", ""]],
-                        ["bh-milestone", [225, "depth1", ""]],
-                        ["bh-milestone", [250, "depth1", ""]],
-                    ], () => {return !player.depth1.negToggle ? {} : {display: "none !important"}}],
-                    ["style-column", [
-                        ["raw-html", () => {return "<button class='bhMilestoneButton base' style='width:257px;height:50px' onclick='player.depth1.comboStart=-1'>Starting combo value: " + player.depth1.comboStart + "<br>[Click to set to -1]</button>"}],
-                        ["bh-milestone", ["-25", "depth1", ""]],
-                        ["bh-milestone", ["-50", "depth1", ""]],
-                        ["bh-milestone", ["-75", "depth1", ""]],
-                        ["bh-milestone", ["-100", "depth1", ""]],
-                        ["bh-milestone", ["-125", "depth1", ""]],
-                        ["bh-milestone", ["-150", "depth1", ""]],
-                        ["bh-milestone", ["-175", "depth1", ""]],
-                        ["bh-milestone", ["-200", "depth1", ""]],
-                        ["bh-milestone", ["-225", "depth1", ""]],
-                        ["bh-milestone", ["-250", "depth1", ""]],
-                    ], () => {return player.depth1.negToggle ? {} : {display: "none !important"}}],
-                ], {width: "272px", height: "267px", background: "var(--miscButton)", borderBottom: "3px solid var(--regBorder)"}],
-                ["style-column", [
-                    ["raw-html", "<p style='line-height:1'>Clicking on a cleared milestone allows you to start at that milestones combo value.", {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
-                ], {width: "272px", height: "50px", background: "var(--miscButtonHover)", borderRadius: "0 0 27px 0"}],
-            ], {width: "272px", height: "420px", borderLeft: "3px solid var(--regBorder)"}],
-        ], {width: "800px", height: "420px"}],
+        ["buttonless-microtabs", "stuff", {borderWidth: "0"}],
     ],
     layerShown() {return player.startedGame && tmp.pu.levelables[302].canClick},
 })
@@ -401,7 +593,15 @@ BHS.depth1 = {
             case -24: case -74:
                 return "lesserYi"
             case -49: case -124:
+                return "lesserEr"
+            case -99: case -174:
+                return "lesserSan"
+            case -149: case -224:
+                return "lesserSi"
+            case -199:
                 return "lesserWu"
+            case -249:
+                return "lesserLiu"
             default:
                 let random = Math.random()
                 let cel = ["lesserAlpha", "lesserBeta", "lesserGamma", "lesserDelta", "lesserEpsilon"]
@@ -410,7 +610,12 @@ BHS.depth1 = {
                 if (combo >= 100) cel.push("lesserTheta")
                 if (combo >= 150) cel.push("lesserIota")
                 if (combo >= 200) cel.push("lesserKappa")
-                if (combo < 0) cel = ["lesserEnas", "lesserPente", "lesserDeka", "lesserHekaton", "lesserKhilioi", "lesserMyrioi"]
+                if (combo < 0) cel = ["lesserEnas", "lesserPente", "lesserDeka", "lesserHekaton", "lesserKhilioi", "lesserMyrioi", "lesserDyo", "lesserTria"]
+                if (combo <= -25) cel.push("lesserTessera")
+                if (combo <= -50) cel.push("lesserExi")
+                if (combo <= -100) cel.push("lesserEpta")
+                if (combo <= -150) cel.push("lesserOkto")
+                if (combo <= -200) cel.push("lesserEnnea")
                 return cel[Math.floor(Math.random()*cel.length)]
         }
     },
@@ -771,6 +976,7 @@ BHC.lesserEnas = {
     },
     health: new Decimal(300),
     damage: new Decimal(15),
+    negMult: new Decimal(2.6),
     actions: {
         0: {
             name: "Chop",
@@ -810,6 +1016,7 @@ BHC.lesserPente = {
     },
     health: new Decimal(500),
     damage: new Decimal(20),
+    negMult: new Decimal(1.8),
     actions: {
         0: {
             name: "Magic Missile",
@@ -825,7 +1032,7 @@ BHC.lesserPente = {
             instant: true,
             type: "heal",
             target: "celestialite",
-            value: new Decimal(20),
+            value: new Decimal(25),
             cooldown: new Decimal(20),
         },
     },
@@ -848,6 +1055,7 @@ BHC.lesserDeka = {
     },
     health: new Decimal(750),
     damage: new Decimal(15),
+    negMult: new Decimal(1.4),
     actions: {
         0: {
             name: "Stab",
@@ -887,6 +1095,7 @@ BHC.lesserHekaton = {
     },
     health: new Decimal(1000),
     damage: new Decimal(30),
+    negMult: new Decimal(1.2),
     actions: {
         0: {
             name: "Blast",
@@ -927,6 +1136,7 @@ BHC.lesserKhilioi = {
     },
     health: new Decimal(1250),
     damage: new Decimal(25),
+    negMult: new Decimal(1.1),
     actions: {
         0: {
             name: "Quick Shot",
@@ -1013,6 +1223,335 @@ BHC.lesserMyrioi = {
     },
 }
 
+BHC.lesserDyo = {
+    name: "Celestialite Lesser Dyo",
+    symbol: "⇓δ",
+    style: {
+        background: "linear-gradient(90deg, #830000, #DE0000)",
+        color: "black",
+        borderColor: "#430001",
+    },
+    health: new Decimal(1200),
+    damage: new Decimal(25),
+    actions: {
+        0: {
+            name: "Stab",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value: new Decimal(1),
+            cooldown: new Decimal(8),
+        },
+        1: {
+            name: "Punt",
+            instant: true,
+            type: "damage",
+            target: "randomPlayerHeal",
+            method: "physical",
+            properties: {
+                "stun": [new Decimal(1), "soft", new Decimal(2)], // Chance / Stun-Type / Stun-Time
+            },
+            value: new Decimal(1),
+            cooldown: new Decimal(12),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.gloomingUmbrite = new Decimal(300)
+        gain.dimUmbrite = new Decimal(100)
+        gain.darkEssence = new Decimal(35)
+        return gain
+    },
+}
+
+BHC.lesserTria = {
+    name: "Celestialite Lesser Tria",
+    symbol: "⇓τ",
+    style: {
+        background: "linear-gradient(90deg, #830000, #DE0000)",
+        color: "black",
+        borderColor: "#430001",
+    },
+    health: new Decimal(1250),
+    damage: new Decimal(20),
+    actions: {
+        0: {
+            name: "Slash",
+            instant: true,
+            type: "damage",
+            target: "allPlayer",
+            method: "physical",
+            value: new Decimal(1),
+            cooldown: new Decimal(8),
+        },
+        1: {
+            name: "Decapitate",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value: new Decimal(3),
+            stun: ["soft", new Decimal(5), 2],
+            cooldown: new Decimal(20),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.gloomingUmbrite = new Decimal(350)
+        gain.dimUmbrite = new Decimal(125)
+        gain.darkEssence = new Decimal(40)
+        return gain
+    },
+}
+
+BHC.lesserTessera = {
+    name: "Celestialite Lesser Tessera",
+    symbol: "⇓Τ",
+    style: {
+        background: "linear-gradient(90deg, #830000, #DE0000)",
+        color: "black",
+        borderColor: "#430001",
+    },
+    health: new Decimal(1300),
+    damage: new Decimal(30),
+    actions: {
+        0: {
+            name: "Drain",
+            passive: true,
+            constantType: "effect",
+            constantTarget: "allPlayer",
+            effects: {
+                "regenAdd"() {return player.bh.celestialite.damage.div(-6)}, // Add to regen stat
+            },
+            cooldown: new Decimal(Infinity),
+        },
+        1: {
+            name: "Motivation",
+            instant: true,
+            type: "effect",
+            target: "celestialite",
+            properties: {
+                "damageDiminish": new Decimal(0.05), // Diminishing Multiplicative Effect
+            },
+            cooldown: new Decimal(3),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.gloomingUmbrite = new Decimal(400)
+        gain.dimUmbrite = new Decimal(150)
+        gain.darkEssence = new Decimal(45)
+        return gain
+    },
+}
+
+BHC.lesserExi = {
+    name: "Celestialite Lesser Exi",
+    symbol: "⇓έ",
+    style: {
+        background: "linear-gradient(90deg, #830000, #DE0000)",
+        color: "black",
+        borderColor: "#430001",
+    },
+    health: new Decimal(1350),
+    damage: new Decimal(35),
+    actions: {
+        0: {
+            name: "Devour",
+            passive: true,
+            constantType: "effect",
+            constantTarget: "randomPlayerHeal",
+            effects: {
+                "regenAdd"() {return player.bh.celestialite.damage.div(-7)}, // Add to regen stat
+            },
+            cooldown: new Decimal(Infinity),
+        },
+        1: {
+            name: "Magic Missile",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "magic",
+            value: new Decimal(1),
+            cooldown: new Decimal(8),
+        },
+        2: {
+            name: "Bandage",
+            instant: true,
+            type: "heal",
+            target: "celestialite",
+            value: new Decimal(100),
+            cooldown: new Decimal(20),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.gloomingUmbrite = new Decimal(450)
+        gain.dimUmbrite = new Decimal(160)
+        gain.darkEssence = new Decimal(50)
+        return gain
+    },
+}
+
+BHC.lesserEpta = {
+    name: "Celestialite Lesser Epta",
+    symbol: "⇓ε",
+    style: {
+        background: "linear-gradient(90deg, #830000, #DE0000)",
+        color: "black",
+        borderColor: "#430001",
+    },
+    health: new Decimal(1400),
+    damage: new Decimal(40),
+    actions: {
+        0: {
+            name: "Slap",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            properties: {
+                "stun": [new Decimal(1), "soft", new Decimal(2)], // Chance / Stun-Type / Stun-Time
+            },
+            value: new Decimal(1),
+            cooldown: new Decimal(8),
+        },
+        1: {
+            name: "Quick Shot",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            value: new Decimal(1),
+            cooldown: new Decimal(5),
+        },
+        2: {
+            name: "Battle Cry",
+            active: true,
+            constantType: "effect",
+            constantTarget: "allPlayer",
+            effects: {
+                "damageMult": new Decimal(1.5), // Multiplicative Effect
+            },
+            cooldown: new Decimal(25),
+            duration: new Decimal(8),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.gloomingUmbrite = new Decimal(500)
+        gain.dimUmbrite = new Decimal(175)
+        gain.darkEssence = new Decimal(60)
+        return gain
+    },
+}
+
+BHC.lesserOkto = {
+    name: "Celestialite Lesser Okto",
+    symbol: "⇓ο",
+    style: {
+        background: "linear-gradient(90deg, #830000, #DE0000)",
+        color: "black",
+        borderColor: "#430001",
+    },
+    health: new Decimal(1450),
+    damage: new Decimal(45),
+    actions: {
+        0: {
+            name: "Quick Shot",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            value: new Decimal(1),
+            cooldown: new Decimal(5),
+        },
+        1: {
+            name: "Charge Shot",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            value: new Decimal(3),
+            stun: ["soft", new Decimal(3), 2],
+            cooldown: new Decimal(12),
+        },
+        2: {
+            name: "Frantic Shot",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            value: new Decimal(1),
+            cooldown: new Decimal(3),
+            conditional(index, slot) {
+                return player.bh.celestialite.health.lte(player.bh.celestialite.maxHealth.div(5))
+            },
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.gloomingUmbrite = new Decimal(600)
+        gain.dimUmbrite = new Decimal(200)
+        gain.darkEssence = new Decimal(75)
+        return gain
+    },
+}
+
+BHC.lesserEnnea = {
+    name: "Celestialite Lesser Ennea",
+    symbol: "⇓Ε",
+    style: {
+        background: "linear-gradient(90deg, #830000, #DE0000)",
+        color: "black",
+        borderColor: "#430001",
+    },
+    health: new Decimal(1500),
+    damage: new Decimal(50),
+    actions: {
+        0: {
+            name: "Drain",
+            passive: true,
+            constantType: "effect",
+            constantTarget: "allPlayer",
+            effects: {
+                "regenAdd"() {return player.bh.celestialite.damage.div(-10)}, // Add to regen stat
+            },
+            cooldown: new Decimal(Infinity),
+        },
+        1: {
+            name: "Punt",
+            instant: true,
+            type: "damage",
+            target: "randomPlayerHeal",
+            method: "physical",
+            properties: {
+                "stun": [new Decimal(1), "soft", new Decimal(2)], // Chance / Stun-Type / Stun-Time
+            },
+            value: new Decimal(1),
+            cooldown: new Decimal(8),
+        },
+        2: {
+            name: "Decapitate",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value: new Decimal(3),
+            stun: ["soft", new Decimal(5), 2],
+            cooldown: new Decimal(20),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.gloomingUmbrite = new Decimal(750)
+        gain.dimUmbrite = new Decimal(250)
+        gain.darkEssence = new Decimal(100)
+        return gain
+    },
+}
+
 // Negative Minibosses (Chinese Numbers)
 BHC.lesserYi = {
     name: "Celestialite Lesser Yi",
@@ -1025,6 +1564,330 @@ BHC.lesserYi = {
     },
     health: new Decimal(5000),
     damage: new Decimal(35),
+    actions: {
+        0: {
+            name: "Drain",
+            passive: true,
+            constantType: "effect",
+            constantTarget: "allPlayer",
+            effects: {
+                "regenAdd"() {return player.bh.celestialite.damage.div(-6)}, // Add to regen stat
+            },
+            cooldown: new Decimal(Infinity),
+        },
+        1: {
+            name: "Motivation",
+            instant: true,
+            type: "effect",
+            target: "celestialite",
+            properties: {
+                "damageDiminish": new Decimal(0.05), // Diminishing Multiplicative Effect
+            },
+            cooldown: new Decimal(3),
+        },
+        2: {
+            name: "Slap",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            properties: {
+                "stun": [new Decimal(1), "soft", new Decimal(2)], // Chance / Stun-Type / Stun-Time
+            },
+            value: new Decimal(1),
+            cooldown: new Decimal(8),
+        },
+        3: {
+            name: "Bandage",
+            instant: true,
+            type: "heal",
+            target: "celestialite",
+            value: new Decimal(100),
+            cooldown: new Decimal(20),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.gloomingUmbrite = new Decimal(2000)
+        gain.dimUmbrite = new Decimal(750)
+        gain.darkEssence = new Decimal(250)
+        return gain
+    },
+}
+
+BHC.lesserEr = {
+    name: "Celestialite Lesser Er",
+    symbol: "⇓二",
+    style: {
+        background: "linear-gradient(90deg, #830000, #DE0000)",
+        color: "black",
+        borderColor: "#430001",
+        fontSize: "40px",
+    },
+    health: new Decimal(6000),
+    damage: new Decimal(40),
+    actions: {
+        0: {
+            name: "Quick Shot",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            value: new Decimal(1),
+            cooldown: new Decimal(5),
+        },
+        1: {
+            name: "Charge Shot",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            value: new Decimal(3),
+            stun: ["soft", new Decimal(3), 2],
+            cooldown: new Decimal(12),
+        },
+        2: {
+            name: "Block",
+            instant: true,
+            type: "shield",
+            target: "celestialite",
+            value: new Decimal(1),
+
+            active: true,
+            constantType: "effect",
+            constantTarget: "celestialite",
+            effects: {
+                "defenseAdd": new Decimal(20), // Multiplicative Effect
+            },
+            cooldown: new Decimal(20),
+            duration: new Decimal(5),
+        },
+        3: {
+            name: "Emergency Medkit",
+            instant: true,
+            type: "heal",
+            target: "celestialite",
+            value: new Decimal(100),
+            cooldown: new Decimal(30),
+            conditional(index, slot) {
+                return player.bh.celestialite.health.lte(player.bh.celestialite.maxHealth.div(5))
+            },
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.gloomingUmbrite = new Decimal(3000)
+        gain.dimUmbrite = new Decimal(1125)
+        gain.darkEssence = new Decimal(375)
+        return gain
+    },
+}
+
+BHC.lesserSan = {
+    name: "Celestialite Lesser San",
+    symbol: "⇓三",
+    style: {
+        background: "linear-gradient(90deg, #830000, #DE0000)",
+        color: "black",
+        borderColor: "#430001",
+        fontSize: "40px",
+    },
+    health: new Decimal(7000),
+    damage: new Decimal(45),
+    actions: {
+        0: {
+            name: "Earth Tremor",
+            instant: true,
+            type: "damage",
+            target: "all",
+            method: "physical",
+            value: new Decimal(0.2),
+            cooldown: new Decimal(2),
+        },
+        1: {
+            name: "Earthquake",
+            instant: true,
+            type: "damage",
+            target: "all",
+            method: "physical",
+            value: new Decimal(1),
+            cooldown: new Decimal(10),
+        },
+        2: {
+            name: "Earth Upheaval",
+            instant: true,
+            type: "damage",
+            target: "all",
+            method: "physical",
+            value: new Decimal(3),
+            cooldown: new Decimal(25),
+        },
+        3: {
+            name: "Earth Spasm",
+            instant: true,
+            type: "reset",
+            target: "celestialite",
+            cooldown: new Decimal(45),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.gloomingUmbrite = new Decimal(4000)
+        gain.dimUmbrite = new Decimal(1500)
+        gain.darkEssence = new Decimal(500)
+        return gain
+    },
+}
+
+BHC.lesserSi = {
+    name: "Celestialite Lesser Si",
+    symbol: "⇓四",
+    style: {
+        background: "linear-gradient(90deg, #830000, #DE0000)",
+        color: "black",
+        borderColor: "#430001",
+        fontSize: "40px",
+    },
+    health: new Decimal(8000),
+    damage: new Decimal(50),
+    actions: {
+        0: {
+            name: "Slash",
+            instant: true,
+            type: "damage",
+            target: "allPlayer",
+            method: "physical",
+            value: new Decimal(0.5),
+            cooldown: new Decimal(5),
+        },
+        1: {
+            name: "Punt",
+            instant: true,
+            type: "damage",
+            target: "randomPlayerHeal",
+            method: "physical",
+            properties: {
+                "stun": [new Decimal(1), "soft", new Decimal(2)], // Chance / Stun-Type / Stun-Time
+            },
+            value: new Decimal(1),
+            cooldown: new Decimal(9),
+        },
+        2: {
+            name: "Sword Dance",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            properties: {
+                "multi-hit": [8, 100],
+            },
+            value: new Decimal(0.25),
+            cooldown: new Decimal(16),
+        },
+        3: {
+            name: "Last Stand",
+            passive: true,
+            constantType: "effect",
+            constantTarget: "celestialite",
+            effects: {
+                "damageMult": new Decimal(2),
+            },
+            conditional(index, slot) {
+                return player.bh.celestialite.health.lte(player.bh.celestialite.maxHealth.div(5))
+            },
+            cooldown: new Decimal(Infinity),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.gloomingUmbrite = new Decimal(5000)
+        gain.dimUmbrite = new Decimal(1875)
+        gain.darkEssence = new Decimal(625)
+        return gain
+    },
+}
+
+BHC.lesserWu = {
+    name: "Celestialite Lesser Wu",
+    symbol: "⇓五",
+    style: {
+        background: "linear-gradient(90deg, #830000, #DE0000)",
+        color: "black",
+        borderColor: "#430001",
+        fontSize: "40px",
+    },
+    health: new Decimal(9000),
+    damage: new Decimal(55),
+    actions: {
+        0: {
+            name: "Magic Missile",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "magic",
+            value: new Decimal(0.3),
+            properties: {
+                "multi-hit"() {
+                    if (!player.bh.celestialite.actions[0].variables.bullets) player.bh.celestialite.actions[0].variables.bullets = 1
+                    return [player.bh.celestialite.actions[0].variables.bullets, 200]
+                }
+            },
+            cooldown: new Decimal(8),
+        },
+        1: {
+            name: "Missile Increase",
+            instant: true,
+            type: "function",
+            target: "allPlayer",
+            onTrigger(index, slot, target, magnitude) {
+                if (!player.bh.celestialite.actions[0].variables.bullets) player.bh.celestialite.actions[0].variables.bullets = 1
+                player.bh.celestialite.actions[0].variables.bullets += 1
+                bhLog("<span style='color: #8b0e7a'>" + run(BHC[player.bh.celestialite.id].name, BHC[player.bh.celestialite.id]) + " increases its missile count.")
+            },
+            cooldown: new Decimal(20),
+        },
+        2: {
+            name: "Damage Enchantment",
+            instant: true,
+            type: "effect",
+            target: "celestialite",
+            properties: {
+                "damageMult": new Decimal(1.1), // Multiplicative Effect
+            },
+            cooldown: new Decimal(30),
+        },
+        3: {
+            name: "Bullet Time",
+            active: true,
+            constantType: "effect",
+            constantTarget: "celestialite",
+            effects: {
+                "agilityAdd": new Decimal(20), // Multiplicative Effect
+            },
+            cooldown: new Decimal(45),
+            duration: new Decimal(8),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.gloomingUmbrite = new Decimal(6000)
+        gain.dimUmbrite = new Decimal(2250)
+        gain.darkEssence = new Decimal(750)
+        return gain
+    },
+}
+
+BHC.lesserLiu = {
+    name: "Celestialite Lesser Liu",
+    symbol: "⇓六",
+    style: {
+        background: "linear-gradient(90deg, #830000, #DE0000)",
+        color: "black",
+        borderColor: "#430001",
+        fontSize: "40px",
+    },
+    health: new Decimal(10000),
+    damage: new Decimal(60),
     actions: {
         0: {
             name: "Chop",
@@ -1051,6 +1914,7 @@ BHC.lesserYi = {
             target: "randomPlayer",
             method: "physical",
             value: new Decimal(3),
+            stun: ["soft", new Decimal(5), 2],
             cooldown: new Decimal(45),
         },
         3: {
@@ -1060,82 +1924,15 @@ BHC.lesserYi = {
             target: "randomPlayer",
             method: "physical",
             value: new Decimal(10),
+            stun: ["soft", new Decimal(10), 2],
             cooldown: new Decimal(100),
         },
     },
     reward() {
         let gain = {}
-        gain.gloomingUmbrite = new Decimal(2000)
-        gain.dimUmbrite = new Decimal(750)
-        gain.darkEssence = new Decimal(250)
-        return gain
-    },
-}
-
-
-BHC.lesserWu = {
-    name: "Celestialite Lesser Wu",
-    symbol: "⇓五",
-    style: {
-        background: "linear-gradient(90deg, #830000, #DE0000)",
-        color: "black",
-        borderColor: "#430001",
-        fontSize: "40px",
-    },
-    health: new Decimal(7500),
-    damage: new Decimal(50),
-    actions: {
-        0: {
-            name: "Slash",
-            instant: true,
-            type: "damage",
-            target: "allPlayer",
-            value: new Decimal(0.5),
-            cooldown: new Decimal(5),
-        },
-        1: {
-            name: "Punt",
-            instant: true,
-            type: "damage",
-            target: "randomHeal",
-            method: "physical",
-            properties: {
-                "stun": [new Decimal(1), "soft", new Decimal(2)], // Chance / Stun-Type / Stun-Time
-            },
-            value: new Decimal(1),
-            cooldown: new Decimal(9),
-        },
-        2: {
-            name: "Sword Dance",
-            instant: true,
-            type: "damage",
-            target: "randomPlayer",
-            method: "physical",
-            properties: {
-                "multi-hit": [8, 100],
-            },
-            value: new Decimal(0.25),
-            cooldown: new Decimal(16),
-        },
-        3: {
-            name: "Last Stand",
-            passive: true,
-            type: "effect",
-            target: "celestialite",
-            effects: {
-                "damageMult": new Decimal(2),
-            },
-            conditional(index, slot) {
-                return player.bh.celestialite.health.lte(player.bh.celestialite.maxHealth.div(5))
-            },
-            cooldown: new Decimal(Infinity),
-        },
-    },
-    reward() {
-        let gain = {}
-        gain.gloomingUmbrite = new Decimal(3000)
-        gain.dimUmbrite = new Decimal(1250)
-        gain.darkEssence = new Decimal(350)
+        gain.gloomingUmbrite = new Decimal(7000)
+        gain.dimUmbrite = new Decimal(2625)
+        gain.darkEssence = new Decimal(875)
         return gain
     },
 }

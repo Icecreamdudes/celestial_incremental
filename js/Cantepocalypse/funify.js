@@ -348,8 +348,10 @@
         player.oi.linkingPower = [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),]
         player.oi.linkerChoice = new Decimal(0)
 
-        player.oi.protoMemories = new Decimal(0)
-        player.oi.protoMemorySeconds = new Decimal(0)
+        if (!hasUpgrade("depth2", 103)) {
+            player.oi.protoMemories = new Decimal(0)
+            player.oi.protoMemorySeconds = new Decimal(0)
+        }
 
         player.oi.buyables[11] = new Decimal(0)
         player.oi.buyables[12] = new Decimal(0)

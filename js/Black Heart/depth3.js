@@ -17,6 +17,7 @@ addLayer("depth3", {
         highestCombo: new Decimal(0),
         lowestCombo: new Decimal(0),
         comboEffect: new Decimal(1),
+        negComboEffect: new Decimal(0),
         comboStart: 0,
 
         milestone: {
@@ -42,7 +43,6 @@ addLayer("depth3", {
             250: 0,
         },
         milestoneEffect: new Decimal(0),
-        negToggle: false,
     }},
     automate() {},
     nodeStyle() {
@@ -77,6 +77,7 @@ addLayer("depth3", {
         player.depth3.unlocked = player.depth2.milestone[25] > 0
 
         player.depth3.comboEffect = Decimal.pow(1.15, player.depth3.highestCombo.min(250)).pow(buyableEffect("depth3", 2))
+        player.depth3.negComboEffect = Decimal.div(player.depth3.lowestCombo, -2)
 
         player.depth3.milestoneEffect = new Decimal(0)
         for (let i = 25; i < 251; i = i+25) {
@@ -98,17 +99,25 @@ addLayer("depth3", {
             style: {width: "200px", minHeight: "75px", color: "white", background: "radial-gradient(#720804, #410230)", border: "3px solid #961d76", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"},
         },
         "neg": {
-            title() {return player.depth3.negToggle ? "Switch to positive milestones" : "Switch to negative milestones"},
+            title: "Swap Sides",
             canClick: true,
             unlocked() {return player.depth3.lowestCombo.lt(0)},
             onClick() {
-                if (player.depth3.negToggle) {
-                    player.depth3.negToggle = false
+                if (player.subtabs["depth3"]["stuff"] == "negative") {
+                    player.subtabs["depth3"]["stuff"] = "positive"
                 } else {
-                    player.depth3.negToggle = true
+                    player.subtabs["depth3"]["stuff"] = "negative"
                 }
             },
-            style: {width: "257px", minHeight: "40px", fontSize: "9px", color: "var(--textColor)", background: "var(--miscButtonDisable)", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0", padding: "0 5px"},
+            style() {
+                let look = {width: "250px", minHeight: "30px", color: "var(--textColor)", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0", padding: "0 5px"}
+                if (player.subtabs["depth3"]["stuff"] == "negative") {
+                    look.background = "var(--miscButtonHover)"
+                } else {
+                    look.background = "var(--menuBackground)"
+                }
+                return look
+            },
         },
     },
     upgrades: {
@@ -309,92 +318,164 @@ addLayer("depth3", {
             },
         },
     },
+    microtabs: {
+        stuff: {
+            "positive": {
+                unlocked: true,
+                content: [
+                    ["style-row", [
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", () => {return "You have " + formatShortWhole(player.depth3.vividUmbrite) + " vivid umbrite."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + formatShortWhole(player.depth3.lustrousUmbrite) + " lustrous umbrite."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + formatShortWhole(player.bh.darkEssence) + " dark essence."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                            ], {width: "272px", height: "72px", background: "var(--miscButtonHover)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["theme-scroll-column", [
+                                ["blank", "2px"],
+                                ["row", [["upgrade", 1], ["upgrade", 2]]],
+                                ["row", [["upgrade", 3], ["upgrade", 4]]],
+                                ["row", [["upgrade", 5], ["upgrade", 6]]],
+                                ["row", [["buyable", 1], ["buyable", 2]]],
+                                ["row", [["buyable", 3], ["buyable", 4]]],
+                                ["blank", "2px"],
+                            ], {width: "272px", height: "345px", background: "var(--miscButton)", borderRadius: "0 0 0 27px"}],
+                        ], {width: "272px", height: "420px", borderRight: "3px solid var(--regBorder)"}],
+                        ["style-column", [
+                            ["style-column", [
+                                ["style-column", [
+                                    ["raw-html", "Depth 3", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "5px"}],
+                                ["clickable", "enter"],
+                            ], {width: "250px", height: "127px", background: "var(--miscButtonDisable)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["top-column", [
+                                ["style-column", [
+                                    ["clickable", "neg"]
+                                ], () => {return player.depth3.lowestCombo.lt(0) ? {width: "250px", height: "30px", borderBottom: "3px solid var(--regBorder)"} : {display: "none !important"}}],
+                                ["blank", "10px"],
+                                ["style-column", [
+                                    ["raw-html", "Properties", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "10px"}],
+                                ["raw-html", () => {return Decimal.sub(1.015, player.bh.comboScalingReduction).gt(1) ? "<u>Combo Scaling" : ""}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return Decimal.sub(1.015, player.bh.comboScalingReduction).gt(1) ? formatSimple(Decimal.sub(1.015, player.bh.comboScalingReduction).max(1).sub(1).mul(100)) + "% starting at 100" : ""}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                            ], {width: "250px", height: "217px", background: "var(--layerBackground)"}],
+                            ["style-row", [
+                                ["layer-proxy", ["bh", [
+                                    ["row", [["clickable", "Auto-Enter"], ["blank", ["10px", "10px"]], ["clickable", "Auto-Exit"]]],
+                                ]]],
+                            ], {width: "250px", height: "70px", background: "var(--miscButtonDisable)", borderTop: "3px solid var(--regBorder)"}],
+                        ], {width: "250px", height: "420px"}],
+                        ["style-column", [
+                            ["top-column", [
+                                ["style-column", [
+                                    ["raw-html", () => {return "Highest Combo: " + formatWhole(player.depth3.highestCombo.min(250)) + "/" + BHS["depth3"].comboLimit}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                                ], {width: "225px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "2px"}],
+                                ["top-column", [
+                                    ["raw-html", () => {return "Boosts singularity points by x" + formatSimple(player.depth3.comboEffect)}, {color: "var(--textColor)", fontSize: "11px", fontFamily: "monospace"}],
+                                ], {width: "272px", height: "25px"}],
+                                ["top-column", [
+                                    ["blank", "4px"],
+                                    ["raw-html", () => {return "Milestones increase skill points by +" + formatSimple(player.depth3.milestoneEffect)}, {color: "var(--textColor)", fontSize: "11px", fontFamily: "monospace"}],
+                                ], {width: "272px", height: "30px", background: "var(--layerBackground)", borderTop: "3px solid var(--regBorder)"}],
+                            ], {width: "272px", height: "97px", background: "var(--miscButtonHover)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["theme-scroll-column", [
+                                ["raw-html", () => {return "<button class='bhMilestoneButton  base' style='width:257px;height:50px' onclick='player.depth3.comboStart=0'>Starting combo value: " + player.depth3.comboStart + "<br>[Click to set to 0]</button>"}],
+                                ["bh-milestone", [25, "depth3", ""]],
+                                ["bh-milestone", [50, "depth3", ""]],
+                                ["bh-milestone", [75, "depth3", ""]],
+                                ["bh-milestone", [100, "depth3", ""]],
+                                ["bh-milestone", [125, "depth3", ""]],
+                                ["bh-milestone", [150, "depth3", ""]],
+                                ["bh-milestone", [175, "depth3", ""]],
+                                ["bh-milestone", [200, "depth3", ""]],
+                                ["bh-milestone", [225, "depth3", ""]],
+                                ["bh-milestone", [250, "depth3", ""]],
+                            ], {width: "272px", height: "267px", background: "var(--miscButton)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["style-column", [
+                                ["raw-html", "<p style='line-height:1'>Clicking on a cleared milestone allows you to start at that milestones combo value.", {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                            ], {width: "272px", height: "50px", background: "var(--miscButtonHover)", borderRadius: "0 0 27px 0"}],
+                        ], {width: "272px", height: "420px", borderLeft: "3px solid var(--regBorder)"}],
+                    ], {width: "800px", height: "420px"}],
+                ],
+            },
+            "negative": {
+                unlocked() {return player.depth3.lowestCombo.lt(0)},
+                content: [
+                    ["style-row", [
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", () => {return "You have " + formatShortWhole(player.depth3.vividUmbrite) + " vivid umbrite."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + formatShortWhole(player.depth3.lustrousUmbrite) + " lustrous umbrite."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + formatShortWhole(player.bh.darkEssence) + " dark essence."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                            ], {width: "272px", height: "72px", background: "var(--layerBackground)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["theme-scroll-column", [
+                                ["blank", "2px"],
+                                ["row", [["upgrade", 101], ["upgrade", 102]]],
+                                ["row", [["upgrade", 103], ["upgrade", 104]]],
+                                ["row", [["buyable", 101], ["buyable", 102]]],
+                                ["blank", "2px"],
+                            ], {width: "272px", height: "345px", background: "var(--miscButtonDisable)", borderRadius: "0 0 0 27px"}],
+                        ], {width: "272px", height: "420px", borderRight: "3px solid var(--regBorder)"}],
+                        ["style-column", [
+                            ["style-column", [
+                                ["style-column", [
+                                    ["raw-html", "Depth 3", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "5px"}],
+                                ["clickable", "enter"],
+                            ], {width: "250px", height: "127px", background: "var(--miscButton)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["top-column", [
+                                ["style-column", [
+                                    ["clickable", "neg"]
+                                ], () => {return player.depth3.lowestCombo.lt(0) ? {width: "250px", height: "30px", borderBottom: "3px solid var(--regBorder)"} : {display: "none !important"}}],
+                                ["blank", "10px"],
+                                ["style-column", [
+                                    ["raw-html", "Properties", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "10px"}],
+                                ["raw-html", () => {return "<u>Negative"}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "Combo scaling increases based on combo value"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                            ], {width: "250px", height: "217px", background: "var(--miscButtonDisable)"}],
+                            ["style-row", [
+                                ["layer-proxy", ["bh", [
+                                    ["row", [["clickable", "Auto-Enter"], ["blank", ["10px", "10px"]], ["clickable", "Auto-Exit"]]],
+                                ]]],
+                            ], {width: "250px", height: "70px", background: "var(--miscButton)", borderTop: "3px solid var(--regBorder)"}],
+                        ], {width: "250px", height: "420px"}],
+                        ["style-column", [
+                            ["top-column", [
+                                ["style-column", [
+                                    ["raw-html", () => {return "Lowest Combo: " + formatWhole(player.depth3.lowestCombo.max(-250)) + "/-" + BHS["depth3"].comboLimit}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                                ], {width: "225px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "2px"}],
+                                ["top-column", [
+                                    ["raw-html", () => {return "<div style='line-height:1;margin-top:1px'>Increases singularity power softcap<br>base by +" + formatSimple(player.depth3.negComboEffect) + "</div>"}, {color: "var(--textColor)", fontSize: "11px", fontFamily: "monospace"}],
+                                ], {width: "272px", height: "25px"}],
+                                ["top-column", [
+                                    ["blank", "4px"],
+                                    ["raw-html", () => {return "Milestones increase skill points by +" + formatSimple(player.depth3.milestoneEffect)}, {color: "var(--textColor)", fontSize: "11px", fontFamily: "monospace"}],
+                                ], {width: "272px", height: "30px", background: "var(--menuBackground)", borderTop: "3px solid var(--regBorder)"}],
+                            ], {width: "272px", height: "97px", background: "var(--layerBackground)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["theme-scroll-column", [
+                                ["raw-html", () => {return "<button class='bhMilestoneButton base' style='width:257px;height:50px' onclick='player.depth3.comboStart=-1'>Starting combo value: " + player.depth3.comboStart + "<br>[Click to set to -1]</button>"}],
+                                ["bh-milestone", ["-25", "depth3", ""]],
+                                ["bh-milestone", ["-50", "depth3", ""]],
+                                ["bh-milestone", ["-75", "depth3", ""]],
+                                ["bh-milestone", ["-100", "depth3", ""]],
+                                ["bh-milestone", ["-125", "depth3", ""]],
+                                ["bh-milestone", ["-150", "depth3", ""]],
+                                ["bh-milestone", ["-175", "depth3", ""]],
+                                ["bh-milestone", ["-200", "depth3", ""]],
+                                ["bh-milestone", ["-225", "depth3", ""]],
+                                ["bh-milestone", ["-250", "depth3", ""]],
+                            ], {width: "272px", height: "267px", background: "var(--miscButtonDisable)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["style-column", [
+                                ["raw-html", "<p style='line-height:1'>Clicking on a cleared milestone allows you to start at that milestones combo value.", {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                            ], {width: "272px", height: "50px", background: "var(--layerBackground)", borderRadius: "0 0 27px 0"}],
+                        ], {width: "272px", height: "420px", borderLeft: "3px solid var(--regBorder)"}],
+                    ], {width: "800px", height: "420px"}],
+                ],
+            },
+        },
+    },
     tabFormat: [
-        ["style-row", [
-            ["style-column", [
-                ["style-column", [
-                    ["raw-html", () => {return "You have " + formatShortWhole(player.depth3.vividUmbrite) + " vivid umbrite."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return "You have " + formatShortWhole(player.depth3.lustrousUmbrite) + " lustrous umbrite."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return "You have " + formatShortWhole(player.bh.darkEssence) + " dark essence."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
-                ], {width: "272px", height: "72px", background: "var(--miscButtonHover)", borderBottom: "3px solid var(--regBorder)"}],
-                ["theme-scroll-column", [
-                    ["blank", "2px"],
-                    ["row", [["upgrade", 1], ["upgrade", 2]]],
-                    ["row", [["upgrade", 3], ["upgrade", 4]]],
-                    ["row", [["upgrade", 5], ["upgrade", 6]]],
-                    ["row", [["buyable", 1], ["buyable", 2]]],
-                    ["row", [["buyable", 3], ["buyable", 4]]],
-                    ["blank", "2px"],
-                ], {width: "272px", height: "345px", background: "var(--miscButton)", borderRadius: "0 0 0 27px"}],
-            ], {width: "272px", height: "420px", borderRight: "3px solid var(--regBorder)"}],
-            ["style-column", [
-                ["style-column", [
-                    ["style-column", [
-                        ["raw-html", "Depth 3", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
-                    ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "10px"}],
-                    ["clickable", "enter"],
-                ], {width: "250px", height: "147px", background: "var(--miscButtonDisable)", borderBottom: "3px solid var(--regBorder)"}],
-                ["top-column", [
-                    ["blank", "10px"],
-                    ["style-column", [
-                        ["raw-html", "Properties", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
-                    ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "10px"}],
-                    ["raw-html", () => {return Decimal.sub(1.015, player.bh.comboScalingReduction).gt(1) ? "<u>Combo Scaling" : ""}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return Decimal.sub(1.015, player.bh.comboScalingReduction).gt(1) ? formatSimple(Decimal.sub(1.015, player.bh.comboScalingReduction).max(1).sub(1).mul(100)) + "% starting at 100" : ""}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                ], {width: "250px", height: "197px", background: "var(--layerBackground)"}],
-                ["style-row", [
-                    ["layer-proxy", ["bh", [
-                        ["row", [["clickable", "Auto-Enter"], ["blank", ["10px", "10px"]], ["clickable", "Auto-Exit"]]],
-                    ]]],
-                ], {width: "250px", height: "70px", background: "var(--miscButtonDisable)", borderTop: "3px solid var(--regBorder)"}],
-            ], {width: "250px", height: "420px"}],
-            ["style-column", [
-                ["top-column", [
-                    ["style-column", [
-                        ["raw-html", () => {return "Highest Combo: " + formatWhole(player.depth3.highestCombo.min(250)) + "/" + BHS["depth3"].comboLimit}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
-                    ], {width: "225px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "2px"}],
-                    ["top-column", [
-                        ["raw-html", () => {return "Boosts singularity points by x" + formatSimple(player.depth3.comboEffect)}, {color: "var(--textColor)", fontSize: "11px", fontFamily: "monospace"}],
-                    ], {width: "272px", height: "25px"}],
-                    ["top-column", [
-                        ["blank", "4px"],
-                        ["raw-html", () => {return "Milestones increase skill points by +" + formatSimple(player.depth3.milestoneEffect)}, {color: "var(--textColor)", fontSize: "11px", fontFamily: "monospace"}],
-                    ], {width: "272px", height: "30px", background: "var(--layerBackground)", borderTop: "3px solid var(--regBorder)"}],
-                ], {width: "272px", height: "97px", background: "var(--miscButtonHover)", borderBottom: "3px solid var(--regBorder)"}],
-                ["theme-scroll-column", [
-                    ["hoverless-clickable", "neg"],
-                    ["style-column", [
-                        ["raw-html", () => {return "<button class='bhMilestoneButton  base' style='width:257px;height:50px' onclick='player.depth3.comboStart=0'>Starting combo value: " + player.depth3.comboStart + "<br>[Click to set to 0]</button>"}],
-                        ["bh-milestone", [25, "depth3", ""]],
-                        ["bh-milestone", [50, "depth3", ""]],
-                        ["bh-milestone", [75, "depth3", ""]],
-                        ["bh-milestone", [100, "depth3", ""]],
-                        ["bh-milestone", [125, "depth3", ""]],
-                        ["bh-milestone", [150, "depth3", ""]],
-                        ["bh-milestone", [175, "depth3", ""]],
-                        ["bh-milestone", [200, "depth3", ""]],
-                        ["bh-milestone", [225, "depth3", ""]],
-                        ["bh-milestone", [250, "depth3", ""]],
-                    ], () => {return !player.depth3.negToggle ? {} : {display: "none !important"}}],
-                    ["style-column", [
-                        ["raw-html", () => {return "<button class='bhMilestoneButton base' style='width:257px;height:50px' onclick='player.depth3.comboStart=-1'>Starting combo value: " + player.depth3.comboStart + "<br>[Click to set to -1]</button>"}],
-                        ["bh-milestone", ["-25", "depth3", ""]],
-                        ["bh-milestone", ["-50", "depth3", ""]],
-                        ["bh-milestone", ["-75", "depth3", ""]],
-                        ["bh-milestone", ["-100", "depth3", ""]],
-                        ["bh-milestone", ["-125", "depth3", ""]],
-                        ["bh-milestone", ["-150", "depth3", ""]],
-                        ["bh-milestone", ["-175", "depth3", ""]],
-                        ["bh-milestone", ["-200", "depth3", ""]],
-                        ["bh-milestone", ["-225", "depth3", ""]],
-                        ["bh-milestone", ["-250", "depth3", ""]],
-                    ], () => {return player.depth3.negToggle ? {} : {display: "none !important"}}],
-                ], {width: "272px", height: "267px", background: "var(--miscButton)", borderBottom: "3px solid var(--regBorder)"}],
-                ["style-column", [
-                    ["raw-html", "<p style='line-height:1'>Clicking on a cleared milestone allows you to start at that milestones combo value.", {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
-                ], {width: "272px", height: "50px", background: "var(--miscButtonHover)", borderRadius: "0 0 27px 0"}],
-            ], {width: "272px", height: "420px", borderLeft: "3px solid var(--regBorder)"}],
-        ], {width: "800px", height: "420px"}],
+        ["buttonless-microtabs", "stuff", {borderWidth: "0"}],
     ],
     layerShown() {return player.startedGame && player.depth1.milestone[25] > 0},
 })
@@ -902,7 +983,7 @@ BHC.greaterNu = {
     },
     actions: {
         0: {
-            name: "Mini-Earthquake",
+            name: "Earth Tremor",
             instant: true,
             type: "damage",
             target: "all",
@@ -977,6 +1058,7 @@ BHC.greaterEnas = {
     health: new Decimal(500),
     damage: new Decimal(5),
     regen: new Decimal(3),
+    negMult: new Decimal(5.2),
     actions: {
         0: {
             name: "Quick Shot",
@@ -993,7 +1075,7 @@ BHC.greaterEnas = {
             constantType: "effect",
             constantTarget: "allPlayer",
             effects: {
-                "regenAdd": new Decimal(-1), // Add to regen stat
+                "regenAdd"() {return player.bh.celestialite.damage.div(-5)}, // Add to regen stat
             },
             cooldown: new Decimal(Infinity),
         },
@@ -1018,6 +1100,7 @@ BHC.greaterPente = {
     health: new Decimal(750),
     damage: new Decimal(15),
     regen: new Decimal(5),
+    negMult: new Decimal(3.6),
     actions: {
         0: {
             name: "Chop",
@@ -1060,6 +1143,7 @@ BHC.greaterDeka = {
     },
     health: new Decimal(1000),
     damage: new Decimal(15),
+    negMult: new Decimal(2.8),
     attributes: {
         "stealthy": new Decimal(0.2), // Resistance DMG Mult
     },
@@ -1104,6 +1188,7 @@ BHC.greaterHekaton = {
     },
     health: new Decimal(1000),
     damage: new Decimal(5),
+    negMult: new Decimal(2.4),
     attributes: {
         "rebound": new Decimal(0.05), // Resistance DMG Mult
     },
@@ -1154,6 +1239,7 @@ BHC.greaterKhilioi = {
     },
     health: new Decimal(500),
     damage: new Decimal(25),
+    negMult: new Decimal(2.2),
     attributes: {
         "air": new Decimal(0.2), // Resistance DMG Mult
         "warded": new Decimal(0.2), // Resistance DMG Mult
@@ -1209,6 +1295,7 @@ BHC.greaterMyrioi = {
     health: new Decimal(1250),
     damage: new Decimal(10),
     regen: new Decimal(2),
+    negMult: new Decimal(2),
     attributes: {
         "air": new Decimal(0.5), // Resistance DMG Mult
         "warded": new Decimal(0.5), // Resistance DMG Mult
@@ -1250,7 +1337,7 @@ BHC.greaterMyrioi = {
             constantType: "effect",
             constantTarget: "allPlayer",
             effects: {
-                "regenAdd": new Decimal(-1), // Add to regen stat
+                "regenAdd"() {return player.bh.celestialite.damage.div(-5)}, // Add to regen stat
             },
             cooldown: new Decimal(Infinity),
         },

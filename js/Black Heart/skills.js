@@ -168,8 +168,37 @@ BHA.general_poisonNeedle = {
     cooldown: new Decimal(10),
     cooldownCap: new Decimal(2),
 }
+BHA.general_rest = {
+    name: "Rest",
+    description(char) {
+        let effect = new Decimal(10).add(player.bh.skillData["general_rest"].level.mul(2))
+        if (player.alephsChamber.milestone[25] >= 2) effect = effect.mul(Decimal.div(char.potency.add(100), 100))
+        return "Soft-stun yourself for 10 seconds. While stunned, boost your regen by x" + formatSimple(effect)
+    },
+    passiveText() {return "+" + formatSimple(player.bh.skillData["general_rest"].maxLevel.div(40), 2) + " RGN"},
+    char: "general",
+    spCost: new Decimal(16),
+    curCostBase: new Decimal(5000),
+    curCostScale: new Decimal(5),
+    currency: "dimUmbrite",
+    unlocked() {return hasUpgrade("depth1", 102)},
 
-//Rest: Character is unavailable to perform actions for 20 seconds but regen is boosted by x4
+    instant: true,
+    type: "none",
+    target: "self",
+    stun() {return ["soft", new Decimal(10)]},
+
+    active: true,
+    constantType: "effect",
+    constantTarget: "self",
+    effects: {
+        "regenMult"(char) {return Decimal.add(10, player.bh.skillData["general_rest"].level.mul(2))}, // Multiplicative Effect
+    },
+    cooldown: new Decimal(30),
+    cooldownCap: new Decimal(5),
+    duration: new Decimal(10),
+}
+
 // Skill that disables regen but increases damage.
 
 // Kres Skills

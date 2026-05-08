@@ -95,11 +95,11 @@ const UPGRADE_POOL = [
         effect(arena) { arena.upgradeEffects.gemGain *= 1.1; }
     },
     {
-        name: "Bullet Size Up",
-        description: "+10% bullet size",
+        name() {if (player.ir.shipType != 3 && player.ir.shipType != 7) {return "Bullet Size Up"} else {return "Max HP Up"}},
+        description() {if (player.ir.shipType != 3 && player.ir.shipType != 7) {return "+10% bullet size"} else {return "+10% max HP"}},
         rarity: "rare",
         color: "#4c8cff",
-        effect(arena) { arena.upgradeEffects.bulletSize += 0.1; }
+        effect(arena) { if (player.ir.shipType != 3 && player.ir.shipType != 7) {arena.upgradeEffects.bulletSize += 0.1} else {arena.upgradeEffects.maxHp *= 1.1;setTimeout(() => {player.ir.shipHealth = player.ir.shipHealth.mul(1.1)}, 100)}; }
     },
     // Epic
     {
@@ -765,7 +765,7 @@ class SpaceArena {
                 wanderSpeed: 2,
                 wanderChange: 0.15,
                 bulletSpeed: 6,
-                bulletCooldown: 120, // shoots every 2 seconds (at 60fps)
+                bulletCooldown: 100, // shoots every 1.66 seconds (at 60fps)
                 burstCount: 1,
                 burstInterval: 1,
                 rockDrop: [20, 30],
@@ -782,6 +782,40 @@ class SpaceArena {
                     ctx.fillStyle = "#221";
                     ctx.textAlign = "center";
                     ctx.fillText("ι", enemy.x, enemy.y + 6);
+                    ctx.restore();
+                }
+            },
+            kappaShip: {
+                name: "Kappa",
+                radius: 32,
+                color: "#7fffd4",
+                healthMin: 650,
+                healthMax: 750,
+                damage: 8,
+                speed: 1.2,
+                wanderSpeed: 1.2,
+                wanderChange: 0.02,
+                bulletSpeed: 8,
+                spinTimer: 180,
+                spinCooldown: 240, // 4 seconds between spins (at 60fps)
+                burstCount: 1,
+                burstInterval: 1,
+                rockDrop: [25, 35],
+                xpDrop: [28, 38],
+                draw: (ctx, enemy) => {
+                    ctx.save();
+                    ctx.translate(enemy.x, enemy.y);
+                    ctx.rotate(enemy.angle);
+                    ctx.beginPath();
+                    ctx.arc(0, 0, enemy.radius, 0, 2 * Math.PI);
+                    ctx.fillStyle = enemy.color;
+                    ctx.shadowColor = "#cfe";
+                    if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
+                    ctx.fill();
+                    ctx.font = "bold 36px monospace";
+                    ctx.fillStyle = "#021";
+                    ctx.textAlign = "center";
+                    ctx.fillText("κ", 0, 9);
                     ctx.restore();
                 }
             },
@@ -989,7 +1023,7 @@ class SpaceArena {
             bulletSize: 1,
             hpRegen: 0,
             damageReduction: 1,
-            maxHp: 0,
+            maxHp: 1,
             moveSpeed: 0,
             lootGain: 1,
             gemGain: 1,
@@ -1433,6 +1467,12 @@ class SpaceArena {
         if (typeName === "etaShip") {
             enemy.shootCooldown = type.bulletCooldown || 120;
         }
+        if (typeName === "kappaShip") {
+            enemy.spinTimer = 0
+            enemy.bulletTimer = 0
+            enemy.angle = 0
+            enemy.spinCooldown = this.enemyTypes.kappaShip.spinCooldown || 120
+        }
 
         if (player.tab == "ir" && player.ir.battleLevel.gte(17)) {
             enemy.health = enemy.health * Decimal.pow(1.1, player.ir.battleLevel.sub(16)).toNumber()
@@ -1639,7 +1679,7 @@ class SpaceArena {
             // gem chance for hard-mode enemies Delta/Epsilon/Zeta/Eta (3%)
             if (["deltaShip", "epsilonShip", "zetaShip", "etaShip", "thetaShip", "iotaShip"].includes(enemy.type)) {
                 let chance = 0.03
-                if (["thetaShip", "iotaShip"].includes(enemy.type)) chance = 0.05
+                if (["thetaShip", "iotaShip", "kappaShip"].includes(enemy.type)) chance = 0.05
                 chance = chance * this.upgradeEffects.gemGain * this.resourceMult
                 let guarantee = 0
                 if (chance >= 1) {
@@ -1688,8 +1728,8 @@ class SpaceArena {
         // Health regen
         if (this.upgradeEffects.hpRegen > 0) {
             player.ir.shipHealth = player.ir.shipHealth.add(this.upgradeEffects.hpRegen);
-            if (player.ir.shipHealth.gt(player.ir.shipHealthMax.add(this.upgradeEffects.maxHp))) {
-                player.ir.shipHealth = player.ir.shipHealthMax.add(this.upgradeEffects.maxHp);
+            if (player.ir.shipHealth.gt(player.ir.shipHealthMax)) {
+                player.ir.shipHealth = player.ir.shipHealthMax;
             }
         }
 
@@ -2105,7 +2145,7 @@ class SpaceArena {
             }
         }
 
-        // Asteroid spawning (disabled in hard mode or while boss active)
+        // Asteroid spawning (disabled while boss active)
         if (!this.bossActive) {
             this.asteroidSpawnTimer++;
             if (this.asteroidSpawnTimer > 60) {
@@ -2113,10 +2153,16 @@ class SpaceArena {
                 if (this.difficulty < 2) {
                     if (Math.random() < 0.3) this.spawnAsteroid("default", 2);
                     else this.spawnAsteroid("default", 1);
+                } else if (this.difficulty < 3) {
+                    if (Math.random() < 0.05) this.spawnAsteroid("metal", 2);
+                    else if (Math.random() < 0.15) this.spawnAsteroid("default", 3);
+                    else if (Math.random() < 0.4) this.spawnAsteroid("default", 2);
+                    else this.spawnAsteroid("default", 1);
                 } else {
                     if (Math.random() < 0.05) this.spawnAsteroid("metal", 2);
                     else if (Math.random() < 0.15) this.spawnAsteroid("default", 3);
                     else if (Math.random() < 0.4) this.spawnAsteroid("default", 2);
+                    else if (Math.random() < 0.5) this.spawnAsteroid("metal", 1);
                     else this.spawnAsteroid("default", 1);
                 }
             }
@@ -2134,7 +2180,7 @@ class SpaceArena {
             if (aliveEnemies < maxEnemies && this.enemySpawnCooldown <= 0) {
                 let possibleTypes = ["alphaShip", "betaShip", "gammaShip"];
                 if (this.difficulty >= 1) possibleTypes = possibleTypes.concat(["deltaShip", "epsilonShip", "zetaShip", "etaShip"]);
-                if (this.difficulty >= 2) possibleTypes = possibleTypes.concat(["thetaShip", "iotaShip"]);
+                if (this.difficulty >= 2) possibleTypes = possibleTypes.concat(["thetaShip", "iotaShip", "kappaShip"]);
                 let typeToSpawn = possibleTypes[getRandomInt(possibleTypes.length)];
                 this.spawnEnemy(typeToSpawn);
                 this.enemySpawnCooldown = this.enemySpawnCooldownMax;
@@ -2865,8 +2911,8 @@ class SpaceArena {
 
             // Generic wander updates
             if (!enemy.wanderAngle) enemy.wanderAngle = Math.random() * Math.PI * 2;
-                // --- UFO Miniboss behavior ---
-                if (enemy.type === "ufoBoss") {
+            // --- UFO Miniboss behavior ---
+            if (enemy.type === "ufoBoss") {
                     // Hovering: maintain an orbit distance ~220 from player
                     let dx = this.ship.x - enemy.x;
                     let dy = this.ship.y - enemy.y;
@@ -2979,7 +3025,6 @@ class SpaceArena {
                     continue;
             }
             // --- Alpha Ship behavior ---
-            
             if (enemy.type === "alphaShip") {
                 if (!enemy.wanderTimer || enemy.wanderTimer <= 0) {
                     enemy.wanderTimer = getRandomInt(60) + 60;
@@ -3478,6 +3523,73 @@ class SpaceArena {
                     enemy.burstCount--;
                 }
             }
+
+            // --- Kappa Ship behavior: Wanders around, stops, and spins bullets ---
+            if (enemy.type === "kappaShip") {
+                if (!enemy.wanderTimer || enemy.wanderTimer <= 0) {
+                    enemy.wanderTimer = getRandomInt(80) + 60;
+                    enemy.wanderAngle += (Math.random() - 0.5) * enemy.wanderChange * Math.PI * 2;
+                }
+                enemy.wanderTimer--;
+
+                enemy.vx = Math.cos(enemy.wanderAngle) * enemy.wanderSpeed;
+                enemy.vy = Math.sin(enemy.wanderAngle) * enemy.wanderSpeed;
+                if (enemy.spinTimer <= 0) {
+                    enemy.x += enemy.vx;
+                    enemy.y += enemy.vy;
+                }
+
+                // Keep inside arena
+                if (enemy.x < enemy.radius) {
+                    enemy.x = enemy.radius;
+                    enemy.wanderAngle = Math.PI - enemy.wanderAngle;
+                }
+                if (enemy.x > this.width - enemy.radius) {
+                    enemy.x = this.width - enemy.radius;
+                    enemy.wanderAngle = Math.PI - enemy.wanderAngle;
+                }
+                if (enemy.y < enemy.radius) {
+                    enemy.y = enemy.radius;
+                    enemy.wanderAngle = -enemy.wanderAngle;
+                }
+                if (enemy.y > this.height - enemy.radius) {
+                    enemy.y = this.height - enemy.radius;
+                    enemy.wanderAngle = -enemy.wanderAngle;
+                }
+
+                enemy.spinCooldown--;
+                // Spin: rotate and spray bullets in 360 over time
+                if (enemy.spinCooldown <= 0) {
+                    enemy.spinCooldown = 999999
+                    enemy.spinTimer = this.enemyTypes.kappaShip.spinTimer
+                }
+                if (enemy.spinTimer > 0) {
+                    // spawn a handful of bullets at current spinAngle
+                    if (enemy.bulletTimer <= 0) {
+                        let ang = enemy.angle;
+                        let spd = this.enemyTypes.kappaShip.bulletSpeed;
+                        this.bullets.push({
+                            x: enemy.x + Math.cos(ang) * (enemy.radius - 6),
+                            y: enemy.y + Math.sin(ang) * (enemy.radius - 6),
+                            vx: Math.cos(ang) * spd,
+                            vy: Math.sin(ang) * spd,
+                            life: 90,
+                            damage: this.enemyTypes.kappaShip.damage,
+                            pierce: 0,
+                            piercedAsteroids: [],
+                            fromEnemy: true
+                        });
+                        enemy.bulletTimer = 3 // Time between bullets (in 60fps)
+                        enemy.angle += 0.25;
+                    }
+                    enemy.bulletTimer--;
+                    // advance spin angle to rotate spray
+                    enemy.spinTimer--;
+                    if (enemy.spinTimer <= 0) {
+                        enemy.spinCooldown = this.enemyTypes.kappaShip.spinCooldown;
+                    }
+                }
+            }
         }
 
         // Gamma Ship trail damage
@@ -3678,7 +3790,7 @@ class SpaceArena {
                 let enemyDmg = (typeof enemyDmgRaw === 'number') ? enemyDmgRaw : (enemyDmgRaw.toNumber ? enemyDmgRaw.toNumber() : Number(enemyDmgRaw));
                 if (Number.isNaN(enemyDmg) || !isFinite(enemyDmg) || enemyDmg < 0) enemyDmg = 0;
                 if (player.ir.shipType != 3 && player.ir.shipType != 7) enemy.health -= enemyDmg * 0.05;
-                if (player.ir.shipType == 3 || player.ir.shipType == 7) enemy.health -= enemyDmg * 2.5 * arena.upgradeEffects.bulletSize;
+                if (player.ir.shipType == 3 || player.ir.shipType == 7) enemy.health -= enemyDmg * 2.5;
 
                 let shipDmgRaw = enemy.damage * this.upgradeEffects.damageReduction * 6;
                 if (player.tab == "ir" && player.ir.battleLevel.gte(17)) {
@@ -3730,7 +3842,6 @@ class SpaceArena {
             if (dist < asteroid.size + shipRadius) {
                 let aDmgRaw = this.ship.collisionDamage * this.upgradeEffects.attackDamage;
                 let aDmg = (typeof aDmgRaw === 'number') ? aDmgRaw : (aDmgRaw.toNumber ? aDmgRaw.toNumber() : Number(aDmgRaw));
-                if (player.ir.shipType == 3 || player.ir.shipType == 7) aDmg = aDmg * arena.upgradeEffects.bulletSize
                 asteroid.health -= aDmg;
                 let dmg = (asteroid.unit > 1 ? Math.pow(asteroid.unit-1, 2)*3 : 2);
                 if (asteroid.type == "metal") dmg = Decimal.pow(dmg, 1.3)
@@ -4772,7 +4883,7 @@ class SpaceArena {
                 this.ctx.font = "bold 32px monospace";
                 this.ctx.fillStyle = upg.color;
                 this.ctx.textAlign = "center";
-                this.ctx.fillText(upg.name, boxX + boxWidth / 2, boxY + 50);
+                this.ctx.fillText(run(upg.name, upg), boxX + boxWidth / 2, boxY + 50);
 
                 let rarityText = upg.rarity.charAt(0).toUpperCase() + upg.rarity.slice(1);
                 this.ctx.font = "italic 24px monospace";
@@ -4781,7 +4892,7 @@ class SpaceArena {
 
                 this.ctx.font = "22px monospace";
                 this.ctx.fillStyle = "#fff";
-                let desc = upg.description;
+                let desc = run(upg.description, upg);
                 let descLines = [];
                 let words = desc.split(" ");
                 let line = "";

@@ -959,10 +959,12 @@ addLayer("co", {
         player.oi.linkingPower = [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0)]
         player.oi.linkingPowerPerSecond = [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0)]
 
-        player.oi.protoMemories = new Decimal(0)
-        player.oi.protoMemorySeconds = new Decimal(0)
-        player.oi.protoMemorySecondsToGet = new Decimal(0)
-        player.oi.protoMemoriesPerSecond = new Decimal(0)
+        if (!hasUpgrade("depth2", 103)) {
+            player.oi.protoMemories = new Decimal(0)
+            player.oi.protoMemorySeconds = new Decimal(0)
+            player.oi.protoMemorySecondsToGet = new Decimal(0)
+            player.oi.protoMemoriesPerSecond = new Decimal(0)
+        }
 
         for (let i = 11; i < 20; i++) {
             player.oi.buyables[i] = new Decimal(0)

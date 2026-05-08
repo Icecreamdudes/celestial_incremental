@@ -214,6 +214,7 @@
 
         player.wel.lightWellSpeed = new Decimal(1)
         player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(player.wel.fountains[4].completionEffect)
+        player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(player.pri.fountains[5].completionEffect)
         if (hasMilestone("prj", 105)) player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(player.prj.milestone105Effect)
 
         // WELLS
@@ -229,6 +230,7 @@
 
         for (let i = 1; i < Object.keys(player.wel.modules).length + 1; i++) {
             player.wel.modules[i].time = player.wel.modules[i].time.add(player.wel.modules[i].timeSpeed.mul(delta))
+            player.wel.light = player.wel.light.add(layers.wel.clickables[i].lightGain().mul(new Decimal(1).sub(player.wel.modules[i].time.div(player.wel.modules[i].maxTime).min(1))).div(player.wel.modules[i].maxTime).mul(player.wel.modules[i].timeSpeed).mul(delta).mul(2))
 
             // CYCLE SPEED
             player.wel.modules[i].timeSpeed = player.wel.lightWellSpeed
@@ -238,7 +240,7 @@
             player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(player.wel.fountains[3].completionEffect)
             player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(player.pri.fountains[2].completionEffect)
             if (hasMilestone("prj", 102)) player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(2);
-            if (hasUpgrade("wel", 32) && player.wel.modules[i].completions < player.wel.modules[i].bestCompletions) {
+            if (hasUpgrade("wel", 32) && player.wel.modules[i].completions.lt(player.wel.modules[i].bestCompletions)) {
                 // MAKE THIS MORE DYNAMIC EVENTUALLY
                 player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(3);
             }
@@ -599,7 +601,7 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Halve light fountain durations until your highest and increase focus cap by +1.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Light wells produce while cooling down at a diminishing rate and increase focus cap by +1.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><br><h3>Req: 3 Spiral ↻</h3>"
                 }
@@ -670,14 +672,14 @@
             },
         },
         33: {
-            unlocked() { return hasUpgrade("wel", 31) },
-            condition() { return player.pri.blueshifts.gte(4) },
+            unlocked() { return hasUpgrade("wel", 31) && hasUpgrade("wel", 32) },
+            condition() { return player.pri.bestPrisms.gte(1e3) },
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Prism fountain speed slightly boosts project speed.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "e.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
-                    s += "???</h2><br><br><h3>Req: 60 total Prism Fountain cycles</h3>"
+                    s += "???</h2><br><br><h3>Req: 1,000 Prisms</h3>"
                 }
                 return s
             },
@@ -708,7 +710,7 @@
             },
         },
         34: {
-            unlocked() { return hasUpgrade("wel", 31) },
+            unlocked() { return hasUpgrade("wel", 33) },
             condition() { return false },
             fullDisplay() {
                 let s = "<h2>"
@@ -1009,7 +1011,7 @@
             },
             lightGain() {
                 let gain = player.wel.lightGain
-                gain = gain.mul(2e3)
+                gain = gain.mul(0)
                 return gain.floor()
             },
             onHold() { clickClickable(this.layer, this.id) },

@@ -991,7 +991,7 @@
                 let s = completions
                 
                 if (completions.gte(5)) {
-                    s = s.add(completions.sub(5).pow(1.5)).mul(10)
+                    s = s.add(completions.sub(5).pow(1.5)).mul(5)
                 }
 
                 return s.floor()
@@ -1053,7 +1053,7 @@
                 if (completions.eq(0)) return new Decimal(0);
                 let s = new Decimal(10)
 
-                s = s.mul(completions.sub(1).pow_base(completions.add(1).div(5).ceil().pow_base(5)))
+                s = s.mul(completions.sub(1).pow_base(completions.add(1).div(5).ceil().pow_base(10)))
 
                 return s
             },
@@ -1195,7 +1195,6 @@
                         ["blank", "25px"],
                         ["raw-html", "You have a total of <h3>" + formatWhole(player.prj.completedProjects) + "</h3> project cycles.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "25px"],
-                        //["raw-html", "<small>Stat multipliers from project milestones are only active when their second requirement is fulfilled.</small>", {color: "#bfbfbf", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", "<small>Unlocks from project milestones are permanent!</small>", {color: "#bfbfbf", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "15px"],
                         ["style-row", [
@@ -1205,9 +1204,9 @@
                         ]],
                         ["blank", "6px", {width: "6px"}],
                         ["style-row", [
-                            hasUpgrade("wel", 31) ? makeProject(3) : null,
+                            hasUpgrade("wel", 34) ? makeProject(3) : null,
                             ["blank", "6px", {width: "6px"}],
-                            hasUpgrade("wel", 34) ? makeProject(4) : null,
+                            hasUpgrade("wel", 44) ? makeProject(4) : null,
                         ]],
                         ["blank", "12px"],
                         ["clickable", 101],

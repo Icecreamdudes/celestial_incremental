@@ -257,7 +257,7 @@
         },
         14: {
             costBase() { return new Decimal(1e20) },
-            costGrowth() { return new Decimal(100) },
+            costGrowth() { return new Decimal(40) },
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.dt.timeEnergy},
             pay(amt) { player.dt.timeEnergy = this.currency().sub(amt) },
@@ -265,7 +265,7 @@
                 let eff = getBuyableAmount(this.layer, this.id).pow(0.5).pow_base(2)
                 return eff
             },
-            unlocked() { return hasMilestone("prj", 206) },
+            unlocked() { return hasMilestone("prj", 106) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -293,13 +293,13 @@
             style: { width: '275px', height: '150px', color: "black", }
         },
         15: {
-            costBase() { return new Decimal(1e30) },
-            costGrowth() { return new Decimal(1e3) },
+            costBase() { return new Decimal(1e25) },
+            costGrowth() { return new Decimal(60) },
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.dt.timeEnergy},
             pay(amt) { player.dt.timeEnergy = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).div(10).add(1) },
-            unlocked() { return hasMilestone("prj", 206) },
+            unlocked() { return hasMilestone("prj", 106) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -327,8 +327,8 @@
             style: { width: '275px', height: '150px', color: "black", }
         },
         16: {
-            costBase() { return new Decimal(1e40) },
-            costGrowth() { return new Decimal(1e4) },
+            costBase() { return new Decimal(1e30) },
+            costGrowth() { return new Decimal(1e2) },
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.dt.timeEnergy},
             pay(amt) { player.dt.timeEnergy = this.currency().sub(amt) },
@@ -336,7 +336,7 @@
                 let eff = getBuyableAmount(this.layer, this.id).pow(0.85).pow_base(1.25)
                 return eff
             },
-            unlocked() { return hasMilestone("prj", 206) },
+            unlocked() { return hasMilestone("prj", 106) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {

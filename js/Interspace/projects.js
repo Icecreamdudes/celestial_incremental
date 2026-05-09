@@ -106,7 +106,7 @@
         player.prj.projectSpeed = player.prj.projectSpeed.mul(player.prj.storedTimeCapsuleEffect)
         if (hasUpgrade("wel", 22)) player.prj.projectSpeed = player.prj.projectSpeed.mul(2);
 
-        player.prj.storedTimeCapsuleEffect = player.prj.storedTimeCapsules.add(1).log(10).add(1).pow(0.5).sub(1).pow_base(10).pow(2).sub(1).div(5).add(1)
+        player.prj.storedTimeCapsuleEffect = player.prj.storedTimeCapsules.add(1).log(10).add(1).pow(0.5).sub(1).pow_base(10).pow(2).sub(1).div(2).add(1)
 
         player.prj.completedProjects = new Decimal(0)
 
@@ -154,7 +154,11 @@
             },
             style() {
                 let look = {width: "238px", minHeight: "45px", borderRadius: "0px"}
-                if (this.canClick()) {
+                if (player.prj.modules[this.id].focused) {
+                    look.backgroundColor = "#663366"
+                    look.border = "3px solid #994d86"
+                    look.color = "white"
+                } else if (this.canClick()) {
                     look.backgroundColor = "#ffa8d3"
                     look.border = "3px solid #0000003f"
                     look.color = "black"
@@ -181,7 +185,11 @@
             },
             style() {
                 let look = {width: "238px", minHeight: "45px", borderRadius: "0px"}
-                if (this.canClick()) {
+                if (player.prj.modules[this.id].focused) {
+                    look.backgroundColor = "#663366"
+                    look.border = "3px solid #994d86"
+                    look.color = "white"
+                } else if (this.canClick()) {
                     look.backgroundColor = "#ffa8d3"
                     look.border = "3px solid #0000003f"
                     look.color = "black"
@@ -208,7 +216,11 @@
             },
             style() {
                 let look = {width: "238px", minHeight: "45px", borderRadius: "0px"}
-                if (this.canClick()) {
+                if (player.prj.modules[this.id].focused) {
+                    look.backgroundColor = "#663366"
+                    look.border = "3px solid #994d86"
+                    look.color = "white"
+                } else if (this.canClick()) {
                     look.backgroundColor = "#ffa8d3"
                     look.border = "3px solid #0000003f"
                     look.color = "black"
@@ -235,7 +247,11 @@
             },
             style() {
                 let look = {width: "238px", minHeight: "45px", borderRadius: "0px"}
-                if (this.canClick()) {
+                if (player.prj.modules[this.id].focused) {
+                    look.backgroundColor = "#663366"
+                    look.border = "3px solid #994d86"
+                    look.color = "white"
+                } else if (this.canClick()) {
                     look.backgroundColor = "#ffa8d3"
                     look.border = "3px solid #0000003f"
                     look.color = "black"
@@ -540,7 +556,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Improve the Spiral and Arrow prismatic fountains.</small>" },
+            effectDescription() { return "<small>Improve the spiral and arrow prismatic fountains. x2 Prism gain.</small>" },
             cycleReq() { return new Decimal(3) },
             projectId() { return 2 },
             unlocked() { return true },
@@ -561,7 +577,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock auto-prismatic. x2 prism gain.</small>" },
+            effectDescription() { return "<small>Unlock auto-prismatic. Uncap light fountain bulk. Replace arrow effect.</small>" },
             cycleReq() { return new Decimal(4) },
             projectId() { return 2 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) },
@@ -582,7 +598,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Increase focus cap by 1 and x2 stored time capsules.</small>" },
+            effectDescription() { return "<small>Increase focus cap by +1 and x2 stored time capsules.</small>" },
             cycleReq() { return new Decimal(5) },
             projectId() { return 2 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) },
@@ -603,7 +619,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>x1.25 passive light well progress gain per blueshift. (x1.00)</small>" },
+            effectDescription() { return "<small>Each blueshift boosts prisms by +x0.2 per project cycle.</small>" },
             cycleReq() { return new Decimal(6) },
             projectId() { return 2 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) },
@@ -646,7 +662,7 @@
             onComplete() {
                 doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Light fountains no longer consume light.</small>" },
+            effectDescription() { return "<small>Extend the pyramid.</small>" },
             cycleReq() { return new Decimal(2) },
             projectId() { return 3 },
             unlocked() { return true },
@@ -667,7 +683,7 @@
             onComplete() {
                 doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Extend the pyramid.</small>" },
+            effectDescription() { return "<small>Each project cycle after 2 boosts the blueshift base by +0.5.</small>" },
             cycleReq() { return new Decimal(3) },
             projectId() { return 3 },
             unlocked() { return true },
@@ -709,7 +725,7 @@
             onComplete() {
                 doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>x2 stored time capsules.</small>" },
+            effectDescription() { return "<small>Keep δ ↻ on prismatic and blueshift. +0.5 to light upgrade 1.4 base.</small>" },
             cycleReq() { return new Decimal(5) },
             projectId() { return 3 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) },
@@ -836,7 +852,7 @@
             onComplete() {
                 doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Light fountains no longer require light to progress.</small>" },
+            effectDescription() { return "<small>Unlock the starry obelisk.</small>" },
             cycleReq() { return new Decimal(5) },
             projectId() { return 4 },
             unlocked() { return true },
@@ -1040,7 +1056,7 @@
             },
             getTimeCapsuleReq() {
                 let completions = player.prj.modules[2].completions
-                let s = completions.add(1).pow(2).mul(5)
+                let s = completions.add(1).mul(completions).mul(2.5)
                 
                 if (completions.gte(5)) {
                     s = s.add(completions.sub(5).pow(1.5)).mul(10)
@@ -1069,7 +1085,7 @@
         3: {
             title: "Blueshift",
             completionEffectStat: "Punchcard XP",
-            statReqName: "δ ↻",
+            statReqName: "Blueshifts",
             statReqLocation() {return player.wel.modules[4]},
             statReqInternalName: "completions",
             getCompletionEffect() {
@@ -1081,7 +1097,7 @@
             },
             getTimeReq() {
                 let completions = player.prj.modules[3].completions
-                let s = new Decimal(1e5)
+                let s = new Decimal(1e4)
 
                 s = s.mul(completions.add(1).mul(completions.pow(2)).div(2).add(1))
                 if (completions.gte(5)) {
@@ -1092,7 +1108,7 @@
             },
             getTimeCapsuleReq() {
                 let completions = player.prj.modules[3].completions
-                let s = completions.add(1).pow(3).mul(300)
+                let s = completions.add(1).pow(3).mul(100)
                 
                 if (completions.gte(5)) {
                     s = s.add(completions.sub(5).pow(3)).mul(10)
@@ -1103,9 +1119,9 @@
             getStatReq() {
                 let completions = player.prj.modules[3].completions
                 if (completions.eq(0)) return new Decimal(0);
-                let s = new Decimal(1e10)
+                let s = new Decimal(2)
 
-                s = s.mul(completions.sub(1).pow_base(completions.add(1).div(5).ceil().pow(1.25).pow_base(50)))
+                s = s.mul(completions).mul(completions.div(5).floor().add(1))
 
                 return s
             },
@@ -1144,7 +1160,7 @@
             },
             getTimeCapsuleReq() {
                 let completions = player.prj.modules[4].completions
-                let s = completions.add(1).pow(4).mul(1e5)
+                let s = completions.add(1).pow(4).mul(4e3)
                 
                 if (completions.gte(5)) {
                     s = s.add(completions.sub(5).pow(4)).mul(10)

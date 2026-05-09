@@ -181,8 +181,11 @@
         // LIGHT
 
         player.wel.lightWellCycleEffectSoftcap = new Decimal(0.5)
-        if (hasUpgrade("wel", 23)) player.wel.lightWellCycleEffectSoftcap = player.wel.lightWellCycleEffectSoftcap.add(player.prj.totalProjectLevels.mul(0.02).min(0.5));
-
+        if (hasUpgrade("wel", 23)) player.wel.lightWellCycleEffectSoftcap = player.wel.lightWellCycleEffectSoftcap
+        .add(player.prj.modules[1].completions.mul(0.02).min(0.1))
+        .add(player.prj.modules[2].completions.mul(0.02).min(0.1))
+        .add(player.prj.modules[3].completions.mul(0.02).min(0.1))
+        .add(player.prj.modules[4].completions.mul(0.02).min(0.1));
 
         player.wel.lightGain = new Decimal(1)
         player.wel.lightGain = player.wel.lightGain.mul(player.wel.fountains[1].completionEffect)
@@ -234,6 +237,7 @@
 
             // CYCLE SPEED
             player.wel.modules[i].timeSpeed = player.wel.lightWellSpeed
+            if (player.wel.modules[i].timeSpeed.gte(player.wel.modules[i].maxTime.mul(10))) player.wel.modules[i].timeSpeed = player.wel.modules[i].maxTime.mul(10);
 
             // CYCLE GAIN
             player.wel.modules[i].completionsGain = new Decimal(1)
@@ -677,13 +681,13 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "e.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Project speed affects prism wells at a rate equal to the light well effect softcap.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><br><h3>Req: 1,000 Prisms</h3>"
                 }
                 return s
             },
-            cost: new Decimal(1e38),
+            cost: new Decimal(1e26),
             currencyLocation() { return player.wel },
             currencyDisplayName: "Light",
             currencyInternalName: "light",
@@ -711,17 +715,17 @@
         },
         34: {
             unlocked() { return hasUpgrade("wel", 33) },
-            condition() { return false },
+            condition() { return player.wel.modules[1].maxTime.div(player.wel.modules[1].timeSpeed).lte(0.1) },
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Unlock the fourth project and double light well speed.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Unlock the third project and double light well cycles.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
-                    s += "???</h2><br><br><h3>Req: 2 δ Blueshifts</h3>"
+                    s += "???</h2><br><br><h3>Req: 0.1s Light Well cycle timer</h3>"
                 }
                 return s
             },
-            cost: new Decimal(1e50),
+            cost: new Decimal(1e29),
             currencyLocation() { return player.wel },
             currencyDisplayName: "Light",
             currencyInternalName: "light",
@@ -749,17 +753,17 @@
         },
         41: {
             unlocked() { return hasUpgrade("wel", 34) },
-            condition() { return player.wel.modules[1].maxTime.div(player.wel.modules[1].timeSpeed).lte(0.1) },
+            condition() { return false },
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Unlock the third project.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Double light gain every blueshift.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
-                    s += "???</h2><br><br><h3>Req: 0.1s Light Well cycle timer</h3>"
+                    s += "???</h2><br><br><h3>Req: 1 Dodecahedron ↻</h3>"
                 }
                 return s
             },
-            cost: new Decimal(1e24),
+            cost: new Decimal(1e49),
             currencyLocation() { return player.wel },
             currencyDisplayName: "Light",
             currencyInternalName: "light",
@@ -787,13 +791,13 @@
         },
         42: {
             unlocked() { return hasUpgrade("wel", 34) },
-            condition() { return player.wel.modules[3].completions.gte(1e9) },
+            condition() { return false },
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
                     s += "Unlock more starlight buyables.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
-                    s += "???</h2><br><br><h3>Req: Time Capsule Project level 15</h3>"
+                    s += "???</h2><br><br><h3>Req: 12 Dodecahedron ↻</h3>"
                 }
                 return s
             },
@@ -829,7 +833,7 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Triple ALL well speeds.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Triple light well speed.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><br><h3>Req: Prism Well γ unlocked</h3>"
                 }
@@ -867,7 +871,7 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "(COMING SOON)</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Unlock the fourth project.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><br><h3>Req: 60 total Project levels</h3>"
                 }

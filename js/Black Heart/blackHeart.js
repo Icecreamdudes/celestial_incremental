@@ -122,6 +122,7 @@ BH_CURRENCY = {
     "vividUmbrite": ["Vivid Umbrite", "depth3"],
     "lustrousUmbrite": ["Lustrous Umbrite", "depth3"],
     "darkEssence": ["Dark Essence", "bh"],
+    "darkEther": ["Dark Ether", "bh"],
     "eclipseShards": ["Eclipse Shards", "sma"],
     "spaceRock": ["Space Rocks", "ir"],
     "spaceGem": ["Space Gems", "ir"],
@@ -579,7 +580,7 @@ addLayer("bh", {
 
         // General Currencies
         darkEssence: new Decimal(0),
-        //darkEther
+        darkEther: new Decimal(0),
     }},
     automate() {},
     nodeStyle() {

@@ -178,9 +178,9 @@ BHA.general_rest = {
     passiveText() {return "+" + formatSimple(player.bh.skillData["general_rest"].maxLevel.div(40), 2) + " RGN"},
     char: "general",
     spCost: new Decimal(16),
-    curCostBase: new Decimal(5000),
-    curCostScale: new Decimal(5),
-    currency: "dimUmbrite",
+    curCostBase: new Decimal(10),
+    curCostScale: new Decimal(2),
+    currency: "darkEther",
     unlocked() {return hasUpgrade("depth1", 102)},
 
     instant: true,

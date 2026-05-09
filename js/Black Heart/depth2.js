@@ -12,6 +12,7 @@ addLayer("depth2", {
 
         faintUmbrite: new Decimal(0),
         clearUmbrite: new Decimal(0),
+        hazyUmbrite: new Decimal(0),
         depth2Mult: new Decimal(1),
 
         highestCombo: new Decimal(0),
@@ -522,9 +523,12 @@ addLayer("depth2", {
                     ["style-row", [
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", () => {return "You have " + formatShortWhole(player.depth2.faintUmbrite) + " faint umbrite."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
-                                ["raw-html", () => {return "You have " + formatShortWhole(player.depth2.clearUmbrite) + " clear umbrite."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
-                                ["raw-html", () => {return "You have " + formatShortWhole(player.bh.darkEssence) + " dark essence."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                                ["raw-html", () => {
+                                    return "<p>You have " + formatShortWhole(player.depth2.faintUmbrite) + " faint umbrite.<br>\n\
+                                        You have " + formatShortWhole(player.depth2.clearUmbrite) + " clear umbrite.<br>\n\
+                                        You have " + formatShortWhole(player.depth2.hazyUmbrite) + " hazy umbrite.<br>\n\
+                                        You have " + formatShortWhole(player.bh.darkEther) + " dark ether.</p>"
+                                }, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
                             ], {width: "272px", height: "72px", background: "var(--layerBackground)", borderBottom: "3px solid var(--regBorder)"}],
                             ["theme-scroll-column", [
                                 ["blank", "2px"],
@@ -1151,9 +1155,16 @@ BHC.minorEnas = {
     },
     reward() {
         let gain = {}
-        gain.faintUmbrite = new Decimal(40)
-        gain.clearUmbrite = new Decimal(12)
-        gain.darkEssence = new Decimal(5)
+        if (player.bh.combo.gte(0)) {
+            gain.faintUmbrite = new Decimal(40)
+            gain.clearUmbrite = new Decimal(12)
+            gain.darkEssence = new Decimal(5)
+        } else {
+            gain.faintUmbrite = new Decimal(100)
+            gain.clearUmbrite = new Decimal(30)
+            if (Math.random() < 0.3) gain.hazyUmbrite = new Decimal(1)
+            if (Math.random() < 0.15) gain.darkEther = new Decimal(1)
+        }
         return gain
     },
 }
@@ -1192,9 +1203,16 @@ BHC.minorPente = {
     },
     reward() {
         let gain = {}
-        gain.faintUmbrite = new Decimal(80)
-        gain.clearUmbrite = new Decimal(25)
-        gain.darkEssence = new Decimal(8)
+        if (player.bh.combo.gte(0)) {
+            gain.faintUmbrite = new Decimal(80)
+            gain.clearUmbrite = new Decimal(25)
+            gain.darkEssence = new Decimal(8)
+        } else {
+            gain.faintUmbrite = new Decimal(150)
+            gain.clearUmbrite = new Decimal(45)
+            if (Math.random() < 0.4) gain.hazyUmbrite = new Decimal(1)
+            if (Math.random() < 0.2) gain.darkEther = new Decimal(1)
+        }
         return gain
     },
 }
@@ -1234,9 +1252,16 @@ BHC.minorDeka = {
     },
     reward() {
         let gain = {}
-        gain.faintUmbrite = new Decimal(125)
-        gain.clearUmbrite = new Decimal(50)
-        gain.darkEssence = new Decimal(12)
+        if (player.bh.combo.gte(0)) {
+            gain.faintUmbrite = new Decimal(125)
+            gain.clearUmbrite = new Decimal(50)
+            gain.darkEssence = new Decimal(12)
+        } else {
+            gain.faintUmbrite = new Decimal(175)
+            gain.clearUmbrite = new Decimal(70)
+            if (Math.random() < 0.5) gain.hazyUmbrite = new Decimal(1)
+            if (Math.random() < 0.25) gain.darkEther = new Decimal(1)
+        }
         return gain
     },
 }
@@ -1278,9 +1303,16 @@ BHC.minorHekaton = {
     },
     reward() {
         let gain = {}
-        gain.faintUmbrite = new Decimal(200)
-        gain.clearUmbrite = new Decimal(60)
-        gain.darkEssence = new Decimal(18)
+        if (player.bh.combo.gte(0)) {
+            gain.faintUmbrite = new Decimal(200)
+            gain.clearUmbrite = new Decimal(60)
+            gain.darkEssence = new Decimal(18)
+        } else {
+            gain.faintUmbrite = new Decimal(240)
+            gain.clearUmbrite = new Decimal(70)
+            if (Math.random() < 0.3) gain.hazyUmbrite = new Decimal(2)
+            if (Math.random() < 0.3) gain.darkEther = new Decimal(1)
+        }
         return gain
     },
 }
@@ -1328,9 +1360,16 @@ BHC.minorKhilioi = {
     },
     reward() {
         let gain = {}
-        gain.faintUmbrite = new Decimal(300)
-        gain.clearUmbrite = new Decimal(100)
-        gain.darkEssence = new Decimal(40)
+        if (player.bh.combo.gte(0)) {
+            gain.faintUmbrite = new Decimal(300)
+            gain.clearUmbrite = new Decimal(100)
+            gain.darkEssence = new Decimal(40)
+        } else {
+            gain.faintUmbrite = new Decimal(330)
+            gain.clearUmbrite = new Decimal(110)
+            if (Math.random() < 0.4) gain.hazyUmbrite = new Decimal(2)
+            if (Math.random() < 0.35) gain.darkEther = new Decimal(1)
+        }
         return gain
     },
 }
@@ -1378,9 +1417,16 @@ BHC.minorMyrioi = {
     },
     reward() {
         let gain = {}
-        gain.faintUmbrite = new Decimal(600)
-        gain.clearUmbrite = new Decimal(200)
-        gain.darkEssence = new Decimal(80)
+        if (player.bh.combo.gte(0)) {
+            gain.faintUmbrite = new Decimal(600)
+            gain.clearUmbrite = new Decimal(200)
+            gain.darkEssence = new Decimal(80)
+        } else {
+            gain.faintUmbrite = new Decimal(600)
+            gain.clearUmbrite = new Decimal(200)
+            if (Math.random() < 0.5) gain.hazyUmbrite = new Decimal(2)
+            if (Math.random() < 0.4) gain.darkEther = new Decimal(1)
+        }
         return gain
     },
 }

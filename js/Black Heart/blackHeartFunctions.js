@@ -610,6 +610,11 @@ function celestialiteReward(gain) {
         player.depth1.dimUmbrite = player.depth1.dimUmbrite.add(gain.dimUmbrite)
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.dimUmbrite) + " dim umbrite! (You have " + formatWhole(player.depth1.dimUmbrite) + ")")
     }
+    if (gain.murkyUmbrite) {
+        gain.murkyUmbrite = gain.murkyUmbrite.mul(player.depth1.depth1Mult).mul(generalMult).floor()
+        player.depth1.murkyUmbrite = player.depth1.murkyUmbrite.add(gain.murkyUmbrite)
+        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.murkyUmbrite) + " murky umbrite! (You have " + formatWhole(player.depth1.murkyUmbrite) + ")")
+    }
     if (gain.faintUmbrite) {
         gain.faintUmbrite = gain.faintUmbrite.mul(player.depth2.depth2Mult).mul(generalMult).floor()
         player.depth2.faintUmbrite = player.depth2.faintUmbrite.add(gain.faintUmbrite)
@@ -619,6 +624,11 @@ function celestialiteReward(gain) {
         gain.clearUmbrite = gain.clearUmbrite.mul(player.depth2.depth2Mult).mul(generalMult).floor()
         player.depth2.clearUmbrite = player.depth2.clearUmbrite.add(gain.clearUmbrite)
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.clearUmbrite) + " clear umbrite! (You have " + formatWhole(player.depth2.clearUmbrite) + ")")
+    }
+    if (gain.hazyUmbrite) {
+        gain.hazyUmbrite = gain.hazyUmbrite.mul(player.depth2.depth2Mult).mul(generalMult).floor()
+        player.depth2.hazyUmbrite = player.depth2.hazyUmbrite.add(gain.hazyUmbrite)
+        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.hazyUmbrite) + " hazy umbrite! (You have " + formatWhole(player.depth2.hazyUmbrite) + ")")
     }
     if (gain.vividUmbrite) {
         gain.vividUmbrite = gain.vividUmbrite.mul(player.depth3.depth3Mult).mul(generalMult).floor()
@@ -634,6 +644,11 @@ function celestialiteReward(gain) {
         gain.darkEssence = gain.darkEssence.mul(buyableEffect("sme", 135)).mul(generalMult).floor()
         player.bh.darkEssence = player.bh.darkEssence.add(gain.darkEssence)
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.darkEssence) + " dark essence! (You have " + formatWhole(player.bh.darkEssence) + ")")
+    }
+    if (gain.darkEther) {
+        gain.darkEther = gain.darkEther.mul(generalMult).floor()
+        player.bh.darkEther = player.bh.darkEther.add(gain.darkEther)
+        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.darkEther) + " dark ether! (You have " + formatWhole(player.bh.darkEther) + ")")
     }
     if (gain.temporalDust) {
         gain.temporalDust = gain.temporalDust.mul(player.stagnantSynestia.temporalMult).mul(generalMult).floor()

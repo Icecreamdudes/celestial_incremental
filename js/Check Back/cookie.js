@@ -577,7 +577,7 @@ addLayer("ep2", {
             img: "resources/currencies/dimensional_power.png",
             unlocked() {return getBuyableAmount("ep2", 18).gte(15)},
             title: "<span style='color:#3A812Bcc'>Dimensional Fuel</span>",
-            description() {return "Dimension Power buildings reduce star exploration time.<br>Currently: /" + formatSimple(upgradeEffect(this.layer, this.id), 2)},
+            description() {return "Dimension Power buildings reduce SE time.<br>Currently: /" + formatSimple(upgradeEffect(this.layer, this.id), 2)},
             cost: new Decimal(5e24),
             currencyLocation() { return player.ep2 },
             currencyDisplayName: "Cookies",

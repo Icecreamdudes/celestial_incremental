@@ -12,6 +12,7 @@ addLayer("depth1", {
 
         gloomingUmbrite: new Decimal(0),
         dimUmbrite: new Decimal(0),
+        murkyUmbrite: new Decimal(0),
         depth1Mult: new Decimal(1),
 
         highestCombo: new Decimal(0),
@@ -491,9 +492,12 @@ addLayer("depth1", {
                     ["style-row", [
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", () => {return "You have " + formatShortWhole(player.depth1.gloomingUmbrite) + " glooming umbrite."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
-                                ["raw-html", () => {return "You have " + formatShortWhole(player.depth1.dimUmbrite) + " dim umbrite."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
-                                ["raw-html", () => {return "You have " + formatShortWhole(player.bh.darkEssence) + " dark essence."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                                ["raw-html", () => {
+                                    return "<p>You have " + formatShortWhole(player.depth1.gloomingUmbrite) + " glooming umbrite.<br>\n\
+                                        You have " + formatShortWhole(player.depth1.dimUmbrite) + " dim umbrite.<br>\n\
+                                        You have " + formatShortWhole(player.depth1.murkyUmbrite) + " murky umbrite.<br>\n\
+                                        You have " + formatShortWhole(player.bh.darkEther) + " dark ether.</p>"
+                                }, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
                             ], {width: "272px", height: "72px", background: "var(--layerBackground)", borderBottom: "3px solid var(--regBorder)"}],
                             ["theme-scroll-column", [
                                 ["blank", "2px"],
@@ -999,9 +1003,16 @@ BHC.lesserEnas = {
     },
     reward() {
         let gain = {}
-        gain.gloomingUmbrite = new Decimal(30)
-        gain.dimUmbrite = new Decimal(10)
-        gain.darkEssence = new Decimal(3)
+        if (player.bh.combo.gte(0)) {
+            gain.gloomingUmbrite = new Decimal(30)
+            gain.dimUmbrite = new Decimal(10)
+            gain.darkEssence = new Decimal(3)
+        } else {
+            gain.gloomingUmbrite = new Decimal(80)
+            gain.dimUmbrite = new Decimal(25)
+            if (Math.random() < 0.3) gain.murkyUmbrite = new Decimal(1)
+            if (Math.random() < 0.1) gain.darkEther = new Decimal(1)
+        }
         return gain
     },
 }
@@ -1038,9 +1049,16 @@ BHC.lesserPente = {
     },
     reward() {
         let gain = {}
-        gain.gloomingUmbrite = new Decimal(60)
-        gain.dimUmbrite = new Decimal(20)
-        gain.darkEssence = new Decimal(6)
+        if (player.bh.combo.gte(0)) {
+            gain.gloomingUmbrite = new Decimal(60)
+            gain.dimUmbrite = new Decimal(20)
+            gain.darkEssence = new Decimal(6)
+        } else {
+            gain.gloomingUmbrite = new Decimal(110)
+            gain.dimUmbrite = new Decimal(35)
+            if (Math.random() < 0.4) gain.murkyUmbrite = new Decimal(1)
+            if (Math.random() < 0.125) gain.darkEther = new Decimal(1)
+        }
         return gain
     },
 }
@@ -1078,9 +1096,16 @@ BHC.lesserDeka = {
     },
     reward() {
         let gain = {}
-        gain.gloomingUmbrite = new Decimal(100)
-        gain.dimUmbrite = new Decimal(35)
-        gain.darkEssence = new Decimal(10)
+        if (player.bh.combo.gte(0)) {
+            gain.gloomingUmbrite = new Decimal(100)
+            gain.dimUmbrite = new Decimal(35)
+            gain.darkEssence = new Decimal(10)
+        } else {
+            gain.gloomingUmbrite = new Decimal(140)
+            gain.dimUmbrite = new Decimal(50)
+            if (Math.random() < 0.5) gain.murkyUmbrite = new Decimal(1)
+            if (Math.random() < 0.15) gain.darkEther = new Decimal(1)
+        }
         return gain
     },
 }
@@ -1119,9 +1144,16 @@ BHC.lesserHekaton = {
     },
     reward() {
         let gain = {}
-        gain.gloomingUmbrite = new Decimal(150)
-        gain.dimUmbrite = new Decimal(50)
-        gain.darkEssence = new Decimal(15)
+        if (player.bh.combo.gte(0)) {
+            gain.gloomingUmbrite = new Decimal(150)
+            gain.dimUmbrite = new Decimal(50)
+            gain.darkEssence = new Decimal(15)
+        } else {
+            gain.gloomingUmbrite = new Decimal(180)
+            gain.dimUmbrite = new Decimal(60)
+            if (Math.random() < 0.3) gain.murkyUmbrite = new Decimal(2)
+            if (Math.random() < 0.175) gain.darkEther = new Decimal(1)
+        }
         return gain
     },
 }
@@ -1168,9 +1200,16 @@ BHC.lesserKhilioi = {
     },
     reward() {
         let gain = {}
-        gain.gloomingUmbrite = new Decimal(250)
-        gain.dimUmbrite = new Decimal(80)
-        gain.darkEssence = new Decimal(30)
+        if (player.bh.combo.gte(0)) {
+            gain.gloomingUmbrite = new Decimal(250)
+            gain.dimUmbrite = new Decimal(80)
+            gain.darkEssence = new Decimal(30)
+        } else {
+            gain.gloomingUmbrite = new Decimal(275)
+            gain.dimUmbrite = new Decimal(90)
+            if (Math.random() < 0.4) gain.murkyUmbrite = new Decimal(2)
+            if (Math.random() < 0.2) gain.darkEther = new Decimal(1)
+        }
         return gain
     },
 }
@@ -1216,9 +1255,16 @@ BHC.lesserMyrioi = {
     },
     reward() {
         let gain = {}
-        gain.gloomingUmbrite = new Decimal(500)
-        gain.dimUmbrite = new Decimal(175)
-        gain.darkEssence = new Decimal(60)
+        if (player.bh.combo.gte(0)) {
+            gain.gloomingUmbrite = new Decimal(500)
+            gain.dimUmbrite = new Decimal(175)
+            gain.darkEssence = new Decimal(60)
+        } else {
+            gain.gloomingUmbrite = new Decimal(500)
+            gain.dimUmbrite = new Decimal(175)
+            if (Math.random() < 0.5) gain.murkyUmbrite = new Decimal(2)
+            if (Math.random() < 0.25) gain.darkEther = new Decimal(1)
+        }
         return gain
     },
 }
@@ -1260,7 +1306,8 @@ BHC.lesserDyo = {
         let gain = {}
         gain.gloomingUmbrite = new Decimal(300)
         gain.dimUmbrite = new Decimal(100)
-        gain.darkEssence = new Decimal(35)
+        if (Math.random() < 0.3) gain.murkyUmbrite = new Decimal(2)
+        if (Math.random() < 0.2) gain.darkEther = new Decimal(1)
         return gain
     },
 }
@@ -1300,7 +1347,8 @@ BHC.lesserTria = {
         let gain = {}
         gain.gloomingUmbrite = new Decimal(350)
         gain.dimUmbrite = new Decimal(125)
-        gain.darkEssence = new Decimal(40)
+        if (Math.random() < 0.35) gain.murkyUmbrite = new Decimal(2)
+        if (Math.random() < 0.215) gain.darkEther = new Decimal(1)
         return gain
     },
 }
@@ -1341,7 +1389,8 @@ BHC.lesserTessera = {
         let gain = {}
         gain.gloomingUmbrite = new Decimal(400)
         gain.dimUmbrite = new Decimal(150)
-        gain.darkEssence = new Decimal(45)
+        if (Math.random() < 0.4) gain.murkyUmbrite = new Decimal(2)
+        if (Math.random() < 0.23) gain.darkEther = new Decimal(1)
         return gain
     },
 }
@@ -1389,7 +1438,8 @@ BHC.lesserExi = {
         let gain = {}
         gain.gloomingUmbrite = new Decimal(450)
         gain.dimUmbrite = new Decimal(160)
-        gain.darkEssence = new Decimal(50)
+        if (Math.random() < 0.45) gain.murkyUmbrite = new Decimal(2)
+        if (Math.random() < 0.245) gain.darkEther = new Decimal(1)
         return gain
     },
 }
@@ -1442,7 +1492,8 @@ BHC.lesserEpta = {
         let gain = {}
         gain.gloomingUmbrite = new Decimal(500)
         gain.dimUmbrite = new Decimal(175)
-        gain.darkEssence = new Decimal(60)
+        if (Math.random() < 0.5) gain.murkyUmbrite = new Decimal(2)
+        if (Math.random() < 0.26) gain.darkEther = new Decimal(1)
         return gain
     },
 }
@@ -1494,7 +1545,8 @@ BHC.lesserOkto = {
         let gain = {}
         gain.gloomingUmbrite = new Decimal(600)
         gain.dimUmbrite = new Decimal(200)
-        gain.darkEssence = new Decimal(75)
+        if (Math.random() < 0.55) gain.murkyUmbrite = new Decimal(2)
+        if (Math.random() < 0.275) gain.darkEther = new Decimal(1)
         return gain
     },
 }
@@ -1547,7 +1599,8 @@ BHC.lesserEnnea = {
         let gain = {}
         gain.gloomingUmbrite = new Decimal(750)
         gain.dimUmbrite = new Decimal(250)
-        gain.darkEssence = new Decimal(100)
+        if (Math.random() < 0.3) gain.murkyUmbrite = new Decimal(4)
+        if (Math.random() < 0.3) gain.darkEther = new Decimal(1)
         return gain
     },
 }
@@ -1610,7 +1663,8 @@ BHC.lesserYi = {
         let gain = {}
         gain.gloomingUmbrite = new Decimal(2000)
         gain.dimUmbrite = new Decimal(750)
-        gain.darkEssence = new Decimal(250)
+        gain.murkyUmbrite = new Decimal(10)
+        gain.darkEther = new Decimal(3)
         return gain
     },
 }
@@ -1678,7 +1732,8 @@ BHC.lesserEr = {
         let gain = {}
         gain.gloomingUmbrite = new Decimal(3000)
         gain.dimUmbrite = new Decimal(1125)
-        gain.darkEssence = new Decimal(375)
+        gain.murkyUmbrite = new Decimal(15)
+        gain.darkEther = new Decimal(4)
         return gain
     },
 }
@@ -1734,7 +1789,8 @@ BHC.lesserSan = {
         let gain = {}
         gain.gloomingUmbrite = new Decimal(4000)
         gain.dimUmbrite = new Decimal(1500)
-        gain.darkEssence = new Decimal(500)
+        gain.murkyUmbrite = new Decimal(20)
+        gain.darkEther = new Decimal(5)
         return gain
     },
 }
@@ -1802,7 +1858,8 @@ BHC.lesserSi = {
         let gain = {}
         gain.gloomingUmbrite = new Decimal(5000)
         gain.dimUmbrite = new Decimal(1875)
-        gain.darkEssence = new Decimal(625)
+        gain.murkyUmbrite = new Decimal(25)
+        gain.darkEther = new Decimal(6)
         return gain
     },
 }
@@ -1872,7 +1929,8 @@ BHC.lesserWu = {
         let gain = {}
         gain.gloomingUmbrite = new Decimal(6000)
         gain.dimUmbrite = new Decimal(2250)
-        gain.darkEssence = new Decimal(750)
+        gain.murkyUmbrite = new Decimal(30)
+        gain.darkEther = new Decimal(7)
         return gain
     },
 }
@@ -1932,7 +1990,8 @@ BHC.lesserLiu = {
         let gain = {}
         gain.gloomingUmbrite = new Decimal(7000)
         gain.dimUmbrite = new Decimal(2625)
-        gain.darkEssence = new Decimal(875)
+        gain.murkyUmbrite = new Decimal(35)
+        gain.darkEther = new Decimal(8)
         return gain
     },
 }

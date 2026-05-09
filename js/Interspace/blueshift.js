@@ -12,21 +12,49 @@
                 amount: new Decimal(0),
                 cycleGainMul: new Decimal(1),
                 cycleAddedSpeedDiv: new Decimal(1),
+                shiftBase: new Decimal(10),
             },
             2: {
                 amount: new Decimal(0),
                 cycleGainMul: new Decimal(1),
                 cycleAddedSpeedDiv: new Decimal(1),
+                shiftBase: new Decimal(30),
             },
             3: {
                 amount: new Decimal(0),
                 cycleGainMul: new Decimal(1),
                 cycleAddedSpeedDiv: new Decimal(1),
+                shiftBase: new Decimal(120),
             },
             4: {
                 amount: new Decimal(0),
                 cycleGainMul: new Decimal(1),
                 cycleAddedSpeedDiv: new Decimal(1),
+                shiftBase: new Decimal(600),
+            },
+            5: {
+                amount: new Decimal(0),
+                cycleGainMul: new Decimal(1),
+                cycleAddedSpeedDiv: new Decimal(1),
+                shiftBase: new Decimal(10),
+            },
+            6: {
+                amount: new Decimal(0),
+                cycleGainMul: new Decimal(1),
+                cycleAddedSpeedDiv: new Decimal(1),
+                shiftBase: new Decimal(20),
+            },
+            7: {
+                amount: new Decimal(0),
+                cycleGainMul: new Decimal(1),
+                cycleAddedSpeedDiv: new Decimal(1),
+                shiftBase: new Decimal(60),
+            },
+            8: {
+                amount: new Decimal(0),
+                cycleGainMul: new Decimal(1),
+                cycleAddedSpeedDiv: new Decimal(1),
+                shiftBase: new Decimal(240),
             },
         },
         blueshiftEffectBase: new Decimal(0),
@@ -44,22 +72,34 @@
     tooltip: "Blueshift",
     color: "#ffffd1",
     update(delta) {
-        player.blu.blueshiftEffectBase = new Decimal(2)
+        player.blu.blueshiftEffectBase = new Decimal(3)
         player.blu.blueshiftEffect = player.blu.totalBlueshifts.pow_base(player.blu.blueshiftEffectBase)
 
         // BLUESHIFTS
         
-        player.blu.blueshifts[1].cycleGainMul = player.blu.blueshifts[1].amount.pow_base(100)
-        player.blu.blueshifts[1].cycleAddedSpeedDiv = player.blu.blueshifts[1].amount.pow_base(100)
+        player.blu.blueshifts[1].cycleGainMul = player.blu.blueshifts[1].amount.pow_base(10)
+        player.blu.blueshifts[1].cycleAddedSpeedDiv = player.blu.blueshifts[1].amount.pow_base(10)
         
-        player.blu.blueshifts[2].cycleGainMul = player.blu.blueshifts[2].amount.pow_base(600)
-        player.blu.blueshifts[2].cycleAddedSpeedDiv = player.blu.blueshifts[2].amount.pow_base(600)
+        player.blu.blueshifts[2].cycleGainMul = player.blu.blueshifts[2].amount.pow_base(30)
+        player.blu.blueshifts[2].cycleAddedSpeedDiv = player.blu.blueshifts[2].amount.pow_base(30)
         
-        player.blu.blueshifts[3].cycleGainMul = player.blu.blueshifts[3].amount.pow_base(3000)
-        player.blu.blueshifts[3].cycleAddedSpeedDiv = player.blu.blueshifts[3].amount.pow_base(3000)
+        player.blu.blueshifts[3].cycleGainMul = player.blu.blueshifts[3].amount.pow_base(120)
+        player.blu.blueshifts[3].cycleAddedSpeedDiv = player.blu.blueshifts[3].amount.pow_base(120)
         
-        player.blu.blueshifts[4].cycleGainMul = player.blu.blueshifts[4].amount.pow_base(36000)
-        player.blu.blueshifts[4].cycleAddedSpeedDiv = player.blu.blueshifts[4].amount.pow_base(36000)
+        player.blu.blueshifts[4].cycleGainMul = player.blu.blueshifts[4].amount.pow_base(600)
+        player.blu.blueshifts[4].cycleAddedSpeedDiv = player.blu.blueshifts[4].amount.pow_base(600)
+        
+        player.blu.blueshifts[5].cycleGainMul = player.blu.blueshifts[5].amount.pow_base(5)
+        player.blu.blueshifts[5].cycleAddedSpeedDiv = player.blu.blueshifts[5].amount.pow_base(5)
+        
+        player.blu.blueshifts[6].cycleGainMul = player.blu.blueshifts[6].amount.pow_base(10)
+        player.blu.blueshifts[6].cycleAddedSpeedDiv = player.blu.blueshifts[6].amount.pow_base(10)
+        
+        player.blu.blueshifts[7].cycleGainMul = player.blu.blueshifts[7].amount.pow_base(30)
+        player.blu.blueshifts[7].cycleAddedSpeedDiv = player.blu.blueshifts[7].amount.pow_base(30)
+        
+        player.blu.blueshifts[8].cycleGainMul = player.blu.blueshifts[8].amount.pow_base(120)
+        player.blu.blueshifts[8].cycleAddedSpeedDiv = player.blu.blueshifts[8].amount.pow_base(120)
 
     },
     blueshiftReset(isRewarded, id) {
@@ -70,7 +110,7 @@
     clickables: {
         1001: {
             title() { return "<h3>Reset</h3> →" },
-            canClick() { return player.wel.light.gte(1e15)},
+            canClick() { return player.wel.modules[this.id-1000].maxTime.div(player.wel.modules[this.id-1000].timeSpeed).lte(0.1)},
             unlocked() { return true },
             onClick() {
             },
@@ -90,7 +130,7 @@
         },
         1002: {
             title() { return "<h3>Reset</h3> →" },
-            canClick() { return player.wel.light.gte(1e15)},
+            canClick() { return player.wel.modules[this.id-1000].maxTime.div(player.wel.modules[this.id-1000].timeSpeed).lte(0.1)},
             unlocked() { return true },
             onClick() {
             },
@@ -110,7 +150,7 @@
         },
         1003: {
             title() { return "<h3>Reset</h3> →" },
-            canClick() { return player.wel.light.gte(1e15)},
+            canClick() { return player.wel.modules[this.id-1000].maxTime.div(player.wel.modules[this.id-1000].timeSpeed).lte(0.1)},
             unlocked() { return true },
             onClick() {
             },
@@ -130,7 +170,7 @@
         },
         1004: {
             title() { return "<h3>Reset</h3> →" },
-            canClick() { return player.wel.light.gte(1e15)},
+            canClick() { return player.wel.modules[this.id-1000].maxTime.div(player.wel.modules[this.id-1000].timeSpeed).lte(0.1)},
             unlocked() { return true },
             onClick() {
             },
@@ -157,7 +197,7 @@
     infoboxes: {},
     microtabs: {
         stuff: {
-            "Reset": {
+            "Blueshifts": {
                 buttonStyle() { return { color: "white", borderRadius: "8px"} },
                 unlocked() { return true },
                 content() {
@@ -272,6 +312,13 @@
                     ]
                 }
             },
+            "Upgrades": {
+                buttonStyle() { return { color: "white", borderRadius: "8px"} },
+                unlocked() { return true },
+                content() {
+                    return []
+                }
+            }
         },
     },
     tabFormat: [

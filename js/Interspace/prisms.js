@@ -109,10 +109,10 @@
     tooltip: "Prismatic",
     color: "#d6ebff",
     update(delta) {
-        player.pri.prismsToGet = player.wel.light.add(1).log(10).sub(15).pow_base(1.41421356237).floor()
+        player.pri.prismsToGet = player.wel.light.add(1).log(10).sub(15).pow_base(1.5).floor()
         if (!hasMilestone("prj", 201)) player.pri.prismsToGet = player.pri.prismsToGet.min(1);
 
-        if (hasMilestone("pri", 203)) player.pri.prismsToGet = player.pri.prismsToGet.mul(2);
+        if (hasMilestone("prj", 203)) player.pri.prismsToGet = player.pri.prismsToGet.mul(2);
 
         if (player.pri.bestPrisms.lt(player.pri.prisms)) player.pri.bestPrisms = player.pri.prisms;
         
@@ -413,7 +413,7 @@
                 return true
             },
             getCompletionEffect() {
-                let completions = player.pri.fountains[1].completions.pow(0.9)
+                let completions = player.pri.fountains[1].completions.pow(0.75)
 
                 s = player.wel.light.add(1).log10().div(4).add(1).pow(completions).log(10).add(1).pow(0.5).sub(1).pow_base(10).sub(1).mul(3).add(1)
 
@@ -460,6 +460,7 @@
                 let completions = player.pri.fountains[2].completions
 
                 s = completions.add(1)
+                if (hasMilestone("prj", 203)) s = s.pow(1.5)
 
                 return s
             },
@@ -507,6 +508,7 @@
                 let completions = player.pri.fountains[3].completions
 
                 s = completions.add(1)
+                if (hasMilestone("prj", 203)) s = s.pow(1.5)
 
                 return s
             },
@@ -551,7 +553,7 @@
                 return player.pri.fountains[2].completions.gt(0) || player.pri.fountains[3].completions.gt(0)
             },
             getCompletionEffect() {
-                let completions = player.pri.fountains[4].completions.pow(0.9)
+                let completions = player.pri.fountains[4].completions.pow(0.75)
 
                 s = player.pri.prisms.add(1).log10().div(4).add(1).pow(completions).log(10).add(1).pow(0.5).sub(1).pow_base(10).sub(1).mul(4).add(1).pow(2)
 

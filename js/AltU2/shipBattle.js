@@ -3844,7 +3844,7 @@ class SpaceArena {
                 let aDmg = (typeof aDmgRaw === 'number') ? aDmgRaw : (aDmgRaw.toNumber ? aDmgRaw.toNumber() : Number(aDmgRaw));
                 asteroid.health -= aDmg;
                 let dmg = (asteroid.unit > 1 ? Math.pow(asteroid.unit-1, 2)*3 : 2);
-                if (asteroid.type == "metal") dmg = Decimal.pow(dmg, 1.3)
+                if (asteroid.type == "metal") dmg = Math.pow(dmg, 1.3)
                 dmg = dmg * this.upgradeEffects.damageReduction
                 if (player.tab == "ir" && player.ir.battleLevel.gte(17)) {
                     dmg = dmg * Decimal.pow(1.1, player.ir.battleLevel.sub(16)).toNumber()
@@ -3876,8 +3876,8 @@ class SpaceArena {
         // Asteroid splitting and removal
         this.asteroids = this.asteroids.filter(asteroid => {
             if (asteroid.health <= 0) {
-                let loot = Math.floor(Math.random() * (asteroid.unit+2)) + Decimal.pow(3, asteroid.unit-1);
-                if (asteroid.type == "metal") loot = Decimal.pow(loot, 1.3)
+                let loot = Math.floor(Math.random() * (asteroid.unit+2)) + Math.pow(3, asteroid.unit-1);
+                if (asteroid.type == "metal") loot = Math.pow(loot, 1.3)
                 loot = loot * this.upgradeEffects.lootGain * this.resourceMult
                 loot = loot * levelableEffect("pet", 502)[1]
                 loot = loot * levelableEffect("pu", 212)[1]
@@ -3887,14 +3887,15 @@ class SpaceArena {
                 player.ir.levelables[player.ir.shipType][1] = player.ir.levelables[player.ir.shipType][1].add(loot)
                 lootFlashPositions.push({ x: asteroid.x, y: asteroid.y, amount: loot, type: "rock" });
 
-                let xp = Math.floor((Decimal.pow(3, asteroid.unit)) * this.upgradeEffects.xpGain);
-                if (asteroid.type == "metal") xp = Decimal.pow(loot, 1.3)
+                let xp = Math.pow(3, asteroid.unit);
+                if (asteroid.type == "metal") xp = Math.pow(loot, 1.3)
+                xp = Math.floor(xp * this.upgradeEffects.xpGain)
                 xpOrbsToAdd.push({ x: asteroid.x, y: asteroid.y, amount: xp });
 
                 let random = Math.random();
                 
                 let chance = 0.005 * this.upgradeEffects.gemGain * this.resourceMult
-                if (asteroid.unit > 1) chance *= Decimal.pow(2, asteroid.unit-1)
+                if (asteroid.unit > 1) chance *= Math.pow(2, asteroid.unit-1)
                 if (asteroid.type == "metal") chance *= 1.5
                 if (hasUpgrade("ir", 104)) chance *= 2
                 let guarantee = 0

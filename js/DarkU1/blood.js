@@ -117,8 +117,10 @@
                 localStorage.setItem('arenaActive', 'true');
 
                 player.ir.shipHealth = player.ir.shipHealthMax
-                if (hasUpgrade("ir", 14)) arena.upgradeEffects.hpRegen += 0.5 / 60
-                arena.upgradeEffects.hpRegen += buyableEffect("bl", 13).sub(1).toNumber() / 60
+                let regen = 0
+                if (hasUpgrade("ir", 14)) regen += 0.5
+                regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
+                if (regen > 0) arena.upgradeEffects.hpRegen = regen / 60
 
                 arena.upgradeEffects.attackDamage *= levelableEffect("ir", player.ir.shipType)[2]
                 player.bl.noxFightActive = false
@@ -331,7 +333,7 @@
             purchaseLimit() { return new Decimal(50) },
             currency() { return player.bl.bloodStones},
             pay(amt) { player.bl.bloodStones = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).div(100).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(50).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -339,7 +341,7 @@
                 return "Blood Rejuvenation"
             },
             display() {
-                return "which are boosting ship regen by +" + formatShortSimple(tmp[this.layer].buyables[this.id].effect.sub(1), 2) + "\n\
+                return "which are boosting base ship regen AND perks by x" + formatShortSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood Stones"
             },
             buy(mult) {
@@ -365,7 +367,7 @@
             purchaseLimit() { return new Decimal(50) },
             currency() { return player.bl.bloodStones},
             pay(amt) { player.bl.bloodStones = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).div(200).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(100).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -373,7 +375,7 @@
                 return "Blood Alleviator"
             },
             display() {
-                return "which are reducing ship battle xp req by /" + formatSimple(tmp[this.layer].buyables[this.id].effect, 3) + "\n\
+                return "which are reducing ship battle xp req by /" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood Stones"
             },
             buy(mult) {
@@ -2044,7 +2046,7 @@ class BloodArena extends SpaceArena {
                             player.bl.noxDefeated = true;
                             let noxStone = 75
                             noxStone = noxStone * (this.upgradeEffects.lootGain || 1) * (this.resourceMult || 1)
-                            noxStone = noxStone * (buyableEffect("bl", 34).toNumber() || 1)
+                            noxStone = noxStone * (getBuyableAmount("bl", 34).div(100).add(1).toNumber() || 1)
                             noxStone = Math.max(0, Math.floor(noxStone))
                             try {
                                 if (player.bl && player.bl.bloodStones !== undefined && typeof player.bl.bloodStones.add === 'function') {
@@ -2117,7 +2119,7 @@ class BloodArena extends SpaceArena {
                     // apply loot multipliers similar to SpaceArena logic
                     try {
                         amt = amt * (this.upgradeEffects.lootGain || 1) * (this.resourceMult || 1)
-                        amt = amt * (buyableEffect("bl", 34).toNumber() || 1)
+                        amt = amt * (getBuyableAmount("bl", 34).div(100).add(1).toNumber() || 1)
                         amt = Math.max(0, Math.floor(amt))
                     } catch (e) {}
                     //try { amt = Math.max(0, Math.floor(amt * levelableEffect("pet", 502)[1])); } catch (e) {}

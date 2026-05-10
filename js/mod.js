@@ -819,6 +819,70 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.12.5 - Battle Bananza</h3><br>
+		Content:<br>
+			- Added ??? temple bestowal<br>
+			- Added negative depth 1<br>
+			- Added new tav's domain layer<br>
+			- Added new ship battle perks<br>
+			- Added new space battle asteroids<br>
+			- Added new space battle celestialites<br>
+			- Added blood gems to blood battle<br>
+			- Added 5 new buyables to blood layer<br>
+			- Added 2 new perks from beating Nox<br><br>
+		Minor Changes:<br>
+			- Added an auto-shoot feature to ship battles<br>
+			- Added a new singularity upgrade to keep more content on resets<br>
+			- Space exploration nodes now change their border color when maxed<br>
+			- Made giving up in black heart require pressing the button twice (aka, a confirm click)<br>
+			- Clarified the hex realm BI upgrade text<br>
+			- Clarified the text on the OTF Keeper<br>
+			- Added a disclaimer to checkback buyables that says that costs are based on total xp<br>
+			- Clarified that purity respec doesn't reset anything<br>
+			- Added a tooltip to the "Multiplied Miracles" purifier that reminds you what the two miracles buff<br>
+			- Singularity milestone 7 now autobuys rocket fuel upgrades<br>
+			- Added 2 new laboratory currencies that multiply the previous currencies<br>
+			- Added 5 new laboratory celestialites<br>
+			- Made golden cookies spawned during bullet hell attacks automatically collect themselves<br><br>
+		Balancing:<br>
+			- Ship battle softcap now scales enemy damage and rewards<br>
+			- Changed space battle cost balancing to account for the above change<br>
+			- Buffed stinger to deal more damage<br>
+			- Buffed base perk chance from 3% -> 5%<br>
+			- Buffed depth mileston effects (all end results are floored):<br>
+			Depth 2: milestone^1.1<br>
+			Depth 3: milestone^1.2<br>
+			Depth 4: milestone^1.3<br>
+			- Nerfed Major Mu's poison mist attack<br>
+			- Added a brief invincibility time at the start of bullet hell attacks<br>
+			- Reduced laboratory cooldown from 30m -> 20m<br>
+			- Added pet effect softcaps<br>
+			- Added a softcap to blood effect<br>
+			- Made the first DU1 point softcap start inflating after reaching /1e308<br>
+			- Nerfed the last charger milestone<br>
+			- Added a softcap to to time cube gain at 1e10,000 timecubes<br>
+			- Nerfed shard research 16 (for obvious reasons)<br><br>
+		Bug Fixes:<br>
+			- Fixed IP challenges not giving rewards on enter/exit if points are above infinity<br>
+			- Fixed ship battles sometimes not loading<br>
+			- Improved ship battle buttons (so they actually work somewhat)<br>
+			- Fixed movement sometimes "sticking" after perk screen<br>
+			- Fixed some star buyables crashing the game if you maxed them<br>
+			- Fixed typo in Iridite unlock text<br>
+			- Fixed repli-grass mult not showing enough digits<br>
+			- Fixed the slot roll cutscene and some cutscene typos<br>
+			- Fixed normality buyables showing the purchased amount twice<br>
+			- Fixed respeccing power not giving power if above the requirement<br>
+			- Fixed number formatting in the current effect of nest upgrade 5:2<br>
+			- Fixed typo in paradox pylon factor effects<br>
+			- Fixed IP Challenge jukebox song<br>
+			- Hopefully fixed the dice space easter egg<br>
+			- Fixed being able to gain one extra highest combo<br>
+			- Fixed bug where first celestialite spawned can start with the wrong amount of health<br>
+			- Fixed some celestialite attacks not working correctly<br>
+			- Fixed the formatting of some punchcard effects<br>
+			- Fixed Spissitude not functioning<br>
+			- Fixed being able to spin the wheel of fortune while it is already spinning<br><br>
 	<h3>v1.12.2 - Hive QoL Stuff</h3><br>
 		Content:<br>
 			- Added hive achievements<br>

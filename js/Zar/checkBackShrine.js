@@ -144,8 +144,10 @@
                 localStorage.setItem('arenaActive', 'true');
 
                 player.ir.shipHealth = player.ir.shipHealthMax
-                if (hasUpgrade("ir", 14)) arena.upgradeEffects.hpRegen += 0.5 / 60
-                arena.upgradeEffects.hpRegen += buyableEffect("bl", 13).sub(1).toNumber() / 60
+                let regen = 0
+                if (hasUpgrade("ir", 14)) regen += 0.5
+                regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
+                if (regen > 0) arena.upgradeEffects.hpRegen = regen / 60
 
                 arena.upgradeEffects.attackDamage *= levelableEffect("ir", player.ir.shipType)[2]
                 arena.upgradeEffects.moveSpeed += 4

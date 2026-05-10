@@ -39,10 +39,18 @@ const UPGRADE_POOL = [
     // Uncommon
     {
         name: "Health Regen",
-        description: "+0.5 HP/sec",
+        description() {
+            let regen = 0.5
+            regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
+            return "+" + formatSimple(regen, 2) + " HP/sec"
+        },
         rarity: "uncommon",
         color: "#4cff4c",
-        effect(arena) { arena.upgradeEffects.hpRegen += 0.5 / 60; }
+        effect(arena) {
+            let regen = 0.5
+            regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
+            arena.upgradeEffects.hpRegen += regen / 60;
+        }
     },
     {
         name: "XP Gain Up",
@@ -125,10 +133,18 @@ const UPGRADE_POOL = [
     },
     {
         name: "Epic Defense",
-        description: "Take 15% less damage, +0.5 HP/sec",
+        description() {
+            let regen = 0.5
+            regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
+            return "Take 15% less damage, +" + formatSimple(regen, 2) + " HP/sec"
+        },
         rarity: "epic",
         color: "#b44cff",
-        effect(arena) { arena.upgradeEffects.damageReduction *= 0.85; arena.upgradeEffects.hpRegen += 0.5 / 60; }
+        effect(arena) {
+            let regen = 0.5
+            regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
+            arena.upgradeEffects.damageReduction *= 0.85; arena.upgradeEffects.hpRegen += regen / 60;
+        }
     },
 ];
 
@@ -3881,7 +3897,7 @@ class SpaceArena {
                 loot = loot * this.upgradeEffects.lootGain * this.resourceMult
                 loot = loot * levelableEffect("pet", 502)[1]
                 loot = loot * levelableEffect("pu", 212)[1]
-                loot = loot * (buyableEffect("bl", 34).toNumber() || 1)
+                loot = loot * (getBuyableAmount("bl", 34).div(100).add(1).toNumber() || 1)
                 loot = Math.max(0, Math.floor(loot))
                 player.ir.spaceRock = player.ir.spaceRock.add(loot);
                 player.ir.levelables[player.ir.shipType][1] = player.ir.levelables[player.ir.shipType][1].add(loot)

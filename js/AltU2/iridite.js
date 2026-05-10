@@ -19,8 +19,10 @@ function shipBattleSkip(level = new Decimal(0), upgEffect = {}) {
     }
 
     player.ir.shipHealth = player.ir.shipHealthMax
-    if (hasUpgrade("ir", 14)) arena.upgradeEffects.hpRegen += 0.5 / 60
-    arena.upgradeEffects.hpRegen += buyableEffect("bl", 13).sub(1).toNumber() / 60
+    let regen = 0
+    if (hasUpgrade("ir", 14)) regen += 0.5
+    regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
+    if (regen > 0) arena.upgradeEffects.hpRegen = regen / 60
 
     arena.upgradeEffects.attackDamage *= levelableEffect("ir", player.ir.shipType)[2]
     arena.upgradeEffects = Object.assign(arena.upgradeEffects, upgEffect)
@@ -154,7 +156,7 @@ addLayer("ir", {
         if (hasUpgrade("ir", 102)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.25)
         if (player.ir.shipType != 0) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(levelableEffect("ir", player.ir.shipType)[3])
         if (hasUpgrade("ir", 17)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.3)
-        player.ir.shipHealthMax = player.ir.shipHealthMax.mul(buyableEffect("bl", 33))
+        player.ir.shipHealthMax = player.ir.shipHealthMax.mul(getBuyableAmount("bl", 33).div(100).add(1))
 
         player.ir.timers[0].max = new Decimal(0)
         player.ir.timers[1].max = new Decimal(600)
@@ -175,7 +177,7 @@ addLayer("ir", {
         player.ir.battleXPReq = player.ir.battleLevel.pow(1.6).mul(5).add(40)
         if (hasUpgrade("ir", 103)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.25)
         if (hasUpgrade("ir", 106)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.4)
-        player.ir.battleXPReq = player.ir.battleXPReq.div(buyableEffect("bl", 14))
+        player.ir.battleXPReq = player.ir.battleXPReq.div(getBuyableAmount("bl", 14).div(100).add(1))
 
         if (player.ir.battleXP.gte(player.ir.battleXPReq)) {
             player.ir.battleXP = new Decimal(0);
@@ -694,8 +696,10 @@ addLayer("ir", {
                 pauseUniverseAll(["A2", "DS"], "pause", true)
 
                 player.ir.shipHealth = player.ir.shipHealthMax
-                if (hasUpgrade("ir", 14)) arena.upgradeEffects.hpRegen += 0.5 / 60
-                arena.upgradeEffects.hpRegen += buyableEffect("bl", 13).sub(1).toNumber() / 60
+                let regen = 0
+                if (hasUpgrade("ir", 14)) regen += 0.5
+                regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
+                if (regen > 0) arena.upgradeEffects.hpRegen = regen / 60
 
                 arena.upgradeEffects.attackDamage *= levelableEffect("ir", player.ir.shipType)[2]
 
@@ -907,7 +911,7 @@ addLayer("ir", {
             unlocked() { return buyableEffect("sb", 12).gte(3) },
             description: "Cut ship cooldown times based on space gems.",
             effect() {
-                return player.ir.spaceGem.pow(0.75).mul(0.03).add(1)
+                return player.ir.spaceGem.pow(0.75).mul(0.02).add(1)
             },
             effectDisplay() { return "/" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             cost: new Decimal(8000),

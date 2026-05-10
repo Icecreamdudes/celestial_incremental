@@ -14,7 +14,14 @@
 
         nMax: false,
     }},
-    automate() {},
+    automate() {
+        if (hasUpgrade("sma", 21)) {
+            buyUpgrade("dn", 11, false)
+            buyUpgrade("dn", 12, false)
+            buyUpgrade("dn", 13, false)
+            buyUpgrade("dn", 14, false)
+        }
+    },
     nodeStyle() {
         return {
             background: "linear-gradient(150deg,rgb(122, 177, 14) 0%,rgba(193, 223, 0) 50%,rgb(116, 141, 3) 100%)",
@@ -38,6 +45,8 @@
 
         //normality softcap
         if (player.dn.normalityToGet.gte(1e120)) player.dn.normalityToGet = player.dn.normalityToGet.div(1e120).pow(0.5).mul(1e120)
+
+        if (hasUpgrade("sma", 208)) player.dn.normality = player.dn.normality.add(player.dn.normalityToGet.mul(0.01).mul(delta))
 
         player.dn.normalityEffect = player.dn.normality.mul(10).pow(3).add(1)
 

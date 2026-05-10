@@ -829,7 +829,9 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added new space battle celestialites<br>
 			- Added blood gems to blood battle<br>
 			- Added 5 new buyables to blood layer<br>
-			- Added 2 new perks from beating Nox<br><br>
+			- Added 2 new perks from beating Nox<br>
+			- Added 3 more starmetal upgrades<br>
+			- Added 5 more eclipse upgrades<br>
 		Minor Changes:<br>
 			- Added an auto-shoot feature to ship battles<br>
 			- Added a new singularity upgrade to keep more content on resets<br>
@@ -880,6 +882,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Fixed being able to gain one extra highest combo<br>
 			- Fixed bug where first celestialite spawned can start with the wrong amount of health<br>
 			- Fixed some celestialite attacks not working correctly<br>
+			- Fixed the 4th rocket core scrap upgrade effect being assigned to the wrong variable<br>
 			- Fixed the formatting of some punchcard effects<br>
 			- Fixed Spissitude not functioning<br>
 			- Fixed being able to spin the wheel of fortune while it is already spinning<br><br>

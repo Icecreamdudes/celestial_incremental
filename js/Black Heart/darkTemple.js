@@ -236,6 +236,7 @@ addLayer("darkTemple", {
         selection: 1,
         runeCap: new Decimal(5),
         tierCap: new Decimal(3),
+        totalLevel: new Decimal(0),
 
         spAdd: new Decimal(0),
         skillCost: new Decimal(1),
@@ -284,11 +285,13 @@ addLayer("darkTemple", {
         player.darkTemple.runeCap = new Decimal(5)
         if (player.matosLair.milestone[25] >= 3) player.darkTemple.runeCap = player.darkTemple.runeCap.add(1)
         if (player.alephsChamber.milestone[25] >= 3) player.darkTemple.runeCap = player.darkTemple.runeCap.add(1)
+        player.darkTemple.totalLevel = new Decimal(0)
         let stats = {}
         for (let j = 1; j < 6; j++) {
             for (let i = 1; i < getBuyableAmount("darkTemple", j).add(1); i++) {
                 stats = addObject(stats, RUNE_EFFECTS[j][i], getBuyableAmount("darkTemple", j+100) ? 1+(getBuyableAmount("darkTemple", j+100).toNumber()/2) : 1)
             }
+            player.darkTemple.totalLevel = player.darkTemple.totalLevel.add(getBuyableAmount("darkTemple", j).mul(getBuyableAmount("darkTemple", j+100) ? 1+(getBuyableAmount("darkTemple", j+100).toNumber()/2) : 1))
         }
         if (stats.sp) player.darkTemple.spAdd = new Decimal(stats.sp).floor()
         if (stats.scd) player.darkTemple.skillCost = Decimal.pow(2, stats.scd)
@@ -611,6 +614,7 @@ addLayer("darkTemple", {
             canClick: true,
             unlocked: true,
             onClick() {
+                player.subtabs["darkTemple"]["stuff"] = "runes"
                 player.darkTemple.tab = "level"
                 player.darkTemple.selection = 1
             },
@@ -621,6 +625,7 @@ addLayer("darkTemple", {
             canClick: true,
             unlocked: true,
             onClick() {
+                player.subtabs["darkTemple"]["stuff"] = "runes"
                 player.darkTemple.tab = "tier"
                 player.darkTemple.selection = 1
             },
@@ -631,12 +636,112 @@ addLayer("darkTemple", {
             canClick: true,
             unlocked: true,
             onClick() {
-                
+                player.subtabs["darkTemple"]["stuff"] = "bestowal"
             },
             style: {width: "172px", minHeight: "40px", color: "#C71585", background: "#13020d", border: "3px solid #3b0627", borderRadius: "0"},
         },
     },
+    upgrades: {
+        2: {
+            unlocked: true,
+            fullDisplay() {
+                return !this.canAfford() ? "<h3>You need " + formatWhole(Decimal.sub(5, player.darkTemple.totalLevel)) + " more eff. rune levels"
+                : "Unlock ???<br><br>Cost: " + formatSimple(this.cost) + " " + this.currencyDisplayName
+            },
+            cost: new Decimal(25),
+            canAfford() {return player.darkTemple.totalLevel.gte(5)},
+            currencyLocation() {return player.bh },
+            currencyDisplayName: "Dark Essence",
+            currencyInternalName: "darkEssence",
+            style() {
+                let look = {minHeight: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#C71585", border: "2px solid #C71585", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#1a3b0f"
+                else if (!this.canAfford()) look.backgroundColor = "#000"
+                else if (!canAffordUpgrade(this.layer, this.id)) look.backgroundColor = "#361e1e"
+                else look.backgroundColor = "#250121"
+                return look
+            },
+        },
+        4: {
+            unlocked: true,
+            fullDisplay() {
+                return !this.canAfford() ? "<h3>You need " + formatWhole(Decimal.sub(10, player.darkTemple.totalLevel)) + " more eff. rune levels"
+                : "Unlock rune<br>by-products<br><br>Cost: " + formatSimple(this.cost) + " " + this.currencyDisplayName
+            },
+            cost: new Decimal(25),
+            canAfford() {return player.darkTemple.totalLevel.gte(10)},
+            currencyLocation() {return player.bh },
+            currencyDisplayName: "Dark Essence",
+            currencyInternalName: "darkEssence",
+            style() {
+                let look = {minHeight: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#C71585", border: "2px solid #C71585", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#1a3b0f"
+                else if (!this.canAfford()) look.backgroundColor = "#000"
+                else if (!canAffordUpgrade(this.layer, this.id)) look.backgroundColor = "#361e1e"
+                else look.backgroundColor = "#250121"
+                return look
+            },
+        },
+    },
     buyables: {
+        1001: {
+            costBase() { return new Decimal(5) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(5) },
+            currency() { return player.bh.darkEssence },
+            pay(amt) { player.bh.darkEssence = this.currency().sub(amt) },
+            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).div(10).add(1)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) && player.darkTemple.totalLevel.gte(2) },
+            display() {
+                return !this.canAfford() ? "<h3>You need " + formatWhole(Decimal.sub(2, player.darkTemple.totalLevel)) + " more eff. rune levels"
+                : "Increase ??? gain<br>Currently: x" + formatSimple(this.effect()) + "<br>Next: x" + formatSimple(this.effect(getBuyableAmount(this.layer, this.id).add(1))) + "<br><br>Cost: " + formatSimple(this.cost()) + " Dark Essence"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#C71585", border: "2px solid #C71585", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#1a3b0f"
+                else if (player.darkTemple.totalLevel.lt(2)) look.backgroundColor = "#000"
+                else if (!this.canAfford()) look.backgroundColor = "#361e1e"
+                else look.backgroundColor = "#250121"
+                return look
+
+                return look
+            },
+        },
+        1003: {
+            costBase() { return new Decimal(5) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(5) },
+            currency() { return player.bh.darkEssence },
+            pay(amt) { player.bh.darkEssence = this.currency().sub(amt) },
+            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).div(10).add(1)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) && player.darkTemple.totalLevel.gte(8) },
+            display() {
+                return !this.canAfford() ? "<h3>You need " + formatWhole(Decimal.sub(8, player.darkTemple.totalLevel)) + " more eff. rune levels"
+                : "Increase ??? gain<br>Currently: x" + formatSimple(this.effect()) + "<br>Next: x" + formatSimple(this.effect(getBuyableAmount(this.layer, this.id).add(1))) + "<br><br>Cost: " + formatSimple(this.cost()) + " Dark Essence"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#C71585", border: "2px solid #C71585", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#1a3b0f"
+                else if (player.darkTemple.totalLevel.lt(8)) look.backgroundColor = "#000"
+                else if (!this.canAfford()) look.backgroundColor = "#361e1e"
+                else look.backgroundColor = "#250121"
+                return look
+
+                return look
+            },
+        },
         1: {
             purchaseLimit() { return player.darkTemple.runeCap },
             pay() {
@@ -813,7 +918,241 @@ addLayer("darkTemple", {
         },
     },
     microtabs: {
-        
+        stuff: {
+            "runes": {
+                content: [
+                    ["style-row", [
+                        ["style-column", [
+                            ["row", [
+                                ["style-row", [["clickable", 12]], {marginTop: "18px", marginRight: "30px"}],
+                                ["style-row", [["clickable", 1]], {marginBottom: "18px"}],
+                                ["style-row", [["clickable", 2]], {marginTop: "18px", marginLeft: "30px"}],
+                            ]],
+                            ["row", [
+                                ["style-column", [
+                                    ["style-row", [["clickable", 11]], {marginTop: "12px", marginLeft: "18px"}],
+                                    ["style-row", [["clickable", 10]], {marginRight: "18px", marginTop: "30px", marginBottom: "30px"}],
+                                    ["style-row", [["clickable", 9]], {marginBottom: "12px", marginLeft: "18px"}],
+                                ]],
+                                ["style-column", [
+                                    ["style-column", [
+                                        ["raw-html", () => {
+                                            switch (player.darkTemple.selection) {
+                                                case 1:
+                                                    return "ᚠ"
+                                                case 2:
+                                                    return "ᚢ"
+                                                case 3:
+                                                    return "ᚦ"
+                                                case 4:
+                                                    return "ᚱ"
+                                                case 5:
+                                                    return "ᚴ"
+                                                default:
+                                                    return ""
+                                            }
+                                        }, {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
+                                    ], {width: "200px", height: "35px", borderBottom: "3px solid var(--regBorder)"}],
+                                    ["style-column", [
+                                        ["raw-html", () => {
+                                            let cost1 = "<br><br>"
+                                            let cost2 = "<br><br>"
+                                            let cost3 = "<br><br>"
+                                            if (player.darkTemple.tab == "level") {
+                                                switch (player.darkTemple.selection) {
+                                                    case 1:
+                                                        cost1 = formatSimple(player.depth1.gloomingUmbrite) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 1)).mul(9).floor()) + "<br>Glooming Umbrite"
+                                                        cost2 = formatSimple(player.depth1.dimUmbrite) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 1)).mul(3).floor()) + "<br>Dim Umbrite"
+                                                        cost3 = formatSimple(player.sma.starmetalAlloy) + "/" + formatSimple(Decimal.pow(4, getBuyableAmount("darkTemple", 1)).mul(10000)) + "<br>Starmetal Alloy"
+                                                        break;
+                                                    case 2:
+                                                        cost1 = formatSimple(player.depth2.faintUmbrite) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 2)).mul(12).floor()) + "<br>Faint Umbrite"
+                                                        cost2 = formatSimple(player.depth2.clearUmbrite) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 2)).mul(4).floor()) + "<br>Clear Umbrite"
+                                                        cost3 = formatSimple(player.s.singularityPoints) + "/" + formatSimple(Decimal.pow(1e10, getBuyableAmount("darkTemple", 2)).mul(1e100)) + "<br>Singularity Points"
+                                                        break;
+                                                    case 3:
+                                                        cost1 = formatSimple(player.depth3.vividUmbrite) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 3)).mul(15).floor()) + "<br>Vivid Umbrite"
+                                                        cost2 = formatSimple(player.depth3.lustrousUmbrite) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 3)).mul(5).floor()) + "<br>Lustrous Umbrite"
+                                                        cost3 = formatSimple(player.au2.stars) + "/" + formatSimple(Decimal.pow(10, getBuyableAmount("darkTemple", 3)).mul(10)) + "<br>Stars"
+                                                        break;
+                                                    case 4:
+                                                        cost1 = formatSimple(player.stagnantSynestia.temporalDust) + "/" + formatSimple(Decimal.pow(2.5, getBuyableAmount("darkTemple", 4)).mul(12).floor()) + "<br>Temporal Dust"
+                                                        cost2 = formatSimple(player.stagnantSynestia.temporalShard) + "/" + formatSimple(Decimal.pow(2, getBuyableAmount("darkTemple", 4)).mul(2).floor()) + "<br>Temporal Shards"
+                                                        cost3 = formatSimple(player.sme.starmetalEssence) + "/" + formatSimple(Decimal.pow(5, getBuyableAmount("darkTemple", 4)).mul(100)) + "<br>Starmetal Essence"
+                                                        break;
+                                                    case 5:
+                                                        cost1 = formatSimple(player.depth4.gloomingNocturnium) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 5)).mul(30).floor()) + "<br>Glooming Nocturnium"
+                                                        cost2 = formatSimple(player.depth4.dimNocturnium) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 5)).mul(10).floor()) + "<br>Dim Nocturnium"
+                                                        cost3 = formatSimple(player.pol.pollinators) + "/" + formatSimple(Decimal.pow("1e200", getBuyableAmount("darkTemple", 5)).mul("1e2000")) + "<br>Pollinators"
+                                                        break;
+                                                }
+                                            } else if (player.darkTemple.tab == "tier") {
+                                                switch (player.darkTemple.selection) {
+                                                    case 1:
+                                                        cost1 = formatSimple(player.depth1.murkyUmbrite) + "/" + formatSimple(Decimal.pow(10, getBuyableAmount("darkTemple", 101)).mul(25).floor()) + "<br>Murky Umbrite"
+                                                        cost2 = formatSimple(player.bh.darkEther) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 101)).mul(10).floor()) + "<br>Dark Ether"
+                                                        cost3 = formatSimple(getBuyableAmount("darkTemple", 1)) + "/" + formatSimple(getBuyableAmount("darkTemple", 101).add(5)) + "<br>ᚠ Rune Levels"
+                                                        break;
+                                                    case 2:
+                                                        cost1 = formatSimple(player.depth2.hazyUmbrite) + "/" + formatSimple(Decimal.pow(10, getBuyableAmount("darkTemple", 102)).mul(50).floor()) + "<br>Hazy Umbrite"
+                                                        cost2 = formatSimple(player.bh.darkEther) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 102)).mul(30).floor()) + "<br>Dark Ether"
+                                                        cost3 = formatSimple(getBuyableAmount("darkTemple", 2)) + "/" + formatSimple(getBuyableAmount("darkTemple", 102).add(5)) + "<br>ᚢ Rune Levels"
+                                                        break;
+                                                    case 3:
+                                                        break;
+                                                    case 4:
+                                                        break;
+                                                    case 5:
+                                                        break;
+                                                }
+                                            }
+                                            return "<div style='line-height:1.2'>" + cost1 + "<hr style='width:200px;height:3px;margin:2px 0;background:var(--regBorder);border:0'>" + cost2 + "<hr style='width:200px;height:3px;margin:2px 0;background:var(--regBorder);border:0'>" + cost3 + "<div>"
+                                        }, {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
+                                    ], {width: "200px", height: "104px", background: "var(--layerBackground)"}],
+                                    ["style-column", [
+                                        ["buyable", 1], ["buyable", 2], ["buyable", 3], ["buyable", 4], ["buyable", 5],
+                                        ["buyable", 101], ["buyable", 102],
+                                    ], {width: "200px", height: "35px", background: "black", borderTop: "3px solid var(--regBorder)", borderRadius: "0 0 27px 27px"}],
+                                ], {width: "200px", height: "180px", background: "var(--miscButton)", border: "3px solid var(--regBorder)", borderRadius: "30px", margin: "28px 18px 28px 18px", boxShadow: "0px 0px 10px #113"}],
+                                ["style-column", [
+                                    ["style-row", [["clickable", 3]], {marginTop: "12px", marginRight: "18px"}],
+                                    ["style-row", [["clickable", 4]], {marginLeft: "18px", marginTop: "30px", marginBottom: "30px"}],
+                                    ["style-row", [["clickable", 5]], {marginBottom: "12px", marginRight: "18px"}],
+                                ]],
+                            ]],
+                            ["row", [
+                                ["style-row", [["clickable", 8]], {marginBottom: "18px", marginRight: "30px"}],
+                                ["style-row", [["clickable", 7]], {marginTop: "18px"}],
+                                ["style-row", [["clickable", 6]], {marginBottom: "18px", marginLeft: "30px"}],
+                            ]],
+                        ], {width: "420px", height: "420px", background: "radial-gradient(#00000055, #22226655)"}],
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", "Effects", {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                            ], {width: "202px", height: "40px", borderBottom: "3px solid var(--regBorder)"}],
+                            ["theme-scroll-column", [
+                                ["blank", "5px"],
+                                ["raw-html", () => {
+                                    let futureEffects = {}
+                                    if (player.darkTemple.tab == "level" && getBuyableAmount("darkTemple", player.darkTemple.selection).lt(player.darkTemple.runeCap)) {
+                                        futureEffects = RUNE_EFFECTS[player.darkTemple.selection][getBuyableAmount("darkTemple", player.darkTemple.selection).add(1)]
+                                        let tierMult = getBuyableAmount("darkTemple", player.darkTemple.selection+100) ? 1+(getBuyableAmount("darkTemple", player.darkTemple.selection+100).toNumber()/2) : 1
+                                        for (let i in futureEffects) {
+                                            futureEffects[i] = futureEffects[i] * tierMult
+                                        }
+                                    } else if (player.darkTemple.tab == "tier") {
+                                        for (let i = 1; i < getBuyableAmount("darkTemple", player.darkTemple.selection); i++) {
+                                            futureEffects = addObject(futureEffects, RUNE_EFFECTS[player.darkTemple.selection][i], 0.5)
+                                        }
+                                    }
+                                    let str = ""
+                                    if (player.darkTemple.spAdd.gt(0) || futureEffects.sp) {
+                                        str = str + "+" + formatShortSimple(player.darkTemple.spAdd) + " SP"
+                                        if (futureEffects.sp && futureEffects >= 1) str = str + " <small style='color:#88f'>(+" + formatShortSimple(Math.floor(futureEffects.sp)) + ")</small>"
+                                        str = str + "<br>"
+                                    }
+                                    if (player.darkTemple.skillCost.gt(1) || futureEffects.scd) {
+                                        str = str + "/" + formatShortSimple(player.darkTemple.skillCost) + " <small>Skill Lv. Cost</small>"
+                                        if (futureEffects.scd) str = str + " <small style='color:#88f'>(/" + formatShortSimple(Decimal.pow(2, futureEffects.scd)) + ")</small>"
+                                        str = str + "<br>"
+                                    }
+                                    if (player.darkTemple.hpAdd.gt(0) || futureEffects.hp) {
+                                        str = str + "+" + formatShortSimple(player.darkTemple.hpAdd) + " HP"
+                                        if (futureEffects.hp) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.hp) + ")</small>"
+                                        str = str + "<br>"
+                                    }
+                                    if (player.darkTemple.hpMult.gt(0) || futureEffects.hpMult) {
+                                        str = str + "+" + formatShortSimple(player.darkTemple.hpMult.mul(100)) + "% <small>Base HP Mult</small>"
+                                        if (futureEffects.hpMult) str = str + " <small style='color:#88f'>(+" + formatShortSimple(Decimal.mul(futureEffects.hpMult, 100)) + "%)</small>"
+                                        str = str + "<br>"
+                                    }
+                                    if (player.darkTemple.dmgAdd.gt(0) || futureEffects.dmg) {
+                                        str = str + "+" + formatShortSimple(player.darkTemple.dmgAdd) + " DMG"
+                                        if (futureEffects.dmg) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.dmg) + ")</small>"
+                                        str = str + "<br>"
+                                    }
+                                    if (player.darkTemple.dmgMult.gt(0) || futureEffects.dmgMult) {
+                                        str = str + "+" + formatShortSimple(player.darkTemple.dmgMult.mul(100)) + "% <small>Base DMG Mult</small>"
+                                        if (futureEffects.dmgMult) str = str + " <small style='color:#88f'>(+" + formatShortSimple(Decimal.mul(futureEffects.dmgMult, 100)) + "%)</small>"
+                                        str = str + "<br>"
+                                    }
+                                    if (player.darkTemple.agiAdd.gt(0) || futureEffects.agi) {
+                                        str = str + "+" + formatShortSimple(player.darkTemple.agiAdd) + " AGI"
+                                        if (futureEffects.agi) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.agi) + ")</small>"
+                                        str = str + "<br>"
+                                    }
+                                    if (player.darkTemple.agiMult.gt(0) || futureEffects.agiMult) {
+                                        str = str + "+" + formatShortSimple(player.darkTemple.agiMult.mul(100)) + "% <small>Base AGI Mult</small>"
+                                        if (futureEffects.agiMult) str = str + " <small style='color:#88f'>(+" + formatShortSimple(Decimal.mul(futureEffects.agiMult, 100)) + "%)</small>"
+                                        str = str + "<br>"
+                                    }
+                                    if (player.darkTemple.defAdd.gt(0) || futureEffects.def) {
+                                        str = str + "+" + formatShortSimple(player.darkTemple.defAdd) + " DEF"
+                                        if (futureEffects.def) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.def) + ")</small>"
+                                        str = str + "<br>"
+                                    }
+                                    if (player.darkTemple.rgnAdd.gt(0) || futureEffects.rgn) {
+                                        str = str + "+" + formatShortSimple(player.darkTemple.rgnAdd, 2) + " RGN"
+                                        if (futureEffects.rgn) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.rgn, 2) + ")</small>"
+                                        str = str + "<br>"
+                                    }
+                                    if (player.darkTemple.luckAdd.gt(0) || futureEffects.luck) {
+                                        str = str + "+" + formatShortSimple(player.darkTemple.luckAdd) + " LUCK"
+                                        if (futureEffects.luck) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.luck) + ")</small>"
+                                        str = str + "<br>"
+                                    }
+                                    if (player.darkTemple.mndAdd.gt(0) || futureEffects.mnd) {
+                                        str = str + "+" + formatShortSimple(player.darkTemple.mndAdd) + " MND"
+                                        if (futureEffects.mnd) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.mnd) + ")</small>"
+                                        str = str + "<br>"
+                                    }
+                                    if (player.darkTemple.depth1CurMult.gt(1) || futureEffects.d1c) {
+                                        str = str + "x" + formatShortSimple(player.darkTemple.depth1CurMult) + " <small>Depth 1 SPVs</small>"
+                                        if (futureEffects.d1c) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.d1c) + ")</small>"
+                                        str = str + "<br>"
+                                    }
+                                    if (player.darkTemple.depth2CurMult.gt(1) || futureEffects.d2c) {
+                                        str = str + "x" + formatShortSimple(player.darkTemple.depth2CurMult) + " <small>Depth 2 SPVs</small>"
+                                        if (futureEffects.d2c) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.d2c) + ")</small>"
+                                        str = str + "<br>"
+                                    }
+                                    if (player.darkTemple.depth3CurMult.gt(1) || futureEffects.d3c) {
+                                        str = str + "x" + formatShortSimple(player.darkTemple.depth3CurMult) + " <small>Depth 3 SPVs</small>"
+                                        if (futureEffects.d3c) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.d3c) + ")</small>"
+                                        str = str + "<br>"
+                                    }
+                                    if (player.darkTemple.depth4CurMult.gt(1) || futureEffects.d4c) {
+                                        str = str + "x" + formatShortSimple(player.darkTemple.depth4CurMult) + " <small>Depth 4 SPVs</small>"
+                                        if (futureEffects.d4c) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.d4c) + ")</small>"
+                                        str = str + "<br>"
+                                    }
+                                    if (player.darkTemple.stagnantCurMult.gt(1) || futureEffects.ssc) {
+                                        str = str + "x" + formatShortSimple(player.darkTemple.stagnantCurMult) + " <div style='display:inline-block;font-size:10px'>Stagnant<br>Synestia SPVs</div>"
+                                        if (futureEffects.ssc) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.ssc) + ")</small>"
+                                        str = str + "<br>"
+                                    }
+                                    return str
+                                }, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                            ], {width: "202px", height: "377px", background: "var(--layerBackground)"}],
+                        ], {width: "200px", height: "420px", background: "var(--miscButton)", borderLeft: "3px solid var(--regBorder)", borderRadius: "0 0 27px 0"}],
+                    ], {width: "624px", height: "420px", margin: "-3px", border: "3px solid var(--regBorder)"}],
+                ],
+            },
+            "bestowal": {
+                content: [
+                    ["top-column", [
+                        ["blank", "10px"],
+                        ["style-row", [
+                            ["raw-html", () => {return "Eff. Rune Levels: " + formatWhole(player.darkTemple.totalLevel)}, {color: "#C71585", fontSize: "20px", fontFamily: "monospace"}]
+                        ], {width: "300px", height: "30px", background: "black", border: "3px solid #C71585", borderRadius: "15px"}],
+                        ["blank", "10px"],
+                        ["row", [
+                            ["buyable", 1001], ["upgrade", 2], ["buyable", 1003], ["upgrade", 4],
+                        ]],
+                    ], {width: "624px", height: "420px", background: "radial-gradient(#00000055, #630a4255)"}],
+                ],
+            },
+        },
     },
     tabFormat: [
         ["style-row", [
@@ -825,220 +1164,8 @@ addLayer("darkTemple", {
                 ["clickable", "tier"],
                 ["clickable", "bestowal"],
             ], {width: "172px", height: "420px", background: "var(--layerBackground)", borderRight: "3px solid var(--regBorder)", borderRadius: "0 0 0 27px"}],
-            ["style-column", [
-                ["row", [
-                    ["style-row", [["clickable", 12]], {marginTop: "18px", marginRight: "30px"}],
-                    ["style-row", [["clickable", 1]], {marginBottom: "18px"}],
-                    ["style-row", [["clickable", 2]], {marginTop: "18px", marginLeft: "30px"}],
-                ]],
-                ["row", [
-                    ["style-column", [
-                        ["style-row", [["clickable", 11]], {marginTop: "12px", marginLeft: "18px"}],
-                        ["style-row", [["clickable", 10]], {marginRight: "18px", marginTop: "30px", marginBottom: "30px"}],
-                        ["style-row", [["clickable", 9]], {marginBottom: "12px", marginLeft: "18px"}],
-                    ]],
-                    ["style-column", [
-                        ["style-column", [
-                            ["raw-html", () => {
-                                switch (player.darkTemple.selection) {
-                                    case 1:
-                                        return "ᚠ"
-                                    case 2:
-                                        return "ᚢ"
-                                    case 3:
-                                        return "ᚦ"
-                                    case 4:
-                                        return "ᚱ"
-                                    case 5:
-                                        return "ᚴ"
-                                    default:
-                                        return ""
-                                }
-                            }, {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
-                        ], {width: "200px", height: "35px", borderBottom: "3px solid var(--regBorder)"}],
-                        ["style-column", [
-                            ["raw-html", () => {
-                                let cost1 = "<br><br>"
-                                let cost2 = "<br><br>"
-                                let cost3 = "<br><br>"
-                                if (player.darkTemple.tab == "level") {
-                                    switch (player.darkTemple.selection) {
-                                        case 1:
-                                            cost1 = formatSimple(player.depth1.gloomingUmbrite) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 1)).mul(9).floor()) + "<br>Glooming Umbrite"
-                                            cost2 = formatSimple(player.depth1.dimUmbrite) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 1)).mul(3).floor()) + "<br>Dim Umbrite"
-                                            cost3 = formatSimple(player.sma.starmetalAlloy) + "/" + formatSimple(Decimal.pow(4, getBuyableAmount("darkTemple", 1)).mul(10000)) + "<br>Starmetal Alloy"
-                                            break;
-                                        case 2:
-                                            cost1 = formatSimple(player.depth2.faintUmbrite) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 2)).mul(12).floor()) + "<br>Faint Umbrite"
-                                            cost2 = formatSimple(player.depth2.clearUmbrite) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 2)).mul(4).floor()) + "<br>Clear Umbrite"
-                                            cost3 = formatSimple(player.s.singularityPoints) + "/" + formatSimple(Decimal.pow(1e10, getBuyableAmount("darkTemple", 2)).mul(1e100)) + "<br>Singularity Points"
-                                            break;
-                                        case 3:
-                                            cost1 = formatSimple(player.depth3.vividUmbrite) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 3)).mul(15).floor()) + "<br>Vivid Umbrite"
-                                            cost2 = formatSimple(player.depth3.lustrousUmbrite) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 3)).mul(5).floor()) + "<br>Lustrous Umbrite"
-                                            cost3 = formatSimple(player.au2.stars) + "/" + formatSimple(Decimal.pow(10, getBuyableAmount("darkTemple", 3)).mul(10)) + "<br>Stars"
-                                            break;
-                                        case 4:
-                                            cost1 = formatSimple(player.stagnantSynestia.temporalDust) + "/" + formatSimple(Decimal.pow(2.5, getBuyableAmount("darkTemple", 4)).mul(12).floor()) + "<br>Temporal Dust"
-                                            cost2 = formatSimple(player.stagnantSynestia.temporalShard) + "/" + formatSimple(Decimal.pow(2, getBuyableAmount("darkTemple", 4)).mul(2).floor()) + "<br>Temporal Shards"
-                                            cost3 = formatSimple(player.sme.starmetalEssence) + "/" + formatSimple(Decimal.pow(5, getBuyableAmount("darkTemple", 4)).mul(100)) + "<br>Starmetal Essence"
-                                            break;
-                                        case 5:
-                                            cost1 = formatSimple(player.depth4.gloomingNocturnium) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 5)).mul(30).floor()) + "<br>Glooming Nocturnium"
-                                            cost2 = formatSimple(player.depth4.dimNocturnium) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 5)).mul(10).floor()) + "<br>Dim Nocturnium"
-                                            cost3 = formatSimple(player.pol.pollinators) + "/" + formatSimple(Decimal.pow("1e200", getBuyableAmount("darkTemple", 5)).mul("1e2000")) + "<br>Pollinators"
-                                            break;
-                                    }
-                                } else if (player.darkTemple.tab == "tier") {
-                                    switch (player.darkTemple.selection) {
-                                        case 1:
-                                            cost1 = formatSimple(player.depth1.murkyUmbrite) + "/" + formatSimple(Decimal.pow(10, getBuyableAmount("darkTemple", 101)).mul(25).floor()) + "<br>Murky Umbrite"
-                                            cost2 = formatSimple(player.bh.darkEther) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 101)).mul(10).floor()) + "<br>Dark Ether"
-                                            cost3 = formatSimple(getBuyableAmount("darkTemple", 1)) + "/" + formatSimple(getBuyableAmount("darkTemple", 101).add(5)) + "<br>ᚠ Rune Levels"
-                                            break;
-                                        case 2:
-                                            cost1 = formatSimple(player.depth2.hazyUmbrite) + "/" + formatSimple(Decimal.pow(10, getBuyableAmount("darkTemple", 102)).mul(50).floor()) + "<br>Hazy Umbrite"
-                                            cost2 = formatSimple(player.bh.darkEther) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 102)).mul(30).floor()) + "<br>Dark Ether"
-                                            cost3 = formatSimple(getBuyableAmount("darkTemple", 2)) + "/" + formatSimple(getBuyableAmount("darkTemple", 102).add(5)) + "<br>ᚢ Rune Levels"
-                                            break;
-                                        case 3:
-                                            break;
-                                        case 4:
-                                            break;
-                                        case 5:
-                                            break;
-                                    }
-                                }
-                                return "<div style='line-height:1.2'>" + cost1 + "<hr style='width:200px;height:3px;margin:2px 0;background:var(--regBorder);border:0'>" + cost2 + "<hr style='width:200px;height:3px;margin:2px 0;background:var(--regBorder);border:0'>" + cost3 + "<div>"
-                            }, {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
-                        ], {width: "200px", height: "104px", background: "var(--layerBackground)"}],
-                        ["style-column", [
-                            ["buyable", 1], ["buyable", 2], ["buyable", 3], ["buyable", 4], ["buyable", 5],
-                            ["buyable", 101], ["buyable", 102],
-                        ], {width: "200px", height: "35px", background: "black", borderTop: "3px solid var(--regBorder)", borderRadius: "0 0 27px 27px"}],
-                    ], {width: "200px", height: "180px", background: "var(--miscButton)", border: "3px solid var(--regBorder)", borderRadius: "30px", margin: "28px 18px 28px 18px", boxShadow: "0px 0px 10px #113"}],
-                    ["style-column", [
-                        ["style-row", [["clickable", 3]], {marginTop: "12px", marginRight: "18px"}],
-                        ["style-row", [["clickable", 4]], {marginLeft: "18px", marginTop: "30px", marginBottom: "30px"}],
-                        ["style-row", [["clickable", 5]], {marginBottom: "12px", marginRight: "18px"}],
-                    ]],
-                ]],
-                ["row", [
-                    ["style-row", [["clickable", 8]], {marginBottom: "18px", marginRight: "30px"}],
-                    ["style-row", [["clickable", 7]], {marginTop: "18px"}],
-                    ["style-row", [["clickable", 6]], {marginBottom: "18px", marginLeft: "30px"}],
-                ]],
-            ], {width: "420px", height: "420px", background: "radial-gradient(#00000055, #22226655)"}],
-            ["style-column", [
-                ["style-column", [
-                    ["raw-html", "Effects", {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
-                ], {width: "202px", height: "40px", borderBottom: "3px solid var(--regBorder)"}],
-                ["theme-scroll-column", [
-                    ["blank", "5px"],
-                    ["raw-html", () => {
-                        let futureEffects = {}
-                        if (player.darkTemple.tab == "level" && getBuyableAmount("darkTemple", player.darkTemple.selection).lt(player.darkTemple.runeCap)) {
-                            futureEffects = RUNE_EFFECTS[player.darkTemple.selection][getBuyableAmount("darkTemple", player.darkTemple.selection).add(1)]
-                            let tierMult = getBuyableAmount("darkTemple", player.darkTemple.selection+100) ? 1+(getBuyableAmount("darkTemple", player.darkTemple.selection+100).toNumber()/2) : 1
-                            for (let i in futureEffects) {
-                                futureEffects[i] = futureEffects[i] * tierMult
-                            }
-                        } else if (player.darkTemple.tab == "tier") {
-                            for (let i = 1; i < getBuyableAmount("darkTemple", player.darkTemple.selection); i++) {
-                                futureEffects = addObject(futureEffects, RUNE_EFFECTS[player.darkTemple.selection][i], 0.5)
-                            }
-                        }
-                        let str = ""
-                        if (player.darkTemple.spAdd.gt(0) || futureEffects.sp) {
-                            str = str + "+" + formatShortSimple(player.darkTemple.spAdd) + " SP"
-                            if (futureEffects.sp && futureEffects >= 1) str = str + " <small style='color:#88f'>(+" + formatShortSimple(Math.floor(futureEffects.sp)) + ")</small>"
-                            str = str + "<br>"
-                        }
-                        if (player.darkTemple.skillCost.gt(1) || futureEffects.scd) {
-                            str = str + "/" + formatShortSimple(player.darkTemple.skillCost) + " <small>Skill Lv. Cost</small>"
-                            if (futureEffects.scd) str = str + " <small style='color:#88f'>(/" + formatShortSimple(Decimal.pow(2, futureEffects.scd)) + ")</small>"
-                            str = str + "<br>"
-                        }
-                        if (player.darkTemple.hpAdd.gt(0) || futureEffects.hp) {
-                            str = str + "+" + formatShortSimple(player.darkTemple.hpAdd) + " HP"
-                            if (futureEffects.hp) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.hp) + ")</small>"
-                            str = str + "<br>"
-                        }
-                        if (player.darkTemple.hpMult.gt(0) || futureEffects.hpMult) {
-                            str = str + "+" + formatShortSimple(player.darkTemple.hpMult.mul(100)) + "% <small>Base HP Mult</small>"
-                            if (futureEffects.hpMult) str = str + " <small style='color:#88f'>(+" + formatShortSimple(Decimal.mul(futureEffects.hpMult, 100)) + "%)</small>"
-                            str = str + "<br>"
-                        }
-                        if (player.darkTemple.dmgAdd.gt(0) || futureEffects.dmg) {
-                            str = str + "+" + formatShortSimple(player.darkTemple.dmgAdd) + " DMG"
-                            if (futureEffects.dmg) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.dmg) + ")</small>"
-                            str = str + "<br>"
-                        }
-                        if (player.darkTemple.dmgMult.gt(0) || futureEffects.dmgMult) {
-                            str = str + "+" + formatShortSimple(player.darkTemple.dmgMult.mul(100)) + "% <small>Base DMG Mult</small>"
-                            if (futureEffects.dmgMult) str = str + " <small style='color:#88f'>(+" + formatShortSimple(Decimal.mul(futureEffects.dmgMult, 100)) + "%)</small>"
-                            str = str + "<br>"
-                        }
-                        if (player.darkTemple.agiAdd.gt(0) || futureEffects.agi) {
-                            str = str + "+" + formatShortSimple(player.darkTemple.agiAdd) + " AGI"
-                            if (futureEffects.agi) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.agi) + ")</small>"
-                            str = str + "<br>"
-                        }
-                        if (player.darkTemple.agiMult.gt(0) || futureEffects.agiMult) {
-                            str = str + "+" + formatShortSimple(player.darkTemple.agiMult.mul(100)) + "% <small>Base AGI Mult</small>"
-                            if (futureEffects.agiMult) str = str + " <small style='color:#88f'>(+" + formatShortSimple(Decimal.mul(futureEffects.agiMult, 100)) + "%)</small>"
-                            str = str + "<br>"
-                        }
-                        if (player.darkTemple.defAdd.gt(0) || futureEffects.def) {
-                            str = str + "+" + formatShortSimple(player.darkTemple.defAdd) + " DEF"
-                            if (futureEffects.def) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.def) + ")</small>"
-                            str = str + "<br>"
-                        }
-                        if (player.darkTemple.rgnAdd.gt(0) || futureEffects.rgn) {
-                            str = str + "+" + formatShortSimple(player.darkTemple.rgnAdd, 2) + " RGN"
-                            if (futureEffects.rgn) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.rgn, 2) + ")</small>"
-                            str = str + "<br>"
-                        }
-                        if (player.darkTemple.luckAdd.gt(0) || futureEffects.luck) {
-                            str = str + "+" + formatShortSimple(player.darkTemple.luckAdd) + " LUCK"
-                            if (futureEffects.luck) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.luck) + ")</small>"
-                            str = str + "<br>"
-                        }
-                        if (player.darkTemple.mndAdd.gt(0) || futureEffects.mnd) {
-                            str = str + "+" + formatShortSimple(player.darkTemple.mndAdd) + " MND"
-                            if (futureEffects.mnd) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.mnd) + ")</small>"
-                            str = str + "<br>"
-                        }
-                        if (player.darkTemple.depth1CurMult.gt(1) || futureEffects.d1c) {
-                            str = str + "x" + formatShortSimple(player.darkTemple.depth1CurMult) + " <small>Depth 1 SPVs</small>"
-                            if (futureEffects.d1c) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.d1c) + ")</small>"
-                            str = str + "<br>"
-                        }
-                        if (player.darkTemple.depth2CurMult.gt(1) || futureEffects.d2c) {
-                            str = str + "x" + formatShortSimple(player.darkTemple.depth2CurMult) + " <small>Depth 2 SPVs</small>"
-                            if (futureEffects.d2c) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.d2c) + ")</small>"
-                            str = str + "<br>"
-                        }
-                        if (player.darkTemple.depth3CurMult.gt(1) || futureEffects.d3c) {
-                            str = str + "x" + formatShortSimple(player.darkTemple.depth3CurMult) + " <small>Depth 3 SPVs</small>"
-                            if (futureEffects.d3c) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.d3c) + ")</small>"
-                            str = str + "<br>"
-                        }
-                        if (player.darkTemple.depth4CurMult.gt(1) || futureEffects.d4c) {
-                            str = str + "x" + formatShortSimple(player.darkTemple.depth4CurMult) + " <small>Depth 4 SPVs</small>"
-                            if (futureEffects.d4c) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.d4c) + ")</small>"
-                            str = str + "<br>"
-                        }
-                        if (player.darkTemple.stagnantCurMult.gt(1) || futureEffects.ssc) {
-                            str = str + "x" + formatShortSimple(player.darkTemple.stagnantCurMult) + " <div style='display:inline-block;font-size:10px'>Stagnant<br>Synestia SPVs</div>"
-                            if (futureEffects.ssc) str = str + " <small style='color:#88f'>(+" + formatShortSimple(futureEffects.ssc) + ")</small>"
-                            str = str + "<br>"
-                        }
-                        return str
-                    }, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
-                ], {width: "202px", height: "377px", background: "var(--layerBackground)"}],
-            ], {width: "202px", height: "420px", background: "var(--miscButton)", borderLeft: "3px solid var(--regBorder)", borderRadius: "0 0 27px 0"}],
-        ], {width: "800px", height: "420px", border: "3px solid var(--regBorder)", margin: "-3px", borderRadius: "0 0 0 27px"}],
+            ["buttonless-microtabs", "stuff", {borderWidth: "0"}],
+        ], {width: "800px", height: "420px"}],
     ],
     layerShown() {return player.startedGame && tmp.pu.levelables[302].canClick},
 })

@@ -146,10 +146,12 @@
             }
         }
 
-        player.ds.length = new Decimal(1)
-        player.ds.width = new Decimal(1)
-        player.ds.depth = new Decimal(1)
-        player.ds.spissitude = new Decimal(1)
+        if (!hasUpgrade("sma", 20)) {
+            player.ds.length = new Decimal(1)
+            player.ds.width = new Decimal(1)
+            player.ds.depth = new Decimal(1)
+            player.ds.spissitude = new Decimal(1)
+        }
 
         player.dgr.grass = new Decimal(0)
         for (let i = 1; i < (tmp.dgr.grid.cols + "0" + (tmp.dgr.grid.rows + 1)); ) {

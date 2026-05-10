@@ -2366,11 +2366,6 @@ addLayer("cb", {
                 ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
             ], () => { return player.cb.highestLevel.gte(250) ? {width: "123px", height: "50px", borderRight: "2px solid white"} : {display: "none !important"}}],
             ["tooltip-row", [
-                ["raw-html", "<img src='resources/ascensionShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatShortWhole(player.cbs.ascensionShards)}, {width: "68px", height: "50px", color: "#80ffff", "text-shadow": "0 0 10px #80ffff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                ["raw-html", "<div class='bottomTooltip'>Ascension Shards<hr><small>(Gained from ???)</small></div>"],
-            ], () => { return player.ir.iriditeDefeated ? {width: "123px", height: "50px", borderRight: "2px solid white"} : {display: "none !important"}}], // placeholder req
-            ["tooltip-row", [
                 ["raw-html", "<img src='resources/cbTickspeed.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                 ["raw-html", () => { return "x" + formatSimple(player.cb.cbTickspeed, 2)}, {width: "70px", height: "50px", color: "#0098E5", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", () => {

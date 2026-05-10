@@ -2164,7 +2164,7 @@ addLayer("pet", {
             },
             levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
             effect() {
-                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40)).add(levelableEffect("pet", 1103)[0])
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40)).add(levelableEffect("pet", 1103)[0]).add(buyableEffect("ev13", 12))
                 if ((player.points.lt(1e100) && !hasMilestone("ip", 24)) || inChallenge("ip", 13)) amt = amt.sub(1)
                 return [
                     amt.pow(2.7).pow(Decimal.pow(4, getLevelableTier(this.layer, this.id))).add(1), // Factor Power Gain
@@ -4689,13 +4689,13 @@ addLayer("pet", {
                 player.tab = "ev13"
             },
             // CLICK CODE
-            unlocked() { return player.ir.iriditeDefeated},
+            unlocked() { return player.cbs.shrineReactivated},
             canClick() { return getLevelableAmount(this.layer, this.id).gt(0)},
             onClick() { return layers[this.layer].levelables.index = this.id },
             // BUY CODE
             pay(amt) { player.cbs.ascensionShards = player.cbs.ascensionShards.sub(amt) },
             canAfford() { return player.cbs.ascensionShards.gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).pow(0.5).floor() },
+            xpReq() { return getLevelableAmount(this.layer, this.id).pow(0.75).floor().plus(1) },
             currency() { return player.cbs.ascensionShards },
             buy() {
                 this.pay(this.xpReq())
@@ -4703,7 +4703,7 @@ addLayer("pet", {
             },
             // STYLE
             barShown() { return this.canClick() },
-            barStyle() { return {backgroundColor: "#80ffff"}},
+            barStyle() { return {backgroundColor: "#c6f7ff"}},
             style() {
                 let look = {width: "100px", minHeight: "125px"}
                 this.canClick() ? look.backgroundColor = "#00ffff" : look.backgroundColor = "#222222"
@@ -4736,7 +4736,7 @@ addLayer("pet", {
                 player.tab = "ev14"
             },
             // CLICK CODE
-            unlocked() { return player.ir.iriditeDefeated},
+            unlocked() { return player.cbs.shrineReactivated},
             canClick() { return getLevelableAmount(this.layer, this.id).gt(0)},
             onClick() { return layers[this.layer].levelables.index = this.id },
             // BUY CODE
@@ -4750,7 +4750,7 @@ addLayer("pet", {
             },
             // STYLE
             barShown() { return this.canClick() },
-            barStyle() { return {backgroundColor: "#80ffff"}},
+            barStyle() { return {backgroundColor: "#c6f7ff"}},
             style() {
                 let look = {width: "100px", minHeight: "125px"}
                 this.canClick() ? look.backgroundColor = "#200000" : look.backgroundColor = "#222222"
@@ -5219,11 +5219,11 @@ addLayer("pet", {
                             ], () => { return player.cb.highestLevel.gte(250) ? {width: "525px", backgroundColor: "#070a19", padding: "5px"} : {display: "none !important"}}],
 
                             ["style-column", [
-                                ["raw-html", "Ascension Shards", {color: "#80ffff", "text-shadow": "0 0 10px #80ffff", fontSize: "20px", fontFamily: "monospace"}],
-                            ], () => { return player.ir.iriditeDefeated ? {width: "535px", height: "40px", backgroundColor: "#102020", borderTop: "3px solid #80ffff", borderBottom: "3px solid #80ffff", userSelect: "none"} : {display: "none !important"}}],
+                                ["raw-html", "Ascension Shards", {color: "#c6f7ff", fontSize: "20px", fontFamily: "monospace"}],
+                            ], () => { return player.cbs.shrineReactivated ? {width: "535px", height: "40px", backgroundColor: "#273132", borderTop: "3px solid #c6f7ff", borderBottom: "3px solid #c6f7ff", userSelect: "none"} : {display: "none !important"}}],
                             ["style-column", [
                                 ["row", [["levelable", 2103], ["levelable", 2203],]],
-                            ], () => { return player.ir.iriditeDefeated ? {width: "525px", backgroundColor: "#081010", padding: "5px"} : {display: "none !important"}}], // placeholder reqs
+                            ], () => { return player.cbs.shrineReactivated ? {width: "525px", backgroundColor: "#131819", padding: "5px"} : {display: "none !important"}}], // placeholder reqs
 
                             ["style-column", [
                                 ["raw-html", "Chocolate Shards", {color: "#86562E", fontSize: "20px", fontFamily: "monospace"}],

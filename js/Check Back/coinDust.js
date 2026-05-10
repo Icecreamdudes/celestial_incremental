@@ -49,7 +49,8 @@ addLayer("ev0", {
         player.ev0.coinDustPerSecond = player.ev0.coinDustPerSecond.mul(buyableEffect("ev0", 18))
         player.ev0.coinDustPerSecond = player.ev0.coinDustPerSecond.mul(levelableEffect("pet", 110)[1])
         player.ev0.coinDustPerSecond = player.ev0.coinDustPerSecond.mul(levelableEffect("pet", 2103)[1])
-        if (hasUpgrade("ev13", 11)) player.ev0.coinDustPerSecond = player.ev0.coinDustPerSecond.mul(500)
+        player.ev0.coinDustPerSecond = player.ev0.coinDustPerSecond.mul(player.ev13.diamondDustEffect)
+        if (hasUpgrade("ev13", 11)) player.ev0.coinDustPerSecond = player.ev0.coinDustPerSecond.mul(20)
         if (hasUpgrade("ev13", 12)) player.ev0.coinDustPerSecond = player.ev0.coinDustPerSecond.mul(player.ev13.diamondDustEffect)
 
         if (player.ev0.coinDust.lt(1)) player.ev0.coinDustEffect = player.ev0.coinDust.mul(0.05).add(1)

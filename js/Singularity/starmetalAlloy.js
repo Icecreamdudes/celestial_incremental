@@ -367,6 +367,51 @@
                 return look
             }
         },
+        19: {
+            title: "Dark Starmetal Upgrade X",
+            unlocked() { return hasUpgrade("sma", 18) && player.ir.iriditeDefeated},
+            description: "Automate pent resets.",
+            cost: new Decimal(1e7),
+            currencyLocation() { return player.sma },
+            currencyDisplayName: "Starmetal Alloy",
+            currencyInternalName: "starmetalAlloy",
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "2px solid", margin: "2px"}
+                if (player.sma.inStarmetalChallenge) {look.borderColor = "#384166"} else {look.borderColor = "rgba(255,255,255,0.5)"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#361e1e" : look.background = "linear-gradient(120deg, #2e2f11 0%, #261e0a 25%, #2f1317 50%, #2a132f, 75%,  #13292f 100%)"
+                return look
+            }
+        },
+        20: {
+            title: "Dark Starmetal Upgrade XI",
+            unlocked() { return hasUpgrade("sma", 19)},
+            description: "Space energy resets no longer reset space.",
+            cost: new Decimal(1e8),
+            currencyLocation() { return player.sma },
+            currencyDisplayName: "Starmetal Alloy",
+            currencyInternalName: "starmetalAlloy",
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "2px solid", margin: "2px"}
+                if (player.sma.inStarmetalChallenge) {look.borderColor = "#384166"} else {look.borderColor = "rgba(255,255,255,0.5)"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#361e1e" : look.background = "linear-gradient(120deg, #2e2f11 0%, #261e0a 25%, #2f1317 50%, #2a132f, 75%,  #13292f 100%)"
+                return look
+            }
+        },
+        21: {
+            title: "Dark Starmetal Upgrade XII",
+            unlocked() { return hasUpgrade("sma", 20)},
+            description: "Autobuy normality upgrades.",
+            cost: new Decimal(1e9),
+            currencyLocation() { return player.sma },
+            currencyDisplayName: "Starmetal Alloy",
+            currencyInternalName: "starmetalAlloy",
+            style() {
+                let look = {borderRadius: "15px", color: "white", border: "2px solid", margin: "2px"}
+                if (player.sma.inStarmetalChallenge) {look.borderColor = "#384166"} else {look.borderColor = "rgba(255,255,255,0.5)"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#361e1e" : look.background = "linear-gradient(120deg, #2e2f11 0%, #261e0a 25%, #2f1317 50%, #2a132f, 75%,  #13292f 100%)"
+                return look
+            }
+        },
 
         //other
         101: {
@@ -562,6 +607,89 @@
             currencyLocation() { return player.sma },
             currencyDisplayName: "Eclipse Shards",
             currencyInternalName: "eclipseShards",
+            style() {
+                let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "#f5ff68"
+                return look
+            }
+        },
+        206: {
+            title: "Eclipse Shard Upgrade VI",
+            unlocked() { return true},
+            description: "Reduce eclipse tickspeed by /1.2.",
+            cost: new Decimal(75),
+            currencyLocation() { return player.sma },
+            currencyDisplayName: "Eclipse Shards",
+            currencyInternalName: "eclipseShards",
+            style() {
+                let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "#f5ff68"
+                return look
+            }
+        },
+        207: {
+            title: "Eclipse Shard Upgrade VII",
+            unlocked() { return true},
+            description: "Dark prestige points reduce booster requirement.",
+            cost: new Decimal(250),
+            currencyLocation() { return player.sma },
+            currencyDisplayName: "Eclipse Shards",
+            currencyInternalName: "eclipseShards",
+            effect() {
+                return player.dp.prestigePoints.pow(0.05).add(1)
+            },
+            effectDisplay() { return "/" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            style() {
+                let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "#f5ff68"
+                return look
+            }
+        },
+        208: {
+            title: "Eclipse Shard Upgrade VIII",
+            unlocked() { return true},
+            description: "Always generate 1% of normality per second.",
+            cost: new Decimal(750),
+            currencyLocation() { return player.sma },
+            currencyDisplayName: "Eclipse Shards",
+            currencyInternalName: "eclipseShards",
+            style() {
+                let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "#f5ff68"
+                return look
+            }
+        },
+        209: {
+            title: "Eclipse Shard Upgrade IX",
+            unlocked() { return true},
+            description: "Slightly improve cloud's tickspeed nerf formula.",
+            cost: new Decimal(2500),
+            currencyLocation() { return player.sma },
+            currencyDisplayName: "Eclipse Shards",
+            currencyInternalName: "eclipseShards",
+            style() {
+                let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "#f5ff68"
+                return look
+            }
+        },
+        210: {
+            title: "Eclipse Shard Upgrade X",
+            unlocked() { return true},
+            description: "Starmetal requirement dividers slightly apply to eclipse requirement.",
+            tooltip: "Only applies at ^0.1 the power",
+            cost: new Decimal(7500),
+            currencyLocation() { return player.sma },
+            currencyDisplayName: "Eclipse Shards",
+            currencyInternalName: "eclipseShards",
+            effect() {
+                let eff = new Decimal(1)
+                eff = eff.mul(player.dn.normalityEffect)
+                eff = eff.mul(levelableEffect("st", 208)[0])
+                eff = eff.pow(0.1)
+                return eff
+            },
+            effectDisplay() { return "/" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style() {
                 let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "#f5ff68"
@@ -830,7 +958,7 @@
                     ["style-column", [
                         ["blank", "5px"],
                         ["row", [["upgrade", 10], ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],
-                            ["upgrade", 17], ["upgrade", 18]]],
+                            ["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 20], ["upgrade", 21]]],
                         ["blank", "5px"],
                     ], {width: "800px", background: "linear-gradient(120deg, #171708 0%, #130f05 25%, #17090b 50%, #150917, 75%, #091417 100%)", border: "3px solid #ccc", borderRadius: "15px"}],
                     ["blank", "20px"],
@@ -887,7 +1015,8 @@
                     ["blank", "25px"],
                     ["style-column", [
                         ["blank", "5px"],
-                        ["row", [["upgrade", 201] ,["upgrade", 202], ["upgrade", 203], ["upgrade", 204], ["upgrade", 205]]],
+                        ["row", [["upgrade", 201] ,["upgrade", 202], ["upgrade", 203], ["upgrade", 204], ["upgrade", 205],
+                            ["upgrade", 206], ["upgrade", 207], ["upgrade", 208], ["upgrade", 209], ["upgrade", 210]]],
                         ["blank", "5px"],
                         ["style-row", [], {width: "800px", height: "3px", backgroundColor: "#b29c47"}],
                         ["blank", "5px"],

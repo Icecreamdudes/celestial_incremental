@@ -29,6 +29,7 @@
         let onepersec = new Decimal(1)
 
         player.dv.timeDrainRate = player.dv.clouds.pow(0.25).div(5).add(1)
+        if (hasUpgrade("sma", 209)) player.dv.timeDrainRate = player.dv.clouds.pow(0.2).div(10).add(1)
 
         if (player.dv.producingClouds)
         {

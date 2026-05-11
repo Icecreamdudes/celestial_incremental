@@ -1,4 +1,4 @@
-addLayer("goo", {
+addLayer("ep3", {
     name: "Goobert", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "Gb", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "CB",
@@ -83,5 +83,5 @@ addLayer("goo", {
         ["blank", "25px"],
         ["buttonless-microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame && (getLevelableAmount("pet", 407).gte(1) || getLevelableTier("pet", 407).gte(1)) }
+    layerShown() { return player.startedGame && (getLevelableAmount("pet", 407).gte(1) || getLevelableTier("pet", 407).gte(1)) || true}
 })

@@ -30,7 +30,7 @@
 		"Black Heart/stagnantSynestia.js", "Black Heart/depth4.js", "Black Heart/alephsChamber.js", "Black Heart/laboratory.js", "DarkU1/grassJump.js",
 		"Hive/nest.js", "Check Back/gwaTemple.js",
 
-		"Interspace/well.js", "Interspace/projects.js", "Interspace/prisms.js", "Interspace/blueshift.js", "Interspace/bumpy.js", "Interspace/cere.js", "Check Back/goobert.js",
+		"Interspace/well.js", "Interspace/projects.js", "Interspace/prisms.js", "Interspace/blueshift.js", "Interspace/bumpy.js", "Interspace/cere.js", "Check Back/goobert.js", "Check Back/compaction.js",
 		"DarkU1/timeCapsules.js", "Check Back/dragon.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
@@ -317,11 +317,14 @@ function updateStyles() {
 		case "ev8":
 			layerBG = "linear-gradient(0deg, #252525)"
 			break;
-		case "ep0": case "ep1": case "ep2": case "sp": case "goo":
+		case "ep0": case "ep1": case "ep2": case "sp": case "ep3":
 			layerBG = "linear-gradient(0deg, #7d3f98)"
 			break;
 		case "leg":
 			layerBG = "linear-gradient(0deg, #eed200)"
+			break;
+		case "ev15":
+			layerBG = "linear-gradient(0deg, #02240b)"
 			break;
 		case "gwaTemple":
 			layerBG = "#676742"

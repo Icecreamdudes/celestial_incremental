@@ -19,6 +19,7 @@ addLayer("cb", {
         xpMult: new Decimal(1),
         req: new Decimal(4),
         reqDiv: new Decimal(1),
+        reqRoot: new Decimal(1),
         effectActivate: false,
 
         xpTimers: {
@@ -141,6 +142,7 @@ addLayer("cb", {
         //red purple green
 
         evolutionShards: new Decimal(0),
+        baseESC: new Decimal(1),
         IC7shardCount: 0,
 
         //xpboost
@@ -170,6 +172,7 @@ addLayer("cb", {
 
         //paragon
         paragonShards: new Decimal(0),
+        basePSC: new Decimal(1),
 
         //pity system
         pityEvoCurrent: new Decimal(0),
@@ -217,6 +220,9 @@ addLayer("cb", {
         player.cb.reqDiv = player.cb.reqDiv.mul(levelableEffect("pet", 304)[1])
         player.cb.reqDiv = player.cb.reqDiv.mul(buyableEffect("ev2", 11))
         player.cb.reqDiv = player.cb.reqDiv.mul(player.se.starsExploreEffect[2][1])
+
+        player.cb.reqRoot = new Decimal(1)
+        player.cb.reqRoot = player.cb.reqRoot.mul(buyableEffect("ev15", 11).recip())
 
         player.cb.req = layers.cb.levelToXP(player.cb.level.add(1)).sub(layers.cb.levelToXP(player.cb.level))
 
@@ -318,15 +324,16 @@ addLayer("cb", {
         player.cb.xpTimers[7].esc = new Decimal(98).mul(buyableEffect("ev1", 174))
         player.cb.xpTimers[8].esc = new Decimal(500).mul(buyableEffect("ev1", 184))
 
-        let mult = new Decimal(1)
-        mult = mult.add(levelableEffect("pet", 1107)[1].sub(1))
-        mult = mult.add(buyableEffect("ev2", 31).sub(1))
-        mult = mult.add(buyableEffect("depth1", 4).sub(1))
+        player.cb.baseESC = new Decimal(1)
+        player.cb.baseESC = player.cb.baseESC.add(levelableEffect("pet", 1107)[1].sub(1))
+        player.cb.baseESC = player.cb.baseESC.add(buyableEffect("ev2", 31).sub(1))
+        player.cb.baseESC = player.cb.baseESC.add(buyableEffect("depth1", 4).sub(1))
+        player.cb.baseESC = player.cb.baseESC.mul(levelableEffect("pet", 1102)[1])
+        player.cb.baseESC = player.cb.baseESC.mul(levelableEffect("ir", 9)[0])
+        if (hasUpgrade("cbs", 102)) player.cb.baseESC = player.cb.baseESC.mul(upgradeEffect("cbs", 102))
+        player.cb.baseESC = player.cb.baseESC.mul(buyableEffect("ev15", 11))
         for (let i in player.cb.xpTimers) {
-            player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(mult)
-            player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(levelableEffect("pet", 1102)[1])
-            player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(levelableEffect("ir", 9)[0])
-            if (hasUpgrade("cbs", 102)) player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(upgradeEffect("cbs", 102))
+            player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(player.cb.baseESC)
         }
 
         player.cb.crateTimers[0].base = buyableEffect("ev1", 201).mul(buyableEffect("ev1", 204))
@@ -431,6 +438,7 @@ addLayer("cb", {
         } else if (player.cb.XPBoost.gte(1000)) {
             player.cb.XPBoostEffect = Decimal.add(1000, player.cb.XPBoost.sub(1000).pow(Decimal.add(0.5, buyableEffect("sme", 116).sub(1))).mul(10))
         }
+        player.cb.XPBoostEffect = player.cb.XPBoostEffect.pow(buyableEffect("ev15", 13))
 
         // PITY
         player.cb.pityMax = new Decimal(200).sub(buyableEffect("cb", 16))
@@ -454,13 +462,13 @@ addLayer("cb", {
     levelToXP(quantity) {
         // The big XP additions are the difference between post-softcap XP and pre-softcap XP at the softcap level
         if (quantity.lt(1000)) {
-            quantity = quantity.add(1.5).pow(2).div(2).div(player.cb.reqDiv)
+            quantity = quantity.add(1.5).pow(2).div(2).div(player.cb.reqDiv).root(player.cb.reqRoot)
         } else if (quantity.lt(10000)) {
-            quantity = quantity.pow(2.25).div(2).sub(2309705).div(player.cb.reqDiv)
+            quantity = quantity.pow(2.25).div(2).sub(2309705).div(player.cb.reqDiv).root(player.cb.reqRoot)
         } else if (quantity.lt(100000)) {
-            quantity = quantity.pow(2.5).sub(9502309705).div(player.cb.reqDiv)
+            quantity = quantity.pow(2.5).sub(9502309705).div(player.cb.reqDiv).root(player.cb.reqRoot)
         } else {
-            quantity = Decimal.pow(1000, quantity.pow(0.125)).sub(1323276439362).div(player.cb.reqDiv)
+            quantity = Decimal.pow(1000, quantity.pow(0.125)).sub(1323276439362).div(player.cb.reqDiv).root(player.cb.reqRoot)
         }
         return quantity
     },
@@ -468,13 +476,13 @@ addLayer("cb", {
         // The number the quantity is less then is XP equivalent to the level softcaps above
         // The big XP additions are the difference between post-softcap XP and pre-softcap XP at the softcap level
         if (quantity.lt(Decimal.div(501501, player.cb.reqDiv))) {
-            quantity = quantity.mul(player.cb.reqDiv).mul(2).pow(1/2).sub(1.5).floor()
+            quantity = quantity.mul(player.cb.reqDiv).pow(player.cb.reqRoot).mul(2).pow(1/2).sub(1.5).floor()
         } else if (quantity.lt(Decimal.div(497690295, player.cb.reqDiv))) {
-            quantity = quantity.mul(player.cb.reqDiv).add(2309705).mul(2).pow(4/9).floor()
+            quantity = quantity.mul(player.cb.reqDiv).pow(player.cb.reqRoot).add(2309705).mul(2).pow(4/9).floor()
         } else if (quantity.lt(Decimal.div(3152775350463, player.cb.reqDiv))) {
-            quantity = quantity.mul(player.cb.reqDiv).add(9502309705).pow(2/5).floor()
+            quantity = quantity.mul(player.cb.reqDiv).pow(player.cb.reqRoot).add(9502309705).pow(2/5).floor()
         } else {
-            quantity = quantity.mul(player.cb.reqDiv).add(1323276439362).log(10).div(3).pow(8).floor()
+            quantity = quantity.mul(player.cb.reqDiv).pow(player.cb.reqRoot).add(1323276439362).log(10).div(3).pow(8).floor()
         }
         return quantity
     },

@@ -4256,7 +4256,7 @@
             portrait: "resources/secret.png",
             music: "music/bumpy.mp3",
             background: "linear-gradient(135deg, #bf8fbf 0%, #b4bfb4 100%)",
-            trigger() {return hasMilestone("prj", 201) },
+            trigger() {return hasMilestone("prj", 401) },
             dialogue: [
                 { text: "You enter a flashback."},
                 { text: "A crowd is running through a narrow street, likely fleeing from something."},
@@ -4280,6 +4280,23 @@
                 { text: "Nothing. What I'm doing is for the greater good.", portrait: "resources/cere.png" },
                 { text: "You've killed billions now! For a science project!", portrait: "resources/memoryBumpy.png" },
                 { text: "She turned you into a damn celestial to do her bidding!", portrait: "resources/memoryBumpy.png" },
+            ],
+        },
+        "UD-CycleUnlock": {
+            type: "normal",
+            portrait: "resources/secret.png",
+            music: "music/bumpy.mp3",
+            background: "linear-gradient(45deg, #bf8fbf 0%, #b4bfb4 100%)",
+            trigger() {return hasUpgrade("bum", 44) },
+            dialogue: [
+                { text: "You and Bumpy walk down an unfamiliar street."},
+                { text: "He takes you into a building, then down some stairs."},
+                { text: "At the base of the stairs is a dim room, empty, apart from an elevator door."},
+                { text: "The oldest part of Interspace is at the very bottom of this elevator.", portrait: "resources/bumpy.png" },
+                { text: "I will need you to destory all of your light before going down.", portrait: "resources/bumpy.png" },
+                { text: "Otherwise, Cere will could use it to break free.", portrait: "resources/bumpy.png" },
+                { text: "I can do that.", portrait: "resources/player.png" },
+                { text: "Good. I'll be waiting for you here.", portrait: "resources/bumpy.png" },
             ],
         },
 

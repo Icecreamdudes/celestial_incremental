@@ -72,7 +72,7 @@
     tooltip: "Blueshift",
     color: "#ffffd1",
     update(delta) {
-        player.blu.blueshiftEffectBase = new Decimal(3)
+        player.blu.blueshiftEffectBase = new Decimal(2)
         player.blu.blueshiftEffect = player.blu.totalBlueshifts.pow_base(player.blu.blueshiftEffectBase)
 
         // BLUESHIFTS
@@ -101,10 +101,88 @@
         player.blu.blueshifts[8].cycleGainMul = player.blu.blueshifts[8].amount.pow_base(120)
         player.blu.blueshifts[8].cycleAddedSpeedDiv = player.blu.blueshifts[8].amount.pow_base(120)
 
+        player.blu.totalBlueshifts = new Decimal(0)
+        for (let i = 1; i < Object.keys(player.blu.blueshifts).length + 1; i++) {
+            let blueshift = player.blu.blueshifts[i]
+
+            blueshift.cycleGainMul = blueshift.shiftBase.pow(blueshift.amount)
+            blueshift.cycleAddedSpeedDiv = blueshift.shiftBase.pow(blueshift.amount)
+            player.blu.totalBlueshifts = player.blu.totalBlueshifts.add(blueshift.amount)
+        }
+
     },
     blueshiftReset(isRewarded, id) {
-        prismReset(false)
+        if (isRewarded) {
+            player.blu.blueshifts[id].amount = player.blu.blueshifts[id].amount.add(1)
+        }
+        layers.pri.prismReset(false)
 
+        player.pri.fountains[1].completions = new Decimal(0)
+        player.pri.fountains[1].canAddCompletion = false
+        if (player.pri.fountains[1].focused) {
+            player.pri.fountains[1].focused = false
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        if (player.pri.fountains[1].automated) {
+            player.pri.fountains[1].automated = false
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        player.pri.fountains[2].completions = new Decimal(0)
+        player.pri.fountains[2].canAddCompletion = false
+        if (player.pri.fountains[2].focused) {
+            player.pri.fountains[2].focused = false
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        if (player.pri.fountains[2].automated) {
+            player.pri.fountains[2].automated = false
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        player.pri.fountains[3].completions = new Decimal(0)
+        player.pri.fountains[3].canAddCompletion = false
+        if (player.pri.fountains[3].focused) {
+            player.pri.fountains[3].focused = false
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        if (player.pri.fountains[3].automated) {
+            player.pri.fountains[3].automated = false
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        player.pri.fountains[4].completions = new Decimal(0)
+        player.pri.fountains[4].canAddCompletion = false
+        if (player.pri.fountains[4].focused) {
+            player.pri.fountains[4].focused = false
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        if (player.pri.fountains[4].automated) {
+            player.pri.fountains[4].automated = false
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        player.pri.fountains[5].completions = new Decimal(0)
+        player.pri.fountains[5].canAddCompletion = false
+        if (player.pri.fountains[5].focused) {
+            player.pri.fountains[5].focused = false
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        if (player.pri.fountains[5].automated) {
+            player.pri.fountains[5].automated = false
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        player.pri.fountains[6].completions = new Decimal(0)
+        player.pri.fountains[6].canAddCompletion = false
+        if (player.pri.fountains[6].focused) {
+            player.pri.fountains[6].focused = false
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        if (player.pri.fountains[6].automated) {
+            player.pri.fountains[6].automated = false
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+
+        player.pri.prisms = new Decimal(0)
+        player.pri.prismsToGet = new Decimal(0)
+        player.pri.bestPrisms = new Decimal(0)
+        player.pri.totalPrisms = new Decimal(4)
+        player.pri.bestPrismsInOneReset = new Decimal(0)
     },
     branches: ["wel"],
     clickables: {
@@ -113,6 +191,7 @@
             canClick() { return player.wel.modules[this.id-1000].maxTime.div(player.wel.modules[this.id-1000].timeSpeed).lte(0.1)},
             unlocked() { return true },
             onClick() {
+                layers.blu.blueshiftReset(true, 1)
             },
             style() {
                 let look = {width: "150px", minHeight: "50px", borderRadius: "0"}
@@ -133,6 +212,7 @@
             canClick() { return player.wel.modules[this.id-1000].maxTime.div(player.wel.modules[this.id-1000].timeSpeed).lte(0.1)},
             unlocked() { return true },
             onClick() {
+                layers.blu.blueshiftReset(true, 2)
             },
             style() {
                 let look = {width: "150px", minHeight: "50px", borderRadius: "0"}
@@ -153,6 +233,7 @@
             canClick() { return player.wel.modules[this.id-1000].maxTime.div(player.wel.modules[this.id-1000].timeSpeed).lte(0.1)},
             unlocked() { return true },
             onClick() {
+                layers.blu.blueshiftReset(true, 3)
             },
             style() {
                 let look = {width: "150px", minHeight: "50px", borderRadius: "0"}
@@ -173,6 +254,7 @@
             canClick() { return player.wel.modules[this.id-1000].maxTime.div(player.wel.modules[this.id-1000].timeSpeed).lte(0.1)},
             unlocked() { return true },
             onClick() {
+                layers.blu.blueshiftReset(true, 4)
             },
             style() {
                 let look = {width: "150px", minHeight: "50px", borderRadius: "0"}
@@ -251,7 +333,7 @@
                                         ["raw-html", "+1 Blueshift", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                     ], {background: "#4d9973", borderRadius: "10px 10px 0px 0px", width: "150px", height:"25px"}],
                                     ["blank", "3px"],
-                                    ["clickable", 1003],
+                                    ["clickable", 1002],
                                 ]],
                                 ["blank", "3px"],
                                 ["style-column", [
@@ -274,7 +356,7 @@
                                         ["raw-html", "+1 Blueshift", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                     ], {background: "#4d9973", borderRadius: "10px 10px 0px 0px", width: "150px", height:"25px"}],
                                     ["blank", "3px"],
-                                    ["clickable", 1004],
+                                    ["clickable", 1003],
                                 ]],
                                 ["blank", "3px"],
                                 ["style-column", [
@@ -297,7 +379,7 @@
                                         ["raw-html", "+1 Blueshift", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                     ], {background: "#4d9973", borderRadius: "10px 10px 0px 0px", width: "150px", height:"25px"}],
                                     ["blank", "3px"],
-                                    ["clickable", 1002],
+                                    ["clickable", 1004],
                                 ]],
                                 ["blank", "3px"],
                                 ["style-column", [
@@ -325,5 +407,5 @@
         ["raw-html", () => { return "You have <h3>" + format(player.wel.light) + "</h3> light." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && hasMilestone("prj", 301)}
+    layerShown() { return player.startedGame == true && hasMilestone("prj", 301) || true}
 })

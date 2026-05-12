@@ -42,6 +42,8 @@ addLayer("bee", {
         if (player.al.cocoonLevel >= 12) player.bee.preAlephMult = player.bee.preAlephMult.mul(3)
         if (hasUpgrade("al", 125)) player.bee.preAlephMult = player.bee.preAlephMult.mul(2)
         if (hasUpgrade("al", 225)) player.bee.preAlephMult = player.bee.preAlephMult.mul(2)
+        if (hasAchievement("achievements", 916)) player.bee.preAlephMult = player.bee.preAlephMult.mul(1.25)
+        if (hasAchievement("achievements", 919)) player.bee.preAlephMult = player.bee.preAlephMult.mul(1.25)
         player.bee.preAlephMult = player.bee.preAlephMult.mul(levelableEffect("pet", 503)[0])
         player.bee.preAlephMult = player.bee.preAlephMult.mul(levelableEffect("pu", 213)[1])
         player.bee.preAlephMult = player.bee.preAlephMult.mul(buyableEffect("sme", 176))
@@ -58,6 +60,11 @@ addLayer("bee", {
         if (hasUpgrade("ne", 102)) player.bee.bps = player.bee.bps.mul(3)
         if (player.bb.breadMilestone >= 1) player.bee.bps = player.bee.bps.mul(player.bb.breadEffects[0])
         player.bee.bps = player.bee.bps.mul(player.ho.effects.bee.effect)
+        if (hasAchievement("achievements", 902)) player.bee.bps = player.bee.bps.mul(1.05)
+        if (hasAchievement("achievements", 905)) player.bee.bps = player.bee.bps.mul(1.1)
+        if (hasAchievement("achievements", 909)) player.bee.bps = player.bee.bps.mul(1.1)
+        if (hasAchievement("achievements", 907)) player.bee.bps = player.bee.bps.mul(1.25)
+        if (hasAchievement("achievements", 911)) player.bee.bps = player.bee.bps.mul(1.25)
         if (hasUpgrade("al", 101)) player.bee.bps = player.bee.bps.mul(2)
         player.bee.bps = player.bee.bps.mul(buyableEffect("bee", 12))
         if (hasUpgrade("al", 110)) player.bee.bps = player.bee.bps.mul(3)
@@ -127,6 +134,7 @@ addLayer("bee", {
                 }
             },
             buy() {
+                if (!hasAchievement("achievements", 901)) completeAchievement("achievements", 901)
                 if (player.bee.beeMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     if (player.al.cocoonLevel < 13) this.pay(buyonecost)

@@ -342,7 +342,7 @@ function importSave(imported = undefined, forced = false) {
 		save();
 		window.location.reload();
 	} catch (e) {
-		return;
+		console.error(e)
 	}
 }
 

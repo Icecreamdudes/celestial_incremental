@@ -831,7 +831,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added 5 new buyables to blood layer<br>
 			- Added 2 new perks from beating Nox<br>
 			- Added 3 more starmetal upgrades<br>
-			- Added 5 more eclipse upgrades<br>
+			- Added 5 more eclipse upgrades<br><br>
 		Minor Changes:<br>
 			- Added an auto-shoot feature to ship battles<br>
 			- Added a new singularity upgrade to keep more content on resets<br>

@@ -52,6 +52,7 @@
         if (hasMilestone("db", 12)) player.du.pointGain = player.du.pointGain.mul(player.db.milestone2Effect)
         if (hasMilestone("dgj", 12)) player.du.pointGain = player.du.pointGain.mul(player.dgj.milestone2Effect)
         player.du.pointGain = player.du.pointGain.mul(buyableEffect("dgj", 11))
+        if (hasUpgrade("darkTemple", 2)) player.du.pointGain = player.du.pointGain.mul(upgradeEffect("darkTemple", 2))
 
         player.du.pointGain = player.du.pointGain.div(player.du.pointSoftcap)
         if (player.pet.legPetTimers[0].active) player.du.pointGain = player.du.pointGain.pow(0.7)

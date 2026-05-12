@@ -646,19 +646,20 @@ addLayer("darkTemple", {
             unlocked: true,
             fullDisplay() {
                 return !this.canAfford() ? "<h3>You need " + formatWhole(Decimal.sub(5, player.darkTemple.totalLevel)) + " more eff. rune levels"
-                : "Unlock ???<br><br>Cost: " + formatSimple(this.cost) + " " + this.currencyDisplayName
+                : "Boost DCP based on dark essence<br>Currently: x" + formatSimple(this.effect()) + "<br><br>Cost: " + formatSimple(this.cost) + " " + this.currencyDisplayName
             },
-            cost: new Decimal(25),
+            cost: new Decimal(10),
             canAfford() {return player.darkTemple.totalLevel.gte(5)},
             currencyLocation() {return player.bh },
             currencyDisplayName: "Dark Essence",
             currencyInternalName: "darkEssence",
+            effect() {return player.bh.darkEssence.pow(0.5).add(1)},
             style() {
-                let look = {minHeight: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#C71585", border: "2px solid #C71585", margin: "2px"}
-                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#1a3b0f"
+                let look = {width: "140px", minHeight: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#0d1d07"}
                 else if (!this.canAfford()) look.backgroundColor = "#000"
-                else if (!canAffordUpgrade(this.layer, this.id)) look.backgroundColor = "#361e1e"
-                else look.backgroundColor = "#250121"
+                else if (!canAffordUpgrade(this.layer, this.id)) look.backgroundColor = "#1b0f0f"
+                else look.backgroundColor = "#13020d"
                 return look
             },
         },
@@ -674,11 +675,132 @@ addLayer("darkTemple", {
             currencyDisplayName: "Dark Essence",
             currencyInternalName: "darkEssence",
             style() {
-                let look = {minHeight: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#C71585", border: "2px solid #C71585", margin: "2px"}
-                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#1a3b0f"
+                let look = {width: "140px", minHeight: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
                 else if (!this.canAfford()) look.backgroundColor = "#000"
-                else if (!canAffordUpgrade(this.layer, this.id)) look.backgroundColor = "#361e1e"
-                else look.backgroundColor = "#250121"
+                else if (!canAffordUpgrade(this.layer, this.id)) look.backgroundColor = "#1b0f0f"
+                else look.backgroundColor = "#13020d"
+                return look
+            },
+        },
+        6: {
+            unlocked: true,
+            fullDisplay() {
+                return !this.canAfford() ? "<h3>You need " + formatWhole(Decimal.sub(15, player.darkTemple.totalLevel)) + " more eff. rune levels"
+                : "???<br><br>Cost: " + formatSimple(this.cost) + " " + this.currencyDisplayName
+            },
+            cost: new Decimal(75),
+            canAfford() {return player.darkTemple.totalLevel.gte(15)},
+            currencyLocation() {return player.bh },
+            currencyDisplayName: "Dark Essence",
+            currencyInternalName: "darkEssence",
+            style() {
+                let look = {width: "140px", minHeight: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
+                else if (!this.canAfford()) look.backgroundColor = "#000"
+                else if (!canAffordUpgrade(this.layer, this.id)) look.backgroundColor = "#1b0f0f"
+                else look.backgroundColor = "#13020d"
+                return look
+            },
+        },
+        8: {
+            unlocked: true,
+            fullDisplay() {
+                return !this.canAfford() ? "<h3>You need " + formatWhole(Decimal.sub(20, player.darkTemple.totalLevel)) + " more eff. rune levels"
+                : "???<br><br>Cost: " + formatSimple(this.cost) + " " + this.currencyDisplayName
+            },
+            cost: new Decimal(200),
+            canAfford() {return player.darkTemple.totalLevel.gte(20)},
+            currencyLocation() {return player.bh },
+            currencyDisplayName: "Dark Essence",
+            currencyInternalName: "darkEssence",
+            style() {
+                let look = {width: "140px", minHeight: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
+                else if (!this.canAfford()) look.backgroundColor = "#000"
+                else if (!canAffordUpgrade(this.layer, this.id)) look.backgroundColor = "#1b0f0f"
+                else look.backgroundColor = "#13020d"
+                return look
+            },
+        },
+        10: {
+            unlocked: true,
+            fullDisplay() {
+                return !this.canAfford() ? "<h3>You need " + formatWhole(Decimal.sub(25, player.darkTemple.totalLevel)) + " more eff. rune levels"
+                : "Unlock Negative Depth 1<br><br>Cost: " + formatSimple(this.cost) + " " + this.currencyDisplayName
+            },
+            cost: new Decimal(500),
+            canAfford() {return player.darkTemple.totalLevel.gte(25)},
+            currencyLocation() {return player.bh },
+            currencyDisplayName: "Dark Essence",
+            currencyInternalName: "darkEssence",
+            style() {
+                let look = {width: "140px", minHeight: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
+                else if (!this.canAfford()) look.backgroundColor = "#000"
+                else if (!canAffordUpgrade(this.layer, this.id)) look.backgroundColor = "#1b0f0f"
+                else look.backgroundColor = "#13020d"
+                return look
+            },
+        },
+        12: {
+            unlocked: true,
+            fullDisplay() {
+                return !this.canAfford() ? "<h3>You need " + formatWhole(Decimal.sub(30, player.darkTemple.totalLevel)) + " more eff. rune levels"
+                : "Unlock Rune Tiers<br><br>Cost: " + formatSimple(this.cost) + " " + this.currencyDisplayName
+            },
+            cost: new Decimal(25),
+            canAfford() {return player.darkTemple.totalLevel.gte(30)},
+            currencyLocation() {return player.bh },
+            currencyDisplayName: "Dark Ether",
+            currencyInternalName: "darkEther",
+            style() {
+                let look = {width: "140px", minHeight: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
+                else if (!this.canAfford()) look.backgroundColor = "#000"
+                else if (!canAffordUpgrade(this.layer, this.id)) look.backgroundColor = "#1b0f0f"
+                else look.backgroundColor = "#13020d"
+                return look
+            },
+        },
+        14: {
+            unlocked: true,
+            fullDisplay() {
+                return !this.canAfford() ? "<h3>You need " + formatWhole(Decimal.sub(35, player.darkTemple.totalLevel)) + " more eff. rune levels"
+                : "Skill points buff ship battle damage<br>Currently: x" + formatSimple(this.effect()) + "<br><br>Cost: " + formatSimple(this.cost) + " " + this.currencyDisplayName
+            },
+            cost: new Decimal(150),
+            canAfford() {return player.darkTemple.totalLevel.gte(35)},
+            currencyLocation() {return player.bh },
+            currencyDisplayName: "Dark Ether",
+            currencyInternalName: "darkEther",
+            effect() {return player.bh.maxSkillPoints.add(1).log(10).add(1)},
+            style() {
+                let look = {width: "140px", minHeight: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
+                else if (!this.canAfford()) look.backgroundColor = "#000"
+                else if (!canAffordUpgrade(this.layer, this.id)) look.backgroundColor = "#1b0f0f"
+                else look.backgroundColor = "#13020d"
+                return look
+            },
+        },
+        16: {
+            unlocked: true,
+            fullDisplay() {
+                return !this.canAfford() ? "<h3>You need " + formatWhole(Decimal.sub(40, player.darkTemple.totalLevel)) + " more eff. rune levels"
+                : "???<br><br>Cost: " + formatSimple(this.cost) + " " + this.currencyDisplayName
+            },
+            cost: new Decimal(750),
+            canAfford() {return player.darkTemple.totalLevel.gte(40)},
+            currencyLocation() {return player.bh },
+            currencyDisplayName: "Dark Ether",
+            currencyInternalName: "darkEther",
+            style() {
+                let look = {width: "140px", minHeight: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
+                else if (!this.canAfford()) look.backgroundColor = "#000"
+                else if (!canAffordUpgrade(this.layer, this.id)) look.backgroundColor = "#1b0f0f"
+                else look.backgroundColor = "#13020d"
                 return look
             },
         },
@@ -687,56 +809,230 @@ addLayer("darkTemple", {
         1001: {
             costBase() { return new Decimal(5) },
             costGrowth() { return new Decimal(1.5) },
-            purchaseLimit() { return new Decimal(5) },
+            purchaseLimit() { return new Decimal(10) },
             currency() { return player.bh.darkEssence },
             pay(amt) { player.bh.darkEssence = this.currency().sub(amt) },
-            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).div(10).add(1)},
+            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).div(2).add(1)},
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) && player.darkTemple.totalLevel.gte(2) },
             display() {
-                return !this.canAfford() ? "<h3>You need " + formatWhole(Decimal.sub(2, player.darkTemple.totalLevel)) + " more eff. rune levels"
-                : "Increase ??? gain<br>Currently: x" + formatSimple(this.effect()) + "<br>Next: x" + formatSimple(this.effect(getBuyableAmount(this.layer, this.id).add(1))) + "<br><br>Cost: " + formatSimple(this.cost()) + " Dark Essence"
+                return player.darkTemple.totalLevel.lt(2) ? "<h3>You need " + formatWhole(Decimal.sub(2, player.darkTemple.totalLevel)) + " more eff. rune levels"
+                : "Increase character defense<br>Currently: +" + formatSimple(this.effect().sub(1)) + "<br>Next: +" + formatSimple(this.effect(getBuyableAmount(this.layer, this.id).add(1)).sub(1)) + "<br><br>Cost: " + formatSimple(this.cost()) + " Dark Essence"
             },
             buy() {
                 this.pay(this.cost())
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
             },
             style() {
-                let look = {width: "120px", height: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#C71585", border: "2px solid #C71585", margin: "2px"}
-                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#1a3b0f"
+                let look = {width: "140px", height: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
                 else if (player.darkTemple.totalLevel.lt(2)) look.backgroundColor = "#000"
-                else if (!this.canAfford()) look.backgroundColor = "#361e1e"
-                else look.backgroundColor = "#250121"
+                else if (!this.canAfford()) look.backgroundColor = "#1b0f0f"
+                else look.backgroundColor = "#13020d"
                 return look
 
                 return look
             },
         },
         1003: {
-            costBase() { return new Decimal(5) },
-            costGrowth() { return new Decimal(1.5) },
-            purchaseLimit() { return new Decimal(5) },
+            costBase() { return new Decimal(10) },
+            costGrowth() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(10) },
             currency() { return player.bh.darkEssence },
             pay(amt) { player.bh.darkEssence = this.currency().sub(amt) },
-            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).div(10).add(1)},
+            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1)},
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) && player.darkTemple.totalLevel.gte(8) },
             display() {
-                return !this.canAfford() ? "<h3>You need " + formatWhole(Decimal.sub(8, player.darkTemple.totalLevel)) + " more eff. rune levels"
-                : "Increase ??? gain<br>Currently: x" + formatSimple(this.effect()) + "<br>Next: x" + formatSimple(this.effect(getBuyableAmount(this.layer, this.id).add(1))) + "<br><br>Cost: " + formatSimple(this.cost()) + " Dark Essence"
+                return player.darkTemple.totalLevel.lt(8) ? "<h3>You need " + formatWhole(Decimal.sub(8, player.darkTemple.totalLevel)) + " more eff. rune levels"
+                : "Increase skill points<br>Currently: +" + formatSimple(this.effect().sub(1)) + "<br>Next: +" + formatSimple(this.effect(getBuyableAmount(this.layer, this.id).add(1)).sub(1)) + "<br><br>Cost: " + formatSimple(this.cost()) + " Dark Essence"
             },
             buy() {
                 this.pay(this.cost())
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
             },
             style() {
-                let look = {width: "120px", height: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#C71585", border: "2px solid #C71585", margin: "2px"}
-                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#1a3b0f"
+                let look = {width: "140px", height: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
                 else if (player.darkTemple.totalLevel.lt(8)) look.backgroundColor = "#000"
-                else if (!this.canAfford()) look.backgroundColor = "#361e1e"
-                else look.backgroundColor = "#250121"
+                else if (!this.canAfford()) look.backgroundColor = "#1b0f0f"
+                else look.backgroundColor = "#13020d"
+                return look
+
+                return look
+            },
+        },
+        1005: {
+            costBase() { return new Decimal(50) },
+            costGrowth() { return new Decimal(3) },
+            purchaseLimit() { return new Decimal(10) },
+            currency() { return player.bh.darkEssence },
+            pay(amt) { player.bh.darkEssence = this.currency().sub(amt) },
+            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).div(10).add(1)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) && player.darkTemple.totalLevel.gte(12) },
+            display() {
+                return player.darkTemple.totalLevel.lt(12) ? "<h3>You need " + formatWhole(Decimal.sub(12, player.darkTemple.totalLevel)) + " more eff. rune levels"
+                : "Increase dark essence<br>Currently: x" + formatSimple(this.effect()) + "<br>Next: x" + formatSimple(this.effect(getBuyableAmount(this.layer, this.id).add(1))) + "<br><br>Cost: " + formatSimple(this.cost()) + " Dark Essence"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "140px", height: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
+                else if (player.darkTemple.totalLevel.lt(12)) look.backgroundColor = "#000"
+                else if (!this.canAfford()) look.backgroundColor = "#1b0f0f"
+                else look.backgroundColor = "#13020d"
+                return look
+
+                return look
+            },
+        },
+        1007: {
+            costBase() { return new Decimal(125) },
+            costGrowth() { return new Decimal(5) },
+            purchaseLimit() { return new Decimal(5) },
+            currency() { return player.bh.darkEssence },
+            pay(amt) { player.bh.darkEssence = this.currency().sub(amt) },
+            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).div(10).add(1)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) && player.darkTemple.totalLevel.gte(18) },
+            display() {
+                return player.darkTemple.totalLevel.lt(18) ? "<h3>You need " + formatWhole(Decimal.sub(18, player.darkTemple.totalLevel)) + " more eff. rune levels"
+                : "Reduce skill level cap cost<br>Currently: /" + formatSimple(this.effect()) + "<br>Next: /" + formatSimple(this.effect(getBuyableAmount(this.layer, this.id).add(1))) + "<br><br>Cost: " + formatSimple(this.cost()) + " Dark Essence"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "140px", height: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
+                else if (player.darkTemple.totalLevel.lt(18)) look.backgroundColor = "#000"
+                else if (!this.canAfford()) look.backgroundColor = "#1b0f0f"
+                else look.backgroundColor = "#13020d"
+                return look
+
+                return look
+            },
+        },
+        1009: {
+            costBase() { return new Decimal(250) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(5) },
+            currency() { return player.bh.darkEssence },
+            pay(amt) { player.bh.darkEssence = this.currency().sub(amt) },
+            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) && player.darkTemple.totalLevel.gte(22) },
+            display() {
+                return player.darkTemple.totalLevel.lt(22) ? "<h3>You need " + formatWhole(Decimal.sub(22, player.darkTemple.totalLevel)) + " more eff. rune levels"
+                : "<small>Increase chance to double celestialite rewards</small><br>Currently: +" + formatSimple(this.effect().sub(1)) + "%<br>Next: +" + formatSimple(this.effect(getBuyableAmount(this.layer, this.id).add(1)).sub(1)) + "%<br><br>Cost: " + formatSimple(this.cost()) + " Dark Essence"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "140px", height: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
+                else if (player.darkTemple.totalLevel.lt(22)) look.backgroundColor = "#000"
+                else if (!this.canAfford()) look.backgroundColor = "#1b0f0f"
+                else look.backgroundColor = "#13020d"
+                return look
+
+                return look
+            },
+        },
+        1011: {
+            costBase() { return new Decimal(5) },
+            costGrowth() { return new Decimal(5) },
+            purchaseLimit() { return new Decimal(5) },
+            currency() { return player.bh.darkEther },
+            pay(amt) { player.bh.darkEther = this.currency().sub(amt) },
+            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) && player.darkTemple.totalLevel.gte(28) },
+            display() {
+                return player.darkTemple.totalLevel.lt(28) ? "<h3>You need " + formatWhole(Decimal.sub(28, player.darkTemple.totalLevel)) + " more eff. rune levels"
+                : "Increase base character stats<br>Currently: +" + formatSimple(this.effect().sub(1)) + "%<br>Next: +" + formatSimple(this.effect(getBuyableAmount(this.layer, this.id).add(1)).sub(1)) + "%<br><br>Cost: " + formatSimple(this.cost()) + " Dark Ether"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "140px", height: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
+                else if (player.darkTemple.totalLevel.lt(28)) look.backgroundColor = "#000"
+                else if (!this.canAfford()) look.backgroundColor = "#1b0f0f"
+                else look.backgroundColor = "#13020d"
+                return look
+
+                return look
+            },
+        },
+        1013: {
+            costBase() { return new Decimal(50) },
+            costGrowth() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(5) },
+            currency() { return player.bh.darkEther },
+            pay(amt) { player.bh.darkEther = this.currency().sub(amt) },
+            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).div(10).add(1)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) && player.darkTemple.totalLevel.gte(32) },
+            display() {
+                return player.darkTemple.totalLevel.lt(32) ? "<h3>You need " + formatWhole(Decimal.sub(32, player.darkTemple.totalLevel)) + " more eff. rune levels"
+                : "Reduce rune level cost<br>Currently: /" + formatSimple(this.effect()) + "<br>Next: /" + formatSimple(this.effect(getBuyableAmount(this.layer, this.id).add(1))) + "<br><br>Cost: " + formatSimple(this.cost()) + " Dark Ether"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "140px", height: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
+                else if (player.darkTemple.totalLevel.lt(32)) look.backgroundColor = "#000"
+                else if (!this.canAfford()) look.backgroundColor = "#1b0f0f"
+                else look.backgroundColor = "#13020d"
+                return look
+
+                return look
+            },
+        },
+        1015: {
+            costBase() { return new Decimal(300) },
+            costGrowth() { return new Decimal(3) },
+            purchaseLimit() { return new Decimal(5) },
+            currency() { return player.bh.darkEther },
+            pay(amt) { player.bh.darkEther = this.currency().sub(amt) },
+            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).div(5).add(1)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) && player.darkTemple.totalLevel.gte(38) },
+            display() {
+                return player.darkTemple.totalLevel.lt(38) ? "<h3>You need " + formatWhole(Decimal.sub(38, player.darkTemple.totalLevel)) + " more eff. rune levels"
+                : "Increase RGN during celestialite respawn<br>Currently: +" + formatSimple(this.effect().sub(1)) + "<br>Next: +" + formatSimple(this.effect(getBuyableAmount(this.layer, this.id).add(1)).sub(1)) + "<br><br>Cost: " + formatSimple(this.cost()) + " Dark Ether"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "140px", height: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
+                else if (player.darkTemple.totalLevel.lt(38)) look.backgroundColor = "#000"
+                else if (!this.canAfford()) look.backgroundColor = "#1b0f0f"
+                else look.backgroundColor = "#13020d"
                 return look
 
                 return look
@@ -1140,15 +1436,27 @@ addLayer("darkTemple", {
             },
             "bestowal": {
                 content: [
-                    ["top-column", [
+                    ["always-scroll-column", [
                         ["blank", "10px"],
-                        ["style-row", [
-                            ["raw-html", () => {return "Eff. Rune Levels: " + formatWhole(player.darkTemple.totalLevel)}, {color: "#C71585", fontSize: "20px", fontFamily: "monospace"}]
-                        ], {width: "300px", height: "30px", background: "black", border: "3px solid #C71585", borderRadius: "15px"}],
+                        ["row", [
+                            ["style-row", [
+                                ["raw-html", () => {return "Eff. Rune Levels: " + formatWhole(player.darkTemple.totalLevel)}, {color: "#C71585", fontSize: "14px", fontFamily: "monospace"}]
+                            ], {width: "185px", height: "30px", background: "black", border: "3px solid #C71585", borderRadius: "15px"}],
+                            ["style-row", [
+                                ["raw-html", () => {return formatWhole(player.bh.darkEssence) + " Dark Essence"}, {color: "#C71585", fontSize: "14px", fontFamily: "monospace"}]
+                            ], {width: "185px", height: "30px", background: "black", border: "3px solid #C71585", borderRadius: "15px", marginLeft: "10px"}],
+                            ["style-row", [
+                                ["raw-html", () => {return formatWhole(player.bh.darkEther) + " Dark Ether"}, {color: "#C71585", fontSize: "14px", fontFamily: "monospace"}]
+                            ], {width: "185px", height: "30px", background: "black", border: "3px solid #C71585", borderRadius: "15px", marginLeft: "10px"}],
+                        ]],
                         ["blank", "10px"],
                         ["row", [
                             ["buyable", 1001], ["upgrade", 2], ["buyable", 1003], ["upgrade", 4],
+                            ["buyable", 1005], ["upgrade", 6], ["buyable", 1007], ["upgrade", 8],
+                            ["buyable", 1009], ["upgrade", 10], ["buyable", 1011], ["upgrade", 12],
+                            ["buyable", 1013], ["upgrade", 14], ["buyable", 1015], ["upgrade", 16],
                         ]],
+                        ["blank", "10px"],
                     ], {width: "624px", height: "420px", background: "radial-gradient(#00000055, #630a4255)"}],
                 ],
             },

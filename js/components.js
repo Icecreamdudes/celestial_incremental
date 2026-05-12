@@ -806,7 +806,7 @@ function loadVue() {
 					<div v-bind:class="{levelableBarText: true, hide: !tmp[layer].levelables[data].barShown}">
 						<span v-html="player[layer].levelables[data][0].gte(tmp[layer].levelables[data].levelLimit) ? formatShortestWhole(tmp[layer].levelables[data].currency) : formatShortestWhole(tmp[layer].levelables[data].currency)+'/'+formatShortestWhole(tmp[layer].levelables[data].xpReq)"></span>
 					</div>
-					<div v-bind:class="{levelableBarProgress: true, hide: !tmp[layer].levelables[data].barShown}" v-bind:style="[{'width': player[layer].levelables[data][0].gte(tmp[layer].levelables[data].levelLimit) ? '0%' : toNumber(tmp[layer].levelables[data].currency.div(tmp[layer].levelables[data].xpReq).mul(100))+'%'}, tmp[layer].levelables[data].barStyle]"></div>
+					<div v-bind:class="{levelableBarProgress: true, flash: tmp[layer].levelables[data].currency.gte(tmp[layer].levelables[data].xpReq), hide: !tmp[layer].levelables[data].barShown}" v-bind:style="[{'width': player[layer].levelables[data][0].gte(tmp[layer].levelables[data].levelLimit) ? '0%' : toNumber(tmp[layer].levelables[data].currency.div(tmp[layer].levelables[data].xpReq).mul(100))+'%'}, tmp[layer].levelables[data].barStyle]"></div>
 				</div>
 				<tooltip v-if="layers[layer].levelables[data].tooltip" :text="run(layers[layer].levelables[data].tooltip, layers[layer].levelables[data])"></tooltip>
 			</button>
@@ -1432,6 +1432,15 @@ function loadVue() {
 				<span style="position:absolute;top:34px;left:15px;font-size:14px" v-html="player.fl.glossaryIndex != 0 ? run(layers.fl.glossary[player.fl.glossaryIndex].getTitle, layers.fl.glossary[player.fl.glossaryIndex]) : ''"></span>
 			</div>
 		`
+	})
+	
+	Vue.component('gilding', {
+		props: ['layer', 'data'],
+		template: `
+		<div v-bind:class="{hoverable: true, gild: true, selected: player[layer].gildingIndex == data}" v-if="run(layers[layer].glossary[data].gildDisplay, layers[layer].glossary[data])" :disabled="!player[layer].gilding[data]" v-on:click="player[layer].gildingIndex = data" v-bind:style="!player[layer].gilding[data] ? {'filter': 'brightness(50%)'} : {}">
+			<svg width='54pt' height='54pt' viewBox='0 0 60 60' v-bind:style="!player[layer].gilding[data] ? {'filter': 'brightness(50%) drop-shadow(0px 3px 2px rgba(100, 100, 0, 0.5))'} : {}" style="filter:drop-shadow(0px 3px 2px rgba(100, 100, 0, 0.5))" v-html="layers[layer].glossary[data].svg"></svg>
+		</div>
+		`,
 	})
 	
 	Vue.component('jukebox', {

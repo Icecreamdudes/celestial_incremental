@@ -1181,7 +1181,7 @@
                 player.bh.darkEssence = this.currency()[0].sub(amt)
                 player.sme.starmetalEssence = this.currency()[1].sub(amt2)
             },
-            effect(x) {return getBuyableAmount(this.layer, this.id).div(50)},
+            effect(x) {return getBuyableAmount(this.layer, this.id).mul(2)},
             unlocked: true,
             branches: [[102, "#8a0e79"]],
             cost(x) {
@@ -1192,8 +1192,8 @@
             },
             display() {
                 return "<h3>SME-D1</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/25)\n\
-                    Increase base black heart health\n\
-                    Currently: +" + formatSimple(tmp[this.layer].buyables[this.id].effect.mul(100)) + "%\n\ \n\
+                    Increase black heart health\n\
+                    Currently: +" + formatSimple(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
                     Cost:<br>" + formatShortWhole(player.bh.darkEssence) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[0]) + " Dark Essence\n\
                     " + formatShortWhole(player.sme.starmetalEssence) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[1]) + " SME"
             },
@@ -1216,7 +1216,7 @@
                 player.bh.darkEssence = this.currency()[0].sub(amt)
                 player.sme.starmetalEssence = this.currency()[1].sub(amt2)
             },
-            effect(x) {return getBuyableAmount(this.layer, this.id).div(50)},
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(5)},
             unlocked: true,
             branches: [[131, "#8a0e79"]],
             cost(x) {
@@ -1227,8 +1227,8 @@
             },
             display() {
                 return "<h3>SME-D2</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/25)\n\
-                    Increase base black heart damage\n\
-                    Currently: +" + formatSimple(tmp[this.layer].buyables[this.id].effect.mul(100)) + "%\n\ \n\
+                    Increase black heart damage\n\
+                    Currently: +" + formatSimple(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
                     Cost:<br>" + formatShortWhole(player.bh.darkEssence) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[0]) + " Dark Essence\n\
                     " + formatShortWhole(player.sme.starmetalEssence) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[1]) + " SME"
             },

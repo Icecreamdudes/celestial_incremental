@@ -86,7 +86,7 @@
         {
             for (let prop in player.pu.levelables) {
                 if (getLevelableTier("pu", prop, true)) {
-                    if (player.bl.bloodDrain) addLevelableXP("pu", prop, player.le.eclipseShardsToGetTrue.mul(player.bl.xpGainPercentage.mul(delta)).floor())
+                    if (player.bl.bloodDrain) addLevelableXP("pu", prop, player.le.eclipseShardsToGetTrue.mul(player.le.eclipseShardsValue).mul(player.bl.xpGainPercentage.mul(delta)).floor())
                 }
             }
         }

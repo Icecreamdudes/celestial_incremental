@@ -1178,10 +1178,10 @@ addLayer("bh", {
         let healthBase = new Decimal(1)
         healthBase = healthBase.add(buyableEffect("depth1", 1))
         healthBase = healthBase.add(player.darkTemple.hpMult)
-        healthBase = healthBase.add(buyableEffect("sme", 131))
         if (hasUpgrade("ep2", 9101)) healthBase = healthBase.add(upgradeEffect("ep2", 9101))
 
         let healthAdd = new Decimal(0)
+        healthAdd = healthAdd.add(buyableEffect("sme", 131))
         healthAdd = healthAdd.add(player.darkTemple.hpAdd)
         healthAdd = healthAdd.add(player.bh.skillData["general_bandage"].maxLevel)
         healthAdd = healthAdd.add(player.bh.skillData["general_recklessAbandon"].maxLevel)
@@ -1194,10 +1194,10 @@ addLayer("bh", {
         let damageBase = new Decimal(1)
         damageBase = damageBase.add(buyableEffect("depth2", 1))
         damageBase = damageBase.add(player.darkTemple.dmgMult)
-        damageBase = damageBase.add(buyableEffect("sme", 132))
         if (hasUpgrade("ep2", 9103)) damageBase = damageBase.add(upgradeEffect("ep2", 9103))
 
         let damageAdd = new Decimal(0)
+        damageAdd = damageAdd.add(buyableEffect("sme", 132))
         damageAdd = damageAdd.add(player.darkTemple.dmgAdd)
         damageAdd = damageAdd.add(player.bh.skillData["general_slap"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["kres_chop"].maxLevel.div(5))

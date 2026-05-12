@@ -1064,7 +1064,7 @@ function stagnantUpdate(time) {
                                     if (player.bh.celestialite.actions[i].cooldown.gte(BHC[player.bh.celestialite.id].actions[i].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))) {
                                         if (!BHC[player.bh.celestialite.id].actions[i].conditional || BHC[player.bh.celestialite.id].actions[i].conditional(3, i)) {
                                             player.bh.celestialite.actions[i].cooldown = new Decimal(0)
-                                            player.bh.celestialite.actions[i].duration = BHC[player.bh.celestialite.id].actions[i].duration
+                                            player.bh.celestialite.actions[i].duration = run(BHC[player.bh.celestialite.id].actions[i].duration, BHC[player.bh.celestialite.id].actions[i])
                                         }
                                     }
                                 }
@@ -1138,7 +1138,7 @@ function stagnantUpdate(time) {
                                     }
                                     if (active) {
                                         player.bh.characters[i].skills[j].cooldown = new Decimal(0)
-                                        player.bh.characters[i].skills[j].duration = BHA[player.bh.characters[i].skills[j].id].duration
+                                        player.bh.characters[i].skills[j].duration = run(BHA[player.bh.characters[i].skills[j].id].duration, BHA[player.bh.characters[i].skills[j].id])
                                     }
                                 }
                             }

@@ -607,7 +607,7 @@ addLayer("pu", {
                     "Unlock a new generator buyable<br>",
                     !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
-                    "x" + format(this.effect()[1]) + " to pre-hex power resources",
+                    "x" + format(this.effect()[1]) + " to pre-power hex resources",
                     getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")

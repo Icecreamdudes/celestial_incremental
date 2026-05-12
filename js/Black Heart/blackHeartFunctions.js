@@ -590,6 +590,7 @@ function bhHeal(heal, index, slot, target, str = "") {
     }
 }
 
+
 function celestialiteReward(gain) {
     let generalChance = Decimal.sub(player.bh.celestialite.curAdd, 1)
     let generalRemain = generalChance.floor()
@@ -675,6 +676,11 @@ function celestialiteReward(gain) {
         player.laboratory.matosEssence = player.laboratory.matosEssence.add(gain.matosEssence)
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.matosEssence) + " matos dust! (You have " + formatWhole(player.laboratory.matosEssence) + ")")
     }
+    if (gain.pips) {
+        gain.pips = gain.pips.mul(generalMult).floor()
+        player.zd.pips = player.zd.pips.add(gain.pips)
+        bhLog("<span style='color: #a3a3a3'>" + str + "You gained " + formatWhole(gain.pips) + " dice pips! (You have " + formatWhole(player.zd.pips) + ")")
+    }
 }
 
 function celestialiteDeath() {
@@ -741,6 +747,15 @@ function celestialiteDeath() {
             player.bh.celestialite.id = "none"
 
             player.subtabs["bh"]["stuff"] = "win"
+
+            if (player.bh.characters[0].id == "creation") { //change when there is a formal unlock for the creation
+                player.bh.characters[0].id = "none"
+                player.bh.characterData[player.bh.characterSelection].selected = true
+                for (let i = 0; i < 4; i++) {
+                    player.bh.characters[0].skills[i].id = "none"
+                }
+            }
+            player.zarDungeon.reachedZar = false
         }
     }
 
@@ -793,6 +808,16 @@ function celestialiteSpawn() {
     }
 
     if (BHC[player.bh.celestialite.id].onSpawn) BHC[player.bh.celestialite.id].onSpawn()
+
+    if (player.bh.celestialite.id == "matos") {
+        screenFlash("-Matos, Celestial of Machinery-", 1200)
+    }
+    if (player.bh.celestialite.id == "aleph") {
+        screenFlash("-Aleph, Celestial of the Swarms-", 1200)
+    }
+    if (player.bh.celestialite.id == "zar") {
+        screenFlash("-Zar, Celestial of Chance-", 1200)
+    }
 }
 
 function calcTarget(index, slot, target, action = "none") {
@@ -931,6 +956,7 @@ function BHStageEnter(stage) {
     }
     player.bh.respawnTimer = new Decimal(-1)
     player.bh.timer = new Decimal(0)
+    layers.creation.resetCreation()
     celestialiteSpawn()
 }
 
@@ -1138,3 +1164,150 @@ function stagnantUpdate(time) {
         }, 200*z)
     }
 }
+
+
+const navHealSound = new Audio('music/navHeal.mp3');
+function navHealEffect(x, y)
+{
+    if (options.musicToggle) navHealSound.play();
+    if (typeof options !== 'undefined' && options.toggleParticle === false) return;
+
+    // create a small plus-sign SVG generator used for particle images
+    const plusSvg = (size, color) => {
+        const s = Math.max(8, Math.round(size));
+        const half = s / 2;
+        const thickness = Math.max(1, Math.round(s * 0.18));
+        const svg = "<svg xmlns='http://www.w3.org/2000/svg' width='" + s + "' height='" + s + "' viewBox='0 0 " + s + " " + s + "'>" +
+            "<rect x='" + (half - thickness/2) + "' y='" + (s*0.12) + "' width='" + thickness + "' height='" + (s*0.76) + "' rx='" + (thickness/2) + "' fill='" + color + "'/>" +
+            "<rect x='" + (s*0.12) + "' y='" + (half - thickness/2) + "' width='" + (s*0.76) + "' height='" + thickness + "' rx='" + (thickness/2) + "' fill='" + color + "'/>" +
+            "</svg>";
+        return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+    };
+
+    // helper: create a white-circle SVG data URI to use as mask (no external images)
+    const circleMask = (size) => {
+        const s = Math.max(4, Math.round(size));
+        const svg = "<svg xmlns='http://www.w3.org/2000/svg' width='" + s + "' height='" + s + "' viewBox='0 0 " + s + " " + s + "'><circle cx='" + (s/2) + "' cy='" + (s/2) + "' r='" + (s/2) + "' fill='white' /></svg>";
+        return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+    };
+
+    const ellipseMask = (w, h) => {
+        const ww = Math.max(4, Math.round(w));
+        const hh = Math.max(4, Math.round(h));
+        const svg = "<svg xmlns='http://www.w3.org/2000/svg' width='" + ww + "' height='" + hh + "' viewBox='0 0 " + ww + " " + hh + "'><ellipse cx='" + (ww/2) + "' cy='" + (hh/2) + "' rx='" + (ww/2) + "' ry='" + (hh/2) + "' fill='white' /></svg>";
+        return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+    };
+
+    // determine a screen-centered origin (fallback to provided x,y)
+    const screenInfo = (function(){
+        if (typeof tmp !== 'undefined' && tmp.other && tmp.other.screenWidth && tmp.other.screenHeight) return {x: tmp.other.screenWidth/2, y: tmp.other.screenHeight/2, w: tmp.other.screenWidth, h: tmp.other.screenHeight};
+        if (typeof window !== 'undefined' && window.innerWidth && window.innerHeight) return {x: window.innerWidth/2, y: window.innerHeight/2, w: window.innerWidth, h: window.innerHeight};
+        return {x: x, y: y, w: 1024, h: 768};
+    })();
+
+    // Create a main controller particle that spawns the full-screen aura and plus-sign particles
+    makeParticles({
+        time: 6,
+        x: screenInfo.x,
+        y: screenInfo.y,
+        width: 48,
+        height: 48,
+        image: circleMask(12),
+        angle: 0,
+        spread: 0,
+        offset: 0,
+        speed: 0,
+        rotation: 0,
+        gravity: 0,
+        fadeOutTime: 3,
+        fadeInTime: 0.3,
+        update() {
+            if (!this._init) {
+                this._init = true;
+                this._total = this.time;
+                this._start = this.width;
+
+                // full-screen purple aura
+                const auraSize = Math.max(screenInfo.w, screenInfo.h) * 1.6;
+                makeParticles({
+                    time: 6,
+                    x: screenInfo.x,
+                    y: screenInfo.y,
+                    width: auraSize,
+                    height: auraSize,
+                    image: circleMask(auraSize),
+                    color: 'rgba(160,80,255,0.12)',
+                    angle: 0,
+                    spread: 0,
+                    offset: 0,
+                    speed: 0,
+                    rotation: 0,
+                    gravity: 0,
+                    fadeOutTime: 3,
+                    fadeInTime: 0.3,
+                }, 1, 'normal', {x: screenInfo.x, y: screenInfo.y});
+
+                // spawn many plus-sign particles across the screen
+                const plusCount = 80;
+                for (let i = 0; i < plusCount; i++) {
+                    const px = Math.random() * screenInfo.w;
+                    const py = Math.random() * screenInfo.h;
+                    const psize = 8 + Math.random() * 28;
+                    const hue = 260 + Math.random() * 40;
+                    const color = `hsla(${hue},90%,70%,${0.9 - Math.random() * 0.6})`;
+                    makeParticles({
+                        time: 2 + Math.random() * 4,
+                        x: px,
+                        y: py,
+                        width: psize,
+                        height: psize,
+                        image: plusSvg(psize, color),
+                        color: color,
+                        angle: Math.random() * 360,
+                        spread: 0,
+                        offset: 0,
+                        speed: Math.random() * 6,
+                        rotation: (Math.random() - 0.5) * 6,
+                        gravity: 0,
+                        fadeOutTime: 1 + Math.random() * 2,
+                        fadeInTime: 0.05,
+                    }, 1, 'normal', {x: px, y: py});
+                }
+
+                // small energetic sparks
+                const sparks = 60;
+                for (let i = 0; i < sparks; i++) {
+                    const px = Math.random() * screenInfo.w;
+                    const py = Math.random() * screenInfo.h;
+                    const psize = 4 + Math.random() * 10;
+                    const hue = 260 + Math.random() * 40;
+                    const col = `hsla(${hue},85%,60%,${0.8 - Math.random() * 0.6})`;
+                    makeParticles({
+                        time: 1 + Math.random() * 3,
+                        x: px,
+                        y: py,
+                        width: psize,
+                        height: psize,
+                        image: circleMask(psize),
+                        color: col,
+                        angle: Math.random() * 360,
+                        spread: 360,
+                        offset: 0,
+                        speed: 12 + Math.random() * 28,
+                        rotation: (Math.random() - 0.5) * 6,
+                        gravity: 0.02,
+                        fadeOutTime: 1 + Math.random() * 2,
+                        fadeInTime: 0.02,
+                    }, 1, 'normal', {x: px, y: py});
+                }
+            }
+
+            // pulse the controller particle for a subtle scaling effect
+            const prog = 1 - (this.time / this._total);
+            const pulse = 1 + Math.sin(prog * Math.PI * 2) * 0.06;
+            this.width = this._start * (pulse + prog * 6);
+            this.height = this.width;
+        }
+    }, 1, 'normal', {x: x, y: y});
+}
+

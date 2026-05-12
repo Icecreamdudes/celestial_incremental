@@ -416,6 +416,41 @@ BHA.nav_soulShred = {
     duration: new Decimal(10),
     cooldown: new Decimal(Infinity),
 }
+
+BHA.nav_violetResonance = {
+    name: "Violet Resonance",
+    description(char) {
+        let heal = new Decimal(40).add(player.bh.skillData["nav_violetResonance"].level.mul(7.5))
+        if (player.matosLair.milestone[25] >= 2) heal = heal.mul(char.mending.div(10).add(1))
+        return "Heals the entire party by " + formatWhole(heal) + " health."},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["nav_violetResonance"].maxLevel) + " MND"},
+    char: "nav",
+    spCost: new Decimal(25),
+    curCostBase: new Decimal(500),
+    curCostScale: new Decimal(250),
+    currency: "paragonShards",
+    unlocked() {return player.zarDungeon.navMilestone }, //make this something eventually
+
+    instant: true,
+    type: "function",
+    target: "allPlayer",
+    value() {return new Decimal(40).add(player.bh.skillData["nav_violetResonance"].level.mul(7.5))},
+    cooldown: new Decimal(90),
+    cooldownCap: new Decimal(50),
+    onTrigger(index, slot, target, method)
+    {
+        let heal = new Decimal(30).add(player.bh.skillData["nav_violetResonance"].level.mul(5))
+        bhHeal(heal, index, slot, "allPlayer", "")
+
+        navHealEffect();
+
+        options.musicVolume = options.musicVolume * 0.2
+        setTimeout(() => {
+            options.musicVolume = options.musicVolume * 5
+        }, 5000);
+    },
+}
+
 // Add chance to heal at end of round passive (Likely through adding to a BH array variable)
 
 // Sel Skills
@@ -970,39 +1005,16 @@ BHA.vespasian_peakPerformance = {
     },
     cooldown: new Decimal(Infinity)
 }
-BHA.creation_cardThrow = {
-    name: "Card Throw",
-    description() {return "Throws " + formatWhole(player.cart.cardsToThrow) + " cards at the enemy, dealing damage based on many factors."},
-    passiveText() {return "+" + formatSimple(player.bh.skillData["creation_cardThrow"].maxLevel.div(5)) + " DMG"},
-    char: "creation",
-    spCost: new Decimal(10),
-    curCostBase: new Decimal(3),
-    curCostScale: new Decimal(3),
-    currency: "darkEssence",
-    unlocked() {return false},
-
-    instant: true,
-    type: "function",
-    target: "celestialite",
-    method: "physical",
-    value() {return new Decimal(0.75).add(player.bh.skillData["creation_cardThrow"].level.mul(0.15))},
-    cooldown: new Decimal(10),
-    cooldownCap: new Decimal(4),
-    onTrigger(index, slot, target)
-    {
-        cardThrow();
-    }
-}
 BHA.diceFive_diceSlice = {
     name: "Dice Slice",
-    description() {return "Deals " + formatWhole(new Decimal(40).add(player.bh.skillData["diceFive_diceSlice"].level.mul(7.5))) + "% * d" + formatWhole(player.bh.skillData["diceFive_diceSlice"].level.add(6)) + " physical damage and reduces enemy's luck by 75% for 7 seconds."},
+    description() {return "Deals " + formatWhole(new Decimal(60).add(player.bh.skillData["diceFive_diceSlice"].level.mul(10))) + "% * d" + formatWhole(player.bh.skillData["diceFive_diceSlice"].level.add(6)) + " physical damage and reduces enemy's luck by 75% for 7 seconds."},
     passiveText() {return "+" + formatSimple(player.bh.skillData["diceFive_diceSlice"].maxLevel.div(2)) + " LUCK"},
     char: "diceFive",
     spCost: new Decimal(6),
-    curCostBase: new Decimal(3),
-    curCostScale: new Decimal(3),
-    currency: "darkEssence", //change to pips later
-    unlocked() {return true},
+    curCostBase: new Decimal(10),
+    curCostScale: new Decimal(5),
+    currency: "pips", //change to pips later
+    unlocked() {return hasUpgrade("zd", 11)},
 
     instant: true,
     type: "function",
@@ -1020,7 +1032,7 @@ BHA.diceFive_diceSlice = {
     onTrigger(index, slot, target, method)
     {
         let roll = getRandomInt(player.bh.skillData["diceFive_diceSlice"].level.add(6)) + 1
-        let baseDmg = new Decimal(0.4).add(player.bh.skillData["diceFive_diceSlice"].level.mul(0.075))
+        let baseDmg = new Decimal(0.6).add(player.bh.skillData["diceFive_diceSlice"].level.mul(0.10))
 
         let dmg = baseDmg.mul(roll).mul(player.bh.characters[index].damage)
 
@@ -1035,11 +1047,11 @@ BHA.diceFive_luckyLift = {
          return "Boosts the entire team's luck by +" + formatWhole(effect) + "% for 10 seconds."},
     passiveText() {return "+" + formatSimple(player.bh.skillData["diceFive_luckyLift"].maxLevel.div(2)) + " LUCK"},
     char: "diceFive",
-    spCost: new Decimal(8),
-    curCostBase: new Decimal(4),
-    curCostScale: new Decimal(4),
-    currency: "darkEssence", //change to pips later
-    unlocked() {return true},
+    spCost: new Decimal(14),
+    curCostBase: new Decimal(15),
+    curCostScale: new Decimal(6),
+    currency: "pips", //change to pips later
+    unlocked() {return hasUpgrade("zd", 12)},
     active: true,
     constantType: "effect",
     constantTarget: "allPlayer",
@@ -1053,35 +1065,32 @@ BHA.diceFive_luckyLift = {
 BHA.diceFive_coinToss = {
     name: "Coin Toss",
     description() {
-        return "Either deals " + formatWhole(new Decimal(300).add(player.bh.skillData["diceFive_coinToss"].level.mul(50))) + "% ranged damage or soft-stuns Dice Five for 5 seconds. (Unaffected by luck)"},
+        return "Either deals " + formatWhole(new Decimal(1000).add(player.bh.skillData["diceFive_coinToss"].level.mul(200))) + "% ranged damage or soft-stuns Dice Five for 5 seconds. (Unaffected by luck)"},
     passiveText() {return "+" + formatSimple(player.bh.skillData["diceFive_coinToss"].maxLevel.div(2)) + " LUCK"},
     char: "diceFive",
-    spCost: new Decimal(10),
-    curCostBase: new Decimal(5),
-    curCostScale: new Decimal(5),
-    currency: "darkEssence", //change to pips later
-    unlocked() {return true},
+    spCost: new Decimal(14),
+    curCostBase: new Decimal(25),
+    curCostScale: new Decimal(9),
+    currency: "pips", //change to pips later
+    unlocked() {return hasUpgrade("zd", 13)},
 
     instant: true,
     type: "function",
     target: "celestialite",
     cooldown: new Decimal(24),
     cooldownCap: new Decimal(6),
-    duration: new Decimal(0),
     method: "ranged",
-    active: true,
     onTrigger(index, slot, target, method)
     {
-        let baseDmg = new Decimal(3).add(player.bh.skillData["diceFive_coinToss"].level.mul(0.5))
+        let baseDmg = new Decimal(10).add(player.bh.skillData["diceFive_coinToss"].level.mul(2))
         let dmg = baseDmg.mul(player.bh.characters[index].damage)
 
         let random = getRandomInt(2)
-
         if (random == 0) {
             bhAttack(dmg, index, slot, "celestialite", "", "ranged")
         } else
         {
-            player.bh.characters[index].stun = ["soft", new Decimal(5), player.bh.skillData["diceFive_coinToss"].selected[1]]
+            player.bh.characters[index].stun = ["soft", new Decimal(5)]
         }
     },
 }
@@ -1094,3 +1103,91 @@ BHA.diceFive_coinToss = {
 // A passive skill that gives the chance for an action to trigger a team buff that doubles damage
 
 // A skill that passively gives you one of the three resistance attributes. Has an instant part of it that cycles the attribute
+
+BHA.creation_increment = {
+    name: "Increment",
+    description() {return "Increments incremental energy by " + format(new Decimal.mul(new Decimal(1).add(Decimal.mul(0.5, player.bh.skillData["creation_increment"])), player.creation.incrementalEnergyMult)) + ", as well as dealing physical damage based on current incremental energy."},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["creation_increment"].maxLevel.div(5)) + " DMG"},
+    char: "creation",
+    spCost: new Decimal(12),
+    curCostBase: new Decimal(250),
+    curCostScale: new Decimal(5),
+    currency: "paragonShards",
+    unlocked() {return false},
+
+    instant: true,
+    type: "function",
+    target: "celestialite",
+    method: "physical",
+    value() {return new Decimal.mul(new Decimal(1).add(Decimal.mul(0.5, player.bh.skillData["creation_increment"])), player.creation.incrementalEnergyMult)},
+    cooldown: new Decimal(3),
+    cooldownCap: new Decimal(1),
+    onTrigger(index, slot, target)
+    {
+        let increase = new Decimal.mul(new Decimal(1).add(Decimal.mul(0.5, player.bh.skillData["creation_increment"])), player.creation.incrementalEnergyMult)
+        player.creation.incrementalEnergy = player.creation.incrementalEnergy.add(increase)
+        bhLog("<span style='color: #8a76b0'>" + "Your incremental energy has increased by " + format(increase) + "!</span>")
+        bhAttack(Decimal.mul(player.creation.incrementalEnergy.pow(0.825), player.bh.characters[index].damage.mul(0.25)), index, slot, "celestialite", "", "physical")
+    }
+}
+BHA.creation_upgrade = {
+    name: "Upgrade",
+    description() {return "Spends " + format(player.creation.upgradeCost) + " incremental energy to boost incremental energy by x" + format(player.creation.upgradeEffect) + "."},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["creation_upgrade"].maxLevel.div(5)) + " DMG"},
+    char: "creation",
+    spCost: new Decimal(18),
+    curCostBase: new Decimal(750),
+    curCostScale: new Decimal(5),
+    currency: "paragonShards",
+    unlocked() {return false},
+
+    instant: true,
+    type: "function",
+    target: "celestialite",
+    method: "physical",
+    value() {return new Decimal(1).add(player.bh.skillData["creation_upgrade"].level.mul(0.25))},
+    cooldown: new Decimal(20),
+    cooldownCap: new Decimal(8),
+    onTrigger(index, slot, target)
+    {
+        player.creation.incrementalEnergy = player.creation.incrementalEnergy.sub(player.creation.upgradeCost)
+
+        let increase = new Decimal(1).add(player.bh.skillData["creation_upgrade"].level.mul(0.25))
+        player.creation.upgradeAmount = player.creation.upgradeAmount.add(increase)
+        bhLog("<span style='color: #8a76b0'>" + "Your upgraded your incremental energy gain!</span>")
+    },
+    conditional(index, slot) {
+        return player.creation.incrementalEnergy.gte(player.creation.upgradeCost)
+    },
+}
+BHA.creation_prestige = {
+    name: "Prestige",
+    description() {return "Resets incremental energy and upgrade amount, but boosts The Creation's DMG, HP, RGN, AGI and incremental energy gain by x" + format(player.creation.prestigeEffect) + ".<br>Req: " + format(player.creation.prestigeReq) + " incremental energy"},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["creation_prestige"].maxLevel.div(5)) + " DMG"},
+    char: "creation",
+    spCost: new Decimal(18),
+    curCostBase: new Decimal(2500),
+    curCostScale: new Decimal(5),
+    currency: "paragonShards",
+    unlocked() {return false},
+
+    instant: true,
+    type: "function",
+    target: "celestialite",
+    method: "physical",
+    value() {return new Decimal(1).add(player.bh.skillData["creation_prestige"].level.mul(0.25))},
+    cooldown: new Decimal(60),
+    cooldownCap: new Decimal(30),
+    onTrigger(index, slot, target)
+    {
+        player.creation.incrementalEnergy = new Decimal(0)
+        player.creation.upgradeAmount = new Decimal(0)
+
+        let increase = new Decimal(1).add(player.bh.skillData["creation_prestige"].level.mul(0.25))
+        player.creation.prestigeAmount = player.creation.prestigeAmount.add(increase)
+        bhLog("<span style='color: #8a76b0'>" + "You prestiged you incremental energy!</span>")
+    },
+    conditional(index, slot) {
+        return player.creation.incrementalEnergy.gte(player.creation.prestigeReq)
+    },
+}

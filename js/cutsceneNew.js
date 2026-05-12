@@ -209,6 +209,7 @@ function showCutscene(dialogue, opt = {}) {
     function cleanupAndEnd() {
         if (overlay && overlay.parentNode) overlay.remove();
         cutsceneActive = false;
+        player.bh.bhPause = false
         cutsceneID = 0;
         cutsceneIndex = 0;
         cutsceneDialogue = null;

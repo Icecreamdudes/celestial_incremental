@@ -18,47 +18,47 @@
                 amount: new Decimal(0),
                 cycleGainMul: new Decimal(1),
                 cycleAddedSpeedDiv: new Decimal(1),
-                shiftBase: new Decimal(30),
+                shiftBase: new Decimal(20),
             },
             3: {
                 amount: new Decimal(0),
                 cycleGainMul: new Decimal(1),
                 cycleAddedSpeedDiv: new Decimal(1),
-                shiftBase: new Decimal(120),
+                shiftBase: new Decimal(40),
             },
             4: {
                 amount: new Decimal(0),
                 cycleGainMul: new Decimal(1),
                 cycleAddedSpeedDiv: new Decimal(1),
-                shiftBase: new Decimal(600),
+                shiftBase: new Decimal(160),
             },
             5: {
                 amount: new Decimal(0),
                 cycleGainMul: new Decimal(1),
                 cycleAddedSpeedDiv: new Decimal(1),
-                shiftBase: new Decimal(10),
+                shiftBase: new Decimal(6),
             },
             6: {
                 amount: new Decimal(0),
                 cycleGainMul: new Decimal(1),
                 cycleAddedSpeedDiv: new Decimal(1),
-                shiftBase: new Decimal(20),
+                shiftBase: new Decimal(12),
             },
             7: {
                 amount: new Decimal(0),
                 cycleGainMul: new Decimal(1),
                 cycleAddedSpeedDiv: new Decimal(1),
-                shiftBase: new Decimal(60),
+                shiftBase: new Decimal(24),
             },
             8: {
                 amount: new Decimal(0),
                 cycleGainMul: new Decimal(1),
                 cycleAddedSpeedDiv: new Decimal(1),
-                shiftBase: new Decimal(240),
+                shiftBase: new Decimal(96),
             },
         },
-        blueshiftEffectBase: new Decimal(0),
-        blueshiftEffect: new Decimal(0),
+        blueshiftEffectBase: new Decimal(1.5),
+        blueshiftEffect: new Decimal(1),
     }},
     automate() {},
     nodeStyle() {
@@ -72,40 +72,25 @@
     tooltip: "Blueshift",
     color: "#ffffd1",
     update(delta) {
-        player.blu.blueshiftEffectBase = new Decimal(2)
+        player.blu.blueshiftEffectBase = new Decimal(1.5)
         player.blu.blueshiftEffect = player.blu.totalBlueshifts.pow_base(player.blu.blueshiftEffectBase)
 
         // BLUESHIFTS
         
-        player.blu.blueshifts[1].cycleGainMul = player.blu.blueshifts[1].amount.pow_base(10)
-        player.blu.blueshifts[1].cycleAddedSpeedDiv = player.blu.blueshifts[1].amount.pow_base(10)
-        
-        player.blu.blueshifts[2].cycleGainMul = player.blu.blueshifts[2].amount.pow_base(30)
-        player.blu.blueshifts[2].cycleAddedSpeedDiv = player.blu.blueshifts[2].amount.pow_base(30)
-        
-        player.blu.blueshifts[3].cycleGainMul = player.blu.blueshifts[3].amount.pow_base(120)
-        player.blu.blueshifts[3].cycleAddedSpeedDiv = player.blu.blueshifts[3].amount.pow_base(120)
-        
-        player.blu.blueshifts[4].cycleGainMul = player.blu.blueshifts[4].amount.pow_base(600)
-        player.blu.blueshifts[4].cycleAddedSpeedDiv = player.blu.blueshifts[4].amount.pow_base(600)
-        
-        player.blu.blueshifts[5].cycleGainMul = player.blu.blueshifts[5].amount.pow_base(5)
-        player.blu.blueshifts[5].cycleAddedSpeedDiv = player.blu.blueshifts[5].amount.pow_base(5)
-        
-        player.blu.blueshifts[6].cycleGainMul = player.blu.blueshifts[6].amount.pow_base(10)
-        player.blu.blueshifts[6].cycleAddedSpeedDiv = player.blu.blueshifts[6].amount.pow_base(10)
-        
-        player.blu.blueshifts[7].cycleGainMul = player.blu.blueshifts[7].amount.pow_base(30)
-        player.blu.blueshifts[7].cycleAddedSpeedDiv = player.blu.blueshifts[7].amount.pow_base(30)
-        
-        player.blu.blueshifts[8].cycleGainMul = player.blu.blueshifts[8].amount.pow_base(120)
-        player.blu.blueshifts[8].cycleAddedSpeedDiv = player.blu.blueshifts[8].amount.pow_base(120)
+        player.blu.blueshifts[1].shiftBase = new Decimal(10)
+        player.blu.blueshifts[2].shiftBase = new Decimal(20)
+        player.blu.blueshifts[3].shiftBase = new Decimal(40)
+        player.blu.blueshifts[4].shiftBase = new Decimal(160)
+        player.blu.blueshifts[5].shiftBase = new Decimal(6)
+        player.blu.blueshifts[6].shiftBase = new Decimal(12)
+        player.blu.blueshifts[7].shiftBase = new Decimal(24)
+        player.blu.blueshifts[8].shiftBase = new Decimal(96)
 
         player.blu.totalBlueshifts = new Decimal(0)
         for (let i = 1; i < Object.keys(player.blu.blueshifts).length + 1; i++) {
             let blueshift = player.blu.blueshifts[i]
 
-            blueshift.cycleGainMul = blueshift.shiftBase.pow(blueshift.amount)
+            blueshift.cycleGainMul = blueshift.shiftBase.div(2).pow(blueshift.amount)
             blueshift.cycleAddedSpeedDiv = blueshift.shiftBase.pow(blueshift.amount)
             player.blu.totalBlueshifts = player.blu.totalBlueshifts.add(blueshift.amount)
         }
@@ -294,7 +279,7 @@
                         ], {background: "#2f2f80", borderRadius: "13px", padding: "3px", width: "612px"}],
                         ["blank", "25px"],
                         ["raw-html", "You have blueshifted " + formatWhole(player.blu.totalBlueshifts) + " times.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "<small>Boosts light well cycle gain by x" + format(player.blu.blueshiftEffect, 1) + ".</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "<small>Boosts light well cycle gain by x" + format(player.blu.blueshiftEffect) + ".</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "25px"],
 
                         ["style-row", [
@@ -338,7 +323,7 @@
                                 ["blank", "3px"],
                                 ["style-column", [
                                     ["raw-html", formatWhole(player.blu.blueshifts[2].amount) + " β →", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ["raw-html", "(" + formatWhole(player.blu.blueshifts[2].cycleGainMul) + " β Yield)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                                    ["raw-html", "(x" + formatWhole(player.blu.blueshifts[2].cycleGainMul) + " β Yield)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
                                     ["raw-html", "(/" + formatWhole(player.blu.blueshifts[2].cycleAddedSpeedDiv) + " Added β Spd)", {color: "#ffff00", fontSize: "12px", fontFamily: "monospace"}],
                                 ], {border: "3px solid #4d9973", borderRadius: "0 0 10px 10px", width: "144px", height: "60px"}],
                             ], {backgroundColor: "#336659", borderRadius: "13px", width: "150px", padding: "3px"}],

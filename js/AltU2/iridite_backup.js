@@ -134,8 +134,6 @@ addLayer("ir", {
     universe: "A2",
     row: 1,
     position: 0,
-    innerNodes: [["spaceZone1"]],
-    innerLayer() {return player.subtabs["ir"]["stages"]},
     startData() { return {
         unlocked: true,
         iriditeUnlocked: false,
@@ -327,22 +325,6 @@ addLayer("ir", {
         tookDamageInIriditeFight: false,
 
         iriditePhase: new Decimal(0),
-
-        pylonBuilt: false,
-        pylonEnergyMax: new Decimal(1),
-        pylonEnergy: new Decimal(0),
-        pylonEnergyEffect: new Decimal(1),
-        pylonEnergyEffect2: new Decimal(1), 
-        pylonEnergyEffect3: new Decimal(1),
-        pylonEnergyEffect4: new Decimal(1),
-        pylonPassiveEffect: new Decimal(1),
-        pylonEnergyToGet: new Decimal(0),
-
-        pylonTier: new Decimal(1),
-        pylonTierEffect: new Decimal(1),
-
-        isInThisTab: false,
-        wasInThisTab: false,
     }},
     automate() {},
     nodeStyle() {
@@ -357,31 +339,6 @@ addLayer("ir", {
     branches: ["pl", "se"],
     color: "#151230",
     update(delta) {
-
-        player.ir.isInThisTab = player.tab == "ir" && player.subtabs["ir"].stuff == "stages"
-        if (player.ir.isInThisTab && !player.ir.wasInThisTab) {
-	        let items = document.getElementsByClassName("scrollCentered")
-
-            for (let i = 0; i < items.length; i++) {
-    	        items[i].scrollLeft = (items[i].scrollWidth - items[i].clientWidth ) / 2;
-    	        items[i].scrollTop = (items[i].scrollHeight - items[i].clientHeight ) / 2;
-		        items[i].addEventListener('mousemove', function (e) {
-			        move(e, items[i])
-		        }, false);
-		        items[i].addEventListener('mousedown', function (e) {
-			        startDragging(e, items[i])
-		        }, false);
-		        items[i].addEventListener('mouseup', function (e) {
-		        	stopDragging(e, items[i])
-		        }, false);
-		        items[i].addEventListener('mouseleave', function (e) {
-		        	stopDragging(e, items[i])
-		        }, false);
-
-            }
-        }
-        player.ir.wasInThisTab = player.ir.isInThisTab
-
         if (arena == null && player.subtabs["ir"]['stuff'] == 'Battle') {
             player.subtabs["ir"]['stuff'] = "Refresh Page :(";
         }
@@ -941,20 +898,6 @@ addLayer("ir", {
         },
     },
     clickables: {
-        "build-pylon": {
-            title() { return "<h2>Build the Cosmic Shard Pylon<br><small>0/20 best Zone IV level<br>0/1e20 Space Rocks</small>" },
-            canClick() { return player.cbs.ascensionShards.gte(5) && player.cb.paragonShards.gte(250) && player.cb.evolutionShards.gte(1000) && player.cof.coreFragments[6].gte(10000) },
-            unlocked() { return !player.ir.pylonBuilt},
-            onClick() {
-                player.cbs.ascensionShards = player.cbs.ascensionShards.sub(5)
-                player.cb.paragonShards = player.cb.paragonShards.sub(250)
-                player.cb.evolutionShards = player.cb.evolutionShards.sub(1000)
-                player.cof.coreFragments[6] = player.cof.coreFragments[6].sub(10000)
-
-                player.cbs.pylonBuilt = true
-            },
-            style: {width: "600px", minHeight: "150px", maxHeight: "150px", backgroundImage: "linear-gradient(180deg, #151230 0%, #37078f 50%, #151230 100%)", border: "3px solid #5e4ee6", color: "white", borderRadius: "15px"},
-        },
         1: {
             title() { return "<h2>Unlock Iridite, the Astral Celestial" },
             canClick() { return player.au2.stars.gte(5e10) && player.stagnantSynestia.highestCombo.gte(25) },
@@ -1027,7 +970,7 @@ addLayer("ir", {
             onClick() {
                 player.ir.inBattle = false
                 options.fullscreen = false
-                player.subtabs["ir"]['stuff'] = 'stages'
+                player.subtabs["ir"]['stuff'] = 'Space Battle'
 
                 if (arena) {
                     arena.removeArena();
@@ -1479,16 +1422,6 @@ addLayer("ir", {
         },
     },
     microtabs: {
-        stages: {
-            "spaceZone1": {
-                unlocked: true,
-                embedLayer: 'spaceZone1',
-            },
-            "spaceZone2": {
-                unlocked: true,
-                embedLayer: 'spaceZone2',
-            },
-        },
         stuff: {
             "Main": {
                 buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
@@ -1503,118 +1436,35 @@ addLayer("ir", {
                     ["clickable", 1],
                 ]
             },
-            "ships": {
-                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
-                unlocked() { return player.ir.iriditeUnlocked && !player.ir.inBattle },
-                content: [
-                    ["style-row", [
-                        ["category-button", ["Ships", "stuff", "ships"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "27px 0 0 0"}],
-                        ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#5e4ee6"}],
-                        ["category-button", ["Stages", "stuff", "stages"], {width: "264px", height: "40px", background: "#37078f", borderRadius: "0 0 0 0"}],
-                        ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#5e4ee6"}],
-                        ["category-button", ["???", "stuff", "pylon"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "0 27px 0 0"}],
-                    ], {width: "800px", height: "40px", border: "3px solid #5e4ee6", borderRadius: "30px 30px 0 0", marginBottom: "-3px"}],
-                    ["style-column", [
-                        ["style-column", [
-                            ["clickable", 11],
-                            ["blank", "25px"],
-                            ["raw-html", function () { return "You have " + formatWhole(player.ir.spaceRock) + " space rocks." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                            ["raw-html", function () { return "You have " + formatWhole(player.ir.spaceGem) + " space gems." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                            ["blank", "25px"],
-                            ["style-column", [
-                                    ["levelable-display", [
-                                        ["style-row", [["clickable", 2],], {width: '100px', height: '40px' }],
-                                    ]],
-                            ], {width: "550px", height: "175px", backgroundColor: "#070024", border: "3px solid #5e4ee6", borderRight: "3px solid #5e4ee6", borderRadius: "2px 2px 0 0"}],
-                            ["always-scroll-column", [
-                                    ["style-column", [
-                                        ["raw-html", "Ships", {color: "#5e4ee6", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "541px", height: "40px", backgroundColor: "#241d66ff", borderBottom: "3px solid #5e4ee6",  borderLeft: "3px solid #5e4ee6",  userSelect: "none"}],
-                                    ["style-column", [
-                                        ["row", [["levelable", 1], ["levelable", 2],["levelable", 3],["levelable", 4],["levelable", 5],]],
-                                        ["row", [["levelable", 6],["levelable", 7],["levelable", 8],["levelable", 9],["levelable", 10],]],
-                                    ], {width: "531px", height: "260px", backgroundColor: "#151230", borderLeft: "3px solid #5e4ee6", padding: "5px"}],
-                                ], {width: "556px", height: "230px", borderBottom: "3px solid #5e4ee6"}],
-                            ["blank", "25px"],
-                        ], {width: "800px", borderRight: "2px solid srgb(27, 0, 36)"}],
-                    ], {width: "800px", height: "720px", background: "radial-gradient(circle, #151230 0%, #37078f 200%)", border: "3px solid #5e4ee6", borderRadius: "0 0 30px 30px"}],
-                ],
-            },
             "stages": {
                 buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
                 unlocked() { return player.ir.iriditeUnlocked && !player.ir.inBattle },
                 content: [
+                    ["blank", "25px"],
                     ["style-row", [
-                        ["category-button", ["Ships", "stuff", "ships"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "27px 0 0 0"}],
-                        ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#5e4ee6"}],
-                        ["category-button", ["Stages", "stuff", "stages"], {width: "264px", height: "40px", background: "#37078f", borderRadius: "0 0 0 0"}],
-                        ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#5e4ee6"}],
-                        ["category-button", ["???", "stuff", "pylon"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "0 27px 0 0"}],
-                    ], {width: "800px", height: "40px", border: "3px solid #5e4ee6", borderRadius: "30px 30px 0 0", marginBottom: "-3px"}],
-                    ["style-row", [
-                        ["style-column", [
-                            ["style-column", [
-                                ["buttonless-microtabs", "stages", {borderWidth: "0"}],
-                            ], {width: "800px", height: "720px", borderRadius: "0"}],
-                        ], {width: "397px", height: "720px", borderRadius: "0"}],
-                        ["style-column", [
-                            ["centered-draggable-scroll-row", [
-                                ["style-row", [
-                                    ["tooltip-row", [["category-button", ["I", "stages", "spaceZone1"], () => {
-                                        let str = {
-                                            width: "75px",
-                                            height: "75px",
-                                            background: "radial-gradient(#37078f, black)",
-                                            border: "4px solid #5e4ee6",
-                                            borderRadius: "50%",
-                                            color: "white",
-                                            fontSize: "24px",
-                                            textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
-                                        }
-                                        if (player.subtabs["ir"]["stages"] == "spaceZone1") str.outline = "3px solid #fff"
-                                        return str
-                                    }],
-                                    ["raw-html", () => {return "<div class='bottomTooltip'>Zone I</div>"}],
-                                ], {width: "0", height: "0", position: "relative", left: "0", top: "0px"}],
-                                    ["tooltip-row", [["category-button", ["II", "stages", "spaceZone2"], () => {
-                                        let str = {
-                                            left: "100px",
-                                            top: "0px",
-                                            width: "75px",
-                                            height: "75px",
-                                            background: "radial-gradient(#64078f, black)",
-                                            border: "4px solid #904ee6",
-                                            borderRadius: "50%",
-                                            color: "white",
-                                            fontSize: "24px",
-                                            textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
-                                        }
-                                        if (player.subtabs["ir"]["stages"] == "spaceZone2") str.outline = "3px solid #fff"
-                                        return str
-                                    }], 
-                                    ["raw-html", () => {return "<div class='bottomTooltip'>Zone II</div>"}],
-                                ], {width: "0", height: "0", position: "relative", left: "100px", top: "0px"}],
-                                ], {width: "1044px", height: "1044px", backgroundImage: "url(resources/ui/spaceMapBackground.png)"}],
-                            ], {width: "400px", height: "360px", borderLeft: "3px solid #5e4ee6", borderBottom: "3px solid #5e4ee6", flexFlow: "column"}],
-                            ["blank", "357px"],
-                        ], {width: "403px", height: "720px"}],
-                    ], {width: "800px", height: "720px", background: "radial-gradient(circle, #151230 0%, #37078f 200%)", border: "3px solid #5e4ee6", borderRadius: "0 0 0 30px"}],
-                ],
-            },
-            "pylon": {
-                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
-                unlocked() { return player.ir.iriditeUnlocked && !player.ir.inBattle },
-                content: [
-                    ["style-row", [
-                        ["category-button", ["Ships", "stuff", "ships"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "27px 0 0 0"}],
-                        ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#5e4ee6"}],
-                        ["category-button", ["Stages", "stuff", "stages"], {width: "264px", height: "40px", background: "#37078f", borderRadius: "0 0 0 0"}],
-                        ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#5e4ee6"}],
-                        ["category-button", ["???", "stuff", "pylon"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "0 27px 0 0"}],
-                    ], {width: "800px", height: "40px", border: "3px solid #5e4ee6", borderRadius: "30px 30px 0 0", marginBottom: "-3px"}],
+                        ["category-button", ["Ships", "stuff", "ships"], {width: "265px", height: "40px", background: "var(--layerBackground)", borderRadius: "27px 0 0 0"}],
+                        ["style-row", [], {width: "3px", height: "40px", backgroundColor: "var(--regBorder)"}],
+                        ["category-button", ["Stages", "stuff", "stages"], {width: "264px", height: "40px", background: "var(--layerBackground)", borderRadius: "0 27px 0 0"}],
+                        ["style-row", [], {width: "3px", height: "40px", backgroundColor: "var(--regBorder)"}],
+                        ["category-button", ["Cosmic Pylon", "stuff", "pylon"], {width: "265px", height: "40px", background: "var(--layerBackground)", borderRadius: "0 27px 0 0"}],
+                    ], {width: "800px", height: "40px", border: "3px solid var(--regBorder)", borderRadius: "30px 30px 0 0", marginBottom: "-3px"}],
                     ["style-column", [
-                        ["clickable", "build-pylon"]
-                    ], {width: "800px", height: "720px", background: "linear-gradient(120deg, #0F0D25 0%, #0E0921 100%)", border: "3px solid #5e4ee6", borderRadius: "0 0 30px 30px"}],
+                        ["style-row", [
+                            ["style-column", [
+                                ["clickable", "Stage-Black-Heart"],
+                                ["style-row", [], {width: "200px", height: "3px", background: "var(--regBorder)"}],
+                                ["clickable", "Stage-Temporal-Chasm"],
+                                ["style-row", [], {width: "200px", height: "3px", background: "var(--regBorder)"}],
+                                ["clickable", "Stage-???"],
+                            ], {width: "200px", height: "297px", borderRight: "3px solid var(--regBorder)"}],
+                            ["theme-scroll-row", [
+                                ["row-tree", universes.A2.tree2],
+                            ], () => {return true ? {width: "547px", height: "297px", padding: "0 25px", background: "linear-gradient(90deg, rgba(50, 50, 50, 0.5) 0%, rgba(0, 0, 0, 0.5) 150%)"} : {display: "none !important"}}],
+                        ], {width: "800px", height: "297px", borderBottom: "3px solid var(--regBorder)"}],
+                        ["style-column", [
+                            ["buttonless-microtabs", "stages", {borderWidth: "0"}],
+                        ], {width: "800px", height: "420px", borderRadius: "0 0 27px 27px"}],
+                    ], {width: "800px", height: "720px", border: "3px solid var(--regBorder)", borderRadius: "0 0 30px 30px"}],
                 ],
             },
             "Space Battle": {
@@ -1739,8 +1589,7 @@ addLayer("ir", {
         },
     },
     tabFormat: [
-        ["buttonless-microtabs", "stuff", { 'border-width': '0px' }],
-        ["blank", "25px"],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.se.starsExploreCount[0][5].gte(1) }
 });
@@ -2550,9 +2399,8 @@ class SpaceArena {
             width: this.width + 'px',
             height: this.height + 'px',
             transform: `translate(-50%, -50%)`,
-            background: 'black',
-            border: '3px solid #5e4ee6',
-            borderRadius: '10px',
+            background: '#181a2b',
+            border: '3px solid #fff',
             zIndex: 9999,
             overflow: 'hidden',
         });

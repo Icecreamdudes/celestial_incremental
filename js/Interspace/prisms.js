@@ -109,10 +109,11 @@
     tooltip: "Prismatic",
     color: "#d6ebff",
     update(delta) {
-        player.pri.prismsToGet = player.wel.light.add(1).log(10).sub(15).pow_base(1.5).floor()
+        player.pri.prismsToGet = player.wel.light.add(1).log(10).sub(15).pow_base(1.5)
         if (!hasMilestone("prj", 201)) player.pri.prismsToGet = player.pri.prismsToGet.min(1);
 
         if (hasMilestone("prj", 203)) player.pri.prismsToGet = player.pri.prismsToGet.mul(2);
+        player.pri.prismsToGet = player.pri.prismsToGet.floor()
 
         if (player.pri.bestPrisms.lt(player.pri.prisms)) player.pri.bestPrisms = player.pri.prisms;
         

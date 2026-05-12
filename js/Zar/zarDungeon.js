@@ -10,7 +10,10 @@
         zarChips: new Decimal(0),
         zarChipsToGet: new Decimal(1),
 
-        deck: [],
+        deck: [            "Club1", "Club2", "Club3", "Club4", "Club5", "Club6", "Club7", "Club8", "Club9", "Club10", "ClubJ", "ClubQ", "ClubK",
+            "Heart1", "Heart2", "Heart3", "Heart4", "Heart5", "Heart6", "Heart7", "Heart8", "Heart9", "Heart10", "HeartJ", "HeartQ", "HeartK",
+            "Diamond1", "Diamond2", "Diamond3", "Diamond4", "Diamond5", "Diamond6", "Diamond7", "Diamond8", "Diamond9", "Diamond10", "DiamondJ", "DiamondQ", "DiamondK",
+            "Spade1", "Spade2", "Spade3", "Spade4", "Spade5", "Spade6", "Spade7", "Spade8", "Spade9", "Spade10", "SpadeJ", "SpadeQ", "SpadeK",],
 
         dealerScore: new Decimal(0),
         playerScore: new Decimal(0),
@@ -22,6 +25,10 @@
         playerHandImages: [],
 
         gameOver: false,
+        gameCost: new Decimal(25),
+
+        //dungeon
+        pips: new Decimal(0),
     }},
     automate() {},
     nodeStyle() {
@@ -62,6 +69,20 @@
         } else if (player.zd.dealerScore.eq(21))
         {
             layers.zd.endGame('dealer')
+        }
+
+        player.zd.gameCost = new Decimal(25)
+        player.zd.gameCost = player.zd.gameCost.mul(player.zd.zarChips.add(1).pow(0.35)).floor()
+        player.zd.gameCost = player.zd.gameCost.div(buyableEffect("zd", 18))
+
+        player.zd.zarChipsToGet = new Decimal(1)
+        player.zd.zarChipsToGet = player.zd.zarChipsToGet.add(buyableEffect("zd", 15))
+
+        player.zd.zarChipsToGet = player.zd.zarChipsToGet.mul(buyableEffect("zd", 17)).floor()
+
+        if (player.bh.currentStage == "zarDungeon" && player.tab == "zd")
+        {
+            player.tab = "bh"
         }
     },
     startGame() {
@@ -137,14 +158,28 @@
             if (winner == 'dealer') {
                 makeShinies(GOLDEN_EFFECT_TEXT, 1, {x: 1000, y: 450, text: "You lost..."})
             } else if (winner == 'player') {
-                makeShinies(GOLDEN_EFFECT_TEXT, 1, {x: 1000, y: 450, text: "You win!"})
+                player.cb.evolutionShards = player.cb.evolutionShards.add(player.zd.gameCost)
+
+                let random = Math.random()
+                if (random < buyableEffect("zd", 16)) 
+                {
+                    player.zd.zarChips = player.zd.zarChips.add(player.zd.zarChipsToGet.mul(3))
+                    makeShinies(GOLDEN_EFFECT_TEXT, 1, {x: 1000, y: 450, text: "[TRIPLE] You win!<br><h5>Evolution shards returned."})
+                }
+                else 
+                {
+                    player.zd.zarChips = player.zd.zarChips.add(player.zd.zarChipsToGet)
+                    makeShinies(GOLDEN_EFFECT_TEXT, 1, {x: 1000, y: 450, text: "You win!<br><h5>Evolution shards returned."})
+                }
             } else if (winner == 'push') {
-                makeShinies(GOLDEN_EFFECT_TEXT, 1, {x: 1000, y: 450, text: "It's a tie!"})
+                makeShinies(GOLDEN_EFFECT_TEXT, 1, {x: 1000, y: 450, text: "It's a tie!<br><h5>Evolution shards returned."})
+                player.cb.evolutionShards = player.cb.evolutionShards.add(player.zd.gameCost)
             }
         }
 
         player.zd.gameOver = true
     },
+    
     clickables: {
         11: {
             title() { return "<h3>Hit" },
@@ -192,14 +227,17 @@
             style: { width: '100px', "min-height": '100px', color: "black", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px" },
         },    
         13: {
-            title() { return "<h3>Start Game" },
-            canClick() { return player.zd.gameOver },
+            title() { return "<br><h3>Start Game</h3><br><h4>Cost: " + formatWhole(player.zd.gameCost) + " Evo Shards" },
+            tooltip() { return "You have " + formatWhole(player.cb.evolutionShards) + " evolution shards." },
+            canClick() { return player.zd.gameOver && player.cb.evolutionShards.gte(player.zd.gameCost) },
             unlocked() { return true },
             onClick() {
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(player.zd.gameCost)
+
                 layers.zd.startGame();
                 player.zd.gameOver = false
             },
-            style: { width: '100px', "min-height": '100px', color: "black", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px" },
+            style: { width: '200px', "min-height": '100px', color: "black", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px" },
         },   
         //cards
         101: {
@@ -349,29 +387,312 @@
     },
     bars: {},
     upgrades: {
+        11: {
+            title: "New Ally",
+            unlocked: true,
+            description: "Unlocks Dice Five as a party member.",
+            cost: new Decimal(20),
+            currencyLocation() { return player.zd },
+            currencyDisplayName: "Pips",
+            currencyInternalName: "pips",
+            style() {
+                let look = {minHeight: "140px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#363636"
+                return look
+            },
+        },
+        12: {
+            title: "Four-Leaf Clover",
+            unlocked: true,
+            description: "Unlocks Dice Five's \"Lucky Lift\" skill.",
+            cost: new Decimal(50),
+            currencyLocation() { return player.zd },
+            currencyDisplayName: "Pips",
+            currencyInternalName: "pips",
+            style() {
+                let look = {minHeight: "140px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#363636"
+                return look
+            },
+        },
+        13: {
+            title: "Not an Ultrakill Reference",
+            unlocked: true,
+            description: "Unlocks Dice Five's \"Coin Toss\" skill.",
+            cost: new Decimal(150),
+            currencyLocation() { return player.zd },
+            currencyDisplayName: "Pips",
+            currencyInternalName: "pips",
+            style() {
+                let look = {minHeight: "140px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#363636"
+                return look
+            },
+        },
+        14: {
+            title: "Pip Power",
+            unlocked: true,
+            description: "Pips boost chance point gain",
+            cost: new Decimal(300),
+            currencyLocation() { return player.zd },
+            currencyDisplayName: "Pips",
+            currencyInternalName: "pips",
+            effect() {
+                return player.zd.pips.pow(1.5).add(1)
+            },
+            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            style() {
+                let look = {minHeight: "140px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#363636"
+                return look
+            },
+        },
     },
-    buyables: {},
+    buyables: {
+        11: {
+            costBase() { return new Decimal(1) },
+            costGrowth() { return new Decimal(1.25) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.zd.zarChips},
+            pay(amt) { player.zd.zarChips = this.currency().sub(amt) },
+            effect(x) {return Decimal.pow(4, getBuyableAmount(this.layer, this.id))},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>ZC-1</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/100)\n\
+                    Quadruple chance point gain\n\
+                    Currently: x" + formatWhole(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Zar Chips"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "#dadada"
+                return look
+            },
+        },
+        12: {
+            costBase() { return new Decimal(1) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.zd.zarChips},
+            pay(amt) { player.zd.zarChips = this.currency().sub(amt) },
+            effect(x) {return Decimal.pow(2, getBuyableAmount(this.layer, this.id))},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>ZC-2</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/50)\n\
+                    Double hex power gain\n\
+                    Currently: x" + formatWhole(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Zar Chips"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "#dadada"
+                return look
+            },
+        },
+        13: {
+            costBase() { return new Decimal(2) },
+            costGrowth() { return new Decimal(1.25) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.zd.zarChips},
+            pay(amt) { player.zd.zarChips = this.currency().sub(amt) },
+            effect(x) {return Decimal.add(1, getBuyableAmount(this.layer, this.id).pow(0.8).mul(0.03))},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>ZC-3</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/100)\n\
+                    Multiply ESC\n\
+                    Currently: x" + format(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Zar Chips"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "#dadada"
+                return look
+            },
+        },
+        14: {
+            costBase() { return new Decimal(50) },
+            costGrowth() { return new Decimal(1) },
+            purchaseLimit() { return new Decimal(1) },
+            currency() { return player.zd.zarChips},
+            pay(amt) { player.zd.zarChips = this.currency().sub(amt) },
+            effect(x) {return getBuyableAmount(this.layer, this.id)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>ZC-4</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/1)\n\
+                    Open the door to Zar's Dungeon\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Zar Chips"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "#dadada"
+                return look
+            },
+        },
+
+        15: {
+            costBase() { return new Decimal(2) },
+            costGrowth() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.zd.zarChips},
+            pay(amt) { player.zd.zarChips = this.currency().sub(amt) },
+            effect(x) {return getBuyableAmount(this.layer, this.id)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>ZC-5</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/100)\n\
+                    Adds to base Zar Chip gain\n\
+                    Currently: +" + formatWhole(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Zar Chips"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "#dadada"
+                return look
+            },
+        },
+        16: {
+            costBase() { return new Decimal(3) },
+            costGrowth() { return new Decimal(3) },
+            purchaseLimit() { return new Decimal(10) },
+            currency() { return player.zd.zarChips},
+            pay(amt) { player.zd.zarChips = this.currency().sub(amt) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).pow(0.5).mul(0.2)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>ZC-6</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/20)\n\
+                    Chance to win triple zar chips on win.\n\
+                    Currently: " + format(tmp[this.layer].buyables[this.id].effect.mul(100)) + "%\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Zar Chips"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "#dadada"
+                return look
+            },
+        },
+        17: {
+            costBase() { return new Decimal(5) },
+            costGrowth() { return new Decimal(2.5) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.zd.zarChips},
+            pay(amt) { player.zd.zarChips = this.currency().sub(amt) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.3).add(1)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>ZC-7</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/50)\n\
+                    Multiplies Zar Chip gain\n\
+                    Currently: x" + format(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Zar Chips"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "#dadada"
+                return look
+            },
+        },
+        18: {
+            costBase() { return new Decimal(8) },
+            costGrowth() { return new Decimal(3) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.zd.zarChips},
+            pay(amt) { player.zd.zarChips = this.currency().sub(amt) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.25).add(1)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>ZC-7</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/50)\n\
+                    Divides Evo Shard requirement\n\
+                    Currently: /" + format(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Zar Chips"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "#dadada"
+                return look
+            },
+        },
+    },
     milestones: {},
     challenges: {},
     infoboxes: {
     },
     microtabs: {
+        stages: {
+            "zarDungeon": {
+                unlocked: true,
+                embedLayer: 'zarDungeon',
+            },
+        },
         stuff: {
             "Zar Chips": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return player.za.zarUnlocked },
                 content: [
-                    ["blank", "25px"],
+                    ["blank", "50px"],
+                    ["style-row", [
+                    ["column", [
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.zd.zarChips) + "</h3> zar chips. (+" + formatWhole(player.zd.zarChipsToGet) + ")"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }], 
+                    ["blank", "15px"],
+                    ]]
+                    ], {width: "1277px", height: "75px", backgroundColor: "#303030", border: "3px solid #7f7f7f", padding: "5px"}],
+                    ["style-row", [
+                    ["style-column", [
                     ["style-column", [
                     ["raw-html", () => {return "Your Hand"}, {color: "#1f1f1f", fontSize: "20px", fontFamily: "monospace"}],
-                    ], {width: "785px", height: "30px", backgroundColor: "#dadada", border: "3px solid #7f7f7f", userSelect: "none"}],
+                    ], {width: "785px", height: "40px", backgroundColor: "#dadada", border: "3px solid #7f7f7f", userSelect: "none"}],
                     ["style-row", [
                     ["row", [["clickable", 101], ["clickable", 102], ["clickable", 103], ["clickable", 104], ["clickable", 105], ["clickable", 106], ["clickable", 107], ["clickable", 108]]], 
                     ["raw-html", function () { return "&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["raw-html", () => {return "Hand Value: " + formatWhole(player.zd.playerScore)}, {color: "#dadada", fontSize: "20px", fontFamily: "monospace"}],
                     ], {width: "775px", height: "135px", backgroundColor: "#303030", border: "3px solid #7f7f7f", borderTop: "0px", borderBottom: "0px", padding: "5px"}],
                     ["style-column", [
                     ["raw-html", () => {return "Zar's Hand"}, {color: "#1f1f1f", fontSize: "20px", fontFamily: "monospace"}],
-                    ], {width: "785px", height: "30px", backgroundColor: "#dadada", border: "3px solid #7f7f7f", borderBottom: "3px solid #7f7f7f", userSelect: "none"}],
+                    ], {width: "785px", height: "40px", backgroundColor: "#dadada", border: "3px solid #7f7f7f", borderBottom: "3px solid #7f7f7f", userSelect: "none"}],
                     ["style-row", [
                     ["row", [["clickable", 201], ["clickable", 202], ["clickable", 203], ["clickable", 204], ["clickable", 205], ["clickable", 206], ["clickable", 207], ["clickable", 208]]],
                                         ["raw-html", function () { return "&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["raw-html", () => {return "Hand Value: " + formatWhole(player.zd.dealerScore)}, {color: "#dadada", fontSize: "20px", fontFamily: "monospace"}],
@@ -379,6 +700,25 @@
                     ["style-row", [
                     ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13],]],
                     ], {width: "775px", height: "135px", backgroundColor: "#7f7f7f", border: "3px solid #dadada", borderTop: "0px", padding: "5px"}],
+                    ], {width: "775px", height: "485px",}],
+                    ["style-column", [
+                    ["style-row", [["buyable", 11],["buyable", 12],["buyable", 13],["buyable", 14],], {width: "502px", height: "130px",}],
+                    ["style-row", [["buyable", 15],["buyable", 16],["buyable", 17],["buyable", 18],], {width: "502px", height: "130px",}],
+                    ["style-row", [], {width: "502px", height: "260px",}],
+                    ], {width: "502px", height: "515px", backgroundColor: "#7f7f7f", border: "3px solid #dadada", padding: "5px"}],
+                    ], {width: "1295px", height: "485px",}],
+                ]
+            },
+            "Dungeon": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                unlocked() { return player.zd.buyables[14].gte(1) },
+                content: [
+                    ["blank", "25px"],
+                    ["style-column", [
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.zd.pips) + "</h3> dice pips."}, { "color": "white", "font-size": "24px", "font-family": "monospace" }], 
+                    ["style-row", [["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14],], {width: "502px", height: "200px",}],
+                    ], {width: "1184px", height: "260px", backgroundColor: "#4e4e4e", border: "3px solid #dadada", borderRadius: "25px 25px 0px 0px", padding: "5px"}],
+                    ["buttonless-microtabs", "stages", {borderWidth: "0"}],
                 ]
             },
         },
@@ -401,3 +741,1137 @@ function shuffle(array) {
   }
   return array;
 }
+addLayer("zard", {
+    name: "Zar's Dungeon Death", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "⚅", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "BH",
+    row: 1,
+    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order,
+    startData() { return {
+        unlocked: true,
+    }},
+    clickables: {
+        "Leave": {
+            title: "<h2>Leave Zar's Dungeon</h2>",
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.tab = "zd"
+            },
+            style: {width: "200px", minHeight: "75px", color: "white", background: "linear-gradient(45deg, #4e4e4e 0%, #868686 100%)", border: "3px solid #000", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"},
+        },
+    },
+    upgrades: {},
+    buyables: {},
+    tabFormat: [
+                    ["blank", "200px"],
+                    ["style-column", [
+                        ["raw-html", "Everyone has passed out.", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", "<i>Something</i> pulls you out of Zar's Dungeon.", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ], {width: "800px", height: "80px", backgroundColor: "rgb(39, 39, 39)", border: "3px solid #777777", borderRadius: "20px"}],
+                    ["blank", "25px"],
+                    ["clickable", "Leave"],
+                    ["blank", "25px"],
+    ],
+    layerShown() {return false},
+})
+
+addLayer("zarDungeon", {
+    name: "Zar's Dungeon", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "⚅", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "BH",
+    row: 1,
+    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    onClick() {
+        if (player.zarDungeon.unlocked) player.subtabs["bh"]["stages"] = "zarDungeon"
+    },
+    startData() { return {
+        unlocked: true,
+
+        navMilestone: false,
+        diceFiveMilestone: false,
+
+        navToggle: true,
+        diceFiveToggle: true,
+        reachedZar: false,
+
+        barrageActive: false,
+    }},
+    automate() {},
+    nodeStyle() {
+        let str = {}
+        str = {
+            background: "linear-gradient(45deg, #3f003f 0%, #a900a9 100%)",
+            backgroundOrigin: "border-box",
+            borderColor: "#3f003f",
+            color: "rgba(0,0,0,0.5)",
+            margin: "20px 0 0 30px !important",
+        }
+        if (player.subtabs["bh"]["stages"] == "zarDungeon") str.outline = "3px solid #999"
+        return str
+    },
+    tooltip: "Zar's Dungeon",
+    color: "#696969",
+    update(delta) {
+        player.zarDungeon.unlocked = player.zd.buyables[14].gte(1)
+
+        if (player.bh.currentStage == "zarDungeon" && player.bh.combo.eq(29) && !player.zarDungeon.reachedZar) {
+            if (player.bh.characters[1].id != "none") player.bh.characterData[player.bh.characters[1].id].selected = false
+            player.bh.characters[1].id = "none"
+            player.bh.characterData[player.bh.characterSelection].selected = true
+            for (let i = 0; i < 4; i++) {
+                player.bh.characters[1].skills[i].id = "none"
+            }
+
+            if (player.bh.characterData[player.bh.characterSelection].selected) {
+            player.bh.characterData[player.bh.characterSelection].selected = false
+            player.bh.characters[0].id = "creation"
+            for (let i = 0; i < 4; i++) {
+                player.bh.characters[0].skills[0].id = "creation_increment"
+                player.bh.characters[0].skills[1].id = "creation_upgrade"
+                player.bh.characters[0].skills[2].id = "creation_prestige"
+                player.bh.characters[0].skills[3].id = "none"
+            }
+            }
+            setTimeout(() => {
+                for (let i = 0; i < 3; i++) {
+                    player.bh.characters[i].health = player.bh.characters[i].maxHealth
+                    player.bh.characters[i].shield = new Decimal(0)
+                    player.bh.characters[i].stun = ["none", new Decimal(0)]
+
+                for (let j = 0; j < 4; j++) {
+                    player.bh.characters[i].skills[j].cooldown = player.bh.characters[i].skills[j].cooldownMax
+                    player.bh.characters[i].skills[j].duration = new Decimal(0)
+                    player.bh.characters[i].skills[j].interval = new Decimal(0)
+                }
+                }
+            }, 200); 
+            player.zarDungeon.reachedZar = true
+        }
+
+        if (player.bh.currentStage == "zarDungeon" && player.bh.combo.gte(20) && player.zarDungeon.navToggle && !player.zarDungeon.diceFiveToggle)
+        {
+            player.zarDungeon.navMilestone = true
+        }
+        if (player.bh.currentStage == "zarDungeon" && player.bh.combo.gte(20) && !player.zarDungeon.navToggle && player.zarDungeon.diceFiveToggle)
+        {
+            player.zarDungeon.diceFiveMilestone = true
+        }
+    },
+    clickables: {
+        "enter": {
+            title: "<h2>Enter Zar's Dungeon</h2>",
+            tooltip: "You can only select Nav and Dice Five into your party.",
+            canClick() { return (player.zarDungeon.navToggle || player.zarDungeon.diceFiveToggle) && player.bh.currentStage != "zarDungeon" },
+            unlocked: true,
+            onClick() {                
+                if (player.zarDungeon.navToggle) 
+                { 
+                    if (player.bh.characterData[player.bh.characterSelection].selected) {
+                    player.bh.characterData[player.bh.characterSelection].selected = false
+                    player.bh.characters[0].id = "nav"
+                    for (let i = 0; i < 4; i++) {
+                        player.bh.characters[0].skills[i].id = player.bh.characterData["nav"].skills[i]
+                    }
+                }
+                }
+                else
+                {
+                    if (player.bh.characters[0].id != "none") player.bh.characterData[player.bh.characters[0].id].selected = false
+                    player.bh.characters[0].id = "none"
+
+                    player.bh.characterData[player.bh.characterSelection].selected = true
+                    for (let i = 0; i < 4; i++) {
+                        player.bh.characters[0].skills[i].id = "none"
+                    }
+                }
+                if (hasUpgrade("zd", 11) && player.zarDungeon.diceFiveToggle) 
+                {
+                    player.bh.characters[1].id = "diceFive"
+                    for (let i = 0; i < 4; i++) {
+                        player.bh.characters[1].skills[i].id = player.bh.characterData["diceFive"].skills[i]
+                    }
+                }
+                else
+                {
+                    if (player.bh.characters[1].id != "none") player.bh.characterData[player.bh.characters[1].id].selected = false
+                    player.bh.characters[1].id = "none"
+
+                    player.bh.characterData[player.bh.characterSelection].selected = true
+                    for (let i = 0; i < 4; i++) {
+                        player.bh.characters[1].skills[i].id = "none"
+                    }
+                }
+
+                if (player.bh.characters[2].id != "none") player.bh.characterData[player.bh.characters[2].id].selected = false
+                player.bh.characters[2].id = "none"
+                player.bh.characterData[player.bh.characterSelection].selected = true
+                for (let i = 0; i < 4; i++) {
+                    player.bh.characters[2].skills[i].id = "none"
+                }
+                player.tab = "bh"
+
+                BHStageEnter("zarDungeon")
+
+                setTimeout(() => {
+                    for (let i = 0; i < 3; i++) {
+                        player.bh.characters[i].health = player.bh.characters[i].maxHealth
+                        player.bh.characters[i].shield = new Decimal(0)
+                        player.bh.characters[i].stun = ["none", new Decimal(0)]
+
+                    for (let j = 0; j < 4; j++) {
+                        player.bh.characters[i].skills[j].cooldown = player.bh.characters[i].skills[j].cooldownMax
+                        player.bh.characters[i].skills[j].duration = new Decimal(0)
+                        player.bh.characters[i].skills[j].interval = new Decimal(0)
+                    }
+                    }
+                }, 200); 
+                
+
+            },
+            style: {width: "200px", minHeight: "75px", color: "white", background: "linear-gradient(45deg, #4e4e4e 0%, #868686 100%)", border: "3px solid #000", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"},
+        },
+        "Nav-Toggle": {
+            title() {return player.zarDungeon.navToggle ? "<div style='margin-bottom:-20px;line-height:1'>Nav<br><small>[Enabled]</small></div>" : "Nav<br><small>[Disabled]"},
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.zarDungeon.navToggle = !player.zarDungeon.navToggle
+            },
+            style: {width: "110px", minHeight: "55px", color: "var(--textColor)", background: "var(--miscButtonHover)", border: "3px solid var(--miscButton)", borderRadius: "15px"},
+        },
+        "DiceFive-Toggle": {
+            title() {return player.zarDungeon.diceFiveToggle ? "<div style='margin-bottom:-20px;line-height:1'>Dice Five<br><small>[Enabled]</small></div>" : "Dice Five<br><small>[Disabled]"},
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.zarDungeon.diceFiveToggle = !player.zarDungeon.diceFiveToggle
+            },
+            style: {width: "110px", minHeight: "55px", color: "var(--textColor)", background: "var(--miscButtonHover)", border: "3px solid var(--miscButton)", borderRadius: "15px"},
+        },
+    },
+    upgrades: {},
+    buyables: {},
+    tabFormat: [
+        ["style-row", [
+            ["style-column", [
+                ["top-column", [
+                    ["blank", "5px"],
+                    ["style-column", [
+                        ["raw-html", "Perks for defeating Zar", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
+                    ], {width: "500px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "5px"}],
+                    ["raw-html", "<u>Unlocks</u>", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                    //["raw-html", "Grass Jump (in Eclipse)", {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                    ["blank", "10px"],
+                    ["raw-html", "<u>Effects</u>", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                    //["raw-html", () => { return "Weakened Star Softcap." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+
+                    // Zar punchcard 
+                ], () => {
+                    let look = {width: "697px", height: "420px", background: "linear-gradient(180deg, #4e4e4e 0%, #868686 100%)", borderRadius: "0 0 0 27px"}
+                    if (player.zarDungeon.milestone[25] == 0) {look.filter = "brightness(25%) blur(10px)"; look.userSelect = "none"}
+                    return look
+                }],
+            ], {borderRadius: "0 0 0 27px", overflow: "hidden"}],
+            ["style-column", [
+                ["style-column", [
+                    ["style-column", [
+                        ["raw-html", "Zar's Dungeon", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", "All celestialite's damage is based on luck.", {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                    ], {width: "400px", height: "35px", marginBottom: "10px"}],
+                    ["clickable", "enter"],
+                ], {width: "500px", height: "147px", background: "var(--miscButtonDisable)", borderBottom: "3px solid var(--regBorder)"}],
+                ["top-column", [
+                    ["style-column", [
+                        ["raw-html", "20 Combo with only Nav", {color: "rgba(0,0,0,0.5)", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", "Unlocks Nav's ultimate ability: Violet Resonance", {color: "rgba(0,0,0,0.5)", fontSize: "14px", fontFamily: "monospace"}],
+                    ], () => {
+                        let look = {width: "482px", height: "58px", padding: "0 5px", background: "#bf8f8f", border: "4px solid rgba(0, 0, 0, 0.125)", cursor: "default", userSelect: "none"}
+                        if (player.zarDungeon.navMilestone) look.background = "#77bf5f"
+                        return look
+                    }],
+                    ["style-column", [
+                        ["raw-html", "20 Combo with only Dice Five", {color: "rgba(0,0,0,0.5)", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", "Unlocks Dice Five's ultimate ability: Snake Eyes", {color: "rgba(0,0,0,0.5)", fontSize: "14px", fontFamily: "monospace"}],
+                    ], () => {
+                        let look = {width: "482px", height: "57px", padding: "0 5px", background: "#bf8f8f", border: "4px solid rgba(0, 0, 0, 0.125)", cursor: "default", userSelect: "none"}
+                        if (player.zarDungeon.diceFiveMilestone) look.background = "#77bf5f"
+                        return look
+                    }],
+                    ["style-column", [
+                        ["raw-html", "???", {color: "rgba(0,0,0,0.5)", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", "", {color: "rgba(0,0,0,0.5)", fontSize: "14px", fontFamily: "monospace"}],
+                    ], () => {
+                        let look = {width: "482px", height: "58px", padding: "0 5px", background: "#bf8f8f", border: "4px solid rgba(0, 0, 0, 0.125)", cursor: "default", userSelect: "none"}
+                        if (player.zarDungeon.milestone[25] >= 3) look.background = "#77bf5f"
+                        return look
+                    }],
+                ], {width: "500px", height: "197px", background: "var(--layerBackground)"}],
+                ["style-row", [
+                    ["layer-proxy", ["bh", [
+                        ["row", [["clickable", "Auto-Enter"], ["blank", ["10px", "10px"]], ["clickable", "Auto-Exit"]]],
+                    ]]], ["blank", ["10px", "10px"]], ["clickable", "Nav-Toggle"], ["blank", ["10px", "10px"]], ["clickable", "DiceFive-Toggle"],
+                ], {width: "500px", height: "70px", background: "var(--miscButtonDisable)", borderTop: "3px solid var(--regBorder)", borderRadius: "0 0 27px 0"}],
+            ], {width: "500px", height: "420px", borderLeft: "3px solid var(--regBorder)"}],
+        ], {width: "1200px", height: "420px"}],
+    ],
+    layerShown() {return player.startedGame && player.zd.buyables[14].gte(1)},
+})
+
+BHS.zarDungeon = {
+    nameCap: "Zar's Dungeon",
+    nameLow: "zar's dungeon",
+    music: "music/casino.mp3",
+    comboLimit: 30,
+    generateCelestialite(combo) {
+        if (typeof combo == "object") combo = combo.toNumber()
+        switch (combo) {
+            case 6:
+                return "dice1"
+            case 12:
+                return "dice2"
+            case 18:
+                return "dice3"
+            case 24:  
+                return "dice4"
+            case 29:
+                return "zar"
+            default:
+                let random = Math.random()
+                let cel = ["zd1", "zd2", "zd3", "zd4", "zd5"]
+                if (combo >= 12) 
+                {
+                    cel.push("zd6")
+                    cel.push("zd7")
+                    cel.push("zd8")
+                }
+                return cel[Math.floor(Math.random()*cel.length)]
+        }
+    },
+}
+
+BHC.zd1 = {
+    name: "Celestialite ZD-1",
+    icon: "resources/celestialites/d1.png",
+    health: new Decimal(700),
+    damage: new Decimal(6),
+    luck: new Decimal(25),
+    agility: new Decimal(5),
+    actions: {
+        0: {
+            name: "Lucky Strike",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value() {
+                return player.bh.celestialite.luck.mul(0.2).add(player.bh.celestialite.damage.mul(2))
+            },
+            cooldown: new Decimal(8),
+        },
+        1: {
+            name: "Rigging",
+            instant: true,
+            type: "effect",
+            target: "celestialite",
+            properties: {
+                "luckAdd": new Decimal(15),
+            },
+            cooldown: new Decimal(10),
+        },
+    },
+    attributes: {
+        "air": new Decimal(0.7), // Resistance DMG Mult
+        "rebound": new Decimal(0.03),
+    },
+    reward() {
+        let gain = {}
+
+        gain.pips = Decimal.add(getRandomInt(2), 1)
+        return gain
+    },
+}
+BHC.zd2 = {
+    name: "Celestialite ZD-2",
+    icon: "resources/celestialites/d2.png",
+    health: new Decimal(1200),
+    damage: new Decimal(3),
+    luck: new Decimal(8),
+    agility: new Decimal(15),
+    actions: {
+        0: {
+            name: "Random Attack",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value() {
+                let random = getRandomInt(3) + 1
+                return player.bh.celestialite.luck.mul(0.5).add(player.bh.celestialite.damage.mul(2)).mul(random)
+            },
+            cooldown: new Decimal(8),
+        },
+        1: {
+            name: "Accelerate",
+            instant: true,
+            type: "effect",
+            target: "celestialite",
+            properties: {
+                "agilityAdd": new Decimal(15),
+            },
+            cooldown: new Decimal(10),
+        },
+    },
+    attributes: {
+        "warded": new Decimal(0.7), // Resistance DMG Mult
+        "rebound": new Decimal(0.03),
+    },
+    reward() {
+        let gain = {}
+
+        gain.pips = Decimal.add(getRandomInt(3), 1)
+        return gain
+    },
+}
+BHC.zd3 = {
+    name: "Celestialite ZD-3",
+    icon: "resources/celestialites/d3.png",
+    health: new Decimal(900),
+    damage: new Decimal(3),
+    luck: new Decimal(6),
+    agility: new Decimal(15),
+    actions: {
+        0: {
+            name: "Dice Bomb",
+            instant: true,
+            type: "damage",
+            target: "all",
+            method: "ranged",
+            value() {
+                let random = getRandomInt(2) + 3
+                return player.bh.celestialite.luck.mul(0.75).add(player.bh.celestialite.damage.mul(3)).mul(random)
+            },
+            cooldown: new Decimal(15),
+        },
+        1: {
+            name: "Self-Repair",
+            instant: true,
+            type: "heal",
+            target: "celestialite",
+            value: new Decimal(50),
+            cooldown: new Decimal(5),
+        },
+    },
+    attributes: {
+        "stealthy": new Decimal(0.7), // Resistance DMG Mult
+        "rebound": new Decimal(0.03),
+    },
+    reward() {
+        let gain = {}
+
+        gain.pips = Decimal.add(getRandomInt(1), 2)
+        return gain
+    },
+}
+BHC.zd4 = {
+    name: "Celestialite ZD-4",
+    icon: "resources/celestialites/d4.png",
+    health: new Decimal(300),
+    damage: new Decimal(4),
+    luck: new Decimal(9),
+    agility: new Decimal(5),
+    actions: {
+        0: {
+            name: "Dice Knife",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value() {
+                let random = getRandomInt(6) + 6
+                return player.bh.celestialite.luck.mul(0.05).add(player.bh.celestialite.damage.mul(0.05)).mul(random)
+            },
+            cooldown: new Decimal(1),
+        },
+    },
+    attributes: {
+        "air": new Decimal(0.5), // Resistance DMG Mult
+        "warded": new Decimal(0.5), // Resistance DMG Mult
+        "stealthy": new Decimal(0.5), // Resistance DMG Mult
+        "rebound": new Decimal(0.1),
+    },
+    reward() {
+        let gain = {}
+
+        gain.pips = Decimal.add(getRandomInt(4), 1)
+        return gain
+    },
+}
+BHC.zd5 = {
+    name: "Celestialite ZD-5",
+    icon: "resources/celestialites/d5.png",
+    health: new Decimal(800),
+    damage: new Decimal(4),
+    luck: new Decimal(7),
+    agility: new Decimal(8),
+    actions: {
+        0: {
+            name: "Gambler's Fallacy",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            value() {
+                let random = getRandomInt(6)
+                return player.bh.celestialite.luck.mul(0.5).add(player.bh.celestialite.damage.mul(0.5)).mul(random)
+            },
+            properties: {
+                "storeTarget": true,
+            },
+            cooldown: new Decimal(15),
+
+            active: true,
+            constantType: "effect",
+            constantTarget: "storedTarget",
+            effects: {
+                "regenAdd"() {return Decimal.mul(-4, player.bh.celestialite.luck)}
+            },
+            duration: new Decimal(3),
+        },
+        1: {
+            name: "Self-Repair",
+            instant: true,
+            type: "heal",
+            target: "celestialite",
+            value: new Decimal(50),
+            cooldown: new Decimal(5),
+        },
+    },
+    attributes: {
+        "rebound": new Decimal(0.1),
+    },
+    reward() {
+        let gain = {}
+
+        gain.pips = Decimal.add(getRandomInt(3), 2)
+        return gain
+    },
+}
+BHC.zd6 = {
+    name: "Celestialite ZD-6",
+    icon: "resources/celestialites/d6.png",
+    health: new Decimal(1400),
+    damage: new Decimal(6),
+    luck: new Decimal(7),
+    agility: new Decimal(8),
+    actions: {
+        0: {
+            name: "Coin Toss",
+            instant: true,
+            type: "function",
+            target: "randomPlayer",
+            method: "ranged",
+            cooldown: new Decimal(10),
+            onTrigger(index, slot, target, method)
+            {
+                let dmg = player.bh.celestialite.luck.mul(10).add(player.bh.celestialite.damage.mul(8))
+
+                let random = getRandomInt(2)
+                if (random == 0) {
+                    bhAttack(dmg, index, slot, "randomPlayer", "", "ranged")
+                } else {
+                    player.bh.celestialite.stun = ["soft", new Decimal(3)]
+                }
+            },            
+        },
+    },
+    attributes: {
+        "daze": new Decimal(0.1),
+        "explosive": new Decimal(25),
+    },
+    reward() {
+        let gain = {}
+
+        gain.pips = Decimal.add(getRandomInt(3), 2)
+        return gain
+    },
+}
+BHC.zd7 = {
+    name: "Celestialite ZD-7",
+    icon: "resources/celestialites/d7.png",
+    health: new Decimal(1200),
+    damage: new Decimal(6),
+    luck: new Decimal(7),
+    agility: new Decimal(12),
+    actions: {
+        0: {
+            name: "Coin Gun",
+            instant: true,
+            type: "function",
+            target: "randomPlayer",
+            method: "ranged",
+            cooldown: new Decimal(1.5),
+            onTrigger(index, slot, target, method)
+            {
+                let dmg = player.bh.celestialite.luck.mul(3).add(player.bh.celestialite.damage.mul(1.8))
+
+                let random = getRandomInt(2)
+                if (random == 0) {
+                    bhAttack(dmg, index, slot, "randomPlayer", "", "ranged")
+                } else {
+                    player.bh.celestialite.stun = ["soft", new Decimal(0.2)]
+                }
+            },     
+        },
+        1: {
+            name: "Accelerate",
+            instant: true,
+            type: "effect",
+            target: "celestialite",
+            properties: {
+                "agilityAdd": new Decimal(6),
+            },
+            cooldown: new Decimal(10),
+        },
+    },
+    attributes: {
+        "daze": new Decimal(0.25),
+        "explosive": new Decimal(25),
+    },
+    reward() {
+        let gain = {}
+
+        gain.pips = Decimal.add(getRandomInt(3), 2)
+        return gain
+    },
+}
+BHC.zd8 = {
+    name: "Celestialite ZD-8",
+    icon: "resources/celestialites/d8.png",
+    health: new Decimal(2000),
+    damage: new Decimal(6),
+    luck: new Decimal(7),
+    agility: new Decimal(12),
+    actions: {
+        0: {
+            name: "Lucky Magic",
+            instant: true,
+            type: "function",
+            target: "randomPlayer",
+            method: "magic",
+            cooldown: new Decimal(15),
+            onTrigger(index, slot, target, method)
+            {
+                let dmg = player.bh.celestialite.luck.mul(10.5).add(player.bh.celestialite.damage.mul(6))
+
+                let random = getRandomInt(4)
+                if (random == 0) {
+                    bhAttack(dmg.mul(1.5), index, slot, "randomPlayer", "", "magic")
+                    player.bh.characters[1].stun = ["soft", new Decimal(5)]
+                } else if (random == 1) {
+                    bhAttack(dmg.mul(1.5), index, slot, "randomPlayer", "", "magic")
+                    player.bh.characters[0].stun = ["soft", new Decimal(5)]
+                } else if (random == 2) {
+                    bhAttack(dmg, index, slot, "randomPlayer", "", "magic")
+                    player.bh.characters[0].stun = ["soft", new Decimal(2.5)]
+                    player.bh.characters[1].stun = ["soft", new Decimal(2.5)]
+                } else {
+                    bhAttack(dmg.mul(0.5), index, slot, "all", "", "magic")
+                }
+            },     
+        },
+    },
+    attributes: {
+        "rebound": new Decimal(0.2),
+    },
+    reward() {
+        let gain = {}
+
+        gain.pips = Decimal.add(getRandomInt(3), 2)
+        return gain
+    },
+}
+BHC.dice1 = {
+    name: "Dice One",
+    icon: "resources/diceOne.png",
+    health: new Decimal(5000),
+    damage: new Decimal(20),
+    luck: new Decimal(7),
+    agility: new Decimal(8),
+    noRandomStats: true,
+    actions: {
+        0: {
+            name: "Lucky Strike",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value() {
+                return player.bh.celestialite.luck.mul(0.15).add(player.bh.celestialite.damage.mul(0.05))
+            },
+            cooldown: new Decimal(6),
+        },
+        1: {
+            name: "Dice Bomb",
+            instant: true,
+            type: "damage",
+            target: "all",
+            method: "ranged",
+            value() {
+                let random = getRandomInt(2) + 1
+                return player.bh.celestialite.luck.mul(0.25).add(player.bh.celestialite.damage.mul(0.02)).mul(random)
+            },
+            cooldown: new Decimal(15),
+        },
+        2: {
+            name: "???",
+            instant: true,
+            type: "function",
+            onTrigger(index, slot, target)
+            {
+                let random = getRandomInt(3)
+                if (random == 0) {
+                    bulletHell({"bouncingDice": {diceCount: 3, enemySpeed: 3}}, {duration: 15})
+                } else if (random == 1) {
+                    bulletHell({"diceAttackNoOrbit": {diceAmount: 1, intervalDiv: 2}}, {duration: 10})
+                } else {
+                    bulletHell({"diceAttack": {diceAmount: 2, intervalDiv: 1}}, {duration: 10})
+                }
+            },
+            cooldown: new Decimal(25),
+        },
+    },
+    attributes: {
+        "rebound": new Decimal(0.1),
+    },
+    reward() {
+        let gain = {}
+
+        gain.pips = Decimal.add(getRandomInt(4), 5)
+        return gain
+    },
+}
+BHC.dice2 = {
+    name: "Dice Two",
+    icon: "resources/diceTwo.png",
+    health: new Decimal(6000),
+    damage: new Decimal(24),
+    luck: new Decimal(7),
+    agility: new Decimal(8),
+    noRandomStats: true,
+    actions: {
+        0: {
+            name: "Dice Knife",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value() {
+                let random = getRandomInt(6) + 6
+                return player.bh.celestialite.luck.mul(0.05).add(player.bh.celestialite.damage.mul(0.015)).mul(Decimal.mul(random, 0.075))
+            },
+            cooldown: new Decimal(1),
+        },
+        1: {
+            name: "Random Attack",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value() {
+                let random = getRandomInt(3) + 1
+                return player.bh.celestialite.luck.mul(0.15).add(player.bh.celestialite.damage.mul(0.02)).mul(random).div(3)
+            },
+            cooldown: new Decimal(8),
+        },
+        2: {
+            name: "???",
+            instant: true,
+            type: "function",
+            onTrigger(index, slot, target)
+            {
+                let random = getRandomInt(3)
+                if (random == 0) {
+                    bulletHell({"bouncingDice": {diceCount: 1, enemySpeed: 6, intervalDiv: 3.5}}, {duration: 15})
+                } else if (random == 1) {
+                    bulletHell({"diceAttackNoOrbit": {diceAmount: 2, intervalDiv: 1}}, {duration: 10})
+                } else if (random == 2){
+                    bulletHell({"diceAttack": {diceAmount: 4, intervalDiv: 0.5}}, {duration: 10})
+                } 
+            },
+            cooldown: new Decimal(25),
+        },
+    },
+    attributes: {
+        "rebound": new Decimal(0.1),
+    },
+    reward() {
+        let gain = {}
+
+        gain.pips = Decimal.add(getRandomInt(4), 5)
+        return gain
+    },
+}
+BHC.dice3 = {
+    name: "Dice Three",
+    icon: "resources/diceThree.png",
+    health: new Decimal(7000),
+    damage: new Decimal(24),
+    luck: new Decimal(10),
+    agility: new Decimal(8),
+    noRandomStats: true,
+    actions: {
+        0: {
+            name: "Gambler's Fallacy",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            value() {
+                return player.bh.celestialite.luck.mul(0.25).add(player.bh.celestialite.damage.mul(0.06))
+            },
+            properties: {
+                "storeTarget": true,
+            },
+            cooldown: new Decimal(15),
+
+            active: true,
+            constantType: "effect",
+            constantTarget: "storedTarget",
+            effects: {
+                "regenAdd"() {return player.bh.celestialite.luck}
+            },
+            duration: new Decimal(3),
+        },
+        1: {
+            name: "Coin Gun",
+            instant: true,
+            type: "function",
+            target: "randomPlayer",
+            method: "ranged",
+            cooldown: new Decimal(2),
+            onTrigger(index, slot, target, method)
+            {
+                let dmg = player.bh.celestialite.luck.mul(0.25).add(player.bh.celestialite.damage.mul(0.25))
+
+                let random = getRandomInt(2)
+                if (random == 0) {
+                    bhAttack(dmg, index, slot, "randomPlayer", "", "ranged")
+                } else {
+                    player.bh.celestialite.stun = ["soft", new Decimal(0.2)]
+                }
+            },     
+        },
+        2: {
+            name: "???",
+            instant: true,
+            type: "function",
+            onTrigger(index, slot, target)
+            {
+                let random = getRandomInt(3)
+                if (random == 0) {
+                    bulletHell({"bouncingDice": {diceCount: 10, enemySpeed: 0.25, intervalDiv: 0.5}}, {duration: 15})
+                } else if (random == 1) {
+                    bulletHell({"diceAttackNoOrbit": {diceAmount: 8, intervalDiv: 0.25}}, {duration: 10})
+                } else if (random == 2){
+                    bulletHell({"pipRain": {bulletPerSec: 7}}, {duration: 12})
+                } 
+            },
+            cooldown: new Decimal(22),
+        },
+    },
+    attributes: {
+        "rebound": new Decimal(0.1),
+    },
+    reward() {
+        let gain = {}
+
+        gain.pips = Decimal.add(getRandomInt(4), 5)
+        return gain
+    },
+}
+BHC.dice4 = {
+    name: "Dice Four",
+    icon: "resources/diceFour.png",
+    health: new Decimal(8000),
+    damage: new Decimal(22),
+    luck: new Decimal(12),
+    agility: new Decimal(8),
+    noRandomStats: true,
+    actions: {
+        0: {
+            name: "Coin Toss",
+            instant: true,
+            type: "function",
+            target: "randomPlayer",
+            method: "ranged",
+            cooldown: new Decimal(10),
+            onTrigger(index, slot, target, method)
+            {
+                let dmg = player.bh.celestialite.luck.mul(0.5).add(player.bh.celestialite.damage.mul(0.3))
+
+                let random = getRandomInt(2)
+                if (random == 0) {
+                    bhAttack(dmg, index, slot, "randomPlayer", "", "ranged")
+                } else {
+                    player.bh.celestialite.stun = ["soft", new Decimal(3)]
+                }
+            },            
+        },
+        1: {
+            name: "Lucky Magic",
+            instant: true,
+            type: "function",
+            target: "randomPlayer",
+            method: "magic",
+            cooldown: new Decimal(15),
+            onTrigger(index, slot, target, method)
+            {
+                let dmg = player.bh.celestialite.luck.mul(0.5).add(player.bh.celestialite.damage.mul(0.3))
+
+                let random = getRandomInt(4)
+                if (random == 0) {
+                    bhAttack(dmg.mul(1.5), index, slot, "randomPlayer", "", "magic")
+                    player.bh.characters[1].stun = ["soft", new Decimal(5)]
+                } else if (random == 1) {
+                    bhAttack(dmg.mul(1.5), index, slot, "randomPlayer", "", "magic")
+                    player.bh.characters[0].stun = ["soft", new Decimal(5)]
+                } else if (random == 2) {
+                    bhAttack(dmg, index, slot, "randomPlayer", "", "magic")
+                    player.bh.characters[0].stun = ["soft", new Decimal(2.5)]
+                    player.bh.characters[1].stun = ["soft", new Decimal(2.5)]
+                } else {
+                    bhAttack(dmg.mul(0.5), index, slot, "all", "", "magic")
+                }
+            },     
+        },
+        2: {
+            name: "???",
+            instant: true,
+            type: "function",
+            onTrigger(index, slot, target)
+            {
+                let random = getRandomInt(3)
+                if (random == 0) {
+                    bulletHell({"bouncingDice": {diceCount: 4 + getRandomInt(3), enemySpeed: 2, intervalDiv: 1}}, {duration: 15})
+                } else if (random == 1) {
+                    bulletHell({"diceAttackNoOrbit": {diceAmount: 3 + getRandomInt(3), intervalDiv: 0.6}}, {duration: 10})
+                } else if (random == 2){
+                    bulletHell({"pipRainHorizontal": {bulletPerSec: 11}}, {duration: 12})
+                } 
+            },
+            cooldown: new Decimal(22),
+        },
+    },
+    attributes: {
+        "rebound": new Decimal(0.1),
+    },
+    reward() {
+        let gain = {}
+
+        gain.pips = Decimal.add(getRandomInt(4), 5)
+        return gain
+    },
+}
+BHC.zar = {
+    name: "Zar",
+    icon: "resources/zar.png",
+    health: new Decimal(25000),
+    damage: new Decimal(22),
+    luck: new Decimal(35),
+    agility: new Decimal(8),
+    noRandomStats: true,
+    actions: {
+        0: {
+            name: "Lucky Strike",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            value() {
+                return player.bh.celestialite.luck.mul(0.015).add(player.bh.celestialite.damage.mul(0.015))
+            },
+            cooldown: new Decimal(10),
+        },
+        1: {
+            name: "Gambler's Fallacy",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "ranged",
+            value() {
+                return player.bh.celestialite.luck.mul(0.025).add(player.bh.celestialite.damage.mul(0.06))
+            },
+            properties: {
+                "storeTarget": true,
+            },
+            cooldown: new Decimal(12),
+
+            active: true,
+            constantType: "effect",
+            constantTarget: "storedTarget",
+            effects: {
+                "regenAdd"() {return player.bh.celestialite.luck.mul(-0.15)}
+            },
+            duration: new Decimal(3),
+        },
+        2: {
+            name: "Lucky Magic",
+            instant: true,
+            type: "function",
+            target: "randomPlayer",
+            method: "magic",
+            cooldown: new Decimal(15),
+            onTrigger(index, slot, target, method)
+            {
+
+                let dmg = player.bh.celestialite.luck.mul(0.50).add(player.bh.celestialite.damage.mul(0.3))
+
+                let random = getRandomInt(4)
+                if (random == 0) {
+                    bhAttack(dmg.mul(1.5), index, slot, "randomPlayer", "", "magic")
+                    player.bh.characters[1].stun = ["soft", new Decimal(5)]
+                } else if (random == 1) {
+                    bhAttack(dmg.mul(1.5), index, slot, "randomPlayer", "", "magic")
+                    player.bh.characters[0].stun = ["soft", new Decimal(5)]
+                } else if (random == 2) {
+                    bhAttack(dmg, index, slot, "randomPlayer", "", "magic")
+                    player.bh.characters[0].stun = ["soft", new Decimal(2.5)]
+                    player.bh.characters[1].stun = ["soft", new Decimal(2.5)]
+                } else {
+                    bhAttack(dmg.mul(0.5), index, slot, "all", "", "magic")
+                }
+            },     
+        },
+        3: {
+            name: "???",
+            instant: true,
+            type: "function",
+            onTrigger(index, slot, target)
+            {
+                //harder attacks at phase 2
+                let random = getRandomInt(7)
+                if (random == 0) {
+                    bulletHell({"pipRainUltimate": {bulletPerSec: 3}}, {duration: 12})
+                } else if (random == 1) {
+                    bulletHell({"diceSpikes": {spawnPerSec: 10, enemySpeed: 3.5, spikeSize: 28,}}, {width: 1200, height: 600, duration: 12, transparent: false})
+                } else if (random == 2){
+                    bulletHellBlue({"diceSpikesPlatformer": {bulletPerSec: 1.2, enemySpeed: 3, spikeHeight: 80, spikeWidth: 60}}, {width:800, height:300, duration:15, jumpMin:6, jumpMax:150, gravity: 0.2})
+                } else if (random == 3){
+                    bulletHellBlue({"spikePlatformAttack": {spikeHeight: 50, spikeWidth: 28, platformCount: 4, platformSpikeChance: 0.4, platformSpeed: 1.5, platformMinW: 203, platformMaxW: 203}}, {width:800, height:600, duration:15, jumpMin:6, jumpMax:250, gravity: 0.2})
+                }  else if (random == 4){
+                    bulletHellBlue({"dieBouncer": {dieAmount: 1, size: 50, enemySpeed: 3, chargeMult: 1.6, spikeSpeed:5, spikeRadius:30, lastTick:false}}, {width: 800, height: 600, duration: 10, jumpMin:6, jumpMax:250, gravity: 0.2})
+                } else if (random == 5){
+                    bulletHell({"dieBouncer": {dieAmount: 2, size: 50, enemySpeed: 3, chargeMult: 1.6, spikeSpeed:6, spikeRadius:30, lastTick:false}}, {width: 1200, height: 600, duration: 10})
+                } else if (random == 6) {
+                    bulletHellBlue({"movingDieRadialBurstAttack": {circleAmount: 1, burstInterval: 800, bulletsPerBurst: 6, enemySpeed: 1.5, bulletSpeed: 5}}, {width:800, height:600, duration:15, jumpMin:6, jumpMax:250, gravity: 0.2})
+                }
+
+                //bulletHellBlue({"spikePlatformAttack": {spikeHeight: 50, spikeWidth: 28, platformCount: 4, platformSpikeChance: 0.3, platformSpeed: 1.5, platformMinW: 203, platformMaxW: 203, rain: true, bulletPerSec: 3}}, {width:800, height:600, duration:15, jumpMin:6, jumpMax:250, gravity: 0.2})
+            },
+            cooldown: new Decimal(22),
+
+            passive: true,
+            onPassive(index, slot, target) {
+                console.log("passive")
+                if (!player.bh.celestialite.actions[3].variables.attacks) player.bh.celestialite.actions[3].variables.attacks = 0
+                if (player.bh.celestialite.health.lt(50) && player.bh.celestialite.attackID == 14 && player.bh.celestialite.actions[3].variables.attacks == 0) {
+                    screenFlash("", 200)
+                    setTimeout(() => {
+                        player.bh.celestialite.attackTimeout = [15, new Decimal(15)]
+                    }, 200)
+                    player.bh.celestialite.actions[3].variables.attacks = 1
+                }
+                if (player.bh.celestialite.attackID == 15 && player.bh.celestialite.actions[3].variables.attacks == 1) {
+                    screenFlash("", 200)
+                    setTimeout(() => {
+                        player.bh.celestialite.attackTimeout = [16, new Decimal(15)]
+                    }, 200)
+                    player.bh.celestialite.actions[3].variables.attacks = 2
+                }
+                if (player.bh.celestialite.attackID == 16 && player.bh.celestialite.actions[3].variables.attacks == 2) {
+                    screenFlash("", 200)
+                    setTimeout(() => {
+                        player.bh.celestialite.attackTimeout = [17, new Decimal(19)]
+                    }, 200)
+                    player.bh.celestialite.actions[3].variables.attacks = 3
+                }
+                if (player.bh.celestialite.attackID >= 17 && player.bh.celestialite.actions[3].variables.attacks == 3) {
+                    celestialiteDeath()
+                }
+            },
+        },
+    },
+    reward() {
+        let gain = {}
+
+        gain.pips = Decimal.add(getRandomInt(4), 5)
+        return gain
+    },
+}
+
+function zarAttackBarrage(attackVariable) {
+    if (attackVariable == 0)
+    {
+        player.zarDungeon.barrageActive = true
+        screenFlash("", 200)
+        setTimeout(() => {
+        bulletHellBlue({"diceSpikesPlatformer": {bulletPerSec: 1.2, enemySpeed: 3, spikeHeight: 80, spikeWidth: 60}}, {width:800, height:300, duration:2, jumpMin:6, jumpMax:150, gravity: 0.2})
+        }, 200)
+        setTimeout(() => {
+        zarAttackBarrage(getRandomInt(4))
+        }, 2200)
+    } 
+    else if (attackVariable == 1)
+    {
+        player.zarDungeon.barrageActive = true
+        screenFlash("", 200)
+        setTimeout(() => {
+        bulletHellBlue({"pipRainUltimate": {bulletPerSec: 4}}, {width:800, height:300, duration:2, jumpMin:6, jumpMax:150, gravity: 0.2})
+        }, 200)
+        setTimeout(() => {
+        zarAttackBarrage(getRandomInt(4))
+        }, 2200)
+    }
+    else if (attackVariable == 2)
+    {
+        player.zarDungeon.barrageActive = true
+        screenFlash("", 200)
+        setTimeout(() => {
+        bulletHellBlue({"dieBouncer": {dieAmount: 1, size: 50, enemySpeed: 3, chargeMult: 1.6, spikeSpeed:5, spikeRadius:30, lastTick:false}}, {width: 800, height: 600, duration: 2, jumpMin:6, jumpMax:250, gravity: 0.2})
+        }, 200)
+        setTimeout(() => {
+        zarAttackBarrage(getRandomInt(5))
+        }, 2200)
+    } 
+    else if (attackVariable == 3)
+    {
+        player.zarDungeon.barrageActive = true
+        screenFlash("", 200)
+        setTimeout(() => {
+            bulletHellBlue({"spikePlatformAttack": {spikeHeight: 50, spikeWidth: 28, platformCount: 4, platformSpikeChance: 0.4, platformSpeed: 1.5, platformMinW: 203, platformMaxW: 203}}, {width:800, height:600, duration:2, jumpMin:6, jumpMax:250, gravity: 0.2})
+        }, 200)
+        setTimeout(() => {
+        zarAttackBarrage(getRandomInt(5))
+        }, 2200)
+    } else if (attackVariable == 4)
+    {
+        screenFlash("", 200)
+        setTimeout(() => {
+            bulletHell({"diceSpikes": {spawnPerSec: 10, enemySpeed: 3.5, spikeSize: 28,}}, {width: window.innerWidth, height: window.innerHeight, duration: 10, transparent: true})
+        }, 200)
+        setTimeout(() => {
+        player.zarDungeon.barrageActive = false
+        }, 2200)
+    }
+}
+
+
+window.addEventListener('load', (event) => {
+    setTimeout(() => {
+    if (player.zarDungeon.barrageActive)
+    {
+        zarAttackBarrage(getRandomInt(4))
+    }
+    }, 500)
+});

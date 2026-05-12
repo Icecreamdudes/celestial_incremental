@@ -70,6 +70,8 @@
         player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(buyableEffect("sme", 181))
         player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(buyableEffect("car", 12))
         if (hasUpgrade("car", 15)) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(upgradeEffect("car", 15))
+        player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(buyableEffect("zd", 11))
+
         player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.pow(buyableEffect("sm", 115))
         
         if (player.za.chancePoints.gte(player.za.chancePointsSoftcapStart)) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.div(player.za.chancePointsSoftcapEffect)

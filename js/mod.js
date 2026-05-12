@@ -28,7 +28,7 @@
 		"Black Heart/blackHeart.js", "Black Heart/blackHeartFunctions.js", "Black Heart/characters.js", "Black Heart/skills.js", "Black Heart/depth1.js",
 		"Black Heart/depth2.js", "Black Heart/depth3.js", "Black Heart/matosLair.js", "Black Heart/darkTemple.js", "Black Heart/bulletHell.js",
 		"Black Heart/stagnantSynestia.js", "Black Heart/depth4.js", "Black Heart/alephsChamber.js", "Black Heart/laboratory.js", "DarkU1/grassJump.js",
-		"Hive/nest.js", "Check Back/gwaTemple.js", "Black Heart/cardThrow.js", "Zar/zarDungeon.js",
+		"Hive/nest.js", "Check Back/gwaTemple.js", "Zar/zarDungeon.js", "Black Heart/creation.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 	],
@@ -238,6 +238,9 @@ function updateStyles() {
 					break;
 				case "laboratory":
 					layerBG = "linear-gradient(-180deg, #3a4625 0%, #172312 100%)"
+					break;
+			    case "zarDungeon":
+					layerBG = "linear-gradient(0deg, rgb(187, 187, 187) 0%, rgba(83,83,83,1) 100%)"
 					break;
 				default: 
 					layerBG = "black"
@@ -734,6 +737,10 @@ function updateStyles() {
 							}
 							if (player.bh.currentStage == "alephsChamber" && player.bh.combo.eq(24)) {
 								playAndLoopAudio("music/alephBattle.mp3", options.musicVolume/10)
+								break;
+							}
+							if (player.bh.currentStage == "zarDungeon" && player.bh.combo.eq(29)) {
+								playAndLoopAudio("music/zar.mp3", options.musicVolume/10)
 								break;
 							}
 							// Default Behavior
@@ -1649,7 +1656,7 @@ var doNotCallTheseFunctionsEveryTick = [
 	"startCutscene38", "startCutscene39", "cookieClick", "generateFlower", "generateMult", "flowerClick",
 	"selectCelestialites", "petDeath", "celestialiteDeath", "petAbility", "celestialiteAbility",
 	"arriveAtStar", "spaceEnergyReset", "coinFlip", "randomizeSegments", "spinWheel", "spinSlots", "evaluateRewards",
-	"slotReset", "enhanceReset", "cardReset", "cardDraw", "startGame", "endGame",
+	"slotReset", "enhanceReset", "cardReset", "cardDraw", "startGame", "endGame", "resetCreation"
 ]
 
 function getStartPoints(){

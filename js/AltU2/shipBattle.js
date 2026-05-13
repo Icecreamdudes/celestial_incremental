@@ -345,7 +345,7 @@ class SpaceArena {
             this.bounceCooldown = 2000; // 2 seconds in ms
             this.canvasClickListener = (e) => {
                 let now = Date.now();
-                this.bounceCooldown = 2000 / this.upgradeEffects.attackSpeed
+                this.bounceCooldown = 2000 * this.upgradeEffects.attackSpeed
                 if (now - this.lastBounceClick < this.bounceCooldown) return;
                 this.lastBounceClick = now;
                 let rect = this.canvas.getBoundingClientRect();
@@ -431,7 +431,7 @@ class SpaceArena {
             this.dashCooldown = 1000; // 1 second in ms
             this.canvasClickListener = (e) => {
                 let now = Date.now();
-                this.dashCooldown = 1000 / this.upgradeEffects.attackSpeed
+                this.dashCooldown = 1000 * this.upgradeEffects.attackSpeed
                 if (now - this.lastDashClick < this.dashCooldown) return;
                 this.lastDashClick = now;
                 let rect = this.canvas.getBoundingClientRect();
@@ -1761,7 +1761,7 @@ class SpaceArena {
             // Auto Bounce
             if (player.ir.autoShoot) {
                 let now = Date.now();
-                this.bounceCooldown = 2000 / this.upgradeEffects.attackSpeed
+                this.bounceCooldown = 2000 * this.upgradeEffects.attackSpeed
                 if (now - this.lastBounceClick >= this.bounceCooldown) {
                     this.lastBounceClick = now;
                     let rect = this.canvas.getBoundingClientRect();
@@ -1820,7 +1820,7 @@ class SpaceArena {
             // Auto Dash
             if (player.ir.autoShoot) {
                 let now = Date.now();
-                this.dashCooldown = 1000 / this.upgradeEffects.attackSpeed
+                this.dashCooldown = 1000 * this.upgradeEffects.attackSpeed
                 if (now - this.lastDashClick >= this.dashCooldown) {
                     this.lastDashClick = now;
                     let rect = this.canvas.getBoundingClientRect();
@@ -2009,7 +2009,7 @@ class SpaceArena {
                         if (this.ship._laserActive && this.ship._laserHitCooldown <= 0) {
                             let petMul = (player.pet && player.pet.legPetTimers && player.pet.legPetTimers[1] && player.pet.legPetTimers[1].current && typeof player.pet.legPetTimers[1].current.gt === "function" && player.pet.legPetTimers[1].current.gt(0)) ? 1.5 : 1;
                             let globalMult = (player && player.ir && player.ir.shipDamageMult && typeof player.ir.shipDamageMult.toNumber === "function" ? player.ir.shipDamageMult.toNumber() : 1)
-                            let dmg = (this.ship.damage || 7) * this.upgradeEffects.attackDamage * this.upgradeEffects.attackSpeed * petMul * globalMult;
+                            let dmg = (this.ship.damage || 7) * this.upgradeEffects.attackDamage * petMul * globalMult / this.upgradeEffects.attackSpeed;
                             let rawDmg = (typeof dmg === 'number') ? dmg : (dmg.toNumber ? dmg.toNumber() : Number(dmg));
                             let ang = this.ship._laserAngle;
                             let ux = Math.cos(ang), uy = Math.sin(ang);

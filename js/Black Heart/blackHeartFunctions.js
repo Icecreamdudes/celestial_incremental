@@ -591,7 +591,7 @@ function bhHeal(heal, index, slot, target, str = "") {
 }
 
 function celestialiteReward(gain) {
-    let generalChance = Decimal.sub(player.bh.celestialite.curAdd, 1)
+    let generalChance = player.bh.celestialite.curAdd
     let generalRemain = generalChance.floor()
     generalChance = generalChance.sub(generalRemain)
     
@@ -641,7 +641,7 @@ function celestialiteReward(gain) {
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.lustrousUmbrite) + " lustrous umbrite! (You have " + formatWhole(player.depth3.lustrousUmbrite) + ")")
     }
     if (gain.darkEssence) {
-        gain.darkEssence = gain.darkEssence.mul(buyableEffect("sme", 135)).mul(generalMult).floor()
+        gain.darkEssence = gain.darkEssence.mul(buyableEffect("darkTemple", 1005)).mul(generalMult).floor()
         player.bh.darkEssence = player.bh.darkEssence.add(gain.darkEssence)
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.darkEssence) + " dark essence! (You have " + formatWhole(player.bh.darkEssence) + ")")
     }
@@ -960,7 +960,6 @@ function BHStageEnter(stage) {
     player.bh.currentStage = stage
     if (player[stage].comboStart) {
         player.bh.combo = new Decimal(player[stage].comboStart)
-        if (Math.random() < 0.33 && Decimal.gte(player[stage].comboStart, BHS[player.bh.currentStage].comboLimit)) player.bh.combo = new Decimal(-1)
     } else {
         player.bh.combo = new Decimal(0)
     }

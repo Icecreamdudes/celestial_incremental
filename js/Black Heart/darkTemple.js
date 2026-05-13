@@ -237,6 +237,24 @@ addLayer("darkTemple", {
         runeCap: new Decimal(5),
         tierCap: new Decimal(3),
         totalLevel: new Decimal(0),
+        runeCostDiv: new Decimal(1),
+
+        byproduct: {
+            1: false,
+            2: false,
+            3: false,
+            4: false,
+            5: false,
+            6: false,
+            7: false,
+            8: false,
+            9: false,
+            10: false,
+            11: false,
+            12: false,
+        },
+        byproductCap: new Decimal(1),
+        byproductMult: new Decimal(1),
 
         spAdd: new Decimal(0),
         skillCost: new Decimal(1),
@@ -311,6 +329,42 @@ addLayer("darkTemple", {
         if (stats.d3c) player.darkTemple.depth3CurMult = Decimal.add(1, stats.d3c)
         if (stats.ssc) player.darkTemple.stagnantCurMult = Decimal.add(1, stats.ssc)
         if (stats.d4c) player.darkTemple.depth4CurMult = Decimal.add(1, stats.d4c)
+
+        player.darkTemple.runeCostDiv = new Decimal(1)
+        player.darkTemple.runeCostDiv = player.darkTemple.runeCostDiv.mul(buyableEffect("darkTemple", 1013))
+
+        player.darkTemple.byproductMult = new Decimal(1)
+        if (hasUpgrade("darkTemple", 8)) player.darkTemple.byproductMult = player.darkTemple.byproductMult.mul(upgradeEffect("darkTemple", 8))
+
+        if (player.darkTemple.byproduct[1]) {
+            let eff1 = getBuyableAmount("darkTemple", 1).mul(getBuyableAmount("darkTemple", 101).div(2).add(1))
+            player.depth1.gloomingUmbrite = player.depth1.gloomingUmbrite.add(new Decimal(3).mul(eff1).mul(player.darkTemple.byproductMult).div(3600).mul(delta))
+            player.depth1.dimUmbrite = player.depth1.dimUmbrite.add(new Decimal(1).mul(eff1).mul(player.darkTemple.byproductMult).div(3600).mul(delta))
+            player.bh.darkEssence = player.bh.darkEssence.add(new Decimal(0.3).mul(eff1).mul(player.darkTemple.byproductMult).div(3600).mul(delta))
+        }
+        if (player.darkTemple.byproduct[2]) {
+            let eff2 = getBuyableAmount("darkTemple", 2).mul(getBuyableAmount("darkTemple", 102).div(2).add(1))
+            player.depth2.faintUmbrite = player.depth2.faintUmbrite.add(new Decimal(4).mul(eff2).mul(player.darkTemple.byproductMult).div(3600).mul(delta))
+            player.depth2.clearUmbrite = player.depth2.clearUmbrite.add(new Decimal(1.5).mul(eff2).mul(player.darkTemple.byproductMult).div(3600).mul(delta))
+            player.bh.darkEssence = player.bh.darkEssence.add(new Decimal(0.6).mul(eff2).mul(player.darkTemple.byproductMult).div(3600).mul(delta))
+        }
+        if (player.darkTemple.byproduct[3]) {
+            let eff3 = getBuyableAmount("darkTemple", 3)
+            player.depth3.vividUmbrite = player.depth3.vividUmbrite.add(new Decimal(5).mul(eff3).mul(player.darkTemple.byproductMult).div(3600).mul(delta))
+            player.depth3.lustrousUmbrite = player.depth3.lustrousUmbrite.add(new Decimal(2).mul(eff3).mul(player.darkTemple.byproductMult).div(3600).mul(delta))
+            player.bh.darkEssence = player.bh.darkEssence.add(new Decimal(0.9).mul(eff3).mul(player.darkTemple.byproductMult).div(3600).mul(delta))
+        }
+        if (player.darkTemple.byproduct[4]) {
+            let eff4 = getBuyableAmount("darkTemple", 4)
+            player.stagnantSynestia.temporalDust = player.stagnantSynestia.temporalDust.add(new Decimal(4).mul(eff4).mul(player.darkTemple.byproductMult).div(3600).mul(delta))
+            player.stagnantSynestia.temporalShard = player.stagnantSynestia.temporalShard.add(new Decimal(0.5).mul(eff4).mul(player.darkTemple.byproductMult).div(3600).mul(delta))
+        }
+        if (player.darkTemple.byproduct[5]) {
+            let eff5 = getBuyableAmount("darkTemple", 5)
+            player.depth4.gloomingNocturnium = player.depth4.gloomingNocturnium.add(new Decimal(10).mul(eff5).mul(player.darkTemple.byproductMult).div(3600).mul(delta))
+            player.depth4.dimNocturnium = player.depth4.dimNocturnium.add(new Decimal(3).mul(eff5).mul(player.darkTemple.byproductMult).div(3600).mul(delta))
+            player.bh.darkEssence = player.bh.darkEssence.add(new Decimal(1.5).mul(eff5).mul(player.darkTemple.byproductMult).div(3600).mul(delta))
+        }
     },
     clickables: {
         1: {
@@ -335,6 +389,12 @@ addLayer("darkTemple", {
                     look.background = "#112"
                     look.border = "3px solid #336"
                     if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #112"} else {look.boxShadow = "0px 0px 15px #336"}
+                    if (getBuyableAmount("darkTemple", 101).gte(player.darkTemple.tierCap)) look.background = "#224"
+                } else if (player.darkTemple.tab == "byproduct") {
+                    look.background = "#115"
+                    look.border = "3px solid #33e"
+                    if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #115"} else {look.boxShadow = "0px 0px 15px #33e"}
+                    if (player.darkTemple.byproduct[1]) look.background = "#22a"
                 }
                 if (player.darkTemple.selection == 1) look.borderColor = "#ccf"
                 return look
@@ -362,6 +422,12 @@ addLayer("darkTemple", {
                     look.background = "#112"
                     look.border = "3px solid #336"
                     if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #112"} else {look.boxShadow = "0px 0px 15px #336"}
+                    if (getBuyableAmount("darkTemple", 102).gte(player.darkTemple.tierCap)) look.background = "#224"
+                } else if (player.darkTemple.tab == "byproduct") {
+                    look.background = "#115"
+                    look.border = "3px solid #33e"
+                    if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #115"} else {look.boxShadow = "0px 0px 15px #33e"}
+                    if (player.darkTemple.byproduct[2]) look.background = "#22a"
                 }
                 if (player.darkTemple.selection == 2) look.borderColor = "#ccf"
                 return look
@@ -389,6 +455,11 @@ addLayer("darkTemple", {
                     look.background = "#112"
                     look.border = "3px solid #336"
                     if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #112"} else {look.boxShadow = "0px 0px 15px #336"}
+                } else if (player.darkTemple.tab == "byproduct") {
+                    look.background = "#115"
+                    look.border = "3px solid #33e"
+                    if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #115"} else {look.boxShadow = "0px 0px 15px #33e"}
+                    if (player.darkTemple.byproduct[3]) look.background = "#22a"
                 }
                 if (player.darkTemple.selection == 3) look.borderColor = "#ccf"
                 return look
@@ -416,6 +487,11 @@ addLayer("darkTemple", {
                     look.background = "#112"
                     look.border = "3px solid #336"
                     if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #112"} else {look.boxShadow = "0px 0px 15px #336"}
+                } else if (player.darkTemple.tab == "byproduct") {
+                    look.background = "#115"
+                    look.border = "3px solid #33e"
+                    if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #115"} else {look.boxShadow = "0px 0px 15px #33e"}
+                    if (player.darkTemple.byproduct[4]) look.background = "#22a"
                 }
                 if (player.darkTemple.selection == 4) look.borderColor = "#ccf"
                 return look
@@ -443,6 +519,11 @@ addLayer("darkTemple", {
                     look.background = "#112"
                     look.border = "3px solid #336"
                     if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #112"} else {look.boxShadow = "0px 0px 15px #336"}
+                } else if (player.darkTemple.tab == "byproduct") {
+                    look.background = "#115"
+                    look.border = "3px solid #33e"
+                    if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #115"} else {look.boxShadow = "0px 0px 15px #33e"}
+                    if (player.darkTemple.byproduct[5]) look.background = "#22a"
                 }
                 if (player.darkTemple.selection == 5) look.borderColor = "#ccf"
                 return look
@@ -466,6 +547,11 @@ addLayer("darkTemple", {
                     look.background = "#112"
                     look.border = "3px solid #336"
                     if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #112"} else {look.boxShadow = "0px 0px 15px #336"}
+                } else if (player.darkTemple.tab == "byproduct") {
+                    look.background = "#115"
+                    look.border = "3px solid #33e"
+                    if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #115"} else {look.boxShadow = "0px 0px 15px #33e"}
+                    if (player.darkTemple.byproduct[6]) look.background = "#22a"
                 }
                 if (player.darkTemple.selection == 6) look.borderColor = "#ccf"
                 return look
@@ -489,6 +575,11 @@ addLayer("darkTemple", {
                     look.background = "#112"
                     look.border = "3px solid #336"
                     if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #112"} else {look.boxShadow = "0px 0px 15px #336"}
+                } else if (player.darkTemple.tab == "byproduct") {
+                    look.background = "#115"
+                    look.border = "3px solid #33e"
+                    if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #115"} else {look.boxShadow = "0px 0px 15px #33e"}
+                    if (player.darkTemple.byproduct[7]) look.background = "#22a"
                 }
                 if (player.darkTemple.selection == 7) look.borderColor = "#ccf"
                 return look
@@ -512,6 +603,11 @@ addLayer("darkTemple", {
                     look.background = "#112"
                     look.border = "3px solid #336"
                     if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #112"} else {look.boxShadow = "0px 0px 15px #336"}
+                } else if (player.darkTemple.tab == "byproduct") {
+                    look.background = "#115"
+                    look.border = "3px solid #33e"
+                    if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #115"} else {look.boxShadow = "0px 0px 15px #33e"}
+                    if (player.darkTemple.byproduct[8]) look.background = "#22a"
                 }
                 if (player.darkTemple.selection == 8) look.borderColor = "#ccf"
                 return look
@@ -535,6 +631,11 @@ addLayer("darkTemple", {
                     look.background = "#112"
                     look.border = "3px solid #336"
                     if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #112"} else {look.boxShadow = "0px 0px 15px #336"}
+                } else if (player.darkTemple.tab == "byproduct") {
+                    look.background = "#115"
+                    look.border = "3px solid #33e"
+                    if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #115"} else {look.boxShadow = "0px 0px 15px #33e"}
+                    if (player.darkTemple.byproduct[9]) look.background = "#22a"
                 }
                 if (player.darkTemple.selection == 9) look.borderColor = "#ccf"
                 return look
@@ -558,6 +659,11 @@ addLayer("darkTemple", {
                     look.background = "#112"
                     look.border = "3px solid #336"
                     if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #112"} else {look.boxShadow = "0px 0px 15px #336"}
+                } else if (player.darkTemple.tab == "byproduct") {
+                    look.background = "#115"
+                    look.border = "3px solid #33e"
+                    if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #115"} else {look.boxShadow = "0px 0px 15px #33e"}
+                    if (player.darkTemple.byproduct[10]) look.background = "#22a"
                 }
                 if (player.darkTemple.selection == 10) look.borderColor = "#ccf"
                 return look
@@ -581,6 +687,11 @@ addLayer("darkTemple", {
                     look.background = "#112"
                     look.border = "3px solid #336"
                     if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #112"} else {look.boxShadow = "0px 0px 15px #336"}
+                } else if (player.darkTemple.tab == "byproduct") {
+                    look.background = "#115"
+                    look.border = "3px solid #33e"
+                    if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #115"} else {look.boxShadow = "0px 0px 15px #33e"}
+                    if (player.darkTemple.byproduct[11]) look.background = "#22a"
                 }
                 if (player.darkTemple.selection == 11) look.borderColor = "#ccf"
                 return look
@@ -604,8 +715,36 @@ addLayer("darkTemple", {
                     look.background = "#112"
                     look.border = "3px solid #336"
                     if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #112"} else {look.boxShadow = "0px 0px 15px #336"}
+                } else if (player.darkTemple.tab == "byproduct") {
+                    look.background = "#115"
+                    look.border = "3px solid #33e"
+                    if (!this.canClick()) {look.filter = "brightness(50%)"; look.boxShadow = "0px 0px 10px #115"} else {look.boxShadow = "0px 0px 15px #33e"}
+                    if (player.darkTemple.byproduct[12]) look.background = "#22a"
                 }
                 if (player.darkTemple.selection == 12) look.borderColor = "#ccf"
+                return look
+            },
+        },
+        "byproductToggle": {
+            title() {return player.darkTemple.byproduct[player.darkTemple.selection] ? "Unselect" : "Select"},
+            canClick() {
+                let amt = 0
+                for (let i = 1; i < 13; i++) {
+                    if (player.darkTemple.byproduct[i]) amt++
+                }
+                return Decimal.lt(amt, player.darkTemple.byproductCap) || player.darkTemple.byproduct[player.darkTemple.selection]
+            },
+            unlocked() {return player.darkTemple.tab == "byproduct"},
+            onClick() {
+                if (player.darkTemple.byproduct[player.darkTemple.selection]) {
+                    player.darkTemple.byproduct[player.darkTemple.selection] = false
+                } else {
+                    player.darkTemple.byproduct[player.darkTemple.selection] = true
+                }
+            },
+            style() {
+                let look = {width: "200px", minHeight: "35px", color: "var(--textColor)", fontSize: "12px", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "0 0 27px 27px"}
+                !this.canClick() ? look.background = "#361e1e" : player.darkTemple.byproduct[player.darkTemple.selection] ? look.background =  "var(--miscButton)" : look.background = "var(--miscButtonDisable)"
                 return look
             },
         },
@@ -623,13 +762,30 @@ addLayer("darkTemple", {
         "tier": {
             title: "Rune Tiers",
             canClick: true,
-            unlocked: true,
+            unlocked() {return hasUpgrade("darkTemple", 12)},
             onClick() {
                 player.subtabs["darkTemple"]["stuff"] = "runes"
                 player.darkTemple.tab = "tier"
                 player.darkTemple.selection = 1
             },
             style: {width: "172px", minHeight: "40px", color: "#88f", background: "#112", border: "3px solid #336", borderRadius: "0"},
+        },
+        "byproduct": {
+            title() {
+                let amt = 0
+                for (let i = 1; i < 13; i++) {
+                    if (player.darkTemple.byproduct[i]) amt++
+                }
+                return "Rune By-Products<br><small>[" + formatWhole(amt) + "/" + formatWhole(player.darkTemple.byproductCap) + "]</small>"
+            },
+            canClick: true,
+            unlocked() {return hasUpgrade("darkTemple", 4)},
+            onClick() {
+                player.subtabs["darkTemple"]["stuff"] = "runes"
+                player.darkTemple.tab = "byproduct"
+                player.darkTemple.selection = 1
+            },
+            style: {width: "172px", minHeight: "40px", height: "40px", lineHeight: "1", color: "#88f", background: "#115", border: "3px solid #33e", borderRadius: "0"},
         },
         "bestowal": {
             title: "Bestowals",
@@ -658,7 +814,7 @@ addLayer("darkTemple", {
                 let look = {width: "140px", minHeight: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#0d1d07"}
                 else if (!this.canAfford()) look.backgroundColor = "#000"
-                else if (!canAffordUpgrade(this.layer, this.id)) look.backgroundColor = "#1b0f0f"
+                else if (!canAffordUpgrade(this.layer, this.id)) look.backgroundColor = "#2b1818"
                 else look.backgroundColor = "#13020d"
                 return look
             },
@@ -678,7 +834,7 @@ addLayer("darkTemple", {
                 let look = {width: "140px", minHeight: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
                 else if (!this.canAfford()) look.backgroundColor = "#000"
-                else if (!canAffordUpgrade(this.layer, this.id)) look.backgroundColor = "#1b0f0f"
+                else if (!canAffordUpgrade(this.layer, this.id)) look.backgroundColor = "#2b1818"
                 else look.backgroundColor = "#13020d"
                 return look
             },
@@ -687,18 +843,19 @@ addLayer("darkTemple", {
             unlocked: true,
             fullDisplay() {
                 return !this.canAfford() ? "<h3>You need " + formatWhole(Decimal.sub(15, player.darkTemple.totalLevel)) + " more eff. rune levels"
-                : "???<br><br>Cost: " + formatSimple(this.cost) + " " + this.currencyDisplayName
+                : "Reduce CB level req. based on eff. rune levels<br>Currently: /" + formatSimple(this.effect(), 2) + "<br><br>Cost: " + formatSimple(this.cost) + " " + this.currencyDisplayName
             },
             cost: new Decimal(75),
             canAfford() {return player.darkTemple.totalLevel.gte(15)},
             currencyLocation() {return player.bh },
             currencyDisplayName: "Dark Essence",
             currencyInternalName: "darkEssence",
+            effect() {return player.darkTemple.totalLevel.add(1).log(2).div(5).add(1)},
             style() {
                 let look = {width: "140px", minHeight: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
                 else if (!this.canAfford()) look.backgroundColor = "#000"
-                else if (!canAffordUpgrade(this.layer, this.id)) look.backgroundColor = "#1b0f0f"
+                else if (!canAffordUpgrade(this.layer, this.id)) look.backgroundColor = "#2b1818"
                 else look.backgroundColor = "#13020d"
                 return look
             },
@@ -707,18 +864,25 @@ addLayer("darkTemple", {
             unlocked: true,
             fullDisplay() {
                 return !this.canAfford() ? "<h3>You need " + formatWhole(Decimal.sub(20, player.darkTemple.totalLevel)) + " more eff. rune levels"
-                : "???<br><br>Cost: " + formatSimple(this.cost) + " " + this.currencyDisplayName
+                : "Increase rune by-product gain based on bestowals<br>Currently: x" + formatSimple(this.effect(), 2) + "<br><br>Cost: " + formatSimple(this.cost) + " " + this.currencyDisplayName
             },
             cost: new Decimal(200),
             canAfford() {return player.darkTemple.totalLevel.gte(20)},
             currencyLocation() {return player.bh },
             currencyDisplayName: "Dark Essence",
             currencyInternalName: "darkEssence",
+            effect() {
+                let amt = new Decimal(player.darkTemple.upgrades.length)
+                for (let i = 1001; i < 1016; i = i+2) {
+                    amt = amt.add(getBuyableAmount("darkTemple", i))
+                }
+                return amt.div(100).add(1)
+            },
             style() {
                 let look = {width: "140px", minHeight: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
                 else if (!this.canAfford()) look.backgroundColor = "#000"
-                else if (!canAffordUpgrade(this.layer, this.id)) look.backgroundColor = "#1b0f0f"
+                else if (!canAffordUpgrade(this.layer, this.id)) look.backgroundColor = "#2b1818"
                 else look.backgroundColor = "#13020d"
                 return look
             },
@@ -738,7 +902,7 @@ addLayer("darkTemple", {
                 let look = {width: "140px", minHeight: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
                 else if (!this.canAfford()) look.backgroundColor = "#000"
-                else if (!canAffordUpgrade(this.layer, this.id)) look.backgroundColor = "#1b0f0f"
+                else if (!canAffordUpgrade(this.layer, this.id)) look.backgroundColor = "#2b1818"
                 else look.backgroundColor = "#13020d"
                 return look
             },
@@ -758,7 +922,7 @@ addLayer("darkTemple", {
                 let look = {width: "140px", minHeight: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
                 else if (!this.canAfford()) look.backgroundColor = "#000"
-                else if (!canAffordUpgrade(this.layer, this.id)) look.backgroundColor = "#1b0f0f"
+                else if (!canAffordUpgrade(this.layer, this.id)) look.backgroundColor = "#2b1818"
                 else look.backgroundColor = "#13020d"
                 return look
             },
@@ -779,7 +943,7 @@ addLayer("darkTemple", {
                 let look = {width: "140px", minHeight: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
                 else if (!this.canAfford()) look.backgroundColor = "#000"
-                else if (!canAffordUpgrade(this.layer, this.id)) look.backgroundColor = "#1b0f0f"
+                else if (!canAffordUpgrade(this.layer, this.id)) look.backgroundColor = "#2b1818"
                 else look.backgroundColor = "#13020d"
                 return look
             },
@@ -788,7 +952,7 @@ addLayer("darkTemple", {
             unlocked: true,
             fullDisplay() {
                 return !this.canAfford() ? "<h3>You need " + formatWhole(Decimal.sub(40, player.darkTemple.totalLevel)) + " more eff. rune levels"
-                : "???<br><br>Cost: " + formatSimple(this.cost) + " " + this.currencyDisplayName
+                : "[COMING SOON]<br><br>Cost: " + formatSimple(this.cost) + " " + this.currencyDisplayName
             },
             cost: new Decimal(750),
             canAfford() {return player.darkTemple.totalLevel.gte(40)},
@@ -799,7 +963,7 @@ addLayer("darkTemple", {
                 let look = {width: "140px", minHeight: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
                 else if (!this.canAfford()) look.backgroundColor = "#000"
-                else if (!canAffordUpgrade(this.layer, this.id)) look.backgroundColor = "#1b0f0f"
+                else if (!canAffordUpgrade(this.layer, this.id)) look.backgroundColor = "#2b1818"
                 else look.backgroundColor = "#13020d"
                 return look
             },
@@ -826,9 +990,9 @@ addLayer("darkTemple", {
             },
             style() {
                 let look = {width: "140px", height: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
-                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) look.backgroundColor = "#0d1d07"
                 else if (player.darkTemple.totalLevel.lt(2)) look.backgroundColor = "#000"
-                else if (!this.canAfford()) look.backgroundColor = "#1b0f0f"
+                else if (!this.canAfford()) look.backgroundColor = "#2b1818"
                 else look.backgroundColor = "#13020d"
                 return look
 
@@ -855,9 +1019,9 @@ addLayer("darkTemple", {
             },
             style() {
                 let look = {width: "140px", height: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
-                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) look.backgroundColor = "#0d1d07"
                 else if (player.darkTemple.totalLevel.lt(8)) look.backgroundColor = "#000"
-                else if (!this.canAfford()) look.backgroundColor = "#1b0f0f"
+                else if (!this.canAfford()) look.backgroundColor = "#2b1818"
                 else look.backgroundColor = "#13020d"
                 return look
 
@@ -884,9 +1048,9 @@ addLayer("darkTemple", {
             },
             style() {
                 let look = {width: "140px", height: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
-                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) look.backgroundColor = "#0d1d07"
                 else if (player.darkTemple.totalLevel.lt(12)) look.backgroundColor = "#000"
-                else if (!this.canAfford()) look.backgroundColor = "#1b0f0f"
+                else if (!this.canAfford()) look.backgroundColor = "#2b1818"
                 else look.backgroundColor = "#13020d"
                 return look
 
@@ -913,9 +1077,9 @@ addLayer("darkTemple", {
             },
             style() {
                 let look = {width: "140px", height: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
-                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) look.backgroundColor = "#0d1d07"
                 else if (player.darkTemple.totalLevel.lt(18)) look.backgroundColor = "#000"
-                else if (!this.canAfford()) look.backgroundColor = "#1b0f0f"
+                else if (!this.canAfford()) look.backgroundColor = "#2b1818"
                 else look.backgroundColor = "#13020d"
                 return look
 
@@ -928,13 +1092,13 @@ addLayer("darkTemple", {
             purchaseLimit() { return new Decimal(5) },
             currency() { return player.bh.darkEssence },
             pay(amt) { player.bh.darkEssence = this.currency().sub(amt) },
-            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1)},
+            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).div(100).add(1)},
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) && player.darkTemple.totalLevel.gte(22) },
             display() {
                 return player.darkTemple.totalLevel.lt(22) ? "<h3>You need " + formatWhole(Decimal.sub(22, player.darkTemple.totalLevel)) + " more eff. rune levels"
-                : "<small>Increase chance to double celestialite rewards</small><br>Currently: +" + formatSimple(this.effect().sub(1)) + "%<br>Next: +" + formatSimple(this.effect(getBuyableAmount(this.layer, this.id).add(1)).sub(1)) + "%<br><br>Cost: " + formatSimple(this.cost()) + " Dark Essence"
+                : "<small>Increase chance to double celestialite rewards</small><br>Currently: +" + formatSimple(this.effect().sub(1).mul(100)) + "%<br>Next: +" + formatSimple(this.effect(getBuyableAmount(this.layer, this.id).add(1).mul(100)).sub(1)) + "%<br><br>Cost: " + formatSimple(this.cost()) + " Dark Essence"
             },
             buy() {
                 this.pay(this.cost())
@@ -942,9 +1106,9 @@ addLayer("darkTemple", {
             },
             style() {
                 let look = {width: "140px", height: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
-                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) look.backgroundColor = "#0d1d07"
                 else if (player.darkTemple.totalLevel.lt(22)) look.backgroundColor = "#000"
-                else if (!this.canAfford()) look.backgroundColor = "#1b0f0f"
+                else if (!this.canAfford()) look.backgroundColor = "#2b1818"
                 else look.backgroundColor = "#13020d"
                 return look
 
@@ -957,13 +1121,13 @@ addLayer("darkTemple", {
             purchaseLimit() { return new Decimal(5) },
             currency() { return player.bh.darkEther },
             pay(amt) { player.bh.darkEther = this.currency().sub(amt) },
-            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1)},
+            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).div(100).add(1)},
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) && player.darkTemple.totalLevel.gte(28) },
             display() {
                 return player.darkTemple.totalLevel.lt(28) ? "<h3>You need " + formatWhole(Decimal.sub(28, player.darkTemple.totalLevel)) + " more eff. rune levels"
-                : "Increase base character stats<br>Currently: +" + formatSimple(this.effect().sub(1)) + "%<br>Next: +" + formatSimple(this.effect(getBuyableAmount(this.layer, this.id).add(1)).sub(1)) + "%<br><br>Cost: " + formatSimple(this.cost()) + " Dark Ether"
+                : "Increase base character stats<br>Currently: +" + formatSimple(this.effect().sub(1).mul(100)) + "%<br>Next: +" + formatSimple(this.effect(getBuyableAmount(this.layer, this.id).add(1)).sub(1).mul(100)) + "%<br><br>Cost: " + formatSimple(this.cost()) + " Dark Ether"
             },
             buy() {
                 this.pay(this.cost())
@@ -971,9 +1135,9 @@ addLayer("darkTemple", {
             },
             style() {
                 let look = {width: "140px", height: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
-                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) look.backgroundColor = "#0d1d07"
                 else if (player.darkTemple.totalLevel.lt(28)) look.backgroundColor = "#000"
-                else if (!this.canAfford()) look.backgroundColor = "#1b0f0f"
+                else if (!this.canAfford()) look.backgroundColor = "#2b1818"
                 else look.backgroundColor = "#13020d"
                 return look
 
@@ -1000,9 +1164,9 @@ addLayer("darkTemple", {
             },
             style() {
                 let look = {width: "140px", height: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
-                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) look.backgroundColor = "#0d1d07"
                 else if (player.darkTemple.totalLevel.lt(32)) look.backgroundColor = "#000"
-                else if (!this.canAfford()) look.backgroundColor = "#1b0f0f"
+                else if (!this.canAfford()) look.backgroundColor = "#2b1818"
                 else look.backgroundColor = "#13020d"
                 return look
 
@@ -1029,9 +1193,9 @@ addLayer("darkTemple", {
             },
             style() {
                 let look = {width: "140px", height: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
-                if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) look.backgroundColor = "#0d1d07"
                 else if (player.darkTemple.totalLevel.lt(38)) look.backgroundColor = "#000"
-                else if (!this.canAfford()) look.backgroundColor = "#1b0f0f"
+                else if (!this.canAfford()) look.backgroundColor = "#2b1818"
                 else look.backgroundColor = "#13020d"
                 return look
 
@@ -1041,16 +1205,16 @@ addLayer("darkTemple", {
         1: {
             purchaseLimit() { return player.darkTemple.runeCap },
             pay() {
-                player.depth1.gloomingUmbrite = player.depth1.gloomingUmbrite.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(9).floor())
-                player.depth1.dimUmbrite = player.depth1.dimUmbrite.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(3).floor())
-                player.sma.starmetalAlloy = player.sma.starmetalAlloy.sub(Decimal.pow(4, getBuyableAmount(this.layer, this.id)).mul(10000))
+                player.depth1.gloomingUmbrite = player.depth1.gloomingUmbrite.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(9).div(player.darkTemple.runeCostDiv).floor())
+                player.depth1.dimUmbrite = player.depth1.dimUmbrite.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(3).div(player.darkTemple.runeCostDiv).floor())
+                player.sma.starmetalAlloy = player.sma.starmetalAlloy.sub(Decimal.pow(4, getBuyableAmount(this.layer, this.id)).mul(10000).div(player.darkTemple.runeCostDiv))
             },
             effect(x) {return getBuyableAmount(this.layer, this.id)},
             unlocked() {return player.darkTemple.tab == "level" && player.darkTemple.selection == 1},
             canAfford() {
-                return player.depth1.gloomingUmbrite.gte(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(9))
-                && player.depth1.dimUmbrite.gte(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(3))
-                && player.sma.starmetalAlloy.gte(Decimal.pow(4, getBuyableAmount(this.layer, this.id)).mul(10000))
+                return player.depth1.gloomingUmbrite.gte(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(9).div(player.darkTemple.runeCostDiv))
+                && player.depth1.dimUmbrite.gte(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(3).div(player.darkTemple.runeCostDiv))
+                && player.sma.starmetalAlloy.gte(Decimal.pow(4, getBuyableAmount(this.layer, this.id)).mul(10000).div(player.darkTemple.runeCostDiv))
             },
             display() {return "<div style='line-height:0.8'>Level Up<br><span style='font-size:10px'>[" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(player.darkTemple.runeCap) + "]</div>"},
             buy() {
@@ -1066,16 +1230,16 @@ addLayer("darkTemple", {
         2: {
             purchaseLimit() { return player.darkTemple.runeCap },
             pay() {
-                player.depth2.faintUmbrite = player.depth2.faintUmbrite.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(12).floor())
-                player.depth2.clearUmbrite = player.depth2.clearUmbrite.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(4).floor())
-                player.s.singularityPoints = player.s.singularityPoints.sub(Decimal.pow(1e10, getBuyableAmount(this.layer, this.id)).mul(1e100))
+                player.depth2.faintUmbrite = player.depth2.faintUmbrite.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(12).div(player.darkTemple.runeCostDiv).floor())
+                player.depth2.clearUmbrite = player.depth2.clearUmbrite.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(4).div(player.darkTemple.runeCostDiv).floor())
+                player.s.singularityPoints = player.s.singularityPoints.sub(Decimal.pow(1e10, getBuyableAmount(this.layer, this.id)).mul(1e100).div(player.darkTemple.runeCostDiv))
             },
             effect(x) {return getBuyableAmount(this.layer, this.id)},
             unlocked() {return player.darkTemple.tab == "level" && player.darkTemple.selection == 2},
             canAfford() {
-                return player.depth2.faintUmbrite.gte(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(12).floor())
-                && player.depth2.clearUmbrite.gte(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(4).floor())
-                && player.s.singularityPoints.gte(Decimal.pow(1e10, getBuyableAmount(this.layer, this.id)).mul(1e100))
+                return player.depth2.faintUmbrite.gte(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(12).div(player.darkTemple.runeCostDiv).floor())
+                && player.depth2.clearUmbrite.gte(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(4).div(player.darkTemple.runeCostDiv).floor())
+                && player.s.singularityPoints.gte(Decimal.pow(1e10, getBuyableAmount(this.layer, this.id)).mul(1e100).div(player.darkTemple.runeCostDiv))
             },
             display() {return "<div style='line-height:0.8'>Level Up<br><span style='font-size:10px'>[" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(player.darkTemple.runeCap) + "]</div>"},
             buy() {
@@ -1091,16 +1255,16 @@ addLayer("darkTemple", {
         3: {
             purchaseLimit() { return player.darkTemple.runeCap },
             pay() {
-                player.depth3.vividUmbrite = player.depth3.vividUmbrite.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(15).floor())
-                player.depth3.lustrousUmbrite = player.depth3.lustrousUmbrite.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(5).floor())
-                player.au2.stars = player.au2.stars.sub(Decimal.pow(10, getBuyableAmount(this.layer, this.id)).mul(10))
+                player.depth3.vividUmbrite = player.depth3.vividUmbrite.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(15).div(player.darkTemple.runeCostDiv).floor())
+                player.depth3.lustrousUmbrite = player.depth3.lustrousUmbrite.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(5).div(player.darkTemple.runeCostDiv).floor())
+                player.au2.stars = player.au2.stars.sub(Decimal.pow(10, getBuyableAmount(this.layer, this.id)).mul(10).div(player.darkTemple.runeCostDiv))
             },
             effect(x) {return getBuyableAmount(this.layer, this.id)},
-            unlocked() {return player.darkTemple.selection == 3},
+            unlocked() {return player.darkTemple.tab == "level" && player.darkTemple.selection == 3},
             canAfford() {
-                return player.depth3.vividUmbrite.gte(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(15).floor())
-                && player.depth3.lustrousUmbrite.gte(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(5).floor())
-                && player.au2.stars.gte(Decimal.pow(10, getBuyableAmount(this.layer, this.id)).mul(10))
+                return player.depth3.vividUmbrite.gte(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(15).div(player.darkTemple.runeCostDiv).floor())
+                && player.depth3.lustrousUmbrite.gte(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(5).div(player.darkTemple.runeCostDiv).floor())
+                && player.au2.stars.gte(Decimal.pow(10, getBuyableAmount(this.layer, this.id)).mul(10).div(player.darkTemple.runeCostDiv))
             },
             display() {return "<div style='line-height:0.8'>Level Up<br><span style='font-size:10px'>[" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(player.darkTemple.runeCap) + "]</div>"},
             buy() {
@@ -1116,16 +1280,16 @@ addLayer("darkTemple", {
         4: {
             purchaseLimit() { return player.darkTemple.runeCap },
             pay() {
-                player.stagnantSynestia.temporalDust = player.stagnantSynestia.temporalDust.sub(Decimal.pow(2.5, getBuyableAmount(this.layer, this.id)).mul(12).floor())
-                player.stagnantSynestia.temporalShard = player.stagnantSynestia.temporalShard.sub(Decimal.pow(2, getBuyableAmount(this.layer, this.id)).mul(2).floor())
-                player.sme.starmetalEssence = player.sme.starmetalEssence.sub(Decimal.pow(5, getBuyableAmount(this.layer, this.id)).mul(100))
+                player.stagnantSynestia.temporalDust = player.stagnantSynestia.temporalDust.sub(Decimal.pow(2.5, getBuyableAmount(this.layer, this.id)).mul(12).div(player.darkTemple.runeCostDiv).floor())
+                player.stagnantSynestia.temporalShard = player.stagnantSynestia.temporalShard.sub(Decimal.pow(2, getBuyableAmount(this.layer, this.id)).mul(2).div(player.darkTemple.runeCostDiv).floor())
+                player.sme.starmetalEssence = player.sme.starmetalEssence.sub(Decimal.pow(5, getBuyableAmount(this.layer, this.id)).mul(100).div(player.darkTemple.runeCostDiv))
             },
             effect(x) {return getBuyableAmount(this.layer, this.id)},
-            unlocked() {return player.darkTemple.selection == 4},
+            unlocked() {return player.darkTemple.tab == "level" && player.darkTemple.selection == 4},
             canAfford() {
-                return player.stagnantSynestia.temporalDust.gte(Decimal.pow(2.5, getBuyableAmount(this.layer, this.id)).mul(12).floor())
-                && player.stagnantSynestia.temporalShard.gte(Decimal.pow(2, getBuyableAmount(this.layer, this.id)).mul(2).floor())
-                && player.sme.starmetalEssence.gte(Decimal.pow(5, getBuyableAmount(this.layer, this.id)).mul(100))
+                return player.stagnantSynestia.temporalDust.gte(Decimal.pow(2.5, getBuyableAmount(this.layer, this.id)).mul(12).div(player.darkTemple.runeCostDiv).floor())
+                && player.stagnantSynestia.temporalShard.gte(Decimal.pow(2, getBuyableAmount(this.layer, this.id)).mul(2).div(player.darkTemple.runeCostDiv).floor())
+                && player.sme.starmetalEssence.gte(Decimal.pow(5, getBuyableAmount(this.layer, this.id)).mul(100).div(player.darkTemple.runeCostDiv))
             },
             display() {return "<div style='line-height:0.8'>Level Up<br><span style='font-size:10px'>[" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(player.darkTemple.runeCap) + "]</div>"},
             buy() {
@@ -1141,16 +1305,16 @@ addLayer("darkTemple", {
         5: {
             purchaseLimit() { return player.darkTemple.runeCap },
             pay() {
-                player.depth4.gloomingNocturnium = player.depth4.gloomingNocturnium.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(30).floor())
-                player.depth4.dimNocturnium = player.depth4.dimNocturnium.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(10).floor())
-                player.pol.pollinators = player.pol.pollinators.sub(Decimal.pow("1e200", getBuyableAmount(this.layer, this.id)).mul("1e2000"))
+                player.depth4.gloomingNocturnium = player.depth4.gloomingNocturnium.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(30).div(player.darkTemple.runeCostDiv).floor())
+                player.depth4.dimNocturnium = player.depth4.dimNocturnium.sub(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(10).div(player.darkTemple.runeCostDiv).floor())
+                player.pol.pollinators = player.pol.pollinators.sub(Decimal.pow("1e200", getBuyableAmount(this.layer, this.id)).mul("1e2000").div(player.darkTemple.runeCostDiv))
             },
             effect(x) {return getBuyableAmount(this.layer, this.id)},
-            unlocked() {return player.darkTemple.selection == 5},
+            unlocked() {return player.darkTemple.tab == "level" && player.darkTemple.selection == 5},
             canAfford() {
-                return player.depth4.gloomingNocturnium.gte(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(30).floor())
-                && player.depth4.dimNocturnium.gte(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(10).floor())
-                && player.pol.pollinators.gte(Decimal.pow("1e200", getBuyableAmount(this.layer, this.id)).mul("1e2000"))
+                return player.depth4.gloomingNocturnium.gte(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(30).div(player.darkTemple.runeCostDiv).floor())
+                && player.depth4.dimNocturnium.gte(Decimal.pow(3, getBuyableAmount(this.layer, this.id)).mul(10).div(player.darkTemple.runeCostDiv).floor())
+                && player.pol.pollinators.gte(Decimal.pow("1e200", getBuyableAmount(this.layer, this.id)).div(player.darkTemple.runeCostDiv).mul("1e2000"))
             },
             display() {return "<div style='line-height:0.8'>Level Up<br><span style='font-size:10px'>[" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(player.darkTemple.runeCap) + "]</div>"},
             buy() {
@@ -1257,29 +1421,29 @@ addLayer("darkTemple", {
                                             if (player.darkTemple.tab == "level") {
                                                 switch (player.darkTemple.selection) {
                                                     case 1:
-                                                        cost1 = formatSimple(player.depth1.gloomingUmbrite) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 1)).mul(9).floor()) + "<br>Glooming Umbrite"
-                                                        cost2 = formatSimple(player.depth1.dimUmbrite) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 1)).mul(3).floor()) + "<br>Dim Umbrite"
-                                                        cost3 = formatSimple(player.sma.starmetalAlloy) + "/" + formatSimple(Decimal.pow(4, getBuyableAmount("darkTemple", 1)).mul(10000)) + "<br>Starmetal Alloy"
+                                                        cost1 = formatSimple(player.depth1.gloomingUmbrite) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 1)).mul(9).div(player.darkTemple.runeCostDiv).floor()) + "<br>Glooming Umbrite"
+                                                        cost2 = formatSimple(player.depth1.dimUmbrite) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 1)).mul(3).div(player.darkTemple.runeCostDiv).floor()) + "<br>Dim Umbrite"
+                                                        cost3 = formatSimple(player.sma.starmetalAlloy) + "/" + formatSimple(Decimal.pow(4, getBuyableAmount("darkTemple", 1)).mul(10000).div(player.darkTemple.runeCostDiv)) + "<br>Starmetal Alloy"
                                                         break;
                                                     case 2:
-                                                        cost1 = formatSimple(player.depth2.faintUmbrite) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 2)).mul(12).floor()) + "<br>Faint Umbrite"
-                                                        cost2 = formatSimple(player.depth2.clearUmbrite) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 2)).mul(4).floor()) + "<br>Clear Umbrite"
-                                                        cost3 = formatSimple(player.s.singularityPoints) + "/" + formatSimple(Decimal.pow(1e10, getBuyableAmount("darkTemple", 2)).mul(1e100)) + "<br>Singularity Points"
+                                                        cost1 = formatSimple(player.depth2.faintUmbrite) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 2)).mul(12).div(player.darkTemple.runeCostDiv).floor()) + "<br>Faint Umbrite"
+                                                        cost2 = formatSimple(player.depth2.clearUmbrite) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 2)).mul(4).div(player.darkTemple.runeCostDiv).floor()) + "<br>Clear Umbrite"
+                                                        cost3 = formatSimple(player.s.singularityPoints) + "/" + formatSimple(Decimal.pow(1e10, getBuyableAmount("darkTemple", 2)).mul(1e100).div(player.darkTemple.runeCostDiv)) + "<br>Singularity Points"
                                                         break;
                                                     case 3:
-                                                        cost1 = formatSimple(player.depth3.vividUmbrite) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 3)).mul(15).floor()) + "<br>Vivid Umbrite"
-                                                        cost2 = formatSimple(player.depth3.lustrousUmbrite) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 3)).mul(5).floor()) + "<br>Lustrous Umbrite"
-                                                        cost3 = formatSimple(player.au2.stars) + "/" + formatSimple(Decimal.pow(10, getBuyableAmount("darkTemple", 3)).mul(10)) + "<br>Stars"
+                                                        cost1 = formatSimple(player.depth3.vividUmbrite) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 3)).mul(15).div(player.darkTemple.runeCostDiv).floor()) + "<br>Vivid Umbrite"
+                                                        cost2 = formatSimple(player.depth3.lustrousUmbrite) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 3)).mul(5).div(player.darkTemple.runeCostDiv).floor()) + "<br>Lustrous Umbrite"
+                                                        cost3 = formatSimple(player.au2.stars) + "/" + formatSimple(Decimal.pow(10, getBuyableAmount("darkTemple", 3)).mul(10).div(player.darkTemple.runeCostDiv)) + "<br>Stars"
                                                         break;
                                                     case 4:
-                                                        cost1 = formatSimple(player.stagnantSynestia.temporalDust) + "/" + formatSimple(Decimal.pow(2.5, getBuyableAmount("darkTemple", 4)).mul(12).floor()) + "<br>Temporal Dust"
-                                                        cost2 = formatSimple(player.stagnantSynestia.temporalShard) + "/" + formatSimple(Decimal.pow(2, getBuyableAmount("darkTemple", 4)).mul(2).floor()) + "<br>Temporal Shards"
-                                                        cost3 = formatSimple(player.sme.starmetalEssence) + "/" + formatSimple(Decimal.pow(5, getBuyableAmount("darkTemple", 4)).mul(100)) + "<br>Starmetal Essence"
+                                                        cost1 = formatSimple(player.stagnantSynestia.temporalDust) + "/" + formatSimple(Decimal.pow(2.5, getBuyableAmount("darkTemple", 4)).mul(12).div(player.darkTemple.runeCostDiv).floor()) + "<br>Temporal Dust"
+                                                        cost2 = formatSimple(player.stagnantSynestia.temporalShard) + "/" + formatSimple(Decimal.pow(2, getBuyableAmount("darkTemple", 4)).mul(2).div(player.darkTemple.runeCostDiv).floor()) + "<br>Temporal Shards"
+                                                        cost3 = formatSimple(player.sme.starmetalEssence) + "/" + formatSimple(Decimal.pow(5, getBuyableAmount("darkTemple", 4)).mul(100).div(player.darkTemple.runeCostDiv)) + "<br>Starmetal Essence"
                                                         break;
                                                     case 5:
-                                                        cost1 = formatSimple(player.depth4.gloomingNocturnium) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 5)).mul(30).floor()) + "<br>Glooming Nocturnium"
-                                                        cost2 = formatSimple(player.depth4.dimNocturnium) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 5)).mul(10).floor()) + "<br>Dim Nocturnium"
-                                                        cost3 = formatSimple(player.pol.pollinators) + "/" + formatSimple(Decimal.pow("1e200", getBuyableAmount("darkTemple", 5)).mul("1e2000")) + "<br>Pollinators"
+                                                        cost1 = formatSimple(player.depth4.gloomingNocturnium) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 5)).mul(30).div(player.darkTemple.runeCostDiv).floor()) + "<br>Glooming Nocturnium"
+                                                        cost2 = formatSimple(player.depth4.dimNocturnium) + "/" + formatSimple(Decimal.pow(3, getBuyableAmount("darkTemple", 5)).mul(10).div(player.darkTemple.runeCostDiv).floor()) + "<br>Dim Nocturnium"
+                                                        cost3 = formatSimple(player.pol.pollinators) + "/" + formatSimple(Decimal.pow("1e200", getBuyableAmount("darkTemple", 5)).mul("1e2000").div(player.darkTemple.runeCostDiv)) + "<br>Pollinators"
                                                         break;
                                                 }
                                             } else if (player.darkTemple.tab == "tier") {
@@ -1301,6 +1465,38 @@ addLayer("darkTemple", {
                                                     case 5:
                                                         break;
                                                 }
+                                            } else if (player.darkTemple.tab == "byproduct") {
+                                                switch (player.darkTemple.selection) {
+                                                    case 1:
+                                                        let eff1 = getBuyableAmount("darkTemple", 1).mul(getBuyableAmount("darkTemple", 101).div(2).add(1))
+                                                        return "<div style='line-height:1.2'><h3>Eff. Rune Level: " + formatSimple(eff1) + "</h3><br><small><i>[Rune by-products work offline]</i></small><br><br>\n\
+                                                        +" + formatSimple(new Decimal(3).mul(eff1).mul(player.darkTemple.byproductMult)) + "/h Glooming Umbrite<br>\n\
+                                                        +" + formatSimple(new Decimal(1).mul(eff1).mul(player.darkTemple.byproductMult)) + "/h Dim Umbrite<br>\n\
+                                                        +" + formatSimple(new Decimal(0.3).mul(eff1).mul(player.darkTemple.byproductMult)) + "/h Dark Essence</div>"
+                                                    case 2:
+                                                        let eff2 = getBuyableAmount("darkTemple", 2).mul(getBuyableAmount("darkTemple", 102).div(2).add(1))
+                                                        return "<div style='line-height:1.2'><h3>Eff. Rune Level: " + formatSimple(eff2) + "</h3><br><small><i>[Rune by-products work offline]</i></small><br><br>\n\
+                                                        +" + formatSimple(new Decimal(4).mul(eff2).mul(player.darkTemple.byproductMult)) + "/h Faint Umbrite<br>\n\
+                                                        +" + formatSimple(new Decimal(1.5).mul(eff2).mul(player.darkTemple.byproductMult)) + "/h Clear Umbrite<br>\n\
+                                                        +" + formatSimple(new Decimal(0.6).mul(eff2).mul(player.darkTemple.byproductMult)) + "/h Dark Essence</div>"
+                                                    case 3:
+                                                        let eff3 = getBuyableAmount("darkTemple", 3)
+                                                        return "<div style='line-height:1.2'><h3>Eff. Rune Level: " + formatSimple(eff3) + "</h3><br><small><i>[Rune by-products work offline]</i></small><br><br>\n\
+                                                        +" + formatSimple(new Decimal(5).mul(eff3).mul(player.darkTemple.byproductMult)) + "/h Vivid Umbrite<br>\n\
+                                                        +" + formatSimple(new Decimal(2).mul(eff3).mul(player.darkTemple.byproductMult)) + "/h Lustrous Umbrite<br>\n\
+                                                        +" + formatSimple(new Decimal(1).mul(eff3).mul(player.darkTemple.byproductMult)) + "/h Dark Essence</div>"
+                                                    case 4:
+                                                        let eff4 = getBuyableAmount("darkTemple", 4)
+                                                        return "<div style='line-height:1.2'><h3>Eff. Rune Level: " + formatSimple(eff4) + "</h3><br><small><i>[Rune by-products work offline]</i></small><br><br>\n\
+                                                        +" + formatSimple(new Decimal(4).mul(eff4).mul(player.darkTemple.byproductMult)) + "/h Temporal Dust<br>\n\
+                                                        +" + formatSimple(new Decimal(0.5).mul(eff4).mul(player.darkTemple.byproductMult)) + "/h Temporal Shards</div>"
+                                                    case 5:
+                                                        let eff5 = getBuyableAmount("darkTemple", 5)
+                                                        return "<div style='line-height:1.2'><h3>Eff. Rune Level: " + formatSimple(eff5) + "</h3><br><small><i>[Rune by-products work offline]</i></small><br><br>\n\
+                                                        +" + formatSimple(new Decimal(10).mul(eff5).mul(player.darkTemple.byproductMult)) + "/h Glooming Nocturnium<br>\n\
+                                                        +" + formatSimple(new Decimal(3).mul(eff5).mul(player.darkTemple.byproductMult)) + "/h Dim Nocturnium<br>\n\
+                                                        +" + formatSimple(new Decimal(1.5).mul(eff5).mul(player.darkTemple.byproductMult)) + "/h Dark Essence</div>"
+                                                }
                                             }
                                             return "<div style='line-height:1.2'>" + cost1 + "<hr style='width:200px;height:3px;margin:2px 0;background:var(--regBorder);border:0'>" + cost2 + "<hr style='width:200px;height:3px;margin:2px 0;background:var(--regBorder);border:0'>" + cost3 + "<div>"
                                         }, {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
@@ -1308,6 +1504,7 @@ addLayer("darkTemple", {
                                     ["style-column", [
                                         ["buyable", 1], ["buyable", 2], ["buyable", 3], ["buyable", 4], ["buyable", 5],
                                         ["buyable", 101], ["buyable", 102],
+                                        ["clickable", "byproductToggle"],
                                     ], {width: "200px", height: "35px", background: "black", borderTop: "3px solid var(--regBorder)", borderRadius: "0 0 27px 27px"}],
                                 ], {width: "200px", height: "180px", background: "var(--miscButton)", border: "3px solid var(--regBorder)", borderRadius: "30px", margin: "28px 18px 28px 18px", boxShadow: "0px 0px 10px #113"}],
                                 ["style-column", [
@@ -1457,7 +1654,7 @@ addLayer("darkTemple", {
                             ["buyable", 1013], ["upgrade", 14], ["buyable", 1015], ["upgrade", 16],
                         ]],
                         ["blank", "10px"],
-                    ], {width: "624px", height: "420px", background: "radial-gradient(#00000055, #630a4255)"}],
+                    ], {width: "624px", height: "420px", background: "radial-gradient(#00000055, #630a4255)", margin: "-3px", border: "3px solid var(--regBorder)"}],
                 ],
             },
         },
@@ -1470,6 +1667,7 @@ addLayer("darkTemple", {
                 ], {width: "172px", height: "40px", background: "var(--miscButton)", borderBottom: "3px solid var(--regBorder)"}],
                 ["clickable", "level"],
                 ["clickable", "tier"],
+                ["clickable", "byproduct"],
                 ["clickable", "bestowal"],
             ], {width: "172px", height: "420px", background: "var(--layerBackground)", borderRight: "3px solid var(--regBorder)", borderRadius: "0 0 0 27px"}],
             ["buttonless-microtabs", "stuff", {borderWidth: "0"}],

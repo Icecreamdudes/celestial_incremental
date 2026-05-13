@@ -1145,7 +1145,8 @@ addLayer("bh", {
 
         player.bh.celestialite.curAdd = BHC[player.bh.celestialite.id].curAdd ?? new Decimal(0)
         player.bh.celestialite.curAdd = player.bh.celestialite.curAdd.add(bhTemp[3].curAdd.sub(1))
-        player.bh.celestialite.curAdd = player.bh.celestialite.curAdd.add(buyableEffect("laboratory", 11))
+        player.bh.celestialite.curAdd = player.bh.celestialite.curAdd.add(buyableEffect("laboratory", 11).sub(1))
+        player.bh.celestialite.curAdd = player.bh.celestialite.curAdd.add(buyableEffect("darkTemple", 1009).sub(1))
 
         player.bh.celestialite.attributes = BHC[player.bh.celestialite.id].attributes ?? {}
         player.bh.celestialite.attributes = Object.assign({}, player.bh.celestialite.attributes, bhTemp[3].attributes)
@@ -1157,6 +1158,7 @@ addLayer("bh", {
 
         // =-- Calculate general stats --=
         player.bh.maxSkillPoints = new Decimal(10)
+        player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(buyableEffect("darkTemple", 1003).sub(1))
         player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(player.darkTemple.spAdd)
         player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(player.depth1.milestoneEffect)
         player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(player.depth2.milestoneEffect)
@@ -1166,7 +1168,7 @@ addLayer("bh", {
 
         player.bh.skillCostDiv = new Decimal(1)
         player.bh.skillCostDiv = player.bh.skillCostDiv.mul(player.darkTemple.skillCost)
-        player.bh.skillCostDiv = player.bh.skillCostDiv.mul(buyableEffect("sme", 136))
+        player.bh.skillCostDiv = player.bh.skillCostDiv.mul(buyableEffect("darkTemple", 1007))
         if (hasUpgrade("depth2", 102)) player.bh.skillCostDiv = player.bh.skillCostDiv.mul(upgradeEffect("depth2", 102))
 
         player.bh.timeSpeed = new Decimal(1)
@@ -1215,11 +1217,12 @@ addLayer("bh", {
         let regenBase = new Decimal(1)
 
         let regenAdd = new Decimal(0)
+        if (player.bh.respawnTimer.gt(0)) regenAdd = regenAdd.add(buyableEffect("darkTemple", 1015).sub(1))
         regenAdd = regenAdd.add(player.darkTemple.rgnAdd)
         regenAdd = regenAdd.add(player.bh.skillData["general_scream"].maxLevel.div(40))
         regenAdd = regenAdd.add(player.bh.skillData["kres_berserker"].maxLevel.div(40))
         regenAdd = regenAdd.add(player.bh.skillData["general_rest"].maxLevel.div(40))
-        regenAdd = regenAdd.add(buyableEffect("sme", 134))
+        regenAdd = regenAdd.add(buyableEffect("sme", 134).sub(1))
         regenAdd = regenAdd.add(buyableEffect("depth4", 1).sub(1))
 
         // =-- AGILITY STUFF --= //
@@ -1243,6 +1246,7 @@ addLayer("bh", {
         let defenseBase = new Decimal(1)
 
         let defenseAdd = new Decimal(0)
+        defenseAdd = defenseAdd.add(buyableEffect("darkTemple", 1001).sub(1))
         defenseAdd = defenseAdd.add(player.darkTemple.defAdd)
         defenseAdd = defenseAdd.add(player.bh.skillData["general_block"].maxLevel.div(2))
         defenseAdd = defenseAdd.add(player.bh.skillData["nav_reboundingAura"].maxLevel.div(2))

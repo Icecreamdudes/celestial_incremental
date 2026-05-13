@@ -1661,8 +1661,8 @@ class SpaceArena {
                 amt = Math.max(0, Math.floor(amt * this.upgradeEffects.lootGain * this.resourceMult));
                 amt = Math.max(0, Math.floor(amt * levelableEffect("pet", 502)[1]));
                 amt = Math.max(0, Math.floor(amt * levelableEffect("pu", 212)[1]));
-                loot = loot * (getBuyableAmount("bl", 34).div(100).add(1).toNumber() || 1)
-                loot = loot * (getBuyableAmount("sme", 155).div(10).add(1).toNumber() || 1)
+                amt = amt * (getBuyableAmount("bl", 34).div(100).add(1).toNumber() || 1)
+                amt = amt * (getBuyableAmount("sme", 155).div(10).add(1).toNumber() || 1)
                 player.ir.spaceRock = player.ir.spaceRock.add(amt);
                 lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "rock" });
             }
@@ -3807,6 +3807,8 @@ class SpaceArena {
             let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
             let dist = Math.sqrt(dx * dx + dy * dy);
             if (dist < enemy.radius + shipRadius) {
+                let petMul = (player.pet && player.pet.legPetTimers && player.pet.legPetTimers[1] && player.pet.legPetTimers[1].current && typeof player.pet.legPetTimers[1].current.gt === "function" && player.pet.legPetTimers[1].current.gt(0)) ? 1.5 : 1;
+                let globalMult = (player && player.ir && player.ir.shipDamageMult && typeof player.ir.shipDamageMult.toNumber === "function" ? player.ir.shipDamageMult.toNumber() : 1)
                 let enemyDmgRaw = this.ship.collisionDamage * this.upgradeEffects.attackDamage * petMul * globalMult;
                 let enemyDmg = (typeof enemyDmgRaw === 'number') ? enemyDmgRaw : (enemyDmgRaw.toNumber ? enemyDmgRaw.toNumber() : Number(enemyDmgRaw));
                 if (Number.isNaN(enemyDmg) || !isFinite(enemyDmg) || enemyDmg < 0) enemyDmg = 0;
@@ -3861,6 +3863,8 @@ class SpaceArena {
             let dist = Math.sqrt(dx * dx + dy * dy);
             let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
             if (dist < asteroid.size + shipRadius) {
+                let petMul = (player.pet && player.pet.legPetTimers && player.pet.legPetTimers[1] && player.pet.legPetTimers[1].current && typeof player.pet.legPetTimers[1].current.gt === "function" && player.pet.legPetTimers[1].current.gt(0)) ? 1.5 : 1;
+                let globalMult = (player && player.ir && player.ir.shipDamageMult && typeof player.ir.shipDamageMult.toNumber === "function" ? player.ir.shipDamageMult.toNumber() : 1)
                 let aDmgRaw = this.ship.collisionDamage * this.upgradeEffects.attackDamage * petMul * globalMult;
                 let aDmg = (typeof aDmgRaw === 'number') ? aDmgRaw : (aDmgRaw.toNumber ? aDmgRaw.toNumber() : Number(aDmgRaw));
                 asteroid.health -= aDmg;

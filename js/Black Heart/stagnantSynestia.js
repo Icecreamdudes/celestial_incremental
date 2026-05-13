@@ -348,7 +348,7 @@ addLayer("stagnantSynestia", {
                                 ["bh-milestone", [25, "stagnantSynestia", ""]],
                                 ["bh-milestone", [50, "stagnantSynestia", ""]],
                                 ["bh-milestone", [75, "stagnantSynestia", ""]],
-                                ["bh-milestone", [100, "stagnantSynestia", "<br><small style='color:#ff000088'>[Combo Selection Sealed]</small>", () => {return true}]],
+                                ["bh-milestone", [100, "stagnantSynestia", ""]],
                             ], {width: "272px", height: "250px", background: "var(--miscButton)", borderBottom: "3px solid var(--regBorder)"}],
                             ["style-column", [
                                 ["raw-html", "<p style='line-height:1'>Clicking on a cleared milestone allows you to start at that milestones combo value.", {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],

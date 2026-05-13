@@ -173,20 +173,20 @@ BHA.general_rest = {
     description(char) {
         let effect = new Decimal(10).add(player.bh.skillData["general_rest"].level.mul(2))
         if (player.alephsChamber.milestone[25] >= 2) effect = effect.mul(Decimal.div(char.potency.add(100), 100))
-        return "Soft-stun yourself for 10 seconds. While stunned, boost your regen by x" + formatSimple(effect)
+        return "Soft-stun yourself for 5 seconds. While stunned, boost your regen by x" + formatSimple(effect)
     },
     passiveText() {return "+" + formatSimple(player.bh.skillData["general_rest"].maxLevel.div(40), 2) + " RGN"},
     char: "general",
     spCost: new Decimal(16),
-    curCostBase: new Decimal(10),
-    curCostScale: new Decimal(2),
+    curCostBase: new Decimal(25),
+    curCostScale: new Decimal(5),
     currency: "darkEther",
     unlocked() {return hasUpgrade("depth1", 102)},
 
     instant: true,
     type: "none",
     target: "self",
-    stun() {return ["soft", new Decimal(10)]},
+    stun() {return ["soft", new Decimal(5)]},
 
     active: true,
     constantType: "effect",

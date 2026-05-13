@@ -931,14 +931,14 @@ addLayer("darkTemple", {
             unlocked: true,
             fullDisplay() {
                 return !this.canAfford() ? "<h3>You need " + formatWhole(Decimal.sub(35, player.darkTemple.totalLevel)) + " more eff. rune levels"
-                : "Skill points buff ship battle damage<br>Currently: x" + formatSimple(this.effect()) + "<br><br>Cost: " + formatSimple(this.cost) + " " + this.currencyDisplayName
+                : "Skill points buff ship battle damage<br>Currently: x" + formatSimple(this.effect(), 2) + "<br><br>Cost: " + formatSimple(this.cost) + " " + this.currencyDisplayName
             },
             cost: new Decimal(150),
             canAfford() {return player.darkTemple.totalLevel.gte(35)},
             currencyLocation() {return player.bh },
             currencyDisplayName: "Dark Ether",
             currencyInternalName: "darkEther",
-            effect() {return player.bh.maxSkillPoints.add(1).log(10).add(1)},
+            effect() {return player.bh.maxSkillPoints.add(1).log(10).div(15).add(1)},
             style() {
                 let look = {width: "140px", minHeight: "100px", lineHeight: "1", fontSize: "12px", borderRadius: "15px", color: "#f283c9", border: "2px solid #C71585", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) look.backgroundColor = "#0d1d07"
@@ -952,7 +952,7 @@ addLayer("darkTemple", {
             unlocked: true,
             fullDisplay() {
                 return !this.canAfford() ? "<h3>You need " + formatWhole(Decimal.sub(40, player.darkTemple.totalLevel)) + " more eff. rune levels"
-                : "[COMING SOON]<br><br>Cost: " + formatSimple(this.cost) + " " + this.currencyDisplayName
+                : "Replace bestowal buyable purchase hardcap with softcap<br><br>Cost: " + formatSimple(this.cost) + " " + this.currencyDisplayName
             },
             cost: new Decimal(750),
             canAfford() {return player.darkTemple.totalLevel.gte(40)},
@@ -971,9 +971,18 @@ addLayer("darkTemple", {
     },
     buyables: {
         1001: {
-            costBase() { return new Decimal(5) },
-            costGrowth() { return new Decimal(1.5) },
-            purchaseLimit() { return new Decimal(10) },
+            costBase() {
+                if (getBuyableAmount(this.layer, this.id).gte(10) && hasUpgrade("darkTemple", 16)) return new Decimal(0.01)
+                return new Decimal(5)
+            },
+            costGrowth() {
+                if (getBuyableAmount(this.layer, this.id).gte(10) && hasUpgrade("darkTemple", 16)) return new Decimal(3)
+                return new Decimal(1.5)
+            },
+            purchaseLimit() {
+                if (hasUpgrade("darkTemple", 16)) return new Decimal(Infinity)
+                return new Decimal(10)
+            },
             currency() { return player.bh.darkEssence },
             pay(amt) { player.bh.darkEssence = this.currency().sub(amt) },
             effect(x) { return (x || getBuyableAmount(this.layer, this.id)).div(2).add(1)},
@@ -1000,9 +1009,18 @@ addLayer("darkTemple", {
             },
         },
         1003: {
-            costBase() { return new Decimal(10) },
-            costGrowth() { return new Decimal(2) },
-            purchaseLimit() { return new Decimal(10) },
+            costBase() {
+                if (getBuyableAmount(this.layer, this.id).gte(10) && hasUpgrade("darkTemple", 16)) return new Decimal(0.005)
+                return new Decimal(10)
+            },
+            costGrowth() {
+                if (getBuyableAmount(this.layer, this.id).gte(10) && hasUpgrade("darkTemple", 16)) return new Decimal(5)
+                return new Decimal(2)
+            },
+            purchaseLimit() {
+                if (hasUpgrade("darkTemple", 16)) return new Decimal(Infinity)
+                return new Decimal(10)
+            },
             currency() { return player.bh.darkEssence },
             pay(amt) { player.bh.darkEssence = this.currency().sub(amt) },
             effect(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1)},
@@ -1029,9 +1047,18 @@ addLayer("darkTemple", {
             },
         },
         1005: {
-            costBase() { return new Decimal(50) },
-            costGrowth() { return new Decimal(3) },
-            purchaseLimit() { return new Decimal(10) },
+            costBase() {
+                if (getBuyableAmount(this.layer, this.id).gte(10) && hasUpgrade("darkTemple", 16)) return new Decimal(0.001)
+                return new Decimal(50)
+            },
+            costGrowth() {
+                if (getBuyableAmount(this.layer, this.id).gte(10) && hasUpgrade("darkTemple", 16)) return new Decimal(10)
+                return new Decimal(3)
+            },
+            purchaseLimit() {
+                if (hasUpgrade("darkTemple", 16)) return new Decimal(Infinity)
+                return new Decimal(10)
+            },
             currency() { return player.bh.darkEssence },
             pay(amt) { player.bh.darkEssence = this.currency().sub(amt) },
             effect(x) { return (x || getBuyableAmount(this.layer, this.id)).div(10).add(1)},
@@ -1058,9 +1085,18 @@ addLayer("darkTemple", {
             },
         },
         1007: {
-            costBase() { return new Decimal(125) },
-            costGrowth() { return new Decimal(5) },
-            purchaseLimit() { return new Decimal(5) },
+            costBase() {
+                if (getBuyableAmount(this.layer, this.id).gte(5) && hasUpgrade("darkTemple", 16)) return new Decimal(0.1)
+                return new Decimal(125)
+            },
+            costGrowth() {
+                if (getBuyableAmount(this.layer, this.id).gte(5) && hasUpgrade("darkTemple", 16)) return new Decimal(25)
+                return new Decimal(5)
+            },
+            purchaseLimit() {
+                if (hasUpgrade("darkTemple", 16)) return new Decimal(Infinity)
+                return new Decimal(5)
+            },
             currency() { return player.bh.darkEssence },
             pay(amt) { player.bh.darkEssence = this.currency().sub(amt) },
             effect(x) { return (x || getBuyableAmount(this.layer, this.id)).div(10).add(1)},
@@ -1087,9 +1123,18 @@ addLayer("darkTemple", {
             },
         },
         1009: {
-            costBase() { return new Decimal(250) },
-            costGrowth() { return new Decimal(10) },
-            purchaseLimit() { return new Decimal(5) },
+            costBase() {
+                if (getBuyableAmount(this.layer, this.id).gte(5) && hasUpgrade("darkTemple", 16)) return new Decimal(0.01)
+                return new Decimal(250)
+            },
+            costGrowth() {
+                if (getBuyableAmount(this.layer, this.id).gte(5) && hasUpgrade("darkTemple", 16)) return new Decimal(100)
+                return new Decimal(10)
+            },
+            purchaseLimit() {
+                if (hasUpgrade("darkTemple", 16)) return new Decimal(Infinity)
+                return new Decimal(5)
+            },
             currency() { return player.bh.darkEssence },
             pay(amt) { player.bh.darkEssence = this.currency().sub(amt) },
             effect(x) { return (x || getBuyableAmount(this.layer, this.id)).div(100).add(1)},
@@ -1116,9 +1161,18 @@ addLayer("darkTemple", {
             },
         },
         1011: {
-            costBase() { return new Decimal(5) },
-            costGrowth() { return new Decimal(5) },
-            purchaseLimit() { return new Decimal(5) },
+            costBase() {
+                if (getBuyableAmount(this.layer, this.id).gte(5) && hasUpgrade("darkTemple", 16)) return new Decimal(0.003)
+                return new Decimal(5)
+            },
+            costGrowth() {
+                if (getBuyableAmount(this.layer, this.id).gte(5) && hasUpgrade("darkTemple", 16)) return new Decimal(25)
+                return new Decimal(5)
+            },
+            purchaseLimit() {
+                if (hasUpgrade("darkTemple", 16)) return new Decimal(Infinity)
+                return new Decimal(5)
+            },
             currency() { return player.bh.darkEther },
             pay(amt) { player.bh.darkEther = this.currency().sub(amt) },
             effect(x) { return (x || getBuyableAmount(this.layer, this.id)).div(100).add(1)},
@@ -1145,9 +1199,18 @@ addLayer("darkTemple", {
             },
         },
         1013: {
-            costBase() { return new Decimal(50) },
-            costGrowth() { return new Decimal(2) },
-            purchaseLimit() { return new Decimal(5) },
+            costBase() {
+                if (getBuyableAmount(this.layer, this.id).gte(5) && hasUpgrade("darkTemple", 16)) return new Decimal(1)
+                return new Decimal(50)
+            },
+            costGrowth() {
+                if (getBuyableAmount(this.layer, this.id).gte(5) && hasUpgrade("darkTemple", 16)) return new Decimal(5)
+                return new Decimal(2)
+            },
+            purchaseLimit() {
+                if (hasUpgrade("darkTemple", 16)) return new Decimal(Infinity)
+                return new Decimal(5)
+            },
             currency() { return player.bh.darkEther },
             pay(amt) { player.bh.darkEther = this.currency().sub(amt) },
             effect(x) { return (x || getBuyableAmount(this.layer, this.id)).div(10).add(1)},
@@ -1174,9 +1237,18 @@ addLayer("darkTemple", {
             },
         },
         1015: {
-            costBase() { return new Decimal(300) },
-            costGrowth() { return new Decimal(3) },
-            purchaseLimit() { return new Decimal(5) },
+            costBase() {
+                if (getBuyableAmount(this.layer, this.id).gte(5) && hasUpgrade("darkTemple", 16)) return new Decimal(1)
+                return new Decimal(300)
+            },
+            costGrowth() {
+                if (getBuyableAmount(this.layer, this.id).gte(5) && hasUpgrade("darkTemple", 16)) return new Decimal(10)
+                return new Decimal(3)
+            },
+            purchaseLimit() {
+                if (hasUpgrade("darkTemple", 16)) return new Decimal(Infinity)
+                return new Decimal(5)
+            },
             currency() { return player.bh.darkEther },
             pay(amt) { player.bh.darkEther = this.currency().sub(amt) },
             effect(x) { return (x || getBuyableAmount(this.layer, this.id)).div(5).add(1)},
@@ -1185,7 +1257,7 @@ addLayer("darkTemple", {
             canAfford() { return this.currency().gte(this.cost()) && player.darkTemple.totalLevel.gte(38) },
             display() {
                 return player.darkTemple.totalLevel.lt(38) ? "<h3>You need " + formatWhole(Decimal.sub(38, player.darkTemple.totalLevel)) + " more eff. rune levels"
-                : "Increase RGN during celestialite respawn<br>Currently: +" + formatSimple(this.effect().sub(1)) + "<br>Next: +" + formatSimple(this.effect(getBuyableAmount(this.layer, this.id).add(1)).sub(1)) + "<br><br>Cost: " + formatSimple(this.cost()) + " Dark Ether"
+                : "<small>Increase RGN during celestialite respawn</small><br>Currently: +" + formatSimple(this.effect().sub(1)) + "<br>Next: +" + formatSimple(this.effect(getBuyableAmount(this.layer, this.id).add(1)).sub(1)) + "<br><br>Cost: " + formatSimple(this.cost()) + " Dark Ether"
             },
             buy() {
                 this.pay(this.cost())
@@ -1533,7 +1605,7 @@ addLayer("darkTemple", {
                                         for (let i in futureEffects) {
                                             futureEffects[i] = futureEffects[i] * tierMult
                                         }
-                                    } else if (player.darkTemple.tab == "tier") {
+                                    } else if (player.darkTemple.tab == "tier" && (getBuyableAmount("darkTemple", player.darkTemple.selection+100) || player.darkTemple.tierCap).lt(player.darkTemple.tierCap)) {
                                         for (let i = 1; i < getBuyableAmount("darkTemple", player.darkTemple.selection); i++) {
                                             futureEffects = addObject(futureEffects, RUNE_EFFECTS[player.darkTemple.selection][i], 0.5)
                                         }

@@ -3125,8 +3125,8 @@ addLayer("bh", {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[2]) return ""
                 let str = "<h5>" + run(BHC[player.bh.celestialite.id].actions[2].name, BHC[player.bh.celestialite.id].actions[2]) + "<br>" + formatTime(player.bh.celestialite.actions[2].cooldown) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[2].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))
                 if (player.bh.celestialite.actions[2].cooldown.gt(BHC[player.bh.celestialite.id].actions[2].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))) str = "<h5>" + run(BHC[player.bh.celestialite.id].actions[2].name, BHC[player.bh.celestialite.id].actions[2]) + "<br>[x" + formatWhole(player.bh.celestialite.actions[2].cooldown.div(BHC[player.bh.celestialite.id].actions[2].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility)))).floor()) + "]"
-                if (BHC[player.bh.celestialite.id].actions[2].passive && !BHC[player.bh.celestialite.id].actions[0].instant) str = "<h5>" + run(BHC[player.bh.celestialite.id].actions[2].name, BHC[player.bh.celestialite.id].actions[2]) + "<br>[PASSIVE]"
-                if ((!BHC[player.bh.celestialite.id].actions[2].passive || BHC[player.bh.celestialite.id].actions[0].instant || player.bh.celestialite.stun[0] == "hard") && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
+                if (BHC[player.bh.celestialite.id].actions[2].passive && !BHC[player.bh.celestialite.id].actions[2].instant) str = "<h5>" + run(BHC[player.bh.celestialite.id].actions[2].name, BHC[player.bh.celestialite.id].actions[2]) + "<br>[PASSIVE]"
+                if ((!BHC[player.bh.celestialite.id].actions[2].passive || BHC[player.bh.celestialite.id].actions[2].instant || player.bh.celestialite.stun[0] == "hard") && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
                 return str
             },
         },

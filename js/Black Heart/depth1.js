@@ -1370,7 +1370,7 @@ BHC.lesserTessera = {
             constantType: "effect",
             constantTarget: "allPlayer",
             effects: {
-                "regenAdd"() {return player.bh.celestialite.damage.div(-6)}, // Add to regen stat
+                "regenAdd"() {return player.bh.celestialite.damage.div(-10)}, // Add to regen stat
             },
             cooldown: new Decimal(Infinity),
         },
@@ -1412,7 +1412,7 @@ BHC.lesserExi = {
             constantType: "effect",
             constantTarget: "randomPlayerHeal",
             effects: {
-                "regenAdd"() {return player.bh.celestialite.damage.div(-7)}, // Add to regen stat
+                "regenAdd"() {return player.bh.celestialite.damage.div(-10)}, // Add to regen stat
             },
             cooldown: new Decimal(Infinity),
         },
@@ -1616,7 +1616,7 @@ BHC.lesserYi = {
         fontSize: "40px",
     },
     health: new Decimal(5000),
-    damage: new Decimal(35),
+    damage: new Decimal(30),
     actions: {
         0: {
             name: "Drain",
@@ -1624,7 +1624,7 @@ BHC.lesserYi = {
             constantType: "effect",
             constantTarget: "allPlayer",
             effects: {
-                "regenAdd"() {return player.bh.celestialite.damage.div(-6)}, // Add to regen stat
+                "regenAdd"() {return player.bh.celestialite.damage.div(-10)}, // Add to regen stat
             },
             cooldown: new Decimal(Infinity),
         },
@@ -1679,7 +1679,7 @@ BHC.lesserEr = {
         fontSize: "40px",
     },
     health: new Decimal(6000),
-    damage: new Decimal(40),
+    damage: new Decimal(35),
     actions: {
         0: {
             name: "Quick Shot",
@@ -1748,7 +1748,7 @@ BHC.lesserSan = {
         fontSize: "40px",
     },
     health: new Decimal(7000),
-    damage: new Decimal(45),
+    damage: new Decimal(40),
     actions: {
         0: {
             name: "Earth Tremor",
@@ -1805,7 +1805,7 @@ BHC.lesserSi = {
         fontSize: "40px",
     },
     health: new Decimal(8000),
-    damage: new Decimal(50),
+    damage: new Decimal(45),
     actions: {
         0: {
             name: "Slash",
@@ -1874,7 +1874,7 @@ BHC.lesserWu = {
         fontSize: "40px",
     },
     health: new Decimal(9000),
-    damage: new Decimal(55),
+    damage: new Decimal(50),
     actions: {
         0: {
             name: "Magic Missile",
@@ -1945,7 +1945,7 @@ BHC.lesserLiu = {
         fontSize: "40px",
     },
     health: new Decimal(10000),
-    damage: new Decimal(60),
+    damage: new Decimal(55),
     actions: {
         0: {
             name: "Chop",

@@ -922,7 +922,7 @@ BHA.vespasian_overdrive = {
         "damageMult"() {return new Decimal(1.5).add(player.bh.skillData["vespasian_overdrive"].level.div(10))},
         "agilityMult"() {return new Decimal(1.5).add(player.bh.skillData["vespasian_overdrive"].level.div(10))},
         "defenseAdd"() {return new Decimal(-25).sub(player.bh.skillData["vespasian_overdrive"].level.mul(5))},
-        "regenMult"() {return new Decimal(0)},
+        "regenMult"(char) {return char.regen.gt(0) ? new Decimal(0) : new Decimal(1)},
     },
     duration: new Decimal(8),
     cooldown: new Decimal(20),

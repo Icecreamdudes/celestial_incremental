@@ -3117,7 +3117,7 @@ addLayer("bh", {
             borderStyle() {return player.bh.celestialite.actions[2].duration.gt(0) ? {border: "0", borderRadius: "15px 15px 0 0"} : {border: "0", borderRadius: "15px"}},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
             fillStyle() {
-                if ((BHC[player.bh.celestialite.id].actions[2] && BHC[player.bh.celestialite.id].actions[2].passive && !BHC[player.bh.celestialite.id].actions[0].instant) || player.bh.celestialite.stun[1].gt(0)) return {backgroundColor: "#361e1e"}
+                if ((BHC[player.bh.celestialite.id].actions[2] && BHC[player.bh.celestialite.id].actions[2].passive && !BHC[player.bh.celestialite.id].actions[2].instant) || player.bh.celestialite.stun[1].gt(0)) return {backgroundColor: "#361e1e"}
                 return {backgroundColor: "#8a0e79"}
             },
             textStyle() {return player.bh.celestialite.actions[2].duration.gt(0) ? {userSelect: "none", lineHeight: "1", fontSize: "12px"} : {userSelect: "none", lineHeight: "1"}},

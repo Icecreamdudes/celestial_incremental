@@ -134,12 +134,13 @@ addLayer("ir", {
     universe: "A2",
     row: 1,
     position: 0,
-    innerNodes: [["spaceZone1"]],
     innerLayer() {return player.subtabs["ir"]["stages"]},
     startData() { return {
         unlocked: true,
         iriditeUnlocked: false,
+
         inBattle: false,
+        battleStage: "zone1",
 
         shipHealth: new Decimal(0),
         shipHealthMax: new Decimal(100),
@@ -153,6 +154,7 @@ addLayer("ir", {
             0: {
                 max: new Decimal(0),
                 onClick(isRewarded) {},
+                statDisplay() {return "Nothing"}
             },
             1: {
                 max: new Decimal(600),
@@ -1594,7 +1596,7 @@ addLayer("ir", {
                                     }], 
                                     ["raw-html", () => {return "<div class='bottomTooltip'>Zone II</div>"}],
                                 ], {width: "0", height: "0", position: "relative", left: "100px", top: "0px"}],
-                                ], {width: "1044px", height: "1044px", backgroundImage: "url(resources/ui/spaceMapBackground.png)"}],
+                                ], {width: "1044px", height: "1044px", backgroundImage: "url(resources/ui/spaceBattle/map.png)"}],
                             ], {width: "400px", height: "360px", borderLeft: "3px solid #5e4ee6", borderBottom: "3px solid #5e4ee6", flexFlow: "column"}],
                             ["blank", "357px"],
                         ], {width: "403px", height: "720px"}],
@@ -2126,6 +2128,7 @@ class SpaceArena {
                 xpDrop: [10, 15],
                 draw: (ctx, enemy) => {
                     ctx.save();
+                    ctx.translate(400 - this.ship.x, 400 - this.ship.y);
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
@@ -2158,6 +2161,7 @@ class SpaceArena {
                 xpDrop: [6, 10],
                 draw: (ctx, enemy) => {
                     ctx.save();
+                    ctx.translate(400 - this.ship.x, 400 - this.ship.y);
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
@@ -2190,6 +2194,7 @@ class SpaceArena {
                 xpDrop: [18, 26],
                 draw: (ctx, enemy) => {
                     ctx.save();
+                    ctx.translate(400 - this.ship.x, 400 - this.ship.y);
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
@@ -2223,6 +2228,7 @@ class SpaceArena {
                 xpDrop: [12, 18],
                 draw: (ctx, enemy) => {
                     ctx.save();
+                    ctx.translate(400 - this.ship.x, 400 - this.ship.y);
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
@@ -2254,6 +2260,7 @@ class SpaceArena {
                 xpDrop: [14, 22],
                 draw: (ctx, enemy) => {
                     ctx.save();
+                    ctx.translate(400 - this.ship.x, 400 - this.ship.y);
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
@@ -2286,6 +2293,7 @@ class SpaceArena {
                 xpDrop: [16, 24],
                 draw: (ctx, enemy) => {
                     ctx.save();
+                    ctx.translate(400 - this.ship.x, 400 - this.ship.y);
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
@@ -2317,6 +2325,7 @@ class SpaceArena {
                 xpDrop: [8, 14],
                 draw: (ctx, enemy) => {
                     ctx.save();
+                    ctx.translate(400 - this.ship.x, 400 - this.ship.y);
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
@@ -2347,6 +2356,7 @@ class SpaceArena {
                 xpDrop: [200, 300],
                 draw: (ctx, enemy) => {
                     ctx.save();
+                    ctx.translate(400 - this.ship.x, 400 - this.ship.y);
                     ctx.translate(enemy.x, enemy.y);
                     // UFO body
                     ctx.beginPath();
@@ -2388,6 +2398,7 @@ class SpaceArena {
                 draw: (ctx, enemy) => {
                     ctx.save();
                     ctx.translate(enemy.x, enemy.y);
+                    ctx.translate(400 - this.ship.x, 400 - this.ship.y);
 
                     // wing flap drive
                     const phase = (enemy.wingPhase || 0);
@@ -2550,12 +2561,14 @@ class SpaceArena {
             width: this.width + 'px',
             height: this.height + 'px',
             transform: `translate(-50%, -50%)`,
-            background: 'black',
+            backgroundImage: "url(resources/ui/spaceBattle/" + player.ir.battleStage + ".png)",
             border: '3px solid #5e4ee6',
             borderRadius: '10px',
             zIndex: 9999,
             overflow: 'hidden',
+	        "transition-duration": "0s",
         });
+        console.log(this.arenaDiv)
         document.body.appendChild(this.arenaDiv);
 
         this.canvas = document.createElement('canvas');
@@ -2624,7 +2637,7 @@ class SpaceArena {
         let angle = this.ship.angle || 0;
         // shipType 5 aims at the mouse and fires burst shots toward it
         if (player.ir.shipType == 5 && typeof this.mouseX === "number" && typeof this.mouseY === "number") {
-            angle = Math.atan2(this.mouseY - this.ship.y, this.mouseX - this.ship.x);
+            angle = Math.atan2(this.mouseY - 400, this.mouseX - 400);
             // spawn a short burst (multiple pellets) per shot
             let pellets = 5;
             let spread = 0.22;
@@ -3088,6 +3101,8 @@ class SpaceArena {
     }
 
     update() {
+        this.arenaDiv.style.backgroundPosition = (400 - this.ship.x) + "px " + (400 - this.ship.y) + "px"
+
         // Prepare collectors used by multiple death paths
         let newAsteroids = [];
         let lootFlashPositions = [];
@@ -5260,6 +5275,7 @@ class SpaceArena {
         // Draw ship
         if (player.ir.shipType == 3) {
             this.ctx.save();
+            ctx.translate(400, 400);
             this.ctx.beginPath();
             this.ctx.arc(this.ship.x, this.ship.y, this.ship.radius, 0, 2 * Math.PI);
             this.ctx.fillStyle = "#a7a7a7ff";
@@ -5270,7 +5286,7 @@ class SpaceArena {
         }
         if (player.ir.shipType == 1) {
             this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
+            this.ctx.translate(400, 400);
             this.ctx.rotate(this.ship.angle);
             this.ctx.beginPath();
             this.ctx.moveTo(20, 0);
@@ -5284,7 +5300,7 @@ class SpaceArena {
         }
         if (player.ir.shipType == 2) {
             this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
+            this.ctx.translate(400, 400);
             this.ctx.rotate(this.ship.angle);
             this.ctx.beginPath();
             this.ctx.moveTo(20, 0);
@@ -5299,7 +5315,7 @@ class SpaceArena {
         if (player.ir.shipType == 4) {
             // Sniper-style ship: long barrel and scope
             this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
+            this.ctx.translate(400, 400);
             this.ctx.rotate(this.ship.angle);
             // Body
             this.ctx.fillStyle = "#dbefff";
@@ -5326,7 +5342,7 @@ class SpaceArena {
         if (player.ir.shipType == 5) {
             // Small UFO (player ship) — visual match to miniboss but smaller & different color
             this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
+            this.ctx.translate(400, 400);
             this.ctx.rotate(this.ship.angle || 0);
             const r = this.ship.radius || 12;
             const bodyR = r * 1.4;
@@ -5363,7 +5379,7 @@ class SpaceArena {
         }
         if (player.ir.shipType == 6) {
             this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
+            this.ctx.translate(400, 400);
             this.ctx.rotate(this.ship.angle);
  
             this.ctx.beginPath();
@@ -5388,7 +5404,7 @@ class SpaceArena {
         }
         if (player.ir.shipType == 7) {
             this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
+            this.ctx.translate(400, 400);
             this.ctx.rotate(this.ship.angle);
  
             // BODY
@@ -5412,7 +5428,7 @@ class SpaceArena {
         }
         if (player.ir.shipType == 8) {
             this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
+            this.ctx.translate(400, 400);
             this.ctx.rotate(this.ship.angle);
 
             // Miniature Iridite visuals
@@ -5499,7 +5515,7 @@ class SpaceArena {
             const thickness = windup > elapsed ? (maxThickness * (elapsed / windup)) : (maxThickness * (0.6 + 0.4 * progress));
 
             this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
+            this.ctx.translate(400, 400);
             this.ctx.rotate(angle);
             this.ctx.globalCompositeOperation = "lighter";
             let g = this.ctx.createLinearGradient(0, -thickness * 2, beamLen, thickness * 2);
@@ -5520,7 +5536,7 @@ class SpaceArena {
         // Evolver ship (shipType 9) — triangle shape with blue-purple gradient and dividing line
         if (player.ir.shipType == 9) {
             this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
+            this.ctx.translate(400, 400);
             this.ctx.rotate(this.ship.angle);
             let lenShip = Math.max(18, this.ship.radius || 20);
 
@@ -5556,7 +5572,7 @@ class SpaceArena {
         }
         if (player.ir.shipType == 10) {
             this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
+            this.ctx.translate(400, 400);
             this.ctx.rotate(this.ship.angle);
             this.ctx.strokeStyle = "#30bf78";
             this.ctx.fillStyle = "#30bf78";
@@ -5647,18 +5663,24 @@ class SpaceArena {
             if (type && type.draw) {
                 type.draw(this.ctx, enemy);
                 this.ctx.save();
-                this.ctx.fillStyle = "#ff4444";
+                this.ctx.translate(400 - this.ship.x, 400 - this.ship.y);
+                this.ctx.fillStyle = "#151230";
+                this.ctx.fillRect(enemy.x - enemy.radius - 2, enemy.y - enemy.radius - 20, enemy.radius * 2 + 4, 13);
                 let barWidth = enemy.radius * 2 * (enemy.health / enemy.maxHealth);
-                this.ctx.fillRect(enemy.x - enemy.radius, enemy.y - enemy.radius - 18, barWidth, 6);
+                this.ctx.fillStyle = "#bf0000";
+                this.ctx.fillRect(enemy.x - enemy.radius, enemy.y - enemy.radius - 18, barWidth, 9);
 
-                this.ctx.font = "14px monospace";
-                this.ctx.fillStyle = "#fff";
+                let t = Math.max(0, Math.floor(enemy.health)) + "/" + Math.floor(enemy.maxHealth)
+                this.ctx.font = "12px monospace";
+                this.ctx.fillStyle = "#151230";
                 this.ctx.textAlign = "center";
-                this.ctx.fillText(
-                    Math.max(0, Math.floor(enemy.health)) + "/" + Math.floor(enemy.maxHealth),
-                    enemy.x,
-                    enemy.y - enemy.radius - 6
-                );
+                this.ctx.fillText(t, enemy.x + 1, enemy.y - enemy.radius - 9 + 1)
+                this.ctx.fillText(t, enemy.x + 1, enemy.y - enemy.radius - 9 - 1)
+                this.ctx.fillText(t, enemy.x - 1, enemy.y - enemy.radius - 9 + 1)
+                this.ctx.fillText(t, enemy.x - 1, enemy.y - enemy.radius - 9 - 1)
+                this.ctx.fillStyle = "white";
+                this.ctx.fillText(t, enemy.x, enemy.y - enemy.radius - 9)
+
                 this.ctx.restore();
             }
 
@@ -5857,6 +5879,7 @@ class SpaceArena {
                 // Draw a large, spinning metallic sword
                 this.ctx.save();
                 this.ctx.translate(bullet.x, bullet.y);
+                this.ctx.translate(400 - this.ship.x, 400 - this.ship.y);
                 this.ctx.rotate(bullet.rot || 0);
 
                 let r = bullet.radius || 80;
@@ -5909,6 +5932,7 @@ class SpaceArena {
                 // draw mini-star glyph for thematic boss/projectiles
                 this.ctx.save();
                 this.ctx.translate(bullet.x, bullet.y);
+                this.ctx.translate(400 - this.ship.x, 400 - this.ship.y);
                 let ang = Math.atan2(bullet.vy, bullet.vx || 0);
                 this.ctx.rotate(ang);
                 // determine font size; giant bullets are significantly larger
@@ -5936,6 +5960,8 @@ class SpaceArena {
                 this.ctx.fillText("✦", 0, 0);
                 this.ctx.restore();
             } else {
+                this.ctx.save();
+                this.ctx.translate(400 - this.ship.x, 400 - this.ship.y);
                 this.ctx.beginPath();
                 let r = bullet.fromEnemy ? 6 : ((player.ir.shipType == 2 || player.ir.shipType == 10) ? 10 : 4);
                 // larger radius for homing enemy projectiles
@@ -5944,6 +5970,7 @@ class SpaceArena {
                 this.ctx.arc(bullet.x, bullet.y, r, 0, 2 * Math.PI);
                 this.ctx.fillStyle = bullet.fromEnemy ? "#ff4444" : "#ffec8b";
                 this.ctx.fill();
+                this.ctx.restore();
             }
             // Evolver primary shard rendering (crystal shard with facets)
             if (bullet.evolverShard) {
@@ -6021,6 +6048,8 @@ class SpaceArena {
             }
             // Evolver mini shard rendering (small blue bullet)
             if (bullet.evolverMini) {
+                this.ctx.save();
+                this.ctx.translate(400 - this.ship.x, 400 - this.ship.y);
                 this.ctx.beginPath();
                 let r = bullet.radius || 4;
                 this.ctx.arc(bullet.x, bullet.y, r, 0, 2 * Math.PI);
@@ -6029,11 +6058,13 @@ class SpaceArena {
                 this.ctx.strokeStyle = '#2c3e50';
                 this.ctx.lineWidth = 1;
                 this.ctx.stroke();
+                this.ctx.restore();
             }
             // Evolver mini shard rendering (smaller triangle)
             if (bullet.evolverMini) {
                 this.ctx.save();
                 this.ctx.translate(bullet.x, bullet.y);
+                this.ctx.translate(400 - this.ship.x, 400 - this.ship.y);
                 let ang = Math.atan2(bullet.vy, bullet.vx || 0);
                 this.ctx.rotate(ang);
                 let len = Math.min(8, bullet.radius || 6);
@@ -6061,6 +6092,7 @@ class SpaceArena {
             this.ctx.save();
             this.ctx.globalAlpha = asteroid.phased ? 0.3 : 1;
             this.ctx.translate(asteroid.x, asteroid.y);
+            this.ctx.translate(400 - this.ship.x, 400 - this.ship.y);
             this.ctx.beginPath();
             let shape = asteroid.shape;
             if (shape && shape.length > 0) {
@@ -6075,18 +6107,23 @@ class SpaceArena {
 
             if (!asteroid.phased) {
                 this.ctx.setTransform(1, 0, 0, 1, 0, 0);
-                this.ctx.fillStyle = "#ff4444";
+                this.ctx.translate(400 - this.ship.x, 400 - this.ship.y);
+                this.ctx.fillStyle = "#151230";
+                this.ctx.fillRect(asteroid.x - asteroid.size - 2, asteroid.y - asteroid.size - 20, asteroid.size * 2 + 4, 13);
                 let barWidth = asteroid.size * 2 * (asteroid.health / asteroid.maxHealth);
-                this.ctx.fillRect(asteroid.x - asteroid.size, asteroid.y - asteroid.size - 18, barWidth, 6);
+                this.ctx.fillStyle = "#bf0000";
+                this.ctx.fillRect(asteroid.x - asteroid.size, asteroid.y - asteroid.size - 18, barWidth, 9);
 
-                this.ctx.font = "14px monospace";
-                this.ctx.fillStyle = "#fff";
+                let t = Math.max(0, Math.floor(asteroid.health)) + "/" + Math.floor(asteroid.maxHealth)
+                this.ctx.font = "12px monospace";
+                this.ctx.fillStyle = "#151230";
                 this.ctx.textAlign = "center";
-                this.ctx.fillText(
-                    Math.max(0, Math.floor(asteroid.health)) + "/" + Math.floor(asteroid.maxHealth),
-                    asteroid.x,
-                    asteroid.y - asteroid.size - 6
-                );
+                this.ctx.fillText(t, asteroid.x + 1, asteroid.y - asteroid.size - 9 + 1)
+                this.ctx.fillText(t, asteroid.x + 1, asteroid.y - asteroid.size - 9 - 1)
+                this.ctx.fillText(t, asteroid.x - 1, asteroid.y - asteroid.size - 9 + 1)
+                this.ctx.fillText(t, asteroid.x - 1, asteroid.y - asteroid.size - 9 - 1)
+                this.ctx.fillStyle = "white";
+                this.ctx.fillText(t, asteroid.x, asteroid.y - asteroid.size - 9)
             }
             this.ctx.restore();
         }
@@ -6094,6 +6131,7 @@ class SpaceArena {
         // Draw XP orbs
         for (let orb of this.xpOrbs) {
             this.ctx.save();
+            this.ctx.translate(400 - this.ship.x, 400 - this.ship.y);
             this.ctx.globalAlpha = 0.8;
             this.ctx.beginPath();
             this.ctx.arc(orb.x, orb.y, 6, 0, 2 * Math.PI);
@@ -6106,6 +6144,7 @@ class SpaceArena {
         for (let i = this.lootFlashes.length - 1; i >= 0; i--) {
             let flash = this.lootFlashes[i];
             this.ctx.save();
+            ctx.translate(400 - this.ship.x, 400 - this.ship.y);
             this.ctx.globalAlpha = Math.max(0, flash.timer / 120);
             this.ctx.font = flash.style;
             this.ctx.fillStyle = flash.color;

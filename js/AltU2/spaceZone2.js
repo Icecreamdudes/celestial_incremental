@@ -55,6 +55,7 @@ addLayer("spaceZone2", {
             unlocked: true,
             onClick() {
                 player.ir.inBattle = true
+                player.ir.battleStage = "zone2"
                 options.fullscreen = true
                 player.subtabs["ir"]['stuff'] = 'Battle'
 

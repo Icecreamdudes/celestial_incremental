@@ -28,6 +28,7 @@ BHP.general = {
 
 let statMult = new Decimal(1)
 if (player && player.depth1 && hasUpgrade("depth1", 101)) statMult = statMult.mul(1.05)
+if (player && player.darkTemple && hasUpgrade("darkTemple", 1011)) statMult = statMult.mul(buyableEffect("darkTemple", 1011).sub(1))
 
 // Start of characters
 BHP.kres = {

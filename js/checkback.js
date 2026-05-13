@@ -212,6 +212,7 @@ addLayer("cb", {
         player.cb.reqDiv = player.cb.reqDiv.mul(levelableEffect("pet", 304)[1])
         player.cb.reqDiv = player.cb.reqDiv.mul(buyableEffect("ev2", 11))
         player.cb.reqDiv = player.cb.reqDiv.mul(player.se.starsExploreEffect[2][1])
+        if (hasUpgrade("darkTemple", 6)) player.cb.reqDiv = player.cb.reqDiv.mul(upgradeEffect("darkTemple", 6))
 
         player.cb.req = layers.cb.levelToXP(player.cb.level.add(1)).sub(layers.cb.levelToXP(player.cb.level))
 

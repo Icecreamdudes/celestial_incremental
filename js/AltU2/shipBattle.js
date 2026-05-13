@@ -1136,6 +1136,7 @@ class SpaceArena {
         if (now - this.ship.lastShot < cooldown) return;
         this.ship.lastShot = now
         let petMul = (player.pet && player.pet.legPetTimers && player.pet.legPetTimers[1] && player.pet.legPetTimers[1].current && typeof player.pet.legPetTimers[1].current.gt === "function" && player.pet.legPetTimers[1].current.gt(0)) ? 1.5 : 1;
+        let globalMult = (player && player.ir && player.ir.shipDamageMult && typeof player.ir.shipDamageMult.toNumber === "function" ? player.ir.shipDamageMult.toNumber() : 1)
         let angle = this.ship.angle || 0;
         // shipType 5 aims at the mouse and fires burst shots toward it
         if (player.ir.shipType == 5 && typeof this.mouseX === "number" && typeof this.mouseY === "number") {
@@ -1153,7 +1154,7 @@ class SpaceArena {
                     vx: Math.cos(ang) * spd,
                     vy: Math.sin(ang) * spd,
                     life: 120,
-                    damage: (this.ship.damage || 6) * this.upgradeEffects.attackDamage * petMul,
+                    damage: (this.ship.damage || 6) * this.upgradeEffects.attackDamage * petMul * globalMult,
                     pierce: 0,
                     piercedAsteroids: [],
                     piercedEnemies: [],
@@ -1218,7 +1219,7 @@ class SpaceArena {
                 vx: Math.cos(angle) * speed,
                 vy: Math.sin(angle) * speed,
                 life: 240,
-                damage: this.ship.damage * this.upgradeEffects.attackDamage * petMul,
+                damage: this.ship.damage * this.upgradeEffects.attackDamage * petMul * globalMult,
                 pierce: 0,
                 piercedAsteroids: [],
                 piercedEnemies: [],
@@ -1233,7 +1234,7 @@ class SpaceArena {
                 vx: Math.cos(angle) * speed,
                 vy: Math.sin(angle) * speed,
                 life: 120,
-                damage: this.ship.damage * this.upgradeEffects.attackDamage * petMul,
+                damage: this.ship.damage * this.upgradeEffects.attackDamage * petMul * globalMult,
                 pierce: pierce,
                 piercedAsteroids: [],
                 piercedEnemies: [],
@@ -1660,6 +1661,8 @@ class SpaceArena {
                 amt = Math.max(0, Math.floor(amt * this.upgradeEffects.lootGain * this.resourceMult));
                 amt = Math.max(0, Math.floor(amt * levelableEffect("pet", 502)[1]));
                 amt = Math.max(0, Math.floor(amt * levelableEffect("pu", 212)[1]));
+                loot = loot * (getBuyableAmount("bl", 34).div(100).add(1).toNumber() || 1)
+                loot = loot * (getBuyableAmount("sme", 155).div(10).add(1).toNumber() || 1)
                 player.ir.spaceRock = player.ir.spaceRock.add(amt);
                 lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "rock" });
             }
@@ -1675,7 +1678,7 @@ class SpaceArena {
             if (enemy.type === "ufoBoss") {
                 this.bossActive = false;
                 player.ir.ufoDefeated = true;
-                let gain = Math.floor(2 * this.upgradeEffects.gemGain * this.resourceMult)
+                let gain = Math.floor(2 * this.upgradeEffects.gemGain * this.resourceMult * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1))
                 player.ir.spaceGem = player.ir.spaceGem.add(gain);
                 lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 2, type: "gem" });
             }
@@ -1687,7 +1690,7 @@ class SpaceArena {
                 if (!player.ir.tookDamageInIriditeFight) player.ir.astralShipUnlocked = true;
                 player.ir.iriditeFightActive = false;
                 localStorage.setItem('arenaActive', 'false');
-                let gain = Math.floor(5 * this.upgradeEffects.gemGain * this.resourceMult)
+                let gain = Math.floor(5 * this.upgradeEffects.gemGain * this.resourceMult * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1))
                 player.ir.spaceGem = player.ir.spaceGem.add(gain);
                 lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 2, type: "gem" });
             }
@@ -1697,6 +1700,7 @@ class SpaceArena {
                 let chance = 0.03
                 if (["thetaShip", "iotaShip", "kappaShip"].includes(enemy.type)) chance = 0.05
                 chance = chance * this.upgradeEffects.gemGain * this.resourceMult
+                chance = chance * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1)
                 let guarantee = 0
                 if (chance >= 1) {
                     guarantee = Math.floor(chance)
@@ -2004,7 +2008,8 @@ class SpaceArena {
 
                         if (this.ship._laserActive && this.ship._laserHitCooldown <= 0) {
                             let petMul = (player.pet && player.pet.legPetTimers && player.pet.legPetTimers[1] && player.pet.legPetTimers[1].current && typeof player.pet.legPetTimers[1].current.gt === "function" && player.pet.legPetTimers[1].current.gt(0)) ? 1.5 : 1;
-                            let dmg = (this.ship.damage || 7) * this.upgradeEffects.attackDamage * this.upgradeEffects.attackSpeed * petMul;
+                            let globalMult = (player && player.ir && player.ir.shipDamageMult && typeof player.ir.shipDamageMult.toNumber === "function" ? player.ir.shipDamageMult.toNumber() : 1)
+                            let dmg = (this.ship.damage || 7) * this.upgradeEffects.attackDamage * this.upgradeEffects.attackSpeed * petMul * globalMult;
                             let rawDmg = (typeof dmg === 'number') ? dmg : (dmg.toNumber ? dmg.toNumber() : Number(dmg));
                             let ang = this.ship._laserAngle;
                             let ux = Math.cos(ang), uy = Math.sin(ang);
@@ -3802,7 +3807,7 @@ class SpaceArena {
             let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
             let dist = Math.sqrt(dx * dx + dy * dy);
             if (dist < enemy.radius + shipRadius) {
-                let enemyDmgRaw = this.ship.collisionDamage * this.upgradeEffects.attackDamage;
+                let enemyDmgRaw = this.ship.collisionDamage * this.upgradeEffects.attackDamage * petMul * globalMult;
                 let enemyDmg = (typeof enemyDmgRaw === 'number') ? enemyDmgRaw : (enemyDmgRaw.toNumber ? enemyDmgRaw.toNumber() : Number(enemyDmgRaw));
                 if (Number.isNaN(enemyDmg) || !isFinite(enemyDmg) || enemyDmg < 0) enemyDmg = 0;
                 if (player.ir.shipType != 3 && player.ir.shipType != 7) enemy.health -= enemyDmg * 0.05;
@@ -3856,7 +3861,7 @@ class SpaceArena {
             let dist = Math.sqrt(dx * dx + dy * dy);
             let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
             if (dist < asteroid.size + shipRadius) {
-                let aDmgRaw = this.ship.collisionDamage * this.upgradeEffects.attackDamage;
+                let aDmgRaw = this.ship.collisionDamage * this.upgradeEffects.attackDamage * petMul * globalMult;
                 let aDmg = (typeof aDmgRaw === 'number') ? aDmgRaw : (aDmgRaw.toNumber ? aDmgRaw.toNumber() : Number(aDmgRaw));
                 asteroid.health -= aDmg;
                 let dmg = (asteroid.unit > 1 ? Math.pow(asteroid.unit-1, 2)*3 : 2);
@@ -3898,6 +3903,7 @@ class SpaceArena {
                 loot = loot * levelableEffect("pet", 502)[1]
                 loot = loot * levelableEffect("pu", 212)[1]
                 loot = loot * (getBuyableAmount("bl", 34).div(100).add(1).toNumber() || 1)
+                loot = loot * (getBuyableAmount("sme", 155).div(10).add(1).toNumber() || 1)
                 loot = Math.max(0, Math.floor(loot))
                 player.ir.spaceRock = player.ir.spaceRock.add(loot);
                 player.ir.levelables[player.ir.shipType][1] = player.ir.levelables[player.ir.shipType][1].add(loot)
@@ -3914,6 +3920,7 @@ class SpaceArena {
                 if (asteroid.unit > 1) chance *= Math.pow(2, asteroid.unit-1)
                 if (asteroid.type == "metal") chance *= 1.5
                 if (hasUpgrade("ir", 104)) chance *= 2
+                chance = chance * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1)
                 let guarantee = 0
                 if (chance >= 1) {
                     guarantee = Math.floor(chance)

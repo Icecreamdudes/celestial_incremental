@@ -41,7 +41,7 @@
 
 // Set your version in num and name
 let VERSION = {
-	num: 190.21, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
+	num: 190.25, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
 	name: "Aleph Update Pt II: Nested Metal",
 }
 
@@ -821,7 +821,9 @@ let credits = `<h1>Credits:</h1><br>
 let changelog = `<h1>Changelog:</h1><br>
 	<h3>v1.12.5 - Battle Bananza</h3><br>
 		Content:<br>
-			- Added ??? temple bestowal<br>
+			- Added ??? temple bestowals<br>
+			- Added ??? temple rune by-products<br>
+			- Added ??? temple rune tiers<br>
 			- Added negative depth 1<br>
 			- Added new tav's domain layer<br>
 			- Added new ship battle perks<br>
@@ -2163,4 +2165,8 @@ function fixOldSave(oldVersion){
 		if (player.cs && player.cs.scraps.antimatter.effect.gte(1)) player.cs.scraps.antimatter.effect = new Decimal(0)
 	}
 	if (oldVersion < 190.21) player.m.buyables[15] = Decimal.min(player.m.buyables[15], 50)
+	if (oldVersion < 190.25) {
+		if (player.sme.buyables[135]) player.darkTemple.buyables[1005] = new Decimal(player.sme.buyables[135])
+		if (player.sme.buyables[136]) player.darkTemple.buyables[1007] = new Decimal(player.sme.buyables[136])
+	}
 }

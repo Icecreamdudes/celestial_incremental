@@ -2047,6 +2047,7 @@ class BloodArena extends SpaceArena {
                             let noxStone = 75
                             noxStone = noxStone * (this.upgradeEffects.lootGain || 1) * (this.resourceMult || 1)
                             noxStone = noxStone * (getBuyableAmount("bl", 34).div(100).add(1).toNumber() || 1)
+                            noxStone = noxStone * (getBuyableAmount("sme", 155).div(10).add(1).toNumber() || 1)
                             noxStone = Math.max(0, Math.floor(noxStone))
                             try {
                                 if (player.bl && player.bl.bloodStones !== undefined && typeof player.bl.bloodStones.add === 'function') {
@@ -2066,7 +2067,7 @@ class BloodArena extends SpaceArena {
                                     this.lootFlashes.push({ x: enemy.x, y: enemy.y, text: `+${formatWhole(noxStone)} blood stones`, timer: 120, color: "#ff6b6b", style: "18px monospace" });
                                 }
                             } catch (e) {}
-                            let noxChance = 5 * this.upgradeEffects.gemGain * this.resourceMult
+                            let noxChance = 5 * this.upgradeEffects.gemGain * this.resourceMult * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1)
                             let noxGuarantee = 0
                             if (noxChance >= 1) {
                                 noxGuarantee = Math.floor(noxChance)
@@ -2120,6 +2121,7 @@ class BloodArena extends SpaceArena {
                     try {
                         amt = amt * (this.upgradeEffects.lootGain || 1) * (this.resourceMult || 1)
                         amt = amt * (getBuyableAmount("bl", 34).div(100).add(1).toNumber() || 1)
+                        amt = amt * (getBuyableAmount("sme", 155).div(10).add(1).toNumber() || 1)
                         amt = Math.max(0, Math.floor(amt))
                     } catch (e) {}
                     //try { amt = Math.max(0, Math.floor(amt * levelableEffect("pet", 502)[1])); } catch (e) {}
@@ -2147,7 +2149,7 @@ class BloodArena extends SpaceArena {
 
                     let chance = this._bloodGemChances && this._bloodGemChances[enemy.type];
                     if (!chance) continue;
-                    chance = chance * this.upgradeEffects.gemGain * this.resourceMult
+                    chance = chance * this.upgradeEffects.gemGain * this.resourceMult * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1)
                     let guarantee = 0
                     if (chance >= 1) {
                         guarantee = Math.floor(chance)

@@ -86,7 +86,7 @@ addLayer("depth1", {
         "neg": {
             title: "Swap Sides",
             canClick: true,
-            unlocked() {return player.depth1.lowestCombo.lt(0)},
+            unlocked() {return hasUpgrade("darkTemple", 10)},
             onClick() {
                 if (player.subtabs["depth1"]["stuff"] == "negative") {
                     player.subtabs["depth1"]["stuff"] = "positive"
@@ -194,7 +194,7 @@ addLayer("depth1", {
 
         101: {
             title: "Multi Darkness",
-            unlocked() {return player.depth1.lowestCombo.lt(0)},
+            unlocked() {return hasUpgrade("darkTemple", 10)},
             description: "Increase the base stats of all characters by 5%.",
             cost: new Decimal(25000),
             currencyLocation() { return player.depth1 },
@@ -208,7 +208,7 @@ addLayer("depth1", {
         },
         102: {
             title: "Tiring Darkness",
-            unlocked() {return player.depth1.lowestCombo.lt(0)},
+            unlocked() {return hasUpgrade("darkTemple", 10)},
             description: "Unlocks the general skill \"Rest\".",
             cost: new Decimal(10000),
             currencyLocation() { return player.depth1 },
@@ -222,7 +222,7 @@ addLayer("depth1", {
         },
         103: {
             title: "Exponential Darkness",
-            unlocked() {return player.depth1.lowestCombo.lt(0)},
+            unlocked() {return hasUpgrade("darkTemple", 10)},
             description: "Unlock Exponentiation in Tav's Domain.",
             cost: new Decimal(250000),
             currencyLocation() { return player.depth1 },
@@ -236,7 +236,7 @@ addLayer("depth1", {
         },
         104: {
             title: "Vast Darkness",
-            unlocked() {return player.depth1.lowestCombo.lt(0)},
+            unlocked() {return hasUpgrade("darkTemple", 10)},
             description: "Unlock a new space buyable.",
             cost: new Decimal(100000),
             currencyLocation() { return player.depth1 },
@@ -439,7 +439,7 @@ addLayer("depth1", {
                             ["top-column", [
                                 ["style-column", [
                                     ["clickable", "neg"]
-                                ], () => {return player.depth1.lowestCombo.lt(0) ? {width: "250px", height: "30px", borderBottom: "3px solid var(--regBorder)"} : {display: "none !important"}}],
+                                ], () => {return hasUpgrade("darkTemple", 10) ? {width: "250px", height: "30px", borderBottom: "3px solid var(--regBorder)"} : {display: "none !important"}}],
                                 ["blank", "10px"],
                                 ["style-column", [
                                     ["raw-html", "Properties", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
@@ -517,7 +517,7 @@ addLayer("depth1", {
                             ["top-column", [
                                 ["style-column", [
                                     ["clickable", "neg"]
-                                ], () => {return player.depth1.lowestCombo.lt(0) ? {width: "250px", height: "30px", borderBottom: "3px solid var(--regBorder)"} : {display: "none !important"}}],
+                                ], () => {return hasUpgrade("darkTemple", 10) ? {width: "250px", height: "30px", borderBottom: "3px solid var(--regBorder)"} : {display: "none !important"}}],
                                 ["blank", "10px"],
                                 ["style-column", [
                                     ["raw-html", "Properties", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],

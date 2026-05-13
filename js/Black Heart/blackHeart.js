@@ -569,6 +569,7 @@ addLayer("bh", {
         timeSpeed: new Decimal(1),
         maxSkillPoints: new Decimal(10),
         skillCostDiv: new Decimal(1),
+        baseMult: new Decimal(1),
         log: ["", "", "", "", "", "", "", "", "", ""],
         inputCharSelection: 0,
         inputSkillSelection: 0,
@@ -1175,6 +1176,11 @@ addLayer("bh", {
         player.bh.timeSpeed = player.bh.timeSpeed.add(bhTemp.timeAdd)
         player.bh.timeSpeed = player.bh.timeSpeed.mul(bhTemp.timeMult)
         if (player.bh.respawnTimer.gt(0)) player.bh.timeSpeed = player.bh.timeSpeed.mul(player.stagnantSynestia.milestoneEffect)
+        
+        player.bh.baseMult = new Decimal(1)
+        if (hasUpgrade("depth1", 101)) player.bh.baseMult = player.bh.baseMult.mul(1.05)
+        player.bh.baseMult = player.bh.baseMult.mul(buyableEffect("darkTemple", 1011))
+
 
         // =-- HEALTH STUFF --= //
         let healthBase = new Decimal(1)

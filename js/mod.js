@@ -42,7 +42,7 @@
 // Set your version in num and name
 let VERSION = {
 	num: 190.25, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
-	name: "Aleph Update Pt II: Nested Metal",
+	name: "Battle Bonanza",
 }
 
 function miscCode() {
@@ -819,7 +819,7 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v1.12.5 - Battle Bananza</h3><br>
+	<h3>v1.12.5 - Battle Bonanza</h3><br>
 		Content:<br>
 			- Added ??? temple bestowals<br>
 			- Added ??? temple rune by-products<br>
@@ -853,7 +853,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Changed space battle cost balancing to account for the above change<br>
 			- Buffed stinger to deal more damage<br>
 			- Buffed base perk chance from 3% -> 5%<br>
-			- Buffed depth mileston effects (all end results are floored):<br>
+			- Buffed depth milestone effects (all end results are floored):<br>
 			Depth 2: milestone^1.1<br>
 			Depth 3: milestone^1.2<br>
 			Depth 4: milestone^1.3<br>
@@ -868,6 +868,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Nerfed shard research 16 (for obvious reasons)<br><br>
 		Bug Fixes:<br>
 			- Fixed IP challenges not giving rewards on enter/exit if points are above infinity<br>
+			- Fixed attack speed perk nerfing attack speed for some ships<br>
 			- Fixed ship battles sometimes not loading<br>
 			- Improved ship battle buttons (so they actually work somewhat)<br>
 			- Fixed movement sometimes "sticking" after perk screen<br>

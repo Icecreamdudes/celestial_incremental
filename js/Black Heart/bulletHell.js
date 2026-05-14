@@ -215,7 +215,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         info.onGround = true;
     }
     info.pr = 18;
-    info.speed = 5;
+    info.speed = 5.5;
     info.pos = {x: 0, y: 0}
     info.keys = {up: false, down: false, left: false, right: false}
     if (info.goalType) {
@@ -2788,7 +2788,7 @@ BHB.pipRain = {
     moveFunc(info, ticks, id) {
         // Rain Bullets
         const bulletRadius = info.actions[id].bulletRadius ?? 12;
-        const bulletSpeed = info.actions[id].enemySpeed ?? 4;
+        const bulletSpeed = info.actions[id].bulletSpeed ?? 4;
         if (!info.actions[id].lastTime) info.actions[id].lastTime = ticks;
         const bulletsToSpawn = Math.floor(((ticks - info.actions[id].lastTime) / 1000) * info.actions[id].bulletPerSec); // LAST NUMBER IS AMOUNT OF BULLETS PER SECOND
         for (let i = 0; i < bulletsToSpawn; i++) {
@@ -2810,7 +2810,7 @@ BHB.pipRainHorizontal = {
     moveFunc(info, ticks, id) {
         // Rain Bullets
         const bulletRadius = info.actions[id].bulletRadius ?? 12;
-        const bulletSpeed = info.actions[id].enemySpeed ?? 4;
+        const bulletSpeed = info.actions[id].bulletSpeed ?? 4;
         if (!info.actions[id].lastTime) info.actions[id].lastTime = ticks;
         const bulletsToSpawn = Math.floor(((ticks - info.actions[id].lastTime) / 1000) * info.actions[id].bulletPerSec); // LAST NUMBER IS AMOUNT OF BULLETS PER SECOND
         for (let i = 0; i < bulletsToSpawn; i++) {
@@ -2832,7 +2832,7 @@ BHB.pipRainUltimate = {
     moveFunc(info, ticks, id) {
         // Rain Bullets
         const bulletRadius = info.actions[id].bulletRadius ?? 12;
-        const bulletSpeed = info.actions[id].enemySpeed ?? 4;
+        const bulletSpeed = info.actions[id].bulletSpeed ?? 4;
         if (!info.actions[id].lastTime) info.actions[id].lastTime = ticks;
         const bulletsToSpawn = Math.floor(((ticks - info.actions[id].lastTime) / 1000) * info.actions[id].bulletPerSec); // LAST NUMBER IS AMOUNT OF BULLETS PER SECOND
         for (let i = 0; i < bulletsToSpawn; i++) {
@@ -2861,7 +2861,7 @@ BHB.pipRainUltimate = {
 
 BHB.diceSpikes = {
     // bulletHell({"diceSpikes": {spawnPerSec: 6, bulletPerSec: 6, enemySpeed: 4, spikeSize: 28}}, {width: 1200, height: 600, duration: 12, transparent: false})
-    // bulletHell({"diceSpikes": {spawnPerSec: 6, bulletPerSec: 6, enemySpeed: 4, spikeSize: 28, rain: true}}, {width: 1200, height: 600, duration: 12, transparent: false})
+    // bulletHell({"diceSpikes": {spawnPerSec: 6, bulletPerSec: 6, enemySpeed: 4, bulletSpeed: 2, spikeSize: 28, rain: true}}, {width: 1200, height: 600, duration: 12, transparent: false})
     moveFunc(info, ticks, id) {
         const spikeSize = info.actions[id].spikeSize ?? 28;
         const speed = info.actions[id].enemySpeed ?? 6;
@@ -2870,6 +2870,18 @@ BHB.diceSpikes = {
 
         if (!info.actions[id].lastTime) info.actions[id].lastTime = ticks;
         const bulletsToSpawn = Math.floor(((ticks - info.actions[id].lastTime) / 1000) * spawnPerSec);
+
+        // Allow `rain` to be specified on the action (info.actions[id].rain)
+        if ((info.actions && info.actions[id] && info.actions[id].rain) || info.rain) {
+            // Reuse existing pipRain behavior so toggling `rain` matches pipRain effects.
+            if (BHB && BHB.pipRain && typeof BHB.pipRain.moveFunc === 'function') {
+                info = BHB.pipRain.moveFunc(info, ticks, id) || info;
+            }
+            // Optionally spawn horizontal pip rain if configured
+            if (info.actions && info.actions[id] && info.actions[id].horizontalRain && BHB && BHB.pipRainHorizontal && typeof BHB.pipRainHorizontal.moveFunc === 'function') {
+                info = BHB.pipRainHorizontal.moveFunc(info, ticks, id) || info;
+            }
+        }
 
         for (let i = 0; i < bulletsToSpawn; i++) {
             // choose side: -1 = left, 1 = right
@@ -2922,6 +2934,7 @@ BHB.diceSpikes = {
                 b.y += b.vy;
             }
         }
+
         return info;
     },
 }
@@ -3384,8 +3397,8 @@ BHB.movingDieRadialBurstAttack = {
 }
 //bulletHellBlue({"movingDieRadialBurstAttack": {circleAmount: 1, burstInterval: 800, bulletsPerBurst: 6, enemySpeed: 1.5, bulletSpeed: 5}}, {width:800, height:600, duration:15, jumpMin:6, jumpMax:250, gravity: 0.2})
 
-
-//bulletHell({"dieBouncer": {dieAmount: 4, size: 70, enemySpeed: 4, chargeMult: 2, spikeSpeed:6, spikeRadius:30, lastTick:false}}, {width: window.innerWidth, height: window.innerHeight, duration: 19, transparent: true, saveContent: true,})
+//bulletHell({"pipRainUltimate": {bulletPerSec: 6}}, {width: window.innerWidth, height: window.innerHeight, duration: 19, transparent: true, saveContent: true,})
+//bulletHell({"dieBouncer": {dieAmount: 4, size: 60, enemySpeed: 3, chargeMult: 1.6, spikeSpeed:6, spikeRadius:30, lastTick:false}}, {width: window.innerWidth, height: window.innerHeight, duration: 19, transparent: true, saveContent: true,})
 
 BHB.zarUltimateAttack = {
 //bulletHellBlue({"zarUltimateAttack": {spikeHeight: 50, spikeWidth: 28, platformCount: 6, spawnPerSec: 4, bulletPerSec: 6, enemySpeed: 3, spikeSize: 28, platformSpikeChance: 0.1, platformSpeed: 1.5, platformMinW: 203, platformMaxW: 203, diceSpikes: true, bulletPerSec: 10}}, {width: window.innerWidth, height: window.innerHeight, duration: 19, transparent: true, saveContent: true, jumpMin:6, jumpMax:350, gravity: 0.2})

@@ -94,7 +94,7 @@ addLayer("tad", {
 
         // EXPONENTIATION
         exponentiate: new Decimal(0),
-        exponentiateReq: new Decimal(1e100),
+        exponentiateReq: new Decimal(1e200),
         exponentiateEffect: new Decimal(1),
         exponentiateEffect2: new Decimal(1),
 
@@ -298,7 +298,7 @@ addLayer("tad", {
 
         let exponentiateScale = new Decimal(1e50)
 
-        player.tad.exponentiateReq = Decimal.pow(exponentiateScale, player.tad.exponentiate).mul(1e100).div(exponentiateDiv)
+        player.tad.exponentiateReq = Decimal.pow(exponentiateScale, player.tad.exponentiate).mul(1e200).div(exponentiateDiv)
 
         player.tad.exponentiateEffect = player.tad.exponentiate.pow(0.5).div(10).add(1)
         player.tad.exponentiateEffect2 = player.tad.exponentiate.gt(0) ? Decimal.pow(10, player.tad.exponentiate.pow(0.5).mul(3)) : new Decimal(1)

@@ -14,16 +14,23 @@ addLayer("stagnantSynestia", {
         temporalMult: new Decimal(1),
 
         highestCombo: new Decimal(0),
+        lowestCombo: new Decimal(0),
         comboEffect: new Decimal(1),
+        negComboEffect: new Decimal(1),
         comboStart: 0,
 
         milestone: {
+            "-100": 0,
+            "-75": 0,
+            "-50": 0,
+            "-25": 0,
             25: 0,
             50: 0,
             75: 0,
             100: 0,
         },
         milestoneEffect: new Decimal(0),
+        negToggle: false,
     }},
     automate() {},
     nodeStyle() {
@@ -41,7 +48,8 @@ addLayer("stagnantSynestia", {
     tooltip: "Stagnant Synestia",
     color: "#0091DC",
     update(delta) {
-        player.stagnantSynestia.comboEffect = player.stagnantSynestia.highestCombo.div(50).add(1).pow(buyableEffect("stagnantSynestia", 2))
+        player.stagnantSynestia.comboEffect = player.stagnantSynestia.highestCombo.min(100).div(50).add(1).pow(buyableEffect("stagnantSynestia", 2))
+        player.stagnantSynestia.negComboEffect = player.stagnantSynestia.lowestCombo.div(-100).add(1)
 
         player.stagnantSynestia.milestoneEffect = new Decimal(1)
         for (let i = 25; i < 101; i = i+25) {
@@ -60,6 +68,27 @@ addLayer("stagnantSynestia", {
                 BHStageEnter("stagnantSynestia")
             },
             style: {width: "200px", minHeight: "75px", color: "white", background: "radial-gradient(#094394, #052653)", border: "3px solid #021124", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"},
+        },
+        "neg": {
+            title: "Swap Sides",
+            canClick: true,
+            unlocked() {return player.stagnantSynestia.lowestCombo.lt(0)},
+            onClick() {
+                if (player.subtabs["stagnantSynestia"]["stuff"] == "negative") {
+                    player.subtabs["stagnantSynestia"]["stuff"] = "positive"
+                } else {
+                    player.subtabs["stagnantSynestia"]["stuff"] = "negative"
+                }
+            },
+            style() {
+                let look = {width: "250px", minHeight: "30px", color: "var(--textColor)", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0", padding: "0 5px"}
+                if (player.subtabs["stagnantSynestia"]["stuff"] == "negative") {
+                    look.background = "var(--miscButtonHover)"
+                } else {
+                    look.background = "var(--menuBackground)"
+                }
+                return look
+            },
         },
     },
     upgrades: {
@@ -254,71 +283,154 @@ addLayer("stagnantSynestia", {
             },
         },
     },
+    microtabs: {
+        stuff: {
+            "positive": {
+                unlocked: true,
+                content: [
+                    ["style-row", [
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", () => {return "You have " + formatShortWhole(player.stagnantSynestia.temporalDust) + " temporal dust."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + formatShortWhole(player.stagnantSynestia.temporalShard) + " temporal shards."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                            ], {width: "272px", height: "52px", background: "var(--miscButtonHover)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["theme-scroll-column", [
+                                ["blank", "2px"],
+                                ["row", [["upgrade", 1], ["upgrade", 2]]],
+                                ["row", [["upgrade", 3], ["upgrade", 4]]],
+                                ["row", [["upgrade", 5], ["upgrade", 6]]],
+                                ["row", [["buyable", 1], ["buyable", 2]]],
+                                ["row", [["buyable", 3], ["buyable", 4]]],
+                                ["blank", "2px"],
+                            ], {width: "272px", height: "365px", background: "var(--miscButton)", borderRadius: "0 0 0 27px"}],
+                        ], {width: "272px", height: "420px", borderRight: "3px solid var(--regBorder)"}],
+                        ["style-column", [
+                            ["style-column", [
+                                ["style-column", [
+                                    ["raw-html", "Stagnant Synestia", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "5px"}],
+                                ["clickable", "enter"],
+                            ], {width: "250px", height: "127px", background: "var(--miscButtonDisable)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["top-column", [
+                                ["style-column", [
+                                    ["clickable", "neg"]
+                                ], () => {return player.stagnantSynestia.lowestCombo.lt(0) ? {width: "250px", height: "30px", borderBottom: "3px solid var(--regBorder)"} : {display: "none !important"}}],
+                                ["blank", "10px"],
+                                ["style-column", [
+                                    ["raw-html", "Properties", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "10px"}],
+                                ["raw-html", () => {return Decimal.sub(1.025, player.bh.comboScalingReduction).gt(1) ? "<u>Combo Scaling" : ""}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return Decimal.sub(1.025, player.bh.comboScalingReduction).gt(1) ? formatSimple(Decimal.sub(1.025, player.bh.comboScalingReduction).max(1).sub(1).mul(100)) + "% starting at 25" : ""}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                ["blank", "5px"],
+                                ["raw-html", "<u>Time Stagnation", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                                ["raw-html", "You have to force time to move forward", {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                            ], {width: "250px", height: "217px", background: "var(--layerBackground)"}],
+                            ["style-row", [
+                                ["layer-proxy", ["bh", [
+                                    ["row", [["clickable", "Auto-Enter"], ["blank", ["10px", "10px"]], ["clickable", "Auto-Exit"]]],
+                                ]]],
+                            ], {width: "250px", height: "70px", background: "var(--miscButtonDisable)", borderTop: "3px solid var(--regBorder)"}],
+                        ], {width: "250px", height: "420px"}],
+                        ["style-column", [
+                            ["top-column", [
+                                ["style-column", [
+                                    ["raw-html", () => {return "Highest Combo: " + formatWhole(player.stagnantSynestia.highestCombo.min(100)) + "/" + BHS["stagnantSynestia"].comboLimit}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                                ], {width: "225px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "2px"}],
+                                ["top-column", [
+                                    ["raw-html", () => {return "Boosts check back xp by x" + formatSimple(player.stagnantSynestia.comboEffect, 2)}, {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
+                                ], {width: "272px", height: "25px"}],
+                                ["style-column", [
+                                    ["raw-html", () => {return "<p style='line-height:1.2'>Milestones multiply tickspeed during celestialite respawn by x" + formatSimple(player.stagnantSynestia.milestoneEffect, 2)}, {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
+                                ], {width: "272px", height: "47px", background: "var(--layerBackground)", borderTop: "3px solid var(--regBorder)"}],
+                            ], {width: "272px", height: "114px", background: "var(--miscButtonHover)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["theme-scroll-column", [
+                                ["raw-html", () => {return "<button class='bhMilestoneButton  base' style='width:257px;height:50px' onclick='player.stagnantSynestia.comboStart=0'>Starting combo value: " + player.stagnantSynestia.comboStart + "<br>[Click to set to 0]</button>"}],
+                                ["bh-milestone", [25, "stagnantSynestia", ""]],
+                                ["bh-milestone", [50, "stagnantSynestia", ""]],
+                                ["bh-milestone", [75, "stagnantSynestia", ""]],
+                                ["bh-milestone", [100, "stagnantSynestia", ""]],
+                            ], {width: "272px", height: "250px", background: "var(--miscButton)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["style-column", [
+                                ["raw-html", "<p style='line-height:1'>Clicking on a cleared milestone allows you to start at that milestones combo value.", {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                            ], {width: "272px", height: "50px", background: "var(--miscButtonHover)", borderRadius: "0 0 27px 0"}],
+                        ], {width: "272px", height: "420px", borderLeft: "3px solid var(--regBorder)"}],
+                    ], {width: "800px", height: "420px"}],
+                ],
+            },
+            "negative": {
+                unlocked() {return player.depth4.lowestCombo.lt(0)},
+                content: [
+                    ["style-row", [
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", () => {return "You have " + formatShortWhole(player.stagnantSynestia.temporalDust) + " temporal dust."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "You have " + formatShortWhole(player.stagnantSynestia.temporalShard) + " temporal shards."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                            ], {width: "272px", height: "52px", background: "var(--miscButtonHover)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["theme-scroll-column", [
+                                ["blank", "2px"],
+                                ["row", [["upgrade", 101], ["upgrade", 102]]],
+                                ["row", [["upgrade", 103], ["upgrade", 104]]],
+                                ["row", [["buyable", 101], ["buyable", 102]]],
+                                ["blank", "2px"],
+                            ], {width: "272px", height: "365px", background: "var(--miscButton)", borderRadius: "0 0 0 27px"}],
+                        ], {width: "272px", height: "420px", borderRight: "3px solid var(--regBorder)"}],
+                        ["style-column", [
+                            ["style-column", [
+                                ["style-column", [
+                                    ["raw-html", "Stagnant Synestia", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "5px"}],
+                                ["clickable", "enter"],
+                            ], {width: "250px", height: "127px", background: "var(--miscButton)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["top-column", [
+                                ["style-column", [
+                                    ["clickable", "neg"]
+                                ], () => {return player.stagnantSynestia.lowestCombo.lt(0) ? {width: "250px", height: "30px", borderBottom: "3px solid var(--regBorder)"} : {display: "none !important"}}],
+                                ["blank", "10px"],
+                                ["style-column", [
+                                    ["raw-html", "Properties", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "10px"}],
+                                ["raw-html", () => {return "<u>Negative"}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "Combo scaling increases based on combo value"}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                                ["blank", "5px"],
+                                ["raw-html", "<u>Time Stagnation", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                                ["raw-html", "You have to force time to move forward", {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
+                            ], {width: "250px", height: "217px", background: "var(--miscButtonDisable)"}],
+                            ["style-row", [
+                                ["layer-proxy", ["bh", [
+                                    ["row", [["clickable", "Auto-Enter"], ["blank", ["10px", "10px"]], ["clickable", "Auto-Exit"]]],
+                                ]]],
+                            ], {width: "250px", height: "70px", background: "var(--miscButton)", borderTop: "3px solid var(--regBorder)"}],
+                        ], {width: "250px", height: "420px"}],
+                        ["style-column", [
+                            ["top-column", [
+                                ["style-column", [
+                                    ["raw-html", () => {return "Lowest Combo: " + formatWhole(player.stagnantSynestia.lowestCombo.max(-250)) + "/-" + BHS["stagnantSynestia"].comboLimit}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                                ], {width: "225px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "2px"}],
+                                ["top-column", [
+                                    ["raw-html", () => {return "<div style='line-height:1;margin-top:1px'>Boosts check back tickspeed by x" + formatSimple(player.stagnantSynestia.negComboEffect, 2) + "</div>"}, {color: "var(--textColor)", fontSize: "11px", fontFamily: "monospace"}],
+                                ], {width: "272px", height: "25px"}],
+                                ["style-column", [
+                                    ["raw-html", () => {return "<p style='line-height:1.2'>Milestones multiply tickspeed during celestialite respawn by x" + formatSimple(player.stagnantSynestia.milestoneEffect, 2)}, {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
+                                ], {width: "272px", height: "47px", background: "var(--layerBackground)", borderTop: "3px solid var(--regBorder)"}],
+                            ], {width: "272px", height: "114px", background: "var(--layerBackground)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["theme-scroll-column", [
+                                ["raw-html", () => {return "<button class='bhMilestoneButton base' style='width:257px;height:50px' onclick='player.stagnantSynestia.comboStart=-1'>Starting combo value: " + player.stagnantSynestia.comboStart + "<br>[Click to set to -1]</button>"}],
+                                ["bh-milestone", ["-25", "stagnantSynestia", ""]],
+                                ["bh-milestone", ["-50", "stagnantSynestia", ""]],
+                                ["bh-milestone", ["-75", "stagnantSynestia", ""]],
+                                ["bh-milestone", ["-100", "stagnantSynestia", ""]],
+                            ], {width: "272px", height: "250px", background: "var(--miscButtonDisable)", borderBottom: "3px solid var(--regBorder)"}],
+                            ["style-column", [
+                                ["raw-html", "<p style='line-height:1'>Clicking on a cleared milestone allows you to start at that milestones combo value.", {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
+                            ], {width: "272px", height: "50px", background: "var(--layerBackground)", borderRadius: "0 0 27px 0"}],
+                        ], {width: "272px", height: "420px", borderLeft: "3px solid var(--regBorder)"}],
+                    ], {width: "800px", height: "420px"}],
+                ],
+            },
+        },
+    },
     tabFormat: [
-        ["style-row", [
-            ["style-column", [
-                ["style-column", [
-                    ["raw-html", () => {return "You have " + formatShortWhole(player.stagnantSynestia.temporalDust) + " temporal dust."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return "You have " + formatShortWhole(player.stagnantSynestia.temporalShard) + " temporal shards."}, {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
-                ], {width: "272px", height: "52px", background: "var(--miscButtonHover)", borderBottom: "3px solid var(--regBorder)"}],
-                ["theme-scroll-column", [
-                    ["blank", "2px"],
-                    ["row", [["upgrade", 1], ["upgrade", 2]]],
-                    ["row", [["upgrade", 3], ["upgrade", 4]]],
-                    ["row", [["upgrade", 5], ["upgrade", 6]]],
-                    ["row", [["buyable", 1], ["buyable", 2]]],
-                    ["row", [["buyable", 3], ["buyable", 4]]],
-                    ["blank", "2px"],
-                ], {width: "272px", height: "365px", background: "var(--miscButton)", borderRadius: "0 0 0 27px"}],
-            ], {width: "272px", height: "420px", borderRight: "3px solid var(--regBorder)"}],
-            ["style-column", [
-                ["style-column", [
-                    ["style-column", [
-                        ["raw-html", "Stagnant Synestia", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
-                    ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "10px"}],
-                    ["clickable", "enter"],
-                ], {width: "250px", height: "147px", background: "var(--miscButtonDisable)", borderBottom: "3px solid var(--regBorder)"}],
-                ["top-column", [
-                    ["blank", "10px"],
-                    ["style-column", [
-                        ["raw-html", "Properties", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
-                    ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "10px"}],
-                    ["raw-html", () => {return Decimal.sub(1.025, player.bh.comboScalingReduction).gt(1) ? "<u>Combo Scaling" : ""}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return Decimal.sub(1.025, player.bh.comboScalingReduction).gt(1) ? formatSimple(Decimal.sub(1.025, player.bh.comboScalingReduction).max(1).sub(1).mul(100)) + "% starting at 25" : ""}, {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                    ["blank", "5px"],
-                    ["raw-html", "<u>Time Stagnation", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", "You have to force time to move forward", {color: "var(--textColor)", fontSize: "16px", fontFamily: "monospace"}],
-                ], {width: "250px", height: "197px", background: "var(--layerBackground)"}],
-                ["style-row", [
-                    ["layer-proxy", ["bh", [
-                        ["row", [["clickable", "Auto-Enter"], ["blank", ["10px", "10px"]], ["clickable", "Auto-Exit"]]],
-                    ]]],
-                ], {width: "250px", height: "70px", background: "var(--miscButtonDisable)", borderTop: "3px solid var(--regBorder)"}],
-            ], {width: "250px", height: "420px"}],
-            ["style-column", [
-                ["top-column", [
-                    ["style-column", [
-                        ["raw-html", () => {return "Highest Combo: " + formatWhole(player.stagnantSynestia.highestCombo) + "/" + BHS["stagnantSynestia"].comboLimit}, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
-                    ], {width: "225px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "2px"}],
-                    ["top-column", [
-                        ["raw-html", () => {return "Boosts check back xp by x" + formatSimple(player.stagnantSynestia.comboEffect, 2)}, {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
-                    ], {width: "272px", height: "25px"}],
-                    ["style-column", [
-                        ["raw-html", () => {return "<p style='line-height:1.2'>Milestones multiply tickspeed during celestialite respawn by x" + formatSimple(player.stagnantSynestia.milestoneEffect, 2)}, {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
-                    ], {width: "272px", height: "47px", background: "var(--layerBackground)", borderTop: "3px solid var(--regBorder)"}],
-                ], {width: "272px", height: "114px", background: "var(--miscButtonHover)", borderBottom: "3px solid var(--regBorder)"}],
-                ["theme-scroll-column", [
-                    ["raw-html", () => {return "<button class='bhMilestoneButton  base' style='width:257px;height:50px' onclick='player.stagnantSynestia.comboStart=0'>Starting combo value: " + player.stagnantSynestia.comboStart + "<br>[Click to set to 0]</button>"}],
-                    ["bh-milestone", [25, "stagnantSynestia", ""]],
-                    ["bh-milestone", [50, "stagnantSynestia", ""]],
-                    ["bh-milestone", [75, "stagnantSynestia", ""]],
-                    ["bh-milestone", [100, "stagnantSynestia", ""]],
-                ], {width: "272px", height: "250px", background: "var(--layerBackground)", borderBottom: "3px solid var(--regBorder)"}],
-                ["style-column", [
-                    ["raw-html", "<p style='line-height:1'>Clicking on a cleared milestone allows you to start at that milestones combo value.", {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
-                ], {width: "272px", height: "50px", background: "var(--miscButtonHover)", borderRadius: "0 0 27px 0"}],
-            ], {width: "272px", height: "420px", borderLeft: "3px solid var(--regBorder)"}],
-        ], {width: "800px", height: "420px"}],
+        ["buttonless-microtabs", "stuff", {borderWidth: "0"}],
     ],
     layerShown() {return player.startedGame && hasUpgrade("ev8", 24)},
 })
@@ -348,6 +460,7 @@ BHS.stagnantSynestia = {
                 if (combo >= 25) cel.push("staticEta")
                 if (combo >= 50) cel.push("staticTheta")
                 if (combo >= 75) cel.push("staticIota")
+                if (combo < 0) cel = ["staticEnas", "staticPente", "staticDeka", "staticHekaton"]
                 return cel[Math.floor(Math.random()*cel.length)]
         }
     },
@@ -806,6 +919,7 @@ BHC.staticEnas = {
     },
     health: new Decimal(3000),
     damage: new Decimal(50),
+    agility: new Decimal(20),
     noRandomStats: true,
     actions: {
         0: {
@@ -823,7 +937,7 @@ BHC.staticEnas = {
                     bulletHell({"bulletRain": {bulletPerSec: 4+magnitude}, "knifeThrow": {knifeLength: 64, knifeWidth: 16, enemySpeed: 6, knifePerSec: 1.2+(magnitude/8)}}, {duration: 7+magnitude})
                 }
             },
-            cooldown: new Decimal(5),
+            cooldown: new Decimal(6),
         },
         1: {
             name: "Eye Drops",
@@ -831,7 +945,7 @@ BHC.staticEnas = {
             type: "heal",
             target: "celestialite",
             value: new Decimal(10),
-            cooldown: new Decimal(10),
+            cooldown: new Decimal(12),
         },
         2: {
             name: "Capsaicin",
@@ -841,7 +955,7 @@ BHC.staticEnas = {
             properties: {
                 "agilityAdd": new Decimal(50), // Additive Effect
             },
-            cooldown: new Decimal(20),
+            cooldown: new Decimal(24),
         },
     },
     reward() {
@@ -862,6 +976,7 @@ BHC.staticPente = {
     },
     health: new Decimal(4000),
     damage: new Decimal(50),
+    agility: new Decimal(20),
     noRandomStats: true,
     actions: {
         0: {
@@ -879,7 +994,7 @@ BHC.staticPente = {
                     bulletHell({"radialKnifeBurstAttack": {knifeLength: 40, knifeWidth: 10, burstInterval: 1500, bulletsPerBurst: 4+magnitude, enemySpeed: 5}}, {duration: 10+(magnitude*2), subArena: true, subWidth: 300})
                 }
             },
-            cooldown: new Decimal(4),
+            cooldown: new Decimal(4.8),
         },
         1: {
             name: "Binding Chains",
@@ -890,7 +1005,7 @@ BHC.staticPente = {
                 "agilityAdd": new Decimal(-50),
             },
             duration: new Decimal(5),
-            cooldown: new Decimal(15),
+            cooldown: new Decimal(18),
         },
         2: {
             name: "Shielding Walls",
@@ -898,7 +1013,7 @@ BHC.staticPente = {
             type: "shield",
             target: "celestialite",
             value: new Decimal(3),
-            cooldown: new Decimal(20),
+            cooldown: new Decimal(24),
         },
     },
     reward() {
@@ -920,6 +1035,7 @@ BHC.staticDeka = {
     health: new Decimal(5000),
     damage: new Decimal(50),
     luck: new Decimal(4),
+    agility: new Decimal(10),
     noRandomStats: true,
     actions: {
         0: {
@@ -928,27 +1044,29 @@ BHC.staticDeka = {
             type: "function",
             target: "allPlayer",
             onTrigger(index, slot, target, magnitude) {
+                if (!player.bh.celestialite.actions[0].variables.bullets) player.bh.celestialite.actions[0].variables.bullets = 4
                 let random = Math.random()
                 if (random < 0.33) {
-                    bulletHell({"movingCircleRadialBurstAttack": {circleAmount: 3, burstInterval: 1300-(magnitude*100), bulletsPerBurst: player.bh.celestialite.luck, enemySpeed: 3, bulletSpeed: 3}}, {duration: 7+magnitude})
+                    bulletHell({"movingCircleRadialBurstAttack": {circleAmount: 3, burstInterval: 1300-(magnitude*100), bulletsPerBurst: player.bh.celestialite.actions[0].variables.bullets, enemySpeed: 3, bulletSpeed: 3}}, {duration: 7+magnitude})
                 } else if (random < 0.66) {
-                    bulletHell({"rotatingCircleRadialBurst": {locX: 250, locY: 250, circleAmount: 4, burstInterval: 1300-(magnitude*100), orbitSpeed: 0.015, orbitRadius: 400, bulletsPerBurst: player.bh.celestialite.luck, enemySpeed: 6, bulletSpeed: 5}}, {width: 500, duration: 10+(magnitude*2)})
+                    bulletHell({"rotatingCircleRadialBurst": {locX: 250, locY: 250, circleAmount: 4, burstInterval: 1300-(magnitude*100), orbitSpeed: 0.015, orbitRadius: 400, bulletsPerBurst: player.bh.celestialite.actions[0].variables.bullets, enemySpeed: 6, bulletSpeed: 5}}, {width: 500, duration: 10+(magnitude*2)})
                 } else {
-                    bulletHell({"rotatingCircleRadialBurst": {locX: 500, locY: 125, circleAmount: 8, burstInterval: 1300-(magnitude*100), orbitSpeed: 0.02, orbitRadius: 200, bulletsPerBurst: player.bh.celestialite.luck, enemySpeed: 6, bulletSpeed: 5}}, {width: 250, height: 250, duration: 10+(magnitude*2)})
+                    bulletHell({"rotatingCircleRadialBurst": {locX: 500, locY: 125, circleAmount: 8, burstInterval: 1300-(magnitude*100), orbitSpeed: 0.02, orbitRadius: 200, bulletsPerBurst: player.bh.celestialite.actions[0].variables.bullets, enemySpeed: 6, bulletSpeed: 5}}, {width: 250, height: 250, duration: 10+(magnitude*2)})
                 }
             },
-            cooldown: new Decimal(6),
+            cooldown: new Decimal(8),
         },
         1: {
             name: "More Bullets",
             instant: true,
-            type: "effect",
-            target: "celestialite",
-            noMessage: true,
-            properties: {
-                "luckAdd": new Decimal(1),
+            type: "function",
+            target: "allPlayer",
+            onTrigger(index, slot, target, magnitude) {
+                if (!player.bh.celestialite.actions[0].variables.bullets) player.bh.celestialite.actions[0].variables.bullets = 4
+                player.bh.celestialite.actions[0].variables.bullets += 1
+                bhLog("<span style='color: #8b0e7a'>" + run(BHC[player.bh.celestialite.id].name, BHC[player.bh.celestialite.id]) + " increases its turret's bullet count.")
             },
-            cooldown: new Decimal(12),
+            cooldown: new Decimal(15),
         },
         2: {
             name: "Higher Caliber",
@@ -958,7 +1076,7 @@ BHC.staticDeka = {
             properties: {
                 "damageAdd": new Decimal(5),
             },
-            cooldown: new Decimal(15),
+            cooldown: new Decimal(20),
         },
     },
     reward() {
@@ -979,6 +1097,7 @@ BHC.staticHekaton = {
     },
     health: new Decimal(6000),
     damage: new Decimal(50),
+    agility: new Decimal(10),
     noRandomStats: true,
     actions: {
         0: {
@@ -991,12 +1110,12 @@ BHC.staticHekaton = {
                 if (random < 0.33) {
                     bulletHell({"centerIcon": {locX: 600, locY: 250, radius: 64, fillColor: "#0091DC", strokeColor: "#094394", symbol: "⧖"}, "centerSpiralAttack": {locX: 600, locY: 250, spiralAngle: 0, spiralRate: 0.65, spiralInterval: 22-(magnitude*2), radialStart: 64, bulletSpeed: 6, spiralBullets: true}}, {duration: 10+(magnitude*2)})
                 } else if (random < 0.66) {
-                    bulletHell({"chargingIcon": {locX: 600, locY: 250, radius: 64, fillColor: "#0091DC", strokeColor: "#094394", symbol: "⧖", enemySpeed: 5, burstBullets: 3, burstViolence: 0.5, lungeTimer: 0, lungeCooldown: 0, lastTick: false}}, {duration: 10+(magnitude*2)})
+                    bulletHell({"chargingIcon": {locX: 600, locY: 250, radius: 64, fillColor: "#0091DC", strokeColor: "#094394", symbol: "⧖", enemySpeed: 3, bulletSpeed: 5, shootInterval: 1, burstBullets: 3+(Math.floor(magnitude/2)), burstViolence: 0.5, lungeTimer: 0, lungeCooldown: 0, lastTick: false}}, {duration: 10+(magnitude*2)})
                 } else {
                     bulletHell({"bouncingIcon": {locX: 600, locY: 250, radius: 64, fillColor: "#0091DC", strokeColor: "#094394", symbol: "⧖", enemySpeed: 6, shootInterval: 400-(magnitude*20)}, "bulletRain": {bulletPerSec: 2+(magnitude/2)}}, {duration: 10+(magnitude*2)})
                 }
             },
-            cooldown: new Decimal(6),
+            cooldown: new Decimal(8),
         },
         1: {
             name: "Bound Bandage",
@@ -1004,7 +1123,7 @@ BHC.staticHekaton = {
             type: "heal",
             target: "celestialite",
             value: new Decimal(30),
-            cooldown: new Decimal(12),
+            cooldown: new Decimal(16),
 
             active: true,
             constantType: "effect",
@@ -1019,7 +1138,7 @@ BHC.staticHekaton = {
             passive: true,
             constantType: "effect",
             constantTarget: "celestialite",
-            properties: {
+            effects: {
                 "agilityAdd"() {return Decimal.sub(1, player.bh.celestialite.health.div(player.bh.celestialite.maxHealth)).mul(150)},
             },
             cooldown: new Decimal(Infinity),

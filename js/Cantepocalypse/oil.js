@@ -110,9 +110,12 @@
         player.oi.linkingPowerEffect[5] = player.oi.linkingPower[5].pow(0.25).add(1)
 
         player.oi.protoMemoriesPerSecond = player.oi.linkingPower[0].mul(player.oi.linkingPower[1].mul(player.oi.linkingPower[2].mul(player.oi.linkingPower[3].mul(player.oi.linkingPower[4].mul(player.oi.linkingPower[5]))))).plus(1).pow(0.55).div(1e7)
-        player.oi.protoMemoriesPerSecond = player.oi.protoMemoriesPerSecond.mul(buyableEffect("oi", 24))
+        if (!hasUpgrade("depth2", 203)) player.oi.protoMemoriesPerSecond = player.oi.protoMemoriesPerSecond.mul(buyableEffect("oi", 24))
         player.oi.protoMemoriesPerSecond = player.oi.protoMemoriesPerSecond.mul(player.fu.funEffect2)
         if (!inChallenge("fu", 12)) player.oi.protoMemoriesPerSecond = player.oi.protoMemoriesPerSecond.mul(levelableEffect("pet", 403)[2])
+
+        // POWER RAISERS
+        if (hasUpgrade("depth2", 203)) player.oi.protoMemoriesPerSecond = player.oi.protoMemoriesPerSecond.pow(buyableEffect("oi", 24))
 
         player.oi.protoMemorySecondsToGet = player.cp.replicantiPoints.plus(1).log10().mul(8).pow(0.5)
         if (hasUpgrade("fu", 14)) player.oi.protoMemorySecondsToGet = player.oi.protoMemorySecondsToGet.mul(upgradeEffect("fu", 14))
@@ -474,12 +477,24 @@
             style: { width: '275px', height: '150px'},
         },
         21: {
-            costBase() { return new Decimal(20) },
-            costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(100) },
+            costBase() {
+                if (hasUpgrade("depth2", 103)) return new Decimal("1e2000")
+                return new Decimal(20)
+            },
+            costGrowth() {
+                if (hasUpgrade("depth2", 103)) return new Decimal("1e250")
+                return new Decimal(1.2)
+            },
+            purchaseLimit() {
+                if (hasUpgrade("depth2", 103)) return new Decimal(50)
+                return new Decimal(100)
+            },
             currency() { return player.oi.protoMemories},
             pay(amt) { player.oi.protoMemories = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(10).pow(2.4).add(1) },
+            effect(x) {
+                if (hasUpgrade("depth2", 103)) return new getBuyableAmount(this.layer, this.id).div(100).add(1)
+                return new getBuyableAmount(this.layer, this.id).mul(10).pow(2.4).add(1)
+            },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -487,6 +502,10 @@
                 return "Steel Rememberance"
             },
             display() {
+                if (hasUpgrade("depth2", 103)) {
+                    return "which are raising steel gain by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                        Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Proto Memories"
+                }
                 return "which are multiplying steel gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Proto Memories"
             },
@@ -508,12 +527,24 @@
             style: { width: '275px', height: '150px'},
         },
         22: {
-            costBase() { return new Decimal(35) },
-            costGrowth() { return new Decimal(1.25) },
-            purchaseLimit() { return new Decimal(100) },
+            costBase() {
+                if (hasUpgrade("depth2", 103)) return new Decimal("1e1920")
+                return new Decimal(35)
+            },
+            costGrowth() {
+                if (hasUpgrade("depth2", 103)) return new Decimal("1e240")
+                return new Decimal(1.25)
+            },
+            purchaseLimit() {
+                if (hasUpgrade("depth2", 103)) return new Decimal(50)
+                return new Decimal(100)
+            },
             currency() { return player.oi.protoMemories},
             pay(amt) { player.oi.protoMemories = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(5).pow(1.45).add(1) },
+            effect(x) {
+                if (hasUpgrade("depth2", 103)) return new getBuyableAmount(this.layer, this.id).div(100).add(1)
+                return new getBuyableAmount(this.layer, this.id).mul(5).pow(1.45).add(1)
+            },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -521,6 +552,10 @@
                 return "Crystal Rememberance"
             },
             display() {
+                if (hasUpgrade("depth2", 103)) {
+                    return "which are raising crystal gain by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                        Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Proto Memories"
+                }
                 return "which are multiplying crystal gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Proto Memories"
             },
@@ -542,12 +577,24 @@
             style: { width: '275px', height: '150px'},
         },
         23: {
-            costBase() { return new Decimal(50) },
-            costGrowth() { return new Decimal(1.3) },
-            purchaseLimit() { return new Decimal(100) },
+            costBase() {
+                if (hasUpgrade("depth2", 103)) return new Decimal("1e1840")
+                return new Decimal(50)
+            },
+            costGrowth() {
+                if (hasUpgrade("depth2", 103)) return new Decimal("1e230")
+                return new Decimal(1.3)
+            },
+            purchaseLimit() {
+                if (hasUpgrade("depth2", 103)) return new Decimal(50)
+                return new Decimal(100)
+            },
             currency() { return player.oi.protoMemories},
             pay(amt) { player.oi.protoMemories = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(3).pow(1.35).add(1) },
+            effect(x) {
+                if (hasUpgrade("depth2", 103)) return new getBuyableAmount(this.layer, this.id).div(100).add(1)
+                return new getBuyableAmount(this.layer, this.id).mul(3).pow(1.35).add(1)
+            },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -555,6 +602,10 @@
                 return "Time Cube Rememberance"
             },
             display() {
+                if (hasUpgrade("depth2", 103)) {
+                    return "which are raising time cube gain by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                        Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Proto Memories"
+                }
                 return "which are multiplying time cube gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Proto Memories"
             },
@@ -576,12 +627,24 @@
             style: { width: '275px', height: '150px'},
         },
         24: {
-            costBase() { return new Decimal(80) },
-            costGrowth() { return new Decimal(1.35) },
-            purchaseLimit() { return new Decimal(100) },
+            costBase() {
+                if (hasUpgrade("depth2", 103)) return new Decimal("1e1760")
+                return new Decimal(80)
+            },
+            costGrowth() {
+                if (hasUpgrade("depth2", 103)) return new Decimal("1e220")
+                return new Decimal(1.35)
+            },
+            purchaseLimit() {
+                if (hasUpgrade("depth2", 103)) return new Decimal(50)
+                return new Decimal(100)
+            },
             currency() { return player.oi.protoMemories},
             pay(amt) { player.oi.protoMemories = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
+            effect(x) {
+                if (hasUpgrade("depth2", 103)) return new getBuyableAmount(this.layer, this.id).div(100).add(1)
+                return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1)
+            },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -589,6 +652,10 @@
                 return "Memory Rememberance"
             },
             display() {
+                if (hasUpgrade("depth2", 103)) {
+                    return "which are raising proto memory gain by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                        Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Proto Memories"
+                }
                 return "which are multiplying proto memory gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Proto Memories"
             },

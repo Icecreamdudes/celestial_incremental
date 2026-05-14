@@ -135,7 +135,7 @@ addLayer("hpu", {
             },
         },
         2: {
-            title() { return "Respec your purifiers"},
+            title() { return "Respec your purifiers<br><small style='font-size:11px'>(Doesn't reset content)</small>"},
             canClick() { return player.hpu.totalPurity.gt(player.hpu.purity)},
             unlocked: true,
             onClick() {
@@ -150,7 +150,7 @@ addLayer("hpu", {
                 player.hpu.purifiers[1].amount = extra
                 player.hpu.purifiers[4].amount = extra
             },
-            style: {width: "250px", minHeight: "40px", border: "2px solid black", borderRadius: "15px"},
+            style: {width: "250px", minHeight: "40px", lineHeight: "0.9", border: "2px solid black", borderRadius: "15px"},
         },
         3: {
             title() {
@@ -180,6 +180,10 @@ addLayer("hpu", {
                 if (inChallenge("hrm", 12)) str = "<h3>Multiplied Miracles</h3><br>Lv." + formatWhole(player.hpu.purifiers[1].amount) + "<br>x" + format(player.hpu.purifiers[1].effect) + " Blessings and Boons"
                 if (player.hpu.purifiers[1].effect.gt(8)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
+            },
+            tooltip() {
+                if (!inChallenge("hrm", 12)) return "[Reminder]<br>1st Miracle buffs blessings, 4th Miracle buffs boons"
+                return ""
             },
             canClick() {return player.hpu.purity.gte(1) && !hasUpgrade("hpw", 1102)},
             unlocked: true,

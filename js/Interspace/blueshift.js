@@ -91,7 +91,7 @@
             let blueshift = player.blu.blueshifts[i]
 
             blueshift.cycleGainMul = blueshift.shiftBase.div(2).pow(blueshift.amount)
-            blueshift.cycleSpeedRoot = blueshift.amount.div(2).add(1)
+            blueshift.cycleSpeedRoot = blueshift.amount.add(1)
             player.blu.totalBlueshifts = player.blu.totalBlueshifts.add(blueshift.amount)
         }
 

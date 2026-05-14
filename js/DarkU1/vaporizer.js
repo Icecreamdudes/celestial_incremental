@@ -29,6 +29,7 @@
         let onepersec = new Decimal(1)
 
         player.dv.timeDrainRate = player.dv.clouds.pow(0.25).div(5).add(1)
+        if (hasUpgrade("sma", 209)) player.dv.timeDrainRate = player.dv.clouds.pow(0.2).div(10).add(1)
 
         if (player.dv.producingClouds)
         {
@@ -140,7 +141,7 @@
                 return "Vaporized Rank-Tier-Tetr"
             },
             display() {
-                return "which are raising rank-tier-tetr requirements by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are raising rank-tier-tetr requirements by ^" + format(tmp[this.layer].buyables[this.id].effect, 3) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Clouds"
             },
             buy(mult) {
@@ -174,7 +175,7 @@
                 return "Vaporized Boosters"
             },
             display() {
-                return "which are raising booster requirements by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are raising booster requirements by ^" + format(tmp[this.layer].buyables[this.id].effect, 3) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Clouds"
             },
             buy(mult) {

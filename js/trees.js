@@ -92,6 +92,7 @@
         let amt = player.t.trees
         if (player.t.treesToGet.gte(player.t.trees)) amt = player.t.treesToGet
         player.t.doomSoftcap = player.t.doomSoftcap.div(amt.div(player.t.doomSoftcapStart).add(1).log(player.t.doomSoftcapStart).pow(doomWeaken).add(1))
+        if (hasUpgrade("depth2", 104)) player.t.doomSoftcap = player.t.doomSoftcap.max(0.01)
 
         // APPLY DOOM SOFTCAP
         if (player.t.treesToGet.gt(player.t.doomSoftcapStart)) player.t.treesToGet = player.t.treesToGet.div(player.t.doomSoftcapStart).pow(player.t.doomSoftcap).mul(player.t.doomSoftcapStart)

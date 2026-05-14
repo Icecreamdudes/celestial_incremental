@@ -12,6 +12,12 @@
         prismsToGet: new Decimal(0),
         bestPrismsInOneReset: new Decimal(0),
 
+        autoPrismaticToggle: false,
+        autoPrismaticInput: new Decimal(0),
+        autoPrismaticAmount: new Decimal(1),
+        autoPrismaticType: false, // False: Amount ; True: Time
+        autoPrismaticTime: new Decimal(0),
+
         fountainSpeed: new Decimal(0),
 
         fountains: {
@@ -109,6 +115,12 @@
     tooltip: "Prismatic",
     color: "#d6ebff",
     update(delta) {
+        // Set auto prismatic values
+        if (player.pri.autoPrismaticInput.gte(1) && !player.pri.autoPrismaticType) player.pri.autoPrismaticAmount = player.pri.autoPrismaticInput
+        if (player.pri.autoPrismaticInput.lt(1) && !player.pri.autoPrismaticType) player.pri.autoPrismaticAmount = new Decimal(1)
+        if (player.pri.autoPrismaticInput.gte(0) && player.pri.autoPrismaticType) player.pri.autoPrismaticAmount = player.pri.autoPrismaticInput
+        if (player.pri.autoPrismaticInput.lt(0) && player.pri.autoPrismaticType) player.pri.autoPrismaticAmount = new Decimal(1)
+
         player.pri.prismsToGet = player.wel.light.add(1).log(10).sub(15).pow_base(1.5)
         if (!hasMilestone("prj", 201)) player.pri.prismsToGet = player.pri.prismsToGet.min(1);
 
@@ -166,43 +178,46 @@
 
         player.wel.fountains[1].completions = new Decimal(0)
         player.wel.fountains[1].canAddCompletion = false
-        if (player.wel.fountains[1].focused) {
-            player.wel.fountains[1].focused = false
-            player.prj.focused = player.prj.focused.sub(1)
-        }
-        if (player.wel.fountains[1].automated) {
-            player.wel.fountains[1].automated = false
-            player.prj.focused = player.prj.focused.sub(1)
-        }
         player.wel.fountains[2].completions = new Decimal(0)
         player.wel.fountains[2].canAddCompletion = false
-        if (player.wel.fountains[2].focused) {
-            player.wel.fountains[2].focused = false
-            player.prj.focused = player.prj.focused.sub(1)
-        }
-        if (player.wel.fountains[2].automated) {
-            player.wel.fountains[2].automated = false
-            player.prj.focused = player.prj.focused.sub(1)
-        }
         player.wel.fountains[3].completions = new Decimal(0)
         player.wel.fountains[3].canAddCompletion = false
-        if (player.wel.fountains[3].focused) {
-            player.wel.fountains[3].focused = false
-            player.prj.focused = player.prj.focused.sub(1)
-        }
-        if (player.wel.fountains[3].automated) {
-            player.wel.fountains[3].automated = false
-            player.prj.focused = player.prj.focused.sub(1)
-        }
         player.wel.fountains[4].completions = new Decimal(0)
         player.wel.fountains[4].canAddCompletion = false
-        if (player.wel.fountains[4].focused) {
-            player.wel.fountains[4].focused = false
-            player.prj.focused = player.prj.focused.sub(1)
-        }
-        if (player.wel.fountains[4].automated) {
-            player.wel.fountains[4].automated = false
-            player.prj.focused = player.prj.focused.sub(1)
+
+        if (!hasMilestone('prj', 204)) {
+            if (player.wel.fountains[1].focused) {
+                player.wel.fountains[1].focused = false
+                player.prj.focused = player.prj.focused.sub(1)
+            }
+            if (player.wel.fountains[1].automated) {
+                player.wel.fountains[1].automated = false
+                player.prj.focused = player.prj.focused.sub(1)
+            }
+            if (player.wel.fountains[2].focused) {
+                player.wel.fountains[2].focused = false
+                player.prj.focused = player.prj.focused.sub(1)
+            }
+            if (player.wel.fountains[2].automated) {
+                player.wel.fountains[2].automated = false
+                player.prj.focused = player.prj.focused.sub(1)
+            }
+            if (player.wel.fountains[3].focused) {
+                player.wel.fountains[3].focused = false
+                player.prj.focused = player.prj.focused.sub(1)
+            }
+            if (player.wel.fountains[3].automated) {
+                player.wel.fountains[3].automated = false
+                player.prj.focused = player.prj.focused.sub(1)
+            }
+            if (player.wel.fountains[4].focused) {
+                player.wel.fountains[4].focused = false
+                player.prj.focused = player.prj.focused.sub(1)
+            }
+            if (player.wel.fountains[4].automated) {
+                player.wel.fountains[4].automated = false
+                player.prj.focused = player.prj.focused.sub(1)
+            }
         }
     },
     branches: ["wel"],
@@ -383,12 +398,71 @@
             style() {
                 let look = {width: "400px", minHeight: "75px", maxHeight: "75px", borderRadius: "10px"}
                 if (this.canClick()) {
-                    look.backgroundColor = "#d6ebff"
+                    look.backgroundColor = "#a8ffff"
                     look.border = "3px solid #0000003f"
                     look.color = "black"
                 } else {
                     look.background = "#361e1e"
                     look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        "autoPrismaticToggle": {
+            title() {return player.pri.autoPrismaticToggle ? "Auto-Reset: ON" : "Auto-Reset: OFF"},
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                if (player.pri.autoPrismaticToggle) {
+                    player.pri.autoPrismaticToggle = false
+                } else {
+                    player.pri.autoPrismaticToggle = true
+                }
+            },
+            style() {
+                let look = {width: "194px", minHeight: "45.5px", maxHeight: "45.5px", fontSize: "12px", border: "3px solid #0000003f", borderRadius: "0 0 7px 0"}
+                if (player.pri.autoPrismaticToggle) {look.backgroundColor = "#a8ffff"} else {look.backgroundColor = "#4d9999"}
+                return look
+            },
+        },
+        "autoPrismaticAmount": {
+            title() { return "Amount" },
+            canClick() { return player.pri.autoPrismaticType },
+            unlocked() { return true },
+            onClick() {
+                player.pri.autoPrismaticType = false
+            },
+            style() {
+                let look = {width: "95.5px", minHeight: "45.5px", maxHeight: "45.5px", fontSize: "12px", border: "3px solid #0000003f", borderRadius: "0"}
+                if (this.canClick()) {
+                    look.backgroundColor = "#a8ffff"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#335966"
+                    look.border = "3px solid #4d9999"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        "autoPrismaticTime": {
+            title() { return "Time" },
+            canClick() { return !player.pri.autoPrismaticType },
+            unlocked() { return true },
+            onClick() {
+                player.pri.autoPrismaticType = true
+            },
+            style() {
+                let look = {width: "95.5px", minHeight: "45.5px", maxHeight: "45.5px", fontSize: "12px", border: "3px solid #0000003f", borderRadius: "0 7px 0 0"}
+                if (this.canClick()) {
+                    look.backgroundColor = "#a8ffff"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#335966"
+                    look.border = "3px solid #4d9999"
                     look.color = "white"
                 }
                 return look
@@ -422,9 +496,12 @@
             },
             getTimeReq() {
                 let completions = player.pri.fountains[1].completions
-                let s = new Decimal(6)
+                let s = completions.div(8).add(1).pow(4)
 
-                s = s.mul(completions.add(1).pow(2))
+                if (completions.gte(20)) {
+                    s = s.mul(completions.sub(20).pow_base(1.25))
+                }
+                s = s.pow(1.0625).mul(20)
 
                 return s
             },
@@ -596,7 +673,7 @@
             completionEffectPrefix: "x",
             completionEffectSuffix: " Light Well Speed",
             condition() {
-                return player.pri.bestPrismsInOneReset.gte(40)
+                return player.pri.bestPrismsInOneReset.gte(100)
             },
             unlocked() {
                 return player.pri.fountains[2].completions.gt(0) || player.pri.fountains[3].completions.gt(0)
@@ -604,7 +681,7 @@
             getCompletionEffect() {
                 let completions = player.pri.fountains[5].completions
 
-                s = completions.pow(0.8).pow_base(1.2).sub(1).mul(2.5).add(1)
+                s = completions.pow(0.8).pow_base(1.2)
 
                 return s
             },
@@ -616,13 +693,13 @@
                 if (completions.gte(50)) {
                     s = s.pow(1.05)
                 }
-                s = s.pow(1.0625).mul(400)
+                s = s.pow(1.0625).mul(1.8e3)
 
                 return s
             },
             getprismReq() {
                 let completions = player.pri.fountains[5].completions
-                let s = completions.pow_base(1.5).mul(40)
+                let s = completions.pow_base(1.5).mul(50)
 
                 return s.floor()
             },
@@ -660,13 +737,13 @@
                 if (completions.gte(50)) {
                     s = s.pow(1.05)
                 }
-                s = s.pow(1.0625).mul(24)
+                s = s.pow(1.0625).mul(3.6e3)
 
                 return s
             },
             getprismReq() {
                 let completions = player.pri.fountains[6].completions
-                let s = completions.pow_base(2).mul(400)
+                let s = completions.pow_base(2).mul(50)
 
                 return s.floor()
             },
@@ -700,6 +777,8 @@
                         ["blank", "6px", {width: "6px"}],
                         ["style-row", [
                         ]],
+                        ["blank", "25px", {width: "6px"}],
+                        ["clickable", 102],
                     ]
 
                     // Spiral
@@ -770,7 +849,7 @@
                         } else {
                             look[5][1].push(
                                 ["style-column", [
-                                    ["raw-html", "Cone<br><small>Req: +40 Prisms in one reset</small>", {color: "white", fontSize: "16px"}],
+                                    ["raw-html", "Cone<br><small>Req: +100 Prisms in one reset</small>", {color: "white", fontSize: "16px"}],
                                 ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
                             )
                         }
@@ -813,7 +892,31 @@
             ], {display: () => {return hasMilestone("prj", 201) ? "" : "none !important"}}],
         ]],
         ["blank", "15px"],
-        ["clickable", 101],
+        ["style-row", [
+            ["clickable", 101],
+            ["style-row", [
+                ["blank", "3px", {width: "6px"}],
+                ["style-row", [
+                    ["style-column", [
+                        ["blank", "8px"],
+                        ["style-column", [
+                            ["raw-html", () => {return player.pri.autoPrismaticType ? "Auto-Reset Time" : "Auto-Reset Amount"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ], {width: "200px", height: "25px"}],
+                        ["blank", "8px"],
+                        ["style-column", [
+                            ["raw-html", () => {return player.pri.autoPrismaticType ? formatTime(player.pri.autoPrismaticTime) + "/" + formatTime(player.pri.autoPrismaticAmount) : "+" + formatWhole(player.pri.autoPrismaticAmount) + " Prisms"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ], {width: "197px", height: "25px", background: "#4d9999", marginLeft: "3px", borderRadius: "10px 10px 0 0"}],
+                        ["blank", "3px"],
+                        ["text-input", "autoPrismaticInput", {width: "197px", height: "25px", marginLeft: "3px", backgroundColor: "#1a2d33", color: "white", fontSize: "16px", textAlign: "center", border: "0px", borderRadius: "0 0 0 7px", padding: "0px 0px"}],
+                    ], {width: "200px", height: "100px"}],
+                    ["style-column", [
+                        ["row", [["clickable", "autoPrismaticAmount"], ["blank", "3px", {width: "3px"}], ["clickable", "autoPrismaticTime"]]],
+                        ["blank", "3px"],
+                        ["clickable", "autoPrismaticToggle"],
+                    ], {width: "200px", height: "100px"}],
+                ], {width: "400px", height: "100px", backgroundColor: "#335966", borderRadius: "10px"}],
+            ], () => {return {display: hasMilestone("prj", 204) ? "" : "none !important"}}],
+        ]],
         ["blank", "15px"],
         ["style-column", [
             ["microtabs", "stuff", { 'border-width': '0px' }],

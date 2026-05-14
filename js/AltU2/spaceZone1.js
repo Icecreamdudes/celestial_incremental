@@ -59,7 +59,7 @@ addLayer("spaceZone1", {
                 options.fullscreen = true
                 player.subtabs["ir"]['stuff'] = 'Battle'
 
-                arena = new SpaceArena(800, 800);
+                arena = new SpaceArena(800, 800, 3200, 3200);
                 arena.spawnArena();
                 localStorage.setItem('arenaActive', 'true');
 
@@ -84,7 +84,22 @@ addLayer("spaceZone1", {
         ["style-column", [
             ["style-row", [
                 ["style-column", [
-                    ["clickable", "enter"],
+                    ["style-column", [
+                        ["style-column", [
+                            ["raw-html", "Zone 1", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ], {width: "350px", height: "35px", borderBottom: "2px solid #5e4ee6", marginBottom: "10px"}],
+                        ["clickable", "enter"],
+                    ], {width: "397px", height: "147px", background: "#0000003f", borderBottom: "3px solid #5e4ee6"}],
+
+                    ["top-column", [
+                        ["blank", "10px"],
+                        ["style-column", [
+                            ["raw-html", "Properties", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ], {width: "350px", height: "35px", borderBottom: "2px solid #5e4ee6", marginBottom: "10px"}],
+                        ["raw-html", () => {return Decimal.sub(1.1, player.ir.levelScalingReduction).gt(1) ? "<u>Level Scaling" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return Decimal.sub(1.1, player.ir.levelScalingReduction).gt(1) ? formatSimple(Decimal.sub(1.1, player.ir.levelScalingReduction).max(1).sub(1).mul(100)) + "% starting at 20" : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ], {width: "397px", height: "211px", background: "#0000007f", borderBottom: "3px solid #5e4ee6"}],
+
                 ], {width: "397px", height: "363px"}],
                 ["style-column", [], {width: "403px", height: "363px"}],
             ], {width: "800px", height: "363px"}],

@@ -11,49 +11,49 @@
             1: {
                 amount: new Decimal(0),
                 cycleGainMul: new Decimal(1),
-                cycleAddedSpeedDiv: new Decimal(1),
+                cycleSpeedRoot: new Decimal(1),
                 shiftBase: new Decimal(10),
             },
             2: {
                 amount: new Decimal(0),
                 cycleGainMul: new Decimal(1),
-                cycleAddedSpeedDiv: new Decimal(1),
+                cycleSpeedRoot: new Decimal(1),
                 shiftBase: new Decimal(20),
             },
             3: {
                 amount: new Decimal(0),
                 cycleGainMul: new Decimal(1),
-                cycleAddedSpeedDiv: new Decimal(1),
+                cycleSpeedRoot: new Decimal(1),
                 shiftBase: new Decimal(40),
             },
             4: {
                 amount: new Decimal(0),
                 cycleGainMul: new Decimal(1),
-                cycleAddedSpeedDiv: new Decimal(1),
+                cycleSpeedRoot: new Decimal(1),
                 shiftBase: new Decimal(160),
             },
             5: {
                 amount: new Decimal(0),
                 cycleGainMul: new Decimal(1),
-                cycleAddedSpeedDiv: new Decimal(1),
+                cycleSpeedRoot: new Decimal(1),
                 shiftBase: new Decimal(6),
             },
             6: {
                 amount: new Decimal(0),
                 cycleGainMul: new Decimal(1),
-                cycleAddedSpeedDiv: new Decimal(1),
+                cycleSpeedRoot: new Decimal(1),
                 shiftBase: new Decimal(12),
             },
             7: {
                 amount: new Decimal(0),
                 cycleGainMul: new Decimal(1),
-                cycleAddedSpeedDiv: new Decimal(1),
+                cycleSpeedRoot: new Decimal(1),
                 shiftBase: new Decimal(24),
             },
             8: {
                 amount: new Decimal(0),
                 cycleGainMul: new Decimal(1),
-                cycleAddedSpeedDiv: new Decimal(1),
+                cycleSpeedRoot: new Decimal(1),
                 shiftBase: new Decimal(96),
             },
         },
@@ -91,7 +91,7 @@
             let blueshift = player.blu.blueshifts[i]
 
             blueshift.cycleGainMul = blueshift.shiftBase.div(2).pow(blueshift.amount)
-            blueshift.cycleAddedSpeedDiv = blueshift.shiftBase.pow(blueshift.amount)
+            blueshift.cycleSpeedRoot = blueshift.amount.div(2).add(1)
             player.blu.totalBlueshifts = player.blu.totalBlueshifts.add(blueshift.amount)
         }
 
@@ -101,6 +101,39 @@
             player.blu.blueshifts[id].amount = player.blu.blueshifts[id].amount.add(1)
         }
         layers.pri.prismReset(false)
+
+        if (player.wel.fountains[1].focused) {
+            player.wel.fountains[1].focused = false
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        if (player.wel.fountains[1].automated) {
+            player.wel.fountains[1].automated = false
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        if (player.wel.fountains[2].focused) {
+            player.wel.fountains[2].focused = false
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        if (player.wel.fountains[2].automated) {
+            player.wel.fountains[2].automated = false
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        if (player.wel.fountains[3].focused) {
+            player.wel.fountains[3].focused = false
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        if (player.wel.fountains[3].automated) {
+            player.wel.fountains[3].automated = false
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        if (player.wel.fountains[4].focused) {
+            player.wel.fountains[4].focused = false
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        if (player.wel.fountains[4].automated) {
+            player.wel.fountains[4].automated = false
+            player.prj.focused = player.prj.focused.sub(1)
+        }
 
         player.pri.fountains[1].completions = new Decimal(0)
         player.pri.fountains[1].canAddCompletion = false
@@ -168,6 +201,10 @@
         player.pri.bestPrisms = new Decimal(0)
         player.pri.totalPrisms = new Decimal(4)
         player.pri.bestPrismsInOneReset = new Decimal(0)
+        
+        for (let i = 1; i < Object.keys(player.wel.modules).length + 1; i++) {
+            player.wel.modules[i].bestCompletions = new Decimal(0)
+        }
     },
     branches: ["wel"],
     clickables: {
@@ -273,7 +310,7 @@
                         ["style-column", [
                             ["style-column", [
                                 ["raw-html", 
-                                    "<small>When a fountain's timer gets at or below 0.1s, you can do a blueshift. Blueshifting resets everything prismatic does, as well as all light well cycles. Each blueshift done divides added cycle speed and increases cycle gain for its respective well. You also gain multipliers from total blueshifts done.</small>"
+                                    "<small>When a fountain's timer gets at or below 0.1s, you can do a blueshift. Blueshifting resets everything prismatic does, as well as prisms and the pyramid. Each blueshift done roots cycle speed and increases yield for its respective well. You also gain multipliers from total blueshifts done.</small>"
                                 , {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                             ], {background: "#2f2f80", border: "3px solid #4242b3", borderRadius: "10px", width: "600px", height: "125px", padding: "3px"}],                   
                         ], {background: "#2f2f80", borderRadius: "13px", padding: "3px", width: "612px"}],
@@ -301,7 +338,7 @@
                                 ["style-column", [
                                     ["raw-html", formatWhole(player.blu.blueshifts[1].amount) + " α →", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                     ["raw-html", "(x" + formatWhole(player.blu.blueshifts[1].cycleGainMul) + " α Yield)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
-                                    ["raw-html", "(/" + formatWhole(player.blu.blueshifts[1].cycleAddedSpeedDiv) + " Added α Spd)", {color: "#ffff00", fontSize: "12px", fontFamily: "monospace"}],
+                                    ["raw-html", "(√" + formatSimple(player.blu.blueshifts[1].cycleSpeedRoot) + " α Spd)", {color: "#ffff00", fontSize: "12px", fontFamily: "monospace"}],
                                 ], {border: "3px solid #4d9973", borderRadius: "0 0 10px 10px", width: "144px", height: "60px"}],
                             ], {backgroundColor: "#336659", borderRadius: "13px", width: "150px", padding: "3px"}],
 
@@ -324,7 +361,7 @@
                                 ["style-column", [
                                     ["raw-html", formatWhole(player.blu.blueshifts[2].amount) + " β →", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                     ["raw-html", "(x" + formatWhole(player.blu.blueshifts[2].cycleGainMul) + " β Yield)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
-                                    ["raw-html", "(/" + formatWhole(player.blu.blueshifts[2].cycleAddedSpeedDiv) + " Added β Spd)", {color: "#ffff00", fontSize: "12px", fontFamily: "monospace"}],
+                                    ["raw-html", "(√" + formatSimple(player.blu.blueshifts[2].cycleSpeedRoot) + " β Spd)", {color: "#ffff00", fontSize: "12px", fontFamily: "monospace"}],
                                 ], {border: "3px solid #4d9973", borderRadius: "0 0 10px 10px", width: "144px", height: "60px"}],
                             ], {backgroundColor: "#336659", borderRadius: "13px", width: "150px", padding: "3px"}],
 
@@ -347,7 +384,7 @@
                                 ["style-column", [
                                     ["raw-html", formatWhole(player.blu.blueshifts[3].amount) + " γ →", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                     ["raw-html", "(x" + formatWhole(player.blu.blueshifts[3].cycleGainMul) + " γ Yield)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
-                                    ["raw-html", "(/" + formatWhole(player.blu.blueshifts[3].cycleAddedSpeedDiv) + " Added γ Spd)", {color: "#ffff00", fontSize: "12px", fontFamily: "monospace"}],
+                                    ["raw-html", "(√" + formatSimple(player.blu.blueshifts[3].cycleSpeedRoot) + " γ Spd)", {color: "#ffff00", fontSize: "12px", fontFamily: "monospace"}],
                                 ], {border: "3px solid #4d9973", borderRadius: "0 0 10px 10px", width: "144px", height: "60px"}],
                             ], {backgroundColor: "#336659", borderRadius: "13px", width: "150px", padding: "3px"}],
 
@@ -370,7 +407,7 @@
                                 ["style-column", [
                                     ["raw-html", formatWhole(player.blu.blueshifts[4].amount) + " δ →", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                     ["raw-html", "(x" + formatWhole(player.blu.blueshifts[4].cycleGainMul) + " δ Yield)", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
-                                    ["raw-html", "(/" + formatWhole(player.blu.blueshifts[4].cycleAddedSpeedDiv) + " Added δ Spd)", {color: "#ffff00", fontSize: "12px", fontFamily: "monospace"}],
+                                    ["raw-html", "(√" + formatSimple(player.blu.blueshifts[4].cycleSpeedRoot) + " δ Spd)", {color: "#ffff00", fontSize: "12px", fontFamily: "monospace"}],
                                 ], {border: "3px solid #4d9973", borderRadius: "0 0 10px 10px", width: "144px", height: "60px"}],
                             ], {backgroundColor: "#336659", borderRadius: "13px", width: "150px", padding: "3px"}],
 
@@ -392,5 +429,5 @@
         ["raw-html", () => { return "You have <h3>" + format(player.wel.light) + "</h3> light." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && hasMilestone("prj", 301) || true}
+    layerShown() { return player.startedGame == true && hasMilestone("prj", 301)}
 })

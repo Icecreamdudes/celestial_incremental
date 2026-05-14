@@ -59,7 +59,7 @@ addLayer("spaceZone2", {
                 options.fullscreen = true
                 player.subtabs["ir"]['stuff'] = 'Battle'
 
-                arena = new SpaceArena(800, 800);
+                arena = new SpaceArena(800, 800, 3200, 3200);
                 arena.spawnArena();
                 localStorage.setItem('arenaActive', 'true');
 
@@ -73,7 +73,7 @@ addLayer("spaceZone2", {
                 player.ir.ufoFought = false
                 player.ir.iriditeFought = false
             },
-            style: {width: "350px", minHeight: "75px", color: "white", background: "radial-gradient(#64078f, black)", border: "3px solid #5e4ee6", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"},
+            style: {width: "350px", minHeight: "75px", color: "white", background: "radial-gradient(#64078f, black)", border: "3px solid #904ee6", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"},
         },
     },
     upgrades: {

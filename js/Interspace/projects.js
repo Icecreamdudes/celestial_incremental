@@ -96,6 +96,7 @@
         if (hasUpgrade("wel", 21)) player.prj.maxFocused = player.prj.maxFocused.add(1);
         if (hasUpgrade("wel", 24)) player.prj.maxFocused = player.prj.maxFocused.add(1);
         if (hasUpgrade("wel", 31)) player.prj.maxFocused = player.prj.maxFocused.add(1);
+        if (hasMilestone("prj", 205)) player.prj.maxFocused = player.prj.maxFocused.add(1);
 
         player.prj.totalProjectLevels = player.prj.modules[1].completions
         .add(player.prj.modules[2].completions)
@@ -577,7 +578,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock auto-prismatic. Uncap light fountain bulk. Replace arrow effect.</small>" },
+            effectDescription() { return "<small>Unlock auto-prismatic. Retain focus on prismatic.</small>" },
             cycleReq() { return new Decimal(4) },
             projectId() { return 2 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) },
@@ -1056,7 +1057,7 @@
             },
             getTimeCapsuleReq() {
                 let completions = player.prj.modules[2].completions
-                let s = completions.add(1).mul(completions).mul(2.5)
+                let s = completions.add(1).mul(completions).mul(5)
                 
                 if (completions.gte(5)) {
                     s = s.add(completions.sub(5).pow(1.5)).mul(10)
@@ -1067,7 +1068,7 @@
             getStatReq() {
                 let completions = player.prj.modules[2].completions
                 if (completions.eq(0)) return new Decimal(0);
-                let s = new Decimal(10)
+                let s = new Decimal(6)
 
                 s = s.mul(completions.sub(1).pow_base(completions.add(1).div(5).ceil().pow_base(10)))
 
@@ -1084,7 +1085,7 @@
         },
         3: {
             title: "Blueshift",
-            completionEffectStat: "Punchcard XP",
+            completionEffectStat: "Starmetal Essence",
             statReqName: "Blueshifts",
             statReqLocation() {return player.wel.modules[4]},
             statReqInternalName: "completions",
@@ -1108,7 +1109,7 @@
             },
             getTimeCapsuleReq() {
                 let completions = player.prj.modules[3].completions
-                let s = completions.add(1).pow(3).mul(100)
+                let s = completions.add(1).pow(3).mul(200)
                 
                 if (completions.gte(5)) {
                     s = s.add(completions.sub(5).pow(3)).mul(10)

@@ -238,7 +238,7 @@
             // CYCLE SPEED
             player.wel.modules[i].timeSpeed = player.wel.lightWellSpeed
 
-            player.wel.modules[i].timeSpeed = player.wel.modules[i].timeSpeed.sub(1).div(player.blu.blueshifts[i].cycleAddedSpeedDiv).add(1)
+            player.wel.modules[i].timeSpeed = player.wel.modules[i].timeSpeed.root(player.blu.blueshifts[i].cycleSpeedRoot)
 
             if (player.wel.modules[i].timeSpeed.gte(player.wel.modules[i].maxTime.mul(10))) player.wel.modules[i].timeSpeed = player.wel.modules[i].maxTime.mul(10);
 
@@ -682,17 +682,17 @@
         },
         33: {
             unlocked() { return hasUpgrade("wel", 31) && hasUpgrade("wel", 32) },
-            condition() { return player.pri.bestPrisms.gte(1e3) },
+            condition() { return player.pri.bestPrisms.gte(300) },
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Project speed affects prism wells at a rate equal to the light well effect softcap.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "???.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
-                    s += "???</h2><br><br><h3>Req: 1,000 Prisms</h3>"
+                    s += "???</h2><br><br><h3>Req: 300 Prisms</h3>"
                 }
                 return s
             },
-            cost: new Decimal(1e26),
+            cost: new Decimal(1e28),
             currencyLocation() { return player.wel },
             currencyDisplayName: "Light",
             currencyInternalName: "light",
@@ -720,17 +720,17 @@
         },
         34: {
             unlocked() { return hasUpgrade("wel", 33) },
-            condition() { return player.wel.modules[1].maxTime.div(player.wel.modules[1].timeSpeed).lte(0.1) },
+            condition() { return hasMilestone("prj", 205) && player.wel.modules[1].maxTime.div(player.wel.modules[1].timeSpeed).lte(0.1) },
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Unlock the third project and double light well cycles.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Unlock the third project.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
-                    s += "???</h2><br><br><h3>Req: 0.1s Light Well cycle timer</h3>"
+                    s += "???</h2><br><br><h3>Req: Prismatic project level 5 and 0.1s Light Well cycle timer</h3>"
                 }
                 return s
             },
-            cost: new Decimal(1e29),
+            cost: new Decimal(1e32),
             currencyLocation() { return player.wel },
             currencyDisplayName: "Light",
             currencyInternalName: "light",
@@ -1468,7 +1468,7 @@
             title: "Light Fountain II",
             completionEffectStat: "Light",
             condition() {
-                return player.wel.bestLight.gte(1.5e3)
+                return player.wel.bestLight.gte(1.5e3) || hasMilestone('prj', 204)
             },
             canAuto() {
                 return player.pri.totalPrisms.gte(2)
@@ -1517,7 +1517,7 @@
             title: "Cycle Fountain",
             completionEffectStat: "Light Well Cycles",
             condition() {
-                return player.wel.bestLight.gte(5e4)
+                return player.wel.bestLight.gte(5e4) || hasMilestone('prj', 204)
             },
             canAuto() {
                 return player.pri.totalPrisms.gte(3)
@@ -1566,7 +1566,7 @@
             title: "Speed Fountain",
             completionEffectStat: "Light Well Speed",
             condition() {
-                return player.wel.bestLight.gte(1.5e6)
+                return player.wel.bestLight.gte(1.5e6) || hasMilestone('prj', 204)
             },
             canAuto() {
                 return player.pri.totalPrisms.gte(4)
@@ -1574,7 +1574,7 @@
             getCompletionEffect() {
                 let completions = player.wel.fountains[4].completions
 
-                let s = completions.mul(0.25).add(1)
+                let s = completions.mul(0.2).add(1)
 
                 return s
             },

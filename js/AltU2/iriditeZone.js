@@ -1,15 +1,11 @@
-addLayer("spaceZone2", {
-    name: "Zone II", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "II", // This appears on the layer's node. Default is the id with the first letter capitalized
+addLayer("iriditeZone", {
+    name: "Iridite Zone", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "✦", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "A2",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-
-        spaceRocks: new Decimal(0),
-        spaceGems: new Decimal(0),
-        zone2Mult: new Decimal(1),
 
         highestCombo: new Decimal(0),
         comboEffect: new Decimal(1),
@@ -32,7 +28,7 @@ addLayer("spaceZone2", {
     automate() {},
     nodeStyle() {
         let str = {
-            background: "radial-gradient(#64078f, black)",
+            background: "radial-gradient(#151230)",
             backgroundOrigin: "border-box",
             borderColor: "#904ee6",
             color: "white",
@@ -42,20 +38,20 @@ addLayer("spaceZone2", {
         if (player.subtabs["ir"]["spaceStages"] == "spaceZone2") str.outline = "3px solid #fff"
         return str
     },
-    tooltip: "Zone II",
-    branches: ["spaceZone1"],
+    tooltip: "Iridite Zone",
+    branches: ["spaceZone2"],
     color: "#904ee6",
     update(delta) {
         
     },
     clickables: {
         "enter": {
-            title: "<h2>Enter Zone II",
+            title: "<h2>Enter Iridite Zone",
             canClick: true,
             unlocked: true,
             onClick() {
                 player.ir.inBattle = true
-                player.ir.battleStage = "zone2"
+                player.ir.battleStage = "iridite"
                 options.fullscreen = true
                 player.subtabs["ir"]['stuff'] = 'Battle'
 
@@ -73,7 +69,7 @@ addLayer("spaceZone2", {
                 player.ir.ufoFought = false
                 player.ir.iriditeFought = false
             },
-            style: {width: "350px", minHeight: "75px", color: "white", background: "radial-gradient(#64078f, black)", border: "3px solid #904ee6", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"},
+            style: {width: "350px", minHeight: "75px", color: "white", background: "radial-gradient(#151230)", border: "3px solid white", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"},
         },
     },
     upgrades: {

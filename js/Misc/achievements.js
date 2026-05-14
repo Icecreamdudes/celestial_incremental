@@ -656,13 +656,12 @@ addLayer("achievements", {
             unlocked: true,
         },
         1209: {
-            name: "Lunch Break",
+            name: "Taking Shape",
             image: "resources/achievements/12_00.png",
-            tooltip: "<h3>Lunch Break</h3><hr style='margin-bottom:4px'>Do a prism reset without<br>focusing on light fountains.<br><br>Reward: +2 project speed,<br>additive to all other bonuses.",
+            tooltip: "<h3>Taking Shape</h3><hr style='margin-bottom:4px'>Get at least 1 ↻ for each<br>of the first six pyramid<br>fountains.",
             color: "#994d99",
             complete() {return false},
             unlocked: true,
-            marked: true,
         },
         1210: {
             name: "Faster than Light",

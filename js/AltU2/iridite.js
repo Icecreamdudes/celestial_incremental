@@ -141,6 +141,7 @@ addLayer("ir", {
 
         inBattle: false,
         battleStage: "zone1",
+        comboScalingReduction: new Decimal(1.1),
 
         shipHealth: new Decimal(0),
         shipHealthMax: new Decimal(100),
@@ -998,7 +999,7 @@ addLayer("ir", {
                 options.fullscreen = true
                 player.subtabs["ir"]['stuff'] = 'Battle'
 
-                arena = new SpaceArena(1200, 600);
+                arena = new SpaceArena(800, 800, 3200, 3200);
                 arena.spawnArena();
                 localStorage.setItem('arenaActive', 'true');
 
@@ -1490,6 +1491,14 @@ addLayer("ir", {
                 unlocked: true,
                 embedLayer: 'spaceZone2',
             },
+            "iriditeZone": {
+                unlocked: true,
+                embedLayer: 'iriditeZone',
+            },
+            "spaceZone3": {
+                unlocked: true,
+                embedLayer: 'spaceZone3',
+            },
         },
         stuff: {
             "Main": {
@@ -1562,45 +1571,88 @@ addLayer("ir", {
                         ["style-column", [
                             ["centered-draggable-scroll-row", [
                                 ["style-row", [
-                                    ["tooltip-row", [["category-button", ["I", "stages", "spaceZone1"], () => {
-                                        let str = {
-                                            width: "75px",
-                                            height: "75px",
-                                            background: "radial-gradient(#37078f, black)",
-                                            border: "4px solid #5e4ee6",
-                                            borderRadius: "50%",
-                                            color: "white",
-                                            fontSize: "24px",
-                                            textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
-                                        }
-                                        if (player.subtabs["ir"]["stages"] == "spaceZone1") str.outline = "3px solid #fff"
-                                        return str
-                                    }],
-                                    ["raw-html", () => {return "<div class='bottomTooltip'>Zone I</div>"}],
-                                ], {width: "0", height: "0", position: "relative", left: "0", top: "0px"}],
-                                    ["tooltip-row", [["category-button", ["II", "stages", "spaceZone2"], () => {
-                                        let str = {
-                                            left: "100px",
-                                            top: "0px",
-                                            width: "75px",
-                                            height: "75px",
-                                            background: "radial-gradient(#64078f, black)",
-                                            border: "4px solid #904ee6",
-                                            borderRadius: "50%",
-                                            color: "white",
-                                            fontSize: "24px",
-                                            textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
-                                        }
-                                        if (player.subtabs["ir"]["stages"] == "spaceZone2") str.outline = "3px solid #fff"
-                                        return str
-                                    }], 
-                                    ["raw-html", () => {return "<div class='bottomTooltip'>Zone II</div>"}],
-                                ], {width: "0", height: "0", position: "relative", left: "100px", top: "0px"}],
+
+                                    // Zone I
+                                    ["tooltip-row", [
+                                        ["category-button", ["I", "stages", "spaceZone1"], () => {
+                                            let str = {
+                                                width: "75px",
+                                                height: "75px",
+                                                background: "radial-gradient(#37078f, black)",
+                                                border: "4px solid #5e4ee6",
+                                                borderRadius: "50%",
+                                                color: "white",
+                                                fontSize: "32px",
+                                                textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
+                                            }
+                                            if (player.subtabs["ir"]["stages"] == "spaceZone1") str.outline = "3px solid #fff"
+                                            return str
+                                        }],
+                                        ["raw-html", () => {return "<div class='bottomTooltip'>Zone I</div>"}],
+                                    ], {width: "0", height: "0", position: "relative", left: "0", top: "0px"}],
+
+                                    // Zone II
+                                    ["tooltip-row", [
+                                        ["category-button", ["II", "stages", "spaceZone2"], () => {
+                                            let str = {
+                                                width: "75px",
+                                                height: "75px",
+                                                background: "radial-gradient(#64078f, black)",
+                                                border: "4px solid #904ee6",
+                                                borderRadius: "50%",
+                                                color: "white",
+                                                fontSize: "32px",
+                                                textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
+                                            }
+                                            if (player.subtabs["ir"]["stages"] == "spaceZone2") str.outline = "3px solid #fff"
+                                            return str
+                                        }], 
+                                        ["raw-html", () => {return "<div class='bottomTooltip'>Zone II</div>"}],
+                                    ], {width: "0", height: "0", position: "relative", left: "100px", top: "0px"}],
+
+                                    // Iridite Zone
+                                    ["tooltip-row", [
+                                        ["category-button", ["✦", "stages", "iriditeZone"], () => {
+                                            let str = {
+                                                width: "75px",
+                                                height: "75px",
+                                                background: "radial-gradient(#151230)",
+                                                border: "4px solid white",
+                                                borderRadius: "50%",
+                                                color: "white",
+                                                fontSize: "32px",
+                                                textShadow: "0px 0px 5px #151230",
+                                            }
+                                            if (player.subtabs["ir"]["stages"] == "iriditeZone") str.outline = "3px solid #fff"
+                                            return str
+                                        }], 
+                                        ["raw-html", () => {return "<div class='bottomTooltip'>Iridite Zone</div>"}],
+                                    ], {width: "0", height: "0", position: "relative", left: "200px", top: "0px"}],
+
+                                    // Zone III
+                                    ["tooltip-row", [
+                                        ["category-button", ["III", "stages", "spaceZone3"], () => {
+                                            let str = {
+                                                width: "75px",
+                                                height: "75px",
+                                                background: "radial-gradient(#8f0749, black)",
+                                                border: "4px solid #e64ebd",
+                                                borderRadius: "50%",
+                                                color: "white",
+                                                fontSize: "32px",
+                                                textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
+                                            }
+                                            if (player.subtabs["ir"]["stages"] == "spaceZone3") str.outline = "3px solid #fff"
+                                            return str
+                                        }], 
+                                        ["raw-html", () => {return "<div class='bottomTooltip'>Zone III</div>"}],
+                                    ], {width: "0", height: "0", position: "relative", left: "100px", top: "-100px"}],
+
                                 ], {width: "1044px", height: "1044px", backgroundImage: "url(resources/ui/spaceBattle/map.png)"}],
                             ], {width: "400px", height: "360px", borderLeft: "3px solid #5e4ee6", borderBottom: "3px solid #5e4ee6", flexFlow: "column"}],
                             ["blank", "357px"],
                         ], {width: "403px", height: "720px"}],
-                    ], {width: "800px", height: "720px", background: "radial-gradient(circle, #151230 0%, #37078f 200%)", border: "3px solid #5e4ee6", borderRadius: "0 0 0 30px"}],
+                    ], {width: "800px", height: "720px", background: "radial-gradient(circle, #151230 0%, #37078f 200%)", border: "3px solid #5e4ee6", borderRadius: "0 0 30px 30px"}],
                 ],
             },
             "pylon": {
@@ -1851,9 +1903,11 @@ class SpaceArena {
             this._onWindowResize = null;
         }
     }
-    constructor(width, height) {
-        this.width = width;
-        this.height = height;
+    constructor(canvasWidth, canvasHeight, arenaWidth, arenaHeight) {
+        this.width = arenaWidth;
+        this.height = arenaHeight;
+        this.canvasWidth = canvasWidth;
+        this.canvasHeight = canvasHeight;
         this.arenaDiv = null;
 
         // load wing GIF for Iridite (200x200). keep a loaded flag so draw can choose fallback.
@@ -1867,8 +1921,8 @@ class SpaceArena {
         // Ship types
         if (player.ir.shipType == 1) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 angle: 0,
                 velocity: 0,
                 angularVelocity: 0,
@@ -1886,8 +1940,8 @@ class SpaceArena {
         this.shipHitInvuln = 0;
         if (player.ir.shipType == 2) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 angle: 0,
                 velocity: 0,
                 angularVelocity: 0,
@@ -1903,8 +1957,8 @@ class SpaceArena {
         }
         if (player.ir.shipType == 3) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 vx: 0,
                 vy: 0,
                 radius: 30,
@@ -1931,8 +1985,8 @@ class SpaceArena {
         }
         if (player.ir.shipType == 4) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 angle: 0,
                 velocity: 0,
                 angularVelocity: 0,
@@ -1948,8 +2002,8 @@ class SpaceArena {
         }
         if (player.ir.shipType == 5) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 angle: 0,
                 vx: 0,
                 vy: 0,
@@ -1968,8 +2022,8 @@ class SpaceArena {
         }
         if (player.ir.shipType == 6) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 angle: 0,
                 vx: 0,
                 vy: 0,
@@ -1988,8 +2042,8 @@ class SpaceArena {
         }
         if (player.ir.shipType == 7) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 vx: 0,
                 vy: 0,
                 radius: 20,
@@ -2003,22 +2057,22 @@ class SpaceArena {
                 collisionDamage: 10,
             };
             this.lastDashClick = 0;
-            this.dashCooldown = 2000; // 2 seconds in ms
+            this.dashCooldown = 1000; // 1 seconds in ms
             this.canvasClickListener = (e) => {
                 let now = Date.now();
-                this.dashCooldown = 2000 / this.upgradeEffects.attackSpeed
+                this.dashCooldown = 1000 / this.upgradeEffects.attackSpeed
                 if (now - this.lastDashClick < this.dashCooldown) return;
                 this.lastDashClick = now;
                 let rect = this.canvas.getBoundingClientRect();
-                let mx = e.clientX - rect.left;
-                let my = e.clientY - rect.top;
+                let mx = e.clientX + this.ship.x - (canvasWidth / 2) - rect.left;
+                let my = e.clientY + this.ship.y - (canvasHeight / 2) - rect.top;
                 this.ship.dashTarget = { x: mx, y: my };
             };
         }
         if (player.ir.shipType == 8) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 angle: 0,
                 velocity: 0,
                 angularVelocity: 0,
@@ -2040,8 +2094,8 @@ class SpaceArena {
         }
         if (player.ir.shipType == 9) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 angle: 0,
                 velocity: 0,
                 angularVelocity: 0,
@@ -2057,8 +2111,8 @@ class SpaceArena {
         }
         if (player.ir.shipType == 10) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 angle: 0,
                 velocity: 0,
                 angularVelocity: 0,
@@ -2076,8 +2130,8 @@ class SpaceArena {
         }
         if (player.ir.shipType == 0) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 angle: 0,
                 velocity: 0,
                 angularVelocity: 0,
@@ -2100,7 +2154,7 @@ class SpaceArena {
         this.running = false;
         this.loop = null;
         this.asteroidSpawnTimer = 0;
-        this.maxAsteroids = 6;
+        this.maxAsteroids = 10;
         this.lootFlashes = [];
         this.upgradeChoiceActive = false;
         this.upgradeChoices = [];
@@ -2128,7 +2182,7 @@ class SpaceArena {
                 xpDrop: [10, 15],
                 draw: (ctx, enemy) => {
                     ctx.save();
-                    ctx.translate(400 - this.ship.x, 400 - this.ship.y);
+                    ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
@@ -2161,7 +2215,7 @@ class SpaceArena {
                 xpDrop: [6, 10],
                 draw: (ctx, enemy) => {
                     ctx.save();
-                    ctx.translate(400 - this.ship.x, 400 - this.ship.y);
+                    ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
@@ -2194,7 +2248,7 @@ class SpaceArena {
                 xpDrop: [18, 26],
                 draw: (ctx, enemy) => {
                     ctx.save();
-                    ctx.translate(400 - this.ship.x, 400 - this.ship.y);
+                    ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
@@ -2228,7 +2282,7 @@ class SpaceArena {
                 xpDrop: [12, 18],
                 draw: (ctx, enemy) => {
                     ctx.save();
-                    ctx.translate(400 - this.ship.x, 400 - this.ship.y);
+                    ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
@@ -2260,7 +2314,7 @@ class SpaceArena {
                 xpDrop: [14, 22],
                 draw: (ctx, enemy) => {
                     ctx.save();
-                    ctx.translate(400 - this.ship.x, 400 - this.ship.y);
+                    ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
@@ -2293,7 +2347,7 @@ class SpaceArena {
                 xpDrop: [16, 24],
                 draw: (ctx, enemy) => {
                     ctx.save();
-                    ctx.translate(400 - this.ship.x, 400 - this.ship.y);
+                    ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
@@ -2325,7 +2379,7 @@ class SpaceArena {
                 xpDrop: [8, 14],
                 draw: (ctx, enemy) => {
                     ctx.save();
-                    ctx.translate(400 - this.ship.x, 400 - this.ship.y);
+                    ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
@@ -2356,7 +2410,7 @@ class SpaceArena {
                 xpDrop: [200, 300],
                 draw: (ctx, enemy) => {
                     ctx.save();
-                    ctx.translate(400 - this.ship.x, 400 - this.ship.y);
+                    ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                     ctx.translate(enemy.x, enemy.y);
                     // UFO body
                     ctx.beginPath();
@@ -2398,7 +2452,7 @@ class SpaceArena {
                 draw: (ctx, enemy) => {
                     ctx.save();
                     ctx.translate(enemy.x, enemy.y);
-                    ctx.translate(400 - this.ship.x, 400 - this.ship.y);
+                    ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
 
                     // wing flap drive
                     const phase = (enemy.wingPhase || 0);
@@ -2558,8 +2612,8 @@ class SpaceArena {
             position: 'fixed',
             left: '50%',
             top: '50%',
-            width: this.width + 'px',
-            height: this.height + 'px',
+            width: this.canvasWidth + 'px',
+            height: this.canvasHeight + 'px',
             transform: `translate(-50%, -50%)`,
             backgroundImage: "url(resources/ui/spaceBattle/" + player.ir.battleStage + ".png)",
             border: '3px solid #5e4ee6',
@@ -2572,8 +2626,8 @@ class SpaceArena {
         document.body.appendChild(this.arenaDiv);
 
         this.canvas = document.createElement('canvas');
-        this.canvas.width = this.width;
-        this.canvas.height = this.height;
+        this.canvas.width = this.canvasWidth;
+        this.canvas.height = this.canvasHeight;
         this.arenaDiv.appendChild(this.canvas);
         this.ctx = this.canvas.getContext('2d');
 
@@ -3386,16 +3440,15 @@ class SpaceArena {
                 this.ship.x += this.ship.vx;
                 this.ship.y += this.ship.vy;
 
-                // Keep inside bounds (respect ship radius if set)
-                const r = this.ship.radius || 12;
-                if (this.ship.x < r) this.ship.x = r;
-                if (this.ship.x > this.width - r) this.ship.x = this.width - r;
-                if (this.ship.y < r) this.ship.y = r;
-                if (this.ship.y > this.height - r) this.ship.y = this.height - r;
+                // Wrap ship around arena edges
+                if (this.ship.x < 0) this.ship.x = this.width;
+                if (this.ship.x > this.width) this.ship.x = 0;
+                if (this.ship.y < 0) this.ship.y = this.height;
+                if (this.ship.y > this.height) this.ship.y = 0;
 
                 // Rotation purely visual: smoothly face the mouse (won't affect movement)
                 if (typeof this.mouseX === "number" && typeof this.mouseY === "number") {
-                    let desired = Math.atan2(this.mouseY - this.ship.y, this.mouseX - this.ship.x);
+                    let desired = Math.atan2(this.mouseY - 400, this.mouseX - 400);
                     let diff = desired - this.ship.angle;
                     while (diff > Math.PI) diff -= 2 * Math.PI;
                     while (diff < -Math.PI) diff += 2 * Math.PI;
@@ -5275,7 +5328,7 @@ class SpaceArena {
         // Draw ship
         if (player.ir.shipType == 3) {
             this.ctx.save();
-            ctx.translate(400, 400);
+            ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
             this.ctx.beginPath();
             this.ctx.arc(this.ship.x, this.ship.y, this.ship.radius, 0, 2 * Math.PI);
             this.ctx.fillStyle = "#a7a7a7ff";
@@ -5286,7 +5339,7 @@ class SpaceArena {
         }
         if (player.ir.shipType == 1) {
             this.ctx.save();
-            this.ctx.translate(400, 400);
+            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
             this.ctx.rotate(this.ship.angle);
             this.ctx.beginPath();
             this.ctx.moveTo(20, 0);
@@ -5300,7 +5353,7 @@ class SpaceArena {
         }
         if (player.ir.shipType == 2) {
             this.ctx.save();
-            this.ctx.translate(400, 400);
+            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
             this.ctx.rotate(this.ship.angle);
             this.ctx.beginPath();
             this.ctx.moveTo(20, 0);
@@ -5315,7 +5368,7 @@ class SpaceArena {
         if (player.ir.shipType == 4) {
             // Sniper-style ship: long barrel and scope
             this.ctx.save();
-            this.ctx.translate(400, 400);
+            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
             this.ctx.rotate(this.ship.angle);
             // Body
             this.ctx.fillStyle = "#dbefff";
@@ -5342,7 +5395,7 @@ class SpaceArena {
         if (player.ir.shipType == 5) {
             // Small UFO (player ship) — visual match to miniboss but smaller & different color
             this.ctx.save();
-            this.ctx.translate(400, 400);
+            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
             this.ctx.rotate(this.ship.angle || 0);
             const r = this.ship.radius || 12;
             const bodyR = r * 1.4;
@@ -5379,7 +5432,7 @@ class SpaceArena {
         }
         if (player.ir.shipType == 6) {
             this.ctx.save();
-            this.ctx.translate(400, 400);
+            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
             this.ctx.rotate(this.ship.angle);
  
             this.ctx.beginPath();
@@ -5404,7 +5457,7 @@ class SpaceArena {
         }
         if (player.ir.shipType == 7) {
             this.ctx.save();
-            this.ctx.translate(400, 400);
+            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
             this.ctx.rotate(this.ship.angle);
  
             // BODY
@@ -5428,7 +5481,7 @@ class SpaceArena {
         }
         if (player.ir.shipType == 8) {
             this.ctx.save();
-            this.ctx.translate(400, 400);
+            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
             this.ctx.rotate(this.ship.angle);
 
             // Miniature Iridite visuals
@@ -5515,7 +5568,7 @@ class SpaceArena {
             const thickness = windup > elapsed ? (maxThickness * (elapsed / windup)) : (maxThickness * (0.6 + 0.4 * progress));
 
             this.ctx.save();
-            this.ctx.translate(400, 400);
+            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
             this.ctx.rotate(angle);
             this.ctx.globalCompositeOperation = "lighter";
             let g = this.ctx.createLinearGradient(0, -thickness * 2, beamLen, thickness * 2);
@@ -5536,7 +5589,7 @@ class SpaceArena {
         // Evolver ship (shipType 9) — triangle shape with blue-purple gradient and dividing line
         if (player.ir.shipType == 9) {
             this.ctx.save();
-            this.ctx.translate(400, 400);
+            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
             this.ctx.rotate(this.ship.angle);
             let lenShip = Math.max(18, this.ship.radius || 20);
 
@@ -5572,7 +5625,7 @@ class SpaceArena {
         }
         if (player.ir.shipType == 10) {
             this.ctx.save();
-            this.ctx.translate(400, 400);
+            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
             this.ctx.rotate(this.ship.angle);
             this.ctx.strokeStyle = "#30bf78";
             this.ctx.fillStyle = "#30bf78";
@@ -5663,7 +5716,7 @@ class SpaceArena {
             if (type && type.draw) {
                 type.draw(this.ctx, enemy);
                 this.ctx.save();
-                this.ctx.translate(400 - this.ship.x, 400 - this.ship.y);
+                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                 this.ctx.fillStyle = "#151230";
                 this.ctx.fillRect(enemy.x - enemy.radius - 2, enemy.y - enemy.radius - 20, enemy.radius * 2 + 4, 13);
                 let barWidth = enemy.radius * 2 * (enemy.health / enemy.maxHealth);
@@ -5879,7 +5932,7 @@ class SpaceArena {
                 // Draw a large, spinning metallic sword
                 this.ctx.save();
                 this.ctx.translate(bullet.x, bullet.y);
-                this.ctx.translate(400 - this.ship.x, 400 - this.ship.y);
+                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                 this.ctx.rotate(bullet.rot || 0);
 
                 let r = bullet.radius || 80;
@@ -5932,7 +5985,7 @@ class SpaceArena {
                 // draw mini-star glyph for thematic boss/projectiles
                 this.ctx.save();
                 this.ctx.translate(bullet.x, bullet.y);
-                this.ctx.translate(400 - this.ship.x, 400 - this.ship.y);
+                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                 let ang = Math.atan2(bullet.vy, bullet.vx || 0);
                 this.ctx.rotate(ang);
                 // determine font size; giant bullets are significantly larger
@@ -5961,7 +6014,7 @@ class SpaceArena {
                 this.ctx.restore();
             } else {
                 this.ctx.save();
-                this.ctx.translate(400 - this.ship.x, 400 - this.ship.y);
+                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                 this.ctx.beginPath();
                 let r = bullet.fromEnemy ? 6 : ((player.ir.shipType == 2 || player.ir.shipType == 10) ? 10 : 4);
                 // larger radius for homing enemy projectiles
@@ -6049,7 +6102,7 @@ class SpaceArena {
             // Evolver mini shard rendering (small blue bullet)
             if (bullet.evolverMini) {
                 this.ctx.save();
-                this.ctx.translate(400 - this.ship.x, 400 - this.ship.y);
+                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                 this.ctx.beginPath();
                 let r = bullet.radius || 4;
                 this.ctx.arc(bullet.x, bullet.y, r, 0, 2 * Math.PI);
@@ -6064,7 +6117,7 @@ class SpaceArena {
             if (bullet.evolverMini) {
                 this.ctx.save();
                 this.ctx.translate(bullet.x, bullet.y);
-                this.ctx.translate(400 - this.ship.x, 400 - this.ship.y);
+                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                 let ang = Math.atan2(bullet.vy, bullet.vx || 0);
                 this.ctx.rotate(ang);
                 let len = Math.min(8, bullet.radius || 6);
@@ -6092,7 +6145,7 @@ class SpaceArena {
             this.ctx.save();
             this.ctx.globalAlpha = asteroid.phased ? 0.3 : 1;
             this.ctx.translate(asteroid.x, asteroid.y);
-            this.ctx.translate(400 - this.ship.x, 400 - this.ship.y);
+            this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
             this.ctx.beginPath();
             let shape = asteroid.shape;
             if (shape && shape.length > 0) {
@@ -6107,7 +6160,7 @@ class SpaceArena {
 
             if (!asteroid.phased) {
                 this.ctx.setTransform(1, 0, 0, 1, 0, 0);
-                this.ctx.translate(400 - this.ship.x, 400 - this.ship.y);
+                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                 this.ctx.fillStyle = "#151230";
                 this.ctx.fillRect(asteroid.x - asteroid.size - 2, asteroid.y - asteroid.size - 20, asteroid.size * 2 + 4, 13);
                 let barWidth = asteroid.size * 2 * (asteroid.health / asteroid.maxHealth);
@@ -6131,7 +6184,7 @@ class SpaceArena {
         // Draw XP orbs
         for (let orb of this.xpOrbs) {
             this.ctx.save();
-            this.ctx.translate(400 - this.ship.x, 400 - this.ship.y);
+            this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
             this.ctx.globalAlpha = 0.8;
             this.ctx.beginPath();
             this.ctx.arc(orb.x, orb.y, 6, 0, 2 * Math.PI);
@@ -6144,7 +6197,7 @@ class SpaceArena {
         for (let i = this.lootFlashes.length - 1; i >= 0; i--) {
             let flash = this.lootFlashes[i];
             this.ctx.save();
-            ctx.translate(400 - this.ship.x, 400 - this.ship.y);
+            ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
             this.ctx.globalAlpha = Math.max(0, flash.timer / 120);
             this.ctx.font = flash.style;
             this.ctx.fillStyle = flash.color;

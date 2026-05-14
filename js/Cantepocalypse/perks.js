@@ -48,7 +48,7 @@
         // KEEP AT LAST
         if (inChallenge("fu", 11) || inChallenge("fu", 12)) player.pr.perkPointsToGet = player.pr.perkPointsToGet.pow(Decimal.mul(0.2, buyableEffect("fu", 88)))
 
-        player.pr.perkPointsChance = new Decimal(0.03)
+        player.pr.perkPointsChance = new Decimal(0.05)
         player.pr.perkPointsChance = player.pr.perkPointsChance.add(buyableEffect("pr", 18))
     },
     clickables: {
@@ -338,7 +338,7 @@
         18: {
             costBase() { return new Decimal(1000) },
             costGrowth() { return new Decimal(10) },
-            purchaseLimit() { return new Decimal(194) },
+            purchaseLimit() { return new Decimal(190) },
             currency() { return player.cp.replicantiPoints},
             pay(amt) { player.cp.replicantiPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.005) },

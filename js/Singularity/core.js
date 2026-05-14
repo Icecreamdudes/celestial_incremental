@@ -697,9 +697,11 @@ addLayer("co", {
         player.rf.upgrades.splice(0, player.rf.upgrades.length)
 
         //     <----     CHECKBACK LAYER     ---->
-        player.cb.xp = new Decimal(0)
-        player.cb.totalxp = new Decimal(4.5)
-        player.cb.level = new Decimal(1)
+        if (!hasUpgrade("s", 30)) {
+            player.cb.xp = new Decimal(0)
+            player.cb.totalxp = new Decimal(4.5)
+            player.cb.level = new Decimal(1)
+        }
         if (!hasMilestone("s", 14)) player.cb.XPBoost = new Decimal(1)
 
         if (!hasMilestone("s", 15)) {
@@ -858,20 +860,22 @@ addLayer("co", {
         }
 
         //     <----     CANTE LAYER     ---->
-        player.ca.replicanti = new Decimal(1)
-        player.ca.replicantiMult = new Decimal(1)
-        player.ca.replicateChance = new Decimal(0)
+        if (!hasUpgrade("s", 30)) {
+            player.ca.replicanti = new Decimal(1)
+            player.ca.replicantiMult = new Decimal(1)
+            player.ca.replicateChance = new Decimal(0)
 
-        player.ca.galaxyDust = new Decimal(0)
-        player.ca.galaxyDustToGet = new Decimal(0)
+            player.ca.galaxyDust = new Decimal(0)
+            player.ca.galaxyDustToGet = new Decimal(0)
 
-        if (!hasMilestone("s", 18)) player.ca.canteCores = new Decimal(0)
-        if (!hasMilestone("s", 18)) player.ca.canteEnergy = new Decimal(0)
-        player.ca.replicantiGalaxies = new Decimal(0)
-        if (!hasMilestone("s", 18)) player.ca.rememberanceCores = new Decimal(0)
-        
-        for (let i in player.ca.buyables) {
-            player.ca.buyables[i] = new Decimal(0)
+            if (!hasMilestone("s", 18)) player.ca.canteCores = new Decimal(0)
+            if (!hasMilestone("s", 18)) player.ca.canteEnergy = new Decimal(0)
+            player.ca.replicantiGalaxies = new Decimal(0)
+            if (!hasMilestone("s", 18)) player.ca.rememberanceCores = new Decimal(0)
+
+            for (let i in player.ca.buyables) {
+                player.ca.buyables[i] = new Decimal(0)
+            }
         }
 
         //     <----     A1 STUFF     ---->
@@ -959,10 +963,12 @@ addLayer("co", {
         player.oi.linkingPower = [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0)]
         player.oi.linkingPowerPerSecond = [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0)]
 
-        player.oi.protoMemories = new Decimal(0)
-        player.oi.protoMemorySeconds = new Decimal(0)
-        player.oi.protoMemorySecondsToGet = new Decimal(0)
-        player.oi.protoMemoriesPerSecond = new Decimal(0)
+        if (!hasUpgrade("depth2", 103)) {
+            player.oi.protoMemories = new Decimal(0)
+            player.oi.protoMemorySeconds = new Decimal(0)
+            player.oi.protoMemorySecondsToGet = new Decimal(0)
+            player.oi.protoMemoriesPerSecond = new Decimal(0)
+        }
 
         for (let i = 11; i < 20; i++) {
             player.oi.buyables[i] = new Decimal(0)

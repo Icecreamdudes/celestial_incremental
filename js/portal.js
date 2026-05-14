@@ -125,9 +125,9 @@
     },
     clickables: {
         2: {
-            title() { return "Keep OTFs on reset. (Currently off)" },
+            title() { return "OTF Keeper<br>[Currently Off]" },
             display() {
-                return "You only gain them back once you reach the req.";
+                return "<small>You only gain them back once you reach the req.</small>";
             },
             canClick() { return true },
             unlocked() { return ((hasMilestone("ip", 18) || player.s.highestSingularityPoints.gt(0) || player.po.breakInfinity) && !player.po.keepOTFS)},
@@ -135,22 +135,28 @@
                 player.po.keepOTFS = true
             },
             style: {
-                width: '200px',
+                width: '175px',
                 "min-height": '75px',
+                lineHeight: "1",
+                border: "3px solid #888",
                 borderRadius: '10px',
+                fontSize: "12px",
             },
         },
         3: {
-            title() { return "Don't keep OTFs on reset. (Currently on)" },
+            title() { return "OTF Keeper<br>[Currently On]" },
             canClick() { return true },
             unlocked() { return ((hasMilestone("ip", 18) || player.s.highestSingularityPoints.gt(0) || player.po.breakInfinity) && player.po.keepOTFS)},
             onClick() {
                 player.po.keepOTFS = false
             },
             style: {
-                width: '200px',
+                width: '175px',
                 "min-height": '75px',
+                lineHeight: "1",
+                border: "3px solid #888",
                 borderRadius: '10px',
+                fontSize: "12px",
             },
         },
         4: {

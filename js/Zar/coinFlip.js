@@ -182,8 +182,8 @@
             }
         }
 
-        if (player.cf.coinExploit > 0) {
-            player.cf.coinExploit = Math.max(player.cf.coinExploit - (0.5*delta), 0)
+        if (Decimal.gt(player.cf.coinExploit, 0)) {
+            player.cf.coinExploit = Decimal.sub(player.cf.coinExploit, 0.01).max(0)
         }
         if (player.cf.coinExploit < 0) {
             player.cf.coinExploit = player.cf.coinExploit + delta

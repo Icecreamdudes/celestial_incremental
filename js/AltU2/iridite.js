@@ -1,131 +1,39 @@
-﻿let arena = null; // Global arena instance
+﻿//shipBattleSkip(new Decimal(17), {attackDamage: 3, damageReduction: 0.3, attackSpeed: 0.8, lootGain: 1.8, gemGain: 1.2})
+function shipBattleSkip(level = new Decimal(0), upgEffect = {}) {
+    player.ir.inBattle = true
+    options.fullscreen = true
+    if (player.tab == "ir") {
+        player.subtabs["ir"]['stuff'] = 'Battle'
 
-// Restore arena on refresh if needed
-window.addEventListener('DOMContentLoaded', () => {
-    if (localStorage.getItem('arenaActive') === 'true') {
-        arena = new SpaceArena(800, 600);
+        arena = new SpaceArena(1200, 600);
         arena.spawnArena();
-    }
-});
+        localStorage.setItem('arenaActive', 'true');
 
-function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
-}
+        pauseUniverseAll(["A2", "DS"], "pause", true)
+    } else {
+        player.subtabs["bl"]['stuff'] = 'Battle'
 
-// Upgrade definitions
-const UPGRADE_POOL = [
-    // Common
-    {
-        name: "Attack Damage Up",
-        description: "+10% attack damage",
-        rarity: "common",
-        color: "#fff",
-        effect(arena) { arena.upgradeEffects.attackDamage *= 1.1; }
-    },
-    {
-        name: "XP Gain Up",
-        description: "+10% XP gain",
-        rarity: "common",
-        color: "#fff",
-        effect(arena) { arena.upgradeEffects.xpGain *= 1.1; }
-    },
-    {
-        name: "Loot Gain Up",
-        description: "+10% loot gain",
-        rarity: "common",
-        color: "#fff",
-        effect(arena) { arena.upgradeEffects.lootGain *= 1.1; }
-    },
-    // Uncommon
-    {
-        name: "Health Regen",
-        description: "+0.5 HP/sec",
-        rarity: "uncommon",
-        color: "#4cff4c",
-        effect(arena) { arena.upgradeEffects.hpRegen += 0.5 / 60; }
-    },
-    {
-        name: "Loot Gain Up",
-        description: "+20% loot gain",
-        rarity: "uncommon",
-        color: "#4cff4c",
-        effect(arena) { arena.upgradeEffects.lootGain *= 1.2; }
-    },
-    {
-        name: "Attack Damage Up",
-        description: "+15% attack damage",
-        rarity: "uncommon",
-        color: "#4cff4c",
-        effect(arena) { arena.upgradeEffects.attackDamage *= 1.15; }
-    },
-    // Rare
-    {
-        name: "Damage Reduction",
-        description: "Take 20% less damage",
-        rarity: "rare",
-        color: "#4c8cff",
-        effect(arena) { arena.upgradeEffects.damageReduction *= 0.8; }
-    },
-    {
-        name: "Movement Speed Up",
-        description: "+1 max velocity",
-        rarity: "rare",
-        color: "#4c8cff",
-        effect(arena) { arena.upgradeEffects.moveSpeed += 1; }
-    },
-    {
-        name: "Attack Speed Up",
-        description: "8% faster attack speed",
-        rarity: "uncommon",
-        color: "#4cff4c",
-        effect(arena) { arena.upgradeEffects.attackSpeed *= 0.92; }
-    },
-    {
-        name: "Loot Gain Up",
-        description: "+35% loot gain",
-        rarity: "rare",
-        color: "#4c8cff",
-        effect(arena) { arena.upgradeEffects.lootGain *= 1.35; }
-    },
-    // Epic
-    {
-        name: "Epic Attack",
-        description: "+20% attack damage, +8% attack speed",
-        rarity: "epic",
-        color: "#b44cff",
-        effect(arena) { arena.upgradeEffects.attackDamage *= 1.2; arena.upgradeEffects.attackSpeed *= 0.92; }
-    },
-    {
-        name: "Epic XP",
-        description: "+50% XP gain",
-        rarity: "epic",
-        color: "#b44cff",
-        effect(arena) { arena.upgradeEffects.xpGain *= 1.5; }
+        arena = new BloodArena(1200, 600);
+        arena.spawnArena();
+        localStorage.setItem('arenaActive', 'true');
     }
-];
 
-// Rarity weights
-const UPGRADE_RARITY_WEIGHTS = {
-    common: 50,
-    uncommon: 25,
-    rare: 15,
-    epic: 10
-};
+    player.ir.shipHealth = player.ir.shipHealthMax
+    let regen = 0
+    if (hasUpgrade("ir", 14)) regen += 0.5
+    regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
+    if (regen > 0) arena.upgradeEffects.hpRegen = regen / 60
 
-function pickUpgrades() {
-    // Weighted random selection
-    let pool = [];
-    for (let upg of UPGRADE_POOL) {
-        for (let i = 0; i < UPGRADE_RARITY_WEIGHTS[upg.rarity]; i++) {
-            pool.push(upg);
-        }
+    arena.upgradeEffects.attackDamage *= levelableEffect("ir", player.ir.shipType)[2]
+    arena.upgradeEffects = Object.assign(arena.upgradeEffects, upgEffect)
+
+    if (player.tab == "ir") {
+        if (level.lte(8)) player.ir.ufoFought = false
+        if (level.lte(16)) player.ir.iriditeFought = false
+    } else {
+        if (level.lte(20)) player.bl.noxFightActive = false
     }
-    let chosen = [];
-    while (chosen.length < 3) {
-        let upg = pool[getRandomInt(pool.length)];
-        if (!chosen.includes(upg)) chosen.push(upg);
-    }
-    return chosen;
+    player.ir.battleLevel = level
 }
 
 addLayer("ir", {
@@ -145,6 +53,7 @@ addLayer("ir", {
 
         shipHealth: new Decimal(0),
         shipHealthMax: new Decimal(100),
+        shipDamageMult: new Decimal(1),
 
         spaceRock: new Decimal(0),
         spaceGem: new Decimal(0),
@@ -331,6 +240,9 @@ addLayer("ir", {
 
         iriditePhase: new Decimal(0),
 
+        adsFought: false,
+        adsDefeated: false,
+
         pylonBuilt: false,
         pylonEnergyMax: new Decimal(1),
         pylonEnergy: new Decimal(0),
@@ -403,9 +315,14 @@ addLayer("ir", {
         if (player.ir.shipType == 9) player.ir.shipHealthMax = new Decimal(75)
         if (player.ir.shipType == 10) player.ir.shipHealthMax = new Decimal(125)
 
+        if (arena && arena.upgradeEffects && arena.upgradeEffects.maxHp) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(arena.upgradeEffects.maxHp)
         if (hasUpgrade("ir", 102)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.25)
         if (player.ir.shipType != 0) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(levelableEffect("ir", player.ir.shipType)[3])
         if (hasUpgrade("ir", 17)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.3)
+        player.ir.shipHealthMax = player.ir.shipHealthMax.mul(getBuyableAmount("bl", 33).div(100).add(1))
+
+        player.ir.shipDamageMult = new Decimal(1)
+        if (hasUpgrade("darkTemple", 14)) player.ir.shipDamageMult = player.ir.shipDamageMult.mul(upgradeEffect("darkTemple", 14))
 
         player.ir.timers[0].max = new Decimal(0)
         player.ir.timers[1].max = new Decimal(600)
@@ -429,6 +346,7 @@ addLayer("ir", {
         player.ir.battleXPReq = player.ir.battleLevel.pow(1.6).mul(5).add(40)
         if (hasUpgrade("ir", 103)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.25)
         if (hasUpgrade("ir", 106)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.4)
+        player.ir.battleXPReq = player.ir.battleXPReq.div(getBuyableAmount("bl", 14).div(100).add(1))
 
         if (player.ir.battleXP.gte(player.ir.battleXPReq)) {
             player.ir.battleXP = new Decimal(0);
@@ -1006,7 +924,10 @@ addLayer("ir", {
                 pauseUniverseAll(["A2", "DS"], "pause", true)
 
                 player.ir.shipHealth = player.ir.shipHealthMax
-                if (hasUpgrade("ir", 14)) arena.upgradeEffects.hpRegen += 0.5 / 60
+                let regen = 0
+                if (hasUpgrade("ir", 14)) regen += 0.5
+                regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
+                if (regen > 0) arena.upgradeEffects.hpRegen = regen / 60
 
                 arena.upgradeEffects.attackDamage *= levelableEffect("ir", player.ir.shipType)[2]
 
@@ -1101,6 +1022,19 @@ addLayer("ir", {
                 }
                 return look
             },
+        },
+        15: {
+            title() { return player.ir.autoShoot ? "<h2>Auto-Shoot<br>[ENABLED]" : "<h2>Auto-Shoot<br>[DISABLED]" },
+            canClick() { return true },
+            unlocked() { return !player.ir.iriditeFightActive},
+            onClick() {
+                if (player.ir.autoShoot) {
+                    player.ir.autoShoot = false
+                } else {
+                    player.ir.autoShoot = true
+                }
+            },
+            style: {width: "200px", minHeight: '100px', color: "white", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
         },
         1001: {
             title() {return "W"},
@@ -1386,10 +1320,10 @@ addLayer("ir", {
             title: "Medkit",
             unlocked() { return getLevelableAmount("pet", 502).gt(0) },
             description: "Unlock Geroa's \"Self Repair\" skill",
-            cost: new Decimal(2000),
+            cost: new Decimal(25),
             currencyLocation() { return player.ir },
-            currencyDisplayName: "Space Rocks",
-            currencyInternalName: "spaceRock",
+            currencyDisplayName: "Space Gems",
+            currencyInternalName: "spaceGem",
             style() {
                 let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
@@ -1400,7 +1334,7 @@ addLayer("ir", {
             title: "Spicy Energy",
             unlocked() { return getLevelableAmount("pet", 502).gt(0) },
             description: "Unlock Geroa's \"Cosmic Ray\" skill",
-            cost: new Decimal(10000),
+            cost: new Decimal(5000),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
@@ -1414,10 +1348,10 @@ addLayer("ir", {
             title: "I'M A FIRIN' MY LASAR",
             unlocked() { return getLevelableAmount("pet", 502).gt(0) },
             description: "Unlock Geroa's \"Orbital Cannon\" skill",
-            cost: new Decimal(50000),
+            cost: new Decimal(100),
             currencyLocation() { return player.ir },
-            currencyDisplayName: "Space Rocks",
-            currencyInternalName: "spaceRock",
+            currencyDisplayName: "Space Gems",
+            currencyInternalName: "spaceGem",
             style() {
                 let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
@@ -1428,7 +1362,7 @@ addLayer("ir", {
             title: "Probably should use these",
             unlocked() { return getLevelableAmount("pet", 502).gt(0) },
             description: "Unlock Geroa's \"Defense Satellites\" skill",
-            cost: new Decimal(4e5),
+            cost: new Decimal(1e5),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
@@ -1442,10 +1376,10 @@ addLayer("ir", {
             title: "Version 2.0",
             unlocked() { return getLevelableAmount("pet", 502).gt(0) },
             description: "Increase Geroa's base stats by 20%",
-            cost: new Decimal(1e7),
+            cost: new Decimal(500),
             currencyLocation() { return player.ir },
-            currencyDisplayName: "Space Rocks",
-            currencyInternalName: "spaceRock",
+            currencyDisplayName: "Space Gems",
+            currencyInternalName: "spaceGem",
             style() {
                 let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
@@ -1456,7 +1390,7 @@ addLayer("ir", {
             title: "Version 3.0",
             unlocked() { return getLevelableAmount("pet", 502).gt(0) && hasUpgrade("depth4", 4) },
             description: "Increase Geroa's base damage by 50%",
-            cost: new Decimal(1e8),
+            cost: new Decimal(2e6),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
@@ -1470,10 +1404,10 @@ addLayer("ir", {
             title: "Advanced Medkit",
             unlocked() { return getLevelableAmount("pet", 502).gt(0) && false },
             description: "\"Self Repair\" now requires being under 50% health, and heals 20% more",
-            cost: new Decimal(1e9),
+            cost: new Decimal(1000),
             currencyLocation() { return player.ir },
-            currencyDisplayName: "Space Rocks",
-            currencyInternalName: "spaceRock",
+            currencyDisplayName: "Space Gems",
+            currencyInternalName: "spaceGem",
             style() {
                 let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
@@ -1507,7 +1441,7 @@ addLayer("ir", {
                 content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return formatWhole(player.au2.stars) + "/5e10 stars." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return formatWhole(player.stagnantSynestia.highestCombo) + "/25 best stagnantion synestia combo." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return formatWhole(player.stagnantSynestia.highestCombo) + "/25 best stagnant synestia combo." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Not a lot of requirements... I'm trying to be nice." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
@@ -1759,13 +1693,16 @@ addLayer("ir", {
                     ["raw-html", function () { return "Use W and S to more forwards or backwards, A to D to rotate, and Space or Mouse to shoot." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["row", [["bar", "healthBar"], ["bar", "xpBar"],]],
                     ["blank", "650px"],
-                    ["row", [["clickable", 12], ["clickable", 13], ["blank", "50px"],
-                                                            ["style-column", [
+                    ["style-row", [
+                        ["clickable", 12],
+                        ["blank", ["100px", "50px"]],
+                        ["style-column", [
                             ["clickable", 1001],
                             ["row", [["clickable", 1002], ["clickable", 1003], ["clickable", 1004]]],
-                        ], {width: "150px", height: "100px"}],     
-                ]],     
-    
+                        ], {width: "150px", height: "100px"}],
+                        ["blank", ["100px", "50px"]],
+                        ["clickable", 13],
+                    ], {position: "fixed", top: "calc(50% + 320px)", left: "calc(50% - 375px)", isolation: "isolate", zIndex: "15000"}],
                 ]
             },
             "Refresh Page :(": {

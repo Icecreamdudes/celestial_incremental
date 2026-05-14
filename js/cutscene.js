@@ -2865,7 +2865,7 @@
                 { text: "All that matters is whether or not you can be beneficial to the swarm.", portrait: "resources/alephDark.png"},
                 { text: "The swarm... Only a celestial will have these kind of strange tendencies."},
                 { text: "You look forward and see a lone bee."},
-                { text: "The bee is as superphysical bee, similarly to how Marcel's pets are superphysical as well."},
+                { text: "The bee is a superphysical bee, similarly to how Marcel's pets are superphysical as well."},
                 { text: "Unfortunately it has dwindled down to only one bee, but it is quite the special one!", portrait: "resources/alephDark.png"},
                 { text: "Why should I help you with building up this swarm?", portrait: "resources/player.png"},
                 { text: "Judging by your aura, you seem to be quite focused on hunting celestials.", portrait: "resources/alephDark.png"},

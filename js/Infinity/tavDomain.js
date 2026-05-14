@@ -602,12 +602,14 @@ addLayer("tad", {
         6: {
             title: "x10",
             canClick() {
+                if (hasMilestone("tad", 104)) return player.tad.highestCap.mul(1e25).gte(player.tad.domainCap.mul(10))
                 if (player.alephsChamber.milestone[25] > 0) return player.tad.highestCap.mul(1e5).gte(player.tad.domainCap.mul(10))
                 return player.tad.highestCap.mul(10).gte(player.tad.domainCap.mul(10))
             },
             unlocked: true,
             tooltip() {
                 if (this.canClick()) return ""
+                if (hasMilestone("tad", 104)) return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e25)) + " cap first!"
                 if (player.alephsChamber.milestone[25] > 0) return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e5)) + " cap first!"
                 return "Need to beat " + formatWhole(player.tad.highestCap.mul(10)) + " cap first!"
             },
@@ -626,12 +628,14 @@ addLayer("tad", {
         7: {
             title: "x1e5",
             canClick() {
+                if (hasMilestone("tad", 104)) return player.tad.highestCap.mul(1e25).gte(player.tad.domainCap.mul(1e5))
                 if (player.alephsChamber.milestone[25] > 0) return player.tad.highestCap.mul(1e5).gte(player.tad.domainCap.mul(1e5))
                 return player.tad.highestCap.mul(10).gte(player.tad.domainCap.mul(1e5))
             },
             unlocked: true,
             tooltip() {
                 if (this.canClick()) return ""
+                if (hasMilestone("tad", 104)) return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e29)) + " cap first!"
                 if (player.alephsChamber.milestone[25] > 0) return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e9)) + " cap first!"
                 return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e5)) + " cap first!"
             },
@@ -650,12 +654,14 @@ addLayer("tad", {
         8: {
             title: "x1e25",
             canClick() {
+                if (hasMilestone("tad", 104)) return player.tad.highestCap.mul(1e25).gte(player.tad.domainCap.mul(1e25))
                 if (player.alephsChamber.milestone[25] > 0) return player.tad.highestCap.mul(1e5).gte(player.tad.domainCap.mul(1e25))
                 return player.tad.highestCap.mul(10).gte(player.tad.domainCap.mul(1e25))
             },
             unlocked: true,
             tooltip() {
                 if (this.canClick()) return ""
+                if (hasMilestone("tad", 104)) return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e49)) + " cap first!"
                 if (player.alephsChamber.milestone[25] > 0) return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e29)) + " cap first!"
                 return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e25)) + " cap first!"
             },
@@ -2658,6 +2664,16 @@ addLayer("tad", {
                 return look
             },
         },
+        104: {
+            requirementDescription: "8 Exponentiations",
+            effectDescription() { return "Tav's Domain Expander cap now increments by x1e25" },
+            done() { return player.tad.exponentiate.gte(8) },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "black", border: "3px solid #997f6b", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("tad", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+        },
     },
     domainReset(tier = 0) {
         // MATTER
@@ -3182,6 +3198,12 @@ addLayer("tad", {
                             ["raw-html", "4", {color: "rgba(0,0,0,0.6)", fontSize: "32px", fontFamily: "monospace"}],
                         ], {backgroundColor: "#ffd5b3", border: "3px solid #997f6b", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
                         ["titleless-milestone", 103],
+                    ]],
+                    ["style-row", [
+                        ["style-column", [
+                            ["raw-html", "8", {color: "rgba(0,0,0,0.6)", fontSize: "32px", fontFamily: "monospace"}],
+                        ], {backgroundColor: "#ffd5b3", border: "3px solid #997f6b", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                        ["titleless-milestone", 104],
                     ]],
                     ["style-row", [
                         ["raw-html", "Exponentiation content is kept on all resets", {color: "rgba(0,0,0,0.6)", fontSize: "20px", fontFamily: "monospace"}],

@@ -341,7 +341,7 @@ class SpaceArena {
                 maxVelocity: 10,
                 collisionDamage: 10,
             };
-            this.lastBounceClick = 0;
+            this.lastBounceClick = Date.now() - 1500;
             this.bounceCooldown = 2000; // 2 seconds in ms
             this.canvasClickListener = (e) => {
                 let now = Date.now();
@@ -427,7 +427,7 @@ class SpaceArena {
                 maxVelocity: 10,
                 collisionDamage: 10,
             };
-            this.lastDashClick = 0;
+            this.lastDashClick = Date.now() - 500;
             this.dashCooldown = 1000; // 1 second in ms
             this.canvasClickListener = (e) => {
                 let now = Date.now();

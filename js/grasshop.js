@@ -110,6 +110,7 @@
         let amt = player.gh.grasshoppers
         if (player.gh.grasshoppersToGet.gte(player.gh.grasshoppers)) amt = player.gh.grasshoppersToGet
         player.gh.doomSoftcap = player.gh.doomSoftcap.div(amt.div(player.gh.doomSoftcapStart).add(1).log(player.gh.doomSoftcapStart).div(doomWeaken).add(1))
+        if (hasUpgrade("depth2", 104)) player.gh.doomSoftcap = player.gh.doomSoftcap.max(0.01)
 
         // APPLY DOOM SOFTCAP
         if (player.gh.grasshoppersToGet.gt(player.gh.doomSoftcapStart)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.div(player.gh.doomSoftcapStart).pow(player.gh.doomSoftcap).mul(player.gh.doomSoftcapStart)
@@ -187,6 +188,7 @@
         let amt2 = player.gh.fertilizer
         if (player.gh.fertilizerPerSecond.gte(player.gh.fertilizer)) amt2 = player.gh.fertilizerPerSecond
         player.gh.doomSoftcap2 = player.gh.doomSoftcap2.div(amt2.div(player.gh.doomSoftcap2Start).add(1).log(player.gh.doomSoftcap2Start).div(doomWeaken2).add(1))
+        if (hasUpgrade("depth2", 104)) player.gh.doomSoftcap2 = player.gh.doomSoftcap2.max(0.01)
 
         // APPLY DOOM SOFTCAP
         if (player.gh.fertilizerPerSecond.gt(player.gh.doomSoftcap2Start)) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.div(player.gh.doomSoftcap2Start).pow(player.gh.doomSoftcap2).mul(player.gh.doomSoftcap2Start)
@@ -211,7 +213,7 @@
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("p", 14))
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("id", 21))
         if (hasUpgrade("hpw", 1023)) player.gh.steelToGet = player.gh.steelToGet.mul(upgradeEffect("hpw", 1023))
-        player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("oi", 21))
+        if (!hasUpgrade("depth2", 103)) player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("oi", 21))
         if (hasUpgrade("ep2", 9)) player.gh.steelToGet = player.gh.steelToGet.mul(upgradeEffect("ep2", 9))
         if (hasUpgrade("s", 14)) player.gh.steelToGet = player.gh.steelToGet.mul(upgradeEffect("s", 14))
         player.gh.steelToGet = player.gh.steelToGet.mul(player.fa.foundryEffect)
@@ -228,6 +230,7 @@
         player.gh.steelToGet = player.gh.steelToGet.pow(player.se.starsExploreEffect[0][5])
         player.gh.steelToGet = player.gh.steelToGet.pow(player.cof.coreFragmentEffects[2])
         player.gh.steelToGet = player.gh.steelToGet.pow(buyableEffect("laboratory", 12))
+        if (hasUpgrade("depth2", 103)) player.gh.steelToGet = player.gh.steelToGet.pow(buyableEffect("oi", 21))
 
         // STEEL PER SECOND
         if (hasUpgrade("sma", 103)) player.gh.steel = player.gh.steel.add(Decimal.mul(player.uni["U1"].tickspeed.div(10), player.gh.steelToGet.mul(delta)))

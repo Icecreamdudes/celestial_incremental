@@ -95,6 +95,7 @@
         if (hasMilestone("r", 20)) player.i.preOTFMult = player.i.preOTFMult.mul(100)
         player.i.preOTFMult = player.i.preOTFMult.mul(player.d.boosterEffects[15])
         if (hasMilestone("fa", 22)) player.i.preOTFMult = player.i.preOTFMult.mul(player.fa.milestoneEffect[10])
+        player.i.preOTFMult = player.i.preOTFMult.mul(player.depth2.negComboEffect)
 
         player.i.preOTFMult = player.i.preOTFMult.pow(player.i.pylonEnergyEffect2)
 
@@ -193,6 +194,7 @@
         let amt = player.points
         if (player.gain.gte(player.points)) amt = player.gain
         player.i.doomSoftcap = player.i.doomSoftcap.div(amt.div(player.i.doomSoftcapStart).add(1).log(player.i.doomSoftcapStart).div(doomWeaken).add(1))
+        if (hasUpgrade("depth2", 104)) player.i.doomSoftcap = player.i.doomSoftcap.max(0.01)
 
         // APPLY DOOM SOFTCAP
         if (player.gain.gt(player.i.doomSoftcapStart)) player.gain = player.gain.div(player.i.doomSoftcapStart).pow(player.i.doomSoftcap).mul(player.i.doomSoftcapStart)

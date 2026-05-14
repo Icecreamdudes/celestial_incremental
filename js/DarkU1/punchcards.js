@@ -26,11 +26,13 @@ addLayer("pu", {
     tooltip: "Punchcards",
     color: "black",
     update(delta) {
-        if (player.pu.selectedPunchcards[player.pu.selectionIndex] > 400)
-        {
-            player.pu.selectionCost = new Decimal(5)
-        } else
-        {
+        if (player.pu.selectedPunchcards[player.pu.selectionIndex] > 400) {
+            if (player.bl.noxDefeated && player.pu.selectedPunchcards[player.pu.selectionIndex] == 401) {
+                player.pu.selectionCost = new Decimal(3)
+            } else {
+                player.pu.selectionCost = new Decimal(5)
+            }
+        } else {
             player.pu.selectionCost = new Decimal(1)
         }
     },
@@ -413,7 +415,7 @@ addLayer("pu", {
                 let str = [
                     !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
-                    "^" + format(this.effect()[0].div(1.08)) + " to rank effect<br>",
+                    "^" + format(this.effect()[0].div(1.08), 3) + " to rank effect<br>",
                     "x" + format(this.effect()[1]) + " to rank points <small>(Based on points)</small><br>",
                     !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
@@ -468,7 +470,7 @@ addLayer("pu", {
                 let str = [
                     !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
-                    "^" + format(this.effect()[0].div(1.15)) + " to tier effect<br>",
+                    "^" + format(this.effect()[0].div(1.15), 3) + " to tier effect<br>",
                     "x" + format(this.effect()[1]) + " to tier points <small>(Based on points)</small><br>",
                     !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
@@ -523,7 +525,7 @@ addLayer("pu", {
                 let str = [
                     !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
-                    "^" + format(this.effect()[0].div(1.2)) + " to tetr effect<br>",
+                    "^" + format(this.effect()[0].div(1.2), 3) + " to tetr effect<br>",
                     "x" + format(this.effect()[1]) + " to tetr points <small>(Based on points)</small><br>",
                     !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
@@ -687,7 +689,7 @@ addLayer("pu", {
                     !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
                     "x" + format(this.effect()[1]) + " to grass cap and value <small>(Based on grass)</small><br>",
-                    "^" + format(this.effect()[0]) + " to first two grass buyables<br>",
+                    "^" + format(this.effect()[0], 3) + " to first two grass buyables<br>",
                     !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[2]) + " to golden grass",
@@ -955,7 +957,7 @@ addLayer("pu", {
                     "/" + format(this.effect()[0]) + " to grass jump requirement <small>(Based on grass jumps)</small><br>",
                     !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
-                    "^" + format(this.effect()[1]) + " to golden grass",
+                    "^" + format(this.effect()[1], 3) + " to golden grass",
                     getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
@@ -1056,7 +1058,7 @@ addLayer("pu", {
                 let str = [
                     !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
-                    "^" + format(this.effect()[0]) + " to point softcap<br>",
+                    "^" + format(this.effect()[0], 3) + " to point softcap<br>",
                     "/" + format(this.effect()[1]) + " to point softcap <small>(Based on point softcap)</small><br>",
                     !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
@@ -1111,7 +1113,7 @@ addLayer("pu", {
                 let str = [
                     !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
-                    "^" + format(this.effect()[0]) + " to rank/tier/tetr effect<br>",
+                    "^" + format(this.effect()[0], 3) + " to rank/tier/tetr effect<br>",
                     "x" + format(this.effect()[1]) + " to rank/tier/tetr points <small>(Based on points)</small><br>",
                     !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
@@ -1167,7 +1169,7 @@ addLayer("pu", {
                     !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
                     "x" + format(this.effect()[0]) + " to points <small>(Based on generators)</small><br>",
-                    "^" + format(this.effect()[1]) + " to first generator buyable<br>",
+                    "^" + format(this.effect()[1], 3) + " to first generator buyable<br>",
                     !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[2]) + " to hex power",
@@ -1222,7 +1224,7 @@ addLayer("pu", {
                     !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
                     "x" + format(this.effect()[0]) + " to prestige points <small>(Based on generators)</small><br>",
-                    "^" + format(this.effect()[1]) + " to third generator buyable<br>",
+                    "^" + format(this.effect()[1], 3) + " to third generator buyable<br>",
                     !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[2]) + " to core scraps",
@@ -1385,7 +1387,7 @@ addLayer("pu", {
                     !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
                     "Unlock pent in rank layer<br>",
-                    "^" + format(this.effect()[0]) + " to pent effect<br>",
+                    "^" + format(this.effect()[0], 3) + " to pent effect<br>",
                     !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to time cubes",
@@ -1550,7 +1552,7 @@ addLayer("pu", {
                     "Unlock a new normality buyable<br>",
                     !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
-                    "^" + format(this.effect()[1]) + " to hex power",
+                    "^" + format(this.effect()[1], 3) + " to hex power",
                     getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
@@ -2079,7 +2081,7 @@ addLayer("pu", {
                     !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
                     "x" + format(this.effect()[0]) + " to starmetal alloy<small> (Based on universe resets)</small><br>",
-                    "^" + format(this.effect()[1]) + " to points<small> (Based on universe resets)</small><br>",
+                    "^" + format(this.effect()[1], 3) + " to points<small> (Based on universe resets)</small><br>",
                     !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[2]) + " to starmetal essence",
@@ -2133,7 +2135,7 @@ addLayer("pu", {
                 let str = [
                     !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
-                    "<small>^" + format(this.effect()[0]) + " to the second point softcap's effect<br>",
+                    "<small>^" + format(this.effect()[0], 3) + " to the second point softcap's effect<br>",
                     "<small>x" + format(this.effect()[1]) + " to second point softcap start (Based on normality)</small><br>",
                     !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
@@ -2427,7 +2429,11 @@ addLayer("pu", {
                     ], () => {return {returnwidth: "550px", height: "390px", border: "3px solid white", backgroundColor: "#1c2033"}}],
                                         ["style-column", [
                     ["style-column", [
-                            ["raw-html", () => { return "Legendary Punchcards<br><small>(Costs 5 Punchcard Selections)"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", () => {
+                                let cost = 5
+                                if (player.bl.noxDefeated && player.pu.selectedPunchcards[3] == 401) cost = 3
+                                return "Legendary Punchcards<br><small>(Costs " + cost + " Punchcard Selections)"
+                            }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                         ], {width: "550px", height: "50px"}],
                         ["style-column", [
                             ["row", [["clickable", 101],]],

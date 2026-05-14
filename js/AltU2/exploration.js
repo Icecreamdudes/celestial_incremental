@@ -163,7 +163,7 @@ addLayer("se", {
             },
             style() {
                 let look = {width: "75px", minHeight: "75px", borderRadius: "100px", fontSize: '12px', color: "white",}
-                player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(0) ? look.border = "3px solid #ff0000ff" : look.border = "3px solid #ffffff",
+                player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(0) ? look.border = "3px solid #ff0000ff" : player.se.starsExploreCount[0][0].gte(100) ? look.border = "3px solid #ffee88" : look.border = "3px solid #ffffff",
                 look.backgroundImage = "linear-gradient(60deg, #927bf7ff 0%, #674ddbff 50%, #4e35c0ff 100%)"
                 return look
             },
@@ -184,7 +184,7 @@ addLayer("se", {
             },
             style() {
                 let look = {width: "75px", minHeight: "75px", borderRadius: "100px", fontSize: '12px', color: "white",}
-                player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(1) ? look.border = "3px solid #ff0000ff" : look.border = "3px solid #ffffff",
+                player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(1) ? look.border = "3px solid #ff0000ff" : player.se.starsExploreCount[0][1].gte(100) ? look.border = "3px solid #ffee88" : look.border = "3px solid #ffffff",
                 look.backgroundImage = "linear-gradient(-60deg, #4e35c0ff 0%, #3d2996ff 50%, #2b1d69ff 100%)"
                 return look
             },
@@ -205,7 +205,7 @@ addLayer("se", {
             },
             style() {
                 let look = {width: "75px", minHeight: "75px", borderRadius: "100px", fontSize: '12px', color: "white",}
-                player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(2) ? look.border = "3px solid #ff0000ff" : look.border = "3px solid #ffffff",
+                player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(2) ? look.border = "3px solid #ff0000ff" : player.se.starsExploreCount[0][2].gte(100) ? look.border = "3px solid #ffee88" : look.border = "3px solid #ffffff",
                 look.backgroundImage = "linear-gradient(315deg, #5A4FCF 0%, #242124 74%)"
                 return look
             },
@@ -226,7 +226,7 @@ addLayer("se", {
             },
             style() {
                 let look = {width: "75px", minHeight: "75px", borderRadius: "100px", fontSize: '12px', color: "white",}
-                player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(3) ? look.border = "3px solid #ff0000ff" : look.border = "3px solid #ffffff",
+                player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(3) ? look.border = "3px solid #ff0000ff" : player.se.starsExploreCount[0][3].gte(100) ? look.border = "3px solid #ffee88" : look.border = "3px solid #ffffff",
                 look.backgroundImage = "linear-gradient(-315deg, #271ab9ff 0%, #1e033dff 74%)"
                 return look
             },
@@ -247,7 +247,7 @@ addLayer("se", {
             },
             style() {
                 let look = {width: "75px", minHeight: "75px", borderRadius: "100px", fontSize: '12px', color: "white",}
-                player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(4) ? look.border = "3px solid #ff0000ff" : look.border = "3px solid #ffffff",
+                player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(4) ? look.border = "3px solid #ff0000ff" : player.se.starsExploreCount[0][4].gte(100) ? look.border = "3px solid #ffee88" : look.border = "3px solid #ffffff",
                 look.backgroundImage = "linear-gradient(180deg, #140129ff 0%, #750e8fff 74%)"
                 return look
             },
@@ -268,7 +268,7 @@ addLayer("se", {
             },
             style() {
                 let look = {width: "75px", minHeight: "75px", borderRadius: "100px", fontSize: '12px', color: "white",}
-                player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(5) ? look.border = "3px solid #ff0000ff" : look.border = "3px solid #ffffff",
+                player.se.currentPosition[0].eq(0) && player.se.currentPosition[1].eq(5) ? look.border = "3px solid #ff0000ff" : player.se.starsExploreCount[0][5].gte(100) ? look.border = "3px solid #ffee88" : look.border = "3px solid #ffffff",
                 look.backgroundImage = "linear-gradient(180deg, #140129ff 0%, #750e8fff, #2a0e8fff 74%)"
                 return look
             },
@@ -291,7 +291,7 @@ addLayer("se", {
             },
             style() {
                 let look = {width: "75px", minHeight: "75px", borderRadius: "100px", fontSize: '12px', color: "white",}
-                player.se.currentPosition[0].eq(1) && player.se.currentPosition[1].eq(0) ? look.border = "3px solid #ff0000ff" : look.border = "3px solid #ffffff",
+                player.se.currentPosition[0].eq(1) && player.se.currentPosition[1].eq(0) ? look.border = "3px solid #ff0000ff" : player.se.starsExploreCount[1][0].gte(100) ? look.border = "3px solid #ffee88" : look.border = "3px solid #ffffff",
                 look.backgroundImage = "linear-gradient(315deg, #460000ff 0%, #6b0311ff 74%)"
                 return look
             },
@@ -312,7 +312,7 @@ addLayer("se", {
             },
             style() {
                 let look = {width: "75px", minHeight: "75px", borderRadius: "100px", fontSize: '12px', color: "white",}
-                player.se.currentPosition[0].eq(1) && player.se.currentPosition[1].eq(1) ? look.border = "3px solid #ff0000ff" : look.border = "3px solid #ffffff",
+                player.se.currentPosition[0].eq(1) && player.se.currentPosition[1].eq(1) ? look.border = "3px solid #ff0000ff" : player.se.starsExploreCount[1][1].gte(100) ? look.border = "3px solid #ffee88" : look.border = "3px solid #ffffff",
                 look.backgroundImage = "linear-gradient(315deg, #7e2323ff 0%, #8b112cff 74%)"
                 return look
             },
@@ -333,7 +333,7 @@ addLayer("se", {
             },
             style() {
                 let look = {width: "75px", minHeight: "75px", borderRadius: "100px", fontSize: '12px', color: "white",}
-                player.se.currentPosition[0].eq(1) && player.se.currentPosition[1].eq(2) ? look.border = "3px solid #ff0000ff" : look.border = "3px solid #ffffff",
+                player.se.currentPosition[0].eq(1) && player.se.currentPosition[1].eq(2) ? look.border = "3px solid #ff0000ff" : player.se.starsExploreCount[1][2].gte(100) ? look.border = "3px solid #ffee88" : look.border = "3px solid #ffffff",
                 look.backgroundImage = "linear-gradient(315deg, #ca4949ff 0%, #86666dff 74%)"
                 return look
             },
@@ -356,7 +356,7 @@ addLayer("se", {
             },
             style() {
                 let look = {width: "75px", minHeight: "75px", borderRadius: "100px", fontSize: '12px', color: "white",}
-                player.se.currentPosition[0].eq(2) && player.se.currentPosition[1].eq(0) ? look.border = "3px solid #ff0000ff" : look.border = "3px solid #ffffff",
+                player.se.currentPosition[0].eq(2) && player.se.currentPosition[1].eq(0) ? look.border = "3px solid #ff0000ff" : player.se.starsExploreCount[2][0].gte(100) ? look.border = "3px solid #ffee88" : look.border = "3px solid #ffffff",
                 look.backgroundImage = "linear-gradient(315deg, #094599 0%, #042e68ff 74%)"
                 return look
             },
@@ -377,7 +377,7 @@ addLayer("se", {
             },
             style() {
                 let look = {width: "75px", minHeight: "75px", borderRadius: "100px", fontSize: '12px', color: "white",}
-                player.se.currentPosition[0].eq(2) && player.se.currentPosition[1].eq(1) ? look.border = "3px solid #ff0000ff" : look.border = "3px solid #ffffff",
+                player.se.currentPosition[0].eq(2) && player.se.currentPosition[1].eq(1) ? look.border = "3px solid #ff0000ff" : player.se.starsExploreCount[2][1].gte(100) ? look.border = "3px solid #ffee88" : look.border = "3px solid #ffffff",
                 look.backgroundImage = "linear-gradient(115deg, #215cadff 0%, #466ca1ff 74%)"
                 return look
             },

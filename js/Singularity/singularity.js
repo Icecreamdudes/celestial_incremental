@@ -378,6 +378,16 @@
             currencyInternalName: "singularityPoints",
             style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
+        30: {
+            title: "Singularity Upgrade XX",
+            unlocked() { return player.ir.iriditeDefeated},
+            description: "Keep check back xp and cante layer content on singularity reset.",  
+            cost: new Decimal("1e1600"),
+            currencyLocation() { return player.s },
+            currencyDisplayName: "Singularity Points",
+            currencyInternalName: "singularityPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
     },
     buyables: {
         11: {

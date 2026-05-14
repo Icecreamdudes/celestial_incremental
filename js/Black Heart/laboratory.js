@@ -475,7 +475,9 @@ BHS.laboratory = {
             case 15:
                 return "f15"
             default:
-                return "f" + Math.floor(Math.random()*16)
+                let num = Math.floor(Math.random()*16)
+                num = num.toString().padStart(2, '0')
+                return "f" + num
         }
     },
 }

@@ -1339,7 +1339,7 @@ BHC.lesserTria = {
             target: "randomPlayer",
             method: "physical",
             value: new Decimal(3),
-            stun: ["soft", new Decimal(5), 2],
+            stun: ["soft", new Decimal(5), 1],
             cooldown: new Decimal(20),
         },
     },

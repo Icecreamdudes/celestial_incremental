@@ -130,8 +130,8 @@ addLayer("jukebox", {
             artist: "Icecreamdude",
             name: "N/A",
             description: "IP Challenge",
-            img: "resources/music/ipChallenge.png",
-            file: "music/tav.mp3",
+            img: "resources/music/infinity-challenges.png",
+            file: "music/ipChallenge.mp3",
             unlocked() {return hasChallenge("ip", 11) || player.s.highestSingularityPoints.gt(0)},
         },
         "hex": {

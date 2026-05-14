@@ -1766,39 +1766,16 @@ BHC.zar = {
                 } else if (random == 6) {
                     bulletHellBlue({"movingDieRadialBurstAttack": {circleAmount: 1, burstInterval: 800, bulletsPerBurst: 6, enemySpeed: 1.5, bulletSpeed: 5}}, {width:800, height:600, duration:15, jumpMin:6, jumpMax:250, gravity: 0.2})
                 }
-
+                
+                //bulletHell({"diceSpikes": {spawnPerSec: 6, bulletPerSec: 6, enemySpeed: 3.5, bulletSpeed: 2, spikeSize: 28, rain: true}}, {width: window.innerWidth, height: window.innerHeight, duration: 12, transparent: true})
+                //bulletHell({"pipRainUltimate": {bulletPerSec: 3}}, {width: window.innerWidth, height: window.innerHeight, duration: 12, transparent: true})
+                //bulletHell({"diceAttack": {diceAmount: 8, intervalDiv: 0.55}}, {duration: 10})
                 //bulletHellBlue({"spikePlatformAttack": {spikeHeight: 50, spikeWidth: 28, platformCount: 4, platformSpikeChance: 0.3, platformSpeed: 1.5, platformMinW: 203, platformMaxW: 203, rain: true, bulletPerSec: 3}}, {width:800, height:600, duration:15, jumpMin:6, jumpMax:250, gravity: 0.2})
             },
             cooldown: new Decimal(22),
 
             passive: true,
             onPassive(index, slot, target) {
-                console.log("passive")
-                if (!player.bh.celestialite.actions[3].variables.attacks) player.bh.celestialite.actions[3].variables.attacks = 0
-                if (player.bh.celestialite.health.lt(50) && player.bh.celestialite.attackID == 14 && player.bh.celestialite.actions[3].variables.attacks == 0) {
-                    screenFlash("", 200)
-                    setTimeout(() => {
-                        player.bh.celestialite.attackTimeout = [15, new Decimal(15)]
-                    }, 200)
-                    player.bh.celestialite.actions[3].variables.attacks = 1
-                }
-                if (player.bh.celestialite.attackID == 15 && player.bh.celestialite.actions[3].variables.attacks == 1) {
-                    screenFlash("", 200)
-                    setTimeout(() => {
-                        player.bh.celestialite.attackTimeout = [16, new Decimal(15)]
-                    }, 200)
-                    player.bh.celestialite.actions[3].variables.attacks = 2
-                }
-                if (player.bh.celestialite.attackID == 16 && player.bh.celestialite.actions[3].variables.attacks == 2) {
-                    screenFlash("", 200)
-                    setTimeout(() => {
-                        player.bh.celestialite.attackTimeout = [17, new Decimal(19)]
-                    }, 200)
-                    player.bh.celestialite.actions[3].variables.attacks = 3
-                }
-                if (player.bh.celestialite.attackID >= 17 && player.bh.celestialite.actions[3].variables.attacks == 3) {
-                    celestialiteDeath()
-                }
             },
         },
     },
@@ -1816,44 +1793,44 @@ function zarAttackBarrage(attackVariable) {
         player.zarDungeon.barrageActive = true
         screenFlash("", 200)
         setTimeout(() => {
-        bulletHellBlue({"diceSpikesPlatformer": {bulletPerSec: 1.2, enemySpeed: 3, spikeHeight: 80, spikeWidth: 60}}, {width:800, height:300, duration:2, jumpMin:6, jumpMax:150, gravity: 0.2})
+        bulletHellBlue({"diceSpikesPlatformer": {bulletPerSec: 1.2, enemySpeed: 3, spikeHeight: 80, spikeWidth: 60}}, {width:800, height:300, duration:3, jumpMin:6, jumpMax:150, gravity: 0.2})
         }, 200)
         setTimeout(() => {
         zarAttackBarrage(getRandomInt(4))
-        }, 2200)
+        }, 3200)
     } 
     else if (attackVariable == 1)
     {
         player.zarDungeon.barrageActive = true
         screenFlash("", 200)
         setTimeout(() => {
-        bulletHellBlue({"pipRainUltimate": {bulletPerSec: 4}}, {width:800, height:300, duration:2, jumpMin:6, jumpMax:150, gravity: 0.2})
+        bulletHell({"pipRainUltimate": {bulletPerSec: 4}}, {width:800, height:600, duration:3,})
         }, 200)
         setTimeout(() => {
         zarAttackBarrage(getRandomInt(4))
-        }, 2200)
+        }, 3200)
     }
     else if (attackVariable == 2)
     {
         player.zarDungeon.barrageActive = true
         screenFlash("", 200)
         setTimeout(() => {
-        bulletHellBlue({"dieBouncer": {dieAmount: 1, size: 50, enemySpeed: 3, chargeMult: 1.6, spikeSpeed:5, spikeRadius:30, lastTick:false}}, {width: 800, height: 600, duration: 2, jumpMin:6, jumpMax:250, gravity: 0.2})
+        bulletHellBlue({"dieBouncer": {dieAmount: 1, size: 50, enemySpeed: 3, chargeMult: 1.6, spikeSpeed:5, spikeRadius:30, lastTick:false}}, {width: 800, height: 600, duration: 3, jumpMin:6, jumpMax:250, gravity: 0.2})
         }, 200)
         setTimeout(() => {
         zarAttackBarrage(getRandomInt(5))
-        }, 2200)
+        }, 3200)
     } 
     else if (attackVariable == 3)
     {
         player.zarDungeon.barrageActive = true
         screenFlash("", 200)
         setTimeout(() => {
-            bulletHellBlue({"spikePlatformAttack": {spikeHeight: 50, spikeWidth: 28, platformCount: 4, platformSpikeChance: 0.4, platformSpeed: 1.5, platformMinW: 203, platformMaxW: 203}}, {width:800, height:600, duration:2, jumpMin:6, jumpMax:250, gravity: 0.2})
+            bulletHellBlue({"spikePlatformAttack": {spikeHeight: 50, spikeWidth: 28, platformCount: 4, platformSpikeChance: 0, platformSpeed: 1.5, platformMinW: 203, platformMaxW: 203}}, {width:800, height:600, duration:3, jumpMin:6, jumpMax:250, gravity: 0.2})
         }, 200)
         setTimeout(() => {
         zarAttackBarrage(getRandomInt(5))
-        }, 2200)
+        }, 3200)
     } else if (attackVariable == 4)
     {
         screenFlash("", 200)
@@ -1862,7 +1839,7 @@ function zarAttackBarrage(attackVariable) {
         }, 200)
         setTimeout(() => {
         player.zarDungeon.barrageActive = false
-        }, 2200)
+        }, 3200)
     }
 }
 
@@ -1875,3 +1852,5 @@ window.addEventListener('load', (event) => {
     }
     }, 500)
 });
+
+//bulletHell({"diceAttack": {diceAmount: 8, intervalDiv: 0.5}}, {duration: 10})

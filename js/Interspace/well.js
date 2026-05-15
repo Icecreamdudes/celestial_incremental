@@ -13,6 +13,8 @@
         lightWellCycleEffectSoftcap: new Decimal(0.5),
         
         lightWellSpeed: new Decimal(1),
+
+        lightFountainReqDivisor: new Decimal(1),
         
         modules: {
             1: {
@@ -219,6 +221,7 @@
         player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(player.wel.fountains[4].completionEffect)
         player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(player.pri.fountains[5].completionEffect)
         if (hasMilestone("prj", 105)) player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(player.prj.milestone105Effect)
+        player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(buyableEffect("sme", 192))
 
         // WELLS
 
@@ -262,6 +265,12 @@
         //player.wel.modules[2].completions = player.wel.modules[2].completions.add(player.wel.modules[2].completionsGain.mul(delta).mul(player.wel.modules[2].timeSpeed.div(player.wel.modules[2].maxTime)))
         //player.wel.modules[3].completions = player.wel.modules[3].completions.add(player.wel.modules[3].completionsGain.mul(delta).mul(player.wel.modules[3].timeSpeed.div(player.wel.modules[3].maxTime)))
         
+        // FOUNTAIN REQ DIVISOR
+        player.wel.lightFountainReqDivisor = new Decimal(1)
+        if (hasUpgrade("wel", 33)) {
+            player.wel.lightFountainReqDivisor = player.wel.lightFountainReqDivisor.mul(player.pri.fountains[3].completionEffect)
+        }
+
         // FOUNTAIN PROGRESS
         Object.keys(layers.wel.fountains).forEach(i => {
             let module = player.wel.fountains[i]
@@ -271,7 +280,13 @@
             module.lightReq = fountain.getLightReq()
             module.completionEffect = fountain.getCompletionEffect()
 
-            if (module.automated && player.wel.light.gte(module.lightReq)) module.time = module.time.add(module.timeSpeed.mul(player.pri.fountains[3].completionEffect).div(player.wel.light).mul(player.wel.light.sub(module.lightReq)).mul(0.5).mul(delta));
+            if (module.automated && player.wel.light.gte(module.lightReq)) {
+                if (hasUpgrade("wel", 33)) {
+                    module.time = module.time.add(module.timeSpeed.div(player.wel.light).mul(player.wel.light.sub(module.lightReq)).mul(delta));
+                } else {
+                    module.time = module.time.add(module.timeSpeed.mul(player.pri.fountains[3].completionEffect).div(player.wel.light).mul(player.wel.light.sub(module.lightReq)).mul(0.5).mul(delta));
+                }
+            }
             if (module.focused) {
                 module.time = module.time.add(module.timeSpeed.mul(delta))
             }
@@ -300,8 +315,8 @@
         else player.wel.modules[7].completionsEffect = player.wel.modules[7].completions.mul(0.01).add(1);
         player.wel.lightGain = player.wel.lightGain.mul(player.wel.modules[7].completionsEffect)
 
-        if (player.wel.modules[8].completions.gte(1e3)) player.wel.modules[8].completionsEffect = player.wel.modules[8].completions.div(1e3).pow(player.wel.lightWellCycleEffectSoftcap).mul(1e3).div(1e15).add(1);
-        else player.wel.modules[8].completionsEffect = player.wel.modules[8].completions.div(1e15).add(1);
+        if (player.wel.modules[8].completions.gte(1e3)) player.wel.modules[8].completionsEffect = player.wel.modules[8].completions.div(1e3).pow(player.wel.lightWellCycleEffectSoftcap).mul(1e3).div(1e12).add(1);
+        else player.wel.modules[8].completionsEffect = player.wel.modules[8].completions.div(1e12).add(1);
         player.wel.lightGain = player.wel.lightGain.mul(player.wel.modules[8].completionsEffect)
 
         //
@@ -720,13 +735,13 @@
         },
         34: {
             unlocked() { return hasUpgrade("wel", 33) },
-            condition() { return hasMilestone("prj", 205) && player.wel.modules[1].maxTime.div(player.wel.modules[1].timeSpeed).lte(0.1) },
+            condition() { return player.prj.completedProjects.gte(15) },
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
                     s += "Unlock the third project.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
-                    s += "???</h2><br><br><h3>Req: Prismatic project level 5 and 0.1s Light Well cycle timer</h3>"
+                    s += "???</h2><br><br><h3>Req: 15 total project cycles</h3>"
                 }
                 return s
             },
@@ -840,7 +855,7 @@
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
                     s += "Triple light well speed.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
-                    s += "???</h2><br><br><h3>Req: Prism Well γ unlocked</h3>"
+                    s += "???</h2><br><br><h3>Req: Light Well δ unlocked</h3>"
                 }
                 return s
             },
@@ -878,7 +893,7 @@
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
                     s += "Unlock the fourth project.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
-                    s += "???</h2><br><br><h3>Req: 60 total Project levels</h3>"
+                    s += "???</h2><br><br><h3>Req: 30 total Project levels</h3>"
                 }
                 return s
             },
@@ -1441,6 +1456,8 @@
                     s = s.pow(completions.sub(400).div(400).add(1))
                 }
 
+                s = s.div(player.wel.lightFountainReqDivisor)
+
                 return s
             },
             getLightReq() {
@@ -1452,6 +1469,8 @@
                 if (completions.gte(400)) {
                     s = s.pow(completions.sub(400).div(400).add(1))
                 }
+
+                s = s.div(player.wel.lightFountainReqDivisor)
 
                 return s.floor()
             },
@@ -1490,6 +1509,8 @@
                     s = s.pow(completions.sub(400).div(400).add(1))
                 }
 
+                s = s.div(player.wel.lightFountainReqDivisor)
+
                 return s
             },
             getLightReq() {
@@ -1501,6 +1522,8 @@
                 if (completions.gte(400)) {
                     s = s.pow(completions.sub(400).div(400).add(1))
                 }
+
+                s = s.div(player.wel.lightFountainReqDivisor)
 
                 return s.floor()
             },
@@ -1539,6 +1562,8 @@
                     s = s.pow(completions.sub(400).div(400).add(1))
                 }
 
+                s = s.div(player.wel.lightFountainReqDivisor)
+
                 return s
             },
             getLightReq() {
@@ -1550,6 +1575,8 @@
                 if (completions.gte(400)) {
                     s = s.pow(completions.sub(400).div(400).add(1))
                 }
+
+                s = s.div(player.wel.lightFountainReqDivisor)
 
                 return s.floor()
             },
@@ -1574,7 +1601,7 @@
             getCompletionEffect() {
                 let completions = player.wel.fountains[4].completions
 
-                let s = completions.mul(0.2).add(1)
+                let s = completions.mul(0.25).add(1)
 
                 return s
             },
@@ -1588,6 +1615,8 @@
                     s = s.pow(completions.sub(400).div(400).add(1))
                 }
 
+                s = s.div(player.wel.lightFountainReqDivisor)
+
                 return s
             },
             getLightReq() {
@@ -1599,6 +1628,8 @@
                 if (completions.gte(400)) {
                     s = s.pow(completions.sub(400).div(400).add(1))
                 }
+
+                s = s.div(player.wel.lightFountainReqDivisor)
 
                 return s.floor()
             },
@@ -1795,7 +1826,7 @@
                     }
                     }
                     if (player.wel.modules[2].completions.gte(500)) {
-                    if (player.wel.modules[3].completions.gte(1e15) && false) {
+                    if (player.wel.modules[3].completions.gte(1e12)) {
                             // light well delta
                         look[1][1].push(["blank", "1px"])
                         look[1][1].push(
@@ -1839,7 +1870,7 @@
                         look[1][1].push(
                             ["style-column", [
                                 ["style-column", [
-                                    ["raw-html", "Light Well δ</h2><br><small>Req: 1e15 γ ↻</small>", {color: "white", fontSize: "16px"}],
+                                    ["raw-html", "Light Well δ</h2><br><small>Req: 1e12 γ ↻</small>", {color: "white", fontSize: "16px"}],
                                 ], {background: "black",border: "3px solid #663737", borderRadius: "103px 103px 16px 16px", width: "150px", height: "323px", lineHeight: "1"}],
                             ["blank", "9px"],
                         ]],
@@ -2051,7 +2082,7 @@
                             ["blank", "25px"],
                             ["raw-html", "You are using " + formatWhole(player.prj.focused) + "/" + formatWhole(player.prj.maxFocused) + " focus.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                             ["style-column", [
-                                ["raw-html", "<small>Automated fountains gain x" + formatShort(player.pri.fountains[3].completionEffect.mul(0.5), 1) + " progress.</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                                ["raw-html", hasUpgrade("wel", 33) ? "<small>Fountain requirements are reduced by /" + formatShort(player.pri.fountains[3].completionEffect, 1) + ".</small>" : "<small>Automated fountains gain x" + formatShort(player.pri.fountains[3].completionEffect.mul(0.5), 1) + " progress.</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                             ], {display: layers.wel.fountains[1].canAuto ? "" : "none !important"}],
                             ["blank", "10px"],
                         ]],

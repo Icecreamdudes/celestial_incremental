@@ -99,6 +99,58 @@
                 automated: false,
                 prismReq: new Decimal(1),
             },
+            7: {
+                time: new Decimal(0),
+                timeReq: new Decimal(1e8),
+                timeSpeed: new Decimal(1),
+                canAddCompletion: false,
+                completions: new Decimal(0),
+                maxCompletions: new Decimal(0),
+                completionEffect: new Decimal(1),
+
+                focused: false,
+                automated: false,
+                prismReq: new Decimal(1),
+            },
+            8: {
+                time: new Decimal(0),
+                timeReq: new Decimal(1e8),
+                timeSpeed: new Decimal(1),
+                canAddCompletion: false,
+                completions: new Decimal(0),
+                maxCompletions: new Decimal(0),
+                completionEffect: new Decimal(1),
+
+                focused: false,
+                automated: false,
+                prismReq: new Decimal(1),
+            },
+            9: {
+                time: new Decimal(0),
+                timeReq: new Decimal(1e8),
+                timeSpeed: new Decimal(1),
+                canAddCompletion: false,
+                completions: new Decimal(0),
+                maxCompletions: new Decimal(0),
+                completionEffect: new Decimal(1),
+
+                focused: false,
+                automated: false,
+                prismReq: new Decimal(1),
+            },
+            10: {
+                time: new Decimal(0),
+                timeReq: new Decimal(1e8),
+                timeSpeed: new Decimal(1),
+                canAddCompletion: false,
+                completions: new Decimal(0),
+                maxCompletions: new Decimal(0),
+                completionEffect: new Decimal(1),
+
+                focused: false,
+                automated: false,
+                prismReq: new Decimal(1),
+            },
         },
 
         blueshifts: new Decimal(0),
@@ -121,7 +173,9 @@
         if (player.pri.autoPrismaticInput.gte(0) && player.pri.autoPrismaticType) player.pri.autoPrismaticAmount = player.pri.autoPrismaticInput
         if (player.pri.autoPrismaticInput.lt(0) && player.pri.autoPrismaticType) player.pri.autoPrismaticAmount = new Decimal(1)
 
-        player.pri.prismsToGet = player.wel.light.add(1).log(10).sub(15).pow_base(1.5)
+        let prismGainGrowth = new Decimal(0.5)
+        //if (hasMilestone("blu", 11)) prismGainGrowth = prismGainGrowth.mul(player.blu.milestone11Effect)
+        player.pri.prismsToGet = player.wel.light.add(1).log(10).sub(15).pow_base(prismGainGrowth.add(1))
         if (!hasMilestone("prj", 201)) player.pri.prismsToGet = player.pri.prismsToGet.min(1);
 
         if (hasMilestone("prj", 203)) player.pri.prismsToGet = player.pri.prismsToGet.mul(2);
@@ -233,7 +287,11 @@
             },
             style() {
                 let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
-                if (this.canClick()) {
+                if (player.pri.fountains[this.id].focused) {
+                    look.backgroundColor = "#335966"
+                    look.border = "3px solid #4d9999"
+                    look.color = "white"
+                } else if (this.canClick()) {
                     look.backgroundColor = "#a8ffff"
                     look.border = "3px solid #0000003f"
                     look.color = "black"
@@ -256,7 +314,11 @@
             },
             style() {
                 let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
-                if (this.canClick()) {
+                if (player.pri.fountains[this.id].focused) {
+                    look.backgroundColor = "#335966"
+                    look.border = "3px solid #4d9999"
+                    look.color = "white"
+                } else if (this.canClick()) {
                     look.backgroundColor = "#a8ffff"
                     look.border = "3px solid #0000003f"
                     look.color = "black"
@@ -279,7 +341,11 @@
             },
             style() {
                 let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
-                if (this.canClick()) {
+                if (player.pri.fountains[this.id].focused) {
+                    look.backgroundColor = "#335966"
+                    look.border = "3px solid #4d9999"
+                    look.color = "white"
+                } else if (this.canClick()) {
                     look.backgroundColor = "#a8ffff"
                     look.border = "3px solid #0000003f"
                     look.color = "black"
@@ -302,7 +368,11 @@
             },
             style() {
                 let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
-                if (this.canClick()) {
+                if (player.pri.fountains[this.id].focused) {
+                    look.backgroundColor = "#335966"
+                    look.border = "3px solid #4d9999"
+                    look.color = "white"
+                } else if (this.canClick()) {
                     look.backgroundColor = "#a8ffff"
                     look.border = "3px solid #0000003f"
                     look.color = "black"
@@ -325,7 +395,11 @@
             },
             style() {
                 let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
-                if (this.canClick()) {
+                if (player.pri.fountains[this.id].focused) {
+                    look.backgroundColor = "#335966"
+                    look.border = "3px solid #4d9999"
+                    look.color = "white"
+                } else if (this.canClick()) {
                     look.backgroundColor = "#a8ffff"
                     look.border = "3px solid #0000003f"
                     look.color = "black"
@@ -348,7 +422,119 @@
             },
             style() {
                 let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
-                if (this.canClick()) {
+                if (player.pri.fountains[this.id].focused) {
+                    look.backgroundColor = "#335966"
+                    look.border = "3px solid #4d9999"
+                    look.color = "white"
+                } else if (this.canClick()) {
+                    look.backgroundColor = "#a8ffff"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        7: {
+            title() { return "<h3>Focus</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.pri.prisms.gte(player.pri.fountains[this.id].prismReq) && !player.pri.fountains[this.id].focused},
+            unlocked() { return true },
+            onClick() {
+                player.pri.prisms = player.pri.prisms.sub(player.pri.fountains[this.id].prismReq)
+                player.prj.focused = player.prj.focused.add(1)
+                player.pri.fountains[this.id].focused = true
+            },
+            style() {
+                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
+                if (player.pri.fountains[this.id].focused) {
+                    look.backgroundColor = "#335966"
+                    look.border = "3px solid #4d9999"
+                    look.color = "white"
+                } else if (this.canClick()) {
+                    look.backgroundColor = "#a8ffff"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        8: {
+            title() { return "<h3>Focus</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.pri.prisms.gte(player.pri.fountains[this.id].prismReq) && !player.pri.fountains[this.id].focused},
+            unlocked() { return true },
+            onClick() {
+                player.pri.prisms = player.pri.prisms.sub(player.pri.fountains[this.id].prismReq)
+                player.prj.focused = player.prj.focused.add(1)
+                player.pri.fountains[this.id].focused = true
+            },
+            style() {
+                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
+                if (player.pri.fountains[this.id].focused) {
+                    look.backgroundColor = "#335966"
+                    look.border = "3px solid #4d9999"
+                    look.color = "white"
+                } else if (this.canClick()) {
+                    look.backgroundColor = "#a8ffff"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        9: {
+            title() { return "<h3>Focus</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.pri.prisms.gte(player.pri.fountains[this.id].prismReq) && !player.pri.fountains[this.id].focused},
+            unlocked() { return true },
+            onClick() {
+                player.pri.prisms = player.pri.prisms.sub(player.pri.fountains[this.id].prismReq)
+                player.prj.focused = player.prj.focused.add(1)
+                player.pri.fountains[this.id].focused = true
+            },
+            style() {
+                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
+                if (player.pri.fountains[this.id].focused) {
+                    look.backgroundColor = "#335966"
+                    look.border = "3px solid #4d9999"
+                    look.color = "white"
+                } else if (this.canClick()) {
+                    look.backgroundColor = "#a8ffff"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        10: {
+            title() { return "<h3>Focus</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.pri.prisms.gte(player.pri.fountains[this.id].prismReq) && !player.pri.fountains[this.id].focused},
+            unlocked() { return true },
+            onClick() {
+                player.pri.prisms = player.pri.prisms.sub(player.pri.fountains[this.id].prismReq)
+                player.prj.focused = player.prj.focused.add(1)
+                player.pri.fountains[this.id].focused = true
+            },
+            style() {
+                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
+                if (player.pri.fountains[this.id].focused) {
+                    look.backgroundColor = "#335966"
+                    look.border = "3px solid #4d9999"
+                    look.color = "white"
+                } else if (this.canClick()) {
                     look.backgroundColor = "#a8ffff"
                     look.border = "3px solid #0000003f"
                     look.color = "black"
@@ -681,7 +867,7 @@
             getCompletionEffect() {
                 let completions = player.pri.fountains[5].completions
 
-                s = completions.pow(0.8).pow_base(1.2)
+                s = completions.pow(0.8).pow_base(1.25)
 
                 return s
             },
@@ -756,6 +942,186 @@
                 return s
             },
         },
+        7: {
+            title: "Dodecahedron",
+            completionEffectPrefix: "x",
+            completionEffectSuffix: " Light, based on well ↻",
+            condition() {
+                return player.pri.fountains[2].completions.gte(12)
+            },
+            unlocked() {
+                return (player.pri.fountains[4].completions.gt(0) || player.pri.fountains[5].completions.gt(0) || player.pri.fountains[6].completions.gt(0)) && hasMilestone("prj", 302)
+            },
+            getCompletionEffect() {
+                let completions = player.pri.fountains[7].completions.pow(0.75)
+
+                s = player.pri.prisms.add(1).log10().div(4).add(1).pow(completions).log(10).add(1).pow(0.5).sub(1).pow_base(10).sub(1).mul(4).add(1).pow(2)
+
+                return s
+            },
+            getTimeReq() {
+                let completions = player.pri.fountains[7].completions
+                let s = completions.div(4).add(1).pow(5)
+
+                if (completions.gte(50)) {
+                    s = s.pow(1.05)
+                }
+                s = s.pow(1.0625).mul(400)
+
+                return s
+            },
+            getprismReq() {
+                let completions = player.pri.fountains[7].completions
+                let s = completions.div(4).add(1).pow(5)
+                
+                if (completions.gte(20)) {
+                    s = s.mul(completions.sub(20).pow_base(1.5))
+                }
+                s = s.mul(8)
+
+                return s.floor()
+            },
+            getTimeSpeed() {
+                let s = new Decimal(1)
+
+                //s = s.mul(player.prj.projectSpeed)
+                s = s.mul(player.pri.fountainSpeed)
+
+                return s
+            },
+        },
+        8: {
+            title: "Lense",
+            completionEffectPrefix: "x",
+            completionEffectSuffix: " Light",
+            condition() {
+                return player.prj.projectSpeed.gte(400)
+            },
+            unlocked() {
+                return (player.pri.fountains[4].completions.gt(0) || player.pri.fountains[5].completions.gt(0) || player.pri.fountains[6].completions.gt(0)) && hasMilestone("prj", 302)
+            },
+            getCompletionEffect() {
+                let completions = player.pri.fountains[9].completions
+
+                s = completions.pow(0.8).pow_base(1.2)
+
+                return s
+            },
+            getTimeReq() {
+                let completions = player.pri.fountains[9].completions
+                let s = new Decimal(1)
+
+                s = s.mul(completions.pow_base(1.5))
+                if (completions.gte(50)) {
+                    s = s.pow(1.05)
+                }
+                s = s.pow(1.0625).mul(1.8e3)
+
+                return s
+            },
+            getprismReq() {
+                let completions = player.pri.fountains[9].completions
+                let s = completions.pow_base(1.5).mul(50)
+
+                return s.floor()
+            },
+            getTimeSpeed() {
+                let s = new Decimal(1)
+
+                //s = s.mul(player.prj.projectSpeed)
+                s = s.mul(player.pri.fountainSpeed)
+
+                return s
+            },
+        },
+        9: {
+            title: "Pentagon",
+            completionEffectPrefix: "x",
+            completionEffectSuffix: " Project Speed",
+            condition() {
+                return player.prj.projectSpeed.gte(400)
+            },
+            unlocked() {
+                return (player.pri.fountains[4].completions.gt(0) || player.pri.fountains[5].completions.gt(0) || player.pri.fountains[6].completions.gt(0)) && hasMilestone("prj", 302)
+            },
+            getCompletionEffect() {
+                let completions = player.pri.fountains[9].completions
+
+                s = completions.pow(0.8).pow_base(1.2)
+
+                return s
+            },
+            getTimeReq() {
+                let completions = player.pri.fountains[9].completions
+                let s = new Decimal(1)
+
+                s = s.mul(completions.pow_base(1.5))
+                if (completions.gte(50)) {
+                    s = s.pow(1.05)
+                }
+                s = s.pow(1.0625).mul(1.8e3)
+
+                return s
+            },
+            getprismReq() {
+                let completions = player.pri.fountains[9].completions
+                let s = completions.pow_base(1.5).mul(50)
+
+                return s.floor()
+            },
+            getTimeSpeed() {
+                let s = new Decimal(1)
+
+                //s = s.mul(player.prj.projectSpeed)
+                s = s.mul(player.pri.fountainSpeed)
+
+                return s
+            },
+        },
+        10: {
+            title: "Gear",
+            completionEffectPrefix: "x",
+            completionEffectSuffix: " Light Well Speed",
+            condition() {
+                return player.prj.projectSpeed.gte(400)
+            },
+            unlocked() {
+                return (player.pri.fountains[4].completions.gt(0) || player.pri.fountains[5].completions.gt(0) || player.pri.fountains[6].completions.gt(0)) && hasMilestone("prj", 302)
+            },
+            getCompletionEffect() {
+                let completions = player.pri.fountains[9].completions
+
+                s = completions.pow(0.8).pow_base(1.2)
+
+                return s
+            },
+            getTimeReq() {
+                let completions = player.pri.fountains[9].completions
+                let s = new Decimal(1)
+
+                s = s.mul(completions.pow_base(1.5))
+                if (completions.gte(50)) {
+                    s = s.pow(1.05)
+                }
+                s = s.pow(1.0625).mul(1.8e3)
+
+                return s
+            },
+            getprismReq() {
+                let completions = player.pri.fountains[9].completions
+                let s = completions.pow_base(1.5).mul(50)
+
+                return s.floor()
+            },
+            getTimeSpeed() {
+                let s = new Decimal(1)
+
+                //s = s.mul(player.prj.projectSpeed)
+                s = s.mul(player.pri.fountainSpeed)
+
+                return s
+            },
+        },
     },
     microtabs: {
         stuff: {
@@ -770,6 +1136,12 @@
                                 ["style-column", [], {background: "#d6ebff", border: "3px solid #d6ebff", borderRadius: "13px 13px 0 0", borderRight: "0", width: "268px", height: "215px", marginLeft: "-5.25px"}],
                             ], {width: "0", height: "0"}],
                             makePrismFountain(1, false)
+                        ]],
+                        ["blank", "6px", {width: "6px"}],
+                        ["style-row", [
+                        ]],
+                        ["blank", "6px", {width: "6px"}],
+                        ["style-row", [
                         ]],
                         ["blank", "6px", {width: "6px"}],
                         ["style-row", [
@@ -869,6 +1241,81 @@
                             look[5][1].push(
                             ["style-column", [
                                 ["raw-html", "Hourglass<br><small>Req: 10 Spiral ↻ and 10 Arrow ↻</small>", {color: "white", fontSize: "16px"}],
+                            ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
+                            )
+                        }
+                    }
+
+                    // dodecahedron
+                    if (layers.pri.fountains[7].unlocked()) {
+                        look[7][1].push(["blank", "6px", {width: "6px"}])
+                            look[7][1].push(
+                                ["style-column", [
+                                    ["style-column", [], {background: "#d6ebff", border: "3px solid #d6ebff", borderRadius: "0", borderRight: "0", width: "268px", height: "215px", marginLeft: "-5.25px"}],
+                                ], {width: "0", height: "0"}],
+                            )
+                        if (layers.pri.fountains[7].condition()) {
+                            look[7][1].push(makePrismFountain(7, false))
+                        } else {
+                            look[7][1].push(
+                            ["style-column", [
+                                ["raw-html", "Dodecahedron<br><small>Req: 12 Octahedron ↻</small>", {color: "white", fontSize: "16px"}],
+                            ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
+                            )
+                        }
+                    }
+                    // lense
+                    if (layers.pri.fountains[8].unlocked()) {
+                        look[7][1].push(["blank", "6px", {width: "6px"}])
+                            look[7][1].push(
+                                ["style-column", [
+                                    ["style-column", [], {background: "#d6ebff", border: "3px solid #d6ebff", borderRadius: "0", borderRight: "0", width: "268px", height: "215px", marginLeft: "-5.25px"}],
+                                ], {width: "0", height: "0"}],
+                            )
+                        if (layers.pri.fountains[8].condition()) {
+                            look[7][1].push(makePrismFountain(7, false))
+                        } else {
+                            look[7][1].push(
+                            ["style-column", [
+                                ["raw-html", "Lense<br><small>Req: 8 Total Blueprint ↻</small>", {color: "white", fontSize: "16px"}],
+                            ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
+                            )
+                        }
+                    }
+
+                    // pentagon
+                    if (layers.pri.fountains[9].unlocked()) {
+                        look[9][1].push(["blank", "6px", {width: "6px"}])
+                            look[9][1].push(
+                                ["style-column", [
+                                    ["style-column", [], {background: "#d6ebff", border: "3px solid #d6ebff", borderRadius: "0", borderRight: "0", width: "268px", height: "215px", marginLeft: "-5.25px"}],
+                                ], {width: "0", height: "0"}],
+                            )
+                        if (layers.pri.fountains[9].condition()) {
+                            look[9][1].push(makePrismFountain(9, false))
+                        } else {
+                            look[9][1].push(
+                            ["style-column", [
+                                ["raw-html", "Pentagon<br><small>Req: 400 Project Speed</small>", {color: "white", fontSize: "16px"}],
+                            ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
+                            )
+                        }
+                    }
+
+                    // gear
+                    if (layers.pri.fountains[10].unlocked()) {
+                        look[9][1].push(["blank", "6px", {width: "6px"}])
+                            look[9][1].push(
+                                ["style-column", [
+                                    ["style-column", [], {background: "#d6ebff", border: "3px solid #d6ebff", borderRadius: "0", borderRight: "0", width: "268px", height: "215px", marginLeft: "-5.25px"}],
+                                ], {width: "0", height: "0"}],
+                            )
+                        if (layers.pri.fountains[10].condition()) {
+                            look[9][1].push(makePrismFountain(9, false))
+                        } else {
+                            look[9][1].push(
+                            ["style-column", [
+                                ["raw-html", "Gear<br><small>Req: 16 Total Blueprint ↻</small>", {color: "white", fontSize: "16px"}],
                             ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
                             )
                         }

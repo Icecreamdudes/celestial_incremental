@@ -57,7 +57,7 @@
                 shiftBase: new Decimal(96),
             },
         },
-        blueshiftEffectBase: new Decimal(1.5),
+        blueshiftEffectBase: new Decimal(2),
         blueshiftEffect: new Decimal(1),
     }},
     automate() {},
@@ -72,7 +72,7 @@
     tooltip: "Blueshift",
     color: "#ffffd1",
     update(delta) {
-        player.blu.blueshiftEffectBase = new Decimal(1.5)
+        player.blu.blueshiftEffectBase = new Decimal(3)
         player.blu.blueshiftEffect = player.blu.totalBlueshifts.pow_base(player.blu.blueshiftEffectBase)
 
         // BLUESHIFTS
@@ -90,11 +90,15 @@
         for (let i = 1; i < Object.keys(player.blu.blueshifts).length + 1; i++) {
             let blueshift = player.blu.blueshifts[i]
 
-            blueshift.cycleGainMul = blueshift.shiftBase.div(2).pow(blueshift.amount)
+            blueshift.cycleGainMul = blueshift.shiftBase.pow(blueshift.amount)
             blueshift.cycleSpeedRoot = blueshift.amount.add(1)
             player.blu.totalBlueshifts = player.blu.totalBlueshifts.add(blueshift.amount)
         }
 
+        player.blu.milestone11Effect = player.blu.blueshifts[1].amount.mul(0.1).add(1)
+        player.blu.milestone12Effect = player.blu.blueshifts[2].amount.mul(0.2).add(1)
+        player.blu.milestone13Effect = player.blu.blueshifts[3].amount.mul(0.2).add(1)
+        player.blu.milestone14Effect = player.blu.blueshifts[4].amount.mul(0.25).add(1)
     },
     blueshiftReset(isRewarded, id) {
         if (isRewarded) {
@@ -193,6 +197,47 @@
         }
         if (player.pri.fountains[6].automated) {
             player.pri.fountains[6].automated = false
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        
+        player.pri.fountains[7].completions = new Decimal(0)
+        player.pri.fountains[7].canAddCompletion = false
+        if (player.pri.fountains[7].focused) {
+            player.pri.fountains[7].focused = false
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        if (player.pri.fountains[7].automated) {
+            player.pri.fountains[7].automated = false
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        player.pri.fountains[8].completions = new Decimal(0)
+        player.pri.fountains[8].canAddCompletion = false
+        if (player.pri.fountains[8].focused) {
+            player.pri.fountains[8].focused = false
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        if (player.pri.fountains[8].automated) {
+            player.pri.fountains[8].automated = false
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        player.pri.fountains[9].completions = new Decimal(0)
+        player.pri.fountains[9].canAddCompletion = false
+        if (player.pri.fountains[9].focused) {
+            player.pri.fountains[9].focused = false
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        if (player.pri.fountains[9].automated) {
+            player.pri.fountains[9].automated = false
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        player.pri.fountains[10].completions = new Decimal(0)
+        player.pri.fountains[10].canAddCompletion = false
+        if (player.pri.fountains[10].focused) {
+            player.pri.fountains[10].focused = false
+            player.prj.focused = player.prj.focused.sub(1)
+        }
+        if (player.pri.fountains[10].automated) {
+            player.pri.fountains[10].automated = false
             player.prj.focused = player.prj.focused.sub(1)
         }
 
@@ -296,7 +341,72 @@
     bars: {},
     upgrades: {},
     buyables: {},
-    milestones: {},
+    milestones: {
+        11: {
+            requirementDescription: "1 Blueshift",
+            effectDescription() { return "+x0.1 prism gain per OoM of light, per α blueshift. (x" + format(player.blu.milestone11Effect, 1) + ")" },
+            done() { return player.blu.totalBlueshifts.gte(1) },
+            style() {
+                let look = {width: "506px", minHeight: "69px", maxHeight: "69px", marginLeft: "3px", marginRight: "3px", color: "white", outline: "3px solid #2f2f80", borderRadius: "0px"}
+                if (hasMilestone("blu", this.id)) {
+                    look.backgroundColor = "#2f2f80"
+                    look.border = "3px solid #4242b3"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                }
+                return look
+            },
+        },
+        12: {
+            requirementDescription: "2 Blueshifts",
+            effectDescription() { return "+x0.2 effective pyramid ↻, per β blueshift. (x" + format(player.blu.milestone12Effect, 1) + ")" },
+            done() { return player.blu.totalBlueshifts.gte(2) },
+            style() {
+                let look = {width: "506px", minHeight: "69px", maxHeight: "69px", marginLeft: "3px", marginRight: "3px", color: "white", outline: "3px solid #2f2f80", borderRadius: "0px"}
+                if (hasMilestone("blu", this.id)) {
+                    look.backgroundColor = "#2f2f80"
+                    look.border = "3px solid #4242b3"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                }
+                return look
+            },
+        },
+        13: {
+            requirementDescription: "3 Blueshifts",
+            effectDescription() { return "+x0.2 to the blueshift effect base, per γ blueshift. (x" + format(player.blu.milestone13Effect, 1) + ")" },
+            done() { return player.blu.totalBlueshifts.gte(3) },
+            style() {
+                let look = {width: "506px", minHeight: "69px", maxHeight: "69px", marginLeft: "3px", marginRight: "3px", color: "white", outline: "3px solid #2f2f80", borderRadius: "0px"}
+                if (hasMilestone("blu", this.id)) {
+                    look.backgroundColor = "#2f2f80"
+                    look.border = "3px solid #4242b3"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                }
+                return look
+            },
+        },
+        14: {
+            requirementDescription: "4 Blueshifts",
+            effectDescription() { return "+/0.25 light well speed and duration per blueshift. (/" + format(player.blu.milestone14Effect, 2) + ")" },
+            done() { return player.blu.totalBlueshifts.gte(4) },
+            style() {
+                let look = {width: "506px", minHeight: "69px", maxHeight: "69px", marginLeft: "3px", marginRight: "3px", color: "white", outline: "3px solid #2f2f80", borderRadius: "0px"}
+                if (hasMilestone("blu", this.id)) {
+                    look.backgroundColor = "#2f2f80"
+                    look.border = "3px solid #4242b3"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                }
+                return look
+            },
+        },
+    },
     challenges: {},
     infoboxes: {},
     microtabs: {
@@ -315,8 +425,8 @@
                             ], {background: "#2f2f80", border: "3px solid #4242b3", borderRadius: "10px", width: "600px", height: "125px", padding: "3px"}],                   
                         ], {background: "#2f2f80", borderRadius: "13px", padding: "3px", width: "612px"}],
                         ["blank", "25px"],
-                        ["raw-html", "You have blueshifted " + formatWhole(player.blu.totalBlueshifts) + " times.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "<small>Boosts light well cycle gain by x" + format(player.blu.blueshiftEffect) + ".</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "You have blueshifted <h3>" + formatWhole(player.blu.totalBlueshifts) + "</h3> times.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "<small>Boosts light well ↻ gain by x" + formatSimple(player.blu.blueshiftEffect) + ".</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "25px"],
 
                         ["style-row", [
@@ -416,13 +526,6 @@
                     ]
                 }
             },
-            "Upgrades": {
-                buttonStyle() { return { color: "white", borderRadius: "8px"} },
-                unlocked() { return true },
-                content() {
-                    return []
-                }
-            }
         },
     },
     tabFormat: [

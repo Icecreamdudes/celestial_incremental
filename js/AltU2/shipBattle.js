@@ -172,6 +172,7 @@ function pickUpgrades() {
     return chosen;
 }
 
+
 class SpaceArena {
         // Expand the arena to cover the entire screen and make it transparent
     enterIriditeFullscreen() {
@@ -276,9 +277,11 @@ class SpaceArena {
             this._onWindowResize = null;
         }
     }
-    constructor(width, height) {
-        this.width = width;
-        this.height = height;
+    constructor(canvasWidth, canvasHeight, arenaWidth, arenaHeight) {
+        this.width = arenaWidth;
+        this.height = arenaHeight;
+        this.canvasWidth = canvasWidth;
+        this.canvasHeight = canvasHeight;
         this.arenaDiv = null;
 
         // load wing GIF for Iridite (200x200). keep a loaded flag so draw can choose fallback.
@@ -292,8 +295,8 @@ class SpaceArena {
         // Ship types
         if (player.ir.shipType == 1) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 angle: 0,
                 velocity: 0,
                 angularVelocity: 0,
@@ -311,8 +314,8 @@ class SpaceArena {
         this.shipHitInvuln = 0;
         if (player.ir.shipType == 2) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 angle: 0,
                 velocity: 0,
                 angularVelocity: 0,
@@ -328,8 +331,8 @@ class SpaceArena {
         }
         if (player.ir.shipType == 3) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 vx: 0,
                 vy: 0,
                 radius: 30,
@@ -345,7 +348,7 @@ class SpaceArena {
             this.bounceCooldown = 2000; // 2 seconds in ms
             this.canvasClickListener = (e) => {
                 let now = Date.now();
-                this.bounceCooldown = 2000 * this.upgradeEffects.attackSpeed
+                this.bounceCooldown = 2000 / this.upgradeEffects.attackSpeed
                 if (now - this.lastBounceClick < this.bounceCooldown) return;
                 this.lastBounceClick = now;
                 let rect = this.canvas.getBoundingClientRect();
@@ -356,8 +359,8 @@ class SpaceArena {
         }
         if (player.ir.shipType == 4) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 angle: 0,
                 velocity: 0,
                 angularVelocity: 0,
@@ -373,8 +376,8 @@ class SpaceArena {
         }
         if (player.ir.shipType == 5) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 angle: 0,
                 vx: 0,
                 vy: 0,
@@ -393,8 +396,8 @@ class SpaceArena {
         }
         if (player.ir.shipType == 6) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 angle: 0,
                 vx: 0,
                 vy: 0,
@@ -413,8 +416,8 @@ class SpaceArena {
         }
         if (player.ir.shipType == 7) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 vx: 0,
                 vy: 0,
                 radius: 20,
@@ -428,22 +431,22 @@ class SpaceArena {
                 collisionDamage: 10,
             };
             this.lastDashClick = 0;
-            this.dashCooldown = 1000; // 1 second in ms
+            this.dashCooldown = 1000; // 1 seconds in ms
             this.canvasClickListener = (e) => {
                 let now = Date.now();
-                this.dashCooldown = 1000 * this.upgradeEffects.attackSpeed
+                this.dashCooldown = 1000 / this.upgradeEffects.attackSpeed
                 if (now - this.lastDashClick < this.dashCooldown) return;
                 this.lastDashClick = now;
                 let rect = this.canvas.getBoundingClientRect();
-                let mx = e.clientX - rect.left;
-                let my = e.clientY - rect.top;
+                let mx = e.clientX + this.ship.x - (canvasWidth / 2) - rect.left;
+                let my = e.clientY + this.ship.y - (canvasHeight / 2) - rect.top;
                 this.ship.dashTarget = { x: mx, y: my };
             };
         }
         if (player.ir.shipType == 8) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 angle: 0,
                 velocity: 0,
                 angularVelocity: 0,
@@ -465,8 +468,8 @@ class SpaceArena {
         }
         if (player.ir.shipType == 9) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 angle: 0,
                 velocity: 0,
                 angularVelocity: 0,
@@ -480,10 +483,29 @@ class SpaceArena {
                 collisionDamage: 0.1,
             };
         }
+        if (player.ir.shipType == 10) {
+            this.ship = {
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
+                angle: 0,
+                velocity: 0,
+                angularVelocity: 0,
+                maxVelocity: 5,
+                acceleration: 0.25,
+                deceleration: 0.2,
+                rotationSpeed: 0.02,
+                cooldown: 5000,
+                lastShot: 0,
+                damage: 300,
+                collisionDamage: 15,
+            };
+            this.awaitingShotCharge = false
+            this.shotChargeTimer = 0
+        }
         if (player.ir.shipType == 0) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 angle: 0,
                 velocity: 0,
                 angularVelocity: 0,
@@ -506,13 +528,12 @@ class SpaceArena {
         this.running = false;
         this.loop = null;
         this.asteroidSpawnTimer = 0;
-        this.maxAsteroids = 6;
+        this.maxAsteroids = 10;
         this.lootFlashes = [];
         this.upgradeChoiceActive = false;
         this.upgradeChoices = [];
         this.selectedUpgradeIndex = null;
         this.upgradeEffects = this.getDefaultUpgradeEffects();
-        this.resourceMult = 1;
 
         // Enemy system
         this.enemies = [];
@@ -535,6 +556,7 @@ class SpaceArena {
                 xpDrop: [10, 15],
                 draw: (ctx, enemy) => {
                     ctx.save();
+                    ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
@@ -567,6 +589,7 @@ class SpaceArena {
                 xpDrop: [6, 10],
                 draw: (ctx, enemy) => {
                     ctx.save();
+                    ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
@@ -599,6 +622,7 @@ class SpaceArena {
                 xpDrop: [18, 26],
                 draw: (ctx, enemy) => {
                     ctx.save();
+                    ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
@@ -632,6 +656,7 @@ class SpaceArena {
                 xpDrop: [12, 18],
                 draw: (ctx, enemy) => {
                     ctx.save();
+                    ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
@@ -663,6 +688,7 @@ class SpaceArena {
                 xpDrop: [14, 22],
                 draw: (ctx, enemy) => {
                     ctx.save();
+                    ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
@@ -695,6 +721,7 @@ class SpaceArena {
                 xpDrop: [16, 24],
                 draw: (ctx, enemy) => {
                     ctx.save();
+                    ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
@@ -726,6 +753,7 @@ class SpaceArena {
                 xpDrop: [8, 14],
                 draw: (ctx, enemy) => {
                     ctx.save();
+                    ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                     ctx.beginPath();
                     ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
                     ctx.fillStyle = enemy.color;
@@ -736,102 +764,6 @@ class SpaceArena {
                     ctx.fillStyle = "#021";
                     ctx.textAlign = "center";
                     ctx.fillText("η", enemy.x, enemy.y + 5);
-                    ctx.restore();
-                }
-            },
-            thetaShip: {
-                name: "Theta",
-                radius: 40,
-                color: "#9c5d4a",
-                healthMin: 700,
-                healthMax: 800,
-                damage: 25,
-                speed: 0.8,
-                wanderSpeed: 1,
-                wanderChange: 0.04,
-                bulletSpeed: 3,
-                bulletCooldown: 150, // shoots every 2.5 seconds (at 60fps)
-                burstCount: 1,
-                burstInterval: 1,
-                rockDrop: [30, 45],
-                xpDrop: [32, 42],
-                draw: (ctx, enemy) => {
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
-                    ctx.fillStyle = enemy.color;
-                    ctx.shadowColor = "#d6b4a9";
-                    if (!options.performanceMode) {ctx.shadowBlur = 10} else {ctx.shadowBlur = 0};
-                    ctx.fill();
-                    ctx.font = "bold 48px monospace";
-                    ctx.fillStyle = "#3e251d";
-                    ctx.textAlign = "center";
-                    ctx.fillText("θ", enemy.x, enemy.y + 16);
-                    ctx.restore();
-                }
-            },
-            iotaShip: {
-                name: "Iota",
-                radius: 18,
-                color: "#ffd69c",
-                healthMin: 550,
-                healthMax: 600,
-                damage: 10,
-                speed: 1.6,
-                wanderSpeed: 2,
-                wanderChange: 0.15,
-                bulletSpeed: 6,
-                bulletCooldown: 100, // shoots every 1.66 seconds (at 60fps)
-                burstCount: 1,
-                burstInterval: 1,
-                rockDrop: [20, 30],
-                xpDrop: [24, 32],
-                draw: (ctx, enemy) => {
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
-                    ctx.fillStyle = enemy.color;
-                    ctx.shadowColor = "#fec";
-                    if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
-                    ctx.fill();
-                    ctx.font = "bold 20px monospace";
-                    ctx.fillStyle = "#221";
-                    ctx.textAlign = "center";
-                    ctx.fillText("ι", enemy.x, enemy.y + 6);
-                    ctx.restore();
-                }
-            },
-            kappaShip: {
-                name: "Kappa",
-                radius: 32,
-                color: "#7fffd4",
-                healthMin: 650,
-                healthMax: 750,
-                damage: 8,
-                speed: 1.2,
-                wanderSpeed: 1.2,
-                wanderChange: 0.02,
-                bulletSpeed: 8,
-                spinTimer: 180,
-                spinCooldown: 240, // 4 seconds between spins (at 60fps)
-                burstCount: 1,
-                burstInterval: 1,
-                rockDrop: [25, 35],
-                xpDrop: [28, 38],
-                draw: (ctx, enemy) => {
-                    ctx.save();
-                    ctx.translate(enemy.x, enemy.y);
-                    ctx.rotate(enemy.angle);
-                    ctx.beginPath();
-                    ctx.arc(0, 0, enemy.radius, 0, 2 * Math.PI);
-                    ctx.fillStyle = enemy.color;
-                    ctx.shadowColor = "#cfe";
-                    if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
-                    ctx.fill();
-                    ctx.font = "bold 36px monospace";
-                    ctx.fillStyle = "#021";
-                    ctx.textAlign = "center";
-                    ctx.fillText("κ", 0, 9);
                     ctx.restore();
                 }
             },
@@ -852,6 +784,7 @@ class SpaceArena {
                 xpDrop: [200, 300],
                 draw: (ctx, enemy) => {
                     ctx.save();
+                    ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                     ctx.translate(enemy.x, enemy.y);
                     // UFO body
                     ctx.beginPath();
@@ -893,6 +826,7 @@ class SpaceArena {
                 draw: (ctx, enemy) => {
                     ctx.save();
                     ctx.translate(enemy.x, enemy.y);
+                    ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
 
                     // wing flap drive
                     const phase = (enemy.wingPhase || 0);
@@ -1036,13 +970,11 @@ class SpaceArena {
         return {
             attackDamage: 1,
             attackSpeed: 1,
-            bulletSize: 1,
             hpRegen: 0,
             damageReduction: 1,
-            maxHp: 1,
+            maxHp: 0,
             moveSpeed: 0,
             lootGain: 1,
-            gemGain: 1,
             xpGain: 1,
         };
     }
@@ -1054,19 +986,22 @@ class SpaceArena {
             position: 'fixed',
             left: '50%',
             top: '50%',
-            width: this.width + 'px',
-            height: this.height + 'px',
+            width: this.canvasWidth + 'px',
+            height: this.canvasHeight + 'px',
             transform: `translate(-50%, -50%)`,
-            background: '#181a2b',
-            border: '3px solid #fff',
+            backgroundImage: "url(resources/ui/spaceBattle/" + player.ir.battleStage + ".png)",
+            border: '3px solid #5e4ee6',
+            borderRadius: '10px',
             zIndex: 9999,
             overflow: 'hidden',
+	        "transition-duration": "0s",
         });
+        console.log(this.arenaDiv)
         document.body.appendChild(this.arenaDiv);
 
         this.canvas = document.createElement('canvas');
-        this.canvas.width = this.width;
-        this.canvas.height = this.height;
+        this.canvas.width = this.canvasWidth;
+        this.canvas.height = this.canvasHeight;
         this.arenaDiv.appendChild(this.canvas);
         this.ctx = this.canvas.getContext('2d');
 
@@ -1075,7 +1010,6 @@ class SpaceArena {
         window.addEventListener('mousedown', this.handleMouseDown);
         window.addEventListener('mouseup', this.handleMouseUp);
         window.addEventListener('mousemove', this.handleMouseMove);
-        window.addEventListener("touchmove", this.handleTouchMove);
         
         this.running = true;
         this.loop = setInterval(() => this.update(), 1000 / 60);
@@ -1093,7 +1027,6 @@ class SpaceArena {
         window.removeEventListener('mousedown', this.handleMouseDown);
         window.removeEventListener('mouseup', this.handleMouseUp);
         window.removeEventListener('mousemove', this.handleMouseMove);
-        window.removeEventListener('mousemove', this.handleTouchMove);
         if (this.arenaDiv) document.body.removeChild(this.arenaDiv);
 
         if ((player.ir.shipType == 3 || player.ir.shipType == 7) && this.canvasClickListener) {
@@ -1116,15 +1049,8 @@ class SpaceArena {
     handleKeyUp = (e) => { if (!this.upgradeChoiceActive) this.keys[e.code] = false; };
     handleMouseDown = (e) => { if (!this.upgradeChoiceActive) this.mouseDown = true; };
     handleMouseUp = (e) => { if (!this.upgradeChoiceActive) this.mouseDown = false; };
-    handleMouseMove = (e) => {
+        handleMouseMove = (e) => {
         if (!this.canvas) return;
-        let rect = this.canvas.getBoundingClientRect();
-        this.mouseX = e.clientX - rect.left;
-        this.mouseY = e.clientY - rect.top;
-    };
-    handleTouchMove = (e) => {
-        if (!this.canvas) return;
-        e = e.touches[0]
         let rect = this.canvas.getBoundingClientRect();
         this.mouseX = e.clientX - rect.left;
         this.mouseY = e.clientY - rect.top;
@@ -1136,11 +1062,10 @@ class SpaceArena {
         if (now - this.ship.lastShot < cooldown) return;
         this.ship.lastShot = now
         let petMul = (player.pet && player.pet.legPetTimers && player.pet.legPetTimers[1] && player.pet.legPetTimers[1].current && typeof player.pet.legPetTimers[1].current.gt === "function" && player.pet.legPetTimers[1].current.gt(0)) ? 1.5 : 1;
-        let globalMult = (player && player.ir && player.ir.shipDamageMult && typeof player.ir.shipDamageMult.toNumber === "function" ? player.ir.shipDamageMult.toNumber() : 1)
         let angle = this.ship.angle || 0;
         // shipType 5 aims at the mouse and fires burst shots toward it
         if (player.ir.shipType == 5 && typeof this.mouseX === "number" && typeof this.mouseY === "number") {
-            angle = Math.atan2(this.mouseY - this.ship.y, this.mouseX - this.ship.x);
+            angle = Math.atan2(this.mouseY - 400, this.mouseX - 400);
             // spawn a short burst (multiple pellets) per shot
             let pellets = 5;
             let spread = 0.22;
@@ -1154,7 +1079,7 @@ class SpaceArena {
                     vx: Math.cos(ang) * spd,
                     vy: Math.sin(ang) * spd,
                     life: 120,
-                    damage: (this.ship.damage || 6) * this.upgradeEffects.attackDamage * petMul * globalMult,
+                    damage: (this.ship.damage || 6) * this.upgradeEffects.attackDamage * petMul,
                     pierce: 0,
                     piercedAsteroids: [],
                     piercedEnemies: [],
@@ -1164,24 +1089,12 @@ class SpaceArena {
             return;
         }
 
-        if (player.ir.shipType == 8 && typeof this.mouseX === "number" && typeof this.mouseY === "number") {
-            // Initiate laser sequence if not already active
-            if (!this.ship._laserActive && (!this.ship._laserTimer || this.ship._laserTimer <= 0)) {
-                this.ship._laserTimer = 180; // 3 seconds
-                this.ship._laserActive = false;
-                this.ship._laserAngle = Math.atan2(this.mouseY - this.ship.y, this.mouseX - this.ship.x);
-                // spin slightly towards mouse direction or just a fixed slow spin?
-                // Let's make it follow mouse slowly for control
-                this.ship._laserHitCooldown = 0;
-            }
-            return;
-        }
-
         let speed = 10 + this.upgradeEffects.moveSpeed;
         // evolver shards
         if (player.ir.shipType == 9) speed = 12 + this.upgradeEffects.moveSpeed;
         if (player.ir.shipType == 4) speed = 25 + this.upgradeEffects.moveSpeed;
         if (player.ir.shipType == 6) speed = 20 + this.upgradeEffects.moveSpeed;
+        if (player.ir.shipType == 10) speed = 20 + this.upgradeEffects.moveSpeed;
         let pierce = 0;
         if (player.ir.shipType == 2) pierce = 1;
         if (player.ir.shipType == 4) pierce = 10;
@@ -1219,7 +1132,7 @@ class SpaceArena {
                 vx: Math.cos(angle) * speed,
                 vy: Math.sin(angle) * speed,
                 life: 240,
-                damage: this.ship.damage * this.upgradeEffects.attackDamage * petMul * globalMult,
+                damage: this.ship.damage * this.upgradeEffects.attackDamage * petMul,
                 pierce: 0,
                 piercedAsteroids: [],
                 piercedEnemies: [],
@@ -1234,7 +1147,7 @@ class SpaceArena {
                 vx: Math.cos(angle) * speed,
                 vy: Math.sin(angle) * speed,
                 life: 120,
-                damage: this.ship.damage * this.upgradeEffects.attackDamage * petMul * globalMult,
+                damage: this.ship.damage * this.upgradeEffects.attackDamage * petMul,
                 pierce: pierce,
                 piercedAsteroids: [],
                 piercedEnemies: [],
@@ -1386,63 +1299,35 @@ class SpaceArena {
         }
     }
 
-    spawnAsteroid(type = "default", unit = 1, x = null, y = null, child = false) {
-        if (this.asteroids.length >= this.maxAsteroids && !child) return;
-        let size = unit > 1 ? ((30*(unit/2)) + Math.random() * 15) : 10 + Math.random() * 5;
-        let health = unit > 1 ? Math.pow(getRandomInt(50) + 75, (unit+2)/4) : getRandomInt(15) + 20;
-        if (type == "metal") health = Math.pow(health, 1.3)
+    spawnAsteroid(big = false, x = null, y = null) {
+        if (this.asteroids.length >= this.maxAsteroids) return;
+        let size = big ? 30 + Math.random() * 15 : 10 + Math.random() * 5;
+        let health = big ? getRandomInt(50) + 75 : getRandomInt(15) + 20;
         let angle = Math.random() * Math.PI * 2;
-        let speed = unit > 1 ? (1 + Math.random() * 1.5)/(unit/2) : 2 + Math.random() * 2;
-        let splitCount = unit > 2 ? 1 + Math.floor(Math.random() * 2) : unit > 1 ? 2 + Math.floor(Math.random() * 3) : 0;
+        let speed = big ? 1 + Math.random() * 1.5 : 2 + Math.random() * 2;
+        let splitCount = big ? 2 + Math.floor(Math.random() * 3) : 0;
         let phaseTime = 9999999999;
-        let vertexCount = unit > 1 ? 8 + Math.floor(Math.random() * unit * 2) : 8 + Math.floor(Math.random() * 3);
-        if (child) {
-            if (unit == 1) size *= 2
-            health = unit > 1 ? Math.pow(100, ((unit+2)/4)) : 20
-            if (type == "metal") health = Math.pow(health, 1.3)
-            vertexCount -= 3
-        }
+        let vertexCount = big ? 8 + Math.floor(Math.random() * 4) : 8 + Math.floor(Math.random() * 3);
         let shape = this.generateConvexPolygon(size, vertexCount);
 
-        if (player.tab == "ir" && player.ir.battleLevel.gte(17)) {
-            health = health * Decimal.pow(1.1, player.ir.battleLevel.sub(16)).toNumber()
-        } else if (player.tab == "bl" && player.ir.battleLevel.gte(21)) {
-            health = health * Decimal.pow(1.1, player.ir.battleLevel.sub(20)).toNumber()
+        if (player.ir.battleLevel.gte(20)) {
+            health = health * Decimal.pow(1.04, player.ir.battleLevel.sub(19)).toNumber()
         }
 
-        if (!child) {
-            this.asteroids.push({
-                x: x !== null ? x : Math.random() * this.width,
-                y: y !== null ? y : Math.random() * this.height,
-                vx: Math.cos(angle) * speed,
-                vy: Math.sin(angle) * speed,
-                type: type,
-                unit: unit,
-                size: size,
-                health: health,
-                maxHealth: health,
-                splitCount: splitCount,
-                phaseTimer: phaseTime,
-                phased: false,
-                shape: shape,
-            });
-        } else {
-            return {
-                x: x !== null ? x : Math.random() * this.width,
-                y: y !== null ? y : Math.random() * this.height,
-                vx: Math.cos(angle) * speed,
-                vy: Math.sin(angle) * speed,
-                type: type,
-                unit: unit,
-                size: size,
-                health: health,
-                maxHealth: health,
-                splitCount: splitCount,
-                phaseTimer: phaseTime,
-                phased: false,
-                shape: shape,
-            };
-        }
+        this.asteroids.push({
+            x: x !== null ? x : Math.random() * this.width,
+            y: y !== null ? y : Math.random() * this.height,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            size: size,
+            health: health,
+            maxHealth: health,
+            big: big,
+            splitCount: splitCount,
+            phaseTimer: phaseTime,
+            phased: false,
+            shape: shape,
+        });
     }
 
     spawnEnemy(typeName) {
@@ -1484,18 +1369,9 @@ class SpaceArena {
         if (typeName === "etaShip") {
             enemy.shootCooldown = type.bulletCooldown || 120;
         }
-        if (typeName === "kappaShip") {
-            enemy.spinTimer = 0
-            enemy.bulletTimer = 0
-            enemy.angle = 0
-            enemy.spinCooldown = this.enemyTypes.kappaShip.spinCooldown || 120
-        }
 
-        if (player.tab == "ir" && player.ir.battleLevel.gte(17)) {
-            enemy.health = enemy.health * Decimal.pow(1.1, player.ir.battleLevel.sub(16)).toNumber()
-            enemy.maxHealth = enemy.health
-        } else if (player.tab == "bl" && player.ir.battleLevel.gte(21)) {
-            enemy.health = enemy.health * Decimal.pow(1.1, player.ir.battleLevel.sub(20)).toNumber()
+        if (player.ir.battleLevel.gte(20)) {
+            enemy.health = enemy.health * Decimal.pow(1.04, player.ir.battleLevel.sub(19)).toNumber()
             enemy.maxHealth = enemy.health
         }
 
@@ -1643,7 +1519,18 @@ class SpaceArena {
         return points;
     }
 
+    chargeShot() {
+        if (this.awaitingShotCharge) return;
+        let now = Date.now();
+        let cooldown = this.ship.cooldown * this.upgradeEffects.attackSpeed;
+        if (now - this.ship.lastShot < cooldown) return;
+        this.awaitingShotCharge = true
+        this.shotChargeTimer = 21
+    }
+
     update() {
+        this.arenaDiv.style.backgroundPosition = (400 - this.ship.x) + "px " + (400 - this.ship.y) + "px"
+
         // Prepare collectors used by multiple death paths
         let newAsteroids = [];
         let lootFlashPositions = [];
@@ -1658,11 +1545,9 @@ class SpaceArena {
             if (type && type.rockDrop) {
                 let minR = type.rockDrop[0], maxR = type.rockDrop[1];
                 let amt = getRandomInt(maxR - minR + 1) + minR;
-                amt = Math.max(0, Math.floor(amt * this.upgradeEffects.lootGain * this.resourceMult));
+                amt = Math.max(0, Math.floor(amt * this.upgradeEffects.lootGain));
                 amt = Math.max(0, Math.floor(amt * levelableEffect("pet", 502)[1]));
                 amt = Math.max(0, Math.floor(amt * levelableEffect("pu", 212)[1]));
-                amt = amt * (getBuyableAmount("bl", 34).div(100).add(1).toNumber() || 1)
-                amt = amt * (getBuyableAmount("sme", 155).div(10).add(1).toNumber() || 1)
                 player.ir.spaceRock = player.ir.spaceRock.add(amt);
                 lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "rock" });
             }
@@ -1678,8 +1563,7 @@ class SpaceArena {
             if (enemy.type === "ufoBoss") {
                 this.bossActive = false;
                 player.ir.ufoDefeated = true;
-                let gain = Math.floor(2 * this.upgradeEffects.gemGain * this.resourceMult * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1))
-                player.ir.spaceGem = player.ir.spaceGem.add(gain);
+                player.ir.spaceGem = player.ir.spaceGem.add(2);
                 lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 2, type: "gem" });
             }
 
@@ -1690,26 +1574,13 @@ class SpaceArena {
                 if (!player.ir.tookDamageInIriditeFight) player.ir.astralShipUnlocked = true;
                 player.ir.iriditeFightActive = false;
                 localStorage.setItem('arenaActive', 'false');
-                let gain = Math.floor(5 * this.upgradeEffects.gemGain * this.resourceMult * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1))
-                player.ir.spaceGem = player.ir.spaceGem.add(gain);
-                lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 2, type: "gem" });
             }
 
             // gem chance for hard-mode enemies Delta/Epsilon/Zeta/Eta (3%)
-            if (["deltaShip", "epsilonShip", "zetaShip", "etaShip", "thetaShip", "iotaShip"].includes(enemy.type)) {
-                let chance = 0.03
-                if (["thetaShip", "iotaShip", "kappaShip"].includes(enemy.type)) chance = 0.05
-                chance = chance * this.upgradeEffects.gemGain * this.resourceMult
-                chance = chance * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1)
-                let guarantee = 0
-                if (chance >= 1) {
-                    guarantee = Math.floor(chance)
-                    chance = chance % 1
-                }
-                if (Math.random() < chance) guarantee += 1
-                if (guarantee > 0) {
-                    player.ir.spaceGem = player.ir.spaceGem.add(guarantee);
-                    lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: guarantee, type: "gem" });
+            if (["deltaShip", "epsilonShip", "zetaShip", "etaShip"].includes(enemy.type)) {
+                if (Math.random() < 0.03) {
+                    player.ir.spaceGem = player.ir.spaceGem.add(1);
+                    lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 1, type: "gem" });
                 }
             }
         };
@@ -1728,28 +1599,15 @@ class SpaceArena {
         if (this.shipHitInvuln > 0) this.shipHitInvuln = Math.max(0, this.shipHitInvuln - _TICK_MS);
 
         // Hard mode check
-        this.difficulty = 0
-        if (player.ir.battleLevel.gte(33)) { this.difficulty = 3
-        } else if (player.ir.battleLevel.gte(17)) { this.difficulty = 2
-        } else if (player.ir.battleLevel.gte(8)) this.difficulty = 1
+        const hardMode = player.ir.battleLevel.gte(8);
         
-        if (this.difficulty == 0) {this.enemySpawnCooldownMax = 1000
-        } else if (this.difficulty == 1) {this.enemySpawnCooldownMax = 700
-        } else if (this.difficulty == 2) {this.enemySpawnCooldownMax = 600
-        } else {this.enemySpawnCooldownMax = 500}
-
-        this.resourceMult = 1
-        if (player.tab == "ir" && player.ir.battleLevel.gte(17)) {
-            this.resourceMult = this.resourceMult * Decimal.pow(1.1, player.ir.battleLevel.sub(16)).toNumber()
-        } else if (player.tab == "bl" && player.ir.battleLevel.gte(21)) {
-            this.resourceMult = this.resourceMult * Decimal.pow(1.1, player.ir.battleLevel.sub(20)).toNumber()
-        }
+        if (hardMode) this.enemySpawnCooldownMax = 700;
 
         // Health regen
         if (this.upgradeEffects.hpRegen > 0) {
             player.ir.shipHealth = player.ir.shipHealth.add(this.upgradeEffects.hpRegen);
-            if (player.ir.shipHealth.gt(player.ir.shipHealthMax)) {
-                player.ir.shipHealth = player.ir.shipHealthMax;
+            if (player.ir.shipHealth.gt(player.ir.shipHealthMax.add(this.upgradeEffects.maxHp))) {
+                player.ir.shipHealth = player.ir.shipHealthMax.add(this.upgradeEffects.maxHp);
             }
         }
 
@@ -1757,17 +1615,6 @@ class SpaceArena {
         if (player.ir.shipType == 3) {
             // Gravity
             this.ship.vy += this.ship.gravity;
-
-            // Auto Bounce
-            if (player.ir.autoShoot) {
-                let now = Date.now();
-                this.bounceCooldown = 2000 * this.upgradeEffects.attackSpeed
-                if (now - this.lastBounceClick >= this.bounceCooldown) {
-                    this.lastBounceClick = now;
-                    let rect = this.canvas.getBoundingClientRect();
-                    this.ship.bounceTarget = { x: this.mouseX, y: this.mouseY };
-                }
-            }
 
             // Bounce click logic
             if (this.ship.bounceTarget) {
@@ -1817,17 +1664,6 @@ class SpaceArena {
                 this.ship.vx = -this.ship.vx * this.ship.bounce;
             }
         } else if (player.ir.shipType == 7) {
-            // Auto Dash
-            if (player.ir.autoShoot) {
-                let now = Date.now();
-                this.dashCooldown = 1000 * this.upgradeEffects.attackSpeed
-                if (now - this.lastDashClick >= this.dashCooldown) {
-                    this.lastDashClick = now;
-                    let rect = this.canvas.getBoundingClientRect();
-                    this.ship.dashTarget = { x: this.mouseX, y: this.mouseY };
-                }
-            }
-
             if (this.ship.dashTarget) {
                 let dx = this.ship.dashTarget.x - this.ship.x;
                 let dy = this.ship.dashTarget.y - this.ship.y;
@@ -1902,7 +1738,18 @@ class SpaceArena {
                 if (this.keys['KeyD']) this.ship.angle += this.ship.rotationSpeed;
             }
 
-            if (this.keys['Space'] || this.mouseDown || player.ir.autoShoot) this.shoot();
+            if (this.keys['Space'] || this.mouseDown) {
+                if (player.ir.shipType == 10) {
+                    this.chargeShot()
+                } else {
+                    this.shoot()
+                }
+            }
+            if (this.shotChargeTimer) this.shotChargeTimer--;
+            if (this.awaitingShotCharge && this.shotChargeTimer <= 0) {
+                this.shoot()
+                this.awaitingShotCharge = false
+            }
 
             if (this.keys['KeyW']) {
                 this.ship.velocity += this.ship.acceleration + this.upgradeEffects.moveSpeed * 0.1;
@@ -1967,16 +1814,15 @@ class SpaceArena {
                 this.ship.x += this.ship.vx;
                 this.ship.y += this.ship.vy;
 
-                // Keep inside bounds (respect ship radius if set)
-                const r = this.ship.radius || 12;
-                if (this.ship.x < r) this.ship.x = r;
-                if (this.ship.x > this.width - r) this.ship.x = this.width - r;
-                if (this.ship.y < r) this.ship.y = r;
-                if (this.ship.y > this.height - r) this.ship.y = this.height - r;
+                // Wrap ship around arena edges
+                if (this.ship.x < 0) this.ship.x = this.width;
+                if (this.ship.x > this.width) this.ship.x = 0;
+                if (this.ship.y < 0) this.ship.y = this.height;
+                if (this.ship.y > this.height) this.ship.y = 0;
 
                 // Rotation purely visual: smoothly face the mouse (won't affect movement)
                 if (typeof this.mouseX === "number" && typeof this.mouseY === "number") {
-                    let desired = Math.atan2(this.mouseY - this.ship.y, this.mouseX - this.ship.x);
+                    let desired = Math.atan2(this.mouseY - 400, this.mouseX - 400);
                     let diff = desired - this.ship.angle;
                     while (diff > Math.PI) diff -= 2 * Math.PI;
                     while (diff < -Math.PI) diff += 2 * Math.PI;
@@ -2008,14 +1854,12 @@ class SpaceArena {
 
                         if (this.ship._laserActive && this.ship._laserHitCooldown <= 0) {
                             let petMul = (player.pet && player.pet.legPetTimers && player.pet.legPetTimers[1] && player.pet.legPetTimers[1].current && typeof player.pet.legPetTimers[1].current.gt === "function" && player.pet.legPetTimers[1].current.gt(0)) ? 1.5 : 1;
-                            let globalMult = (player && player.ir && player.ir.shipDamageMult && typeof player.ir.shipDamageMult.toNumber === "function" ? player.ir.shipDamageMult.toNumber() : 1)
-                            let dmg = (this.ship.damage || 7) * this.upgradeEffects.attackDamage * petMul * globalMult / this.upgradeEffects.attackSpeed;
+                            let dmg = (this.ship.damage || 7) * this.upgradeEffects.attackDamage * petMul;
                             let rawDmg = (typeof dmg === 'number') ? dmg : (dmg.toNumber ? dmg.toNumber() : Number(dmg));
                             let ang = this.ship._laserAngle;
                             let ux = Math.cos(ang), uy = Math.sin(ang);
                             let beamLen = Math.max(this.width, this.height) * 1.5;
                             let thickness = (this.ship.radius || 12) * 0.8;
-                            thickness = thickness * this.upgradeEffects.bulletSize
 
                             // Check enemies
                             for (let enemy of this.enemies) {
@@ -2166,26 +2010,13 @@ class SpaceArena {
             }
         }
 
-        // Asteroid spawning (disabled while boss active)
+        // Asteroid spawning (disabled in hard mode or while boss active)
         if (!this.bossActive) {
             this.asteroidSpawnTimer++;
             if (this.asteroidSpawnTimer > 60) {
                 this.asteroidSpawnTimer = 0;
-                if (this.difficulty < 2) {
-                    if (Math.random() < 0.3) this.spawnAsteroid("default", 2);
-                    else this.spawnAsteroid("default", 1);
-                } else if (this.difficulty < 3) {
-                    if (Math.random() < 0.05) this.spawnAsteroid("metal", 2);
-                    else if (Math.random() < 0.15) this.spawnAsteroid("default", 3);
-                    else if (Math.random() < 0.4) this.spawnAsteroid("default", 2);
-                    else this.spawnAsteroid("default", 1);
-                } else {
-                    if (Math.random() < 0.05) this.spawnAsteroid("metal", 2);
-                    else if (Math.random() < 0.15) this.spawnAsteroid("default", 3);
-                    else if (Math.random() < 0.4) this.spawnAsteroid("default", 2);
-                    else if (Math.random() < 0.5) this.spawnAsteroid("metal", 1);
-                    else this.spawnAsteroid("default", 1);
-                }
+                if (Math.random() < 0.3) this.spawnAsteroid(true);
+                else this.spawnAsteroid(false);
             }
         }
 
@@ -2196,12 +2027,10 @@ class SpaceArena {
                 this.enemySpawnCooldown--;
             }
 
-            let maxEnemies = 4
-            if (this.difficulty >= 1) maxEnemies += 2
+            const maxEnemies = hardMode ? 6 : 4;
             if (aliveEnemies < maxEnemies && this.enemySpawnCooldown <= 0) {
                 let possibleTypes = ["alphaShip", "betaShip", "gammaShip"];
-                if (this.difficulty >= 1) possibleTypes = possibleTypes.concat(["deltaShip", "epsilonShip", "zetaShip", "etaShip"]);
-                if (this.difficulty >= 2) possibleTypes = possibleTypes.concat(["thetaShip", "iotaShip", "kappaShip"]);
+                if (hardMode) possibleTypes = possibleTypes.concat(["deltaShip", "epsilonShip", "zetaShip", "etaShip"]);
                 let typeToSpawn = possibleTypes[getRandomInt(possibleTypes.length)];
                 this.spawnEnemy(typeToSpawn);
                 this.enemySpawnCooldown = this.enemySpawnCooldownMax;
@@ -2457,9 +2286,6 @@ class SpaceArena {
                             if (!enemy._lungeHit) {
                                 enemy._lungeHit = 18; // few frames cooldown
                                 let impactDmg = (6 + enemy.phase * 3) * this.upgradeEffects.damageReduction;
-                                if (player.ir.battleLevel.gte(17)) {
-                                    impactDmg = impactDmg * Decimal.pow(1.1, player.ir.battleLevel.sub(16)).toNumber()
-                                }
                                 this.applyShipDamage(impactDmg);
                             }
                         }
@@ -2744,9 +2570,6 @@ class SpaceArena {
                             if (proj > -enemy.radius && proj < beamLen && perp < thickness + (player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12)) {
                                 // apply damage once per short cooldown
                                 let dmg = (6 + enemy.phase * 1) * this.upgradeEffects.damageReduction;
-                                if (player.ir.battleLevel.gte(17)) {
-                                    dmg = dmg * Decimal.pow(1.1, player.ir.battleLevel.sub(16)).toNumber()
-                                }
                                 this.applyShipDamage(dmg);
                                 enemy._laserHitCooldown = 8; // frames between hits
                             }
@@ -2854,9 +2677,6 @@ class SpaceArena {
                                 enemy._recentlyHit = 6; // frames of invuln for player from this contact
                                 // reduced dash damage to make attack less violent
                                 let impactDmg = (5) * this.upgradeEffects.damageReduction;
-                                if (player.ir.battleLevel.gte(17)) {
-                                    impactDmg = impactDmg * Decimal.pow(1.1, player.ir.battleLevel.sub(16)).toNumber()
-                                }
                                 this.applyShipDamage(impactDmg);
                                 // reduced knockback
                                 let kn = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
@@ -2932,8 +2752,8 @@ class SpaceArena {
 
             // Generic wander updates
             if (!enemy.wanderAngle) enemy.wanderAngle = Math.random() * Math.PI * 2;
-            // --- UFO Miniboss behavior ---
-            if (enemy.type === "ufoBoss") {
+                // --- UFO Miniboss behavior ---
+                if (enemy.type === "ufoBoss") {
                     // Hovering: maintain an orbit distance ~220 from player
                     let dx = this.ship.x - enemy.x;
                     let dy = this.ship.y - enemy.y;
@@ -3046,6 +2866,7 @@ class SpaceArena {
                     continue;
             }
             // --- Alpha Ship behavior ---
+
             if (enemy.type === "alphaShip") {
                 if (!enemy.wanderTimer || enemy.wanderTimer <= 0) {
                     enemy.wanderTimer = getRandomInt(60) + 60;
@@ -3429,188 +3250,6 @@ class SpaceArena {
                     });
                 }
             }
-            
-            // --- Theta Ship behavior: Giant slow ship with big heavy bullets ---
-            if (enemy.type === "thetaShip") {
-                if (!enemy.wanderTimer || enemy.wanderTimer <= 0) {
-                    enemy.wanderTimer = getRandomInt(80) + 60;
-                    enemy.wanderAngle += (Math.random() - 0.5) * enemy.wanderChange * Math.PI * 2;
-                }
-                enemy.wanderTimer--;
-
-                enemy.vx = Math.cos(enemy.wanderAngle) * enemy.wanderSpeed;
-                enemy.vy = Math.sin(enemy.wanderAngle) * enemy.wanderSpeed;
-                enemy.x += enemy.vx;
-                enemy.y += enemy.vy;
-
-                // Keep inside arena
-                if (enemy.x < enemy.radius) {
-                    enemy.x = enemy.radius;
-                    enemy.wanderAngle = Math.PI - enemy.wanderAngle;
-                }
-                if (enemy.x > this.width - enemy.radius) {
-                    enemy.x = this.width - enemy.radius;
-                    enemy.wanderAngle = Math.PI - enemy.wanderAngle;
-                }
-                if (enemy.y < enemy.radius) {
-                    enemy.y = enemy.radius;
-                    enemy.wanderAngle = -enemy.wanderAngle;
-                }
-                if (enemy.y > this.height - enemy.radius) {
-                    enemy.y = this.height - enemy.radius;
-                    enemy.wanderAngle = -enemy.wanderAngle;
-                }
-
-                // Big heavy bullets
-                enemy.burstTimer--;
-                if (enemy.burstTimer <= 0) {
-                    enemy.burstTimer = this.enemyTypes.thetaShip.bulletCooldown;
-                    let speed = this.enemyTypes.thetaShip.bulletSpeed;
-                    let angle = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
-                    this.bullets.push({
-                        x: enemy.x + Math.cos(angle) * (enemy.radius + 4),
-                        y: enemy.y + Math.sin(angle) * (enemy.radius + 4),
-                        vx: Math.cos(angle) * speed,
-                        vy: Math.sin(angle) * speed,
-                        radius: 16,
-                        glow: true,
-                        life: 180,
-                        damage: this.enemyTypes.thetaShip.damage,
-                        pierce: 3,
-                        piercedAsteroids: [],
-                        fromEnemy: true,
-                    });
-                }
-            }
-
-            // --- Iota Ship behavior: Small, medium speed ship that shoots spreads of bullets ---
-            if (enemy.type === "iotaShip") {
-                if (!enemy.wanderTimer || enemy.wanderTimer <= 0) {
-                    enemy.wanderTimer = getRandomInt(60) + 40;
-                    enemy.wanderAngle += (Math.random() - 0.5) * enemy.wanderChange * Math.PI * 2;
-                }
-                enemy.wanderTimer--;
-
-                enemy.vx = Math.cos(enemy.wanderAngle) * enemy.wanderSpeed;
-                enemy.vy = Math.sin(enemy.wanderAngle) * enemy.wanderSpeed;
-                enemy.x += enemy.vx;
-                enemy.y += enemy.vy;
-
-                // Keep inside arena
-                if (enemy.x < enemy.radius) {
-                    enemy.x = enemy.radius;
-                    enemy.wanderAngle = Math.PI - enemy.wanderAngle;
-                }
-                if (enemy.x > this.width - enemy.radius) {
-                    enemy.x = this.width - enemy.radius;
-                    enemy.wanderAngle = Math.PI - enemy.wanderAngle;
-                }
-                if (enemy.y < enemy.radius) {
-                    enemy.y = enemy.radius;
-                    enemy.wanderAngle = -enemy.wanderAngle;
-                }
-                if (enemy.y > this.height - enemy.radius) {
-                    enemy.y = this.height - enemy.radius;
-                    enemy.wanderAngle = -enemy.wanderAngle;
-                }
-
-                // Shooting logic
-                enemy.burstTimer--;
-                if (enemy.burstTimer <= 0) {
-                    enemy.burstTimer = this.enemyTypes.iotaShip.bulletCooldown;
-                    enemy.burstCount = this.enemyTypes.iotaShip.burstCount;
-                }
-                if (enemy.burstCount > 0 && enemy.burstTimer % this.enemyTypes.iotaShip.burstInterval === 0) {
-                    let dx = this.ship.x - enemy.x;
-                    let dy = this.ship.y - enemy.y;
-                    let baseAngle = Math.atan2(dy, dx);
-                    let speed = this.enemyTypes.iotaShip.bulletSpeed;
-                    let spread = 0.12
-                    for (let i = 0; i < 5; i++) {
-                        let offset = (i / (2) - 0.5) * spread;
-                        let angle = baseAngle + offset;
-                        this.bullets.push({
-                            x: enemy.x + Math.cos(angle) * enemy.radius,
-                            y: enemy.y + Math.sin(angle) * enemy.radius,
-                            vx: Math.cos(angle) * speed,
-                            vy: Math.sin(angle) * speed,
-                            life: 120,
-                            damage: this.enemyTypes.iotaShip.damage,
-                            pierce: 0,
-                            piercedAsteroids: [],
-                            fromEnemy: true,
-                        })
-                    }
-                    enemy.burstCount--;
-                }
-            }
-
-            // --- Kappa Ship behavior: Wanders around, stops, and spins bullets ---
-            if (enemy.type === "kappaShip") {
-                if (!enemy.wanderTimer || enemy.wanderTimer <= 0) {
-                    enemy.wanderTimer = getRandomInt(80) + 60;
-                    enemy.wanderAngle += (Math.random() - 0.5) * enemy.wanderChange * Math.PI * 2;
-                }
-                enemy.wanderTimer--;
-
-                enemy.vx = Math.cos(enemy.wanderAngle) * enemy.wanderSpeed;
-                enemy.vy = Math.sin(enemy.wanderAngle) * enemy.wanderSpeed;
-                if (enemy.spinTimer <= 0) {
-                    enemy.x += enemy.vx;
-                    enemy.y += enemy.vy;
-                }
-
-                // Keep inside arena
-                if (enemy.x < enemy.radius) {
-                    enemy.x = enemy.radius;
-                    enemy.wanderAngle = Math.PI - enemy.wanderAngle;
-                }
-                if (enemy.x > this.width - enemy.radius) {
-                    enemy.x = this.width - enemy.radius;
-                    enemy.wanderAngle = Math.PI - enemy.wanderAngle;
-                }
-                if (enemy.y < enemy.radius) {
-                    enemy.y = enemy.radius;
-                    enemy.wanderAngle = -enemy.wanderAngle;
-                }
-                if (enemy.y > this.height - enemy.radius) {
-                    enemy.y = this.height - enemy.radius;
-                    enemy.wanderAngle = -enemy.wanderAngle;
-                }
-
-                enemy.spinCooldown--;
-                // Spin: rotate and spray bullets in 360 over time
-                if (enemy.spinCooldown <= 0) {
-                    enemy.spinCooldown = 999999
-                    enemy.spinTimer = this.enemyTypes.kappaShip.spinTimer
-                }
-                if (enemy.spinTimer > 0) {
-                    // spawn a handful of bullets at current spinAngle
-                    if (enemy.bulletTimer <= 0) {
-                        let ang = enemy.angle;
-                        let spd = this.enemyTypes.kappaShip.bulletSpeed;
-                        this.bullets.push({
-                            x: enemy.x + Math.cos(ang) * (enemy.radius - 6),
-                            y: enemy.y + Math.sin(ang) * (enemy.radius - 6),
-                            vx: Math.cos(ang) * spd,
-                            vy: Math.sin(ang) * spd,
-                            life: 90,
-                            damage: this.enemyTypes.kappaShip.damage,
-                            pierce: 0,
-                            piercedAsteroids: [],
-                            fromEnemy: true
-                        });
-                        enemy.bulletTimer = 3 // Time between bullets (in 60fps)
-                        enemy.angle += 0.25;
-                    }
-                    enemy.bulletTimer--;
-                    // advance spin angle to rotate spray
-                    enemy.spinTimer--;
-                    if (enemy.spinTimer <= 0) {
-                        enemy.spinCooldown = this.enemyTypes.kappaShip.spinCooldown;
-                    }
-                }
-            }
         }
 
         // Gamma Ship trail damage
@@ -3623,15 +3262,10 @@ class SpaceArena {
                 let dist = Math.sqrt(dx * dx + dy * dy);
                 if (dist < trail.radius + shipRadius && trail.timer > 0) {
                     let dmg = trail.damage * this.upgradeEffects.damageReduction;
-                    if (player.tab == "ir" && player.ir.battleLevel.gte(17)) {
-                        dmg = dmg * Decimal.pow(1.1, player.ir.battleLevel.sub(16)).toNumber()
-                    } else if (player.tab == "bl" && player.ir.battleLevel.gte(21)) {
-                        dmg = dmg * Decimal.pow(1.1, player.ir.battleLevel.sub(20)).toNumber()
-                    }
                     
                     if (!this._asteroidMinigamePaused) {
                         if (player.ir.shipType == 3 || player.ir.shipType == 7) dmg /= 4;
-                        player.ir.shipHealth = player.ir.shipHealth.sub(dmg);
+                            player.ir.shipHealth = player.ir.shipHealth.sub(dmg);
                         if (player.ir.shipHealth.lte(0)) {
                             this.onShipDeath();
                         }
@@ -3670,11 +3304,10 @@ class SpaceArena {
                 let dx = bullet.x - asteroid.x;
                 let dy = bullet.y - asteroid.y;
                 let dist = Math.sqrt(dx * dx + dy * dy);
-                let bulletRadius = (typeof bullet.radius === "number") ? bullet.radius : (player.ir.shipType == 2 ? 10*this.upgradeEffects.bulletSize : 4*this.upgradeEffects.bulletSize);
-                if (dist < asteroid.size + bulletRadius) {
+                if (dist < asteroid.size) {
                     let bDmg = (typeof bullet.damage === 'number') ? bullet.damage : (bullet.damage && bullet.damage.toNumber ? bullet.damage.toNumber() : Number(bullet.damage || 0));
                     asteroid.health -= bDmg;
-                    if (player.ir.shipType == 2 || player.ir.shipType == 4 || bullet.pierce) {
+                    if (player.ir.shipType == 2 || player.ir.shipType == 4) {
                         bullet.pierce--;
                         bullet.piercedAsteroids.push(asteroid);
                         if (bullet.pierce < 0) bullet.life = 0;
@@ -3699,8 +3332,7 @@ class SpaceArena {
                 let dx = bullet.x - enemy.x;
                 let dy = bullet.y - enemy.y;
                 let dist = Math.sqrt(dx * dx + dy * dy);
-                let bulletRadius = (typeof bullet.radius === "number") ? bullet.radius : (player.ir.shipType == 2 ? 10*this.upgradeEffects.bulletSize : 4*this.upgradeEffects.bulletSize);
-                if (dist < enemy.radius + bulletRadius) {
+                if (dist < enemy.radius) {
                     let bDmg = (typeof bullet.damage === 'number') ? bullet.damage : (bullet.damage && bullet.damage.toNumber ? bullet.damage.toNumber() : Number(bullet.damage || 0));
                     enemy.health -= bDmg;
 
@@ -3779,11 +3411,6 @@ class SpaceArena {
                 if (!bullet._hitPlayer) {
                     bullet._hitPlayer = true;
                     let dmg = bullet.damage * this.upgradeEffects.damageReduction;
-                    if (player.tab == "ir" && player.ir.battleLevel.gte(17)) {
-                        dmg = dmg * Decimal.pow(1.1, player.ir.battleLevel.sub(16)).toNumber()
-                    } else if (player.tab == "bl" && player.ir.battleLevel.gte(21)) {
-                        dmg = dmg * Decimal.pow(1.1, player.ir.battleLevel.sub(20)).toNumber()
-                    }
                     if (player.ir.shipType == 3 || player.ir.shipType == 7) dmg /= 1.5;
                     player.ir.shipHealth = player.ir.shipHealth.sub(dmg);
  
@@ -3807,20 +3434,14 @@ class SpaceArena {
             let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
             let dist = Math.sqrt(dx * dx + dy * dy);
             if (dist < enemy.radius + shipRadius) {
-                let petMul = (player.pet && player.pet.legPetTimers && player.pet.legPetTimers[1] && player.pet.legPetTimers[1].current && typeof player.pet.legPetTimers[1].current.gt === "function" && player.pet.legPetTimers[1].current.gt(0)) ? 1.5 : 1;
-                let globalMult = (player && player.ir && player.ir.shipDamageMult && typeof player.ir.shipDamageMult.toNumber === "function" ? player.ir.shipDamageMult.toNumber() : 1)
-                let enemyDmgRaw = this.ship.collisionDamage * this.upgradeEffects.attackDamage * petMul * globalMult;
+                let enemyDmgRaw = this.ship.collisionDamage * this.upgradeEffects.attackDamage;
                 let enemyDmg = (typeof enemyDmgRaw === 'number') ? enemyDmgRaw : (enemyDmgRaw.toNumber ? enemyDmgRaw.toNumber() : Number(enemyDmgRaw));
                 if (Number.isNaN(enemyDmg) || !isFinite(enemyDmg) || enemyDmg < 0) enemyDmg = 0;
                 if (player.ir.shipType != 3 && player.ir.shipType != 7) enemy.health -= enemyDmg * 0.05;
-                if (player.ir.shipType == 3 || player.ir.shipType == 7) enemy.health -= enemyDmg * 2.5;
+                if (player.ir.shipType == 3) enemy.health -= enemyDmg * 2.5;
+                if (player.ir.shipType == 7) enemy.health -= enemyDmg * 1.5;
 
                 let shipDmgRaw = enemy.damage * this.upgradeEffects.damageReduction * 6;
-                if (player.tab == "ir" && player.ir.battleLevel.gte(17)) {
-                    shipDmgRaw = shipDmgRaw * Decimal.pow(1.1, player.ir.battleLevel.sub(16)).toNumber()
-                } else if (player.tab == "bl" && player.ir.battleLevel.gte(21)) {
-                    shipDmgRaw = shipDmgRaw * Decimal.pow(1.1, player.ir.battleLevel.sub(20)).toNumber()
-                }
                 let shipDmg = (typeof shipDmgRaw === 'number') ? shipDmgRaw : (shipDmgRaw.toNumber ? shipDmgRaw.toNumber() : Number(shipDmgRaw));
                 if (Number.isNaN(shipDmg) || !isFinite(shipDmg) || shipDmg < 0) shipDmg = 3 * (typeof this.upgradeEffects.damageReduction === 'number' ? this.upgradeEffects.damageReduction : (this.upgradeEffects.damageReduction.toNumber ? this.upgradeEffects.damageReduction.toNumber() : Number(this.upgradeEffects.damageReduction)));
                 if (player.ir.iriditeFightActive) shipDmg /= 12;
@@ -3863,19 +3484,10 @@ class SpaceArena {
             let dist = Math.sqrt(dx * dx + dy * dy);
             let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
             if (dist < asteroid.size + shipRadius) {
-                let petMul = (player.pet && player.pet.legPetTimers && player.pet.legPetTimers[1] && player.pet.legPetTimers[1].current && typeof player.pet.legPetTimers[1].current.gt === "function" && player.pet.legPetTimers[1].current.gt(0)) ? 1.5 : 1;
-                let globalMult = (player && player.ir && player.ir.shipDamageMult && typeof player.ir.shipDamageMult.toNumber === "function" ? player.ir.shipDamageMult.toNumber() : 1)
-                let aDmgRaw = this.ship.collisionDamage * this.upgradeEffects.attackDamage * petMul * globalMult;
+                let aDmgRaw = this.ship.collisionDamage * this.upgradeEffects.attackDamage;
                 let aDmg = (typeof aDmgRaw === 'number') ? aDmgRaw : (aDmgRaw.toNumber ? aDmgRaw.toNumber() : Number(aDmgRaw));
                 asteroid.health -= aDmg;
-                let dmg = (asteroid.unit > 1 ? Math.pow(asteroid.unit-1, 2)*3 : 2);
-                if (asteroid.type == "metal") dmg = Math.pow(dmg, 1.3)
-                dmg = dmg * this.upgradeEffects.damageReduction
-                if (player.tab == "ir" && player.ir.battleLevel.gte(17)) {
-                    dmg = dmg * Decimal.pow(1.1, player.ir.battleLevel.sub(16)).toNumber()
-                } else if (player.tab == "bl" && player.ir.battleLevel.gte(21)) {
-                    dmg = dmg * Decimal.pow(1.1, player.ir.battleLevel.sub(20)).toNumber()
-                }
+                let dmg = (asteroid.big ? 3 : 2) * this.upgradeEffects.damageReduction;
                 if (player.ir.shipType == 3 || player.ir.shipType == 7) dmg /= 6;
                 if (!this._asteroidMinigamePaused) this.applyShipDamage(dmg);
                 if (player.ir.shipType == 3) {
@@ -3901,44 +3513,51 @@ class SpaceArena {
         // Asteroid splitting and removal
         this.asteroids = this.asteroids.filter(asteroid => {
             if (asteroid.health <= 0) {
-                let loot = Math.floor(Math.random() * (asteroid.unit+2)) + Math.pow(3, asteroid.unit-1);
-                if (asteroid.type == "metal") loot = Math.pow(loot, 1.3)
-                loot = loot * this.upgradeEffects.lootGain * this.resourceMult
-                loot = loot * levelableEffect("pet", 502)[1]
-                loot = loot * levelableEffect("pu", 212)[1]
-                loot = loot * (getBuyableAmount("bl", 34).div(100).add(1).toNumber() || 1)
-                loot = loot * (getBuyableAmount("sme", 155).div(10).add(1).toNumber() || 1)
-                loot = Math.max(0, Math.floor(loot))
+                let loot = Math.floor(Math.random() * (asteroid.big ? 4 : 3)) + (asteroid.big ? 3 : 1);
+                loot = Math.floor(loot * this.upgradeEffects.lootGain);
+                loot = Math.max(0, Math.floor(loot * levelableEffect("pet", 502)[1]));
+                loot = Math.max(0, Math.floor(loot * levelableEffect("pu", 212)[1]));
                 player.ir.spaceRock = player.ir.spaceRock.add(loot);
                 player.ir.levelables[player.ir.shipType][1] = player.ir.levelables[player.ir.shipType][1].add(loot)
                 lootFlashPositions.push({ x: asteroid.x, y: asteroid.y, amount: loot, type: "rock" });
 
-                let xp = Math.pow(3, asteroid.unit);
-                if (asteroid.type == "metal") xp = Math.pow(loot, 1.3)
-                xp = Math.floor(xp * this.upgradeEffects.xpGain)
+                let xp = Math.floor((asteroid.big ? 10 : 3) * this.upgradeEffects.xpGain);
                 xpOrbsToAdd.push({ x: asteroid.x, y: asteroid.y, amount: xp });
 
                 let random = Math.random();
-                
-                let chance = 0.005 * this.upgradeEffects.gemGain * this.resourceMult
-                if (asteroid.unit > 1) chance *= Math.pow(2, asteroid.unit-1)
-                if (asteroid.type == "metal") chance *= 1.5
-                if (hasUpgrade("ir", 104)) chance *= 2
-                chance = chance * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1)
-                let guarantee = 0
-                if (chance >= 1) {
-                    guarantee = Math.floor(chance)
-                    chance = chance % 1
-                }
-                if (Math.random() < chance) guarantee += 1
-                if (guarantee > 0) {
-                    player.ir.spaceGem = player.ir.spaceGem.add(guarantee);
-                    lootFlashPositions.push({ x: asteroid.x, y: asteroid.y + 15, amount: guarantee, type: "gem" });
+                if (asteroid.big) {
+                    if (hasUpgrade("ir", 104))
+                    {
+                        if (random < 0.02) {
+                        player.ir.spaceGem = player.ir.spaceGem.add(1);
+                        lootFlashPositions.push({ x: asteroid.x, y: asteroid.y + 15, amount: 1, type: "gem" });
+                        }
+                    } else
+                    {
+                        if (random < 0.01) {
+                        player.ir.spaceGem = player.ir.spaceGem.add(1);
+                        lootFlashPositions.push({ x: asteroid.x, y: asteroid.y + 15, amount: 1, type: "gem" });
+                        }
+                    }
+                } else {
+                    if (hasUpgrade("ir", 104))
+                    {
+                        if (random < 0.01) {
+                        player.ir.spaceGem = player.ir.spaceGem.add(1);
+                        lootFlashPositions.push({ x: asteroid.x, y: asteroid.y + 15, amount: 1, type: "gem" });
+                        }
+                    } else
+                    {
+                        if (random < 0.005) {
+                        player.ir.spaceGem = player.ir.spaceGem.add(1);
+                        lootFlashPositions.push({ x: asteroid.x, y: asteroid.y + 15, amount: 1, type: "gem" });
+                        }
+                    }
                 }
 
-                if (asteroid.splitCount > 0) {
+                if (asteroid.big) {
                     for (let i = 0; i < asteroid.splitCount; i++) {
-                        newAsteroids.push(this.spawnAsteroid(asteroid.type, asteroid.unit-1, asteroid.x, asteroid.y, true));
+                        newAsteroids.push(this.createSmallAsteroid(asteroid.x, asteroid.y));
                     }
                 }
                 return false;
@@ -3953,7 +3572,7 @@ class SpaceArena {
                 this.lootFlashes.push({
                     x: pos.x,
                     y: pos.y,
-                    text: `+${formatWhole(pos.amount)} space rock`,
+                    text: `+${pos.amount} space rock`,
                     timer: 120,
                     color: "#ffe066",
                     style: "18px monospace"
@@ -3963,7 +3582,7 @@ class SpaceArena {
                 this.lootFlashes.push({
                     x: pos.x,
                     y: pos.y,
-                    text: `+${formatWhole(pos.amount)} space gem`,
+                    text: `+${pos.amount} space gem`,
                     timer: 240,
                     color: "#66e8ffff",
                     style: "24px monospace"
@@ -4049,12 +3668,41 @@ class SpaceArena {
         return true;
     }
 
+    createSmallAsteroid(x, y) {
+        let size = 20 + Math.random() * 10;
+        let health = 20;
+        let angle = Math.random() * Math.PI * 2;
+        let speed = 2 + Math.random() * 2;
+        let phaseTime = 99999999999999;
+        let shape = this.generateConvexPolygon(size, 5 + Math.floor(Math.random() * 3));
+
+        if (player.ir.battleLevel.gte(20)) {
+            health = health * Decimal.pow(1.04, player.ir.battleLevel.sub(19)).toNumber()
+        }
+
+        return {
+            x: x,
+            y: y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            size: size,
+            health: health,
+            maxHealth: health,
+            big: false,
+            splitCount: 0,
+            phaseTimer: phaseTime,
+            phased: false,
+            shape: shape,
+        };
+    }
+
     draw() {
         this.ctx.clearRect(0, 0, this.width, this.height);
 
         // Draw ship
         if (player.ir.shipType == 3) {
             this.ctx.save();
+            ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
             this.ctx.beginPath();
             this.ctx.arc(this.ship.x, this.ship.y, this.ship.radius, 0, 2 * Math.PI);
             this.ctx.fillStyle = "#a7a7a7ff";
@@ -4065,7 +3713,7 @@ class SpaceArena {
         }
         if (player.ir.shipType == 1) {
             this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
+            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
             this.ctx.rotate(this.ship.angle);
             this.ctx.beginPath();
             this.ctx.moveTo(20, 0);
@@ -4079,7 +3727,7 @@ class SpaceArena {
         }
         if (player.ir.shipType == 2) {
             this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
+            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
             this.ctx.rotate(this.ship.angle);
             this.ctx.beginPath();
             this.ctx.moveTo(20, 0);
@@ -4094,7 +3742,7 @@ class SpaceArena {
         if (player.ir.shipType == 4) {
             // Sniper-style ship: long barrel and scope
             this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
+            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
             this.ctx.rotate(this.ship.angle);
             // Body
             this.ctx.fillStyle = "#dbefff";
@@ -4121,7 +3769,7 @@ class SpaceArena {
         if (player.ir.shipType == 5) {
             // Small UFO (player ship) — visual match to miniboss but smaller & different color
             this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
+            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
             this.ctx.rotate(this.ship.angle || 0);
             const r = this.ship.radius || 12;
             const bodyR = r * 1.4;
@@ -4158,7 +3806,7 @@ class SpaceArena {
         }
         if (player.ir.shipType == 6) {
             this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
+            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
             this.ctx.rotate(this.ship.angle);
  
             this.ctx.beginPath();
@@ -4183,7 +3831,7 @@ class SpaceArena {
         }
         if (player.ir.shipType == 7) {
             this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
+            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
             this.ctx.rotate(this.ship.angle);
  
             // BODY
@@ -4207,7 +3855,7 @@ class SpaceArena {
         }
         if (player.ir.shipType == 8) {
             this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
+            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
             this.ctx.rotate(this.ship.angle);
 
             // Miniature Iridite visuals
@@ -4289,13 +3937,12 @@ class SpaceArena {
             const progress = Math.max(0, Math.min(1, (elapsed - windup) / (laserTotal - windup)));
             const angle = this.ship._laserAngle || this.ship.angle || 0;
             const beamLen = Math.max(this.width, this.height) * 1.5;
-            let r = this.ship.radius || 12;
-            r = r * this.upgradeEffects.bulletSize
+            const r = this.ship.radius || 12;
             const maxThickness = r * 0.8;
             const thickness = windup > elapsed ? (maxThickness * (elapsed / windup)) : (maxThickness * (0.6 + 0.4 * progress));
 
             this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
+            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
             this.ctx.rotate(angle);
             this.ctx.globalCompositeOperation = "lighter";
             let g = this.ctx.createLinearGradient(0, -thickness * 2, beamLen, thickness * 2);
@@ -4313,24 +3960,10 @@ class SpaceArena {
             this.ctx.globalCompositeOperation = "source-over";
         }
 
-        if (player.ir.shipType == 0) {
-            this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
-            this.ctx.rotate(this.ship.angle);
-            this.ctx.beginPath();
-            this.ctx.moveTo(15, 0);
-            this.ctx.lineTo(-10, 10);
-            this.ctx.lineTo(-10, -10);
-            this.ctx.closePath();
-            this.ctx.fillStyle = "#eaf6f7";
-            this.ctx.fill();
-            this.ctx.restore();
-        }
-
         // Evolver ship (shipType 9) — triangle shape with blue-purple gradient and dividing line
         if (player.ir.shipType == 9) {
             this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
+            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
             this.ctx.rotate(this.ship.angle);
             let lenShip = Math.max(18, this.ship.radius || 20);
 
@@ -4364,6 +3997,92 @@ class SpaceArena {
 
             this.ctx.restore();
         }
+        if (player.ir.shipType == 10) {
+            this.ctx.save();
+            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
+            this.ctx.rotate(this.ship.angle);
+            this.ctx.strokeStyle = "#30bf78";
+            this.ctx.fillStyle = "#30bf78";
+            // Body Background
+            this.ctx.beginPath();
+            this.ctx.arc(0, 0, 21, 0, Math.PI * 2);
+            this.ctx.fill();
+            // Left Cannon
+            this.ctx.fillStyle = "#dfffdf";
+            this.ctx.moveTo(20, 0);
+            this.ctx.beginPath();
+            this.ctx.lineTo(0, -5);
+            this.ctx.lineTo(75, -5);
+            this.ctx.lineTo(65, -15);
+            this.ctx.lineTo(0, -15);
+            this.ctx.closePath();
+            this.ctx.fill();
+            this.ctx.stroke();
+            // Right Cannon
+            this.ctx.moveTo(20, 0);
+            this.ctx.beginPath();
+            this.ctx.lineTo(0, 5);
+            this.ctx.lineTo(75, 5);
+            this.ctx.lineTo(65, 15);
+            this.ctx.lineTo(0, 15);
+            this.ctx.closePath();
+            this.ctx.fill();
+            this.ctx.stroke();
+            // Body
+            this.ctx.beginPath();
+            this.ctx.arc(0, 0, 20, 0, Math.PI * 2);
+            this.ctx.fill();
+            // Cockpit
+            
+            this.ctx.beginPath();
+            this.ctx.arc(0, 0, 16, 0, Math.PI * 2);
+            this.ctx.fillStyle = "#400020";
+            this.ctx.fill();
+
+            this.ctx.beginPath();
+            this.ctx.arc(0, 0, 4, 0, Math.PI * 2);
+            if (this.awaitingShotCharge && this.shotChargeTimer <= 3) this.ctx.fillStyle = "#fff";
+            else this.ctx.fillStyle = "#800040"
+            this.ctx.fill();
+
+            this.ctx.beginPath();
+            this.ctx.arc(10, 0, 4, 0, Math.PI * 2);
+            if (this.awaitingShotCharge && this.shotChargeTimer <= 21) this.ctx.fillStyle = "#ff7f7f";
+            else this.ctx.fillStyle = "#800040"
+            this.ctx.fill();
+
+            this.ctx.beginPath();
+            this.ctx.arc(5, Math.sqrt(3) * 5, 4, 0, Math.PI * 2);
+            if (this.awaitingShotCharge && this.shotChargeTimer <= 18) this.ctx.fillStyle = "#ffff7f";
+            else this.ctx.fillStyle = "#800040"
+            this.ctx.fill();
+
+            this.ctx.beginPath();
+            this.ctx.arc(-5, Math.sqrt(3) * 5, 4, 0, Math.PI * 2);
+            if (this.awaitingShotCharge && this.shotChargeTimer <= 15) this.ctx.fillStyle = "#7fff7f";
+            else this.ctx.fillStyle = "#800040"
+            this.ctx.fill();
+
+            this.ctx.beginPath();
+            this.ctx.arc(-10, 0, 4, 0, Math.PI * 2);
+            if (this.awaitingShotCharge && this.shotChargeTimer <= 12) this.ctx.fillStyle = "#7fffff";
+            else this.ctx.fillStyle = "#800040"
+            this.ctx.fill();
+
+            this.ctx.beginPath();
+            this.ctx.arc(-5, -Math.sqrt(3) * 5, 4, 0, Math.PI * 2);
+            if (this.awaitingShotCharge && this.shotChargeTimer <= 9) this.ctx.fillStyle = "#7f7fff";
+            else this.ctx.fillStyle = "#800040"
+            this.ctx.fill();
+
+            this.ctx.beginPath();
+            this.ctx.arc(5, -Math.sqrt(3) * 5, 4, 0, Math.PI * 2);
+            if (this.awaitingShotCharge && this.shotChargeTimer <= 6) this.ctx.fillStyle = "#ff7fff";
+            else this.ctx.fillStyle = "#800040"
+            this.ctx.fill();
+
+            this.ctx.restore();
+        }
 
         for (let enemy of this.enemies) {
             if (!enemy.alive) continue;
@@ -4371,18 +4090,24 @@ class SpaceArena {
             if (type && type.draw) {
                 type.draw(this.ctx, enemy);
                 this.ctx.save();
-                this.ctx.fillStyle = "#ff4444";
+                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
+                this.ctx.fillStyle = "#151230";
+                this.ctx.fillRect(enemy.x - enemy.radius - 2, enemy.y - enemy.radius - 20, enemy.radius * 2 + 4, 13);
                 let barWidth = enemy.radius * 2 * (enemy.health / enemy.maxHealth);
-                this.ctx.fillRect(enemy.x - enemy.radius, enemy.y - enemy.radius - 18, barWidth, 6);
+                this.ctx.fillStyle = "#bf0000";
+                this.ctx.fillRect(enemy.x - enemy.radius, enemy.y - enemy.radius - 18, barWidth, 9);
 
-                this.ctx.font = "14px monospace";
-                this.ctx.fillStyle = "#fff";
+                let t = Math.max(0, Math.floor(enemy.health)) + "/" + Math.floor(enemy.maxHealth)
+                this.ctx.font = "12px monospace";
+                this.ctx.fillStyle = "#151230";
                 this.ctx.textAlign = "center";
-                this.ctx.fillText(
-                    formatWhole(Math.max(0, Math.floor(enemy.health))) + "/" + formatWhole(Math.floor(enemy.maxHealth)),
-                    enemy.x,
-                    enemy.y - enemy.radius - 6
-                );
+                this.ctx.fillText(t, enemy.x + 1, enemy.y - enemy.radius - 9 + 1)
+                this.ctx.fillText(t, enemy.x + 1, enemy.y - enemy.radius - 9 - 1)
+                this.ctx.fillText(t, enemy.x - 1, enemy.y - enemy.radius - 9 + 1)
+                this.ctx.fillText(t, enemy.x - 1, enemy.y - enemy.radius - 9 - 1)
+                this.ctx.fillStyle = "white";
+                this.ctx.fillText(t, enemy.x, enemy.y - enemy.radius - 9)
+
                 this.ctx.restore();
             }
 
@@ -4581,6 +4306,7 @@ class SpaceArena {
                 // Draw a large, spinning metallic sword
                 this.ctx.save();
                 this.ctx.translate(bullet.x, bullet.y);
+                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                 this.ctx.rotate(bullet.rot || 0);
 
                 let r = bullet.radius || 80;
@@ -4633,6 +4359,7 @@ class SpaceArena {
                 // draw mini-star glyph for thematic boss/projectiles
                 this.ctx.save();
                 this.ctx.translate(bullet.x, bullet.y);
+                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                 let ang = Math.atan2(bullet.vy, bullet.vx || 0);
                 this.ctx.rotate(ang);
                 // determine font size; giant bullets are significantly larger
@@ -4660,24 +4387,17 @@ class SpaceArena {
                 this.ctx.fillText("✦", 0, 0);
                 this.ctx.restore();
             } else {
-                if (bullet.glow) this.ctx.save()
+                this.ctx.save();
+                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                 this.ctx.beginPath();
-                let r = bullet.fromEnemy ? 6 : (player.ir.shipType == 2 ? 10 : 4);
+                let r = bullet.fromEnemy ? 6 : ((player.ir.shipType == 2 || player.ir.shipType == 10) ? 10 : 4);
                 // larger radius for homing enemy projectiles
                 if (bullet.fromEnemy && bullet.homing) r = 10;
                 if (bullet.giant) r = bullet.radius || 18;
-                if (bullet.radius) r = bullet.radius
-                if (!bullet.fromEnemy) r = r * this.upgradeEffects.bulletSize
                 this.ctx.arc(bullet.x, bullet.y, r, 0, 2 * Math.PI);
                 this.ctx.fillStyle = bullet.fromEnemy ? "#ff4444" : "#ffec8b";
-                if (bullet.glow) {
-                    this.ctx.shadowColor = "#ff4444";
-                    if (!options.performanceMode) {this.ctx.shadowBlur = r/2} else {this.ctx.shadowBlur = 0};
-                    this.ctx.fill();
-                    this.ctx.restore();
-                } else {
-                    this.ctx.fill();
-                }
+                this.ctx.fill();
+                this.ctx.restore();
             }
             // Evolver primary shard rendering (crystal shard with facets)
             if (bullet.evolverShard) {
@@ -4685,9 +4405,7 @@ class SpaceArena {
                 this.ctx.translate(bullet.x, bullet.y);
                 let ang = Math.atan2(bullet.vy, bullet.vx || 0);
                 this.ctx.rotate(ang);
-                let r = (bullet.radius || 26)
-                if (!bullet.fromEnemy) r = r * this.upgradeEffects.bulletSize
-                let len = Math.min(56, r * 2);
+                let len = Math.min(56, (bullet.radius || 26) * 2);
 
                 // crystal gradients matching ship
                 let mainG = this.ctx.createLinearGradient(len, 0, -len * 0.7, 0);
@@ -4757,24 +4475,26 @@ class SpaceArena {
             }
             // Evolver mini shard rendering (small blue bullet)
             if (bullet.evolverMini) {
+                this.ctx.save();
+                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                 this.ctx.beginPath();
                 let r = bullet.radius || 4;
-                if (!bullet.fromEnemy) r = r * this.upgradeEffects.bulletSize
                 this.ctx.arc(bullet.x, bullet.y, r, 0, 2 * Math.PI);
                 this.ctx.fillStyle = '#5fb8ff';
                 this.ctx.fill();
                 this.ctx.strokeStyle = '#2c3e50';
                 this.ctx.lineWidth = 1;
                 this.ctx.stroke();
+                this.ctx.restore();
             }
             // Evolver mini shard rendering (smaller triangle)
             if (bullet.evolverMini) {
                 this.ctx.save();
                 this.ctx.translate(bullet.x, bullet.y);
+                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                 let ang = Math.atan2(bullet.vy, bullet.vx || 0);
                 this.ctx.rotate(ang);
                 let len = Math.min(8, bullet.radius || 6);
-                if (!bullet.fromEnemy) len = len * this.upgradeEffects.bulletSize
                 // mini shards use the same family as the ship but slightly desaturated
                 let g2 = this.ctx.createLinearGradient(len, 0, -len * 0.6, 0);
                 g2.addColorStop(0, 'rgba(241,182,255,0.95)');
@@ -4799,6 +4519,7 @@ class SpaceArena {
             this.ctx.save();
             this.ctx.globalAlpha = asteroid.phased ? 0.3 : 1;
             this.ctx.translate(asteroid.x, asteroid.y);
+            this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
             this.ctx.beginPath();
             let shape = asteroid.shape;
             if (shape && shape.length > 0) {
@@ -4808,27 +4529,28 @@ class SpaceArena {
                 }
                 this.ctx.closePath();
             }
-            if (asteroid.type == "default") {
-                this.ctx.fillStyle = asteroid.unit > 1 ? "#a9a9a9" : "#888";
-            } else {
-                this.ctx.fillStyle = asteroid.unit > 1 ? "#696969" : "#555";
-            }
+            this.ctx.fillStyle = asteroid.big ? "#a9a9a9" : "#888";
             this.ctx.fill();
 
             if (!asteroid.phased) {
                 this.ctx.setTransform(1, 0, 0, 1, 0, 0);
-                this.ctx.fillStyle = "#ff4444";
+                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
+                this.ctx.fillStyle = "#151230";
+                this.ctx.fillRect(asteroid.x - asteroid.size - 2, asteroid.y - asteroid.size - 20, asteroid.size * 2 + 4, 13);
                 let barWidth = asteroid.size * 2 * (asteroid.health / asteroid.maxHealth);
-                this.ctx.fillRect(asteroid.x - asteroid.size, asteroid.y - asteroid.size - 18, barWidth, 6);
+                this.ctx.fillStyle = "#bf0000";
+                this.ctx.fillRect(asteroid.x - asteroid.size, asteroid.y - asteroid.size - 18, barWidth, 9);
 
-                this.ctx.font = "14px monospace";
-                this.ctx.fillStyle = "#fff";
+                let t = Math.max(0, Math.floor(asteroid.health)) + "/" + Math.floor(asteroid.maxHealth)
+                this.ctx.font = "12px monospace";
+                this.ctx.fillStyle = "#151230";
                 this.ctx.textAlign = "center";
-                this.ctx.fillText(
-                    formatWhole(Math.max(0, Math.floor(asteroid.health))) + "/" + formatWhole(Math.floor(asteroid.maxHealth)),
-                    asteroid.x,
-                    asteroid.y - asteroid.size - 6
-                );
+                this.ctx.fillText(t, asteroid.x + 1, asteroid.y - asteroid.size - 9 + 1)
+                this.ctx.fillText(t, asteroid.x + 1, asteroid.y - asteroid.size - 9 - 1)
+                this.ctx.fillText(t, asteroid.x - 1, asteroid.y - asteroid.size - 9 + 1)
+                this.ctx.fillText(t, asteroid.x - 1, asteroid.y - asteroid.size - 9 - 1)
+                this.ctx.fillStyle = "white";
+                this.ctx.fillText(t, asteroid.x, asteroid.y - asteroid.size - 9)
             }
             this.ctx.restore();
         }
@@ -4836,6 +4558,7 @@ class SpaceArena {
         // Draw XP orbs
         for (let orb of this.xpOrbs) {
             this.ctx.save();
+            this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
             this.ctx.globalAlpha = 0.8;
             this.ctx.beginPath();
             this.ctx.arc(orb.x, orb.y, 6, 0, 2 * Math.PI);
@@ -4848,6 +4571,7 @@ class SpaceArena {
         for (let i = this.lootFlashes.length - 1; i >= 0; i--) {
             let flash = this.lootFlashes[i];
             this.ctx.save();
+            ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
             this.ctx.globalAlpha = Math.max(0, flash.timer / 120);
             this.ctx.font = flash.style;
             this.ctx.fillStyle = flash.color;
@@ -4911,7 +4635,7 @@ class SpaceArena {
                 this.ctx.font = "bold 32px monospace";
                 this.ctx.fillStyle = upg.color;
                 this.ctx.textAlign = "center";
-                this.ctx.fillText(run(upg.name, upg), boxX + boxWidth / 2, boxY + 50);
+                this.ctx.fillText(upg.name, boxX + boxWidth / 2, boxY + 50);
 
                 let rarityText = upg.rarity.charAt(0).toUpperCase() + upg.rarity.slice(1);
                 this.ctx.font = "italic 24px monospace";
@@ -4920,7 +4644,7 @@ class SpaceArena {
 
                 this.ctx.font = "22px monospace";
                 this.ctx.fillStyle = "#fff";
-                let desc = run(upg.description, upg);
+                let desc = upg.description;
                 let descLines = [];
                 let words = desc.split(" ");
                 let line = "";
@@ -5033,12 +4757,6 @@ class SpaceArena {
         if (!this.loop) {
             this.loop = setInterval(() => this.update(), 1000 / 60);
         }
-        this.keys['KeyW'] = false
-        this.keys['KeyA'] = false
-        this.keys['KeyS'] = false
-        this.keys['KeyD'] = false
-        this.keys['Space'] = false
-        this.mouseDown = false
     }
 
     onShipDeath() {
@@ -5128,3 +4846,4 @@ function resumeAsteroidMinigame() {
     if (typeof arena.resumeAsteroidMinigame === 'function') arena.resumeAsteroidMinigame();
 }
 window.resumeAsteroidMinigame = resumeAsteroidMinigame;
+

@@ -2179,7 +2179,7 @@
                 return [this.costGrowth()[0].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[0]).floor(), this.costGrowth()[1].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[1]).floor()]
             },
             canAfford() {
-                return this.currency()[0].gte(this.cost()[0]) && this.currency()[1].gte(this.cost()[1]) && getBuyableAmount("sme", 181).gt(0)
+                return this.currency()[0].gte(this.cost()[0]) && this.currency()[1].gte(this.cost()[1]) && getBuyableAmount("sme", 105).gt(0)
             },
             display() {
                 return "<h3>SME-J1</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
@@ -2214,7 +2214,7 @@
                 return [this.costGrowth()[0].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[0]).floor(), this.costGrowth()[1].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[1]).floor()]
             },
             canAfford() {
-                return this.currency()[0].gte(this.cost()[0]) && this.currency()[1].gte(this.cost()[1]) && getBuyableAmount("sme", 181).gt(0)
+                return this.currency()[0].gte(this.cost()[0]) && this.currency()[1].gte(this.cost()[1]) && getBuyableAmount("sme", 191).gt(0)
             },
             display() {
                 return "<h3>SME-J2</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
@@ -2248,7 +2248,7 @@
                 return [this.costGrowth()[0].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[0]).floor(), this.costGrowth()[1].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[1]).floor()]
             },
             canAfford() {
-                return this.currency()[0].gte(this.cost()[0]) && this.currency()[1].gte(this.cost()[1]) && getBuyableAmount("sme", 181).gt(0)
+                return this.currency()[0].gte(this.cost()[0]) && this.currency()[1].gte(this.cost()[1]) && getBuyableAmount("sme", 191).gt(0)
             },
             display() {
                 return "<h3>SME-J3</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/5)\n\
@@ -2282,7 +2282,7 @@
                 return [this.costGrowth()[0].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[0]).floor(), this.costGrowth()[1].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[1]).floor()]
             },
             canAfford() {
-                return this.currency()[0].gte(this.cost()[0]) && this.currency()[1].gte(this.cost()[1]) && getBuyableAmount("sme", 181).gt(0)
+                return this.currency()[0].gte(this.cost()[0]) && this.currency()[1].gte(this.cost()[1]) && getBuyableAmount("sme", 192).gt(0)
             },
             display() {
                 return "<h3>SME-J4</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/5)\n\

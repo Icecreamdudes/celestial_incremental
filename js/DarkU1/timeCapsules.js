@@ -107,11 +107,13 @@
         player.dp.buyables[15] = new Decimal(0)
         player.dp.buyables[16] = new Decimal(0)
 
-        player.db.boosters = new Decimal(0)
-        for (let i = 0; i < player.db.milestones.length; i++) {
-            if (+player.db.milestones[i] < 101) {
-                player.db.milestones.splice(i, 1);
-                i--;
+        if (!hasMilestone("prj", 110)) {
+            player.db.boosters = new Decimal(0)
+            for (let i = 0; i < player.db.milestones.length; i++) {
+                if (+player.db.milestones[i] < 101) {
+                    player.db.milestones.splice(i, 1);
+                    i--;
+                }
             }
         }
 

@@ -106,6 +106,7 @@
         player.prj.projectSpeed = new Decimal(1)
         player.prj.projectSpeed = player.prj.projectSpeed.mul(player.prj.storedTimeCapsuleEffect)
         if (hasUpgrade("wel", 22)) player.prj.projectSpeed = player.prj.projectSpeed.mul(2);
+        player.prj.projectSpeed = player.prj.projectSpeed.mul(buyableEffect("sme", 191))
 
         player.prj.storedTimeCapsuleEffect = player.prj.storedTimeCapsules.add(1).log(10).add(1).pow(0.5).sub(1).pow_base(10).pow(2).sub(1).div(2).add(1)
 
@@ -323,7 +324,7 @@
         },
         102: {
             onComplete() {
-                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
             effectDescription() { return "<small>x2 light well cycle gain and unlock 1 punchcard per project cycle up to 5.</small>" },
             cycleReq() { return new Decimal(2) },
@@ -344,7 +345,7 @@
         },
         103: {
             onComplete() {
-                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
             effectDescription() { return "<small>x2 light gain and get a fourth punchcard choice.</small>" },
             cycleReq() { return new Decimal(3) },
@@ -365,7 +366,7 @@
         },
         104: {
             onComplete() {
-                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
             effectDescription() { return "<small>Unlock time-based bonuses to D1 exit rewards.</small>" },
             cycleReq() { return new Decimal(4) },
@@ -386,7 +387,7 @@
         },
         105: {
             onComplete() {
-                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
             effectDescription() { return "<small>Project progress gain boosts light well speed. (x" + format(player.prj.milestone105Effect) + ")</small>" },
             cycleReq() { return new Decimal(5) },
@@ -407,7 +408,7 @@
         },
         106: {
             onComplete() {
-                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
             effectDescription() { return "<small>Unlock more time energy buyables.</small>" },
             cycleReq() { return new Decimal(6) },
@@ -428,9 +429,9 @@
         },
         107: {
             onComplete() {
-                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock a permanent booster milestone.</small>" },
+            effectDescription() { return "<small>???</small>" },
             cycleReq() { return new Decimal(7) },
             projectId() { return 1 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) && hasUpgrade("wel", 31) },
@@ -449,9 +450,9 @@
         },
         108: {
             onComplete() {
-                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock extra time capsules.</small>" },
+            effectDescription() { return "<small>???</small>" },
             cycleReq() { return new Decimal(8) },
             projectId() { return 1 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) && hasUpgrade("wel", 31) },
@@ -470,9 +471,9 @@
         },
         109: {
             onComplete() {
-                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>/2 to the eclipse timer tickspeed.</small>" },
+            effectDescription() { return "<small>/1.5 to the eclipse timer tickspeed.</small>" },
             cycleReq() { return new Decimal(9) },
             projectId() { return 1 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) && hasUpgrade("wel", 31) },
@@ -491,12 +492,33 @@
         },
         110: {
             onComplete() {
-                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Passively generate 0.1% of best stored space energy/time capsule gain.</small>" },
+            effectDescription() { return "<small>Keep boosters on time capsule resets.</small>" },
             cycleReq() { return new Decimal(10) },
             projectId() { return 1 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) && hasUpgrade("wel", 31) },
+            done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
+            style() {
+                let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
+                if (hasMilestone("prj", this.id)) {
+                    look.backgroundColor = "#efffef"
+                    look.color = "#232e23"
+                } else {
+                    look.backgroundColor = "#232e23"
+                    look.color = "#efffef"
+                }
+                return look
+            },
+        },
+        111: {
+            onComplete() {
+                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+            },
+            effectDescription() { return "<small>Unlock project studies.</small>" },
+            cycleReq() { return new Decimal(11) },
+            projectId() { return 1 },
+            unlocked() { return hasMilestone(this.layer, this.id - 3) && hasUpgrade("wel", 34) },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
@@ -642,7 +664,7 @@
             onComplete() {
                 doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock the ability to blueshift your wells.</small>" },
+            effectDescription() { return "<small>Unlock blueshifts.</small>" },
             cycleReq() { return new Decimal(1) },
             projectId() { return 3 },
             unlocked() { return true },
@@ -663,7 +685,7 @@
             onComplete() {
                 doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Extend the pyramid.</small>" },
+            effectDescription() { return "<small>Unlock the fourth row of the pyramid.</small>" },
             cycleReq() { return new Decimal(2) },
             projectId() { return 3 },
             unlocked() { return true },
@@ -684,7 +706,7 @@
             onComplete() {
                 doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Each project cycle after 2 boosts the blueshift base by +0.5.</small>" },
+            effectDescription() { return "<small>Unlock light well δ. Unlock a prism well automator every blueshift.</small>" },
             cycleReq() { return new Decimal(3) },
             projectId() { return 3 },
             unlocked() { return true },
@@ -705,7 +727,7 @@
             onComplete() {
                 doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Start prismatics with 1 δ ↻.</small>" },
+            effectDescription() { return "<small>Prismatic no longer resets δ ↻.</small>" },
             cycleReq() { return new Decimal(4) },
             projectId() { return 3 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) },
@@ -1029,7 +1051,7 @@
 
                 return s
             },
-            milestones: [101, 102, 103, 104, 105, 106, 107, 108, 109, 110],
+            milestones: [101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111],
         },
         2: {
             title: "Prismatic",
@@ -1087,8 +1109,8 @@
             title: "Blueshift",
             completionEffectStat: "Starmetal Essence",
             statReqName: "Blueshifts",
-            statReqLocation() {return player.wel.modules[4]},
-            statReqInternalName: "completions",
+            statReqLocation() {return player.blu},
+            statReqInternalName: "totalBlueshifts",
             getCompletionEffect() {
                 let completions = player.prj.modules[3].completions
 
@@ -1098,7 +1120,7 @@
             },
             getTimeReq() {
                 let completions = player.prj.modules[3].completions
-                let s = new Decimal(1e4)
+                let s = new Decimal(2e4)
 
                 s = s.mul(completions.add(1).mul(completions.pow(2)).div(2).add(1))
                 if (completions.gte(5)) {
@@ -1109,10 +1131,10 @@
             },
             getTimeCapsuleReq() {
                 let completions = player.prj.modules[3].completions
-                let s = completions.add(1).pow(3).mul(200)
+                let s = completions.add(1).pow(2).mul(200)
                 
                 if (completions.gte(5)) {
-                    s = s.add(completions.sub(5).pow(3)).mul(10)
+                    s = s.add(completions.sub(5).pow(2)).mul(10)
                 }
 
                 return s.floor()

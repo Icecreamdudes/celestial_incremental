@@ -477,7 +477,7 @@ addLayer("cb", {
     levelup() {
         let leftover = new Decimal(0)
         player.cb.level = layers.cb.xpToLevel(player.cb.totalxp)
-        leftover = player.cb.totalxp - layers.cb.levelToXP(player.cb.level)
+        leftover = player.cb.totalxp.sub(layers.cb.levelToXP(player.cb.level))
         player.cb.xp = new Decimal(0)
         player.cb.xp = player.cb.xp.add(leftover)
     },

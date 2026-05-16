@@ -131,7 +131,7 @@ addLayer("jukebox", {
             name: "N/A",
             description: "IP Challenge",
             img: "resources/music/infinity-challenges.png",
-            file: "music/tav.mp3",
+            file: "music/ipChallenge.mp3",
             unlocked() {return hasChallenge("ip", 11) || player.s.highestSingularityPoints.gt(0)},
         },
         "hex": {

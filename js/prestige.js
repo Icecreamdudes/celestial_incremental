@@ -104,6 +104,7 @@
         let amt = player.p.prestigePoints
         if (player.p.prestigePointsToGet.gte(player.p.prestigePoints)) amt = player.p.prestigePointsToGet
         player.p.doomSoftcap = player.p.doomSoftcap.div(amt.div(player.p.doomSoftcapStart).add(1).log(player.p.doomSoftcapStart).div(doomWeaken).add(1))
+        if (hasUpgrade("depth2", 104)) player.p.doomSoftcap = player.p.doomSoftcap.max(0.01)
 
         // APPLY DOOM SOFTCAP
         if (player.p.prestigePointsToGet.gt(player.p.doomSoftcapStart)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.div(player.p.doomSoftcapStart).pow(player.p.doomSoftcap).mul(player.p.doomSoftcapStart)
@@ -138,7 +139,7 @@
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("id", 22))
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("r", 12))
         if (hasUpgrade("hpw", 1023)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("hpw", 1023))
-        player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("oi", 22))
+        if (!hasUpgrade("depth2", 103)) player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("oi", 22))
         if (hasUpgrade("pol", 17)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("pol", 17))
         if (hasUpgrade("ep1", 11)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("ep1", 11))
         if (hasUpgrade("ep2", 4)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("ep2", 4))
@@ -146,6 +147,9 @@
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("ra", 14))
         player.p.crystalsToGet = player.p.crystalsToGet.mul(player.co.cores.prestige.effect[2])
         player.p.crystalsToGet = player.p.crystalsToGet.mul(player.i.postOTFMult)
+
+        // POWER MODIFIERS
+        if (hasUpgrade("depth2", 103)) player.p.crystalsToGet = player.p.crystalsToGet.pow(buyableEffect("oi", 22))
 
         // CRYSTALS PER SECOND
         player.p.crystals = player.p.crystals.add(player.p.crystalsToGet.mul(Decimal.mul(buyableEffect("fa", 202), delta)))

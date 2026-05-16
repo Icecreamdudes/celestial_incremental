@@ -682,10 +682,10 @@
                     player.po.featureSlots = player.po.featureSlotsMax
                 }
 
-                layers.in.bigCrunch()
+                if (player.points.gt(Infinity)) {layers.bigc.bigCrunch()} else {layers.in.bigCrunch()}
             },
             onExit() {
-                layers.in.bigCrunch()
+                if (player.points.gt(Infinity)) {layers.bigc.bigCrunch()} else {layers.in.bigCrunch()}
             },
             onComplete() {if (!hasAchievement("achievements", 107)) completeAchievement("achievements", 107)},
             buttonStyle: {backgroundColor: "white"},
@@ -714,10 +714,10 @@
             rewardDescription: "Unlocks a new check back button at level 125.",
             unlocked() { return hasChallenge("ip", 11) },
             onEnter() {
-                layers.in.bigCrunch()
+                if (player.points.gt(Infinity)) {layers.bigc.bigCrunch()} else {layers.in.bigCrunch()}
             },
             onExit() {
-                layers.in.bigCrunch()
+                if (player.points.gt(Infinity)) {layers.bigc.bigCrunch()} else {layers.in.bigCrunch()}
             },
             onComplete() {if (!hasAchievement("achievements", 109)) completeAchievement("achievements", 109)},
             buttonStyle: {backgroundColor: "white"},
@@ -759,10 +759,10 @@
                     player.po.featureSlots = player.po.featureSlotsMax
                 }
 
-                layers.in.bigCrunch()
+                if (player.points.gt(Infinity)) {layers.bigc.bigCrunch()} else {layers.in.bigCrunch()}
             },
             onExit() {
-                layers.in.bigCrunch()
+                if (player.points.gt(Infinity)) {layers.bigc.bigCrunch()} else {layers.in.bigCrunch()}
             },
             onComplete() {if (!hasAchievement("achievements", 111)) completeAchievement("achievements", 111)},
             buttonStyle: {backgroundColor: "white"},
@@ -795,12 +795,12 @@
             rewardDescription: "Unlocks infinity point buyables and new milestones.",
             unlocked() { return hasChallenge("ip", 13) },
             onEnter() {
-                layers.in.bigCrunch()
+                if (player.points.gt(Infinity)) {layers.bigc.bigCrunch()} else {layers.in.bigCrunch()}
                 player.r.pentToGet = new Decimal(0)
                 player.r.pent = new Decimal(0)
             },
             onExit() {
-                layers.in.bigCrunch()
+                if (player.points.gt(Infinity)) {layers.bigc.bigCrunch()} else {layers.in.bigCrunch()}
             },
             onComplete() {if (!hasAchievement("achievements", 113)) completeAchievement("achievements", 113)},
             buttonStyle: {backgroundColor: "white"},
@@ -826,7 +826,7 @@
                     player.po.featureSlots = player.po.featureSlotsMax
                 }
 
-                layers.in.bigCrunch()
+                if (player.points.gt(Infinity)) {layers.bigc.bigCrunch()} else {layers.in.bigCrunch()}
 
                 player.d.challengeDicePoints = new Decimal(0)
                 player.d.buyables[21] = new Decimal(0)
@@ -842,7 +842,7 @@
                 }
             },
             onExit() {
-                layers.in.bigCrunch()
+                if (player.points.gt(Infinity)) {layers.bigc.bigCrunch()} else {layers.in.bigCrunch()}
             },
             onComplete() {if (!hasAchievement("achievements", 116)) completeAchievement("achievements", 116)},
             buttonStyle: {backgroundColor: "white"},
@@ -867,10 +867,10 @@
                     player.po.featureSlots = player.po.featureSlotsMax
                 }
 
-                layers.in.bigCrunch()
+                if (player.points.gt(Infinity)) {layers.bigc.bigCrunch()} else {layers.in.bigCrunch()}
             },
             onExit() {
-                layers.in.bigCrunch()
+                if (player.points.gt(Infinity)) {layers.bigc.bigCrunch()} else {layers.in.bigCrunch()}
             },
             onComplete() {if (!hasAchievement("achievements", 120)) completeAchievement("achievements", 120)},
             buttonStyle: {backgroundColor: "white"},
@@ -885,12 +885,12 @@
             rewardDescription: "Check back buyables.",
             unlocked() { return hasChallenge("ip", 16) && player.cb.highestLevel.gte(35) },
             onEnter() {
-                layers.in.bigCrunch()
+                if (player.points.gt(Infinity)) {layers.bigc.bigCrunch()} else {layers.in.bigCrunch()}
 
                 player.cb.IC7shardCount = 0
             },
             onExit() {
-                layers.in.bigCrunch()
+                if (player.points.gt(Infinity)) {layers.bigc.bigCrunch()} else {layers.in.bigCrunch()}
             },
             onComplete() {if (!hasAchievement("achievements", 122)) completeAchievement("achievements", 122)},
             buttonStyle: {backgroundColor: "white"},

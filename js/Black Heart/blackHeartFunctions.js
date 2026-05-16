@@ -591,7 +591,7 @@ function bhHeal(heal, index, slot, target, str = "") {
 }
 
 function celestialiteReward(gain) {
-    let generalChance = Decimal.sub(player.bh.celestialite.curAdd, 1)
+    let generalChance = player.bh.celestialite.curAdd
     let generalRemain = generalChance.floor()
     generalChance = generalChance.sub(generalRemain)
     
@@ -610,6 +610,11 @@ function celestialiteReward(gain) {
         player.depth1.dimUmbrite = player.depth1.dimUmbrite.add(gain.dimUmbrite)
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.dimUmbrite) + " dim umbrite! (You have " + formatWhole(player.depth1.dimUmbrite) + ")")
     }
+    if (gain.murkyUmbrite) {
+        gain.murkyUmbrite = gain.murkyUmbrite.mul(player.depth1.depth1Mult).mul(generalMult).floor()
+        player.depth1.murkyUmbrite = player.depth1.murkyUmbrite.add(gain.murkyUmbrite)
+        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.murkyUmbrite) + " murky umbrite! (You have " + formatWhole(player.depth1.murkyUmbrite) + ")")
+    }
     if (gain.faintUmbrite) {
         gain.faintUmbrite = gain.faintUmbrite.mul(player.depth2.depth2Mult).mul(generalMult).floor()
         player.depth2.faintUmbrite = player.depth2.faintUmbrite.add(gain.faintUmbrite)
@@ -619,6 +624,11 @@ function celestialiteReward(gain) {
         gain.clearUmbrite = gain.clearUmbrite.mul(player.depth2.depth2Mult).mul(generalMult).floor()
         player.depth2.clearUmbrite = player.depth2.clearUmbrite.add(gain.clearUmbrite)
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.clearUmbrite) + " clear umbrite! (You have " + formatWhole(player.depth2.clearUmbrite) + ")")
+    }
+    if (gain.hazyUmbrite) {
+        gain.hazyUmbrite = gain.hazyUmbrite.mul(player.depth2.depth2Mult).mul(generalMult).floor()
+        player.depth2.hazyUmbrite = player.depth2.hazyUmbrite.add(gain.hazyUmbrite)
+        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.hazyUmbrite) + " hazy umbrite! (You have " + formatWhole(player.depth2.hazyUmbrite) + ")")
     }
     if (gain.vividUmbrite) {
         gain.vividUmbrite = gain.vividUmbrite.mul(player.depth3.depth3Mult).mul(generalMult).floor()
@@ -631,9 +641,14 @@ function celestialiteReward(gain) {
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.lustrousUmbrite) + " lustrous umbrite! (You have " + formatWhole(player.depth3.lustrousUmbrite) + ")")
     }
     if (gain.darkEssence) {
-        gain.darkEssence = gain.darkEssence.mul(buyableEffect("sme", 135)).mul(generalMult).floor()
+        gain.darkEssence = gain.darkEssence.mul(buyableEffect("darkTemple", 1005)).mul(generalMult).floor()
         player.bh.darkEssence = player.bh.darkEssence.add(gain.darkEssence)
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.darkEssence) + " dark essence! (You have " + formatWhole(player.bh.darkEssence) + ")")
+    }
+    if (gain.darkEther) {
+        gain.darkEther = gain.darkEther.mul(generalMult).floor()
+        player.bh.darkEther = player.bh.darkEther.add(gain.darkEther)
+        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.darkEther) + " dark ether! (You have " + formatWhole(player.bh.darkEther) + ")")
     }
     if (gain.temporalDust) {
         gain.temporalDust = gain.temporalDust.mul(player.stagnantSynestia.temporalMult).mul(generalMult).floor()
@@ -656,12 +671,12 @@ function celestialiteReward(gain) {
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.dimNocturnium) + " dim nocturnium! (You have " + formatWhole(player.depth4.dimNocturnium) + ")")
     }
     if (gain.matosDust) {
-        gain.matosDust = gain.matosDust.mul(player.laboratory.matosMult).mul(generalMult).floor()
+        gain.matosDust = gain.matosDust.mul(player.laboratory.matosMult).mul(generalMult).mul(player.laboratory.matosFragment.add(1).log(10).add(1)).floor()
         player.laboratory.matosDust = player.laboratory.matosDust.add(gain.matosDust)
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.matosDust) + " matos dust! (You have " + formatWhole(player.laboratory.matosDust) + ")")
     }
     if (gain.matosShard) {
-        gain.matosDust = gain.matosShard.mul(player.laboratory.matosMult).mul(generalMult).floor()
+        gain.matosDust = gain.matosShard.mul(player.laboratory.matosMult).mul(generalMult).mul(player.laboratory.matosEssence.add(1).log(10).add(1)).floor()
         player.laboratory.matosShard = player.laboratory.matosShard.add(gain.matosShard)
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.matosShard) + " matos shards! (You have " + formatWhole(player.laboratory.matosShard) + ")")
     }
@@ -683,7 +698,7 @@ function celestialiteDeath() {
     if (BHC[player.bh.celestialite.id].onDeath) BHC[player.bh.celestialite.id].onDeath()
     player.bh.respawnTimer = player.bh.respawnMax
     if (!BHS[player.bh.currentStage].timer) player.bh.timer = new Decimal(0)
-    player.bh.combo = player.bh.combo.add(1)
+    if (player.bh.combo.gte(0)) {player.bh.combo = player.bh.combo.add(1)} else {player.bh.combo = player.bh.combo.sub(1)}
 
     if (BHC[player.bh.celestialite.id].attributes) {
         // Explosion Modifier
@@ -709,7 +724,8 @@ function celestialiteDeath() {
     }
     
     if (player.bh.currentStage != "none") {
-        if (player[player.bh.currentStage].highestCombo && player.bh.combo.gt(player[player.bh.currentStage].highestCombo)) player[player.bh.currentStage].highestCombo = player.bh.combo
+        if (player[player.bh.currentStage].highestCombo && player.bh.combo.gt(player[player.bh.currentStage].highestCombo)) player[player.bh.currentStage].highestCombo = player.bh.combo.min(BHS[player.bh.currentStage].comboLimit)
+        if (player[player.bh.currentStage].lowestCombo && player.bh.combo.lt(player[player.bh.currentStage].lowestCombo)) player[player.bh.currentStage].lowestCombo = player.bh.combo.max(Decimal.mul(BHS[player.bh.currentStage].comboLimit, -1))
         if (player[player.bh.currentStage].milestone && Object.hasOwn(player[player.bh.currentStage].milestone, player.bh.combo)) {
             let curVal = player[player.bh.currentStage].milestone[player.bh.combo]
             let charAmt = 4
@@ -750,12 +766,30 @@ function celestialiteDeath() {
 function celestialiteSpawn() {
     let celestialiteId = BHS[player.bh.currentStage].generateCelestialite(player.bh.combo)
 
+    player.bh.comboScaling = 1
+    if (BHS[player.bh.currentStage].comboScaling) player.bh.comboScaling = BHS[player.bh.currentStage].comboScaling
+    if (player.bh.combo.lt(0)) player.bh.comboScaling = ((player.bh.comboScaling-1)*(1+(Math.abs(player.bh.combo/100))))+1
+
+    player.bh.comboScalingReduction = 0
+    if (hasUpgrade("ep2", 9107)) player.bh.comboScalingReduction = player.bh.comboScalingReduction + 0.002
+    if (hasMilestone("db", 105)) player.bh.comboScalingReduction = player.bh.comboScalingReduction + 0.002
+    if (hasUpgrade("depth4", 3)) player.bh.comboScalingReduction = player.bh.comboScalingReduction + 0.002
+    player.bh.comboScalingReduction = player.bh.comboScalingReduction + (buyableEffect("laboratory", 1).sub(1).toNumber())
+
+    player.bh.comboScaling = Math.max(player.bh.comboScaling - player.bh.comboScalingReduction , 1)
+
+    let negStart = 25
+    if ("comboScalingStart" in BHS[player.bh.currentStage] && "comboLimit" in BHS[player.bh.currentStage]) negStart = BHS[player.bh.currentStage].comboLimit - BHS[player.bh.currentStage].comboScalingStart
+
     let scale = new Decimal(1)
     if (player.bh.combo.gte(player.bh.comboScalingStart)) scale = Decimal.pow(player.bh.comboScaling, player.bh.combo.sub(player.bh.comboScalingStart))
+    if (player.bh.combo.lt(0)) scale = Decimal.pow(player.bh.comboScaling, Decimal.mul(player.bh.combo-negStart, -1))
     if (BHS[player.bh.currentStage].celestialiteNerf) scale = scale.div(BHS[player.bh.currentStage].celestialiteNerf())
+
     player.bh.celestialite.id = celestialiteId
     player.bh.celestialite.randomMult = Decimal.add(0.85, Decimal.mul(Math.random(), 0.3))
     if (BHC[player.bh.celestialite.id].noRandomStats) player.bh.celestialite.randomMult = new Decimal(1)
+    if (player.bh.combo.lt(0) && BHC[player.bh.celestialite.id].negMult) player.bh.celestialite.randomMult = player.bh.celestialite.randomMult.mul(BHC[player.bh.celestialite.id].negMult)
     player.bh.celestialite.health = BHC[celestialiteId].health ?? new Decimal(0)
     player.bh.celestialite.maxHealth = BHC[celestialiteId].health ?? new Decimal(0)
     player.bh.celestialite.damage = BHC[celestialiteId].damage ?? new Decimal(0)
@@ -838,6 +872,13 @@ function calcTarget(index, slot, target, action = "none") {
             }
             let rndhP = pothTarget[Math.floor(Math.random()*pothTarget.length)]
             result = [rndhP]
+            if (result[0] === undefined && action != "heal") {
+                for (let i = 0; i < 3; i++) {
+                    if (player.bh.characters[i].health.gt(0) && player.bh.characters[i].id != "none") pothTarget.push(i)
+                }
+                let randP = pothTarget[Math.floor(Math.random()*pothTarget.length)]
+                result = [randP]
+            }
             break;
         case "random":
             let rndTarget = [3]
@@ -1038,7 +1079,7 @@ function stagnantUpdate(time) {
                                     if (player.bh.celestialite.actions[i].cooldown.gte(BHC[player.bh.celestialite.id].actions[i].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))) {
                                         if (!BHC[player.bh.celestialite.id].actions[i].conditional || BHC[player.bh.celestialite.id].actions[i].conditional(3, i)) {
                                             player.bh.celestialite.actions[i].cooldown = new Decimal(0)
-                                            player.bh.celestialite.actions[i].duration = BHC[player.bh.celestialite.id].actions[i].duration
+                                            player.bh.celestialite.actions[i].duration = run(BHC[player.bh.celestialite.id].actions[i].duration, BHC[player.bh.celestialite.id].actions[i])
                                         }
                                     }
                                 }
@@ -1112,7 +1153,7 @@ function stagnantUpdate(time) {
                                     }
                                     if (active) {
                                         player.bh.characters[i].skills[j].cooldown = new Decimal(0)
-                                        player.bh.characters[i].skills[j].duration = BHA[player.bh.characters[i].skills[j].id].duration
+                                        player.bh.characters[i].skills[j].duration = run(BHA[player.bh.characters[i].skills[j].id].duration, BHA[player.bh.characters[i].skills[j].id])
                                     }
                                 }
                             }

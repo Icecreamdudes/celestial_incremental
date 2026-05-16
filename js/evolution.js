@@ -1089,7 +1089,7 @@ addLayer("ev8", {
         player.ev8.evoTimers[3].max = new Decimal(324000)
         for (let thing in player.ev8.evoTimers) {
             if (hasUpgrade("ev8", 27)) {
-                player.ev8.evoTimers[thing].base = player.ev8.evoTimers[thing].base.mul(ESCMult.pow(2)).floor()
+                player.ev8.evoTimers[thing].base = player.ev8.evoTimers[thing].base.mul(ESCMult.pow(1.5)).floor()
             } else {
                 player.ev8.evoTimers[thing].base = player.ev8.evoTimers[thing].base.mul(ESCMult).floor()
             }
@@ -1414,7 +1414,7 @@ addLayer("ev8", {
         27: {
             title: "Shard Research XVI",
             unlocked() {return getBuyableAmount("sme", 112).gte(4)},
-            description: "ESC mult effectiveness on evo shard buttons is squared.",
+            description: "ESC mult effectiveness on evo shard buttons is raised by ^1.5.",
             tooltip: "ESC only effects shard buttons via SME Study B:7",
             cost: new Decimal(40),
             currencyLocation() {return player.cb},

@@ -106,7 +106,7 @@ addLayer("alephsChamber", {
                     }],
                     ["style-column", [
                         ["raw-html", "2 Characters", {color: "rgba(0,0,0,0.5)", fontSize: "16px", fontFamily: "monospace"}],
-                        ["raw-html", "Unlock Potency", {color: "rgba(0,0,0,0.5)", fontSize: "14px", fontFamily: "monospace"}],
+                        ["raw-html", "Unlock the Potency Stat", {color: "rgba(0,0,0,0.5)", fontSize: "14px", fontFamily: "monospace"}],
                     ], () => {
                         let look = {width: "232px", height: "57px", padding: "0 5px", background: "#bf8f8f", border: "4px solid rgba(0, 0, 0, 0.125)", cursor: "default", userSelect: "none"}
                         if (player.alephsChamber.milestone[25] >= 2) look.background = "#77bf5f"
@@ -427,8 +427,7 @@ BHC.m26 = {
         fontSize: "60px",
     },
     health: new Decimal(1400),
-    damage: new Decimal(6),
-    luck: new Decimal(3),
+    damage: new Decimal(5),
     actions: {
         0: {
             name: "Arrow Flurry",
@@ -437,7 +436,10 @@ BHC.m26 = {
             target: "randomPlayer",
             method: "ranged",
             properties: {
-                "multi-hit"() {return [player.bh.celestialite.luck.toNumber(), 200]},
+                "multi-hit"() {
+                    if (!player.bh.celestialite.actions[0].variables.bullets) player.bh.celestialite.actions[0].variables.bullets = 3
+                    return [player.bh.celestialite.actions[0].variables.bullets, 200]
+                },
                 "crit": [0.5, 2],
             },
             value: new Decimal(1),
@@ -446,13 +448,14 @@ BHC.m26 = {
         1: {
             name: "Arrow Resupply",
             instant: true,
-            type: "effect",
-            target: "celestialite",
-            noMessage: true,
-            properties: {
-                "luckAdd": new Decimal(1),
+            type: "function",
+            target: "allPlayer",
+            onTrigger(index, slot, target, magnitude) {
+                if (!player.bh.celestialite.actions[0].variables.bullets) player.bh.celestialite.actions[0].variables.bullets = 3
+                player.bh.celestialite.actions[0].variables.bullets += 1
+                bhLog("<span style='color: #8b0e7a'>" + run(BHC[player.bh.celestialite.id].name, BHC[player.bh.celestialite.id]) + " increases its arrow count.")
             },
-            cooldown: new Decimal(6),
+            cooldown: new Decimal(10),
         },
     },
     reward() {
@@ -529,7 +532,7 @@ BHC.ma2 = {
     },
     health: new Decimal(4000),
     damage: new Decimal(30),
-    luck: new Decimal(6),
+    luck: new Decimal(5),
     actions: {
         0: {
             name: "Poison Needle",
@@ -547,18 +550,22 @@ BHC.ma2 = {
             constantType: "effect",
             constantTarget: "storedTarget",
             effects: {
-                "regenAdd"() {return Decimal.mul(-1, player.bh.celestialite.luck)}
+                "regenAdd"() {
+                    if (!player.bh.celestialite.actions[0].variables.bullets) player.bh.celestialite.actions[0].variables.bullets = player.bh.celestialite.luck.toNumber()
+                    return Decimal.mul(-1, player.bh.celestialite.actions[0].variables.bullets)
+                }
             },
             duration: new Decimal(3),
         },
         1: {
             name: "Increased Toxicity",
             instant: true,
-            type: "effect",
-            target: "celestialite",
-            noMessage: true,
-            properties: {
-                "luckAdd": new Decimal(3),
+            type: "function",
+            target: "allPlayer",
+            onTrigger(index, slot, target, magnitude) {
+                if (!player.bh.celestialite.actions[0].variables.bullets) player.bh.celestialite.actions[0].variables.bullets = player.bh.celestialite.luck.toNumber()
+                player.bh.celestialite.actions[0].variables.bullets *= 1.3
+                bhLog("<span style='color: #8b0e7a'>" + run(BHC[player.bh.celestialite.id].name, BHC[player.bh.celestialite.id]) + " increases its poison slash's toxicity.")
             },
             cooldown: new Decimal(12),
         },

@@ -11,6 +11,7 @@
         bloodToGet: new Decimal(1),
 
         bloodStones: new Decimal(0),
+        bloodGems: new Decimal(0),
 
         bloodDrain: false,
         bloodDrainPerSecond: new Decimal(0.1),
@@ -46,17 +47,19 @@
         
         player.bl.bloodToGet = player.bl.blood.pow(2).add(bloodGain).root(2).sub(player.bl.blood)
         player.bl.bloodToGet = player.bl.bloodToGet.mul(buyableEffect("bl", 23))
+        player.bl.bloodToGet = player.bl.bloodToGet.mul(buyableEffect("bl", 32))
         if (getLevelableTier("pu", 401, true)) player.bl.bloodToGet = player.bl.bloodToGet.mul(levelableEffect("pu", 401)[0])
 
         if (player.bl.bloodToGet.gte(10)) player.bl.bloodToGet = player.bl.bloodToGet.div(10).pow(0.2).mul(10)
 
         player.bl.bloodEffect = player.bl.blood.pow(0.15).div(15).add(1)
+        if (player.bl.blood.gte(6713)) player.bl.bloodEffect = player.bl.blood.add(1).log(2).div(100).add(1.123)
 
         if (player.bl.bloodDrain && player.bl.blood.gte(0))
         {
             player.bl.bloodDrainPerSecond = Decimal.mul(0.1, player.bl.blood.pow(0.2))
-            player.bl.bloodDrainPerSecond = player.bl.bloodDrainPerSecond.mul(buyableEffect("bl", 11)[1])
-            player.bl.bloodDrainPerSecond = player.bl.bloodDrainPerSecond.div(buyableEffect("bl", 13))
+            player.bl.bloodDrainPerSecond = player.bl.bloodDrainPerSecond.mul(buyableEffect("bl", 31)[1])
+            player.bl.bloodDrainPerSecond = player.bl.bloodDrainPerSecond.div(buyableEffect("bl", 12))
         } else
         {
             player.bl.bloodDrain = false
@@ -69,8 +72,8 @@
         player.bl.blood = player.bl.blood.sub(player.bl.bloodDrainPerSecond.mul(delta))
 
         player.bl.xpGainPercentage = new Decimal(0.003)
-        player.bl.xpGainPercentage = player.bl.xpGainPercentage.mul(buyableEffect("bl", 11)[0])
-        player.bl.xpGainPercentage = player.bl.xpGainPercentage.mul(buyableEffect("bl", 12))
+        player.bl.xpGainPercentage = player.bl.xpGainPercentage.mul(buyableEffect("bl", 31)[0])
+        player.bl.xpGainPercentage = player.bl.xpGainPercentage.mul(buyableEffect("bl", 11))
 
         if (!player.pet.legPetTimers[0].active)
         {
@@ -83,12 +86,13 @@
         {
             for (let prop in player.pu.levelables) {
                 if (getLevelableTier("pu", prop, true)) {
-                    if (player.bl.bloodDrain) addLevelableXP("pu", prop, player.le.eclipseShardsToGetTrue.mul(player.bl.xpGainPercentage.mul(delta)).floor())
+                    if (player.bl.bloodDrain) addLevelableXP("pu", prop, player.le.eclipseShardsToGetTrue.mul(player.le.eclipseShardsValue).mul(player.bl.xpGainPercentage.mul(delta)).floor())
                 }
             }
         }
 
         player.bl.bloodStones = player.bl.bloodStones.floor()
+        player.bl.bloodGems = player.bl.bloodGems.floor()
 
         if (player.ir.battleLevel.gte(20) && !player.bl.foughtNox && player.tab == "bl")
         {
@@ -113,7 +117,10 @@
                 localStorage.setItem('arenaActive', 'true');
 
                 player.ir.shipHealth = player.ir.shipHealthMax
-                if (hasUpgrade("ir", 14)) arena.upgradeEffects.hpRegen += 0.5 / 60
+                let regen = 0
+                if (hasUpgrade("ir", 14)) regen += 0.5
+                regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
+                if (regen > 0) arena.upgradeEffects.hpRegen = regen / 60
 
                 arena.upgradeEffects.attackDamage *= levelableEffect("ir", player.ir.shipType)[2]
                 player.bl.noxFightActive = false
@@ -144,7 +151,20 @@
                 player.bl.foughtNox = false
                 player.bl.noxFightActive = false
             },
-            style: { width: '300px', "min-height": '100px', color: "white" },
+            style: {width: "200px", minHeight: '100px', color: "white", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
+        },
+        13: {
+            title() { return player.ir.autoShoot ? "<h2>Auto-Shoot<br>[ENABLED]" : "<h2>Auto-Shoot<br>[DISABLED]" },
+            canClick() { return true },
+            unlocked() { return !player.ir.iriditeFightActive},
+            onClick() {
+                if (player.ir.autoShoot) {
+                    player.ir.autoShoot = false
+                } else {
+                    player.ir.autoShoot = true
+                }
+            },
+            style: {width: "200px", minHeight: '100px', color: "white", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
         },
 
         101: {
@@ -188,52 +208,66 @@
                 return look
             }
         },
+        1001: {
+            title() {return "W"},
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                document.dispatchEvent(new KeyboardEvent('keydown', {key: 'w', code: 'KeyW', bubbles: true}))
+                setTimeout(() => {
+                    document.dispatchEvent(new KeyboardEvent('keyup', {key: 'w', code: 'KeyW', bubbles: true}))
+                }, 100)
+            },
+            style: {width: "50px", minHeight: "50px", fontSize: "12px", color: "white", backgroundColor: "#222", border: "2px solid white", margin: "-1px"}
+        },
+        1002: {
+            title() {return "A"},
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                document.dispatchEvent(new KeyboardEvent('keydown', {key: 'a', code: 'KeyA', bubbles: true}))
+                setTimeout(() => {
+                    document.dispatchEvent(new KeyboardEvent('keyup', {key: 'a', code: 'KeyA', bubbles: true}))
+                }, 100)
+            },
+            style: {width: "50px", minHeight: "50px", fontSize: "12px", color: "white", backgroundColor: "#222", border: "2px solid white", margin: "-1px"}
+        },
+        1003: {
+            title() {return "S"},
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                document.dispatchEvent(new KeyboardEvent('keydown', {key: 's', code: 'KeyS', bubbles: true}))
+                setTimeout(() => {
+                    document.dispatchEvent(new KeyboardEvent('keyup', {key: 's', code: 'KeyS', bubbles: true}))
+                }, 100)
+            },
+            style: {width: "50px", minHeight: "50px", fontSize: "12px", color: "white", backgroundColor: "#222", border: "2px solid white", margin: "-1px"}
+        },
+        1004: {
+            title() {return "D"},
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                document.dispatchEvent(new KeyboardEvent('keydown', {key: 'd', code: 'KeyD', bubbles: true}))
+                setTimeout(() => {
+                    document.dispatchEvent(new KeyboardEvent('keyup', {key: 'd', code: 'KeyD', bubbles: true}))
+                }, 100)
+            },
+            style: {width: "50px", minHeight: "50px", fontSize: "12px", color: "white", backgroundColor: "#222", border: "2px solid white", margin: "-1px"}
+        },
     },
     bloodReset() {
     },
     upgrades: {},
     buyables: {
         11: {
-            costBase() { return new Decimal(6) },
+            costBase() { return new Decimal(10) },
             costGrowth() { return new Decimal(1.15) },
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.bl.bloodStones},
             pay(amt) { player.bl.bloodStones = this.currency().sub(amt) },
-            effect(x) { return [getBuyableAmount(this.layer, this.id).pow(0.5).div(5).add(1), getBuyableAmount(this.layer, this.id).pow(0.4).div(8).add(1)] },
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Enhanced Drainage"
-            },
-            display() {
-                return "which are boosting punchcard XP gain by x" + format(tmp[this.layer].buyables[this.id].effect[0]) + ".\n\also multiplying drain rate by x" + format(tmp[this.layer].buyables[this.id].effect[1]) + ".\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood Stones"
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
-        },
-        12: {
-            costBase() { return new Decimal(10) },
-            costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(100) },
-            currency() { return player.bl.bloodStones},
-            pay(amt) { player.bl.bloodStones = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.45).div(7).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).div(8).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -241,32 +275,32 @@
                 return "Pure Drainage"
             },
             display() {
-                return "which are boosting punchcard XP gain by x" + format(tmp[this.layer].buyables[this.id].effect) + "\n\Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood Stones"
+                return "which are boosting punchcard XP/s by x" + format(tmp[this.layer].buyables[this.id].effect) + "\n\Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood Stones"
             },
             buy(mult) {
                 if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
                     this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
                     this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
+            style: { width: '200px', height: '175px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
         },
-        13: {
-            costBase() { return new Decimal(15) },
-            costGrowth() { return new Decimal(1.25) },
+        12: {
+            costBase() { return new Decimal(10) },
+            costGrowth() { return new Decimal(1.15) },
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.bl.bloodStones},
             pay(amt) { player.bl.bloodStones = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.4).div(10).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).div(10).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -278,20 +312,88 @@
             },
             buy(mult) {
                 if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
                     this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
                     this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
+            style: { width: '200px', height: '175px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
+        },
+        13: {
+            costBase() { return new Decimal(20) },
+            costGrowth() { return new Decimal(1.2) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.bl.bloodStones},
+            pay(amt) { player.bl.bloodStones = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(50).add(1) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Blood Rejuvenation"
+            },
+            display() {
+                return "which are boosting base ship regen AND perks by x" + formatShortSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood Stones"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '200px', height: '175px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
+        },
+        14: {
+            costBase() { return new Decimal(20) },
+            costGrowth() { return new Decimal(1.2) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.bl.bloodStones},
+            pay(amt) { player.bl.bloodStones = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(100).add(1) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Blood Alleviator"
+            },
+            display() {
+                return "which are reducing ship battle xp req by /" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood Stones"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '200px', height: '175px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
         },
 
         //regular blood
@@ -309,18 +411,18 @@
                 return "Bloody Reduction"
             },
             display() {
-                return "which are reducing starmetal requirement by ^" + format(tmp[this.layer].buyables[this.id].effect) + "\n\Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood."
+                return "which are reducing starmetal requirement by ^" + format(tmp[this.layer].buyables[this.id].effect, 3) + "\n\Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood."
             },
             buy(mult) {
                 if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
                     this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
                     this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -346,14 +448,14 @@
             },
             buy(mult) {
                 if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
                     this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
                     this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
@@ -379,20 +481,159 @@
             },
             buy(mult) {
                 if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
                     this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
                     this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
             style: { width: '275px', height: '150px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
+        },
+
+        // Blood Gems
+        31: {
+            costBase() { return new Decimal(1) },
+            costGrowth() { return new Decimal(1.05) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.bl.bloodGems},
+            pay(amt) { player.bl.bloodGems = this.currency().sub(amt) },
+            effect(x) { return [getBuyableAmount(this.layer, this.id).pow(0.6).div(4).add(1), getBuyableAmount(this.layer, this.id).pow(0.5).div(6).add(1)] },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Enhanced Drainage"
+            },
+            display() {
+                return "which are boosting punchcard XP/s by x" + format(tmp[this.layer].buyables[this.id].effect[0]) + ".\n\
+                    also multiplying drain rate by x" + format(tmp[this.layer].buyables[this.id].effect[1]) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood Gems"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '200px', height: '175px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
+        },
+        32: {
+            costBase() { return new Decimal(1) },
+            costGrowth() { return new Decimal(1.05) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.bl.bloodGems},
+            pay(amt) { player.bl.bloodGems = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(25).add(1) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Glistening Blood"
+            },
+            display() {
+                return "which are boosting blood gain by x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood Gems"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '200px', height: '175px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
+        },
+        33: {
+            costBase() { return new Decimal(2) },
+            costGrowth() { return new Decimal(1.1) },
+            purchaseLimit() { return new Decimal(25) },
+            currency() { return player.bl.bloodGems},
+            pay(amt) { player.bl.bloodGems = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(100).add(1)},
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Blood Fuel"
+            },
+            display() {
+                return "which are boosting ship health by x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood Gems"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '200px', height: '175px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
+        },
+        34: {
+            costBase() { return new Decimal(2) },
+            costGrowth() { return new Decimal(1.1) },
+            purchaseLimit() { return new Decimal(25) },
+            currency() { return player.bl.bloodGems},
+            pay(amt) { player.bl.bloodGems = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(100).add(1) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Blood Drill-tip"
+            },
+            display() {
+                return "which are boosting ship battle loot gain by x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood Gems"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '200px', height: '175px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
         },
     },
     milestones: {},
@@ -414,7 +655,10 @@
                         }],
 
                     ]],
-                    ["raw-html", () => {return "Boosts punchcard efficiency by ^" + format(player.bl.bloodEffect) + ". (Only active effects)"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["row", [
+                        ["raw-html", () => {return "Boosts punchcard efficiency by ^" + formatSimple(player.bl.bloodEffect, 3) + ". (Only active effects)"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return player.bl.blood.gte(6713) ? "<small style='margin-left: 10px'>[SOFTCAPPED]</small>" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace"}],
+                    ]],
                     ["blank", "25px"],
                     ["row", [["clickable", 101]]],
                     ["blank", "25px"],
@@ -443,10 +687,20 @@
                     ["blank", "25px"],
                     ["row", [["clickable", 102], ["clickable", 103]]],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have " + formatWhole(player.bl.bloodStones) + " blood stones." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13],]], 
-
+                    ["style-row", [
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", function () { return "You have " + formatWhole(player.bl.bloodStones) + " blood stones." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                            ], {width: "406px", height: "40px", borderRight: "2px solid #f57171ff"}],
+                            ["row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13],["dark-buyable", 14]]],
+                        ], {width: "408px"}],
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", function () { return "You have " + formatWhole(player.bl.bloodGems) + " blood gems." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                            ], {width: "406px", height: "40px", borderLeft: "2px solid #f57171ff"}],
+                            ["row", [["dark-buyable", 31], ["dark-buyable", 32], ["dark-buyable", 33],["dark-buyable", 34]]],
+                        ], {width: "408px"}],
+                    ], {background: "#1f0000ff", border: "2px solid #f57171ff", padding: "-2px"}],
                 ]
             },
             "Blood Battle": {
@@ -456,31 +710,32 @@
                 ["layer-proxy", ["ir", [
                     ["blank", "25px"],
                     ["style-row", [
-                    ["style-column", [
-                    ["blank", "25px"],
-                    ["layer-proxy", ["bl", [
-                    ["clickable", 11],
-                    ]]],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have " + formatWhole(player.bl.bloodStones) + " blood stones." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["style-column", [
-                            ["levelable-display", [
-                                ["style-row", [["clickable", 2],], {width: '100px', height: '40px' }],
-                            ]],
-                    ], {width: "550px", height: "175px", backgroundColor: "rgba(43, 10, 18, 1)", border: "3px solid #ff8989ff", borderRight: "3px solid #ff8989ff", borderRadius: "2px 2px 0 0"}],
-                    ["always-scroll-column", [
+                        ["style-column", [
+                            ["blank", "25px"],
+                            ["layer-proxy", ["bl", [
+                                ["clickable", 11],
+                            ]]],
+                            ["blank", "25px"],
+                            ["raw-html", function () { return "You have " + formatWhole(player.bl.bloodStones) + " blood stones." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                            ["raw-html", function () { return "You have " + formatWhole(player.bl.bloodGems) + " blood gems." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                            ["blank", "25px"],
                             ["style-column", [
-                                ["raw-html", "Ships", {color: "#ff8989ff", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "541px", height: "40px", backgroundColor: "#1f0000ff", borderBottom: "3px solid #ff8989ff",  borderLeft: "3px solid #ff8989ff",  userSelect: "none"}],
-                            ["style-column", [
-                                ["row", [["levelable", 1], ["levelable", 2],["levelable", 3],["levelable", 4],["levelable", 5],]],
-                                ["row", [["levelable", 6], ["levelable", 7], ["levelable", 8], ["levelable", 9]]],
-                            ], {width: "531px", height: "250px", backgroundColor: "rgba(43, 10, 18, 1)", borderLeft: "3px solid #ff8989ff", padding: "5px"}],
-                        ], {width: "556px", height: "220px"}],
-                    ["blank", "25px"],
-                        ], {width: "1000px", borderRight: "2px solid srgb(27, 0, 36)"}],
-                    ], {width: "1000px", border: "3px solid #ff8989ff", backgroundColor: "#290303ff", borderRadius: "15px 15px 15px 15px"}],
+                                ["levelable-display", [
+                                    ["style-row", [["clickable", 2],], {width: '100px', height: '40px' }],
+                                ]],
+                            ], {width: "550px", height: "175px", backgroundColor: "#2b0a12", border: "3px solid #ff8989ff", borderRight: "3px solid #ff8989ff", borderRadius: "2px 2px 0 0"}],
+                            ["top-column", [
+                                ["style-column", [
+                                    ["raw-html", "Ships", {color: "#ff8989ff", fontSize: "20px", fontFamily: "monospace"}],
+                                ], {width: "550px", height: "40px", backgroundColor: "#1f0000ff", borderBottom: "3px solid #ff8989ff", userSelect: "none"}],
+                                ["style-column", [
+                                    ["row", [["levelable", 1], ["levelable", 2],["levelable", 3],["levelable", 4],["levelable", 5],]],
+                                    ["row", [["levelable", 6], ["levelable", 7], ["levelable", 8], ["levelable", 9]]],
+                                ], {width: "540px", height: "270px", backgroundColor: "#2b0a12", padding: "5px"}],
+                            ], {width: "550px", height: "323px", borderBottom: "3px solid #ff8989ff", borderLeft: "3px solid #ff8989ff", borderRight: "3px solid #ff8989ff"}],
+                            ["blank", "25px"],
+                        ], {width: "800px", borderRight: "2px solid srgb(27, 0, 36)"}],
+                    ], {width: "800px", border: "3px solid #ff8989ff", backgroundColor: "#290303ff", borderRadius: "15px 15px 15px 15px"}],
                 ]]]
             ]
             },
@@ -488,19 +743,22 @@
                 buttonStyle() { return { border: "2px solid #f57171ff", borderRadius: "10px" } },
                 unlocked() { return false },
                 content: [
-                ["layer-proxy", ["ir", [
-
-                                        ["raw-html", function () { return "Level: " + formatWhole(player.ir.battleLevel) }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Use W and S to more forwards or backwards, A to D to rotate, and Space or Mouse to shoot." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["row", [["bar", "healthBar"], ["bar", "xpBar"],]],
-                    ["blank", "650px"],
-                    ["row", [["layer-proxy", ["bl", [["clickable", 12]]]], ["clickable", 13], ["blank", "50px"],
-                                                            ["style-column", [
-                            ["clickable", 1001],
-                            ["row", [["clickable", 1002], ["clickable", 1003], ["clickable", 1004]]],
-                        ], {width: "150px", height: "100px"}],     
-                ]],  
-            ]]],
+                    ["layer-proxy", ["ir", [
+                        ["raw-html", function () { return "Level: " + formatWhole(player.ir.battleLevel) }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
+                        ["raw-html", function () { return "Use W and S to more forwards or backwards, A to D to rotate, and Space or Mouse to shoot." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                        ["row", [["bar", "healthBar"], ["bar", "xpBar"],]],
+                        ["blank", "650px"],
+                        ["style-row", [
+                            ["layer-proxy", ["bl", [["clickable", 12]]]],
+                            ["blank", ["100px", "50px"]],
+                            ["style-column", [
+                                ["clickable", 1001],
+                                ["row", [["clickable", 1002], ["clickable", 1003], ["clickable", 1004]]],
+                            ], {width: "150px", height: "100px", zIndex: 15000}],
+                            ["blank", ["100px", "50px"]],
+                            ["layer-proxy", ["bl", [["clickable", 13]]]],
+                        ], {position: "fixed", top: "calc(50% + 320px)", left: "calc(50% - 375px)", isolation: "isolate"}],
+                    ]]],
                 ]
             },
             "Refresh Page :(": {
@@ -528,7 +786,17 @@
                 unlocked() { return player.bl.noxDefeated && !player.ir.inBattle},
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Coming soon." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["style-column", [
+                        ["raw-html", "Perks for beating Nox", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ], {width: "800px", border: "3px solid #f57171ff", background: "#290303ff", borderBottom: "5px", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}],
+                    ["style-column", [
+                        ["raw-html", "<u>Unlocks</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", "[Coming Soon]", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["blank", "10px"],
+                        ["raw-html", "<u>Effects</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", "Keep blood battle buyables on resets", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "\"Humanities\" punchcard cost decreased from 5 -> 3", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                    ], {width: "800px", border: "3px solid #f57171ff", background: "#2b0a12", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px"}]
                 ]
             },
         },
@@ -562,6 +830,8 @@ class BloodArena extends SpaceArena {
         this.upgradeEffects.damageReduction = this.upgradeEffects.damageReduction || 1;
         this.upgradeEffects.xpGain = this.upgradeEffects.xpGain || 1;
         this.upgradeEffects.lootGain = this.upgradeEffects.lootGain || 1;
+        this.upgradeEffects.gemGain = this.upgradeEffects.gemGain || 1;
+        this.resourceMult = this.resourceMult || 1;
 
         // Leech: attaches to the ship and deals drain (visualized as segmented worm)
         this.enemyTypes.leech = {
@@ -950,6 +1220,13 @@ class BloodArena extends SpaceArena {
         // extend ranges for level-6 enemies
         this._bloodLootRanges.eye = [2, 4];
         this._bloodLootRanges.largeLeech = [3, 5];
+        this._bloodGemChances = {
+            leech: 0.01,
+            bloodBat: 0.01,
+            sanguineSkiff: 0.015,
+            eye: 0.02,
+            largeLeech: 0.03,
+        }
         // bloodMachine loot removed (bloodMachine removed)
 
         // Level 6+ spawn timers and caps
@@ -1005,7 +1282,7 @@ class BloodArena extends SpaceArena {
         this.running = true;
         this.loop = setInterval(() => this.update(), 1000 / 60);
 
-        if (player.ir.shipType == 3) {
+        if (player.ir.shipType == 3 || player.ir.shipType == 7) {
             this.canvas.addEventListener('click', this.canvasClickListener);
         }
     }
@@ -1418,7 +1695,10 @@ class BloodArena extends SpaceArena {
                             enemy.drainCooldown = (typeof enemy.drainCooldown === 'number') ? enemy.drainCooldown - dtMs : -dtMs;
                             while (typeof enemy.drainCooldown === 'number' && enemy.drainCooldown <= 0) {
                                 enemy.drainCooldown += 1000; // schedule next drain in 1s
-                                const drainAmount = (() => { try { return new Decimal(5); } catch (e) { return 5; } })();
+                                let drainAmount = (() => { try { return new Decimal(5); } catch (e) { return 5; } })();
+                                if (player.ir.battleLevel.gte(21)) {
+                                    drainAmount = drainAmount * Decimal.pow(1.1, player.ir.battleLevel.sub(20)).toNumber()
+                                }
                                 try {
                                     if (player && player.ir && player.ir.shipHealth !== undefined && typeof player.ir.shipHealth.sub === 'function') {
                                         player.ir.shipHealth = player.ir.shipHealth.sub(drainAmount);
@@ -1572,8 +1852,12 @@ class BloodArena extends SpaceArena {
                             // slower drain: 8 HP per second
                             enemy.drainCooldown = (typeof enemy.drainCooldown === 'number') ? enemy.drainCooldown - dtMs : -dtMs;
                             while (typeof enemy.drainCooldown === 'number' && enemy.drainCooldown <= 0) {
+                                let dmg = 8
+                                if (player.ir.battleLevel.gte(21)) {
+                                    dmg = dmg * Decimal.pow(1.1, player.ir.battleLevel.sub(20)).toNumber()
+                                }
                                 enemy.drainCooldown += 1000;
-                                try { this.applyShipDamage(new Decimal(8)); } catch (e) { this.applyShipDamage(8); }
+                                try { this.applyShipDamage(new Decimal(dmg)); } catch (e) { this.applyShipDamage(dmg); }
                             }
                         }
                     }
@@ -1760,6 +2044,51 @@ class BloodArena extends SpaceArena {
                     try {
                         if (enemy.type === 'noxBoss') {
                             player.bl.noxDefeated = true;
+                            let noxStone = 75
+                            noxStone = noxStone * (this.upgradeEffects.lootGain || 1) * (this.resourceMult || 1)
+                            noxStone = noxStone * (getBuyableAmount("bl", 34).div(100).add(1).toNumber() || 1)
+                            noxStone = noxStone * (getBuyableAmount("sme", 155).div(10).add(1).toNumber() || 1)
+                            noxStone = Math.max(0, Math.floor(noxStone))
+                            try {
+                                if (player.bl && player.bl.bloodStones !== undefined && typeof player.bl.bloodStones.add === 'function') {
+                                    player.bl.bloodStones = player.bl.bloodStones.add(noxStone);
+                                    if (player.ir && player.ir.levelables && player.ir.levelables[player.ir.shipType]) player.ir.levelables[player.ir.shipType][1] = player.ir.levelables[player.ir.shipType][1].add(noxStone*5)
+                                } else if (player.bl) {
+                                    player.bl.bloodStones = (player.bl.bloodStones || 0) + noxStone;
+                                }
+                            } catch (e) {
+                                // fallback numeric
+                                try { player.bl.bloodStones = (player.bl.bloodStones || 0) + noxStone; } catch (e2) {}
+                            }
+
+                            // optional loot flash if arena supports it
+                            try {
+                                if (this.lootFlashes && Array.isArray(this.lootFlashes)) {
+                                    this.lootFlashes.push({ x: enemy.x, y: enemy.y, text: `+${formatWhole(noxStone)} blood stones`, timer: 120, color: "#ff6b6b", style: "18px monospace" });
+                                }
+                            } catch (e) {}
+                            let noxChance = 5 * this.upgradeEffects.gemGain * this.resourceMult * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1)
+                            let noxGuarantee = 0
+                            if (noxChance >= 1) {
+                                noxGuarantee = Math.floor(noxChance)
+                                noxChance = noxChance % 1
+                            }
+                            if (Math.random() < noxChance) noxGuarantee += 1
+                            try {
+                                if (player.bl && player.bl.bloodGems !== undefined && typeof player.bl.bloodGems.add === 'function') {
+                                    player.bl.bloodGems = player.bl.bloodGems.add(noxGuarantee);
+                                } else if (player.bl) {
+                                    player.bl.bloodGems = (player.bl.bloodGems || 0) + noxGuarantee;
+                                }
+                            } catch (e) {
+                                try {player.bl.bloodGems = (player.bl.bloodGems || 0) + noxGuarantee; } catch (e2) {}
+                            }
+
+                            try {
+                                if (this.lootFlashes && Array.isArray(this.lootFlashes)) {
+                                    this.lootFlashes.push({ x: enemy.x, y: enemy.y + 12, text: `+${formatWhole(noxGuarantee)} blood gems`, timer: 240, color: "#E0115F", style: "24px monospace" });
+                                }
+                            } catch (e) {}
                         }
                     } catch (e) {}
                     // If a Large Leech died, spawn several small leeches at its position
@@ -1790,7 +2119,10 @@ class BloodArena extends SpaceArena {
                     let amt = Math.floor(Math.random() * (maxR - minR + 1)) + minR;
                     // apply loot multipliers similar to SpaceArena logic
                     try {
-                        amt = Math.max(0, Math.floor(amt * (this.upgradeEffects.lootGain || 1)));
+                        amt = amt * (this.upgradeEffects.lootGain || 1) * (this.resourceMult || 1)
+                        amt = amt * (getBuyableAmount("bl", 34).div(100).add(1).toNumber() || 1)
+                        amt = amt * (getBuyableAmount("sme", 155).div(10).add(1).toNumber() || 1)
+                        amt = Math.max(0, Math.floor(amt))
                     } catch (e) {}
                     //try { amt = Math.max(0, Math.floor(amt * levelableEffect("pet", 502)[1])); } catch (e) {}
                     //try { amt = Math.max(0, Math.floor(amt * levelableEffect("pu", 212)[1])); } catch (e) {}
@@ -1799,6 +2131,7 @@ class BloodArena extends SpaceArena {
                     try {
                         if (player.bl && player.bl.bloodStones !== undefined && typeof player.bl.bloodStones.add === 'function') {
                             player.bl.bloodStones = player.bl.bloodStones.add(amt);
+                            if (player.ir && player.ir.levelables && player.ir.levelables[player.ir.shipType]) player.ir.levelables[player.ir.shipType][1] = player.ir.levelables[player.ir.shipType][1].add(amt*5)
                         } else if (player.bl) {
                             player.bl.bloodStones = (player.bl.bloodStones || 0) + amt;
                         }
@@ -1810,9 +2143,36 @@ class BloodArena extends SpaceArena {
                     // optional loot flash if arena supports it
                     try {
                         if (this.lootFlashes && Array.isArray(this.lootFlashes)) {
-                            this.lootFlashes.push({ x: enemy.x, y: enemy.y, text: `+${amt} blood stones`, timer: 120, color: "#ff6b6b", style: "18px monospace" });
+                            this.lootFlashes.push({ x: enemy.x, y: enemy.y, text: `+${formatWhole(amt)} blood stones`, timer: 120, color: "#ff6b6b", style: "18px monospace" });
                         }
                     } catch (e) {}
+
+                    let chance = this._bloodGemChances && this._bloodGemChances[enemy.type];
+                    if (!chance) continue;
+                    chance = chance * this.upgradeEffects.gemGain * this.resourceMult * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1)
+                    let guarantee = 0
+                    if (chance >= 1) {
+                        guarantee = Math.floor(chance)
+                        chance = chance % 1
+                    }
+                    if (Math.random() < chance) guarantee += 1
+                    if (guarantee > 0) {
+                        try {
+                            if (player.bl && player.bl.bloodGems !== undefined && typeof player.bl.bloodGems.add === 'function') {
+                                player.bl.bloodGems = player.bl.bloodGems.add(guarantee);
+                            } else if (player.bl) {
+                                player.bl.bloodGems = (player.bl.bloodGems || 0) + guarantee;
+                            }
+                        } catch (e) {
+                            try {player.bl.bloodGems = (player.bl.bloodGems || 0) + guarantee; } catch (e2) {}
+                        }
+
+                        try {
+                            if (this.lootFlashes && Array.isArray(this.lootFlashes)) {
+                                this.lootFlashes.push({ x: enemy.x, y: enemy.y + 12, text: `+${formatWhole(guarantee)} blood gems`, timer: 240, color: "#E0115F", style: "24px monospace" });
+                            }
+                        } catch (e) {}
+                    }
                 }
             }
         } catch (e) { console.warn('BloodArena loot conversion error', e); }
@@ -1864,7 +2224,7 @@ class BloodArena extends SpaceArena {
                 this.ctx.font = '14px monospace';
                 this.ctx.fillStyle = '#fff';
                 this.ctx.textAlign = 'center';
-                this.ctx.fillText(Math.max(0, Math.floor(h)) + '/' + Math.floor(mh), enemy.x, enemy.y - (enemy.radius || 12) - 6);
+                this.ctx.fillText(formatWhole(Math.max(0, Math.floor(h))) + '/' + formatWhole(Math.floor(mh)), enemy.x, enemy.y - (enemy.radius || 12) - 6);
                 this.ctx.restore();
             }
             // draw vampire knight warnings (red aiming lines) and decrement timers

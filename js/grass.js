@@ -131,6 +131,7 @@ addLayer('g', {
         let amt = player.g.grass
         if (player.g.grassVal.gte(player.g.grass)) amt = player.g.grassVal
         player.g.doomSoftcap = player.g.doomSoftcap.div(amt.div(player.g.doomSoftcapStart).add(1).log(player.g.doomSoftcapStart).div(doomWeaken).add(1))
+        if (hasUpgrade("depth2", 104)) player.g.doomSoftcap = player.g.doomSoftcap.max(0.01)
 
         // APPLY DOOM SOFTCAP
         if (player.g.grassVal.gt(player.g.doomSoftcapStart)) player.g.grassVal = player.g.grassVal.div(player.g.doomSoftcapStart).pow(player.g.doomSoftcap).mul(player.g.doomSoftcapStart)

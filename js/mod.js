@@ -848,7 +848,7 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v1.12.6 - Akash's Mini-Update 1: Negative Diamonds</h3><br>
+	<h3>v1.12.6 - Akash's Mini-Update I: Negative Diamonds</h3><br>
 		Content:<br>
 			- Added the 3rd page of achievements<br>
 			- Added a new evolution pet<br>

@@ -1750,22 +1750,43 @@ BHC.zar = {
             onTrigger(index, slot, target)
             {
                 //harder attacks at phase 2
-                let random = getRandomInt(7)
-                if (random == 0) {
-                    bulletHell({"pipRainUltimate": {bulletPerSec: 3}}, {duration: 12})
-                } else if (random == 1) {
-                    bulletHell({"diceSpikes": {spawnPerSec: 10, enemySpeed: 3.5, spikeSize: 28,}}, {width: 1200, height: 600, duration: 12, transparent: false})
-                } else if (random == 2){
-                    bulletHellBlue({"diceSpikesPlatformer": {bulletPerSec: 1.2, enemySpeed: 3, spikeHeight: 80, spikeWidth: 60}}, {width:800, height:300, duration:15, jumpMin:6, jumpMax:150, gravity: 0.2})
-                } else if (random == 3){
-                    bulletHellBlue({"spikePlatformAttack": {spikeHeight: 50, spikeWidth: 28, platformCount: 4, platformSpikeChance: 0.4, platformSpeed: 1.5, platformMinW: 203, platformMaxW: 203}}, {width:800, height:600, duration:15, jumpMin:6, jumpMax:250, gravity: 0.2})
-                }  else if (random == 4){
-                    bulletHellBlue({"dieBouncer": {dieAmount: 1, size: 50, enemySpeed: 3, chargeMult: 1.6, spikeSpeed:5, spikeRadius:30, lastTick:false}}, {width: 800, height: 600, duration: 10, jumpMin:6, jumpMax:250, gravity: 0.2})
-                } else if (random == 5){
-                    bulletHell({"dieBouncer": {dieAmount: 2, size: 50, enemySpeed: 3, chargeMult: 1.6, spikeSpeed:6, spikeRadius:30, lastTick:false}}, {width: 1200, height: 600, duration: 10})
-                } else if (random == 6) {
-                    bulletHellBlue({"movingDieRadialBurstAttack": {circleAmount: 1, burstInterval: 800, bulletsPerBurst: 6, enemySpeed: 1.5, bulletSpeed: 5}}, {width:800, height:600, duration:15, jumpMin:6, jumpMax:250, gravity: 0.2})
+
+                if (player.bh.celestialite.health.gte(12500))
+                {
+                    let random = getRandomInt(7)
+                    if (random == 0) {
+                        bulletHell({"pipRainUltimate": {bulletPerSec: 3}}, {duration: 12})
+                    } else if (random == 1) {
+                        bulletHell({"diceSpikes": {spawnPerSec: 10, enemySpeed: 3.5, spikeSize: 28,}}, {width: 1200, height: 600, duration: 12, transparent: false})
+                    } else if (random == 2){
+                        bulletHellBlue({"diceSpikesPlatformer": {bulletPerSec: 1.2, enemySpeed: 3, spikeHeight: 80, spikeWidth: 60}}, {width:800, height:300, duration:15, jumpMin:6, jumpMax:150, gravity: 0.2})
+                    } else if (random == 3){
+                        bulletHellBlue({"spikePlatformAttack": {spikeHeight: 50, spikeWidth: 28, platformCount: 4, platformSpikeChance: 0.4, platformSpeed: 1.5, platformMinW: 203, platformMaxW: 203}}, {width:800, height:600, duration:15, jumpMin:6, jumpMax:250, gravity: 0.2})
+                    }  else if (random == 4){
+                        bulletHellBlue({"dieBouncer": {dieAmount: 1, size: 50, enemySpeed: 3, chargeMult: 1.6, spikeSpeed:5, spikeRadius:30, lastTick:false}}, {width: 800, height: 600, duration: 10, jumpMin:6, jumpMax:250, gravity: 0.2})
+                    } else if (random == 5){
+                        bulletHell({"dieBouncer": {dieAmount: 2, size: 50, enemySpeed: 3, chargeMult: 1.6, spikeSpeed:6, spikeRadius:30, lastTick:false}}, {width: 1200, height: 600, duration: 10})
+                    } else if (random == 6) {
+                        bulletHellBlue({"movingDieRadialBurstAttack": {circleAmount: 1, burstInterval: 800, bulletsPerBurst: 6, enemySpeed: 1.5, bulletSpeed: 5}}, {width:800, height:600, duration:15, jumpMin:6, jumpMax:250, gravity: 0.2})
+                    }
+                } else
+                {
+                    let random = getRandomInt(8)
+                    if (random == 0) {
+                        bulletHell({"diceSpikes": {spawnPerSec: 6, bulletPerSec: 6, enemySpeed: 3.5, bulletSpeed: 2, spikeSize: 28, rain: true}}, {width: window.innerWidth, height: window.innerHeight, duration: 12, transparent: true})
+                    } else if (random == 1) {
+                        bulletHell({"pipRainUltimate": {bulletPerSec: 3}}, {width: window.innerWidth, height: window.innerHeight, duration: 12, transparent: true})
+                    } else if (random == 2){
+                        bulletHell({"diceAttack": {diceAmount: 8, intervalDiv: 0.55}}, {duration: 10})
+                    } else if (random == 3) {
+                        bulletHellBlue({"spikePlatformAttack": {spikeHeight: 50, spikeWidth: 28, platformCount: 4, platformSpikeChance: 0.1, platformSpeed: 1.5, platformMinW: 203, platformMaxW: 203, rain: true, bulletPerSec: 3}}, {width:800, height:600, duration:15, jumpMin:6, jumpMax:250, gravity: 0.2})
+                    } else if (random == 4) {
+                        bulletHellBlue({"zarUltimateAttack": {spikeHeight: 50, spikeWidth: 28, platformCount: 6, spawnPerSec: 2, bulletPerSec: 6, enemySpeed: 3, spikeSize: 28, platformSpikeChance: 0.1, platformSpeed: 1, platformMinW: 203, platformMaxW: 203, diceSpikes: true, bulletPerSec: 10}}, {width: 800, height: 600, duration: 12, transparent: false, saveContent: true, jumpMin:6, jumpMax:350, gravity: 0.2})
+                    } else if (random == 5 || random == 6 || random == 7) {
+                        zarAttackBarrage(getRandomInt(4))
+                    }
                 }
+                
                 
                 //bulletHell({"diceSpikes": {spawnPerSec: 6, bulletPerSec: 6, enemySpeed: 3.5, bulletSpeed: 2, spikeSize: 28, rain: true}}, {width: window.innerWidth, height: window.innerHeight, duration: 12, transparent: true})
                 //bulletHell({"pipRainUltimate": {bulletPerSec: 3}}, {width: window.innerWidth, height: window.innerHeight, duration: 12, transparent: true})

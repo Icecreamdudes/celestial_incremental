@@ -171,9 +171,11 @@
         player.dr.pentReq = layers.dr.getPentReq()
 
         player.dr.pentsToGet = new Decimal(1)
+        if (hasUpgrade("sma", 19)) player.dr.pentsToGet = pentGain.sub(player.dr.pent)
         if (player.dr.tetr.lt(player.dr.pentReq) || player.dr.pentsToGet.lt(0) || !getLevelableTier("pu", 207, true)) {
             player.dr.pentsToGet = new Decimal(0)
         }
+        if (hasUpgrade("sma", 19)) player.dr.pent = player.dr.pent.add(player.dr.pentsToGet)
 
 
 

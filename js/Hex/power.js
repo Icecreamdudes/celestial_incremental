@@ -163,6 +163,11 @@ addLayer("hpw", {
             unlocked: true,
             onClick() {
                 if (confirm("Are you sure you want to do a power reset?")) {
+                    if (player.hbl.blessings.gte(6e5)) {
+                        player.hpw.power = player.hpw.power.add(player.hpw.powerGain)
+                        player.hpw.totalPower = player.hpw.totalPower.add(player.hpw.powerGain)
+                    }
+
                     player.hpw.power = player.hpw.totalPower
                     for (let i = 0; i < player.hpw.upgrades.length; i++) {
                         player.hpw.upgrades.splice(i, 1);

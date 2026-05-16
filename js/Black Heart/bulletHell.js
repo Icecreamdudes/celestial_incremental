@@ -54,7 +54,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
     }
 
     // Reset immortality frames at start
-    window.lastDamageTime = 0;
+    window.lastDamageTime = Date.now();
     let running = true; // Prevent multiple animation loops
     info.full = options.fullscreen
 
@@ -931,7 +931,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         if (playerHit && player && player.bh && player.bh.currentStage && player.bh.currentStage != "none") {
             const now = Date.now();
             // Immortality frames: only allow damage every 100ms
-            if (typeof window.lastDamageTime !== "number") window.lastDamageTime = 0;
+            if (typeof window.lastDamageTime !== "number") window.lastDamageTime = Date.now();
                 if (now - window.lastDamageTime > 100) {
                     window.lastDamageTime = now;
                     bhAttack(player.bh.celestialite.damage.mul(0.25), 3, 0, "randomPlayer")
@@ -1897,7 +1897,7 @@ BHB.finalMatosAttack = {
 }
 
 BHB.chargingIcon = {
-    //bulletHell({"chargingIcon": {locX: 600, locY: 250, radius: 64, fillColor: "#0091DC", strokeColor: "#094394", symbol: "⧖", enemySpeed: 5, burstBullets: 3, burstViolence: 0.5, lungeTimer: 0, lungeCooldown: 0, lastTick: false}}, {duration: 12})
+    //bulletHell({"chargingIcon": {locX: 600, locY: 250, radius: 64, fillColor: "#0091DC", strokeColor: "#094394", symbol: "⧖", enemySpeed: 5, bulletSpeed: 5, shootInterval: 1, burstBullets: 3, burstViolence: 0.5, lungeTimer: 0, lungeCooldown: 0, lastTick: false}}, {duration: 12})
     codeFunc(info, id) {
         let curX = info.width / 2 + info.boxLeft
         let curY = info.height / 2 + info.boxTop
@@ -1972,16 +1972,18 @@ BHB.chargingIcon = {
                 b.pulse += dt * 0.008
 
                 // Shoot burst at player
+                let shootSpeed = 1000 / (info.actions[id].shootInterval || 1.5)
                 if (!info.actions[id].lastTime) info.actions[id].lastTime = ticks;
-                if (ticks - info.actions[id].lastTime > 650) {
+                if (ticks - info.actions[id].lastTime > shootSpeed) {
                     let dx = info.px - b.x;
                     let dy = info.py - b.y;
                     let baseAngle = Math.atan2(dy, dx);
+                    let speed = info.actions[id].bulletSpeed || 8
                     for (let i = 0; i < info.actions[id].burstBullets; i++) {
                         let spread = (i - (info.actions[id].burstBullets - 1) / 2) * info.actions[id].burstViolence;
                         let angle = baseAngle + spread + (Math.random() - 0.5) * 0.18;
-                        let vx = Math.cos(angle) * 8 * (0.9 + Math.random() * 0.3);
-                        let vy = Math.sin(angle) * 8 * (0.9 + Math.random() * 0.3);
+                        let vx = Math.cos(angle) * speed * (0.9 + Math.random() * 0.3);
+                        let vy = Math.sin(angle) * speed * (0.9 + Math.random() * 0.3);
                         info.bullets.push({x: b.x + info.boxLeft, y: b.y + info.boxTop, r: 12, vx, vy, draw(b, bossCtx) {bossCtx.beginPath();bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);bossCtx.fillStyle = "#fff";bossCtx.fill()}});
                     }
                     // Randomize next burst

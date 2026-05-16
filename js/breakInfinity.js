@@ -399,7 +399,10 @@
         27: {
             title: "BI IP Upgrade XV",
             unlocked() { return true },
-            description: "Unlock hex of realms, and new hex of power mights.",
+            description() {
+                if (!hasUpgrade("i", 30)) return "Unlock ???<br>[Requires an origin upgrade to utilize]"
+                return "Unlock hex of realms, and new hex of power content."
+            },
             cost: new Decimal(1e32),
             currencyLocation() { return player.in },
             currencyDisplayName: "IP",

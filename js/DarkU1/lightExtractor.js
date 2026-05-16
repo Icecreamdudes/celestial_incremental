@@ -60,7 +60,7 @@
         player.le.starmetalAlloyReq = Decimal.pow(1e1, player.le.resetAmount.add(1).pow(1.5).floor()).mul(1e2)
         if (player.le.resetAmount.gte(3)) player.le.starmetalAlloyReq = Decimal.pow(1e1, player.le.resetAmount.add(1).pow(2.5).floor()).mul(1e2)
         if (player.le.resetAmount.gte(8)) player.le.starmetalAlloyReq = Decimal.pow(1e1, player.le.resetAmount.add(1).pow(2.6).floor()).mul(1e2)
-        player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(player.dn.normalityEffect) 
+        player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(player.dn.normalityEffect)
         player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(levelableEffect("st", 208)[0])
         player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.pow(buyableEffect("bl", 21))
 
@@ -96,6 +96,7 @@
         if (player.le.resetAmount.gte(3)) player.le.eclipseShardsReq = Decimal.pow(1e1, player.le.resetAmount.add(1).pow(2.5).floor()).mul(1e3)
         if (player.le.resetAmount.gte(8)) player.le.eclipseShardsReq = Decimal.pow(1e1, player.le.resetAmount.add(1).pow(2.6).floor()).mul(1e3)
         player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(player.db.milestone1Effect)
+        if (hasUpgrade("sma", 210)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(upgradeEffect("sma", 210))
 
         player.le.eclipseShardsToGetToGet = player.le.resetAmount.add(1)
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGet
@@ -643,13 +644,22 @@
 
         player.bl.blood = new Decimal(0)
         player.bl.bloodStones = new Decimal(0)
-
-        player.bl.buyables[11] = new Decimal(0)
-        player.bl.buyables[12] = new Decimal(0)
-        player.bl.buyables[13] = new Decimal(0)
+        player.bl.bloodGems = new Decimal(0)
+        
         player.bl.buyables[21] = new Decimal(0)
         player.bl.buyables[22] = new Decimal(0)
         player.bl.buyables[23] = new Decimal(0)
+
+        if (!player.bl.noxDefeated) {
+            player.bl.buyables[11] = new Decimal(0)
+            player.bl.buyables[12] = new Decimal(0)
+            player.bl.buyables[13] = new Decimal(0)
+            player.bl.buyables[14] = new Decimal(0)
+            player.bl.buyables[31] = new Decimal(0)
+            player.bl.buyables[32] = new Decimal(0)
+            player.bl.buyables[33] = new Decimal(0)
+            player.bl.buyables[34] = new Decimal(0)
+        }
 
         player.bl.bloodDrain = false
     },
@@ -1112,9 +1122,9 @@
                             ["raw-html", () => { return "You have <h3>" + formatWhole(player.sma.starmetalAlloy) + "</h3> starmetal alloy." }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ["blank", "5px"],
                             ["style-row", [["upgrade", 10], ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],
-                                ["upgrade", 17], ["upgrade", 18]], {maxWidth: "755px"}],
+                                ["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 20], ["upgrade", 21]], {maxWidth: "800px"}],
                             ["blank", "5px"],
-                        ], {width: "755px", background: "linear-gradient(120deg, #171708 0%, #130f05 25%, #17090b 50%, #150917, 75%, #091417 100%)", border: "2px solid #384166", borderRadius: "15px"}],
+                        ], {width: "800px", background: "linear-gradient(120deg, #171708 0%, #130f05 25%, #17090b 50%, #150917, 75%, #091417 100%)", border: "2px solid #384166", borderRadius: "15px"}],
                     ]]],
                 ]
             },

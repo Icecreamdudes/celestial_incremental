@@ -85,7 +85,7 @@
         player.fa.milestoneEffect[7] = player.fa.charge.pow(0.25).div(5).add(1) //anon
         player.fa.milestoneEffect[8] = player.fa.charge.pow(0.08).div(15).add(1) //galaxy dust
         player.fa.milestoneEffect[9] = player.fa.charge.pow(0.1).add(1) //charge
-        player.fa.milestoneEffect[10] = player.fa.charge.pow(0.015).add(1) //pre-otf
+        player.fa.milestoneEffect[10] = Decimal.pow(10, player.fa.charge.add(1).log(1e10).pow(0.5)) //pre-otf
     },
     clickables: {},
     bars: {},

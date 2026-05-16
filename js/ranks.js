@@ -218,7 +218,7 @@
         } else {
             player.r.timeCubesPerSecond = player.points.plus(1).log10().pow(0.3)
             player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(buyableEffect("id", 23))
-            player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(buyableEffect("oi", 23))
+            if (!hasUpgrade("depth2", 103)) player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(buyableEffect("oi", 23))
             player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(levelableEffect("pet", 209)[2])
             if (hasUpgrade("ep0", 12)) player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(upgradeEffect("ep0", 12))
             if (hasUpgrade("ep2", 2)) player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(upgradeEffect("ep2", 2))
@@ -229,6 +229,10 @@
 
             // EXPONENTS
             if (hasUpgrade("cs", 103)) player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.pow(1.1)
+            if (hasUpgrade("depth2", 103)) player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.pow(buyableEffect("oi", 23))
+
+            // SOFTCAP
+            if (player.r.timeCubesPerSecond.gte("1e10000")) player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.div("1e10000").pow(0.1).mul("1e10000")
         }
 
         player.r.timeCubes = player.r.timeCubes.add(player.r.timeCubesPerSecond.mul(delta))
@@ -860,8 +864,10 @@
                     ], {width: "700px", backgroundColor: "#333333", border: "2px solid white", borderBottom: "2px solid white", borderRadius: "15px"}],
                     ["blank", "25px"],
                     ["style-column", [
-                        ["style-column", [
-                            ["raw-html", function () { return "You have " + format(player.r.timeCubes) + " time cubes (" + format(player.r.timeCubesPerSecond) + "/s)" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                        ["style-row", [
+                            ["raw-html", () => {return "You have " + format(player.r.timeCubes) + " time cubes"}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                            ["raw-html", () => {return "(" + format(player.r.timeCubesPerSecond) + "/s)"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "12px"}],
+                            ["raw-html", () => {return player.r.timeCubesPerSecond.gte("1e10000") ? "<small style='margin-left:10px'>[SOFTCAPPED]</small>" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace"}],
                         ], {width: "650px", height: "50px", borderBottom: "2px solid #d82cd4"}],
                         ["style-column", [
                             ["raw-html", function () { return "Points: x" + format(player.r.timeCubeEffects[0]) }, () => { return player.points.gte("1e1000") ? {color: "white", fontSize: "20px", fontFamily: "monospace"} : {color: "grey", fontSize: "20px", fontFamily: "monospace"} }],

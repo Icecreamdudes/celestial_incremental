@@ -376,7 +376,7 @@ addUniverse("UZ", {
         }
         return style
     },
-    uniShown() { return player.startedGame && !player.sma.inStarmetalChallenge },
+    uniShown() { return false && !player.sma.inStarmetalChallenge },
     disabled() {return false}
 })
 

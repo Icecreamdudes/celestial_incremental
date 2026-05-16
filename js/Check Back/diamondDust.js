@@ -276,7 +276,9 @@ addLayer("ev13", {
                      ["blank", "15px"],
                      ["style-row", [["ex-buyable", 11], ["ex-buyable", 12],]],
                      ["blank", "15px"],
-                     ["raw-html", function () { return "Buyable costs start increasing faster after 10 levels." }, {fontSize: "16px", fontFamily: "monospace"}],
+                     ["style-column", [
+                        ["raw-html", "Buyable costs start increasing faster after 10 levels.", {color: "black", fontSize: "16px", fontFamily: "monospace"}],
+                    ], {width: "600px", height: "30px", background: "#00ffff", borderRadius: "20px"}],
                 ]
             },
             "Coal": {

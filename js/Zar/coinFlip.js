@@ -180,7 +180,7 @@
         }
 
         if (Decimal.gt(player.cf.coinExploit, 0)) {
-            player.cf.coinExploit = Decimal.sub(player.cf.coinExploit, delta.mul(0.5)).max(0)
+            player.cf.coinExploit = Decimal.sub(player.cf.coinExploit, 0.01).max(0)
         }
         if (Decimal.lt(player.cf.coinExploit, 0)) {
             player.cf.coinExploit = Decimal.add(player.cf.coinExploit, delta)
@@ -263,7 +263,7 @@
                 player.cf.buyables[33] = new Decimal(0)
                 player.cf.buyables[34] = new Decimal(0)
             },
-            onHold() {player.cf.coinExploit = Decimal.add(player.cf.coinExploit, 0.05)},
+            onHold() {player.cf.coinExploit = Decimal.add(player.cf.coinExploit, 0.1)},
             style() { 
                 return { width: '100px', "min-height": '100px', borderRadius: "15px 15px 15px 15px", border: "3px solid #9b5a48ff", backgroundColor: "#744335ff" }
             },

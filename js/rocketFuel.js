@@ -18,7 +18,20 @@
         abilityIndex: -1,
         abilityDesc: [],
     }},
-    automate() {},
+    automate() {
+        if (hasMilestone("s", 17)) {
+            buyUpgrade("rf", 11)
+            buyUpgrade("rf", 12)
+            buyUpgrade("rf", 13)
+            buyUpgrade("rf", 14)
+            buyUpgrade("rf", 15)
+            buyUpgrade("rf", 16)
+            buyUpgrade("rf", 17)
+            buyUpgrade("rf", 18)
+            buyUpgrade("rf", 19)
+            buyUpgrade("rf", 20)
+        }
+    },
     nodeStyle() {
         function degreesToRadians(degrees) {
             return (degrees * Math.PI) / 180;
@@ -77,6 +90,9 @@
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(player.se.starsExploreEffect[0][3])
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(buyableEffect("fa", 15))
         if (hasMilestone("n", 24)) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(player.n.milestone14Effect)
+
+        // ROCKET FUEL SOFTCAP
+        if (player.rf.rocketFuelToGet.gt("1e100000")) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.div("1e100000").pow(0.3).mul("1e100000")
 
         // ROCKET FUEL PER SECOND
         if (player.po.rocketFuel || inChallenge("ip", 16)) {
@@ -430,11 +446,11 @@
             case 5:
                 if (!hasUpgrade("cs", 901)) player.rf.abilityEffects[5] = amount.add(1).log(10).add(1).div(66).add(1).pow(player.cs.scraps.rocket.effect)
                 if (hasUpgrade("cs", 901)) player.rf.abilityEffects[5] = amount.add(1).log(10).add(1).pow(2).pow(player.cs.scraps.rocket.effect)
+                if (hasUpgrade("cs", 904)) player.rf.abilityEffects[5] = Decimal.pow(1.15, amount.add(1).log(10).pow(0.7)).pow(player.cs.scraps.rocket.effect)
                 player.rf.abilityTimers[5] = amount.add(1).log(10).add(1).mul(60)
             break;
             case 6:
                 player.rf.abilityTimers[6] = amount.add(1).log(10).add(1).mul(60)
-                if (hasUpgrade("cs", 904)) player.rf.abilityTimers[6] = Decimal.pow(2, player.rf.abilityTimers[6].pow(0.3))
             break;
             case 7:
                 player.rf.abilityEffects[7] = amount.add(1).log(6).add(1).div(36).add(1).pow(player.cs.scraps.rocket.effect)
@@ -678,7 +694,7 @@
                 player.rf.rocketFuelToGet.gte(1) ? look.color = "#949494" : look.color = "gray"
                 return look
             }],
-            ["raw-html", () => {return player.rf.rocketFuel.gt(1e20) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return player.rf.rocketFuelToGet.gt("1e100000") ? "[SOFTCAPPED<sup>2</sup>]" : player.rf.rocketFuel.gt(1e20) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["raw-html", () => {return !inChallenge("ip", 16) || hasUpgrade("rf", 19) ? "Boosts grassshoppers by x" + format(player.rf.rocketFuelEffect) + "." : "<s>Boosts grassshoppers by x" + format(player.rf.rocketFuelEffect) + ".</s>" }, {color: "#949494", fontSize: "20px", fontFamily: "monospace"}],
         ["blank", "25px"],

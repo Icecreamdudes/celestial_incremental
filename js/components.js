@@ -1388,10 +1388,17 @@ function loadVue() {
 	Vue.component('gilding', {
 		props: ['layer', 'data'],
 		template: `
-		<div v-bind:class="{hoverable: true, gild: true, selected: player[layer].gildingIndex == data}" v-if="run(layers[layer].glossary[data].gildDisplay, layers[layer].glossary[data])" :disabled="!player[layer].gilding[data]" v-on:click="player[layer].gildingIndex = data" v-bind:style="!player[layer].gilding[data] ? {'filter': 'brightness(50%)'} : {}">
+		<div v-bind:class="{hoverable: true, gild: true}" v-if="run(layers[layer].glossary[data].gildDisplay, layers[layer].glossary[data])" :disabled="!player[layer].gilding[data]"
+		v-on:click="let tier = parseInt(data.toString()[1])+1;if (player.fl.gilding[data]) {player.fl.gilding[data] = false;player.fl.goldenSeeds = player.fl.goldenSeeds.add(tier)} else if (player.fl.goldenSeeds.gte(tier)) {player.fl.gilding[data] = true;player.fl.goldenSeeds = player.fl.goldenSeeds.sub(tier)}"
+		v-bind:style="!player[layer].gilding[data] ? {'filter': 'brightness(50%)'} : {}" @mouseenter="hover" @touchstart="hover" @touchmove="hover">
 			<svg width='54pt' height='54pt' viewBox='0 0 60 60' v-bind:style="!player[layer].gilding[data] ? {'filter': 'brightness(50%) drop-shadow(0px 3px 2px rgba(100, 100, 0, 0.5))'} : {}" style="filter:drop-shadow(0px 3px 2px rgba(100, 100, 0, 0.5))" v-html="layers[layer].glossary[data].svg"></svg>
 		</div>
 		`,
+		methods: {
+			hover() {
+				player.fl.gildingIndex = this.data
+			},
+		},
 	})
 	
 	Vue.component('jukebox', {
@@ -1437,7 +1444,7 @@ function loadVue() {
 		props: ['layer', 'data'],
 		template: `
 		<button v-bind:class="{bhMilestoneButton: true, selected: player[data[1]].comboStart == data[0], semiFinish: player[data[1]].milestone[data[0]]>0 && player[data[1]].milestone[data[0]]<3, finish: player[data[1]].milestone[data[0]]>2}"
-			style="width:257px;height:50px" v-on:click="if(player[data[1]].milestone[data[0]]>0 && !data[3])player[data[1]].comboStart=data[0]"
+			style="width:257px;height:50px" v-on:click="if(player[data[1]].milestone[data[0]]>0 && !run(data[3], data))player[data[1]].comboStart=data[0]"
 			v-html="data[0] + ' Combo (' + player[data[1]].milestone[data[0]] + '/3)<br><small>[' + (player[data[1]].milestone[data[0]]>2 ? '1 Character' : formatWhole(3-player[data[1]].milestone[data[0]]) + ' Characters') + ']</small>' + data[2]">
 		</button>
 		`,

@@ -58,7 +58,8 @@
 
             // Singularity Power Softcap
             let base = new Decimal(300)
-            if (hasUpgrade("cs", 1304)) base = base + 150
+            if (hasUpgrade("cs", 1304)) base = base.add(150)
+            base = base.add(player.depth3.negComboEffect)
             if (player.sd.singularityPowerPerSecond.gt(1e300)) player.sd.singularityPowerPerSecond = player.sd.singularityPowerPerSecond.div(1e300).pow(Decimal.div(base, player.sd.singularityPowerPerSecond.plus(1).log(10))).mul(1e300)
             
             // Singularity Power Per Second Calc

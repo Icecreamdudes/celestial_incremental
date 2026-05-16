@@ -326,6 +326,8 @@ Features:
 
 - noRandomStats: A boolean that prevents the slight randomization of celestialite stats.
 
+- negMult: Stat multiplier while at negative combo.
+
 - immortal: A boolean that prevents death via the celestialite reaching zero health. Generally used to prevent the celestialite from dying before doing a "final attack".
 
 - timer: Starts a timer. If the player doesn't kill the celestialite before the timer ends, they die. Conflicts with the stage timer. (I'd assume)

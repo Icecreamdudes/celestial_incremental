@@ -1,4 +1,4 @@
-﻿const DOMAIN_TREE = [["tac", "tco"], ["tma"], ["tst"]]
+﻿const DOMAIN_TREE = [["tac", "tco"], ["tma"], ["tex", "tst"]]
 addNode("tac", {
     color: "#5b629a",
     symbol: "Ac",
@@ -41,11 +41,22 @@ addNode("tst", {
     },
     layerShown() {return hasMilestone("s", 11)},
 })
+addNode("tex", {
+    color: "#ffd5b3",
+    symbol: "Ex",
+    tooltip: "Exponentiation",
+    branches: [["tac", "#2d314d"]],
+    canClick: true,
+    onClick() {
+        player.subtabs["tad"]["Domain"] = "Exponentiation"
+    },
+    layerShown() {return hasUpgrade("depth1", 103)},
+})
 addLayer("tad", {
     name: "Tav's Domain", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "TD", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "U2",
-    innerNodes: [["tac", "tco"], ["tma"], ["tst"]],
+    innerNodes: [["tac", "tco"], ["tma"], ["tex", "tst"]],
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -57,6 +68,7 @@ addLayer("tad", {
         matterGain: new Decimal(0),
         domainCap: new Decimal(1e5),
         highestCap: new Decimal(1e5),
+        matterSoftcap: new Decimal(1),
 
         // ACCUMULATION - ACCUMULATORS
         accumulationCost: new Decimal(1),
@@ -80,6 +92,12 @@ addLayer("tad", {
 
         // STABILIZATION
         stabilizationMax: false,
+
+        // EXPONENTIATION
+        exponentiate: new Decimal(0),
+        exponentiateReq: new Decimal(1e200),
+        exponentiateEffect: new Decimal(1),
+        exponentiateEffect2: new Decimal(1),
 
         // SPECIALIZATION - SPECIALIZATIONS
 
@@ -170,7 +188,15 @@ addLayer("tad", {
         breakNIP: false,
         hiveExpand: false,
     }},
-    automate() {},
+    automate() {
+        if (player.tad.auto) {
+            for (let i = 11; i < 45; ) {
+                buyBuyable("tad", i)
+                if (i % 10 == 4) i = i + 7
+                else i++
+            }
+        }
+    },
     nodeStyle() {
         return {
             background: "linear-gradient(150deg, #b2d8d8, 50%, #094242 100%)",
@@ -217,6 +243,10 @@ addLayer("tad", {
         player.tad.matterGain = player.tad.matterGain.mul(levelableEffect("pet", 209)[1])
         player.tad.matterGain = player.tad.matterGain.mul(buyableEffect("tad", 211))
         if (hasMilestone("tad", 1)) player.tad.matterGain = player.tad.matterGain.mul(player.tad.magnification.pow(1.5).add(1))
+
+        player.tad.matterSoftcap = Decimal.div(1, player.tad.matterGain.div(1.79e308).add(1).log(1.79e308).add(1))
+
+        if (player.tad.matterGain.gt(1.79e308)) player.tad.matterGain = player.tad.matterGain.div(1.79e308).pow(player.tad.matterSoftcap).mul(1.79e308)
 
 
         // MATTER PER SECOND
@@ -280,6 +310,16 @@ addLayer("tad", {
         if (player.tad.altInfinities.infested.milestone.gte(3)) {
             player.tad.magnification = player.tad.magnification.add(player.tad.magnificationGain)
         }
+
+        // EXPONENTIATION CONTENT
+        let exponentiateDiv = new Decimal(1)
+
+        let exponentiateScale = new Decimal(1e50)
+
+        player.tad.exponentiateReq = Decimal.pow(exponentiateScale, player.tad.exponentiate).mul(1e200).div(exponentiateDiv)
+
+        player.tad.exponentiateEffect = player.tad.exponentiate.pow(0.5).div(10).add(1)
+        player.tad.exponentiateEffect2 = player.tad.exponentiate.gt(0) ? Decimal.pow(10, player.tad.exponentiate.pow(0.5).mul(3)) : new Decimal(1)
 
         // COLLAPSE CODE
         if (player.tad.matter.gte(player.tad.domainCap)) {
@@ -589,12 +629,14 @@ addLayer("tad", {
         6: {
             title: "x10",
             canClick() {
+                if (hasMilestone("tad", 104)) return player.tad.highestCap.mul(1e25).gte(player.tad.domainCap.mul(10))
                 if (player.alephsChamber.milestone[25] > 0) return player.tad.highestCap.mul(1e5).gte(player.tad.domainCap.mul(10))
                 return player.tad.highestCap.mul(10).gte(player.tad.domainCap.mul(10))
             },
             unlocked: true,
             tooltip() {
                 if (this.canClick()) return ""
+                if (hasMilestone("tad", 104)) return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e25)) + " cap first!"
                 if (player.alephsChamber.milestone[25] > 0) return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e5)) + " cap first!"
                 return "Need to beat " + formatWhole(player.tad.highestCap.mul(10)) + " cap first!"
             },
@@ -613,12 +655,14 @@ addLayer("tad", {
         7: {
             title: "x1e5",
             canClick() {
+                if (hasMilestone("tad", 104)) return player.tad.highestCap.mul(1e25).gte(player.tad.domainCap.mul(1e5))
                 if (player.alephsChamber.milestone[25] > 0) return player.tad.highestCap.mul(1e5).gte(player.tad.domainCap.mul(1e5))
                 return player.tad.highestCap.mul(10).gte(player.tad.domainCap.mul(1e5))
             },
             unlocked: true,
             tooltip() {
                 if (this.canClick()) return ""
+                if (hasMilestone("tad", 104)) return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e29)) + " cap first!"
                 if (player.alephsChamber.milestone[25] > 0) return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e9)) + " cap first!"
                 return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e5)) + " cap first!"
             },
@@ -637,12 +681,14 @@ addLayer("tad", {
         8: {
             title: "x1e25",
             canClick() {
+                if (hasMilestone("tad", 104)) return player.tad.highestCap.mul(1e25).gte(player.tad.domainCap.mul(1e25))
                 if (player.alephsChamber.milestone[25] > 0) return player.tad.highestCap.mul(1e5).gte(player.tad.domainCap.mul(1e25))
                 return player.tad.highestCap.mul(10).gte(player.tad.domainCap.mul(1e25))
             },
             unlocked: true,
             tooltip() {
                 if (this.canClick()) return ""
+                if (hasMilestone("tad", 104)) return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e49)) + " cap first!"
                 if (player.alephsChamber.milestone[25] > 0) return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e29)) + " cap first!"
                 return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e25)) + " cap first!"
             },
@@ -821,6 +867,23 @@ addLayer("tad", {
             style() {
                 let look = {width: "400px", minHeight: "100px", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "15px"}
                 if (this.canClick()) {look.background = "#6d228b"} else {look.background = "#bf8f8f"}
+                return look
+            },
+        },
+        41: {
+            title() {
+                return "<h2>Exponentiate, but reset previous Tav's Domain content.</h2><br><h3>Req: " + format(player.tad.exponentiateReq) + " Matter</h3>"
+            },
+            canClick() { return player.tad.matter.gte(player.tad.exponentiateReq)},
+            unlocked: true,
+            onClick() {
+                player.tad.exponentiate = player.tad.exponentiate.add(1)
+                // RESET
+                layers.tad.domainReset(4)
+            },
+            style() {
+                let look = {width: "400px", minHeight: "100px", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "15px"}
+                if (this.canClick()) {look.background = "#ffd5b3"} else {look.background = "#bf8f8f"}
                 return look
             },
         },
@@ -1416,13 +1479,13 @@ addLayer("tad", {
     },
     buyables: {
         11: {
-            costBase() { return new Decimal(1) },
-            costGrowth() { return new Decimal(3).div(player.tad.accumulationCost).max(1.6) },
+            costBase() { return new Decimal(1).mul(player.tad.exponentiateEffect2) },
+            costGrowth() { return new Decimal(3).mul(player.tad.exponentiateEffect2).div(player.tad.accumulationCost).max(1.6) },
             purchaseLimit() {if (hasUpgrade("tad", 153)) {return new Decimal(75)} else {return new Decimal(50)}},
             currency() { return player.tad.matter},
             pay(amt) { player.tad.matter = this.currency().sub(amt) },
             effect(x) {
-                return getBuyableAmount(this.layer, this.id).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id).min(50)))
+                return getBuyableAmount(this.layer, this.id).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id).min(50))).pow(player.tad.exponentiateEffect)
             },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -1462,13 +1525,13 @@ addLayer("tad", {
             },
         },
         12: {
-            costBase() { return new Decimal(15) },
-            costGrowth() { return new Decimal(4).div(player.tad.accumulationCost).max(1.6) },
+            costBase() { return new Decimal(15).mul(player.tad.exponentiateEffect2) },
+            costGrowth() { return new Decimal(4).mul(player.tad.exponentiateEffect2).div(player.tad.accumulationCost).max(1.6) },
             purchaseLimit() {if (hasUpgrade("tad", 153)) {return new Decimal(75)} else {return new Decimal(50)}},
             currency() { return player.tad.matter},
             pay(amt) { player.tad.matter = this.currency().sub(amt) },
             effect(x) {
-                return getBuyableAmount(this.layer, this.id).mul(4).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id).min(50)))
+                return getBuyableAmount(this.layer, this.id).mul(4).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id).min(50))).pow(player.tad.exponentiateEffect)
             },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -1508,13 +1571,13 @@ addLayer("tad", {
             },
         },
         13: {
-            costBase() { return new Decimal(150000) },
-            costGrowth() { return new Decimal(7).div(player.tad.accumulationCost).max(1.6) },
+            costBase() { return new Decimal(150000).mul(player.tad.exponentiateEffect2) },
+            costGrowth() { return new Decimal(7).mul(player.tad.exponentiateEffect2).div(player.tad.accumulationCost).max(1.6) },
             purchaseLimit() {if (hasUpgrade("tad", 153)) {return new Decimal(75)} else {return new Decimal(50)}},
             currency() { return player.tad.matter},
             pay(amt) { player.tad.matter = this.currency().sub(amt) },
             effect(x) {
-                return getBuyableAmount(this.layer, this.id).mul(400).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id).min(50)))
+                return getBuyableAmount(this.layer, this.id).mul(400).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id).min(50))).pow(player.tad.exponentiateEffect)
             },
             unlocked() {return hasUpgrade("tad", 122)},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -1554,13 +1617,13 @@ addLayer("tad", {
             },
         },
         14: {
-            costBase() { return new Decimal(1e13)},
-            costGrowth() { return new Decimal(16).div(player.tad.accumulationCost).max(1.6) },
+            costBase() { return new Decimal(1e13).mul(player.tad.exponentiateEffect2)},
+            costGrowth() { return new Decimal(16).mul(player.tad.exponentiateEffect2).div(player.tad.accumulationCost).max(1.6) },
             purchaseLimit() {if (hasUpgrade("tad", 153)) {return new Decimal(75)} else {return new Decimal(50)}},
             currency() { return player.tad.matter},
             pay(amt) { player.tad.matter = this.currency().sub(amt) },
             effect(x) {
-                return getBuyableAmount(this.layer, this.id).mul(1.6e6).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id).min(50)))
+                return getBuyableAmount(this.layer, this.id).mul(1.6e6).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id).min(50))).pow(player.tad.exponentiateEffect)
             },
             unlocked() {return hasUpgrade("tad", 141)},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -1600,13 +1663,13 @@ addLayer("tad", {
             },
         },
         21: {
-            costBase() { return new Decimal(500) },
-            costGrowth() { return new Decimal(5).div(player.tad.accumulationCost).max(1.6) },
+            costBase() { return new Decimal(500).mul(player.tad.exponentiateEffect2) },
+            costGrowth() { return new Decimal(5).mul(player.tad.exponentiateEffect2).div(player.tad.accumulationCost).max(1.6) },
             purchaseLimit() { return new Decimal(50) },
             currency() { return player.tad.matter},
             pay(amt) { player.tad.matter = this.currency().sub(amt) },
             effect(x) {
-                return getBuyableAmount(this.layer, this.id).mul(20).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id)))
+                return getBuyableAmount(this.layer, this.id).mul(20).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id))).pow(player.tad.exponentiateEffect)
             },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -1639,13 +1702,13 @@ addLayer("tad", {
             },
         },
         22: {
-            costBase() { return new Decimal(8000) },
-            costGrowth() { return new Decimal(6).div(player.tad.accumulationCost).max(1.6) },
+            costBase() { return new Decimal(8000).mul(player.tad.exponentiateEffect2) },
+            costGrowth() { return new Decimal(6).mul(player.tad.exponentiateEffect2).div(player.tad.accumulationCost).max(1.6) },
             purchaseLimit() { return new Decimal(50) },
             currency() { return player.tad.matter},
             pay(amt) { player.tad.matter = this.currency().sub(amt) },
             effect(x) {
-                return getBuyableAmount(this.layer, this.id).mul(80).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id)))
+                return getBuyableAmount(this.layer, this.id).mul(80).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id))).pow(player.tad.exponentiateEffect)
             },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -1678,13 +1741,13 @@ addLayer("tad", {
             },
         },
         23: {
-            costBase() { return new Decimal(4000000) },
-            costGrowth() { return new Decimal(8).div(player.tad.accumulationCost).max(1.6) },
+            costBase() { return new Decimal(4000000).mul(player.tad.exponentiateEffect2) },
+            costGrowth() { return new Decimal(8).mul(player.tad.exponentiateEffect2).div(player.tad.accumulationCost).max(1.6) },
             purchaseLimit() { return new Decimal(50) },
             currency() { return player.tad.matter},
             pay(amt) { player.tad.matter = this.currency().sub(amt) },
             effect(x) {
-                return getBuyableAmount(this.layer, this.id).mul(2000).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id)))
+                return getBuyableAmount(this.layer, this.id).mul(2000).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id))).pow(player.tad.exponentiateEffect)
             },
             unlocked() {return hasUpgrade("tad", 122)},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -1717,13 +1780,13 @@ addLayer("tad", {
             },
         },
         24: {
-            costBase() { return new Decimal(1e15) },
-            costGrowth() { return new Decimal(18).div(player.tad.accumulationCost).max(1.6) },
+            costBase() { return new Decimal(1e15).mul(player.tad.exponentiateEffect2) },
+            costGrowth() { return new Decimal(18).mul(player.tad.exponentiateEffect2).div(player.tad.accumulationCost).max(1.6) },
             purchaseLimit() { return new Decimal(50) },
             currency() { return player.tad.matter},
             pay(amt) { player.tad.matter = this.currency().sub(amt) },
             effect(x) {
-                return getBuyableAmount(this.layer, this.id).mul(1e7).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id)))
+                return getBuyableAmount(this.layer, this.id).mul(1e7).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id))).pow(player.tad.exponentiateEffect)
             },
             unlocked() {return hasUpgrade("tad", 141)},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -1756,13 +1819,13 @@ addLayer("tad", {
             },
         },
         31: {
-            costBase() { return new Decimal(1e8) },
-            costGrowth() { return new Decimal(10).div(player.tad.accumulationCost).max(1.6) },
+            costBase() { return new Decimal(1e8).mul(player.tad.exponentiateEffect2) },
+            costGrowth() { return new Decimal(10).mul(player.tad.exponentiateEffect2).div(player.tad.accumulationCost).max(1.6) },
             purchaseLimit() { return new Decimal(50) },
             currency() { return player.tad.matter},
             pay(amt) { player.tad.matter = this.currency().sub(amt) },
             effect(x) {
-                return getBuyableAmount(this.layer, this.id).mul(12000).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id)))
+                return getBuyableAmount(this.layer, this.id).mul(12000).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id))).pow(player.tad.exponentiateEffect)
             },
             unlocked() {return hasUpgrade("tad", 134)},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -1795,13 +1858,13 @@ addLayer("tad", {
             },
         },
         32: {
-            costBase() { return new Decimal(4e9) },
-            costGrowth() { return new Decimal(12).div(player.tad.accumulationCost).max(1.6) },
+            costBase() { return new Decimal(4e9).mul(player.tad.exponentiateEffect2) },
+            costGrowth() { return new Decimal(12).mul(player.tad.exponentiateEffect2).div(player.tad.accumulationCost).max(1.6) },
             purchaseLimit() { return new Decimal(50) },
             currency() { return player.tad.matter},
             pay(amt) { player.tad.matter = this.currency().sub(amt) },
             effect(x) {
-                return getBuyableAmount(this.layer, this.id).mul(60000).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id)))
+                return getBuyableAmount(this.layer, this.id).mul(60000).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id))).pow(player.tad.exponentiateEffect)
             },
             unlocked() {return hasUpgrade("tad", 134)},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -1834,13 +1897,13 @@ addLayer("tad", {
             },
         },
         33: {
-            costBase() { return new Decimal(2e11) },
-            costGrowth() { return new Decimal(14).div(player.tad.accumulationCost).max(1.6) },
+            costBase() { return new Decimal(2e11).mul(player.tad.exponentiateEffect2) },
+            costGrowth() { return new Decimal(14).mul(player.tad.exponentiateEffect2).div(player.tad.accumulationCost).max(1.6) },
             purchaseLimit() { return new Decimal(50) },
             currency() { return player.tad.matter},
             pay(amt) { player.tad.matter = this.currency().sub(amt) },
             effect(x) {
-                return getBuyableAmount(this.layer, this.id).mul(400000).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id)))
+                return getBuyableAmount(this.layer, this.id).mul(400000).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id))).pow(player.tad.exponentiateEffect)
             },
             unlocked() {return hasUpgrade("tad", 134)},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -1873,13 +1936,13 @@ addLayer("tad", {
             },
         },
         34: {
-            costBase() { return new Decimal(1e18) },
-            costGrowth() { return new Decimal(20).div(player.tad.accumulationCost).max(1.6) },
+            costBase() { return new Decimal(1e18).mul(player.tad.exponentiateEffect2) },
+            costGrowth() { return new Decimal(20).mul(player.tad.exponentiateEffect2).div(player.tad.accumulationCost).max(1.6) },
             purchaseLimit() { return new Decimal(50) },
             currency() { return player.tad.matter},
             pay(amt) { player.tad.matter = this.currency().sub(amt) },
             effect(x) {
-                return getBuyableAmount(this.layer, this.id).mul(5e7).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id)))
+                return getBuyableAmount(this.layer, this.id).mul(5e7).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id))).pow(player.tad.exponentiateEffect)
             },
             unlocked() {return hasUpgrade("tad", 141)},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -1912,13 +1975,13 @@ addLayer("tad", {
             },
         },
         41: {
-            costBase() { return new Decimal(1e25) },
-            costGrowth() { return new Decimal(50).div(player.tad.accumulationCost).max(1.6) },
+            costBase() { return new Decimal(1e25).mul(player.tad.exponentiateEffect2) },
+            costGrowth() { return new Decimal(50).mul(player.tad.exponentiateEffect2).div(player.tad.accumulationCost).max(1.6) },
             purchaseLimit() { return new Decimal(50) },
             currency() { return player.tad.matter},
             pay(amt) { player.tad.matter = this.currency().sub(amt) },
             effect(x) {
-                return getBuyableAmount(this.layer, this.id).mul(1e10).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id)))
+                return getBuyableAmount(this.layer, this.id).mul(1e10).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id))).pow(player.tad.exponentiateEffect)
             },
             unlocked() {return hasUpgrade("tad", 151)},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -1951,13 +2014,13 @@ addLayer("tad", {
             },
         },
         42: {
-            costBase() { return new Decimal(1e30) },
-            costGrowth() { return new Decimal(150).div(player.tad.accumulationCost).max(1.6) },
+            costBase() { return new Decimal(1e30).mul(player.tad.exponentiateEffect2) },
+            costGrowth() { return new Decimal(150).mul(player.tad.exponentiateEffect2).div(player.tad.accumulationCost).max(1.6) },
             purchaseLimit() { return new Decimal(50) },
             currency() { return player.tad.matter},
             pay(amt) { player.tad.matter = this.currency().sub(amt) },
             effect(x) {
-                return getBuyableAmount(this.layer, this.id).mul(1e12).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id)))
+                return getBuyableAmount(this.layer, this.id).mul(1e12).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id))).pow(player.tad.exponentiateEffect)
             },
             unlocked() {return hasUpgrade("tad", 151)},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -1990,13 +2053,13 @@ addLayer("tad", {
             },
         },
         43: {
-            costBase() { return new Decimal(1e35) },
-            costGrowth() { return new Decimal(500).div(player.tad.accumulationCost).max(1.6) },
+            costBase() { return new Decimal(1e35).mul(player.tad.exponentiateEffect2) },
+            costGrowth() { return new Decimal(500).mul(player.tad.exponentiateEffect2).div(player.tad.accumulationCost).max(1.6) },
             purchaseLimit() { return new Decimal(50) },
             currency() { return player.tad.matter},
             pay(amt) { player.tad.matter = this.currency().sub(amt) },
             effect(x) {
-                return getBuyableAmount(this.layer, this.id).mul(1e14).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id)))
+                return getBuyableAmount(this.layer, this.id).mul(1e14).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id))).pow(player.tad.exponentiateEffect)
             },
             unlocked() {return hasUpgrade("tad", 151)},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -2029,13 +2092,13 @@ addLayer("tad", {
             },
         },
         44: {
-            costBase() { return new Decimal(1e40) },
-            costGrowth() { return new Decimal(2000).div(player.tad.accumulationCost).max(1.6) },
+            costBase() { return new Decimal(1e40).mul(player.tad.exponentiateEffect2) },
+            costGrowth() { return new Decimal(2000).mul(player.tad.exponentiateEffect2).div(player.tad.accumulationCost).max(1.6) },
             purchaseLimit() { return new Decimal(50) },
             currency() { return player.tad.matter},
             pay(amt) { player.tad.matter = this.currency().sub(amt) },
             effect(x) {
-                return getBuyableAmount(this.layer, this.id).mul(1e16).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id)))
+                return getBuyableAmount(this.layer, this.id).mul(1e16).mul(Decimal.pow(player.tad.accumulationScale, getBuyableAmount(this.layer, this.id))).pow(player.tad.exponentiateEffect)
             },
             unlocked() {return hasUpgrade("tad", 151)},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -2068,7 +2131,7 @@ addLayer("tad", {
             },
         },
         101: {
-            purchaseLimit() { return new Decimal(10) },
+            purchaseLimit() { return hasMilestone("tad", 102) ? new Decimal(25) : new Decimal(10) },
             currency() { return player.tad.compression},
             pay(amt) { player.tad.compression = this.currency().sub(amt) },
             effect(x) {
@@ -2079,7 +2142,7 @@ addLayer("tad", {
             cost(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1) },
             canAfford() { return this.currency().gte(this.cost()) },
             display() {
-                return "<h3>Matter Compressor</h3><br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
+                return "<h3>Matter Compressor</h3><br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")\n\
                     x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + " Matter Gain<br>\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Compression"
             },
@@ -2105,7 +2168,7 @@ addLayer("tad", {
             },
         },
         102: {
-            purchaseLimit() { return new Decimal(10) },
+            purchaseLimit() { return hasMilestone("tad", 102) ? new Decimal(25) : new Decimal(10) },
             currency() { return player.tad.compression},
             pay(amt) { player.tad.compression = this.currency().sub(amt) },
             effect(x) {
@@ -2116,7 +2179,7 @@ addLayer("tad", {
             cost(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1) },
             canAfford() { return this.currency().gte(this.cost()) },
             display() {
-                return "<h3>Accumu-Cost Compressor</h3><br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
+                return "<h3>Accumu-Cost Compressor</h3><br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")\n\
                     /" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + " Accumulator Cost Scaling<br>\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Compression"
             },
@@ -2142,7 +2205,7 @@ addLayer("tad", {
             },
         },
         103: {
-            purchaseLimit() { return new Decimal(10) },
+            purchaseLimit() { return hasMilestone("tad", 102) ? new Decimal(25) : new Decimal(10) },
             currency() { return player.tad.compression},
             pay(amt) { player.tad.compression = this.currency().sub(amt) },
             effect(x) {
@@ -2153,7 +2216,7 @@ addLayer("tad", {
             cost(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1) },
             canAfford() { return this.currency().gte(this.cost()) },
             display() {
-                return "<h3>Accumu-Effect Compressor</h3><br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
+                return "<h3>Accumu-Effect Compressor</h3><br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")\n\
                     x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + " Accumulator Effect Scaling<br>\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Compression"
             },
@@ -2179,7 +2242,7 @@ addLayer("tad", {
             },
         },
         104: {
-            purchaseLimit() { return new Decimal(10) },
+            purchaseLimit() { return hasMilestone("tad", 102) ? new Decimal(25) : new Decimal(10) },
             currency() { return player.tad.compression},
             pay(amt) { player.tad.compression = this.currency().sub(amt) },
             effect(x) {
@@ -2190,7 +2253,7 @@ addLayer("tad", {
             cost(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1) },
             canAfford() { return this.currency().gte(this.cost()) },
             display() {
-                return "<h3>Infinitum Compressor</h3><br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
+                return "<h3>Infinitum Compressor</h3><br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")\n\
                     x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + " Infinitum Gain<br>\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Compression"
             },
@@ -2466,7 +2529,7 @@ addLayer("tad", {
                 if (amt.eq(5)) return new Decimal("1e4050")
                 return new Decimal("1e8050")
             },
-            purchaseLimit() { return new Decimal(5) },
+            purchaseLimit() { return hasMilestone("tad", 103) ? new Decimal(10) : new Decimal(5) },
             currency() { return player.in.infinityPoints},
             pay(amt) {player.in.infinityPoints = this.currency().sub(amt)},
             effect(x) { return getBuyableAmount(this.layer, this.id).add(1) },
@@ -2475,7 +2538,7 @@ addLayer("tad", {
             canAfford() { return this.currency().gte(this.cost()) },
             display() {
                 return "<h3>Stabilization [3:1]</h3>\n\
-                    (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/5)\n\
+                    (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")\n\
                     Multiplies first column caps by x" + formatSimple(tmp[this.layer].buyables[this.id].effect) + " and multiplies row 1 base by x" + formatSimple(Decimal.pow(4, getBuyableAmount(this.layer, this.id))) +  ", but raises cost scaling by ^" + formatSimple(Decimal.pow(2, getBuyableAmount(this.layer, this.id))) + ".\n\ \n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
@@ -2502,7 +2565,7 @@ addLayer("tad", {
                 if (amt.eq(5)) return new Decimal("1e4050")
                 return new Decimal("1e8050")
             },
-            purchaseLimit() { return new Decimal(5) },
+            purchaseLimit() { return hasMilestone("tad", 103) ? new Decimal(10) : new Decimal(5) },
             currency() { return player.ta.negativeInfinityPoints},
             pay(amt) {player.ta.negativeInfinityPoints = this.currency().sub(amt)},
             effect(x) { return getBuyableAmount(this.layer, this.id).add(1) },
@@ -2511,7 +2574,7 @@ addLayer("tad", {
             canAfford() { return this.currency().gte(this.cost()) },
             display() {
                 return "<h3>Stabilization [3:2]</h3>\n\
-                    (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/5)\n\
+                    (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")\n\
                     Multiplies second column caps by x" + formatSimple(tmp[this.layer].buyables[this.id].effect) + " and multiplies row 1 base by x" + formatSimple(Decimal.pow(4, getBuyableAmount(this.layer, this.id))) +  ", but raises cost scaling by ^" + formatSimple(Decimal.pow(2, getBuyableAmount(this.layer, this.id))) + ".\n\ \n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " NIP"
             },
@@ -2538,7 +2601,7 @@ addLayer("tad", {
                 if (amt.eq(5)) return new Decimal("1e405")
                 return new Decimal("1e805")
             },
-            purchaseLimit() { return new Decimal(5) },
+            purchaseLimit() { return hasMilestone("tad", 103) ? new Decimal(10) : new Decimal(5) },
             currency() { return player.s.singularityPoints},
             pay(amt) {player.s.singularityPoints = this.currency().sub(amt)},
             effect(x) { return getBuyableAmount(this.layer, this.id).add(1) },
@@ -2547,7 +2610,7 @@ addLayer("tad", {
             canAfford() { return this.currency().gte(this.cost()) },
             display() {
                 return "<h3>Stabilization [3:3]</h3>\n\
-                    (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/5)\n\
+                    (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")\n\
                     Multiplies third column caps by x" + formatSimple(tmp[this.layer].buyables[this.id].effect) + " and multiplies row 1 base by x" + formatSimple(Decimal.pow(4, getBuyableAmount(this.layer, this.id))) +  ", but raises cost scaling by ^" + formatSimple(Decimal.pow(2, getBuyableAmount(this.layer, this.id))) + ".\n\ \n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " SP"
             },
@@ -2607,6 +2670,60 @@ addLayer("tad", {
             unlocked: true,
             style: {width: "350px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
+
+        101: {
+            requirementDescription: "1 Exponentiation",
+            effectDescription() { return "Multiply accumulator costs, but raise accumulator effects.<br>Currently: x" + formatSimple(player.tad.exponentiateEffect2) + ", ^" + formatSimple(player.tad.exponentiateEffect, 2) },
+            done() { return player.tad.exponentiate.gte(1) },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "black", border: "3px solid #997f6b", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("tad", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+        },
+        102: {
+            requirementDescription: "2 Exponentiations",
+            effectDescription() { return "Increase compressor cap to 25" },
+            done() { return player.tad.exponentiate.gte(2) },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "black", border: "3px solid #997f6b", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("tad", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+        },
+        103: {
+            requirementDescription: "4 Exponentiations",
+            effectDescription() { return "Double 3rd row stabilization caps" },
+            done() { return player.tad.exponentiate.gte(4) },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "black", border: "3px solid #997f6b", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("tad", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+        },
+        104: {
+            requirementDescription: "8 Exponentiations",
+            effectDescription() { return "Tav's Domain Expander cap now increments by x1e25" },
+            done() { return player.tad.exponentiate.gte(8) },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "black", border: "3px solid #997f6b", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("tad", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+        },
+        105: {
+            requirementDescription: "16 Exponentiations",
+            effectDescription() { return "Automate Accumulators" },
+            done() { return player.tad.exponentiate.gte(16) },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "black", border: "3px solid #997f6b", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("tad", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+            toggles: [
+                ["tad", "auto"], // Each toggle is defined by a layer and the data toggled for that layer
+            ],
+        },
     },
     domainReset(tier = 0) {
         // MATTER
@@ -2638,7 +2755,12 @@ addLayer("tad", {
         if (tier > 3 && !hasMilestone("tad", 6)) {
             player.tad.magnification = new Decimal(0)
             player.tad.magnificationGain = new Decimal(0)
-            player.tad.milestones.splice(0, player.tad.milestones.length)
+            for (let i = 0; i < player.tad.milestones.length; i++) {
+                if (+player.tad.milestones[i] < 10) {
+                    player.tad.milestones.splice(i, 1);
+                    i--;
+                }
+            }
         }
     },
     microtabs: {
@@ -3098,6 +3220,52 @@ addLayer("tad", {
                     ["raw-html", "Stabilization content is kept on all resets", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
                 ]
             },
+            "Exponentiation": {
+                buttonStyle() {return {color: "black", borderRadius: "5px"}},
+                unlocked() {return true},
+                content: [
+                    ["clickable", 1],
+                    ["blank", "15px"],
+                    ["clickable", 41],
+                    ["blank", "25px"],
+                    ["style-row", [
+                        ["raw-html", () => {return player.tad.exponentiate.neq(1) ? "You have exponentiated " + formatWhole(player.tad.exponentiate) + " times" : "You have exponentiated " + formatWhole(player.tad.exponentiate) + " time"}, {color: "rgba(0,0,0,0.6)", fontSize: "24px", fontFamily: "monospace"}],
+                    ], {backgroundColor: "#ffd5b3", border: "3px solid #997f6b", borderRadius: "13px 13px 0px 0px", width: "588px", height: "40px"}],
+                    ["style-row", [
+                        ["style-column", [
+                            ["raw-html", "1", {color: "rgba(0,0,0,0.6)", fontSize: "32px", fontFamily: "monospace"}],
+                        ], {backgroundColor: "#ffd5b3", border: "3px solid #997f6b", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                        ["titleless-milestone", 101],
+                    ]],
+                    ["style-row", [
+                        ["style-column", [
+                            ["raw-html", "2", {color: "rgba(0,0,0,0.6)", fontSize: "32px", fontFamily: "monospace"}],
+                        ], {backgroundColor: "#ffd5b3", border: "3px solid #997f6b", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                        ["titleless-milestone", 102],
+                    ]],
+                    ["style-row", [
+                        ["style-column", [
+                            ["raw-html", "4", {color: "rgba(0,0,0,0.6)", fontSize: "32px", fontFamily: "monospace"}],
+                        ], {backgroundColor: "#ffd5b3", border: "3px solid #997f6b", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                        ["titleless-milestone", 103],
+                    ]],
+                    ["style-row", [
+                        ["style-column", [
+                            ["raw-html", "8", {color: "rgba(0,0,0,0.6)", fontSize: "32px", fontFamily: "monospace"}],
+                        ], {backgroundColor: "#ffd5b3", border: "3px solid #997f6b", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                        ["titleless-milestone", 104],
+                    ]],
+                    ["style-row", [
+                        ["style-column", [
+                            ["raw-html", "16", {color: "rgba(0,0,0,0.6)", fontSize: "32px", fontFamily: "monospace"}],
+                        ], {backgroundColor: "#ffd5b3", border: "3px solid #997f6b", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                        ["titleless-milestone", 105],
+                    ]],
+                    ["style-row", [
+                        ["raw-html", "Exponentiation content is kept on all resets", {color: "rgba(0,0,0,0.6)", fontSize: "20px", fontFamily: "monospace"}],
+                    ], {backgroundColor: "#ffd5b3", border: "3px solid #997f6b", borderTop: "0px", borderRadius: "0px 0px 13px 13px", width: "588px", height: "30px"}],
+                ],
+            },
         },
     },
     tabFormat: [
@@ -3110,6 +3278,7 @@ addLayer("tad", {
             }],
             ["raw-html", () => {return "<div class='bottomTooltip'>Base Gain<hr><small>(+" + formatSimple(player.tad.matterBase) + "/s)</small></div>"}],
         ]],
+        ["raw-html", () => {return player.tad.matterGain.gte(1.79e308) ? "Matter Limiter: Gain past 1.79e308 is raised by ^" + formatSimple(player.tad.matterSoftcap, 3) : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace"}],
         ["tooltip-row", [
             ["raw-html", () => {return player.tad.matter.gte(player.tad.domainCap) ? "Domain limit reached." : "Domain collapses at " + formatWhole(player.tad.domainCap) + " matter."}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
             ["raw-html", () => {return player.tad.matterGain.gt(0) ? "<div class='bottomTooltip'>Time till collapse<hr><small>" + formatTime(player.tad.domainCap.sub(player.tad.matter).div(player.tad.matterGain)) + "</small></div>" : "<div class='bottomTooltip'>Time till collapse<hr><small>∞y ∞d ∞h ∞m ∞s</small></div>"}],

@@ -258,7 +258,7 @@
         21: {
             title() { return "SPIN!"},
             tooltip() { return "<h5>Spin Length: " + format(player.wof.spinLength) + ". <h6>(I don't know what unit of measurement this is in, but it's probably seconds.)" },
-            canClick() { return player.za.chancePoints.gte(player.wof.spinCost) },
+            canClick() { return player.za.chancePoints.gte(player.wof.spinCost) && !player.wof.spinActive },
             unlocked() { return true },
             onClick() {
                 player.wof.spinPause = new Decimal(7)

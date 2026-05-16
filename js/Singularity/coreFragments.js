@@ -120,6 +120,7 @@
             player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(buyableEffect("sb", 102))
             player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(buyableEffect("fu", 91))
             player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(buyableEffect("depth4", 3))
+            player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(player.depth4.negComboEffect)
 
             player.cof.coreFragmentsToGet[i] = player.cof.fragmentScore[i].div(100).floor()
             player.cof.coreFragments[i] = player.cof.coreFragments[i].floor()

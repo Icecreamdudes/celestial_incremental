@@ -52,6 +52,7 @@
         if (hasMilestone("db", 12)) player.du.pointGain = player.du.pointGain.mul(player.db.milestone2Effect)
         if (hasMilestone("dgj", 12)) player.du.pointGain = player.du.pointGain.mul(player.dgj.milestone2Effect)
         player.du.pointGain = player.du.pointGain.mul(buyableEffect("dgj", 11))
+        if (hasUpgrade("darkTemple", 2)) player.du.pointGain = player.du.pointGain.mul(upgradeEffect("darkTemple", 2))
 
         player.du.pointGain = player.du.pointGain.div(player.du.pointSoftcap)
         if (player.pet.legPetTimers[0].active) player.du.pointGain = player.du.pointGain.pow(0.7)
@@ -78,10 +79,11 @@
         }
 
         // SOFTCAP
-        if (player.du.points.lte(1e10)) player.du.pointSoftcap = player.du.points.pow(0.15).div(10).add(1).pow(levelableEffect("st", 201)[0])
-        if (player.du.points.lte(1e10) && getLevelableTier("pu", 201, true)) player.du.pointSoftcap = player.du.points.pow(0.15).div(10).div(levelableEffect("pu", 201)[1]).add(1).pow(levelableEffect("pu", 201)[0]).pow(levelableEffect("st", 201)[0])
-        if (player.du.points.gt(1e10)) player.du.pointSoftcap = player.du.points.pow(0.30).div(15).add(1).pow(levelableEffect("st", 201)[0])
-        if (player.du.points.gt(1e10) && getLevelableTier("pu", 201, true)) player.du.pointSoftcap = player.du.points.pow(0.30).div(15).div(levelableEffect("pu", 201)[1]).add(1).pow(levelableEffect("pu", 201)[0]).pow(levelableEffect("st", 201)[0])
+        if (player.du.points.lte(1e10)) player.du.pointSoftcap = player.du.points.pow(0.15).div(10).add(1)
+        if (player.du.points.gt(1e10)) player.du.pointSoftcap = player.du.points.pow(0.30).div(15).add(1)
+        if (player.du.pointSoftcap.gt(1e308)) player.du.pointSoftcap = player.du.pointSoftcap.div(1e308).pow(player.du.pointSoftcap.add(1).log(1e308)).mul(1e308)
+        if (getLevelableTier("pu", 201, true)) player.du.pointSoftcap = player.du.pointSoftcap.sub(1).div(levelableEffect("pu", 201)[1]).add(1).pow(levelableEffect("pu", 201)[0])
+        player.du.pointSoftcap = player.du.pointSoftcap.pow(levelableEffect("st", 201)[0])
         player.du.pointSoftcap = player.du.pointSoftcap.pow(player.dv.cloudEffect)
 
     },

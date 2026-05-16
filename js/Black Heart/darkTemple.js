@@ -238,6 +238,7 @@ addLayer("darkTemple", {
         tierCap: new Decimal(3),
         totalLevel: new Decimal(0),
         runeCostDiv: new Decimal(1),
+        bestowalCostDiv: new Decimal(1),
 
         byproduct: {
             1: false,
@@ -332,6 +333,9 @@ addLayer("darkTemple", {
 
         player.darkTemple.runeCostDiv = new Decimal(1)
         player.darkTemple.runeCostDiv = player.darkTemple.runeCostDiv.mul(buyableEffect("darkTemple", 1013))
+
+        player.darkTemple.bestowalCostDiv = new Decimal(1)
+        player.darkTemple.bestowalCostDiv = player.darkTemple.bestowalCostDiv.mul(buyableEffect("depth1", 104))
 
         player.darkTemple.byproductMult = new Decimal(1)
         if (hasUpgrade("darkTemple", 8)) player.darkTemple.byproductMult = player.darkTemple.byproductMult.mul(upgradeEffect("darkTemple", 8))
@@ -972,8 +976,8 @@ addLayer("darkTemple", {
     buyables: {
         1001: {
             costBase() {
-                if (getBuyableAmount(this.layer, this.id).gte(10) && hasUpgrade("darkTemple", 16)) return new Decimal(0.01)
-                return new Decimal(5)
+                if (getBuyableAmount(this.layer, this.id).gte(10) && hasUpgrade("darkTemple", 16)) return new Decimal(0.01).div(player.darkTemple.bestowalCostDiv)
+                return new Decimal(5).div(player.darkTemple.bestowalCostDiv)
             },
             costGrowth() {
                 if (getBuyableAmount(this.layer, this.id).gte(10) && hasUpgrade("darkTemple", 16)) return new Decimal(3)
@@ -1010,8 +1014,8 @@ addLayer("darkTemple", {
         },
         1003: {
             costBase() {
-                if (getBuyableAmount(this.layer, this.id).gte(10) && hasUpgrade("darkTemple", 16)) return new Decimal(0.005)
-                return new Decimal(10)
+                if (getBuyableAmount(this.layer, this.id).gte(10) && hasUpgrade("darkTemple", 16)) return new Decimal(0.005).div(player.darkTemple.bestowalCostDiv)
+                return new Decimal(10).div(player.darkTemple.bestowalCostDiv)
             },
             costGrowth() {
                 if (getBuyableAmount(this.layer, this.id).gte(10) && hasUpgrade("darkTemple", 16)) return new Decimal(5)
@@ -1048,8 +1052,8 @@ addLayer("darkTemple", {
         },
         1005: {
             costBase() {
-                if (getBuyableAmount(this.layer, this.id).gte(10) && hasUpgrade("darkTemple", 16)) return new Decimal(0.001)
-                return new Decimal(50)
+                if (getBuyableAmount(this.layer, this.id).gte(10) && hasUpgrade("darkTemple", 16)) return new Decimal(0.001).div(player.darkTemple.bestowalCostDiv)
+                return new Decimal(50).div(player.darkTemple.bestowalCostDiv)
             },
             costGrowth() {
                 if (getBuyableAmount(this.layer, this.id).gte(10) && hasUpgrade("darkTemple", 16)) return new Decimal(10)
@@ -1086,8 +1090,8 @@ addLayer("darkTemple", {
         },
         1007: {
             costBase() {
-                if (getBuyableAmount(this.layer, this.id).gte(5) && hasUpgrade("darkTemple", 16)) return new Decimal(0.1)
-                return new Decimal(125)
+                if (getBuyableAmount(this.layer, this.id).gte(5) && hasUpgrade("darkTemple", 16)) return new Decimal(0.1).div(player.darkTemple.bestowalCostDiv)
+                return new Decimal(125).div(player.darkTemple.bestowalCostDiv)
             },
             costGrowth() {
                 if (getBuyableAmount(this.layer, this.id).gte(5) && hasUpgrade("darkTemple", 16)) return new Decimal(25)
@@ -1124,8 +1128,8 @@ addLayer("darkTemple", {
         },
         1009: {
             costBase() {
-                if (getBuyableAmount(this.layer, this.id).gte(5) && hasUpgrade("darkTemple", 16)) return new Decimal(0.01)
-                return new Decimal(250)
+                if (getBuyableAmount(this.layer, this.id).gte(5) && hasUpgrade("darkTemple", 16)) return new Decimal(0.01).div(player.darkTemple.bestowalCostDiv)
+                return new Decimal(250).div(player.darkTemple.bestowalCostDiv)
             },
             costGrowth() {
                 if (getBuyableAmount(this.layer, this.id).gte(5) && hasUpgrade("darkTemple", 16)) return new Decimal(100)
@@ -1162,8 +1166,8 @@ addLayer("darkTemple", {
         },
         1011: {
             costBase() {
-                if (getBuyableAmount(this.layer, this.id).gte(5) && hasUpgrade("darkTemple", 16)) return new Decimal(0.003)
-                return new Decimal(5)
+                if (getBuyableAmount(this.layer, this.id).gte(5) && hasUpgrade("darkTemple", 16)) return new Decimal(0.003).div(player.darkTemple.bestowalCostDiv)
+                return new Decimal(5).div(player.darkTemple.bestowalCostDiv)
             },
             costGrowth() {
                 if (getBuyableAmount(this.layer, this.id).gte(5) && hasUpgrade("darkTemple", 16)) return new Decimal(25)
@@ -1200,8 +1204,8 @@ addLayer("darkTemple", {
         },
         1013: {
             costBase() {
-                if (getBuyableAmount(this.layer, this.id).gte(5) && hasUpgrade("darkTemple", 16)) return new Decimal(1)
-                return new Decimal(50)
+                if (getBuyableAmount(this.layer, this.id).gte(5) && hasUpgrade("darkTemple", 16)) return new Decimal(1).div(player.darkTemple.bestowalCostDiv)
+                return new Decimal(50).div(player.darkTemple.bestowalCostDiv)
             },
             costGrowth() {
                 if (getBuyableAmount(this.layer, this.id).gte(5) && hasUpgrade("darkTemple", 16)) return new Decimal(5)
@@ -1238,8 +1242,8 @@ addLayer("darkTemple", {
         },
         1015: {
             costBase() {
-                if (getBuyableAmount(this.layer, this.id).gte(5) && hasUpgrade("darkTemple", 16)) return new Decimal(1)
-                return new Decimal(300)
+                if (getBuyableAmount(this.layer, this.id).gte(5) && hasUpgrade("darkTemple", 16)) return new Decimal(1).div(player.darkTemple.bestowalCostDiv)
+                return new Decimal(300).div(player.darkTemple.bestowalCostDiv)
             },
             costGrowth() {
                 if (getBuyableAmount(this.layer, this.id).gte(5) && hasUpgrade("darkTemple", 16)) return new Decimal(10)

@@ -691,15 +691,15 @@
                         ["style-column", [
                             ["style-column", [
                                 ["raw-html", function () { return "You have " + formatWhole(player.bl.bloodStones) + " blood stones." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                            ], {width: "405px", height: "40px", borderRight: "2px solid #f57171ff"}],
+                            ], {width: "406px", height: "40px", borderRight: "2px solid #f57171ff"}],
                             ["row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13],["dark-buyable", 14]]],
-                        ], {width: "407px"}],
+                        ], {width: "408px"}],
                         ["style-column", [
                             ["style-column", [
                                 ["raw-html", function () { return "You have " + formatWhole(player.bl.bloodGems) + " blood gems." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                            ], {width: "405px", height: "40px", borderLeft: "2px solid #f57171ff"}],
+                            ], {width: "406px", height: "40px", borderLeft: "2px solid #f57171ff"}],
                             ["row", [["dark-buyable", 31], ["dark-buyable", 32], ["dark-buyable", 33],["dark-buyable", 34]]],
-                        ], {width: "407px"}],
+                        ], {width: "408px"}],
                     ], {background: "#1f0000ff", border: "2px solid #f57171ff", padding: "-2px"}],
                 ]
             },

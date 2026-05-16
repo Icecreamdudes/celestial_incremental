@@ -16,7 +16,12 @@ BHA.none = {
 // General Skills
 BHA.general_slap = {
     name: "Slap",
-    description() {return "Deals " + formatWhole(new Decimal(75).add(player.bh.skillData["general_slap"].level.mul(15))) + "% physical damage and soft-stuns the celestialite for a second."},
+    description(char) {
+        if (hasUpgrade("depth1", 106)) {
+            return "Deals " + formatWhole(new Decimal(75).add(player.bh.skillData["general_slap"].level.mul(15))) + "% physical damage, with a " + formatSimple(Decimal.mul(10, Decimal.div(Decimal.add(100, char.luck), 100))) + "% chance to hit twice, and soft-stuns the celestialite for a second."
+        }
+        return "Deals " + formatWhole(new Decimal(75).add(player.bh.skillData["general_slap"].level.mul(15))) + "% physical damage and soft-stuns the celestialite for a second."
+    },
     passiveText() {return "+" + formatSimple(player.bh.skillData["general_slap"].maxLevel.div(5)) + " DMG"},
     char: "general",
     spCost: new Decimal(6),
@@ -31,6 +36,14 @@ BHA.general_slap = {
     method: "physical",
     properties: {
         "stun": [new Decimal(1), "soft", new Decimal(1)], // Chance / Stun-Type / Stun-Time
+        "multi-hit"(char) {
+            let luckMult = Decimal.div(Decimal.add(100, char.luck), 100)
+            if (hasUpgrade("depth1", 106) && Decimal.lt(Math.random(), luckMult.div(10))) {
+                return [2, 200]
+            } else {
+                return [1, 200]
+            }
+        },
     },
     value() {return new Decimal(0.75).add(player.bh.skillData["general_slap"].level.mul(0.15))},
     cooldown: new Decimal(10),

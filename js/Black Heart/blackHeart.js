@@ -206,6 +206,18 @@ addLayer("bh", {
                     cooldown: new Decimal(0),
                     interval: new Decimal(0),
                 },
+                4: {
+                    variables: {},
+                    duration: new Decimal(0),
+                    cooldown: new Decimal(0),
+                    interval: new Decimal(0),
+                },
+                5: {
+                    variables: {},
+                    duration: new Decimal(0),
+                    cooldown: new Decimal(0),
+                    interval: new Decimal(0),
+                },
             },
         },
 
@@ -562,6 +574,7 @@ addLayer("bh", {
         comboScaling: 1.015,
         comboScalingStart: new Decimal(100),
         comboScalingReduction: 0,
+        negativeScalingReduction: 0,
         comboSoftcap: new Decimal(1),
         shieldDecayMax: new Decimal(30),
         timer: new Decimal(0),
@@ -711,9 +724,11 @@ addLayer("bh", {
             }
         }
 
+        let negativeScaling = 100
+        if (hasUpgrade("depth1", 105)) negativescaling += 1
         player.bh.comboScaling = 1
         if (BHS[player.bh.currentStage].comboScaling) player.bh.comboScaling = BHS[player.bh.currentStage].comboScaling
-        if (player.bh.combo.lt(0)) player.bh.comboScaling = ((player.bh.comboScaling-1)*(1+(Math.abs(player.bh.combo/100))))+1
+        if (player.bh.combo.lt(0)) player.bh.comboScaling = ((player.bh.comboScaling-1)*(1+(Math.abs(player.bh.combo/negativeScaling))))+1
 
         player.bh.comboScalingReduction = 0
         if (hasUpgrade("ep2", 9107)) player.bh.comboScalingReduction = player.bh.comboScalingReduction + 0.002
@@ -821,7 +836,7 @@ addLayer("bh", {
                 }
 
                 // Cycle, increment cooldowns, and trigger celestialite actions
-                for (let i = 0; i < 4; i++) {
+                for (let i = 0; i < 6; i++) {
                     if (BHC[player.bh.celestialite.id].actions[i]) {
                         if ((player.bh.celestialite.stun[1].gt(0) && player.bh.celestialite.stun[0] == "hard") || player.bh.bulletHell) continue
                         let curStun = player.bh.celestialite.stun[1].gt(0) && player.bh.celestialite.stun[0] == "soft"
@@ -1153,7 +1168,7 @@ addLayer("bh", {
         player.bh.celestialite.attributes = Object.assign({}, player.bh.celestialite.attributes, bhTemp[3].attributes)
 
         player.bh.celestialite.actionChances = []
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 6; i++) {
             if (BHC[player.bh.celestialite.id].actions[i] && BHC[player.bh.celestialite.id].actions[i].actionChance) player.bh.celestialite.actionChances.push(run(BHC[player.bh.celestialite.id].actions[i].actionChance, BHC[player.bh.celestialite.id].actions[i]))
         }
 
@@ -1709,6 +1724,7 @@ addLayer("bh", {
                 if (player.bh.characters[0].skills[0].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
                 if (this.canClick() || passive) look.background = BHP[BHA[player.bh.characters[0].skills[0].id].char].color
                 if (passive) look.backgroundImage = "linear-gradient(rgba(0,0,0,0.5))"
+                if (BHA[player.bh.characters[0].skills[0].id].style) look = Object.assign({}, look, run(BHA[player.bh.characters[0].skills[0].id].style, BHA[player.bh.characters[0].skills[0].id]))
                 return look
             },
         },
@@ -1749,6 +1765,7 @@ addLayer("bh", {
                 if (player.bh.characters[0].skills[1].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
                 if (this.canClick() || passive) look.background = BHP[BHA[player.bh.characters[0].skills[1].id].char].color
                 if (passive) look.backgroundImage = "linear-gradient(rgba(0,0,0,0.5))"
+                if (BHA[player.bh.characters[0].skills[1].id].style) look = Object.assign({}, look, run(BHA[player.bh.characters[0].skills[1].id].style, BHA[player.bh.characters[0].skills[1].id]))
                 return look
             },
         },
@@ -1789,6 +1806,7 @@ addLayer("bh", {
                 if (player.bh.characters[0].skills[2].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
                 if (this.canClick() || passive) look.background = BHP[BHA[player.bh.characters[0].skills[2].id].char].color
                 if (passive) look.backgroundImage = "linear-gradient(rgba(0,0,0,0.5))"
+                if (BHA[player.bh.characters[0].skills[2].id].style) look = Object.assign({}, look, run(BHA[player.bh.characters[0].skills[2].id].style, BHA[player.bh.characters[0].skills[2].id]))
                 return look
             },
         },
@@ -1829,6 +1847,7 @@ addLayer("bh", {
                 if (player.bh.characters[0].skills[3].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
                 if (this.canClick() || passive) look.background = BHP[BHA[player.bh.characters[0].skills[3].id].char].color
                 if (passive) look.backgroundImage = "linear-gradient(rgba(0,0,0,0.5))"
+                if (BHA[player.bh.characters[0].skills[3].id].style) look = Object.assign({}, look, run(BHA[player.bh.characters[0].skills[3].id].style, BHA[player.bh.characters[0].skills[3].id]))
                 return look
             },
         },
@@ -1882,6 +1901,7 @@ addLayer("bh", {
                 if (player.bh.characters[1].skills[0].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
                 if (this.canClick() || passive) look.background = BHP[BHA[player.bh.characters[1].skills[0].id].char].color
                 if (passive) look.backgroundImage = "linear-gradient(rgba(0,0,0,0.5))"
+                if (BHA[player.bh.characters[1].skills[0].id].style) look = Object.assign({}, look, run(BHA[player.bh.characters[1].skills[0].id].style, BHA[player.bh.characters[1].skills[0].id]))
                 return look
             },
         },
@@ -1922,6 +1942,7 @@ addLayer("bh", {
                 if (player.bh.characters[1].skills[1].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
                 if (this.canClick() || passive) look.background = BHP[BHA[player.bh.characters[1].skills[1].id].char].color
                 if (passive) look.backgroundImage = "linear-gradient(rgba(0,0,0,0.5))"
+                if (BHA[player.bh.characters[1].skills[1].id].style) look = Object.assign({}, look, run(BHA[player.bh.characters[1].skills[1].id].style, BHA[player.bh.characters[1].skills[1].id]))
                 return look
             },
         },
@@ -1962,6 +1983,7 @@ addLayer("bh", {
                 if (player.bh.characters[1].skills[2].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
                 if (this.canClick() || passive) look.background = BHP[BHA[player.bh.characters[1].skills[2].id].char].color
                 if (passive) look.backgroundImage = "linear-gradient(rgba(0,0,0,0.5))"
+                if (BHA[player.bh.characters[1].skills[2].id].style) look = Object.assign({}, look, run(BHA[player.bh.characters[1].skills[2].id].style, BHA[player.bh.characters[1].skills[2].id]))
                 return look
             },
         },
@@ -2002,6 +2024,7 @@ addLayer("bh", {
                 if (player.bh.characters[1].skills[3].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
                 if (this.canClick() || passive) look.background = BHP[BHA[player.bh.characters[1].skills[3].id].char].color
                 if (passive) look.backgroundImage = "linear-gradient(rgba(0,0,0,0.5))"
+                if (BHA[player.bh.characters[1].skills[3].id].style) look = Object.assign({}, look, run(BHA[player.bh.characters[1].skills[3].id].style, BHA[player.bh.characters[1].skills[3].id]))
                 return look
             },
         },
@@ -2055,6 +2078,7 @@ addLayer("bh", {
                 if (player.bh.characters[2].skills[0].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
                 if (this.canClick() || passive) look.background = BHP[BHA[player.bh.characters[2].skills[0].id].char].color
                 if (passive) look.backgroundImage = "linear-gradient(rgba(0,0,0,0.5))"
+                if (BHA[player.bh.characters[2].skills[0].id].style) look = Object.assign({}, look, run(BHA[player.bh.characters[2].skills[0].id].style, BHA[player.bh.characters[2].skills[0].id]))
                 return look
             },
         },
@@ -2095,6 +2119,7 @@ addLayer("bh", {
                 if (player.bh.characters[2].skills[1].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
                 if (this.canClick() || passive) look.background = BHP[BHA[player.bh.characters[2].skills[1].id].char].color
                 if (passive) look.backgroundImage = "linear-gradient(rgba(0,0,0,0.5))"
+                if (BHA[player.bh.characters[2].skills[1].id].style) look = Object.assign({}, look, run(BHA[player.bh.characters[2].skills[1].id].style, BHA[player.bh.characters[2].skills[1].id]))
                 return look
             },
         },
@@ -2135,6 +2160,7 @@ addLayer("bh", {
                 if (player.bh.characters[2].skills[2].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
                 if (this.canClick() || passive) look.background = BHP[BHA[player.bh.characters[2].skills[2].id].char].color
                 if (passive) look.backgroundImage = "linear-gradient(rgba(0,0,0,0.5))"
+                if (BHA[player.bh.characters[2].skills[2].id].style) look = Object.assign({}, look, run(BHA[player.bh.characters[2].skills[2].id].style, BHA[player.bh.characters[2].skills[2].id]))
                 return look
             },
         },
@@ -2175,6 +2201,7 @@ addLayer("bh", {
                 if (player.bh.characters[2].skills[3].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
                 if (this.canClick() || passive) look.background = BHP[BHA[player.bh.characters[2].skills[3].id].char].color
                 if (passive) look.backgroundImage = "linear-gradient(rgba(0,0,0,0.5))"
+                if (BHA[player.bh.characters[2].skills[3].id].style) look = Object.assign({}, look, run(BHA[player.bh.characters[2].skills[3].id].style, BHA[player.bh.characters[2].skills[3].id]))
                 return look
             },
         },
@@ -2437,6 +2464,7 @@ addLayer("bh", {
             style() {
                 let look = {width: "45px", minHeight: "45px", color: "white", fontSize: "5px", backgroundColor: "transparent", padding: "0", cursor: "default", userSelect: "none", borderRadius: "0"}
                 player.bh.characters[0].skills[0].id != "none" ? look.backgroundColor = BHP[BHA[player.bh.characters[0].skills[0].id].char].color : look.backgroundColor = "#333"
+                if (BHA[player.bh.characters[0].skills[0].id].style) look = Object.assign({}, look, run(BHA[player.bh.characters[0].skills[0].id].style, BHA[player.bh.characters[0].skills[0].id]))
                 return look
             },
         },
@@ -2454,6 +2482,7 @@ addLayer("bh", {
             style() {
                 let look = {width: "45px", minHeight: "45px", color: "white", fontSize: "5px", backgroundColor: "transparent", padding: "0", cursor: "default", userSelect: "none", borderRadius: "0"}
                 player.bh.characters[0].skills[1].id != "none" ? look.backgroundColor = BHP[BHA[player.bh.characters[0].skills[1].id].char].color : look.backgroundColor = "#333"
+                if (BHA[player.bh.characters[0].skills[1].id].style) look = Object.assign({}, look, run(BHA[player.bh.characters[0].skills[1].id].style, BHA[player.bh.characters[0].skills[1].id]))
                 return look
             },
         },
@@ -2471,6 +2500,7 @@ addLayer("bh", {
             style() {
                 let look = {width: "45px", minHeight: "45px", color: "white", fontSize: "5px", backgroundColor: "transparent", padding: "0", cursor: "default", userSelect: "none", borderRadius: "0"}
                 player.bh.characters[0].skills[2].id != "none" ? look.backgroundColor = BHP[BHA[player.bh.characters[0].skills[2].id].char].color : look.backgroundColor = "#333"
+                if (BHA[player.bh.characters[0].skills[2].id].style) look = Object.assign({}, look, run(BHA[player.bh.characters[0].skills[2].id].style, BHA[player.bh.characters[0].skills[2].id]))
                 return look
             },
         },
@@ -2488,6 +2518,7 @@ addLayer("bh", {
             style() {
                 let look = {width: "45px", minHeight: "45px", color: "white", fontSize: "5px", backgroundColor: "transparent", padding: "0", cursor: "default", userSelect: "none", borderRadius: "0"}
                 player.bh.characters[0].skills[3].id != "none" ? look.backgroundColor = BHP[BHA[player.bh.characters[0].skills[3].id].char].color : look.backgroundColor = "#333"
+                if (BHA[player.bh.characters[0].skills[3].id].style) look = Object.assign({}, look, run(BHA[player.bh.characters[0].skills[3].id].style, BHA[player.bh.characters[0].skills[3].id]))
                 return look
             },
         },
@@ -2529,6 +2560,7 @@ addLayer("bh", {
             style() {
                 let look = {width: "45px", minHeight: "45px", color: "white", fontSize: "5px", backgroundColor: "transparent", padding: "0", cursor: "default", userSelect: "none", borderRadius: "0"}
                 player.bh.characters[1].skills[0].id != "none" ? look.backgroundColor = BHP[BHA[player.bh.characters[1].skills[0].id].char].color : look.backgroundColor = "#333"
+                if (BHA[player.bh.characters[1].skills[0].id].style) look = Object.assign({}, look, run(BHA[player.bh.characters[1].skills[0].id].style, BHA[player.bh.characters[1].skills[0].id]))
                 return look
             },
         },
@@ -2546,6 +2578,7 @@ addLayer("bh", {
             style() {
                 let look = {width: "45px", minHeight: "45px", color: "white", fontSize: "5px", backgroundColor: "transparent", padding: "0", cursor: "default", userSelect: "none", borderRadius: "0"}
                 player.bh.characters[1].skills[1].id != "none" ? look.backgroundColor = BHP[BHA[player.bh.characters[1].skills[1].id].char].color : look.backgroundColor = "#333"
+                if (BHA[player.bh.characters[1].skills[1].id].style) look = Object.assign({}, look, run(BHA[player.bh.characters[1].skills[1].id].style, BHA[player.bh.characters[1].skills[1].id]))
                 return look
             },
         },
@@ -2563,6 +2596,7 @@ addLayer("bh", {
             style() {
                 let look = {width: "45px", minHeight: "45px", color: "white", fontSize: "5px", backgroundColor: "transparent", padding: "0", cursor: "default", userSelect: "none", borderRadius: "0"}
                 player.bh.characters[1].skills[2].id != "none" ? look.backgroundColor = BHP[BHA[player.bh.characters[1].skills[2].id].char].color : look.backgroundColor = "#333"
+                if (BHA[player.bh.characters[1].skills[2].id].style) look = Object.assign({}, look, run(BHA[player.bh.characters[1].skills[2].id].style, BHA[player.bh.characters[1].skills[2].id]))
                 return look
             },
         },
@@ -2580,6 +2614,7 @@ addLayer("bh", {
             style() {
                 let look = {width: "45px", minHeight: "45px", color: "white", fontSize: "5px", backgroundColor: "transparent", padding: "0", cursor: "default", userSelect: "none", borderRadius: "0"}
                 player.bh.characters[1].skills[3].id != "none" ? look.backgroundColor = BHP[BHA[player.bh.characters[1].skills[3].id].char].color : look.backgroundColor = "#333"
+                if (BHA[player.bh.characters[1].skills[3].id].style) look = Object.assign({}, look, run(BHA[player.bh.characters[1].skills[3].id].style, BHA[player.bh.characters[1].skills[3].id]))
                 return look
             },
         },
@@ -2621,6 +2656,7 @@ addLayer("bh", {
             style() {
                 let look = {width: "45px", minHeight: "45px", color: "white", fontSize: "5px", backgroundColor: "transparent", padding: "0", cursor: "default", userSelect: "none", borderRadius: "0"}
                 player.bh.characters[2].skills[0].id != "none" ? look.backgroundColor = BHP[BHA[player.bh.characters[2].skills[0].id].char].color : look.backgroundColor = "#333"
+                if (BHA[player.bh.characters[2].skills[0].id].style) look = Object.assign({}, look, run(BHA[player.bh.characters[2].skills[0].id].style, BHA[player.bh.characters[2].skills[0].id]))
                 return look
             },
         },
@@ -2638,6 +2674,7 @@ addLayer("bh", {
             style() {
                 let look = {width: "45px", minHeight: "45px", color: "white", fontSize: "5px", backgroundColor: "transparent", padding: "0", cursor: "default", userSelect: "none", borderRadius: "0"}
                 player.bh.characters[2].skills[1].id != "none" ? look.backgroundColor = BHP[BHA[player.bh.characters[2].skills[1].id].char].color : look.backgroundColor = "#333"
+                if (BHA[player.bh.characters[2].skills[1].id].style) look = Object.assign({}, look, run(BHA[player.bh.characters[2].skills[1].id].style, BHA[player.bh.characters[2].skills[1].id]))
                 return look
             },
         },
@@ -2655,6 +2692,7 @@ addLayer("bh", {
             style() {
                 let look = {width: "45px", minHeight: "45px", color: "white", fontSize: "5px", backgroundColor: "transparent", padding: "0", cursor: "default", userSelect: "none", borderRadius: "0"}
                 player.bh.characters[2].skills[2].id != "none" ? look.backgroundColor = BHP[BHA[player.bh.characters[2].skills[2].id].char].color : look.backgroundColor = "#333"
+                if (BHA[player.bh.characters[2].skills[2].id].style) look = Object.assign({}, look, run(BHA[player.bh.characters[2].skills[2].id].style, BHA[player.bh.characters[2].skills[2].id]))
                 return look
             },
         },
@@ -2672,6 +2710,7 @@ addLayer("bh", {
             style() {
                 let look = {width: "45px", minHeight: "45px", color: "white", fontSize: "5px", backgroundColor: "transparent", padding: "0", cursor: "default", userSelect: "none", borderRadius: "0"}
                 player.bh.characters[2].skills[3].id != "none" ? look.backgroundColor = BHP[BHA[player.bh.characters[2].skills[3].id].char].color : look.backgroundColor = "#333"
+                if (BHA[player.bh.characters[2].skills[3].id].style) look = Object.assign({}, look, run(BHA[player.bh.characters[2].skills[3].id].style, BHA[player.bh.characters[2].skills[3].id]))
                 return look
             },
         },
@@ -3198,6 +3237,104 @@ addLayer("bh", {
             display() {
                 if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[3] || !BHC[player.bh.celestialite.id].actions[3].duration) return new Decimal(0)
                 let str = "<h5>" + formatTime(player.bh.celestialite.actions[3].duration) + "/" + formatTime(run(BHC[player.bh.celestialite.id].actions[3].duration, BHC[player.bh.celestialite.id].actions[3]))
+                if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
+                return str
+            },
+        },
+        "celestialite-A4": {
+            unlocked() { return player.bh.celestialite.id != "none" && BHC[player.bh.celestialite.id].actions[4] },
+            direction: RIGHT,
+            width: 125,
+            height() { return player.bh.celestialite.actions[4].duration.gt(0) ? 25 : 40 },
+            progress() {
+                if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[4]) return new Decimal(0)
+                if (BHC[player.bh.celestialite.id].actions[4].passive && !BHC[player.bh.celestialite.id].actions[4].instant) return new Decimal(1)
+                return player.bh.celestialite.actions[4].cooldown.div(BHC[player.bh.celestialite.id].actions[4].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))
+            },
+            borderStyle() {return player.bh.celestialite.actions[4].duration.gt(0) ? {border: "0", borderRadius: "15px 15px 0 0"} : {border: "0", borderRadius: "15px"}},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if ((BHC[player.bh.celestialite.id].actions[4] && BHC[player.bh.celestialite.id].actions[4].passive && !BHC[player.bh.celestialite.id].actions[4].instant) || player.bh.celestialite.stun[1].gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: "#8a0e79"}
+            },
+            textStyle() {return player.bh.celestialite.actions[4].duration.gt(0) ? {userSelect: "none", lineHeight: "1", fontSize: "12px"} : {userSelect: "none", lineHeight: "1"}},
+            display() {
+                if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[4]) return ""
+                let str = "<h5>" + run(BHC[player.bh.celestialite.id].actions[4].name, BHC[player.bh.celestialite.id].actions[4]) + "<br>" + formatTime(player.bh.celestialite.actions[4].cooldown) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[4].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))
+                if (player.bh.celestialite.actions[4].cooldown.gt(BHC[player.bh.celestialite.id].actions[4].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))) str = "<h5>" + run(BHC[player.bh.celestialite.id].actions[4].name, BHC[player.bh.celestialite.id].actions[4]) + "<br>[x" + formatWhole(player.bh.celestialite.actions[4].cooldown.div(BHC[player.bh.celestialite.id].actions[4].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility)))).floor()) + "]"
+                if (BHC[player.bh.celestialite.id].actions[4].passive && !BHC[player.bh.celestialite.id].actions[4].instant) str = "<h5>" + run(BHC[player.bh.celestialite.id].actions[4].name, BHC[player.bh.celestialite.id].actions[4]) + "<br>[PASSIVE]"
+                if ((!BHC[player.bh.celestialite.id].actions[4].passive || BHC[player.bh.celestialite.id].actions[4].instant || player.bh.celestialite.stun[0] == "hard") && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
+                return str
+            },
+        },
+        "celestialite-A4-duration": {
+            unlocked() {return player.bh.celestialite.actions[4].duration.gt(0)},
+            direction: RIGHT,
+            width: 125,
+            height: 13,
+            progress() {
+                if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[4] || !BHC[player.bh.celestialite.id].actions[4].duration) return new Decimal(0)
+                return player.bh.celestialite.actions[4].duration.div(run(BHC[player.bh.celestialite.id].actions[4].duration, BHC[player.bh.celestialite.id].actions[4]));
+            },
+            borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: "#8a0e79"}
+            },
+            textStyle: {userSelect: "none", lineHeight: "1", fontSize: "10px"},
+            display() {
+                if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[4] || !BHC[player.bh.celestialite.id].actions[4].duration) return new Decimal(0)
+                let str = "<h5>" + formatTime(player.bh.celestialite.actions[4].duration) + "/" + formatTime(run(BHC[player.bh.celestialite.id].actions[4].duration, BHC[player.bh.celestialite.id].actions[4]))
+                if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
+                return str
+            },
+        },
+        "celestialite-A5": {
+            unlocked() { return player.bh.celestialite.id != "none" && BHC[player.bh.celestialite.id].actions[5] },
+            direction: RIGHT,
+            width: 125,
+            height() { return player.bh.celestialite.actions[5].duration.gt(0) ? 25 : 40 },
+            progress() {
+                if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[5]) return new Decimal(0)
+                if (BHC[player.bh.celestialite.id].actions[5].passive && !BHC[player.bh.celestialite.id].actions[5].instant) return new Decimal(1)
+                return player.bh.celestialite.actions[5].cooldown.div(BHC[player.bh.celestialite.id].actions[5].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))
+            },
+            borderStyle() {return player.bh.celestialite.actions[5].duration.gt(0) ? {border: "0", borderRadius: "15px 15px 0 0"} : {border: "0", borderRadius: "15px"}},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if ((BHC[player.bh.celestialite.id].actions[5] && BHC[player.bh.celestialite.id].actions[5].passive && !BHC[player.bh.celestialite.id].actions[5].instant) || player.bh.celestialite.stun[1].gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: "#8a0e79"}
+            },
+            textStyle() {return player.bh.celestialite.actions[5].duration.gt(0) ? {userSelect: "none", lineHeight: "1", fontSize: "12px"} : {userSelect: "none", lineHeight: "1"}},
+            display() {
+                if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[5]) return ""
+                let str = "<h5>" + run(BHC[player.bh.celestialite.id].actions[5].name, BHC[player.bh.celestialite.id].actions[5]) + "<br>" + formatTime(player.bh.celestialite.actions[5].cooldown) + "/" + formatTime(BHC[player.bh.celestialite.id].actions[5].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))
+                if (player.bh.celestialite.actions[5].cooldown.gt(BHC[player.bh.celestialite.id].actions[5].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility))))) str = "<h5>" + run(BHC[player.bh.celestialite.id].actions[5].name, BHC[player.bh.celestialite.id].actions[5]) + "<br>[x" + formatWhole(player.bh.celestialite.actions[5].cooldown.div(BHC[player.bh.celestialite.id].actions[5].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.agility)))).floor()) + "]"
+                if (BHC[player.bh.celestialite.id].actions[5].passive && !BHC[player.bh.celestialite.id].actions[5].instant) str = "<h5>" + run(BHC[player.bh.celestialite.id].actions[5].name, BHC[player.bh.celestialite.id].actions[5]) + "<br>[PASSIVE]"
+                if ((!BHC[player.bh.celestialite.id].actions[5].passive || BHC[player.bh.celestialite.id].actions[5].instant || player.bh.celestialite.stun[0] == "hard") && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
+                return str
+            },
+        },
+        "celestialite-A5-duration": {
+            unlocked() {return player.bh.celestialite.actions[5].duration.gt(0)},
+            direction: RIGHT,
+            width: 125,
+            height: 13,
+            progress() {
+                if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[5] || !BHC[player.bh.celestialite.id].actions[5].duration) return new Decimal(0)
+                return player.bh.celestialite.actions[5].duration.div(run(BHC[player.bh.celestialite.id].actions[5].duration, BHC[player.bh.celestialite.id].actions[5]));
+            },
+            borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle() {
+                if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) return {backgroundColor: "#361e1e"}
+                return {backgroundColor: "#8a0e79"}
+            },
+            textStyle: {userSelect: "none", lineHeight: "1", fontSize: "10px"},
+            display() {
+                if (!BHC[player.bh.celestialite.id].actions || !BHC[player.bh.celestialite.id].actions[5] || !BHC[player.bh.celestialite.id].actions[5].duration) return new Decimal(0)
+                let str = "<h5>" + formatTime(player.bh.celestialite.actions[5].duration) + "/" + formatTime(run(BHC[player.bh.celestialite.id].actions[5].duration, BHC[player.bh.celestialite.id].actions[5]))
                 if (player.bh.celestialite.stun[0] == "hard" && player.bh.celestialite.stun[1].gt(0)) str = str + "<br><p style='font-size:8px'>[STUNNED]"
                 return str
             },
@@ -4565,6 +4702,10 @@ addLayer("bh", {
                                 ["row", [
                                     ["style-column", [["bar", "celestialite-A2"], ["bar", "celestialite-A2-duration"]], () => {return BHC[player.bh.celestialite.id].actions[2] ? {width: "125px", height: "40px", border: "2px solid white", borderRadius: "17px", margin: "-1px"} : {display: "none !important"}}],
                                     ["style-column", [["bar", "celestialite-A3"], ["bar", "celestialite-A3-duration"]], () => {return BHC[player.bh.celestialite.id].actions[3] ? {width: "125px", height: "40px", border: "2px solid white", borderRadius: "17px", margin: "-1px"} : {display: "none !important"}}],
+                                ]],
+                                ["row", [
+                                    ["style-column", [["bar", "celestialite-A4"], ["bar", "celestialite-A4-duration"]], () => {return BHC[player.bh.celestialite.id].actions[4] ? {width: "125px", height: "40px", border: "2px solid white", borderRadius: "17px", margin: "-1px"} : {display: "none !important"}}],
+                                    ["style-column", [["bar", "celestialite-A5"], ["bar", "celestialite-A5-duration"]], () => {return BHC[player.bh.celestialite.id].actions[5] ? {width: "125px", height: "40px", border: "2px solid white", borderRadius: "17px", margin: "-1px"} : {display: "none !important"}}],
                                 ]],
                             ], {width: "300px", height: "155px"}],
                             ["blank", "10px"],

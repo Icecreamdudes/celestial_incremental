@@ -60,7 +60,7 @@ function bhAction(index, slot, interval = false, magnitude = 1, delay = false) {
     let hitAmt = 1
     let hitDelay = 200
     if (action.properties && action.properties["multi-hit"]) {
-        let arr = run(action.properties["multi-hit"])
+        let arr = run(action.properties["multi-hit"], action.properties, char)
         hitAmt = arr[0]
         hitDelay = arr[1]
     }
@@ -254,6 +254,8 @@ function bhAction(index, slot, interval = false, magnitude = 1, delay = false) {
                             if (avoid != 2) player.bh.celestialite.actions[1].cooldown = BHC[player.bh.celestialite.id].actions[1].cooldown
                             if (avoid != 3) player.bh.celestialite.actions[2].cooldown = BHC[player.bh.celestialite.id].actions[2].cooldown
                             if (avoid != 4) player.bh.celestialite.actions[3].cooldown = BHC[player.bh.celestialite.id].actions[3].cooldown
+                            if (avoid != 5) player.bh.celestialite.actions[4].cooldown = BHC[player.bh.celestialite.id].actions[4].cooldown
+                            if (avoid != 6) player.bh.celestialite.actions[5].cooldown = BHC[player.bh.celestialite.id].actions[5].cooldown
                         }
                         if (index == 3) {
                             if (receive == 3) {
@@ -299,6 +301,8 @@ function bhAction(index, slot, interval = false, magnitude = 1, delay = false) {
                             if (avoid != 2) player.bh.celestialite.actions[1].cooldown = player.bh.celestialite.actions[1].cooldown.add(val)
                             if (avoid != 3) player.bh.celestialite.actions[2].cooldown = player.bh.celestialite.actions[2].cooldown.add(val)
                             if (avoid != 4) player.bh.celestialite.actions[3].cooldown = player.bh.celestialite.actions[3].cooldown.add(val)
+                            if (avoid != 5) player.bh.celestialite.actions[4].cooldown = player.bh.celestialite.actions[4].cooldown.add(val)
+                            if (avoid != 6) player.bh.celestialite.actions[5].cooldown = player.bh.celestialite.actions[5].cooldown.add(val)
                         }
                         if (index == 3) {
                             if (receive == 3) {
@@ -818,7 +822,7 @@ function celestialiteSpawn() {
     player.bh.celestialite.mending = player.bh.celestialite.mending.mul(scale)
     player.bh.celestialite.potency = player.bh.celestialite.potency.mul(player.bh.celestialite.randomMult)
     player.bh.celestialite.potency = player.bh.celestialite.potency.mul(scale)
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 6; i++) {
         if (BHC[player.bh.celestialite.id].actions[i]) {
             if (BHC[player.bh.celestialite.id].actions[i].variables) {
                 player.bh.celestialite.actions[i].variables = BHC[player.bh.celestialite.id].actions[i].variables
@@ -1052,7 +1056,7 @@ function stagnantUpdate(time) {
                     }
                     
                     // Cycle, increment cooldowns, and trigger celestialite actions
-                    for (let i = 0; i < 4; i++) {
+                    for (let i = 0; i < 6; i++) {
                         if (BHC[player.bh.celestialite.id].actions[i]) {
                             if ((player.bh.celestialite.stun[1].gt(0) && player.bh.celestialite.stun[0] == "hard") || player.bh.bulletHell) continue
                             let curStun = player.bh.celestialite.stun[1].gt(0) && player.bh.celestialite.stun[0] == "soft"

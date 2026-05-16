@@ -198,7 +198,7 @@
             title() { return "<img src='resources/Pets/extremeDemonEvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>"
             },
             canClick() {return true},
-            unlocked() { return tmp.pet.levelables[1203].canClick && !player.ev.evolutionsUnlocked[14] && player.cbs.shrineReactivated}, // placeholder req
+            unlocked() { return tmp.pet.levelables[1203].canClick && !player.ev.evolutionsUnlocked[14] && false}, // placeholder req
             tooltip() { return "██████ ██████████ orbs ███ ████,<br>██████ even more loot" }, // allows exchanging orbs for keys, giving even more loot
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(14)

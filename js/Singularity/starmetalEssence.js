@@ -1612,7 +1612,7 @@
                 return [this.costGrowth()[0].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[0]).floor(), this.costGrowth()[1].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[1]).floor()]
             },
             canAfford() {
-                return this.currency()[0].gte(this.cost()[0]) && this.currency()[1].gte(this.cost()[1]) && getBuyableAmount("sme", 132).gt(0)
+                return this.currency()[0].gte(this.cost()[0]) && this.currency()[1].gte(this.cost()[1]) && getBuyableAmount("sme", 152).gt(0)
             },
             display() {
                 return "<h3>SME-F5</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/5)\n\
@@ -1647,7 +1647,7 @@
                 return [this.costGrowth()[0].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[0]).floor(), this.costGrowth()[1].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[1]).floor()]
             },
             canAfford() {
-                return this.currency()[0].gte(this.cost()[0]) && this.currency()[1].gte(this.cost()[1]) && getBuyableAmount("sme", 133).gt(0)
+                return this.currency()[0].gte(this.cost()[0]) && this.currency()[1].gte(this.cost()[1]) && getBuyableAmount("sme", 155).gt(0)
             },
             display() {
                 return "<h3>SME-F6</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/5)\n\

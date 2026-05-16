@@ -18,7 +18,20 @@
         abilityIndex: -1,
         abilityDesc: [],
     }},
-    automate() {},
+    automate() {
+        if (hasMilestone("s", 17)) {
+            buyUpgrade("rf", 11)
+            buyUpgrade("rf", 12)
+            buyUpgrade("rf", 13)
+            buyUpgrade("rf", 14)
+            buyUpgrade("rf", 15)
+            buyUpgrade("rf", 16)
+            buyUpgrade("rf", 17)
+            buyUpgrade("rf", 18)
+            buyUpgrade("rf", 19)
+            buyUpgrade("rf", 20)
+        }
+    },
     nodeStyle() {
         function degreesToRadians(degrees) {
             return (degrees * Math.PI) / 180;
@@ -430,11 +443,11 @@
             case 5:
                 if (!hasUpgrade("cs", 901)) player.rf.abilityEffects[5] = amount.add(1).log(10).add(1).div(66).add(1).pow(player.cs.scraps.rocket.effect)
                 if (hasUpgrade("cs", 901)) player.rf.abilityEffects[5] = amount.add(1).log(10).add(1).pow(2).pow(player.cs.scraps.rocket.effect)
+                if (hasUpgrade("cs", 904)) player.rf.abilityEffects[5] = Decimal.pow(1.15, amount.add(1).log(10).pow(0.7)).pow(player.cs.scraps.rocket.effect)
                 player.rf.abilityTimers[5] = amount.add(1).log(10).add(1).mul(60)
             break;
             case 6:
                 player.rf.abilityTimers[6] = amount.add(1).log(10).add(1).mul(60)
-                if (hasUpgrade("cs", 904)) player.rf.abilityTimers[6] = Decimal.pow(2, player.rf.abilityTimers[6].pow(0.3))
             break;
             case 7:
                 player.rf.abilityEffects[7] = amount.add(1).log(6).add(1).div(36).add(1).pow(player.cs.scraps.rocket.effect)

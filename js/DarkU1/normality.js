@@ -14,7 +14,14 @@
 
         nMax: false,
     }},
-    automate() {},
+    automate() {
+        if (hasUpgrade("sma", 21) && player.pet.legPetTimers[0].current.lte(0)) {
+            buyUpgrade("dn", 11, false)
+            buyUpgrade("dn", 12, false)
+            buyUpgrade("dn", 13, false)
+            buyUpgrade("dn", 14, false)
+        }
+    },
     nodeStyle() {
         return {
             background: "linear-gradient(150deg,rgb(122, 177, 14) 0%,rgba(193, 223, 0) 50%,rgb(116, 141, 3) 100%)",
@@ -39,6 +46,8 @@
 
         //normality softcap
         if (player.dn.normalityToGet.gte(1e120)) player.dn.normalityToGet = player.dn.normalityToGet.div(1e120).pow(0.5).mul(1e120)
+
+        if (hasUpgrade("sma", 208) && player.pet.legPetTimers[0].current.lte(0)) player.dn.normality = player.dn.normality.add(player.dn.normalityToGet.mul(0.01).mul(delta))
 
         player.dn.normalityEffect = player.dn.normality.mul(10).pow(3).add(1)
 
@@ -160,7 +169,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/100<br/>Starmetal Alloyer"
+                return "Starmetal Alloyer"
             },
             display() {
                 return "which are multiplying total starmetal alloy gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -194,7 +203,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/100<br/>Prestige Generation"
+                return "Prestige Generation"
             },
             display() {
                 return "which are generating " + format(tmp[this.layer].buyables[this.id].effect.mul(100)) + "% of prestige points per second.\n\
@@ -228,7 +237,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/100<br/>Generator Generation"
+                return "Generator Generation"
             },
             display() {
                 return "which are generating " + format(tmp[this.layer].buyables[this.id].effect.mul(100)) + "% of generators per second.\n\
@@ -262,7 +271,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/100<br/>Space Spaciator"
+                return "Space Spaciator"
             },
             display() {
                 return "which are boosting length, width, and depth by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -296,7 +305,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/100<br/>General Generation"
+                return "General Generation"
             },
             display() {
                 return "which are boosting generator power effect by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\

@@ -17,10 +17,10 @@
         secondSoftcapStart: new Decimal(0.3),
 
         // Dimension Stuff
-        dimensionAmounts: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
-        dimensionsPerSecond: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
-        dimensionBase: [new Decimal(10), new Decimal(100), new Decimal(1e4), new Decimal(1e6), new Decimal(1e9), new Decimal(1e13), new Decimal(1e18), new Decimal(1e24)],
-        dimensionGrowths: [new Decimal(1e3),new Decimal(1e4),new Decimal(1e5),new Decimal(1e6),new Decimal(1e8),new Decimal(1e10),new Decimal(1e12),new Decimal(1e15),],
+        dimensionAmounts: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0)],
+        dimensionsPerSecond: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0)],
+        dimensionBase: [new Decimal(10), new Decimal(100), new Decimal(1e4), new Decimal(1e6), new Decimal(1e9), new Decimal(1e13), new Decimal(1e18), new Decimal(1e24),new Decimal("1e100000")],
+        dimensionGrowths: [new Decimal(1e3),new Decimal(1e4),new Decimal(1e5),new Decimal(1e6),new Decimal(1e8),new Decimal(1e10),new Decimal(1e12),new Decimal(1e15),new Decimal("1e20000")],
 
         tickspeedMult: new Decimal(1.13),
 
@@ -176,22 +176,25 @@
         if (hasUpgrade("ip", 13)) player.ad.dimensionsPerSecond[6] = player.ad.dimensionsPerSecond[6].mul(upgradeEffect("ip", 13))
         player.ad.dimensionsPerSecond[6] = player.ad.dimensionsPerSecond[6].mul(levelableEffect("pet", 106)[1])
 
+        // 9TH DIMENSION HEAVY NERF
+        player.ad.dimensionsPerSecond[8] = player.ad.dimensionsPerSecond[8].add(1).log(8)
+
         // ANTIMATTER DIMENSION COST SOFTCAP GROWTH
-        player.ad.dimensionGrowths = [new Decimal(1e3),new Decimal(1e4),new Decimal(1e5),new Decimal(1e6),new Decimal(1e8),new Decimal(1e10),new Decimal(1e12),new Decimal(1e15),]
+        player.ad.dimensionGrowths = [new Decimal(1e3),new Decimal(1e4),new Decimal(1e5),new Decimal(1e6),new Decimal(1e8),new Decimal(1e10),new Decimal(1e12),new Decimal(1e15),new Decimal("1e20000")]
         if (player.ad.antimatter.gt(1e300) && !hasUpgrade("bi", 21) ) {
-            player.ad.dimensionGrowths = [new Decimal(1e25),new Decimal(1e35),new Decimal(1e45),new Decimal(1e60),new Decimal(1e80),new Decimal(1e100),new Decimal(1e120),new Decimal(1e15),]        
+            player.ad.dimensionGrowths = [new Decimal(1e25),new Decimal(1e35),new Decimal(1e45),new Decimal(1e60),new Decimal(1e80),new Decimal(1e100),new Decimal(1e120),new Decimal(1e15),new Decimal("1e20000")]        
         }
         if (player.ad.antimatter.gt(1e300) && hasUpgrade("bi", 21) ) {
-            player.ad.dimensionGrowths = [new Decimal(1e15),new Decimal(1e25),new Decimal(1e35),new Decimal(1e45),new Decimal(1e60),new Decimal(1e80),new Decimal(1e100),new Decimal(1e15),]        
+            player.ad.dimensionGrowths = [new Decimal(1e15),new Decimal(1e25),new Decimal(1e35),new Decimal(1e45),new Decimal(1e60),new Decimal(1e80),new Decimal(1e100),new Decimal(1e15),new Decimal("1e20000")]        
         }
 
         // ANTIMATTER DIMENSION COST SOFTCAP BASE
-        player.ad.dimensionBase = [new Decimal(10), new Decimal(100), new Decimal(1e4), new Decimal(1e6), new Decimal(1e9), new Decimal(1e13), new Decimal(1e18), new Decimal(1e24)]
+        player.ad.dimensionBase = [new Decimal(10), new Decimal(100), new Decimal(1e4), new Decimal(1e6), new Decimal(1e9), new Decimal(1e13), new Decimal(1e18), new Decimal(1e24),new Decimal("1e100000")]
         if (player.ad.antimatter.gt(1e300) && !hasUpgrade("bi", 21)) {
-            player.ad.dimensionBase = [new Decimal("1e-2175"), new Decimal("1e-2325"), new Decimal("1e-2355"), new Decimal("1e-2640"), new Decimal("1e-2580"), new Decimal("1e-2500"), new Decimal("1e-2460"), new Decimal(1e24)]
+            player.ad.dimensionBase = [new Decimal("1e-2175"), new Decimal("1e-2325"), new Decimal("1e-2355"), new Decimal("1e-2640"), new Decimal("1e-2580"), new Decimal("1e-2500"), new Decimal("1e-2460"), new Decimal(1e24),new Decimal("1e100000")]
         }
         if (player.ad.antimatter.gt(1e300) && hasUpgrade("bi", 21)) {
-            player.ad.dimensionBase = [new Decimal("1e-1200"), new Decimal("1e-1575"), new Decimal("1e-1765"), new Decimal("1e-1905"), new Decimal("1e-1860"), new Decimal("1e-1940"), new Decimal("1e-2000"), new Decimal(1e24)]
+            player.ad.dimensionBase = [new Decimal("1e-1200"), new Decimal("1e-1575"), new Decimal("1e-1765"), new Decimal("1e-1905"), new Decimal("1e-1860"), new Decimal("1e-1940"), new Decimal("1e-2000"), new Decimal(1e24),new Decimal("1e100000")]
         }
 
         //----------------------------------------
@@ -824,6 +827,36 @@
             },
             style: { width: '175px', height: '50px', borderRadius: '10px'}
         },
+        19: {
+            costBase() { return player.ad.dimensionBase[8] },
+            costGrowth() { return player.ad.dimensionGrowths[8]},
+            currency() { return player.ad.antimatter},
+            pay(amt) { player.ad.antimatter = this.currency().sub(amt) },
+            effect(x) { return new Decimal(2).pow(getBuyableAmount(this.layer, this.id)) },
+            unlocked() { return getBuyableAmount("ad", 2).gte(5) && false && !inChallenge("ip", 18) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " AM"
+            },
+            buy() {
+                if (player.ad.dimMax == false && !hasUpgrade("bi", 105)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    player.ad.dimensionAmounts[8] = player.ad.dimensionAmounts[8].add(1)
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasUpgrade("bi", 105)) this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                    player.ad.dimensionAmounts[8] = player.ad.dimensionAmounts[8].add(max)
+                }
+            },
+            style: { width: '175px', height: '50px', borderRadius: '10px'}
+        },
     },
     milestones: {},
     challenges: {},
@@ -896,6 +929,12 @@
                         ], {width: "650px"}], 
                         ["buyable", 18],
                     ], () => {return inChallenge("ip", 18) ? {display: "none !important"} : {}}],
+                    ["style-row", [
+                        ["style-row", [
+                            ["raw-html", function () { return getBuyableAmount("ad", 2).gte(5) && false ? "9th dimension (" + format(buyableEffect("ad", "19")) + "x): " + format(player.ad.dimensionAmounts[8]) : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }]
+                        ], {width: "650px"}], 
+                        ["buyable", 19],
+                    ], () => {return inChallenge("ip", 18) || !false ? {display: "none !important"} : {}}],
                     ["blank", "25px"],
                     ["row", [["buyable", 2], ["buyable", 3]]],
                 ]

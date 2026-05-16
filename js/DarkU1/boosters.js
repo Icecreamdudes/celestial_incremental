@@ -44,6 +44,7 @@
         if (getLevelableTier("pu", 307, true)) player.db.boosterReq = player.db.boosterReq.div(levelableEffect("pu", 307)[0])
         player.db.boosterReq = player.db.boosterReq.div(buyableEffect("dgj", 13))
         player.db.boosterReq = player.db.boosterReq.div(levelableEffect("car", 405)[0])
+        if (hasUpgrade("sma", 207)) player.db.boosterReq = player.db.boosterReq.div(upgradeEffect("sma", 207))
 
         player.db.boosterReq = player.db.boosterReq.pow(buyableEffect("dv", 13))
 

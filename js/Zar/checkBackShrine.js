@@ -144,7 +144,10 @@
                 localStorage.setItem('arenaActive', 'true');
 
                 player.ir.shipHealth = player.ir.shipHealthMax
-                if (hasUpgrade("ir", 14)) arena.upgradeEffects.hpRegen += 0.5 / 60
+                let regen = 0
+                if (hasUpgrade("ir", 14)) regen += 0.5
+                regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
+                if (regen > 0) arena.upgradeEffects.hpRegen = regen / 60
 
                 arena.upgradeEffects.attackDamage *= levelableEffect("ir", player.ir.shipType)[2]
                 arena.upgradeEffects.moveSpeed += 4
@@ -185,7 +188,7 @@
 
                 pauseUniverseAll(["DS", "A2"], "unpause", true)
             },
-            style: { width: '300px', "min-height": '100px', color: "white" },
+            style: {width: "200px", minHeight: '100px', color: "white", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
         },
         13: {
             title() { return "<h2>Reactivate the Check Back Shrine<br>Cost: 1 Shard of Ascension" },
@@ -931,19 +934,22 @@
                 buttonStyle() { return { border: "2px solid #f57171ff", borderRadius: "10px" } },
                 unlocked() { return false },
                 content: [
-                ["layer-proxy", ["ir", [
-
-                    ["raw-html", function () { return "Level: " + formatWhole(player.ir.battleLevel) }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Use W and S to more forwards or backwards, A to D to rotate, and Space or Mouse to shoot." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["row", [["bar", "healthBar"], ["bar", "xpBar"],]],
-                    ["blank", "650px"],
-                    ["row", [["layer-proxy", ["cbs", [["clickable", 12]]]], ["clickable", 13], ["blank", "50px"],
-                                                            ["style-column", [
-                            ["clickable", 1001],
-                            ["row", [["clickable", 1002], ["clickable", 1003], ["clickable", 1004]]],
-                        ], {width: "150px", height: "100px"}],     
-                ]],  
-            ]]],
+                    ["layer-proxy", ["ir", [
+                        ["raw-html", function () { return "Level: " + formatWhole(player.ir.battleLevel) }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
+                        ["raw-html", function () { return "Use W and S to more forwards or backwards, A to D to rotate, and Space or Mouse to shoot." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                        ["row", [["bar", "healthBar"], ["bar", "xpBar"],]],
+                        ["blank", "650px"],
+                        ["style-row", [
+                            ["layer-proxy", ["cbs", [["clickable", 12]]]],
+                            ["blank", ["100px", "50px"]],
+                            ["style-column", [
+                                ["clickable", 1001],
+                                ["row", [["clickable", 1002], ["clickable", 1003], ["clickable", 1004]]],
+                            ], {width: "150px", height: "100px"}],
+                            ["blank", ["100px", "50px"]],
+                            ["clickable", 13],
+                        ], {position: "fixed", top: "calc(50% + 320px)", left: "calc(50% - 375px)", isolation: "isolate", zIndex: "15000"}],
+                    ]]],
                 ]
             },
             "Refresh Page :(": {

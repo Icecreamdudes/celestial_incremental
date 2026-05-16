@@ -4746,7 +4746,7 @@ addLayer("pet", {
             },
             // STYLE
             barShown() { return this.canClick() },
-            barStyle() { return {backgroundColor: "#c6f7ff"}},
+            barStyle() { return {backgroundColor: "#adf3ff"}},
             style() {
                 let look = {width: "100px", minHeight: "125px"}
                 this.canClick() ? look.backgroundColor = "#00ffff" : look.backgroundColor = "#222222"

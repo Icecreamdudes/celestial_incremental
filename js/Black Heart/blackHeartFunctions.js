@@ -502,17 +502,17 @@ function bhAttack(damage, index, slot, target, str = "", method = "none", attr =
         }
         if (attribute == undefined) attribute = {}
 
-        if (attribute["rebound"] && !attr && target != "self") {
+        if (typeof attribute["rebound"] !== "undefined" && !attr && target != "self") {
             let attStr = "<span style='color:cyan'>[REBOUND] </span>"
             bhAttack(damage.mul(attribute["rebound"]), receive, slot, index, attStr, "none", true)
         }
 
         let resist = false
 
-        if (attribute["air"] && !attr && method == "physical") {damage = damage.mul(attribute["air"]); resist = true}
-        if (attribute["warded"] && !attr && method == "magic") {damage = damage.mul(attribute["warded"]); resist = true}
-        if (attribute["stealthy"] && !attr && method == "ranged") {damage = damage.mul(attribute["stealthy"]); resist = true}
-        if (attribute["anima"] && !attr && method == "spirit") {damage = damage.mul(attribute["anima"]); resist = true}
+        if (typeof attribute["air"] !== "undefined" && !attr && method == "physical") {damage = damage.mul(attribute["air"]); resist = true}
+        if (typeof attribute["warded"] !== "undefined" && !attr && method == "magic") {damage = damage.mul(attribute["warded"]); resist = true}
+        if (typeof attribute["stealthy"] !== "undefined" && !attr && method == "ranged") {damage = damage.mul(attribute["stealthy"]); resist = true}
+        if (typeof attribute["anima"] !== "undefined" && !attr && method == "spirit") {damage = damage.mul(attribute["anima"]); resist = true}
 
         if (resist) str = str + "<span style='color:#aaa'>[RESISTED] </span>"
 

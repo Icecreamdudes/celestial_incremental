@@ -183,10 +183,13 @@ addLayer("ir", {
         if (hasUpgrade("ir", 106)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.4)
         player.ir.battleXPReq = player.ir.battleXPReq.div(getBuyableAmount("bl", 14).div(100).add(1))
 
-        if (player.ir.battleXP.gte(player.ir.battleXPReq)) {
+        if (player.ir.battleXP.gte(player.ir.battleXPReq) && arena && !arena.upgradeChoiceActive) {
             player.ir.battleXP = player.ir.battleXP.sub(player.ir.battleXPReq).max(0);
             player.ir.battleLevel = player.ir.battleLevel.add(1);
-            if (arena) arena.showUpgradeChoice();
+            if (arena) {
+                arena.showUpgradeChoice();
+                arena.upgradeChoiceActive = true
+            }
         }
 
         if (player.ir.battleLevel.gte(8) && hasUpgrade("ir", 16) && !player.ir.ufoFought && player.tab == "ir") {

@@ -184,7 +184,7 @@ addLayer("ir", {
         player.ir.battleXPReq = player.ir.battleXPReq.div(getBuyableAmount("bl", 14).div(100).add(1))
 
         if (player.ir.battleXP.gte(player.ir.battleXPReq)) {
-            player.ir.battleXP = new Decimal(0);
+            player.ir.battleXP = player.ir.battleXP.sub(player.ir.battleXPReq).max(0);
             player.ir.battleLevel = player.ir.battleLevel.add(1);
             if (arena) arena.showUpgradeChoice();
         }

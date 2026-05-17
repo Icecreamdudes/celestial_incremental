@@ -1550,7 +1550,7 @@ BHC.lesserTessera = {
             constantType: "effect",
             constantTarget: "allPlayer",
             effects: {
-                "regenAdd"() {return player.bh.celestialite.damage.div(-10)}, // Add to regen stat
+                "regenAdd"() {return player.bh.celestialite.damage.div(-12)}, // Add to regen stat
             },
             cooldown: new Decimal(Infinity),
         },
@@ -1592,7 +1592,7 @@ BHC.lesserExi = {
             constantType: "effect",
             constantTarget: "randomPlayerHeal",
             effects: {
-                "regenAdd"() {return player.bh.celestialite.damage.div(-10)}, // Add to regen stat
+                "regenAdd"() {return player.bh.celestialite.damage.div(-12)}, // Add to regen stat
             },
             cooldown: new Decimal(Infinity),
         },
@@ -1748,7 +1748,7 @@ BHC.lesserEnnea = {
             constantType: "effect",
             constantTarget: "allPlayer",
             effects: {
-                "regenAdd"() {return player.bh.celestialite.damage.div(-10)}, // Add to regen stat
+                "regenAdd"() {return player.bh.celestialite.damage.div(-15)}, // Add to regen stat
             },
             cooldown: new Decimal(Infinity),
         },
@@ -1804,7 +1804,7 @@ BHC.lesserYi = {
             constantType: "effect",
             constantTarget: "allPlayer",
             effects: {
-                "regenAdd"() {return player.bh.celestialite.damage.div(-10)}, // Add to regen stat
+                "regenAdd"() {return player.bh.celestialite.damage.div(-12)}, // Add to regen stat
             },
             cooldown: new Decimal(Infinity),
         },

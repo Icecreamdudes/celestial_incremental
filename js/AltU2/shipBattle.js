@@ -3914,7 +3914,7 @@ class SpaceArena {
                 lootFlashPositions.push({ x: asteroid.x, y: asteroid.y, amount: loot, type: "rock" });
 
                 let xp = Math.pow(3, asteroid.unit);
-                if (asteroid.type == "metal") xp = Math.pow(loot, 1.3)
+                if (asteroid.type == "metal") xp = Math.pow(xp, 1.3)
                 xp = Math.floor(xp * this.upgradeEffects.xpGain)
                 xpOrbsToAdd.push({ x: asteroid.x, y: asteroid.y, amount: xp });
 

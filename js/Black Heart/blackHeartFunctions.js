@@ -512,6 +512,7 @@ function bhAttack(damage, index, slot, target, str = "", method = "none", attr =
         if (attribute["air"] && !attr && method == "physical") {damage = damage.mul(attribute["air"]); resist = true}
         if (attribute["warded"] && !attr && method == "magic") {damage = damage.mul(attribute["warded"]); resist = true}
         if (attribute["stealthy"] && !attr && method == "ranged") {damage = damage.mul(attribute["stealthy"]); resist = true}
+        if (attribute["anima"] && !attr && method == "spirit") {damage = damage.mul(attribute["anima"]); resist = true}
 
         if (resist) str = str + "<span style='color:#aaa'>[RESISTED] </span>"
 
@@ -650,7 +651,7 @@ function celestialiteReward(gain) {
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.darkEssence) + " dark essence! (You have " + formatWhole(player.bh.darkEssence) + ")")
     }
     if (gain.darkEther) {
-        gain.darkEther = gain.darkEther.mul(generalMult).floor()
+        gain.darkEther = gain.darkEther.mul(buyableEffect("darkTemple", 1017)).mul(generalMult).floor()
         player.bh.darkEther = player.bh.darkEther.add(gain.darkEther)
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.darkEther) + " dark ether! (You have " + formatWhole(player.bh.darkEther) + ")")
     }

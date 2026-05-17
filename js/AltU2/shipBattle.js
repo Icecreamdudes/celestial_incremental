@@ -1766,6 +1766,9 @@ class SpaceArena {
                     this.lastBounceClick = now;
                     let rect = this.canvas.getBoundingClientRect();
                     this.ship.bounceTarget = { x: this.mouseX, y: this.mouseY };
+                    if (this.ship.bounceTarget.x == undefined) {
+                        this.ship.bounceTarget = {x: this.width / 2, y: this.height / 2}
+                    }
                 }
             }
 
@@ -1825,6 +1828,9 @@ class SpaceArena {
                     this.lastDashClick = now;
                     let rect = this.canvas.getBoundingClientRect();
                     this.ship.dashTarget = { x: this.mouseX, y: this.mouseY };
+                    if (this.ship.dashTarget.x == undefined) {
+                        this.ship.dashTarget = {x: this.width / 2, y: this.height / 2}
+                    }
                 }
             }
 
@@ -3914,7 +3920,7 @@ class SpaceArena {
                 lootFlashPositions.push({ x: asteroid.x, y: asteroid.y, amount: loot, type: "rock" });
 
                 let xp = Math.pow(3, asteroid.unit);
-                if (asteroid.type == "metal") xp = Math.pow(loot, 1.3)
+                if (asteroid.type == "metal") xp = Math.pow(xp, 1.3)
                 xp = Math.floor(xp * this.upgradeEffects.xpGain)
                 xpOrbsToAdd.push({ x: asteroid.x, y: asteroid.y, amount: xp });
 

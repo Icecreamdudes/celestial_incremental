@@ -849,7 +849,6 @@ class SpaceArena {
                 bulletSpeed: 8,
                 bulletCooldown: 60,
                 rockDrop: [50, 80],
-                xpDrop: [200, 300],
                 draw: (ctx, enemy) => {
                     ctx.save();
                     ctx.translate(enemy.x, enemy.y);
@@ -889,7 +888,6 @@ class SpaceArena {
                 bulletSpeed: 10,
                 bulletCooldown: 40,
                 rockDrop: [250, 450],
-                xpDrop: [2000, 3000],
                 draw: (ctx, enemy) => {
                     ctx.save();
                     ctx.translate(enemy.x, enemy.y);
@@ -1678,6 +1676,7 @@ class SpaceArena {
             if (enemy.type === "ufoBoss") {
                 this.bossActive = false;
                 player.ir.ufoDefeated = true;
+                player.ir.battleLevel = player.ir.battleLevel.add(1)
                 let gain = Math.floor(2 * this.upgradeEffects.gemGain * this.resourceMult * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1))
                 player.ir.spaceGem = player.ir.spaceGem.add(gain);
                 lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 2, type: "gem" });
@@ -1690,6 +1689,7 @@ class SpaceArena {
                 if (!player.ir.tookDamageInIriditeFight) player.ir.astralShipUnlocked = true;
                 player.ir.iriditeFightActive = false;
                 localStorage.setItem('arenaActive', 'false');
+                player.ir.battleLevel = player.ir.battleLevel.add(1)
                 let gain = Math.floor(5 * this.upgradeEffects.gemGain * this.resourceMult * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1))
                 player.ir.spaceGem = player.ir.spaceGem.add(gain);
                 lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 2, type: "gem" });
@@ -1766,6 +1766,9 @@ class SpaceArena {
                     this.lastBounceClick = now;
                     let rect = this.canvas.getBoundingClientRect();
                     this.ship.bounceTarget = { x: this.mouseX, y: this.mouseY };
+                    if (this.ship.bounceTarget.x == undefined) {
+                        this.ship.bounceTarget = {x: this.width / 2, y: this.height / 2}
+                    }
                 }
             }
 
@@ -1825,6 +1828,9 @@ class SpaceArena {
                     this.lastDashClick = now;
                     let rect = this.canvas.getBoundingClientRect();
                     this.ship.dashTarget = { x: this.mouseX, y: this.mouseY };
+                    if (this.ship.dashTarget.x == undefined) {
+                        this.ship.dashTarget = {x: this.width / 2, y: this.height / 2}
+                    }
                 }
             }
 
@@ -3914,7 +3920,7 @@ class SpaceArena {
                 lootFlashPositions.push({ x: asteroid.x, y: asteroid.y, amount: loot, type: "rock" });
 
                 let xp = Math.pow(3, asteroid.unit);
-                if (asteroid.type == "metal") xp = Math.pow(loot, 1.3)
+                if (asteroid.type == "metal") xp = Math.pow(xp, 1.3)
                 xp = Math.floor(xp * this.upgradeEffects.xpGain)
                 xpOrbsToAdd.push({ x: asteroid.x, y: asteroid.y, amount: xp });
 

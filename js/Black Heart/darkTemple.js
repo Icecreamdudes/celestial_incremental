@@ -307,10 +307,11 @@ addLayer("darkTemple", {
         player.darkTemple.totalLevel = new Decimal(0)
         let stats = {}
         for (let j = 1; j < 6; j++) {
+            let mult = getBuyableAmount("darkTemple", j+100) ? 1+(getBuyableAmount("darkTemple", j+100).toNumber()/2) : 1
             for (let i = 1; i < getBuyableAmount("darkTemple", j).add(1); i++) {
-                stats = addObject(stats, RUNE_EFFECTS[j][i], getBuyableAmount("darkTemple", j+100) ? 1+(getBuyableAmount("darkTemple", j+100).toNumber()/2) : 1)
+                stats = addObject(stats, RUNE_EFFECTS[j][i], mult)
             }
-            player.darkTemple.totalLevel = player.darkTemple.totalLevel.add(getBuyableAmount("darkTemple", j).mul(getBuyableAmount("darkTemple", j+100) ? 1+(getBuyableAmount("darkTemple", j+100).toNumber()/2) : 1))
+            player.darkTemple.totalLevel = player.darkTemple.totalLevel.add(getBuyableAmount("darkTemple", j).mul(mult))
         }
         if (stats.sp) player.darkTemple.spAdd = new Decimal(stats.sp).floor()
         if (stats.scd) player.darkTemple.skillCost = Decimal.pow(2, stats.scd)
@@ -1817,9 +1818,9 @@ function addObject(obj1, obj2, mult = 1) {
 
     for (const key in obj2) {
         if (combined.hasOwnProperty(key)) {
-            combined[key] += obj2[key] * mult;
+            combined[key] += (obj2[key] * mult);
         } else {
-            combined[key] = obj2[key] * mult;
+            combined[key] = (obj2[key] * mult);
         }
     }
 

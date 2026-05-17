@@ -2044,6 +2044,7 @@ class BloodArena extends SpaceArena {
                     try {
                         if (enemy.type === 'noxBoss') {
                             player.bl.noxDefeated = true;
+                            player.ir.battleLevel = player.ir.battleLevel.add(1)
                             let noxStone = 75
                             noxStone = noxStone * (this.upgradeEffects.lootGain || 1) * (this.resourceMult || 1)
                             noxStone = noxStone * (getBuyableAmount("bl", 34).div(100).add(1).toNumber() || 1)

@@ -637,7 +637,7 @@
                     ["blank", "25px"],
                     ["raw-html", () => { return "You have " + format(player.ds.space) + " space. (based on product of length, width, and depth)"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Boosts starmetal alloy gain by x" + format(player.ds.spaceEffect) + "."}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                    ["raw-html", () => { return "<h4>(Reset on space energy reset)"}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return !hasUpgrade("sma", 20) ? "<h4>(Reset on space energy reset)" : ""}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["raw-html", () => { return "Length: " + format(player.ds.length) + ". (+" + format(player.ds.lengthPerSecond) + "/s)"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Width: " + format(player.ds.width) + ". (+" + format(player.ds.widthPerSecond) + "/s)"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],

@@ -66,9 +66,10 @@ addLayer("depth1", {
         player.depth1.negComboEffect = player.depth1.lowestCombo.div(-10).add(1)
 
         player.depth1.milestoneEffect = new Decimal(0)
-        for (let i = 25; i < 251; i = i+25) {
+        for (let i in player.depth1.milestone) {
             player.depth1.milestoneEffect = player.depth1.milestoneEffect.add(player.depth1.milestone[i])
         }
+        player.depth1.milestoneEffect = player.depth1.milestoneEffect.pow(buyableEffect("depth1", 103))
         
         player.depth1.depth1Mult = new Decimal(1)
         player.depth1.depth1Mult = player.depth1.depth1Mult.mul(player.darkTemple.depth1CurMult)
@@ -248,6 +249,34 @@ addLayer("depth1", {
                 return look
             },
         },
+        105: {
+            title: "Stable Darkness",
+            unlocked() {return hasUpgrade("darkTemple", 10)},
+            description: "Reduce negative scaling by 1%.",
+            cost: new Decimal(250),
+            currencyLocation() { return player.depth1 },
+            currencyDisplayName: "Murky Umbrite",
+            currencyInternalName: "murkyUmbrite",
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
+        106: {
+            title: "Double Darkness",
+            unlocked() {return hasUpgrade("darkTemple", 10)},
+            description: "Slap now has a 10% chance to hit twice.",
+            cost: new Decimal(1000),
+            currencyLocation() { return player.depth1 },
+            currencyDisplayName: "Murky Umbrite",
+            currencyInternalName: "murkyUmbrite",
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
     },
     buyables: {
         1: {
@@ -406,6 +435,58 @@ addLayer("depth1", {
                 return look
             },
         },
+        103: {
+            costBase() { return new Decimal(25) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(20) },
+            currency() { return player.depth1.murkyUmbrite},
+            pay(amt) { player.depth1.murkyUmbrite = this.currency().sub(amt) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(100).add(1)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>Vague Bonuses</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/20)\n\
+                    Increase Depth 1 milestone effect exponent\n\
+                    Currently: +" + formatSimple(tmp[this.layer].buyables[this.id].effect.sub(1), 2) + "\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Murky Umbrite"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "100px", lineHeight: "1", color: "white", border: "2px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#1a3b0f" : !this.canAfford() ? look.background =  "#361e1e" : look.background = "#250121"
+                return look
+            },
+        },
+        104: {
+            costBase() { return new Decimal(100) },
+            costGrowth() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(10) },
+            currency() { return player.depth1.murkyUmbrite},
+            pay(amt) { player.depth1.murkyUmbrite = this.currency().sub(amt) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(10).add(1)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>Abated Bestowals</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
+                    Decrease bestowal buyable cost\n\
+                    Currently: /" + formatSimple(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Murky Umbrite"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "100px", color: "white", border: "2px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#1a3b0f" : !this.canAfford() ? look.background =  "#361e1e" : look.background = "#250121"
+                return look
+            },
+        },
     },
     microtabs: {
         stuff: {
@@ -502,8 +583,10 @@ addLayer("depth1", {
                             ["theme-scroll-column", [
                                 ["blank", "2px"],
                                 ["row", [["upgrade", 101], ["upgrade", 102]]],
+                                ["row", [["upgrade", 105], ["upgrade", 106]]],
                                 ["row", [["upgrade", 103], ["upgrade", 104]]],
                                 ["row", [["buyable", 101], ["buyable", 102]]],
+                                ["row", [["buyable", 103], ["buyable", 104]]],
                                 ["blank", "2px"],
                             ], {width: "272px", height: "345px", background: "var(--miscButtonDisable)", borderRadius: "0 0 0 27px"}],
                         ], {width: "272px", height: "420px", borderRight: "3px solid var(--regBorder)"}],
@@ -622,6 +705,103 @@ BHS.depth1 = {
                 if (combo <= -200) cel.push("lesserEnnea")
                 return cel[Math.floor(Math.random()*cel.length)]
         }
+    },
+}
+
+
+BHC.squid = {
+    name: "Squid",
+    symbol: "🦑",
+    style: {
+        background: "linear-gradient(90deg, #830000, #DE0000)",
+        color: "black",
+        borderColor: "#430001",
+    },
+    health: new Decimal(8888),
+    damage: new Decimal(8),
+    attributes: {
+        "anima": new Decimal(0.5), // Resistance DMG Mult
+        "negative": new Decimal(0.5), // Resistance DMG Mult
+    },
+    actions: {
+        0: {
+            name: "Slap",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            properties: {
+                "stun": [new Decimal(1), "soft", new Decimal(2)], // Chance / Stun-Type / Stun-Time
+            },
+            value: new Decimal(1),
+            cooldown: new Decimal(8),
+        },
+        1: {
+            name: "Slap",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            properties: {
+                "stun": [new Decimal(1), "soft", new Decimal(2)], // Chance / Stun-Type / Stun-Time
+            },
+            value: new Decimal(1),
+            cooldown: new Decimal(9),
+        },
+        2: {
+            name: "Slap",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            properties: {
+                "stun": [new Decimal(1), "soft", new Decimal(2)], // Chance / Stun-Type / Stun-Time
+            },
+            value: new Decimal(1),
+            cooldown: new Decimal(10),
+        },
+        3: {
+            name: "Slap",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            properties: {
+                "stun": [new Decimal(1), "soft", new Decimal(2)], // Chance / Stun-Type / Stun-Time
+            },
+            value: new Decimal(1),
+            cooldown: new Decimal(11),
+        },
+        4: {
+            name: "Slap",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            properties: {
+                "stun": [new Decimal(1), "soft", new Decimal(2)], // Chance / Stun-Type / Stun-Time
+            },
+            value: new Decimal(1),
+            cooldown: new Decimal(12),
+        },
+        5: {
+            name: "Slap",
+            instant: true,
+            type: "damage",
+            target: "randomPlayer",
+            method: "physical",
+            properties: {
+                "stun": [new Decimal(1), "soft", new Decimal(2)], // Chance / Stun-Type / Stun-Time
+            },
+            value: new Decimal(1),
+            cooldown: new Decimal(13),
+        },
+    },
+    reward() {
+        let gain = {}
+        gain.gloomingUmbrite = new Decimal(888)
+        gain.dimUmbrite = new Decimal(88)
+        return gain
     },
 }
 
@@ -1370,7 +1550,7 @@ BHC.lesserTessera = {
             constantType: "effect",
             constantTarget: "allPlayer",
             effects: {
-                "regenAdd"() {return player.bh.celestialite.damage.div(-10)}, // Add to regen stat
+                "regenAdd"() {return player.bh.celestialite.damage.div(-12)}, // Add to regen stat
             },
             cooldown: new Decimal(Infinity),
         },
@@ -1412,7 +1592,7 @@ BHC.lesserExi = {
             constantType: "effect",
             constantTarget: "randomPlayerHeal",
             effects: {
-                "regenAdd"() {return player.bh.celestialite.damage.div(-10)}, // Add to regen stat
+                "regenAdd"() {return player.bh.celestialite.damage.div(-12)}, // Add to regen stat
             },
             cooldown: new Decimal(Infinity),
         },
@@ -1568,7 +1748,7 @@ BHC.lesserEnnea = {
             constantType: "effect",
             constantTarget: "allPlayer",
             effects: {
-                "regenAdd"() {return player.bh.celestialite.damage.div(-10)}, // Add to regen stat
+                "regenAdd"() {return player.bh.celestialite.damage.div(-15)}, // Add to regen stat
             },
             cooldown: new Decimal(Infinity),
         },
@@ -1624,7 +1804,7 @@ BHC.lesserYi = {
             constantType: "effect",
             constantTarget: "allPlayer",
             effects: {
-                "regenAdd"() {return player.bh.celestialite.damage.div(-10)}, // Add to regen stat
+                "regenAdd"() {return player.bh.celestialite.damage.div(-12)}, // Add to regen stat
             },
             cooldown: new Decimal(Infinity),
         },

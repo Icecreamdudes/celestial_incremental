@@ -939,16 +939,6 @@
                         ["raw-html", function () { return "Use W and S to more forwards or backwards, A to D to rotate, and Space or Mouse to shoot." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ["row", [["bar", "healthBar"], ["bar", "xpBar"],]],
                         ["blank", "650px"],
-                        ["style-row", [
-                            ["layer-proxy", ["cbs", [["clickable", 12]]]],
-                            ["blank", ["100px", "50px"]],
-                            ["style-column", [
-                                ["clickable", 1001],
-                                ["row", [["clickable", 1002], ["clickable", 1003], ["clickable", 1004]]],
-                            ], {width: "150px", height: "100px"}],
-                            ["blank", ["100px", "50px"]],
-                            ["clickable", 13],
-                        ], {position: "fixed", top: "calc(50% + 320px)", left: "calc(50% - 375px)", isolation: "isolate", zIndex: "15000"}],
                     ]]],
                 ]
             },

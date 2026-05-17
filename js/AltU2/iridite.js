@@ -179,14 +179,19 @@ addLayer("ir", {
         }
 
         player.ir.battleXPReq = player.ir.battleLevel.pow(1.6).mul(5).add(40)
+        if (player.tab == "ir" && player.ir.battleLevel.gt(16)) player.ir.battleXPReq = player.ir.battleXPReq.mul(Decimal.pow(1.05, player.ir.battleLevel.sub(16)))
+        if (player.tab == "bl" && player.ir.battleLevel.gt(20)) player.ir.battleXPReq = player.ir.battleXPReq.mul(Decimal.pow(1.05, player.ir.battleLevel.sub(20)))
         if (hasUpgrade("ir", 103)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.25)
         if (hasUpgrade("ir", 106)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.4)
         player.ir.battleXPReq = player.ir.battleXPReq.div(getBuyableAmount("bl", 14).div(100).add(1))
 
-        if (player.ir.battleXP.gte(player.ir.battleXPReq)) {
-            player.ir.battleXP = new Decimal(0);
+        if (player.ir.battleXP.gte(player.ir.battleXPReq) && arena && !arena.upgradeChoiceActive) {
+            player.ir.battleXP = player.ir.battleXP.sub(player.ir.battleXPReq).max(0);
             player.ir.battleLevel = player.ir.battleLevel.add(1);
-            if (arena) arena.showUpgradeChoice();
+            if (arena) {
+                arena.showUpgradeChoice();
+                arena.upgradeChoiceActive = true
+            }
         }
 
         if (player.ir.battleLevel.gte(8) && hasUpgrade("ir", 16) && !player.ir.ufoFought && player.tab == "ir") {
@@ -753,7 +758,7 @@ addLayer("ir", {
         1001: {
             title() {return "W"},
             canClick: true,
-            unlocked: true,
+            unlocked() { return !player.ir.iriditeFightActive},
             onClick() {
                 document.dispatchEvent(new KeyboardEvent('keydown', {key: 'w', code: 'KeyW', bubbles: true}))
                 setTimeout(() => {
@@ -765,7 +770,7 @@ addLayer("ir", {
         1002: {
             title() {return "A"},
             canClick: true,
-            unlocked: true,
+            unlocked() { return !player.ir.iriditeFightActive},
             onClick() {
                 document.dispatchEvent(new KeyboardEvent('keydown', {key: 'a', code: 'KeyA', bubbles: true}))
                 setTimeout(() => {
@@ -777,7 +782,7 @@ addLayer("ir", {
         1003: {
             title() {return "S"},
             canClick: true,
-            unlocked: true,
+            unlocked() { return !player.ir.iriditeFightActive},
             onClick() {
                 document.dispatchEvent(new KeyboardEvent('keydown', {key: 's', code: 'KeyS', bubbles: true}))
                 setTimeout(() => {
@@ -789,7 +794,7 @@ addLayer("ir", {
         1004: {
             title() {return "D"},
             canClick: true,
-            unlocked: true,
+            unlocked() { return !player.ir.iriditeFightActive},
             onClick() {
                 document.dispatchEvent(new KeyboardEvent('keydown', {key: 'd', code: 'KeyD', bubbles: true}))
                 setTimeout(() => {

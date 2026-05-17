@@ -60,7 +60,7 @@ function bhAction(index, slot, interval = false, magnitude = 1, delay = false) {
     let hitAmt = 1
     let hitDelay = 200
     if (action.properties && action.properties["multi-hit"]) {
-        let arr = run(action.properties["multi-hit"])
+        let arr = run(action.properties["multi-hit"], action.properties, char)
         hitAmt = arr[0]
         hitDelay = arr[1]
     }
@@ -254,6 +254,8 @@ function bhAction(index, slot, interval = false, magnitude = 1, delay = false) {
                             if (avoid != 2) player.bh.celestialite.actions[1].cooldown = BHC[player.bh.celestialite.id].actions[1].cooldown
                             if (avoid != 3) player.bh.celestialite.actions[2].cooldown = BHC[player.bh.celestialite.id].actions[2].cooldown
                             if (avoid != 4) player.bh.celestialite.actions[3].cooldown = BHC[player.bh.celestialite.id].actions[3].cooldown
+                            if (avoid != 5) player.bh.celestialite.actions[4].cooldown = BHC[player.bh.celestialite.id].actions[4].cooldown
+                            if (avoid != 6) player.bh.celestialite.actions[5].cooldown = BHC[player.bh.celestialite.id].actions[5].cooldown
                         }
                         if (index == 3) {
                             if (receive == 3) {
@@ -299,6 +301,8 @@ function bhAction(index, slot, interval = false, magnitude = 1, delay = false) {
                             if (avoid != 2) player.bh.celestialite.actions[1].cooldown = player.bh.celestialite.actions[1].cooldown.add(val)
                             if (avoid != 3) player.bh.celestialite.actions[2].cooldown = player.bh.celestialite.actions[2].cooldown.add(val)
                             if (avoid != 4) player.bh.celestialite.actions[3].cooldown = player.bh.celestialite.actions[3].cooldown.add(val)
+                            if (avoid != 5) player.bh.celestialite.actions[4].cooldown = player.bh.celestialite.actions[4].cooldown.add(val)
+                            if (avoid != 6) player.bh.celestialite.actions[5].cooldown = player.bh.celestialite.actions[5].cooldown.add(val)
                         }
                         if (index == 3) {
                             if (receive == 3) {
@@ -498,16 +502,27 @@ function bhAttack(damage, index, slot, target, str = "", method = "none", attr =
         }
         if (attribute == undefined) attribute = {}
 
-        if (attribute["rebound"] && !attr && target != "self") {
+        if (typeof attribute["negative"] !== "undefined" && !attr) {
+            let luck = new Decimal(0)
+            if (receive == 3) luck = player.bh.celestialite.luck
+            else luck = player.bh.characters[receive].luck
+            if (Math.random() < attribute["negative"].mul(Decimal.div(Decimal.add(100, luck), 100))) {
+                let attStr = "<span style='color:#55e'>[NEGATIVE] </span>"
+                bhHeal(damage, index, slot, target, attStr)
+            }
+        }
+
+        if (typeof attribute["rebound"] !== "undefined" && !attr && target != "self") {
             let attStr = "<span style='color:cyan'>[REBOUND] </span>"
             bhAttack(damage.mul(attribute["rebound"]), receive, slot, index, attStr, "none", true)
         }
 
         let resist = false
 
-        if (attribute["air"] && !attr && method == "physical") {damage = damage.mul(attribute["air"]); resist = true}
-        if (attribute["warded"] && !attr && method == "magic") {damage = damage.mul(attribute["warded"]); resist = true}
-        if (attribute["stealthy"] && !attr && method == "ranged") {damage = damage.mul(attribute["stealthy"]); resist = true}
+        if (typeof attribute["air"] !== "undefined" && !attr && method == "physical") {damage = damage.mul(attribute["air"]); resist = true}
+        if (typeof attribute["warded"] !== "undefined" && !attr && method == "magic") {damage = damage.mul(attribute["warded"]); resist = true}
+        if (typeof attribute["stealthy"] !== "undefined" && !attr && method == "ranged") {damage = damage.mul(attribute["stealthy"]); resist = true}
+        if (typeof attribute["anima"] !== "undefined" && !attr && method == "spirit") {damage = damage.mul(attribute["anima"]); resist = true}
 
         if (resist) str = str + "<span style='color:#aaa'>[RESISTED] </span>"
 
@@ -646,7 +661,7 @@ function celestialiteReward(gain) {
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.darkEssence) + " dark essence! (You have " + formatWhole(player.bh.darkEssence) + ")")
     }
     if (gain.darkEther) {
-        gain.darkEther = gain.darkEther.mul(generalMult).floor()
+        gain.darkEther = gain.darkEther.mul(buyableEffect("darkTemple", 1017)).mul(generalMult).floor()
         player.bh.darkEther = player.bh.darkEther.add(gain.darkEther)
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.darkEther) + " dark ether! (You have " + formatWhole(player.bh.darkEther) + ")")
     }
@@ -818,7 +833,7 @@ function celestialiteSpawn() {
     player.bh.celestialite.mending = player.bh.celestialite.mending.mul(scale)
     player.bh.celestialite.potency = player.bh.celestialite.potency.mul(player.bh.celestialite.randomMult)
     player.bh.celestialite.potency = player.bh.celestialite.potency.mul(scale)
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 6; i++) {
         if (BHC[player.bh.celestialite.id].actions[i]) {
             if (BHC[player.bh.celestialite.id].actions[i].variables) {
                 player.bh.celestialite.actions[i].variables = BHC[player.bh.celestialite.id].actions[i].variables
@@ -938,7 +953,7 @@ function calcTarget(index, slot, target, action = "none") {
         if (BHC[player.bh.celestialite.id].actions[slot] && BHC[player.bh.celestialite.id].actions[slot].properties && BHC[player.bh.celestialite.id].actions[slot].properties["storeTarget"] && action != "effect" && !stored) {
             player.bh.celestialite.actions[slot].variables["specTarget"] = result
         }
-    } else {
+    } else if (slot < 4) {
         if (BHA[player.bh.characters[index].skills[slot].id] && BHA[player.bh.characters[index].skills[slot].id].properties && BHA[player.bh.characters[index].skills[slot].id].properties["storeTarget"] && action != "effect" && !stored) player.bh.characters[index].skills[slot].variables["specTarget"] = result
     }
     return result
@@ -1052,7 +1067,7 @@ function stagnantUpdate(time) {
                     }
                     
                     // Cycle, increment cooldowns, and trigger celestialite actions
-                    for (let i = 0; i < 4; i++) {
+                    for (let i = 0; i < 6; i++) {
                         if (BHC[player.bh.celestialite.id].actions[i]) {
                             if ((player.bh.celestialite.stun[1].gt(0) && player.bh.celestialite.stun[0] == "hard") || player.bh.bulletHell) continue
                             let curStun = player.bh.celestialite.stun[1].gt(0) && player.bh.celestialite.stun[0] == "soft"

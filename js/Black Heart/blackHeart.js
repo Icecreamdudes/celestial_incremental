@@ -871,6 +871,7 @@ addLayer("bh", {
                 }
                 }
                 player.zarDungeon.reachedZar = false
+                player.zarDungeon.reachedZar2 = false
             }
         }
 
@@ -1870,7 +1871,7 @@ addLayer("bh", {
                 }
             },
             style() {
-                let passive = BHA[player.bh.characters[0].skills[0].id].passive && !BHA[player.bh.characters[0].skills[0].id].instant
+                let passive = BHA[player.bh.characters[0].skills[1].id].passive && !BHA[player.bh.characters[0].skills[1].id].instant
                 let look = {width: "100px", minHeight: "100px", background: "#361e1e", color: "white", borderRadius: "15px"}
                 if (player.bh.characters[0].skills[1].duration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"}
                 if (this.canClick() || passive) look.background = BHP[BHA[player.bh.characters[0].skills[1].id].char].color

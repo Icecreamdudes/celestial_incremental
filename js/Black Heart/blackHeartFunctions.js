@@ -772,6 +772,7 @@ function celestialiteDeath() {
                 }
             }
             player.zarDungeon.reachedZar = false
+            player.zarDungeon.reachedZar2 = false
         }
     }
 
@@ -897,6 +898,13 @@ function calcTarget(index, slot, target, action = "none") {
             }
             let rndhP = pothTarget[Math.floor(Math.random()*pothTarget.length)]
             result = [rndhP]
+            if (result[0] === undefined && action != "heal") {
+                for (let i = 0; i < 3; i++) {
+                    if (player.bh.characters[i].health.gt(0) && player.bh.characters[i].id != "none") pothTarget.push(i)
+                }
+                let randP = pothTarget[Math.floor(Math.random()*pothTarget.length)]
+                result = [randP]
+            }
             break;
         case "random":
             let rndTarget = [3]

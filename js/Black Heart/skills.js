@@ -192,7 +192,7 @@ BHA.general_rest = {
     constantType: "effect",
     constantTarget: "self",
     effects: {
-        "regenMult"(char) {return Decimal.add(10, player.bh.skillData["general_rest"].level.mul(2))}, // Multiplicative Effect
+        "regenMult"(char) {return char.regen.gt(0) ? Decimal.add(10, player.bh.skillData["general_rest"].level.mul(2)) : new Decimal(1)}, // Multiplicative Effect
     },
     cooldown: new Decimal(30),
     cooldownCap: new Decimal(5),
@@ -313,7 +313,7 @@ BHA.kres_berserker = {
     effects: {
         "damageMult"() {return new Decimal(1.5).add(player.bh.skillData["kres_berserker"].level.mul(0.1))}, // Multiplicative Effect
         "agilityMult"() {return new Decimal(1.5).add(player.bh.skillData["kres_berserker"].level.mul(0.1))}, // Multiplicative Effect
-        "regenMult"() {return new Decimal(1.5).add(player.bh.skillData["kres_berserker"].level.mul(0.1))}, // Multiplicative Effect
+        "regenMult"(char) {return char.regen.gt(0) ? new Decimal(1.5).add(player.bh.skillData["kres_berserker"].level.mul(0.1)) : new Decimal(1)}, // Multiplicative Effect
         "attributes"() {
             if (hasUpgrade("sp", 12)) return {"berserk": new Decimal(0.1)}
             return {"berserk": new Decimal(0.2)}

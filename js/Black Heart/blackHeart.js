@@ -725,8 +725,8 @@ addLayer("bh", {
         }
 
         let negativeScaling = 100
-        if (hasUpgrade("depth1", 105)) negativescaling += 1
-        if (hasUpgrade("depth2", 105)) negativescaling += 1
+        if (hasUpgrade("depth1", 105)) negativeScaling += 1
+        if (hasUpgrade("depth2", 105)) negativeScaling += 1
         player.bh.comboScaling = 1
         if (BHS[player.bh.currentStage].comboScaling) player.bh.comboScaling = BHS[player.bh.currentStage].comboScaling
         if (player.bh.combo.lt(0)) player.bh.comboScaling = ((player.bh.comboScaling-1)*(1+(Math.abs(player.bh.combo/negativeScaling))))+1

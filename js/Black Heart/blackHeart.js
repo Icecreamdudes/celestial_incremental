@@ -396,7 +396,7 @@ addLayer("bh", {
         // Saved Character Data
         characterData: {
             "kres": {
-                selected: true,
+                selected: 1,
                 skills: {
                     0: "kres_chop",
                     1: "none",
@@ -414,7 +414,7 @@ addLayer("bh", {
                 potency: new Decimal(10),
             },
             "nav": {
-                selected: true,
+                selected: 2,
                 skills: {
                     0: "nav_magicMissle",
                     1: "none",
@@ -432,7 +432,7 @@ addLayer("bh", {
                 potency: new Decimal(0),
             },
             "sel": {
-                selected: true,
+                selected: 3,
                 skills: {
                     0: "sel_singleShot",
                     1: "none",
@@ -450,7 +450,7 @@ addLayer("bh", {
                 potency: new Decimal(5),
             },
             "eclipse": {
-                selected: false,
+                selected: 0,
                 skills: {
                     0: "eclipse_drain",
                     1: "none",
@@ -468,7 +468,7 @@ addLayer("bh", {
                 potency: new Decimal(10),
             },
             "geroa": {
-                selected: false,
+                selected: 0,
                 skills: {
                     0: "geroa_radioactiveMissile",
                     1: "none",
@@ -486,7 +486,7 @@ addLayer("bh", {
                 potency: new Decimal(0),
             },
             "vespasian": {
-                selected: false,
+                selected: 0,
                 skills: {
                     0: "vespasian_poisonStinger",
                     1: "none",
@@ -725,8 +725,8 @@ addLayer("bh", {
         }
 
         let negativeScaling = 100
-        if (hasUpgrade("depth1", 105)) negativescaling += 1
-        if (hasUpgrade("depth2", 105)) negativescaling += 1
+        if (hasUpgrade("depth1", 105)) negativeScaling += 1
+        if (hasUpgrade("depth2", 105)) negativeScaling += 1
         player.bh.comboScaling = 1
         if (BHS[player.bh.currentStage].comboScaling) player.bh.comboScaling = BHS[player.bh.currentStage].comboScaling
         if (player.bh.combo.lt(0)) player.bh.comboScaling = ((player.bh.comboScaling-1)*(1+(Math.abs(player.bh.combo/negativeScaling))))+1
@@ -2762,7 +2762,7 @@ addLayer("bh", {
             unlocked: true,
             onClick() {
                 if (player.bh.characterData[player.bh.characterSelection].selected) {
-                    player.bh.characterData[player.bh.characterSelection].selected = false
+                    player.bh.characterData[player.bh.characterSelection].selected = 0
                     for (let i = 0; i < 3; i++) {
                         if (player.bh.characters[i].id == player.bh.characterSelection) {
                             player.bh.characters[i].id = "none"
@@ -2772,10 +2772,10 @@ addLayer("bh", {
                         }
                     }
                 } else {
-                    if (player.bh.characters[player.bh.inputCharSelection].id != "none") player.bh.characterData[player.bh.characters[player.bh.inputCharSelection].id].selected = false
+                    if (player.bh.characters[player.bh.inputCharSelection].id != "none") player.bh.characterData[player.bh.characters[player.bh.inputCharSelection].id].selected = 0
                     player.bh.characters[player.bh.inputCharSelection].id = player.bh.characterSelection
 
-                    player.bh.characterData[player.bh.characterSelection].selected = true
+                    player.bh.characterData[player.bh.characterSelection].selected = player.bh.inputCharSelection+1
                     for (let i = 0; i < 4; i++) {
                         player.bh.characters[player.bh.inputCharSelection].skills[i].id = player.bh.characterData[player.bh.characterSelection].skills[i]
                     }

@@ -758,7 +758,7 @@ addLayer("ir", {
         1001: {
             title() {return "W"},
             canClick: true,
-            unlocked: true,
+            unlocked() { return !player.ir.iriditeFightActive},
             onClick() {
                 document.dispatchEvent(new KeyboardEvent('keydown', {key: 'w', code: 'KeyW', bubbles: true}))
                 setTimeout(() => {
@@ -770,7 +770,7 @@ addLayer("ir", {
         1002: {
             title() {return "A"},
             canClick: true,
-            unlocked: true,
+            unlocked() { return !player.ir.iriditeFightActive},
             onClick() {
                 document.dispatchEvent(new KeyboardEvent('keydown', {key: 'a', code: 'KeyA', bubbles: true}))
                 setTimeout(() => {
@@ -782,7 +782,7 @@ addLayer("ir", {
         1003: {
             title() {return "S"},
             canClick: true,
-            unlocked: true,
+            unlocked() { return !player.ir.iriditeFightActive},
             onClick() {
                 document.dispatchEvent(new KeyboardEvent('keydown', {key: 's', code: 'KeyS', bubbles: true}))
                 setTimeout(() => {
@@ -794,7 +794,7 @@ addLayer("ir", {
         1004: {
             title() {return "D"},
             canClick: true,
-            unlocked: true,
+            unlocked() { return !player.ir.iriditeFightActive},
             onClick() {
                 document.dispatchEvent(new KeyboardEvent('keydown', {key: 'd', code: 'KeyD', bubbles: true}))
                 setTimeout(() => {

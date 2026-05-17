@@ -179,6 +179,8 @@ addLayer("ir", {
         }
 
         player.ir.battleXPReq = player.ir.battleLevel.pow(1.6).mul(5).add(40)
+        if (player.tab == "ir" && player.ir.battleLevel.gt(16)) player.ir.battleXPReq = player.ir.battleXPReq.mul(Decimal.mul(1.05, player.ir.battleLevel.sub(16)))
+        if (player.tab == "bl" && player.ir.battleLevel.gt(20)) player.ir.battleXPReq = player.ir.battleXPReq.mul(Decimal.mul(1.05, player.ir.battleLevel.sub(20)))
         if (hasUpgrade("ir", 103)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.25)
         if (hasUpgrade("ir", 106)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.4)
         player.ir.battleXPReq = player.ir.battleXPReq.div(getBuyableAmount("bl", 14).div(100).add(1))

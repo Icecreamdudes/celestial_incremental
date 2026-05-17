@@ -794,6 +794,7 @@ addLayer("zarDungeon", {
         navToggle: true,
         diceFiveToggle: true,
         reachedZar: false,
+        reachedZar2: false,
 
         barrageActive: false,
     }},
@@ -847,6 +848,26 @@ addLayer("zarDungeon", {
                 }
             }, 200); 
             player.zarDungeon.reachedZar = true
+        }
+        if (player.bh.currentStage == "zarDungeon" && player.bh.combo.eq(29) && player.bh.celestialite.health.lte(12500) && !player.zarDungeon.reachedZar2) {
+
+            player.bh.characterData[player.bh.characterSelection].selected = false
+            player.bh.characters[1].id = "nav"
+            for (let i = 0; i < 4; i++) {
+                player.bh.characters[1].skills[i].id = player.bh.characterData["nav"].skills[i]
+            }
+            setTimeout(() => {
+                player.bh.characters[1].health = player.bh.characters[1].maxHealth
+                player.bh.characters[1].shield = new Decimal(0)
+                player.bh.characters[1].stun = ["none", new Decimal(0)]
+
+                for (let i = 0; i < 4; i++) {
+                    player.bh.characters[1].skills[i].cooldown = player.bh.characters[1].skills[i].cooldownMax
+                    player.bh.characters[1].skills[i].duration = new Decimal(0)
+                    player.bh.characters[1].skills[i].interval = new Decimal(0)
+                }
+            }, 200); 
+            player.zarDungeon.reachedZar2 = true
         }
 
         if (player.bh.currentStage == "zarDungeon" && player.bh.combo.gte(20) && player.zarDungeon.navToggle && !player.zarDungeon.diceFiveToggle)

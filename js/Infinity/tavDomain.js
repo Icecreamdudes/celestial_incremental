@@ -68,6 +68,7 @@ addLayer("tad", {
         matterGain: new Decimal(0),
         domainCap: new Decimal(1e5),
         highestCap: new Decimal(1e5),
+        matterSoftcap: new Decimal(1),
 
         // ACCUMULATION - ACCUMULATORS
         accumulationCost: new Decimal(1),
@@ -94,7 +95,7 @@ addLayer("tad", {
 
         // EXPONENTIATION
         exponentiate: new Decimal(0),
-        exponentiateReq: new Decimal(1e100),
+        exponentiateReq: new Decimal(1e200),
         exponentiateEffect: new Decimal(1),
         exponentiateEffect2: new Decimal(1),
 
@@ -187,7 +188,15 @@ addLayer("tad", {
         breakNIP: false,
         hiveExpand: false,
     }},
-    automate() {},
+    automate() {
+        if (player.tad.auto) {
+            for (let i = 11; i < 45; ) {
+                buyBuyable("tad", i)
+                if (i % 10 == 4) i = i + 7
+                else i++
+            }
+        }
+    },
     nodeStyle() {
         return {
             background: "linear-gradient(150deg, #b2d8d8, 50%, #094242 100%)",
@@ -229,6 +238,10 @@ addLayer("tad", {
         player.tad.matterGain = player.tad.matterGain.mul(levelableEffect("pet", 209)[1])
         player.tad.matterGain = player.tad.matterGain.mul(buyableEffect("tad", 211))
         if (hasMilestone("tad", 1)) player.tad.matterGain = player.tad.matterGain.mul(player.tad.magnification.pow(1.5).add(1))
+
+        player.tad.matterSoftcap = Decimal.div(1, player.tad.matterGain.div(1.79e308).add(1).log(1.79e308).add(1))
+
+        if (player.tad.matterGain.gt(1.79e308)) player.tad.matterGain = player.tad.matterGain.div(1.79e308).pow(player.tad.matterSoftcap).mul(1.79e308)
 
 
         // MATTER PER SECOND
@@ -298,7 +311,7 @@ addLayer("tad", {
 
         let exponentiateScale = new Decimal(1e50)
 
-        player.tad.exponentiateReq = Decimal.pow(exponentiateScale, player.tad.exponentiate).mul(1e100).div(exponentiateDiv)
+        player.tad.exponentiateReq = Decimal.pow(exponentiateScale, player.tad.exponentiate).mul(1e200).div(exponentiateDiv)
 
         player.tad.exponentiateEffect = player.tad.exponentiate.pow(0.5).div(10).add(1)
         player.tad.exponentiateEffect2 = player.tad.exponentiate.gt(0) ? Decimal.pow(10, player.tad.exponentiate.pow(0.5).mul(3)) : new Decimal(1)
@@ -602,12 +615,14 @@ addLayer("tad", {
         6: {
             title: "x10",
             canClick() {
+                if (hasMilestone("tad", 104)) return player.tad.highestCap.mul(1e25).gte(player.tad.domainCap.mul(10))
                 if (player.alephsChamber.milestone[25] > 0) return player.tad.highestCap.mul(1e5).gte(player.tad.domainCap.mul(10))
                 return player.tad.highestCap.mul(10).gte(player.tad.domainCap.mul(10))
             },
             unlocked: true,
             tooltip() {
                 if (this.canClick()) return ""
+                if (hasMilestone("tad", 104)) return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e25)) + " cap first!"
                 if (player.alephsChamber.milestone[25] > 0) return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e5)) + " cap first!"
                 return "Need to beat " + formatWhole(player.tad.highestCap.mul(10)) + " cap first!"
             },
@@ -626,12 +641,14 @@ addLayer("tad", {
         7: {
             title: "x1e5",
             canClick() {
+                if (hasMilestone("tad", 104)) return player.tad.highestCap.mul(1e25).gte(player.tad.domainCap.mul(1e5))
                 if (player.alephsChamber.milestone[25] > 0) return player.tad.highestCap.mul(1e5).gte(player.tad.domainCap.mul(1e5))
                 return player.tad.highestCap.mul(10).gte(player.tad.domainCap.mul(1e5))
             },
             unlocked: true,
             tooltip() {
                 if (this.canClick()) return ""
+                if (hasMilestone("tad", 104)) return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e29)) + " cap first!"
                 if (player.alephsChamber.milestone[25] > 0) return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e9)) + " cap first!"
                 return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e5)) + " cap first!"
             },
@@ -650,12 +667,14 @@ addLayer("tad", {
         8: {
             title: "x1e25",
             canClick() {
+                if (hasMilestone("tad", 104)) return player.tad.highestCap.mul(1e25).gte(player.tad.domainCap.mul(1e25))
                 if (player.alephsChamber.milestone[25] > 0) return player.tad.highestCap.mul(1e5).gte(player.tad.domainCap.mul(1e25))
                 return player.tad.highestCap.mul(10).gte(player.tad.domainCap.mul(1e25))
             },
             unlocked: true,
             tooltip() {
                 if (this.canClick()) return ""
+                if (hasMilestone("tad", 104)) return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e49)) + " cap first!"
                 if (player.alephsChamber.milestone[25] > 0) return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e29)) + " cap first!"
                 return "Need to beat " + formatWhole(player.tad.highestCap.mul(1e25)) + " cap first!"
             },
@@ -2658,6 +2677,29 @@ addLayer("tad", {
                 return look
             },
         },
+        104: {
+            requirementDescription: "8 Exponentiations",
+            effectDescription() { return "Tav's Domain Expander cap now increments by x1e25" },
+            done() { return player.tad.exponentiate.gte(8) },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "black", border: "3px solid #997f6b", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("tad", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+        },
+        105: {
+            requirementDescription: "16 Exponentiations",
+            effectDescription() { return "Automate Accumulators" },
+            done() { return player.tad.exponentiate.gte(16) },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "black", border: "3px solid #997f6b", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("tad", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+            toggles: [
+                ["tad", "auto"], // Each toggle is defined by a layer and the data toggled for that layer
+            ],
+        },
     },
     domainReset(tier = 0) {
         // MATTER
@@ -3184,6 +3226,18 @@ addLayer("tad", {
                         ["titleless-milestone", 103],
                     ]],
                     ["style-row", [
+                        ["style-column", [
+                            ["raw-html", "8", {color: "rgba(0,0,0,0.6)", fontSize: "32px", fontFamily: "monospace"}],
+                        ], {backgroundColor: "#ffd5b3", border: "3px solid #997f6b", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                        ["titleless-milestone", 104],
+                    ]],
+                    ["style-row", [
+                        ["style-column", [
+                            ["raw-html", "16", {color: "rgba(0,0,0,0.6)", fontSize: "32px", fontFamily: "monospace"}],
+                        ], {backgroundColor: "#ffd5b3", border: "3px solid #997f6b", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                        ["titleless-milestone", 105],
+                    ]],
+                    ["style-row", [
                         ["raw-html", "Exponentiation content is kept on all resets", {color: "rgba(0,0,0,0.6)", fontSize: "20px", fontFamily: "monospace"}],
                     ], {backgroundColor: "#ffd5b3", border: "3px solid #997f6b", borderTop: "0px", borderRadius: "0px 0px 13px 13px", width: "588px", height: "30px"}],
                 ],
@@ -3200,6 +3254,7 @@ addLayer("tad", {
             }],
             ["raw-html", () => {return "<div class='bottomTooltip'>Base Gain<hr><small>(+" + formatSimple(player.tad.matterBase) + "/s)</small></div>"}],
         ]],
+        ["raw-html", () => {return player.tad.matterGain.gte(1.79e308) ? "Matter Limiter: Gain past 1.79e308 is raised by ^" + formatSimple(player.tad.matterSoftcap, 3) : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace"}],
         ["tooltip-row", [
             ["raw-html", () => {return player.tad.matter.gte(player.tad.domainCap) ? "Domain limit reached." : "Domain collapses at " + formatWhole(player.tad.domainCap) + " matter."}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
             ["raw-html", () => {return player.tad.matterGain.gt(0) ? "<div class='bottomTooltip'>Time till collapse<hr><small>" + formatTime(player.tad.domainCap.sub(player.tad.matter).div(player.tad.matterGain)) + "</small></div>" : "<div class='bottomTooltip'>Time till collapse<hr><small>∞y ∞d ∞h ∞m ∞s</small></div>"}],

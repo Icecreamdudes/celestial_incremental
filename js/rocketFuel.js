@@ -91,6 +91,9 @@
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(buyableEffect("fa", 15))
         if (hasMilestone("n", 24)) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(player.n.milestone14Effect)
 
+        // ROCKET FUEL SOFTCAP
+        if (player.rf.rocketFuelToGet.gt("1e100000")) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.div("1e100000").pow(0.3).mul("1e100000")
+
         // ROCKET FUEL PER SECOND
         if (player.po.rocketFuel || inChallenge("ip", 16)) {
             if (hasUpgrade("rf", 18) || hasChallenge("ip", 16)) {
@@ -691,7 +694,7 @@
                 player.rf.rocketFuelToGet.gte(1) ? look.color = "#949494" : look.color = "gray"
                 return look
             }],
-            ["raw-html", () => {return player.rf.rocketFuel.gt(1e20) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return player.rf.rocketFuelToGet.gt("1e100000") ? "[SOFTCAPPED<sup>2</sup>]" : player.rf.rocketFuel.gt(1e20) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["raw-html", () => {return !inChallenge("ip", 16) || hasUpgrade("rf", 19) ? "Boosts grassshoppers by x" + format(player.rf.rocketFuelEffect) + "." : "<s>Boosts grassshoppers by x" + format(player.rf.rocketFuelEffect) + ".</s>" }, {color: "#949494", fontSize: "20px", fontFamily: "monospace"}],
         ["blank", "25px"],

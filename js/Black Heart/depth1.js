@@ -721,6 +721,7 @@ BHC.squid = {
     damage: new Decimal(8),
     attributes: {
         "anima": new Decimal(0.5), // Resistance DMG Mult
+        "negative": new Decimal(0.5), // Resistance DMG Mult
     },
     actions: {
         0: {

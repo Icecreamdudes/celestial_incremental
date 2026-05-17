@@ -502,6 +502,16 @@ function bhAttack(damage, index, slot, target, str = "", method = "none", attr =
         }
         if (attribute == undefined) attribute = {}
 
+        if (typeof attribute["negative"] !== "undefined" && !attr) {
+            let luck = new Decimal(0)
+            if (receive == 3) luck = player.bh.celestialite.luck
+            else luck = player.bh.characters[receive].luck
+            if (Math.random() < attribute["negative"].mul(Decimal.div(Decimal.add(100, luck), 100))) {
+                let attStr = "<span style='color:#55e'>[NEGATIVE] </span>"
+                bhHeal(damage, index, slot, target, attStr)
+            }
+        }
+
         if (typeof attribute["rebound"] !== "undefined" && !attr && target != "self") {
             let attStr = "<span style='color:cyan'>[REBOUND] </span>"
             bhAttack(damage.mul(attribute["rebound"]), receive, slot, index, attStr, "none", true)
@@ -943,7 +953,7 @@ function calcTarget(index, slot, target, action = "none") {
         if (BHC[player.bh.celestialite.id].actions[slot] && BHC[player.bh.celestialite.id].actions[slot].properties && BHC[player.bh.celestialite.id].actions[slot].properties["storeTarget"] && action != "effect" && !stored) {
             player.bh.celestialite.actions[slot].variables["specTarget"] = result
         }
-    } else {
+    } else if (slot < 4) {
         if (BHA[player.bh.characters[index].skills[slot].id] && BHA[player.bh.characters[index].skills[slot].id].properties && BHA[player.bh.characters[index].skills[slot].id].properties["storeTarget"] && action != "effect" && !stored) player.bh.characters[index].skills[slot].variables["specTarget"] = result
     }
     return result

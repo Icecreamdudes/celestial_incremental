@@ -13,6 +13,7 @@
         lightWellCycleEffectSoftcap: new Decimal(0.5),
         
         lightWellSpeed: new Decimal(1),
+        wellCycleProduct: new Decimal(1),
 
         lightFountainReqDivisor: new Decimal(1),
         
@@ -214,6 +215,7 @@
         if (hasMilestone("prj", 103)) player.wel.lightGain = player.wel.lightGain.mul(2);
         player.wel.lightGain = player.wel.lightGain.mul(player.pri.fountains[1].completionEffect)
         player.wel.lightGain = player.wel.lightGain.mul(player.pri.fountains[4].completionEffect)
+        player.wel.lightGain = player.wel.lightGain.mul(player.pri.fountains[7].completionEffect)
         
         // WELL CYCLE SPEED
 
@@ -234,6 +236,7 @@
         player.wel.modules[7].maxTime = new Decimal(21600)
         player.wel.modules[8].maxTime = new Decimal(259200)
 
+        player.wel.wellCycleProduct = new Decimal(1)
         for (let i = 1; i < Object.keys(player.wel.modules).length + 1; i++) {
             player.wel.modules[i].time = player.wel.modules[i].time.add(player.wel.modules[i].timeSpeed.mul(delta))
             if (hasUpgrade("wel", 31)) player.wel.light = player.wel.light.add(layers.wel.clickables[i].lightGain().mul(new Decimal(1).sub(player.wel.modules[i].time.div(player.wel.modules[i].maxTime).min(1))).div(player.wel.modules[i].maxTime).mul(player.wel.modules[i].timeSpeed).mul(delta).mul(2));
@@ -259,6 +262,7 @@
 
             // MISC
             if (player.wel.modules[i].completions.gte(player.wel.modules[i].bestCompletions)) player.wel.modules[i].bestCompletions = player.wel.modules[i].completions;
+            player.wel.wellCycleProduct = player.wel.wellCycleProduct.mul(player.wel.modules[i].completions.add(1))
         }
 
         //player.wel.modules[1].completions = player.wel.modules[1].completions.add(player.wel.modules[1].completionsGain.mul(delta).mul(player.wel.modules[1].timeSpeed.div(player.wel.modules[1].maxTime)))
@@ -971,6 +975,7 @@
                 player.wel.modules[this.id].time = new Decimal(0)
                 player.wel.modules[this.id].completions = player.wel.modules[this.id].completions.add(player.wel.modules[this.id].completionsGain)
                 if (!hasAchievement("achievements", 1202)) completeAchievement("achievements", 1202);
+                if (!hasAchievement("achievements", 1203) && player.wel.modules[this.id].completions.gte(1e3)) completeAchievement("achievements", 1203)
             },
             lightGain() {
                 let gain = player.wel.lightGain
@@ -1003,6 +1008,7 @@
                 player.wel.modules[this.id].time = new Decimal(0)
                 player.wel.modules[this.id].completions = player.wel.modules[this.id].completions.add(player.wel.modules[this.id].completionsGain)
                 if (!hasAchievement("achievements", 1205)) completeAchievement("achievements", 1205);
+                if (!hasAchievement("achievements", 1203) && player.wel.modules[this.id].completions.gte(1e3)) completeAchievement("achievements", 1203)
             },
             lightGain() {
                 let gain = player.wel.lightGain
@@ -1035,6 +1041,7 @@
                 player.wel.modules[this.id].time = new Decimal(0)
                 player.wel.modules[this.id].completions = player.wel.modules[this.id].completions.add(player.wel.modules[this.id].completionsGain)
                 if (!hasAchievement("achievements", 1212)) completeAchievement("achievements", 1212);
+                if (!hasAchievement("achievements", 1203) && player.wel.modules[this.id].completions.gte(1e3)) completeAchievement("achievements", 1203)
             },
             lightGain() {
                 let gain = player.wel.lightGain
@@ -1825,7 +1832,7 @@
                     )
                     }
                     }
-                    if (player.wel.modules[2].completions.gte(500)) {
+                    if (player.wel.modules[2].completions.gte(500) && hasMilestone("prj", 303)) {
                     if (player.wel.modules[3].completions.gte(1e12)) {
                             // light well delta
                         look[1][1].push(["blank", "1px"])

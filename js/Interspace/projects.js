@@ -1019,9 +1019,7 @@
                 let s = new Decimal(60)
 
                 s = s.mul(completions.add(1).pow(2))
-                if (completions.gte(5)) {
-                    s = s.mul(6)
-                }
+                s = s.mul(completions.div(5).floor().pow_base(4))
 
                 return s
             },
@@ -1029,9 +1027,7 @@
                 let completions = player.prj.modules[1].completions
                 let s = completions
                 
-                if (completions.gte(5)) {
-                    s = s.add(completions.sub(5).pow(1.5)).mul(5)
-                }
+                s = s.add(completions.sub(5).max(0).pow(1.5)).mul(completions.div(5).floor().pow_base(8))
 
                 return s.floor()
             },
@@ -1071,9 +1067,7 @@
                 let s = new Decimal(1800)
 
                 s = s.mul(completions.add(1).mul(completions).div(2).add(1))
-                if (completions.gte(5)) {
-                    s = s.mul(6)
-                }
+                s = s.mul(completions.div(5).floor().pow_base(6))
 
                 return s
             },
@@ -1081,9 +1075,7 @@
                 let completions = player.prj.modules[2].completions
                 let s = completions.add(1).mul(completions).mul(5)
                 
-                if (completions.gte(5)) {
-                    s = s.add(completions.sub(5).pow(1.5)).mul(10)
-                }
+                s = s.add(completions.sub(5).max(0).pow(1.5)).mul(completions.div(5).floor().pow_base(12))
 
                 return s.floor()
             },
@@ -1123,9 +1115,7 @@
                 let s = new Decimal(2e4)
 
                 s = s.mul(completions.add(1).mul(completions.pow(2)).div(2).add(1))
-                if (completions.gte(5)) {
-                    s = s.mul(8)
-                }
+                s = s.mul(completions.div(5).floor().pow_base(8))
 
                 return s
             },
@@ -1133,9 +1123,7 @@
                 let completions = player.prj.modules[3].completions
                 let s = completions.add(1).pow(2).mul(200)
                 
-                if (completions.gte(5)) {
-                    s = s.add(completions.sub(5).pow(2)).mul(10)
-                }
+                s = s.add(completions.sub(5).max(0).pow(2)).mul(completions.div(5).floor().pow_base(16))
 
                 return s.floor()
             },
@@ -1175,9 +1163,7 @@
                 let s = new Decimal(1e9)
 
                 s = s.mul(completions.add(1).mul(completions.pow(3)).div(2).add(1))
-                if (completions.gte(5)) {
-                    s = s.mul(10)
-                }
+                s = s.mul(completions.div(5).floor().pow_base(10))
 
                 return s
             },
@@ -1185,9 +1171,7 @@
                 let completions = player.prj.modules[4].completions
                 let s = completions.add(1).pow(4).mul(4e3)
                 
-                if (completions.gte(5)) {
-                    s = s.add(completions.sub(5).pow(4)).mul(10)
-                }
+                s = s.add(completions.sub(5).max(0).pow(4)).mul(completions.div(5).floor().pow_base(20))
 
                 return s.floor()
             },

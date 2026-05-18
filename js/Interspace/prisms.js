@@ -947,7 +947,7 @@
             completionEffectPrefix: "x",
             completionEffectSuffix: " Light, based on well ↻",
             condition() {
-                return player.pri.fountains[2].completions.gte(12)
+                return player.pri.fountains[4].completions.gte(20)
             },
             unlocked() {
                 return (player.pri.fountains[4].completions.gt(0) || player.pri.fountains[5].completions.gt(0) || player.pri.fountains[6].completions.gt(0)) && hasMilestone("prj", 302)
@@ -955,29 +955,30 @@
             getCompletionEffect() {
                 let completions = player.pri.fountains[7].completions.pow(0.75)
 
-                s = player.pri.prisms.add(1).log10().div(4).add(1).pow(completions).log(10).add(1).pow(0.5).sub(1).pow_base(10).sub(1).mul(4).add(1).pow(2)
+                s = player.wel.wellCycleProduct.log10().div(30).pow(10).add(1).pow(completions).log(10).add(1).pow(0.25).sub(1).pow_base(10).pow(12)
 
                 return s
             },
             getTimeReq() {
                 let completions = player.pri.fountains[7].completions
-                let s = completions.div(4).add(1).pow(5)
+                let s = completions.pow(2)
+
+                s = s.mul(completions.pow_base(2))
 
                 if (completions.gte(50)) {
                     s = s.pow(1.05)
                 }
-                s = s.pow(1.0625).mul(400)
+                s = s.pow(1.0625).mul(1.2e6)
 
                 return s
             },
             getprismReq() {
                 let completions = player.pri.fountains[7].completions
-                let s = completions.div(4).add(1).pow(5)
+                let s = completions.pow(2)
+
+                s = s.mul(completions.pow_base(2))
                 
-                if (completions.gte(20)) {
-                    s = s.mul(completions.sub(20).pow_base(1.5))
-                }
-                s = s.mul(8)
+                s = s.mul(1.2e5)
 
                 return s.floor()
             },
@@ -1259,7 +1260,7 @@
                         } else {
                             look[7][1].push(
                             ["style-column", [
-                                ["raw-html", "Dodecahedron<br><small>Req: 12 Octahedron ↻</small>", {color: "white", fontSize: "16px"}],
+                                ["raw-html", "Dodecahedron<br><small>Req: 20 Octahedron ↻</small>", {color: "white", fontSize: "16px"}],
                             ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
                             )
                         }

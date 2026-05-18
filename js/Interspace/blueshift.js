@@ -103,6 +103,7 @@
     blueshiftReset(isRewarded, id) {
         if (isRewarded) {
             player.blu.blueshifts[id].amount = player.blu.blueshifts[id].amount.add(1)
+            if (!hasAchievement("achievements", 1207)) completeAchievement("achievements", 1207);
         }
         layers.pri.prismReset(false)
 

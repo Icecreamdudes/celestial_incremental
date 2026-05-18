@@ -1666,9 +1666,7 @@ addLayer("darkTemple", {
                                     if (player.darkTemple.tab == "level" && getBuyableAmount("darkTemple", player.darkTemple.selection).lt(player.darkTemple.runeCap)) {
                                         futureEffects = RUNE_EFFECTS[player.darkTemple.selection][getBuyableAmount("darkTemple", player.darkTemple.selection).add(1)]
                                         let tierMult = getBuyableAmount("darkTemple", player.darkTemple.selection+100) ? 1+(getBuyableAmount("darkTemple", player.darkTemple.selection+100).toNumber()/2) : 1
-                                        for (let i in futureEffects) {
-                                            futureEffects[i] = futureEffects[i] * tierMult
-                                        }
+                                        futureEffects = addObject({}, futureEffects, tierMult)
                                     } else if (player.darkTemple.tab == "tier" && (getBuyableAmount("darkTemple", player.darkTemple.selection+100) || player.darkTemple.tierCap).lt(player.darkTemple.tierCap)) {
                                         for (let i = 1; i < getBuyableAmount("darkTemple", player.darkTemple.selection); i++) {
                                             futureEffects = addObject(futureEffects, RUNE_EFFECTS[player.darkTemple.selection][i], 0.5)

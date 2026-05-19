@@ -63,7 +63,8 @@
 
         if (player.dt.timeCapsules.lt(100)) player.dt.storedToGet = new Decimal(0);
         if (getLevelableTier("pu", 214, true)) player.dt.storedToGet = player.dt.storedToGet.add(1);
-
+        if (hasAchievement("achievements", 1206)) player.dt.storedToGet = player.dt.storedToGet.add(1);
+        
         // reset cooldown
         
         player.dt.timeCapsuleResetSafety = true

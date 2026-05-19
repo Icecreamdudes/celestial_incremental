@@ -103,9 +103,14 @@
     blueshiftReset(isRewarded, id) {
         if (isRewarded) {
             player.blu.blueshifts[id].amount = player.blu.blueshifts[id].amount.add(1)
-            if (!hasAchievement("achievements", 1207)) completeAchievement("achievements", 1207);
+            if (!hasAchievement("achievements", 1211) && player.blu.blueshifts[id].amount.gte(2)) completeAchievement("achievements", 1211);
+            if (!hasAchievement("achievements", 1210)) completeAchievement("achievements", 1210);
         }
         layers.pri.prismReset(false)
+        
+        player.wel.modules[4].time = player.wel.modules[4].maxTime
+        player.wel.modules[4].timeSpeed = new Decimal(0)
+        player.wel.modules[4].completions = new Decimal(0)
 
         if (player.wel.fountains[1].focused) {
             player.wel.fountains[1].focused = false
@@ -251,6 +256,8 @@
         for (let i = 1; i < Object.keys(player.wel.modules).length + 1; i++) {
             player.wel.modules[i].bestCompletions = new Decimal(0)
         }
+
+        player.wel.lightGen = new Decimal(0)
     },
     branches: ["wel"],
     clickables: {

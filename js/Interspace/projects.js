@@ -97,6 +97,7 @@
         if (hasUpgrade("wel", 24)) player.prj.maxFocused = player.prj.maxFocused.add(1);
         if (hasUpgrade("wel", 31)) player.prj.maxFocused = player.prj.maxFocused.add(1);
         if (hasMilestone("prj", 205)) player.prj.maxFocused = player.prj.maxFocused.add(1);
+        if (hasMilestone("prj", 302)) player.prj.maxFocused = player.prj.maxFocused.add(1);
 
         player.prj.totalProjectLevels = player.prj.modules[1].completions
         .add(player.prj.modules[2].completions)
@@ -685,7 +686,7 @@
             onComplete() {
                 doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock the fourth row of the pyramid.</small>" },
+            effectDescription() { return "<small>Unlock the fourth row of the pyramid. Increase focus cap by +1.</small>" },
             cycleReq() { return new Decimal(2) },
             projectId() { return 3 },
             unlocked() { return true },
@@ -706,7 +707,7 @@
             onComplete() {
                 doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock light well δ. Unlock a prism well automator every blueshift.</small>" },
+            effectDescription() { return "<small>Unlock light well δ. Unlock a pyramid automator per blueshift after 1.</small>" },
             cycleReq() { return new Decimal(3) },
             projectId() { return 3 },
             unlocked() { return true },
@@ -727,7 +728,7 @@
             onComplete() {
                 doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Prismatic no longer resets δ ↻.</small>" },
+            effectDescription() { return "<small>Blueshift no longer resets δ ↻.</small>" },
             cycleReq() { return new Decimal(4) },
             projectId() { return 3 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) },
@@ -748,7 +749,7 @@
             onComplete() {
                 doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Keep δ ↻ on prismatic and blueshift. +0.5 to light upgrade 1.4 base.</small>" },
+            effectDescription() { return "<small>Unlock more project studies.</small>" },
             cycleReq() { return new Decimal(5) },
             projectId() { return 3 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) },

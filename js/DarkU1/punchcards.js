@@ -1750,7 +1750,7 @@ addLayer("pu", {
             }
         },
         214: {
-            image() {return this.canClick() ? "resources/Punchcards/rarePunchcard13.png" : "resources/Punchcards/lockedPunchcard.png"},
+            image() {return this.canClick() ? "resources/Punchcards/rarePunchcard14.png" : "resources/Punchcards/lockedPunchcard.png"},
             title() {
                 let str = "Time Energy based on Time Energy"
                 if (getLevelableTier(this.layer, this.id, true)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
@@ -1803,7 +1803,7 @@ addLayer("pu", {
             }
         },
         215: {
-            image() {return this.canClick() ? "resources/Punchcards/rarePunchcard14.png" : "resources/Punchcards/lockedPunchcard.png"},
+            image() {return this.canClick() ? "resources/Punchcards/rarePunchcard15.png" : "resources/Punchcards/lockedPunchcard.png"},
             title() {
                 let str = "Time Capsules based on Boosters"
                 if (getLevelableTier(this.layer, this.id, true)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
@@ -2286,7 +2286,7 @@ addLayer("pu", {
             }
         },
         309: {
-            image() {return this.canClick() ? "resources/Punchcards/epicPunchcard7.png" : "resources/Punchcards/lockedPunchcard.png"},
+            image() {return this.canClick() ? "resources/Punchcards/epicPunchcard9.png" : "resources/Punchcards/lockedPunchcard.png"},
             title() {
                 let str = "Tickspeed"
                 if (getLevelableTier(this.layer, this.id, true)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}

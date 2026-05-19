@@ -60,6 +60,8 @@
         player.dt.storedToGet = player.dt.storedToGet.mul(buyableEffect("st", 207))
         if (hasMilestone("prj", 104)) player.dt.storedToGet = player.dt.storedToGet.mul(player.sma.eclipseExitTime.min(86400).div(2700).add(1).pow(0.3));
         player.dt.storedToGet = player.dt.storedToGet.floor()
+        if (hasMilestone("prj", 205)) player.dt.storedToGet = player.dt.storedToGet.mul(2);
+        if (hasMilestone("prj", 305)) player.dt.storedToGet = player.dt.storedToGet.mul(2);
 
         if (player.dt.timeCapsules.lt(100)) player.dt.storedToGet = new Decimal(0);
         if (getLevelableTier("pu", 214, true)) player.dt.storedToGet = player.dt.storedToGet.add(1);

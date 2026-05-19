@@ -9,6 +9,7 @@
         light: new Decimal(0),
         bestLight: new Decimal(0),
         lightGain: new Decimal(1),
+        lightGen: new Decimal(0),
         lightModuleEffects: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
         lightWellCycleEffectSoftcap: new Decimal(0.5),
         
@@ -207,9 +208,8 @@
             else player.wel.modules[3].completionsEffect = player.wel.modules[3].completions.mul(0.01).add(1);
             player.wel.lightGain = player.wel.lightGain.mul(player.wel.modules[3].completionsEffect)
 
-            if (player.wel.modules[4].completions.gte(1e3)) player.wel.modules[4].completionsEffect = player.wel.modules[4].completions.div(1e3).pow(player.wel.lightWellCycleEffectSoftcap).mul(1e3).div(1e15).add(1);
-            else player.wel.modules[4].completionsEffect = player.wel.modules[4].completions.div(1e15).add(1);
-            player.wel.lightGain = player.wel.lightGain.mul(player.wel.modules[4].completionsEffect)
+            player.wel.modules[4].completionsEffect = player.wel.modules[4].completions.div(1e10).pow(0.5);
+            //player.wel.lightGain = player.wel.lightGain.mul(player.wel.modules[4].completionsEffect)
         }
         if (hasUpgrade("wel", 14)) player.wel.lightGain = player.wel.lightGain.mul(player.wel.bestLight.add(1).log(1e4).floor().pow_base(2));
         if (hasMilestone("prj", 103)) player.wel.lightGain = player.wel.lightGain.mul(2);
@@ -230,7 +230,7 @@
         player.wel.modules[1].maxTime = new Decimal(10)
         player.wel.modules[2].maxTime = new Decimal(60)
         player.wel.modules[3].maxTime = new Decimal(300)
-        player.wel.modules[4].maxTime = new Decimal(3600)
+        player.wel.modules[4].maxTime = new Decimal(345600)
         player.wel.modules[5].maxTime = new Decimal(60)
         player.wel.modules[6].maxTime = new Decimal(1800)
         player.wel.modules[7].maxTime = new Decimal(21600)
@@ -260,15 +260,19 @@
             player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(player.blu.blueshifts[i].cycleGainMul)
             player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(player.blu.blueshiftEffect)
 
+            // CYCLE GEN
+            if (i < 4) player.wel.modules[i].completions = player.wel.modules[i].completions.add(player.wel.modules[i].completionsGain.mul(player.wel.modules[4].completionsEffect).div(100).mul(delta));
+
+            // LIGHT GEN
+            player.wel.light = player.wel.light.add(layers.wel.clickables[i].lightGain().mul(player.wel.lightGen).div(player.wel.modules[i].maxTime).mul(player.wel.modules[i].timeSpeed).mul(delta));
+
             // MISC
             if (player.wel.modules[i].completions.gte(player.wel.modules[i].bestCompletions)) player.wel.modules[i].bestCompletions = player.wel.modules[i].completions;
             player.wel.wellCycleProduct = player.wel.wellCycleProduct.mul(player.wel.modules[i].completions.add(1))
         }
+        player.wel.wellCycleProduct = player.wel.wellCycleProduct.div(player.wel.modules[4].completions.add(1))
+        player.wel.wellCycleProduct = player.wel.wellCycleProduct.mul(player.wel.modules[4].completions.div(1e9))
 
-        //player.wel.modules[1].completions = player.wel.modules[1].completions.add(player.wel.modules[1].completionsGain.mul(delta).mul(player.wel.modules[1].timeSpeed.div(player.wel.modules[1].maxTime)))
-        //player.wel.modules[2].completions = player.wel.modules[2].completions.add(player.wel.modules[2].completionsGain.mul(delta).mul(player.wel.modules[2].timeSpeed.div(player.wel.modules[2].maxTime)))
-        //player.wel.modules[3].completions = player.wel.modules[3].completions.add(player.wel.modules[3].completionsGain.mul(delta).mul(player.wel.modules[3].timeSpeed.div(player.wel.modules[3].maxTime)))
-        
         // FOUNTAIN REQ DIVISOR
         player.wel.lightFountainReqDivisor = new Decimal(1)
         if (hasUpgrade("wel", 33)) {
@@ -777,17 +781,17 @@
         },
         41: {
             unlocked() { return hasUpgrade("wel", 34) },
-            condition() { return false },
+            condition() { return player.pri.fountains[7].completions.gte(1) },
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Double light gain every blueshift.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Double pyramid fountain speed.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><br><h3>Req: 1 Dodecahedron ↻</h3>"
                 }
                 return s
             },
-            cost: new Decimal(1e49),
+            cost: new Decimal(1e45),
             currencyLocation() { return player.wel },
             currencyDisplayName: "Light",
             currencyInternalName: "light",
@@ -815,17 +819,17 @@
         },
         42: {
             unlocked() { return hasUpgrade("wel", 34) },
-            condition() { return false },
+            condition() { return hasMilestone("prj", 303) && player.wel.modules[3].completions.gte(1e12) },
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Unlock more starlight buyables.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Triple light well speed.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
-                    s += "???</h2><br><br><h3>Req: 12 Dodecahedron ↻</h3>"
+                    s += "???</h2><br><br><h3>Req: Light Well δ unlocked</h3>"
                 }
                 return s
             },
-            cost: new Decimal(1e99),
+            cost: new Decimal(1e128),
             currencyLocation() { return player.wel },
             currencyDisplayName: "Light",
             currencyInternalName: "light",
@@ -1037,17 +1041,17 @@
             unlocked() { return true },
             onClick() {
                 tickProjects(player.wel.modules[this.id].maxTime.div(player.wel.modules[this.id].timeSpeed).div(2))
-                player.wel.light = player.wel.light.add(layers.wel.clickables[this.id].lightGain())
+                player.wel.lightGen = player.wel.lightGen.add(layers.wel.clickables[this.id].lightGain())
                 player.wel.modules[this.id].time = new Decimal(0)
                 player.wel.modules[this.id].completions = player.wel.modules[this.id].completions.add(player.wel.modules[this.id].completionsGain)
                 if (!hasAchievement("achievements", 1212)) completeAchievement("achievements", 1212);
                 if (!hasAchievement("achievements", 1203) && player.wel.modules[this.id].completions.gte(1e3)) completeAchievement("achievements", 1203)
             },
             lightGain() {
-                let gain = player.wel.lightGain
-                gain = gain.mul(0)
+                let gain = new Decimal(0.01)
+                gain = gain.mul(player.wel.lightGain.div(1e60).pow(0.25))
                 gain = gain.mul(player.blu.blueshifts[this.id].cycleGainMul)
-                return gain.floor()
+                return gain
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
@@ -1685,6 +1689,11 @@
                 content() {
                     let look = [
                         ["blank", "25px"],
+                        ["style-column", [
+                            ["raw-html", "Generating " + format(player.wel.lightGen.mul(100)) + "% of well light yield /s.", {color: "white", fontSize: "18px", fontFamily: "monospace", display: (player.wel.modules[1].completions.gte(1e3) ? "" : "none !important")}],
+                            ["raw-html", "Generating " + format(player.wel.modules[4].completionsEffect) + "% of well ↻ yield /s.", {color: "white", fontSize: "18px", fontFamily: "monospace", display: (player.wel.modules[1].completions.gte(1e3) ? "" : "none !important")}],
+                            ["blank", "25px"],
+                        ], {display: player.wel.lightGen.gt(0) ? "" : "none !important"}],
                         ["row", [
                             // light well alpha
                             ["style-column", [
@@ -1730,8 +1739,8 @@
                     ]
                     if (player.wel.modules[1].completions.gte(50)) {
                             // light well beta
-                        look[1][1].push(["blank", "1px"])
-                        look[1][1].push(
+                        look[2][1].push(["blank", "1px"])
+                        look[2][1].push(
                         ["style-column", [
                             ["style-column", [
                                 ["style-column", [
@@ -1769,8 +1778,8 @@
                     )
                     } else {
                             // light well beta locked
-                        look[1][1].push(["blank", "1px"])
-                        look[1][1].push(
+                        look[2][1].push(["blank", "1px"])
+                        look[2][1].push(
                             ["style-column", [
                                 ["style-column", [
                                     ["raw-html", "Light Well β<br><small>Req: 50 α ↻</small>", {color: "white", fontSize: "16px"}],
@@ -1782,8 +1791,8 @@
                     if (player.wel.modules[1].completions.gte(50)) {
                     if (player.wel.modules[2].completions.gte(500)) {
                             // light well gamma
-                        look[1][1].push(["blank", "1px"])
-                        look[1][1].push(
+                        look[2][1].push(["blank", "1px"])
+                        look[2][1].push(
                         ["style-column", [
                             ["style-column", [
                                     ["style-column", [
@@ -1821,8 +1830,8 @@
                     )
                     } else {
                             // light well gamma locked
-                        look[1][1].push(["blank", "1px"])
-                        look[1][1].push(
+                        look[2][1].push(["blank", "1px"])
+                        look[2][1].push(
                             ["style-column", [
                                 ["style-column", [
                                     ["raw-html", "Light Well γ</h2><br><small>Req: 500 β ↻</small>", {color: "white", fontSize: "16px"}],
@@ -1833,10 +1842,10 @@
                     }
                     }
                     if (player.wel.modules[2].completions.gte(500) && hasMilestone("prj", 303)) {
-                    if (player.wel.modules[3].completions.gte(1e12)) {
+                    if (player.wel.modules[3].completions.gte(1e12) || player.wel.modules[4].completions.gt(0)) {
                             // light well delta
-                        look[1][1].push(["blank", "1px"])
-                        look[1][1].push(
+                        look[2][1].push(["blank", "1px"])
+                        look[2][1].push(
                         ["style-column", [
                             ["style-column", [
                                     ["style-column", [
@@ -1855,7 +1864,7 @@
                             ["raw-html", player.wel.modules[4].time.lt(player.wel.modules[4].maxTime) ? formatTime(player.wel.modules[4].maxTime.sub(player.wel.modules[4].time).div(player.wel.modules[4].timeSpeed)) : formatTime(player.wel.modules[4].maxTime.div(player.wel.modules[4].timeSpeed)) + " CD", {color: "white", fontSize: "16px", fontFamily: "monospace", textShadow: player.wel.modules[4].maxTime.div(player.wel.modules[4].timeSpeed).lte(0.1) ? "1px 1px 0 #3f3fff, -1px 1px 0 #3f3fff, 1px -1px 0 #3f3fff, -1px -1px 0 #3f3fff" : ""}],
                             ["blank", "9px"],
                             ["style-column", [
-                                    ["raw-html", "+" + formatShortWhole(layers.wel.clickables[3].lightGain()) + " Light", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                    ["raw-html", "+" + formatShort(layers.wel.clickables[4].lightGain().mul(100)) + "% Light/s", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                 ], {background: "#4d9973", borderRadius: "10px 10px 0px 0px", width: "150px", height:"25px"}],
                             ["blank", "3px"],
                             ["hoverless-clickable", 4],
@@ -1865,7 +1874,7 @@
                                     ["raw-html", formatShortWhole(player.wel.modules[4].completions) + " δ ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                     ["raw-html", "<div class='bottomTooltip'>Best: " + formatShortWhole(player.wel.modules[4].bestCompletions) + " δ ↻</div>"],
                                 ], {}],
-                                ["raw-html", "(x" + formatShort(player.wel.modules[4].completionsEffect) + " Light)", {color: "white", fontSize: "12px", fontFamily: "monospace", display: hasUpgrade("wel", 13) ? "" : "none !important"}],
+                                ["raw-html", "(+" + formatShort(player.wel.modules[4].completionsEffect) + "% ↻/s)", {color: "white", fontSize: "12px", fontFamily: "monospace", display: hasUpgrade("wel", 13) ? "" : "none !important"}],
                             ], {border: "3px solid #4d9973", borderRadius: "0 0 10px 10px", height: "44px"}],
                         ], {background: "#336659",border: "3px solid #336659", borderRadius: "103px 103px 16px 16px", width: "150px", boxShadow: player.wel.modules[4].maxTime.div(player.wel.modules[4].timeSpeed).lte(0.1) ? "1px 1px 0 #3f3fff, -1px 1px 0 #3f3fff, 1px -1px 0 #3f3fff, -1px -1px 0 #3f3fff" : ""}],
                         ["blank", "6px"],
@@ -1873,8 +1882,8 @@
                     )
                     } else {
                             // light well delta locked
-                        look[1][1].push(["blank", "1px"])
-                        look[1][1].push(
+                        look[2][1].push(["blank", "1px"])
+                        look[2][1].push(
                             ["style-column", [
                                 ["style-column", [
                                     ["raw-html", "Light Well δ</h2><br><small>Req: 1e12 γ ↻</small>", {color: "white", fontSize: "16px"}],
@@ -1889,8 +1898,8 @@
                     }
                     if (false) {
                         // prism well epsilon
-                        look[7][1].push(["blank", "1px"])
-                        look[7][1].push(
+                        look[8][1].push(["blank", "1px"])
+                        look[8][1].push(
                         ["style-column", [
                             ["style-column", [
                                     ["style-column", [
@@ -1927,8 +1936,8 @@
                     if (false) {
                         if (player.wel.modules[5].completions.gte(50)) {
                             // prism well zeta
-                            look[7][1].push(["blank", "1px"])
-                            look[7][1].push(
+                            look[8][1].push(["blank", "1px"])
+                            look[8][1].push(
                             ["style-column", [
                                 ["style-column", [
                                         ["style-column", [
@@ -1963,8 +1972,8 @@
                         )
                         } else {
                                 // prism well zeta locked
-                            look[7][1].push(["blank", "1px"])
-                            look[7][1].push(
+                            look[8][1].push(["blank", "1px"])
+                            look[8][1].push(
                                 ["style-column", [
                                     ["style-column", [
                                         ["raw-html", "Prism Well ζ<br><small>Req: 500 ε ↻</small>", {color: "white", fontSize: "16px"}],
@@ -1977,8 +1986,8 @@
                     if (player.wel.modules[5].completions.gte(50)) {
                         if (player.wel.modules[6].completions.gte(1e6)) {
                             // prism well eta
-                            look[7][1].push(["blank", "1px"])
-                            look[7][1].push(
+                            look[8][1].push(["blank", "1px"])
+                            look[8][1].push(
                             ["style-column", [
                                 ["style-column", [
                                         ["style-column", [
@@ -2013,8 +2022,8 @@
                         )
                         } else {
                                 // prism well eta locked
-                            look[7][1].push(["blank", "1px"])
-                            look[7][1].push(
+                            look[8][1].push(["blank", "1px"])
+                            look[8][1].push(
                                 ["style-column", [
                                     ["style-column", [
                                         ["raw-html", "Prism Well η<br><small>Req: 1,000,000 ζ ↻</small>", {color: "white", fontSize: "16px"}],
@@ -2027,8 +2036,8 @@
                     if (player.wel.modules[6].completions.gte(1e6)) {
                         if (player.wel.modules[7].completions.gte(1e12)) {
                             // prism well theta
-                            look[7][1].push(["blank", "1px"])
-                            look[7][1].push(
+                            look[8][1].push(["blank", "1px"])
+                            look[8][1].push(
                             ["style-column", [
                                 ["style-column", [
                                         ["style-column", [
@@ -2063,8 +2072,8 @@
                         )
                         } else {
                                 // prism well theta locked
-                            look[7][1].push(["blank", "1px"])
-                            look[7][1].push(
+                            look[8][1].push(["blank", "1px"])
+                            look[8][1].push(
                                 ["style-column", [
                                     ["style-column", [
                                         ["raw-html", "Prism Well θ<br><small>Req: 1e12 η ↻</small>", {color: "white", fontSize: "16px"}],

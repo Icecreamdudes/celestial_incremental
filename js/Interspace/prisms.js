@@ -184,6 +184,7 @@
         if (player.pri.bestPrisms.lt(player.pri.prisms)) player.pri.bestPrisms = player.pri.prisms;
         
         player.pri.fountainSpeed = player.pri.totalPrisms.div(10)
+        if (hasUpgrade("wel", 41)) player.pri.fountainSpeed = player.pri.fountainSpeed.mul(2);
 
         // FOUNTAIN PROGRESS
         Object.keys(layers.pri.fountains).forEach(i => {
@@ -194,6 +195,9 @@
             module.prismReq = fountain.getprismReq()
             module.completionEffect = fountain.getCompletionEffect()
 
+            if (module.automated && player.pri.totalPrisms.gte(module.prismReq)) {
+                module.time = module.time.add(module.timeSpeed.mul(0.5).mul(delta));
+            }
             if (module.focused) {
                 module.time = module.time.add(module.timeSpeed.mul(delta))
             }
@@ -212,6 +216,7 @@
             player.pri.prisms = player.pri.prisms.add(player.pri.prismsToGet)
             player.pri.totalPrisms = player.pri.totalPrisms.add(player.pri.prismsToGet)
             if (player.pri.prismsToGet.gt(player.pri.bestPrismsInOneReset)) player.pri.bestPrismsInOneReset = player.pri.prismsToGet;
+            if (!hasAchievement("achievements", 1207)) completeAchievement("achievements", 1207);
         }
 
         player.wel.light = new Decimal(0)
@@ -226,9 +231,6 @@
         player.wel.modules[3].time = player.wel.modules[3].maxTime
         player.wel.modules[3].timeSpeed = new Decimal(0)
         player.wel.modules[3].completions = new Decimal(0)
-        player.wel.modules[4].time = player.wel.modules[4].maxTime
-        player.wel.modules[4].timeSpeed = new Decimal(0)
-        player.wel.modules[4].completions = new Decimal(0)
 
         player.wel.fountains[1].completions = new Decimal(0)
         player.wel.fountains[1].canAddCompletion = false
@@ -286,7 +288,7 @@
                 player.pri.fountains[this.id].focused = true
             },
             style() {
-                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
+                let look = {width: layers.pri.fountains[this.id].canAuto() ? "98.5px" : "200px", minHeight: "45px", borderRadius: "0px"}
                 if (player.pri.fountains[this.id].focused) {
                     look.backgroundColor = "#335966"
                     look.border = "3px solid #4d9999"
@@ -313,7 +315,7 @@
                 player.pri.fountains[this.id].focused = true
             },
             style() {
-                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
+                let look = {width: layers.pri.fountains[this.id].canAuto() ? "98.5px" : "200px", minHeight: "45px", borderRadius: "0px"}
                 if (player.pri.fountains[this.id].focused) {
                     look.backgroundColor = "#335966"
                     look.border = "3px solid #4d9999"
@@ -340,7 +342,7 @@
                 player.pri.fountains[this.id].focused = true
             },
             style() {
-                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
+                let look = {width: layers.pri.fountains[this.id].canAuto() ? "98.5px" : "200px", minHeight: "45px", borderRadius: "0px"}
                 if (player.pri.fountains[this.id].focused) {
                     look.backgroundColor = "#335966"
                     look.border = "3px solid #4d9999"
@@ -367,7 +369,7 @@
                 player.pri.fountains[this.id].focused = true
             },
             style() {
-                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
+                let look = {width: layers.pri.fountains[this.id].canAuto() ? "98.5px" : "200px", minHeight: "45px", borderRadius: "0px"}
                 if (player.pri.fountains[this.id].focused) {
                     look.backgroundColor = "#335966"
                     look.border = "3px solid #4d9999"
@@ -394,7 +396,7 @@
                 player.pri.fountains[this.id].focused = true
             },
             style() {
-                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
+                let look = {width: layers.pri.fountains[this.id].canAuto() ? "98.5px" : "200px", minHeight: "45px", borderRadius: "0px"}
                 if (player.pri.fountains[this.id].focused) {
                     look.backgroundColor = "#335966"
                     look.border = "3px solid #4d9999"
@@ -421,7 +423,7 @@
                 player.pri.fountains[this.id].focused = true
             },
             style() {
-                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
+                let look = {width: layers.pri.fountains[this.id].canAuto() ? "98.5px" : "200px", minHeight: "45px", borderRadius: "0px"}
                 if (player.pri.fountains[this.id].focused) {
                     look.backgroundColor = "#335966"
                     look.border = "3px solid #4d9999"
@@ -448,7 +450,7 @@
                 player.pri.fountains[this.id].focused = true
             },
             style() {
-                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
+                let look = {width: layers.pri.fountains[this.id].canAuto() ? "98.5px" : "200px", minHeight: "45px", borderRadius: "0px"}
                 if (player.pri.fountains[this.id].focused) {
                     look.backgroundColor = "#335966"
                     look.border = "3px solid #4d9999"
@@ -475,7 +477,7 @@
                 player.pri.fountains[this.id].focused = true
             },
             style() {
-                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
+                let look = {width: layers.pri.fountains[this.id].canAuto() ? "98.5px" : "200px", minHeight: "45px", borderRadius: "0px"}
                 if (player.pri.fountains[this.id].focused) {
                     look.backgroundColor = "#335966"
                     look.border = "3px solid #4d9999"
@@ -502,7 +504,7 @@
                 player.pri.fountains[this.id].focused = true
             },
             style() {
-                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
+                let look = {width: layers.pri.fountains[this.id].canAuto() ? "98.5px" : "200px", minHeight: "45px", borderRadius: "0px"}
                 if (player.pri.fountains[this.id].focused) {
                     look.backgroundColor = "#335966"
                     look.border = "3px solid #4d9999"
@@ -529,7 +531,7 @@
                 player.pri.fountains[this.id].focused = true
             },
             style() {
-                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
+                let look = {width: layers.pri.fountains[this.id].canAuto() ? "98.5px" : "200px", minHeight: "45px", borderRadius: "0px"}
                 if (player.pri.fountains[this.id].focused) {
                     look.backgroundColor = "#335966"
                     look.border = "3px solid #4d9999"
@@ -572,18 +574,285 @@
             canClick() { return player.prj.focused.gt(0)},
             unlocked() { return true },
             onClick() {
-                if (player.pri.fountains[i].focused) {
-                    player.pri.fountains[i].focused = false
-                    player.prj.focused = player.prj.focused.sub(1)
-                }
-                if (player.pri.fountains[i].automated) {
-                    player.pri.fountains[i].automated = false
-                    player.prj.focused = player.prj.focused.sub(1)
-                }
+                Object.keys(layers.pri.fountains).forEach(i => {
+                    if (player.pri.fountains[i].focused) {
+                        player.pri.fountains[i].focused = false
+                        player.prj.focused = player.prj.focused.sub(1)
+                    }
+                    if (player.pri.fountains[i].automated) {
+                        player.pri.fountains[i].automated = false
+                        player.prj.focused = player.prj.focused.sub(1)
+                    }
+                });
             },
             style() {
                 let look = {width: "400px", minHeight: "75px", maxHeight: "75px", borderRadius: "10px"}
                 if (this.canClick()) {
+                    look.backgroundColor = "#a8ffff"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        1001: {
+            title() { return "<h3>Auto</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id - 1000].automated },
+            unlocked() { return layers.pri.fountains[this.id - 1000].canAuto() },
+            onClick() {
+                player.prj.focused = player.prj.focused.add(1)
+                player.pri.fountains[this.id - 1000].automated = true
+
+                if (player.pri.fountains[this.id - 1000].focused) {
+                    player.pri.fountains[this.id - 1000].focused = false
+                    player.prj.focused = player.prj.focused.sub(1)
+                }
+            },
+            style() {
+                let look = {width: "98.5px", minHeight: "45px", borderRadius: "0px"}
+                if (player.pri.fountains[this.id - 1000].automated) {
+                    look.backgroundColor = "#335966"
+                    look.border = "3px solid #4d9999"
+                    look.color = "white"
+                } else if (this.canClick()) {
+                    look.backgroundColor = "#a8ffff"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        1002: {
+            title() { return "<h3>Auto</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id - 1000].automated },
+            unlocked() { return layers.pri.fountains[this.id - 1000].canAuto() },
+            onClick() {
+                player.prj.focused = player.prj.focused.add(1)
+                player.pri.fountains[this.id - 1000].automated = true
+            },
+            style() {
+                let look = {width: "98.5px", minHeight: "45px", borderRadius: "0px"}
+                if (player.pri.fountains[this.id - 1000].automated) {
+                    look.backgroundColor = "#335966"
+                    look.border = "3px solid #4d9999"
+                    look.color = "white"
+                } else if (this.canClick()) {
+                    look.backgroundColor = "#a8ffff"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        1003: {
+            title() { return "<h3>Auto</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id - 1000].automated },
+            unlocked() { return layers.pri.fountains[this.id - 1000].canAuto() },
+            onClick() {
+                player.prj.focused = player.prj.focused.add(1)
+                player.pri.fountains[this.id - 1000].automated = true
+            },
+            style() {
+                let look = {width: "98.5px", minHeight: "45px", borderRadius: "0px"}
+                if (player.pri.fountains[this.id - 1000].automated) {
+                    look.backgroundColor = "#335966"
+                    look.border = "3px solid #4d9999"
+                    look.color = "white"
+                } else if (this.canClick()) {
+                    look.backgroundColor = "#a8ffff"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        1004: {
+            title() { return "<h3>Auto</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id - 1000].automated },
+            unlocked() { return layers.pri.fountains[this.id - 1000].canAuto() },
+            onClick() {
+                player.prj.focused = player.prj.focused.add(1)
+                player.pri.fountains[this.id - 1000].automated = true
+            },
+            style() {
+                let look = {width: "98.5px", minHeight: "45px", borderRadius: "0px"}
+                if (player.pri.fountains[this.id - 1000].automated) {
+                    look.backgroundColor = "#335966"
+                    look.border = "3px solid #4d9999"
+                    look.color = "white"
+                } else if (this.canClick()) {
+                    look.backgroundColor = "#a8ffff"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        1005: {
+            title() { return "<h3>Auto</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id - 1000].automated },
+            unlocked() { return layers.pri.fountains[this.id - 1000].canAuto() },
+            onClick() {
+                player.prj.focused = player.prj.focused.add(1)
+                player.pri.fountains[this.id - 1000].automated = true
+            },
+            style() {
+                let look = {width: "98.5px", minHeight: "45px", borderRadius: "0px"}
+                if (player.pri.fountains[this.id - 1000].automated) {
+                    look.backgroundColor = "#335966"
+                    look.border = "3px solid #4d9999"
+                    look.color = "white"
+                } else if (this.canClick()) {
+                    look.backgroundColor = "#a8ffff"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        1006: {
+            title() { return "<h3>Auto</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id - 1000].automated },
+            unlocked() { return layers.pri.fountains[this.id - 1000].canAuto() },
+            onClick() {
+                player.prj.focused = player.prj.focused.add(1)
+                player.pri.fountains[this.id - 1000].automated = true
+            },
+            style() {
+                let look = {width: "98.5px", minHeight: "45px", borderRadius: "0px"}
+                if (player.pri.fountains[this.id - 1000].automated) {
+                    look.backgroundColor = "#335966"
+                    look.border = "3px solid #4d9999"
+                    look.color = "white"
+                } else if (this.canClick()) {
+                    look.backgroundColor = "#a8ffff"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        1007: {
+            title() { return "<h3>Auto</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id - 1000].automated },
+            unlocked() { return layers.pri.fountains[this.id - 1000].canAuto() },
+            onClick() {
+                player.prj.focused = player.prj.focused.add(1)
+                player.pri.fountains[this.id - 1000].automated = true
+            },
+            style() {
+                let look = {width: "98.5px", minHeight: "45px", borderRadius: "0px"}
+                if (player.pri.fountains[this.id - 1000].automated) {
+                    look.backgroundColor = "#335966"
+                    look.border = "3px solid #4d9999"
+                    look.color = "white"
+                } else if (this.canClick()) {
+                    look.backgroundColor = "#a8ffff"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        1008: {
+            title() { return "<h3>Auto</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id - 1000].automated },
+            unlocked() { return layers.pri.fountains[this.id - 1000].canAuto() },
+            onClick() {
+                player.prj.focused = player.prj.focused.add(1)
+                player.pri.fountains[this.id - 1000].automated = true
+            },
+            style() {
+                let look = {width: "98.5px", minHeight: "45px", borderRadius: "0px"}
+                if (player.pri.fountains[this.id - 1000].automated) {
+                    look.backgroundColor = "#335966"
+                    look.border = "3px solid #4d9999"
+                    look.color = "white"
+                } else if (this.canClick()) {
+                    look.backgroundColor = "#a8ffff"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        1009: {
+            title() { return "<h3>Auto</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id - 1000].automated },
+            unlocked() { return layers.pri.fountains[this.id - 1000].canAuto() },
+            onClick() {
+                player.prj.focused = player.prj.focused.add(1)
+                player.pri.fountains[this.id - 1000].automated = true
+            },
+            style() {
+                let look = {width: "98.5px", minHeight: "45px", borderRadius: "0px"}
+                if (player.pri.fountains[this.id - 1000].automated) {
+                    look.backgroundColor = "#335966"
+                    look.border = "3px solid #4d9999"
+                    look.color = "white"
+                } else if (this.canClick()) {
+                    look.backgroundColor = "#a8ffff"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        1010: {
+            title() { return "<h3>Auto</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id - 1000].automated },
+            unlocked() { return layers.pri.fountains[this.id - 1000].canAuto() },
+            onClick() {
+                player.prj.focused = player.prj.focused.add(1)
+                player.pri.fountains[this.id - 1000].automated = true
+            },
+            style() {
+                let look = {width: "98.5px", minHeight: "45px", borderRadius: "0px"}
+                if (player.pri.fountains[this.id - 1000].automated) {
+                    look.backgroundColor = "#335966"
+                    look.border = "3px solid #4d9999"
+                    look.color = "white"
+                } else if (this.canClick()) {
                     look.backgroundColor = "#a8ffff"
                     look.border = "3px solid #0000003f"
                     look.color = "black"
@@ -673,6 +942,9 @@
             unlocked() {
                 return true
             },
+            canAuto() {
+                return player.blu.totalBlueshifts.gte(2)
+            },
             getCompletionEffect() {
                 let completions = player.pri.fountains[1].completions.pow(0.75)
 
@@ -687,7 +959,7 @@
                 if (completions.gte(20)) {
                     s = s.mul(completions.sub(20).pow_base(1.25))
                 }
-                s = s.pow(1.0625).mul(20)
+                s = s.pow(1.0625).mul(10)
 
                 return s
             },
@@ -719,6 +991,9 @@
             },
             unlocked() {
                 return true
+            },
+            canAuto() {
+                return player.blu.totalBlueshifts.gte(3)
             },
             getCompletionEffect() {
                 let completions = player.pri.fountains[2].completions
@@ -768,6 +1043,9 @@
             unlocked() {
                 return true
             },
+            canAuto() {
+                return player.blu.totalBlueshifts.gte(4)
+            },
             getCompletionEffect() {
                 let completions = player.pri.fountains[3].completions
 
@@ -816,6 +1094,9 @@
             unlocked() {
                 return player.pri.fountains[2].completions.gt(0) || player.pri.fountains[3].completions.gt(0)
             },
+            canAuto() {
+                return player.blu.totalBlueshifts.gte(5)
+            },
             getCompletionEffect() {
                 let completions = player.pri.fountains[4].completions.pow(0.75)
 
@@ -827,10 +1108,10 @@
                 let completions = player.pri.fountains[4].completions
                 let s = completions.div(4).add(1).pow(5)
 
-                if (completions.gte(50)) {
-                    s = s.pow(1.05)
+                if (completions.gte(20)) {
+                    s = s.mul(completions.sub(20).pow_base(1.5))
                 }
-                s = s.pow(1.0625).mul(400)
+                s = s.pow(1.0625).mul(120)
 
                 return s
             },
@@ -864,6 +1145,9 @@
             unlocked() {
                 return player.pri.fountains[2].completions.gt(0) || player.pri.fountains[3].completions.gt(0)
             },
+            canAuto() {
+                return player.blu.totalBlueshifts.gte(6)
+            },
             getCompletionEffect() {
                 let completions = player.pri.fountains[5].completions
 
@@ -875,17 +1159,17 @@
                 let completions = player.pri.fountains[5].completions
                 let s = new Decimal(1)
 
-                s = s.mul(completions.pow_base(1.5))
+                s = s.mul(completions.pow_base(1.45))
                 if (completions.gte(50)) {
                     s = s.pow(1.05)
                 }
-                s = s.pow(1.0625).mul(1.8e3)
+                s = s.pow(1.0625).mul(600)
 
                 return s
             },
             getprismReq() {
                 let completions = player.pri.fountains[5].completions
-                let s = completions.pow_base(1.5).mul(50)
+                let s = completions.pow_base(1.45).mul(50)
 
                 return s.floor()
             },
@@ -908,6 +1192,9 @@
             unlocked() {
                 return player.pri.fountains[2].completions.gt(0) || player.pri.fountains[3].completions.gt(0)
             },
+            canAuto() {
+                return player.blu.totalBlueshifts.gte(7)
+            },
             getCompletionEffect() {
                 let completions = player.pri.fountains[6].completions
 
@@ -923,7 +1210,7 @@
                 if (completions.gte(50)) {
                     s = s.pow(1.05)
                 }
-                s = s.pow(1.0625).mul(3.6e3)
+                s = s.pow(1.0625).mul(2.4e3)
 
                 return s
             },
@@ -951,6 +1238,9 @@
             },
             unlocked() {
                 return (player.pri.fountains[4].completions.gt(0) || player.pri.fountains[5].completions.gt(0) || player.pri.fountains[6].completions.gt(0)) && hasMilestone("prj", 302)
+            },
+            canAuto() {
+                return player.blu.totalBlueshifts.gte(8)
             },
             getCompletionEffect() {
                 let completions = player.pri.fountains[7].completions.pow(0.75)
@@ -1001,6 +1291,9 @@
             unlocked() {
                 return (player.pri.fountains[4].completions.gt(0) || player.pri.fountains[5].completions.gt(0) || player.pri.fountains[6].completions.gt(0)) && hasMilestone("prj", 302)
             },
+            canAuto() {
+                return player.blu.totalBlueshifts.gte(9)
+            },
             getCompletionEffect() {
                 let completions = player.pri.fountains[9].completions
 
@@ -1045,6 +1338,9 @@
             unlocked() {
                 return (player.pri.fountains[4].completions.gt(0) || player.pri.fountains[5].completions.gt(0) || player.pri.fountains[6].completions.gt(0)) && hasMilestone("prj", 302)
             },
+            canAuto() {
+                return player.blu.totalBlueshifts.gte(10)
+            },
             getCompletionEffect() {
                 let completions = player.pri.fountains[9].completions
 
@@ -1088,6 +1384,9 @@
             },
             unlocked() {
                 return (player.pri.fountains[4].completions.gt(0) || player.pri.fountains[5].completions.gt(0) || player.pri.fountains[6].completions.gt(0)) && hasMilestone("prj", 302)
+            },
+            canAuto() {
+                return player.blu.totalBlueshifts.gte(11)
             },
             getCompletionEffect() {
                 let completions = player.pri.fountains[9].completions
@@ -1396,14 +1695,20 @@ const makePrismFountain = function (id, effectIsWhole) {
                 ["style-column", [
                     ["blank", "10px"],
                     ["raw-html", layers.pri.fountains[id].title, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ["raw-html", player.pri.fountains[id].timeSpeed.lte(0) ? "<span style='color:#ff7f7f;font-size:14px'>Can't Complete w/o Prisms!</span>" : (player.pri.fountains[id].focused ? formatTime(player.pri.fountains[id].timeReq.sub(player.pri.fountains[id].time).div(player.pri.fountains[id].timeSpeed)) : formatTime(player.pri.fountains[id].timeReq.div(player.pri.fountains[id].timeSpeed))) + " CD", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                    ["raw-html", player.pri.fountains[id].timeSpeed.lte(0) ? "<span style='color:#ff7f7f;font-size:14px'>Can't Complete w/o Prisms!</span>" : (player.pri.fountains[id].focused ? formatTime(player.pri.fountains[id].timeReq.sub(player.pri.fountains[id].time).div(player.pri.fountains[id].timeSpeed)) : formatTime(player.pri.fountains[id].timeReq.div(player.pri.fountains[id].timeSpeed).mul(player.pri.fountains[id].time.div(player.pri.fountains[id].timeReq).neg().add(1)))) + " CD", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                     ["raw-html", "<small>(" + format(player.pri.fountains[id].time, 1) + "/" + format(player.pri.fountains[id].timeReq, 1) + ")</small>", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                     ["blank", "10px"],
                     ["style-column", [
                         ["raw-html", player.pri.fountains[id].prismReq.eq(0) ? "Your first cycle is free!" : "-" + formatWhole(player.pri.fountains[id].prismReq) + " Prisms", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                     ], {background: "#4d9999", borderRadius: "0 10px 0px 0px", width: "200px", height:"25px"}],
                     ["blank", "3px"],
-                    ["clickable", id],
+                    ["style-row", [
+                        ["hoverless-clickable", id],
+                        ["style-row", [
+                            ["blank", "3px", {width: "3px"}],
+                        ], {display: layers.pri.fountains[id].canAuto() ? "" : "none !important"}],
+                        ["hoverless-clickable", id + 1000],
+                    ], {height: "45px"}]
                 ], {background: "#335966", border: "3px solid #335966", borderRadius: "0 10px 0px 0px", width: "200px", height: "150px"}],
                 ["style-column", [
                         ["style-column", [

@@ -2207,7 +2207,7 @@
                 player.sb.storedSpaceEnergy = this.currency()[0].sub(amt)
                 player.sme.starmetalEssence = this.currency()[1].sub(amt2)
             },
-            effect(x) {return getBuyableAmount(this.layer, this.id).div(10).add(1)},
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(20).add(1)},
             unlocked() {return player.bi.interspaceUnlocked},
             branches: [[191, "#3d996b"]],
             cost(x) {

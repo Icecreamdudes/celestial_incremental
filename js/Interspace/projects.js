@@ -12,6 +12,7 @@
 
         totalProjectLevels: new Decimal(0),
         projectSpeed: new Decimal(1),
+        bestProjectSpeed: new Decimal(1),
 
         maxFocused: new Decimal(1),
         focused: new Decimal(0),
@@ -78,6 +79,7 @@
         },
 
         milestone105Effect: new Decimal(1),
+        milestone206Effect: new Decimal(1),
     }},
     automate() {},
     nodeStyle() {
@@ -107,6 +109,7 @@
         player.prj.projectSpeed = new Decimal(1)
         player.prj.projectSpeed = player.prj.projectSpeed.mul(player.prj.storedTimeCapsuleEffect)
         if (hasUpgrade("wel", 22)) player.prj.projectSpeed = player.prj.projectSpeed.mul(2);
+        player.prj.projectSpeed = player.prj.projectSpeed.mul(player.pri.fountains[9].completionEffect);
         player.prj.projectSpeed = player.prj.projectSpeed.mul(buyableEffect("sme", 191))
 
         player.prj.storedTimeCapsuleEffect = player.prj.storedTimeCapsules.add(1).log(10).add(1).pow(0.5).sub(1).pow_base(10).pow(2).sub(1).div(2).add(1)
@@ -139,6 +142,11 @@
         // MILESTONE EFFECTS
 
         player.prj.milestone105Effect = player.prj.projectSpeed.pow(0.2).mul(player.prj.projectSpeed.max(1).log10().mul(0.75)).add(1)
+        player.prj.milestone206Effect = player.prj.modules[2].completions.sub(5).pow_base(1.2).max(1)
+
+        // MISC
+
+        if (player.prj.projectSpeed.gte(player.prj.bestProjectSpeed)) player.prj.bestProjectSpeed = player.prj.projectSpeed;
     },
     branches: ["wel"],
     clickables: {
@@ -643,7 +651,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Each blueshift boosts prisms by +x0.2 per project cycle.</small>" },
+            effectDescription() { return "<small>x1.2 light well speed per project cycle above 5. (x" + formatShort(player.prj.milestone206Effect) + ")</small>" },
             cycleReq() { return new Decimal(6) },
             projectId() { return 2 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) },
@@ -749,7 +757,7 @@
             onComplete() {
                 doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock more project studies.</small>" },
+            effectDescription() { return "<small>x2 stored time capsules.</small>" },
             cycleReq() { return new Decimal(5) },
             projectId() { return 3 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) },
@@ -770,7 +778,7 @@
             onComplete() {
                 doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock even more light buyables.</small>" },
+            effectDescription() { return "<small>Unlock auto-blueshift.</small>" },
             cycleReq() { return new Decimal(6) },
             projectId() { return 3 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) },

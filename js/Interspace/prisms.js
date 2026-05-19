@@ -174,7 +174,6 @@
         if (player.pri.autoPrismaticInput.lt(0) && player.pri.autoPrismaticType) player.pri.autoPrismaticAmount = new Decimal(1)
 
         let prismGainGrowth = new Decimal(0.5)
-        //if (hasMilestone("blu", 11)) prismGainGrowth = prismGainGrowth.mul(player.blu.milestone11Effect)
         player.pri.prismsToGet = player.wel.light.add(1).log(10).sub(15).pow_base(prismGainGrowth.add(1))
         if (!hasMilestone("prj", 201)) player.pri.prismsToGet = player.pri.prismsToGet.min(1);
 
@@ -185,6 +184,7 @@
         
         player.pri.fountainSpeed = player.pri.totalPrisms.div(10)
         if (hasUpgrade("wel", 41)) player.pri.fountainSpeed = player.pri.fountainSpeed.mul(2);
+        player.pri.fountainSpeed = player.pri.fountainSpeed.mul(player.pri.fountains[8].completionEffect);
 
         // FOUNTAIN PROGRESS
         Object.keys(layers.pri.fountains).forEach(i => {
@@ -976,7 +976,6 @@
             getTimeSpeed() {
                 let s = new Decimal(1)
 
-                //s = s.mul(player.prj.projectSpeed)
                 s = s.mul(player.pri.fountainSpeed)
 
                 return s
@@ -999,7 +998,8 @@
                 let completions = player.pri.fountains[2].completions
 
                 s = completions.add(1)
-                if (hasMilestone("prj", 203)) s = s.pow(1.5)
+                if (hasMilestone("prj", 203)) s = s.pow(1.5);
+                if (hasUpgrade("wel", 42)) s = s.mul(completions.sub(100).max(0).pow_base(1.01))
 
                 return s
             },
@@ -1027,7 +1027,6 @@
             getTimeSpeed() {
                 let s = new Decimal(1)
 
-                //s = s.mul(player.prj.projectSpeed)
                 s = s.mul(player.pri.fountainSpeed)
 
                 return s
@@ -1051,6 +1050,7 @@
 
                 s = completions.add(1)
                 if (hasMilestone("prj", 203)) s = s.pow(1.5)
+                if (hasUpgrade("wel", 42)) s = s.mul(completions.sub(100).max(0).pow_base(1.03))
 
                 return s
             },
@@ -1078,7 +1078,6 @@
             getTimeSpeed() {
                 let s = new Decimal(1)
 
-                //s = s.mul(player.prj.projectSpeed)
                 s = s.mul(player.pri.fountainSpeed)
 
                 return s
@@ -1129,7 +1128,6 @@
             getTimeSpeed() {
                 let s = new Decimal(1)
 
-                //s = s.mul(player.prj.projectSpeed)
                 s = s.mul(player.pri.fountainSpeed)
 
                 return s
@@ -1160,9 +1158,6 @@
                 let s = new Decimal(1)
 
                 s = s.mul(completions.pow_base(1.45))
-                if (completions.gte(50)) {
-                    s = s.pow(1.05)
-                }
                 s = s.pow(1.0625).mul(600)
 
                 return s
@@ -1176,7 +1171,6 @@
             getTimeSpeed() {
                 let s = new Decimal(1)
 
-                //s = s.mul(player.prj.projectSpeed)
                 s = s.mul(player.pri.fountainSpeed)
 
                 return s
@@ -1207,9 +1201,6 @@
                 let s = new Decimal(1)
 
                 s = s.mul(completions.pow_base(2))
-                if (completions.gte(50)) {
-                    s = s.pow(1.05)
-                }
                 s = s.pow(1.0625).mul(2.4e3)
 
                 return s
@@ -1223,7 +1214,6 @@
             getTimeSpeed() {
                 let s = new Decimal(1)
 
-                //s = s.mul(player.prj.projectSpeed)
                 s = s.mul(player.pri.fountainSpeed)
 
                 return s
@@ -1255,9 +1245,6 @@
 
                 s = s.mul(completions.pow_base(2))
 
-                if (completions.gte(50)) {
-                    s = s.pow(1.05)
-                }
                 s = s.pow(1.0625).mul(1.2e6)
 
                 return s
@@ -1275,7 +1262,6 @@
             getTimeSpeed() {
                 let s = new Decimal(1)
 
-                //s = s.mul(player.prj.projectSpeed)
                 s = s.mul(player.pri.fountainSpeed)
 
                 return s
@@ -1284,9 +1270,9 @@
         8: {
             title: "Lense",
             completionEffectPrefix: "x",
-            completionEffectSuffix: " Light",
+            completionEffectSuffix: " Pyramid Fountain Speed",
             condition() {
-                return player.prj.projectSpeed.gte(400)
+                return player.pri.totalPrisms.gte(1e10)
             },
             unlocked() {
                 return (player.pri.fountains[4].completions.gt(0) || player.pri.fountains[5].completions.gt(0) || player.pri.fountains[6].completions.gt(0)) && hasMilestone("prj", 302)
@@ -1295,34 +1281,30 @@
                 return player.blu.totalBlueshifts.gte(9)
             },
             getCompletionEffect() {
-                let completions = player.pri.fountains[9].completions
+                let completions = player.pri.fountains[8].completions
 
-                s = completions.pow(0.8).pow_base(1.2)
+                s = completions.pow(0.8).pow_base(1.5)
 
                 return s
             },
             getTimeReq() {
-                let completions = player.pri.fountains[9].completions
+                let completions = player.pri.fountains[8].completions
                 let s = new Decimal(1)
 
-                s = s.mul(completions.pow_base(1.5))
-                if (completions.gte(50)) {
-                    s = s.pow(1.05)
-                }
-                s = s.pow(1.0625).mul(1.8e3)
+                s = s.mul(completions.pow_base(3))
+                s = s.pow(1.0625).mul(1e12)
 
                 return s
             },
             getprismReq() {
-                let completions = player.pri.fountains[9].completions
-                let s = completions.pow_base(1.5).mul(50)
+                let completions = player.pri.fountains[8].completions
+                let s = completions.pow_base(3).mul(1e10)
 
                 return s.floor()
             },
             getTimeSpeed() {
                 let s = new Decimal(1)
 
-                //s = s.mul(player.prj.projectSpeed)
                 s = s.mul(player.pri.fountainSpeed)
 
                 return s
@@ -1333,7 +1315,7 @@
             completionEffectPrefix: "x",
             completionEffectSuffix: " Project Speed",
             condition() {
-                return player.prj.projectSpeed.gte(400)
+                return player.prj.bestProjectSpeed.gte(200)
             },
             unlocked() {
                 return (player.pri.fountains[4].completions.gt(0) || player.pri.fountains[5].completions.gt(0) || player.pri.fountains[6].completions.gt(0)) && hasMilestone("prj", 302)
@@ -1344,7 +1326,7 @@
             getCompletionEffect() {
                 let completions = player.pri.fountains[9].completions
 
-                s = completions.pow(0.8).pow_base(1.2)
+                s = completions.pow(0.5).pow_base(1.5)
 
                 return s
             },
@@ -1352,24 +1334,20 @@
                 let completions = player.pri.fountains[9].completions
                 let s = new Decimal(1)
 
-                s = s.mul(completions.pow_base(1.5))
-                if (completions.gte(50)) {
-                    s = s.pow(1.05)
-                }
-                s = s.pow(1.0625).mul(1.8e3)
+                s = s.mul(completions.pow_base(5))
+                s = s.pow(1.0625).mul(1e12)
 
                 return s
             },
             getprismReq() {
                 let completions = player.pri.fountains[9].completions
-                let s = completions.pow_base(1.5).mul(50)
+                let s = completions.pow_base(5).mul(1e10)
 
                 return s.floor()
             },
             getTimeSpeed() {
                 let s = new Decimal(1)
 
-                //s = s.mul(player.prj.projectSpeed)
                 s = s.mul(player.pri.fountainSpeed)
 
                 return s
@@ -1400,9 +1378,6 @@
                 let s = new Decimal(1)
 
                 s = s.mul(completions.pow_base(1.5))
-                if (completions.gte(50)) {
-                    s = s.pow(1.05)
-                }
                 s = s.pow(1.0625).mul(1.8e3)
 
                 return s
@@ -1416,7 +1391,6 @@
             getTimeSpeed() {
                 let s = new Decimal(1)
 
-                //s = s.mul(player.prj.projectSpeed)
                 s = s.mul(player.pri.fountainSpeed)
 
                 return s
@@ -1573,7 +1547,7 @@
                                 ], {width: "0", height: "0"}],
                             )
                         if (layers.pri.fountains[8].condition()) {
-                            look[7][1].push(makePrismFountain(7, false))
+                            look[7][1].push(makePrismFountain(8, false))
                         } else {
                             look[7][1].push(
                             ["style-column", [
@@ -1596,7 +1570,7 @@
                         } else {
                             look[9][1].push(
                             ["style-column", [
-                                ["raw-html", "Pentagon<br><small>Req: 400 Project Speed</small>", {color: "white", fontSize: "16px"}],
+                                ["raw-html", "Pentagon<br><small>Req: 200 Project Speed</small>", {color: "white", fontSize: "16px"}],
                             ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
                             )
                         }

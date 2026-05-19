@@ -30,7 +30,7 @@
                 amount: new Decimal(0),
                 cycleGainMul: new Decimal(1),
                 cycleSpeedRoot: new Decimal(1),
-                shiftBase: new Decimal(160),
+                shiftBase: new Decimal(1e3),
             },
             5: {
                 amount: new Decimal(0),
@@ -80,11 +80,11 @@
         player.blu.blueshifts[1].shiftBase = new Decimal(10)
         player.blu.blueshifts[2].shiftBase = new Decimal(20)
         player.blu.blueshifts[3].shiftBase = new Decimal(40)
-        player.blu.blueshifts[4].shiftBase = new Decimal(160)
+        player.blu.blueshifts[4].shiftBase = new Decimal(1e3)
         player.blu.blueshifts[5].shiftBase = new Decimal(6)
         player.blu.blueshifts[6].shiftBase = new Decimal(12)
         player.blu.blueshifts[7].shiftBase = new Decimal(24)
-        player.blu.blueshifts[8].shiftBase = new Decimal(96)
+        player.blu.blueshifts[8].shiftBase = new Decimal(400)
 
         player.blu.totalBlueshifts = new Decimal(0)
         for (let i = 1; i < Object.keys(player.blu.blueshifts).length + 1; i++) {
@@ -107,7 +107,7 @@
             if (!hasAchievement("achievements", 1210)) completeAchievement("achievements", 1210);
         }
         layers.pri.prismReset(false)
-        
+
         player.wel.modules[4].time = player.wel.modules[4].maxTime
         player.wel.modules[4].timeSpeed = new Decimal(0)
         player.wel.modules[4].completions = new Decimal(0)

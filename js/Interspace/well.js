@@ -14,6 +14,7 @@
         lightWellCycleEffectSoftcap: new Decimal(0.5),
         
         lightWellSpeed: new Decimal(1),
+        lightWellCycleYield: new Decimal(1),
         wellCycleProduct: new Decimal(1),
 
         lightFountainReqDivisor: new Decimal(1),
@@ -225,6 +226,14 @@
         if (hasMilestone("prj", 105)) player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(player.prj.milestone105Effect)
         player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(buyableEffect("sme", 192))
         player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(player.prj.milestone206Effect)
+        
+        // WELL CYCLES
+
+        player.wel.lightWellCycleYield = new Decimal(1)
+        player.wel.lightWellCycleYield = player.wel.lightWellCycleYield.mul(player.wel.fountains[3].completionEffect)
+        player.wel.lightWellCycleYield = player.wel.lightWellCycleYield.mul(player.pri.fountains[2].completionEffect)
+        if (hasMilestone("prj", 102)) player.wel.lightWellCycleYield = player.wel.lightWellCycleYield.mul(2);
+        player.wel.lightWellCycleYield = player.wel.lightWellCycleYield.mul(player.blu.blueshiftEffect)
 
         // WELLS
 
@@ -250,16 +259,12 @@
             if (player.wel.modules[i].timeSpeed.gte(player.wel.modules[i].maxTime.mul(10))) player.wel.modules[i].timeSpeed = player.wel.modules[i].maxTime.mul(10);
 
             // CYCLE GAIN
-            player.wel.modules[i].completionsGain = new Decimal(1)
-            player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(player.wel.fountains[3].completionEffect)
-            player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(player.pri.fountains[2].completionEffect)
-            if (hasMilestone("prj", 102)) player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(2);
+            player.wel.modules[i].completionsGain = player.wel.lightWellCycleYield
             if (hasUpgrade("wel", 32) && player.wel.modules[i].completions.lt(player.wel.modules[i].bestCompletions)) {
                 // MAKE THIS MORE DYNAMIC EVENTUALLY
                 player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(3);
             }
             player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(player.blu.blueshifts[i].cycleGainMul)
-            player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(player.blu.blueshiftEffect)
 
             // CYCLE GEN
             if (i < 4) player.wel.modules[i].completions = player.wel.modules[i].completions.add(player.wel.modules[i].completionsGain.mul(player.wel.modules[4].completionEffect).div(100).mul(delta));
@@ -786,13 +791,13 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Double pyramid fountain speed.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Project speed affects pyramid fountain speed at /100 efficiency.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><br><h3>Req: 1 Dodecahedron ↻</h3>"
                 }
                 return s
             },
-            cost: new Decimal(1e45),
+            cost: new Decimal(1e38),
             currencyLocation() { return player.wel },
             currencyDisplayName: "Light",
             currencyInternalName: "light",
@@ -824,7 +829,7 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Improve the effects of Speed Fountain, Spiral, and Arrow above 100 ↻.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Improve the formulas for light fountains, and bulk complete them.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><br><h3>Req: Light Well δ unlocked</h3>"
                 }
@@ -1692,8 +1697,12 @@
                     let look = [
                         ["blank", "25px"],
                         ["style-column", [
-                            ["raw-html", "Light Wells are operating at x" + format(player.wel.lightWellSpeed) + " speed.", {color: "white", fontSize: "18px", fontFamily: "monospace", display: (player.wel.modules[1].completions.gte(1e3) ? "" : "none !important")}],
-                            ["raw-html", "<small>All well speed scaling is ^0.5 after x300,000!</small>", {color: "yellow", fontSize: "18px", fontFamily: "monospace", display: (player.wel.modules[1].completions.gte(1e3) ? "" : "none !important")}],
+                            ["style-column", [
+                                ["raw-html", "Light wells yield a base of <h3>" + formatSimple(player.wel.lightWellCycleYield) + "</h3> ↻.", {color: "white", fontSize: "18px", fontFamily: "monospace", display: (player.wel.modules[1].completions.gte(1e3) ? "" : "none !important")}],
+                            ], {display: player.wel.lightWellCycleYield.gt(1) ? "" : "none !important"}],
+                            ["style-column", [
+                                ["raw-html", "Light wells operate at <h3>x" + formatSimple(player.wel.lightWellSpeed) + "</h3> speed.", {color: "white", fontSize: "18px", fontFamily: "monospace", display: (player.wel.modules[1].completions.gte(1e3) ? "" : "none !important")}],
+                            ], {display: player.wel.lightWellSpeed.gt(1) ? "" : "none !important"}],
                         ]],
                         ["blank", "25px"],
                         ["style-column", [

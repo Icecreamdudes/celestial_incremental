@@ -804,7 +804,7 @@ function updateStyles() {
 		case "ho": case "wa": case "al": case "n":
 			player.musuniverse = "UB"
 			break;
-		case "wel": case "pri": case "prj": case "bum":
+		case "wel": case "pri": case "prj": case "blu": case "bum":
 		case "cer":
 			player.musuniverse = "UD"
 			break;

@@ -1225,7 +1225,7 @@
                         ["raw-html", "You are gaining <h3>" + format(player.prj.projectSpeed) + "</h3> project progress /s.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", "You are using " + formatWhole(player.prj.focused) + "/" + formatWhole(player.prj.maxFocused) + " focus.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "25px"],
-                        ["raw-html", "You have a total of <h3>" + formatWhole(player.prj.completedProjects) + "</h3> project cycles.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "You have a total of <h3>" + formatWhole(player.prj.completedProjects) + "</h3> project ↻.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "25px"],
                         ["raw-html", "<small>Unlocks from project milestones are permanent!</small>", {color: "#bfbfbf", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "15px"],

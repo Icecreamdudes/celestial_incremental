@@ -72,8 +72,8 @@
     tooltip: "Blueshift",
     color: "#ffffd1",
     update(delta) {
-        player.blu.blueshiftEffectBase = new Decimal(3)
-        player.blu.blueshiftEffect = player.blu.totalBlueshifts.pow_base(player.blu.blueshiftEffectBase)
+        player.blu.blueshiftEffectBase = new Decimal(2)
+        player.blu.blueshiftEffect = player.blu.totalBlueshifts.pow(0.75).pow_base(player.blu.blueshiftEffectBase)
 
         // BLUESHIFTS
         

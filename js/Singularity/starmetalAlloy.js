@@ -272,7 +272,7 @@
         13: {
             title: "Dark Starmetal Upgrade IV",
             unlocked() { return hasUpgrade("sma", 12)},
-            description: "Dark prestige points boost dark celestial point gain.",
+            description: "Dark prestige points on D1 exit boost dark celestial point gain for next visit.",
             cost: new Decimal("8"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",

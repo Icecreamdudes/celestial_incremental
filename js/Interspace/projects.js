@@ -79,7 +79,6 @@
         },
 
         milestone105Effect: new Decimal(1),
-        milestone206Effect: new Decimal(1),
     }},
     automate() {},
     nodeStyle() {
@@ -142,7 +141,7 @@
         // MILESTONE EFFECTS
 
         player.prj.milestone105Effect = player.prj.projectSpeed.pow(0.2).mul(player.prj.projectSpeed.max(1).log10().mul(0.75)).add(1)
-        player.prj.milestone206Effect = player.prj.modules[2].completions.sub(5).pow_base(1.2).max(1)
+        if (hasMilestone("prj", 111)) player.prj.milestone105Effect = player.prj.milestone105Effect.pow(1.5);
 
         // MISC
 
@@ -335,7 +334,7 @@
             onComplete() {
                 doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>x2 light well cycle gain and unlock 1 punchcard per project cycle up to 5.</small>" },
+            effectDescription() { return "<small>x2 light well ↻ gain and unlock 1 punchcard per project cycle up to 5.</small>" },
             cycleReq() { return new Decimal(2) },
             projectId() { return 1 },
             unlocked() { return true },
@@ -524,10 +523,94 @@
             onComplete() {
                 doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock project studies.</small>" },
+            effectDescription() { return "<small>Improve the 5 ↻ milestone effect.</small>" },
             cycleReq() { return new Decimal(11) },
             projectId() { return 1 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) && hasUpgrade("wel", 34) },
+            done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
+            style() {
+                let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
+                if (hasMilestone("prj", this.id)) {
+                    look.backgroundColor = "#efffef"
+                    look.color = "#232e23"
+                } else {
+                    look.backgroundColor = "#232e23"
+                    look.color = "#efffef"
+                }
+                return look
+            },
+        },
+        112: {
+            onComplete() {
+                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+            },
+            effectDescription() { return "<small>x1.15 light well speed, you're welcome.</small>" },
+            cycleReq() { return new Decimal(13) },
+            projectId() { return 1 },
+            unlocked() { return hasMilestone(this.layer, this.id - 3) && hasUpgrade("wel", 34) },
+            done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
+            style() {
+                let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
+                if (hasMilestone("prj", this.id)) {
+                    look.backgroundColor = "#efffef"
+                    look.color = "#232e23"
+                } else {
+                    look.backgroundColor = "#232e23"
+                    look.color = "#efffef"
+                }
+                return look
+            },
+        },
+        113: {
+            onComplete() {
+                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+            },
+            effectDescription() { return "<small>Automate cloud upgrades.</small>" },
+            cycleReq() { return new Decimal(15) },
+            projectId() { return 1 },
+            unlocked() { return hasMilestone(this.layer, this.id - 3) && hasUpgrade("wel", 34) },
+            done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
+            style() {
+                let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
+                if (hasMilestone("prj", this.id)) {
+                    look.backgroundColor = "#efffef"
+                    look.color = "#232e23"
+                } else {
+                    look.backgroundColor = "#232e23"
+                    look.color = "#efffef"
+                }
+                return look
+            },
+        },
+        114: {
+            onComplete() {
+                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+            },
+            effectDescription() { return "<small>Automate cloud buyables.</small>" },
+            cycleReq() { return new Decimal(16) },
+            projectId() { return 1 },
+            unlocked() { return hasMilestone(this.layer, this.id - 3) && hasUpgrade("bum", 11) },
+            done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
+            style() {
+                let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
+                if (hasMilestone("prj", this.id)) {
+                    look.backgroundColor = "#efffef"
+                    look.color = "#232e23"
+                } else {
+                    look.backgroundColor = "#232e23"
+                    look.color = "#efffef"
+                }
+                return look
+            },
+        },
+        115: {
+            onComplete() {
+                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+            },
+            effectDescription() { return "<small>Unlock a legendary punchcard.</small>" },
+            cycleReq() { return new Decimal(20) },
+            projectId() { return 1 },
+            unlocked() { return hasMilestone(this.layer, this.id - 3) && hasUpgrade("bum", 11) },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
@@ -609,7 +692,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock auto-prismatic. Retain focus on prismatic.</small>" },
+            effectDescription() { return "<small>Retain focus on prismatic.</small>" },
             cycleReq() { return new Decimal(4) },
             projectId() { return 2 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) },
@@ -651,7 +734,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>x1.2 light well speed per project cycle above 5. (x" + formatShort(player.prj.milestone206Effect) + ")</small>" },
+            effectDescription() { return "<small>Unlock auto-prismatic.</small>" },
             cycleReq() { return new Decimal(6) },
             projectId() { return 2 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) },
@@ -1056,7 +1139,7 @@
 
                 return s
             },
-            milestones: [101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111],
+            milestones: [101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115],
         },
         2: {
             title: "Prismatic",
@@ -1202,8 +1285,8 @@
             },
             milestones: [401, 402, 403, 404, 405, 406, 407, 408, 409, 410],
         },
-        // 5, Singularity Points,
-        // 6, Starmetal Essence,
+        // 5, Eclipse Shards,
+        // 6, Pylon Energy generation,
         // 7, Singularities,
         // 8, lmao no spoilers for what this boosts,
     },

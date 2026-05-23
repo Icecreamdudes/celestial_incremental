@@ -34,8 +34,6 @@
     color: "#d460eb",
     update(delta) {
         let onepersec = new Decimal(1)
-
-        if (options.fullscreen && player.tab == "sma") options.fullscreen = false
         
         // Set Autocrunch Values
         if (player.sma.input.gte(1) && !player.sma.type) player.sma.amount = player.sma.input

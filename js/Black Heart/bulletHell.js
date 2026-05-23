@@ -666,6 +666,25 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
 
     function animate(ts) {
         if (!info.active) return;
+        // End early if celestialite is dead
+        if (player.bh.celestialite.id == "none" || (player.bh.celestialite.health.lte(0) && !BHC[player.bh.celestialite.id].immortal)) {
+            info.exitAction()
+            if (!options.bhKeyboard) {
+                window.removeEventListener("mousemove", mouseHandler);
+                window.removeEventListener("touchmove", touchHandler);
+            } else {
+                window.removeEventListener("keydown", keydownHandler);
+                window.removeEventListener("keyup", keyupHandler);
+            }
+            if (overlay.parentNode) overlay.remove();
+            bhState.active = false;
+            info.active = false;
+            player.subtabs["bh"]["stuff"] = "battle";
+            pauseUniverseAll(["BH"], "unpause", true)
+            player.universe = "U3"
+            options.fullscreen = info.full;
+            localStorage.setItem('bhState', JSON.stringify(info));
+        }
         // End early if all characters are dead
         if (info.allCharactersDead()) {
             info.exitAction()

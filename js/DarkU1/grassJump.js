@@ -80,7 +80,7 @@ addLayer("dgj", {
     buyables: {
         11: {
             costBase() { return new Decimal(10) },
-            costGrowth() { return new Decimal(1.2) },
+            costGrowth() { return new Decimal(1.1) },
             purchaseLimit() { return new Decimal(500) },
             currency() { return player.dgj.grassJumpers},
             pay(amt) { player.dgj.grassJumpers = this.currency().sub(amt) },
@@ -119,7 +119,7 @@ addLayer("dgj", {
         },
         12: {
             costBase() { return new Decimal(25) },
-            costGrowth() { return new Decimal(1.3) },
+            costGrowth() { return new Decimal(1.15) },
             purchaseLimit() { return new Decimal(500) },
             currency() { return player.dgj.grassJumpers},
             pay(amt) { player.dgj.grassJumpers = this.currency().sub(amt) },
@@ -158,7 +158,7 @@ addLayer("dgj", {
         },
         13: {
             costBase() { return new Decimal(100) },
-            costGrowth() { return new Decimal(1.4) },
+            costGrowth() { return new Decimal(1.2) },
             purchaseLimit() { return new Decimal(500) },
             currency() { return player.dgj.grassJumpers},
             pay(amt) { player.dgj.grassJumpers = this.currency().sub(amt) },
@@ -197,7 +197,7 @@ addLayer("dgj", {
         },
         14: {
             costBase() { return new Decimal(250) },
-            costGrowth() { return new Decimal(1.5) },
+            costGrowth() { return new Decimal(1.3) },
             purchaseLimit() { return new Decimal(250) },
             currency() { return player.dgj.grassJumpers},
             pay(amt) { player.dgj.grassJumpers = this.currency().sub(amt) },
@@ -236,7 +236,7 @@ addLayer("dgj", {
         },
         15: {
             costBase() { return new Decimal(1000) },
-            costGrowth() { return new Decimal(2) },
+            costGrowth() { return new Decimal(1.5) },
             purchaseLimit() { return new Decimal(250) },
             currency() { return player.dgj.grassJumpers},
             pay(amt) { player.dgj.grassJumpers = this.currency().sub(amt) },
@@ -274,8 +274,8 @@ addLayer("dgj", {
             style: {width: '275px', height: '150px', color: "white", backgroundColor: "#002447", borderColor: "#00488F"},
         },
         16: {
-            costBase() { return new Decimal(100000) },
-            costGrowth() { return new Decimal(10) },
+            costBase() { return new Decimal(10000) },
+            costGrowth() { return new Decimal(2) },
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.dgj.grassJumpers},
             pay(amt) { player.dgj.grassJumpers = this.currency().sub(amt) },

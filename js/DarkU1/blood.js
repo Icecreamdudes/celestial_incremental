@@ -701,6 +701,10 @@
                             ["row", [["dark-buyable", 31], ["dark-buyable", 32], ["dark-buyable", 33],["dark-buyable", 34]]],
                         ], {width: "408px"}],
                     ], {background: "#1f0000ff", border: "2px solid #f57171ff", padding: "-2px"}],
+                    ["blank", "25px"],
+                    ["style-column", [
+                        ["raw-html", "Blood battle buyables are not kept on dark universe exit.", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ], () => {return !player.bl.noxDefeated ? {width: "550px", height: "30px", background: "#1f0000", border: "2px solid #f57171", borderRadius: "15px"} : {display: "none !important"}}]
                 ]
             },
             "Blood Battle": {
@@ -2090,6 +2094,8 @@ class BloodArena extends SpaceArena {
                                     this.lootFlashes.push({ x: enemy.x, y: enemy.y + 12, text: `+${formatWhole(noxGuarantee)} blood gems`, timer: 240, color: "#E0115F", style: "24px monospace" });
                                 }
                             } catch (e) {}
+                            arena.showUpgradeChoice(true);
+                            arena.upgradeChoiceActive = true
                         }
                     } catch (e) {}
                     // If a Large Leech died, spawn several small leeches at its position

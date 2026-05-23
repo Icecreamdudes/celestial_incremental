@@ -812,6 +812,11 @@ addLayer("bh", {
         if (player.bh.currentStage != "none") {
             // Only trigger when celestialite id is set
             if (player.bh.celestialite.id != "none") {
+                // Kill Celestialite
+                if (player.bh.celestialite.health.lte(0) && !BHC[player.bh.celestialite.id].immortal) {
+                    celestialiteDeath()
+                }
+                
                 if (unpaused) {
                     // Celestialite Regen
                     if (player.bh.celestialite.regen.neq(0)) {
@@ -954,11 +959,6 @@ addLayer("bh", {
                             }
                         }                        
                     }
-                }
-
-                // Kill Celestialite
-                if (player.bh.celestialite.health.lte(0) && !BHC[player.bh.celestialite.id].immortal) {
-                    celestialiteDeath()
                 }
             }
 

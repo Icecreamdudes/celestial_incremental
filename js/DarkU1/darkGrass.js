@@ -71,7 +71,7 @@
 
         //post softcap
         player.dgr.maxGrass = player.dgr.maxGrass.mul(buyableEffect("ds", 103))
-
+        player.dgr.maxGrass = player.dgr.maxGrass.mul(buyableEffect("rp", 11))
         // GRASS VALUE
         player.dgr.grassValue = new Decimal(1)
         player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("dgr", 12))
@@ -94,6 +94,7 @@
 
         //post softcap
         player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("ds", 103))
+        player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("rp", 11))
 
         let autoMult = new Decimal(1)
         if (hasMilestone("dgj", 15)) autoMult = autoMult.mul(player.dgj.milestone5Effect)

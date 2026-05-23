@@ -602,11 +602,13 @@ addLayer("bh", {
             "creation_increment": {selected: ["creation", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "creation_upgrade": {selected: ["creation", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "creation_prestige": {selected: ["creation", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "creation_mend": {selected: ["creation", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
 
             // DICE FIVE
             "diceFive_diceSlice": {selected: ["diceFive", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "diceFive_luckyLift": {selected: ["diceFive", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "diceFive_coinToss": {selected: ["diceFive", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "diceFive_snakeEyes": {selected: ["diceFive", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
         },
 
         //Stagnant Timer
@@ -1417,6 +1419,7 @@ addLayer("bh", {
         luckAdd = luckAdd.add(player.bh.skillData["diceFive_diceSlice"].maxLevel.div(2))
         luckAdd = luckAdd.add(player.bh.skillData["diceFive_luckyLift"].maxLevel.div(2))
         luckAdd = luckAdd.add(player.bh.skillData["diceFive_coinToss"].maxLevel.div(2))
+        luckAdd = luckAdd.add(player.bh.skillData["diceFive_snakeEyes"].maxLevel.div(2))
         if (hasUpgrade("ep2", 9105)) luckAdd = luckAdd.add(upgradeEffect("ep2", 9105))
         luckAdd = luckAdd.add(levelableEffect("car", 109)[0])
 
@@ -1478,7 +1481,6 @@ addLayer("bh", {
             player.bh.characters[i].agility = player.bh.characters[i].agility.mul(bhTemp[i].agilityMult)
 
             if (player.bh.characters[i].id == "creation") {
-                player.bh.characters[i].maxHealth = player.bh.characters[i].maxHealth.mul(player.creation.prestigeEffect)
                 player.bh.characters[i].damage = player.bh.characters[i].damage.mul(player.creation.prestigeEffect)
                 player.bh.characters[i].regen = player.bh.characters[i].regen.mul(player.creation.prestigeEffect)
                 player.bh.characters[i].agility = player.bh.characters[i].agility.mul(player.creation.prestigeEffect)
@@ -1710,6 +1712,9 @@ addLayer("bh", {
                 options.fullscreen = false
 
                 player.subtabs["bh"]["stuff"] = "stages"
+                if (player.universe == "DS") {
+                    player.tab = "zd"
+                }
             },
             style() {
                 let look = {width: "200px", minHeight: "75px", color: "white", backgroundColor: "black", border: "3px solid #8a0e79", borderRadius: "20px", margin: "-1.5px"}

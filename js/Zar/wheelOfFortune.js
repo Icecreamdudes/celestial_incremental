@@ -120,6 +120,7 @@
         player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(levelableEffect("car", 208)[0])
         player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(buyableEffect("sme", 183))
         player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(buyableEffect("car", 32))
+        if (player.zarDungeon.zarDefeated) player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(100)
 
         if (hasUpgrade("car", 12)) player.wof.wheelPoints = player.wof.wheelPoints.add(player.wof.wheelPointsMult.mul(Decimal.mul(delta, 0.25)))
 

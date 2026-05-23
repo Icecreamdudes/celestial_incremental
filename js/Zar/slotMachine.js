@@ -108,6 +108,7 @@
         if (hasUpgrade("cbs", 15)) player.sm.totalChipMult = player.sm.totalChipMult.mul(upgradeEffect("cbs", 15))
         player.sm.totalChipMult = player.sm.totalChipMult.mul(buyableEffect("sme", 184))
         player.sm.totalChipMult = player.sm.totalChipMult.mul(buyableEffect("car", 42))
+        if (player.zarDungeon.zarDefeated) player.sm.totalChipMult = player.sm.totalChipMult.mul(10)
 
         player.sm.chipsToGet[0] = player.sm.chipsToGet[0].mul(buyableEffect("sm", 11))
         player.sm.chipsToGet[0] = player.sm.chipsToGet[0].mul(player.sm.totalChipMult)
@@ -142,6 +143,13 @@
         }
 
         if (player.sm.generateSpin) player.sm.spinAmount = player.sm.spinAmount.add(buyableEffect("sm", 113).mul(delta))
+        
+        for (let i = 0; i < 3; i++) {
+            if (player.sm.chips[i].lt(0))
+            {
+                player.sm.chips[i] = new Decimal(0)
+            }
+        }
     },
     randomizeSegments() {
         // Weighted pick but ensure result is different from current displayed index
@@ -570,10 +578,8 @@
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("car", 17)) this.pay(cost)
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    if (!hasUpgrade("car", 17)) this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 }
@@ -698,10 +704,8 @@
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("car", 17))this.pay(cost)
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    if (!hasUpgrade("car", 17)) this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 }

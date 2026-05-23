@@ -290,13 +290,13 @@ function showCutscene(dialogue, opt = {}) {
 }
 
 function showCinematicCutscene(dialogue, opt = {}) {
-    // dialogue: [{ text: "...", duration: 2000, style: { ... } }, ...]
+    // dialogue: [{ text: "...", image: "...", duration: 2000, style: { ... } }, ...]
     // opt: { background, overlayImage, onEnd, cutsceneID }
     let idx = (opt.resume && typeof opt.cutsceneIndex === 'number') ? opt.cutsceneIndex : 0;
 
     // Cinematic cutscene state
     window.cinematicCutsceneActive = true;
-    cutsceneActive = true;
+    if (typeof cutsceneActive !== 'undefined') cutsceneActive = true; 
     window.cinematicCutsceneID = (typeof opt.cutsceneID !== 'undefined')
         ? opt.cutsceneID
         : Date.now() + Math.floor(Math.random() * 1000000);
@@ -327,34 +327,28 @@ function showCinematicCutscene(dialogue, opt = {}) {
         background: opt.background || 'rgba(0,0,0,1)',
         zIndex: 100000,
         pointerEvents: 'auto',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: '20px' // Spacing between image and text if both are present
     });
 
-    // Overlay image (optional)
-    let overlayImg = null;
-    if (opt.overlayImage) {
-        overlayImg = document.createElement('img');
-        overlayImg.src = opt.overlayImage;
-        Object.assign(overlayImg.style, {
-            position: 'absolute',
-            left: '50%',
-            top: '50%',
-            transform: 'translate(-50%, -50%)',
-            maxWidth: '80vw',
-            maxHeight: '80vh',
-            pointerEvents: 'none',
-            opacity: opt.overlayImageOpacity !== undefined ? opt.overlayImageOpacity : 1
-        });
-        overlay.appendChild(overlayImg);
-    }
+    // Create container elements
+    const slideImg = document.createElement('img');
+    Object.assign(slideImg.style, {
+        maxWidth: '80vw',
+        maxHeight: '60vh',
+        objectFit: 'contain',
+        display: 'none',
+        pointerEvents: 'none',
+        userSelect: 'none'
+    });
+    overlay.appendChild(slideImg);
 
-    // Cinematic text area
     const textArea = document.createElement('div');
     Object.assign(textArea.style, {
-        position: 'absolute',
-        left: '50%',
-        top: '50%',
-        transform: 'translate(-50%, -50%)',
         width: '90vw',
         minHeight: '60px',
         color: '#fff',
@@ -365,34 +359,48 @@ function showCinematicCutscene(dialogue, opt = {}) {
         textShadow: '0 0 24px #000, 0 0 8px #222',
         pointerEvents: 'none',
         userSelect: 'none',
-        whiteSpace: 'pre-line'
+        whiteSpace: 'pre-line',
+        display: 'none'
     });
     overlay.appendChild(textArea);
 
     document.body.appendChild(overlay);
 
     function showEntry(entry) {
-        textArea.innerHTML = '';
-        // Support HTML in text
-        if (entry.style) Object.assign(textArea.style, entry.style);
-        else Object.assign(textArea.style, {
-            fontSize: '3vw',
-            color: '#fff'
-        });
-        textArea.innerHTML = entry.text;
-        // Overlay image per entry
-        if (overlayImg) overlayImg.style.display = 'none';
-        if (entry.overlayImage) {
-            if (!overlayImg) {
-                overlayImg = document.createElement('img');
-                overlay.appendChild(overlayImg);
+        // --- 1. Handle Slide Image ---
+        // Prioritize entry-specific image, fallback to global overlayImage if provided
+        const imgSrc = entry.image || entry.overlayImage || opt.overlayImage;
+        if (imgSrc) {
+            slideImg.src = imgSrc;
+            slideImg.style.display = 'block';
+            
+            // Handle opacity configurations
+            let targetOpacity = 1;
+            if (entry.overlayImageOpacity !== undefined) targetOpacity = entry.overlayImageOpacity;
+            else if (entry.imageOpacity !== undefined) targetOpacity = entry.imageOpacity;
+            else if (opt.overlayImageOpacity !== undefined) targetOpacity = opt.overlayImageOpacity;
+            
+            slideImg.style.opacity = targetOpacity;
+        } else {
+            slideImg.style.display = 'none';
+        }
+
+        // --- 2. Handle Slide Text ---
+        if (entry.text) {
+            textArea.innerHTML = entry.text;
+            textArea.style.display = 'block';
+            
+            // Apply custom styles or reset to default
+            if (entry.style) {
+                Object.assign(textArea.style, entry.style);
+            } else {
+                Object.assign(textArea.style, {
+                    fontSize: '3vw',
+                    color: '#fff'
+                });
             }
-            overlayImg.src = entry.overlayImage;
-            overlayImg.style.display = '';
-            overlayImg.style.opacity = entry.overlayImageOpacity !== undefined ? entry.overlayImageOpacity : 1;
-        } else if (overlayImg) {
-            overlayImg.style.display = opt.overlayImage ? '' : 'none';
-            overlayImg.style.opacity = opt.overlayImageOpacity !== undefined ? opt.overlayImageOpacity : 1;
+        } else {
+            textArea.style.display = 'none';
         }
     }
 
@@ -400,7 +408,7 @@ function showCinematicCutscene(dialogue, opt = {}) {
         if (idx >= dialogue.length) {
             overlay.remove();
             window.cinematicCutsceneActive = false;
-            cutsceneActive = false;
+            if (typeof cutsceneActive !== 'undefined') cutsceneActive = false;
             window.cinematicCutsceneID = 0;
             window.cinematicCutsceneIndex = 0;
             window.cinematicCutsceneDialogue = null;

@@ -28,7 +28,7 @@
 		"Black Heart/blackHeart.js", "Black Heart/blackHeartFunctions.js", "Black Heart/characters.js", "Black Heart/skills.js", "Black Heart/depth1.js",
 		"Black Heart/depth2.js", "Black Heart/depth3.js", "Black Heart/matosLair.js", "Black Heart/darkTemple.js", "Black Heart/bulletHell.js",
 		"Black Heart/stagnantSynestia.js", "Black Heart/depth4.js", "Black Heart/alephsChamber.js", "Black Heart/laboratory.js", "DarkU1/grassJump.js",
-		"Hive/nest.js", "Check Back/gwaTemple.js", "Zar/zarDungeon.js", "Black Heart/creation.js",
+		"Hive/nest.js", "Check Back/gwaTemple.js", "Zar/zarDungeon.js", "Black Heart/creation.js", "DarkU1/rerollPoints.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 	],
@@ -256,7 +256,7 @@ function updateStyles() {
 			}
 			break;
 		case "du": case "le": case "dr": case "dp": case "dg":
-		case "dgr": case "dn": case "db": case "dv": case "ds": case "pu":
+		case "dgr": case "dn": case "db": case "dv": case "ds": case "pu": case "rp":
 			layerBG = "black"
 			break;
 		case "ch":
@@ -677,7 +677,7 @@ function updateStyles() {
             player.musuniverse = "U3"
 			break;
 		case "du": case "le": case "dr": case "dp": case "dg":
-		case "dgr": case "dn": case "ds": case "dv": case "bl":
+		case "dgr": case "dn": case "ds": case "dv": case "bl": case "rp":
             player.musuniverse = "D1"
 			break;
 		case "ch":

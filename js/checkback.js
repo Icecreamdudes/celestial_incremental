@@ -504,7 +504,7 @@ addLayer("cb", {
         layers.sp.update(time)
         if (offline) layers.cbs.update(time)
     },
-    branches: ["m"],
+    branches() { return !player.zarDungeon.zarDefeated ? "m" : ["rf"] },
     clickables: {
         11: {
             title() { return player.cb.xpTimers[0].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.xpTimers[0].current) + "." : "<h3>+" + format(player.cb.xpTimers[0].base.mul(player.cb.xpMult)) + " XP."},

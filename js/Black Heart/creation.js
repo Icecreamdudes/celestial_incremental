@@ -5,6 +5,7 @@ addLayer("creation", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
+        creationIndex: 0,
 
         incrementalEnergy: new Decimal(0),
         incrementalEnergyMult: new Decimal(1),
@@ -18,8 +19,18 @@ addLayer("creation", {
         prestigeAmount: new Decimal(0),
         prestigeEffect: new Decimal(1),
         prestigeReq: new Decimal(50),
+
+        //heal
+        healAmount: new Decimal(0),
     }},
     update(delta) {
+        //index
+        for (let i = 0; i < 3; i++) {
+            if (player.bh.characters[i].id == "creation") {
+                player.creation.creationIndex = i
+            }
+        }
+
         //upgrade
         player.creation.upgradeCost = player.creation.upgradeAmount.add(1).pow(0.8).mul(3)
         player.creation.upgradeEffect = player.creation.upgradeAmount.pow(0.875).mul(0.5).add(1)
@@ -32,6 +43,9 @@ addLayer("creation", {
         player.creation.incrementalEnergyMult = new Decimal(1)
         player.creation.incrementalEnergyMult = player.creation.incrementalEnergyMult.mul(player.creation.upgradeEffect)
         player.creation.incrementalEnergyMult = player.creation.incrementalEnergyMult.mul(player.creation.prestigeEffect)
+
+        //heal
+        player.creation.healAmount = player.creation.incrementalEnergy.mul(2)
     },
     resetCreation() {
         player.creation.incrementalEnergy = new Decimal(0)
@@ -41,3 +55,4 @@ addLayer("creation", {
     infoboxes: {},
     layerShown() { return false }
 })
+

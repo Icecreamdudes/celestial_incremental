@@ -167,6 +167,19 @@
     tooltip: "Prismatic",
     color: "#d6ebff",
     update(delta) {
+
+        // Auto-prismatic functionality
+        if (player.pri.prismsToGet.gte(player.pri.autoPrismaticAmount) && player.pri.autoPrismaticToggle && !player.pri.autoPrismaticType && player.wel.light.gte(1e15)) {
+            layers.pri.prismReset(true)
+        }
+        if (player.pri.autoPrismaticToggle && player.pri.autoPrismaticType) {
+            player.pri.autoPrismaticTime = player.pri.autoPrismaticTime.add(delta);
+            if (player.pri.autoPrismaticTime.gte(player.pri.autoPrismaticAmount) && player.wel.light.gte(1e15)) {
+                player.pri.autoPrismaticTime = new Decimal(0)
+                layers.pri.prismReset(true)
+            }
+        }
+
         // Set auto prismatic values
         if (player.pri.autoPrismaticInput.gte(1) && !player.pri.autoPrismaticType) player.pri.autoPrismaticAmount = player.pri.autoPrismaticInput
         if (player.pri.autoPrismaticInput.lt(1) && !player.pri.autoPrismaticType) player.pri.autoPrismaticAmount = new Decimal(1)
@@ -234,12 +247,16 @@
         player.wel.modules[3].completions = new Decimal(0)
 
         player.wel.fountains[1].completions = new Decimal(0)
+        player.wel.fountains[1].time = new Decimal(0)
         player.wel.fountains[1].canAddCompletion = false
         player.wel.fountains[2].completions = new Decimal(0)
+        player.wel.fountains[2].time = new Decimal(0)
         player.wel.fountains[2].canAddCompletion = false
         player.wel.fountains[3].completions = new Decimal(0)
+        player.wel.fountains[3].time = new Decimal(0)
         player.wel.fountains[3].canAddCompletion = false
         player.wel.fountains[4].completions = new Decimal(0)
+        player.wel.fountains[4].time = new Decimal(0)
         player.wel.fountains[4].canAddCompletion = false
 
         if (!hasMilestone('prj', 204)) {
@@ -996,7 +1013,6 @@
 
                 s = completions.add(1)
                 if (hasMilestone("prj", 203)) s = s.pow(1.5);
-                if (hasUpgrade("wel", 42)) s = s.mul(completions.sub(100).max(0).pow_base(1.01))
 
                 return s
             },
@@ -1043,7 +1059,6 @@
 
                 s = completions.add(1)
                 if (hasMilestone("prj", 203)) s = s.pow(1.5)
-                if (hasUpgrade("wel", 42)) s = s.mul(completions.sub(100).max(0).pow_base(1.03))
 
                 return s
             },
@@ -1144,7 +1159,7 @@
 
                 s = s.mul(completions.pow_base(1.5))
                 s = s.mul(completions.sub(20).max(0).pow_base(1.25))
-                s = s.pow(1.0625).mul(600)
+                s = s.pow(1.0625).mul(1.2e3)
 
                 return s
             },
@@ -1330,13 +1345,13 @@
 
                 s = s.mul(completions.pow_base(5))
                 s = s.mul(completions.sub(20).max(0).pow_base(1.4))
-                s = s.pow(1.0625).mul(1e12)
+                s = s.pow(1.0625).mul(1e9)
 
                 return s
             },
             getprismReq() {
                 let completions = player.pri.fountains[9].completions
-                let s = completions.pow_base(5).mul(1e10)
+                let s = completions.pow_base(5).mul(1e7)
                 s = s.mul(completions.sub(20).max(0).pow_base(1.4))
 
                 return s.floor()
@@ -1634,7 +1649,7 @@
                         ["clickable", "autoPrismaticToggle"],
                     ], {width: "200px", height: "100px"}],
                 ], {width: "400px", height: "100px", backgroundColor: "#335966", borderRadius: "10px"}],
-            ], () => {return {display: hasMilestone("prj", 204) ? "" : "none !important"}}],
+            ], () => {return {display: hasMilestone("prj", 206) ? "" : "none !important"}}],
         ]],
         ["blank", "15px"],
         ["style-column", [

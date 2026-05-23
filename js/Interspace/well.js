@@ -209,7 +209,7 @@
             else player.wel.modules[3].completionEffect = player.wel.modules[3].completions.mul(0.01).add(1);
             player.wel.lightGain = player.wel.lightGain.mul(player.wel.modules[3].completionEffect)
 
-            player.wel.modules[4].completionEffect = player.wel.modules[4].completions.div(1e10).pow(0.5);
+            player.wel.modules[4].completionEffect = player.wel.modules[4].completions.div(1e9).pow(0.5);
             if (player.wel.modules[4].completionEffect.gte(100)) player.wel.modules[4].completionEffect = player.wel.modules[4].completionEffect.div(100).pow(0.5).mul(100);
         }
         if (hasUpgrade("wel", 14)) player.wel.lightGain = player.wel.lightGain.mul(player.wel.bestLight.add(1).log(1e4).floor().pow_base(2));
@@ -225,7 +225,7 @@
         player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(player.pri.fountains[5].completionEffect)
         if (hasMilestone("prj", 105)) player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(player.prj.milestone105Effect)
         player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(buyableEffect("sme", 192))
-        player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(player.prj.milestone206Effect)
+        if (hasMilestone("prj", 112)) player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(1.15)
         
         // WELL CYCLES
 
@@ -309,8 +309,13 @@
                     player.prj.focused = player.prj.focused.sub(1);
                     module.focused = false
                 }
-                module.completions = module.completions.add(1)
-                module.time = new Decimal(0)
+                if (hasUpgrade("wel", 42)) {
+                    module.completions = fountain.getLightBulk().min(fountain.getTimeBulk()).add(1).floor()
+                } else {
+                    module.time = new Decimal(0);
+                    module.completions = module.completions.add(1)
+                }
+                
                 if (module.completions.gte(module.bestCompletions)) module.bestCompletions = module.completions;
             }
         });
@@ -825,17 +830,17 @@
         },
         42: {
             unlocked() { return hasUpgrade("wel", 34) },
-            condition() { return hasMilestone("prj", 303) && player.wel.modules[3].completions.gte(1e12) },
+            condition() { return hasMilestone("prj", 303) && player.wel.modules[3].completions.gte(1e10) },
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Improve the formulas for light fountains, and bulk complete them.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Improve the formulae for light fountain reqs, and bulk complete them.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><br><h3>Req: Light Well δ unlocked</h3>"
                 }
                 return s
             },
-            cost: new Decimal(1e80),
+            cost: new Decimal(1e50),
             currencyLocation() { return player.wel },
             currencyDisplayName: "Light",
             currencyInternalName: "light",
@@ -873,7 +878,7 @@
                 }
                 return s
             },
-            cost: new Decimal(1e95),
+            cost: new Decimal(1e65),
             currencyLocation() { return player.wel },
             currencyDisplayName: "Light",
             currencyInternalName: "light",
@@ -911,7 +916,7 @@
                 }
                 return s
             },
-            cost: new Decimal(1e99),
+            cost: new Decimal(1e75),
             currencyLocation() { return player.wel },
             currencyDisplayName: "Light",
             currencyInternalName: "light",
@@ -1055,8 +1060,9 @@
             },
             lightGain() {
                 let gain = new Decimal(0.01)
-                gain = gain.mul(player.wel.lightGain.div(1e60).pow(0.25))
+                gain = gain.mul(player.wel.lightGain.div(1e45).pow(0.25))
                 gain = gain.mul(player.blu.blueshifts[this.id].cycleGainMul)
+                if (gain.gte(1)) gain = gain.pow(0.5);
                 return gain
             },
             onHold() { clickClickable(this.layer, this.id) },
@@ -1467,7 +1473,7 @@
                 let completions = player.wel.fountains[1].completions
                 let s = new Decimal(60)
 
-                s = s.mul(completions.add(1))
+                if (!hasUpgrade("wel", 42)) s = s.mul(completions.add(1));
                 s = s.mul(completions.pow_base(Math.pow(1.4, 1.0625)))
                 if (completions.gte(400)) {
                     s = s.pow(completions.sub(400).div(400).add(1))
@@ -1477,11 +1483,17 @@
 
                 return s
             },
+            getTimeBulk() {
+                let unscaledBulk = player.wel.fountains[1].time.mul(player.wel.lightFountainReqDivisor).div(60).add(1).log(Math.pow(1.4, 1.0625))
+                if (unscaledBulk.gt(400)) {
+                    return unscaledBulk.mul(400).pow(0.5).floor()
+                } else return unscaledBulk.floor()
+            },
             getLightReq() {
                 let completions = player.wel.fountains[1].completions
                 let s = new Decimal(5)
 
-                s = s.mul(completions.mul(0.25).add(1))
+                if (!hasUpgrade("wel", 42)) s = s.mul(completions.mul(0.25).add(1));
                 s = s.mul(completions.pow_base(1.4))
                 if (completions.gte(400)) {
                     s = s.pow(completions.sub(400).div(400).add(1))
@@ -1490,6 +1502,12 @@
                 s = s.div(player.wel.lightFountainReqDivisor)
 
                 return s.floor()
+            },
+            getLightBulk() {
+                let unscaledBulk = player.wel.light.mul(player.wel.lightFountainReqDivisor).div(5).add(1).log(1.4)
+                if (unscaledBulk.gt(400)) {
+                    return unscaledBulk.mul(400).pow(0.5).floor()
+                } else return unscaledBulk.floor()
             },
             getTimeSpeed() {
                 let s = new Decimal(1)
@@ -1520,7 +1538,7 @@
                 let completions = player.wel.fountains[2].completions
                 let s = new Decimal(2.7e4)
 
-                s = s.mul(completions.add(1))
+                if (!hasUpgrade("wel", 42)) s = s.mul(completions.add(1));
                 s = s.mul(completions.pow_base(Math.pow(1.6, 1.0625)))
                 if (completions.gte(400)) {
                     s = s.pow(completions.sub(400).div(400).add(1))
@@ -1530,11 +1548,17 @@
 
                 return s
             },
+            getTimeBulk() {
+                let unscaledBulk = player.wel.fountains[1].time.mul(player.wel.lightFountainReqDivisor).div(2.7e4).add(1).log(Math.pow(1.6, 1.0625))
+                if (unscaledBulk.gt(400)) {
+                    return unscaledBulk.mul(400).pow(0.5).floor()
+                } else return unscaledBulk.floor()
+            },
             getLightReq() {
                 let completions = player.wel.fountains[2].completions
                 let s = new Decimal(1.5e3)
 
-                s = s.mul(completions.mul(0.25).add(1))
+                if (!hasUpgrade("wel", 42)) s = s.mul(completions.mul(0.25).add(1));
                 s = s.mul(completions.pow_base(1.6))
                 if (completions.gte(400)) {
                     s = s.pow(completions.sub(400).div(400).add(1))
@@ -1543,6 +1567,12 @@
                 s = s.div(player.wel.lightFountainReqDivisor)
 
                 return s.floor()
+            },
+            getLightBulk() {
+                let unscaledBulk = player.wel.light.mul(player.wel.lightFountainReqDivisor).div(1.5e3).add(1).log(1.6)
+                if (unscaledBulk.gt(400)) {
+                    return unscaledBulk.mul(400).pow(0.5).floor()
+                } else return unscaledBulk.floor()
             },
             getTimeSpeed() {
                 let s = new Decimal(1)
@@ -1573,8 +1603,8 @@
                 let completions = player.wel.fountains[3].completions
                 let s = new Decimal(3e6)
 
-                s = s.mul(completions.add(1))
-                s = s.mul(completions.pow_base(Math.pow(5, 1.06)))
+                if (!hasUpgrade("wel", 42)) s = s.mul(completions.add(1));
+                s = s.mul(completions.pow_base(Math.pow(5, 1.0625)))
                 if (completions.gte(400)) {
                     s = s.pow(completions.sub(400).div(400).add(1))
                 }
@@ -1583,11 +1613,17 @@
 
                 return s
             },
+            getTimeBulk() {
+                let unscaledBulk = player.wel.fountains[1].time.mul(player.wel.lightFountainReqDivisor).div(3e6).add(1).log(Math.pow(5, 1.0625))
+                if (unscaledBulk.gt(400)) {
+                    return unscaledBulk.mul(400).pow(0.5).floor()
+                } else return unscaledBulk.floor()
+            },
             getLightReq() {
                 let completions = player.wel.fountains[3].completions
                 let s = new Decimal(5e4)
 
-                s = s.mul(completions.mul(0.25).add(1))
+                if (!hasUpgrade("wel", 42)) s = s.mul(completions.mul(0.25).add(1));
                 s = s.mul(completions.pow_base(5))
                 if (completions.gte(400)) {
                     s = s.pow(completions.sub(400).div(400).add(1))
@@ -1596,6 +1632,12 @@
                 s = s.div(player.wel.lightFountainReqDivisor)
 
                 return s.floor()
+            },
+            getLightBulk() {
+                let unscaledBulk = player.wel.light.mul(player.wel.lightFountainReqDivisor).div(5e4).add(1).log(5)
+                if (unscaledBulk.gt(400)) {
+                    return unscaledBulk.mul(400).pow(0.5).floor()
+                } else return unscaledBulk.floor()
             },
             getTimeSpeed() {
                 let s = new Decimal(1)
@@ -1619,7 +1661,6 @@
                 let completions = player.wel.fountains[4].completions
 
                 let s = completions.mul(0.25).add(1)
-                if (hasUpgrade("wel", 42)) s = s.mul(completions.sub(100).max(0).pow(0.9).pow_base(1.075))
 
                 return s
             },
@@ -1627,8 +1668,8 @@
                 let completions = player.wel.fountains[4].completions
                 let s = new Decimal(1e8)
 
-                s = s.mul(completions.add(1))
-                s = s.mul(completions.pow_base(Math.pow(4, 1.06)))
+                if (!hasUpgrade("wel", 42)) s = s.mul(completions.add(1));
+                s = s.mul(completions.pow_base(Math.pow(4, 1.0625)))
                 if (completions.gte(400)) {
                     s = s.pow(completions.sub(400).div(400).add(1))
                 }
@@ -1637,11 +1678,17 @@
 
                 return s
             },
+            getTimeBulk() {
+                let unscaledBulk = player.wel.fountains[1].time.mul(player.wel.lightFountainReqDivisor).div(1e8).add(1).log(Math.pow(4, 1.0625))
+                if (unscaledBulk.gt(400)) {
+                    return unscaledBulk.mul(400).pow(0.5).floor()
+                } else return unscaledBulk.floor()
+            },
             getLightReq() {
                 let completions = player.wel.fountains[4].completions
                 let s = new Decimal(1.5e6)
 
-                s = s.mul(completions.mul(0.25).add(1))
+                if (!hasUpgrade("wel", 42)) s = s.mul(completions.mul(0.25).add(1));
                 s = s.mul(completions.pow_base(4))
                 if (completions.gte(400)) {
                     s = s.pow(completions.sub(400).div(400).add(1))
@@ -1650,6 +1697,12 @@
                 s = s.div(player.wel.lightFountainReqDivisor)
 
                 return s.floor()
+            },
+            getLightBulk() {
+                let unscaledBulk = player.wel.light.mul(player.wel.lightFountainReqDivisor).div(1.5e6).add(1).log(4)
+                if (unscaledBulk.gt(400)) {
+                    return unscaledBulk.mul(400).pow(0.5).floor()
+                } else return unscaledBulk.floor()
             },
             getTimeSpeed() {
                 let s = new Decimal(1)
@@ -1858,7 +1911,7 @@
                     }
                     }
                     if (player.wel.modules[2].completions.gte(500) && hasMilestone("prj", 303)) {
-                    if (player.wel.modules[3].completions.gte(1e12) || player.wel.modules[4].completions.gt(0)) {
+                    if (player.wel.modules[3].completions.gte(1e10) || player.wel.modules[4].completions.gt(0)) {
                             // light well delta
                         look[4][1].push(["blank", "1px"])
                         look[4][1].push(
@@ -1902,7 +1955,7 @@
                         look[4][1].push(
                             ["style-column", [
                                 ["style-column", [
-                                    ["raw-html", "Light Well δ</h2><br><small>Req: 1e12 γ ↻</small>", {color: "white", fontSize: "16px"}],
+                                    ["raw-html", "Light Well δ</h2><br><small>Req: 1e10 γ ↻</small>", {color: "white", fontSize: "16px"}],
                                 ], {background: "black",border: "3px solid #663737", borderRadius: "103px 103px 16px 16px", width: "150px", height: "323px", lineHeight: "1"}],
                             ["blank", "9px"],
                         ]],

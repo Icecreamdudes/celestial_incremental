@@ -703,8 +703,9 @@
                     ], {background: "#1f0000ff", border: "2px solid #f57171ff", padding: "-2px"}],
                     ["blank", "25px"],
                     ["style-column", [
-                        ["raw-html", "Blood battle buyables are not kept on dark universe exit.", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ], () => {return !player.bl.noxDefeated ? {width: "550px", height: "30px", background: "#1f0000", border: "2px solid #f57171", borderRadius: "15px"} : {display: "none !important"}}]
+                        ["raw-html", () => {return !player.bl.noxDefeated ? "Blood battle buyables are not kept on dark universe exit." : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return player.bl.noxDefeated ? "Buyables that buff ship battle work outside of DU1." : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ], {width: "550px", height: "30px", background: "#1f0000", border: "2px solid #f57171", borderRadius: "15px"}]
                 ]
             },
             "Blood Battle": {

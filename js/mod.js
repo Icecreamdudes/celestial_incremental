@@ -660,7 +660,7 @@ function updateStyles() {
 			player.musuniverse = "CS"
 			break;
 		case "h": case "hpr": case "hre": case "hbl": case "hcu":
-		case "hpu": case "hpw": case "hrm":
+		case "hpu": case "hpw": case "hrm": case "hve": case "hsa":
 			player.musuniverse = "UA"
 			break;
 		case "i": case "r": case "f": case "p": case "t":

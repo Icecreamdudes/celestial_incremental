@@ -78,7 +78,11 @@
                 player.ar.tetrPoints = new Decimal(0)
                 player.cp.replicantiPoints = new Decimal(1)
             },
-            style: { width: "400px", minHeight: "100px", borderRadius: "15px"},
+            style() {
+                let look = {width: "400px", minHeight: "100px", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"}
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
     },
     bars: {
@@ -114,7 +118,11 @@
             currencyLocation() { return player.an },
             currencyDisplayName: "Anonymity",
             currencyInternalName: "anonymity",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                canAffordUpgrade(this.layer, this.id) && !hasUpgrade(this.layer, this.id) ? look.color = "white" : look.color = "rgba(0,0,0,0.8)"
+                return look
+            },
         },
         12: {
             title: "Anonymity II",
@@ -128,7 +136,11 @@
                 return player.an.anonymity.plus(1).log10().pow(1.25).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                canAffordUpgrade(this.layer, this.id) && !hasUpgrade(this.layer, this.id) ? look.color = "white" : look.color = "rgba(0,0,0,0.8)"
+                return look
+            },
         },
         13: {
             title: "Anonymity III",
@@ -138,7 +150,11 @@
             currencyLocation() { return player.an },
             currencyDisplayName: "Anonymity",
             currencyInternalName: "anonymity",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                canAffordUpgrade(this.layer, this.id) && !hasUpgrade(this.layer, this.id) ? look.color = "white" : look.color = "rgba(0,0,0,0.8)"
+                return look
+            },
         },
         14: {
             title: "Anonymity IV",
@@ -148,7 +164,11 @@
             currencyLocation() { return player.an },
             currencyDisplayName: "Anonymity",
             currencyInternalName: "anonymity",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                canAffordUpgrade(this.layer, this.id) && !hasUpgrade(this.layer, this.id) ? look.color = "white" : look.color = "rgba(0,0,0,0.8)"
+                return look
+            },
         },
         15: {
             title: "Anonymity V",
@@ -158,7 +178,11 @@
             currencyLocation() { return player.an },
             currencyDisplayName: "Anonymity",
             currencyInternalName: "anonymity",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                canAffordUpgrade(this.layer, this.id) && !hasUpgrade(this.layer, this.id) ? look.color = "white" : look.color = "rgba(0,0,0,0.8)"
+                return look
+            },
         },
         16: {
             title: "Anonymity VI",
@@ -172,7 +196,11 @@
                 return player.an.anonymity.pow(0.15).div(6).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                canAffordUpgrade(this.layer, this.id) && !hasUpgrade(this.layer, this.id) ? look.color = "white" : look.color = "rgba(0,0,0,0.8)"
+                return look
+            },
         },
         17: {
             title: "Anonymity VII",
@@ -182,7 +210,11 @@
             currencyLocation() { return player.an },
             currencyDisplayName: "Anonymity",
             currencyInternalName: "anonymity",
-            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                canAffordUpgrade(this.layer, this.id) && !hasUpgrade(this.layer, this.id) ? look.color = "white" : look.color = "rgba(0,0,0,0.8)"
+                return look
+            },
         },
         18: {
             title: "Anonymity VIII",
@@ -196,7 +228,11 @@
                 return player.pr.perkPoints.pow(0.2).div(3).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                canAffordUpgrade(this.layer, this.id) && !hasUpgrade(this.layer, this.id) ? look.color = "white" : look.color = "rgba(0,0,0,0.8)"
+                return look
+            },
         },
         19: {
             title: "Anonymity IX",
@@ -210,7 +246,11 @@
                 return player.an.anonymity.pow(0.75).mul(6).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                canAffordUpgrade(this.layer, this.id) && !hasUpgrade(this.layer, this.id) ? look.color = "white" : look.color = "rgba(0,0,0,0.8)"
+                return look
+            },
         },
         21: {
             title: "Anonymity X",
@@ -220,7 +260,11 @@
             currencyLocation() { return player.an },
             currencyDisplayName: "Anonymity",
             currencyInternalName: "anonymity",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                canAffordUpgrade(this.layer, this.id) && !hasUpgrade(this.layer, this.id) ? look.color = "white" : look.color = "rgba(0,0,0,0.8)"
+                return look
+            },
         },
         22: {
             title: "Anonymity XI",
@@ -234,7 +278,11 @@
                 return player.cp.replicantiSoftcap2Start.plus(1).log10().pow(0.65).mul(5).add(1)
             },
             effectDisplay() { return "/" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
-            style: {width: "135px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {width: "135px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                canAffordUpgrade(this.layer, this.id) && !hasUpgrade(this.layer, this.id) ? look.color = "white" : look.color = "rgba(0,0,0,0.8)"
+                return look
+            },
         },
         23: {
             title: "Anonymity XII",
@@ -248,7 +296,11 @@
                 return player.an.anonymity.plus(1).log10().pow(0.8).mul(1.7).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                canAffordUpgrade(this.layer, this.id) && !hasUpgrade(this.layer, this.id) ? look.color = "white" : look.color = "rgba(0,0,0,0.8)"
+                return look
+            },
         },
     },
     buyables: {},

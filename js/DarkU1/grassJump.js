@@ -86,7 +86,7 @@ addLayer("dgj", {
             pay(amt) { player.dgj.grassJumpers = this.currency().sub(amt) },
             effect(x) {
                 let bonus = getBuyableAmount(this.layer, this.id).div(25).floor()
-                return getBuyableAmount(this.layer, this.id).add(1).mul(Decimal.pow(2, bonus))
+                return getBuyableAmount(this.layer, this.id).add(1).mul(Decimal.pow(3, bonus))
             },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -96,7 +96,7 @@ addLayer("dgj", {
             },
             display() {
                 return "Boosts points by +100% per level\n\
-                Point gain is doubled every 25 levels\n\
+                Point gain is tripled every 25 levels\n\
                 Currently: x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                 Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grassjumpers"
             },
@@ -125,7 +125,7 @@ addLayer("dgj", {
             pay(amt) { player.dgj.grassJumpers = this.currency().sub(amt) },
             effect(x) {
                 let bonus = getBuyableAmount(this.layer, this.id).div(25).floor()
-                return getBuyableAmount(this.layer, this.id).add(1).mul(Decimal.pow(2, bonus))
+                return getBuyableAmount(this.layer, this.id).add(1).mul(Decimal.pow(3, bonus))
             },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -135,7 +135,7 @@ addLayer("dgj", {
             },
             display() {
                 return "Boosts prestige points by +100% per level\n\
-                Prestige point gain is doubled every 25 levels\n\
+                Prestige point gain is tripled every 25 levels\n\
                 Currently: x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                 Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grassjumpers"
             },
@@ -242,7 +242,7 @@ addLayer("dgj", {
             pay(amt) { player.dgj.grassJumpers = this.currency().sub(amt) },
             effect(x) {
                 let bonus = getBuyableAmount(this.layer, this.id).div(25).floor()
-                return getBuyableAmount(this.layer, this.id).div(4).add(1).mul(Decimal.pow(2, bonus))
+                return getBuyableAmount(this.layer, this.id).div(4).add(1).mul(Decimal.pow(1.5, bonus))
             },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -252,7 +252,7 @@ addLayer("dgj", {
             },
             display() {
                 return "Boosts cloud gain by +25% per level\n\
-                Cloud gain is doubled every 25 levels\n\
+                Cloud gain is multiplied by x1.5 every 25 levels\n\
                 Currently: x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                 Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grassjumpers"
             },

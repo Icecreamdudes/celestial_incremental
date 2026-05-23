@@ -71,6 +71,8 @@
         player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(buyableEffect("car", 12))
         if (hasUpgrade("car", 15)) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(upgradeEffect("car", 15))
         player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(buyableEffect("zd", 11))
+        if (hasUpgrade("car", 15)) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(upgradeEffect("car", 15))
+        if (player.zarDungeon.zarDefeated) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(1000)
 
         player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.pow(buyableEffect("sm", 115))
         

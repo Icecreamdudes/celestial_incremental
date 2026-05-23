@@ -191,6 +191,7 @@
         // SOFTCAP WEAKENER
         let doomWeaken = new Decimal(1)
         doomWeaken = doomWeaken.mul(buyableEffect("fa", 401))
+        if (player.zarDungeon.zarDefeated) doomWeaken = doomWeaken.mul(1.5)
 
         // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
         let amt = player.points

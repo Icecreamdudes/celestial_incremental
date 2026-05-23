@@ -22,6 +22,12 @@
         cardDrawAmount: new Decimal(0),
         
         cardsToGet: new Decimal(0),
+
+        autoDraw: {
+            toggle: false,
+            timer: new Decimal(0),
+            max: new Decimal(10),
+        },
     }},
     automate() {},
     nodeStyle() {
@@ -38,7 +44,7 @@
     color: "rgb(182, 0, 0)",
     branches: ["cbs",],
     update(delta) {
-        player.car.cardGeneratorsToGet = player.za.chancePoints.pow(0.085).div(12).floor()
+        player.car.cardGeneratorsToGet = player.za.chancePoints.pow(0.075).div(16).floor()
         player.car.cardGeneratorsToGet = player.car.cardGeneratorsToGet.mul(buyableEffect("sm", 114))
 
         player.car.cardShreds = player.car.cardShreds.add(player.car.cardShredsPerSecond.mul(delta))
@@ -90,7 +96,18 @@
             player.car.cardShreds = new Decimal(0)
         }
 
+        player.car.autoDraw.max = new Decimal(5)
+        player.car.autoDraw.max = player.car.autoDraw.max.div(buyableEffect("car", 101))
+        
+        if (player.car.autoDraw.toggle && player.car.cardShreds.gte(player.car.cardShredReq)) player.car.autoDraw.timer = player.car.autoDraw.timer.add(delta)
+        if (player.car.autoDraw.timer.gte(player.car.autoDraw.max))
+        {
+            player.car.autoDraw.timer = new Decimal(0)
+            player.car.cardShreds = player.car.cardShreds.sub(player.car.cardShredReq)
+            player.car.cardDrawAmount = player.car.cardDrawAmount.add(1)
 
+            layers.car.cardDraw(); //tentative to change with multi draw
+        }
     },
     cardReset() {
         //resets everything before unlocking cards except for check back shrine
@@ -142,6 +159,7 @@
         player.wof.buyables[13] = new Decimal(0)
         player.wof.buyables[14] = new Decimal(0)
         player.wof.buyables[15] = new Decimal(0)
+        player.wof.autoSpin = false
 
         player.sm.spinAmount = new Decimal(0)
         player.sm.spinActive = false
@@ -158,6 +176,7 @@
         player.sm.buyables[108] = new Decimal(0)
         if (!hasUpgrade("car", 14)) player.sm.buyables[109] = new Decimal(0)
         if (!hasUpgrade("car", 14)) player.sm.buyables[111] = new Decimal(0)
+        player.sm.generateSpin = false
 
         player.car.cardDrawAmount = new Decimal(0)
 
@@ -222,6 +241,18 @@
             },
             style: { width: '400px', "min-height": '100px', color: "white", backgroundImage: "linear-gradient(180deg, #990909 0%, rgb(94, 6, 6) 50%, #990909 100%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px" },
         },
+        21: {
+            title() { return player.car.autoDraw.toggle ? "Autodraw: ON" : "Autodraw: OFF" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                if (!player.car.autoDraw.toggle) player.car.autoDraw.toggle = true
+                else player.car.autoDraw.toggle = false
+            },
+            style() { 
+                return { width: '250px', "min-height": '75px', borderRadius: "15px 15px 15px 15px", border: "3px solid rgb(94, 6, 6)", backgroundImage: "linear-gradient(180deg, #990909 0%, rgb(94, 6, 6) 50%, #990909 100%)", color: "white"}
+            },
+        },
     },
     cardDraw()
     {
@@ -240,7 +271,7 @@
         if (rank == 13) imgRank = "K"
 
         let xOffset = getRandomInt(300)
-        makeParticles(BIG_COOKIE_NUMBER, 1, `normal`, {x: 1100 + xOffset, y: 350, text: "<img src='resources/cards/" + imgSuit + imgRank + ".png'style='width:75px;height:125px;margin:-35px;'></img>"})
+        if (!player.car.autoDraw.toggle) makeParticles(BIG_COOKIE_NUMBER, 1, `normal`, {x: 1100 + xOffset, y: 350, text: "<img src='resources/cards/" + imgSuit + imgRank + ".png'style='width:75px;height:125px;margin:-35px;'></img>"})
 
         let levelableID = ""
         if (rank < 10)
@@ -2246,6 +2277,22 @@
         },
     },
     bars: {
+        autoBar: {
+            unlocked: true,
+            direction: RIGHT,
+            width: 476,
+            height: 50,
+            progress() {
+                return player.car.autoDraw.timer.div(player.car.autoDraw.max)
+            },
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
+            fillStyle: {backgroundColor: "rgb(182, 0, 0)"},
+            textStyle: {fontSize: "14px"},
+            display() {
+                let str = format(player.car.autoDraw.timer) + "/" + format(player.car.autoDraw.max) + "s<br>+" + formatWhole(player.car.cardsToGet) + " cards on draw."
+                return str
+            },
+        },
     },
     upgrades: {
         11: {
@@ -2315,9 +2362,9 @@
         17: {
             title: "So should this be full automation now?",
             unlocked() { return player.cbs.shrineReactivated },
-            description: "Automatically purchase all pre-cardnon-shard researches and wheel buyables.",
+            description: "Automatically purchase all pre-card non-shard researches and wheel buyables.",
             cost: new Decimal(1e6),
-            currencyLocation() { return player.car },
+            currencyLocation() { return player.car }, 
             currencyDisplayName: "Card Generators",
             currencyInternalName: "cardGenerators",
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '125px', },
@@ -2843,6 +2890,40 @@
             },
             style: {width: '193px', height: '142px', color: "black", background: "#f18080", border: "5px solid #ff3333", borderRadius: "0px 5px 5px 0px", boxSizing: "border-box",}
         },
+        101: {
+            costBase() { return new Decimal(1e8) },
+            costGrowth() { return new Decimal(1.25) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.car.cardGenerators },
+            pay(amt) { player.car.cardGenerators = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).mul(0.5).add(1)},
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Auto-Draw Req Divider"
+            },
+            display() {
+                return 'which are dividing auto-draw time requirement by /' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Card Generators'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', border: "3px solid rgb(94, 6, 6)", backgroundImage: "linear-gradient(180deg, #990909 0%, rgb(94, 6, 6) 50%, #990909 100%)", color: "white" }
+        },
     },
     milestones: {},
     challenges: {},
@@ -2973,6 +3054,22 @@
 
                             ], () => {return{width: "775px", height: "135px", backgroundColor: "#490c0c", padding: "5px"}}],
                         ], {width: "785px", height: "722px", border: "3px solid white"}],
+                ]
+            },
+            "Auto Card Draw": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                unlocked() { return player.zarDungeon.zarDefeated },
+                content: [
+                    ["blank", "25px"],
+                    ["bar", "autoBar"],
+                    ["blank", "25px"],
+                    ["clickable", 21], 
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.car.cardGenerators) + "</h3> card generators." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["ex-buyable", 101],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "Such a small tab :(" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                 ]
             },
         },

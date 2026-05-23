@@ -14,6 +14,11 @@ addLayer("pu", {
         selectionCost: new Decimal(0),
 
         legendarySelectionActive: false,
+        legendaryPunchcardsUnlocked: new Decimal(0),
+        legendaryPunchcardChance: new Decimal(0), 
+
+        rerolls: new Decimal(0),
+        rerollCost: new Decimal(1),
     }},
     nodeStyle() {
         return {
@@ -32,9 +37,22 @@ addLayer("pu", {
             } else {
                 player.pu.selectionCost = new Decimal(5)
             }
+            if (player.pu.selectedPunchcards[player.pu.selectionIndex] == 402) {
+                player.pu.selectionCost = new Decimal(2)
+            }
         } else {
             player.pu.selectionCost = new Decimal(1)
         }
+
+        player.pu.legendaryPunchcardsUnlocked = new Decimal(0)
+        if (run(layers.pu.levelables[401].canSelect, layers.pu.levelables[401]) && !getLevelableTier("pu", 401, true)) player.pu.legendaryPunchcardsUnlocked = player.pu.legendaryPunchcardsUnlocked.add(1)
+        if (run(layers.pu.levelables[402].canSelect, layers.pu.levelables[402]) && !getLevelableTier("pu", 402, true)) player.pu.legendaryPunchcardsUnlocked = player.pu.legendaryPunchcardsUnlocked.add(1)
+
+        player.pu.legendaryPunchcardChance = Decimal.add(0.04, player.pu.legendaryPunchcardsUnlocked.sub(1).mul(0.02))
+        player.pu.legendaryPunchcardChance = player.pu.legendaryPunchcardChance.add(buyableEffect("rp", 13))
+
+        //reroll
+        player.pu.rerollCost = player.pu.rerolls.pow(1.2).add(1).mul(5)
     },
     generateSelection() {
         player.pu.selectedPunchcards = [0, 0, 0, 0]
@@ -44,6 +62,7 @@ addLayer("pu", {
                 if (prop >= 100 && prop < 200) raritySelect[0].push(prop) // COMMON
                 if (prop >= 200 && prop < 300) raritySelect[1].push(prop) // RARE
                 if (prop >= 300 && prop < 400) raritySelect[2].push(prop) // EPIC
+                if (prop >= 400 && prop < 500) raritySelect[3].push(prop) // LEGENDARY
             }
         }
         for (let i = 0; i < 3; i++) {
@@ -70,7 +89,7 @@ addLayer("pu", {
 
         //legendary
         let random = Math.random()
-        if (random < 0.04)
+        if (random < player.pu.legendaryPunchcardChance)
         {
             if (hasUpgrade("le", 201)) player.pu.legendarySelectionActive = true
         } else
@@ -78,9 +97,8 @@ addLayer("pu", {
             player.pu.legendarySelectionActive = false
         }
         if (player.pu.legendarySelectionActive) {
-
-            if (run(layers.pu.levelables[401].canSelect, layers.pu.levelables[401]) && !getLevelableTier("pu", 401, true)) player.pu.selectedPunchcards[3] = 401 //MAKE THEM RANDOMIZED EVENTUALLY
-
+            let choice = Math.floor(Math.random() * raritySelect[3].length)
+            player.pu.selectedPunchcards[3] = raritySelect[3][choice]
         }
     },
     clickables: {
@@ -127,6 +145,22 @@ addLayer("pu", {
             },
         },
 
+        9: {
+            title() { return "Reroll Punchcards<br>Req: " + format(player.pu.rerollCost) + " Reroll Points</h5>" },
+            canClick() { return player.rp.rerollPoints.gte(player.pu.rerollCost)},
+            unlocked() { return getLevelableTier("pu", 402, true)},
+            tooltip() { return "You have " + format(player.rp.rerollPoints) + " Reroll Points."},
+            onClick() {
+                player.rp.rerollPoints = player.rp.rerollPoints.sub(player.pu.rerollCost)
+                player.pu.rerolls = player.pu.rerolls.add(1)
+                layers.pu.generateSelection();
+            },
+            style() {
+                let look = {width: "200px", minHeight: "50px", color: "white", border: "2px solid #384166", borderRadius: "10px", fontSize: "8px"}
+                !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
+            },
+        },
         10: {
             title() { return "Activate this card" },
             canClick() { return player.pu.storedSelections.gte(player.pu.selectionCost) && player.pu.selectedPunchcards[player.pu.selectionIndex] != 0},
@@ -2153,6 +2187,59 @@ addLayer("pu", {
                 return look
             }
         },
+        402: {
+            image() {return this.canClick() ? "resources/Punchcards/legendaryPunchcard2.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                let str = "Zar"
+                if (getLevelableTier(this.layer, this.id, true)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
+                return str
+            },
+            description() {
+                let str = [
+                    !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
+                    "<u>Active</u><br>",
+                    "Unlock Reroll Points<br>",
+                    "x" + format(this.effect()[0]) + " to reroll point gain (based on universe resets)<br>",
+                    !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
+                    "<u>Passive</u><br>",
+                    "x" + format(this.effect()[1]) + " to Zar chips",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
+                ]
+                return str.join("")
+            },
+            effectScale() {
+                let scale = new Decimal(1)
+                if (getLevelableAmount(this.layer, this.id).lt(10)) scale = getLevelableAmount(this.layer, this.id).mul(0.05).add(1)
+                if (getLevelableAmount(this.layer, this.id).gte(10)) scale = getLevelableAmount(this.layer, this.id).mul(0.0125).add(1.4)
+                if (getLevelableAmount(this.layer, this.id).gte(50)) scale = getLevelableAmount(this.layer, this.id).sub(49).log(2).mul(0.005).add(2).min(2.5)
+                return scale
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = player.le.resetAmount.div(3).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[1] = getLevelableAmount(this.layer, this.id).mul(0.1).add(1)
+                return eff
+            },
+            // CLICK CODE
+            unlocked() {return (player.zarDungeon.zarDefeated && hasUpgrade("le", 201)) || this.canClick()},
+            canSelect() {return player.zarDungeon.zarDefeated && hasUpgrade("le", 201)},
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                if (getLevelableAmount(this.layer, this.id).lt(10)) return getLevelableAmount(this.layer, this.id).add(1).pow(1.85).mul(100000).floor()
+                if (getLevelableAmount(this.layer, this.id).gte(10)) return Decimal.pow(2.5, getLevelableAmount(this.layer, this.id).sub(9)).mul(7079000).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#003f7f" : look.backgroundColor = "#00254c"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
     },
     microtabs: {
         stuff: {
@@ -2177,7 +2264,7 @@ addLayer("pu", {
                                     return str.substring(0, str.indexOf("</span>"))
                                 }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                             ], {width: "525px", height: "60px"}],
-                            ["clickable", 10],
+                            ["row", [["clickable", 10], ["blank", "25px"], ["clickable", 9],]],
                             ["blank", "10px"],
                         ], {width: "550px", height: "170px"}],
                         ["style-column", [
@@ -2191,15 +2278,14 @@ addLayer("pu", {
                                         ["style-column", [
                     ["style-column", [
                             ["raw-html", () => {
-                                let cost = 5
-                                if (player.bl.noxDefeated && player.pu.selectedPunchcards[3] == 401) cost = 3
-                                return "Legendary Punchcards<br><small>(Costs " + cost + " Punchcard Selections)"
+                                return "Legendary Punchcards<br><small>(Costs " + formatWhole(player.pu.selectionCost) + " Punchcard Selections)"
                             }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                         ], {width: "550px", height: "50px"}],
                         ["style-column", [
                             ["row", [["clickable", 14],]],
                         ], {width: "550px", height: "150px", backgroundColor: "#33011bff"}],
                     ], () => {return player.pu.legendarySelectionActive ? {returnwidth: "550px", height: "200px", border: "3px solid white", backgroundColor: "#330d22ff"} : {display: "none !important"}}],
+                
                 ]
             },
             "Collection": {
@@ -2241,10 +2327,10 @@ addLayer("pu", {
                                 ["levelable", 305], ["levelable", 306], ["levelable", 307], ["levelable", 308],
                             ], () => {return hasUpgrade("sma", 17) ? {width: "525px", backgroundColor: "#000c19", padding: "5px"} : {display: "none !important"}}],
                             ["style-column", [
-                                ["raw-html", "Legendary (4%) <br><h6>[Takes priority over other card rarities]", {color: "#AB2042", fontSize: "20px", fontFamily: "monospace"}],
-                            ], () => {return hasUpgrade("le", 201) ? {width: "535px", height: "40px", backgroundColor: "#5C173D", borderTop: "3px solid #AB2042", borderBottom: "3px solid #AB2042", userSelect: "none"} : {display: "none !important"}}],
+                                ["raw-html", () => { return "Legendary (" + formatWhole(player.pu.legendaryPunchcardChance.mul(100)) + "%)<h6>[Chance increases with available legendaries]<br>[Takes priority over other card rarities]"}, {color: "#AB2042", fontSize: "20px", fontFamily: "monospace"}],
+                            ], () => {return hasUpgrade("le", 201) ? {width: "535px", height: "60px", backgroundColor: "#5C173D", borderTop: "3px solid #AB2042", borderBottom: "3px solid #AB2042", userSelect: "none"} : {display: "none !important"}}],
                             ["style-row", [
-                                ["levelable", 401],
+                                ["levelable", 401], ["levelable", 402],
                             ], () => {return hasUpgrade("le", 201) ? {width: "525px", backgroundColor: "#200815ff", padding: "5px"} : {display: "none !important"}}],
                         ], {width: "550px", height: "522px"}],
                     ], {width: "550px", height: "700px", border: "3px solid white", backgroundColor: "#1c2033"}],

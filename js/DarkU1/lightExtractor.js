@@ -662,6 +662,12 @@
         }
 
         player.bl.bloodDrain = false
+
+        player.rp.rerollPoints = new Decimal(0)
+        
+        player.rp.buyables[11] = new Decimal(0)
+        player.rp.buyables[12] = new Decimal(0)
+        player.rp.buyables[13] = new Decimal(0)
     },
     upgrades: {
         11: {

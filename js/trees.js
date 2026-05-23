@@ -37,7 +37,7 @@
     nodeStyle() {},
     tooltip: "Trees",
     color: "#0B6623",
-    branches: ["p"],
+    branches() { return !player.zarDungeon.zarDefeated ? "p" : ["p", "r"] },
     update(delta) {
         let onepersec = new Decimal(1)
 

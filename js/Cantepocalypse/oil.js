@@ -220,7 +220,11 @@
                 player.oi.oil = player.oi.oil.add(player.oi.oilToGet)
                 player.oi.oilPause = new Decimal(4)
             },
-            style: { width: '600px', "min-height": '100px', borderRadius: '15px' },
+            style() {
+                let look = { width: '600px', "min-height": '100px', border: "3px solid rgba(0,0,0,0.5)", borderRadius: '15px' }
+                look.color = this.canClick() ? "rgba(255,255,255,0.8)" : "black"
+                return look
+            },
         },
         14: {
             title() {
@@ -243,7 +247,11 @@
                 player.oi.linkingPower[4] = new Decimal(0)
                 player.oi.linkingPower[5] = new Decimal(0)
             },
-            style: { width: '600px', "min-height": '100px', borderRadius: '15px' },
+            style() {
+                let look = { width: '600px', "min-height": '120px', border: "3px solid rgba(0,0,0,0.5)", borderRadius: '15px' }
+                look.backgroundColor = this.canClick() ? "#e0ffff" : "#bf8f8f"
+                return look
+            },
         },
     },
     bars: {
@@ -304,7 +312,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px'},
+            style: { width: '275px', height: '150px', color: "rgba(255,255,255,0.8)"},
         },
         12: {
             costBase() { return new Decimal(5) },
@@ -338,7 +346,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px'},
+            style: { width: '275px', height: '150px', color: "rgba(255,255,255,0.8)"},
         },
         13: {
             costBase() { return new Decimal(5) },
@@ -372,7 +380,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px'},
+            style: { width: '275px', height: '150px', color: "rgba(255,255,255,0.8)"},
         },
         14: {
             costBase() { return new Decimal(5) },
@@ -406,7 +414,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px'},
+            style: { width: '275px', height: '150px', color: "rgba(255,255,255,0.8)"},
         },
         15: {
             costBase() { return new Decimal(5) },
@@ -440,7 +448,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px'},
+            style: { width: '275px', height: '150px', color: "rgba(255,255,255,0.8)"},
         },
         16: {
             costBase() { return new Decimal(5) },
@@ -474,7 +482,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px'},
+            style: { width: '275px', height: '150px', color: "rgba(255,255,255,0.8)"},
         },
         21: {
             costBase() {
@@ -524,7 +532,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px'},
+            style: { width: '275px', height: '150px', backgroundColor: "#e0ffff"},
         },
         22: {
             costBase() {
@@ -574,7 +582,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px'},
+            style: { width: '275px', height: '150px', backgroundColor: "#e0ffff"},
         },
         23: {
             costBase() {
@@ -624,7 +632,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px'},
+            style: { width: '275px', height: '150px', backgroundColor: "#e0ffff"},
         },
         24: {
             costBase() {
@@ -674,7 +682,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px'},
+            style: { width: '275px', height: '150px', backgroundColor: "#e0ffff"},
         },
     },
     milestones: {},

@@ -157,7 +157,7 @@
         13: {
             title() { return player.ir.autoShoot ? "<h2>Auto-Shoot<br>[ENABLED]" : "<h2>Auto-Shoot<br>[DISABLED]" },
             canClick() { return true },
-            unlocked() { return !player.ir.iriditeFightActive},
+            unlocked() { return !player.ir.noxFightActive},
             onClick() {
                 if (player.ir.autoShoot) {
                     player.ir.autoShoot = false
@@ -212,7 +212,7 @@
         1001: {
             title() {return "W"},
             canClick: true,
-            unlocked: true,
+            unlocked() { return !player.ir.noxFightActive},
             onClick() {
                 document.dispatchEvent(new KeyboardEvent('keydown', {key: 'w', code: 'KeyW', bubbles: true}))
                 setTimeout(() => {
@@ -224,7 +224,7 @@
         1002: {
             title() {return "A"},
             canClick: true,
-            unlocked: true,
+            unlocked() { return !player.ir.noxFightActive},
             onClick() {
                 document.dispatchEvent(new KeyboardEvent('keydown', {key: 'a', code: 'KeyA', bubbles: true}))
                 setTimeout(() => {
@@ -236,7 +236,7 @@
         1003: {
             title() {return "S"},
             canClick: true,
-            unlocked: true,
+            unlocked() { return !player.ir.noxFightActive},
             onClick() {
                 document.dispatchEvent(new KeyboardEvent('keydown', {key: 's', code: 'KeyS', bubbles: true}))
                 setTimeout(() => {
@@ -248,7 +248,7 @@
         1004: {
             title() {return "D"},
             canClick: true,
-            unlocked: true,
+            unlocked() { return !player.ir.noxFightActive},
             onClick() {
                 document.dispatchEvent(new KeyboardEvent('keydown', {key: 'd', code: 'KeyD', bubbles: true}))
                 setTimeout(() => {
@@ -702,6 +702,11 @@
                             ["row", [["dark-buyable", 31], ["dark-buyable", 32], ["dark-buyable", 33],["dark-buyable", 34]]],
                         ], {width: "408px"}],
                     ], {background: "#1f0000ff", border: "2px solid #f57171ff", padding: "-2px"}],
+                    ["blank", "25px"],
+                    ["style-column", [
+                        ["raw-html", () => {return !player.bl.noxDefeated ? "Blood battle buyables are not kept on dark universe exit." : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return player.bl.noxDefeated ? "Buyables that buff ship battle work outside of DU1." : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ], {width: "550px", height: "30px", background: "#1f0000", border: "2px solid #f57171", borderRadius: "15px"}]
                 ]
             },
             "Blood Battle": {
@@ -2045,6 +2050,7 @@ class BloodArena extends SpaceArena {
                     try {
                         if (enemy.type === 'noxBoss') {
                             player.bl.noxDefeated = true;
+                            player.ir.battleLevel = player.ir.battleLevel.add(1)
                             let noxStone = 75
                             noxStone = noxStone * (this.upgradeEffects.lootGain || 1) * (this.resourceMult || 1)
                             noxStone = noxStone * (getBuyableAmount("bl", 34).div(100).add(1).toNumber() || 1)
@@ -2090,6 +2096,8 @@ class BloodArena extends SpaceArena {
                                     this.lootFlashes.push({ x: enemy.x, y: enemy.y + 12, text: `+${formatWhole(noxGuarantee)} blood gems`, timer: 240, color: "#E0115F", style: "24px monospace" });
                                 }
                             } catch (e) {}
+                            arena.showUpgradeChoice(true);
+                            arena.upgradeChoiceActive = true
                         }
                     } catch (e) {}
                     // If a Large Leech died, spawn several small leeches at its position

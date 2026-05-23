@@ -672,7 +672,7 @@
                 { text: "The cloaked being appears.", },
                 { text: 'I\'m late... Damn it.', portrait: "resources/secret.png"  },
                 { text: 'Looks like you beat all 8 challenges, and found the celestial.', portrait: "resources/secret.png"  },
-                { text: "Tav takes one look at the cloaked being, jolts up, and runs away, freightened.", },
+                { text: "Tav takes one look at the cloaked being, jolts up, and runs away, frightened.", },
                 { text: "What's his deal...", portrait: "resources/secret.png"  },
                 { text: "Tav's action confuses you.", },
                 { text: "You don't want to act friendly to the celestials.", portrait: "resources/secret.png"  },

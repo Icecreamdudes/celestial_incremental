@@ -191,7 +191,7 @@ addLayer("ep2", {
         
         player.ep2.cookiesPerSecond = new Decimal(0)
         for (let i = 1; i < 19; i++) {
-            player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.add(buyableEffect("ep2", i))
+            if (getBuyableAmount("ep2", i).gt(0)) player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.add(buyableEffect("ep2", i))
         }
         player.ep2.cpsbm = player.ep2.cookiesPerSecond // Cookies Per Second Before Multipliers
         for (let i = 101; i < 107; i++) {

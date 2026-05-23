@@ -187,7 +187,7 @@ addLayer("bb", {
             width: 250,
             height: 35,
             progress() {
-                if ((hasUpgrade("al", 114) && player.bb.breadMilestone >= 9) || (!hasUpgrade("al", 114) && player.bb.breadMilestone >= 8)) return new Decimal(0)
+                if ((hasUpgrade("al", 114) && player.bb.breadMilestone >= 9) || (!hasUpgrade("al", 114) && player.bb.breadMilestone >= 8)) return new Decimal(1)
                 return player.bb.beeBread.div(bbMilestone[player.bee.path][player.bb.breadMilestone])
             },
             borderStyle: {

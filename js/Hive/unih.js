@@ -52,7 +52,8 @@ addLayer("bee", {
         if (hasUpgrade("n", 61)) player.bee.preAlephMult = player.bee.preAlephMult.mul(player.n.highestNest.add(1).pow(0.5))
 
         // Bee Calculations
-        if (getBuyableAmount("bee", 11).gt(0)) player.bee.bps = buyableEffect("bee", 11)
+        player.bee.bps = new Decimal(0)
+        if (getBuyableAmount("bee", 11).gt(0)) player.bee.bps = player.bee.bps.add(buyableEffect("bee", 11))
         if (getBuyableAmount("sme", 171).gt(0)) player.bee.bps = player.bee.bps.add(buyableEffect("sme", 171))
         player.bee.bps = player.bee.bps.mul(player.fl.glossaryEffects.bee)
         player.bee.bps = player.bee.bps.mul(player.bpl.roles.drone.effect)

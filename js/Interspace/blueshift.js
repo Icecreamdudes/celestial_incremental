@@ -30,7 +30,7 @@
                 amount: new Decimal(0),
                 cycleGainMul: new Decimal(1),
                 cycleSpeedRoot: new Decimal(1),
-                shiftBase: new Decimal(160),
+                shiftBase: new Decimal(1e3),
             },
             5: {
                 amount: new Decimal(0),
@@ -80,7 +80,7 @@
         player.blu.blueshifts[1].shiftBase = new Decimal(10)
         player.blu.blueshifts[2].shiftBase = new Decimal(20)
         player.blu.blueshifts[3].shiftBase = new Decimal(40)
-        player.blu.blueshifts[4].shiftBase = new Decimal(160)
+        player.blu.blueshifts[4].shiftBase = new Decimal(1e3)
         player.blu.blueshifts[5].shiftBase = new Decimal(6)
         player.blu.blueshifts[6].shiftBase = new Decimal(12)
         player.blu.blueshifts[7].shiftBase = new Decimal(24)

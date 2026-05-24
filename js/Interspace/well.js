@@ -217,6 +217,8 @@
         player.wel.lightGain = player.wel.lightGain.mul(player.pri.fountains[1].completionEffect)
         player.wel.lightGain = player.wel.lightGain.mul(player.pri.fountains[4].completionEffect)
         player.wel.lightGain = player.wel.lightGain.mul(player.pri.fountains[7].completionEffect)
+        player.wel.lightGain = player.wel.lightGain.mul(player.pri.fountains[10].completionEffect)
+        if (hasMilestone("prj", 112)) player.wel.lightGain = player.wel.lightGain.mul(player.prj.milestone112Effect)
         
         // WELL CYCLE SPEED
 
@@ -225,7 +227,8 @@
         player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(player.pri.fountains[5].completionEffect)
         if (hasMilestone("prj", 105)) player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(player.prj.milestone105Effect)
         player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(buyableEffect("sme", 192))
-        if (hasMilestone("prj", 112)) player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(1.15)
+        if (hasMilestone("prj", 209)) player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(1.09)
+        if (hasMilestone("prj", 304)) player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(player.prj.milestone304Effect)
         
         // WELL CYCLES
 
@@ -294,7 +297,7 @@
             module.lightReq = fountain.getLightReq()
             module.completionEffect = fountain.getCompletionEffect()
 
-            if (module.automated && player.wel.light.gte(module.lightReq)) {
+            if (module.automated && player.wel.light.gte(module.lightReq) && player.wel.light.gt(0)) {
                 if (hasUpgrade("wel", 33)) {
                     module.time = module.time.add(module.timeSpeed.div(player.wel.light).mul(player.wel.light.sub(module.lightReq)).mul(delta));
                 } else {
@@ -644,7 +647,7 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Light wells produce while cooling down at a diminishing rate and increase focus cap by +1.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Light wells produce while cooling down and increase focus cap by +1.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><br><h3>Req: 3 Spiral ↻</h3>"
                 }
@@ -868,7 +871,7 @@
         },
         43: {
             unlocked() { return hasUpgrade("wel", 34) },
-            condition() { return false },
+            condition() { return player.wel.modules[4].completions.gte(1e13) },
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
@@ -878,7 +881,7 @@
                 }
                 return s
             },
-            cost: new Decimal(1e65),
+            cost: new Decimal(1e80),
             currencyLocation() { return player.wel },
             currencyDisplayName: "Light",
             currencyInternalName: "light",
@@ -906,7 +909,7 @@
         },
         44: {
             unlocked() { return hasUpgrade("wel", 34) },
-            condition() { return false },
+            condition() { return player.prj.completedProjects.gte(30) },
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
@@ -916,7 +919,7 @@
                 }
                 return s
             },
-            cost: new Decimal(1e75),
+            cost: new Decimal(1e99),
             currencyLocation() { return player.wel },
             currencyDisplayName: "Light",
             currencyInternalName: "light",

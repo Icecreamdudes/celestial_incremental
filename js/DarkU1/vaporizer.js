@@ -14,7 +14,14 @@
 
         producingClouds: false,
     }},
-    automate() {},
+    automate() {
+        if (hasMilestone("prj", 113) && player.pet.legPetTimers[0].current.gt(0)) {
+            buyUpgrade("dv", 11, false)
+            buyUpgrade("dv", 12, false)
+            buyUpgrade("dv", 13, false)
+            buyUpgrade("dv", 14, false)
+        }
+    },
     nodeStyle() {
         return {
             background: "linear-gradient(150deg,rgb(122, 122, 122) 0%,rgb(233, 233, 233) 50%,rgb(122, 122, 122) 100%)",

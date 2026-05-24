@@ -192,6 +192,7 @@
 
         if (hasMilestone("prj", 203)) player.pri.prismsToGet = player.pri.prismsToGet.mul(2);
         player.pri.prismsToGet = player.pri.prismsToGet.mul(player.pri.fountains[8].completionEffect);
+        if (!hasMilestone("prj", 207)) player.pri.prismsToGet = player.pri.prismsToGet.mul(player.prj.milestone207Effect);
 
         player.pri.prismsToGet = player.pri.prismsToGet.floor()
 
@@ -1365,11 +1366,11 @@
             },
         },
         10: {
-            title: "Gear",
+            title: "Cube",
             completionEffectPrefix: "x",
-            completionEffectSuffix: " Light Well Speed",
+            completionEffectSuffix: " Light",
             condition() {
-                return player.prj.projectSpeed.gte(400)
+                return player.wel.modules[4].completions.gte(1e11)
             },
             unlocked() {
                 return (player.pri.fountains[4].completions.gt(0) || player.pri.fountains[5].completions.gt(0) || player.pri.fountains[6].completions.gt(0)) && hasMilestone("prj", 302)
@@ -1378,25 +1379,25 @@
                 return player.blu.totalBlueshifts.gte(11) && hasMilestone("prj", 303)
             },
             getCompletionEffect() {
-                let completions = player.pri.fountains[9].completions
+                let completions = player.pri.fountains[10].completions
 
-                s = completions.pow(0.8).pow_base(1.2)
+                s = completions.pow(0.75).pow_base(4)
 
                 return s
             },
             getTimeReq() {
-                let completions = player.pri.fountains[9].completions
+                let completions = player.pri.fountains[10].completions
                 let s = new Decimal(1)
 
-                s = s.mul(completions.pow_base(1.5))
+                s = s.mul(completions.pow_base(4))
                 s = s.mul(completions.sub(20).max(0).pow_base(1.4))
-                s = s.pow(1.0625).mul(1.8e3)
+                s = s.pow(1.0625).mul(1.4e13)
 
                 return s
             },
             getprismReq() {
-                let completions = player.pri.fountains[9].completions
-                let s = completions.pow_base(1.5).mul(50)
+                let completions = player.pri.fountains[10].completions
+                let s = completions.pow_base(4).mul(1e11)
                 s = s.mul(completions.sub(20).max(0).pow_base(1.4))
 
                 return s.floor()
@@ -1589,7 +1590,7 @@
                         }
                     }
 
-                    // gear
+                    // Cube
                     if (layers.pri.fountains[10].unlocked()) {
                         look[9][1].push(["blank", "6px", {width: "6px"}])
                             look[9][1].push(
@@ -1598,11 +1599,11 @@
                                 ], {width: "0", height: "0"}],
                             )
                         if (layers.pri.fountains[10].condition()) {
-                            look[9][1].push(makePrismFountain(9, false))
+                            look[9][1].push(makePrismFountain(10, false))
                         } else {
                             look[9][1].push(
                             ["style-column", [
-                                ["raw-html", "Gear<br><small>Req: 16 Total Blueprint ↻</small>", {color: "white", fontSize: "16px"}],
+                                ["raw-html", "Cube<br><small>Req: +10% light well ↻/s</small>", {color: "white", fontSize: "16px"}],
                             ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
                             )
                         }

@@ -691,7 +691,7 @@ function celestialiteReward(gain) {
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.matosDust) + " matos dust! (You have " + formatWhole(player.laboratory.matosDust) + ")")
     }
     if (gain.matosShard) {
-        gain.matosDust = gain.matosShard.mul(player.laboratory.matosMult).mul(generalMult).mul(player.laboratory.matosEssence.add(1).log(10).add(1)).floor()
+        gain.matosShard = gain.matosShard.mul(player.laboratory.matosMult).mul(generalMult).mul(player.laboratory.matosEssence.add(1).log(10).add(1)).floor()
         player.laboratory.matosShard = player.laboratory.matosShard.add(gain.matosShard)
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.matosShard) + " matos shards! (You have " + formatWhole(player.laboratory.matosShard) + ")")
     }

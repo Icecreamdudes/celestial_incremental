@@ -64,6 +64,14 @@ function updateStyles() {
 	if (player.tab == 'c') player.hideMenu = true
 	if (options.fullscreen) player.hideMenu = true
 
+	// ===------   PREVENT UNWANTED FULLSCREENS   ------=== //
+	if (options.fullscreen && player.tab != "bh" &&
+	!(player.tab == "ir" && player.subtabs["ir"]["stuff"] == "Battle") &&
+	!(player.tab == "bl" && player.subtabs["bl"]["stuff"] == "Battle") &&
+	!(player.tab == "cbs" && player.subtabs["cbs"]["stuff"] == "Battle")) {
+		options.fullscreen = false
+	}
+
 	// ===------   CHANGE LAYER SIZE   ------=== //
 	const LAYERHOLDER = document.getElementById('layerHolder')
 	if (LAYERHOLDER) {
@@ -681,7 +689,7 @@ function updateStyles() {
 			player.musuniverse = "CS"
 			break;
 		case "h": case "hpr": case "hre": case "hbl": case "hcu":
-		case "hpu": case "hpw": case "hrm":
+		case "hpu": case "hpw": case "hrm": case "hve": case "hsa":
 			player.musuniverse = "UA"
 			break;
 		case "i": case "r": case "f": case "p": case "t":

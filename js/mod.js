@@ -858,15 +858,16 @@ let credits = `<h1>Credits:</h1><br>
 let changelog = `<h1>Changelog:</h1><br>
 	<h3>v1.12.6 - Akash's Mini-Update I: Negative Diamonds</h3><br>
 		Content:<br>
-			- Added the 3rd page of achievements<br>
-			- Added a new evolution pet<br>
-			- Added a new check back layer<br><br>
+			- Added the 3rd page of achievements.<br>
+			- Added a new evolution pet.<br>
+			- Added a new check back layer.<br><br>
 		Minor Changes:<br>
-			- Changed the styles of achievement page buttons<br>
-			- Added missing achievement icons for page 2<br><br>
+			- Changed the styles of achievement page buttons.<br>
+			- Added missing achievement icons for page 2.<br>
+			- Added a few more savebank buttons (actual saves haven't been added yet).<br><br>
 		Bug Fixes:<br>
-			- Fixed legendary punchcards having the wrong color backgrounds<br>
-			- Fixed V's icon not showing up<br><br>
+			- Fixed legendary punchcards having the wrong color backgrounds.<br>
+			- Fixed V not having their cutscene icon.<br><br>
 	<h3>v1.12.5 - Battle Bonanza</h3><br>
 		Content:<br>
 			- Added ??? temple bestowals<br>

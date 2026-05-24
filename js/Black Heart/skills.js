@@ -788,8 +788,8 @@ BHA.geroa_selfRepair = {
         if (hasUpgrade("ir", 207)) return player.bh.characters[index].health.lte(player.bh.characters[index].maxHealth.div(2))
         return player.bh.characters[index].health.lte(player.bh.characters[index].maxHealth.div(4))
     },
-    cooldown: new Decimal(30),
-    cooldownCap: new Decimal(10),
+    cooldown: new Decimal(24),
+    cooldownCap: new Decimal(8),
 }
 BHA.geroa_cosmicRay = {
     name: "Cosmic Ray",

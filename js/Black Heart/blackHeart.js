@@ -812,6 +812,11 @@ addLayer("bh", {
         if (player.bh.currentStage != "none") {
             // Only trigger when celestialite id is set
             if (player.bh.celestialite.id != "none") {
+                // Kill Celestialite
+                if (player.bh.celestialite.health.lte(0) && !BHC[player.bh.celestialite.id].immortal) {
+                    celestialiteDeath()
+                }
+                
                 if (unpaused) {
                     // Celestialite Regen
                     if (player.bh.celestialite.regen.neq(0)) {
@@ -954,11 +959,6 @@ addLayer("bh", {
                             }
                         }                        
                     }
-                }
-
-                // Kill Celestialite
-                if (player.bh.celestialite.health.lte(0) && !BHC[player.bh.celestialite.id].immortal) {
-                    celestialiteDeath()
                 }
             }
 
@@ -2829,7 +2829,7 @@ addLayer("bh", {
         "Char-Eclipse": {
             title() {return "<img src='" + run(BHP["eclipse"].icon, BHP["eclipse"]) + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
             canClick: true,
-            unlocked() {return getLevelableAmount("pet", 501).gt(0)},
+            unlocked() {return getLevelableAmount("pet", 501).gt(0) || getLevelableTier("pet", 501).gt(0)},
             onClick() {
                 player.bh.characterSelection = "eclipse"
             },
@@ -2842,7 +2842,7 @@ addLayer("bh", {
         "Char-Geroa": {
             title() {return "<img src='" + run(BHP["geroa"].icon, BHP["geroa"]) + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
             canClick: true,
-            unlocked() {return getLevelableAmount("pet", 502).gt(0)},
+            unlocked() {return getLevelableAmount("pet", 502).gt(0) || getLevelableTier("pet", 502).gt(0)},
             onClick() {
                 player.bh.characterSelection = "geroa"
             },
@@ -2855,7 +2855,7 @@ addLayer("bh", {
         "Char-Vespasian": {
             title() {return "<img src='" + run(BHP["vespasian"].icon, BHP["vespasian"]) + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
             canClick: true,
-            unlocked() {return getLevelableAmount("pet", 503).gt(0)},
+            unlocked() {return getLevelableAmount("pet", 503).gt(0) || getLevelableTier("pet", 503).gt(0)},
             onClick() {
                 player.bh.characterSelection = "vespasian"
             },

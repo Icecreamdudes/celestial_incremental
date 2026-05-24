@@ -528,7 +528,6 @@
             },
             canClick() {
                 return (player.cb.evolutionShards.gte(30) && player.cb.paragonShards.gte(1) && player.cb.level.gte(1500)
-                && (getLevelableAmount("pet", 206).gte(6) || getLevelableTier("pet", 206).gt(0))
                 && getLevelableAmount("pet", 206).add(getLevelableTier("pet", 206).mul(5).min(40)).gte(6)
                 && getLevelableAmount("pet", 207).add(getLevelableTier("pet", 207).mul(5).min(40)).gte(6)
                 && player.ca.rememberanceCores.gte(5))

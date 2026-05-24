@@ -7,6 +7,8 @@
     startData() { return {
         unlocked: true,
 
+        starshines: new Decimal(0),
+
         starlight: new Decimal(0),
         starlightToGet: new Decimal(0),
         totalStarlight: new Decimal(0),
@@ -40,9 +42,11 @@
     tooltip: "Bumpy",
     color: "#dfffdf",
     update(delta) {
-        player.bum.starlightToGet = player.wel.light.add(1).div(1e50).log(10).pow_base(1.25).floor()
+        player.bum.starlightToGet = player.wel.light.add(1).log(10).sub(100).div(6).pow_base(2).floor()
+        if (player.bum.starshines.lte(0)) player.bum.starlightToGet = player.bum.starlightToGet.min(1);
         
         player.bum.fountainSpeed = player.bum.totalStarlight.pow(2).div(10)
+        player.bum.fountainSpeed = player.bum.fountainSpeed.mul(player.prj.projectSpeed)
 
         // FOUNTAIN PROGRESS
         Object.keys(layers.bum.fountains).forEach(i => {
@@ -68,10 +72,12 @@
     branches: ["prj"],
     clickables: {
         1: {
-            title() { return "<h2>Focus your light into starlight.</h2><br>Req: 1e50 Light" },
-            canClick() { return player.wel.light.gte(1e50)},
+            title() { return "<h2>Focus your light into starlight.</h2><br>Req: 1e100 Light" },
+            canClick() { return player.wel.light.gte(1e100)},
             unlocked() { return true },
             onClick() {
+                player.bum.starlight = player.bum.starlight.add(player.bum.starlightToGet)
+                player.bum.starshines = player.bum.starshines.add(1)
                 layers.pri.prismReset(true)
             },
             style() {
@@ -342,7 +348,7 @@
             ["raw-html", () => { return "You have <h3>" + formatWhole(player.bum.starlight) + "</h3> starlight." }, {color: "#dfffdf", fontSize: "24px", fontFamily: "monospace"}],
             ["raw-html", () => {return "(+" + formatWhole(player.bum.starlightToGet) + ")"}, () => {
                 let look = {fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
-                if (player.bum.starlightToGet.gt(1)) {look.color = "#dfffdf"} else {look.color = "gray"}
+                if (player.bum.starlightToGet.gte(1)) {look.color = "#dfffdf"} else {look.color = "gray"}
                 return look
             }],
         ]],
@@ -351,7 +357,7 @@
         ["blank", "15px"],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && false}
+    layerShown() { return player.startedGame == true && hasMilestone("prj", 401)}
 })
 
 const makeStarlightFountain = function (id, effectIsWhole) {
@@ -379,7 +385,7 @@ const makeStarlightFountain = function (id, effectIsWhole) {
                     ["raw-html", "<small>(" + format(player.bum.fountains[id].time, 1) + "/" + format(player.bum.fountains[id].timeReq, 1) + ")</small>", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                     ["blank", "10px"],
                     ["style-column", [
-                        ["raw-html", player.bum.fountains[id].starlightReq.eq(0) ? "Your first cycle is free!" : "-" + formatWhole(player.bum.fountains[id].starlightReq) + " Light", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                        ["raw-html", player.bum.fountains[id].starlightReq.eq(0) ? "Your first cycle is free!" : "-" + formatWhole(player.bum.fountains[id].starlightReq) + " Starlight", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                     ], {background: "#806080", borderRadius: "0 10px 0px 0px", width: "200px", height:"25px"}],
                     ["blank", "3px"],
                     ["style-row", [

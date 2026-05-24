@@ -79,6 +79,10 @@
         },
 
         milestone105Effect: new Decimal(1),
+        milestone112Effect: new Decimal(1),
+        milestone207Effect: new Decimal(1),
+        milestone210Effect: new Decimal(1),
+        milestone304Effect: new Decimal(1),
     }},
     automate() {},
     nodeStyle() {
@@ -142,6 +146,10 @@
 
         player.prj.milestone105Effect = player.prj.projectSpeed.pow(0.2).mul(player.prj.projectSpeed.max(1).log10().mul(0.75)).add(1)
         if (hasMilestone("prj", 111)) player.prj.milestone105Effect = player.prj.milestone105Effect.pow(1.5);
+        player.prj.milestone112Effect = player.prj.projectSpeed.div(10).add(1)
+        player.prj.milestone207Effect = player.pri.prisms.add(1).log(1e4).floor().pow_base(1.5)
+        player.prj.milestone210Effect = player.bum.starshines.pow_base(1.1).min(100)
+        player.prj.milestone304Effect = player.wel.modules[4].completions.div(1e9).add(1).log10().pow(0.75).pow_base(10).add(1).pow(0.25)
 
         // MISC
 
@@ -334,7 +342,7 @@
             onComplete() {
                 doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>x2 light well ↻ gain and unlock 1 punchcard per project cycle up to 5.</small>" },
+            effectDescription() { return "<small>x2 light well ↻ gain and unlock 1 punchcard per project ↻ up to 5.</small>" },
             cycleReq() { return new Decimal(2) },
             projectId() { return 1 },
             unlocked() { return true },
@@ -544,7 +552,7 @@
             onComplete() {
                 doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>x1.15 light well speed, you're welcome.</small>" },
+            effectDescription() { return "<small>Project speed boosts light. (x" + format(player.prj.milestone112Effect) + ")</small>" },
             cycleReq() { return new Decimal(13) },
             projectId() { return 1 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) && hasUpgrade("wel", 34) },
@@ -751,6 +759,90 @@
                 return look
             },
         },
+        207: {
+            onComplete() {
+                doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+            },
+            effectDescription() { return "<small>x1.5 prism gain every 4 OoM of prisms.</small>" },
+            cycleReq() { return new Decimal(7) },
+            projectId() { return 2 },
+            unlocked() { return hasMilestone(this.layer, this.id - 3) },
+            done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
+            style() {
+                let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
+                if (hasMilestone("prj", this.id)) {
+                    look.backgroundColor = "#efffef"
+                    look.color = "#232e23"
+                } else {
+                    look.backgroundColor = "#232e23"
+                    look.color = "#efffef"
+                }
+                return look
+            },
+        },
+        208: {
+            onComplete() {
+                doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+            },
+            effectDescription() { return "<small>Unlock a time mode for auto-prismatic.</small>" },
+            cycleReq() { return new Decimal(8) },
+            projectId() { return 2 },
+            unlocked() { return hasMilestone(this.layer, this.id - 3) },
+            done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
+            style() {
+                let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
+                if (hasMilestone("prj", this.id)) {
+                    look.backgroundColor = "#efffef"
+                    look.color = "#232e23"
+                } else {
+                    look.backgroundColor = "#232e23"
+                    look.color = "#efffef"
+                }
+                return look
+            },
+        },
+        209: {
+            onComplete() {
+                doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+            },
+            effectDescription() { return "<small>x1.09 light well speed, bumpy is so nice fr.</small>" },
+            cycleReq() { return new Decimal(9) },
+            projectId() { return 2 },
+            unlocked() { return hasMilestone(this.layer, this.id - 3) },
+            done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
+            style() {
+                let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
+                if (hasMilestone("prj", this.id)) {
+                    look.backgroundColor = "#efffef"
+                    look.color = "#232e23"
+                } else {
+                    look.backgroundColor = "#232e23"
+                    look.color = "#efffef"
+                }
+                return look
+            },
+        },
+        210: {
+            onComplete() {
+                doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
+            },
+            effectDescription() { return "<small>x1.1 light gain per starshine done. (x" + format(player.prj.milestone210Effect) + ", caps at x100)</small>" },
+            cycleReq() { return new Decimal(10) },
+            projectId() { return 2 },
+            unlocked() { return hasMilestone(this.layer, this.id - 3) },
+            done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
+            style() {
+                let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
+                if (hasMilestone("prj", this.id)) {
+                    look.backgroundColor = "#efffef"
+                    look.color = "#232e23"
+                } else {
+                    look.backgroundColor = "#232e23"
+                    look.color = "#efffef"
+                }
+                return look
+            },
+        },
         // BLUESHIFT
         301: {
             onComplete() {
@@ -819,7 +911,7 @@
             onComplete() {
                 doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Blueshift no longer resets δ ↻.</small>" },
+            effectDescription() { return "<small>δ ↻ boosts light well speed. (x" + format(player.prj.milestone304Effect) + ")</small>" },
             cycleReq() { return new Decimal(4) },
             projectId() { return 3 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) },
@@ -904,7 +996,7 @@
             onComplete() {
                 doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>x2 starlight per project cycle after 1. Keep pyramid on blueshift.</small>" },
+            effectDescription() { return "<small>x2 starlight per project ↻ after 1. Keep fountain unlocks on blueshift.</small>" },
             cycleReq() { return new Decimal(2) },
             projectId() { return 4 },
             unlocked() { return true },
@@ -925,7 +1017,7 @@
             onComplete() {
                 doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>x10 light. Extend the AU2 star trees.</small>" },
+            effectDescription() { return "<small>x10 light and always generate 10%. Unlock the fifth row of the pyramid.</small>" },
             cycleReq() { return new Decimal(3) },
             projectId() { return 4 },
             unlocked() { return true },
@@ -946,7 +1038,7 @@
             onComplete() {
                 doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock auto-starlight.</small>" },
+            effectDescription() { return "<small>x10 light well ↻ and always generate 1%. Extend the AU2 star trees.</small>" },
             cycleReq() { return new Decimal(4) },
             projectId() { return 4 },
             unlocked() { return true },
@@ -967,7 +1059,7 @@
             onComplete() {
                 doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock the starry obelisk.</small>" },
+            effectDescription() { return "<small>Extend Goobert content. Unlock project studies.</small>" },
             cycleReq() { return new Decimal(5) },
             projectId() { return 4 },
             unlocked() { return true },
@@ -988,7 +1080,7 @@
             onComplete() {
                 doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock prismatic wells.</small>" },
+            effectDescription() { return "<small>Unlock Prism Well ε.</small>" },
             cycleReq() { return new Decimal(6) },
             projectId() { return 4 },
             unlocked() { return true },
@@ -1009,7 +1101,7 @@
             onComplete() {
                 doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Blueshift no longer resets well ↻.</small>" },
+            effectDescription() { return "<small>Unlock the sixth row of the pyramid.</small>" },
             cycleReq() { return new Decimal(7) },
             projectId() { return 4 },
             unlocked() { return true },
@@ -1030,7 +1122,7 @@
             onComplete() {
                 doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock more Goobert content. Improve prismatic well cycle effects.</small>" },
+            effectDescription() { return "<small>Halve anti-singularity fragment cost and double goobert points.</small>" },
             cycleReq() { return new Decimal(8) },
             projectId() { return 4 },
             unlocked() { return true },
@@ -1051,7 +1143,7 @@
             onComplete() {
                 doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Improve project cycle effects.</small>" },
+            effectDescription() { return "<small>Unlock the final pyramid fountain. Improve project ↻ effects.</small>" },
             cycleReq() { return new Decimal(9) },
             projectId() { return 4 },
             unlocked() { return true },
@@ -1072,7 +1164,7 @@
             onComplete() {
                 doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>x100 light. It's time.</small>" },
+            effectDescription() { return "<small>x10 light gain. The grind is on.</small>" },
             cycleReq() { return new Decimal(10) },
             projectId() { return 4 },
             unlocked() { return true },
@@ -1187,7 +1279,7 @@
 
                 return s
             },
-            milestones: [201, 202, 203, 204, 205, 206,]// 207, 208, 209, 210],
+            milestones: [201, 202, 203, 204, 205, 206, 207, 208, 209, 210],
         },
         3: {
             title: "Blueshift",
@@ -1252,7 +1344,7 @@
             },
             getTimeReq() {
                 let completions = player.prj.modules[4].completions
-                let s = new Decimal(1e9)
+                let s = new Decimal(4e6)
 
                 s = s.mul(completions.add(1).mul(completions.pow(3)).div(2).add(1))
                 s = s.mul(completions.div(5).floor().pow_base(10))
@@ -1261,7 +1353,7 @@
             },
             getTimeCapsuleReq() {
                 let completions = player.prj.modules[4].completions
-                let s = completions.add(1).pow(4).mul(4e3)
+                let s = completions.add(1).pow(4).mul(2.5e4)
                 
                 s = s.add(completions.sub(5).max(0).pow(4)).mul(completions.div(5).floor().pow_base(20))
 

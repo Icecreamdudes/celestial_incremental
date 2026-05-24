@@ -118,7 +118,7 @@ addLayer("savebank", {
             style: { width: '125px', minHeight: '50px', color: 'rgba(0,0,0,0.8)', background: 'linear-gradient(140deg, red 0%, black 120%)', borderRadius: '0px', border: '2px solid white'},
         },
         19: {
-            title() { return "Starmetal<br>Matos" },
+            title() { return "Starmetal<br>Black Heart" },
             canClick: true,
             unlocked: true,
             onClick() {
@@ -127,22 +127,22 @@ addLayer("savebank", {
             style: { width: '125px', minHeight: '50px', color: '#282363', background: 'linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%,#eb6077 50%, #d460eb, 75%, #60cfeb 100%)', borderRadius: '0px', border: '2px solid white'},
         },
         21: {
-            title() { return "Matos<br>Check Back Fighting" },
+            title() { return "Black Heart<br>Iridite" },
             canClick: true,
             unlocked: true,
             onClick() {
                 player.subtabs["savebank"]["stuff"] = "Matos-CBF"
             },
-            style: { width: '200px', minHeight: '50px', color: 'black', background: 'linear-gradient(120deg,rgb(138, 14, 121) 0%,rgb(168, 12, 51) 100%)', borderRadius: '0px', border: '2px solid white'},
+            style: { width: '125px', minHeight: '50px', color: 'black', background: 'linear-gradient(120deg,rgb(138, 14, 121) 0%,rgb(168, 12, 51) 100%)', borderRadius: '0px', border: '2px solid white'},
         },
         22: {
-            title() { return "Check Back Fighting<br>End of Iridite" },
+            title() { return "Iridite<br>Hive" },
             canClick: true,
             unlocked: true,
             onClick() {
                 player.subtabs["savebank"]["stuff"] = "CBF-EoIr"
             },
-            style: { width: '200px', minHeight: '50px', color: 'black', background: 'linear-gradient(120deg,rgb(0, 0, 0) 0%,rgb(8, 8, 32) 100%)', borderRadius: '0px', border: '2px solid white', color: 'white'},
+            style: { width: '125px', minHeight: '50px', color: 'black', background: 'linear-gradient(120deg,rgb(0, 0, 0) 0%,rgb(8, 8, 32) 100%)', borderRadius: '0px', border: '2px solid white', color: 'white'},
         },
         // Start-Checkback
         101: {

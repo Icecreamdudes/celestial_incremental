@@ -856,6 +856,9 @@ let changelog = `<h1>Changelog:</h1><br>
 		Minor Changes:<br>
 			- Changed the styles of achievement page buttons<br>
 			- Added missing achievement icons for page 2<br><br>
+		Bug Fixes:<br>
+			- Fixed legendary punchcards having the wrong color backgrounds<br>
+			- Fixed V's icon not showing up<br><br>
 	<h3>v1.12.5 - Battle Bonanza</h3><br>
 		Content:<br>
 			- Added ??? temple bestowals<br>

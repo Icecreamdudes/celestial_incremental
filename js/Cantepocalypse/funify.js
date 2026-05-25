@@ -2469,7 +2469,7 @@
                 return "Softcap Weakener #1"
             },
             display() {
-                return "which are weakening the first replicanti point by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are weakening the first replicanti point softcap by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fear."
             },
             buy(mult) {
@@ -2503,7 +2503,7 @@
                 return "Softcap Extender #2"
             },
             display() {
-                return "which are extending the second replicanti point by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are extending the second replicanti point softcap by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fear."
             },
             buy(mult) {
@@ -2537,7 +2537,7 @@
                 return "Softcap Weakener #2"
             },
             display() {
-                return "which are weakening the second replicanti point by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are weakening the second replicanti point softcap by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fear."
             },
             buy(mult) {

@@ -8,6 +8,8 @@
         unlocked: true,
 
         starshines: new Decimal(0),
+        starshinesToGet: new Decimal(0),
+        totalStarshines: new Decimal(0),
 
         starlight: new Decimal(0),
         starlightToGet: new Decimal(0),
@@ -17,6 +19,66 @@
         
         fountains: {
             1: {
+                time: new Decimal(0),
+                timeReq: new Decimal(60),
+                timeSpeed: new Decimal(1),
+                canAddCompletion: false,
+                completions: new Decimal(0),
+                maxCompletions: new Decimal(0),
+
+                focused: false,
+                starlightReq: new Decimal(1),
+                completionEffect: new Decimal(1),
+            },
+            2: {
+                time: new Decimal(0),
+                timeReq: new Decimal(60),
+                timeSpeed: new Decimal(1),
+                canAddCompletion: false,
+                completions: new Decimal(0),
+                maxCompletions: new Decimal(0),
+
+                focused: false,
+                starlightReq: new Decimal(1),
+                completionEffect: new Decimal(1),
+            },
+            3: {
+                time: new Decimal(0),
+                timeReq: new Decimal(60),
+                timeSpeed: new Decimal(1),
+                canAddCompletion: false,
+                completions: new Decimal(0),
+                maxCompletions: new Decimal(0),
+
+                focused: false,
+                starlightReq: new Decimal(1),
+                completionEffect: new Decimal(1),
+            },
+            4: {
+                time: new Decimal(0),
+                timeReq: new Decimal(60),
+                timeSpeed: new Decimal(1),
+                canAddCompletion: false,
+                completions: new Decimal(0),
+                maxCompletions: new Decimal(0),
+
+                focused: false,
+                starlightReq: new Decimal(1),
+                completionEffect: new Decimal(1),
+            },
+            5: {
+                time: new Decimal(0),
+                timeReq: new Decimal(60),
+                timeSpeed: new Decimal(1),
+                canAddCompletion: false,
+                completions: new Decimal(0),
+                maxCompletions: new Decimal(0),
+
+                focused: false,
+                starlightReq: new Decimal(1),
+                completionEffect: new Decimal(1),
+            },
+            6: {
                 time: new Decimal(0),
                 timeReq: new Decimal(60),
                 timeSpeed: new Decimal(1),
@@ -42,9 +104,15 @@
     tooltip: "Bumpy",
     color: "#dfffdf",
     update(delta) {
+
+        // STARLIGHT
         player.bum.starlightToGet = player.wel.light.add(1).log(10).sub(100).div(6).pow_base(2).floor()
         if (player.bum.starshines.lte(0)) player.bum.starlightToGet = player.bum.starlightToGet.min(1);
+
+        // STARSHINES
+        player.bum.starshinesToGet = new Decimal(1)
         
+        // FOUNTAIN SPEED
         player.bum.fountainSpeed = player.bum.totalStarlight.pow(2).div(10)
         player.bum.fountainSpeed = player.bum.fountainSpeed.mul(player.prj.projectSpeed)
 
@@ -68,7 +136,26 @@
             }
         });
     },
-    //branches: [["wel", "#fff", 40], ["wel", "#402030", 8]],
+    starlightReset(isRewarded) {
+        if (isRewarded) {
+            player.bum.starlight = player.bum.starlight.add(player.bum.starlightToGet)
+            player.bum.starshines = player.bum.starshines.add(player.bum.starshinesToGet)
+            if (!hasAchievement("achievements", 1214)) completeAchievement("achievements", 1214);
+        }
+        layers.blu.blueshiftReset(false)
+
+        Object.keys(player.blu.blueshifts).forEach(i => {
+            let module = player.blu.blueshifts[i]
+            module.amount = new Decimal(0)
+            module.cycleGainMul = new Decimal(1)
+            module.cycleSpeedRoot = new Decimal(1)
+        });
+        player.blu.totalBlueshifts = new Decimal(0)
+        player.blu.blueshiftEffect = new Decimal(1)
+
+        player.prj.projectSpeed = new Decimal(1)
+        player.prj.storedTimeCapsules = new Decimal(0)
+    },
     branches: ["prj"],
     clickables: {
         1: {
@@ -76,9 +163,7 @@
             canClick() { return player.wel.light.gte(1e100)},
             unlocked() { return true },
             onClick() {
-                player.bum.starlight = player.bum.starlight.add(player.bum.starlightToGet)
-                player.bum.starshines = player.bum.starshines.add(1)
-                layers.pri.prismReset(true)
+                layers.bum.starlightReset(true)
             },
             style() {
                 let look = {width: "400px", minHeight: "100px", borderRadius: "10px", padding: "8px"}
@@ -99,7 +184,6 @@
             canClick() { return false},
             unlocked() { return true },
             onClick() {
-                layers.pri.prismReset(true)
             },
             style() {
                 let look = {width: "75px", minHeight: "50px", borderRadius: "10px 10px 0 0", padding: "8px"}
@@ -121,7 +205,6 @@
             canClick() { return false},
             unlocked() { return true },
             onClick() {
-                layers.pri.prismReset(true)
             },
             style() {
                 let look = {width: "75px", minHeight: "50px", borderRadius: "10px 10px 0 0", padding: "8px"}
@@ -143,7 +226,6 @@
             canClick() { return false},
             unlocked() { return true },
             onClick() {
-                layers.pri.prismReset(true)
             },
             style() {
                 let look = {width: "75px", minHeight: "50px", borderRadius: "10px 10px 0 0", padding: "8px"}
@@ -165,7 +247,6 @@
             canClick() { return false},
             unlocked() { return true },
             onClick() {
-                layers.pri.prismReset(true)
             },
             style() {
                 let look = {width: "75px", minHeight: "50px", borderRadius: "10px 10px 0 0", padding: "8px"}
@@ -183,7 +264,122 @@
             },
         },
         1001: {
-            title() { return "<h3>Focus</h3>" },
+            title() { return "<h3>Deposit</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.bum.starlight.gte(player.bum.fountains[this.id - 1000].starlightReq) && !player.bum.fountains[this.id - 1000].focused},
+            unlocked() { return true },
+            onClick() {
+                player.bum.starlight = player.bum.starlight.sub(player.bum.fountains[this.id - 1000].starlightReq)
+                player.prj.focused = player.prj.focused.add(1)
+                player.bum.fountains[this.id - 1000].focused = true
+            },
+            style() {
+                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
+                if (this.canClick()) {
+                    look.backgroundColor = "#ffbfff"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        1002: {
+            title() { return "<h3>Deposit</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.bum.starlight.gte(player.bum.fountains[this.id - 1000].starlightReq) && !player.bum.fountains[this.id - 1000].focused},
+            unlocked() { return true },
+            onClick() {
+                player.bum.starlight = player.bum.starlight.sub(player.bum.fountains[this.id - 1000].starlightReq)
+                player.prj.focused = player.prj.focused.add(1)
+                player.bum.fountains[this.id - 1000].focused = true
+            },
+            style() {
+                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
+                if (this.canClick()) {
+                    look.backgroundColor = "#ffbfff"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        1003: {
+            title() { return "<h3>Deposit</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.bum.starlight.gte(player.bum.fountains[this.id - 1000].starlightReq) && !player.bum.fountains[this.id - 1000].focused},
+            unlocked() { return true },
+            onClick() {
+                player.bum.starlight = player.bum.starlight.sub(player.bum.fountains[this.id - 1000].starlightReq)
+                player.prj.focused = player.prj.focused.add(1)
+                player.bum.fountains[this.id - 1000].focused = true
+            },
+            style() {
+                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
+                if (this.canClick()) {
+                    look.backgroundColor = "#ffbfff"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        1004: {
+            title() { return "<h3>Deposit</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.bum.starlight.gte(player.bum.fountains[this.id - 1000].starlightReq) && !player.bum.fountains[this.id - 1000].focused},
+            unlocked() { return true },
+            onClick() {
+                player.bum.starlight = player.bum.starlight.sub(player.bum.fountains[this.id - 1000].starlightReq)
+                player.prj.focused = player.prj.focused.add(1)
+                player.bum.fountains[this.id - 1000].focused = true
+            },
+            style() {
+                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
+                if (this.canClick()) {
+                    look.backgroundColor = "#ffbfff"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        1005: {
+            title() { return "<h3>Deposit</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.bum.starlight.gte(player.bum.fountains[this.id - 1000].starlightReq) && !player.bum.fountains[this.id - 1000].focused},
+            unlocked() { return true },
+            onClick() {
+                player.bum.starlight = player.bum.starlight.sub(player.bum.fountains[this.id - 1000].starlightReq)
+                player.prj.focused = player.prj.focused.add(1)
+                player.bum.fountains[this.id - 1000].focused = true
+            },
+            style() {
+                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
+                if (this.canClick()) {
+                    look.backgroundColor = "#ffbfff"
+                    look.border = "3px solid #0000003f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        1006: {
+            title() { return "<h3>Deposit</h3>" },
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.bum.starlight.gte(player.bum.fountains[this.id - 1000].starlightReq) && !player.bum.fountains[this.id - 1000].focused},
             unlocked() { return true },
             onClick() {
@@ -207,14 +403,598 @@
         },
     },
     bars: {},
-    upgrades: {},
+    upgrades: {
+        11: {
+            unlocked() { return true },
+            condition() { return true || player.bum.starshines.gte(4) },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "Improve the formulae for pyramid fountain reqs, and bulk complete them.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><h3>Req: 4 starshines done</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(3),
+            currencyLocation() { return player.bum },
+            currencyDisplayName: "Starlight",
+            currencyInternalName: "starlight",
+            canAfford() { return true },
+            style() {
+                let look = {width: "200px", borderRadius: "8px 0 0 0", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#806080"
+                    look.border = "3px solid #4d394d"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#dfffdf"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        12: {
+            unlocked() { return true },
+            condition() { return true || player.bum.starshines.gte(4) },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "Start blueshifts with your total prisms ^0.5. Retain focus on blueshift.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><h3>Req: 4 starshines done</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(3),
+            currencyLocation() { return player.bum },
+            currencyDisplayName: "Starlight",
+            currencyInternalName: "starlight",
+            canAfford() {
+                return this.condition()
+            },
+            style() {
+                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#806080"
+                    look.border = "3px solid #4d394d"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#dfffdf"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        13: {
+            unlocked() { return true },
+            condition() { return true || false },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "Extend fragmentation content.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><h3>Req: 1,000,000 time capsules stored in one run</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(12),
+            currencyLocation() { return player.bum },
+            currencyDisplayName: "Starlight",
+            currencyInternalName: "starlight",
+            canAfford() {
+                return this.condition()
+            },
+            style() {
+                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#806080"
+                    look.border = "3px solid #4d394d"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#dfffdf"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        14: {
+            unlocked() { return true },
+            condition() { return true || player.prj.projectSpeed.gte(1e4) },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "Blueshifts are 6.25% stronger per starlight upgrade bought.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><h3>Req: 10,000 project speed.</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(24),
+            currencyLocation() { return player.bum },
+            currencyDisplayName: "Starlight",
+            currencyInternalName: "starlight",
+            canAfford() {
+                return this.condition()
+            },
+            style() {
+                let look = {width: "200px", borderRadius: "0px 8px 0 0", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#806080"
+                    look.border = "3px solid #4d394d"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#dfffdf"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        21: {
+            unlocked() { return true },
+            condition() { return true },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "Multiply light gain by starlight.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><h3>Req: ???</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(60),
+            currencyLocation() { return player.bum },
+            currencyDisplayName: "Starlight",
+            currencyInternalName: "starlight",
+            canAfford() { return true },
+            style() {
+                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#806080"
+                    look.border = "3px solid #4d394d"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#dfffdf"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        22: {
+            unlocked() { return true },
+            condition() { return true },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "+x0.1 light well speed per focus.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><h3>Req: ???</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(300),
+            currencyLocation() { return player.bum },
+            currencyDisplayName: "Starlight",
+            currencyInternalName: "starlight",
+            canAfford() { return true },
+            style() {
+                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#806080"
+                    look.border = "3px solid #4d394d"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#dfffdf"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        23: {
+            unlocked() { return true },
+            condition() { return true },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "Unlock space zone IV.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><h3>Req: ???</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(400),
+            currencyLocation() { return player.bum },
+            currencyDisplayName: "Starlight",
+            currencyInternalName: "starlight",
+            canAfford() { return true },
+            style() {
+                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#806080"
+                    look.border = "3px solid #4d394d"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#dfffdf"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        24: {
+            unlocked() { return true },
+            condition() { return true },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "Blueshifts no longer reset prismatic content. Double project speed.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><h3>Req: ???</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(4e3),
+            currencyLocation() { return player.bum },
+            currencyDisplayName: "Starlight",
+            currencyInternalName: "starlight",
+            canAfford() { return true },
+            style() {
+                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#806080"
+                    look.border = "3px solid #4d394d"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#dfffdf"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        31: {
+            unlocked() { return true },
+            condition() { return true },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "[PLACEHOLDER]</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><h3>Req: ???</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(9.99e99),
+            currencyLocation() { return player.bum },
+            currencyDisplayName: "Starlight",
+            currencyInternalName: "starlight",
+            canAfford() { return true },
+            style() {
+                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#806080"
+                    look.border = "3px solid #4d394d"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#dfffdf"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        32: {
+            unlocked() { return true },
+            condition() { return true },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "[PLACEHOLDER]</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><h3>Req: ???</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(9.99e99),
+            currencyLocation() { return player.bum },
+            currencyDisplayName: "Starlight",
+            currencyInternalName: "starlight",
+            canAfford() { return true },
+            style() {
+                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#806080"
+                    look.border = "3px solid #4d394d"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#dfffdf"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        33: {
+            unlocked() { return true },
+            condition() { return true },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "Unlock Bumpy as a fighting character.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><h3>Req: ???</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(4e6),
+            currencyLocation() { return player.bum },
+            currencyDisplayName: "Starlight",
+            currencyInternalName: "starlight",
+            canAfford() { return true },
+            style() {
+                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#806080"
+                    look.border = "3px solid #4d394d"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#dfffdf"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        34: {
+            unlocked() { return true },
+            condition() { return true },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "[PLACEHOLDER]</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><h3>Req: ???</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(9.99e99),
+            currencyLocation() { return player.bum },
+            currencyDisplayName: "Starlight",
+            currencyInternalName: "starlight",
+            canAfford() { return true },
+            style() {
+                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#806080"
+                    look.border = "3px solid #4d394d"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#dfffdf"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        41: {
+            unlocked() { return true },
+            condition() { return true },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "[PLACEHOLDER]</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><h3>Req: ???</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(9.99e99),
+            currencyLocation() { return player.bum },
+            currencyDisplayName: "Starlight",
+            currencyInternalName: "starlight",
+            canAfford() { return true },
+            style() {
+                let look = {width: "200px", borderRadius: "0 0 0 8px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#806080"
+                    look.border = "3px solid #4d394d"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#dfffdf"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        42: {
+            unlocked() { return true },
+            condition() { return true },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "[PLACEHOLDER]</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><h3>Req: ???</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(9.99e99),
+            currencyLocation() { return player.bum },
+            currencyDisplayName: "Starlight",
+            currencyInternalName: "starlight",
+            canAfford() { return true },
+            style() {
+                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#806080"
+                    look.border = "3px solid #4d394d"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#dfffdf"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        43: {
+            unlocked() { return true },
+            condition() { return true },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "[PLACEHOLDER]</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><h3>Req: ???</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(9.99e99),
+            currencyLocation() { return player.bum },
+            currencyDisplayName: "Starlight",
+            currencyInternalName: "starlight",
+            canAfford() { return true },
+            style() {
+                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#806080"
+                    look.border = "3px solid #4d394d"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#dfffdf"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        44: {
+            unlocked() { return true },
+            condition() { return true },
+            fullDisplay() {
+                let s = "<h2>"
+                if (hasUpgrade(this.layer, this.id) || this.condition()) {
+                    s += "Unlock The Cycle.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                } else {
+                    s += "???</h2><br><h3>Req: ???</h3>"
+                }
+                return s
+            },
+            cost: new Decimal(1e12),
+            currencyLocation() { return player.bum },
+            currencyDisplayName: "Starlight",
+            currencyInternalName: "starlight",
+            canAfford() { return true },
+            style() {
+                let look = {width: "200px", borderRadius: "0 0 8px 0", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#806080"
+                    look.border = "3px solid #4d394d"
+                } else if (!this.condition()) {
+                    look.backgroundColor = "black"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.backgroundColor = "#dfffdf"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "3px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+    },
     buyables: {},
     milestones: {},
     challenges: {},
     infoboxes: {},
     fountains: {
         1: {
-            title: "ACCELERATION",
+            title: "Light Fountain III",
+            completionEffectPrefix: "x",
             completionEffectStat: "Light, based on Project Speed",
             condition() {
                 return true
@@ -223,7 +1003,7 @@
                 return false
             },
             getCompletionEffect() {
-                let completions = player.bum.fountains[1].completions.add(1)
+                let completions = player.bum.fountains[1].completions
 
                 s = player.prj.projectSpeed.add(1).log(10).add(1).pow(0.5).sub(1).pow_base(10).pow(completions.pow(0.5))
 
@@ -260,6 +1040,236 @@
                 return s
             },
         },
+        2: {
+            title: "Focus Fountain",
+            completionEffectPrefix: "+",
+            completionEffectStat: "Max Focus",
+            condition() {
+                return true
+            },
+            canAuto() {
+                return false
+            },
+            getCompletionEffect() {
+                return player.bum.fountains[2].completions
+            },
+            getTimeReq() {
+                let completions = player.bum.fountains[2].completions
+                let s = new Decimal(3)
+
+                s = s.mul(completions.add(1))
+                s = s.mul(completions.pow_base(2))
+                if (completions.gte(10)) {
+                    s = s.pow(10)
+                }
+
+                return s
+            },
+            getstarlightReq() {
+                let completions = player.bum.fountains[2].completions
+                let s = completions.div(4).add(1).pow(1.25)
+                
+                if (completions.gte(20)) {
+                    s = s.mul(completions.sub(20).pow_base(1.1))
+                }
+
+                s = s.mul(2)
+
+                return s.floor()
+            },
+            getTimeSpeed() {
+                let s = new Decimal(1)
+
+                s = s.mul(player.prj.projectSpeed)
+                s = s.mul(player.bum.fountainSpeed)
+
+                return s
+            },
+        },
+        3: {
+            title: "Prism Fountain",
+            completionEffectPrefix: "x",
+            completionEffectStat: "Prisms",
+            condition() {
+                return true
+            },
+            canAuto() {
+                return false
+            },
+            getCompletionEffect() {
+                return player.bum.fountains[3].completions.pow(0.5).pow_base(1.5)
+            },
+            getTimeReq() {
+                let completions = player.bum.fountains[3].completions
+                let s = new Decimal(3)
+
+                s = s.mul(completions.add(1))
+                s = s.mul(completions.pow_base(2))
+                if (completions.gte(10)) {
+                    s = s.pow(10)
+                }
+
+                return s
+            },
+            getstarlightReq() {
+                let completions = player.bum.fountains[3].completions
+                let s = completions.div(4).add(1).pow(1.25)
+                
+                if (completions.gte(20)) {
+                    s = s.mul(completions.sub(20).pow_base(1.1))
+                }
+
+                s = s.mul(100)
+
+                return s.floor()
+            },
+            getTimeSpeed() {
+                let s = new Decimal(1)
+
+                s = s.mul(player.prj.projectSpeed)
+                s = s.mul(player.bum.fountainSpeed)
+
+                return s
+            },
+        },
+        4: {
+            title: "Speed Fountain II",
+            completionEffectPrefix: "x",
+            completionEffectStat: "Light Well Speed",
+            condition() {
+                return true
+            },
+            canAuto() {
+                return false
+            },
+            getCompletionEffect() {
+                return player.bum.fountains[4].completions.pow(0.5).pow_base(1.5)
+            },
+            getTimeReq() {
+                let completions = player.bum.fountains[4].completions
+                let s = new Decimal(3)
+
+                s = s.mul(completions.add(1))
+                s = s.mul(completions.pow_base(2))
+                if (completions.gte(10)) {
+                    s = s.pow(10)
+                }
+
+                return s
+            },
+            getstarlightReq() {
+                let completions = player.bum.fountains[4].completions
+                let s = completions.div(4).add(1).pow(1.25)
+                
+                if (completions.gte(20)) {
+                    s = s.mul(completions.sub(20).pow_base(1.1))
+                }
+
+                s = s.mul(1e4)
+
+                return s.floor()
+            },
+            getTimeSpeed() {
+                let s = new Decimal(1)
+
+                s = s.mul(player.prj.projectSpeed)
+                s = s.mul(player.bum.fountainSpeed)
+
+                return s
+            },
+        },
+        5: {
+            title: "Project Fountain",
+            completionEffectPrefix: "x",
+            completionEffectStat: "Project Speed",
+            condition() {
+                return true
+            },
+            canAuto() {
+                return false
+            },
+            getCompletionEffect() {
+                return player.bum.fountains[5].completions.pow(0.5).pow_base(1.5)
+            },
+            getTimeReq() {
+                let completions = player.bum.fountains[5].completions
+                let s = new Decimal(3)
+
+                s = s.mul(completions.add(1))
+                s = s.mul(completions.pow_base(2))
+                if (completions.gte(10)) {
+                    s = s.pow(10)
+                }
+
+                return s
+            },
+            getstarlightReq() {
+                let completions = player.bum.fountains[5].completions
+                let s = completions.div(4).add(1).pow(1.25)
+                
+                if (completions.gte(20)) {
+                    s = s.mul(completions.sub(20).pow_base(1.1))
+                }
+
+                s = s.mul(1e6)
+
+                return s.floor()
+            },
+            getTimeSpeed() {
+                let s = new Decimal(1)
+
+                s = s.mul(player.prj.projectSpeed)
+                s = s.mul(player.bum.fountainSpeed)
+
+                return s
+            },
+        },
+        6: {
+            title: "Speed Fountain III",
+            completionEffectPrefix: "x",
+            completionEffectStat: "Prism Well Speed",
+            condition() {
+                return true
+            },
+            canAuto() {
+                return false
+            },
+            getCompletionEffect() {
+                return player.bum.fountains[5].completions.pow(0.5).pow_base(1.5)
+            },
+            getTimeReq() {
+                let completions = player.bum.fountains[5].completions
+                let s = new Decimal(3)
+
+                s = s.mul(completions.add(1))
+                s = s.mul(completions.pow_base(2))
+                if (completions.gte(10)) {
+                    s = s.pow(10)
+                }
+
+                return s
+            },
+            getstarlightReq() {
+                let completions = player.bum.fountains[5].completions
+                let s = completions.div(4).add(1).pow(1.25)
+                
+                if (completions.gte(20)) {
+                    s = s.mul(completions.sub(20).pow_base(1.1))
+                }
+
+                s = s.mul(1e8)
+
+                return s.floor()
+            },
+            getTimeSpeed() {
+                let s = new Decimal(1)
+
+                s = s.mul(player.prj.projectSpeed)
+                s = s.mul(player.bum.fountainSpeed)
+
+                return s
+            },
+        },
     },
     microtabs: {
         stuff: {
@@ -269,11 +1279,52 @@
                 content() {
                     let look = [
                         ["blank", "25px"],
-                        makeStarlightFountain(1),
+                        ["style-row", [
+                            makeStarlightFountain(1, false),
+                            ["blank", "6px", {width: "6px"}],
+                            makeStarlightFountain(2, true),
+                            ["blank", "6px", {width: "6px"}],
+                            makeStarlightFountain(3, false),
+                        ]],
+                        ["blank", "6px", {width: "6px"}],
+                        ["style-row", [
+                            makeStarlightFountain(4, false),
+                            ["blank", "6px", {width: "6px"}],
+                            makeStarlightFountain(5, false),
+                            ["blank", "6px", {width: "6px"}],
+                            makeStarlightFountain(6, false),
+                        ]],
                         ["blank", "25px"],
                     ]
                     return look
                 }
+            },
+            "Upgrades": {
+                buttonStyle() { return { color: "white", borderRadius: "8px"} },
+                unlocked() { return true },
+                content() {
+                    let look = [
+                        ["blank", "25px"],
+                        ["row", [
+                            ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], 
+                        ]],
+                        ["row", [
+                            ["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24],
+                        ]],
+                        ["row", [
+                            ["upgrade", 31], ["upgrade", 32], ["upgrade", 33], ["upgrade", 34],
+                        ]],
+                        ["row", [
+                            ["upgrade", 41], ["upgrade", 42], ["upgrade", 43], ["upgrade", 44],
+                        ]],
+                        ["blank", "25px"],
+                        ["style-row", [
+
+                        ]],
+                        ["blank", "25px"],
+                    ]
+                    return look
+                },
             },
             "Journal": {
                 buttonStyle() { return { color: "white", borderRadius: "8px"} },
@@ -386,7 +1437,7 @@ const makeStarlightFountain = function (id, effectIsWhole) {
                     ["blank", "10px"],
                     ["style-column", [
                         ["raw-html", player.bum.fountains[id].starlightReq.eq(0) ? "Your first cycle is free!" : "-" + formatWhole(player.bum.fountains[id].starlightReq) + " Starlight", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
-                    ], {background: "#806080", borderRadius: "0 10px 0px 0px", width: "200px", height:"25px"}],
+                    ], {background: "#806080", borderRadius: "0 10px 0 0", width: "200px", height:"25px"}],
                     ["blank", "3px"],
                     ["style-row", [
                         ["hoverless-clickable", id + 1000],
@@ -395,16 +1446,16 @@ const makeStarlightFountain = function (id, effectIsWhole) {
                         ], {display: layers.bum.fountains[id].canAuto() ? "" : "none !important"}],
                         ["hoverless-clickable", id + 2000],
                     ], {height: "45px"}]
-                ], {background: "#4d394d", border: "3px solid #4d394d", borderRadius: "0 10px 0px 0px", width: "200px", height: "150px"}],
+                ], {background: "#4d394d", border: "3px solid #4d394d", borderRadius: "0 10px 0 0", width: "200px", height: "150px"}],
                 ["style-column", [
                     ["style-column", [
                         ["tooltip-row", [
                             ["raw-html", formatWhole(player.bum.fountains[id].completions) + " ↻", {color: "white", fontSize: "14px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
                             ["raw-html", "<div class='bottomTooltip'>Best: " + formatShortWhole(player.bum.fountains[id].bestCompletions) + " " + layers.bum.fountains[id].title + " ↻</div>"],
                         ], {}],
-                        ["raw-html", "<small>(x" + (effectIsWhole ? formatWhole(layers.bum.fountains[id].getCompletionEffect()) : formatShort(layers.bum.fountains[id].getCompletionEffect())) + " " + layers.bum.fountains[id].completionEffectStat + ")</small>", {color: "white", fontSize: "14px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
-                    ], {background: "#4d394d", border: "3px solid #806080", borderRadius: "0px 0px 7px 0px", width: "197px", height: "44px"}],
-                ], {background: "#806080", border: "3px solid #4d394d", borderRadius: "0px 0px 10px 0px", borderTop: "0px", borderLeft: "0px", height: "50px"}],
+                        ["raw-html", "<small>(" + layers.bum.fountains[id].completionEffectPrefix + (effectIsWhole ? formatWhole(layers.bum.fountains[id].getCompletionEffect()) : formatShort(layers.bum.fountains[id].getCompletionEffect())) + " " + layers.bum.fountains[id].completionEffectStat + ")</small>", {color: "white", fontSize: "14px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
+                    ], {background: "#4d394d", border: "3px solid #806080", borderRadius: "0px 0 7px 0", width: "197px", height: "44px"}],
+                ], {background: "#806080", border: "3px solid #4d394d", borderRadius: "0px 0 10px 0", borderTop: "0px", borderLeft: "0px", height: "50px"}],
             ], {width: "206px"}]
         ]]
     return thisFountain

@@ -18,7 +18,7 @@
 		"DarkU1/boosters.js", "DarkU1/vaporizer.js", "DarkU1/generators.js", "DarkU1/darkGrass.js", "DarkU1/normality.js",
 		"Singularity/core.js", "Singularity/coreFragments.js", 
 		"Singularity/starmetalEssence.js", "rockets.js", "AltU2/altUni2.js", "AltU2/stars.js", "AltU2/planets.js", "AltU2/exploration.js", "AltU2/iridite.js",
-		"AltU2/spaceZone1.js", "AltU2/spaceZone2.js", "AltU2/iriditeZone.js", "AltU2/spaceZone3.js", 
+		"AltU2/spaceZone1.js", "AltU2/spaceZone2.js", "AltU2/iriditeZone.js", "AltU2/spaceZone3.js", "AltU2/spaceZone4.js", 
 		"Hex/hex.js", "Hex/provenance.js", "Hex/refinement.js", "Hex/blessings.js", "Hex/curses.js",
 		"Hex/purity.js", "Hex/power.js", "Hex/realms.js", "Hex/vex.js", "Hex/sacrifice.js",
 		"Check Back/cookie.js", "Check Back/coinDust.js", "Check Back/buttonEnhancement.js", "Check Back/dailyOrbs.js", "Misc/achievements.js",
@@ -418,7 +418,7 @@ function updateStyles() {
 	        dottedBackground.remove();
 	    }
 	}
-	if (player.tab === "wel") {
+	if (player.tab === "wel" || player.tab === "cer") {
     	let t = Date.now()
     	t = ((t % 60000) / 60000) * 25
 		// Add the light ray background if it doesn't already exist
@@ -438,16 +438,31 @@ function updateStyles() {
         	lightRayBackground.style.overflow = "hidden";
 	    }
 		const el = document.getElementById("lightRay-background");
-		el.style.background = "conic-gradient(at 50% -64px, " +
-		"#0000 " + t + "%, #0000 " + (t + 12.5) + "%," +
-		"#4d99730f " + (t + 12.5) + "%, #4d99730f " + (t + 25) + "%," +
-		"#0000 " + (t + 25) + "%, #0000 " + (t + 37.5) + "%," +
-		"#4d99730f " + (t + 37.5) + "%, #4d99730f " + (t + 50) + "%," +
-		"#0000 " + (t + 50) + "%, #0000 " + (t + 62.5) + "%," +
-		"#4d99730f " + (t + 62.5) + "%, #4d99730f " + (t + 75) + "%," +
-		"#0000 " + (t + 75) + "%, #0000 " + (t + 87.5) + "%," +
-		"#4d99730f " + (t + 87.5) + "%, #4d99730f " + (t + 100) + "%," +
-		"#0000 " + (t + 100) + "%)"
+		if (player.tab === "wel") {
+			el.style.background = "conic-gradient(at 50% -64px, " +
+			"#4d99730f " + (t - 12.5) + "%, #4d99730f " + t + "%," +
+			"#0000 " + t + "%, #0000 " + (t + 12.5) + "%," +
+			"#4d99730f " + (t + 12.5) + "%, #4d99730f " + (t + 25) + "%," +
+			"#0000 " + (t + 25) + "%, #0000 " + (t + 37.5) + "%," +
+			"#4d99730f " + (t + 37.5) + "%, #4d99730f " + (t + 50) + "%," +
+			"#0000 " + (t + 50) + "%, #0000 " + (t + 62.5) + "%," +
+			"#4d99730f " + (t + 62.5) + "%, #4d99730f " + (t + 75) + "%," +
+			"#0000 " + (t + 75) + "%, #0000 " + (t + 87.5) + "%," +
+			"#4d99730f " + (t + 87.5) + "%, #4d99730f " + (t + 100) + "%," +
+			"#0000 " + (t + 100) + "%)"
+		} else if (player.tab === "cer") {
+			el.style.background = "conic-gradient(at 50% -64px, " +
+			"#ff80c00f " + (t - 12.5) + "%, #ff80c00f " + t + "%," +
+			"#0000 " + t + "%, #0000 " + (t + 12.5) + "%," +
+			"#ff80c00f " + (t + 12.5) + "%, #ff80c00f " + (t + 25) + "%," +
+			"#0000 " + (t + 25) + "%, #0000 " + (t + 37.5) + "%," +
+			"#ff80c00f " + (t + 37.5) + "%, #ff80c00f " + (t + 50) + "%," +
+			"#0000 " + (t + 50) + "%, #0000 " + (t + 62.5) + "%," +
+			"#ff80c00f " + (t + 62.5) + "%, #ff80c00f " + (t + 75) + "%," +
+			"#0000 " + (t + 75) + "%, #0000 " + (t + 87.5) + "%," +
+			"#ff80c00f " + (t + 87.5) + "%, #ff80c00f " + (t + 100) + "%," +
+			"#0000 " + (t + 100) + "%)"
+		}
 	} else {
 	    // Remove the light ray background if the tab is not in the well
 	    const lightRayBackground = document.getElementById("lightRay-background");
@@ -1881,7 +1896,7 @@ var doNotCallTheseFunctionsEveryTick = [
 	"selectCelestialites", "petDeath", "celestialiteDeath", "petAbility", "celestialiteAbility",
 	"arriveAtStar", "spaceEnergyReset", "coinFlip", "randomizeSegments", "spinWheel", "spinSlots", "evaluateRewards",
 	"slotReset", "enhanceReset",
-	"prismReset", "blueshiftReset", "timeCapsuleReset", "createMultiverseMapConnection", "createClickableConnection",
+	"prismReset", "blueshiftReset", "starlightReset", "timeCapsuleReset", "createMultiverseMapConnection", "createClickableConnection",
 	"makeProject", "makeLightWell", "makePrismFountain", "makeWellFountain", "makeStarlightFountain", "getTimeReq", "getTimeCapsuleReq", "getTimeSpeed", "lightGain",
 ]
 

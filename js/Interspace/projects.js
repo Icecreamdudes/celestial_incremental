@@ -1059,7 +1059,7 @@
             onComplete() {
                 doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Extend Goobert content. Unlock project studies.</small>" },
+            effectDescription() { return "<small>Keep stored SPVs on starshine. Unlock project studies.</small>" },
             cycleReq() { return new Decimal(5) },
             projectId() { return 4 },
             unlocked() { return true },
@@ -1122,7 +1122,7 @@
             onComplete() {
                 doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Halve anti-singularity fragment cost and double goobert points.</small>" },
+            effectDescription() { return "<small>Halve anti-singularity fragment cost and double goobert point gain.</small>" },
             cycleReq() { return new Decimal(8) },
             projectId() { return 4 },
             unlocked() { return true },

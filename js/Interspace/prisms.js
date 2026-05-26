@@ -1699,7 +1699,7 @@ const makePrismFountain = function (id, effectIsWhole) {
                     ], {height: "45px"}]
                 ], {background: "#335966", border: "3px solid #335966", borderRadius: "0 10px 0px 0px", width: "200px", height: "150px"}],
                 ["style-column", [
-                        ["style-column", [
+                    ["style-column", [
                         ["raw-html", formatWhole(player.pri.fountains[id].completions) + " ↻<br><small>(" + layers.pri.fountains[id].completionEffectPrefix + (effectIsWhole ? formatWhole(layers.pri.fountains[id].getCompletionEffect()) : formatShort(layers.pri.fountains[id].getCompletionEffect())) + layers.pri.fountains[id].completionEffectSuffix + ")</small>", {color: "white", fontSize: "14px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
                     ], {background: "#335966", border: "3px solid #4d9999", borderRadius: "0px 0px 7px 0px", width: "197px", height: "44px"}],
                 ], {background: "#4d9999", border: "3px solid #335966", borderRadius: "0px 0px 10px 0px", borderTop: "0px", borderLeft: "0px", height: "50px"}],

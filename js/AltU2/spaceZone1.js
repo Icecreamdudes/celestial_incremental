@@ -77,6 +77,235 @@ addLayer("spaceZone1", {
         },
     },
     upgrades: {
+        11: {
+            title: "Rejuvenation",
+            unlocked() { return true },
+            description: "Boosts singularity point gain based on space rocks.",
+            cost: new Decimal(300),
+            currencyLocation() { return player.ir },
+            effect() {
+                return player.ir.spaceRock.pow(0.75).mul(1000).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            style() {
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        12: {
+            title: "Replenish",
+            unlocked() { return true },
+            description: "Boosts oil gain based on space rocks.",
+            cost: new Decimal(500),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            effect() {
+                return player.ir.spaceRock.pow(2.5).mul(5).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style() {
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        13: {
+            title: "Servitude",
+            unlocked() { return true },
+            description: "Boosts check back XP gain based on space gems.",
+            cost: new Decimal(800),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            effect() {
+                return player.ir.spaceGem.pow(0.25).mul(0.3).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style() {
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        14: {
+            title: "Healing",
+            unlocked() { return true },
+            description: "All ships start off with 0.5 hp/sec of health regeneration.",
+            cost: new Decimal(1200),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            style() {
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        15: {
+            title: "Civilization",
+            unlocked() { return true },
+            description: "Unlock Space Buildings.",
+            cost: new Decimal(2000),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            style() {
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        16: {
+            title: "Miniboss",
+            unlocked() { return buyableEffect("sb", 12).gte(3) },
+            description: "You are able to fight the UFO miniboss at level 8, and unlock a new legendary pet.",
+            cost: new Decimal(3000),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            style() {
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        17: {
+            title: "Reinforcement II",
+            unlocked() { return buyableEffect("sb", 12).gte(3) },
+            description: "All ships have 30% increased max hp.",
+            cost: new Decimal(5000),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            style() {
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        18: {
+            title: "Timekeeper",
+            unlocked() { return buyableEffect("sb", 12).gte(3) },
+            description: "Cut ship cooldown times based on space gems.",
+            effect() {
+                return player.ir.spaceGem.pow(0.75).mul(0.02).add(1)
+            },
+            effectDisplay() { return "/" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            cost: new Decimal(8000),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            style() {
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        19: {
+            title: "Iridite",
+            unlocked() { return player.ir.ufoDefeated },
+            description: "...",
+            cost: new Decimal(10000),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            style() {
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+
+        //gems
+        101: {
+            title: "Impact",
+            unlocked() { return true },
+            description: "Unlocks the second ship: Impact.",
+            cost: new Decimal(2),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Gems",
+            currencyInternalName: "spaceGem",
+            style() {
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        102: {
+            title: "Reinforcement",
+            unlocked() { return true },
+            description: "All ships have 25% increased max hp.",
+            cost: new Decimal(3),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Gems",
+            currencyInternalName: "spaceGem",
+            style() {
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        103: {
+            title: "Alleviator",
+            unlocked() { return true },
+            description: "Battle XP requirements are cut by /1.25.",
+            cost: new Decimal(5),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Gems",
+            currencyInternalName: "spaceGem",
+            style() {
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        104: {
+            title: "Treasure",
+            unlocked() { return true },
+            description: "Double the probability of getting space gems from asteroids.",
+            cost: new Decimal(7),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Gems",
+            currencyInternalName: "spaceGem",
+            style() {
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        105: {
+            title: "Exploration",
+            unlocked() { return buyableEffect("sb", 12).gte(3) },
+            description: "Unlock more star exploration nodes.",
+            cost: new Decimal(12),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Gems",
+            currencyInternalName: "spaceGem",
+            style() {
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        106: {
+            title: "Alleviator II",
+            unlocked() { return buyableEffect("sb", 12).gte(3) },
+            description: "Battle XP requirements are cut by /1.4",
+            cost: new Decimal(18),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Gems",
+            currencyInternalName: "spaceGem",
+            style() {
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+
     },
     buyables: {
     },
@@ -103,7 +332,26 @@ addLayer("spaceZone1", {
                 ], {width: "397px", height: "363px"}],
                 ["style-column", [], {width: "403px", height: "363px"}],
             ], {width: "800px", height: "363px"}],
-            ["style-column", [
+            ["top-column", [
+                ["style-row", [
+                    ["raw-html", function () { return "You have <span style='color:#ffe066;text-shadow:0 0 8px #ffe066'>" + formatWhole(player.ir.spaceRock) + " space rocks</span> and <span style='color:#66e8ff;text-shadow:0 0 8px #66e8ff'>" + formatWhole(player.ir.spaceGem) + " space gems</span>."  }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                ], {background: "#37078f", borderBottom: "3px solid #5e4ee6", width: "800px", height: "40px"}],
+
+                ["always-scroll-column", [
+                    ["row", [
+                        ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14],
+                    ]],
+                    ["row", [
+                        ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18],
+                    ]],
+                    ["row", [
+                        ["upgrade", 19], ["upgrade", 101], ["upgrade", 102], ["upgrade", 103],
+                    ]],
+                    ["row", [
+                        ["upgrade", 104], ["upgrade", 105], ["upgrade", 106],
+                    ]],
+                ], {width: "800px", height: "314px"}]
+
             ], {width: "800px", height: "357px"}],
         ], {width: "800px", height: "720px"}],
     ],

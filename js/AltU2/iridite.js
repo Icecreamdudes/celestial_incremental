@@ -1433,6 +1433,10 @@ addLayer("ir", {
                 unlocked: true,
                 embedLayer: 'spaceZone3',
             },
+            "spaceZone4": {
+                unlocked: true,
+                embedLayer: 'spaceZone4',
+            },
         },
         stuff: {
             "Main": {
@@ -1453,12 +1457,12 @@ addLayer("ir", {
                 unlocked() { return player.ir.iriditeUnlocked && !player.ir.inBattle },
                 content: [
                     ["style-row", [
-                        ["category-button", ["Ships", "stuff", "ships"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "27px 0 0 0"}],
+                        ["category-button", ["Ships", "stuff", "ships"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "13px 0 0 0"}],
                         ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#5e4ee6"}],
                         ["category-button", ["Stages", "stuff", "stages"], {width: "264px", height: "40px", background: "#37078f", borderRadius: "0 0 0 0"}],
                         ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#5e4ee6"}],
-                        ["category-button", ["???", "stuff", "pylon"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "0 27px 0 0"}],
-                    ], {width: "800px", height: "40px", border: "3px solid #5e4ee6", borderRadius: "30px 30px 0 0", marginBottom: "-3px"}],
+                        ["category-button", ["???", "stuff", "pylon"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "0 13px 0 0"}],
+                    ], {width: "800px", height: "40px", border: "3px solid #5e4ee6", borderRadius: "16px 16px 0 0", marginBottom: "-3px"}],
                     ["style-column", [
                         ["style-column", [
                             ["clickable", 11],
@@ -1479,10 +1483,10 @@ addLayer("ir", {
                                         ["row", [["levelable", 1], ["levelable", 2],["levelable", 3],["levelable", 4],["levelable", 5],]],
                                         ["row", [["levelable", 6],["levelable", 7],["levelable", 8],["levelable", 9],["levelable", 10],]],
                                     ], {width: "531px", height: "260px", backgroundColor: "#151230", borderLeft: "3px solid #5e4ee6", padding: "5px"}],
-                                ], {width: "556px", height: "230px", borderBottom: "3px solid #5e4ee6"}],
+                                ], {width: "556px", height: "216px", borderBottom: "3px solid #5e4ee6"}],
                             ["blank", "25px"],
                         ], {width: "800px", borderRight: "2px solid srgb(27, 0, 36)"}],
-                    ], {width: "800px", height: "720px", background: "radial-gradient(circle, #151230 0%, #37078f 200%)", border: "3px solid #5e4ee6", borderRadius: "0 0 30px 30px"}],
+                    ], {width: "800px", height: "720px", background: "radial-gradient(circle, #151230 0%, #37078f 200%)", border: "3px solid #5e4ee6", borderRadius: "0 0 16px 16px"}],
                 ],
             },
             "stages": {
@@ -1490,12 +1494,12 @@ addLayer("ir", {
                 unlocked() { return player.ir.iriditeUnlocked && !player.ir.inBattle },
                 content: [
                     ["style-row", [
-                        ["category-button", ["Ships", "stuff", "ships"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "27px 0 0 0"}],
+                        ["category-button", ["Ships", "stuff", "ships"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "13px 0 0 0"}],
                         ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#5e4ee6"}],
                         ["category-button", ["Stages", "stuff", "stages"], {width: "264px", height: "40px", background: "#37078f", borderRadius: "0 0 0 0"}],
                         ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#5e4ee6"}],
-                        ["category-button", ["???", "stuff", "pylon"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "0 27px 0 0"}],
-                    ], {width: "800px", height: "40px", border: "3px solid #5e4ee6", borderRadius: "30px 30px 0 0", marginBottom: "-3px"}],
+                        ["category-button", ["???", "stuff", "pylon"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "0 13px 0 0"}],
+                    ], {width: "800px", height: "40px", border: "3px solid #5e4ee6", borderRadius: "16px 16px 0 0", marginBottom: "-3px"}],
                     ["style-row", [
                         ["style-column", [
                             ["style-column", [
@@ -1582,11 +1586,30 @@ addLayer("ir", {
                                         ["raw-html", () => {return "<div class='bottomTooltip'>Zone III</div>"}],
                                     ], {width: "0", height: "0", position: "relative", left: "100px", top: "-100px"}],
 
+                                    // Zone IV
+                                    ["tooltip-row", [
+                                        ["category-button", ["IV", "stages", "spaceZone4"], () => {
+                                            let str = {
+                                                width: "75px",
+                                                height: "75px",
+                                                background: "radial-gradient(#802080, black)",
+                                                border: "4px solid #bf41bf",
+                                                borderRadius: "50%",
+                                                color: "white",
+                                                fontSize: "32px",
+                                                textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
+                                            }
+                                            if (player.subtabs["ir"]["stages"] == "spaceZone4") str.outline = "3px solid #fff"
+                                            return str
+                                        }], 
+                                        ["raw-html", () => {return "<div class='bottomTooltip'>Zone IV</div>"}],
+                                    ], {width: "0", height: "0", position: "relative", left: "100px", top: "100px"}],
+
                                 ], {width: "1044px", height: "1044px", backgroundImage: "url(resources/ui/spaceBattle/map.png)"}],
                             ], {width: "400px", height: "360px", borderLeft: "3px solid #5e4ee6", borderBottom: "3px solid #5e4ee6", flexFlow: "column"}],
                             ["blank", "357px"],
                         ], {width: "403px", height: "720px"}],
-                    ], {width: "800px", height: "720px", background: "radial-gradient(circle, #151230 0%, #37078f 200%)", border: "3px solid #5e4ee6", borderRadius: "0 0 30px 30px"}],
+                    ], {width: "800px", height: "720px", background: "radial-gradient(circle, #151230 0%, #37078f 200%)", border: "3px solid #5e4ee6", borderRadius: "0 0 0 16px"}],
                 ],
             },
             "pylon": {
@@ -1594,15 +1617,15 @@ addLayer("ir", {
                 unlocked() { return player.ir.iriditeUnlocked && !player.ir.inBattle },
                 content: [
                     ["style-row", [
-                        ["category-button", ["Ships", "stuff", "ships"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "27px 0 0 0"}],
+                        ["category-button", ["Ships", "stuff", "ships"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "13px 0 0 0"}],
                         ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#5e4ee6"}],
                         ["category-button", ["Stages", "stuff", "stages"], {width: "264px", height: "40px", background: "#37078f", borderRadius: "0 0 0 0"}],
                         ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#5e4ee6"}],
-                        ["category-button", ["???", "stuff", "pylon"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "0 27px 0 0"}],
-                    ], {width: "800px", height: "40px", border: "3px solid #5e4ee6", borderRadius: "30px 30px 0 0", marginBottom: "-3px"}],
+                        ["category-button", ["???", "stuff", "pylon"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "0 13px 0 0"}],
+                    ], {width: "800px", height: "40px", border: "3px solid #5e4ee6", borderRadius: "16px 16px 0 0", marginBottom: "-3px"}],
                     ["style-column", [
                         ["clickable", "build-pylon"]
-                    ], {width: "800px", height: "720px", background: "linear-gradient(120deg, #0F0D25 0%, #0E0921 100%)", border: "3px solid #5e4ee6", borderRadius: "0 0 30px 30px"}],
+                    ], {width: "800px", height: "720px", background: "linear-gradient(120deg, #0F0D25 0%, #0E0921 100%)", border: "3px solid #5e4ee6", borderRadius: "0 0 16px 16px"}],
                 ],
             },
             "Space Battle": {
@@ -1634,7 +1657,7 @@ addLayer("ir", {
                                 ["row", [["levelable", 1], ["levelable", 2],["levelable", 3],["levelable", 4],["levelable", 5],]],
                                 ["row", [["levelable", 6],["levelable", 7],["levelable", 8],["levelable", 9],["levelable", 10],]],
                             ], {width: "531px", height: "260px", backgroundColor: "#151230", borderLeft: "3px solid #5e4ee6", padding: "5px"}],
-                        ], {width: "556px", height: "230px", borderBottom: "3px solid #5e4ee6"}],
+                        ], {width: "556px", height: "216px", borderBottom: "3px solid #5e4ee6"}],
                     ["blank", "25px"],
                         ], {width: "1000px", borderRight: "2px solid srgb(27, 0, 36)"}],
                 ]

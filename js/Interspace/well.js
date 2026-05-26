@@ -1757,7 +1757,7 @@
                                 ["raw-html", "Light wells yield a base of <h3>" + formatSimple(player.wel.lightWellCycleYield) + "</h3> ↻.", {color: "white", fontSize: "18px", fontFamily: "monospace", display: (player.wel.modules[1].completions.gte(1e3) ? "" : "none !important")}],
                             ], {display: player.wel.lightWellCycleYield.gt(1) ? "" : "none !important"}],
                             ["style-column", [
-                                ["raw-html", "Light wells operate at <h3>x" + formatSimple(player.wel.lightWellSpeed) + "</h3> speed.", {color: "white", fontSize: "18px", fontFamily: "monospace", display: (player.wel.modules[1].completions.gte(1e3) ? "" : "none !important")}],
+                                ["raw-html", "Light wells operate at <h3>x" + format(player.wel.lightWellSpeed) + "</h3> speed.", {color: "white", fontSize: "18px", fontFamily: "monospace", display: (player.wel.modules[1].completions.gte(1e3) ? "" : "none !important")}],
                             ], {display: player.wel.lightWellSpeed.gt(1) ? "" : "none !important"}],
                         ]],
                         ["blank", "25px"],

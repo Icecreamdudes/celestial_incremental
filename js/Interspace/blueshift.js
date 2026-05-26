@@ -7,6 +7,7 @@
         unlocked: true,
 
         totalBlueshifts: new Decimal(0),
+        bestBlueshifts: new Decimal(0),
         blueshifts: {
             1: {
                 amount: new Decimal(0),
@@ -94,6 +95,7 @@
             blueshift.cycleSpeedRoot = blueshift.amount.add(1)
             player.blu.totalBlueshifts = player.blu.totalBlueshifts.add(blueshift.amount)
         }
+        if (player.blu.bestBlueshifts.lt(player.blu.totalBlueshifts)) player.blu.bestBlueshifts = player.blu.totalBlueshifts;
 
         player.blu.milestone11Effect = player.blu.blueshifts[1].amount.mul(0.1).add(1)
         player.blu.milestone12Effect = player.blu.blueshifts[2].amount.mul(0.2).add(1)

@@ -11,33 +11,33 @@
     nodeStyle() {
         return {
             color: "#ff7fbf",
-            background: "#ffdfef",
+            background: "linear-gradient(90deg, #ffbfdf 0%, white 50%, #ffbfdf 100%)",
             "background-origin": "border-box",
             "border-color": "#ff7fbf",
         };
     },
-    tooltip: "Cere, the Celestial of Cycles",
+    tooltip: "Cere, the Celestial of Loops",
     color: "#ffdfef",
     update(delta) {
     },
-    branches: ["bum", "smn", "ans", "qdr"],
+    branches: ["bum"],
     clickables: {
         1: {
-            title() { return "<h2>ENTER THE CYCLE.</h2><br>Req: 10 Starshine Project ↻" },
+            title() { return "<h2>ENTER THE CYCLE.</h2><br>Req: 10 Starshine Project ↻ and 1e200 Light" },
             canClick() { return player.wel.light.gte(1e150)},
             unlocked() { return true },
             onClick() {
             },
             style() {
-                let look = {width: "400px", minHeight: "100px", borderRadius: "10px", padding: "8px"}
+                let look = {width: "400px", minHeight: "100px", borderRadius: "0 0 10px 10px", padding: "8px"}
                 if (this.canClick()) {
                     look.background = "linear-gradient(0deg, #ffdfef 0%, #60bfbf 125%)"
-                    look.border = "3px solid #804060"
+                    look.border = "3px solid #b35986"
                     look.color = "#804060"
                 } else {
                     look.backgroundColor = "#361e1e"
-                    look.border = "3px solid #ffdfef"
-                    look.color = "#ffdfef"
+                    look.border = "3px solid #b35986"
+                    look.color = "white"
                 }
                 return look
             },
@@ -52,7 +52,7 @@
     infoboxes: {},
     microtabs: {
         stuff: {
-            "Entry Point": {
+            "???": {
                 buttonStyle() { return { color: "white", borderRadius: "8px"} },
                 unlocked() { return true },
                 content: [
@@ -96,5 +96,5 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && false}
+    layerShown() { return player.startedGame == true && hasUpgrade("bum", 44)}
 })

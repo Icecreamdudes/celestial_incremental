@@ -2395,7 +2395,7 @@ addLayer("cb", {
         ["raw-html", () => { return player.cb.highestLevel.lt(7500) && player.cb.highestLevel.gte(3000) ?  "You will unlock something at level 7,500! <small>[FRAGMENTATION]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["raw-html", () => { return player.cb.highestLevel.lt(15000) && player.cb.highestLevel.gte(7500) ?  "You will unlock something at level 15,000! <small>[FRAGMENTATION]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["raw-html", () => { return player.cb.highestLevel.lt(25000) && player.cb.highestLevel.gte(15000) && hasUpgrade("s", 23) ?  "You will unlock something at level 25,000! <small>[CRATE TAB] [FRAGMENTATION]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", () => { return player.cb.highestLevel.lt(100000) && player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23) ?  "You will unlock something at level 100,000! <small>[CRATE TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(100000) && player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23) ?  "You will unlock something at level 100,000! <small>[PET TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["raw-html", () => { return player.cb.highestLevel.lt(250000) && player.cb.highestLevel.gte(100000) && player.bh.unlockConditions.done ?  "You will unlock something at level 250,000! <small>[FRAGMENTATION]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["blank", "10px"],
         ["microtabs", "stuff", { 'border-width': '0px' }],

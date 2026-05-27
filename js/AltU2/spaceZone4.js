@@ -55,9 +55,12 @@ addLayer("spaceZone4", {
             unlocked: true,
             onClick() {
                 player.ir.inBattle = true
-                player.ir.battleStage = "zone3"
+                player.ir.battleStage = "zone4"
                 options.fullscreen = true
                 player.subtabs["ir"]['stuff'] = 'Battle'
+
+                player.ir.primaryColor = "#bf41bf"
+                player.ir.secondaryColor = "#802080"
 
                 arena = new SpaceArena(800, 800, 3200, 3200);
                 arena.spawnArena();

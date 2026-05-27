@@ -58,8 +58,11 @@ addLayer("spaceZone3", {
                 player.ir.battleStage = "zone3"
                 options.fullscreen = true
                 player.subtabs["ir"]['stuff'] = 'Battle'
+                
+                player.ir.primaryColor = "#e64ebd"
+                player.ir.secondaryColor = "#8f0749"
 
-                arena = new SpaceArena(800, 800, 3200, 3200);
+                arena = new SpaceArena(800, 800, 800, 800);
                 arena.spawnArena();
                 localStorage.setItem('arenaActive', 'true');
 

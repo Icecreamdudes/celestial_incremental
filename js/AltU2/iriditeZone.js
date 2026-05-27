@@ -7,23 +7,9 @@ addLayer("iriditeZone", {
     startData() { return {
         unlocked: true,
 
-        highestCombo: new Decimal(0),
-        comboEffect: new Decimal(1),
-        comboStart: 0,
-
-        milestone: {
-            10: 0,
-            20: 0,
-            30: 0,
-            40: 0,
-            50: 0,
-            60: 0,
-            70: 0,
-            80: 0,
-            90: 0,
-            100: 0,
-        },
-        milestoneEffect: new Decimal(0),
+        highestLevel: new Decimal(0),
+        levelEffect: new Decimal(1),
+        levelStart: 0,
     }},
     automate() {},
     nodeStyle() {
@@ -55,6 +41,9 @@ addLayer("iriditeZone", {
                 options.fullscreen = true
                 player.subtabs["ir"]['stuff'] = 'Battle'
 
+                player.ir.primaryColor = "white"
+                player.ir.secondaryColor = "#151230"
+
                 arena = new SpaceArena(800, 800, 3200, 3200);
                 arena.spawnArena();
                 localStorage.setItem('arenaActive', 'true');
@@ -80,12 +69,36 @@ addLayer("iriditeZone", {
         ["style-column", [
             ["style-row", [
                 ["style-column", [
-                    ["clickable", "enter"],
+                    ["style-column", [
+                        ["style-column", [
+                            ["raw-html", "Iridite Zone", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ], {width: "350px", height: "35px", borderBottom: "2px solid #5e4ee6", marginBottom: "10px"}],
+                        ["clickable", "enter"],
+                    ], {width: "397px", height: "360px", background: "#0000003f", borderBottom: "3px solid #5e4ee6"}],
+
+                   
                 ], {width: "397px", height: "363px"}],
                 ["style-column", [], {width: "403px", height: "363px"}],
             ], {width: "800px", height: "363px"}],
             ["style-column", [
-            ], {width: "800px", height: "357px"}],
+                    ["style-column", [
+                        ["raw-html", "Perks for defeating Iridite", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ], {width: "500px", height: "35px", borderBottom: "2px solid #5e4ee6", marginBottom: "5px"}],
+                        ["raw-html", "<u>Unlocks</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return player.pol.unlockHive == 2 ? "The Hive" : "Larva (In Pollinators)" }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "New Punchcards", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "New Dark Universe 1 Upgrades", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "New Singularity Upgrades", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "New Starmetal Studies", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["blank", "10px"],
+                        ["raw-html", "<u>Effects</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", "^2 to 2nd antimatter softcap start.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "Weakened 3rd replicanti point softcap.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "Keep hex progress on singularity reset.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "x50 dice sides.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "x1e12 post-OTF currencies.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "/1.5 starmetal essence generator cooldowns", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+            ], {background: "#151230", width: "800px", height: "357px"}],
         ], {width: "800px", height: "720px"}],
     ],
     layerShown() {return player.startedGame && tmp.pu.levelables[302].canClick},

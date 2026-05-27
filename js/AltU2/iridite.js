@@ -58,6 +58,9 @@ addLayer("ir", {
         spaceRock: new Decimal(0),
         spaceGem: new Decimal(0),
 
+        primaryColor: "#5e4ee6",
+        secondaryColor: "#37078f",
+
         shipType: 0,
         sendCooldownTimer: new Decimal(0),
         send: {
@@ -243,19 +246,6 @@ addLayer("ir", {
         adsFought: false,
         adsDefeated: false,
 
-        pylonBuilt: false,
-        pylonEnergyMax: new Decimal(1),
-        pylonEnergy: new Decimal(0),
-        pylonEnergyEffect: new Decimal(1),
-        pylonEnergyEffect2: new Decimal(1), 
-        pylonEnergyEffect3: new Decimal(1),
-        pylonEnergyEffect4: new Decimal(1),
-        pylonPassiveEffect: new Decimal(1),
-        pylonEnergyToGet: new Decimal(0),
-
-        pylonTier: new Decimal(1),
-        pylonTierEffect: new Decimal(1),
-
         isInThisTab: false,
         wasInThisTab: false,
     }},
@@ -375,31 +365,31 @@ addLayer("ir", {
         healthBar: {
             unlocked() { return true },
             direction: RIGHT,
-            width: 300,
-            height: 50,
+            width: 398.5,
+            height: 40,
             progress() {
                 return player.ir.shipHealth.div(player.ir.shipHealthMax);
             },
-            borderStyle: {border: "0", border: "2px solid white",},
-            baseStyle: {background: "rgba(0, 0, 0, 0.5)",},
-            fillStyle: { backgroundImage: "linear-gradient(15deg, #3011bdff 0%, #1640caff 50%, #155e80ff 100%)"},
+            borderStyle() { return {border: "3px solid " + player.ir.primaryColor, borderRadius: "0", color: "white"}},
+            baseStyle: {background: "#151230"},
+            fillStyle: { background: "linear-gradient(15deg, #bf0000 0%, #800000 100%)"},
             display() {
-                return"<h5>" + formatWhole(player.ir.shipHealth) + "/" + formatWhole(player.ir.shipHealthMax) + "<h5>HP" ;
+                return formatWhole(player.ir.shipHealth) + "/" + formatWhole(player.ir.shipHealthMax) + " HP" ;
             },
         },
         xpBar: {
             unlocked() { return true },
             direction: RIGHT,
-            width: 300,
-            height: 50,
+            width: 398.5,
+            height: 40,
             progress() {
                 return player.ir.battleXP.div(player.ir.battleXPReq);
             },
-            borderStyle: {border: "0", border: "2px solid white",},
-            baseStyle: {background: "rgba(0, 0, 0, 0.5)",},
-            fillStyle: { backgroundImage: "linear-gradient(15deg, #3011bdff 0%, #1640caff 50%, #155e80ff 100%)"},
+            borderStyle() { return {border: "3px solid " + player.ir.primaryColor, borderLeft: "0", borderRadius: "0", color: "white"}},
+            baseStyle: {background: "#151230",},
+            fillStyle: { background: "linear-gradient(15deg, #0000bf 0%, #000080 100%)"},
             display() {
-                return"<h5>" + formatWhole(player.ir.battleXP) + "/" + formatWhole(player.ir.battleXPReq) + "<h5>XP" ;
+                return formatWhole(player.ir.battleXP) + "/" + formatWhole(player.ir.battleXPReq) + " XP" ;
             },
         },
     },
@@ -862,20 +852,6 @@ addLayer("ir", {
         },
     },
     clickables: {
-        "build-pylon": {
-            title() { return "<h2>Build the Cosmic Shard Pylon<br><small>0/20 best Zone IV level<br>0/1e20 Space Rocks</small>" },
-            canClick() { return player.cbs.ascensionShards.gte(5) && player.cb.paragonShards.gte(250) && player.cb.evolutionShards.gte(1000) && player.cof.coreFragments[6].gte(10000) },
-            unlocked() { return !player.ir.pylonBuilt},
-            onClick() {
-                player.cbs.ascensionShards = player.cbs.ascensionShards.sub(5)
-                player.cb.paragonShards = player.cb.paragonShards.sub(250)
-                player.cb.evolutionShards = player.cb.evolutionShards.sub(1000)
-                player.cof.coreFragments[6] = player.cof.coreFragments[6].sub(10000)
-
-                player.cbs.pylonBuilt = true
-            },
-            style: {width: "600px", minHeight: "150px", maxHeight: "150px", backgroundImage: "linear-gradient(180deg, #151230 0%, #37078f 50%, #151230 100%)", border: "3px solid #5e4ee6", color: "white", borderRadius: "15px"},
-        },
         1: {
             title() { return "<h2>Unlock Iridite, the Astral Celestial" },
             canClick() { return player.au2.stars.gte(5e10) && player.stagnantSynestia.highestCombo.gte(25) },
@@ -945,7 +921,7 @@ addLayer("ir", {
             },
         },
         12: {
-            title() { return "<h2>Leave Battle" },
+            title() { return "Leave Battle" },
             canClick() { return true },
             unlocked() { return !player.ir.iriditeFightActive || player.subtabs["ir"]["stuff"] == "Refresh Page :("},
             onClick() {
@@ -968,9 +944,9 @@ addLayer("ir", {
                 player.ir.iriditeFightActive = false
             },
             style() {
-                let look = {width: "300px", minHeight: "100px", color: "white", border: "3px solid #480e8a", borderRadius: "10px"}
+                let look = {width: "391px", minHeight: "50px", color: "white", border: "3px solid " + player.ir.primaryColor, borderRadius: "10px"}
                 if (this.canClick()) {
-                    look.backgroundColor = "#000"
+                    look.background = player.ir.secondaryColor
                 } else {
                     look.backgroundColor = "#361e1e"
                 }
@@ -1024,7 +1000,7 @@ addLayer("ir", {
             },
         },
         15: {
-            title() { return player.ir.autoShoot ? "<h2>Auto-Shoot<br>[ENABLED]" : "<h2>Auto-Shoot<br>[DISABLED]" },
+            title() { return player.ir.autoShoot ? "Auto-Shoot<br>[ENABLED]" : "Auto-Shoot<br>[DISABLED]" },
             canClick() { return true },
             unlocked() { return !player.ir.iriditeFightActive},
             onClick() {
@@ -1034,7 +1010,15 @@ addLayer("ir", {
                     player.ir.autoShoot = true
                 }
             },
-            style: {width: "200px", minHeight: '100px', color: "white", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
+            style() {
+                let look = {width: "391px", minHeight: "50px", color: "white", border: "3px solid " + player.ir.primaryColor, borderRadius: "10px"}
+                if (this.canClick()) {
+                    look.background = player.ir.secondaryColor
+                } else {
+                    look.backgroundColor = "#361e1e"
+                }
+                return look
+            },
         },
         1001: {
             title() {return "W"},
@@ -1099,8 +1083,8 @@ addLayer("ir", {
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
             style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
         },
@@ -1117,8 +1101,8 @@ addLayer("ir", {
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
         },
@@ -1135,8 +1119,8 @@ addLayer("ir", {
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
         },
@@ -1149,8 +1133,8 @@ addLayer("ir", {
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
             style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
         },
@@ -1163,8 +1147,8 @@ addLayer("ir", {
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
             style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
         },
@@ -1177,8 +1161,8 @@ addLayer("ir", {
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
             style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
         },
@@ -1191,8 +1175,8 @@ addLayer("ir", {
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
             style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
         },
@@ -1209,8 +1193,8 @@ addLayer("ir", {
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
             style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
         },
@@ -1223,8 +1207,8 @@ addLayer("ir", {
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
             style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
         },
@@ -1239,8 +1223,8 @@ addLayer("ir", {
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
             style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
         },
@@ -1253,8 +1237,8 @@ addLayer("ir", {
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
             style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
         },
@@ -1267,8 +1251,8 @@ addLayer("ir", {
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
             style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
         },
@@ -1281,8 +1265,8 @@ addLayer("ir", {
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
             style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
         },
@@ -1295,8 +1279,8 @@ addLayer("ir", {
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
             style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
         },
@@ -1309,8 +1293,8 @@ addLayer("ir", {
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
             style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
         },
@@ -1325,8 +1309,8 @@ addLayer("ir", {
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
             style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
         },
@@ -1339,8 +1323,8 @@ addLayer("ir", {
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
             style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
         },
@@ -1353,8 +1337,8 @@ addLayer("ir", {
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
             style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
         },
@@ -1367,8 +1351,8 @@ addLayer("ir", {
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
             style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
         },
@@ -1381,8 +1365,8 @@ addLayer("ir", {
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
             style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
         },
@@ -1395,8 +1379,8 @@ addLayer("ir", {
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
             style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
         },
@@ -1409,8 +1393,8 @@ addLayer("ir", {
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
             style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
+                let look = {borderRadius: "10px", color: "white", border: "3px solid #5e4ee6", margin: "3px", width: "190px", maxHeight: "151px", minHeight: "151px", fontSize: "12px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
         },
@@ -1461,7 +1445,7 @@ addLayer("ir", {
                         ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#5e4ee6"}],
                         ["category-button", ["Stages", "stuff", "stages"], {width: "264px", height: "40px", background: "#37078f", borderRadius: "0 0 0 0"}],
                         ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#5e4ee6"}],
-                        ["category-button", ["???", "stuff", "pylon"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "0 13px 0 0"}],
+                        ["category-button", ["Upgrades", "stuff", "upgrades"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "0 13px 0 0"}],
                     ], {width: "800px", height: "40px", border: "3px solid #5e4ee6", borderRadius: "16px 16px 0 0", marginBottom: "-3px"}],
                     ["style-column", [
                         ["style-column", [
@@ -1498,7 +1482,7 @@ addLayer("ir", {
                         ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#5e4ee6"}],
                         ["category-button", ["Stages", "stuff", "stages"], {width: "264px", height: "40px", background: "#37078f", borderRadius: "0 0 0 0"}],
                         ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#5e4ee6"}],
-                        ["category-button", ["???", "stuff", "pylon"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "0 13px 0 0"}],
+                        ["category-button", ["Upgrades", "stuff", "upgrades"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "0 13px 0 0"}],
                     ], {width: "800px", height: "40px", border: "3px solid #5e4ee6", borderRadius: "16px 16px 0 0", marginBottom: "-3px"}],
                     ["style-row", [
                         ["style-column", [
@@ -1612,7 +1596,7 @@ addLayer("ir", {
                     ], {width: "800px", height: "720px", background: "radial-gradient(circle, #151230 0%, #37078f 200%)", border: "3px solid #5e4ee6", borderRadius: "0 0 0 16px"}],
                 ],
             },
-            "pylon": {
+            "upgrades": {
                 buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
                 unlocked() { return player.ir.iriditeUnlocked && !player.ir.inBattle },
                 content: [
@@ -1621,46 +1605,11 @@ addLayer("ir", {
                         ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#5e4ee6"}],
                         ["category-button", ["Stages", "stuff", "stages"], {width: "264px", height: "40px", background: "#37078f", borderRadius: "0 0 0 0"}],
                         ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#5e4ee6"}],
-                        ["category-button", ["???", "stuff", "pylon"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "0 13px 0 0"}],
+                        ["category-button", ["Upgrades", "stuff", "upgrades"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "0 13px 0 0"}],
                     ], {width: "800px", height: "40px", border: "3px solid #5e4ee6", borderRadius: "16px 16px 0 0", marginBottom: "-3px"}],
                     ["style-column", [
-                        ["clickable", "build-pylon"]
                     ], {width: "800px", height: "720px", background: "linear-gradient(120deg, #0F0D25 0%, #0E0921 100%)", border: "3px solid #5e4ee6", borderRadius: "0 0 16px 16px"}],
                 ],
-            },
-            "Space Battle": {
-                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
-                unlocked() { return player.ir.iriditeUnlocked && !player.ir.inBattle },
-                content: [
-                    ["blank", "25px"],
-                    ["style-column", [
-                    ["blank", "25px"],
-                    ["clickable", 11],
-                    ["blank", "25px"],
-                    ["raw-html", function () { if (getLevelableAmount('pet', 1209).lte(0)) return ""; else return player.ir.sendCooldownTimer.lte(0) ? "Captain (Ready)" : "Captain (Cooldown: "+formatTime(player.ir.sendCooldownTimer)+")" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "10px"],
-                    ["row", [["clickable", 13],["clickable", 14]]],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have " + formatWhole(player.ir.spaceRock) + " space rocks." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have " + formatWhole(player.ir.spaceGem) + " space gems." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["style-column", [
-                            ["levelable-display", [
-                                ["style-row", [["clickable", 2],], {width: '100px', height: '40px' }],
-                            ]],
-                    ], {width: "550px", height: "175px", backgroundColor: "#070024", border: "3px solid #5e4ee6", borderRight: "3px solid #5e4ee6", borderRadius: "2px 2px 0 0"}],
-                    ["always-scroll-column", [
-                            ["style-column", [
-                                ["raw-html", "Ships", {color: "#5e4ee6", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "541px", height: "40px", backgroundColor: "#241d66ff", borderBottom: "3px solid #5e4ee6",  borderLeft: "3px solid #5e4ee6",  userSelect: "none"}],
-                            ["style-column", [
-                                ["row", [["levelable", 1], ["levelable", 2],["levelable", 3],["levelable", 4],["levelable", 5],]],
-                                ["row", [["levelable", 6],["levelable", 7],["levelable", 8],["levelable", 9],["levelable", 10],]],
-                            ], {width: "531px", height: "260px", backgroundColor: "#151230", borderLeft: "3px solid #5e4ee6", padding: "5px"}],
-                        ], {width: "556px", height: "216px", borderBottom: "3px solid #5e4ee6"}],
-                    ["blank", "25px"],
-                        ], {width: "1000px", borderRight: "2px solid srgb(27, 0, 36)"}],
-                ]
             },
             "Upgrades": {
                 buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
@@ -1682,51 +1631,24 @@ addLayer("ir", {
                         ["upgrade", 207]]],
                 ]
             },
-            "Perks": {
-                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"} },
-                unlocked() { return player.ir.iriditeDefeated && !player.ir.inBattle },
-                content: [
-                    ["blank", "25px"],
-                    ["style-column", [
-                        ["raw-html", "Perks for defeating Iridite", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                    ], {width: "800px", border: "3px solid rgb(27, 0, 36)", backgroundImage: "linear-gradient(120deg, #480e8aff 0%, rgba(20, 7, 24, 1) 100%)", borderBottom: "5px", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}],
-                    ["style-column", [
-                        ["raw-html", "<u>Unlocks</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", () => { return player.pol.unlockHive == 2 ? "The Hive" : "Larva (In Pollinators)" }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "New Punchcards", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "New Dark Universe 1 Upgrades", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "New Singularity Upgrades", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "New Starmetal Studies", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["blank", "10px"],
-                    ["raw-html", "<u>Effects</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", "^2 to 2nd antimatter softcap start.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "Weakened 3rd replicanti point softcap.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "Keep hex progress on singularity reset.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "x50 dice sides.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "x1e12 post-OTF currencies.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "/1.5 starmetal essence generator cooldowns", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                    ], {width: "800px", border: "3px solid rgb(27, 0, 36)", backgroundImage: "linear-gradient(120deg, #480e8aff 0%, rgba(20, 7, 24, 1) 100%)", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px"}]
-                ]
-            },
             "Battle": {
                 buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
                 unlocked() { return false },
-                content: [
-                    ["raw-html", function () { return "Level: " + formatWhole(player.ir.battleLevel) }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Use W and S to more forwards or backwards, A to D to rotate, and Space or Mouse to shoot." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                content() { return [
+                    ["style-column", [
+                        ["raw-html", "Level " + formatWhole(player.ir.battleLevel) + "<span style='font-size:16px'> / 100</span>", { "color": "white", textShadow: "0 0 10px white", "font-size": "24px", "font-family": "monospace" }],
+                    ], {width: "800px", height: "50px", background: player.ir.secondaryColor, borderRadius: "13px 13px 0 0", border: "3px solid " + player.ir.primaryColor, borderBottom: "0"}],
                     ["row", [["bar", "healthBar"], ["bar", "xpBar"],]],
-                    ["blank", "650px"],
-                    ["style-row", [
-                        ["clickable", 12],
-                        ["blank", ["100px", "50px"]],
-                        ["style-column", [
-                            ["clickable", 1001],
-                            ["row", [["clickable", 1002], ["clickable", 1003], ["clickable", 1004]]],
-                        ], {width: "150px", height: "100px"}],
-                        ["blank", ["100px", "50px"]],
-                        ["clickable", 13],
-                    ], {position: "fixed", top: "calc(50% + 320px)", left: "calc(50% - 375px)", isolation: "isolate", zIndex: "15000"}],
-                ]
+                    ["blank", "800px"],
+                    ["style-column", [
+                        ["blank", "9px", {width: "6px"}],
+                        ["raw-html", "Use W and S to more forwards or backwards, A to D to rotate, and Space or Mouse to shoot.", { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                        ["blank", "9px", {width: "6px"}],
+                        ["row", [
+                            ["clickable", 12], ["blank", "6px", {width: "6px"}], ["clickable", 15],
+                        ]],
+                    ], {width: "800px", height: "100px", background: player.ir.secondaryColor, borderRadius: "0 0 13px 13px", border: "3px solid " + player.ir.primaryColor, borderTop: "0"}],
+                ]}
             },
             "Refresh Page :(": {
                 buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},

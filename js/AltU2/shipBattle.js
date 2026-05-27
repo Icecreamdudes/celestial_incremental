@@ -985,13 +985,13 @@ class SpaceArena {
         Object.assign(this.arenaDiv.style, {
             position: 'fixed',
             left: '50%',
-            top: '50%',
+            top: '547px',
             width: this.canvasWidth + 'px',
             height: this.canvasHeight + 'px',
             transform: `translate(-50%, -50%)`,
             backgroundImage: "url(resources/ui/spaceBattle/" + player.ir.battleStage + ".png)",
-            border: '3px solid #5e4ee6',
-            borderRadius: '10px',
+            border: '3px solid ' + player.ir.primaryColor,
+            borderRadius: '0',
             zIndex: 9999,
             overflow: 'hidden',
 	        "transition-duration": "0s",
@@ -4589,21 +4589,23 @@ class SpaceArena {
         // Draw upgrade choice overlay (unchanged)
         if (this.upgradeChoiceActive) {
             this.ctx.save();
-            this.ctx.globalAlpha = 0.85;
-            this.ctx.fillStyle = "#181a2b";
+            this.ctx.globalAlpha = 0.25;
+            this.ctx.fillStyle = "#5e4ee6";
             this.ctx.fillRect(0, 0, this.width, this.height);
             this.ctx.restore();
-
+            
             this.ctx.save();
+            this.ctx.moveTo(this.ship.x + (this.canvasWidth / 2), this.ship.y);
+            //(this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y
             this.ctx.globalAlpha = 1;
             this.ctx.font = "bold 48px monospace";
             this.ctx.fillStyle = "#fff";
             this.ctx.textAlign = "center";
             this.ctx.fillText("Choose an Upgrade!", this.width / 2, 120);
 
-            let spacing = 340;
-            let boxWidth = 320;
-            let boxHeight = 220;
+            let spacing = 262.5;
+            let boxWidth = 250;
+            let boxHeight = 150;
             let totalWidth = spacing * (this.upgradeChoices.length - 1) + boxWidth;
             let startX = (this.width - totalWidth) / 2;
             let boxY = this.height / 2 - boxHeight / 2;
@@ -4616,33 +4618,33 @@ class SpaceArena {
                 this.ctx.globalAlpha = 1;
                 this.ctx.fillStyle = "#23233b";
                 this.ctx.strokeStyle = upg.color;
-                this.ctx.lineWidth = 7;
+                this.ctx.lineWidth = 3;
                 this.ctx.beginPath();
-                this.ctx.roundRect(boxX, boxY, boxWidth, boxHeight, 24);
+                this.ctx.roundRect(boxX, boxY, boxWidth, boxHeight, 12);
                 this.ctx.fill();
                 this.ctx.stroke();
 
                 if (this.selectedUpgradeIndex === i) {
                     this.ctx.save();
                     this.ctx.strokeStyle = "#ffe066";
-                    this.ctx.lineWidth = 10;
+                    this.ctx.lineWidth = 3;
                     this.ctx.beginPath();
-                    this.ctx.roundRect(boxX + 4, boxY + 4, boxWidth - 8, boxHeight - 8, 18);
+                    this.ctx.roundRect(boxX + 3, boxY + 3, boxWidth - 6, boxHeight - 6, 9);
                     this.ctx.stroke();
                     this.ctx.restore();
                 }
 
-                this.ctx.font = "bold 32px monospace";
+                this.ctx.font = "bold 24px monospace";
                 this.ctx.fillStyle = upg.color;
                 this.ctx.textAlign = "center";
-                this.ctx.fillText(upg.name, boxX + boxWidth / 2, boxY + 50);
+                this.ctx.fillText(upg.name, boxX + boxWidth / 2, boxY + 30);
 
                 let rarityText = upg.rarity.charAt(0).toUpperCase() + upg.rarity.slice(1);
-                this.ctx.font = "italic 24px monospace";
+                this.ctx.font = "italic 18px monospace";
                 this.ctx.fillStyle = upg.color;
-                this.ctx.fillText(rarityText, boxX + boxWidth / 2, boxY + 85);
+                this.ctx.fillText(rarityText, boxX + boxWidth / 2, boxY + 54);
 
-                this.ctx.font = "22px monospace";
+                this.ctx.font = "16px monospace";
                 this.ctx.fillStyle = "#fff";
                 let desc = upg.description;
                 let descLines = [];
@@ -4660,28 +4662,28 @@ class SpaceArena {
                 }
                 descLines.push(line.trim());
                 for (let l = 0; l < descLines.length; l++) {
-                    this.ctx.fillText(descLines[l], boxX + boxWidth / 2, boxY + 120 + l * 28);
+                    this.ctx.fillText(descLines[l], boxX + boxWidth / 2, boxY + 78 + l * 18);
                 }
 
                 this.ctx.restore();
             }
 
             if (this.selectedUpgradeIndex !== null) {
-                let confirmWidth = 180;
+                let confirmWidth = 250;
                 let confirmHeight = 50;
                 let confirmX = this.width / 2 - confirmWidth / 2;
                 let confirmY = boxY + boxHeight + 40;
                 this.ctx.save();
                 this.ctx.globalAlpha = 1;
-                this.ctx.fillStyle = "#4e7cff";
-                this.ctx.strokeStyle = "#fff";
+                this.ctx.fillStyle = "#37078f";
+                this.ctx.strokeStyle = "#5e4ee6";
                 this.ctx.lineWidth = 4;
                 this.ctx.beginPath();
-                this.ctx.roundRect(confirmX, confirmY, confirmWidth, confirmHeight, 16);
+                this.ctx.roundRect(confirmX, confirmY, confirmWidth, confirmHeight, 12);
                 this.ctx.fill();
                 this.ctx.stroke();
 
-                this.ctx.font = "bold 28px monospace";
+                this.ctx.font = "bold 24px monospace";
                 this.ctx.fillStyle = "#fff";
                 this.ctx.textAlign = "center";
                 this.ctx.fillText("Confirm", confirmX + confirmWidth / 2, confirmY + confirmHeight / 2 + 10);

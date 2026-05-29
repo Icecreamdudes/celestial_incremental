@@ -34,6 +34,16 @@ const DRAGONS = {
         id: "otherworldly",
         bonusInfo: "x18, ^1.025 Gold<br>x3 Radiation<br>+0.02 Gold Buyable Base<br>+10% Characters' Base Stats<br>x3 Stars<br>x3 Check Back XP<br>^1.25 Mastery Point Effects",
     },
+    7: {
+        name: "Hex Dragon",
+        id: "hex",
+        bonusInfo: "x126, ^1.025 Gold<br>x3 Radiation<br>+0.02 Gold Buyable Base<br>+10% Characters' Base Stats<br>x3 Stars<br>x3 Check Back XP<br>^1.25 Mastery Point Effects<br>x7 Hex Power",
+    },
+    8: {
+        name: "Anti-Dragon",
+        id: "anti",
+        bonusInfo: "x42, ^1.025 Gold<br>x3 Radiation<br>+0.02 Gold Buyable Base<br>+10% Characters' Base Stats<br>x3 Stars<br>x3 Check Back XP<br>^1.15 Mastery Point Effects<br>x7 Hex Power<br>x3 Fire<br>x3 Magic",
+    },
 }
 addLayer("ep1", {
     name: "Dragon", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -72,7 +82,7 @@ addLayer("ep1", {
         fire: new Decimal(0),
         baseFireToGet: new Decimal(0),
         fireToGet: new Decimal(0),
-        fireEffect: new Decimal(0),
+        fireEffect: new Decimal(1),
 
         platinumShards: new Decimal(0),
         platinumShardPity: new Decimal(0),
@@ -98,6 +108,15 @@ addLayer("ep1", {
         goldBuyableBase: new Decimal(1.01),
 
         upgrade201Effect: new Decimal(1),
+
+        magic: new Decimal(0),
+        baseMagicToGet: new Decimal(0),
+        magicToGet: new Decimal(0),
+        magicEffect: new Decimal(1),
+        magicEffect2: new Decimal(1),
+
+        upgrade301Effect: new Decimal(1),
+        upgrade302Effect: new Decimal(1),
 
         isInThisTab: false,
         wasInThisTab: false,
@@ -186,9 +205,19 @@ addLayer("ep1", {
         player.ep1.fireEffect = Decimal.pow(10, player.ep1.fire.add(1).log(10).pow(0.75)).pow(0.2)
         player.ep1.fireEffect = player.ep1.fireEffect.pow(buyableEffect("ep1", 103))
 
+        // MAGIC GAIN
+
+        // MAGIC EFFECTS
+
+        player.ep1.magicEffect = player.ep1.magic.add(1).log10().pow_base(20)
+        player.ep1.magicEffect2 = player.ep1.magic.add(1).log10().pow(2).div(5).add(1)
+
         // OTHER EFFECTS
 
         player.ep1.upgrade201Effect = player.sma.starmetalAlloy.add(1).log10().pow(1.25).div(10).add(1)
+
+        player.ep1.upgrade301Effect = player.ep1.fire.add(1).log10().pow(0.5).pow_base(10).div(100).add(1)
+        player.ep1.upgrade302Effect = player.cbs.ascensionShards.div(10).add(1)
 
         // SCROLLING CONTAINER
         player.ep1.isInThisTab = player.tab == "ep1"
@@ -415,10 +444,19 @@ addLayer("ep1", {
                     look.color = "#0000007f"
                 }
                 return look
-            }
+            }/*
+            style() {
+                let look = {background: "linear-gradient(90deg, #a00 0%, #800 100%)", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", width: '600px', minHeight: '57px'}
+                if (this.canClick()) {
+                    look.color = "black"
+                } else {
+                    look.color = "#0000007f"
+                }
+                return look
+            }*/
         },
         12: {
-            display() { return "<h2>Infuse your dragon with starlight.</h2><br>Boosts the gold upgrade base by +0.01 and unlocks fire.<br>Requires 100,000 Gold and 200 Starmetal Alloy."},
+            display() { return "<h2>Infuse your dragon with the light of dying stars.</h2><br>Boosts the gold upgrade base by +0.01 and unlocks fire.<br>Requires 100,000 Gold and 200 Starmetal Alloy."},
             canClick() { return this.unlocked()
                 && player.ep1.gold.gte(1e5)
                 && player.sma.starmetalAlloy.gte(200)
@@ -467,7 +505,7 @@ addLayer("ep1", {
             }
         },
         14: {
-            display() { return "<h2>Send your dragon to space.</h2><br>Boosts check back XP, stars, and gold gain by x3 and unlocks alchemy.<br>Requires 1e9 Gold and an ascended space pet."},
+            display() { return "<h2>Send your dragon to space.</h2><br>Boosts check back XP, stars, and gold gain by x3, and unlocks alchemy.<br>Requires 1e9 Gold and an ascended space pet."},
             canClick() { return player.ep1.gold.gte(1e5) && (
                 getLevelableTier("st", 101).gte(1)
                 || getLevelableTier("st", 102).gte(1)
@@ -520,13 +558,65 @@ addLayer("ep1", {
             }
         },
         16: {
-            display() { return "<h2>Infuse your dragon with otherworldly powers.</h2><br>Boosts gold gain by ^1.025 and mastery point effects by ^1.15.<br>Requires 25 platinum shards and ."},
-            canClick() { return false },
+            display() { return "<h2>Infuse your dragon with otherworldly powers.</h2><br>Boosts gold gain by ^1.025 and mastery point effects by ^1.15.<br>Requires e15 gold, 25 platinum shards, and 1 shard of ascension."},
+            canClick() { return player.ep1.gold.gte(1e15) && player.ep1.platinumShards.gte(25) },
             unlocked() { return player.ep1.dragonEvolutionIndex == 5 },
             onClick() { player.ep1.dragonEvolutionIndex = 6 },
             onHold() {},
             style() {
                 let look = {background: "linear-gradient(90deg, #8a00a9 0%, #0061ff 100%)", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", width: '600px', minHeight: '57px'}
+                if (this.canClick()) {
+                    look.color = "white"
+                } else {
+                    look.color = "#ffffff9f"
+                }
+                return look
+            }
+        },
+        17: {
+            display() { return "<h2>COMING SOON.</h2>"},
+            //display() { return "<h2>Tier-up your dragon.</h2><br>Boosts fire and hex power gain by x7, and unlocks magic.<br>Requires e19 gold and 777 ???."},
+            canClick() { return player.ep1.gold.gte(1e19) && false },
+            unlocked() { return player.ep1.dragonEvolutionIndex == 6 },
+            onClick() { player.ep1.dragonEvolutionIndex = 7 },
+            onHold() {},
+            style() {
+                let look = {background: "linear-gradient(90deg, black 0%, #0061ff 100%)", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", width: '600px', minHeight: '57px'}
+                if (this.canClick()) {
+                    look.color = "white"
+                } else {
+                    look.color = "#ffffff9f"
+                }
+                return look
+            }
+        },
+        18: {
+            display() { return "<h2>Upgrade your dragon with the power of anti-singularities.</h2><br>Reduces gold gain by /3, but boosts fire and magic gain by x3.<br>Requires 10,000 magic and 1e25 singularities."},
+            canClick() { return player.ep1.magic.gte(1e4) && player.s.singularities.gte(1e25) },
+            unlocked() { return player.ep1.dragonEvolutionIndex == 7 },
+            onClick() { player.ep1.dragonEvolutionIndex = 8 },
+            onHold() {},
+            style() {
+                let look = {background: "linear-gradient(90deg, #60bf90 0%, white 100%)", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", width: '600px', minHeight: '57px'}
+                if (this.canClick()) {
+                    look.color = "black"
+                } else {
+                    look.color = "#0000009f"
+                }
+                return look
+            }
+        },
+        101: {
+            display() { return "<h2>Reset gold and fire content to gain magic.</h2><br>Requires 1e20 gold"},
+            canClick() { return this.unlocked()
+                && player.ep1.gold.gte(1e20)
+             },
+            unlocked() { return true },
+            onClick() {
+            },
+            onHold() {},
+            style() {
+                let look = {background: "#5e2f5e", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", width: '600px', minHeight: '57px'}
                 if (this.canClick()) {
                     look.color = "white"
                 } else {
@@ -574,7 +664,7 @@ addLayer("ep1", {
                 if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#6f6f6f"
+                    look.color = "#0000009f"
                 }
                 return look
             }
@@ -620,7 +710,7 @@ addLayer("ep1", {
                 if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#6f6f6f"
+                    look.color = "#0000009f"
                 }
                 return look
             }
@@ -666,7 +756,7 @@ addLayer("ep1", {
                 if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#6f6f6f"
+                    look.color = "#0000009f"
                 }
                 return look
             }
@@ -712,7 +802,7 @@ addLayer("ep1", {
                 if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#6f6f6f"
+                    look.color = "#0000009f"
                 }
                 return look
             }
@@ -758,7 +848,7 @@ addLayer("ep1", {
                 if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#6f6f6f"
+                    look.color = "#0000009f"
                 }
                 return look
             }
@@ -801,11 +891,11 @@ addLayer("ep1", {
                 }
             },
             style() {
-                let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '283px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
+                let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '293px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
                 if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#6f6f6f"
+                    look.color = "#0000009f"
                 }
                 return look
             }
@@ -846,11 +936,11 @@ addLayer("ep1", {
                 }
             },
             style() {
-                let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '283px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
+                let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '293px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
                 if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#6f6f6f"
+                    look.color = "#0000009f"
                 }
                 return look
             }
@@ -891,11 +981,11 @@ addLayer("ep1", {
                 }
             },
             style() {
-                let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '283px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
+                let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '293px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
                 if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#6f6f6f"
+                    look.color = "#0000009f"
                 }
                 return look
             }
@@ -936,11 +1026,11 @@ addLayer("ep1", {
                 }
             },
             style() {
-                let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '283px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
+                let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '293px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
                 if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#6f6f6f"
+                    look.color = "#0000009f"
                 }
                 return look
             }
@@ -981,11 +1071,11 @@ addLayer("ep1", {
                 }
             },
             style() {
-                let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '283px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
+                let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '293px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
                 if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#6f6f6f"
+                    look.color = "#0000009f"
                 }
                 return look
             }
@@ -1026,11 +1116,11 @@ addLayer("ep1", {
                 }
             },
             style() {
-                let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '283px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
+                let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '293px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
                 if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#6f6f6f"
+                    look.color = "#0000009f"
                 }
                 return look
             }
@@ -1075,7 +1165,7 @@ addLayer("ep1", {
                 if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#6f6f6f"
+                    look.color = "#0000009f"
                 }
                 return look
             }
@@ -1120,7 +1210,7 @@ addLayer("ep1", {
                 if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#6f6f6f"
+                    look.color = "#0000009f"
                 }
                 return look
             }
@@ -1165,7 +1255,7 @@ addLayer("ep1", {
                 if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#6f6f6f"
+                    look.color = "#0000009f"
                 }
                 return look
             }
@@ -1210,7 +1300,7 @@ addLayer("ep1", {
                 if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#6f6f6f"
+                    look.color = "#0000009f"
                 }
                 return look
             }
@@ -1255,7 +1345,7 @@ addLayer("ep1", {
                 if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#6f6f6f"
+                    look.color = "#0000009f"
                 }
                 return look
             }
@@ -1300,7 +1390,97 @@ addLayer("ep1", {
                 if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#6f6f6f"
+                    look.color = "#0000009f"
+                }
+                return look
+            }
+        },
+        301: {
+            costBase() { return new Decimal(24) },
+            costGrowth() { return new Decimal(1) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.ep1.magic},
+            pay(amt) { player.ep1.magic = this.currency().sub(amt) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.1).add(1)
+                return eff
+            },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "placeholder (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
+            },
+            display() {
+                return 'placeholder.' +'\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Platinum Shards'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style() {
+                let look = {backgroundColor: "#bf8fbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '292px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
+                if (this.canAfford()) {
+                    look.color = "#1f1f1f"
+                } else {
+                    look.color = "#0000009f"
+                }
+                return look
+            }
+        },
+        302: {
+            costBase() { return new Decimal(96) },
+            costGrowth() { return new Decimal(1) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.ep1.magic},
+            pay(amt) { player.ep1.magic = this.currency().sub(amt) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.1).add(1)
+                return eff
+            },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "placeholder (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
+            },
+            display() {
+                return 'placeholder.' +'\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Platinum Shards'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style() {
+                let look = {backgroundColor: "#bf8fbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '292px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
+                if (this.canAfford()) {
+                    look.color = "#1f1f1f"
+                } else {
+                    look.color = "#0000009f"
                 }
                 return look
             }
@@ -1329,7 +1509,7 @@ addLayer("ep1", {
                 if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#6f6f6f"
+                    look.color = "#0000009f"
                 }
                 return look
             }
@@ -1356,7 +1536,7 @@ addLayer("ep1", {
                 if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#6f6f6f"
+                    look.color = "#0000009f"
                 }
                 return look
             }
@@ -1366,7 +1546,7 @@ addLayer("ep1", {
                 return "Buyable Squared"
             },
             description() {
-                return "Boost gold gain by x1.02, based on platinum buyable levels."
+                return "Boost gold gain by x1.02 for each platinum buyable level."
             },
             unlocked() { return true },
             cost: new Decimal(32),
@@ -1383,7 +1563,7 @@ addLayer("ep1", {
                 if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#6f6f6f"
+                    look.color = "#0000009f"
                 }
                 return look
             }
@@ -1410,7 +1590,115 @@ addLayer("ep1", {
                 if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#6f6f6f"
+                    look.color = "#0000009f"
+                }
+                return look
+            }
+        },
+        301: {
+            title() {
+                return "Conflagration"
+            },
+            description() {
+                return "Fire boosts its own gain by x" + format(player.ep1.upgrade301Effect) + "."
+            },
+            unlocked() { return true },
+            cost: new Decimal(3),
+            currencyLocation() { return player.ep1 },
+            currencyDisplayName: "Magic",
+            currencyInternalName: "magic",
+            fullDisplay() {
+                return "<span style='font-size:16px;line-height:1'>" + this.title() + "</span><br><span style='font-size:10px'>"
+                + this.description()
+                + "<br>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>"
+            },
+            style() {
+                let look = {backgroundColor: "#bf8fbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '292px', maxHeight: '85.5px', minHeight: '85.5px', paddingLeft: "8px", paddingRight: "8px"}
+                if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.color = "black"
+                } else {
+                    look.color = "#0000009f"
+                }
+                return look
+            }
+        },
+        302: {
+            title() {
+                return "Conjuration"
+            },
+            description() {
+                return "Shards of Ascension boost platinum shard chance by x" + format(player.ep1.upgrade302Effect) + "."
+            },
+            unlocked() { return true },
+            cost: new Decimal(12),
+            currencyLocation() { return player.ep1 },
+            currencyDisplayName: "Magic",
+            currencyInternalName: "magic",
+            fullDisplay() {
+                return "<span style='font-size:16px;line-height:1'>" + this.title() + "</span><br><span style='font-size:10px'>"
+                + this.description()
+                + "<br>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>"
+            },
+            style() {
+                let look = {backgroundColor: "#bf8fbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '292px', maxHeight: '85.5px', minHeight: '85.5px', paddingLeft: "8px", paddingRight: "8px"}
+                if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.color = "black"
+                } else {
+                    look.color = "#0000009f"
+                }
+                return look
+            }
+        },
+        303: {
+            title() {
+                return "Infused Orbs"
+            },
+            description() {
+                return "Daily orbs give better effects."
+            },
+            unlocked() { return true },
+            cost: new Decimal(1e3),
+            currencyLocation() { return player.ep1 },
+            currencyDisplayName: "Magic",
+            currencyInternalName: "magic",
+            fullDisplay() {
+                return "<span style='font-size:16px;line-height:1'>" + this.title() + "</span><br><span style='font-size:10px'>"
+                + this.description()
+                + "<br>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>"
+            },
+            style() {
+                let look = {backgroundColor: "#bf8fbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '292px', maxHeight: '85.5px', minHeight: '85.5px', paddingLeft: "8px", paddingRight: "8px"}
+                if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.color = "black"
+                } else {
+                    look.color = "#0000009f"
+                }
+                return look
+            }
+        },
+        304: {
+            title() {
+                return "Self-Sufficient Reaction"
+            },
+            description() {
+                return "Passively generate 1% of platinum shard chance as platinum shards."
+            },
+            unlocked() { return true },
+            cost: new Decimal(1e6),
+            currencyLocation() { return player.ep1 },
+            currencyDisplayName: "Magic",
+            currencyInternalName: "magic",
+            fullDisplay() {
+                return "<span style='font-size:16px;line-height:1'>" + this.title() + "</span><br><span style='font-size:10px'>"
+                + this.description()
+                + "<br>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>"
+            },
+            style() {
+                let look = {backgroundColor: "#bf8fbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '292px', maxHeight: '85.5px', minHeight: '85.5px', paddingLeft: "8px", paddingRight: "8px"}
+                if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                    look.color = "black"
+                } else {
+                    look.color = "#0000009f"
                 }
                 return look
             }
@@ -1496,23 +1784,27 @@ addLayer("ep1", {
                                     ], {height: "25px"}],
                                     ["blank", "4px"],
                                     ["style-row", [
-                                        ["style-column", [
+                                        ["top-column", [
                                             ["style-column", [
                                                 ["raw-html", () => {
                                                     return "<img src='resources/Pets/dragon/" + DRAGONS[player.ep1.dragonEvolutionIndex].id + "DragonEvo.png' width='279px' height='279px' style='margin-bottom:-5px'></img>"
                                                 }, {color: "black"}],
                                             ], () => {
-                                                let look = {width: '279px', height: '279px'}
-                                                if ((getLevelableTier("pet", 402).gte(1) && getLevelableAmount("pet", 402).gte(9)) || getLevelableTier("pet", 402).gte(2)) look.display = "none !important"
+                                                let look = {width: '600px', height: '285px'}
                                                 return look
                                             }],
-                                            ["blank", "5px"],
                                             ["hoverless-clickable", 11],
                                             ["hoverless-clickable", 12],
                                             ["hoverless-clickable", 13],
                                             ["hoverless-clickable", 14],
                                             ["hoverless-clickable", 15],
                                             ["hoverless-clickable", 16],
+                                            ["hoverless-clickable", 17],
+                                            ["hoverless-clickable", 18],
+                                            ["hoverless-clickable", 19],
+                                            ["hoverless-clickable", 20],
+                                            ["hoverless-clickable", 21],
+                                            ["hoverless-clickable", 22],
                                         ], {background: "", width: "600px", height: "342px"}],
                                     ]],
                                 ], {background: "linear-gradient(90deg, #e9bfff, #a6b2ff)", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", width: "600px", height: "400px", padding: "3px"}], 
@@ -1520,7 +1812,7 @@ addLayer("ep1", {
                             
                             // Fire
                             ["style-column", [
-                                ["style-column", [
+                                ["top-column", [
                                     ["style-column", [
                                         ["raw-html", "Fire Upgrades", {color: "white", fontSize: "18px"}],
                                     ], {background: "linear-gradient(-90deg, #30bf30 0%, #008040 100%)", width: "600px", height: "25px"}],
@@ -1532,21 +1824,35 @@ addLayer("ep1", {
                                             return text
                                         }, {color: "#1f1f1f", fontSize: "18px"}],
                                     ], {height: "25px"}],
-                                    ["blank", "4px"],
-                                    ["style-row", [
-                                        ["scroll-column", [
-                                            ["raw-html", () => {return "<h6>Gold gives a base of +" + format(player.ep1.baseFireToGet) + " fire /s.</h6>"}, {color: "black"}],
-                                            ["raw-html", () => {return "<h6>Fire boosts gold by x" + format(player.ep1.fireEffect) + ".</h6>"}, {color: "black"}],
-                                        ], {background: "", width: "298px", height: "342px"}],
+                                    ["blank", "1px"],
+                                    ["top-column", [
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<small>Gold gives a base of +" + format(player.ep1.baseFireToGet) + " fire /s.</small>"}, {color: "#804000"}],
+                                            ["raw-html", () => {return "<small>Fire boosts gold gain by x" + format(player.ep1.fireEffect) + ".</small>"}, {color: "#804000"}],
+                                        ], {background: "", width: "600px", height: "57px", fontSize: "18px"}],
                                         ["blank", "3px", {width: "4px"}],
                                         ["always-scroll-column", [
+                                            ["style-row", [
+                                                ["top-column", [
+                                                    ["hoverless-buyable", 101],
+                                                    ["hoverless-buyable", 103],
+                                                    ["hoverless-buyable", 105],
+                                                ], {width: "292px"}],
+                                                ["top-column", [
+                                                    ["hoverless-buyable", 102],
+                                                    ["hoverless-buyable", 104],
+                                                    ["hoverless-buyable", 106],
+                                                ], {width: "292px"}],
+                                            ]],
+                                        ], {background: "#3f3f3f", width: "600px", height: "285px"}],
+                                        /*["always-scroll-column", [
                                             ["hoverless-buyable", 101],
                                             ["hoverless-buyable", 102],
                                             ["hoverless-buyable", 103],
                                             ["hoverless-buyable", 104],
                                             ["hoverless-buyable", 105],
                                             ["hoverless-buyable", 106],
-                                        ], {background: "#3f3f3f", width: "298px", height: "342px"}],
+                                        ], {background: "#3f3f3f", width: "298px", height: "342px"}],*/
                                     ]],
                                 ], () => {
                                     let look = {backgroundColor: "#ffc080", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", width: "600px", height: "400px", padding: "3px"}
@@ -1575,7 +1881,6 @@ addLayer("ep1", {
                                     ], {height: "25px"}],
                                     ["blank", "4px"],
                                     ["style-row", [
-                                        //["style-column", [ ], {width: "600px", height: "171px"}],
                                         ["always-scroll-column", [
                                             ["style-row", [
                                                 ["top-column", [
@@ -1601,6 +1906,60 @@ addLayer("ep1", {
                                         return look
                                     }], 
                             ], {position: "relative", left: "325px", top: "0px", width: "0px", height: "0px"}],
+                            
+                            // Magic
+                            ["style-column", [
+                                ["top-column", [
+                                    ["style-column", [
+                                        ["raw-html", "Magic", {color: "white", fontSize: "18px"}],
+                                    ], {background: "linear-gradient(-90deg, #7830bf 0%, #600080 100%)", width: "600px", height: "25px"}],
+                                    ["blank", "4px"],
+                                    ["style-column", [
+                                        ["tooltip-row", [
+                                            ["raw-html", () => {
+                                                let text = "You have " + formatWhole(player.ep1.magic) + " magic."
+                                                return text
+                                            }, {color: "#1f1f1f", fontSize: "18px"}],
+                                            ["raw-html", () => {return "(+" + formatWhole(player.ep1.magicToGet) + ")"}, () => {
+                                                let look = {color: "white", fontSize: "18px", fontFamily: "monospace", marginLeft: "10px"}
+                                                player.ep1.magicToGet.gt(0) ? look.color = "#1f1f1f" : look.color = "#1f1f1f7f"
+                                                return look
+                                            }],
+                                            ["raw-html", () => {
+                                                return "<div class='bottomTooltip'><small>Base Gain<br>2^(log(Gold+1)-20)</small></div>"
+                                            }],
+                                        ]]
+                                    ], {height: "25px"}],
+                                    ["blank", "4px"],
+                                    ["style-column", [
+                                        ["style-column", [
+                                            ["raw-html", () => {return "<small>Magic boosts gold gain by x" + format(player.ep1.magicEffect) + ".</small>"}, {color: "#5e2f5e"}],
+                                            ["raw-html", () => {return "<small>Magic boosts paragon shard chance by x" + format(player.ep1.magicEffect2) + ".</small>"}, {color: "#5e2f5e"}],
+                                        ], {background: "", width: "600px", height: "57px", fontSize: "18px"}],
+                                    ]],
+                                    ["hoverless-clickable", 101],
+                                    ["style-row", [
+                                        ["always-scroll-column", [
+                                            ["style-row", [
+                                                ["top-column", [
+                                                    ["hoverless-upgrade", 301],
+                                                    ["hoverless-buyable", 301],
+                                                    ["hoverless-upgrade", 303],
+                                                ]],
+                                                ["top-column", [
+                                                    ["hoverless-upgrade", 302],
+                                                    ["hoverless-buyable", 302],
+                                                    ["hoverless-upgrade", 304],
+                                                ]],
+                                            ]],
+                                        ], {background: "#3f3f3f", width: "600px", height: "228px"}],
+                                    ]],
+                                ], () => {
+                                    let look = {backgroundColor: "#bf8fbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", width: "600px", height: "400px", padding: "3px"}
+                                        if (player.ep1.dragonEvolutionIndex < 2) look.display = "none !important";
+                                        return look
+                                    }], 
+                            ], {position: "relative", left: "-300px", top: "-425px", width: "0px", height: "0px"}],
                             
                         ], {background: "repeating-linear-gradient(135deg, #272727 0 15px, #2f2f2f 0 30px)", width: "2400px", height: "1600px"}],
                     ], {border: "6px solid #171717", width: "800px", height: "600px", flexFlow: "column"}],

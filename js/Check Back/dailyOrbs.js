@@ -54,6 +54,8 @@ addLayer("ev2", {
         doubleTime: new Decimal(4),
         doubleCurrent: new Decimal(0),
 
+        purchaseExponent: new Decimal(0.8),
+
         orbAssign: 1
     }},
     nodeStyle: {
@@ -85,12 +87,18 @@ addLayer("ev2", {
         // DAY EFFECT
         player.ev2.dayEffect = player.ev2.day.add(1).log(Decimal.div(10, buyableEffect("ev2", 13))).add(1)
 
+        // PURCHASE EXPONENT
+
+        player.ev2.purchaseExponent = new Decimal(0.8)
+        if (hasUpgrade("ep1", 303)) player.ev2.purchaseExponent = player.ev2.purchaseExponent.add(0.05);
+
         // XP PURCHASE
         player.ev2.xpTime = new Decimal(6).mul(player.ev2.dayEffect).mul(buyableEffect("ev2", 23))
         player.ev2.xpGain = new Decimal(0)
         for (let i = 0; i < 8; i++) {
             player.ev2.xpGain = player.ev2.xpGain.add(player.cb.xpTimers[i].average.mul(player.ev2.xpTime.mul(60)))
         }
+        player.ev2.xpGain = player.ev2.xpGain.pow(player.ev2.purchaseExponent)
 
         // PET POINT PURCHASE
         player.ev2.pointTime = new Decimal(4).mul(player.ev2.dayEffect).mul(buyableEffect("ev2", 23))
@@ -98,9 +106,11 @@ addLayer("ev2", {
         for (let i = 0; i < 9; i++) {
             player.ev2.pointGain = player.ev2.pointGain.add(player.pet.petAverage[i].mul(player.ev2.pointTime.mul(60)))
         }
+        player.ev2.pointGain = player.ev2.pointGain.pow(player.ev2.purchaseExponent)
 
         // SKIP TIME PURCHASE
         player.ev2.skipTime = new Decimal(2).mul(player.ev2.dayEffect).mul(buyableEffect("ev2", 23))
+        player.ev2.skipTime = player.ev2.skipTime.pow(player.ev2.purchaseExponent)
 
         // XP BOOST PURCHASE
         player.ev2.boostTime = new Decimal(5).mul(player.ev2.dayEffect).mul(buyableEffect("ev2", 23))
@@ -108,9 +118,11 @@ addLayer("ev2", {
         for (let i = 0; i < 2; i++) {
             player.ev2.boostGain = player.ev2.boostGain.add(player.cb.boostTimers[i].average.mul(player.ev2.boostTime.mul(60)))
         }
+        player.ev2.boostGain = player.ev2.boostGain.pow(player.ev2.purchaseExponent)
 
         // PET PURCHASE
         player.ev2.petTime = new Decimal(6).mul(player.ev2.dayEffect).mul(buyableEffect("ev2", 23))
+        player.ev2.petTime = player.ev2.petTime.pow(player.ev2.purchaseExponent)
 
         // DOUBLE TIME
         player.ev2.doubleTime = new Decimal(4).mul(player.ev2.dayEffect).mul(buyableEffect("ev2", 23))

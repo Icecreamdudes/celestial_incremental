@@ -1593,7 +1593,7 @@ addLayer("ir", {
                             ], {width: "400px", height: "360px", borderLeft: "3px solid #5e4ee6", borderBottom: "3px solid #5e4ee6", flexFlow: "column"}],
                             ["blank", "357px"],
                         ], {width: "403px", height: "720px"}],
-                    ], {width: "800px", height: "720px", background: "radial-gradient(circle, #151230 0%, #37078f 200%)", border: "3px solid #5e4ee6", borderRadius: "0 0 0 16px"}],
+                    ], {width: "800px", height: "720px", background: "radial-gradient(circle, #151230 0%, #37078f 200%)", border: "3px solid #5e4ee6", borderRadius: "0"}],
                 ],
             },
             "upgrades": {

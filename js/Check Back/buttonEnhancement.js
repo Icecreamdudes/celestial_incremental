@@ -1207,7 +1207,7 @@ addLayer("ev1", {
             currency() { return player.cb.petPoints},
             pay(amt) {player.cb.petPoints = this.currency().sub(amt)},
             effect(x) { return getBuyableAmount(this.layer, this.id).div(100).add(1)},
-            unlocked() {return hasUpgrade("cbs", 103)},
+            unlocked() {return hasUpgrade("cbs", 20)},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             display() {
@@ -1244,7 +1244,7 @@ addLayer("ev1", {
             currency() { return player.cb.petPoints},
             pay(amt) {player.cb.petPoints = this.currency().sub(amt)},
             effect(x) { return getBuyableAmount(this.layer, this.id).div(100).add(1)},
-            unlocked() {return hasUpgrade("cbs", 103)},
+            unlocked() {return hasUpgrade("cbs", 20)},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             display() {
@@ -1281,7 +1281,7 @@ addLayer("ev1", {
             currency() { return player.cb.petPoints},
             pay(amt) {player.cb.petPoints = this.currency().sub(amt)},
             effect(x) { return getBuyableAmount(this.layer, this.id).div(100)},
-            unlocked() {return player.ev.evolutionsUnlocked[4] && hasUpgrade("cbs", 103)},
+            unlocked() {return player.ev.evolutionsUnlocked[4] && hasUpgrade("cbs", 20)},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             display() {
@@ -1315,7 +1315,7 @@ addLayer("ev1", {
             currency() { return player.cb.petPoints},
             pay(amt) {player.cb.petPoints = this.currency().sub(amt)},
             effect(x) { return getBuyableAmount(this.layer, this.id).div(20).add(1)},
-            unlocked() {return player.ev.evolutionsUnlocked[4] && hasUpgrade("cbs", 103)},
+            unlocked() {return player.ev.evolutionsUnlocked[4] && hasUpgrade("cbs", 20)},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             display() {
@@ -2485,7 +2485,7 @@ addLayer("ev1", {
                                 ["row", [["buyable", 181], ["buyable", 182]]],
                                 ["row", [["buyable", 183], ["buyable", 184]]],
                             ], {width: "250px"}],
-                        ], () => {return hasUpgrade("cbs", 103) ? {width: "250px", background: "#004C72", border: "5px solid #002d44", borderRadius: "20px", margin: "5px"} : {display: "none !important"}}],
+                        ], () => {return hasUpgrade("cbs", 20) ? {width: "250px", background: "#004C72", border: "5px solid #002d44", borderRadius: "20px", margin: "5px"} : {display: "none !important"}}],
                     ], {maxWidth: "1080px", background: "#001e2d", border: "5px solid #002d44", borderRadius: "20px"}],
                 ],
             },

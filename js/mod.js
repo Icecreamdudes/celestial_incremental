@@ -956,20 +956,25 @@ let credits = `<h1>Credits:</h1><br>
 
 let changelog = `<h1>Changelog:</h1><br>
 
-	<h3>v1.13 - The Bumpy Bupdate Part I: Interspace</h3><br>
+	<h3>v1.13 - The Interspace Update Part I: Wells of Light</h3><br>
 		Content:<br>
 			- Added universe δ.<br>
-			- Revamped the dragon pet.<br>
-			- Added a pet evolution that allows progressing through Iridite content without space battles. (big for mobile players!)<span style="color:yellow"> [WIP]</span><br>
-			- Revamped the check back shrine.<br>
-			- Added an epic pet.<span style="color:yellow"> [WIP]</span><br>
+			- Remade the dragon pet.<br>
+			- Added space battle zones. Prior content has been separated into space zone I, space zone II, iridite zone, and space zone III.<br>
+			- Added a pet evolution that allows progressing through iridite content without entering space battles. (big for mobile players!)<span style="color:yellow"> [WIP]</span><br>
+			- Added space zone IV.<br>
 			- Added a ship.<br>
+			- Added more star tree upgrades.<span style="color:yellow"> [WIP]</span><br>
+			- Revamped the check back shrine.<br>
+			- Added two check back blessings.<br>
+			- Added an epic pet.<span style="color:yellow"> [WIP]</span><br>
+			- Added an ascension pet.<span style="color:yellow"> [WIP]</span><br>
 			- Added five punchcards.<br>
 			- Added two themes unlocked in the new universe.<span style="color:yellow"> [WIP]</span><br>
 		<br>QoL:<br>
-			- Modernized a lot of check back UI.<br>
+			- Remade a lot of check back UI.<br>
 			- Shifted the hue of check back's blue.<br>
-			- Redrew the art of most pet icons.<br>
+			- Redrew the art of many pet icons.<br>
 			- Added icons beside pet point buttons to indicate which pet corresponds to each button.<br>
 			- Moved evo and para shard pity to below the checkback XP bar.<br>
 			- Redesigned the otherworldly features UI.<br>
@@ -977,11 +982,14 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Redesigned coin flip, wheel of fortune, and slot machine UI.<br>
 			- Removed the coin clipper and rewardless dice space reset buttons in favor of buttons that reduce total flips/spins on a cooldown.<br>
 		<br>Balancing:<br>
-			- The daily orb time skip no longer affects daily orbs.<br>
-			- Added an additional pet point button effect for the evolution fragment pet.<br>
+			- Daily orb time skips no longer affects daily orb cooldown.<br>
+			- Gained stats from daily orbs now scale weaker.<br>
+			- The evolution fragment pet's pet point button now has a chance to grant fragments.<br>
+			- Added upgrades that boost paragon shard chance.<span style="color:yellow"> [WIP]</span><br>
 			- Reduced the scaling of several effects in D1 eclipse.<br>
-			- Changed the scaling and costs of check back factors.<br>
-			- Check back factors are now unlocked one-by-one with each blessing.<br>
+			- Increased the scaling of both unavoidable softcaps during an eclipse.<br>
+			- Heavily weakened the negative effect of clouds.<br>
+			- Changed the scaling and costs of check back factors.<span style="color:yellow"> [WIP]</span><br>
 		<br>Bugfixes:<br>
 			- Cutscene "DS-Zar-Slot-Spin" now correctly triggers after spinning the slots.<br>
 		<br>

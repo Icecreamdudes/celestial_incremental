@@ -466,7 +466,7 @@ addLayer("cbs", {
         },
         108: {
             title() { return "<h2>8</h2>" },
-            canClick() { return false },
+            canClick() { return true },
             unlocked() { return true },
             onClick() { player.cbs.blessing1Selection = 8 },
             xPos: -129.903810568,
@@ -488,7 +488,7 @@ addLayer("cbs", {
         },
         109: {
             title() { return "<h2>9</h2>" },
-            canClick() { return false },
+            canClick() { return true },
             unlocked() { return true },
             onClick() { player.cbs.blessing1Selection = 9 },
             xPos: -150,
@@ -510,7 +510,7 @@ addLayer("cbs", {
         },
         110: {
             title() { return "<h2>10</h2>" },
-            canClick() { return false },
+            canClick() { return true },
             unlocked() { return true },
             onClick() { player.cbs.blessing1Selection = 10 },
             xPos: -129.903810568,
@@ -532,7 +532,7 @@ addLayer("cbs", {
         },
         111: {
             title() { return "<h2>11</h2>" },
-            canClick() { return false },
+            canClick() { return true },
             unlocked() { return true },
             onClick() { player.cbs.blessing1Selection = 11 },
             xPos: -75,
@@ -554,7 +554,7 @@ addLayer("cbs", {
         },
         112: {
             title() { return "<h2>12</h2>" },
-            canClick() { return false },
+            canClick() { return true },
             unlocked() { return true },
             onClick() { player.cbs.blessing1Selection = 12 },
             xPos: 0,
@@ -1305,11 +1305,11 @@ addLayer("cbs", {
         }, 
 
         //check back blessings
-        101: {
+        18: {
             fullDisplay() {return hasUpgrade(this.layer, this.id) ? "BOUGHT!" : "BUY"},
             unlocked() { return player.cbs.shrineReactivated },
-            description: "Check back level boosts check back XP gain.",
-            cost: new Decimal(1e24),
+            description() { return "Check back level boosts check back XP gain. (x" + format(this.effect()) + ")"},
+            cost: new Decimal(1e38),
             currencyLocation() { return player.za },
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
@@ -1335,11 +1335,11 @@ addLayer("cbs", {
             },
             effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
         }, 
-        102: {
+        19: {
             fullDisplay() {return hasUpgrade(this.layer, this.id) ? "BOUGHT!" : "BUY"},
             unlocked() { return player.cbs.shrineReactivated },
-            description: "Ascension Shards boost Evolution Shard Chance.",
-            cost: new Decimal(1e30),
+            description() { return "Ascension Shards boost Evolution Shard Chance. (x" + format(this.effect()) + ")"},
+            cost: new Decimal(1e42),
             currencyLocation() { return player.za },
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
@@ -1365,11 +1365,11 @@ addLayer("cbs", {
             },
             effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
         }, 
-        103: {
+        20: {
             fullDisplay() {return hasUpgrade(this.layer, this.id) ? "BOUGHT!" : "BUY"},
             unlocked() { return player.cbs.shrineReactivated },
-            description: "Unlocks another XP button.",
-            cost: new Decimal(1e38),
+            description() { return "Unlocks another XP button."},
+            cost: new Decimal(1e60),
             currencyLocation() { return player.za },
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
@@ -1390,7 +1390,59 @@ addLayer("cbs", {
                 }
                 return look
             },
-        }, 
+        },
+        21: {
+            fullDisplay() {return hasUpgrade(this.layer, this.id) ? "BOUGHT!" : "BUY"},
+            unlocked() { return player.cbs.shrineReactivated },
+            description() { return "Ascension rituals completed in under 2 minutes yield an extra Shard of Ascension."},
+            cost: new Decimal(1e280),
+            currencyLocation() { return player.za },
+            currencyDisplayName: "Chance Points",
+            currencyInternalName: "chancePoints",
+            style() {
+                let look = {borderRadius: "10px", color: "white", fontSize: "20px", width: "300px", minHeight: "50px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#c6f7ff"
+                    look.border =  "3px solid #c6f7ff"
+                    look.color =  "#062a5e"
+                } else if (!canAffordUpgrade(this.layer, this.id)) {
+                    look.backgroundColor =  "#361e1e"
+                    look.border =  "3px solid #663737"
+                    look.color =  "#c6f7ff"
+                } else {
+                    look.backgroundColor = "#3466ac"
+                    look.border =  "3px solid #c6f7ff"
+                    look.color =  "#c6f7ff"
+                }
+                return look
+            },
+        },
+        22: {
+            fullDisplay() {return hasUpgrade(this.layer, this.id) ? "BOUGHT!" : "BUY"},
+            unlocked() { return player.cbs.shrineReactivated },
+            description() { return "Unlock a new zone in space battle."},
+            cost: new Decimal("1.8e308"),
+            currencyLocation() { return player.za },
+            currencyDisplayName: "Chance Points",
+            currencyInternalName: "chancePoints",
+            style() {
+                let look = {borderRadius: "10px", color: "white", fontSize: "20px", width: "300px", minHeight: "50px"}
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#c6f7ff"
+                    look.border =  "3px solid #c6f7ff"
+                    look.color =  "#062a5e"
+                } else if (!canAffordUpgrade(this.layer, this.id)) {
+                    look.backgroundColor =  "#361e1e"
+                    look.border =  "3px solid #663737"
+                    look.color =  "#c6f7ff"
+                } else {
+                    look.backgroundColor = "#3466ac"
+                    look.border =  "3px solid #c6f7ff"
+                    look.color =  "#c6f7ff"
+                }
+                return look
+            },
+        },
     },
     buyables: {
         11: {
@@ -2084,7 +2136,7 @@ addLayer("cbs", {
 
                         ], {background: "radial-gradient(circle, #3466ac 0%, #203f6b 100%)", border: "3px solid #3466ac", borderRadius: "10px", width: "360px", height: "360px", margin: "20px"}],
                     ], () => {
-                        return {background: "#102036", border: "3px solid #3466ac", borderTop: "0px", borderRadius: "0px 0px 13px 13px", width: "821px", height: "412px", display: player.cbs.shrineTab == 1 ? "" : "none !important"}
+                        return {background: "#102036", border: "3px solid #094599", borderTop: "0px", borderRadius: "0px 0px 13px 13px", width: "821px", height: "412px", display: player.cbs.shrineTab == 1 ? "" : "none !important"}
                     }],
 
                     // FACTORS
@@ -2184,7 +2236,7 @@ addLayer("cbs", {
                             return look
                         }],
                     ], () => {
-                        return {background: "#1b2029", border: "3px solid #536580", borderTop: "0px", borderRadius: "0px 0px 13px 13px", width: "821px", height: "412px", display: player.cbs.shrineTab == 2 ? "" : "none !important"}
+                        return {background: "#1b2029", border: "3px solid #094599", borderTop: "0px", borderRadius: "0px 0px 13px 13px", width: "821px", height: "412px", display: player.cbs.shrineTab == 2 ? "" : "none !important"}
                     }],
 
                     // PYLON
@@ -2207,7 +2259,7 @@ addLayer("cbs", {
                         ["clickable", 15],
 
                     ], () => {
-                        return {background: "linear-gradient(90deg, #2a6378 0%, #09366e 100%)", border: "3px solid #3b8ba8", borderTop: "0px", borderRadius: "0px 0px 13px 13px", width: "821px", height: "412px", display: player.cbs.shrineTab == 3 ? "" : "none !important"}
+                        return {background: "linear-gradient(90deg, #2a6378 0%, #09366e 100%)", border: "3px solid #094599", borderTop: "0px", borderRadius: "0px 0px 13px 13px", width: "821px", height: "412px", display: player.cbs.shrineTab == 3 ? "" : "none !important"}
                     }],
 
                     //

@@ -279,7 +279,7 @@ addLayer("cb", {
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("cbs", 11))
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("cbs", 12))
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("cbs", 13))
-            if (hasUpgrade("cbs", 101)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(upgradeEffect("cbs", 101))
+            if (hasUpgrade("cbs", 18)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(upgradeEffect("cbs", 18))
 
             // ABNORMAL MODIFIERS
             if (player.po.halter.xp.enabled == 1) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.div(player.po.halter.xp.halt)
@@ -332,7 +332,7 @@ addLayer("cb", {
         player.cb.baseESC = player.cb.baseESC.add(buyableEffect("depth1", 4).sub(1))
         player.cb.baseESC = player.cb.baseESC.mul(levelableEffect("pet", 1102)[1])
         player.cb.baseESC = player.cb.baseESC.mul(levelableEffect("ir", 9)[0])
-        if (hasUpgrade("cbs", 102)) player.cb.baseESC = player.cb.baseESC.mul(upgradeEffect("cbs", 102))
+        if (hasUpgrade("cbs", 19)) player.cb.baseESC = player.cb.baseESC.mul(upgradeEffect("cbs", 19))
         player.cb.baseESC = player.cb.baseESC.mul(buyableEffect("ev15", 11))
         for (let i in player.cb.xpTimers) {
             player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(player.cb.baseESC)
@@ -838,7 +838,7 @@ addLayer("cb", {
         19: {
             title() { return player.cb.xpTimers[8].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.xpTimers[8].current) + "." : "<h3>+" + format(player.cb.xpTimers[8].base.mul(player.cb.xpMult)) + " XP."},
             canClick() { return player.cb.xpTimers[8].current.lt(0) && this.unlocked() },
-            unlocked() { return hasUpgrade("cbs", 103) },
+            unlocked() { return hasUpgrade("cbs", 20) },
             tooltip() { return "Evo Shard Rarity: " + formatSimple(player.cb.xpTimers[8].esc) + "%"},
             onClick() {
                 player.cb.xp = player.cb.xp.add(player.cb.xpTimers[8].base.mul(player.cb.xpMult))

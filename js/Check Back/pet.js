@@ -116,6 +116,12 @@ const fragShopBase = {
         1: new Decimal(2000),
         2: new Decimal(1000),
     },
+    10: {
+        name: "Anti-Singularity Fragment",
+        0: new Decimal(2e3),
+        1: new Decimal(2e3),
+        2: new Decimal(2e3),
+    },
 }
 let blinkTime = 0
 addLayer("pet", {
@@ -162,6 +168,7 @@ addLayer("pet", {
         dicePetPointsGain: new Decimal(0),
 
         singularityFragments: new Decimal(0),
+        antiSingularityFragments: new Decimal(0),
 
         // FRAGMENTATION
         bannerIndex: 0,
@@ -266,6 +273,10 @@ addLayer("pet", {
             9: {
                 current: new Decimal(0),
                 max: new Decimal(21600),
+            },
+            10: {
+                current: new Decimal(0),
+                max: new Decimal(3600),
             },
         },
 
@@ -1358,6 +1369,10 @@ addLayer("pet", {
                         addLevelableXP("pet", 503, new Decimal(player.pet.fragShopBulk))
                         doPopup("none", "Vespasian mutates further", "Pet Obtained!", 5, "#eed200", "resources/Pets/vespasianLegendaryPet.png")
                         break;
+                    case 10:
+                        player.pet.antiSingularityFragments = player.pet.antiSingularityFragments.add(player.pet.fragShopBulk)
+                        doPopup("none", "+" + formatSimple(player.pet.fragShopBulk) + " Anti-Singularity Fragment", "Fragment Obtained!", 5, "#cb79ed", "resources/antiSingularityEpicPetFragmentFull.png")
+                        break;
                 }
             },
             style() {
@@ -1455,6 +1470,15 @@ addLayer("pet", {
                 player.pet.fragShopIndex = 9
             },
             style: {width: "75px", minHeight: "75px", background: "#eed200", border: "5px solid #776900", borderRadius: "0px", padding: "0px"},
+        },
+        141: {
+            title() { return "<img src='resources/antiSingularityEpicPetFragmentFull.png'style='width:65px;height:65px;margin:0px;margin-bottom:-4px'></img>" },
+            canClick: true,
+            unlocked() { return hasUpgrade("bum", 13) || true },
+            onClick() {
+                player.pet.fragShopIndex = 10
+            },
+            style: {width: "75px", minHeight: "75px", background: "#d487fd", border: "5px solid #6600A6", borderRadius: "0px", padding: "0px"},
         },
         // LEGENDARY GEMS
         201: {
@@ -3822,30 +3846,30 @@ addLayer("pet", {
         407: {
             image() { return this.canClick() ? "resources/Pets/goobertEpicPet.png" : "resources/secret.png"},
             title() { return "Goobert" },
-            lore() { return "A starlight-infused house cat. " }, 
+            lore() { return "A starlight-infused house cat that freely roams Bumpy's studio. It gives a superphysical presence similar to that of a celestialite." }, 
             description() {
                 return "x" + format(this.effect()[0]) + " to light <small>(based on stars)</small>.<br>" +
                     "x" + format(this.effect()[1]) + " to starlight <small>(based on star power)</small>.<br>" +
-                    "x" + format(this.effect()[2]) + " to rare pet button yield <small>(based on space dust)</small>."
+                    "x" + format(this.effect()[2]) + " to rare pet button yield and cooldown <small>(based on project speed)</small>."
             }, 
             levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    Decimal.pow(10, player.pri.prisms.add(1).log(10).add(1).pow(0.5).sub(1)).pow(Decimal.pow(1.5, getLevelableTier(this.layer, this.id))), // Light (Based on Prisms)
-                    amt.mul(player.wel.modules[1].completions.add(1).mul(player.wel.modules[2].completions.add(1)).mul(player.wel.modules[3].completions.add(1)).log(10).pow(0.8).add(1)).div(20).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // XPBoost (Based on Starmetal Alloy)
-                    amt.mul(player.sma.starmetalAlloy.add(2).log(2).log(2).add(1)).div(100).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1) // Pet Points (Based on Starmetal Alloy)
+                    player.au2.stars.div(1e25).add(1).log(10).add(1).pow(amt.pow(0.5)).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Light (Based on Stars)
+                    player.st.starPower.div(1e25).add(1).log(10).add(1).pow(amt.pow(0.25).div(3)).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Light (Based on Stars)
+                    player.prj.projectSpeed.log(10).add(1).pow(amt.pow(0.5)).div(20).pow(Decimal.pow(1.25, getLevelableTier(this.layer, this.id))).add(1) // Rare pet button yield (Based on Project Speed)
                 ]
             },
             sellValue() { return new Decimal(500)},
             shopLayer() { return "sp" },
             // CLICK CODE
             unlocked() { return player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23) },
-            canClick() { return player.pet.singularityFragments.gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
+            canClick() { return player.pet.antiSingularityFragments.gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
             onClick() { return layers[this.layer].levelables.index = this.id },
             // BUY CODE
-            pay(amt) { player.pet.singularityFragments = player.pet.singularityFragments.sub(amt) },
-            canAfford() { return player.pet.singularityFragments.gte(this.xpReq()) },
+            pay(amt) { player.pet.antiSingularityFragments = player.pet.antiSingularityFragments.sub(amt) },
+            canAfford() { return player.pet.antiSingularityFragments.gte(this.xpReq()) },
             xpReq() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
                 if (amt.eq(0)) {
@@ -3854,7 +3878,7 @@ addLayer("pet", {
                     return amt.add(1).pow(1.3).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
                 }
             },
-            currency() { return player.pet.singularityFragments },
+            currency() { return player.pet.antiSingularityFragments },
             buy() {
                 this.pay(this.xpReq())
                 setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
@@ -5613,6 +5637,8 @@ addLayer("pet", {
                                             return "(" + player.pet.levelables[502][1] + "/" + tmp.pet.levelables[502].xpReq + ")"
                                         case 9:
                                             return "(" + player.pet.levelables[503][1] + "/" + tmp.pet.levelables[503].xpReq + ")"
+                                        case 10:
+                                            return "(" + formatWhole(player.pet.antiSingularityFragments) + ")"
                                         default:
                                             return ""
                                     }
@@ -5648,7 +5674,7 @@ addLayer("pet", {
                             ["style-row", [["hoverless-clickable", 138]], {width: "75px", height: "75px", borderLeft: "1px solid white", borderRight: "1px solid white"}],
                             ["style-row", [["hoverless-clickable", 139]], {width: "75px", height: "75px", borderRight: "1px solid white"}],
                             ["style-row", [["hoverless-clickable", 140]], {width: "75px", height: "75px", borderRight: "1px solid white"}],
-                            ["style-row", [], {width: "75px", height: "75px", borderRight: "1px solid white"}],
+                            ["style-row", [["hoverless-clickable", 141]], {width: "75px", height: "75px", borderRight: "1px solid #190c1e"}],
                             ["style-row", [], {width: "75px", height: "75px", borderRight: "1px solid white"}],
                             ["style-row", [], {width: "75px", height: "75px", borderRight: "1px solid white"}],
                             ["style-row", [], {width: "74px", height: "75px", borderRight: "1px solid white"}],

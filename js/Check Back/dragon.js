@@ -122,9 +122,9 @@ addLayer("ep1", {
         wasInThisTab: false,
     }},
     nodeStyle: {
-        backgroundColor: "#60994d",
-        borderColor: "#004025",
-        color: "#004025",
+        background: "linear-gradient(-90deg, #30bf30 0%, #008040 100%)",
+        borderColor: "#006030",
+        color: "white",
     },
     tooltip: "Dragon",
     color: "#cb79ed",
@@ -146,6 +146,9 @@ addLayer("ep1", {
         player.ep1.goldToGet = player.ep1.goldToGet.mul(buyableEffect("ep1", 204))
         player.ep1.goldToGet = player.ep1.goldToGet.mul(buyableEffect("ep1", 206))
         if (hasUpgrade("ev8", 21)) player.ep1.goldToGet = player.ep1.goldToGet.mul(1.4)
+        player.ep1.goldToGet = player.ep1.goldToGet.mul(buyableEffect("sme", 113))
+
+        if (player.ep1.dragonEvolutionIndex >= 6) player.ep1.goldToGet = player.ep1.goldToGet.pow(1.025);
 
         player.ep1.gold = player.ep1.gold.add(player.ep1.goldToGet.mul(delta))
 
@@ -190,6 +193,7 @@ addLayer("ep1", {
         if (player.ep1.dragonEvolutionIndex >= 2) player.ep1.goldBuyableBase = player.ep1.goldBuyableBase.add(0.01);
         if (player.ep1.dragonEvolutionIndex >= 5) player.ep1.goldBuyableBase = player.ep1.goldBuyableBase.add(0.01);
         player.ep1.goldBuyableBase = player.ep1.goldBuyableBase.add(buyableEffect("ep1", 102))
+        if (hasUpgrade("ep1", 204)) player.ep1.goldBuyableBase = player.ep1.goldBuyableBase.add(0.005);
 
         // FIRE GAIN
         player.ep1.baseFireToGet = player.ep1.gold.add(1).pow(0.2).log(10).pow(4)
@@ -552,7 +556,7 @@ addLayer("ep1", {
                 if (this.canClick()) {
                     look.color = "black"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
                 }
                 return look
             }
@@ -601,13 +605,13 @@ addLayer("ep1", {
                 if (this.canClick()) {
                     look.color = "black"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
                 }
                 return look
             }
         },
         101: {
-            display() { return "<h2>Reset gold and fire content to gain magic.</h2><br>Requires 1e20 gold"},
+            display() { return "<h2>Reset gold, fire, and platinum content to gain magic.</h2><br>Requires 1e20 gold"},
             canClick() { return this.unlocked()
                 && player.ep1.gold.gte(1e20)
              },
@@ -626,7 +630,7 @@ addLayer("ep1", {
             }
         },
     },
-    buyables: { // setBuyableAmount('ep1', 11, new Decimal(0))
+    buyables: {
         11: {
             costBase() { return new Decimal(10) },
             costGrowth() { return new Decimal(1.1) },
@@ -661,23 +665,26 @@ addLayer("ep1", {
             },
             style() {
                 let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '283px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
-                if (this.canAfford()) {
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
                 }
                 return look
             }
         },
         12: {
             costBase() { return new Decimal(100) },
-            costGrowth() { return new Decimal(1.75) },
+            costGrowth() { return new Decimal(1.5) },
             purchaseLimit() { return new Decimal(150) },
             currency() { return player.ep1.gold},
             pay(amt) { player.ep1.gold = this.currency().sub(amt) },
             effect(x) {
-                let eff = player.ep1.goldBuyableBase.pow(getBuyableAmount(this.layer, this.id).mul(3))
-                if (eff.gte(1e6)) eff = eff.div(1e6).pow(0.5).mul(1e6);
+                let eff = player.ep1.goldBuyableBase.pow(getBuyableAmount(this.layer, this.id))
+                if (eff.gte(1e3)) eff = eff.div(1e3).log10().add(1).pow(0.5).sub(1).pow_base(10).mul(1e3);
                 return eff
             },
             unlocked() { return player.ep1.dragonEvolutionIndex >= 1 },
@@ -687,7 +694,7 @@ addLayer("ep1", {
                 return "Fiery Emotions (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
             },
             display() {
-                return 'Boosts first four emotions gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.' + (this.effect().gte(1e6) ? "<span style='color:red'> [SOFTCAPPED]</span>" : "") +'\n\
+                return 'Boosts first four emotions gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.' + (this.effect().gte(1e3) ? "<span style='color:red'> [SOFTCAPPED]</span>" : "") +'\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Gold'
             },
             buy(mult) {
@@ -707,23 +714,26 @@ addLayer("ep1", {
             },
             style() {
                 let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '283px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
-                if (this.canAfford()) {
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
                 }
                 return look
             }
         },
         13: {
             costBase() { return new Decimal(1e4) },
-            costGrowth() { return new Decimal(2.5) },
+            costGrowth() { return new Decimal(6) },
             purchaseLimit() { return new Decimal(150) },
             currency() { return player.ep1.gold},
             pay(amt) { player.ep1.gold = this.currency().sub(amt) },
             effect(x) {
                 let eff = player.ep1.goldBuyableBase.pow(getBuyableAmount(this.layer, this.id))
-                if (eff.gte(4)) eff = getBuyableAmount(this.layer, this.id).sub(Decimal.log(4, player.ep1.goldBuyableBase)).add(1).pow(0.85).add(Decimal.log(4, player.ep1.goldBuyableBase)).sub(1).pow_base(player.ep1.goldBuyableBase);
+                if (eff.gte(4)) eff = eff.div(4).log10().add(1).pow(0.5).sub(1).pow_base(10).mul(4);
                 return eff
             },
             unlocked() { return player.ep1.dragonEvolutionIndex >= 2 },
@@ -753,22 +763,25 @@ addLayer("ep1", {
             },
             style() {
                 let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '283px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
-                if (this.canAfford()) {
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
                 }
                 return look
             }
         },
         14: {
             costBase() { return new Decimal(1e5) },
-            costGrowth() { return new Decimal(1.625) },
+            costGrowth() { return new Decimal(1.4) },
             purchaseLimit() { return new Decimal(150) },
             currency() { return player.ep1.gold},
             pay(amt) { player.ep1.gold = this.currency().sub(amt) },
             effect(x) {
-                let eff = player.ep1.goldBuyableBase.pow(getBuyableAmount(this.layer, this.id).mul(2))
+                let eff = player.ep1.goldBuyableBase.pow(getBuyableAmount(this.layer, this.id))
                 if (eff.gte(1e3)) eff = eff.div(1e3).pow(0.5).mul(1e3);
                 return eff
             },
@@ -776,7 +789,7 @@ addLayer("ep1", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Heat of the Core (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
+                return "Flaming Core (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
             },
             display() {
                 return 'Boosts fire gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.' + (this.effect().gte(1e3) ? "<span style='color:red'> [SOFTCAPPED]</span>" : "") +'\n\
@@ -799,10 +812,13 @@ addLayer("ep1", {
             },
             style() {
                 let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '283px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
-                if (this.canAfford()) {
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
                 }
                 return look
             }
@@ -814,8 +830,8 @@ addLayer("ep1", {
             currency() { return player.ep1.gold},
             pay(amt) { player.ep1.gold = this.currency().sub(amt) },
             effect(x) {
-                let eff = player.ep1.goldBuyableBase.pow(getBuyableAmount(this.layer, this.id).mul(3))
-                if (eff.gte(1e3)) eff = eff.div(1e3).pow(0.5).mul(1e3);
+                let eff = player.ep1.goldBuyableBase.pow(getBuyableAmount(this.layer, this.id))
+                if (eff.gte(4)) eff = eff.div(4).log10().add(1).pow(0.5).sub(1).pow_base(10).mul(4);
                 return eff
             },
             unlocked() { return player.ep1.dragonEvolutionIndex >= 4 },
@@ -825,7 +841,7 @@ addLayer("ep1", {
                 return "Dark Training (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
             },
             display() {
-                return 'Boosts punchcard XP gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.' + (this.effect().gte(1e3) ? "<span style='color:red'> [SOFTCAPPED]</span>" : "") +'\n\
+                return 'Boosts punchcard XP gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.' + (this.effect().gte(4) ? "<span style='color:red'> [SOFTCAPPED]</span>" : "") +'\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Gold'
             },
             buy(mult) {
@@ -845,10 +861,209 @@ addLayer("ep1", {
             },
             style() {
                 let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '283px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
-                if (this.canAfford()) {
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
+                }
+                return look
+            }
+        },
+        16: {
+            costBase() { return new Decimal(1e11) },
+            costGrowth() { return new Decimal(12) },
+            purchaseLimit() { return new Decimal(150) },
+            currency() { return player.ep1.gold},
+            pay(amt) { player.ep1.gold = this.currency().sub(amt) },
+            effect(x) {
+                let eff = player.ep1.goldBuyableBase.pow(getBuyableAmount(this.layer, this.id))
+                if (eff.gte(4)) eff = eff.div(4).log10().add(1).pow(0.5).sub(1).pow_base(10).mul(4);
+                return eff
+            },
+            unlocked() { return player.ep1.dragonEvolutionIndex >= 5 },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Prismatic Aura (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
+            },
+            display() {
+                return 'Boosts starmetal essence by x' + format(tmp[this.layer].buyables[this.id].effect) + '.' + (this.effect().gte(4) ? "<span style='color:red'> [SOFTCAPPED]</span>" : "") +'\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Gold'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style() {
+                let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '283px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.canAfford()) {
+                    look.color = "#1f1f1f"
+                } else {
+                    look.color = "#0000005f"
+                }
+                return look
+            }
+        },
+        17: {
+            costBase() { return new Decimal(1e18) },
+            costGrowth() { return new Decimal(6) },
+            purchaseLimit() { return new Decimal(150) },
+            currency() { return player.ep1.gold},
+            pay(amt) { player.ep1.gold = this.currency().sub(amt) },
+            effect(x) {
+                let eff = player.ep1.goldBuyableBase.pow(getBuyableAmount(this.layer, this.id))
+                if (eff.gte(12)) eff = eff.div(12).log10().add(1).pow(0.5).sub(1).pow_base(10).mul(12);
+                return eff
+            },
+            unlocked() { return player.ep1.dragonEvolutionIndex >= 6 },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Blood of the Epic (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
+            },
+            display() {
+                return 'Boosts the first 6 epic currencies by x' + format(tmp[this.layer].buyables[this.id].effect) + '.' + (this.effect().gte(12) ? "<span style='color:red'> [SOFTCAPPED]</span>" : "") +'\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Gold'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style() {
+                let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '283px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.canAfford()) {
+                    look.color = "#1f1f1f"
+                } else {
+                    look.color = "#0000005f"
+                }
+                return look
+            }
+        },
+        18: {
+            costBase() { return new Decimal(1e28) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(150) },
+            currency() { return player.ep1.gold},
+            pay(amt) { player.ep1.gold = this.currency().sub(amt) },
+            effect(x) {
+                let eff = player.ep1.goldBuyableBase.pow(getBuyableAmount(this.layer, this.id))
+                if (eff.gte(100)) eff = eff.div(100).log10().add(1).pow(0.5).sub(1).pow_base(10).mul(100);
+                return eff
+            },
+            unlocked() { return player.ep1.dragonEvolutionIndex >= 7 },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Dark Arts (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
+            },
+            display() {
+                return 'Boosts magic gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.' + (this.effect().gte(100) ? "<span style='color:red'> [SOFTCAPPED]</span>" : "") +'\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Gold'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style() {
+                let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '283px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.canAfford()) {
+                    look.color = "#1f1f1f"
+                } else {
+                    look.color = "#0000005f"
+                }
+                return look
+            }
+        },
+        19: {
+            costBase() { return new Decimal(1e35) },
+            costGrowth() { return new Decimal(144) },
+            purchaseLimit() { return new Decimal(150) },
+            currency() { return player.ep1.gold},
+            pay(amt) { player.ep1.gold = this.currency().sub(amt) },
+            effect(x) {
+                let eff = player.ep1.goldBuyableBase.pow(getBuyableAmount(this.layer, this.id))
+                if (eff.gte(2)) eff = eff.div(2).log10().add(1).pow(0.5).sub(1).pow_base(10).mul(2);
+                return eff
+            },
+            unlocked() { return player.ep1.dragonEvolutionIndex >= 8 },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Flying Through Time (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
+            },
+            display() {
+                return 'Boosts check back tickspeed by x' + format(tmp[this.layer].buyables[this.id].effect) + '.' + (this.effect().gte(2) ? "<span style='color:red'> [SOFTCAPPED]</span>" : "") +'\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Gold'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style() {
+                let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '283px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.canAfford()) {
+                    look.color = "#1f1f1f"
+                } else {
+                    look.color = "#0000005f"
                 }
                 return look
             }
@@ -892,10 +1107,13 @@ addLayer("ep1", {
             },
             style() {
                 let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '293px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
-                if (this.canAfford()) {
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
                 }
                 return look
             }
@@ -937,10 +1155,13 @@ addLayer("ep1", {
             },
             style() {
                 let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '293px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
-                if (this.canAfford()) {
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
                 }
                 return look
             }
@@ -982,10 +1203,13 @@ addLayer("ep1", {
             },
             style() {
                 let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '293px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
-                if (this.canAfford()) {
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
                 }
                 return look
             }
@@ -1027,10 +1251,13 @@ addLayer("ep1", {
             },
             style() {
                 let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '293px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
-                if (this.canAfford()) {
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
                 }
                 return look
             }
@@ -1072,10 +1299,13 @@ addLayer("ep1", {
             },
             style() {
                 let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '293px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
-                if (this.canAfford()) {
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
                 }
                 return look
             }
@@ -1117,10 +1347,13 @@ addLayer("ep1", {
             },
             style() {
                 let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '293px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
-                if (this.canAfford()) {
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
                 }
                 return look
             }
@@ -1162,10 +1395,13 @@ addLayer("ep1", {
             },
             style() {
                 let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '293px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
-                if (this.canAfford()) {
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
                 }
                 return look
             }
@@ -1207,10 +1443,13 @@ addLayer("ep1", {
             },
             style() {
                 let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '293px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
-                if (this.canAfford()) {
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
                 }
                 return look
             }
@@ -1252,10 +1491,13 @@ addLayer("ep1", {
             },
             style() {
                 let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '293px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
-                if (this.canAfford()) {
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
                 }
                 return look
             }
@@ -1297,10 +1539,13 @@ addLayer("ep1", {
             },
             style() {
                 let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '293px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
-                if (this.canAfford()) {
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
                 }
                 return look
             }
@@ -1342,10 +1587,13 @@ addLayer("ep1", {
             },
             style() {
                 let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '293px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
-                if (this.canAfford()) {
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
                 }
                 return look
             }
@@ -1387,33 +1635,36 @@ addLayer("ep1", {
             },
             style() {
                 let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '293px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
-                if (this.canAfford()) {
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
                 }
                 return look
             }
         },
         301: {
             costBase() { return new Decimal(24) },
-            costGrowth() { return new Decimal(1) },
+            costGrowth() { return new Decimal(1.6) },
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.ep1.magic},
             pay(amt) { player.ep1.magic = this.currency().sub(amt) },
             effect(x) {
-                let eff = getBuyableAmount(this.layer, this.id).mul(0.1).add(1)
+                let eff = getBuyableAmount(this.layer, this.id).pow_base(player.cb.level.add(100000001).log(10).div(8))
                 return eff
             },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "placeholder (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
+                return "Time is Money (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
             },
             display() {
-                return 'placeholder.' +'\n\
-                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Platinum Shards'
+                return 'Check Back level boosts gold gain by x' + format(tmp[this.layer].buyables[this.id].effect, 2) + '.' +'\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Magic'
             },
             buy(mult) {
                 if (mult != true) {
@@ -1432,33 +1683,36 @@ addLayer("ep1", {
             },
             style() {
                 let look = {backgroundColor: "#bf8fbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '292px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
-                if (this.canAfford()) {
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
                 }
                 return look
             }
         },
         302: {
             costBase() { return new Decimal(96) },
-            costGrowth() { return new Decimal(1) },
-            purchaseLimit() { return new Decimal(100) },
+            costGrowth() { return new Decimal(3) },
+            purchaseLimit() { return new Decimal(20) },
             currency() { return player.ep1.magic},
             pay(amt) { player.ep1.magic = this.currency().sub(amt) },
             effect(x) {
-                let eff = getBuyableAmount(this.layer, this.id).mul(0.1).add(1)
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.2).add(1)
                 return eff
             },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "placeholder (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
+                return "Legendary Catalyst (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
             },
             display() {
-                return 'placeholder.' +'\n\
-                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Platinum Shards'
+                return 'Boosts legendary gem effects by ^' + format(tmp[this.layer].buyables[this.id].effect, 2) + '.' +'\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Magic'
             },
             buy(mult) {
                 if (mult != true) {
@@ -1477,10 +1731,13 @@ addLayer("ep1", {
             },
             style() {
                 let look = {backgroundColor: "#bf8fbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '292px', height: '57px', paddingLeft: "8px", paddingRight: "8px"}
-                if (this.canAfford()) {
+                if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.canAfford()) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
                 }
                 return look
             }
@@ -1506,10 +1763,13 @@ addLayer("ep1", {
             },
             style() {
                 let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '292px', maxHeight: '85.5px', minHeight: '85.5px', paddingLeft: "8px", paddingRight: "8px"}
-                if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
                 }
                 return look
             }
@@ -1533,10 +1793,13 @@ addLayer("ep1", {
             },
             style() {
                 let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '292px', maxHeight: '85.5px', minHeight: '85.5px', paddingLeft: "8px", paddingRight: "8px"}
-                if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
                 }
                 return look
             }
@@ -1560,10 +1823,13 @@ addLayer("ep1", {
             },
             style() {
                 let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '292px', maxHeight: '85.5px', minHeight: '85.5px', paddingLeft: "8px", paddingRight: "8px"}
-                if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
                 }
                 return look
             }
@@ -1587,10 +1853,13 @@ addLayer("ep1", {
             },
             style() {
                 let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '292px', maxHeight: '85.5px', minHeight: '85.5px', paddingLeft: "8px", paddingRight: "8px"}
-                if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
                     look.color = "#1f1f1f"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
                 }
                 return look
             }
@@ -1614,10 +1883,13 @@ addLayer("ep1", {
             },
             style() {
                 let look = {backgroundColor: "#bf8fbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '292px', maxHeight: '85.5px', minHeight: '85.5px', paddingLeft: "8px", paddingRight: "8px"}
-                if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
                     look.color = "black"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
                 }
                 return look
             }
@@ -1641,10 +1913,13 @@ addLayer("ep1", {
             },
             style() {
                 let look = {backgroundColor: "#bf8fbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '292px', maxHeight: '85.5px', minHeight: '85.5px', paddingLeft: "8px", paddingRight: "8px"}
-                if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
                     look.color = "black"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
                 }
                 return look
             }
@@ -1671,14 +1946,14 @@ addLayer("ep1", {
                 if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
                     look.color = "black"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
                 }
                 return look
             }
         },
         304: {
             title() {
-                return "Self-Sufficient Reaction"
+                return "Self-Sustaining Reaction"
             },
             description() {
                 return "Passively generate 1% of platinum shard chance as platinum shards."
@@ -1695,10 +1970,13 @@ addLayer("ep1", {
             },
             style() {
                 let look = {backgroundColor: "#bf8fbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '292px', maxHeight: '85.5px', minHeight: '85.5px', paddingLeft: "8px", paddingRight: "8px"}
-                if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
+                if (hasUpgrade(this.layer, this.id)) {
+                    look.backgroundColor = "#77bf5f"
+                    look.color = "#1f1f1f"
+                } else if (this.currencyLocation()[this.currencyInternalName].gte(this.cost)) {
                     look.color = "black"
                 } else {
-                    look.color = "#0000009f"
+                    look.color = "#0000005f"
                 }
                 return look
             }
@@ -1766,6 +2044,12 @@ addLayer("ep1", {
                                             ["hoverless-buyable", 14],
                                             ["hoverless-buyable", 15],
                                             ["hoverless-buyable", 16],
+                                            ["hoverless-buyable", 17],
+                                            ["hoverless-buyable", 18],
+                                            ["hoverless-buyable", 19],
+                                            ["hoverless-buyable", 20],
+                                            ["hoverless-buyable", 21],
+                                            ["hoverless-buyable", 22],
                                         ], {background: "#3f3f3f", width: "298px", height: "342px"}],
                                     ]],
                                 ], {background: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", width: "600px", height: "400px", padding: "3px"}], 
@@ -1956,7 +2240,7 @@ addLayer("ep1", {
                                     ]],
                                 ], () => {
                                     let look = {backgroundColor: "#bf8fbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", width: "600px", height: "400px", padding: "3px"}
-                                        if (player.ep1.dragonEvolutionIndex < 2) look.display = "none !important";
+                                        if (player.ep1.dragonEvolutionIndex < 7) look.display = "none !important";
                                         return look
                                     }], 
                             ], {position: "relative", left: "-300px", top: "-425px", width: "0px", height: "0px"}],

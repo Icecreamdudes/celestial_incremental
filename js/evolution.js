@@ -961,7 +961,7 @@ addLayer("ev8", {
 
         ESCMult = ESCMult.mul(levelableEffect("pet", 1102)[1])
         ESCMult = ESCMult.mul(levelableEffect("ir", 9)[0])
-        if (hasUpgrade("cbs", 102)) ESCMult = ESCMult.mul(upgradeEffect("cbs", 102))
+        if (hasUpgrade("cbs", 19)) ESCMult = ESCMult.mul(upgradeEffect("cbs", 19))
 
         ESCMult = ESCMult.sub(1).mul(buyableEffect("sme", 117).sub(1)).add(1)
 

@@ -21,7 +21,7 @@
 		"Hex/hex.js", "Hex/provenance.js", "Hex/refinement.js", "Hex/blessings.js", "Hex/curses.js",
 		"Hex/purity.js", "Hex/power.js", "Hex/realms.js", "Hex/vex.js", "Hex/sacrifice.js",
 		"Check Back/cookie.js", "Check Back/coinDust.js", "Check Back/buttonEnhancement.js", "Check Back/dailyOrbs.js", "Misc/achievements.js",
-		"Hive/unih.js", "Hive/flower.js", "Hive/pollen.js", "Hive/nectar.js", "Hive/beebread.js",
+		"Hive/unih.js", "Hive/flower.js", "Hive/pollen.js", "Hive/nectar.js", "Hive/beebread.js", "Hive/twig.js",
 		"Hive/honey.js", "Hive/wax.js", "Hive/aleph.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "DarkU1/blood.js", "Zar/zar.js", "Zar/coinFlip.js",
  		"Zar/wheelOfFortune.js", "Check Back/singularityPet.js", "Zar/slotMachine.js", "Zar/checkBackShrine.js", "Zar/cards.js", "Cantepocalypse/enhance.js",
@@ -286,6 +286,9 @@ function updateStyles() {
 			} else {
 				layerBG = "linear-gradient(to right, #443812, #432236)"
 			}
+			break;
+		case "tw":
+			layerBG = "#021507"
 			break;
 		case "cb":
 			layerBG = "#021124"
@@ -661,6 +664,7 @@ function updateStyles() {
 			break;
 		case "h": case "hpr": case "hre": case "hbl": case "hcu":
 		case "hpu": case "hpw": case "hrm": case "hve": case "hsa":
+		case "tera":
 			player.musuniverse = "UA"
 			break;
 		case "i": case "r": case "f": case "p": case "t":
@@ -695,7 +699,7 @@ function updateStyles() {
 			player.musuniverse = "MI"
 			break;
 		case "bee": case "fl": case "bpl": case "ne": case "bb":
-		case "ho": case "wa": case "al": case "n":
+		case "ho": case "wa": case "al": case "n": case "tw":
 			player.musuniverse = "UB"
 			break;
 		case "cb": case "ev0": case "ev1": case "ev2": case "ev4":

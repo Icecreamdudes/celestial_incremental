@@ -219,7 +219,13 @@ addLayer("al", {
             player.al.royalJelly = new Decimal(0)
             player.al.royalJellyGain = new Decimal(0)
             player.al.highestRoyalJelly = new Decimal(0)
-            player.al.upgrades.splice(0, player.al.upgrades.length)
+            for (let i = 0; i < player.al.upgrades.length; i++) {
+                let upg = +player.al.upgrades[i]
+                if (upg > 100 && upg < 200 && Decimal.gte((upg-100)/3, getBuyableAmount("tw", 53))) continue
+                if (upg > 200 && upg < 300 && Decimal.gte((upg-200)/3, getBuyableAmount("tw", 54))) continue
+                player.al.upgrades.splice(i, 1);
+                i--;
+            }
             for (let i in player.al.buyables) {
                 if (!hasMilestone("n", 12)) {
                     player.al.buyables[i] = new Decimal(0)

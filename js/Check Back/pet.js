@@ -624,7 +624,7 @@ addLayer("pet", {
         player.pet.fragShopCost3 = fragShopBase[player.pet.fragShopIndex][2].mul(fragMul).mul(player.pet.fragShopBulk).mul(10).floor().div(10)
 
         // MODIFIERS FOR FRAG FRAGMENTS
-        if (hasUpgrade("ev13", 13) && player.pet.fragShopIndex == 4) {
+        if (hasUpgrade("ev15", 13) && player.pet.fragShopIndex == 4) {
             player.pet.fragShopCost2 = new Decimal(0)
             player.pet.fragShopCost3 = new Decimal(0)
         }
@@ -2165,7 +2165,7 @@ addLayer("pet", {
             },
             levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
             effect() {
-                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40)).add(levelableEffect("pet", 1103)[0]).add(buyableEffect("ev13", 12))
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40)).add(levelableEffect("pet", 1103)[0]).add(buyableEffect("ev15", 12))
                 if ((player.points.lt(1e100) && !hasMilestone("ip", 24)) || inChallenge("ip", 13)) amt = amt.sub(1)
                 return [
                     amt.pow(2.7).pow(Decimal.pow(4, getLevelableTier(this.layer, this.id))).add(1), // Factor Power Gain
@@ -4729,7 +4729,7 @@ addLayer("pet", {
             evoCan() {return true},
             evoTooltip() {return ""},
             evoClick() {
-                player.tab = "ev13"
+                player.tab = "ev15"
             },
             // CLICK CODE
             unlocked() { return player.cbs.shrineReactivated},
@@ -4776,7 +4776,7 @@ addLayer("pet", {
             evoCan() {return true},
             evoTooltip() {return ""},
             evoClick() {
-                player.tab = "ev14"
+                player.tab = "ev16"
             },
             // CLICK CODE
             unlocked() { return player.cbs.shrineReactivated},

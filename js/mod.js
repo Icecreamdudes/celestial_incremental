@@ -325,10 +325,10 @@ function updateStyles() {
 		case "ev8":
 			layerBG = "#252525"
 			break;
-		case "ev13":
+		case "ev15":
 			layerBG = "linear-gradient(-45deg, #206060, #40c0c0)"
 			break;
-		case "ev14":
+		case "ev16":
 			layerBG = "linear-gradient(0deg, #200020, #400040)"
 			break;
 		case "ep0": case "ep1": case "ep2": case "sp":
@@ -856,7 +856,7 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v1.12.6 - Akash's Mini-Update I: Negative Diamonds</h3><br>
+	<h3>v1.13.1 - Akash's Mini-Update I: Negative Diamonds</h3><br>
 		Content:<br>
 			- Added the 3rd page of achievements.<br>
 			- Added a new evolution pet.<br>
@@ -867,7 +867,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added a few more savebank buttons (actual saves haven't been added yet).<br><br>
 		Bug Fixes:<br>
 			- Fixed legendary punchcards having the wrong color backgrounds.<br>
-			- Fixed V not having their cutscene icon.<br><br>
+			- Fixed star exploration node B2 having no effect.<br><br>
 	<h3>v1.12.5 - Battle Bonanza</h3><br>
 		Content:<br>
 			- Added ??? temple bestowals<br>

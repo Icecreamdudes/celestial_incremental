@@ -128,7 +128,7 @@
             player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(buyableEffect("ep0", 11))
             player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(levelableEffect("pet", 309)[1])
             player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(levelableEffect("ir", 3)[1])
-            player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(player.se.starsExploreEffect[2][0])
+            player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(player.se.starsExploreEffect[1][2])
             player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(player.depth4.comboEffect)
 
             // FLOOR SCRAP GAIN

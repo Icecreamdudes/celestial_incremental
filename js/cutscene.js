@@ -4090,7 +4090,7 @@
             background: "#094599",
             portrait: "resources/secret.png",
             music: "music/marcel.mp3",
-            trigger() {return player.ev.evolutionsUnlocked[13]},
+            trigger() {return player.ev.evolutionsUnlocked[15]},
             dialogue: [
                 { text: "Marcel visits you.", },
                 { text: 'And you did it again.', portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },

@@ -10,7 +10,8 @@
         evolutionDisplayIndex: new Decimal(-1),
         evolutionsUnlocked: [false, false, false, false, false,
             false, false, false, false, false,
-            false, false, false, false, false],
+            false, false, false, false, false,
+            false, false],
         /*
         0 - Unsmith
         1 - Shark
@@ -25,9 +26,10 @@
         10 - Eye
         11 - Blob
         12 - Egg Man
-        13 - Goldsmith
-        14 - Insane Face
-        15 - Enhance Dust
+        13 - Enhance Dust
+        14 - ???
+        15 - Goldsmith
+        16 - Insane Face
         */
     }},
     nodeStyle() {},
@@ -183,25 +185,25 @@
             },
             style: { width: "100px", minHeight: "100px", border: "5px solid #2F2F2F", borderRadius: "0px", padding: "0px" },
         },
-        113: {
+        115: {
             title() { return "<img src='resources/Pets/diamondsmithEvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>"
             },
             canClick() {return true},
-            unlocked() { return tmp.pet.levelables[1103].canClick && !player.ev.evolutionsUnlocked[13] && player.cbs.shrineReactivated}, // placeholder req
+            unlocked() { return tmp.pet.levelables[1103].canClick && !player.ev.evolutionsUnlocked[15] && player.cbs.shrineReactivated}, // placeholder req
             tooltip() { return "███████ ██████ coin dust<br>██████████" }, // further boosts coin dust production
             onClick() {
-                player.ev.evolutionDisplayIndex = new Decimal(13)
+                player.ev.evolutionDisplayIndex = new Decimal(15)
             },
             style: { width: "100px", minHeight: "100px", border: "5px solid #2F2F2F", borderRadius: "0px", padding: "0px" }
         },
-        114: {
+        116: {
             title() { return "<img src='resources/Pets/extremeDemonEvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>"
             },
             canClick() {return true},
-            unlocked() { return tmp.pet.levelables[1203].canClick && !player.ev.evolutionsUnlocked[14] && false}, // placeholder req
+            unlocked() { return tmp.pet.levelables[1203].canClick && !player.ev.evolutionsUnlocked[16] && false}, // placeholder req
             tooltip() { return "██████ ██████████ orbs ███ ████,<br>██████ even more loot" }, // allows exchanging orbs for keys, giving even more loot
             onClick() {
-                player.ev.evolutionDisplayIndex = new Decimal(14)
+                player.ev.evolutionDisplayIndex = new Decimal(16)
             },
             style: { width: "100px", minHeight: "100px", border: "5px solid #200000", borderRadius: "0px", padding: "0px" }
         },
@@ -666,7 +668,7 @@
                 setLevelableAmount("pet", 1102, new Decimal(1))
             }
         },
-        13: {
+        15: {
             title() { return "Diamondsmith"},
             description() {
                 return "<div class='evoContainer'><h3>Costs:</h3>" +
@@ -700,11 +702,11 @@
                 player.cb.paragonShards = player.cb.paragonShards.sub(222)
                 player.cbs.ascensionShards = player.cbs.ascensionShards.sub(2)
 
-                player.ev.evolutionsUnlocked[13] = true
+                player.ev.evolutionsUnlocked[15] = true
                 setLevelableAmount("pet", 2103, new Decimal(1))
             }
         },
-        14: {
+        16: {
             title() {return "Extreme Demon"},
             description() {
                 return "<div class='evoContainer'><h3>Costs:</h3>" +
@@ -743,7 +745,7 @@
                 player.cbs.ascensionShards = player.cbs.ascensionShards.sub(1)
                 player.ev2.orbs = player.ev2.orbs.sub(25)
 
-                player.ev.evolutionsUnlocked[14] = true
+                player.ev.evolutionsUnlocked[16] = true
                 setLevelableAmount("pet", 2203, new Decimal(1))
             }
         },
@@ -963,6 +965,7 @@
                         ["bt-clickable", 100], ["bt-clickable", 101], ["bt-clickable", 102], ["bt-clickable", 103], ["bt-clickable", 104],
                         ["bt-clickable", 105], ["bt-clickable", 107], ["bt-clickable", 108], ["bt-clickable", 109], ["bt-clickable", 110],
                         ["bt-clickable", 106], ["bt-clickable", 111], ["bt-clickable", 112], ["bt-clickable", 113], ["bt-clickable", 114],
+                        ["bt-clickable", 115], ["bt-clickable", 116],
 
                         ["bt-clickable", 201], ["bt-clickable", 202], ["bt-clickable", 203], ["bt-clickable", 204],
 

@@ -24,13 +24,13 @@ addLayer("ev0", {
     tooltip: "Coin Dust",
     color: "white",
     automate() {
-        if (hasUpgrade("ev13", 14)) {
+        if (hasUpgrade("ev15", 14)) {
             buyBuyable("ev0", 11)
             buyBuyable("ev0", 12)
             buyBuyable("ev0", 13)
             buyBuyable("ev0", 14)
         }
-        if (hasUpgrade("ev13", 15)) {
+        if (hasUpgrade("ev15", 15)) {
             buyBuyable("ev0", 15)
             buyBuyable("ev0", 16)
             buyBuyable("ev0", 17)
@@ -49,9 +49,9 @@ addLayer("ev0", {
         player.ev0.coinDustPerSecond = player.ev0.coinDustPerSecond.mul(buyableEffect("ev0", 18))
         player.ev0.coinDustPerSecond = player.ev0.coinDustPerSecond.mul(levelableEffect("pet", 110)[1])
         player.ev0.coinDustPerSecond = player.ev0.coinDustPerSecond.mul(levelableEffect("pet", 2103)[1])
-        player.ev0.coinDustPerSecond = player.ev0.coinDustPerSecond.mul(player.ev13.diamondDustEffect)
-        if (hasUpgrade("ev13", 11)) player.ev0.coinDustPerSecond = player.ev0.coinDustPerSecond.mul(20)
-        if (hasUpgrade("ev13", 12)) player.ev0.coinDustPerSecond = player.ev0.coinDustPerSecond.mul(player.ev13.diamondDustEffect)
+        player.ev0.coinDustPerSecond = player.ev0.coinDustPerSecond.mul(player.ev15.diamondDustEffect)
+        if (hasUpgrade("ev15", 11)) player.ev0.coinDustPerSecond = player.ev0.coinDustPerSecond.mul(20)
+        if (hasUpgrade("ev15", 12)) player.ev0.coinDustPerSecond = player.ev0.coinDustPerSecond.mul(player.ev15.diamondDustEffect)
 
         if (player.ev0.coinDust.lt(1)) player.ev0.coinDustEffect = player.ev0.coinDust.mul(0.05).add(1)
         if (player.ev0.coinDust.gte(1)) player.ev0.coinDustEffect = player.ev0.coinDust.pow(0.3).mul(0.05).add(1)
@@ -62,7 +62,7 @@ addLayer("ev0", {
         player.ev0.coinShardsPerSecond = player.ev0.coinShardsPerSecond.mul(buyableEffect("ev0", 17))
         player.ev0.coinShardsPerSecond = player.ev0.coinShardsPerSecond.mul(levelableEffect("pet", 110)[1])
         player.ev0.coinShardsPerSecond = player.ev0.coinShardsPerSecond.mul(levelableEffect("pet", 2103)[2])
-        player.ev0.coinShardsPerSecond = player.ev0.coinShardsPerSecond.mul(player.ev13.diamondDustEffect)
+        player.ev0.coinShardsPerSecond = player.ev0.coinShardsPerSecond.mul(player.ev15.diamondDustEffect)
 
         player.ev0.coinShards = player.ev0.coinShards.add(player.ev0.coinShardsPerSecond.mul(delta))
 
@@ -87,7 +87,7 @@ addLayer("ev0", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Coin Dust"
             },
             buy(mult) {
-                if (mult != true && !hasUpgrade("ev13", 14)) {
+                if (mult != true && !hasUpgrade("ev15", 14)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -97,7 +97,7 @@ addLayer("ev0", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("ev13", 14)) this.pay(cost)
+                    if (!hasUpgrade("ev15", 14)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -122,7 +122,7 @@ addLayer("ev0", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Coin Dust"
             },
             buy(mult) {
-                if (mult != true && !hasUpgrade("ev13", 14)) {
+                if (mult != true && !hasUpgrade("ev15", 14)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -132,7 +132,7 @@ addLayer("ev0", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("ev13", 14)) this.pay(cost)
+                    if (!hasUpgrade("ev15", 14)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -157,7 +157,7 @@ addLayer("ev0", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Coin Dust"
             },
             buy(mult) {
-                if (mult != true && !hasUpgrade("ev13", 14)) {
+                if (mult != true && !hasUpgrade("ev15", 14)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -167,7 +167,7 @@ addLayer("ev0", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                     if (!hasUpgrade("ev13", 14)) this.pay(cost)
+                     if (!hasUpgrade("ev15", 14)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -192,7 +192,7 @@ addLayer("ev0", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Coin Dust"
             },
             buy(mult) {
-                if (mult != true && !hasUpgrade("ev13", 14)) {
+                if (mult != true && !hasUpgrade("ev15", 14)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -202,7 +202,7 @@ addLayer("ev0", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("ev13", 14)) this.pay(cost)
+                    if (!hasUpgrade("ev15", 14)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -227,7 +227,7 @@ addLayer("ev0", {
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Evolution Shards"
             },
             buy(mult) {
-                if (mult != true && !hasUpgrade("ev13", 15)) {
+                if (mult != true && !hasUpgrade("ev15", 15)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
                     this.pay(buyonecost)
 
@@ -237,7 +237,7 @@ addLayer("ev0", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    if (!hasUpgrade("ev13", 15)) this.pay(cost)
+                    if (!hasUpgrade("ev15", 15)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -262,7 +262,7 @@ addLayer("ev0", {
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Paragon Shards"
             },
             buy(mult) {
-                if (mult != true && !hasUpgrade("ev13", 15)) {
+                if (mult != true && !hasUpgrade("ev15", 15)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
                     this.pay(buyonecost)
 
@@ -272,7 +272,7 @@ addLayer("ev0", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    if (!hasUpgrade("ev13", 15)) this.pay(cost)
+                    if (!hasUpgrade("ev15", 15)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -297,7 +297,7 @@ addLayer("ev0", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Coin Dust"
             },
             buy(mult) {
-                if (mult != true && !hasUpgrade("ev13", 15)) {
+                if (mult != true && !hasUpgrade("ev15", 15)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -307,7 +307,7 @@ addLayer("ev0", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("ev13", 15)) this.pay(cost)
+                    if (!hasUpgrade("ev15", 15)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -332,7 +332,7 @@ addLayer("ev0", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Coin Shards"
             },
             buy(mult) {
-                if (mult != true && !hasUpgrade("ev13", 15)) {
+                if (mult != true && !hasUpgrade("ev15", 15)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -342,7 +342,7 @@ addLayer("ev0", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("ev13", 15)) this.pay(cost)
+                    if (!hasUpgrade("ev15", 15)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }

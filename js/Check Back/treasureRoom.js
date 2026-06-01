@@ -1,4 +1,4 @@
-addLayer("ev14", {
+addLayer("ev16", {
     name: "Treasure Room", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "Tr", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "CB",
@@ -44,13 +44,13 @@ addLayer("ev14", {
     update(delta) {
         let onepersec = player.cb.cbTickspeed
 
-        for (let i in player.ev14.timers) {
-            player.ev14.timers[i].current = player.ev14.timers[i].current.sub(onepersec.mul(delta))
+        for (let i in player.ev16.timers) {
+            player.ev16.timers[i].current = player.ev16.timers[i].current.sub(onepersec.mul(delta))
         }
 
         // KEY MODIFIERS
-        player.ev14.keysToGet = new Decimal(0);
-        player.ev14.keysToGet = player.ev14.keysToGet.add(player.ev14.orbInput.div(10));
+        player.ev16.keysToGet = new Decimal(0);
+        player.ev16.keysToGet = player.ev16.keysToGet.add(player.ev16.orbInput.div(10));
     },
     clickables: {
         // controls
@@ -61,7 +61,7 @@ addLayer("ev14", {
             },
             unlocked: true,
             onClick() {
-                player.ev14.orbInput = player.ev2.orbs.mul(0)
+                player.ev16.orbInput = player.ev2.orbs.mul(0)
             },
             style: {
                 width: "50px", 
@@ -79,7 +79,7 @@ addLayer("ev14", {
             },
             unlocked: true,
             onClick() {
-                player.ev14.orbInput = player.ev2.orbs.mul(0.01)
+                player.ev16.orbInput = player.ev2.orbs.mul(0.01)
             },
             style: {
                 width: "50px", 
@@ -96,7 +96,7 @@ addLayer("ev14", {
             },
             unlocked: true,
             onClick() {
-                player.ev14.orbInput = player.ev2.orbs.mul(0.05)
+                player.ev16.orbInput = player.ev2.orbs.mul(0.05)
             },
             style: {
                 width: "50px", 
@@ -113,7 +113,7 @@ addLayer("ev14", {
             },
             unlocked: true,
             onClick() {
-                player.ev14.orbInput = player.ev2.orbs.mul(0.1)
+                player.ev16.orbInput = player.ev2.orbs.mul(0.1)
             },
             style: {
                 width: "50px", 
@@ -130,7 +130,7 @@ addLayer("ev14", {
             },
             unlocked: true,
             onClick() {
-                player.ev14.orbInput = player.ev2.orbs.mul(0.25)
+                player.ev16.orbInput = player.ev2.orbs.mul(0.25)
             },
             style: {
                 width: "50px", 
@@ -147,7 +147,7 @@ addLayer("ev14", {
             },
             unlocked: true,
             onClick() {
-                player.ev14.orbInput = player.ev2.orbs.mul(0.5)
+                player.ev16.orbInput = player.ev2.orbs.mul(0.5)
             },
             style: {
                 width: "50px", 
@@ -164,7 +164,7 @@ addLayer("ev14", {
             },
             unlocked: true,
             onClick() {
-                player.ev14.orbInput = player.ev2.orbs.mul(1)
+                player.ev16.orbInput = player.ev2.orbs.mul(1)
             },
             style: {
                 width: "50px", 
@@ -177,27 +177,27 @@ addLayer("ev14", {
         // convert button
         0: {
             title() {
-                return player.ev14.timers[0].current.gt(0) 
-                ? "<h1>Check back in <br>" + formatTime(player.ev14.timers[0].current) + "." 
-                : "<h1>Convert " + formatSimple(player.ev14.orbInput) + " orbs into " + formatSimple(player.ev14.keysToGet) + " keys."
+                return player.ev16.timers[0].current.gt(0) 
+                ? "<h1>Check back in <br>" + formatTime(player.ev16.timers[0].current) + "." 
+                : "<h1>Convert " + formatSimple(player.ev16.orbInput) + " orbs into " + formatSimple(player.ev16.keysToGet) + " keys."
             },
             canClick() { 
                 return (
-                    player.ev14.orbInput.gt(0) 
-                    && player.ev2.orbs.gte(player.ev14.orbInput)
-                    && player.ev14.timers[0].current.lt(0)
+                    player.ev16.orbInput.gt(0) 
+                    && player.ev2.orbs.gte(player.ev16.orbInput)
+                    && player.ev16.timers[0].current.lt(0)
                 )
             },
             unlocked: true,
             tooltip() {
-                if (player.ev2.orbs.lt(player.ev14.orbInput)) return "Not enough orbs."
-                if (player.ev14.orbInput.lte(0) && player.ev2.paraInput.lte(0)) return "No orbs inputted."
+                if (player.ev2.orbs.lt(player.ev16.orbInput)) return "Not enough orbs."
+                if (player.ev16.orbInput.lte(0) && player.ev2.paraInput.lte(0)) return "No orbs inputted."
                 return ""
             },
             onClick() {
-                player.ev2.orbs = player.ev2.orbs.sub(player.ev14.orbInput)
-                player.ev14.timers[0].current = player.ev14.timers[0].max
-                player.ev14.keys = player.ev14.keys.add(player.ev14.keysToGet)
+                player.ev2.orbs = player.ev2.orbs.sub(player.ev16.orbInput)
+                player.ev16.timers[0].current = player.ev16.timers[0].max
+                player.ev16.keys = player.ev16.keys.add(player.ev16.keysToGet)
             },
             style() {
                 let look = {width: "400px", minHeight: "100px", borderRadius: "60px / 30px"}
@@ -211,7 +211,7 @@ addLayer("ev14", {
             canClick() { return true},
             unlocked() { return true },
             onClick() {
-                player.ev14.chestNumber = new Decimal(1)
+                player.ev16.chestNumber = new Decimal(1)
             },
             style: { width: "160px", minHeight: "120px", backgroundColor: "#ffffff", border: "5px solid #ffffff", borderRadius: "10px", padding: "0px" },
         },
@@ -220,7 +220,7 @@ addLayer("ev14", {
             canClick() { return true},
             unlocked() { return true },
             onClick() {
-                player.ev14.chestNumber = new Decimal(2)
+                player.ev16.chestNumber = new Decimal(2)
             },
             style: { width: "160px", minHeight: "120px", backgroundColor: "#ffd700", border: "5px solid #ffd700", borderRadius: "10px", padding: "0px" },
         },
@@ -229,7 +229,7 @@ addLayer("ev14", {
             canClick() { return true},
             unlocked() { return true },
             onClick() {
-                player.ev14.chestNumber = new Decimal(3)
+                player.ev16.chestNumber = new Decimal(3)
             },
             style: { width: "160px", minHeight: "120px", backgroundColor: "#ff8000", border: "5px solid #ff8000", borderRadius: "10px", padding: "0px" },
         },
@@ -238,7 +238,7 @@ addLayer("ev14", {
             canClick() { return true},
             unlocked() { return true },
             onClick() {
-                player.ev14.chestNumber = new Decimal(4)
+                player.ev16.chestNumber = new Decimal(4)
             },
             style: { width: "160px", minHeight: "120px", backgroundColor: "#00ffff", border: "5px solid #00ffff", borderRadius: "10px", padding: "0px" },
         },
@@ -247,7 +247,7 @@ addLayer("ev14", {
             canClick() { return true},
             unlocked() { return true },
             onClick() {
-                player.ev14.chestNumber = new Decimal(5)
+                player.ev16.chestNumber = new Decimal(5)
             },
             style: { width: "160px", minHeight: "120px", backgroundColor: "#80ff00", border: "5px solid #80ff00", borderRadius: "10px", padding: "0px" },
         },
@@ -256,28 +256,28 @@ addLayer("ev14", {
             canClick() { return true},
             unlocked() { return true },
             onClick() {
-                player.ev14.chestNumber = new Decimal(6)
+                player.ev16.chestNumber = new Decimal(6)
             },
             style: { width: "160px", minHeight: "120px", backgroundColor: "#ff00ff", border: "5px solid #ff00ff", borderRadius: "10px", padding: "0px" },
         },
         // open chest buttons
         1: {
             title() {
-                return player.ev14.timers[1].current.gt(0) 
-                ? "<h1>Check back in <br>" + formatTime(player.ev14.timers[1].current) + "." 
+                return player.ev16.timers[1].current.gt(0) 
+                ? "<h1>Check back in <br>" + formatTime(player.ev16.timers[1].current) + "." 
                 : "<h1>Open a Tier I Chest."
             },
             canClick() { 
                 return (
-                    player.ev14.keys.gte(1)
-                    && player.ev14.timers[1].current.lt(1)
+                    player.ev16.keys.gte(1)
+                    && player.ev16.timers[1].current.lt(1)
                 )
             },
-            unlocked() {return player.ev14.chestNumber == 1},
+            unlocked() {return player.ev16.chestNumber == 1},
             onClick() {
-                player.ev14.keys = player.ev14.keys.sub(1)
-                player.ev14.timers[1].current = player.ev14.timers[1].max
-                layers.ev14.openChest()
+                player.ev16.keys = player.ev16.keys.sub(1)
+                player.ev16.timers[1].current = player.ev16.timers[1].max
+                layers.ev16.openChest()
             },
             style() {
                 let look = {width: "400px", minHeight: "100px", borderRadius: "60px / 30px"}
@@ -287,25 +287,25 @@ addLayer("ev14", {
         },
         2: {
             title() {
-                return player.ev14.timers[2].current.gt(0) 
-                ? "<h1>Check back in <br>" + formatTime(player.ev14.timers[2].current) + "." 
+                return player.ev16.timers[2].current.gt(0) 
+                ? "<h1>Check back in <br>" + formatTime(player.ev16.timers[2].current) + "." 
                 : "<h1>Open a Tier II Chest."
             },
             canClick() { 
                 return (
-                    player.ev14.keys.gte(5)
-                    && player.ev14.timers[2].current.lt(1)
+                    player.ev16.keys.gte(5)
+                    && player.ev16.timers[2].current.lt(1)
                     && player.cb.evolutionShards.gte(100)
                     && player.cb.paragonShards.gte(20)
                 )
             },
-            unlocked() {return player.ev14.chestNumber == 2},
+            unlocked() {return player.ev16.chestNumber == 2},
             onClick() {
-                player.ev14.keys = player.ev14.keys.sub(5)
+                player.ev16.keys = player.ev16.keys.sub(5)
                 player.cb.evolutionShards = player.cb.evolutionShards.sub(100)
                 player.cb.paragonShards = player.cb.paragonShards.sub(20)
-                player.ev14.timers[2].current = player.ev14.timers[2].max
-                layers.ev14.openChest()
+                player.ev16.timers[2].current = player.ev16.timers[2].max
+                layers.ev16.openChest()
             },
             style() {
                 let look = {width: "400px", minHeight: "100px", borderRadius: "60px / 30px"}
@@ -315,25 +315,25 @@ addLayer("ev14", {
         },
         3: {
             title() {
-                return player.ev14.timers[3].current.gt(0) 
-                ? "<h1>Check back in <br>" + formatTime(player.ev14.timers[3].current) + "." 
+                return player.ev16.timers[3].current.gt(0) 
+                ? "<h1>Check back in <br>" + formatTime(player.ev16.timers[3].current) + "." 
                 : "<h1>Open a Tier III Chest."
             },
             canClick() { 
                 return (
-                    player.ev14.keys.gte(10)
-                    && player.ev14.timers[3].current.lt(1)
+                    player.ev16.keys.gte(10)
+                    && player.ev16.timers[3].current.lt(1)
                     && player.cb.evolutionShards.gte(250)
                     && player.cb.paragonShards.gte(50)
                 )
             },
-            unlocked() {return player.ev14.chestNumber == 3},
+            unlocked() {return player.ev16.chestNumber == 3},
             onClick() {
-                player.ev14.keys = player.ev14.keys.sub(10)
+                player.ev16.keys = player.ev16.keys.sub(10)
                 player.cb.evolutionShards = player.cb.evolutionShards.sub(250)
                 player.cb.paragonShards = player.cb.paragonShards.sub(50)
-                player.ev14.timers[3].current = player.ev14.timers[3].max
-                layers.ev14.openChest()
+                player.ev16.timers[3].current = player.ev16.timers[3].max
+                layers.ev16.openChest()
             },
             style() {
                 let look = {width: "400px", minHeight: "100px", borderRadius: "60px / 30px"}
@@ -349,7 +349,7 @@ addLayer("ev14", {
             },
             description() {
                 return "<div class='chestContainer'><h3>Costs:</h3><br>" +
-                formatWhole(player.ev14.keys) + "/1 Keys<br></div>" +
+                formatWhole(player.ev16.keys) + "/1 Keys<br></div>" +
                 "<div class='chestContainer'><h3>Loot Table:</h3><br>" +
                 "25% - " + formatWhole(player.pet.petPointMult.mul(10000)) + " pet points<br>" + 
                 "25% - " + formatWhole(player.pet.petPointMult.mul(4).floor()) + " of the first 9 common pets<br>" +
@@ -363,7 +363,7 @@ addLayer("ev14", {
             },
             description() {
                 return "<div class='chestContainer'><h3>Costs:</h3><br>" +
-                formatWhole(player.ev14.keys) + "/5 Keys<br>" +
+                formatWhole(player.ev16.keys) + "/5 Keys<br>" +
                 formatWhole(player.cb.evolutionShards) + "/100 Evo Shards<br>" +
                 formatWhole(player.cb.paragonShards) + "/20 Para Shards<br></div>" +
                 "<div class='chestContainer'><h3>Loot Table:</h3><br>" +
@@ -380,7 +380,7 @@ addLayer("ev14", {
             },
             description() {
                 return "<div class='chestContainer'><h3>Costs:</h3><br>" +
-                formatWhole(player.ev14.keys) + "/10 Keys<br>" +
+                formatWhole(player.ev16.keys) + "/10 Keys<br>" +
                 formatWhole(player.cb.evolutionShards) + "/250 Evo Shards<br>" +
                 formatWhole(player.cb.paragonShards) + "/50 Para Shards<br></div>" +
                 "<div class='chestContainer'><h3>Loot Table:</h3><br>" +
@@ -396,7 +396,7 @@ addLayer("ev14", {
     },
     openChest() {
         let random = Math.random();
-        if (player.ev14.chestNumber == 1) {
+        if (player.ev16.chestNumber == 1) {
             if (random < 0.25) {
                 let gain = player.pet.petPointMult.mul(10000)
                 player.cb.petPoints = player.cb.petPoints.add(gain)
@@ -434,7 +434,7 @@ addLayer("ev14", {
                 doPopup("none", "+" + formatSimple(gain) + " orbs!", "Resource Obtained!", 5, "#96DED1", "resources/orbs.png")
             }
         }
-        else if (player.ev14.chestNumber == 2) {
+        else if (player.ev16.chestNumber == 2) {
             if (random < 0.2) {
                 let gain = player.pet.petPointMult.mul(50000)
                 player.cb.petPoints = player.cb.petPoints.add(gain)
@@ -485,7 +485,7 @@ addLayer("ev14", {
                 doPopup("none", "+" + formatSimple(gain) + " orbs!", "Resource Obtained!", 5, "#96DED1", "resources/orbs.png")
             }
         }
-        else if (player.ev14.chestNumber == 3) {
+        else if (player.ev16.chestNumber == 3) {
             if (random < 0.15) {
                 let gain = player.pet.petPointMult.mul(100000)
                 player.cb.petPoints = player.cb.petPoints.add(gain)
@@ -596,25 +596,25 @@ addLayer("ev14", {
                             ], {width: "600px", background: "rgba(0,0,0,0.5)", paddingBottom: "10px", borderRadius: "15px"}],
                             ["blank", "5px"],
                             ["raw-html", function() {
-                                if (player.ev14.chestNumber == 0) {
+                                if (player.ev16.chestNumber == 0) {
                                     return "No Chest Selected"
                                 } else {
-                                    return run(layers.ev14.tables[player.ev14.chestNumber].title, layers.ev14.tables[player.ev14.chestNumber])
+                                    return run(layers.ev16.tables[player.ev16.chestNumber].title, layers.ev16.tables[player.ev16.chestNumber])
                                 }
                             }, {fontSize: "32px", color: "#cccccc", fontFamily: "monospace"}],
                             ["style-row", [], {width: "500px", height: "4px", background: "#cccccc", marginBottom: "10px"}],
                             ["raw-html", function() {
-                                if (player.ev14.chestNumber == 0) {
+                                if (player.ev16.chestNumber == 0) {
                                     return ""
                                 } else {
-                                    return run(layers.ev14.tables[player.ev14.chestNumber].description, layers.ev14.tables[player.ev14.chestNumber])
+                                    return run(layers.ev16.tables[player.ev16.chestNumber].description, layers.ev16.tables[player.ev16.chestNumber])
                                 }
                             }, {fontSize: "20px", color: "#cccccc", fontFamily: "monospace"}],
                             ["blank", "10px"],
                         ], {width: "700px", height: "525px", overflowX: "hidden"}],
                         ["style-column", [
                             ["raw-html", function() {
-                                if (player.ev14.chestNumber == 0) {
+                                if (player.ev16.chestNumber == 0) {
                                     return "Select a chest, bruv!"
                                 } else {return ""}
                             }, {fontSize: "30px", color: "#cccccc", fontFamily: "monospace"}],
@@ -646,7 +646,7 @@ addLayer("ev14", {
             ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/secret.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatSimple(player.ev14.keys, 1)}, {width: "95px", height: "50px", color: "#cccccc", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                ["raw-html", () => { return formatSimple(player.ev16.keys, 1)}, {width: "95px", height: "50px", color: "#cccccc", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", "<div class='bottomTooltip'>Keys<hr><small>(Used to unlock treasure room chests)</small></div>"],
             ], {width: "150px", height: "50px"}],
         ], {width: "300px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
@@ -654,5 +654,5 @@ addLayer("ev14", {
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.ev.evolutionsUnlocked[14] }
+    layerShown() { return player.ev.evolutionsUnlocked[16] }
 })

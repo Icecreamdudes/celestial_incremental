@@ -451,7 +451,7 @@ addLayer("n", {
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.n.nest },
             pay(amt) { player.n.nest = this.currency().sub(amt) },
-            effect(x) { return Decimal.pow(getBuyableAmount(this.layer, this.id).add(1), player.fl.totalLevels.add(1).div(1500).log(2)).max(1)},
+            effect(x) { return Decimal.pow(getBuyableAmount(this.layer, this.id).add(1), player.fl.totalLevels.add(1).div(2000).log(2)).max(1)},
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x.pow(2) || getBuyableAmount(this.layer, this.id).pow(2)).mul(this.costBase()).mul(10).floor().div(10) },
             canAfford() { return this.currency().gte(this.cost()) && hasUpgrade("n", 31) },
@@ -461,7 +461,7 @@ addLayer("n", {
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
                 "Buff nest gain based on total flower levels<br>" + // MIDDLE
                 "Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect) +
-                "<br>Next: x" + formatSimple(Decimal.pow(getBuyableAmount(this.layer, this.id).add(2), player.fl.totalLevels.add(1).div(1500).log(2)).max(1)) +
+                "<br>Next: x" + formatSimple(Decimal.pow(getBuyableAmount(this.layer, this.id).add(2), player.fl.totalLevels.add(1).div(2000).log(2)).max(1)) +
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
                 formatSimple(tmp[this.layer].buyables[this.id].cost) + " Nests" + // BOTTOM
                 "</div></div>"

@@ -52,6 +52,7 @@ addLayer("al", {
         player.al.honeycombGain = player.al.honeycombGain.mul(levelableEffect("pet", 503)[1])
         player.al.honeycombGain = player.al.honeycombGain.mul(levelableEffect("pu", 308)[1])
         if (hasUpgrade("n", 62)) player.al.honeycombGain = player.al.honeycombGain.mul(player.n.nestReset.add(1).pow(0.5))
+        player.al.honeycombGain = player.al.honeycombGain.mul(buyableEffect("tw", 64))
 
         // FLOOR HONEYCOMBS
         player.al.honeycombGain = player.al.honeycombGain.floor()
@@ -67,6 +68,7 @@ addLayer("al", {
         player.al.royalJellyGain = player.al.royalJellyGain.mul(levelableEffect("pet", 503)[1])
         player.al.royalJellyGain = player.al.royalJellyGain.mul(levelableEffect("pu", 308)[1])
         if (hasUpgrade("n", 62)) player.al.royalJellyGain = player.al.royalJellyGain.mul(player.n.nestReset.add(1).pow(0.5))
+        player.al.royalJellyGain = player.al.royalJellyGain.mul(buyableEffect("tw", 64))
 
         // FLOOR ROYAL JELLY
         player.al.royalJellyGain = player.al.royalJellyGain.floor()
@@ -221,8 +223,8 @@ addLayer("al", {
             player.al.highestRoyalJelly = new Decimal(0)
             for (let i = 0; i < player.al.upgrades.length; i++) {
                 let upg = +player.al.upgrades[i]
-                if (upg > 100 && upg < 200 && Decimal.gte((upg-100)/3, getBuyableAmount("tw", 53))) continue
-                if (upg > 200 && upg < 300 && Decimal.gte((upg-200)/3, getBuyableAmount("tw", 54))) continue
+                if (upg > 100 && upg < 200 && (upg-100)%3 == 0 && Decimal.lte((upg-100)/3, getBuyableAmount("tw", 53))) continue
+                if (upg > 200 && upg < 300 && (upg-200)%3 == 0 && Decimal.lte((upg-200)/3, getBuyableAmount("tw", 54))) continue
                 player.al.upgrades.splice(i, 1);
                 i--;
             }

@@ -50,6 +50,7 @@ addLayer("n", {
 
         player.n.nestGain = player.n.nestGain.mul(buyableEffect("n", 42))
         player.n.nestGain = player.n.nestGain.mul(buyableEffect("tw", 14))
+        player.n.nestGain = player.n.nestGain.mul(buyableEffect("tw", 74))
 
         player.n.nestGain = player.n.nestGain.mul(10).floor().div(10) // KEEP AT END
 

@@ -238,7 +238,7 @@ addLayer("depth1", {
         104: {
             title: "Vast Darkness",
             unlocked() {return hasUpgrade("darkTemple", 10)},
-            description: "Unlock a new space buyable.",
+            description: "Unlock a new space buyable in Dark-Uni 1.",
             cost: new Decimal(100000),
             currencyLocation() { return player.depth1 },
             currencyDisplayName: "Dim Umbrite",

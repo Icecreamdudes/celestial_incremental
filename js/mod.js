@@ -864,9 +864,11 @@ let changelog = `<h1>Changelog:</h1><br>
 		Minor Changes:<br>
 			- Changed the styles of achievement page buttons.<br>
 			- Added missing achievement icons for page 2.<br>
-			- Added a few more savebank buttons (actual saves haven't been added yet).<br><br>
+			- Added a few more savebank buttons (actual saves haven't been added yet).<br>
+			- Clarified the space buyable D-1 upgrade text.<br><br>
 		Bug Fixes:<br>
 			- Fixed legendary punchcards having the wrong color backgrounds.<br>
+			- Fixed V not having their cutscene icon.<br>
 			- Fixed star exploration node B2 having no effect.<br><br>
 	<h3>v1.12.5 - Battle Bonanza</h3><br>
 		Content:<br>

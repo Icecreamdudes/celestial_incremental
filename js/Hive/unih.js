@@ -50,6 +50,7 @@ addLayer("bee", {
         player.bee.preAlephMult = player.bee.preAlephMult.mul(player.fl.glossaryEffects.preAleph)
         if (hasUpgrade("n", 22)) player.bee.preAlephMult = player.bee.preAlephMult.mul(player.al.royalJellyEffect)
         if (hasUpgrade("n", 61)) player.bee.preAlephMult = player.bee.preAlephMult.mul(player.n.highestNest.add(1).pow(0.5))
+        player.bee.preAlephMult = player.bee.preAlephMult.mul(buyableEffect("tw", 63))
 
         // Bee Calculations
         player.bee.bps = new Decimal(0)

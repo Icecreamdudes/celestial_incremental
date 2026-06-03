@@ -4085,6 +4085,7 @@
             ],
         },
             //note: you can also use the original dice space song for cutscenes
+        /*
         "CB-Goldsmith-Evo": {
             type: "normal",
             background: "#094599",
@@ -4105,6 +4106,7 @@
                 { text: "But thinking realistically, almost nothing comes without giving something up.", },
             ],
         },
+        */ // commenting this b/c the enhance dust cutscene is a thing and already mentions asc-shards
         "UZ-Puzzle-1": {
             type: "normal",
             background: "linear-gradient(135deg, #ff0080ff 0%, #e00070ff 50%, #ff0080ff 100%)",

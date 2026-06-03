@@ -304,7 +304,7 @@ addLayer("tw", {
         21: {
             costBase() { return new Decimal(10) },
             costGrowth() { return new Decimal(2) },
-            purchaseLimit() { return new Decimal(5) },
+            purchaseLimit() { return new Decimal(10) },
             currency() { return player.tw.twigs },
             pay(amt) { player.tw.twigs = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).div(5).add(1)},
@@ -318,7 +318,7 @@ addLayer("tw", {
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
                 "Increase tree damage<br>" + // MIDDLE
                 "Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect) +
-                "<br>Next: x" + formatSimple(getBuyableAmount(this.layer, this.id).add(1).min(5).div(5).add(1)) +
+                "<br>Next: x" + formatSimple(getBuyableAmount(this.layer, this.id).add(1).min(10).div(5).add(1)) +
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
                 formatSimple(tmp[this.layer].buyables[this.id].cost) + " Twigs" + // BOTTOM
                 "</div></div>"
@@ -738,7 +738,10 @@ addLayer("tw", {
         53: {
             costBase() { return new Decimal(500) },
             costGrowth() { return new Decimal(5) },
-            purchaseLimit() { return new Decimal(9) },
+            purchaseLimit() {
+                if (getBuyableAmount("n", 51).gte(3)) return new Decimal(10)
+                return new Decimal(9)
+            },
             currency() { return player.tw.twigs },
             pay(amt) { player.tw.twigs = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).add(1)},
@@ -752,7 +755,7 @@ addLayer("tw", {
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
                 "Keep pollen path automation upgrades on nest resets<br>" + // MIDDLE
                 "Currently: +" + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1)) +
-                "<br>Next: +" + formatWhole(getBuyableAmount(this.layer, this.id).add(1).min(9)) +
+                "<br>Next: +" + formatWhole(getBuyableAmount(this.layer, this.id).add(1).min(this.purchaseLimit())) +
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
                 formatSimple(tmp[this.layer].buyables[this.id].cost) + " Twigs" + // BOTTOM
                 "</div></div>"
@@ -769,7 +772,10 @@ addLayer("tw", {
         54: {
             costBase() { return new Decimal(500) },
             costGrowth() { return new Decimal(5) },
-            purchaseLimit() { return new Decimal(9) },
+            purchaseLimit() {
+                if (getBuyableAmount("n", 51).gte(3)) return new Decimal(10)
+                return new Decimal(9)
+            },
             currency() { return player.tw.twigs },
             pay(amt) { player.tw.twigs = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).add(1)},
@@ -783,7 +789,7 @@ addLayer("tw", {
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
                 "Keep nectar path automation upgrades on nest resets<br>" + // MIDDLE
                 "Currently: +" + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1)) +
-                "<br>Next: +" + formatWhole(getBuyableAmount(this.layer, this.id).add(1).min(9)) +
+                "<br>Next: +" + formatWhole(getBuyableAmount(this.layer, this.id).add(1).min(this.purchaseLimit())) +
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
                 formatSimple(tmp[this.layer].buyables[this.id].cost) + " Twigs" + // BOTTOM
                 "</div></div>"
@@ -955,7 +961,7 @@ addLayer("tw", {
         72: {
             costBase() { return new Decimal(50000) },
             costGrowth() { return new Decimal(5) },
-            purchaseLimit() { return new Decimal(5) },
+            purchaseLimit() { return new Decimal(10) },
             currency() { return player.tw.twigs },
             pay(amt) { player.tw.twigs = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).div(5).add(1)},
@@ -969,7 +975,7 @@ addLayer("tw", {
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
                 "Increase tree damage<br>" + // MIDDLE
                 "Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect) +
-                "<br>Next: x" + formatSimple(getBuyableAmount(this.layer, this.id).add(1).min(5).div(5).add(1)) +
+                "<br>Next: x" + formatSimple(getBuyableAmount(this.layer, this.id).add(1).min(10).div(5).add(1)) +
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
                 formatSimple(tmp[this.layer].buyables[this.id].cost) + " Twigs" + // BOTTOM
                 "</div></div>"
@@ -1020,7 +1026,7 @@ addLayer("tw", {
             purchaseLimit() { return new Decimal(10) },
             currency() { return player.tw.twigs },
             pay(amt) { player.tw.twigs = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).div(20).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(10).add(1)},
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).mul(10).floor().div(10) },
             canAfford() { return this.currency().gte(this.cost()) && getBuyableAmount("tw", 63).gt(0) && getBuyableAmount("tw", 64).gt(0)},
@@ -1030,8 +1036,8 @@ addLayer("tw", {
                 "<h3>Nurtured Nests</h3>" + // TOP
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
                 "Increase nest gain<br>" + // MIDDLE
-                "Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) +
-                "<br>Next: x" + formatSimple(getBuyableAmount(this.layer, this.id).add(1).div(20).add(1), 2) +
+                "Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect) +
+                "<br>Next: x" + formatSimple(getBuyableAmount(this.layer, this.id).add(1).div(10).add(1)) +
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
                 formatSimple(tmp[this.layer].buyables[this.id].cost) + " Twigs" + // BOTTOM
                 "</div></div>"

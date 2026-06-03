@@ -224,7 +224,8 @@ addLayer("n", {
                 return "<div style='height:25px;display:flex;align-items:center'><div>" +
                 "<h3>Nest Upgrade 4:1</h3>" + // TOP
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
-                "Honeycombs and royal jelly now effect nest gain" + // MIDDLE
+                "Honeycombs and royal jelly now effect nest gain<br>" + // MIDDLE
+                "Currently: x" + formatSimple(Decimal.pow(2, player.al.honeycomb.mul(player.al.royalJelly).div(1e40).add(1).log(1e20))) +
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
                 "1 Nest" + // BOTTOM
                 "</div></div>"
@@ -479,7 +480,7 @@ addLayer("n", {
         51: {
             costBase() { return new Decimal(16) },
             costGrowth() { return new Decimal(1.3) },
-            purchaseLimit() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(3) },
             currency() { return player.n.nest },
             pay(amt) { player.n.nest = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(2)},
